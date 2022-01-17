@@ -1,0 +1,12 @@
+{
+  "name": "@devcycle/bucketing",
+  "version": "1.53.0",
+  "dependencies": {
+    "md5": "^2.2.1",
+    "ua-parser-js": "^0.7.21"
+  },
+  "peerDependencies": {
+    "@taplytics/core": "*",
+    "@taplytics/filter-maps": "*"
+  }
+}

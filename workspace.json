@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "projects": {
+    "devcycle-js-sdk": "sdk/js",
+    "nodejs-server-sdk": "sdk/nodejs-server-sdk",
+    "shared-bucketing": "lib/shared/bucketing",
+    "shared-errors": "lib/shared/errors",
+    "shared-ts-types": "lib/shared/ts-types"
+  }
+}

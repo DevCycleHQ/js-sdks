@@ -1,0 +1,74 @@
+{
+  "extends": "@nrwl/workspace/presets/npm.json",
+  "npmScope": "devcycle",
+  "workspaceLayout": {
+    "libsDir": "lib",
+    "appsDir": "services"
+  },
+  "implicitDependencies": {
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    ".eslintrc.json": "*",
+    ".circleci/config.yml": "*",
+    "cf-workers/client-sdk-api/.env": [
+      "client-sdk-api"
+    ]
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": [
+          "build",
+          "test",
+          "lint",
+          "check-types",
+          "package",
+          "prepare"
+        ]
+      }
+    }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ],
+    "prepare": [
+      {
+        "target": "prepare",
+        "projects": "dependencies"
+      }
+    ],
+    "package": [
+      {
+        "target": "package",
+        "projects": "dependencies"
+      }
+    ]
+  },
+  "affected": {
+    "defaultBase": "main"
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/nest"
+  },
+  "generators": {
+    "@nrwl/web:application": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/web:library": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "api"
+}

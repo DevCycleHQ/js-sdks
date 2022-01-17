@@ -1,0 +1,60 @@
+{
+  "root": "sdk/nodejs-server-sdk",
+  "sourceRoot": "sdk/nodejs-server-sdk/src",
+  "targets": {
+    "check-types": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+          "command": "yarn run -T tsc -b --incremental",
+          "cwd": "sdk/nodejs-server-sdk"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "sdk/nodejs-server-sdk/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/sdk/nodejs-server-sdk"
+      ],
+      "options": {
+        "jestConfig": "sdk/nodejs-server-sdk/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "npm-publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn build && ../../scripts/npm-publish-check.sh \"@devcycle/nodejs-server-sdk\"",
+        "cwd": "sdk/js"
+      }
+    },
+    "build": {
+      "executor": "@nrwl/node:build",
+      "outputs": [
+          "{options.outputPath}"
+      ],
+      "options": {
+          "outputPath": "sdk/nodejs-server-sdk/dist",
+          "main": "sdk/nodejs-server-sdk/src/index.ts",
+          "tsConfig": "sdk/nodejs-server-sdk/tsconfig.lib.json"
+      },
+      "configurations": {
+          "production": {
+              "optimization": true,
+              "extractLicenses": false,
+              "inspect": false
+          }
+      }
+    }
+  },
+  "tags": []
+}

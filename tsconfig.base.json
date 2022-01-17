@@ -1,0 +1,30 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "strictNullChecks": true,
+    "baseUrl": ".",
+    "paths": {}
+  },
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "root": "lib/shared/errors",
+  "sourceRoot": "lib/shared/errors/src",
+  "projectType": "library",
+  "targets": {
+    "check-types": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn run -T tsc -b --incremental",
+        "cwd": "lib/shared/errors"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "lib/shared/errors/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/lib/shared/errors"
+      ],
+      "options": {
+        "jestConfig": "lib/shared/errors/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

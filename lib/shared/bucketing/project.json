@@ -1,0 +1,36 @@
+{
+  "root": "lib/shared/bucketing",
+  "sourceRoot": "lib/shared/bucketing/src",
+  "projectType": "library",
+  "targets": {
+    "check-types": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn run -T tsc -b --incremental",
+        "cwd": "lib/shared/bucketing"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "lib/shared/bucketing/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/lib/shared/bucketing"
+      ],
+      "options": {
+        "jestConfig": "lib/shared/bucketing/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

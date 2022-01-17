@@ -1,0 +1,36 @@
+{
+  "root": "lib/shared/ts-types",
+  "sourceRoot": "lib/shared/ts-types/src",
+  "projectType": "library",
+  "targets": {
+    "check-types": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn run -T tsc -b --incremental",
+        "cwd": "lib/shared/ts-types"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "lib/shared/ts-types/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/lib/shared/ts-types"
+      ],
+      "options": {
+        "jestConfig": "lib/shared/ts-types/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

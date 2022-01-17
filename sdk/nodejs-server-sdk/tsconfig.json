@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "allowJs": true
+  },
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}

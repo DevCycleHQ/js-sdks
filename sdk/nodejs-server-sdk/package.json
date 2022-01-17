@@ -1,0 +1,44 @@
+{
+  "name": "@devcycle/nodejs-server-sdk",
+  "version": "1.0.4",
+  "description": "The DevCycle NodeJS Server SDK used for feature management.",
+  "main": "dist/main.js",
+  "types": "types.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "types.d.ts"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "test": "jest --runInBand",
+    "tsc": "tsc",
+    "build": "yarn clean && webpack",
+    "lint": "eslint --ext .js,.ts"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.15.6",
+    "@types/jest": "^27.0.2",
+    "@types/uuid": "^8.3.1",
+    "babel-jest": "^27.2.1",
+    "eslint": "^7.22.0",
+    "jest": "^27.2.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.0.5",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.4.3",
+    "webpack": "^5.53.0",
+    "webpack-cli": "^4.8.0"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "lodash": "^4.17.21",
+    "md5": "^2.2.1",
+    "murmurhash": "^2.0.0",
+    "tslib": "^2.0.0",
+    "ua-parser-js": "^0.7.21",
+    "uuid": "^8.3.2"
+  }
+}
