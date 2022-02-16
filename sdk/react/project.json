@@ -1,0 +1,13 @@
+{
+  "root": "sdk/react",
+  "implicitDependencies": [],
+  "targets": {
+    "npm-publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn build && ../../scripts/npm-publish-check.sh \"@devcycle/devcycle-react-sdk\"",
+        "cwd": "sdk/react"
+      }
+    }
+  }
+}
