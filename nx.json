@@ -3,7 +3,7 @@
   "npmScope": "devcycle",
   "workspaceLayout": {
     "libsDir": "lib",
-    "appsDir": "services"
+    "appsDir": "sdk"
   },
   "implicitDependencies": {
     "package.json": {
@@ -11,10 +11,7 @@
       "devDependencies": "*"
     },
     ".eslintrc.json": "*",
-    ".circleci/config.yml": "*",
-    "cf-workers/client-sdk-api/.env": [
-      "client-sdk-api"
-    ]
+    ".circleci/config.yml": "*"
   },
   "tasksRunnerOptions": {
     "default": {
@@ -70,5 +67,5 @@
       "unitTestRunner": "jest"
     }
   },
-  "defaultProject": "api"
+  "defaultProject": "react"
 }
