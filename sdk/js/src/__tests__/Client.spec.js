@@ -1,6 +1,7 @@
 import { DVCClient } from '../Client'
 import { getConfigJson, publishEvents } from '../Request'
 import { mocked } from 'ts-jest/utils'
+import { DVCVariable } from '../Variable'
 
 jest.mock('../Request')
 const getConfigJson_mock = mocked(getConfigJson)
@@ -21,7 +22,13 @@ describe('DVCClient tests', () => {
         environment: {},
         features: {},
         featureVariationMap: {},
-        variables: {}
+        variables: {
+            key: {
+                _id: 'id',
+                value: 'value1',
+                default_value: 'default_value'
+            }
+        }
     }
 
     it('should make a call to get a config', async () => {
@@ -79,12 +86,11 @@ describe('DVCClient tests', () => {
     describe('variable', () => {
         let client
 
-        const createClientWithDelay = (done, delay) => {
-            return createClientWithConfigImplementation(async () => {
-                await new Promise((resolve) => {
+        const createClientWithDelay = (delay) => {
+            return createClientWithConfigImplementation(() => {
+                return new Promise((resolve) => {
                     setTimeout(() => resolve(testConfig), delay)
                 })
-                done()
             })
         }
 
@@ -98,24 +104,79 @@ describe('DVCClient tests', () => {
             expect(variable.defaultValue).toBe('default_value')
         })
 
-        it('should have no value and default value if config not done fetching', (done) => {
-            client = createClientWithDelay(done, 500)
+        it('should create a variable only if not already created', async () => {
+            client = createClientWithConfigImplementation(() => {
+                return Promise.reject(new Error('Getting config failed'))
+            })
+            await client.onClientInitialized()
+            const variable = client.variable('key', 'default_value')
+            expect(client.variableDefaultMap['key']['default_value']).toBeDefined()
+            client.variable('key', 'default_value')
+            expect(Object.values(client.variableDefaultMap['key']).length).toBe(1)
+            expect(client.variableDefaultMap['key']['default_value']).toEqual(variable)
+        })
+
+        it('should have no value and default value if config not done fetching', () => {
+            client = createClientWithDelay(500)
             const variable = client.variable('key', 'default_value')
             expect(variable.value).toBe('default_value')
             expect(variable.defaultValue).toBe('default_value')
         })
 
-        it('should add to client variables array', (done) => {
-            client = createClientWithDelay(done, 500)
-            const variable = client.variable('key', 'default_value')
-            expect(client.variables).toContainEqual(variable)
+        it('should add to client variable default map with different types of default values', () => {
+            client = createClientWithDelay(500)
+            const stringVariable = client.variable('key', 'default_value')
+            const boolVariable = client.variable('key', true)
+            const numVariable = client.variable('key', 12.4)
+            const jsonVariable = client.variable('key', { key: 'value' })
+            const variableMap = client.variableDefaultMap['key']
+            console.log('variableMap', variableMap)
+            expect(variableMap['default_value']).toEqual(stringVariable)
+            expect(variableMap['true']).toEqual(boolVariable)
+            expect(variableMap['12.4']).toEqual(numVariable)
+            expect(variableMap[JSON.stringify(jsonVariable.defaultValue).replace(/"/g, "")]).toEqual(jsonVariable)
+            expect(Object.values(variableMap).length).toBe(4)
         })
 
-        it('should call onUpdate after config is finished', (done) => {
-            client = createClientWithDelay(done, 500)
+        it('should call onUpdate after config is finished and variable is in config', (done) => {
+            client = createClientWithDelay(500)
             const variable = client.variable('key', 'default_value')
             variable.onUpdate(() => done())
         })
+
+        it('should not call onUpdate if created after config is finished', async () => {
+            client = createClientWithDelay(500)
+            await client.onClientInitialized()
+            const variable = client.variable('key', 'default_value')
+            const callback = jest.fn()
+            variable.onUpdate(callback)
+            expect(callback).not.toHaveBeenCalled()
+        })
+
+        it('should call onUpdate after variable updates are emitted', (done) => {
+            client = createClientWithConfigImplementation(() => {
+                return Promise.resolve(testConfig)
+            })
+            const variable = new DVCVariable({
+                _id: 'id',
+                key: 'key',
+                value: 'my-value',
+                defaultValue: 'default-value'
+            })
+            function onUpdate(value) {
+                expect(value).toBe('my-new-value')
+                expect(this).toBe(variable)
+                done()
+            }
+            variable.onUpdate(onUpdate)
+            client.eventEmitter.emitVariableUpdates({'key': variable}, {
+                'key': {
+                    ...variable,
+                    value: 'my-new-value'
+                }
+            }, {'key': {'default-value': variable}})
+        })
+        
     })
 
     describe('identifyUser', () => {
