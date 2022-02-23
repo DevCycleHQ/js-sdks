@@ -13,7 +13,7 @@ import { EventEmitter } from './EventEmitter'
 export class DVCClient implements Client {
     private options?: DVCOptions
     private onInitialized: Promise<DVCClient>
-    private variables: DVCVariable[]
+    private variableDefaultMap: { [key: string]: { [key: string]: DVCVariable } }
     private environmentKey: string
     config?: BucketedUserConfig
     user: DVCUser
@@ -26,7 +26,7 @@ export class DVCClient implements Client {
         this.user = user
         this.options = options
         this.environmentKey = environmentKey
-        this.variables = []
+        this.variableDefaultMap = {}
         this.eventQueue = new EventQueue(environmentKey, this, options?.flushEventsMS)
         this.eventEmitter = new EventEmitter()
 
@@ -35,10 +35,13 @@ export class DVCClient implements Client {
 
         this.onInitialized = getConfigJson(environmentKey, user)
             .then((config) => {
+                const oldConfig = this.config
                 this.config = config as BucketedUserConfig
                 this.store.saveConfig(config)
                     .then(() => console.log('Successfully saved config to local storage'))
                 this.eventEmitter.emitInitialized(true)
+                this.eventEmitter.emitFeatureUpdates(oldConfig?.features || {}, this.config.features)
+                this.eventEmitter.emitVariableUpdates(oldConfig?.variables || {}, this.config.variables, this.variableDefaultMap)
                 return this
             })
             .catch((err) => {
@@ -59,16 +62,21 @@ export class DVCClient implements Client {
     }
 
     variable(key: string, defaultValue: DVCVariableValue): DVCVariable {
+        const defaultValueKey = JSON.stringify(defaultValue).replace(/"/g, "")
+        if (this.variableDefaultMap[key] && this.variableDefaultMap[key][defaultValueKey]) {
+            return this.variableDefaultMap[key][defaultValueKey]
+        }
+
         const data = {
             key,
             defaultValue,
             ...this.config?.variables?.[key]
         }
         const variable = new DVCVariable(data)
-        this.variables.push(variable)
-        this.onInitialized.then(() => {
-            variable.callback?.(this.config?.variables[key]?.value)
-        })
+        this.variableDefaultMap[key] = { 
+            [defaultValueKey]: variable,
+            ...this.variableDefaultMap[key]
+        }
 
         try {
             this.eventQueue.queueAggregateEvent({
@@ -97,11 +105,16 @@ export class DVCClient implements Client {
                     updatedUser = new DVCUser(user)
                 }
 
+                const oldConfig = this.config
+
                 getConfigJson(this.environmentKey, updatedUser)
                     .then((config) => {
                         this.config = config as BucketedUserConfig
                         this.store.saveConfig(config)
                             .then(() => console.log('Successfully saved config to local storage'))
+                        this.eventEmitter.emitFeatureUpdates(oldConfig.features, config.features)
+                        this.eventEmitter.emitVariableUpdates(oldConfig.variables, config.variables, this.variableDefaultMap)
+
                         return config.variables
                     })
                     .then((variables) => {
@@ -132,6 +145,8 @@ export class DVCClient implements Client {
                 this.eventQueue.flushEvents()
 
                 const updatedUser = anonUser ? new DVCUser(JSON.parse(anonUser)) : new DVCUser({ isAnonymous: true })
+                const oldConfig = this.config
+
                 return getConfigJson(this.environmentKey, updatedUser)
                     .then((config) => {
                         this.config = config as BucketedUserConfig
@@ -142,6 +157,8 @@ export class DVCClient implements Client {
                         this.store.saveUser(updatedUser).then(() => {
                             console.log('Successfully saved user to local storage!')
                         })
+                        this.eventEmitter.emitFeatureUpdates(oldConfig.features, config.features)
+                        this.eventEmitter.emitVariableUpdates(oldConfig.variables, config.variables, this.variableDefaultMap)
                         return config.variables
                     }).catch((e) => {
                         throw new Error(e)

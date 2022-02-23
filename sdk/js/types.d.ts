@@ -12,6 +12,7 @@ declare module 'dvc-js-client-sdk' {
 
     export type DVCFeature = {
         readonly _id: string
+        readonly _variation: string
         readonly key: string
         readonly type: string
         readonly evalReason?: any
@@ -199,13 +200,12 @@ declare module 'dvc-js-client-sdk' {
          * event is emitted by the SDK.
          *
          * Events:
-         *  - `initialized` -> true / false
-         *  - `error` -> Error
-         *  - `variableUpdated:*`
-         *  - `variableUpdated:<variable.key>`
-         *  - `featureUpdated:*`
-         *  - `featureUpdated:<feature.key>`
-         *  - `bucketingUpdated`
+         *  - `initialized` -> (initialized: boolean)
+         *  - `error` -> (error: Error)
+         *  - `variableUpdated:*` -> (key: string, variable: DVCVariable)
+         *  - `variableUpdated:<variable.key>` -> (key: string, variable: DVCVariable)
+         *  - `featureUpdated:*` -> (key: string, feature: DVCFeature)
+         *  - `featureUpdated:<feature.key>` -> (key: string, feature: DVCFeature)
          *
          * @param key
          * @param onUpdate

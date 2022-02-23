@@ -1,4 +1,5 @@
 import { EventEmitter } from '../EventEmitter'
+import { DVCVariable } from '../Variable'
 
 describe('EventEmitter tests', () => {
     const eventEmitter = new EventEmitter()
@@ -63,6 +64,232 @@ describe('EventEmitter tests', () => {
             eventEmitter.subscribe('initialized', handler)
             eventEmitter.emit('initialized', false)
             expect(handler).toBeCalledWith(false)
+        })
+    })
+
+    describe('emitVariableUpdates', () => {
+        it('should emit variable updated event if subscribed to all variable updates, and specific key', () => {
+            const allUpdatesHandler = jest.fn()
+            const variableKeyHandler = jest.fn()
+            const oldVariableSet = {
+                'my-variable-key': {
+                    _id: 'variable_id',
+                    key: 'my-variable-key',
+                    value: 'my-value',
+                    type: 'my-type'
+                }
+            }
+            const variableSet = {
+                'my-variable-key': {
+                    _id: 'variable_id',
+                    key: 'my-variable-key',
+                    value: 'my-new-value',
+                    type: 'my-type'
+                }
+            }
+            eventEmitter.subscribe('variableUpdated:*', allUpdatesHandler)
+            eventEmitter.subscribe(`variableUpdated:my-variable-key`, variableKeyHandler)
+            eventEmitter.emitVariableUpdates(oldVariableSet, variableSet, {})
+            expect(allUpdatesHandler).toBeCalledWith('my-variable-key', variableSet['my-variable-key'])
+            expect(variableKeyHandler).toBeCalledWith('my-variable-key', variableSet['my-variable-key'])
+        })
+
+        it('should not emit variable updated event if no updates', () => {
+            const allUpdatesHandler = jest.fn()
+            const variableKeyHandler = jest.fn()
+            const oldVariableSet = {
+                'my-variable-key': {
+                    _id: 'variable_id',
+                    key: 'my-variable-key',
+                    value: 'my-value',
+                    type: 'my-type'
+                }
+            }
+            const variableSet = {
+                'my-variable-key': {
+                    _id: 'variable_id',
+                    key: 'my-variable-key',
+                    value: 'my-value',
+                    type: 'my-type'
+                }
+            }
+            eventEmitter.subscribe('variableUpdated:*', allUpdatesHandler)
+            eventEmitter.subscribe(`variableUpdated:my-variable-key`, variableKeyHandler)
+            eventEmitter.emitVariableUpdates(oldVariableSet, variableSet, {})
+            expect(allUpdatesHandler).not.toBeCalled()
+            expect(variableKeyHandler).not.toBeCalled()
+
+            // check empty too
+            eventEmitter.emitVariableUpdates({}, {})
+
+            expect(allUpdatesHandler).not.toBeCalled()
+            expect(variableKeyHandler).not.toBeCalled()
+        })
+
+        it('should emit variable updated event if variable removed', () => {
+            const allUpdatesHandler = jest.fn()
+            const variableKeyHandler = jest.fn()
+            const oldVariableSet = {
+                'my-variable-key': {
+                    _id: 'variable_id',
+                    key: 'my-variable-key',
+                    value: 'my-value',
+                    type: 'my-type'
+                }
+            }
+            const newVariableSet = {
+                'different-variable-key': {
+                    _id: 'variable_id_2',
+                    key: 'different-variable-key',
+                    value: 'different-value',
+                    type: 'string'
+                }
+            }
+
+            eventEmitter.subscribe('variableUpdated:*', allUpdatesHandler)
+            eventEmitter.subscribe(`variableUpdated:my-variable-key`, variableKeyHandler)
+            eventEmitter.emitVariableUpdates(oldVariableSet, newVariableSet, {})
+            expect(allUpdatesHandler).toBeCalledWith('my-variable-key', undefined)
+            expect(variableKeyHandler).toBeCalledWith('my-variable-key', undefined)
+        })
+
+        it('should emit variable updated event if variable added', () => {
+            const allUpdatesHandler = jest.fn()
+            const variableKeyHandler = jest.fn()
+            const oldVariableSet = {
+                'different-variable-key': {
+                    _id: 'variable_id_2',
+                    key: 'different-variable-key',
+                    value: 'different-value',
+                    type: 'string'
+                }
+            }
+            const newVariableSet = {
+                'my-variable-key': {
+                    _id: 'variable_id',
+                    key: 'my-variable-key',
+                    value: 'my-value',
+                    type: 'my-type'
+                }
+            }
+
+            eventEmitter.subscribe('variableUpdated:*', allUpdatesHandler)
+            eventEmitter.subscribe(`variableUpdated:my-variable-key`, variableKeyHandler)
+            eventEmitter.emitVariableUpdates(oldVariableSet, newVariableSet, {})
+            expect(allUpdatesHandler).toBeCalledWith('my-variable-key', newVariableSet['my-variable-key'])
+            expect(variableKeyHandler).toBeCalledWith('my-variable-key', newVariableSet['my-variable-key'])
+        })
+    })
+
+    describe('emitFeatureUpdates', () => {
+        it('should emit feature updated event if subscribed to all feature updates, and specific key', () => {
+            const allUpdatesHandler = jest.fn()
+            const featureKeyHandler = jest.fn()
+            const oldFeatureSet = {
+                'my-feature-key': {
+                    _id: 'feature_id',
+                    _variation: 'variation1',
+                    key: 'my-feature-key',
+                    type: 'experiment'
+                }
+            }
+            const featureSet = {
+                'my-feature-key': {
+                    _id: 'feature_id',
+                    _variation: 'variation2',
+                    key: 'my-feature-key',
+                    type: 'experiment'
+                }
+            }
+            eventEmitter.subscribe('featureUpdated:*', allUpdatesHandler)
+            eventEmitter.subscribe(`featureUpdated:my-feature-key`, featureKeyHandler)
+            eventEmitter.emitFeatureUpdates(oldFeatureSet, featureSet)
+            expect(allUpdatesHandler).toBeCalledWith('my-feature-key', featureSet['my-feature-key'])
+            expect(featureKeyHandler).toBeCalledWith('my-feature-key', featureSet['my-feature-key'])
+        })
+
+        it('should not mit feature updated event if no updates', () => {
+            const allUpdatesHandler = jest.fn()
+            const featureKeyHandler = jest.fn()
+            const oldFeatureSet = {
+                'my-feature-key': {
+                    _id: 'feature_id',
+                    _variation: 'variation1',
+                    key: 'my-feature-key',
+                    type: 'experiment'
+                }
+            }
+            const featureSet = {
+                'my-feature-key': {
+                    _id: 'feature_id',
+                    _variation: 'variation1',
+                    key: 'my-feature-key',
+                    type: 'experiment'
+                }
+            }
+            eventEmitter.subscribe('featureUpdated:*', allUpdatesHandler)
+            eventEmitter.subscribe(`featureUpdated:my-feature-key`, featureKeyHandler)
+            eventEmitter.emitFeatureUpdates(oldFeatureSet, featureSet)
+            expect(allUpdatesHandler).not.toBeCalled()
+            expect(featureKeyHandler).not.toBeCalled()
+
+            // check for no features
+            eventEmitter.emitFeatureUpdates({}, {})
+
+            expect(allUpdatesHandler).not.toBeCalled()
+            expect(featureKeyHandler).not.toBeCalled()
+        })
+
+        it('should emit feature updated event with null if removed', () => {
+            const allUpdatesHandler = jest.fn()
+            const featureKeyHandler = jest.fn()
+            const oldFeatureSet = {
+                'my-feature-key': {
+                    _id: 'feature_id',
+                    _variation: 'variation1',
+                    key: 'my-feature-key',
+                    type: 'experiment'
+                }
+            }
+            const newFeatureSet = {
+                'different-feature-key': {
+                    _id: 'different_feature_id',
+                    _variation: 'different-variation1',
+                    key: 'different-feature-key',
+                    type: 'experiment'
+                }
+            }
+            eventEmitter.subscribe('featureUpdated:*', allUpdatesHandler)
+            eventEmitter.subscribe(`featureUpdated:my-feature-key`, featureKeyHandler)
+            eventEmitter.emitFeatureUpdates(oldFeatureSet, newFeatureSet)
+            expect(allUpdatesHandler).toBeCalledWith('my-feature-key', undefined)
+            expect(featureKeyHandler).toBeCalledWith('my-feature-key', undefined)
+        })
+
+        it('should emit feature updated event with new feature if added', () => {
+            const allUpdatesHandler = jest.fn()
+            const featureKeyHandler = jest.fn()
+            const oldFeatureSet = {
+                'different-feature-key': {
+                    _id: 'different_feature_id',
+                    _variation: 'different-variation1',
+                    key: 'different-feature-key',
+                    type: 'experiment'
+                }
+            }
+            const newFeatureSet = {
+                'my-feature-key': {
+                    _id: 'feature_id',
+                    _variation: 'variation1',
+                    key: 'my-feature-key',
+                    type: 'experiment'
+                }
+            }
+            eventEmitter.subscribe('featureUpdated:*', allUpdatesHandler)
+            eventEmitter.subscribe(`featureUpdated:my-feature-key`, featureKeyHandler)
+            eventEmitter.emitFeatureUpdates(oldFeatureSet, newFeatureSet)
+            expect(allUpdatesHandler).toBeCalledWith('my-feature-key', newFeatureSet['my-feature-key'])
+            expect(featureKeyHandler).toBeCalledWith('my-feature-key', newFeatureSet['my-feature-key'])
         })
     })
 })
