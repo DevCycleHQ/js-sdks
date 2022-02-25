@@ -81,8 +81,6 @@ export class EventEmitter {
             const newVariableValue = newVariable && newVariableSet[key].value
 
             if (oldVariableValue !== newVariableValue) {
-                this.emit(`${EventNames.VARIABLE_UPDATED}:*`, key, newVariable)
-                this.emit(`${EventNames.VARIABLE_UPDATED}:${key}`, key, newVariable)
                 const variables = variableDefaultMap[key] && Object.values(variableDefaultMap[key])
                 if (variables) {
                     variables.forEach((variable) => {
@@ -90,6 +88,8 @@ export class EventEmitter {
                         variable.callback?.call(variable, variable.value)
                     })
                 }
+                this.emit(`${EventNames.VARIABLE_UPDATED}:*`, key, newVariable)
+                this.emit(`${EventNames.VARIABLE_UPDATED}:${key}`, key, newVariable)
             }
         })
     }
