@@ -1,7 +1,9 @@
 import { Provider } from './context'
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { ProviderConfig } from './types'
 import initializeDVCClient from './initializeDVCClient'
+import { DVCVariable } from 'dvc-js-client-sdk'
+import context from './context'
 
 export default async function asyncWithDVCProvider(config: ProviderConfig): Promise<React.FC> {
     const { envKey, user } = config
@@ -9,6 +11,6 @@ export default async function asyncWithDVCProvider(config: ProviderConfig): Prom
     const client = await initializeDVCClient(envKey, user)
 
     return ({ children }) => {
-        return <Provider value={{ client }}>{children}</Provider>
+        return <Provider value={{ client, variables: {} }}>{children}</Provider>
     }
 }
