@@ -1,6 +1,6 @@
 {
   "name": "@devcycle/devcycle-js-sdk",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "The DevCycle JS SDK used for feature management.",
   "main": "dist/index.js",
   "files": [
