@@ -62,7 +62,7 @@ export class DVCClient implements Client {
     }
 
     variable(key: string, defaultValue: DVCVariableValue): DVCVariable {
-        const defaultValueKey = JSON.stringify(defaultValue).replace(/"/g, "")
+        const defaultValueKey = typeof defaultValue === 'string' ? defaultValue : JSON.stringify(defaultValue)
         if (this.variableDefaultMap[key] && this.variableDefaultMap[key][defaultValueKey]) {
             return this.variableDefaultMap[key][defaultValueKey]
         }

@@ -134,7 +134,7 @@ describe('DVCClient tests', () => {
             expect(variableMap['default_value']).toEqual(stringVariable)
             expect(variableMap['true']).toEqual(boolVariable)
             expect(variableMap['12.4']).toEqual(numVariable)
-            expect(variableMap[JSON.stringify(jsonVariable.defaultValue).replace(/"/g, "")]).toEqual(jsonVariable)
+            expect(variableMap[JSON.stringify(jsonVariable.defaultValue)]).toEqual(jsonVariable)
             expect(Object.values(variableMap).length).toBe(4)
         })
 
