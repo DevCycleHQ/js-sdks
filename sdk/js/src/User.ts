@@ -1,8 +1,9 @@
 import { DVCUser as User, JSON } from 'dvc-js-client-sdk'
 // import packageJson from '../package.json'
 import { v4 as uuidv4 } from 'uuid'
+import { isWeb } from './utils'
 
-export type UserParam = Pick<User, 'isAnonymous' | 'user_id' | 'email' | 'name' | 'language' | 'country' | 'appVersion' | 'appBuild' | 'customData' | 'privateCustomData'>
+export type UserParam = Pick<User, 'isAnonymous' | 'user_id' | 'email' | 'name' | 'language' | 'country' | 'appVersion' | 'appBuild' | 'customData' | 'privateCustomData' | 'deviceModel'>
 
 export class DVCUser implements User {
     isAnonymous: boolean
@@ -16,10 +17,10 @@ export class DVCUser implements User {
     customData?: JSON
     privateCustomData?: JSON
     lastSeenDate?: Date
+    deviceModel: string
     readonly createdDate: Date
     readonly platform: string
     readonly platformVersion: string
-    readonly deviceModel: string
     readonly sdkType: 'client' | 'server'
     readonly sdkVersion: string
 
@@ -38,14 +39,15 @@ export class DVCUser implements User {
         this.customData = user.customData
         this.privateCustomData = user.privateCustomData
         this.lastSeenDate = new Date()
+        this.deviceModel = window.navigator.userAgent || user.deviceModel
 
         /**
          * Read only properties initialized once
          */
+
         this.createdDate = new Date()
-        this.platform = 'web'
+        this.platform = isWeb() ? 'web' : 'ReactNative'
         this.platformVersion = '1.0.9'
-        this.deviceModel = window.navigator.userAgent
         this.sdkType = 'client'
         this.sdkVersion = '1.0.9'
     }

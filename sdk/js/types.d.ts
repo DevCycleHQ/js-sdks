@@ -97,6 +97,11 @@ declare module 'dvc-js-client-sdk' {
         privateCustomData?: JSON
 
         /**
+         * User defined deviceModel or set by SDK to User-Agent
+         */
+        deviceModel?: string
+
+        /**
          * Set by SDK automatically
          */
         readonly createdDate?: Date
@@ -115,11 +120,6 @@ declare module 'dvc-js-client-sdk' {
          * Set by SDK to ??
          */
         readonly platformVersion?: string
-
-        /**
-         * Set by SDK to User-Agent
-         */
-        readonly deviceModel?: string
 
         /**
          * SDK type

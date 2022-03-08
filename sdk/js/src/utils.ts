@@ -50,6 +50,8 @@ export function generateEventPayload(
     }
 }
 
+export const isWeb = () => typeof document !== 'undefined'
+
 export default {
     serializeUser,
     checkParamDefined,
