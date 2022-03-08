@@ -19,15 +19,10 @@ export default function DVCProvider(props: Props) {
         const client = await initializeDVCClient(envKey, user)
         setClient(client)
         client.subscribe('variableUpdated:*', (key: string, variable: DVCVariable) => {
-          if (!variables[key] || variables[key].value !== variable.value) {
-            setVariables({
-              ...variables,
-              [key]: {
-                ...variable,
-                ...variables[key]
-              }
-            })
-          }
+          setVariables({
+            ...variables,
+            ...{ [key]: variable }
+          })
         })
       })()
     }, [])
