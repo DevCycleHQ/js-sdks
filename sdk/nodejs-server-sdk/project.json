@@ -30,29 +30,29 @@
         "passWithNoTests": true
       }
     },
-    "npm-publish": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "yarn build && ../../scripts/npm-publish-check.sh \"@devcycle/nodejs-server-sdk\"",
-        "cwd": "sdk/js"
-      }
-    },
     "build": {
       "executor": "@nrwl/node:webpack",
       "outputs": [
         "{options.outputPath}"
       ],
       "options": {
-        "outputPath": "sdk/nodejs-server-sdk/dist",
+        "outputPath": "dist/sdk/nodejs-server-sdk",
+        "tsConfig": "sdk/nodejs-server-sdk/tsconfig.lib.json",
+        "packageJson": "sdk/nodejs-server-sdk/package.json",
         "main": "sdk/nodejs-server-sdk/src/index.ts",
-        "tsConfig": "sdk/nodejs-server-sdk/tsconfig.lib.json"
-      },
-      "configurations": {
-        "production": {
-          "optimization": true,
-          "extractLicenses": false,
-          "inspect": false
-        }
+        "assets": [
+          "sdk/nodejs-server-sdk/*.md"
+        ]
+      }
+    },
+    "npm-publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "dependsOn": [
+          "build"
+        ],
+        "command": "../../scripts/npm-publish-check.sh \"@devcycle/nodejs-server-sdk\"",
+        "cwd": "sdk/js"
       }
     }
   },

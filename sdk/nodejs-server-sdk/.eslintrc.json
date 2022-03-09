@@ -4,8 +4,7 @@
   ],
   "ignorePatterns": [
     "!**/*",
-    "dist/**/*",
-    "node_modules/**/*"
+    "node_modules/*"
   ],
   "overrides": [
     {
@@ -30,15 +29,6 @@
         "*.jsx"
       ],
       "rules": {}
-    },
-      {
-          "files": [
-              "*.spec.ts",
-              "*.spec.js"
-          ],
-          "rules": {
-              "@typescript-eslint/ban-ts-comment": 0
-          }
-      }
+    }
   ]
 }

@@ -29,6 +29,9 @@
       "@devcycle/devcycle-react-sdk": [
         "sdk/react/src/index.ts"
       ],
+      "@devcycle/nodejs-server-sdk": [
+        "sdk/nodejs-server-sdk/src/index.ts"
+      ],
       "@devcycle/shared/bucketing": [
         "lib/shared/bucketing/src/index.ts"
       ],
