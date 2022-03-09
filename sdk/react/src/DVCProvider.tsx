@@ -2,7 +2,7 @@ import { ProviderConfig } from './types'
 import React, { ReactNode, useEffect, useState } from 'react'
 import initializeDVCClient from './initializeDVCClient'
 import { Provider } from './context'
-import { DVCClient, DVCVariable } from '@devcycle/devcycle-js-sdk'
+import type { DVCClient, DVCVariable } from '@devcycle/devcycle-js-sdk'
 
 type Props = {
   config: ProviderConfig
@@ -15,19 +15,19 @@ export default function DVCProvider(props: Props) {
     const [variables, setVariables] = useState<{[key: string]: DVCVariable}>({})
 
     useEffect(() => {
-      (async () => {
-        const client = await initializeDVCClient(envKey, user)
-        setClient(client)
-        client.subscribe('variableUpdated:*', (key: string, variable: DVCVariable) => {
-          setVariables({
-            ...variables,
-            ...{ [key]: variable }
-          })
-        })
-      })()
+        (async () => {
+            const client = await initializeDVCClient(envKey, user)
+            setClient(client)
+            client.subscribe('variableUpdated:*', (key: string, variable: DVCVariable) => {
+                setVariables({
+                    ...variables,
+                    ...{ [key]: variable }
+                })
+            })
+        })()
     }, [])
   
     return (
-      <Provider value={{ client, variables }}>{props.children}</Provider>
+        <Provider value={{ client, variables }}>{props.children}</Provider>
     )
 }

@@ -6,7 +6,7 @@ interface DVCContext {
   variables: { [key: string]: DVCVariable}
 }
 
-const context = createContext<DVCContext>({ client: undefined, variables: {}})
+const context = createContext<DVCContext>({ client: undefined, variables: {} })
 const { Provider, Consumer } = context
 
 export { Provider, Consumer, DVCContext }
