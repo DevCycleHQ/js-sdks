@@ -45,9 +45,9 @@ export class DVCUser implements User {
          */
 
         this.createdDate = new Date()
-        this.platform = options.reactNative ? 'ReactNative' : 'web'
+        this.platform = options?.reactNative ? 'ReactNative' : 'web'
         this.platformVersion = '1.0.9'
-        this.deviceModel = options.reactNative && global.DeviceInfo ? global.DeviceInfo.getModel() : window.navigator.userAgent 
+        this.deviceModel = options?.reactNative && global.DeviceInfo ? global.DeviceInfo.getModel() : window.navigator.userAgent 
         this.sdkType = 'client'
         this.sdkVersion = '1.0.9'
     }
