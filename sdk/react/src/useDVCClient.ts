@@ -2,9 +2,9 @@ import { useContext } from 'react'
 import context from './context'
 
 export const useDVCClient = () => {
-  const { client } = useContext(context)
+    const { client } = useContext(context)
 
-  return client
+    return client
 }
 
 export default useDVCClient

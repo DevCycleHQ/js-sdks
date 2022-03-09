@@ -1,7 +1,60 @@
 {
   "root": "sdk/react",
+  "sourceRoot": "sdk/react/src",
   "implicitDependencies": [],
   "targets": {
+    "check-types": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn run -T tsc -b --incremental",
+        "cwd": "sdk/react"
+      }
+    },
+    "build": {
+      "executor": "@nrwl/web:rollup",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/sdk/react",
+        "tsConfig": "sdk/react/tsconfig.lib.json",
+        "project": "sdk/react/package.json",
+        "entryFile": "sdk/react/src/index.ts",
+        "external": [
+          "react/jsx-runtime"
+        ],
+        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "compiler": "babel",
+        "assets": [
+          {
+            "glob": "sdk/react/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "sdk/react/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/sdk/react"
+      ],
+      "options": {
+        "jestConfig": "sdk/react/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
     "npm-publish": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {

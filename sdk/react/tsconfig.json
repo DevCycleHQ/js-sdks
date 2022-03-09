@@ -1,17 +1,25 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "lib":["es6", "DOM"],
-    "target":"es5",
-    "declaration": true,
-    "noImplicitAny": true,
-    "preserveConstEnums": true,
-    "sourceMap": true,
+    "jsx": "react-jsx",
+    "allowJs": true,
     "esModuleInterop": true,
-    "outDir":"./dist/",
-    "jsx": "react",
-    "skipLibCheck": true
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
 }

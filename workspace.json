@@ -1,8 +1,8 @@
 {
   "version": 2,
   "projects": {
-    "devcycle-js-sdk": "sdk/js",
-    "nodejs-server-sdk": "sdk/nodejs-server-sdk",
+    "js": "sdk/js",
+    "nodejs": "sdk/nodejs-server-sdk",
     "react": "sdk/react",
     "shared-bucketing": "lib/shared/bucketing",
     "shared-types": "lib/shared/types"

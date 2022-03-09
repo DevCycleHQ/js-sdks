@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import { DVCClient } from 'dvc-js-client-sdk'
+import type { DVCClient } from '@devcycle/devcycle-js-sdk'
 
 interface DVCContext {
   client?: DVCClient

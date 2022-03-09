@@ -53,7 +53,7 @@
     "defaultBase": "main"
   },
   "cli": {
-    "defaultCollection": "@nrwl/nest"
+    "defaultCollection": "@nrwl/js"
   },
   "generators": {
     "@nrwl/web:application": {
@@ -66,6 +66,11 @@
       "style": "css",
       "linter": "eslint",
       "unitTestRunner": "jest"
+    },
+    "@nrwl/react": {
+      "application": {
+        "babel": true
+      }
     }
   },
   "defaultProject": "react"
