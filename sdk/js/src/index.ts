@@ -22,10 +22,12 @@ export const initialize = (environmentKey: string, user: UserParam, options?: DV
         .then(() => console.log('Successfully initialized DevCycle!'))
         .catch((err) => console.log(`Error initializing DevCycle: ${err}`))
 
-    window.addEventListener('pagehide', () => {
+    if (!options?.reactNative) {
+      window.addEventListener('pagehide', () => {
         client.flushEvents()
-    })
-
+      })
+    }
+    
     return client
 }
 

@@ -10,12 +10,12 @@ type Props = {
 }
 
 export default function DVCProvider(props: Props) {
-    const { envKey, user } = props.config
+    const { envKey, user, options } = props.config
     const [client, setClient] = useState<DVCClient | undefined>(undefined)
 
     useEffect(() => {
         (async () => {
-            setClient(await initializeDVCClient(envKey, user))
+            setClient(await initializeDVCClient(envKey, user, options))
         })()
     }, [])
 
