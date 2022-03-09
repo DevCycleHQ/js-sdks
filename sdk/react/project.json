@@ -24,6 +24,7 @@
           "react/jsx-runtime"
         ],
         "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "buildableProjectDepsInPackageJsonType": "dependencies",
         "compiler": "babel",
         "assets": [
           {
