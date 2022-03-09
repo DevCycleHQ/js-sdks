@@ -23,14 +23,17 @@
     "strictPropertyInitialization": false,
     "baseUrl": ".",
     "paths": {
+      "@devcycle/devcycle-js-sdk": [
+        "sdk/js/src/index.ts"
+      ],
+      "@devcycle/devcycle-react-sdk": [
+        "sdk/react/src/index.ts"
+      ],
       "@devcycle/shared/bucketing": [
         "lib/shared/bucketing/src/index.ts"
       ],
       "@devcycle/types": [
         "lib/shared/types/src/index.ts"
-      ],
-      "@devcycle/devcycle-js-sdk": [
-        "sdk/js/src/index.ts"
       ]
     }
   },
