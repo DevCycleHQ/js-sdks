@@ -31,7 +31,7 @@
       }
     },
     "build": {
-      "executor": "@nrwl/node:webpack",
+      "executor": "@nrwl/js:tsc",
       "outputs": [
         "{options.outputPath}"
       ],
@@ -39,6 +39,7 @@
         "outputPath": "dist/sdk/nodejs-server-sdk",
         "tsConfig": "sdk/nodejs-server-sdk/tsconfig.lib.json",
         "packageJson": "sdk/nodejs-server-sdk/package.json",
+        "buildableProjectDepsInPackageJsonType": "dependencies",
         "main": "sdk/nodejs-server-sdk/src/index.ts",
         "assets": [
           "sdk/nodejs-server-sdk/*.md"

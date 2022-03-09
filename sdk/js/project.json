@@ -35,8 +35,7 @@
       ],
       "options": {
         "jestConfig": "sdk/js/jest.config.js",
-        "passWithNoTests": true,
-        "cwd": "sdk/js"
+        "passWithNoTests": true
       }
     },
     "build": {
@@ -46,8 +45,10 @@
       ],
       "options": {
         "outputPath": "dist/sdk/js",
-        "main": "sdk/js/src/index.ts",
         "tsConfig": "sdk/js/tsconfig.lib.json",
+        "packageJson": "sdk/js/package.json",
+        "buildableProjectDepsInPackageJsonType": "dependencies",
+        "main": "sdk/js/src/index.ts",
         "assets": [
           "sdk/js/*.md"
         ]
