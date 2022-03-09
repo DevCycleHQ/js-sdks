@@ -2,7 +2,7 @@ import { isString } from 'lodash'
 import {
     PublicEnvironment, PublicFeature, PublicProject, PublicVariable
 } from './configBody'
-import { VariableValue } from '@devcycle/shared/mongo/schemas'
+import { VariableValue } from './models'
 import {
     IsEmail, IsDate, IsOptional, IsNumber, IsBoolean,
     IsString, IsIn, IsNotEmpty, IsISO31661Alpha2

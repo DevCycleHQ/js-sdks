@@ -10,10 +10,7 @@ eg.
 The top-level folders inside `lib/` indicate where the library is intended to be used:
 ```
 lib/
-  cf-workers/   - libraries that only work in cf workers
-  nest/         - libraries that only work in nest services
   shared/       - libraries that work in any JS project
-  test/         - libraries specifically to help with testing
 ```
 
 We are loosely following the advice in these articles for organizing our libraries
