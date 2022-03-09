@@ -1,7 +1,7 @@
 'use strict'
-import { orderBy, pick } from 'lodash'
+import { orderBy, pick, last, first } from 'lodash'
 import {
-    ConfigBody, PublicTarget, PublicFeature, BucketedUserConfig, PublicRollout, DVCAPIUser
+    ConfigBody, PublicTarget, PublicFeature, BucketedUserConfig, PublicRollout, DVCAPIUser, PublicRolloutStage
 } from '@devcycle/shared/ts-types'
 
 import murmurhash from 'murmurhash'
@@ -51,46 +51,63 @@ export const decideTargetVariation = (
     throw new Error('Failed to decide target variation')
 }
 
-export const getCurrentRolloutPercentage = (rollout: PublicRollout): number => {
-    // coerce to numbers to appease the TS gods
-    const { startDate, targetDate } = rollout
-    const startTime = startDate?.getTime()
-    const targetTime = targetDate?.getTime()
-    const now = Date.now()
+export const getCurrentRolloutPercentage = (rollout: PublicRollout, currentDate: Date): number => {
+    const start = rollout.startPercentage
+    const startDate = rollout.startDate
 
-    if (targetTime && !startTime) {
-        throw new Error('Invalid rollout: targetTime provided with no startTime or targetPercentage')
+    if (rollout.type === 'schedule') {
+        return currentDate >= startDate ? 1 : 0
     }
 
-    // Rollout hasn't started yet
-    if (startTime && now < startTime) {
-        return -1
+    if (!(typeof start === 'number')) {
+        throw new Error('Invalid rollout configuration')
     }
 
-    // This implies that there is no rollout, everyone gets it right away
-    if (!rollout.targetPercentage) {
-        return rollout.startPercentage
+    const _currentStage = last(
+        rollout.stages?.filter((stage) => stage.date <= currentDate),
+    )
+    const nextStage = first(
+        rollout.stages?.filter((stage) => stage.date > currentDate),
+    )
+
+    const currentStage: Omit<PublicRolloutStage, 'type'> | null =
+        _currentStage || (startDate < currentDate ? {
+            percentage: start,
+            date: startDate
+        } : null)
+
+    if (!currentStage) {
+        return 0
     }
 
-    // Rollout is complete
-    if (targetTime && now >= targetTime) {
-        return rollout.targetPercentage
-    // In case you want to permanent rollout to some percentage of the audience
-    } else if (!targetTime || !startTime) {
-        return rollout.startPercentage
-    } else {
-        const timeDiff = (now - startTime) / (targetTime - startTime)
-        const rolloutDiff = (rollout.targetPercentage - rollout.startPercentage)
-        return (timeDiff * rolloutDiff) + rollout.startPercentage
+    if (
+        !nextStage || nextStage.type === 'discrete'
+    ) {
+        return currentStage.percentage
     }
+
+    const currentDatePercentage = (currentDate.getTime() - currentStage.date.getTime()) /
+            (nextStage.date.getTime() - currentStage.date.getTime())
+
+    if (currentDatePercentage === 0) {
+        return 0
+    }
+
+    return (
+        currentStage.percentage +
+        (nextStage.percentage - currentStage.percentage) * currentDatePercentage
+    )
 }
 
 export const doesUserPassRollout = (
     { rollout, boundedHash }:
-    { rollout: PublicRollout, boundedHash: number }
+    { rollout?: PublicRollout, boundedHash: number }
 ): boolean => {
-    const rolloutPercentage = getCurrentRolloutPercentage(rollout)
-    return (boundedHash <= rolloutPercentage)
+    if (!rollout) {
+        return true
+    }
+    const rolloutPercentage = getCurrentRolloutPercentage(rollout, new Date())
+    return !!rolloutPercentage && (boundedHash <= rolloutPercentage)
 }
 
 export const bucketForSegmentedFeature = ({ boundedHash, target }:
@@ -148,7 +165,7 @@ export const generateBucketedConfig = (
     segmentedFeatures.forEach(({ feature, target }) => {
         const { _id, key, type, variations } = feature
         const { rolloutHash, bucketingHash } = generateBoundedHashes(user.user_id, target._id)
-        if (!doesUserPassRollout({ boundedHash: rolloutHash, rollout: target.rollout })) {
+        if (target.rollout && !doesUserPassRollout({ boundedHash: rolloutHash, rollout: target.rollout })) {
             return
         }
 

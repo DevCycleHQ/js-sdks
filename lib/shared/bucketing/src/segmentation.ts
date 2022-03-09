@@ -4,7 +4,7 @@ import {
 import { versionCompare } from './versionCompare'
 import {
     TopLevelOperator, AudienceFilterOrOperator, UserSubType
-} from '@devcycle/shared/mongo/schemas'
+} from '@devcycle/shared/ts-types'
 import UAParser from 'ua-parser-js'
 
 // TODO add support for OR/XOR as well as recursive filters
@@ -45,7 +45,8 @@ const filterFunctionsBySubtype: FilterFunctionsBySubtype = {
     platformVersion: (data, filter) => checkVersionFilters(data.platformVersion, filter),
     deviceModel: (data, filter) => checkStringsFilter(data.deviceModel, filter),
     platform: (data, filter) => checkStringsFilter(data.platform, filter),
-    customData: (data, filter) => checkCustomData(data.customData, filter)
+    customData: (data, filter) =>
+        checkCustomData(data.customData, filter) || checkCustomData(data.privateCustomData, filter),
 }
 
 export const convertToSemanticVersion = (version: string) => {
@@ -237,10 +238,6 @@ export const checkCustomData = (data: any, filter: AudienceFilterOrOperator): bo
         } else if (!dataValue && operator === '!=') {
             return true
         } else {
-            if (firstValue && dataValue) {
-                console.warn('Custom Data value types not equal! filter value: ' +
-                    firstValue + ', data value: ' + dataValue)
-            }
             return false
         }
     }
