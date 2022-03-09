@@ -5,7 +5,7 @@ import { EventQueue } from '../src/eventQueue'
 import { EventTypes } from '../src/models/requestEvent'
 import { publishEvents } from '../src/request'
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { BucketedUserConfig } from '@devcycle/shared/ts-types'
+import { BucketedUserConfig } from '@devcycle/types'
 import { mocked } from 'ts-jest/utils'
 import { defaultLogger } from '../src'
 

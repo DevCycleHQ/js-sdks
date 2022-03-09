@@ -1,5 +1,5 @@
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { BucketedUserConfig, ConfigBody } from '@devcycle/shared/ts-types'
+import { BucketedUserConfig, ConfigBody } from '@devcycle/types'
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { generateBucketedConfig } from '@devcycle/shared/bucketing'
 import { DVCUser } from '../../types'

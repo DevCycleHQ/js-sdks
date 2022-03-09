@@ -4,7 +4,7 @@ import { checkParamDefined, checkParamString } from './utils/paramUtils'
 import { DVCRequestEvent } from './models/requestEvent'
 import { DVCRequestUser } from './models/requestUser'
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { BucketedUserConfig } from '@devcycle/shared/ts-types'
+import { BucketedUserConfig } from '@devcycle/types'
 
 export const EventTypes: Record<string, string> = {
     variableEvaluated: 'variableEvaluated',
