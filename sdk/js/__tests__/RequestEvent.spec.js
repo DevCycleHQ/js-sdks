@@ -1,5 +1,5 @@
-import { DVCRequestEvent } from '../RequestEvent'
-import { EventTypes } from '../EventQueue'
+import { DVCRequestEvent } from '../src/RequestEvent'
+import { EventTypes } from '../src/EventQueue'
 
 describe('RequestEvent tests', () => {
     it('should throw if no type defined', () => {

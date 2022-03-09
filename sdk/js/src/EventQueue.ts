@@ -1,21 +1,24 @@
 import { DVCClient } from './Client'
-import { DVCEvent } from 'dvc-js-client-sdk'
+import { DVCEvent } from './types'
 import { publishEvents } from './Request'
 import { checkParamDefined } from './utils'
-import { DVCRequestEvent } from './RequestEvent'
 
-export const EventTypes: Record<string, string> = {
+export const EventTypes = {
     variableEvaluated: 'variableEvaluated',
-    variableDefaulted: 'variableDefaulted',
+    variableDefaulted: 'variableDefaulted'
+}
+
+type AggregateEvent = DVCEvent & {
+    target: string
 }
 
 export class EventQueue {
     private readonly environmentKey: string
     client: DVCClient
     eventQueue: DVCEvent[]
-    aggregateEventMap: Record<string, Record<string, DVCEvent>>
+    aggregateEventMap: Record<string, Record<string, AggregateEvent>>
     flushEventsMS: number
-    flushInterval: NodeJS.Timer
+    flushInterval: ReturnType<typeof setInterval>
 
     constructor(environmentKey: string, dvcClient: DVCClient, flushEventsMS?: number) {
         this.environmentKey = environmentKey
@@ -75,7 +78,7 @@ export class EventQueue {
      * Queue DVCEvent that can be aggregated together, where multiple calls are aggregated
      * by incrementing the 'value' field.
      */
-    queueAggregateEvent(event: DVCEvent) {
+    queueAggregateEvent(event: AggregateEvent) {
         checkParamDefined('type', event.type)
         checkParamDefined('target', event.target)
         event.date = Date.now()
@@ -85,7 +88,7 @@ export class EventQueue {
         if (!aggEventType) {
             this.aggregateEventMap[event.type] = { [event.target]: event }
         } else if (aggEventType[event.target]) {
-            aggEventType[event.target].value++
+            aggEventType[event.target].value!++
         } else {
             aggEventType[event.target] = event
         }

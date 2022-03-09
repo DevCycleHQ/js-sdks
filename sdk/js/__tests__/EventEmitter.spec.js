@@ -1,5 +1,5 @@
-import { EventEmitter } from '../EventEmitter'
-import { DVCVariable } from '../Variable'
+import { EventEmitter } from '../src/EventEmitter'
+import { DVCVariable } from '../src/Variable'
 
 describe('EventEmitter tests', () => {
     const eventEmitter = new EventEmitter()

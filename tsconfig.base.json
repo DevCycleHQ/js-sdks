@@ -20,12 +20,13 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "strictNullChecks": true,
+    "strictPropertyInitialization": false,
     "baseUrl": ".",
     "paths": {
       "@devcycle/shared/bucketing": [
         "lib/shared/bucketing/src/index.ts"
       ],
-      "@devcycle/shared/types": [
+      "@devcycle/types": [
         "lib/shared/types/src/index.ts"
       ],
       "@devcycle/devcycle-js-sdk": [

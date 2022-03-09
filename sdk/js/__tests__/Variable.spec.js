@@ -1,4 +1,4 @@
-import { DVCVariable } from '../Variable'
+import { DVCVariable } from '../src/Variable'
 
 describe('DVCVariable tests', () => {
     it('should throw error if no key or default value', () => {

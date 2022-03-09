@@ -1,8 +1,9 @@
-import { DVCFeatureSet, DVCVariableSet, DVCUser } from 'dvc-js-client-sdk'
+import { DVCFeatureSet, DVCVariableSet, DVCEvent } from './types'
+import { DVCUser } from './User'
 import { serializeUser, generateEventPayload } from './utils'
-import { DVCEvent } from 'dvc-js-client-sdk'
 import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios'
 import axiosRetry from 'axios-retry'
+import { BucketedUserConfig } from '@devcycle/types'
 
 const axiosClient = axios.create({
     validateStatus: (status: number) => status < 400 && status >= 200,
@@ -13,7 +14,7 @@ axiosRetry(axiosClient, {
         return Math.pow(2, retryCount) * 1000
     },
     retryCondition: (error) => {
-        return error.response.status >= 500
+        return (error?.response?.status || 0) >= 500
     }
 })
 
@@ -23,23 +24,6 @@ export const EVENT_URL = 'https://events'
 
 export const CONFIG_PATH = '/v1/sdkConfig'
 export const EVENTS_PATH = '/v1/events'
-
-export type BucketedUserConfig = {
-    project: {
-        _id: string,
-        key: string
-    }
-    environment: {
-        _id: string,
-        key: string
-    }
-    features?: DVCFeatureSet
-    featureVariationMap?: {
-        [key: string]: string
-    }
-    variables?: DVCVariableSet
-    knownVariableKeys?: string[]
-}
 
 export const baseRequestHeaders = (environmentKey?: string): AxiosRequestHeaders => {
     return {

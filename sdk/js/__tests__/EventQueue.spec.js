@@ -1,6 +1,6 @@
-import * as Request from '../Request'
-import { DVCClient } from '../Client'
-import { EventQueue, EventTypes } from '../EventQueue'
+import * as Request from '../src/Request'
+import { DVCClient } from '../src/Client'
+import { EventQueue, EventTypes } from '../src/EventQueue'
 let eventQueue, dvcClient
 
 describe('EventQueue tests', () => {
@@ -49,10 +49,10 @@ describe('EventQueue tests', () => {
             eventQueue.queueAggregateEvent(event2)
             eventQueue.queueAggregateEvent(defaultEvent1)
             eventQueue.queueAggregateEvent(defaultEvent2)
-            
+
             const aggregateEvaluatedEvent = eventQueue.aggregateEventMap[EventTypes.variableEvaluated]['dummy_key1']
             const aggregateDefaultedEvent = eventQueue.aggregateEventMap[EventTypes.variableDefaulted]['dummy_key1']
-            
+
             expect(aggregateEvaluatedEvent).toBeDefined()
             expect(aggregateEvaluatedEvent.value).toBe(2)
 
@@ -62,11 +62,11 @@ describe('EventQueue tests', () => {
 
         it('aggregates with the proper value after flushing', async () => {
             const event = { type: EventTypes.variableEvaluated, target: 'dummy_key1', clientDate: Date.now() }
-            
+
             eventQueue.queueAggregateEvent(event)
             expect(eventQueue.aggregateEventMap[EventTypes.variableEvaluated]['dummy_key1'].value).toBe(1)
             eventQueue.aggregateEventMap = {}
-            
+
             eventQueue.queueAggregateEvent(event)
             expect(eventQueue.aggregateEventMap[EventTypes.variableEvaluated]['dummy_key1'].value).toBe(1)
         })

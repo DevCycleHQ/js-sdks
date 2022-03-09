@@ -1,7 +1,6 @@
-import { DVCEvent } from 'dvc-js-client-sdk'
+import { DVCEvent, DVCUser } from './types'
 import { checkParamDefined } from './utils'
 import { EventTypes } from './EventQueue'
-import { DVCUser } from 'dvc-js-client-sdk'
 
 export type DVCEventPayload = {
     events: DVCRequestEvent[],
@@ -21,7 +20,7 @@ export class DVCRequestEvent {
     constructor(event: DVCEvent, user_id: string, featureVars?: Record<string, string>) {
         const { type, target, date, value, metaData } = event
         checkParamDefined('type', type)
-        const isCustomEvent = !EventTypes[type]
+        const isCustomEvent = !(type in EventTypes)
         this.type = isCustomEvent ? 'customEvent' : type
         this.customType = isCustomEvent ? type : undefined
         this.target = target

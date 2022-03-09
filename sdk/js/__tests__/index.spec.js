@@ -1,8 +1,8 @@
-import * as DVCClient from '../'
-import { getConfigJson } from '../Request'
+import * as DVCClient from '../src'
+import { getConfigJson } from '../src/Request'
 import { mocked } from 'ts-jest/utils'
 
-jest.mock('../Request')
+jest.mock('../src/Request')
 mocked(getConfigJson).mockImplementation(() => {
     return Promise.resolve({})
 })
@@ -22,13 +22,13 @@ describe('initialize tests', () => {
     it('should throw an error if user is not passed in initialize', () => {
         expect(() => DVCClient.initialize('YOUR_CLIENT_SIDE_ID')).toThrow(expect.anything())
     })
-    
+
     it('should flush when pagehide is triggered', () => {
         const user = { user_id: 'bruh' }
         const client = DVCClient.initialize('YOUR_CLIENT_SIDE_ID', user)
         const flushMock = jest.fn()
         client.flushEvents = flushMock
-        
+
         window.dispatchEvent(new Event('pagehide'))
         expect(flushMock).toBeCalled()
     })
