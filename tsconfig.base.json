@@ -25,8 +25,8 @@
       "@devcycle/shared/bucketing": [
         "lib/shared/bucketing/src/index.ts"
       ],
-      "@devcycle/shared/ts-types": [
-        "lib/shared/ts-types/src/index.ts"
+      "@devcycle/shared/types": [
+        "lib/shared/types/src/index.ts"
       ],
       "@devcycle/devcycle-js-sdk": [
         "sdk/js/src/index.ts"

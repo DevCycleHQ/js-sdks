@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { ConfigBody } from '@devcycle/shared/ts-types'
+import { ConfigBody } from '@devcycle/types'
 import { DVCLogger, DVCOptions } from '../types'
 import { getEnvironmentConfig } from './request'
 
