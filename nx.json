@@ -24,7 +24,8 @@
           "check-types",
           "package",
           "prepare"
-        ]
+        ],
+        "parallel": 1
       }
     }
   },

@@ -5,8 +5,8 @@
     "check-types": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-          "command": "yarn run -T tsc -b --incremental",
-          "cwd": "sdk/nodejs-server-sdk"
+        "command": "yarn run -T tsc -b --incremental",
+        "cwd": "sdk/nodejs-server-sdk"
       }
     },
     "lint": {
@@ -38,21 +38,21 @@
       }
     },
     "build": {
-      "executor": "@nrwl/node:build",
+      "executor": "@nrwl/node:webpack",
       "outputs": [
-          "{options.outputPath}"
+        "{options.outputPath}"
       ],
       "options": {
-          "outputPath": "sdk/nodejs-server-sdk/dist",
-          "main": "sdk/nodejs-server-sdk/src/index.ts",
-          "tsConfig": "sdk/nodejs-server-sdk/tsconfig.lib.json"
+        "outputPath": "sdk/nodejs-server-sdk/dist",
+        "main": "sdk/nodejs-server-sdk/src/index.ts",
+        "tsConfig": "sdk/nodejs-server-sdk/tsconfig.lib.json"
       },
       "configurations": {
-          "production": {
-              "optimization": true,
-              "extractLicenses": false,
-              "inspect": false
-          }
+        "production": {
+          "optimization": true,
+          "extractLicenses": false,
+          "inspect": false
+        }
       }
     }
   },
