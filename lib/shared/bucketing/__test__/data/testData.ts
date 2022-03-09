@@ -11,7 +11,7 @@ import {
     FilterType,
     UserSubType,
     VariableType
-} from '@devcycle/shared/ts-types'
+} from '@devcycle/types'
 
 import moment from 'moment'
 

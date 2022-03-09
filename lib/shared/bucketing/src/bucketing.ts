@@ -2,7 +2,7 @@
 import { orderBy, pick, last, first } from 'lodash'
 import {
     ConfigBody, PublicTarget, PublicFeature, BucketedUserConfig, PublicRollout, DVCAPIUser, PublicRolloutStage
-} from '@devcycle/shared/ts-types'
+} from '@devcycle/types'
 
 import murmurhash from 'murmurhash'
 import { evaluateOperator } from './segmentation'

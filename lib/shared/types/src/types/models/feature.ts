@@ -64,5 +64,5 @@ export class Feature<IdType = string> {
     variations: Variation<IdType>[]
 
     @Type(() => FeatureConfiguration)
-    configuration: FeatureConfiguration<IdType>
+        configuration: FeatureConfiguration<IdType>
 }

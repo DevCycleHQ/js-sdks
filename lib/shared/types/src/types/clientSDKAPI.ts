@@ -23,14 +23,14 @@ export class DVCAPIUser {
     @IsBoolean()
     @IsOptional()
     @Transform(({ value }) => isString(value) ? value === 'true' : value)
-    isAnonymous?: boolean
+        isAnonymous?: boolean
 
     /**
      * Must be defined if `isAnonymous = false`
      */
     @IsString()
     @IsNotEmpty()
-    user_id: string
+        user_id: string
 
     /**
      * Email used for identifying a device user in the dashboard,
@@ -38,7 +38,7 @@ export class DVCAPIUser {
      */
     @IsEmail()
     @IsOptional()
-    email?: string
+        email?: string
 
     /**
      * Name of the user which can be used for identifying a device user,
@@ -46,28 +46,28 @@ export class DVCAPIUser {
      */
     @IsString()
     @IsOptional()
-    name?: string
+        name?: string
 
     /**
      * ISO 639-1 two letter codes
      */
     @IsString()
     @IsOptional()
-    language?: string
+        language?: string
 
     /**
      * ISO 3166 alpha-2
      */
     @IsISO31661Alpha2()
     @IsOptional()
-    country?: string
+        country?: string
 
     /**
      * Application Version, can be used for audience segmentation.
      */
     @IsString()
     @IsOptional()
-    appVersion?: string
+        appVersion?: string
 
     /**
      * Application Build, can be used for audience segmentation.
@@ -75,7 +75,7 @@ export class DVCAPIUser {
     @IsNumber()
     @IsOptional()
     @Type(() => Number)
-    appBuild?: number
+        appBuild?: number
 
     /**
      * Custom JSON data used for audience segmentation, must be limited to __kb in size.
@@ -84,7 +84,7 @@ export class DVCAPIUser {
     @IsDVCJSONObject()
     @IsOptional()
     @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-    customData?: DVCJSON
+        customData?: DVCJSON
 
     /**
      * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
@@ -94,7 +94,7 @@ export class DVCAPIUser {
     @IsDVCJSONObject()
     @IsOptional()
     @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-    privateCustomData?: DVCJSON
+        privateCustomData?: DVCJSON
 
     /**
      * Set by SDK automatically
@@ -102,7 +102,7 @@ export class DVCAPIUser {
     @IsDate()
     @IsOptional()
     @Transform(({ value }) => value ? new Date(Number(value)) : undefined)
-    createdDate?: Date
+        createdDate?: Date
 
     /**
      * Set by SDK automatically
@@ -110,28 +110,28 @@ export class DVCAPIUser {
     @IsDate()
     @IsOptional()
     @Transform(({ value }) => value ? new Date(Number(value)) : undefined)
-    lastSeenDate?: Date
+        lastSeenDate?: Date
 
     /**
      * Set by SDK to 'web'
      */
     @IsString()
     @IsOptional()
-    platform?: string
+        platform?: string
 
     /**
      * Set by SDK to ??
      */
     @IsString()
     @IsOptional()
-    platformVersion?: string
+        platformVersion?: string
 
     /**
      * Set by SDK to User-Agent
      */
     @IsString()
     @IsOptional()
-    deviceModel?: string
+        deviceModel?: string
 
     /**
      * SDK type
@@ -140,14 +140,14 @@ export class DVCAPIUser {
     @IsOptional()
     @IsIn(['client', 'server', 'mobile', 'api'])
     @Transform(({ value }) => value)
-    sdkType?: SDKTypes = 'api'
+        sdkType?: SDKTypes = 'api'
 
     /**
      * SDK Version
      */
     @IsString()
     @IsOptional()
-    sdkVersion?: string
+        sdkVersion?: string
 }
 
 /**
@@ -163,14 +163,14 @@ export class DVCClientAPIUser implements DVCAPIUser {
      */
     @IsBoolean()
     @Transform(({ value }) => isString(value) ? value === 'true' : value)
-    isAnonymous: boolean
+        isAnonymous: boolean
 
     /**
      * Must be defined if `isAnonymous = false`
      */
     @IsString()
     @IsNotEmpty()
-    user_id: string
+        user_id: string
 
     /**
      * Email used for identifying a device user in the dashboard,
@@ -178,7 +178,7 @@ export class DVCClientAPIUser implements DVCAPIUser {
      */
     @IsEmail()
     @IsOptional()
-    email?: string
+        email?: string
 
     /**
      * Name of the user which can be used for identifying a device user,
@@ -186,28 +186,28 @@ export class DVCClientAPIUser implements DVCAPIUser {
      */
     @IsString()
     @IsOptional()
-    name?: string
+        name?: string
 
     /**
      * ISO 639-1 two letter codes
      */
     @IsString()
     @IsOptional()
-    language?: string
+        language?: string
 
     /**
      * ISO 3166 alpha-2
      */
     @IsISO31661Alpha2()
     @IsOptional()
-    country?: string
+        country?: string
 
     /**
      * Application Version, can be used for audience segmentation.
      */
     @IsString()
     @IsOptional()
-    appVersion?: string
+        appVersion?: string
 
     /**
      * Application Build, can be used for audience segmentation.
@@ -215,7 +215,7 @@ export class DVCClientAPIUser implements DVCAPIUser {
     @IsNumber()
     @IsOptional()
     @Type(() => Number)
-    appBuild?: number
+        appBuild?: number
 
     /**
      * Custom JSON data used for audience segmentation, must be limited to __kb in size.
@@ -224,7 +224,7 @@ export class DVCClientAPIUser implements DVCAPIUser {
     @IsDVCJSONObject()
     @IsOptional()
     @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-    customData?: DVCJSON
+        customData?: DVCJSON
 
     /**
      * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
@@ -234,61 +234,61 @@ export class DVCClientAPIUser implements DVCAPIUser {
     @IsDVCJSONObject()
     @IsOptional()
     @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-    privateCustomData?: DVCJSON
+        privateCustomData?: DVCJSON
 
     /**
      * Set by SDK automatically
      */
     @IsDate()
     @Transform(({ value }) => value ? new Date(Number(value)) : undefined)
-    createdDate: Date
+        createdDate: Date
 
     /**
      * Set by SDK automatically
      */
     @IsDate()
     @Transform(({ value }) => value ? new Date(Number(value)) : undefined)
-    lastSeenDate: Date
+        lastSeenDate: Date
 
     /**
      * Set by SDK to 'web'
      */
     @IsString()
     @IsNotEmpty()
-    platform: string
+        platform: string
 
     /**
      * Set by SDK to ??
      */
     @IsString()
     @IsNotEmpty()
-    platformVersion: string
+        platformVersion: string
 
     /**
      * Set by SDK to User-Agent
      */
     @IsString()
     @IsNotEmpty()
-    deviceModel: string
+        deviceModel: string
 
     /**
      * SDK type
      */
     @IsString()
     @IsIn(['client', 'mobile'])
-    sdkType: SDKTypes
+        sdkType: SDKTypes
 
     /**
      * SDK Version
      */
     @IsString()
     @IsNotEmpty()
-    sdkVersion: string
+        sdkVersion: string
 
     @IsBoolean()
     @IsOptional()
     @Transform(({ value }) => isString(value) ? value === 'true' : value)
-    isDebug?: boolean
+        isDebug?: boolean
 }
 
 export type SDKVariable = PublicVariable & {

@@ -11,33 +11,33 @@ export class DVCEvent {
      */
     @IsNotEmpty()
     @IsString()
-    type: string
+        type: string
 
     /**
      * target / subject of event. Contextual to event type
      */
     @IsOptional()
     @IsString()
-    target?: string
+        target?: string
 
     /**
      * date the event occurred according to client
      */
     @IsOptional()
     @IsNumber()
-    date?: number
+        date?: number
 
     /**
      * value for numerical events. Contextual to event type
      */
     @IsOptional()
     @IsNumber()
-    value?: number
+        value?: number
 
     /**
      * extra metadata for event. Contextual to event type
      */
     @IsOptional()
     @IsObject()
-    metaData?: Record<string, unknown>
+        metaData?: Record<string, unknown>
 }
