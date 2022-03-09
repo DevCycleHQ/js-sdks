@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios'
 import { ConfigBody } from '@devcycle/types'
 import { DVCLogger, DVCOptions } from '../types'
 import { getEnvironmentConfig } from './request'
+import { plainToClass } from 'class-transformer'
 
 type ConfigPollingOptions = DVCOptions & {
     cdnURI?: string
@@ -68,7 +69,7 @@ export class EnvironmentConfigManager {
         if (res?.status === 304) {
             this.logger.debug(`Config not modified, using cache, etag: ${this.configEtag}`)
         } else if (res?.status === 200) {
-            this.config = res?.data
+            this.config = res?.data ? plainToClass(ConfigBody, res.data): undefined
             this.configEtag = res?.headers?.etag
         } else if (this.config) {
             this.logger.error(`Failed to download config, using cached version. url: ${url}.`)
