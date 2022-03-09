@@ -4,7 +4,7 @@ import {
 import { versionCompare } from './versionCompare'
 import {
     TopLevelOperator, AudienceFilterOrOperator, UserSubType
-} from '@devcycle/shared/ts-types'
+} from '@devcycle/types'
 import UAParser from 'ua-parser-js'
 
 // TODO add support for OR/XOR as well as recursive filters

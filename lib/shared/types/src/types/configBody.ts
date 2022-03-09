@@ -35,27 +35,27 @@ export class ConfigBody<IdType = string> {
      * Fully populated Feature model containing FeatureConfigurations / Variations / Audiences
      */
      @Type(() => Feature)
-     features: Feature<IdType>[]
+         features: Feature<IdType>[]
 
-    /**
+     /**
      * All dynamic variables in a project
      */
-    variables: Variable<IdType>[]
+     variables: Variable<IdType>[]
 
-    /**
+     /**
      * Map of `variable.key` to `hash(variable.key + environment.apiKey)`
      * of all known variable keys. This is used to generate the `knownVariableKeys`
      * in the BucketingAPI response.
      */
-    variableHashes: {
+     variableHashes: {
         [key: string]: number
     }
 
-    /**
+     /**
      * **Implement Later**
      *
      * All List Audiences in the project
      * TODO make required when implemented
      */
-    listAudiences?: ListAudience<IdType>[]
+     listAudiences?: ListAudience<IdType>[]
 }

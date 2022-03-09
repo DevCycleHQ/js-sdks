@@ -11,7 +11,7 @@ export class RolloutStage {
      * Date the target percentage below should be fully applied.
      */
     @Type(() => Date)
-    date: Date
+        date: Date
 
     /**
      * Target percentage this step should reach by the above date.
@@ -26,24 +26,24 @@ export class Rollout {
     /**
      * Type of rollout
      */
-     type: 'schedule' | 'gradual' | 'stepped'
+    type: 'schedule' | 'gradual' | 'stepped'
 
-     /**
+    /**
       * Rollout start percentage
       */
-     startPercentage?: number
+    startPercentage?: number
 
      /**
       * Date to start rollout
       */
      @Type(() => Date)
-     startDate: Date
+         startDate: Date
 
      /**
       * Stages of rollout
       */
      @Type(() => RolloutStage)
-     stages?: RolloutStage[]
+         stages?: RolloutStage[]
 }
 
 export class TargetDistribution<IdType = string> {
@@ -75,7 +75,7 @@ export class Target<IdType = string> {
      * Rollout sub-document describing how a Target's audience is rolled out
      */
     @Type(() => Rollout)
-    rollout?: Rollout
+        rollout?: Rollout
 
     /**
      * Specifies variation distribution percentages for features
@@ -137,5 +137,5 @@ export class FeatureConfiguration<IdType = string> {
      * Defines the targets to evaluate what variation a user should be delivered.
      */
     @Type(() => Target)
-    targets: Target<IdType>[]
+        targets: Target<IdType>[]
 }

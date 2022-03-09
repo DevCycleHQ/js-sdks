@@ -1,0 +1,49 @@
+{
+  "root": "lib/shared/types",
+  "sourceRoot": "lib/shared/types/src",
+  "targets": {
+    "check-types": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn run -T tsc -b --incremental",
+        "cwd": "lib/shared/types"
+      }
+    },
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/lib/shared/types",
+        "main": "lib/shared/types/src/index.ts",
+        "tsConfig": "lib/shared/types/tsconfig.lib.json",
+        "assets": [
+          "lib/shared/types/*.md"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "lib/shared/types/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/lib/shared/types"
+      ],
+      "options": {
+        "jestConfig": "lib/shared/types/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
