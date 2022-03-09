@@ -13,7 +13,7 @@
     "target": "es2015",
     "module": "esnext",
     "lib": [
-      "es2017",
+      "es2019",
       "dom"
     ],
     "resolveJsonModule": true,
@@ -21,7 +21,17 @@
     "skipDefaultLibCheck": true,
     "strictNullChecks": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@devcycle/shared/bucketing": [
+        "lib/shared/bucketing/src/index.ts"
+      ],
+      "@devcycle/shared/ts-types": [
+        "lib/shared/ts-types/src/index.ts"
+      ],
+      "@devcycle/devcycle-js-sdk": [
+        "sdk/js/src/index.ts"
+      ]
+    }
   },
   "exclude": [
     "node_modules",

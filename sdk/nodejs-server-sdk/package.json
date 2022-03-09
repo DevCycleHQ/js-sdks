@@ -1,6 +1,6 @@
 {
   "name": "@devcycle/nodejs-server-sdk",
-  "version": "1.0.4",
+  "version": "1.0.8",
   "description": "The DevCycle NodeJS Server SDK used for feature management.",
   "main": "dist/main.js",
   "types": "types.d.ts",

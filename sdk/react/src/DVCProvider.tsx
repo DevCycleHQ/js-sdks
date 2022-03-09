@@ -2,6 +2,7 @@ import { ProviderConfig } from './types'
 import React, { ReactNode, useEffect, useState } from 'react'
 import initializeDVCClient from './initializeDVCClient'
 import { Provider } from './context'
+import { DVCClient } from '@devcycle/devcycle-js-sdk'
 
 type Props = {
   config: ProviderConfig
@@ -10,7 +11,7 @@ type Props = {
 
 export default function DVCProvider(props: Props) {
   const { envKey, user } = props.config
-  const [client, setClient] = useState(undefined)
+  const [client, setClient] = useState<DVCClient | undefined>(undefined)
 
   useEffect(() => {
     (async () => {

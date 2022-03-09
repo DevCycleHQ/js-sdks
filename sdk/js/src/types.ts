@@ -1,20 +1,25 @@
-// declare module 'dvc-js-client-sdk' {
-import { DVCJSON } from './dvcJSON'
 
-export type DVCVariableValue = string | number | boolean | DVCJSON
+export type DVCVariableValue = string | number | boolean | JSON
+export type JSON = { [key: string]: string | number | boolean }
+
+export interface ErrorCallback<T> {
+    (err: Error, result?: null | undefined): void
+    (err: null | undefined, result: T): void
+}
 
 export type DVCVariableSet = {
-    [key: string]: DVCVariableValue
+    [key: string]: Pick<DVCVariable, 'key' | 'value' | 'evalReason'> & {
+        '_id': string,
+        'type': string
+    }
 }
 
 export type DVCFeature = {
+    readonly _id: string
+    readonly _variation: string
     readonly key: string
-
-    readonly name: string
-
-    readonly segmented: boolean
-
-    readonly evaluationReason: unknown
+    readonly type: string
+    readonly evalReason?: any
 }
 
 export type DVCFeatureSet = {
@@ -27,20 +32,14 @@ export type DVCFeatureSet = {
  * @param user
  * @param options
  */
-// export function initialize(
-//     environmentKey: string,
-//     user: DVCUser,
-//     options?: DVCOptions
-// ): Promise<DVCClient>
-//
-// export function initializeSync(
-//     environmentKey: string,
-//     user: DVCUser,
-//     options?: DVCOptions
-// ): DVCClient
+export type initialize = (
+    environmentKey: string,
+    user: DVCUser,
+    options?: DVCOptions
+) => DVCClient
 
 export interface DVCOptions {
-    debug: boolean
+    flushEventsMS?: number
 }
 
 export interface DVCUser {
@@ -92,14 +91,14 @@ export interface DVCUser {
      * Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will be logged to DevCycle's servers and available in the dashboard to view.
      */
-    customData?: DVCJSON
+    customData?: JSON
 
     /**
      * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will not be logged to DevCycle's servers and
      * will not be available in the dashboard.
      */
-    privateCustomData?: DVCJSON
+    privateCustomData?: JSON
 
     /**
      * Set by SDK automatically
@@ -144,12 +143,20 @@ export interface DVCClient {
     user: DVCUser
 
     /**
+     * Notify the user when Features have been loaded from the server.
+     * An optional callback can be passed in, and will return
+     * a promise if no callback has been passed in.
      *
+     * @param onInitialized
      */
-    onClientInitialized(onInitialized?: (err?: Error) => void): Promise<DVCClient>
+    onClientInitialized(): Promise<DVCClient>
+    onClientInitialized(onInitialized: ErrorCallback<DVCClient>): void
 
     /**
-     * QUESTION:  which of these three method types do we choose?
+     * Grab variable values associated with Features. Use the key created in the dashboard to fetch
+     * the variable value. If the user does not receive the feature, the default value is used in the DVCVariable.
+     * DVCVariable is returned, which has a value property that is used to grab the variable value,
+     * and a convenience method to pass in a callback to notify the user when the value has changed from the server.
      *
      * @param key
      * @param defaultValue
@@ -161,27 +168,31 @@ export interface DVCClient {
 
     /**
      * Update user data after SDK initialization, this will trigger updates to Feature Flag /
-     * Dynamic Variable Bucketing. The `callback` parameter or returned `Promise` can be
-     * used to know that the user has been re-bucketed and all variables have been updated
-     * based on the updated user data.
+     * Dynamic Variable Bucketing. The `callback` parameter or returned `Promise` can be used to
+     * return the Variables for the new user.
      *
      * @param user
      * @param callback
      */
     identifyUser(
+        user: DVCUser
+    ): Promise<DVCVariableSet>
+    identifyUser(
         user: DVCUser,
-        callback?: (err: Error | null, features: DVCFeatureSet) => void
-    ): Promise<DVCFeatureSet>
+        callback: ErrorCallback<DVCVariableSet>
+    ): void
 
     /**
-     * Resets the user to an Anonymous user. `callback` or `Promise` can be used to know
-     * that the user has been re-bucketed and all variables have been updated.
+     * Resets the user to an Anonymous user. `callback` or `Promise` can be used to return the
+     * Variables for the anonymous user.
      *
      * @param callback
      */
     resetUser(
-        callback?: (err: Error | null, features: DVCFeatureSet) => void
-    ): Promise<DVCFeatureSet>
+    ): Promise<DVCVariableSet>
+    resetUser(
+        callback: ErrorCallback<DVCVariableSet>
+    ): void
 
     /**
      * Retrieve all data on all Features, Object mapped by feature `key`.
@@ -191,7 +202,7 @@ export interface DVCClient {
     allFeatures(): DVCFeatureSet
 
     /**
-     * Retrieve all DynamicVariables, Object mapped by variable `key`.
+     * Retrieve all data on all Variables, Object mapped by feature `key`.
      */
     allVariables(): DVCVariableSet
 
@@ -200,18 +211,17 @@ export interface DVCClient {
      * event is emitted by the SDK.
      *
      * Events:
-     *  - `initialized`
-     *  - `error`
-     *  - `variableUpdated:*`
-     *  - `variableUpdated:<variable.key>`
-     *  - `featureUpdated:*`
-     *  - `featureUpdated:<feature.key>`
-     *  - `bucketingUpdated`
+     *  - `initialized` -> (initialized: boolean)
+     *  - `error` -> (error: Error)
+     *  - `variableUpdated:*` -> (key: string, variable: DVCVariable)
+     *  - `variableUpdated:<variable.key>` -> (key: string, variable: DVCVariable)
+     *  - `featureUpdated:*` -> (key: string, feature: DVCFeature)
+     *  - `featureUpdated:<feature.key>` -> (key: string, feature: DVCFeature)
      *
      * @param key
      * @param onUpdate
      */
-    subscribe(key: string, onUpdate: (...args: unknown[]) => void): void
+    subscribe(key: string, handler: (...args: any[]) => void): void
 
     /**
      * Unsubscribe to remove existing event emitter subscription.
@@ -219,24 +229,14 @@ export interface DVCClient {
      * @param key
      * @param onUpdate
      */
-    unsubscribe(key: string, onUpdate: (...args: unknown[]) => void): void
+    unsubscribe(key: string, handler?: (...args: any[]) => void): void
 
     /**
      * Track Event to DVC
      *
-     * @param eventName
-     * @param value
-     * @param attributes
+     * @param event
      */
-    track(eventName: string, value?: number, attributes?: JSON): void
-
-    /**
-     * Track Page View to DVC
-     *
-     * @param pageName
-     * @param attributes
-     */
-    trackPage(pageName: string, attributes?: JSON): void
+    track(event: DVCEvent): void
 
     /**
      * Flush all queued events to DVC
@@ -264,10 +264,15 @@ export interface DVCVariable {
     readonly defaultValue: DVCVariableValue
 
     /**
+     * If the `variable.value` is set to use the `defaultValue` this will be `true`.
+     */
+    readonly isDefaulted: boolean
+
+    /**
      * Evaluation Reason as to why the variable was segmented into a specific Feature and
      * given this specific value
      */
-    readonly evaluationReason: unknown
+    readonly evalReason?: any
 
     /**
      * Use the onUpdate callback to be notified everytime the value of the variable
@@ -277,4 +282,30 @@ export interface DVCVariable {
      */
     onUpdate(callback: (value: DVCVariableValue) => void): DVCVariable
 }
-// }
+
+export interface DVCEvent {
+    /**
+     * type of the event
+     */
+    type: string
+
+    /**
+     * date event occurred according to client stored as time since epoch
+     */
+    date?: number
+
+    /**
+     * target / subject of event. Contextual to event type
+     */
+    target?: string
+
+    /**
+     * value for numerical events. Contextual to event type
+     */
+    value?: number
+
+    /**
+     * extra metadata for event. Contextual to event type
+     */
+    metaData?: Record<string, unknown>
+}

@@ -1,3 +1,5 @@
+import { DVCUser } from '../User'
+
 jest.mock('axios')
 import axios from 'axios'
 import { mocked } from 'ts-jest/utils'
@@ -39,14 +41,15 @@ describe('Request tests', () => {
             const environmentKey = 'my_env_key'
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
-            await Request.getConfigJson(environmentKey, user)
+            await Request.getConfigJson(environmentKey, user as DVCUser)
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 method: 'GET',
-                url: `https://sdk-api.devcycle.com/v1/sdkConfig?envKey=${environmentKey}&user_id=${user.user_id}&isAnonymous=false`
+                url: `https://sdk-api.devcycle.com/v1/sdkConfig?envKey=${
+                    environmentKey}&user_id=${user.user_id}&isAnonymous=false`
             })
         })
     })

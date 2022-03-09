@@ -1,18 +1,16 @@
 import {
+    ConfigBody,
+    PublicAudience,
+    PublicEnvironment,
+    PublicProject,
+    PublicVariable,
+    PublicVariation,
     AudienceOperator,
     FilterComparator,
     FeatureType,
     FilterType,
     UserSubType,
     VariableType
-} from '@devcycle/shared/mongo/schemas'
-import {
-    ConfigBody,
-    PublicAudience,
-    PublicEnvironment,
-    PublicProject,
-    PublicVariable,
-    PublicVariation
 } from '@devcycle/shared/ts-types'
 
 import moment from 'moment'
@@ -73,6 +71,13 @@ export const audiences: PublicAudience[] = [
                 dataKey: 'favouriteFood',
                 comparator: FilterComparator['='],
                 values: ['pizza']
+            },
+            {
+                type: FilterType.user,
+                subType: UserSubType.customData,
+                dataKey: 'favouriteDrink',
+                comparator: FilterComparator['='],
+                values: ['coffee']
             }],
             operator: AudienceOperator.and
         }
@@ -188,9 +193,6 @@ export const config: ConfigBody = {
                 targets: [{
                     _id: '61536f3bc838a705c105eb62',
                     _audience: audiences[0],
-                    rollout: {
-                        startPercentage: 1
-                    },
                     distribution: [{
                         _variation: variations[0]._id,
                         percentage: 0.5
@@ -201,9 +203,6 @@ export const config: ConfigBody = {
                 }, {
                     _id: '61536f468fd67f0091982533',
                     _audience: audiences[1],
-                    rollout: {
-                        startPercentage: 1
-                    },
                     distribution: [{
                         _variation: variations[1]._id,
                         percentage: 1
@@ -212,10 +211,16 @@ export const config: ConfigBody = {
                     _id: '61536f468fd67f0091982534',
                     _audience: audiences[2],
                     rollout: {
+                        type: 'gradual',
                         startPercentage: 0,
-                        targetPercentage: 1,
                         startDate: moment().subtract(1, 'days').toDate(),
-                        targetDate: moment().add(1, 'days').toDate()
+                        stages: [
+                            {
+                                type: 'linear',
+                                percentage: 1,
+                                date: moment().add(1, 'days').toDate()
+                            }
+                        ]
                     },
                     distribution: [{
                         _variation: variations[1]._id,
@@ -234,9 +239,6 @@ export const config: ConfigBody = {
                 targets: [{
                     _id: '61536f468fd67f0091982533',
                     _audience: audiences[0],
-                    rollout: {
-                        startPercentage: 1
-                    },
                     distribution: [{
                         _variation: variations[3]._id,
                         percentage: 1
@@ -248,9 +250,6 @@ export const config: ConfigBody = {
                 }, {
                     _id: '61536f669c69b86cccc5f15e',
                     _audience: audiences[2],
-                    rollout: {
-                        startPercentage: 1
-                    },
                     distribution: [{
                         _variation: variations[2]._id,
                         percentage: 1
@@ -276,16 +275,10 @@ export const barrenConfig: ConfigBody = {
                 targets: [{
                     _id: '61536f3bc838a705c105eb62',
                     _audience: audiences[0],
-                    rollout: {
-                        startPercentage: 1
-                    },
                     distribution: []
                 },{
                     _id: '61536f3bc838a705c105eb62',
                     _audience: audiences[2],
-                    rollout: {
-                        startPercentage: 1
-                    },
                     distribution: [{
                         _variation: variations[2]._id,
                         percentage: 1
@@ -303,9 +296,6 @@ export const barrenConfig: ConfigBody = {
                 targets: [{
                     _id: '61536f468fd67f0091982533',
                     _audience: audiences[1],
-                    rollout: {
-                        startPercentage: 1
-                    },
                     distribution: [{
                         _variation: variations[3]._id,
                         percentage: 1
@@ -317,9 +307,6 @@ export const barrenConfig: ConfigBody = {
                 }, {
                     _id: '61536f669c69b86cccc5f15e',
                     _audience: audiences[2],
-                    rollout: {
-                        startPercentage: 1
-                    },
                     distribution: [{
                         _variation: variations[2]._id,
                         percentage: 1

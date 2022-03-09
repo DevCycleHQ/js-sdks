@@ -1,19 +1,13 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "lib":["es6", "DOM"],
-    "allowJs": true,
-    "target":"es5",
-    "declaration": true,
-    "noImplicitAny": true,
-    "preserveConstEnums": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "outDir":"./dist/",
-    "experimentalDecorators": true,
-  },
-  "include": ["src/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "extends": "../../tsconfig.base.json",
+  "include": [],
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
 }

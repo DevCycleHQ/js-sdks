@@ -1,7 +1,6 @@
-import { DVCEvent } from 'dvc-js-client-sdk'
+import { DVCEvent, DVCUser } from './types'
 import { checkParamDefined } from './utils'
 import { EventTypes } from './EventQueue'
-import { DVCUser } from 'dvc-js-client-sdk'
 
 export type DVCEventPayload = {
     events: DVCRequestEvent[],

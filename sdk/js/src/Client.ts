@@ -1,14 +1,20 @@
 import {
-    DVCClient as Client, DVCFeatureSet, DVCOptions, DVCVariableSet, DVCVariableValue, DVCEvent as ClientEvent
-} from 'dvc-js-client-sdk'
+    DVCClient as Client,
+    DVCFeatureSet,
+    DVCOptions,
+    DVCVariableSet,
+    DVCVariableValue,
+    DVCEvent as ClientEvent,
+    ErrorCallback
+} from './types'
 import { DVCVariable } from './Variable'
 import { getConfigJson } from './Request'
 import Store from './Store'
 import { DVCUser, UserParam } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
-import { BucketedUserConfig } from './Request'
 import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
+import { BucketedUserConfig } from '@devcycle/shared/ts-types'
 
 export class DVCClient implements Client {
     private options?: DVCOptions
@@ -41,7 +47,8 @@ export class DVCClient implements Client {
                     .then(() => console.log('Successfully saved config to local storage'))
                 this.eventEmitter.emitInitialized(true)
                 this.eventEmitter.emitFeatureUpdates(oldConfig?.features || {}, this.config.features)
-                this.eventEmitter.emitVariableUpdates(oldConfig?.variables || {}, this.config.variables, this.variableDefaultMap)
+                this.eventEmitter.emitVariableUpdates(oldConfig?.variables || {},
+                    this.config.variables, this.variableDefaultMap)
                 return this
             })
             .catch((err) => {
@@ -51,12 +58,14 @@ export class DVCClient implements Client {
             })
     }
 
-    onClientInitialized(onInitialized?: (err?: Error) => void): Promise<DVCClient> {
+    onClientInitialized(): Promise<DVCClient>
+    onClientInitialized(onInitialized: ErrorCallback<DVCClient>): void
+    onClientInitialized(onInitialized?: (err?: Error) => void): Promise<DVCClient> | void {
         if (onInitialized && typeof onInitialized === 'function') {
             this.onInitialized
                 .then(() => onInitialized())
                 .catch((err) => onInitialized(err))
-            return null
+            return
         }
         return this.onInitialized
     }
@@ -73,7 +82,7 @@ export class DVCClient implements Client {
             ...this.config?.variables?.[key]
         }
         const variable = new DVCVariable(data)
-        this.variableDefaultMap[key] = { 
+        this.variableDefaultMap[key] = {
             [defaultValueKey]: variable,
             ...this.variableDefaultMap[key]
         }
@@ -93,7 +102,20 @@ export class DVCClient implements Client {
         return variable
     }
 
-    identifyUser(user: UserParam, callback?: (err: Error, variables: DVCVariableSet) => void): Promise<DVCVariableSet> {
+    identifyUser(user: UserParam): Promise<DVCVariableSet>
+    identifyUser(user: UserParam,
+                 callback?: ErrorCallback<DVCVariableSet>): void
+    identifyUser(
+        user: UserParam,
+        callback?: ErrorCallback<DVCVariableSet>
+    ): Promise<DVCVariableSet> | void {
+        let config: BucketedUserConfig
+        if (this.config) {
+            config = this.config
+        } else {
+            throw new Error('Client not initialized')
+        }
+
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
             try {
                 this.eventQueue.flushEvents()
@@ -105,7 +127,7 @@ export class DVCClient implements Client {
                     updatedUser = new DVCUser(user)
                 }
 
-                const oldConfig = this.config
+                const oldConfig = config
 
                 getConfigJson(this.environmentKey, updatedUser)
                     .then((config) => {
@@ -113,7 +135,8 @@ export class DVCClient implements Client {
                         this.store.saveConfig(config)
                             .then(() => console.log('Successfully saved config to local storage'))
                         this.eventEmitter.emitFeatureUpdates(oldConfig.features, config.features)
-                        this.eventEmitter.emitVariableUpdates(oldConfig.variables, config.variables, this.variableDefaultMap)
+                        this.eventEmitter.emitVariableUpdates(oldConfig.variables,
+                            config.variables, this.variableDefaultMap)
 
                         return config.variables
                     })
@@ -121,7 +144,7 @@ export class DVCClient implements Client {
                         this.user = updatedUser
                         this.store.saveUser(updatedUser)
                             .then(() => console.log('Successfully saved user to local storage!'))
-                        return resolve(variables)
+                        return resolve(variables || {})
                     })
                     .catch((err) => Promise.reject(err))
             } catch (err) {
@@ -133,19 +156,28 @@ export class DVCClient implements Client {
         if (callback && typeof callback == 'function') {
             promise.then((variables) => callback(null, variables))
                 .catch((err) => callback(err, null))
-            return null
+            return
         }
 
         return promise
     }
 
-    resetUser(callback?: (err: Error, variables: DVCVariableSet) => void): Promise<DVCVariableSet> {
+    resetUser(): Promise<DVCVariableSet>
+    resetUser(callback: ErrorCallback<DVCVariableSet>): void
+    resetUser(callback?: ErrorCallback<DVCVariableSet>): Promise<DVCVariableSet> | void {
+        let config: BucketedUserConfig
+        if (this.config) {
+            config = this.config
+        } else {
+            throw new Error('Client not initialized')
+        }
+
         const promise = this.store.loadAnonUser().then((anonUser) => {
             try {
                 this.eventQueue.flushEvents()
 
                 const updatedUser = anonUser ? new DVCUser(JSON.parse(anonUser)) : new DVCUser({ isAnonymous: true })
-                const oldConfig = this.config
+                const oldConfig = config
 
                 return getConfigJson(this.environmentKey, updatedUser)
                     .then((config) => {
@@ -158,8 +190,9 @@ export class DVCClient implements Client {
                             console.log('Successfully saved user to local storage!')
                         })
                         this.eventEmitter.emitFeatureUpdates(oldConfig.features, config.features)
-                        this.eventEmitter.emitVariableUpdates(oldConfig.variables, config.variables, this.variableDefaultMap)
-                        return config.variables
+                        this.eventEmitter.emitVariableUpdates(oldConfig.variables,
+                            config.variables, this.variableDefaultMap)
+                        return config.variables || {}
                     }).catch((e) => {
                         throw new Error(e)
                     })
@@ -172,7 +205,7 @@ export class DVCClient implements Client {
         if (callback && typeof callback == 'function') {
             promise.then((variables) => callback(null, variables))
                 .catch((err) => callback(err, null))
-            return null
+            return
         }
         return promise
     }

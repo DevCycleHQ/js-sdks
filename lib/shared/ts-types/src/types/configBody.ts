@@ -1,80 +1,46 @@
 import {
-    Project, Environment, Feature, Variable, Variation,
-    ListAudience, Audience, FeaturePrerequisites, FeatureWinningVariation,
-    TargetDistribution, VariableValue
-} from '@devcycle/shared/mongo/schemas'
+    Project, Environment, Variable, Variation,
+    ListAudience, Audience, FeatureConfiguration, Rollout, RolloutStage, Feature, Target
+} from './models'
+import { Type } from 'class-transformer'
 
-export type PublicProject<IdType = string> = Pick<Project, 'key'> & { _id: IdType }
+export type PublicProject = Project
 
-export type PublicEnvironment<IdType = string> = Pick<Environment, 'key'> & { _id: IdType }
+export type PublicEnvironment = Environment
 
-export type PublicTarget<IdType = string> = {
-    _id: IdType
-    rollout: PublicRollout
-    _audience: PublicAudience<IdType>
-    distribution: (Pick<TargetDistribution, 'percentage'> & { _variation: IdType })[]
+export { Rollout, RolloutStage, FeatureConfiguration, Feature, Variation, Audience, Variable }
+
+export { Rollout as PublicRollout,
+    RolloutStage as PublicRolloutStage,
+    FeatureConfiguration as PublicFeatureConfiguration,
+    Feature as PublicFeature,
+    Variation as PublicVariation,
+    Audience as PublicAudience,
+    Variable as PublicVariable,
+    Target as PublicTarget
 }
 
-export type PublicRollout = {
-    startPercentage: number
-    targetPercentage?: number
-    startDate?: Date
-    targetDate?: Date
-}
-
-export type PublicFeatureConfiguration<IdType = string> = {
-    _id: IdType
-    prerequisites?: (
-        Pick<FeaturePrerequisites, 'comparator'> & { _feature: IdType }
-    )[]
-    winningVariation?: Pick<FeatureWinningVariation, 'updatedAt'> & { _variation: IdType }
-    forcedUsers?: { [key: string]: IdType }
-    targets: PublicTarget<IdType>[]
-}
-
-export type PublicAudience<IdType = string> = Pick<Audience, 'filters'> & { _id: IdType }
-
-export type PublicVariation<IdType = string> = Pick<Variation, | 'name'> & {
-    _id: IdType
-    variables: {
-        _var: IdType
-        value: VariableValue
-    }[]
-}
-
-export type PublicFeature<IdType = string> = Pick<Feature, 'key' | 'type' > & {
-    _id: IdType
-    variations: PublicVariation<IdType>[]
-    configuration: PublicFeatureConfiguration<IdType>
-}
-
-export type PublicVariable<IdType = string> = Pick<Variable, 'key' | 'type'> & { _id: IdType }
-
-export type PublicListAudience<IdType = string> = Pick<
-        ListAudience,
-        'source' | 'appUserKeyName' | 'current'
-    > & { _id: IdType }
-
-export interface ConfigBody<IdType = string> {
+export class ConfigBody<IdType = string> {
     /**
      * Basic project data used for building bucketing response
      */
-    project: PublicProject<IdType>
+    project: Project<IdType>
 
     /**
      * Basic environment data used for building bucketing response
      */
-    environment: PublicEnvironment<IdType>
+    environment: Environment<IdType>
 
     /**
      * Fully populated Feature model containing FeatureConfigurations / Variations / Audiences
      */
-    features: PublicFeature<IdType>[]
+     @Type(() => Feature)
+     features: Feature<IdType>[]
 
     /**
      * All dynamic variables in a project
      */
-    variables: PublicVariable<IdType>[]
+    variables: Variable<IdType>[]
 
     /**
      * Map of `variable.key` to `hash(variable.key + environment.apiKey)`
@@ -91,5 +57,5 @@ export interface ConfigBody<IdType = string> {
      * All List Audiences in the project
      * TODO make required when implemented
      */
-    listAudiences?: PublicListAudience<IdType>[]
+    listAudiences?: ListAudience<IdType>[]
 }

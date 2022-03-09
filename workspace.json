@@ -5,7 +5,6 @@
     "nodejs-server-sdk": "sdk/nodejs-server-sdk",
     "react": "sdk/react",
     "shared-bucketing": "lib/shared/bucketing",
-    "shared-errors": "lib/shared/errors",
     "shared-ts-types": "lib/shared/ts-types"
   }
 }

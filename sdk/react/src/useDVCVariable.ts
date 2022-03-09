@@ -1,15 +1,13 @@
-import { useContext } from 'react'
-import context from './context'
-import { DVCVariable } from '@devcycle/devcycle-js-sdk/dist/Variable'
+import type { DVCVariable } from '@devcycle/devcycle-js-sdk'
+import useVariable from './useVariable'
 
 /**
  *
  * @deprecated Use the `useVariable` hook instead
  *
  */
-export const useDVCVariable = (key: string, defaultValue: any) => {
-  const { client } = useContext(context)
-  return client ? client.variable(key, defaultValue) : new DVCVariable({ key, defaultValue, value: null })
+export const useDVCVariable = (key: string, defaultValue: any): DVCVariable => {
+    return useVariable(key, defaultValue)
 }
 
 export default useDVCVariable

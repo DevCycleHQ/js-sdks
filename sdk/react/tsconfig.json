@@ -1,17 +1,20 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "module": "commonjs",
-    "lib":["es6", "DOM"],
     "target":"es5",
     "declaration": true,
-    "noImplicitAny": true,
-    "preserveConstEnums": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
     "outDir":"./dist/",
-    "jsx": "react",
-    "skipLibCheck": true
+    "jsx": "react"
   },
-  "include": ["src/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "include": [],
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
 }

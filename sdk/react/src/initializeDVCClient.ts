@@ -1,5 +1,5 @@
 import { initialize } from '@devcycle/devcycle-js-sdk'
-import { DVCUser, DVCClient } from 'dvc-js-client-sdk'
+import type { DVCUser, DVCClient } from '@devcycle/devcycle-js-sdk'
 
 const initializeDVCClient = async (
   environmentKey: string,

@@ -1,5 +1,5 @@
-import { DVCUser } from 'dvc-js-client-sdk'
-import { BucketedUserConfig } from './Request'
+import { DVCUser } from './types'
+import { BucketedUserConfig } from '@devcycle/shared/ts-types'
 
 export const StoreKey = {
     Config: 'dvc:config',
@@ -13,15 +13,15 @@ export class Store {
     constructor(localStorage: Storage) {
         this.store = localStorage
     }
-    
-    save(storeKey: string, data: object): Promise<void> {
+
+    save(storeKey: string, data: unknown): Promise<void> {
         return this.modifyStore((storeKey: string) => {
             this.store?.setItem(storeKey, JSON.stringify(data))
         }, storeKey)
     }
 
-    load(storeKey: string): Promise<string> {
-        return new Promise(resolve => {
+    load(storeKey: string): Promise<string | null | undefined> {
+        return new Promise((resolve) => {
             resolve(this.store?.getItem(storeKey))
         })
     }
@@ -29,15 +29,15 @@ export class Store {
     clear(storeKey: string): Promise<void> {
         return this.modifyStore((storeKey: string) => this.store?.removeItem(storeKey), storeKey)
     }
-    
-    modifyStore(modify:(storeKey: string) => void, storeKey: string): Promise<void> {
+
+    modifyStore(modify: (storeKey: string) => void, storeKey: string): Promise<void> {
         try {
-            return new Promise(resolve => {
-                resolve(modify(storeKey)) 
+            return new Promise((resolve) => {
+                resolve(modify(storeKey))
             })
         } catch (e) {
             console.log(e)
-            return null
+            return Promise.resolve()
         }
     }
 

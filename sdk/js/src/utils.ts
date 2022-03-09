@@ -1,6 +1,7 @@
-import { DVCUser, DVCEvent } from 'dvc-js-client-sdk'
-import { BucketedUserConfig } from './Request'
+import { DVCEvent } from './types'
 import { DVCRequestEvent, DVCEventPayload } from './RequestEvent'
+import { DVCUser } from './User'
+import { BucketedUserConfig } from '@devcycle/shared/ts-types'
 
 export const serializeUser = (user: DVCUser): string => {
     const convertToQueryFriendlyFormat = (property?: any): any => {

@@ -1,7 +1,54 @@
 {
   "root": "sdk/react",
+  "sourceRoot": "sdk/react/src",
   "implicitDependencies": [],
   "targets": {
+    "check-types": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn run -T tsc -b --incremental",
+        "cwd": "sdk/react"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "sdk/react/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/sdk/react"
+      ],
+      "options": {
+        "jestConfig": "sdk/react/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "build": {
+      "executor": "@nrwl/node:build",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "sdk/react/dist",
+        "main": "sdk/react/src/index.ts",
+        "tsConfig": "sdk/react/tsconfig.lib.json"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": false,
+          "inspect": false
+        }
+      }
+    },
     "npm-publish": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {

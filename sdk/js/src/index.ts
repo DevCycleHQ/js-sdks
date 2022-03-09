@@ -1,9 +1,10 @@
-/// <reference path='../types.d.ts'/>
 import {
     DVCOptions,
-} from 'dvc-js-client-sdk'
+} from './types'
 import { DVCUser, UserParam } from './User'
 import { DVCClient } from './Client'
+
+export * from './types'
 
 export const initialize = (environmentKey: string, user: UserParam, options?: DVCOptions): DVCClient => {
     // TODO: implement logger
@@ -19,12 +20,12 @@ export const initialize = (environmentKey: string, user: UserParam, options?: DV
 
     client.onClientInitialized()
         .then(() => console.log('Successfully initialized DevCycle!'))
-        .catch(err => console.log(`Error initializing DevCycle: ${err}`))
+        .catch((err) => console.log(`Error initializing DevCycle: ${err}`))
 
     window.addEventListener('pagehide', () => {
         client.flushEvents()
     })
-    
+
     return client
 }
 
