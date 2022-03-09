@@ -9,6 +9,6 @@
     "keywords": [],
     "license": "MIT",
     "dependencies": {
-        "@devcycle/nodejs-server-sdk": "file:../../"
+        "@devcycle/nodejs-server-sdk": "*"
     }
 }
