@@ -1,4 +1,4 @@
-import { DVCUser } from '../User'
+import { DVCUser } from '../src/User'
 import { validate as uuidValidate } from 'uuid'
 
 describe('DVCUser tests', () => {

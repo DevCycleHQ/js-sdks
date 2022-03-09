@@ -1,7 +1,8 @@
-import { DVCVariable as Variable, DVCVariableValue } from 'dvc-js-client-sdk'
+import { DVCVariable as Variable, DVCVariableValue } from './types'
 import { checkParamDefined, checkParamType } from './utils'
 
-type VariableParam = Pick<Variable, 'key' | 'defaultValue' | 'value'> & {
+type VariableParam = Pick<Variable, 'key' | 'defaultValue'> & {
+    value?: DVCVariableValue
     evalReason?: any
 }
 
@@ -18,10 +19,15 @@ export class DVCVariable implements Variable {
         checkParamType('key', key, 'string')
         checkParamDefined('defaultValue', defaultValue)
         this.key = variable.key
-        this.isDefaulted = variable.value === undefined || variable.value === null
-        this.value = this.isDefaulted
-            ? variable.defaultValue
-            : variable.value
+
+        if (variable.value === undefined || variable.value === null) {
+            this.isDefaulted = true
+            this.value = variable.defaultValue
+        } else {
+            this.value = variable.value
+            this.isDefaulted = false
+        }
+
         this.defaultValue = variable.defaultValue
         this.evalReason = variable.evalReason
     }

@@ -1,5 +1,6 @@
 {
   "root": "sdk/js",
+  "sourceRoot": "sdk/js/src",
   "implicitDependencies": [],
   "targets": {
     "npm-publish": {
@@ -7,6 +8,49 @@
       "options": {
         "command": "yarn build && ../../scripts/npm-publish-check.sh \"@devcycle/devcycle-js-sdk\"",
         "cwd": "sdk/js"
+      }
+    },
+    "check-types": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn run -T tsc -b --incremental",
+        "cwd": "sdk/js"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "sdk/js/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/sdk/js"
+      ],
+      "options": {
+        "jestConfig": "sdk/js/jest.config.js",
+        "passWithNoTests": true,
+        "cwd": "sdk/js"
+      }
+    },
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/sdk/js",
+        "main": "sdk/js/src/index.ts",
+        "tsConfig": "sdk/js/tsconfig.lib.json",
+        "assets": [
+          "sdk/js/*.md"
+        ]
       }
     }
   }

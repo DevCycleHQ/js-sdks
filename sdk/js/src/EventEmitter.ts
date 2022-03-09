@@ -1,6 +1,6 @@
-import { DVCFeatureSet, DVCVariableSet } from "dvc-js-client-sdk"
+import { DVCFeatureSet, DVCVariableSet } from './types'
 import { DVCVariable } from './Variable'
-import { checkParamType } from "./utils"
+import { checkParamType } from './utils'
 
 const EventNames = {
     INITIALIZED: 'initialized',
@@ -21,10 +21,10 @@ export class EventEmitter {
     subscribe(key: string, handler: eventHandler) {
         checkParamType('key', key, 'string')
         checkParamType('handler', handler, 'function')
-        
-        const eventNames = Object.keys(EventNames).map(e => e.toLowerCase())
-        if (!eventNames.includes(key) && 
-            !key.startsWith(EventNames.VARIABLE_UPDATED) && 
+
+        const eventNames = Object.keys(EventNames).map((e) => e.toLowerCase())
+        if (!eventNames.includes(key) &&
+            !key.startsWith(EventNames.VARIABLE_UPDATED) &&
             !key.startsWith(EventNames.FEATURE_UPDATED)) {
             throw new Error('Not a valid event to subscribe to')
         } else if (!this.events[key]) {
@@ -36,20 +36,20 @@ export class EventEmitter {
 
     unsubscribe(key: string, handler?: eventHandler) {
         checkParamType('key', key, 'string')
-        
-        const eventNames = Object.keys(EventNames).map(e => e.toLowerCase())
+
+        const eventNames = Object.keys(EventNames).map((e) => e.toLowerCase())
         if (!eventNames.includes(key)) {
             return
         } else if (!handler) {
             this.events[key] = []
         } else {
-            this.events[key] = this.events[key].filter(eventHandler => eventHandler !== handler)
+            this.events[key] = this.events[key].filter((eventHandler) => eventHandler !== handler)
         }
     }
 
     emit(key: string, ...args: any[]) {
         checkParamType('key', key, 'string')
-        
+
         const handlers = this.events[key]
         if (!handlers) {
             this.events[key] = []
@@ -70,9 +70,9 @@ export class EventEmitter {
     }
 
     emitVariableUpdates(
-        oldVariableSet: DVCVariableSet, 
-        newVariableSet: DVCVariableSet, 
-        variableDefaultMap: { [key: string]: { [key: string]: DVCVariable } } 
+        oldVariableSet: DVCVariableSet,
+        newVariableSet: DVCVariableSet,
+        variableDefaultMap: { [key: string]: { [key: string]: DVCVariable } }
     ) {
         const keys = Object.keys(oldVariableSet).concat(Object.keys(newVariableSet))
         keys.forEach((key) => {

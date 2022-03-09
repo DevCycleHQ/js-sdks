@@ -1,4 +1,4 @@
-import Store, { StoreKey } from '../Store'
+import Store, { StoreKey } from '../src/Store'
 
 describe('Store tests', () => {
 

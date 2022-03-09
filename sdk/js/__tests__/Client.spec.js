@@ -1,9 +1,9 @@
-import { DVCClient } from '../Client'
-import { getConfigJson, publishEvents } from '../Request'
+import { DVCClient } from '../src/Client'
+import { getConfigJson, publishEvents } from '../src/Request'
 import { mocked } from 'ts-jest/utils'
-import { DVCVariable } from '../Variable'
+import { DVCVariable } from '../src/Variable'
 
-jest.mock('../Request')
+jest.mock('../src/Request')
 const getConfigJson_mock = mocked(getConfigJson)
 
 beforeEach(() => {
@@ -176,7 +176,7 @@ describe('DVCClient tests', () => {
                 }
             }, {'key': {'default-value': variable}})
         })
-        
+
     })
 
     describe('identifyUser', () => {
