@@ -84,7 +84,7 @@ export class EventEmitter {
                 const variables = variableDefaultMap[key] && Object.values(variableDefaultMap[key])
                 if (variables) {
                     variables.forEach((variable) => {
-                        variable.value = newVariableValue
+                        variable.value = newVariableValue ?? variable.defaultValue
                         variable.callback?.call(variable, variable.value)
                     })
                 }
