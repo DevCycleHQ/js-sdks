@@ -11,11 +11,14 @@ export const initialize = (environmentKey: string, user: UserParam, options?: DV
     if (!window) {
         console.log('Window is not defined, try initializing in a browser context')
     }
+    if (!window.addEventListener && !options?.reactNative) {
+        throw new Error('Window is not defined, try initializing in a browser context. If running on React Native, initialize with the option reactNative: true')
+    }
     if (!environmentKey) {
         throw new Error('Missing environment key! Call initialize with a valid environment key')
     }
 
-    const dvcUser: DVCUser = new DVCUser(user)
+    const dvcUser: DVCUser = new DVCUser(user, options)
     const client = new DVCClient(environmentKey, dvcUser, options)
 
     client.onClientInitialized()
@@ -23,11 +26,11 @@ export const initialize = (environmentKey: string, user: UserParam, options?: DV
         .catch((err) => console.log(`Error initializing DevCycle: ${err}`))
 
     if (!options?.reactNative) {
-      window.addEventListener('pagehide', () => {
-        client.flushEvents()
-      })
+        window.addEventListener('pagehide', () => {
+          client.flushEvents()
+        })
     }
-    
+
     return client
 }
 
