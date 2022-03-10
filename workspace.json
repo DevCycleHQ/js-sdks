@@ -5,6 +5,7 @@
     "nodejs": "sdk/nodejs-server-sdk",
     "react": "sdk/react",
     "shared-bucketing": "lib/shared/bucketing",
+    "shared-bucketing-as": "lib/shared/bucketing-assembly-script",
     "shared-types": "lib/shared/types"
   }
 }

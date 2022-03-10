@@ -1,0 +1,16 @@
+{
+  "name": "@devcycle/bucketing-assembly-script",
+  "version": "1.0.0",
+  "scripts": {
+    "build:untouched": "asc src/index.ts --target debug --exportRuntime",
+    "build:optimized": "asc src/index.ts --target release --exportRuntime",
+    "build": "yarn run build:untouched && yarn run build:optimized",
+    "test": "node tests"
+  },
+  "dependencies": {
+    "@assemblyscript/loader": "^0.19.23",
+    "assemblyscript": "^0.19.23",
+    "assemblyscript-json": "^1.1.0"
+  },
+  "devDependencies": {}
+}
