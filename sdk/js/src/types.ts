@@ -315,5 +315,5 @@ type DeviceInfo = {
     getModel: () => string
 }
 declare global {
-  var DeviceInfo: DeviceInfo
+  var DeviceInfo: DeviceInfo | undefined
 }
