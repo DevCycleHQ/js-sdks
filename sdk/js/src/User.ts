@@ -1,4 +1,4 @@
-import { DVCUser as User, JSON } from './types'
+import { DVCOptions, DVCUser as User, JSON } from './types'
 import { v4 as uuidv4 } from 'uuid'
 
 export type UserParam = Pick<User, 'isAnonymous' | 'user_id' | 'email' | 'name' | 'language' | 'country'
@@ -23,7 +23,7 @@ export class DVCUser implements User {
     readonly sdkType: 'client' | 'server'
     readonly sdkVersion: string
 
-    constructor(user: UserParam) {
+    constructor(user: UserParam, options?: DVCOptions) {
         if (!user.user_id && !user.isAnonymous) {
             throw new Error('Must have a user_id, or have "isAnonymous" set on the user')
         }
@@ -43,10 +43,11 @@ export class DVCUser implements User {
         /**
          * Read only properties initialized once
          */
+
         this.createdDate = new Date()
-        this.platform = 'web'
+        this.platform = options?.reactNative ? 'ReactNative' : 'web'
         this.platformVersion = '1.0.9'
-        this.deviceModel = window.navigator.userAgent
+        this.deviceModel = options?.reactNative && globalThis.DeviceInfo ? globalThis.DeviceInfo.getModel() : window.navigator.userAgent 
         this.sdkType = 'client'
         this.sdkVersion = '1.0.9'
     }

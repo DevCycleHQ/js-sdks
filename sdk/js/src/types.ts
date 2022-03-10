@@ -40,6 +40,7 @@ export type initialize = (
 
 export interface DVCOptions {
     flushEventsMS?: number
+    reactNative?: boolean
 }
 
 export interface DVCUser {
@@ -308,4 +309,11 @@ export interface DVCEvent {
      * extra metadata for event. Contextual to event type
      */
     metaData?: Record<string, unknown>
+}
+
+type DeviceInfo = {
+    getModel: () => string
+}
+declare global {
+  var DeviceInfo: DeviceInfo | undefined
 }
