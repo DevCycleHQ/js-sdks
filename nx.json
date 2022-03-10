@@ -3,7 +3,7 @@
   "npmScope": "devcycle",
   "workspaceLayout": {
     "libsDir": "lib",
-    "appsDir": "sdk"
+    "appsDir": "examples"
   },
   "implicitDependencies": {
     "package.json": {
@@ -69,7 +69,22 @@
     },
     "@nrwl/react": {
       "application": {
+        "style": "css",
+        "linter": "eslint",
         "babel": true
+      },
+      "component": {
+        "style": "css"
+      },
+      "library": {
+        "style": "css",
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/next": {
+      "application": {
+        "style": "css",
+        "linter": "eslint"
       }
     }
   },

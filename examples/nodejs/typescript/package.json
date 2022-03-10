@@ -2,23 +2,6 @@
   "name": "@devcycle/nodejs-server-sdk-typescript-example",
   "version": "1.0.0",
   "description": "DevCycle NodeJS Typescript Example App",
-  "main": "dist/app.min.js",
-  "scripts": {
-    "start": "yarn build && node dist/app.min.js",
-    "build": "webpack",
-    "build:dev": "webpack --env dev"
-  },
   "keywords": [],
-  "license": "MIT",
-  "devDependencies": {
-    "@babel/cli": "^7.15.7",
-    "@babel/core": "^7.15.8",
-    "@babel/preset-env": "^7.15.8",
-    "@types/node": "^16.11.6",
-    "webpack-cli": "^4.9.1"
-  },
-  "dependencies": {
-    "@devcycle/nodejs-server-sdk": "*",
-    "webpack-node-externals": "^3.0.0"
-  }
+  "license": "MIT"
 }

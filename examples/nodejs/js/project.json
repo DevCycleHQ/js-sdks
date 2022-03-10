@@ -1,0 +1,36 @@
+{
+  "root": "examples/nodejs/js",
+  "sourceRoot": "examples/nodejs/js/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/examples/nodejs/js",
+        "main": "examples/nodejs/js/src/main.js",
+        "tsConfig": "examples/nodejs/js/tsconfig.app.json"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "nodejs-js:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "examples/nodejs/js/**/*.js"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

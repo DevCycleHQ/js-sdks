@@ -1,5 +1,0 @@
-built/*
-dist/*
-node_modules/*
-.npmrc
-.yarn/*

@@ -1,0 +1,36 @@
+{
+  "root": "examples/nodejs/typescript",
+  "sourceRoot": "examples/nodejs/typescript/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/examples/nodejs/typescript",
+        "main": "examples/nodejs/typescript/src/main.ts",
+        "tsConfig": "examples/nodejs/typescript/tsconfig.app.json"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "nodejs-typescript:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "examples/nodejs/typescript/**/*.ts"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
