@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios'
 import { UserEventsBatchRequestPayload } from './eventQueue'
 import { DVCLogger } from '../types'
 
@@ -37,7 +37,7 @@ export async function getEnvironmentConfig(
     requestTimeout: number,
     etag?: string
 ): Promise<AxiosResponse> {
-    const headers = {}
+    const headers: AxiosRequestHeaders = {}
     if (etag) {
         headers['If-None-Match'] = etag
     }
