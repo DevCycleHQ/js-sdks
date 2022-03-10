@@ -32,7 +32,7 @@
       "@devcycle/nodejs-server-sdk": [
         "sdk/nodejs-server-sdk/src/index.ts"
       ],
-      "@devcycle/shared/bucketing": [
+      "@devcycle/bucketing": [
         "lib/shared/bucketing/src/index.ts"
       ],
       "@devcycle/types": [
