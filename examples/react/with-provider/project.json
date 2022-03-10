@@ -1,0 +1,52 @@
+{
+  "root": "examples/react/with-provider",
+  "sourceRoot": "examples/react/with-provider/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/examples/react/with-provider",
+        "index": "examples/react/with-provider/src/index.html",
+        "baseHref": "/",
+        "main": "examples/react/with-provider/src/index.tsx",
+        "tsConfig": "examples/react/with-provider/tsconfig.app.json",
+        "assets": [
+          "examples/react/with-provider/src/public"
+        ],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "react-with-provider:build",
+        "hmr": true
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "react-with-provider:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "examples/react/with-provider/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

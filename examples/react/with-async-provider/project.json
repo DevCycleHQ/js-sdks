@@ -1,0 +1,51 @@
+{
+  "root": "examples/react/with-async-provider",
+  "sourceRoot": "examples/react/with-async-provider/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/examples/react/with-async-provider",
+        "index": "examples/react/with-async-provider/src/index.html",
+        "baseHref": "/",
+        "main": "examples/react/with-async-provider/src/index.tsx",
+        "tsConfig": "examples/react/with-async-provider/tsconfig.app.json",
+        "assets": [
+          "examples/react/with-async-provider/src/public"
+        ],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "react-with-async-provider:build",
+        "hmr": true
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "react-with-async-provider:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "examples/react/with-async-provider/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

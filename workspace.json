@@ -3,7 +3,12 @@
   "projects": {
     "js": "sdk/js",
     "nodejs": "sdk/nodejs-server-sdk",
+    "nodejs-js": "examples/nodejs/js",
+    "nodejs-typescript": "examples/nodejs/typescript",
     "react": "sdk/react",
+    "react-next-js-app": "examples/react/next-js-app",
+    "react-with-async-provider": "examples/react/with-async-provider",
+    "react-with-provider": "examples/react/with-provider",
     "shared-bucketing": "lib/shared/bucketing",
     "shared-bucketing-as": "lib/shared/bucketing-assembly-script",
     "shared-types": "lib/shared/types"
