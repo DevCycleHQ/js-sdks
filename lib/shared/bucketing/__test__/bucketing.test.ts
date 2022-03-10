@@ -1,19 +1,23 @@
 /* eslint-disable max-len */
 
-import { FeatureType } from '@devcycle/types'
-import { generateBoundedHashes, decideTargetVariation, generateBucketedConfig, doesUserPassRollout } from '../src/bucketing'
+import { Audience, FeatureType, Rollout } from '@devcycle/types'
+import {
+    generateBoundedHashes,
+    decideTargetVariation,
+    generateBucketedConfig,
+    doesUserPassRollout
+} from '../src/bucketing'
+import { config, barrenConfig } from './data/testData'
+
 import moment from 'moment'
 import * as _ from 'lodash'
 import * as uuid from 'uuid'
 
 describe('User Hashing and Bucketing', () => {
     it('generates buckets approximately in the same distribution as the variation distributions', () => {
-        let buckets = []
+        const buckets: string[] = []
         const testTarget = {
-            rollout: {
-                startPercentage: 1
-            },
-            _audience: 'aud',
+            _audience: { _id: 'id', filters: [] } as unknown as Audience,
             _id: 'target',
             distribution: [
                 { _variation: 'var1', percentage: 0.25 },
@@ -23,15 +27,15 @@ describe('User Hashing and Bucketing', () => {
             ]
         }
         _.times(30000, () => {
-            let user_id = uuid.v4()
-            let { bucketingHash } = generateBoundedHashes(user_id, testTarget._id)
+            const user_id = uuid.v4()
+            const { bucketingHash } = generateBoundedHashes(user_id, testTarget._id)
             buckets.push(decideTargetVariation({ target: testTarget, boundedHash: bucketingHash }))
         })
 
-        let var1 = _.filter(buckets, (bucket) => bucket === 'var1')
-        let var2 = _.filter(buckets, (bucket) => bucket === 'var2')
-        let var3 = _.filter(buckets, (bucket) => bucket === 'var3')
-        let var4 = _.filter(buckets, (bucket) => bucket === 'var4')
+        const var1 = _.filter(buckets, (bucket) => bucket === 'var1')
+        const var2 = _.filter(buckets, (bucket) => bucket === 'var2')
+        const var3 = _.filter(buckets, (bucket) => bucket === 'var3')
+        const var4 = _.filter(buckets, (bucket) => bucket === 'var4')
 
         expect(var1.length / buckets.length).toBeGreaterThan(0.24)
         expect(var1.length / buckets.length).toBeLessThan(0.26)
@@ -45,35 +49,34 @@ describe('User Hashing and Bucketing', () => {
 
     it('that bucketing hash yields the same hash for user_id', () => {
         const user_id = uuid.v4()
-        let { bucketingHash } = generateBoundedHashes(user_id, 'fake')
-        let { bucketingHash: bucketingHash2 } = generateBoundedHashes(user_id, 'fake')
+        const { bucketingHash } = generateBoundedHashes(user_id, 'fake')
+        const { bucketingHash: bucketingHash2 } = generateBoundedHashes(user_id, 'fake')
         expect(bucketingHash).toBe(bucketingHash2)
     })
 
     it('generates different hashes for different target_id seeds', () => {
         const user_id = uuid.v4()
-        let { bucketingHash } = generateBoundedHashes(user_id, 'fake')
-        let { bucketingHash: bucketingHash2 } = generateBoundedHashes(user_id, 'fake2')
+        const { bucketingHash } = generateBoundedHashes(user_id, 'fake')
+        const { bucketingHash: bucketingHash2 } = generateBoundedHashes(user_id, 'fake2')
         expect(bucketingHash).not.toBe(bucketingHash2)
     })
 
     it('should generate rollout hash deterministically', () => {
         const user_id = uuid.v4()
-        let { rolloutHash } = generateBoundedHashes(user_id, 'fake')
-        let { rolloutHash: rolloutHash2 } = generateBoundedHashes(user_id, 'fake')
+        const { rolloutHash } = generateBoundedHashes(user_id, 'fake')
+        const { rolloutHash: rolloutHash2 } = generateBoundedHashes(user_id, 'fake')
         expect(rolloutHash).toBe(rolloutHash2)
     })
 
     it('generates different hashes for different rollout and bucketing', () => {
         const user_id = uuid.v4()
-        let { rolloutHash, bucketingHash } = generateBoundedHashes(user_id, 'fake')
+        const { rolloutHash, bucketingHash } = generateBoundedHashes(user_id, 'fake')
         expect(bucketingHash).not.toBe(rolloutHash)
     })
 })
 
 describe('Config Parsing and Generating', () => {
     it('generates the correctly modified config from the example config', () => {
-        const { config } = require('./data/testData.ts')
         const user = {
             country: 'canada',
             user_id: 'asuh',
@@ -114,12 +117,11 @@ describe('Config Parsing and Generating', () => {
                 }
             }
         }
-        let c = generateBucketedConfig({ config, user })
+        const c = generateBucketedConfig({ config, user })
         expect(c).toEqual(expected)
     })
 
     it('puts the user in the target for the first audience they match', () => {
-        const { config } = require('./data/testData.ts')
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -190,12 +192,11 @@ describe('Config Parsing and Generating', () => {
                 }
             }
         }
-        let c = generateBucketedConfig({ config, user })
+        const c = generateBucketedConfig({ config, user })
         expect(c).toEqual(expected)
     })
 
     it('holds user back if not in rollout', () => {
-        const { config } = require('./data/testData.ts')
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -244,12 +245,11 @@ describe('Config Parsing and Generating', () => {
                 }
             }
         }
-        let c = generateBucketedConfig({ config, user })
+        const c = generateBucketedConfig({ config, user })
         expect(c).toEqual(expected)
     })
 
     it('puts user through if in rollout', () => {
-        const { config } = require('./data/testData.ts')
         const user = {
             country: 'U S AND A',
             user_id: 'pass_rollout',
@@ -310,12 +310,11 @@ describe('Config Parsing and Generating', () => {
                 }
             }
         }
-        let c = generateBucketedConfig({ config, user })
+        const c = generateBucketedConfig({ config, user })
         expect(c).toEqual(expected)
     })
 
     it('errors when feature missing distribution', () => {
-        const { barrenConfig } = require('./data/testData.ts')
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -326,7 +325,6 @@ describe('Config Parsing and Generating', () => {
     })
 
     it('errors when config missing variations', () => {
-        const { barrenConfig } = require('./data/testData.ts')
         const user = {
             country: 'U S AND A',
             user_id: 'pass_rollout',
@@ -345,7 +343,6 @@ describe('Config Parsing and Generating', () => {
     })
 
     it('errors when config missing variables', () => {
-        const { barrenConfig } = require('./data/testData.ts')
         const user = {
             country: 'canada',
             user_id: 'asuh',
@@ -359,7 +356,7 @@ describe('Config Parsing and Generating', () => {
 describe('Rollout Logic', () => {
     describe('gradual', () => {
         it('it should evaluate correctly given various hashes', () => {
-            let rollout = {
+            const rollout: Rollout = {
                 startDate: moment().subtract(1, 'days').toDate(),
                 startPercentage: 0,
                 type: 'gradual',
@@ -374,14 +371,14 @@ describe('Rollout Logic', () => {
             expect(doesUserPassRollout({ rollout, boundedHash: 0.2 })).toBeTruthy()
             expect(doesUserPassRollout({ rollout, boundedHash: 0.75 })).toBeFalsy()
             expect(doesUserPassRollout({ rollout, boundedHash: 0.85 })).toBeFalsy()
-            rollout.targetPercentage = 0.8
+            rollout.stages![0].percentage = 0.8
             expect(doesUserPassRollout({ rollout, boundedHash: 0.51 })).toBeFalsy()
             expect(doesUserPassRollout({ rollout, boundedHash: 0.95 })).toBeFalsy()
             expect(doesUserPassRollout({ rollout, boundedHash: 0.35 })).toBeTruthy()
         })
 
         it('should not pass rollout for startDates in the future', () => {
-            let rollout = {
+            const rollout: Rollout = {
                 startDate: moment().add(1, 'days').toDate(),
                 startPercentage: 0,
                 type: 'gradual',
@@ -398,7 +395,7 @@ describe('Rollout Logic', () => {
             expect(doesUserPassRollout({ rollout, boundedHash: 1 })).toBeFalsy()
         })
         it('should pass rollout for endDates in the past', () => {
-            let rollout = {
+            const rollout: Rollout = {
                 startDate: moment().subtract(2, 'days').toDate(),
                 startPercentage: 0,
                 type: 'gradual',
@@ -416,7 +413,7 @@ describe('Rollout Logic', () => {
         })
 
         it('returns start value when end date not set', () => {
-            let rollout = {
+            const rollout: Rollout = {
                 startDate: moment().subtract(30, 'seconds').toDate(),
                 startPercentage: 1,
                 type: 'gradual'
@@ -429,7 +426,7 @@ describe('Rollout Logic', () => {
         })
 
         it('returns 0 when end date not set and start in future', () => {
-            let rollout = {
+            const rollout: Rollout = {
                 startDate: moment().add(1, 'minute').toDate(),
                 startPercentage: 1,
                 type: 'gradual'
@@ -444,7 +441,7 @@ describe('Rollout Logic', () => {
 
     describe('schedule', () => {
         it('lets user through when schedule has passed', () => {
-            let rollout = {
+            const rollout: Rollout = {
                 startDate: moment().subtract(1, 'minute').toDate(),
                 type: 'schedule'
             }
@@ -456,7 +453,7 @@ describe('Rollout Logic', () => {
         })
 
         it('blocks user when schedule is in the future', () => {
-            let rollout = {
+            const rollout: Rollout = {
                 startDate: moment().add(1, 'minute').toDate(),
                 type: 'schedule'
             }
@@ -470,7 +467,7 @@ describe('Rollout Logic', () => {
 
     describe('stepped', () => {
         it('uses the exact percentage of the correct step in the rollout', () => {
-            const rollout = {
+            const rollout: Rollout = {
                 startDate: moment().subtract(3, 'days').toDate(),
                 startPercentage: 0,
                 type: 'stepped',
@@ -502,7 +499,7 @@ describe('Rollout Logic', () => {
     })
 
     it('throws when given an empty rollout object', () => {
-        let rollout = {}
+        const rollout = {} as Rollout
         expect(() => doesUserPassRollout({ rollout, boundedHash: 0 })).toThrow()
     })
 

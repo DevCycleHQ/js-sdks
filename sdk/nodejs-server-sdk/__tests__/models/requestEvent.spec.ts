@@ -37,16 +37,12 @@ describe('DVCRequestEvent Unit Tests', () => {
     })
 
     it('should check that type is defined as a string', () => {
-        // @ts-ignore
-        expect(() => new DVCRequestEvent({})).toThrow('Missing parameter: type')
-        // @ts-ignore
-        expect(() => new DVCRequestEvent({ type: 6 })).toThrow('type is not of type: string')
+        expect(() => new (DVCRequestEvent as any)({})).toThrow('Missing parameter: type')
+        expect(() => new (DVCRequestEvent as any)({ type: 6 })).toThrow('type is not of type: string')
     })
 
     it('should check that user_id is defined as a string', () => {
-        // @ts-ignore
-        expect(() => new DVCRequestEvent({ type: 'type' })).toThrow('Missing parameter: user_id')
-        // @ts-ignore
-        expect(() => new DVCRequestEvent({ type: 'type' }, 6)).toThrow('user_id is not of type: string')
+        expect(() => new (DVCRequestEvent as any)({ type: 'type' })).toThrow('Missing parameter: user_id')
+        expect(() => new (DVCRequestEvent as any)({ type: 'type' }, 6)).toThrow('user_id is not of type: string')
     })
 })

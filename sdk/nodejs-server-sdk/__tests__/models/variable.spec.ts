@@ -18,13 +18,11 @@ describe('DVCVariable Unit Tests', () => {
     })
 
     it('should check key param is set', () => {
-        // @ts-ignore
-        expect(() => new DVCVariable({ })).toThrow('Missing parameter: key')
+        expect(() => new (DVCVariable as any)({ })).toThrow('Missing parameter: key')
     })
 
     it('should check defaultValue is set', () => {
-        // @ts-ignore
-        expect(() => new DVCVariable({ key: 'key' })).toThrow('Missing parameter: defaultValue')
+        expect(() => new (DVCVariable as any)({ key: 'key' })).toThrow('Missing parameter: defaultValue')
     })
 
     it('should set isDefaulted properly', () => {

@@ -8,8 +8,7 @@ describe('paramUtils Unit Tests', () => {
 
         it('should throw if param is not defined', () => {
             expect(() => checkParamDefined('param', null)).toThrow('Missing parameter: param')
-            // @ts-ignore
-            expect(() => checkParamDefined('param')).toThrow('Missing parameter: param')
+            expect(() => (checkParamDefined as any)('param')).toThrow('Missing parameter: param')
         })
     })
 
@@ -31,8 +30,7 @@ describe('paramUtils Unit Tests', () => {
         })
 
         it('should throw for invalid type enum value', () => {
-            // @ts-ignore
-            expect(() => checkParamType('param', 6, 'nonum')).toThrow('unknown type to check: nonum')
+            expect(() => (checkParamType as any)('param', 6, 'nonum')).toThrow('unknown type to check: nonum')
         })
 
         it('should throw for empty string', () => {
