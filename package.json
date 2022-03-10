@@ -12,6 +12,8 @@
   "scripts": {
     "lint": "nx run-many --parallel --target lint --all",
     "test": "nx run-many --parallel --target test --all",
+    "affected:lint": "npx nx affected --base=origin/main --target=lint",
+    "affected:test": "npx nx affected --base=origin/main --target=test --codeCoverage",
     "lerna": "lerna",
     "lerna:test:unit": "lerna run unit-test",
     "lerna:version": "lerna version -m \"Release\"",
