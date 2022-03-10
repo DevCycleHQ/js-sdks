@@ -15,6 +15,7 @@
         "baseHref": "/",
         "main": "examples/react/with-async-provider/src/index.tsx",
         "tsConfig": "examples/react/with-async-provider/tsconfig.app.json",
+        "buildLibsFromSource": false,
         "assets": [
           "examples/react/with-async-provider/src/public"
         ],
@@ -25,12 +26,12 @@
     "serve": {
       "executor": "@nrwl/web:dev-server",
       "options": {
-        "buildTarget": "react-with-async-provider:build",
+        "buildTarget": "example-react-with-async-provider:build",
         "hmr": true
       },
       "configurations": {
         "production": {
-          "buildTarget": "react-with-async-provider:build:production",
+          "buildTarget": "example-react-with-async-provider:build:production",
           "hmr": false
         }
       }

@@ -23,6 +23,9 @@
     "strictPropertyInitialization": false,
     "baseUrl": ".",
     "paths": {
+      "@devcycle/bucketing": [
+        "lib/shared/bucketing/src/index.ts"
+      ],
       "@devcycle/devcycle-js-sdk": [
         "sdk/js/src/index.ts"
       ],
@@ -31,9 +34,6 @@
       ],
       "@devcycle/nodejs-server-sdk": [
         "sdk/nodejs-server-sdk/src/index.ts"
-      ],
-      "@devcycle/bucketing": [
-        "lib/shared/bucketing/src/index.ts"
       ],
       "@devcycle/types": [
         "lib/shared/types/src/index.ts"

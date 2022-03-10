@@ -11,7 +11,8 @@
       "defaultConfiguration": "production",
       "options": {
         "root": "examples/react/next-js-app",
-        "outputPath": "dist/examples/react/next-js-app"
+        "outputPath": "dist/examples/react/next-js-app",
+        "buildLibsFromSource": false
       },
       "configurations": {
         "production": {}
@@ -20,12 +21,12 @@
     "serve": {
       "executor": "@nrwl/next:server",
       "options": {
-        "buildTarget": "react-next-js-app:build",
+        "buildTarget": "example-react-next-js-app:build",
         "dev": true
       },
       "configurations": {
         "production": {
-          "buildTarget": "react-next-js-app:build:production",
+          "buildTarget": "example-react-next-js-app:build:production",
           "dev": false
         }
       }
@@ -33,7 +34,7 @@
     "export": {
       "executor": "@nrwl/next:export",
       "options": {
-        "buildTarget": "react-next-js-app:build:production"
+        "buildTarget": "example-react-next-js-app:build:production"
       }
     },
     "test": {

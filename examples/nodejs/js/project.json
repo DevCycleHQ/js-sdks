@@ -17,7 +17,7 @@
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
-        "buildTarget": "nodejs-js:build"
+        "buildTarget": "example-nodejs-js:build"
       }
     },
     "lint": {
