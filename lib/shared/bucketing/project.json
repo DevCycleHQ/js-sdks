@@ -19,6 +19,7 @@
         "outputPath": "dist/lib/shared/bucketing",
         "main": "lib/shared/bucketing/src/index.ts",
         "tsConfig": "lib/shared/bucketing/tsconfig.lib.json",
+        "buildableProjectDepsInPackageJsonType": "dependencies",
         "assets": [
           "lib/shared/bucketing/*.md"
         ]
