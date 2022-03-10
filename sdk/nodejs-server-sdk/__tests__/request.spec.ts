@@ -1,11 +1,12 @@
 jest.mock('axios')
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import { mocked } from 'ts-jest/utils'
 
 const axiosRequestMock = jest.fn()
 const createMock = mocked(axios.create, true)
-// @ts-ignore
-createMock.mockImplementation(() => ({ request: axiosRequestMock }))
+createMock.mockImplementation(() => {
+    return { request: axiosRequestMock } as unknown as AxiosInstance
+})
 
 import { defaultLogger } from '../src'
 const logger = defaultLogger()

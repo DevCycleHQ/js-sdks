@@ -33,10 +33,8 @@ describe('DVCRequestUser Unit Tests', () => {
     })
 
     it('should throw error if user_id is missing', () => {
-        // @ts-ignore
-        expect(() => new DVCRequestUser({})).toThrow('Must have a user_id set on the user')
-        expect(() => new DVCRequestUser({ user_id: '' })).toThrow('Must have a user_id set on the user')
-        // @ts-ignore
-        expect(() => new DVCRequestUser({ user_id: 8 })).toThrow('user_id is not of type: string')
+        expect(() => new (DVCRequestUser as any)({})).toThrow('Must have a user_id set on the user')
+        expect(() => new (DVCRequestUser as any)({ user_id: '' })).toThrow('Must have a user_id set on the user')
+        expect(() => new (DVCRequestUser as any)({ user_id: 8 })).toThrow('user_id is not of type: string')
     })
 })

@@ -1,9 +1,15 @@
-/* eslint-disable node/no-deprecated-api */
 /* eslint-disable max-len */
 
 import * as _ from 'lodash'
 import * as assert from 'assert'
 import * as segmentation from '../src/segmentation'
+import {
+    Audience,
+    AudienceFilterOrOperator,
+    AudienceOperator,
+    FilterComparator,
+    TopLevelOperator
+} from '@devcycle/types'
 
 describe('SegmentationManager Unit Test', () => {
     // TODO update and uncomment these tests when we incorporate list audiences
@@ -188,11 +194,11 @@ describe('SegmentationManager Unit Test', () => {
 
     describe('evaluateOperator', () => {
         it('should fail for empty filters', () => {
-            const filters = []
+            const filters: Record<string, unknown>[] = []
 
-            const operator = {
+            const operator: TopLevelOperator = {
                 filters,
-                operator: 'and'
+                operator: AudienceOperator.and
             }
 
             const data = {
@@ -202,9 +208,9 @@ describe('SegmentationManager Unit Test', () => {
                 platform: 'iOS'
             }
             assert.strictEqual(false, segmentation.evaluateOperator({ data, operator }))
-            const orOp = {
+            const orOp: TopLevelOperator = {
                 filters,
-                operator: 'or'
+                operator: AudienceOperator.or
             }
             assert.strictEqual(false, segmentation.evaluateOperator({ data: {}, operator: orOp }))
         })
@@ -214,11 +220,11 @@ describe('SegmentationManager Unit Test', () => {
                 type: 'all',
                 comparator: '=',
                 values: []
-            }]
+            }] as AudienceFilterOrOperator[]
 
-            const operator = {
+            const operator: TopLevelOperator = {
                 filters,
-                operator: 'and'
+                operator: AudienceOperator.and
             }
 
             const data = {
@@ -235,11 +241,11 @@ describe('SegmentationManager Unit Test', () => {
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
                 { type: 'user', subType: 'email', comparator: '=', values: ['dexter@smells.nice', 'brooks@big.lunch'] },
                 { type: 'user', subType: 'appVersion', comparator: '>', values: ['1.0.0'] }
-            ]
+            ] as AudienceFilterOrOperator[]
 
-            const operator = {
+            const operator: TopLevelOperator = {
                 filters,
-                operator: 'and'
+                operator: AudienceOperator.and
             }
 
             const data = {
@@ -257,11 +263,11 @@ describe('SegmentationManager Unit Test', () => {
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
                 { type: 'user', subType: 'email', comparator: '=', values: ['dexter@smells.nice', 'brooks@big.lunch'] },
                 { type: 'user', subType: 'appVersion', comparator: '>', values: ['1.0.0'] }
-            ]
+            ] as AudienceFilterOrOperator[]
 
-            const operator = {
+            const operator: TopLevelOperator = {
                 filters,
-                operator: 'or'
+                operator: AudienceOperator.or
             }
 
             const data = {
@@ -278,11 +284,11 @@ describe('SegmentationManager Unit Test', () => {
             const filters = [
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
                 { type: 'user', subType: 'customData', datakey: '', comparator: '=', values: ['Canada'] }
-            ]
+            ] as AudienceFilterOrOperator[]
 
-            const operator = {
+            const operator: TopLevelOperator = {
                 filters,
-                operator: 'and'
+                operator: AudienceOperator.and
             }
 
             const data = {
@@ -301,9 +307,9 @@ describe('SegmentationManager Unit Test', () => {
                     subType: 'user_id',
                     comparator: '=',
                     values: ['test_user']
-                }],
+                }] as AudienceFilterOrOperator[],
                 operator: 'and'
-            }
+            } as TopLevelOperator
 
             const data = { user_id: 'test_user' }
             assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
@@ -316,9 +322,9 @@ describe('SegmentationManager Unit Test', () => {
                     subType: 'email',
                     comparator: '=',
                     values: ['test@devcycle.com']
-                }],
+                }] as AudienceFilterOrOperator[],
                 operator: 'and'
-            }
+            } as TopLevelOperator
 
             const data = { email: 'test@devcycle.com' }
             assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
@@ -331,9 +337,9 @@ describe('SegmentationManager Unit Test', () => {
                     subType: 'country',
                     comparator: '=',
                     values: ['CA']
-                }],
+                }] as AudienceFilterOrOperator[],
                 operator: 'and'
-            }
+            } as TopLevelOperator
 
             const data = { country: 'CA' }
             assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
@@ -346,9 +352,9 @@ describe('SegmentationManager Unit Test', () => {
                     subType: 'appVersion',
                     comparator: '=',
                     values: ['1.0.1']
-                }],
+                }] as AudienceFilterOrOperator[],
                 operator: 'and'
-            }
+            } as TopLevelOperator
 
             const data = { appVersion: '1.0.1' }
             assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
@@ -361,9 +367,9 @@ describe('SegmentationManager Unit Test', () => {
                     subType: 'platformVersion',
                     comparator: '>=',
                     values: ['15.1']
-                }],
+                }] as AudienceFilterOrOperator[],
                 operator: 'and'
-            }
+            } as TopLevelOperator
 
             const data = { platformVersion: '15.1' }
             assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
@@ -376,9 +382,9 @@ describe('SegmentationManager Unit Test', () => {
                     subType: 'platform',
                     comparator: '=',
                     values: ['iOS', 'iPadOS', 'tvOS']
-                }],
+                }] as AudienceFilterOrOperator[],
                 operator: 'and'
-            }
+            } as TopLevelOperator
 
             const data = { platform: 'iPadOS' }
             assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
@@ -391,9 +397,9 @@ describe('SegmentationManager Unit Test', () => {
                     subType: 'deviceModel',
                     comparator: '=',
                     values: ['Samsung Galaxy F12']
-                }],
+                }] as AudienceFilterOrOperator[],
                 operator: 'and'
-            }
+            } as TopLevelOperator
 
             const data = { deviceModel: 'Samsung Galaxy F12' }
             assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
@@ -408,9 +414,9 @@ describe('SegmentationManager Unit Test', () => {
                     dataKeyType: 'String',
                     comparator: '=',
                     values: ['dataValue']
-                }],
+                }] as AudienceFilterOrOperator[],
                 operator: 'and'
-            }
+            } as TopLevelOperator
 
             const data = { customData: { testKey: 'dataValue' } }
             assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
@@ -419,89 +425,89 @@ describe('SegmentationManager Unit Test', () => {
 
     describe('checkStringsFilter', () => {
         it('should return false if filter and no value', () => {
-            const filter = { type: 'user', comparator: '=', values: [1, 2] }
+            const filter = { type: 'user', comparator: '=', values: [1, 2] } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkStringsFilter(null, filter))
         })
         it('should return false if exists filter and no value', () => {
-            const filter = { type: 'user', comparator: 'exist' }
+            const filter = { type: 'user', comparator: 'exist' } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkStringsFilter(null, filter))
             assert.strictEqual(false, segmentation.checkStringsFilter('', filter))
         })
         it('should return true if exists filter and value', () => {
-            const filter = { type: 'user', comparator: 'exist' }
+            const filter = { type: 'user', comparator: 'exist' } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkStringsFilter('string', filter))
         })
         it('should return true if not exists filter and no value', () => {
-            const filter = { type: 'user', comparator: '!exist' }
+            const filter = { type: 'user', comparator: '!exist' } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkStringsFilter(null, filter))
             assert.strictEqual(true, segmentation.checkStringsFilter('', filter))
         })
         it('should return false if not exists filter and value', () => {
-            const filter = { type: 'user', comparator: '!exist' }
+            const filter = { type: 'user', comparator: '!exist' } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkStringsFilter('string', filter))
         })
         it('should return false if contains filter and no value', () => {
-            const filter = { type: 'user', comparator: 'contain', values: ['hello'] }
+            const filter = { type: 'user', comparator: 'contain', values: ['hello'] } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkStringsFilter(null, filter))
         })
         it('should return true if browser filter works', () => {
-            const filter = { type: 'user', comparator: '=', values: ['Chrome'] }
+            const filter = { type: 'user', comparator: '=', values: ['Chrome'] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkStringsFilter('Chrome', filter))
         })
         it('should return true if browser device type filter works', () => {
-            const filter = { type: 'user', comparator: '=', values: ['Desktop'] }
+            const filter = { type: 'user', comparator: '=', values: ['Desktop'] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkStringsFilter('Desktop', filter))
         })
         it('should return true if contains filter and value contains', () => {
-            const filter = { type: 'user', comparator: 'contain', values: ['hello'] }
+            const filter = { type: 'user', comparator: 'contain', values: ['hello'] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkStringsFilter('helloWorld', filter))
         })
         it('should return false if contains filter and value does not contain', () => {
-            const filter = { type: 'user', comparator: 'contain', values: ['hello'] }
+            const filter = { type: 'user', comparator: 'contain', values: ['hello'] } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkStringsFilter('xy', filter))
         })
         it('should return true if not contains filter and no value', () => {
-            const filter = { type: 'user', comparator: '!contain', values: ['hello'] }
+            const filter = { type: 'user', comparator: '!contain', values: ['hello'] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkStringsFilter(null, filter))
         })
         it('should return true if not contains filter and value', () => {
-            const filter = { type: 'user', comparator: '!contain', values: ['hello'] }
+            const filter = { type: 'user', comparator: '!contain', values: ['hello'] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkStringsFilter('xy', filter))
         })
         it('should return false if not contains filter and not value', () => {
-            const filter = { type: 'user', comparator: '!contain', values: ['hello'] }
+            const filter = { type: 'user', comparator: '!contain', values: ['hello'] } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkStringsFilter('hello', filter))
         })
 
         it('should return false if string is not a string', () => {
-            assert.strictEqual(false, segmentation.checkStringsFilter(1, []))
+            assert.strictEqual(false, segmentation.checkStringsFilter(1, {}))
         })
         it('should return false if filter value is not a string', () => {
-            const filter = { type: 'user', comparator: '=', values: [1, 2] }
+            const filter = { type: 'user', comparator: '=', values: [1, 2] } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkStringsFilter('Male', filter))
         })
         it('should return true if string is equal', () => {
-            const filter = { type: 'user', comparator: '=', values: ['Male'] }
+            const filter = { type: 'user', comparator: '=', values: ['Male'] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkStringsFilter('Male', filter))
         })
         it('should return false if string is not equal', () => {
-            const filter = { type: 'user', comparator: '=', values: ['Male'] }
+            const filter = { type: 'user', comparator: '=', values: ['Male'] } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkStringsFilter('Female', filter))
         })
         it('should return true if string is one of multiple values', () => {
-            const filter = { type: 'user', comparator: '=', values: ['iPhone OS', 'Android'] }
+            const filter = { type: 'user', comparator: '=', values: ['iPhone OS', 'Android'] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkStringsFilter('iPhone OS', filter))
         })
         it('should return true if string is equal to multiple filters', () => {
             const filters = [
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
                 { type: 'user', subType: 'country', comparator: '!=', values: ['Not Canada'] }
-            ]
+            ] as AudienceFilterOrOperator[]
 
             const operator = {
                 filters,
                 operator: 'AND'
-            }
+            } as unknown as TopLevelOperator
 
             assert.strictEqual(true, segmentation.evaluateOperator({ data: { country: 'Canada' }, operator }))
         })
@@ -510,12 +516,12 @@ describe('SegmentationManager Unit Test', () => {
             const filters = [
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
                 { type: 'user', subType: 'country', comparator: '=', values: ['Not Canada'] }
-            ]
+            ] as AudienceFilterOrOperator[]
 
             const operator = {
                 filters,
                 operator: 'AND'
-            }
+            } as unknown as TopLevelOperator
 
             assert.strictEqual(false, segmentation.evaluateOperator({ data: { country: 'Canada' }, operator }))
         })
@@ -523,92 +529,92 @@ describe('SegmentationManager Unit Test', () => {
 
     describe('checkBooleanFilter', () => {
         it('should return false if exists filter and no value', () => {
-            const filter = { type: 'user', comparator: 'exist' }
+            const filter = { type: 'user', comparator: 'exist' } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkBooleanFilter(null, filter))
             assert.strictEqual(false, segmentation.checkBooleanFilter(10, filter))
         })
         it('should return true if exists filter and value', () => {
-            const filter = { type: 'user', comparator: 'exist' }
+            const filter = { type: 'user', comparator: 'exist' } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkBooleanFilter(true, filter))
             assert.strictEqual(true, segmentation.checkBooleanFilter(false, filter))
         })
         it('should return true if not exists filter and no value', () => {
-            const filter = { type: 'user', comparator: '!exist' }
+            const filter = { type: 'user', comparator: '!exist' } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkBooleanFilter(null, filter))
             assert.strictEqual(true, segmentation.checkBooleanFilter(10, filter))
         })
         it('should return false if not exists filter and value', () => {
-            const filter = { type: 'user', comparator: '!exist' }
+            const filter = { type: 'user', comparator: '!exist' } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkBooleanFilter(true, filter))
             assert.strictEqual(false, segmentation.checkBooleanFilter(false, filter))
         })
         it('should return false if filters value is not a boolean', () => {
-            const filter = { type: 'user', comparator: '=', values: ['hi1', 'hi2'] }
+            const filter = { type: 'user', comparator: '=', values: ['hi1', 'hi2'] } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkBooleanFilter(true, filter))
         })
         it('should return true if filers value equals boolean', () => {
-            const filter = { type: 'user', comparator: '=', values: [true] }
+            const filter = { type: 'user', comparator: '=', values: [true] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkBooleanFilter(true, filter))
         })
         it('should return false if filers value does not equals boolean', () => {
-            const filter = { type: 'user', comparator: '=', values: [true] }
+            const filter = { type: 'user', comparator: '=', values: [true] } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkBooleanFilter(false, filter))
         })
         it('should return false if filers value equals boolean', () => {
-            const filter = { type: 'user', comparator: '!=', values: [true] }
+            const filter = { type: 'user', comparator: '!=', values: [true] } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkBooleanFilter(true, filter))
         })
         it('should return true if filers value does not equals boolean', () => {
-            const filter = { type: 'user', comparator: '!=', values: [true] }
+            const filter = { type: 'user', comparator: '!=', values: [true] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkBooleanFilter(false, filter))
         })
     })
 
     describe('checkNumbersFilter', () => {
         it('should return false if filter and no number', () => {
-            assert.strictEqual(false, segmentation.checkNumbersFilter(null, []))
+            assert.strictEqual(false, segmentation.checkNumbersFilter(null, {}))
         })
         it('should return false if exists filter and no number', () => {
-            let filter = { type: 'user', comparator: 'exist' }
+            const filter = { type: 'user', comparator: 'exist' } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkNumbersFilter(null, filter))
             assert.strictEqual(false, segmentation.checkNumbersFilter('str', filter))
         })
         it('should return true if exists filter and number', () => {
-            const filter = { type: 'user', comparator: 'exist' }
+            const filter = { type: 'user', comparator: 'exist' } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkNumbersFilter(10, filter))
         })
         it('should return true if not exists filter and no number', () => {
-            const filter = { type: 'user', comparator: '!exist' }
+            const filter = { type: 'user', comparator: '!exist' } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkNumbersFilter(null, filter))
             assert.strictEqual(true, segmentation.checkNumbersFilter('str', filter))
         })
         it('should return false if not exists filter and number', () => {
-            const filter = { type: 'user', comparator: '!exist' }
+            const filter = { type: 'user', comparator: '!exist' } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkNumbersFilter(10, filter))
         })
 
         it('should return false if filter value is not a number', () => {
-            const filter = { type: 'user', comparator: '=', values: ['hi1', 'hi2'] }
+            const filter = { type: 'user', comparator: '=', values: ['hi1', 'hi2'] } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkNumbersFilter(10, filter))
         })
         it('should return true if values does not equal filter values', () => {
-            const filter = { type: 'user', comparator: '!=', values: [10, 11] }
+            const filter = { type: 'user', comparator: '!=', values: [10, 11] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkNumbersFilter(12, filter))
         })
         it('should return true if values does not equal filter values', () => {
-            const filter = { type: 'user', comparator: '!=', values: [10, 11] }
+            const filter = { type: 'user', comparator: '!=', values: [10, 11] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkNumbersFilter(12, filter))
         })
         it('should return true if number is equal', () => {
-            const filter = { type: 'user', comparator: '=', values: [10] }
+            const filter = { type: 'user', comparator: '=', values: [10] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkNumbersFilter(10, filter))
         })
         it('should return false if number is not equal', () => {
-            const filter = { type: 'user', comparator: '=', values: [10] }
+            const filter = { type: 'user', comparator: '=', values: [10] } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkNumbersFilter(11, filter))
         })
         it('should return false if number is equal to a OR values', () => {
-            const filter = { type: 'user', comparator: '=', values: [10, 11] }
+            const filter = { type: 'user', comparator: '=', values: [10, 11] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkNumbersFilter(11, filter))
         })
     })
@@ -616,7 +622,7 @@ describe('SegmentationManager Unit Test', () => {
     describe('checkNumberFilter', () => {
         it('should return false if operator is not valid', () => {
             assert.strictEqual(false, segmentation.checkNumberFilter(0, [0], '=11'))
-            assert.strictEqual(false, segmentation.checkNumberFilter(0, [0], 0))
+            assert.strictEqual(false, segmentation.checkNumberFilter(0, [0], 0 as unknown as string))
         })
         it('should return true if values are equal', () => {
             assert.strictEqual(true, segmentation.checkNumberFilter(0, [0], '='))
@@ -737,29 +743,29 @@ describe('SegmentationManager Unit Test', () => {
 
     describe('checkVersionFilters', () => {
         it('should return false if filter and version is null', () => {
-            const filter = { type: 'user', comparator: '=', values: ['1.1.2', '1.1.3'] }
-            const filter1 = { type: 'user', comparator: '>=', values: ['1.1.2', '1.1.3'] }
-            assert.strictEqual(false, segmentation.checkVersionFilters(null, filter))
-            assert.strictEqual(false, segmentation.checkVersionFilters(null, filter1))
+            const filter = { type: 'user', comparator: '=', values: ['1.1.2', '1.1.3'] } as AudienceFilterOrOperator
+            const filter1 = { type: 'user', comparator: '>=', values: ['1.1.2', '1.1.3'] } as AudienceFilterOrOperator
+            assert.strictEqual(false, segmentation.checkVersionFilters(null as unknown as string, filter))
+            assert.strictEqual(false, segmentation.checkVersionFilters(null as unknown as string, filter1))
         })
         it('should return true if filter equals version', () => {
-            const filter = { type: 'user', comparator: '=', values: ['1.1.2', '1.1.3'] }
+            const filter = { type: 'user', comparator: '=', values: ['1.1.2', '1.1.3'] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkVersionFilters('1.1.2', filter))
         })
         it('should return true if filter greater than or equals version', () => {
-            const filter = { type: 'user', comparator: '>=', values: ['1.1.2', '1.1.3'] }
+            const filter = { type: 'user', comparator: '>=', values: ['1.1.2', '1.1.3'] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkVersionFilters('1.1.2', filter))
         })
         it('should return true if filter equals version non semver', () => {
-            const filter = { type: 'user', comparator: '=', values: ['1.1.2.12'] }
-            const filter2 = { type: 'user', comparator: '=', values: ['31.331.2222.12'] }
-            const filter3 = { type: 'user', comparator: '=', values: ['1.1.2.12.1.2.3'] }
+            const filter = { type: 'user', comparator: '=', values: ['1.1.2.12'] } as AudienceFilterOrOperator
+            const filter2 = { type: 'user', comparator: '=', values: ['31.331.2222.12'] } as AudienceFilterOrOperator
+            const filter3 = { type: 'user', comparator: '=', values: ['1.1.2.12.1.2.3'] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkVersionFilters('1.1.2.12', filter))
             assert.strictEqual(true, segmentation.checkVersionFilters('31.331.2222.12', filter2))
             assert.strictEqual(true, segmentation.checkVersionFilters('1.1.2.12.1.2.3', filter3))
         })
         it('should return false if filter does not equals version', () => {
-            const filter = { type: 'user', comparator: '=', values: ['1.1.1'] }
+            const filter = { type: 'user', comparator: '=', values: ['1.1.1'] } as AudienceFilterOrOperator
             assert.strictEqual(false, segmentation.checkVersionFilters('1.1.2', filter))
         })
     })
@@ -772,7 +778,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, segmentation.checkVersionFilter('1.1.', ['1.1'], '='))
         })
         it('should return false if string versions not equal', () => {
-            assert.strictEqual(false, segmentation.checkVersionFilter(null, ['2'], '='))
+            assert.strictEqual(false, segmentation.checkVersionFilter(null as unknown as string, ['2'], '='))
             assert.strictEqual(false, segmentation.checkVersionFilter('1', ['2'], '='))
             assert.strictEqual(false, segmentation.checkVersionFilter('1.1', ['1.2'], '='))
             assert.strictEqual(false, segmentation.checkVersionFilter('1.1', ['1.1.1'], '='))
@@ -797,7 +803,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, segmentation.checkVersionFilter('1.1.1', ['1.2.3'], '!='))
         })
         it('should return true if string versions greater than', () => {
-            assert.strictEqual(false, segmentation.checkVersionFilter(null, ['1'], '>'))
+            assert.strictEqual(false, segmentation.checkVersionFilter(null as unknown as string, ['1'], '>'))
             assert.strictEqual(false, segmentation.checkVersionFilter('1', ['1'], '>'))
             assert.strictEqual(false, segmentation.checkVersionFilter('1.1', ['1.1'], '>'))
             assert.strictEqual(false, segmentation.checkVersionFilter('1.1.1', ['1.1.1'], '>'))
@@ -824,7 +830,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, segmentation.checkVersionFilter('4.8.241.2', ['4.8.241.0'], '>'))
         })
         it('should return true if string versions greater than or equal', () => {
-            assert.strictEqual(false, segmentation.checkVersionFilter(null, ['2'], '>='))
+            assert.strictEqual(false, segmentation.checkVersionFilter(null as unknown as string, ['2'], '>='))
             assert.strictEqual(false, segmentation.checkVersionFilter('1', ['2'], '>='))
             assert.strictEqual(false, segmentation.checkVersionFilter('1.1', ['1.2'], '>='))
             assert.strictEqual(false, segmentation.checkVersionFilter('1.1', ['1.1.1'], '>='))
@@ -877,7 +883,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, segmentation.checkVersionFilter('4.8.241.2', ['4.8.241.5'], '<'))
         })
         it('should return false if string versions less than', () => {
-            assert.strictEqual(false, segmentation.checkVersionFilter(null, ['1'], '<'))
+            assert.strictEqual(false, segmentation.checkVersionFilter(null as unknown as string, ['1'], '<'))
             assert.strictEqual(false, segmentation.checkVersionFilter('1', ['1'], '<'))
             assert.strictEqual(false, segmentation.checkVersionFilter('1.1', ['1.1'], '<'))
             assert.strictEqual(false, segmentation.checkVersionFilter('1.1.1', ['1.1.1'], '<'))
@@ -909,7 +915,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, segmentation.checkVersionFilter('4.8.241.2', ['4.8.241.2'], '<='))
         })
         it('should return false if string versions less than or equal', () => {
-            assert.strictEqual(false, segmentation.checkVersionFilter(null, ['1'], '<='))
+            assert.strictEqual(false, segmentation.checkVersionFilter(null as unknown as string, ['1'], '<='))
             assert.strictEqual(false, segmentation.checkVersionFilter('2', ['1'], '<='))
             assert.strictEqual(false, segmentation.checkVersionFilter('1.2', ['1.1'], '<='))
             assert.strictEqual(false, segmentation.checkVersionFilter('2.1', ['1.1'], '<='))
@@ -937,7 +943,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, segmentation.checkVersionFilter('1.1.', ['1.1', '1.1'], '='))
         })
         it('should return false if all string versions not equal array', () => {
-            assert.strictEqual(false, segmentation.checkVersionFilter(null, ['2', '3'], '='))
+            assert.strictEqual(false, segmentation.checkVersionFilter(null as unknown as string, ['2', '3'], '='))
             assert.strictEqual(false, segmentation.checkVersionFilter('1', ['2', '3'], '='))
             assert.strictEqual(false, segmentation.checkVersionFilter('1.1', ['1.2', '1.2'], '='))
             assert.strictEqual(false, segmentation.checkVersionFilter('1.1', ['1.1.1', '1.2'], '='))
@@ -1156,7 +1162,7 @@ describe('SegmentationManager Unit Test', () => {
             type: 'user',
             subType: 'customData',
             values: ['value']
-        }
+        } as AudienceFilterOrOperator
         it('should return false if filter and no data', () => {
             assert.strictEqual(false, segmentation.checkCustomData(null, filterStr))
         })
@@ -1164,7 +1170,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, segmentation.checkCustomData({ strKey: 'value' }, filterStr))
         })
         it('should return true if string is one OR value', () => {
-            let filter = _.clone(filterStr)
+            const filter = _.clone(filterStr)
             filter.values = ['value', 'value too']
             assert.strictEqual(true, segmentation.checkCustomData({ strKey: 'value' }, filter))
         })
@@ -1176,14 +1182,14 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false, segmentation.checkCustomData({}, filterStr))
         })
 
-        let filterNum = _.clone(filterStr)
+        const filterNum = _.clone(filterStr)
         filterNum.dataKey = 'numKey'
         filterNum.values = [0]
         it('should return true if number value is equal', () => {
             assert.strictEqual(true, segmentation.checkCustomData({ numKey: 0 }, filterNum))
         })
         it('should return true if number is one OR value', () => {
-            let filter = _.clone(filterNum)
+            const filter = _.clone(filterNum)
             filter.values = [0, 1]
             assert.strictEqual(true, segmentation.checkCustomData({ numKey: 1 }, filter))
         })
@@ -1191,7 +1197,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false, segmentation.checkCustomData({ numKey: 1 }, filterNum))
         })
 
-        let filterBool = _.clone(filterStr)
+        const filterBool = _.clone(filterStr)
         filterBool.dataKey = 'boolKey'
         filterBool.values = [false]
         it('should return true if bool value is equal', () => {
@@ -1204,7 +1210,7 @@ describe('SegmentationManager Unit Test', () => {
             const operatorFilter = {
                 filters: [filterStr, filterNum, filterBool],
                 operator: 'AND'
-            }
+            } as unknown as TopLevelOperator
             assert.strictEqual(true,
                 segmentation.evaluateOperator({
                     data: { customData: { strKey: 'value', numKey: 0, boolKey: false } },
@@ -1216,7 +1222,7 @@ describe('SegmentationManager Unit Test', () => {
             const operatorFilter = {
                 filters: [filterStr, filterNum, filterBool],
                 operator: 'AND'
-            }
+            } as unknown as TopLevelOperator
             assert.strictEqual(false,
                 segmentation.evaluateOperator({
                     data: { customData: { strKey: 'value', boolKey: false } },
@@ -1226,12 +1232,12 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         it('should return true if one custom data key is missing with not equal filter value', () => {
-            let filter = _.clone(filterNum)
-            filter.comparator = '!='
+            const filter = _.clone(filterNum)
+            filter.comparator = '!=' as FilterComparator
             const operatorFilter = {
                 filters: [filterStr, filter, filterBool],
                 operator: 'AND'
-            }
+            } as unknown as TopLevelOperator
             assert.strictEqual(true,
                 segmentation.evaluateOperator({
                     data: { customData: { strKey: 'value', boolKey: false } },
@@ -1241,27 +1247,27 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         it('should return true if no custom data is provided with not equal filter value', () => {
-            let filter = _.clone(filterNum)
-            filter.comparator = '!='
+            const filter = _.clone(filterNum)
+            filter.comparator = '!=' as FilterComparator
             assert.strictEqual(true,
                 segmentation.checkCustomData(null, filter))
         })
 
         it('should return true if no custom data is provided with not exists filter value', () => {
-            let filter = _.clone(filterNum)
-            filter.comparator = '!exist'
+            const filter = _.clone(filterNum)
+            filter.comparator = '!exist' as FilterComparator
 
             assert.strictEqual(true,
                 segmentation.checkCustomData(null, filter))
         })
 
         it('should return false if no custom data is provided with not equal filter and others', () => {
-            let filter = _.clone(filterNum)
-            filter.comparator = '!='
+            const filter = _.clone(filterNum)
+            filter.comparator = '!=' as FilterComparator
             const operatorFilter = {
                 filters: [filterStr, filter, filterBool],
                 operator: 'AND'
-            }
+            } as unknown as TopLevelOperator
             assert.strictEqual(false,
                 segmentation.evaluateOperator({
                     data: { customData: null },
@@ -1271,12 +1277,12 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         it('should return false if no custom data is provided with not exists filter and others', () => {
-            let filter = _.clone(filterNum)
-            filter.comparator = '!exist'
+            const filter = _.clone(filterNum)
+            filter.comparator = '!exist' as FilterComparator
             const operatorFilter = {
                 filters: [filterStr, filter, filterBool],
                 operator: 'AND'
-            }
+            } as unknown as TopLevelOperator
             assert.strictEqual(false,
                 segmentation.evaluateOperator({
                     data: { customData: null },
@@ -1285,13 +1291,13 @@ describe('SegmentationManager Unit Test', () => {
             )
         })
 
-        let containsFilter = {
+        const containsFilter = {
             comparator: 'contain',
             type: 'user',
             subType: 'customData',
             dataKey: 'last_order_no',
             values: ['FP']
-        }
+        } as AudienceFilterOrOperator
         it('should return true if custom data contains value', () => {
             assert.strictEqual(true, segmentation.checkCustomData({ last_order_no: 'FP2423423' }, containsFilter))
         })
@@ -1302,7 +1308,7 @@ describe('SegmentationManager Unit Test', () => {
             subType: 'customData',
             dataKey: 'field',
             values: []
-        }
+        } as AudienceFilterOrOperator
         it('should return true if custom data value exists', () => {
             assert.strictEqual(true, segmentation.checkCustomData({ field: 'something' }, existsFilter))
         })
@@ -1479,7 +1485,6 @@ describe('SegmentationManager Unit Test', () => {
         const audiences = [
             {
                 '_id': '60cca1d8230f17002542b909',
-                'name': 'All Android',
                 'filters': {
                     'filters': [{
                         'values': [
@@ -1496,7 +1501,6 @@ describe('SegmentationManager Unit Test', () => {
             },
             {
                 '_id': '60cca1d8230f17002542b910',
-                'name': 'Android TV and Fire TV',
                 'filters': {
                     'filters': [{
                         'values': [
@@ -1512,7 +1516,6 @@ describe('SegmentationManager Unit Test', () => {
             },
             {
                 '_id': '60cca1d8230f17002542b911',
-                'name': 'Android TV',
                 'filters': {
                     'filters': [{
                         'values': [
@@ -1527,7 +1530,6 @@ describe('SegmentationManager Unit Test', () => {
             },
             {
                 '_id': '60cca1d8230f17002542b912',
-                'name': 'Android',
                 'filters': {
                     'filters': [{
                         'values': [
@@ -1542,7 +1544,6 @@ describe('SegmentationManager Unit Test', () => {
             },
             {
                 '_id': '60cca1d8230f17002542b913',
-                'name': 'iOS',
                 'filters': {
                     'filters': [{
                         'values': [
@@ -1554,7 +1555,7 @@ describe('SegmentationManager Unit Test', () => {
                     }],
                     'operator': 'AND'
                 }
-            }]
+            }] as unknown as Audience[]
         it('should filter all Android TV audiences properly if it is included in data', () => {
             const data = {
                 platform: 'Android TV'

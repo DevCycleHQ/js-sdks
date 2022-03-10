@@ -11,7 +11,7 @@ export const versionCompare = (v1: string, v2: string, options?: optionsType) =>
         v2parts = v2.split('.')
 
     const isValidPart = (x: string) => {
-        return (lexicographical ? /^\d+[A-Za-z]*$/ : /^\d+$/).test(x);
+        return (lexicographical ? /^\d+[A-Za-z]*$/ : /^\d+$/).test(x)
     }
 
     if (!v1parts.every(isValidPart) || !v2parts.every(isValidPart)) {
@@ -19,8 +19,8 @@ export const versionCompare = (v1: string, v2: string, options?: optionsType) =>
     }
 
     if (zeroExtend) {
-        while (v1parts.length < v2parts.length) v1parts.push("0");
-        while (v2parts.length < v1parts.length) v2parts.push("0");
+        while (v1parts.length < v2parts.length) v1parts.push('0')
+        while (v2parts.length < v1parts.length) v2parts.push('0')
     }
 
     let v1PartsFinal: (string | number)[] = v1parts
