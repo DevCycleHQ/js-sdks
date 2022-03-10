@@ -8,7 +8,6 @@
       "outputs": [
         "{options.outputPath}"
       ],
-      "defaultConfiguration": "production",
       "options": {
         "compiler": "babel",
         "outputPath": "dist/examples/react/with-provider",
@@ -26,12 +25,12 @@
     "serve": {
       "executor": "@nrwl/web:dev-server",
       "options": {
-        "buildTarget": "react-with-provider:build",
+        "buildTarget": "example-react-with-provider:build",
         "hmr": true
       },
       "configurations": {
         "production": {
-          "buildTarget": "react-with-provider:build:production",
+          "buildTarget": "example-react-with-provider:build:production",
           "hmr": false
         }
       }

@@ -3,7 +3,7 @@
   "npmScope": "devcycle",
   "workspaceLayout": {
     "libsDir": "lib",
-    "appsDir": "examples"
+    "appsDir": "sdk"
   },
   "implicitDependencies": {
     "package.json": {
