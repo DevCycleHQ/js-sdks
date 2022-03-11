@@ -1,0 +1,91 @@
+import { JSON } from "assemblyscript-json"
+import {getJSONArrayFromJSON, getJSONObjFromJSON, getStringFromJSON, jsonArrFromValueArray} from "./jsonHelpers"
+import { FeatureConfiguration } from "./featureConfiguration"
+
+const validTypes = ['release', 'experiment', 'permission', 'ops']
+
+export class Feature extends JSON.Value {
+    _id: string
+    type: string
+    key: string
+    variations: Variation[]
+    configuration: FeatureConfiguration
+
+    constructor(feature: JSON.Obj) {
+        super()
+        this._id = getStringFromJSON(feature, '_id')
+
+        const type = getStringFromJSON(feature, 'type')
+        if (!validTypes.includes(type)) throw new Error(`Feature.type must be one of: ${validTypes.join(',')}`)
+        this.type = type
+
+        this.key = getStringFromJSON(feature, 'key')
+
+        const variations = getJSONArrayFromJSON(feature, 'variations')
+        this.variations = variations.valueOf().map<Variation>((variation) => {
+            return new Variation(variation as JSON.Obj)
+        })
+
+        this.configuration = new FeatureConfiguration(getJSONObjFromJSON(feature, 'configuration'))
+    }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('_id', this._id)
+        json.set('type', this.type)
+        json.set('key', this.key)
+        json.set('variations', jsonArrFromValueArray(this.variations))
+        json.set('configuration', this.configuration)
+        return json.stringify()
+    }
+}
+
+export class Variation extends JSON.Value {
+    _id: string
+    name: string | null
+    variables: Array<Variable>
+
+    constructor(variation: JSON.Obj) {
+        super()
+        this._id = getStringFromJSON(variation, '_id')
+
+        const name = variation.getString('_id')
+        this.name = name ? name.toString() : null
+
+        const variables = getJSONArrayFromJSON(variation, 'variables')
+        this.variables = variables.valueOf().map<Variable>((variable) => {
+            return new Variable(variable as JSON.Obj)
+        })
+    }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('_id', this._id)
+        json.set('name', this.name)
+
+        const variables = jsonArrFromValueArray(this.variables)
+        json.set('variables', variables)
+
+        return json.stringify()
+    }
+}
+
+export class Variable extends JSON.Value {
+    _var: string
+    // value: any
+
+    constructor(variable: JSON.Obj) {
+        super()
+        this._var = getStringFromJSON(variable, '_var')
+        // // TODO: how to check the types on this...
+        // this.value = variable.get('value')
+    }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('_var', this._var)
+        // json.set('value', this.value)
+        return json.stringify()
+    }
+}
+
