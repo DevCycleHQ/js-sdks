@@ -2,6 +2,17 @@
     "root": "lib/shared/bucketing-assembly-script",
     "sourceRoot": "lib/shared/bucketing-assembly-script/src",
     "projectType": "library",
-    "targets": {},
+    "targets": {
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": [
+                "coverage/lib/shared/bucketing-assembly-script"
+            ],
+            "options": {
+                "jestConfig": "lib/shared/bucketing-assembly-script/jest.config.js",
+                "passWithNoTests": true
+            }
+        }
+    },
     "tags": []
 }

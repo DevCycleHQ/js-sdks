@@ -1,6 +1,16 @@
 {
-  "extends": "../../../node_modules/assemblyscript/std/assembly.json",
-  "include": [
-    "./**/*.ts"
+  "extends": "../../../tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "compilerOptions": {
+      "allowJs": true
+  },
+    "references": [
+    {
+      "path": "./tsconfig.as.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
   ]
 }
