@@ -1,0 +1,7 @@
+{
+    "root": "lib/shared/bucketing-assembly-script",
+    "sourceRoot": "lib/shared/bucketing-assembly-script/src",
+    "projectType": "library",
+    "targets": {},
+    "tags": []
+}
