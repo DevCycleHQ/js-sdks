@@ -1,6 +1,6 @@
 {
     "root": "lib/shared/bucketing-assembly-script",
-    "sourceRoot": "lib/shared/bucketing-assembly-script/src",
+    "sourceRoot": "lib/shared/bucketing-assembly-script/assembly-script-src",
     "projectType": "library",
     "targets": {
         "test": {
@@ -15,16 +15,15 @@
                 }
             ],
             "options": {
-                "jestConfig": "lib/shared/bucketing-assembly-script/jest.config.js",
-                "passWithNoTests": true
+                "jestConfig": "lib/shared/bucketing-assembly-script/jest.config.js"
             }
         },
         "build": {
             "executor": "@nrwl/workspace:run-commands",
             "options": {
                 "commands": [
-                    { "command": "asc src/index.ts --target debug --exportRuntime" },
-                    { "command": "asc src/index.ts --target release --exportRuntime" }
+                    { "command": "asc assembly-script-src/index.ts --target debug --exportRuntime" },
+                    { "command": "asc assembly-script-src/index.ts --target release --exportRuntime" }
                 ],
                 "cwd": "lib/shared/bucketing-assembly-script",
                 "parallel": true

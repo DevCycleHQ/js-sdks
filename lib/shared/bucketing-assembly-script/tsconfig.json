@@ -7,9 +7,6 @@
   },
     "references": [
     {
-      "path": "./tsconfig.as.json"
-    },
-    {
       "path": "./tsconfig.spec.json"
     }
   ]

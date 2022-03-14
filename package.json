@@ -22,6 +22,9 @@
     "lerna:version:major": "lerna version major -m \"Release\""
   },
   "dependencies": {
+    "@assemblyscript/loader": "^0.19.23",
+    "assemblyscript": "^0.19.23",
+    "assemblyscript-json": "^1.1.0",
     "@nrwl/next": "13.8.5",
     "async": "^3.2.1",
     "axios": "^0.24.0",
@@ -48,6 +51,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.7",
     "@nrwl/cli": "13.8.8",
     "@nrwl/devkit": "13.8.8",
     "@nrwl/eslint-plugin-nx": "13.8.8",
