@@ -18,6 +18,7 @@ describe('WASM test', () => {
         )
         const result = __getString(resultAdr)
         console.log('result: ' + result)
-        expect(result).not.toBeNull()
+        const resultJSON = JSON.parse(result)
+        expect(resultJSON).toEqual(config)
     })
 })

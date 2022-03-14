@@ -75,7 +75,7 @@ export class ConfigBody {
     environment: PublicEnvironment
     features: Feature[]
     variables: Variable[]
-    variableHashes: Map<string, number>
+    variableHashes: Map<string, i64>
 
     constructor(configJSON: JSON.Obj) {
         this.project = new PublicProject(getJSONObjFromJSON(configJSON, "project"))
@@ -93,11 +93,11 @@ export class ConfigBody {
         })
 
         const variableHashes = getJSONObjFromJSON(configJSON, 'variableHashes')
-        const variableHashesMap = new Map<string, number>()
+        const variableHashesMap = new Map<string, i64>()
         const keys = variableHashes.keys
-        for (let i=0; i++; i < keys.length) {
+        for (let i=0; i < keys.length; i++) {
             const key = keys[i]
-            const value = variableHashes.getNum(key)
+            const value = variableHashes.getInteger(key)
             if (!value) throw new Error(`Unable to get variableHashes value for key: ${key}`)
             variableHashesMap.set(key, value.valueOf())
         }

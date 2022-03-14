@@ -46,7 +46,7 @@ export class FeatureConfiguration extends JSON.Value {
         if (this.forcedUsers) {
             json.set('forcedUsers', jsonObjFromMap(this.forcedUsers as Map<string, string>))
         }
-        // json.set('targets', jsonArrFromValueArray(this.targets))
+        json.set('targets', jsonArrFromValueArray(this.targets))
         return json.stringify()
     }
 }

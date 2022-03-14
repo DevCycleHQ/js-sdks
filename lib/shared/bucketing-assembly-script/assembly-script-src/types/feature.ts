@@ -53,7 +53,7 @@ export class Variation extends JSON.Value {
         super()
         this._id = getStringFromJSON(variation, '_id')
 
-        const name = variation.getString('_id')
+        const name = variation.getString('name')
         this.name = name ? name.toString() : null
 
         const variables = getJSONArrayFromJSON(variation, 'variables')
@@ -65,10 +65,11 @@ export class Variation extends JSON.Value {
     stringify(): string {
         const json = new JSON.Obj()
         json.set('_id', this._id)
-        json.set('name', this.name)
+        if (this.name) {
+            json.set('name', this.name)
+        }
 
-        const variables = jsonArrFromValueArray(this.variables)
-        json.set('variables', variables)
+        json.set('variables', jsonArrFromValueArray(this.variables))
 
         return json.stringify()
     }
@@ -76,19 +77,19 @@ export class Variation extends JSON.Value {
 
 export class VariationVariable extends JSON.Value {
     _var: string
-    // value: any
+    value: string
 
     constructor(variable: JSON.Obj) {
         super()
         this._var = getStringFromJSON(variable, '_var')
         // // TODO: how to check the types on this...
-        // this.value = variable.get('value')
+        this.value = getStringFromJSON(variable, 'value')
     }
 
     stringify(): string {
         const json = new JSON.Obj()
         json.set('_var', this._var)
-        // json.set('value', this.value)
+        json.set('value', this.value)
         return json.stringify()
     }
 }
