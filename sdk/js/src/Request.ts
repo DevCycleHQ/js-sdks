@@ -83,7 +83,7 @@ export const publishEvents = async (
     const res = await post(
         `${EVENT_URL}${HOST}${EVENTS_PATH}`,
         envKey,
-        payload
+        payload as unknown as Record<string, unknown>
     )
     if (res.status !== 201) {
         console.error(`Error posting events, status: ${res.status}, body: ${res.data}`)

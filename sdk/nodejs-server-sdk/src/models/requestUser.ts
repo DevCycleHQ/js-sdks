@@ -17,7 +17,7 @@ export class DVCRequestUser implements DVCUser {
     appBuild?: number
     customData?: JSON
     privateCustomData?: JSON
-    lastSeenDate?: Date
+    readonly lastSeenDate: Date
     readonly createdDate: Date
     readonly platform: string
     readonly platformVersion: string

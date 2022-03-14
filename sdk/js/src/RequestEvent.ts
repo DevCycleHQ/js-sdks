@@ -1,13 +1,8 @@
-import { DVCEvent, DVCUser } from './types'
+import { DVCEvent } from './types'
 import { checkParamDefined } from './utils'
 import { EventTypes } from './EventQueue'
 
-export type DVCEventPayload = {
-    events: DVCRequestEvent[],
-    user: DVCUser
-}
-
-export class DVCRequestEvent {
+export class DVCRequestEvent implements DVCEvent {
     type: string
     target?: string
     customType?: string

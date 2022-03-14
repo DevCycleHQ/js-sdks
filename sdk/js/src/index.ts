@@ -4,6 +4,7 @@ import {
 import { DVCUser, UserParam } from './User'
 import { DVCClient } from './Client'
 
+export { UserParam } from './User'
 export * from './types'
 
 export const initialize = (environmentKey: string, user: UserParam, options?: DVCOptions): DVCClient => {
