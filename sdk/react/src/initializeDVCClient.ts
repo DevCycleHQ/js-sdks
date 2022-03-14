@@ -7,7 +7,6 @@ const initializeDVCClient = async (
     options?: DVCOptions,
 ): Promise<DVCClient> => {
     const client = initialize(environmentKey, user, options)
-
     return client.onClientInitialized()
 }
 

@@ -1,4 +1,4 @@
-import asyncWithDVCProvider from './asyncWithDVCProvider'
+import asyncWithDVCProvider from './asyncDVCProvider'
 import useDVCClient from './useDVCClient'
 import useVariable from './useVariable'
 import withDVCProvider from './withDVCProvider'
