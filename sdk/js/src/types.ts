@@ -315,5 +315,6 @@ type DeviceInfo = {
     getModel: () => string
 }
 declare global {
+   // eslint-disable-next-line no-var
   var DeviceInfo: DeviceInfo | undefined
 }

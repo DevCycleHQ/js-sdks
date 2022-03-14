@@ -1,15 +1,15 @@
 import { isString } from 'lodash'
 import {
     PublicEnvironment, PublicFeature, PublicProject, PublicVariable
-} from './configBody'
-import { VariableValue } from './models'
+} from '../../config/configBody'
+import { VariableValue } from '../../config/models'
 import {
     IsEmail, IsDate, IsOptional, IsNumber, IsBoolean,
     IsString, IsIn, IsNotEmpty, IsISO31661Alpha2
 } from 'class-validator'
 import { Transform, Type } from 'class-transformer'
 import 'reflect-metadata'
-import { DVCJSON, IsDVCJSONObject } from './dvcJSON'
+import { DVCJSON, IsDVCJSONObject } from '../../validators/dvcJSON'
 
 export const SDKTypeValues = ['client', 'server', 'mobile', 'api']
 export type SDKTypes = typeof SDKTypeValues[number]

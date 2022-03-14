@@ -1,15 +1,12 @@
-# shared-types
+# Devcycle Types
 
-This library was generated with [Nx](https://nx.dev).
+This package contains shared types used to define the contracts between DevCycle SDKs and backend APIs.
 
-
+It also holds validation logic within those definitions that is used for request validation by the APIs.
 
 ## Building
 
 Run `nx build shared-types` to build the library.
-
-
-
 
 
 ## Running unit tests

@@ -2,6 +2,11 @@
   "private": true,
   "name": "devcycle-js-sdks",
   "version": "1.0.0",
+  "workspaces": [
+    "sdk/*",
+    "lib/**/*",
+    "example/**/*"
+  ],
   "scripts": {
     "lint": "nx run-many --parallel --target lint --all",
     "test": "nx run-many --parallel --target test --all",
