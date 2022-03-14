@@ -1,5 +1,6 @@
-import { JSON } from "assemblyscript-json"
+import { JSON, JSONEncoder } from "assemblyscript-json"
 import {
+    getF64FromJSON,
     getJSONArrayFromJSON,
     getJSONObjFromJSON,
     getStringFromJSON,
@@ -11,7 +12,7 @@ export class Target extends JSON.Value {
     _id: string
     _audience: Audience
     rollout: Rollout | null
-    // distribution: TargetDistribution[]
+    distribution: TargetDistribution[]
 
     constructor(target: JSON.Obj) {
         super()
@@ -21,14 +22,21 @@ export class Target extends JSON.Value {
 
         const rollout = target.getObj('rollout')
         this.rollout = rollout ? new Rollout(rollout) : null
+
+        const distribution = getJSONArrayFromJSON(target, 'distribution')
+        this.distribution = distribution.valueOf().map<TargetDistribution>((dist) => {
+            return new TargetDistribution(dist as JSON.Obj)
+        })
     }
 
     stringify(): string {
         const json = new JSON.Obj()
         json.set('_id', this._id)
         json.set('_audience', this._audience)
-        json.set('rollout', this.rollout)
-        // json.set('distribution', jsonArrFromValueArray(this.distribution))
+        if (this.rollout) {
+            json.set('rollout', this.rollout)
+        }
+        json.set('distribution', jsonArrFromValueArray(this.distribution))
         return json.stringify()
     }
 }
@@ -70,7 +78,7 @@ export class TopLevelOperator extends JSON.Value {
 
     stringify(): string {
         const json = new JSON.Obj()
-        json.set('_filters', jsonArrFromValueArray(this.filters))
+        json.set('filters', jsonArrFromValueArray(this.filters))
         json.set('operator', this.operator)
         return json.stringify()
     }
@@ -123,7 +131,7 @@ export class AudienceFilterOrOperator extends JSON.Value {
             for (let i = 0; i < valuesArr.valueOf().length; i++) {
                 const value = valuesArr.valueOf()[i]
                 if (value.isString) {
-                    values.push(value.stringify())
+                    values.push((value as JSON.Str).valueOf())
                 }
             }
             this.values = values
@@ -142,13 +150,27 @@ export class AudienceFilterOrOperator extends JSON.Value {
 
     stringify(): string {
         const json = new JSON.Obj()
-        json.set('type', this.type)
-        json.set('subType', this.subType)
-        json.set('comparator', this.comparator)
-        json.set('dataKey', this.dataKey)
-        json.set('dataKeyType', this.dataKeyType)
-        json.set('values', this.values)
-        json.set('operator', this.operator)
+        if (this.type) {
+            json.set('type', this.type)
+        }
+        if (this.subType) {
+            json.set('subType', this.subType)
+        }
+        if (this.comparator) {
+            json.set('comparator', this.comparator)
+        }
+        if (this.dataKey) {
+            json.set('dataKey', this.dataKey)
+        }
+        if (this.dataKeyType) {
+            json.set('dataKeyType', this.dataKeyType)
+        }
+        if (this.values) {
+            json.set('values', this.values)
+        }
+        if (this.operator) {
+            json.set('operator', this.operator)
+        }
         if (this.filters) {
             json.set('filters', jsonArrFromValueArray(this.filters as AudienceFilterOrOperator[]))
         }
@@ -170,7 +192,7 @@ export class Rollout extends JSON.Value {
         this.type = isValidString(rollout, 'type', validRolloutTypes)
 
         const startPercentage = rollout.getNum('startPercentage')
-        this.startPercentage = startPercentage ? startPercentage.valueOf() : 1
+        this.startPercentage = startPercentage ? startPercentage.valueOf() : 1.0
 
         this.startDate = Date.fromString(getStringFromJSON(rollout, 'startDate'))
 
@@ -204,16 +226,33 @@ export class RolloutStage extends JSON.Value {
         super()
         this.type = isValidString(stage, 'type', validRolloutStages)
         this.date = Date.fromString(getStringFromJSON(stage, 'date'))
-
-        const percentage = stage.getNum('percentage')
-        this.percentage = percentage ? percentage.valueOf() : 1
+        this.percentage = getF64FromJSON(stage, 'percentage')
     }
 
     stringify(): string {
         const json = new JSON.Obj()
         json.set('type', this.type)
-        json.set('date', this.date)
-        json.set('percentage', this.percentage)
+        // json.set('date', this.date)
+        json.set('percentage', new JSON.Float(this.percentage))
+        return json.stringify()
+    }
+}
+
+export class TargetDistribution extends JSON.Value {
+    _variation: string
+    percentage: f64
+
+    constructor(distribution: JSON.Obj) {
+        super()
+        this._variation = getStringFromJSON(distribution, '_variation')
+        this.percentage = getF64FromJSON(distribution, 'percentage')
+    }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('_variation', this._variation)
+        // const f64Value: f64 =
+        // json.set('percentage', f64(1.0))
         return json.stringify()
     }
 }

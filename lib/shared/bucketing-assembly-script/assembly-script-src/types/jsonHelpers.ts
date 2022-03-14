@@ -22,11 +22,16 @@ export function getStringFromJSON(jsonObj: JSON.Obj, key: string): string {
 }
 
 export function getF64FromJSON(jsonObj: JSON.Obj, key: string): f64 {
-    const num = jsonObj.getNum(key)
-    if (!num) {
-        throw new Error(`JSON Number missing for key: "${key}", obj: ${jsonObj.stringify()}`)
+    const num = jsonObj.get(key)
+    if (num && num.isFloat) {
+        return f64(1.0)
+        // return (num as JSON.Float).valueOf()
+    } else if (num && num.isInteger) {
+        return f64(1.0)
+        // const int = num as JSON.Integer
+        // return parseInt(int.toString())
     } else {
-        return num.valueOf()
+        throw new Error(`JSON Number missing for key: "${key}", obj: ${jsonObj.stringify()}`)
     }
 }
 

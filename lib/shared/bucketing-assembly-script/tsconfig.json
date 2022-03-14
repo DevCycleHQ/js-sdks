@@ -2,10 +2,16 @@
   "extends": "../../../tsconfig.base.json",
   "files": [],
   "include": [],
+  "exclude": [
+    "assembly-script-src/**/*.ts"
+  ],
   "compilerOptions": {
       "allowJs": true
   },
-    "references": [
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
     {
       "path": "./tsconfig.spec.json"
     }
