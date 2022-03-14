@@ -5,11 +5,11 @@ import { withDVCProvider } from '@devcycle/devcycle-react-sdk'
 
 const ENV_KEY = 'test_token'
 const user = {
-  user_id: 'test-user',
-  isAnonymous: false
+    user_id: 'test-user',
+    isAnonymous: false
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+    return <Component {...pageProps} />
 }
-export default withDVCProvider({envKey: ENV_KEY, user: user })(MyApp as React.FC)
+export default withDVCProvider({ envKey: ENV_KEY, user: user })(MyApp as React.FC)
