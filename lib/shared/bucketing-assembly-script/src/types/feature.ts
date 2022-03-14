@@ -1,5 +1,11 @@
 import { JSON } from "assemblyscript-json"
-import {getJSONArrayFromJSON, getJSONObjFromJSON, getStringFromJSON, jsonArrFromValueArray} from "./jsonHelpers"
+import {
+    getJSONArrayFromJSON,
+    getJSONObjFromJSON,
+    getStringFromJSON,
+    isValidString,
+    jsonArrFromValueArray
+} from "./jsonHelpers"
 import { FeatureConfiguration } from "./featureConfiguration"
 
 const validTypes = ['release', 'experiment', 'permission', 'ops']
@@ -15,9 +21,7 @@ export class Feature extends JSON.Value {
         super()
         this._id = getStringFromJSON(feature, '_id')
 
-        const type = getStringFromJSON(feature, 'type')
-        if (!validTypes.includes(type)) throw new Error(`Feature.type must be one of: ${validTypes.join(',')}`)
-        this.type = type
+        this.type = isValidString(feature, 'type', validTypes)
 
         this.key = getStringFromJSON(feature, 'key')
 
@@ -43,7 +47,7 @@ export class Feature extends JSON.Value {
 export class Variation extends JSON.Value {
     _id: string
     name: string | null
-    variables: Array<Variable>
+    variables: Array<VariationVariable>
 
     constructor(variation: JSON.Obj) {
         super()
@@ -53,8 +57,8 @@ export class Variation extends JSON.Value {
         this.name = name ? name.toString() : null
 
         const variables = getJSONArrayFromJSON(variation, 'variables')
-        this.variables = variables.valueOf().map<Variable>((variable) => {
-            return new Variable(variable as JSON.Obj)
+        this.variables = variables.valueOf().map<VariationVariable>((variable) => {
+            return new VariationVariable(variable as JSON.Obj)
         })
     }
 
@@ -70,7 +74,7 @@ export class Variation extends JSON.Value {
     }
 }
 
-export class Variable extends JSON.Value {
+export class VariationVariable extends JSON.Value {
     _var: string
     // value: any
 

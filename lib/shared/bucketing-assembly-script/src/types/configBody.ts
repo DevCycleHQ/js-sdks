@@ -1,6 +1,12 @@
 import { JSON } from "assemblyscript-json"
-import { getStringFromJSON, getJSONObjFromJSON, getJSONArrayFromJSON } from './jsonHelpers'
-import { Feature, Variable } from "./feature"
+import {
+    getStringFromJSON,
+    getJSONObjFromJSON,
+    getJSONArrayFromJSON,
+    jsonArrFromValueArray,
+    jsonObjFromMap, isValidString
+} from './jsonHelpers'
+import { Feature,  } from "./feature"
 
 
 export class PublicProject extends JSON.Value {
@@ -34,6 +40,31 @@ export class PublicEnvironment extends JSON.Value {
     stringify(): string {
         const json = new JSON.Obj()
         json.set('_id', this._id)
+        json.set('key', this.key)
+        return json.stringify()
+    }
+}
+
+const validVariableTypes = [
+    'String', 'Boolean', 'Number', 'Semver'
+]
+
+export class Variable extends JSON.Value {
+    _id: string
+    type: string
+    key: string
+
+    constructor(variable: JSON.Obj) {
+        super()
+        this._id = getStringFromJSON(variable, '_id')
+        this.type = isValidString(variable, 'type', validVariableTypes)
+        this.key = getStringFromJSON(variable, 'key')
+    }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('_id', this._id)
+        json.set('type', this.type)
         json.set('key', this.key)
         return json.stringify()
     }
@@ -78,9 +109,9 @@ export class ConfigBody {
         const json: JSON.Obj = new JSON.Obj()
         json.set('project', this.project)
         json.set('environment', this.environment)
-        json.set('features', this.features)
-        json.set('variables', this.variables)
-        json.set('variableHashes', this.variableHashes)
+        json.set('features', jsonArrFromValueArray(this.features))
+        json.set('variables', jsonArrFromValueArray(this.variables))
+        json.set('variableHashes', jsonObjFromMap(this.variableHashes))
         return json.stringify()
     }
 }
