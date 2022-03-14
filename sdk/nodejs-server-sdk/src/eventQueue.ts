@@ -3,7 +3,6 @@ import { publishEvents } from './request'
 import { checkParamDefined, checkParamString } from './utils/paramUtils'
 import { DVCRequestEvent } from './models/requestEvent'
 import { DVCRequestUser } from './models/requestUser'
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { BucketedUserConfig } from '@devcycle/types'
 
 export const EventTypes: Record<string, string> = {

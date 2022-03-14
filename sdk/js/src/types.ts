@@ -104,37 +104,37 @@ export interface DVCUser {
     /**
      * Set by SDK automatically
      */
-    readonly createdDate?: Date
+    readonly createdDate: Date
 
     /**
      * Set by SDK automatically
      */
-    readonly lastSeenDate?: Date
+    readonly lastSeenDate: Date
 
     /**
      * Set by SDK to 'web'
      */
-    readonly platform?: string
+    readonly platform: string
 
     /**
      * Set by SDK to ??
      */
-    readonly platformVersion?: string
+    readonly platformVersion: string
 
     /**
      * Set by SDK to User-Agent
      */
-    readonly deviceModel?: string
+    readonly deviceModel: string
 
     /**
      * SDK type
      */
-    readonly sdkType?: 'client' | 'server'
+    readonly sdkType: 'client' | 'server'
 
     /**
      * SDK Version
      */
-    readonly sdkVersion?: string
+    readonly sdkVersion: string
 }
 
 export interface DVCClient {

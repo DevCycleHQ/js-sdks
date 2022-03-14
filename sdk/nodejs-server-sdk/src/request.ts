@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios'
-import { UserEventsBatchRequestPayload } from './eventQueue'
 import { DVCLogger } from '../types'
+import { SDKEventBatchRequestBody } from '@devcycle/types'
 
 const axiosClient = axios.create({
     validateStatus: (status: number) => status < 400 && status >= 200,
@@ -12,7 +12,7 @@ export const EVENTS_PATH = '/v1/events/batch'
 export async function publishEvents(
     logger: DVCLogger,
     envKey: string | null,
-    eventsBatch: UserEventsBatchRequestPayload
+    eventsBatch: SDKEventBatchRequestBody
 ): Promise<AxiosResponse> {
     if (!envKey) {
         throw new Error('DevCycle is not yet initialized to publish events.')

@@ -1,9 +1,9 @@
 import { DVCEvent } from './types'
-import { DVCRequestEvent, DVCEventPayload } from './RequestEvent'
+import { DVCRequestEvent } from './RequestEvent'
 import { DVCUser } from './User'
-import { BucketedUserConfig } from '@devcycle/types'
+import { BucketedUserConfig, SDKEventRequestBody, DVCClientAPIUser } from '@devcycle/types'
 
-export const serializeUser = (user: DVCUser): string => {
+export const serializeUser = (user: DVCClientAPIUser): string => {
     const convertToQueryFriendlyFormat = (property?: any): any => {
         if (property instanceof Date) {
             return property.getTime()
@@ -15,7 +15,7 @@ export const serializeUser = (user: DVCUser): string => {
     }
     return Object.keys(user)
         .reduce((prev: string, curr: string, _: number): string => {
-            const userProperty = convertToQueryFriendlyFormat(user[curr as keyof DVCUser])
+            const userProperty = convertToQueryFriendlyFormat(user[curr as keyof DVCClientAPIUser])
             const nextQueryParam = userProperty !== null && userProperty !== undefined
                 ? `${prev && '&'}${curr}=${encodeURIComponent(userProperty)}`
                 : ''
@@ -42,7 +42,7 @@ export function generateEventPayload(
     config: BucketedUserConfig,
     user: DVCUser,
     events: DVCEvent[]
-): DVCEventPayload {
+): SDKEventRequestBody {
     return {
         events: events.map((event) => {
             return new DVCRequestEvent(event, user.user_id, config.featureVariationMap)
