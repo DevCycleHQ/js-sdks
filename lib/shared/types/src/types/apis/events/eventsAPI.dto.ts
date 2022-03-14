@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
-import { DVCAPIUser } from '../bucketing/clientSDKAPI'
+import { DVCAPIUser } from '../sdk/clientSDKAPI'
 import 'reflect-metadata'
 
 /**
