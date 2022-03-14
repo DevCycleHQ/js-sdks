@@ -37,16 +37,6 @@
         "buildTarget": "example-react-next-js-app:build:production"
       }
     },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/examples/react/next-js-app"
-      ],
-      "options": {
-        "jestConfig": "examples/react/next-js-app/jest.config.js",
-        "passWithNoTests": true
-      }
-    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": [
