@@ -8,5 +8,6 @@ interface DVCContext {
 const context = createContext<DVCContext>({ client: undefined })
 const { Provider, Consumer } = context
 
-export { Provider, Consumer, DVCContext }
+export { Provider, Consumer }
+export type { DVCContext }
 export default context

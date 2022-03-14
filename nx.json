@@ -2,8 +2,8 @@
   "extends": "@nrwl/workspace/presets/npm.json",
   "npmScope": "devcycle",
   "workspaceLayout": {
-    "libsDir": "lib",
-    "appsDir": "sdk"
+    "libsDir": "",
+    "appsDir": ""
   },
   "implicitDependencies": {
     "package.json": {
