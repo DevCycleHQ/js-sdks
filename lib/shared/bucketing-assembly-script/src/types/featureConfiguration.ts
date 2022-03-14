@@ -1,8 +1,14 @@
 import { JSON } from "assemblyscript-json"
-import { getJSONArrayFromJSON, getStringFromJSON, isValidString } from "./jsonHelpers"
+import {
+    getJSONArrayFromJSON,
+    getStringFromJSON,
+    isValidString,
+    jsonArrFromValueArray,
+    jsonObjFromMap
+} from "./jsonHelpers"
 import { Target } from "./target"
 
-export class FeatureConfiguration {
+export class FeatureConfiguration extends JSON.Value {
     _id: string
     prerequisites: FeaturePrerequisites[] | null
     winningVariation: FeatureWinningVariation | null
@@ -10,6 +16,7 @@ export class FeatureConfiguration {
     targets: Target[]
 
     constructor(featureConfig: JSON.Obj) {
+        super()
         this._id = getStringFromJSON(featureConfig, '_id')
 
         const prerequisites = featureConfig.getArr('prerequisites')
@@ -26,29 +33,62 @@ export class FeatureConfiguration {
 
         this.forcedUsers = null
     }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('_id', this._id)
+        if (this.prerequisites) {
+            json.set('prerequisites', jsonArrFromValueArray(this.prerequisites as FeaturePrerequisites[]))
+        }
+        if (this.winningVariation) {
+            json.set('winningVariation', this.winningVariation as FeatureWinningVariation)
+        }
+        if (this.forcedUsers) {
+            json.set('forcedUsers', jsonObjFromMap(this.forcedUsers as Map<string, string>))
+        }
+        // json.set('targets', jsonArrFromValueArray(this.targets))
+        return json.stringify()
+    }
 }
 
 const comparatorValues = ['=', '!=']
 
-export class FeaturePrerequisites {
+export class FeaturePrerequisites extends JSON.Value {
     _feature: string
     comparator: string
 
     constructor(featurePrerequisites: JSON.Obj) {
+        super()
+
         this._feature = getStringFromJSON(featurePrerequisites, '_feature')
 
         this.comparator = isValidString(featurePrerequisites, 'comparator', comparatorValues)
     }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('_feature', this._feature)
+        json.set('comparator', this.comparator)
+        return json.stringify()
+    }
 }
 
-export class FeatureWinningVariation {
+export class FeatureWinningVariation extends JSON.Value {
     _variation: string
     // updatedAt: Date
 
     constructor(winningVar: JSON.Obj) {
+        super()
         this._variation = getStringFromJSON(winningVar, '_variation')
 
         // this.updatedAt = Date.fromString(getStringFromJSON(winningVar, 'updatedAt'))
+    }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('_variation', this._variation)
+        // json.set('updatedAt', this.updatedAt)
+        return json.stringify()
     }
 }
 
