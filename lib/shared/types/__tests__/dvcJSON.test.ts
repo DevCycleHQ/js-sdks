@@ -1,4 +1,4 @@
-import { validate } from '../src/types/dvcJSON'
+import { validate } from '../src/types/validators/dvcJSON'
 
 describe('IsDVCJSONObject validator', () => {
     it('should not validate if input is not an object', () => {
