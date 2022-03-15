@@ -1,4 +1,4 @@
-import { DVCOptions } from '../types'
+import { DVCOptions } from './types'
 import { DVCClient } from './client'
 export { DVCClient } from './client'
 

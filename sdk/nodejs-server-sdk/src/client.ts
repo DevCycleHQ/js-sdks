@@ -8,7 +8,7 @@ import {
     DVCEvent,
     DVCLogger,
     DVCUser
-} from '../types'
+} from './types'
 import { EnvironmentConfigManager } from './environmentConfigManager'
 import { bucketUserForConfig } from './utils/userBucketingHelper'
 import { DVCVariable } from './models/variable'

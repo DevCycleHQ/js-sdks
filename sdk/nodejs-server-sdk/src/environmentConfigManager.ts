@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
 import { ConfigBody } from '@devcycle/types'
-import { DVCLogger, DVCOptions } from '../types'
+import { DVCLogger, DVCOptions } from './types'
 import { getEnvironmentConfig } from './request'
 import { plainToClass } from 'class-transformer'
 

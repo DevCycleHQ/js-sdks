@@ -1,4 +1,4 @@
-import { DVCEvent } from '../../types'
+import { DVCEvent } from '../types'
 import { checkParamDefined, checkParamString } from '../utils/paramUtils'
 
 export const EventTypes: Record<string, string> = {
