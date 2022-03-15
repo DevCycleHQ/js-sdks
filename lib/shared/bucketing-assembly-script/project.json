@@ -22,8 +22,8 @@
             "executor": "@nrwl/workspace:run-commands",
             "options": {
                 "commands": [
-                    { "command": "asc assembly-script-src/index.ts --target debug --exportRuntime" },
-                    { "command": "asc assembly-script-src/index.ts --target release --exportRuntime" }
+                    { "command": "asc assembly-script-src/index.ts --target debug --exportRuntime --initialMemory 100 --maximumMemory 10000" },
+                    { "command": "asc assembly-script-src/index.ts --target release --exportRuntime --initialMemory 100 --maximumMemory 10000" }
                 ],
                 "cwd": "lib/shared/bucketing-assembly-script",
                 "parallel": true
