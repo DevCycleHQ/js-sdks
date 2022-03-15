@@ -1,4 +1,4 @@
-import { JSON, JSONEncoder } from "assemblyscript-json"
+import { JSON } from "assemblyscript-json"
 import {
     getF64FromJSON,
     getJSONArrayFromJSON,
@@ -233,7 +233,7 @@ export class RolloutStage extends JSON.Value {
         const json = new JSON.Obj()
         json.set('type', this.type)
         // json.set('date', this.date)
-        json.set('percentage', new JSON.Float(this.percentage))
+        json.set('percentage', this.percentage)
         return json.stringify()
     }
 }
@@ -251,8 +251,7 @@ export class TargetDistribution extends JSON.Value {
     stringify(): string {
         const json = new JSON.Obj()
         json.set('_variation', this._variation)
-        // const f64Value: f64 =
-        // json.set('percentage', f64(1.0))
+        json.set('percentage', this.percentage)
         return json.stringify()
     }
 }
