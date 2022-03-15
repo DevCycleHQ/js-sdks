@@ -77,12 +77,12 @@ export class Variation extends JSON.Value {
 
 export class VariationVariable extends JSON.Value {
     _var: string
+    // TODO: support multiple types
     value: string
 
     constructor(variable: JSON.Obj) {
         super()
         this._var = getStringFromJSON(variable, '_var')
-        // // TODO: how to check the types on this...
         this.value = getStringFromJSON(variable, 'value')
     }
 

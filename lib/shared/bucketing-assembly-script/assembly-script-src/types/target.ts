@@ -1,6 +1,7 @@
 import { JSON } from "assemblyscript-json"
 import {
-    getF64FromJSON,
+    getDateFromJSON,
+    getF64FromJSON, getF64FromJSONOptional,
     getJSONArrayFromJSON,
     getJSONObjFromJSON,
     getStringFromJSON,
@@ -191,10 +192,9 @@ export class Rollout extends JSON.Value {
         super()
         this.type = isValidString(rollout, 'type', validRolloutTypes)
 
-        const startPercentage = rollout.getNum('startPercentage')
-        this.startPercentage = startPercentage ? startPercentage.valueOf() : 1.0
+        this.startPercentage = getF64FromJSONOptional(rollout, 'startPercentage', f64(1))
 
-        this.startDate = Date.fromString(getStringFromJSON(rollout, 'startDate'))
+        this.startDate = getDateFromJSON(rollout, 'startDate')
 
         const stages = rollout.getArr('stages')
         this.stages = stages ?
@@ -207,7 +207,7 @@ export class Rollout extends JSON.Value {
         const json = new JSON.Obj()
         json.set('type', this.type)
         json.set('startPercentage', this.startPercentage)
-        json.set('startDate', this.startDate)
+        json.set('startDate', this.startDate.toISOString())
         if (this.stages) {
             json.set('stages', jsonArrFromValueArray(this.stages as RolloutStage[]))
         }
@@ -225,14 +225,14 @@ export class RolloutStage extends JSON.Value {
     constructor(stage: JSON.Obj) {
         super()
         this.type = isValidString(stage, 'type', validRolloutStages)
-        this.date = Date.fromString(getStringFromJSON(stage, 'date'))
+        this.date = getDateFromJSON(stage, 'date')
         this.percentage = getF64FromJSON(stage, 'percentage')
     }
 
     stringify(): string {
         const json = new JSON.Obj()
         json.set('type', this.type)
-        // json.set('date', this.date)
+        json.set('date', this.date.toISOString())
         json.set('percentage', this.percentage)
         return json.stringify()
     }

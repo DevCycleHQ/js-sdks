@@ -21,8 +21,42 @@ export function getStringFromJSON(jsonObj: JSON.Obj, key: string): string {
     }
 }
 
+export function getStringFromJSONOptional(jsonObj: JSON.Obj, key: string): string | null {
+    const str = jsonObj.getString(key)
+    if (!str) {
+        return null
+    } else {
+        return str.valueOf()
+    }
+}
+
+export function getDateFromJSON(jsonObj: JSON.Obj, key: string): Date {
+    const dateStr = getStringFromJSON(jsonObj, key)
+    return Date.fromString(dateStr)
+}
+
+export function getDateFromJSONOptional(jsonObj: JSON.Obj, key: string): Date | null {
+    const dateStr = getStringFromJSONOptional(jsonObj, key)
+    if (!dateStr) return null
+    return Date.fromString(dateStr as string)
+}
+
 export function getF64FromJSON(jsonObj: JSON.Obj, key: string): f64 {
     const num = jsonObj.get(key)
+    if (num && num.isFloat) {
+        return (num as JSON.Float).valueOf()
+    } else if (num && num.isInteger) {
+        const int = num as JSON.Integer
+        return f64(int.valueOf())
+    } else {
+        throw new Error(`JSON Number missing for key: "${key}", obj: ${jsonObj.stringify()}`)
+    }
+}
+
+export function getF64FromJSONOptional(jsonObj: JSON.Obj, key: string, defaultValue: f64): f64 {
+    const num = jsonObj.get(key)
+    if (!num) return defaultValue
+
     if (num && num.isFloat) {
         return (num as JSON.Float).valueOf()
     } else if (num && num.isInteger) {
@@ -36,7 +70,7 @@ export function getF64FromJSON(jsonObj: JSON.Obj, key: string): f64 {
 export function isValidString(jsonObj: JSON.Obj, key: string, validStrings: string[]): string {
     const value = getStringFromJSON(jsonObj, key)
     if (!validStrings.includes(value)) {
-        throw new Error(`Not valid string value: ${value}, for key: ${key}, obj: ${jsonObj.stringify()}}`)
+        throw new Error(`Not valid string value: ${value}, for key: ${key}, obj: ${jsonObj.stringify()}`)
     }
     return value
 }
