@@ -2,5 +2,8 @@
   "name": "@devcycle/bucketing",
   "version": "1.0.0",
   "dependencies": {},
-  "peerDependencies": {}
+  "peerDependencies": {},
+  "devDependencies": {
+    "moment": "^2.29.1"
+  }
 }
