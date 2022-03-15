@@ -1,6 +1,6 @@
 {
   "name": "@devcycle/devcycle-react-sdk",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "The DevCycle React SDK used for feature management.",
   "main": "dist/index.js",
   "scripts": {
@@ -12,7 +12,6 @@
   "types": "dist/index.d.ts",
   "author": "",
   "license": "MIT",
-  "devDependencies": {},
   "peerDependencies": {
     "react": "^17.0.2"
   },
