@@ -1,5 +1,6 @@
 import { JSON } from "assemblyscript-json"
 import {
+    getDateFromJSON,
     getJSONArrayFromJSON,
     getStringFromJSON,
     isValidString,
@@ -75,19 +76,18 @@ export class FeaturePrerequisites extends JSON.Value {
 
 export class FeatureWinningVariation extends JSON.Value {
     _variation: string
-    // updatedAt: Date
+    updatedAt: Date
 
     constructor(winningVar: JSON.Obj) {
         super()
         this._variation = getStringFromJSON(winningVar, '_variation')
-
-        // this.updatedAt = Date.fromString(getStringFromJSON(winningVar, 'updatedAt'))
+        this.updatedAt = getDateFromJSON(winningVar, 'updatedAt')
     }
 
     stringify(): string {
         const json = new JSON.Obj()
         json.set('_variation', this._variation)
-        // json.set('updatedAt', this.updatedAt)
+        json.set('updatedAt', this.updatedAt.toISOString())
         return json.stringify()
     }
 }

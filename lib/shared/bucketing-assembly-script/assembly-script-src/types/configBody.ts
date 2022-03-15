@@ -77,22 +77,26 @@ export class ConfigBody {
     variables: Variable[]
     variableHashes: Map<string, i64>
 
-    constructor(configJSON: JSON.Obj) {
-        this.project = new PublicProject(getJSONObjFromJSON(configJSON, "project"))
+    constructor(configStr: string) {
+        const configJSON = JSON.parse(configStr)
+        if (!configJSON.isObj) throw new Error(`generateBucketedConfig config param not a JSON Object`)
+        const configJSONObj = configJSON as JSON.Obj
 
-        this.environment = new PublicEnvironment(getJSONObjFromJSON(configJSON, "environment"))
+        this.project = new PublicProject(getJSONObjFromJSON(configJSONObj, "project"))
 
-        const features = getJSONArrayFromJSON(configJSON, 'features')
+        this.environment = new PublicEnvironment(getJSONObjFromJSON(configJSONObj, "environment"))
+
+        const features = getJSONArrayFromJSON(configJSONObj, 'features')
         this.features = features.valueOf().map<Feature>((feature) => {
             return new Feature(feature as JSON.Obj)
         })
 
-        const variables = getJSONArrayFromJSON(configJSON, 'variables')
+        const variables = getJSONArrayFromJSON(configJSONObj, 'variables')
         this.variables = variables.valueOf().map<Variable>((variable) => {
             return new Variable(variable as JSON.Obj)
         })
 
-        const variableHashes = getJSONObjFromJSON(configJSON, 'variableHashes')
+        const variableHashes = getJSONObjFromJSON(configJSONObj, 'variableHashes')
         const variableHashesMap = new Map<string, i64>()
         const keys = variableHashes.keys
         for (let i=0; i < keys.length; i++) {
