@@ -1,12 +1,12 @@
 {
-  "root": "sdk/nodejs-server-sdk",
-  "sourceRoot": "sdk/nodejs-server-sdk/src",
+  "root": "sdk/nodejs",
+  "sourceRoot": "sdk/nodejs/src",
   "targets": {
     "check-types": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "yarn run -T tsc -b --incremental",
-        "cwd": "sdk/nodejs-server-sdk"
+        "cwd": "sdk/nodejs"
       }
     },
     "lint": {
@@ -16,17 +16,17 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "sdk/nodejs-server-sdk/**/*.ts"
+          "sdk/nodejs/**/*.ts"
         ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": [
-        "coverage/sdk/nodejs-server-sdk"
+        "coverage/sdk/nodejs"
       ],
       "options": {
-        "jestConfig": "sdk/nodejs-server-sdk/jest.config.js",
+        "jestConfig": "sdk/nodejs/jest.config.js",
         "passWithNoTests": true
       }
     },
@@ -36,13 +36,13 @@
         "{options.outputPath}"
       ],
       "options": {
-        "outputPath": "dist/sdk/nodejs-server-sdk",
-        "tsConfig": "sdk/nodejs-server-sdk/tsconfig.lib.json",
-        "packageJson": "sdk/nodejs-server-sdk/package.json",
+        "outputPath": "dist/sdk/nodejs",
+        "tsConfig": "sdk/nodejs/tsconfig.lib.json",
+        "packageJson": "sdk/nodejs/package.json",
         "buildableProjectDepsInPackageJsonType": "dependencies",
-        "main": "sdk/nodejs-server-sdk/src/index.ts",
+        "main": "sdk/nodejs/src/index.ts",
         "assets": [
-          "sdk/nodejs-server-sdk/*.md"
+          "sdk/nodejs/*.md"
         ]
       }
     },
@@ -52,8 +52,8 @@
         "dependsOn": [
           "build"
         ],
-        "command": "../../scripts/npm-publish-check.sh \"@devcycle/nodejs-server-sdk\"",
-        "cwd": "sdk/js"
+        "command": "npm publish",
+        "cwd": "dist/sdk/nodejs"
       }
     }
   },
