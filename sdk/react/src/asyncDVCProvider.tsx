@@ -9,6 +9,6 @@ export default async function asyncWithDVCProvider(config: ProviderConfig): Prom
     const client = await initializeDVCClient(envKey, user)
 
     return ({ children }) => {
-        return <Provider value={{ client, variables: {} }}>{children}</Provider>
+        return <Provider value={{ client }}>{children}</Provider>
     }
 }
