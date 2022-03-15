@@ -1,3 +1,12 @@
+import { DVCUser as User } from '@devcycle/devcycle-js-sdk'
+
+export interface DVCUser extends Omit<User, 'isAnonymous' | 'user_id'> {
+  /**
+   * Identifies the user
+   */
+  user_id: string
+}
+
 /**
  * Initialize the SDK
  * @param environmentKey
@@ -39,93 +48,6 @@ export interface DVCOptions {
      * Disables logging of any events or user data to DevCycle.
      */
     disableEventLogging?: boolean
-}
-
-export interface DVCUser {
-    /**
-     * User Identifier, must be defined and unique per user.
-     */
-    user_id: string
-
-    /**
-     * Email used for identifying a device user in the dashboard,
-     * or used for audience segmentation.
-     */
-    email?: string
-
-    /**
-     * Name of the user which can be used for identifying a device user,
-     * or used for audience segmentation.
-     */
-    name?: string
-
-    /**
-     * ISO 639-1 two letter codes, or ISO 639-2 three letter codes
-     */
-    language?: string
-
-    /**
-     * ISO 3166 two or three letter codes
-     */
-    country?: string
-
-    /**
-     * Application Version, can be used for audience segmentation.
-     */
-    appVersion?: string
-
-    /**
-     * Application Build, can be used for audience segmentation.
-     */
-    appBuild?: number
-
-    /**
-     * Custom JSON data used for audience segmentation, must be limited to __kb in size.
-     * Values will be logged to DevCycle's servers and available in the dashboard to view.
-     */
-    customData?: JSON
-
-    /**
-     * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
-     * Values will not be logged to DevCycle's servers and
-     * will not be available in the dashboard.
-     */
-    privateCustomData?: JSON
-
-    /**
-     * Set by SDK automatically
-     */
-    readonly createdDate?: Date
-
-    /**
-     * Set by SDK automatically
-     */
-    readonly lastSeenDate?: Date
-
-    /**
-     * Set by SDK to 'web'
-     */
-    readonly platform?: string
-
-    /**
-     * Set by SDK to ??
-     */
-    readonly platformVersion?: string
-
-    /**
-     * Set by SDK to User-Agent
-     */
-    readonly deviceType?: string
-
-    /**
-     * SDK type
-     */
-    readonly sdkType?: 'client' | 'server'
-
-    /**
-     * SDK Version
-     */
-    readonly sdkVersion?: string
 }
 
 export class DVCClient {

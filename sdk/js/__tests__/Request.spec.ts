@@ -1,4 +1,4 @@
-import { DVCUser } from '../src/User'
+import { DVCPopulatedUser } from '../src/User'
 
 jest.mock('axios')
 import axios, { AxiosInstance } from 'axios'
@@ -43,7 +43,7 @@ describe('Request tests', () => {
             const environmentKey = 'my_env_key'
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
-            await Request.getConfigJson(environmentKey, user as DVCUser)
+            await Request.getConfigJson(environmentKey, user as DVCPopulatedUser)
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: {
@@ -59,7 +59,7 @@ describe('Request tests', () => {
     describe('publishEvents', () => {
 
         it('should call get with serialized user and environment key in params', async () => {
-            const user = { user_id: 'my_user' } as DVCUser
+            const user = { user_id: 'my_user' } as DVCPopulatedUser
             const config = {} as BucketedUserConfig
             const environmentKey = 'my_env_key'
             const events = [{ type: 'event_1_type' }, { type: 'event_2_type' }]

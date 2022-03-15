@@ -1,13 +1,13 @@
 import {
     DVCOptions,
+    DVCUser
 } from './types'
-import { DVCUser, UserParam } from './User'
+import { DVCPopulatedUser } from './User'
 import { DVCClient } from './Client'
 
-export { UserParam } from './User'
 export * from './types'
 
-export const initialize = (environmentKey: string, user: UserParam, options?: DVCOptions): DVCClient => {
+export const initialize = (environmentKey: string, user: DVCUser, options?: DVCOptions): DVCClient => {
     // TODO: implement logger
     if (!window) {
         console.log('Window is not defined, try initializing in a browser context')
@@ -24,7 +24,7 @@ export const initialize = (environmentKey: string, user: UserParam, options?: DV
         throw new Error('Missing environment key! Call initialize with a valid environment key')
     }
 
-    const dvcUser: DVCUser = new DVCUser(user, options)
+    const dvcUser = new DVCPopulatedUser(user, options)
     const client = new DVCClient(environmentKey, dvcUser, options)
 
     client.onClientInitialized()

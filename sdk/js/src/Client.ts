@@ -5,12 +5,13 @@ import {
     DVCVariableSet,
     DVCVariableValue,
     DVCEvent as ClientEvent,
+    DVCUser,
     ErrorCallback
 } from './types'
 import { DVCVariable } from './Variable'
 import { getConfigJson } from './Request'
 import Store from './Store'
-import { DVCUser, UserParam } from './User'
+import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
 import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
@@ -22,12 +23,12 @@ export class DVCClient implements Client {
     private variableDefaultMap: { [key: string]: { [key: string]: DVCVariable } }
     private environmentKey: string
     config?: BucketedUserConfig
-    user: DVCUser
+    user: DVCPopulatedUser
     store: Store
     eventQueue: EventQueue
     eventEmitter: EventEmitter
 
-    constructor(environmentKey: string, user: DVCUser, options?: DVCOptions) {
+    constructor(environmentKey: string, user: DVCPopulatedUser, options?: DVCOptions) {
         this.store = new Store(window.localStorage)
         this.user = user
         this.options = options
@@ -36,10 +37,10 @@ export class DVCClient implements Client {
         this.eventQueue = new EventQueue(environmentKey, this, options?.flushEventsMS)
         this.eventEmitter = new EventEmitter()
 
-        this.store.saveUser(user)
+        this.store.saveUser(this.user)
             .then(() => console.log('Successfully saved user to local storage!'))
 
-        this.onInitialized = getConfigJson(environmentKey, user)
+        this.onInitialized = getConfigJson(environmentKey, this.user)
             .then((config) => {
                 const oldConfig = this.config
                 this.config = config as BucketedUserConfig
@@ -102,11 +103,11 @@ export class DVCClient implements Client {
         return variable
     }
 
-    identifyUser(user: UserParam): Promise<DVCVariableSet>
-    identifyUser(user: UserParam,
+    identifyUser(user: DVCUser): Promise<DVCVariableSet>
+    identifyUser(user: DVCUser,
                  callback?: ErrorCallback<DVCVariableSet>): void
     identifyUser(
-        user: UserParam,
+        user: DVCUser,
         callback?: ErrorCallback<DVCVariableSet>
     ): Promise<DVCVariableSet> | void {
         let config: BucketedUserConfig
@@ -120,11 +121,11 @@ export class DVCClient implements Client {
             try {
                 this.eventQueue.flushEvents()
 
-                let updatedUser: DVCUser
+                let updatedUser: DVCPopulatedUser
                 if (user.user_id === this.user.user_id) {
                     updatedUser = this.user.updateUser(user)
                 } else {
-                    updatedUser = new DVCUser(user)
+                    updatedUser = new DVCPopulatedUser(user)
                 }
 
                 const oldConfig = config
@@ -176,7 +177,9 @@ export class DVCClient implements Client {
             try {
                 this.eventQueue.flushEvents()
 
-                const updatedUser = anonUser ? new DVCUser(JSON.parse(anonUser)) : new DVCUser({ isAnonymous: true })
+                const updatedUser = anonUser
+                    ? new DVCPopulatedUser(JSON.parse(anonUser))
+                    : new DVCPopulatedUser({ isAnonymous: true })
                 const oldConfig = config
 
                 return getConfigJson(this.environmentKey, updatedUser)

@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path='../types.d.ts'/>
 import { DVCOptions } from '../types'
 import { DVCClient } from './client'
 export { DVCClient } from './client'

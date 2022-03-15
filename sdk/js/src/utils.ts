@@ -1,6 +1,6 @@
 import { DVCEvent } from './types'
 import { DVCRequestEvent } from './RequestEvent'
-import { DVCUser } from './User'
+import { DVCPopulatedUser } from './User'
 import { BucketedUserConfig, SDKEventRequestBody, DVCClientAPIUser } from '@devcycle/types'
 
 export const serializeUser = (user: DVCClientAPIUser): string => {
@@ -40,7 +40,7 @@ export const checkParamType = (name: string, param: any, type: string) => {
 
 export function generateEventPayload(
     config: BucketedUserConfig,
-    user: DVCUser,
+    user: DVCPopulatedUser,
     events: DVCEvent[]
 ): SDKEventRequestBody {
     return {
