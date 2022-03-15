@@ -1,5 +1,5 @@
 import { DVCFeatureSet, DVCVariableSet, DVCEvent } from './types'
-import { DVCUser } from './User'
+import { DVCPopulatedUser } from './User'
 import { serializeUser, generateEventPayload } from './utils'
 import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios'
 import axiosRetry from 'axios-retry'
@@ -40,7 +40,7 @@ export const get = async (url: string): Promise<AxiosResponse> => {
     })
 }
 
-export const getConfigJson = async (environmentKey: string, user: DVCUser): Promise<BucketedUserConfig> => {
+export const getConfigJson = async (environmentKey: string, user: DVCPopulatedUser): Promise<BucketedUserConfig> => {
     const queryParams = `${serializeUser(user)}`
     const url = `${BASE_URL}${HOST}${CONFIG_PATH}?envKey=${environmentKey}${queryParams && '&' + queryParams}`
 
@@ -70,7 +70,7 @@ export const post = async (
 export const publishEvents = async (
     envKey: string | null,
     config: BucketedUserConfig,
-    user: DVCUser,
+    user: DVCPopulatedUser,
     events: DVCEvent[]
 ) => {
     if (!envKey) {

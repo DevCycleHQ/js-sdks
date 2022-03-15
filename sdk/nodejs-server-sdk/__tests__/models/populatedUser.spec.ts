@@ -1,8 +1,8 @@
-import { DVCRequestUser } from '../../src/models/requestUser'
+import { DVCPopulatedUser } from '../../src/models/populatedUser'
 
-describe('DVCRequestUser Unit Tests', () => {
-    it('should construct DVCRequestUser from UserParam', () => {
-        const requestUser = new DVCRequestUser({
+describe('DVCPopulatedUser Unit Tests', () => {
+    it('should construct DVCPopulatedUser from UserParam', () => {
+        const requestUser = new DVCPopulatedUser({
             user_id: 'user_id',
             email: 'email',
             name: 'name',
@@ -33,8 +33,8 @@ describe('DVCRequestUser Unit Tests', () => {
     })
 
     it('should throw error if user_id is missing', () => {
-        expect(() => new (DVCRequestUser as any)({})).toThrow('Must have a user_id set on the user')
-        expect(() => new (DVCRequestUser as any)({ user_id: '' })).toThrow('Must have a user_id set on the user')
-        expect(() => new (DVCRequestUser as any)({ user_id: 8 })).toThrow('user_id is not of type: string')
+        expect(() => new (DVCPopulatedUser as any)({})).toThrow('Must have a user_id set on the user')
+        expect(() => new (DVCPopulatedUser as any)({ user_id: '' })).toThrow('Must have a user_id set on the user')
+        expect(() => new (DVCPopulatedUser as any)({ user_id: 8 })).toThrow('user_id is not of type: string')
     })
 })

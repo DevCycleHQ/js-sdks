@@ -1,13 +1,13 @@
 import {
     DVCClient as DVCClientInterface,
-    DVCUser,
     DVCOptions,
     DVCVariableValue,
     DVCVariable as DVCVariableInterface,
     DVCVariableSet,
     DVCFeatureSet,
     DVCEvent,
-    DVCLogger
+    DVCLogger,
+    DVCUser
 } from '../types'
 import { EnvironmentConfigManager } from './environmentConfigManager'
 import { bucketUserForConfig } from './utils/userBucketingHelper'
@@ -16,6 +16,7 @@ import { checkParamDefined } from './utils/paramUtils'
 import { EventTypes } from './models/requestEvent'
 import { EventQueue } from './eventQueue'
 import { defaultLogger } from './utils/logger'
+import { DVCPopulatedUser } from './models/populatedUser'
 
 export class DVCClient implements DVCClientInterface {
     environmentKey: string
@@ -47,6 +48,12 @@ export class DVCClient implements DVCClientInterface {
         })
     }
 
+    /**
+     * Notify the user when Features have been loaded from the server.
+     * An optional callback can be passed in, and will return a promise if no callback has been passed in.
+     *
+     * @param onInitialized
+     */
     onClientInitialized(onInitialized?: (err?: Error) => void): Promise<DVCClient> {
         if (onInitialized && typeof onInitialized === 'function') {
             this.onInitialized
@@ -57,7 +64,8 @@ export class DVCClient implements DVCClientInterface {
     }
 
     variable(user: DVCUser, key: string, defaultValue: DVCVariableValue): DVCVariableInterface {
-        const bucketedConfig = bucketUserForConfig(user, this.configHelper?.config)
+        const requestUser = new DVCPopulatedUser(user)
+        const bucketedConfig = bucketUserForConfig(requestUser, this.configHelper?.config)
 
         const variable = new DVCVariable({
             ...bucketedConfig?.variables?.[key],
@@ -71,25 +79,28 @@ export class DVCClient implements DVCClientInterface {
                 : EventTypes.variableEvaluated,
             target: variable.key
         }
-        this.eventQueue.queueAggregateEvent(user, variableEvent, bucketedConfig)
+        this.eventQueue.queueAggregateEvent(requestUser, variableEvent, bucketedConfig)
 
         return variable
     }
 
     allVariables(user: DVCUser): DVCVariableSet {
-        const bucketedConfig = bucketUserForConfig(user, this.configHelper?.config)
+        const requestUser = new DVCPopulatedUser(user)
+        const bucketedConfig = bucketUserForConfig(requestUser, this.configHelper?.config)
         return bucketedConfig?.variables || {}
     }
 
     allFeatures(user: DVCUser): DVCFeatureSet {
-        const bucketedConfig = bucketUserForConfig(user, this.configHelper?.config)
+        const requestUser = new DVCPopulatedUser(user)
+        const bucketedConfig = bucketUserForConfig(requestUser, this.configHelper?.config)
         return bucketedConfig?.features || {}
     }
 
     track(user: DVCUser, event: DVCEvent) {
         checkParamDefined('type', event.type)
-        const bucketedConfig = bucketUserForConfig(user, this.configHelper?.config)
-        this.eventQueue.queueEvent(user, event, bucketedConfig)
+        const requestUser = new DVCPopulatedUser(user)
+        const bucketedConfig = bucketUserForConfig(requestUser, this.configHelper?.config)
+        this.eventQueue.queueEvent(requestUser, event, bucketedConfig)
     }
 
     flushEvents(callback?: () => void): Promise<void> {

@@ -1,5 +1,6 @@
 import { DVCUser } from './types'
 import { BucketedUserConfig } from '@devcycle/types'
+import { DVCPopulatedUser } from './User'
 
 export const StoreKey = {
     Config: 'dvc:config',
@@ -49,7 +50,7 @@ export class Store {
         return this.load(StoreKey.Config)
     }
 
-    saveUser(user: DVCUser) {
+    saveUser(user: DVCPopulatedUser) {
         if (!user) {
             return Promise.reject('No user to save')
         }

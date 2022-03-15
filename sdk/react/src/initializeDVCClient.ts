@@ -1,9 +1,9 @@
 import { DVCOptions, initialize } from '@devcycle/devcycle-js-sdk'
-import type { UserParam, DVCClient } from '@devcycle/devcycle-js-sdk'
+import type { DVCUser, DVCClient } from '@devcycle/devcycle-js-sdk'
 
 const initializeDVCClient = async (
     environmentKey: string,
-    user: UserParam = { isAnonymous: true },
+    user: DVCUser = { isAnonymous: true },
     options?: DVCOptions,
 ): Promise<DVCClient> => {
     const client = initialize(environmentKey, user, options)

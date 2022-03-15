@@ -1,7 +1,7 @@
-import { DVCUser } from '../src/User'
+import { DVCPopulatedUser } from '../src/User'
 import { validate as uuidValidate } from 'uuid'
 
-describe('DVCUser tests', () => {
+describe('DVCPopulatedUser tests', () => {
     it('should make a new user from an object', () => {
         const userObj = {
             isAnonymous: false,
@@ -15,7 +15,7 @@ describe('DVCUser tests', () => {
             customData: {},
             privateCustomData: {}
         }
-        const user = new DVCUser(userObj)
+        const user = new DVCPopulatedUser(userObj)
         const validate = (key) => {
             expect(userObj[key]).toEqual(user[key])
         }
@@ -32,20 +32,20 @@ describe('DVCUser tests', () => {
     })
 
     it('should make a new user if user id provided but no isAnonymous flag', () => {
-        const user = new DVCUser({ user_id: 'user1' })
+        const user = new DVCPopulatedUser({ user_id: 'user1' })
         expect(user.user_id).toBe('user1')
         expect(user.isAnonymous).toBe(false)
     })
 
     it('should throw an error if no user id and no anonymous flag set', () => {
         const createUser = () => {
-            new DVCUser({})
+            new DVCPopulatedUser({})
         }
         expect(createUser).toThrow(expect.any(Error))
     })
 
     it('should create an anonymous user id if isAnonymous is true', () => {
-        const newUser = new DVCUser({ isAnonymous: true })
+        const newUser = new DVCPopulatedUser({ isAnonymous: true })
         expect(uuidValidate(newUser.user_id)).toBe(true)
     })
 })

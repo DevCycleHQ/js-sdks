@@ -1,8 +1,8 @@
-import { DVCEvent, DVCLogger, DVCUser } from '../types'
+import { DVCEvent, DVCLogger } from '../types'
 import { publishEvents } from './request'
 import { checkParamDefined, checkParamString } from './utils/paramUtils'
 import { DVCRequestEvent } from './models/requestEvent'
-import { DVCRequestUser } from './models/requestUser'
+import { DVCPopulatedUser } from './models/populatedUser'
 import { BucketedUserConfig } from '@devcycle/types'
 
 export const EventTypes: Record<string, string> = {
@@ -12,13 +12,13 @@ export const EventTypes: Record<string, string> = {
 
 type EventsMap = Record<string, Record<string, DVCRequestEvent>>
 type UserEventsMap = {
-    user: DVCRequestUser,
+    user: DVCPopulatedUser,
     events: EventsMap
 }
 type AggregateUserEventMap = Record<string, UserEventsMap>
 
 type UserEventsBatchRecord = {
-    user: DVCRequestUser,
+    user: DVCPopulatedUser,
     events: DVCRequestEvent[]
 }
 export type UserEventsBatchRequestPayload = UserEventsBatchRecord[]
@@ -97,16 +97,16 @@ export class EventQueue {
     /**
      * Queue DVCAPIEvent for publishing to DevCycle Events API.
      */
-    queueEvent(user: DVCUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig) {
+    queueEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig) {
         let userEvents = this.userEventQueue[user.user_id]
         if (!userEvents) {
             userEvents = this.userEventQueue[user.user_id] = {
-                user: new DVCRequestUser(user),
+                user,
                 events: []
             }
         } else {
             // Save updated User every time.
-            userEvents.user = new DVCRequestUser(user)
+            userEvents.user = user
         }
 
         userEvents.events.push(
@@ -158,7 +158,7 @@ export class EventQueue {
      * Queue DVCEvent that can be aggregated together, where multiple calls are aggregated
      * by incrementing the 'value' field.
      */
-    queueAggregateEvent(user: DVCUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig) {
+    queueAggregateEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig) {
         checkParamDefined('user_id', user?.user_id)
         checkParamDefined('type', event.type)
         checkParamDefined('target', event.target)
@@ -170,12 +170,12 @@ export class EventQueue {
         let userEventMap = this.aggregateUserEventMap[user.user_id]
         if (!userEventMap) {
             userEventMap = this.aggregateUserEventMap[user.user_id] = {
-                user: new DVCRequestUser(user),
+                user,
                 events: {}
             }
         } else {
             // Always keep the latest user object
-            userEventMap.user = new DVCRequestUser(user)
+            userEventMap.user = user
         }
 
         const requestEvent = new DVCRequestEvent(eventCopy, user.user_id, bucketedConfig?.featureVariationMap)

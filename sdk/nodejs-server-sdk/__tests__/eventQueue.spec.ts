@@ -1,3 +1,5 @@
+import { DVCPopulatedUser } from '../src/models/populatedUser'
+
 jest.mock('../src/request')
 
 import { AxiosResponse } from 'axios'
@@ -36,7 +38,7 @@ describe('EventQueue Unit Tests', () => {
         publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
 
         const eventQueue = new EventQueue(logger, 'envKey')
-        const user = { user_id: 'user1' }
+        const user = new DVCPopulatedUser({ user_id: 'user1' })
         const event = { type: 'test_event' }
         eventQueue.queueEvent(user, event, config)
 
@@ -84,8 +86,8 @@ describe('EventQueue Unit Tests', () => {
         publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
 
         const eventQueue = new EventQueue(logger, 'envKey')
-        const user1 = { user_id: 'user1' }
-        const user2 = { user_id: 'user2' }
+        const user1 = new DVCPopulatedUser({ user_id: 'user1' })
+        const user2 = new DVCPopulatedUser({ user_id: 'user2' })
         eventQueue.queueEvent(user1, { type: 'test_event_1' }, config)
         eventQueue.queueEvent(user1, { type: 'test_event_2' }, config)
 
@@ -154,8 +156,8 @@ describe('EventQueue Unit Tests', () => {
 
     it('should handle event request failures and re-queue events', async () => {
         const eventQueue = new EventQueue(logger, 'envKey')
-        const user = { user_id: 'user1' }
-        const user2 = { user_id: 'user2' }
+        const user = new DVCPopulatedUser({ user_id: 'user1' })
+        const user2 = new DVCPopulatedUser({ user_id: 'user2' })
         eventQueue.queueEvent(user, { type: 'test_event' }, config)
 
         const aggEvent = { type: EventTypes.variableEvaluated, target: 'key' }

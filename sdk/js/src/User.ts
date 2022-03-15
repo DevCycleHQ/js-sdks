@@ -1,10 +1,7 @@
-import { DVCOptions, DVCUser as User, JSON } from './types'
+import { DVCOptions, DVCUser, JSON } from './types'
 import { v4 as uuidv4 } from 'uuid'
 
-export type UserParam = Pick<User, 'isAnonymous' | 'user_id' | 'email' | 'name' | 'language' | 'country'
-    | 'appVersion' | 'appBuild' | 'customData' | 'privateCustomData'>
-
-export class DVCUser implements User {
+export class DVCPopulatedUser implements DVCUser {
     isAnonymous: boolean
     user_id: string
     email?: string
@@ -23,7 +20,7 @@ export class DVCUser implements User {
     readonly sdkType: 'client' | 'server'
     readonly sdkVersion: string
 
-    constructor(user: UserParam, options?: DVCOptions) {
+    constructor(user: DVCUser, options?: DVCOptions) {
         if (!user.user_id && !user.isAnonymous) {
             throw new Error('Must have a user_id, or have "isAnonymous" set on the user')
         }
@@ -54,7 +51,7 @@ export class DVCUser implements User {
         this.sdkVersion = '1.0.9'
     }
 
-    updateUser(user: UserParam) {
+    updateUser(user: DVCUser): DVCPopulatedUser {
         if (this.user_id !== user.user_id) {
             throw new Error('Cannot update a user with a different user_id')
         }

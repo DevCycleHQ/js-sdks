@@ -1,13 +1,8 @@
-import { DVCUser, JSON } from '../../types'
+import { JSON, DVCUser } from '../../types'
 import * as packageJson from '../../package.json'
 import { checkParamType, typeEnum } from '../utils/paramUtils'
 
-type UserParam = Pick<DVCRequestUser,
-    'user_id' | 'email' | 'name' | 'language' |
-    'country' | 'appVersion' | 'appBuild' | 'customData' | 'privateCustomData'
->
-
-export class DVCRequestUser implements DVCUser {
+export class DVCPopulatedUser implements DVCUser {
     user_id: string
     email?: string
     name?: string
@@ -24,7 +19,7 @@ export class DVCRequestUser implements DVCUser {
     readonly sdkType: 'server'
     readonly sdkVersion: string
 
-    constructor(user: UserParam) {
+    constructor(user: DVCUser) {
         if (!user.user_id) {
             throw new Error('Must have a user_id set on the user')
         }
