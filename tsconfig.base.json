@@ -33,7 +33,7 @@
         "sdk/react/src/index.ts"
       ],
       "@devcycle/nodejs-server-sdk": [
-        "sdk/nodejs-server-sdk/src/index.ts"
+        "sdk/nodejs/src/index.ts"
       ],
       "@devcycle/types": [
         "lib/shared/types/src/index.ts"

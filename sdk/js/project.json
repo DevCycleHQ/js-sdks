@@ -6,8 +6,11 @@
     "npm-publish": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "yarn build && ../../scripts/npm-publish-check.sh \"@devcycle/devcycle-js-sdk\"",
-        "cwd": "sdk/js"
+        "dependsOn": [
+          "build"
+        ],
+        "command": "npm publish",
+        "cwd": "dist/sdk/js"
       }
     },
     "check-types": {

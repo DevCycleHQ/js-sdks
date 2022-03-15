@@ -2,7 +2,7 @@
   "version": 2,
   "projects": {
     "js": "sdk/js",
-    "nodejs": "sdk/nodejs-server-sdk",
+    "nodejs": "sdk/nodejs",
     "example-nodejs-js": "examples/nodejs/js",
     "example-nodejs-typescript": "examples/nodejs/typescript",
     "react": "sdk/react",
