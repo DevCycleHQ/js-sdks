@@ -1,7 +1,7 @@
 import { isNumber } from 'lodash'
 import {
     DVCDefaultLoggerOptions, DVCLogger
-} from '../../types'
+} from '../types'
 
 const prefix = '[DevCycle]: '
 export enum DVCLogLevels {

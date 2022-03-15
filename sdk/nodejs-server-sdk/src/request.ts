@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios'
-import { DVCLogger } from '../types'
+import { DVCLogger } from './types'
 import { SDKEventBatchRequestBody } from '@devcycle/types'
 
 const axiosClient = axios.create({

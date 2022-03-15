@@ -1,4 +1,4 @@
-import { JSON, DVCUser } from '../../types'
+import { JSON, DVCUser } from '../types'
 import * as packageJson from '../../package.json'
 import { checkParamType, typeEnum } from '../utils/paramUtils'
 

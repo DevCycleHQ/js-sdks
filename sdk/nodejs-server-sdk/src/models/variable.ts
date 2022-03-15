@@ -1,4 +1,4 @@
-import { DVCVariable as DVCVariableInterface, DVCVariableValue } from '../../types'
+import { DVCVariable as DVCVariableInterface, DVCVariableValue } from '../types'
 import { checkParamDefined, checkParamType, typeEnum } from '../utils/paramUtils'
 
 type VariableParam = Pick<DVCVariableInterface, 'key' | 'defaultValue'> & {

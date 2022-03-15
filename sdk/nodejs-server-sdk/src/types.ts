@@ -1,10 +1,53 @@
-import { DVCUser as User } from '@devcycle/devcycle-js-sdk'
+export interface DVCUser {
+    /**
+     * Identifies the current user. Must be defined
+     */
+    user_id: string
 
-export interface DVCUser extends Omit<User, 'isAnonymous' | 'user_id'> {
-  /**
-   * Identifies the user
-   */
-  user_id: string
+    /**
+     * Email used for identifying a device user in the dashboard,
+     * or used for audience segmentation.
+     */
+    email?: string
+
+    /**
+     * Name of the user which can be used for identifying a device user,
+     * or used for audience segmentation.
+     */
+    name?: string
+
+    /**
+     * ISO 639-1 two letter codes, or ISO 639-2 three letter codes
+     */
+    language?: string
+
+    /**
+     * ISO 3166 two or three letter codes
+     */
+    country?: string
+
+    /**
+     * Application Version, can be used for audience segmentation.
+     */
+    appVersion?: string
+
+    /**
+     * Application Build, can be used for audience segmentation.
+     */
+    appBuild?: number
+
+    /**
+     * Custom JSON data used for audience segmentation, must be limited to __kb in size.
+     * Values will be logged to DevCycle's servers and available in the dashboard to view.
+     */
+    customData?: JSON
+
+    /**
+     * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
+     * Values will not be logged to DevCycle's servers and
+     * will not be available in the dashboard.
+     */
+    privateCustomData?: JSON
 }
 
 /**
@@ -12,10 +55,10 @@ export interface DVCUser extends Omit<User, 'isAnonymous' | 'user_id'> {
  * @param environmentKey
  * @param options
  */
-export async function initialize(
+export type initialize = (
     environmentKey: string,
     options?: DVCOptions
-): DVCClient
+) => Promise<DVCClient>
 
 /**
  * Options to control the setup of the DevCycle NodeJS Server SDK.
@@ -50,7 +93,7 @@ export interface DVCOptions {
     disableEventLogging?: boolean
 }
 
-export class DVCClient {
+export interface DVCClient {
     /**
      * Notify the user when Features have been loaded from the server.
      * An optional callback can be passed in, and will return a promise if no callback has been passed in.
@@ -103,7 +146,7 @@ export class DVCClient {
 }
 
 export type DVCVariableValue = string | number | boolean | JSON
-type JSON = { [key: string]: string | number | boolean }
+export type JSON = { [key: string]: string | number | boolean }
 
 export type DVCVariableSet = Record<string,
     Omit<DVCVariable, 'defaultValue' | 'isDefaulted'> & { _id: string }
@@ -199,4 +242,4 @@ export type DVCDefaultLoggerOptions = {
     logWriter?: (message: string) => void
 }
 
-export function defaultLogger(options?: DVCDefaultLoggerOptions): DVCLogger
+export type defaultLogger = (options?: DVCDefaultLoggerOptions) => DVCLogger
