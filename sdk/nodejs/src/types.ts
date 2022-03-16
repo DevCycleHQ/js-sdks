@@ -83,58 +83,6 @@ export interface DVCOptions {
     disableEventLogging?: boolean
 }
 
-export interface DVCClient {
-    /**
-     * Notify the user when Features have been loaded from the server.
-     * An optional callback can be passed in, and will return a promise if no callback has been passed in.
-     *
-     * @param onInitialized
-     */
-    onClientInitialized(onInitialized?: (err?: Error) => void): Promise<DVCClient>
-
-    /**
-     * Grab variable values associated with Features. Use the key created in the dashboard to fetch
-     * the variable value. If the user does not receive the feature, the default value is used in the DVCVariable.
-     * DVCVariable is returned, which has a `value` property that is used to grab the variable value.
-     *
-     * @param key
-     * @param user
-     * @param defaultValue
-     */
-    variable(
-        user: DVCUser,
-        key: string,
-        defaultValue: DVCVariableValue
-    ): DVCVariable
-
-    /**
-     * Retrieve all data on all Features, Object mapped by feature `key`.
-     * Use the `DVCFeature.segmented` value to determine if the user was segmented into a
-     * feature's audience.
-     */
-    allFeatures(user: DVCUser): DVCFeatureSet
-
-    /**
-     * Retrieve all data on all Variables, Object mapped by feature `key`.
-     */
-    allVariables(user: DVCUser): DVCVariableSet
-
-    /**
-     * Track Event to DVC
-     *
-     * @param user
-     * @param event
-     */
-    track(user: DVCUser, event: DVCEvent): void
-
-    /**
-     * Flush all queued events to DVC
-     *
-     * @param callback
-     */
-    flushEvents(callback?: () => void): Promise<void>
-}
-
 export type DVCVariableValue = string | number | boolean | JSON
 export type JSON = { [key: string]: string | number | boolean }
 
