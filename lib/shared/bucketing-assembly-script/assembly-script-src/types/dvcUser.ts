@@ -15,8 +15,8 @@ export class DVCUser extends JSON.Obj {
         public appVersion: string | null,
         public appBuild: f64,
         // TODO implement CustomDataValue Class
-        public customData: Map<string, string> | null,
-        public privateCustomData: Map<string, string> | null,
+        public customData: Map<string, JSON.Value> | null,
+        public privateCustomData: Map<string, JSON.Value> | null,
         public createdDate: Date | null,
         public lastSeenDate: Date | null,
         public platform: string | null,
@@ -32,13 +32,13 @@ export class DVCUser extends JSON.Obj {
         }
     }
 
-    private static stringMapFromJSONObj(jsonObj: JSON.Obj): Map<string, string> {
-        const map = new Map<string, string>()
+    private static stringMapFromJSONObj(jsonObj: JSON.Obj): Map<string, JSON.Value> {
+        const map = new Map<string, JSON.Value>()
         for (let i=0; i < jsonObj.keys.length; i++) {
             const key = jsonObj.keys[i]
             const value = jsonObj.get(key)
-            if (value && value.isString) {
-                map.set(key, (value as JSON.Str).valueOf())
+            if (value && (value.isString || value.isBool || value.isFloat || value.isInteger)) {
+                map.set(key, value)
             } else {
                 throw new Error(
                     `Value in JSON Object for key: ${key}, is not string to cast to Map<string, string>`
@@ -86,10 +86,10 @@ export class DVCUser extends JSON.Obj {
         if (this.appVersion) json.set('appVersion', this.appVersion)
         if (this.appBuild != -1) json.set('appBuild', this.appBuild)
         if (this.customData) {
-            json.set('customData', jsonObjFromMap(this.customData as Map<string, string>))
+            json.set('customData', jsonObjFromMap(this.customData as Map<string, JSON.Value>))
         }
         if (this.privateCustomData) {
-            json.set('privateCustomData', jsonObjFromMap(this.privateCustomData as Map<string, string>))
+            json.set('privateCustomData', jsonObjFromMap(this.privateCustomData as Map<string, JSON.Value>))
         }
         if (this.createdDate) json.set('createdDate', (this.createdDate as Date).toISOString())
         if (this.lastSeenDate) json.set('lastSeenDate', (this.lastSeenDate as Date).toISOString())

@@ -129,7 +129,9 @@ describe('Config Parsing and Generating', () => {
                 favouriteFood: 'pizza'
             },
             privateCustomData: {
-                favouriteDrink: 'coffee'
+                favouriteDrink: 'coffee',
+                favouriteNumber: 610,
+                favouriteBoolean: true
             },
             platformVersion: '1.1.2',
             os: 'Android',
@@ -204,7 +206,9 @@ describe('Config Parsing and Generating', () => {
                 favouriteFood: 'pizza'
             },
             privateCustomData: {
-                favouriteDrink: 'coffee'
+                favouriteDrink: 'coffee',
+                favouriteNumber: 610,
+                favouriteBoolean: true
             },
             platformVersion: '1.1.2',
             os: 'Android',
@@ -332,7 +336,9 @@ describe('Config Parsing and Generating', () => {
                 favouriteFood: 'pizza'
             },
             privateCustomData: {
-                favouriteDrink: 'coffee'
+                favouriteDrink: 'coffee',
+                favouriteNumber: 610,
+                favouriteBoolean: true
             },
             platformVersion: '1.1.2',
             os: 'Android',

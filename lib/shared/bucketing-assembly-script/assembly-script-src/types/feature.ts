@@ -1,7 +1,7 @@
 import { JSON } from "assemblyscript-json"
 import {
     getJSONArrayFromJSON,
-    getJSONObjFromJSON,
+    getJSONObjFromJSON, getJSONValueFromJSON,
     getStringFromJSON,
     isValidString,
     jsonArrFromValueArray
@@ -77,13 +77,12 @@ export class Variation extends JSON.Value {
 
 export class VariationVariable extends JSON.Value {
     _var: string
-    // TODO: support multiple types
-    value: string
+    value: JSON.Value
 
     constructor(variable: JSON.Obj) {
         super()
         this._var = getStringFromJSON(variable, '_var')
-        this.value = getStringFromJSON(variable, 'value')
+        this.value = getJSONValueFromJSON(variable, 'value')
     }
 
     stringify(): string {

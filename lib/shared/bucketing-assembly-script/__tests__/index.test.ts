@@ -28,7 +28,9 @@ describe('WASM test', () => {
             appVersion: '3.6.1',
             appBuild: 1911,
             customData: {
-                "key": "val"
+                "string": "val",
+                "num": 610,
+                "bool": true
             },
             privateCustomData: {
                 "key": "val"
