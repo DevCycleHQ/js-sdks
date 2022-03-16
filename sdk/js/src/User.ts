@@ -1,5 +1,6 @@
 import { DVCOptions, DVCUser, JSON } from './types'
 import { v4 as uuidv4 } from 'uuid'
+import * as packageJson from '../package.json'
 
 export class DVCPopulatedUser implements DVCUser {
     isAnonymous: boolean
@@ -15,7 +16,6 @@ export class DVCPopulatedUser implements DVCUser {
     lastSeenDate: Date
     readonly createdDate: Date
     readonly platform: string
-    readonly platformVersion: string
     readonly deviceModel: string
     readonly sdkType: 'client' | 'server'
     readonly sdkVersion: string
@@ -43,12 +43,11 @@ export class DVCPopulatedUser implements DVCUser {
 
         this.createdDate = new Date()
         this.platform = options?.reactNative ? 'ReactNative' : 'web'
-        this.platformVersion = '1.0.9'
         this.deviceModel = options?.reactNative && globalThis.DeviceInfo
             ? globalThis.DeviceInfo.getModel()
             : window.navigator.userAgent
         this.sdkType = 'client'
-        this.sdkVersion = '1.0.9'
+        this.sdkVersion = packageJson.version
     }
 
     updateUser(user: DVCUser): DVCPopulatedUser {
