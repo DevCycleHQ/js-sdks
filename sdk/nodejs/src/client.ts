@@ -1,6 +1,6 @@
 import {
-    DVCClient as DVCClientInterface,
     DVCOptions,
+    DVCClient as DVCClientInterface,
     DVCVariableValue,
     DVCVariable as DVCVariableInterface,
     DVCVariableSet,
