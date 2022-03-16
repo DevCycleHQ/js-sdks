@@ -1,6 +1,5 @@
 {
   "name": "@devcycle/bucketing-assembly-script",
-  "version": "1.0.0",
-  "scripts": {},
-  "dependencies": {}
+  "version": "1.0.1",
+  "scripts": {}
 }
