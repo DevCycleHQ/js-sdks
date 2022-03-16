@@ -42,14 +42,14 @@ export class EventQueue {
         this.flushInterval = setInterval(this.flushEvents.bind(this), this.flushEventsMS)
     }
 
-    cleanup() {
+    cleanup(): void {
         clearInterval(this.flushInterval)
     }
 
     /**
      * Flush events in queue to DevCycle Events API. Requeue events if flush fails
      */
-    async flushEvents() {
+    async flushEvents(): Promise<void> {
         const userEventBatch = this.combineUserEventsToFlush()
         if (!userEventBatch.length) {
             return
@@ -97,7 +97,7 @@ export class EventQueue {
     /**
      * Queue DVCAPIEvent for publishing to DevCycle Events API.
      */
-    queueEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig) {
+    queueEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void {
         let userEvents = this.userEventQueue[user.user_id]
         if (!userEvents) {
             userEvents = this.userEventQueue[user.user_id] = {
@@ -158,7 +158,7 @@ export class EventQueue {
      * Queue DVCEvent that can be aggregated together, where multiple calls are aggregated
      * by incrementing the 'value' field.
      */
-    queueAggregateEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig) {
+    queueAggregateEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void {
         checkParamDefined('user_id', user?.user_id)
         checkParamDefined('type', event.type)
         checkParamDefined('target', event.target)

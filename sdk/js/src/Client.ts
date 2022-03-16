@@ -221,15 +221,15 @@ export class DVCClient implements Client {
         return this.config?.variables || {}
     }
 
-    subscribe(key: string, handler: (...args: any[]) => void) {
+    subscribe(key: string, handler: (...args: any[]) => void): void {
         this.eventEmitter.subscribe(key, handler)
     }
 
-    unsubscribe(key: string, handler?: (...args: any[]) => void) {
+    unsubscribe(key: string, handler?: (...args: any[]) => void): void {
         this.eventEmitter.unsubscribe(key, handler)
     }
 
-    track(event: ClientEvent) {
+    track(event: ClientEvent): void {
         checkParamDefined('type', event.type)
 
         this.onInitialized.then(() => {

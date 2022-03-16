@@ -1,4 +1,4 @@
-import type { DVCVariable } from '@devcycle/devcycle-js-sdk'
+import type { DVCVariable, DVCVariableValue } from '@devcycle/devcycle-js-sdk'
 import useVariable from './useVariable'
 
 /**
@@ -6,7 +6,7 @@ import useVariable from './useVariable'
  * @deprecated Use the `useVariable` hook instead
  *
  */
-export const useDVCVariable = (key: string, defaultValue: any): DVCVariable => {
+export const useDVCVariable = (key: string, defaultValue: DVCVariableValue): DVCVariable => {
     return useVariable(key, defaultValue)
 }
 

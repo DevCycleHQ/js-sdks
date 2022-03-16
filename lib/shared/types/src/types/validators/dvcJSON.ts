@@ -9,7 +9,7 @@ export type DVCJSON = { [key: string]: string | number | boolean }
  */
 export function IsDVCJSONObject(validationOptions?: ValidationOptions) {
     // eslint-disable-next-line @typescript-eslint/ban-types
-    return function(object: Object, propertyName: string) {
+    return function(object: Object, propertyName: string): void {
         registerDecorator({
             name: 'isLongerThan',
             target: object.constructor,
@@ -25,7 +25,8 @@ export function IsDVCJSONObject(validationOptions?: ValidationOptions) {
     }
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function validate(json: any) {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function validate(json: any): boolean {
     if (!isPlainObject(json)) return false
 
     for (const key in json) {

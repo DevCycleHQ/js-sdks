@@ -3,7 +3,7 @@ import logo from './logo.svg'
 import './App.css'
 import DevCycleExample from './DevCycleExample'
 
-function App() {
+function App(): React.ReactElement {
     return (
         <div className="App">
             <header className="App-header">

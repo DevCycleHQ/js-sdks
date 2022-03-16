@@ -30,7 +30,7 @@ export class EventQueue {
         this.flushInterval = setInterval(this.flushEvents.bind(this), this.flushEventsMS)
     }
 
-    async flushEvents() {
+    async flushEvents(): Promise<void> {
         if (!this.client.config) {
             console.log('DVC Client not initialized to flush events!')
             return
@@ -70,7 +70,7 @@ export class EventQueue {
     /**
      * Queue DVCAPIEvent for producing
      */
-    queueEvent(event: DVCEvent) {
+    queueEvent(event: DVCEvent): void {
         this.eventQueue.push(event)
     }
 
@@ -78,7 +78,7 @@ export class EventQueue {
      * Queue DVCEvent that can be aggregated together, where multiple calls are aggregated
      * by incrementing the 'value' field.
      */
-    queueAggregateEvent(event: AggregateEvent) {
+    queueAggregateEvent(event: AggregateEvent): void {
         checkParamDefined('type', event.type)
         checkParamDefined('target', event.target)
         event.date = Date.now()

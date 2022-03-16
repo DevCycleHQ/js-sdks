@@ -96,7 +96,7 @@ export class DVCClient implements DVCClientInterface {
         return bucketedConfig?.features || {}
     }
 
-    track(user: DVCUser, event: DVCEvent) {
+    track(user: DVCUser, event: DVCEvent): void {
         checkParamDefined('type', event.type)
         const requestUser = new DVCPopulatedUser(user)
         const bucketedConfig = bucketUserForConfig(requestUser, this.configHelper?.config)

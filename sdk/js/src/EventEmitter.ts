@@ -18,7 +18,7 @@ export class EventEmitter {
         this.events = {}
     }
 
-    subscribe(key: string, handler: eventHandler) {
+    subscribe(key: string, handler: eventHandler): void {
         checkParamType('key', key, 'string')
         checkParamType('handler', handler, 'function')
 
@@ -34,7 +34,7 @@ export class EventEmitter {
         }
     }
 
-    unsubscribe(key: string, handler?: eventHandler) {
+    unsubscribe(key: string, handler?: eventHandler): void {
         checkParamType('key', key, 'string')
 
         const eventNames = Object.keys(EventNames).map((e) => e.toLowerCase())
@@ -47,7 +47,7 @@ export class EventEmitter {
         }
     }
 
-    emit(key: string, ...args: any[]) {
+    emit(key: string, ...args: any[]): void {
         checkParamType('key', key, 'string')
 
         const handlers = this.events[key]
@@ -61,11 +61,11 @@ export class EventEmitter {
         })
     }
 
-    emitInitialized(success: boolean) {
+    emitInitialized(success: boolean): void {
         this.emit(EventNames.INITIALIZED, success)
     }
 
-    emitError(error: Error) {
+    emitError(error: Error): void {
         this.emit(EventNames.ERROR, error)
     }
 
@@ -73,7 +73,7 @@ export class EventEmitter {
         oldVariableSet: DVCVariableSet,
         newVariableSet: DVCVariableSet,
         variableDefaultMap: { [key: string]: { [key: string]: DVCVariable } }
-    ) {
+    ): void {
         const keys = Object.keys(oldVariableSet).concat(Object.keys(newVariableSet))
         keys.forEach((key) => {
             const oldVariableValue = oldVariableSet[key] && oldVariableSet[key].value
@@ -94,7 +94,7 @@ export class EventEmitter {
         })
     }
 
-    emitFeatureUpdates(oldFeatureSet: DVCFeatureSet, newFeatureSet: DVCFeatureSet) {
+    emitFeatureUpdates(oldFeatureSet: DVCFeatureSet, newFeatureSet: DVCFeatureSet): void {
         const keys = Object.keys(oldFeatureSet).concat(Object.keys(newFeatureSet))
         keys.forEach((key) => {
             const oldFeatureVariation = oldFeatureSet[key] && oldFeatureSet[key]._variation

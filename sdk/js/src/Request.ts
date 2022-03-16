@@ -72,7 +72,7 @@ export const publishEvents = async (
     config: BucketedUserConfig,
     user: DVCPopulatedUser,
     events: DVCEvent[]
-) => {
+): Promise<AxiosResponse> => {
     if (!envKey) {
         throw new Error('Missing envKey to publish events to Events API')
     }

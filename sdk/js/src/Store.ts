@@ -42,15 +42,15 @@ export class Store {
         }
     }
 
-    saveConfig(data: BucketedUserConfig) {
+    saveConfig(data: BucketedUserConfig): Promise<void> {
         return this.save(StoreKey.Config, data)
     }
 
-    loadConfig() {
+    loadConfig(): Promise<string | null | undefined> {
         return this.load(StoreKey.Config)
     }
 
-    saveUser(user: DVCPopulatedUser) {
+    saveUser(user: DVCPopulatedUser): Promise<void> {
         if (!user) {
             return Promise.reject('No user to save')
         }
@@ -61,11 +61,11 @@ export class Store {
         return saveUserPromise
     }
 
-    loadUser() {
+    loadUser(): Promise<string  | null | undefined> {
         return this.load(StoreKey.User)
     }
 
-    loadAnonUser() {
+    loadAnonUser(): Promise<string  | null | undefined> {
         return this.load(StoreKey.AnonUser)
     }
 }

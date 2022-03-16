@@ -9,7 +9,7 @@ type Props = {
   children: ReactNode
 }
 
-export default function DVCProvider(props: Props) {
+export default function DVCProvider(props: Props): React.ReactElement {
     const { envKey, user, options } = props.config
     const [client, setClient] = useState<DVCClient | undefined>(undefined)
 
