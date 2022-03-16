@@ -1,6 +1,5 @@
 import {
     DVCOptions,
-    DVCClient as DVCClientInterface,
     DVCVariableValue,
     DVCVariable as DVCVariableInterface,
     DVCVariableSet,
@@ -18,8 +17,8 @@ import { EventQueue } from './eventQueue'
 import { defaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
 
-export class DVCClient implements DVCClientInterface {
-    environmentKey: string
+export class DVCClient {
+    private environmentKey: string
     private options?: DVCOptions
     private configHelper: EnvironmentConfigManager
     private eventQueue: EventQueue
