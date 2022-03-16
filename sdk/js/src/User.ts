@@ -43,6 +43,10 @@ export class DVCPopulatedUser implements DVCUser {
 
         this.createdDate = new Date()
         this.platform = options?.reactNative ? 'ReactNative' : 'web'
+<<<<<<< HEAD
+=======
+        this.platformVersion = ''
+>>>>>>> [DVC-2704] fix: use package json to to grab sdk version
         this.deviceModel = options?.reactNative && globalThis.DeviceInfo
             ? globalThis.DeviceInfo.getModel()
             : window.navigator.userAgent

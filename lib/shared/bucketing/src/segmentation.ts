@@ -216,7 +216,7 @@ export const checkVersionFilters = (appVersion: string, filter: AudienceFilterOr
     }
 }
 
-export const checkCustomData = (data: Record<string, unknown>, filter: AudienceFilterOrOperator): boolean => {
+export const checkCustomData = (data: Record<string, unknown> | null, filter: AudienceFilterOrOperator): boolean => {
     const values = getFilterValues(filter)
     const operator = filter.comparator
 
