@@ -44,15 +44,15 @@ export class EnvironmentConfigManager {
         this.intervalTimeout = setInterval(() => this._fetchConfig(), this.pollingIntervalMS)
     }
 
-    cleanup() {
+    cleanup(): void {
         clearInterval(this.intervalTimeout)
     }
 
-    getConfigURL() {
+    getConfigURL(): string {
         return `${this.cdnURI}/config/v1/server/${this.environmentKey}.json`
     }
 
-    async _fetchConfig() {
+    async _fetchConfig(): Promise<void> {
         const url = this.getConfigURL()
         let res: AxiosResponse<ConfigBody> | null
         try {

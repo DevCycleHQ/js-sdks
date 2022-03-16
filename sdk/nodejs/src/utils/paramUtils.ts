@@ -1,4 +1,4 @@
-export const checkParamDefined = (name: string, param: unknown) => {
+export const checkParamDefined = (name: string, param: unknown): unknown => {
     if (param === undefined || param === null) {
         throw new Error(`Missing parameter: ${name}`)
     }
@@ -12,7 +12,7 @@ export enum typeEnum {
 }
 const typeEnumValues = Object.values(typeEnum)
 
-export const checkParamType = (name: string, param: unknown, type: typeEnum) => {
+export const checkParamType = (name: string, param: unknown, type: typeEnum): void => {
     if (param === undefined || param === null) {
         throw new Error(`${name} is invalid!`)
     }

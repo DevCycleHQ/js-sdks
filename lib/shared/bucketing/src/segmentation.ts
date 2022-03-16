@@ -49,7 +49,7 @@ const filterFunctionsBySubtype: FilterFunctionsBySubtype = {
         checkCustomData(data.customData, filter) || checkCustomData(data.privateCustomData, filter),
 }
 
-export const convertToSemanticVersion = (version: string) => {
+export const convertToSemanticVersion = (version: string): string => {
     const splitVersion = version.split('.')
     if (splitVersion.length < 2) { splitVersion.push('0') }
     if (splitVersion.length < 3) { splitVersion.push('0') }
@@ -157,7 +157,7 @@ export const checkNumberFilter = (num: unknown, filterNums: unknown[] | null, op
     return false
 }
 
-export const checkNumbersFilter = (number: unknown, filter: AudienceFilterOrOperator) => {
+export const checkNumbersFilter = (number: unknown, filter: AudienceFilterOrOperator): boolean => {
     const parsedNumber = isString(number) ? Number(number) : number
     const operator = filter.comparator
     const values = getFilterValues(filter)
@@ -216,7 +216,7 @@ export const checkVersionFilters = (appVersion: string, filter: AudienceFilterOr
     }
 }
 
-export const checkCustomData = (data: any, filter: AudienceFilterOrOperator): boolean => {
+export const checkCustomData = (data: Record<string, unknown>, filter: AudienceFilterOrOperator): boolean => {
     const values = getFilterValues(filter)
     const operator = filter.comparator
 
@@ -279,7 +279,10 @@ export const getFilterValues = (filter: AudienceFilterOrOperator): unknown[] | n
     }
 }
 
-export const parseUserAgent = (uaString?: string) => {
+export const parseUserAgent = (uaString?: string): {
+    browser?: string,
+    browserDeviceType?: string
+} => {
     // Note: Anything that is not in this map will return Desktop
     const DEVICES_MAP: Record<string, string> = {
         'mobile': 'Mobile',

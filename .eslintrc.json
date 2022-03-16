@@ -29,7 +29,8 @@
                 "before": true,
                 "after": true,
                 "overrides": { "colon": { "before": false }}
-            }]
+            }],
+            "@typescript-eslint/explicit-module-boundary-types": ["error"]
         }
     },
     {
