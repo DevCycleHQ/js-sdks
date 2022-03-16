@@ -1,6 +1,6 @@
 import { JSON } from "assemblyscript-json"
 import {
-    getJSONArrayFromJSON, getJSONObjFromJSON, getStringFromJSON, getStringFromJSONOptional
+    getJSONArrayFromJSON, getJSONObjFromJSON, getJSONValueFromJSON, getStringFromJSON, getStringFromJSONOptional
 } from "./jsonHelpers"
 import { PublicProject, PublicEnvironment } from "./configBody"
 
@@ -123,8 +123,7 @@ export class SDKVariable extends JSON.Obj {
         public _id: string,
         public type: string,
         public key: string,
-        // TODO: support multiple types
-        public value: string,
+        public value: JSON.Value,
         public evalReason: string | null
     ) {
         super()
@@ -135,7 +134,7 @@ export class SDKVariable extends JSON.Obj {
             getStringFromJSON(variable, '_id'),
             getStringFromJSON(variable, 'type'),
             getStringFromJSON(variable, 'key'),
-            getStringFromJSON(variable, 'value'),
+            getJSONValueFromJSON(variable, 'value'),
             getStringFromJSONOptional(variable, 'evalReason')
         )
     }

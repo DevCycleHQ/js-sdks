@@ -108,8 +108,7 @@ export class AudienceFilterOrOperator extends JSON.Value {
     comparator: string | null
     dataKey: string | null
     dataKeyType: string | null
-    // TODO: support boolean[] | number[]
-    values: string[] | null
+    values: JSON.Arr | null
     operator: string | null
     filters: AudienceFilterOrOperator[] | null
 
@@ -128,14 +127,7 @@ export class AudienceFilterOrOperator extends JSON.Value {
 
         const valuesArr = filter.getArr('values')
         if (valuesArr) {
-            const values: string[] = []
-            for (let i = 0; i < valuesArr.valueOf().length; i++) {
-                const value = valuesArr.valueOf()[i]
-                if (value.isString) {
-                    values.push((value as JSON.Str).valueOf())
-                }
-            }
-            this.values = values
+            this.values = valuesArr
         } else {
             this.values = null
         }

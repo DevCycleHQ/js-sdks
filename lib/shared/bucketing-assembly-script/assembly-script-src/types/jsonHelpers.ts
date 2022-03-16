@@ -30,6 +30,27 @@ export function getStringFromJSONOptional(jsonObj: JSON.Obj, key: string): strin
     }
 }
 
+export function isValidString(jsonObj: JSON.Obj, key: string, validStrings: string[]): string {
+    const value = getStringFromJSON(jsonObj, key)
+    if (!validStrings.includes(value)) {
+        throw new Error(`Not valid string value: ${value}, for key: ${key}, obj: ${jsonObj.stringify()}`)
+    }
+    return value
+}
+
+export function isValidStringOptional(jsonObj: JSON.Obj, key: string, validStrings: string[]): string | null {
+    const value = jsonObj.getString(key)
+    if (!value) {
+        return null
+    }
+
+    const str = value.toString()
+    if (!validStrings.includes(str)) {
+        throw new Error(`Comparator must be one of: ${validStrings.join(',')}`)
+    }
+    return str
+}
+
 export function getDateFromJSON(jsonObj: JSON.Obj, key: string): Date {
     const dateStr = getStringFromJSON(jsonObj, key)
     return Date.fromString(dateStr)
@@ -67,27 +88,6 @@ export function getF64FromJSONOptional(jsonObj: JSON.Obj, key: string, defaultVa
     }
 }
 
-export function isValidString(jsonObj: JSON.Obj, key: string, validStrings: string[]): string {
-    const value = getStringFromJSON(jsonObj, key)
-    if (!validStrings.includes(value)) {
-        throw new Error(`Not valid string value: ${value}, for key: ${key}, obj: ${jsonObj.stringify()}`)
-    }
-    return value
-}
-
-export function isValidStringOptional(jsonObj: JSON.Obj, key: string, validStrings: string[]): string | null {
-    const value = jsonObj.getString(key)
-    if (!value) {
-        return null
-    }
-
-    const str = value.toString()
-    if (!validStrings.includes(str)) {
-        throw new Error(`Comparator must be one of: ${validStrings.join(',')}`)
-    }
-    return str
-}
-
 export function jsonArrFromValueArray<T extends JSON.Value>(valueArr: Array<T>): JSON.Arr {
     const jsonArr = new JSON.Arr()
     for (let i = 0; i < valueArr.length; i++) {
@@ -105,4 +105,13 @@ export function jsonObjFromMap<T>(objMap: Map<string, T>): JSON.Obj {
         jsonObj.set(key, objMap.get(key))
     }
     return jsonObj
+}
+
+export function getJSONValueFromJSON(jsonObj: JSON.Obj, key: string): JSON.Value {
+    const value = jsonObj.get(key)
+    if (!value) {
+        throw new Error(`JSON Value missing for key: "${key}", obj: ${jsonObj.stringify()}`)
+    } else {
+        return value
+    }
 }

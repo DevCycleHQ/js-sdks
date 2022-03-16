@@ -33,7 +33,7 @@ export const audiences: PublicAudience[] = [
                 type: FilterType.user,
                 subType: UserSubType.email,
                 comparator: FilterComparator['='],
-                values: ['test@email.com']
+                values: ['test@email.com', 'test2@email.com']
             }],
             operator: AudienceOperator.and
         }
@@ -78,6 +78,18 @@ export const audiences: PublicAudience[] = [
                 dataKey: 'favouriteDrink',
                 comparator: FilterComparator['='],
                 values: ['coffee']
+            }, {
+                type: FilterType.user,
+                subType: UserSubType.customData,
+                dataKey: 'favouriteNumber',
+                comparator: FilterComparator['='],
+                values: [610]
+            }, {
+                type: FilterType.user,
+                subType: UserSubType.customData,
+                dataKey: 'favouriteBoolean',
+                comparator: FilterComparator['='],
+                values: [true, false]
             }],
             operator: AudienceOperator.and
         }
@@ -157,7 +169,7 @@ export const variations: PublicVariation[] = [
         ]
     },
     {
-        _id: '615382338424cb11646d7668',
+        _id: '615382338424cb11646d7669',
         name: 'feature 2 never used variation',
         variables: [
             {
@@ -167,6 +179,34 @@ export const variations: PublicVariation[] = [
             {
                 _var: variables[4]._id,
                 value: 'multivar last unused'
+            }
+        ]
+    },
+    {
+        _id: '615382338424cb11646d7660',
+        name: 'feature 2 never used variation, bool',
+        variables: [
+            {
+                _var: variables[3]._id,
+                value: true
+            },
+            {
+                _var: variables[4]._id,
+                value: false
+            }
+        ]
+    },
+    {
+        _id: '615382338424cb11646d7661',
+        name: 'feature 2 never used variation, number',
+        variables: [
+            {
+                _var: variables[3]._id,
+                value: 610
+            },
+            {
+                _var: variables[4]._id,
+                value: 1114
             }
         ]
     }
