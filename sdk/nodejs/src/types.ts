@@ -51,16 +51,6 @@ export interface DVCUser {
 }
 
 /**
- * Initialize the SDK
- * @param environmentKey
- * @param options
- */
-export type initialize = (
-    environmentKey: string,
-    options?: DVCOptions
-) => Promise<DVCClient>
-
-/**
  * Options to control the setup of the DevCycle NodeJS Server SDK.
  */
 export interface DVCOptions {
