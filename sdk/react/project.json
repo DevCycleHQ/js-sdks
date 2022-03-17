@@ -62,7 +62,7 @@
         "dependsOn": [
           "build"
         ],
-        "command": "npm publish",
+        "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/devcycle-react-sdk\"",
         "cwd": "dist/sdk/react"
       }
     }

@@ -9,6 +9,16 @@
         "cwd": "lib/shared/types"
       }
     },
+    "npm-publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "dependsOn": [
+          "build"
+        ],
+        "command": "../../../../scripts/npm-safe-publish.sh \"@devcycle/types\"",
+        "cwd": "dist/lib/shared/types"
+      }
+    },
     "build": {
       "executor": "@nrwl/js:tsc",
       "outputs": [

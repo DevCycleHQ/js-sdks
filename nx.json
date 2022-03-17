@@ -47,6 +47,12 @@
         "target": "package",
         "projects": "dependencies"
       }
+    ],
+    "npm-publish": [
+      {
+        "target": "npm-publish",
+        "projects": "dependencies"
+      }
     ]
   },
   "affected": {

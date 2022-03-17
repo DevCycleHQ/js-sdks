@@ -10,6 +10,16 @@
         "cwd": "lib/shared/bucketing"
       }
     },
+    "npm-publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "dependsOn": [
+          "build"
+        ],
+        "command": "../../../../scripts/npm-safe-publish.sh \"@devcycle/bucketing\"",
+        "cwd": "dist/lib/shared/bucketing"
+      }
+    },
     "build": {
       "executor": "@nrwl/js:tsc",
       "outputs": [
