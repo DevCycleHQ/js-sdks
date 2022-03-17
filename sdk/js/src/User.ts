@@ -1,6 +1,7 @@
 import { DVCOptions, DVCUser, JSON } from './types'
 import { v4 as uuidv4 } from 'uuid'
 import * as packageJson from '../package.json'
+import UAParser from 'ua-parser-js'
 
 export class DVCPopulatedUser implements DVCUser {
     isAnonymous: boolean
@@ -41,12 +42,18 @@ export class DVCPopulatedUser implements DVCUser {
          * Read only properties initialized once
          */
 
+        const userAgent = new UAParser(window.navigator.userAgent)
+
         this.createdDate = new Date()
         this.platform = options?.reactNative ? 'ReactNative' : 'web'
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
         this.platformVersion = ''
 >>>>>>> [DVC-2704] fix: use package json to to grab sdk version
+=======
+        this.platformVersion = userAgent.getBrowser().name ?? ''
+>>>>>>> fix: make platform version the user agent browser
         this.deviceModel = options?.reactNative && globalThis.DeviceInfo
             ? globalThis.DeviceInfo.getModel()
             : window.navigator.userAgent
