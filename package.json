@@ -12,6 +12,8 @@
     "test": "nx run-many --parallel --target test --all",
     "affected:lint": "npx nx affected --base=origin/main --target=lint",
     "affected:test": "npx nx affected --base=origin/main --target=test --codeCoverage",
+    "publish": "npx nx affected --base=origin/main --target=npm-publish",
+    "start": "npx nx serve",
     "lerna": "lerna",
     "lerna:test:unit": "lerna run unit-test",
     "lerna:version": "lerna version -m \"Release\"",
@@ -122,6 +124,9 @@
       "nx affected:lint --uncommitted --parallel --fix=true && :"
     ]
   },
-  "packageManager": "yarn@3.1.0"
+  "packageManager": "yarn@3.1.0",
+  "engines": {
+    "node": "^16.13"
+  }
 }
 
