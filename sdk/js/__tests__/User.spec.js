@@ -3,11 +3,12 @@ import { validate as uuidValidate } from 'uuid'
 
 describe('DVCPopulatedUser tests', () => {
     const setUserAgent = (userAgent) => {
-        Object.defineProperty(window.navigator, 'userAgent', {value : userAgent});
+        window.navigator.userAgent = userAgent
     }
 
     beforeEach(() => {
-        setUserAgent(undefined)
+        setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ' +
+            'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36')
     })
     
     it('should make a new user from an object', () => {
@@ -39,8 +40,6 @@ describe('DVCPopulatedUser tests', () => {
     })
 
     it('should set user agent version from user agent string as platform version', () => {
-        setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ' +
-            'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36')
         const user = new DVCPopulatedUser({ user_id: 'user1' })
         expect(user.platformVersion).toBe('Chrome')
         console.log('user platform version', user.platformVersion)
