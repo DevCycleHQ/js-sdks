@@ -4,11 +4,7 @@ import {
 } from './models'
 import { Type } from 'class-transformer'
 
-export type PublicProject = Project
-
-export type PublicEnvironment = Environment
-
-export { Rollout, RolloutStage, FeatureConfiguration, Feature, Variation, Audience, Variable }
+export { Rollout, RolloutStage, FeatureConfiguration, Feature, Variation, Audience, Variable, Project, Environment }
 
 export { Rollout as PublicRollout,
     RolloutStage as PublicRolloutStage,
@@ -17,7 +13,9 @@ export { Rollout as PublicRollout,
     Variation as PublicVariation,
     Audience as PublicAudience,
     Variable as PublicVariable,
-    Target as PublicTarget
+    Target as PublicTarget,
+    Project as PublicProject,
+    Environment as PublicEnvironment
 }
 
 export class ConfigBody<IdType = string> {
