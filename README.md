@@ -1,14 +1,47 @@
-## MONOREPO
-This is the DevCycle Monorepo which contains all the backend services used by DevCycle products. It is managed using
-`Nx`, a monorepo management tool. It's worth reading their docs here:
+## JS SDK Monorepo
+This is the DevCycle JS SDK Monorepo which contains all the Javascript-based SDKs and public
+shared packages used by DevCycle products.
+
+To view the README for a specific SDK, navigate to that SDK inside the `sdk` directory.
+[Javascript Client SDK](sdk/js)
+[NodeJS Server SDK](sdk/nodejs)
+[React Client SDK](sdk/react)
+
+There are several examples included in this repository for various SDKs. If you want to run them, proceed to setup:
+
+## Setup
+Ensure you have Node 16.x installed.
+
+1. Clone this repo
+2. Run `yarn` from the root directory. SDKs and examples should now be set up to run via Nx.
+
+## Directory Structure
+```
+examples/
+    - contains example applications using each SDK
+lib/
+    - contains shared Javascript libraries
+scripts/
+    - contains all scripts that are not service or task specific
+sdk/
+    - contains all SDKs
+```
+
+## Running an example
+To run an example, use the `nx serve` command with the name of the example you want to run:
+`yarn start example-react-with-provider`
+
+The names of the examples are listed in the `workspace.json` file at the root of the repository. All examples are
+located in the root-level `examples/` directory.
+
+## Development
+The repo is managed using `Nx`, a monorepo management tool. It's worth reading their docs here:
 https://nx.dev/l/n/getting-started/intro
 
 Every project in the repo is listed in the `workspace.json` file. Each of these projects will let you run common Nx
-commands against them. For example, to test the "api" project, run:
+commands against them. For example, to test the "nodejs" project, run:
 
-`nx test api`
-
-To run the api locally, you would run `nx serve api`.
+`nx test nodejs`
 
 These commands can be run from the root directory, but should work in any directory.
 
@@ -29,85 +62,18 @@ yarn test                 - run all tests in the repo
 yarn lint                 - lint all projects in the repo
 ```
 
-## Setup
-
-You should already have nvm installed, if you don't, you can download it here:
-https://github.com/nvm-sh/nvm.
-
-This project uses a `.nvmrc` file to automatically set the version of node being
-used in your shell when you `cd` into the project folder. It requires some
-additions to your shell, instructions for which can be found here:
-https://github.com/nvm-sh/nvm#bash
-
-1. Clone this repo
-2. Run `./scripts/brew_install.sh`. This will install software required to work within
-   the repo.
-3. Authenticate the AWS CLI with SSO
-`aws configure sso`
-Provide this start URL: `https://devcycle-sso.awsapps.com/start`
-`aws sso login`
-4. Run `./scripts/gen-env.sh`. This will generate a .env file in `.generated/environments` which provides the necessary
-environment variables for the services to run.
-5. Run `yarn` from the root directory. Services should now be set up to run via Nx.
-6. Run `yarn start` to start every service at once
-
-If you get errors around node-gyp failing on macOS Catalina, see this install
-document for that lib: https://github.com/nodejs/node-gyp/blob/master/macOS_Catalina.md
-
-Running `scripts/gen-env.sh` will update the local environment variables, and should be done whenever there are new variables added to production/local.
-
 ### Linting and Running Tests
 
 You can run commands in every javascript project using Nx: `nx run-many --target test --all`
 
 This allows you to lint and/or test all projects at once.
 
-## Generating new code
-One of Nx's main features is to generate new code in your repo. Everything you generate will be automatically added
-to Nx's management system so you can build it and run tests.
+### Publishing a Release
+To publish a release, use lerna to create new versions of all changed packages (ensure you do this on the main branch)
+`lerna version`
 
-Typical things we'd want to generate:
-```
-nx workspace-generator application <name>   - generates a new nestjs application in `services/`
-nx workspace-generator library <name>       - generates a new nestjs library in `lib/`
-nx g module <name>        - generates a nestjs module
-```
-There is a much larger list of things you can generate in the Nx docs. Be sure to check out all the possibilities
-and how to fine tune these commands.
+Push up the new tags and version changes, then run:
 
-## Local Development
+`yarn publish`
 
-For details on how to do local development from within the DevCycle repository,
-please read `docs/LocalDevelopment.md`.
-
-## Directory Structure
-```
-cf-workers/
-   - contains cloudflare workers
-docs/
-   - documentation
-infra/
-    flux/
-        - contains FluxCD configs to manage confluent
-    terraform/
-        - contains Terraform files used in prod AWS environment
-lib/
-    - contains shared Javascript libraries
-scripts/
-    - contains all scripts that are not service or task specific, as well as local environment scripts
-services/
-    - contains all backend services
-```
-
-## CircleCI
-
-We primarily use NX's affected feature to run only the jobs that need running per build. 
-This simplifies the definition of all jobs into a common "nx-whatever" job - ie, nx-test.
-
-To add a new job that will be run by multiple services - add it in each service's `project.json` file as a target,
-and then register it in the Circle `config.yml` file as a new job.
-
-## E2E Testing
-
-You can run an E2E test against your local changes/environment by using the `scripts/local-e2e.sh` script. 
-It uses postman + newman to run all the same E2E tests that are run against pre-production to ensure that the services can work together properly.
+This will publish all the new versions to npm.
