@@ -42,7 +42,12 @@ describe('DVCPopulatedUser tests', () => {
     it('should set user agent version from user agent string as platform version', () => {
         const user = new DVCPopulatedUser({ user_id: 'user1' })
         expect(user.platformVersion).toBe('Chrome')
-        console.log('user platform version', user.platformVersion)
+    })
+
+    it('should set user agent as unknown if user agent undefined', () => {
+        setUserAgent(undefined)
+        const user = new DVCPopulatedUser({ user_id: 'user1' })
+        expect(user.platformVersion).toBe('unknown')
     })
 
     it('should make a new user if user id provided but no isAnonymous flag', () => {

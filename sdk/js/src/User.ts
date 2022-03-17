@@ -48,12 +48,16 @@ export class DVCPopulatedUser implements DVCUser {
         this.platform = options?.reactNative ? 'ReactNative' : 'web'
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         this.platformVersion = ''
 >>>>>>> [DVC-2704] fix: use package json to to grab sdk version
 =======
         this.platformVersion = userAgent.getBrowser().name ?? ''
 >>>>>>> fix: make platform version the user agent browser
+=======
+        this.platformVersion = userAgent.getBrowser().name ?? 'unknown'
+>>>>>>> chore: added test for undefined, use unknown as default for platformVersion
         this.deviceModel = options?.reactNative && globalThis.DeviceInfo
             ? globalThis.DeviceInfo.getModel()
             : window.navigator.userAgent

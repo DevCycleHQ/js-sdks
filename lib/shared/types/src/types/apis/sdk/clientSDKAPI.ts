@@ -5,7 +5,7 @@ import {
 import { VariableValue } from '../../config/models'
 import {
     IsEmail, IsDate, IsOptional, IsNumber, IsBoolean,
-    IsString, IsIn, IsNotEmpty, IsISO31661Alpha2, IsDefined
+    IsString, IsIn, IsNotEmpty, IsISO31661Alpha2
 } from 'class-validator'
 import { Transform, Type } from 'class-transformer'
 import 'reflect-metadata'
@@ -261,7 +261,7 @@ export class DVCClientAPIUser implements DVCAPIUser {
      * Set by SDK to ??
      */
     @IsString()
-    @IsDefined()
+    @IsNotEmpty()
         platformVersion: string
 
     /**
