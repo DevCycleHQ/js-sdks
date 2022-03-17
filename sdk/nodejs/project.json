@@ -52,7 +52,7 @@
         "dependsOn": [
           "build"
         ],
-        "command": "npm publish",
+        "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/nodejs-server-sdk\"",
         "cwd": "dist/sdk/nodejs"
       }
     }
