@@ -25,7 +25,6 @@ describe('DVCPopulatedUser tests', () => {
         expect(user.createdDate).toStrictEqual(expect.any(Date))
         expect(user.lastSeenDate).toStrictEqual(expect.any(Date))
         expect(user.platform).toBe('web')
-        expect(user.platformVersion).toStrictEqual(expect.any(String))
         expect(user.deviceModel).toStrictEqual(expect.any(String))
         expect(user.sdkType).toBe('client')
         expect(user.sdkVersion).toStrictEqual(expect.any(String))
