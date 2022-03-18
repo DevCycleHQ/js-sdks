@@ -78,7 +78,14 @@ export const audiences: PublicAudience[] = [
                 dataKey: 'favouriteDrink',
                 comparator: FilterComparator['='],
                 values: ['coffee']
-            }, {
+            }],
+            operator: AudienceOperator.and
+        }
+    },
+    {
+        _id: '6153557f1ed7bac7268ea0d6',
+        filters: {
+            filters: [{
                 type: FilterType.user,
                 subType: UserSubType.customData,
                 dataKey: 'favouriteNumber',
@@ -169,7 +176,7 @@ export const variations: PublicVariation[] = [
         ]
     },
     {
-        _id: '615382338424cb11646d7669',
+        _id: '615382338424cb11646d7668',
         name: 'feature 2 never used variation',
         variables: [
             {
