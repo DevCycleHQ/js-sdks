@@ -1,14 +1,14 @@
-import { JSON } from "assemblyscript-json"
-import { BucketedUserConfig, ConfigBody } from "./types"
-import {DVCUser} from "./types/dvcUser";
+import {
+    BucketedUserConfig, ConfigBody, DVCUser, DVCPopulatedUser
+} from "./types"
+import * as bucketing from './bucketing'
 
 export function generateBucketedConfig(configStr: string, userStr: string): string  {
     const config = new ConfigBody(configStr)
+    const user = DVCPopulatedUser.populatedUserFromString(userStr)
 
-    const user: JSON.Obj = <JSON.Obj>(JSON.parse(userStr))
-
-    // const bucketedConfig = new BucketedUserConfig(config)
-    return config.stringify()
+    const bucketedConfig = bucketing.generateBucketedConfig(config, user)
+    return bucketedConfig.stringify()
 }
 
 export function testConfigBodyClass(configStr: string): string {
@@ -17,8 +17,9 @@ export function testConfigBodyClass(configStr: string): string {
 }
 
 export function testDVCUserClass(userStr: string): string {
-    const user = DVCUser.dvcUserFromJSONString(userStr)
-    return user.stringify()
+    const user = new DVCUser(userStr)
+    const populatedUser = new DVCPopulatedUser(user)
+    return populatedUser.stringify()
 }
 
 export function testBucketedUserConfigClass(userConfigStr: string): string {

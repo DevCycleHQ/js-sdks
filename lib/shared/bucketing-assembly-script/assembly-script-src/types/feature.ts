@@ -5,7 +5,7 @@ import {
     getStringFromJSON,
     isValidString,
     jsonArrFromValueArray
-} from "./jsonHelpers"
+} from "../helpers/jsonHelpers"
 import { FeatureConfiguration } from "./featureConfiguration"
 
 const validTypes = ['release', 'experiment', 'permission', 'ops']

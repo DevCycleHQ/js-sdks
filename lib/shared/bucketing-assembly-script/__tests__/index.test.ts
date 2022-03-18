@@ -39,8 +39,18 @@ describe('WASM test', () => {
 
         const resultAdr = testDVCUserClass(__newString(JSON.stringify(userObj)))
         const result = __getString(resultAdr)
+        const resultJSON = JSON.parse(result)
         console.log('DVCUser result: ' + result)
 
-        expect(JSON.parse(result)).toEqual(userObj)
+        expect(resultJSON).toEqual(expect.objectContaining({
+            ...userObj,
+            deviceModel: '',
+            platform: 'NodeJS',
+            platformVersion: '',
+            sdkType: 'server',
+            sdkVersion: '1.0.0',
+            createdDate: expect.any(String),
+            lastSeenDate: expect.any(String)
+        }))
     })
 })

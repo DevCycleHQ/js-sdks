@@ -1,7 +1,7 @@
 import { JSON } from "assemblyscript-json"
 import {
     getJSONArrayFromJSON, getJSONObjFromJSON, getJSONValueFromJSON, getStringFromJSON, getStringFromJSONOptional
-} from "./jsonHelpers"
+} from '../helpers/jsonHelpers'
 import { PublicProject, PublicEnvironment } from "./configBody"
 
 export class BucketedUserConfig extends JSON.Obj {

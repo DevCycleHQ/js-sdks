@@ -7,7 +7,7 @@ import {
     getStringFromJSON,
     isValidString,
     isValidStringOptional, jsonArrFromValueArray
-} from "./jsonHelpers"
+} from '../helpers/jsonHelpers'
 
 export class Target extends JSON.Value {
     _id: string
@@ -87,7 +87,7 @@ export class TopLevelOperator extends JSON.Value {
 
 const validTypes = ['all', 'user']
 
-const validSubTypes = [
+export const validSubTypes = [
     'user_id', 'email', 'ip', 'country', 'platform',
     'platformVersion', 'appVersion','deviceModel', 'customData'
 ]

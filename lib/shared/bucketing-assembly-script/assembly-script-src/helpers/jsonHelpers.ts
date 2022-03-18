@@ -115,3 +115,13 @@ export function getJSONValueFromJSON(jsonObj: JSON.Obj, key: string): JSON.Value
         return value
     }
 }
+
+export function getF64FromJSONValue(jsonValue: JSON.Value): f64 {
+    const float = jsonValue.isFloat ? jsonValue as JSON.Float : null
+    const int = jsonValue.isInteger ? jsonValue as JSON.Integer : null
+    if (!float && !int) return NaN
+
+    return float
+        ? (float as JSON.Float).valueOf()
+        : (int ? f64((int as JSON.Integer).valueOf()) : NaN)
+}
