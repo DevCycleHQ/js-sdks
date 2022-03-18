@@ -69,7 +69,7 @@ export class Target<IdType = string> {
     /**
      * Audience model describing target segmentation.
      */
-    _audience: Audience
+    _audience: Audience<IdType>
 
     /**
      * Rollout sub-document describing how a Target's audience is rolled out
