@@ -77,7 +77,7 @@ To publish a release, use lerna to create new versions of all changed packages (
 
 Push up the new tags and version changes, then run:
 
-`yarn publish --otp=<one-time password>`
+`yarn npm-publish --otp=<one-time password>`
 
 This will publish all the new versions to npm. You must provide the one-time password associated with the NPM account
 in order to run this command.

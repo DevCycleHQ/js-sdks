@@ -16,7 +16,7 @@
     "test": "nx run-many --parallel --target test --all",
     "affected:lint": "npx nx affected --base=origin/main --target=lint",
     "affected:test": "npx nx affected --base=origin/main --target=test --codeCoverage",
-    "publish": "npx nx affected --base=origin/main~1 --target=npm-publish",
+    "npm-publish": "npx nx affected --base=origin/main~1 --target=npm-publish",
     "start": "npx nx serve",
     "lerna": "lerna",
     "lerna:test:unit": "lerna run unit-test",
