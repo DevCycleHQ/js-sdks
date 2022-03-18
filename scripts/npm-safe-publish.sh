@@ -13,6 +13,23 @@ PACKAGE=$1
 NPM_SHOW="$(npm show "$PACKAGE" version)"
 NPM_LS="$(npm ls "$PACKAGE" --json | jq -r '.version')"
 
+echo $2
+while :; do
+  case "$2" in
+    --otp=*)
+      OTP="${2#*=}"
+      ;;
+    *) break
+  esac
+  shift
+done
+
+# check if otp is set
+if [[ -z "$OTP" ]]; then
+  echo "Must specify the NPM one-time password using the --otp option."
+  exit 1
+fi
+
 if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
   echo "Versions are not the same, (Remote = $NPM_SHOW; Local = $NPM_LS). Checking for publish eligibility."
 
@@ -34,7 +51,7 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
     exit 1
   fi
 
-  npx npm publish
+  npx npm publish --otp=$OTP
 else
   echo "Versions are the same ($NPM_SHOW = $NPM_LS). Not pushing"
 fi

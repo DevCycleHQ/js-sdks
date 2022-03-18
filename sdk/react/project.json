@@ -59,9 +59,6 @@
     "npm-publish": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "dependsOn": [
-          "build"
-        ],
         "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/devcycle-react-sdk\"",
         "cwd": "dist/sdk/react"
       }
