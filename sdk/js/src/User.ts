@@ -17,6 +17,7 @@ export class DVCPopulatedUser implements DVCUser {
     lastSeenDate: Date
     readonly createdDate: Date
     readonly platform: string
+    readonly platformVersion: string
     readonly deviceModel: string
     readonly sdkType: 'client' | 'server'
     readonly sdkVersion: string
@@ -44,20 +45,12 @@ export class DVCPopulatedUser implements DVCUser {
 
         const userAgent = new UAParser(window.navigator.userAgent)
 
+        const platformVersion = userAgent.getBrowser().name && 
+            `${userAgent.getBrowser().name} ${userAgent.getBrowser().version}`
+
         this.createdDate = new Date()
         this.platform = options?.reactNative ? 'ReactNative' : 'web'
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-        this.platformVersion = ''
->>>>>>> [DVC-2704] fix: use package json to to grab sdk version
-=======
-        this.platformVersion = userAgent.getBrowser().name ?? ''
->>>>>>> fix: make platform version the user agent browser
-=======
-        this.platformVersion = userAgent.getBrowser().name ?? 'unknown'
->>>>>>> chore: added test for undefined, use unknown as default for platformVersion
+        this.platformVersion = platformVersion ?? 'unknown'
         this.deviceModel = options?.reactNative && globalThis.DeviceInfo
             ? globalThis.DeviceInfo.getModel()
             : window.navigator.userAgent

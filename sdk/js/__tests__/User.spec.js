@@ -41,7 +41,7 @@ describe('DVCPopulatedUser tests', () => {
 
     it('should set user agent version from user agent string as platform version', () => {
         const user = new DVCPopulatedUser({ user_id: 'user1' })
-        expect(user.platformVersion).toBe('Chrome')
+        expect(user.platformVersion).toBe('Chrome 99.0.4844.51')
     })
 
     it('should set user agent as unknown if user agent undefined', () => {
