@@ -5,6 +5,9 @@
     "module": "commonjs",
     "types": ["jest", "node"]
   },
+  "rules": {
+    "ban-ts-ignore": false
+  },
   "include": [
     "**/*.test.ts",
     "**/*.spec.ts",
