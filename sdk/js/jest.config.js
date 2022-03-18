@@ -16,7 +16,8 @@ module.exports = {
         '<rootDir>/src/**/*.{ts,js}',
         '!<rootDir>/**/*.{spec,test,mock}.{ts,js}'
     ],
-    coverageDirectory: '../../coverage/sdk/js'
+    coverageDirectory: '../../coverage/sdk/js',
+    setupFiles: ['<rootDir>/__tests__/setupConfig.js']
 }
 
 module.exports.reporters = [
