@@ -52,6 +52,10 @@
       {
         "target": "npm-publish",
         "projects": "dependencies"
+      },
+      {
+        "target": "build",
+        "projects": "self"
       }
     ]
   },
