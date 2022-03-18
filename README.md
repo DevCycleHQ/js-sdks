@@ -3,9 +3,12 @@ This is the DevCycle JS SDK Monorepo which contains all the Javascript-based SDK
 shared packages used by DevCycle products.
 
 To view the README for a specific SDK, navigate to that SDK inside the `sdk` directory.
+
 [Javascript Client SDK](sdk/js)
-[NodeJS Server SDK](sdk/nodejs)
+
 [React Client SDK](sdk/react)
+
+[NodeJS Server SDK](sdk/nodejs)
 
 There are several examples included in this repository for various SDKs. If you want to run them, proceed to setup:
 
@@ -28,7 +31,7 @@ sdk/
 ```
 
 ## Running an example
-To run an example, use the `nx serve` command with the name of the example you want to run:
+To run an example, use the `yarn start` command with the name of the example you want to run:
 `yarn start example-react-with-provider`
 
 The names of the examples are listed in the `workspace.json` file at the root of the repository. All examples are
@@ -74,6 +77,7 @@ To publish a release, use lerna to create new versions of all changed packages (
 
 Push up the new tags and version changes, then run:
 
-`yarn publish`
+`yarn publish --otp=<one-time password>`
 
-This will publish all the new versions to npm.
+This will publish all the new versions to npm. You must provide the one-time password associated with the NPM account
+in order to run this command.
