@@ -1164,6 +1164,7 @@ describe('SegmentationManager Unit Test', () => {
             values: ['value']
         } as AudienceFilterOrOperator
         it('should return false if filter and no data', () => {
+            // @ts-ignore
             assert.strictEqual(false, segmentation.checkCustomData(null, filterStr))
         })
         it('should return true if string value is equal', () => {
@@ -1249,16 +1250,16 @@ describe('SegmentationManager Unit Test', () => {
         it('should return true if no custom data is provided with not equal filter value', () => {
             const filter = _.clone(filterNum)
             filter.comparator = '!=' as FilterComparator
-            assert.strictEqual(true,
-                segmentation.checkCustomData(null, filter))
+            // @ts-ignore
+            assert.strictEqual(true, segmentation.checkCustomData(null, filter))
         })
 
         it('should return true if no custom data is provided with not exists filter value', () => {
             const filter = _.clone(filterNum)
             filter.comparator = '!exist' as FilterComparator
 
-            assert.strictEqual(true,
-                segmentation.checkCustomData(null, filter))
+            // @ts-ignore
+            assert.strictEqual(true, segmentation.checkCustomData(null, filter))
         })
 
         it('should return false if no custom data is provided with not equal filter and others', () => {

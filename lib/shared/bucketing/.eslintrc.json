@@ -7,6 +7,14 @@
     "node_modules/*"
   ],
   "overrides": [
+      {
+          "files": [
+              "*.test.ts"
+          ],
+          "rules": {
+              "@typescript-eslint/ban-ts-comment": 0
+          }
+      },
     {
       "files": [
         "*.ts",
