@@ -2,6 +2,15 @@ import { DVCPopulatedUser } from '../src/User'
 import { validate as uuidValidate } from 'uuid'
 
 describe('DVCPopulatedUser tests', () => {
+    const setUserAgent = (userAgent) => {
+        window.navigator.userAgent = userAgent
+    }
+
+    beforeEach(() => {
+        setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ' +
+            'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36')
+    })
+
     it('should make a new user from an object', () => {
         const userObj = {
             isAnonymous: false,
@@ -28,6 +37,17 @@ describe('DVCPopulatedUser tests', () => {
         expect(user.deviceModel).toStrictEqual(expect.any(String))
         expect(user.sdkType).toBe('client')
         expect(user.sdkVersion).toStrictEqual(expect.any(String))
+    })
+
+    it('should set user agent version from user agent string as platform version', () => {
+        const user = new DVCPopulatedUser({ user_id: 'user1' })
+        expect(user.platformVersion).toBe('Chrome 99.0.4844.51')
+    })
+
+    it('should set user agent as unknown if user agent undefined', () => {
+        setUserAgent(undefined)
+        const user = new DVCPopulatedUser({ user_id: 'user1' })
+        expect(user.platformVersion).toBe('unknown')
     })
 
     it('should make a new user if user id provided but no isAnonymous flag', () => {

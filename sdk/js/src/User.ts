@@ -1,6 +1,7 @@
 import { DVCOptions, DVCUser, JSON } from './types'
 import { v4 as uuidv4 } from 'uuid'
 import * as packageJson from '../package.json'
+import UAParser from 'ua-parser-js'
 
 export class DVCPopulatedUser implements DVCUser {
     isAnonymous: boolean
@@ -16,6 +17,7 @@ export class DVCPopulatedUser implements DVCUser {
     lastSeenDate: Date
     readonly createdDate: Date
     readonly platform: string
+    readonly platformVersion: string
     readonly deviceModel: string
     readonly sdkType: 'client' | 'server'
     readonly sdkVersion: string
@@ -41,8 +43,13 @@ export class DVCPopulatedUser implements DVCUser {
          * Read only properties initialized once
          */
 
+        const userAgent = new UAParser(window.navigator.userAgent)
+        const platformVersion = userAgent.getBrowser().name && 
+             `${userAgent.getBrowser().name} ${userAgent.getBrowser().version}`
+
         this.createdDate = new Date()
         this.platform = options?.reactNative ? 'ReactNative' : 'web'
+        this.platformVersion = platformVersion ?? 'unknown'
         this.deviceModel = options?.reactNative && globalThis.DeviceInfo
             ? globalThis.DeviceInfo.getModel()
             : window.navigator.userAgent
