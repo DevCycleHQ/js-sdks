@@ -6,7 +6,7 @@ import {
     isValidString,
     jsonArrFromValueArray,
     jsonObjFromMap
-} from "./jsonHelpers"
+} from "../helpers/jsonHelpers"
 import { Target } from "./target"
 
 export class FeatureConfiguration extends JSON.Value {

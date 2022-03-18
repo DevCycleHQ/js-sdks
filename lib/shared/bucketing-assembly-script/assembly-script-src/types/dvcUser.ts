@@ -1,79 +1,102 @@
 import { JSON } from "assemblyscript-json"
 import {
-    getDateFromJSONOptional, getF64FromJSONOptional, getStringFromJSON, getStringFromJSONOptional, jsonObjFromMap
-} from "./jsonHelpers"
-
-const validSdkTypes = ['client', 'server']
+    getF64FromJSONOptional, getStringFromJSON, getStringFromJSONOptional
+} from "../helpers/jsonHelpers"
 
 export class DVCUser extends JSON.Obj {
-    constructor(
-        public user_id: string,
-        public email: string | null,
-        public name: string | null,
-        public language: string | null,
-        public country: string | null,
-        public appVersion: string | null,
-        public appBuild: f64,
-        // TODO implement CustomDataValue Class
-        public customData: Map<string, JSON.Value> | null,
-        public privateCustomData: Map<string, JSON.Value> | null,
-        public createdDate: Date | null,
-        public lastSeenDate: Date | null,
-        public platform: string | null,
-        public platformVersion: string | null,
-        public deviceModel: string | null,
-        public sdkType: string | null,
-        public sdkVersion: string | null
-    ) {
+    user_id: string
+    email: string | null
+    name: string | null
+    language: string | null
+    country: string | null
+    appVersion: string | null
+    appBuild: f64
+    customData: JSON.Obj | null
+    privateCustomData: JSON.Obj | null
+
+    constructor(userStr: string) {
         super()
-        if (this.sdkType && !validSdkTypes.includes(this.sdkType as string)) {
-            const sdkType = this.sdkType as string
-            throw new Error(`Not valid sdkType value: ${sdkType}`)
-        }
-    }
-
-    private static stringMapFromJSONObj(jsonObj: JSON.Obj): Map<string, JSON.Value> {
-        const map = new Map<string, JSON.Value>()
-        for (let i=0; i < jsonObj.keys.length; i++) {
-            const key = jsonObj.keys[i]
-            const value = jsonObj.get(key)
-            if (value && (value.isString || value.isBool || value.isFloat || value.isInteger)) {
-                map.set(key, value)
-            } else {
-                throw new Error(
-                    `Value in JSON Object for key: ${key}, is not string to cast to Map<string, string>`
-                )
-            }
-        }
-        return map
-    }
-
-    static dvcUserFromJSONString(userStr: string): DVCUser {
         const userJSON = JSON.parse(userStr)
         if (!userJSON.isObj) throw new Error(`dvcUserFromJSONString not a JSON Object`)
         const user = userJSON as JSON.Obj
 
-        const customData = user.getObj('customData')
-        const privateCustomData = user.getObj('privateCustomData')
+        this.user_id = getStringFromJSON(user, 'user_id')
+        this.email = getStringFromJSONOptional(user, 'email')
+        this.name = getStringFromJSONOptional(user, 'name')
+        this.language = getStringFromJSONOptional(user, 'language')
+        this.country = getStringFromJSONOptional(user, 'country')
+        this.appVersion = getStringFromJSONOptional(user, 'appVersion')
 
-        return new DVCUser(
-            getStringFromJSON(user, 'user_id'),
-            getStringFromJSONOptional(user, 'email'),
-            getStringFromJSONOptional(user, 'name'),
-            getStringFromJSONOptional(user, 'language'),
-            getStringFromJSONOptional(user, 'country'),
-            getStringFromJSONOptional(user, 'appVersion'),
-            getF64FromJSONOptional(user, 'appBuild', -1),
-            customData ? this.stringMapFromJSONObj(customData) : null,
-            privateCustomData? this.stringMapFromJSONObj(privateCustomData) : null,
-            getDateFromJSONOptional(user, 'createdDate'),
-            getDateFromJSONOptional(user, 'lastSeenDate'),
-            getStringFromJSONOptional(user, 'platform'),
-            getStringFromJSONOptional(user, 'platformVersion'),
-            getStringFromJSONOptional(user, 'deviceModel'),
-            getStringFromJSONOptional(user, 'sdkType'),
-            getStringFromJSONOptional(user, 'sdkVersion'),
-        )
+        // Need to set a default "null" value, as numbers can't be null in AS
+        this.appBuild = getF64FromJSONOptional(user, 'appBuild', -1)
+
+        const customData = user.getObj('customData')
+        this.customData = (customData && customData.isObj) ? customData : null
+
+        const privateCustomData = user.getObj('privateCustomData')
+        this.privateCustomData = (privateCustomData && privateCustomData.isObj) ? privateCustomData : null
+
+        return this
+    }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('user_id', this.user_id)
+        if (this.email) json.set('email', this.email)
+        if (this.name) json.set('name', this.name)
+        if (this.language) json.set('language', this.language)
+        if (this.country) json.set('country', this.country)
+        if (this.appVersion) json.set('appVersion', this.appVersion)
+        if (this.appBuild != -1) json.set('appBuild', this.appBuild)
+        if (this.customData) json.set('customData', this.customData)
+        if (this.privateCustomData) json.set('privateCustomData', this.privateCustomData)
+        return json.stringify()
+    }
+}
+
+export class DVCPopulatedUser extends JSON.Value {
+    user_id: string
+    email: string | null
+    name: string | null
+    language: string | null
+    country: string | null
+    appVersion: string | null
+    appBuild: f64
+    customData: JSON.Obj | null
+    privateCustomData: JSON.Obj | null
+    createdDate: Date
+    lastSeenDate: Date
+    platform: string
+    platformVersion: string
+    deviceModel: string
+    sdkType: string
+    sdkVersion: string
+
+    constructor(user: DVCUser) {
+        super()
+        this.user_id = user.user_id
+        this.email = user.email
+        this.name = user.name
+        this.language = user.language
+        this.country = user.country
+        this.appVersion = user.appVersion
+        this.appBuild = user.appBuild
+        this.customData = user.customData
+        this.privateCustomData = user.privateCustomData
+
+        this.createdDate = new Date(Date.now())
+        this.lastSeenDate = new Date(Date.now())
+
+        // TODO: set these from init function
+        this.platform = 'NodeJS'
+        this.platformVersion = ''
+        this.deviceModel = ''
+        this.sdkType = 'server'
+        this.sdkVersion = '1.0.0'
+    }
+
+    static populatedUserFromString(userStr: string): DVCPopulatedUser {
+        return new DVCPopulatedUser(new DVCUser(userStr))
     }
 
     stringify(): string {
@@ -86,18 +109,19 @@ export class DVCUser extends JSON.Obj {
         if (this.appVersion) json.set('appVersion', this.appVersion)
         if (this.appBuild != -1) json.set('appBuild', this.appBuild)
         if (this.customData) {
-            json.set('customData', jsonObjFromMap(this.customData as Map<string, JSON.Value>))
+            json.set('customData', this.customData)
         }
         if (this.privateCustomData) {
-            json.set('privateCustomData', jsonObjFromMap(this.privateCustomData as Map<string, JSON.Value>))
+            json.set('privateCustomData', this.privateCustomData)
         }
-        if (this.createdDate) json.set('createdDate', (this.createdDate as Date).toISOString())
-        if (this.lastSeenDate) json.set('lastSeenDate', (this.lastSeenDate as Date).toISOString())
-        if (this.platform) json.set('platform', this.platform)
-        if (this.sdkType) json.set('platformVersion', this.sdkType)
-        if (this.sdkType) json.set('deviceModel', this.sdkType)
-        if (this.sdkType) json.set('sdkType', this.sdkType)
-        if (this.sdkVersion) json.set('sdkVersion', this.sdkVersion)
+
+        json.set('createdDate', (this.createdDate as Date).toISOString())
+        json.set('lastSeenDate', (this.lastSeenDate as Date).toISOString())
+        json.set('platform', this.platform)
+        json.set('platformVersion', this.platformVersion)
+        json.set('deviceModel', this.deviceModel)
+        json.set('sdkType', this.sdkType)
+        json.set('sdkVersion', this.sdkVersion)
         return json.stringify()
     }
 }

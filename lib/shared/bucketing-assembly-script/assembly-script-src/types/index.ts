@@ -1,4 +1,6 @@
 export * from './bucketedUserConfig'
 export * from './configBody'
+export * from './dvcUser'
 export * from './feature'
 export * from './featureConfiguration'
+export * from './target'

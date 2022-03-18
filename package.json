@@ -24,6 +24,7 @@
     "@assemblyscript/loader": "^0.19.23",
     "assemblyscript": "^0.19.23",
     "assemblyscript-json": "^1.1.0",
+    "assemblyscript-regex": "^1.6.4",
     "@nrwl/next": "13.8.5",
     "async": "^3.2.1",
     "axios": "^0.24.0",

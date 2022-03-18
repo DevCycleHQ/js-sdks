@@ -5,9 +5,8 @@ import {
     getJSONArrayFromJSON,
     jsonArrFromValueArray,
     jsonObjFromMap, isValidString
-} from './jsonHelpers'
+} from '../helpers/jsonHelpers'
 import { Feature,  } from "./feature"
-
 
 export class PublicProject extends JSON.Value {
     _id: string
