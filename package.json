@@ -60,8 +60,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.7",
-    "@nestjs/common": "^8.0.11",
-    "@nestjs/swagger": "5.1.0",
     "@nrwl/cli": "13.8.8",
     "@nrwl/devkit": "13.9.3",
     "@nrwl/eslint-plugin-nx": "13.9.3",
