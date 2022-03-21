@@ -173,35 +173,33 @@ export class DVCClient implements Client {
             throw new Error('Client not initialized')
         }
 
-        const promise = this.store.loadAnonUser().then((anonUser) => {
+        const anonUser = new DVCPopulatedUser({ isAnonymous: true })
+
+        const promise = new Promise<DVCVariableSet>((resolve, reject) => {
             try {
                 this.eventQueue.flushEvents()
-
-                const updatedUser = anonUser
-                    ? new DVCPopulatedUser(JSON.parse(anonUser))
-                    : new DVCPopulatedUser({ isAnonymous: true })
                 const oldConfig = config
 
-                return getConfigJson(this.environmentKey, updatedUser)
+                getConfigJson(this.environmentKey, anonUser)
                     .then((config) => {
                         this.config = config as BucketedUserConfig
-                        this.user = updatedUser
+                        this.user = anonUser
                         this.store.saveConfig(config).then(() => {
                             console.log('Successfully saved config to local storage')
                         })
-                        this.store.saveUser(updatedUser).then(() => {
+                        this.store.saveUser(anonUser).then(() => {
                             console.log('Successfully saved user to local storage!')
                         })
                         this.eventEmitter.emitFeatureUpdates(oldConfig.features, config.features)
                         this.eventEmitter.emitVariableUpdates(oldConfig.variables,
                             config.variables, this.variableDefaultMap)
-                        return config.variables || {}
+                        resolve(config.variables || {})
                     }).catch((e) => {
-                        throw new Error(e)
+                        reject(e)
                     })
             } catch (e) {
                 this.eventEmitter.emitError(e)
-                throw new Error(e)
+                reject(e)
             }
         })
 

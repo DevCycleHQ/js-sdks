@@ -65,7 +65,7 @@ export class EventEmitter {
         this.emit(EventNames.INITIALIZED, success)
     }
 
-    emitError(error: Error): void {
+    emitError(error: unknown): void {
         this.emit(EventNames.ERROR, error)
     }
 
