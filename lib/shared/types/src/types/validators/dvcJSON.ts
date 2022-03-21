@@ -1,4 +1,4 @@
-import { isString, isNumber, isBoolean, isPlainObject } from 'lodash'
+import { isString, isNumber, isBoolean, isPlainObject, isNull, isUndefined } from 'lodash'
 import { registerDecorator, ValidationOptions } from 'class-validator'
 
 export type DVCJSON = { [key: string]: string | number | boolean }
@@ -33,7 +33,7 @@ export function validate(json: any): boolean {
         if (!isString(key)) return false
 
         const value = json[key]
-        if (!value || !(isString(value) || isNumber(value) || isBoolean(value))) {
+        if (isUndefined(value) || isNull(value) || !(isString(value) || isNumber(value) || isBoolean(value))) {
             return false
         }
     }
