@@ -16,13 +16,22 @@ export type SDKTypes = typeof SDKTypeValues[number]
 
 export type QueryParams = { [key: string]: string }
 
+const boolTransform = ({ value }: { value:  unknown }) => {
+    if (value === 'true') {
+        return true
+    } else if (value === 'false'){
+        return false
+    }
+    return value
+}
+
 /**
  * Base API User Schema used by the Bucketing API where the only required field is user_id.
  */
 export class DVCAPIUser {
     @IsBoolean()
     @IsOptional()
-    @Transform(({ value }) => isString(value) ? value === 'true' : value)
+    @Transform(boolTransform)
         isAnonymous?: boolean
 
     /**
@@ -162,7 +171,7 @@ export class DVCClientAPIUser implements DVCAPIUser {
      * a `user_id` value must be provided.
      */
     @IsBoolean()
-    @Transform(({ value }) => isString(value) ? value === 'true' : value)
+    @Transform(boolTransform)
         isAnonymous: boolean
 
     /**
