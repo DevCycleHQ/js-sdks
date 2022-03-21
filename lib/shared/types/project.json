@@ -27,14 +27,6 @@
         "tsConfig": "lib/shared/types/tsconfig.lib.json",
         "assets": [
           "lib/shared/types/*.md"
-        ],
-        "transformers": [
-          {
-            "name": "@nestjs/swagger/plugin",
-            "options": {
-              "introspectComments": true
-            }
-          }
         ]
       }
     },
