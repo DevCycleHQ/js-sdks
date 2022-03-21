@@ -32,3 +32,6 @@ junit.xml
 globalConfig.json
 **/environment.json
 **/collection.json
+
+// ignore env files in examples
+examples/**/.env

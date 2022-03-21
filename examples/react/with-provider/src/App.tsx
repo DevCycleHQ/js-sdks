@@ -4,7 +4,7 @@ import './App.css'
 import { withDVCProvider } from '@devcycle/devcycle-react-sdk'
 import DevCycleExample from './DevCycleExample'
 
-const ENV_KEY = 'test_token'
+const ENV_KEY = process.env['NX_CLIENT_KEY'] || 'test_token'
 const user = {
     user_id: 'test-user',
     isAnonymous: false
