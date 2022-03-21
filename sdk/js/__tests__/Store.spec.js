@@ -46,10 +46,4 @@ describe('Store tests', () => {
         expect(localStorage.setItem).toBeCalledWith(StoreKey.User, JSON.stringify(user))
         expect(localStorage.setItem).toBeCalledWith(StoreKey.AnonUser, JSON.stringify(user))
     })
-
-    it('should load anon user from local storage', async () => {
-        const store = new Store(localStorage)
-        await store.loadAnonUser()
-        expect(localStorage.getItem).toBeCalledWith(StoreKey.AnonUser)
-    })
 })

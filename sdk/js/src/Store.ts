@@ -64,10 +64,6 @@ export class Store {
     loadUser(): Promise<string  | null | undefined> {
         return this.load(StoreKey.User)
     }
-
-    loadAnonUser(): Promise<string  | null | undefined> {
-        return this.load(StoreKey.AnonUser)
-    }
 }
 
 export default Store
