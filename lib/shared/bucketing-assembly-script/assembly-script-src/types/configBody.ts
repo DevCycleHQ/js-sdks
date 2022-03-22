@@ -11,17 +11,21 @@ import { Feature,  } from "./feature"
 export class PublicProject extends JSON.Value {
     _id: string
     key: string
+    a0_organization: string
 
     constructor(project: JSON.Obj) {
         super()
         this._id = getStringFromJSON(project, '_id')
         this.key = getStringFromJSON(project, 'key')
+        this.a0_organization = getStringFromJSON(project, 'a0_organization')
     }
 
     stringify(): string {
         const json = new JSON.Obj()
         json.set('_id', this._id)
         json.set('key', this.key)
+        json.set('a0_organization', this.a0_organization)
+
         return json.stringify()
     }
 }

@@ -6,4 +6,6 @@ export class Project<IdType = string> {
      * Must only contain lower-case characters and `_` or `-`
      */
     key: string
+
+    a0_organization?: string
 }

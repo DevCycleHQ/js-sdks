@@ -19,7 +19,7 @@ describe('EventQueue Unit Tests', () => {
         environment: { _id: '', key: '' },
         features: {},
         knownVariableKeys: [],
-        project: { _id: '', key: '' },
+        project: { _id: '', key: '', a0_organization: 'org_' },
         variables: {},
         featureVariationMap: { feature: 'var' }
     }

@@ -95,6 +95,7 @@ describe('Config Parsing and Generating', () => {
             ],
             'project': {
                 '_id': '61535533396f00bab586cb17',
+                'a0_organization': 'org_12345612345',
                 'key': 'test-project'
             },
             'features': {
@@ -147,6 +148,7 @@ describe('Config Parsing and Generating', () => {
             ],
             'project': {
                 '_id': '61535533396f00bab586cb17',
+                'a0_organization': 'org_12345612345',
                 'key': 'test-project'
             },
             'features': {
@@ -227,6 +229,7 @@ describe('Config Parsing and Generating', () => {
             ],
             'project': {
                 '_id': '61535533396f00bab586cb17',
+                'a0_organization': 'org_12345612345',
                 'key': 'test-project'
             },
             'features': {
@@ -279,6 +282,7 @@ describe('Config Parsing and Generating', () => {
             ],
             'project': {
                 '_id': '61535533396f00bab586cb17',
+                'a0_organization': 'org_12345612345',
                 'key': 'test-project'
             },
             'features': {
