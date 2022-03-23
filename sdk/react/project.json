@@ -62,6 +62,13 @@
         "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/devcycle-react-sdk\"",
         "cwd": "dist/sdk/react"
       }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "preset": "conventional",
+        "commitMessageFormat": "chore(${projectName}): release version ${version}"
+      }
     }
   }
 }

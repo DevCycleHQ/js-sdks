@@ -52,6 +52,13 @@
         "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/nodejs-server-sdk\"",
         "cwd": "dist/sdk/nodejs"
       }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "preset": "conventional",
+        "commitMessageFormat": "chore(${projectName}): release version ${version}"
+      }
     }
   },
   "tags": []
