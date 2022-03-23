@@ -1,0 +1,6 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Pre Commit Hook"
+
+yarn lint-staged --shell
