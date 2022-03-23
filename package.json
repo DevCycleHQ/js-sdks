@@ -18,14 +18,7 @@
     "affected:test": "nx affected --base=origin/main --head=HEAD --target=test --codeCoverage",
     "npm-publish": "nx affected --base=origin/main~1 --target=npm-publish",
     "start": "nx serve",
-    "lerna": "lerna",
-    "lerna:test:unit": "lerna run unit-test",
-    "lerna:version": "lerna version -m \"Release\"",
-    "lerna:version:force": "lerna version -m \"Release\" --force-publish",
-    "lerna:version:force:minor": "lerna version minor -m \"Release\" --force-publish",
-    "lerna:version:patch": "lerna version patch -m \"Release\"",
-    "lerna:version:minor": "lerna version minor -m \"Release\"",
-    "lerna:version:major": "lerna version major -m \"Release\""
+    "lerna:version": "scripts/lerna-version.sh"
   },
   "dependencies": {
     "@assemblyscript/loader": "^0.19.23",
