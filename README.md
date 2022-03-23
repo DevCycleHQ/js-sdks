@@ -73,7 +73,7 @@ This allows you to lint and/or test all projects at once.
 
 ### Publishing a Release
 To publish a release, use lerna to create new versions of all changed packages (ensure you do this on the main branch)
-`lerna version`
+`yarn lerna:version`
 
 Push up the new tags and version changes, then run:
 
