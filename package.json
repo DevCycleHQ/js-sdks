@@ -124,12 +124,6 @@
     "typescript": "~4.3.5"
   },
   "resolutions": {},
-  "husky": {
-    "hooks": {
-      "pre-commit": "./scripts/pre_commit.sh",
-      "prepare-commit-msg": "echo preparing && exec < /dev/tty && git cz --hook || true"
-    }
-  },
   "lint-staged": {
     "**/*.{ts,js}": [
       "nx affected --uncommitted --parallel --target=check-types && :",
