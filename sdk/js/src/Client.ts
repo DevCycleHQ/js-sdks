@@ -229,7 +229,6 @@ export class DVCClient implements Client {
 
     track(event: ClientEvent): void {
         checkParamDefined('type', event.type)
-
         this.onInitialized.then(() => {
             this.eventQueue.queueEvent(event)
         })
