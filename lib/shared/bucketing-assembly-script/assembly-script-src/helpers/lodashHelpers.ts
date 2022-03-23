@@ -5,6 +5,16 @@ export function find<T>(array: Array<T>, callbackfn: (value: T, index: i32, arra
     return index >= 0 ? array[index] : null
 }
 
+export function findString(array: Array<string>, findStr: string): string | null {
+    for (let i = 0; i < array.length; i++) {
+        const value = array[i]
+        if (findStr.includes(value)) {
+            return findStr
+        }
+    }
+    return null
+}
+
 export function first<T>(array: Array<T>): T | null {
     return array.length > 0 ? array[0] : null
 }

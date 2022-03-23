@@ -3,7 +3,7 @@ import { find, first, last } from '../helpers/lodashHelpers'
 import {
     ConfigBody, Target as PublicTarget, Feature as PublicFeature, BucketedUserConfig,
     Rollout as PublicRollout, DVCPopulatedUser, RolloutStage as PublicRolloutStage,
-    SDKVariable, SDKFeature, Feature, RolloutStage
+    SDKVariable, SDKFeature, Feature, RolloutStage, TopLevelOperator, Target
 } from '../types'
 
 // import murmurhash from 'murmurhash'
@@ -13,24 +13,23 @@ import { evaluateOperator } from './segmentation'
 const MAX_HASH_VALUE: i32 = 4294967295
 const baseSeed: i32 = 1
 
-interface BoundedHash {
-    rolloutHash: i32,
-    bucketingHash: i32
+class BoundedHash {
+    public rolloutHash: i32
+    public bucketingHash: i32
 }
 
-export const generateBoundedHashes = (
-    user_id: string, target_id: string
-): BoundedHash => {
+export function generateBoundedHashes(user_id: string, target_id: string): BoundedHash {
     // The seed provided to murmurhash must be a number
     // So we first hash the target_id with a constant seed
     const targetHash = 1 //murmurhash.v3(target_id, baseSeed)
-    return {
+    const boundedHash: BoundedHash = {
         rolloutHash: generateBoundedHash(user_id + '_rollout', targetHash),
         bucketingHash: generateBoundedHash(user_id, targetHash)
     }
+    return boundedHash
 }
 
-export const generateBoundedHash = (input: string, hashSeed: i32): i32 => {
+export function generateBoundedHash(input: string, hashSeed: i32): i32 {
     const hash = 1 //murmurhash.v3(input, hashSeed)
     return hash / MAX_HASH_VALUE
 }
@@ -38,7 +37,7 @@ export const generateBoundedHash = (input: string, hashSeed: i32): i32 => {
 /**
  * Given the feature and a hash of the user_id, bucket the user according to the variation distribution percentages
  */
-export const decideTargetVariation = (target: PublicTarget, boundedHash: i32): string => {
+export function decideTargetVariation(target: PublicTarget, boundedHash: i32): string {
     //TODO: figure out sorting
     const variations = target.distribution
         //.sort((a, b) => a._variation > b._variation)
@@ -55,7 +54,7 @@ export const decideTargetVariation = (target: PublicTarget, boundedHash: i32): s
     throw new Error('Failed to decide target variation')
 }
 
-export const getCurrentRolloutPercentage = (rollout: PublicRollout, currentDate: Date): f64 => {
+export function getCurrentRolloutPercentage(rollout: PublicRollout, currentDate: Date): f64 {
     const start = rollout.startPercentage
     const startDate = rollout.startDate
 
@@ -105,14 +104,14 @@ export const getCurrentRolloutPercentage = (rollout: PublicRollout, currentDate:
     )
 }
 
-export const doesUserPassRollout = (rollout: PublicRollout | null, boundedHash: i32): boolean => {
+export function doesUserPassRollout(rollout: PublicRollout | null, boundedHash: i32): bool {
     if (!rollout) return true
 
     const rolloutPercentage = getCurrentRolloutPercentage(rollout, new Date(Date.now()))
     return !!rolloutPercentage && (boundedHash <= rolloutPercentage)
 }
 
-export const bucketForSegmentedFeature = (boundedHash: i32, target: PublicTarget): string => {
+export function bucketForSegmentedFeature(boundedHash: i32, target: PublicTarget): string {
     return decideTargetVariation(target, boundedHash)
 }
 
@@ -121,30 +120,39 @@ interface SegmentedFeatureData {
     target: PublicTarget
 }
 
-export const getSegmentedFeatureDataFromConfig = (
+export function getSegmentedFeatureDataFromConfig(
     config: ConfigBody,
     user: DVCPopulatedUser
-): SegmentedFeatureData[] => {
-    const initialValue: SegmentedFeatureData[] = []
-    return config.features.reduce((accumulator, feature) => {
+): SegmentedFeatureData[] {
+    const accumulator: SegmentedFeatureData[] = []
+
+    for (let y = 0; y < config.features.length; y++) {
+        const feature = config.features[y]
+
         // Returns the first target for which the user passes segmentation
-        const segmentedFeatureTarget = find(feature.configuration.targets, (target) => {
-            return evaluateOperator(target._audience.filters, user)
-        })
+        let segmentedFeatureTarget: Target | null = null
+        for (let i = 0; i < feature.configuration.targets.length; i++) {
+            const target = feature.configuration.targets[i]
+            if (evaluateOperator(target._audience.filters, user)) {
+                segmentedFeatureTarget = target
+                break
+            }
+        }
+
         if (segmentedFeatureTarget) {
             accumulator.push({
                 feature,
                 target: segmentedFeatureTarget
             })
         }
-        return accumulator
-    }, initialValue)
+    }
+    return accumulator
 }
 
-export const generateKnownVariableKeys = (
+export function generateKnownVariableKeys(
     variableHashes: Map<string, i64>,
     variableMap: Map<string, SDKVariable>
-): i64[] => {
+): i64[] {
     const knownVariableKeys: i64[] = []
     variableHashes.keys().forEach((key) => {
         const hash = variableHashes.get(key)
@@ -156,10 +164,10 @@ export const generateKnownVariableKeys = (
     return knownVariableKeys
 }
 
-export const generateBucketedConfig = (
+export function generateBucketedConfig(
     config: ConfigBody,
     user: DVCPopulatedUser
-): BucketedUserConfig => {
+): BucketedUserConfig {
     const variableMap = new Map<string, SDKVariable>()
     const featureKeyMap = new Map<string, SDKFeature>()
     const featureVariationMap = new Map<string, string>()

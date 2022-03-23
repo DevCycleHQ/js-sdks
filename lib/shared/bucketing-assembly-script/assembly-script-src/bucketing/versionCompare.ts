@@ -1,23 +1,28 @@
 import { RegExp } from 'assemblyscript-regex'
 
-interface optionsType {
-    lexicographical: bool,
-    zeroExtend: bool
+export class OptionsType {
+    public lexicographical: bool
+    public zeroExtend: bool
 }
 
-function isValidPart(lexicographical: bool, x: string): bool {
+function hasValidParts(lexicographical: bool, parts: string[]): bool {
     const regex = lexicographical ? new RegExp("/^\d+[A-Za-z]*$/", "g") : new RegExp("/^\d+$/", "g")
-    return regex.test(x)
+    for (let i = 0; i < parts.length; i++) {
+        if (!regex.test(parts[i])) {
+            return false
+        }
+    }
+    return !!parts.length
 }
 
-export const versionCompare = (v1: string, v2: string, options: optionsType | null): i32 => {
+export const versionCompare = (v1: string, v2: string, options: OptionsType | null): f64 => {
     const lexicographical: bool = options ? options.lexicographical : false
     const zeroExtend: bool = options ? options.zeroExtend : false
 
     const v1parts = v1.split('.')
     const v2parts = v2.split('.')
-    const hasV1 = v1parts.every((v1) => isValidPart(lexicographical, v1))
-    const hasV2 = v2parts.every((v2) => isValidPart(lexicographical, v2))
+    const hasV1 = hasValidParts(lexicographical, v1parts)
+    const hasV2 = hasValidParts(lexicographical, v2parts)
     if (!hasV1 || !hasV2) {
         return NaN
     }
@@ -27,12 +32,12 @@ export const versionCompare = (v1: string, v2: string, options: optionsType | nu
         while (v2parts.length < v1parts.length) v2parts.push('0')
     }
 
-    let v1PartsFinal: i32[] = []
-    let v2PartsFinal: i32[] = []
+    let v1PartsFinal: f64[] = []
+    let v2PartsFinal: f64[] = []
 
     if (!lexicographical) {
-        v1PartsFinal = v1parts.map((n) => i32(n))
-        v2PartsFinal = v2parts.map((n) => i32(n))
+        v1PartsFinal = v1parts.map<f64>((n) => parseInt(n))
+        v2PartsFinal = v2parts.map<f64>((n) => parseInt(n))
     }
 
     for (let i = 0; i < v1PartsFinal.length; ++i) {

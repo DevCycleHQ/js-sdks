@@ -1,11 +1,11 @@
 import { RegExp } from 'assemblyscript-regex'
-import { find, includes, replace } from '../helpers/lodashHelpers'
-import { versionCompare } from './versionCompare'
+import {find, findString, includes, replace} from '../helpers/lodashHelpers'
+import { OptionsType, versionCompare } from './versionCompare'
 import {
     TopLevelOperator, AudienceFilterOrOperator, DVCPopulatedUser, validSubTypes
 } from '../types'
-import {JSON} from "assemblyscript-json";
-import {getF64FromJSONValue} from "../helpers/jsonHelpers";
+import { JSON } from "assemblyscript-json";
+import { getF64FromJSONValue } from "../helpers/jsonHelpers";
 // import UAParser from 'ua-parser-js'
 
 // TODO add support for OR/XOR as well as recursive filters
@@ -15,44 +15,55 @@ import {getF64FromJSONValue} from "../helpers/jsonHelpers";
  * @param operator - The set of filters to evaluate, and the boolean operator to follow (AND, OR, XOR)
  * @param data - The incoming user, device, and user agent data
  */
-export const evaluateOperator = (operator: TopLevelOperator, data: DVCPopulatedUser): bool => {
+export function evaluateOperator(operator: TopLevelOperator, data: DVCPopulatedUser): bool {
     if (!operator.filters.length) return false
 
-    const doesUserPassFilter = (filter: AudienceFilterOrOperator) => {
-        if (filter.type === 'all') return true
-        if (!filter.subType || !validSubTypes.includes(filter.subType)) {
-            throw new Error(`Invalid filter subType: ${filter.subType}`)
-        }
-        return filterFunctionsBySubtype(filter.subType, data, filter)
-    }
-
+    userFilterData = data
     if (operator.operator === 'or') {
-        return operator.filters.some(doesUserPassFilter)
+        const result = operator.filters.some(doesUserPassFilter)
+        userFilterData = null
+        return result
     } else {
-        return operator.filters.every(doesUserPassFilter)
+        const result = operator.filters.every(doesUserPassFilter)
+        userFilterData = null
+        return result
     }
 }
 
-const filterFunctionsBySubtype = (subType: string, user: DVCPopulatedUser, filter: AudienceFilterOrOperator): bool => {
-    switch (subType) {
-        case 'country':
-            return checkStringsFilter(user.country, filter)
-        case 'email':
-            return checkStringsFilter(user.email, filter)
-        case 'user_id':
-            return checkStringsFilter(user.user_id, filter)
-        case 'appVersion':
-            return checkVersionFilters(user.appVersion, filter)
-        case 'platformVersion':
-            return checkVersionFilters(user.platformVersion, filter)
-        case 'deviceModel':
-            return checkStringsFilter(user.deviceModel, filter)
-        case 'platform':
-            return checkStringsFilter(user.platform, filter)
-        case 'customData':
-            return checkCustomData(user.customData, filter) || checkCustomData(user.privateCustomData, filter)
-        default:
-            return false
+// Hack because we can't capture data in closures
+let userFilterData: DVCPopulatedUser | null
+function doesUserPassFilter(filter: AudienceFilterOrOperator): bool {
+    if (filter.type === 'all') return true
+    if (!filter.subType || !userFilterData) {
+        throw new Error(`Missing filter subType`)
+    }
+    const subType = filter.subType as string
+    if (!validSubTypes.includes(subType)) {
+        throw new Error(`Invalid filter subType: ${subType}`)
+    }
+
+    return filterFunctionsBySubtype(subType, userFilterData as DVCPopulatedUser, filter)
+}
+
+function filterFunctionsBySubtype(subType: string, user: DVCPopulatedUser, filter: AudienceFilterOrOperator): bool {
+    if (subType === 'country') {
+        return checkStringsFilter(user.country, filter)
+    } else if (subType === 'email') {
+        return checkStringsFilter(user.email, filter)
+    } else if (subType === 'user_id') {
+        return checkStringsFilter(user.user_id, filter)
+    } else if (subType === 'appVersion') {
+        return checkVersionFilters(user.appVersion, filter)
+    } else if (subType === 'platformVersion') {
+        return checkVersionFilters(user.platformVersion, filter)
+    } else if (subType === 'deviceModel') {
+        return checkStringsFilter(user.deviceModel, filter)
+    } else if (subType === 'platform') {
+        return checkStringsFilter(user.platform, filter)
+    } else if (subType === 'customData') {
+        return checkCustomData(user.customData, filter) || checkCustomData(user.privateCustomData, filter)
+    } else {
+        return false
     }
 }
 
@@ -61,9 +72,10 @@ export const convertToSemanticVersion = (version: string): string => {
     if (splitVersion.length < 2) { splitVersion.push('0') }
     if (splitVersion.length < 3) { splitVersion.push('0') }
 
-    splitVersion.forEach((value, index) => {
-        if (value === '') { splitVersion[index] = '0' }
-    })
+    for (let i = 0; i < splitVersion.length; i++) {
+        const value = splitVersion[i]
+        if (value === '') { splitVersion[i] = '0' }
+    }
     return splitVersion.join('.')
 }
 
@@ -73,7 +85,8 @@ export const checkVersionValue = (
     operator: string | null
 ): bool => {
     if (version && filterVersion && filterVersion.length > 0) {
-        const result = versionCompare(version, filterVersion, { zeroExtend: true, lexicographical: false })
+        const options: OptionsType = { zeroExtend: true, lexicographical: false }
+        const result = versionCompare(version, filterVersion, options)
         if (isNaN(result)) {
             return false
         } else if (result === 0 && includes(operator, '=')) {
@@ -89,28 +102,20 @@ export const checkVersionValue = (
 
 export const checkVersionFilter = (
     version: string | null,
-    filterVersions: unknown[] | null,
+    filterVersions: string[] | null,
     operator: string | null
 ): bool => {
-    let parsedOperator = operator
-    let parsedVersion = version
-    if (!parsedVersion || !filterVersions) {
+    if (!version || !filterVersions || !operator) {
         return false
     }
-
-    let filterVersionsTemp: string[] = filterVersions.filter((val) => typeof val === 'string') as string[]
+    let filteredVersions = filterVersions as string[]
+    let parsedVersion = version as string
+    let parsedOperator = operator as string
 
     let not = false
     if (parsedOperator === '!=') {
         parsedOperator = '='
         not = true
-    }
-
-    for (let i = 0; i < filterVersionsTemp.length; i++) {
-        const v = filterVersionsTemp[i]
-        if (typeof v !== 'string') {
-            return false
-        }
     }
 
     if (parsedOperator !== '=') {
@@ -119,22 +124,34 @@ export const checkVersionFilter = (
         const regex1 = new RegExp("/[^(\d|.|\-)]/", "g")
         const regex2 = new RegExp("/-.*/", "g")
         parsedVersion = replace(replace(parsedVersion, regex1, ''), regex2, '')
-        filterVersionsTemp = filterVersionsTemp.map(
-            (filterVersion) => replace(replace(filterVersion, regex1, ''), regex2, '')
-        )
+
+        let mappedfilteredVersions: string[] = []
+        // Replace Array.map(), because you can't access captured data in a closure
+        for (let i=0; i < filteredVersions.length; i++) {
+            mappedfilteredVersions.push(replace(replace(filteredVersions[i], regex1, ''), regex2, ''))
+        }
+        filteredVersions = mappedfilteredVersions
     }
+
     parsedVersion = convertToSemanticVersion(parsedVersion)
-    const passed = filterVersionsTemp.some((v) => checkVersionValue(v, parsedVersion, operator))
+    let passed = false
+    // Replace Array.some(), because you can't access captured data in a closure
+    for (let i = 0; i < filteredVersions.length; i++) {
+         if (checkVersionValue(filteredVersions[i], parsedVersion, operator)) {
+             passed = true
+             break
+         }
+    }
+
     return !not ? passed : !passed
 }
 
 export const checkNumberFilter = (num: f64, filterNums: f64[] | null, operator: string | null): bool => {
-    if (isString(operator)) {
-        switch (operator) {
-            case 'exist':
-                return !isNaN(num)
-            case '!exist':
-                return isNaN(num)
+    if (operator && isString(operator)) {
+        if (operator === 'exists') {
+            return !isNaN(num)
+        } else if (operator === '!exist') {
+            return isNaN(num)
         }
     }
 
@@ -142,80 +159,86 @@ export const checkNumberFilter = (num: f64, filterNums: f64[] | null, operator: 
         return false
     }
 
-    return filterNums.some((filterNum) => {
+    // replace filterNums.some() logic
+    let someValue = false
+    for (let i = 0; i < filterNums.length; i++) {
+        const filterNum = filterNums[i]
         if (isNaN(filterNum)) {
-            return false
+            continue
         }
 
-        switch (operator) {
-            case '=':
-                return (num === filterNum)
-            case '!=':
-                return (num !== filterNum)
-            case '>':
-                return (num > filterNum)
-            case '>=':
-                return (num >= filterNum)
-            case '<':
-                return (num < filterNum)
-            case '<=':
-                return (num <= filterNum)
+        if (operator === '=') {
+            someValue = num === filterNum
+        } else if (operator === '!=') {
+            someValue = num !== filterNum
+        } else if (operator === '>') {
+            someValue = num > filterNum
+        } else if (operator === '>=') {
+            someValue = num >= filterNum
+        } else if (operator === '<') {
+            someValue = num < filterNum
+        } else if (operator === '<=') {
+            someValue = num <= filterNum
+        } else {
+            continue
         }
-        return false
-    })
+
+        if (someValue) {
+            return true
+        }
+    }
+    return someValue
 }
 
-const checkNumbersFilterJSONValue = (jsonValue: JSON.Value, filter: AudienceFilterOrOperator): bool => {
+function checkNumbersFilterJSONValue(jsonValue: JSON.Value, filter: AudienceFilterOrOperator): bool {
     return checkNumbersFilter(getF64FromJSONValue(jsonValue), filter)
 }
 
-export const checkNumbersFilter = (number: f64, filter: AudienceFilterOrOperator): bool => {
+export function checkNumbersFilter(number: f64, filter: AudienceFilterOrOperator): bool {
     const operator = filter.comparator
     const values = getFilterValuesAsF64(filter)
     return checkNumberFilter(number, values, operator)
 }
 
-export const checkStringsFilter = (string: string | null, filter: AudienceFilterOrOperator): bool => {
+export function checkStringsFilter(string: string | null, filter: AudienceFilterOrOperator): bool {
     const operator = filter.comparator
     const values = getFilterValuesAsStrings(filter)
 
-    switch (operator) {
-        case '=':
-            return !!values && string !== null && values.includes(string)
-        case '!=':
-            return !!values && string !== null && !values.includes(string)
-        case 'exist':
-            return string !== null && string !== ''
-        case '!exist':
-            return string === null || string === ''
-        case 'contain':
-            return (!!values && string !== null && !!find(values, (value) => includes(string, value)))
-        case '!contain':
-            return (!!values && (string === null || !find(values, (value) => includes(string, value))))
+    if (operator === '=') {
+        return !!values && string !== null && values.includes(string)
+    } else if (operator === '!=') {
+        return !!values && string !== null && !values.includes(string)
+    } else if (operator === 'exist') {
+        return string !== null && string !== ''
+    } else if (operator === '!exist') {
+        return string === null || string === ''
+    } else if (operator === 'contain') {
+        return (!!values && string !== null && !!findString(values, string))
+    } else if (operator === '!contain') {
+        return (!!values && (string === null || !findString(values, string)))
+    } else {
+        return isString(string)
     }
-    return isString(string)
 }
 
-export const checkBooleanFilter = (bool: bool, filter: AudienceFilterOrOperator): bool => {
+export function checkBooleanFilter(bool: bool, filter: AudienceFilterOrOperator): bool {
     const operator = filter.comparator
     const values = getFilterValuesAsBoolean(filter)
-    switch (operator) {
-        case 'contain':
-        case '=':
-            return !!values && isBoolean(bool) && values.includes(bool)
-        case '!contain':
-        case '!=':
-            return !!values && isBoolean(bool) && !values.includes(bool)
-        case 'exist':
-            return isBoolean(bool)
-        case '!exist':
-            return !isBoolean(bool)
-    }
 
-    return false
+    if (operator === 'contain' || operator === '=') {
+        return !!values && isBoolean(bool) && values.includes(bool)
+    } else if (operator === '!contain' || operator === '!=') {
+        return !!values && isBoolean(bool) && !values.includes(bool)
+    } else if (operator === 'exist') {
+        return isBoolean(bool)
+    } else if (operator === '!exist') {
+        return !isBoolean(bool)
+    } else {
+        return false
+    }
 }
 
-export const checkVersionFilters = (appVersion: string | null, filter: AudienceFilterOrOperator): bool => {
+export function checkVersionFilters(appVersion: string | null, filter: AudienceFilterOrOperator): bool {
     const operator = filter.comparator
     const values = getFilterValuesAsStrings(filter)
     // dont need to do semver if they're looking for an exact match. Adds support for non semver versions.
@@ -226,7 +249,7 @@ export const checkVersionFilters = (appVersion: string | null, filter: AudienceF
     }
 }
 
-export const checkCustomData = (data: JSON.Obj | null, filter: AudienceFilterOrOperator): bool => {
+export function checkCustomData(data: JSON.Obj | null, filter: AudienceFilterOrOperator): bool {
     const values = getFilterValues(filter)
     const operator = filter.comparator
 
@@ -280,42 +303,55 @@ export const checkCustomData = (data: JSON.Obj | null, filter: AudienceFilterOrO
 // }
 // exports.checkListAudienceFields = checkListAudienceFields
 
-export function getFilterValues(filter: AudienceFilterOrOperator): JSON.Value[] | null {
-    if (!filter.values || !filter.isArr) return null
+export function getFilterValues(filter: AudienceFilterOrOperator): JSON.Value[] {
+    if (!filter.values || !filter.isArr) return []
+
     const valuesArray = filter.values as JSON.Arr
-    const jsonValues = valuesArray.valueOf().filter((val: JSON.Value) => {
-        return !(val === null || val === undefined)
-    })
-
-    return jsonValues.length ? jsonValues : null
+    return valuesArray.valueOf().reduce((accumulator, value) => {
+        if (value !== null) {
+            accumulator.push(value)
+        }
+        return accumulator
+    }, [] as JSON.Value[])
 }
 
-export function getFilterValuesAsStrings(filter: AudienceFilterOrOperator): string[] | null {
+export function getFilterValuesAsStrings(filter: AudienceFilterOrOperator): string[] {
     const jsonValues = getFilterValues(filter)
-    return jsonValues
-        ? jsonValues.map((value) => {
-            const str = value.isString ? value as JSON.Str : null
-            return str ? str.valueOf() : null
-        }).filter((v) => v !== null) as string[]
-        : null
+    if (!jsonValues) return []
+
+    return jsonValues.reduce((accumulator, value) => {
+        const str = value.isString ? value as JSON.Str : null
+        if (str) {
+            accumulator.push(str.valueOf())
+        }
+        return accumulator
+    }, [] as string[])
 }
 
-export function getFilterValuesAsF64(filter: AudienceFilterOrOperator): f64[] | null {
+export function getFilterValuesAsF64(filter: AudienceFilterOrOperator): f64[] {
     const jsonValues = getFilterValues(filter)
-    return jsonValues
-        ? jsonValues.map((value) => getF64FromJSONValue(value))
-            .filter((v) => isNaN(v))
-        : null
+    if (!jsonValues) return []
+
+    return jsonValues.reduce((accumulator, value) => {
+        const num = getF64FromJSONValue(value)
+        if (!isNaN(num)) {
+            accumulator.push(num)
+        }
+        return accumulator
+    }, [] as f64[])
 }
 
-export function getFilterValuesAsBoolean(filter: AudienceFilterOrOperator): bool[] | null {
+export function getFilterValuesAsBoolean(filter: AudienceFilterOrOperator): bool[] {
     const jsonValues = getFilterValues(filter)
-    return jsonValues
-        ? jsonValues.map((value) => {
-            const boolVal = value.isBool ? value as JSON.Bool : null
-            return boolVal ? boolVal.valueOf() : null
-        }).filter((v) => v !== null) as bool[]
-        : null
+    if (!jsonValues) return []
+
+    return jsonValues.reduce((accumulator, value) => {
+        const boolVal = value.isBool ? value as JSON.Bool : null
+        if (boolVal) {
+            accumulator.push(boolVal.valueOf())
+        }
+        return accumulator
+    }, [] as bool[])
 }
 
 // export const parseUserAgent = (uaString?: string): {
