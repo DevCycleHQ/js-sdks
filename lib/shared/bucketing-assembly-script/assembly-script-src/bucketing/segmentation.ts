@@ -1,5 +1,5 @@
 import { RegExp } from 'assemblyscript-regex'
-import {find, findString, includes, replace} from '../helpers/lodashHelpers'
+import {  findString, includes, replace} from '../helpers/lodashHelpers'
 import { OptionsType, versionCompare } from './versionCompare'
 import {
     TopLevelOperator, AudienceFilterOrOperator, DVCPopulatedUser, validSubTypes
@@ -20,11 +20,11 @@ export function evaluateOperator(operator: TopLevelOperator, data: DVCPopulatedU
 
     userFilterData = data
     if (operator.operator === 'or') {
-        const result = operator.filters.some(doesUserPassFilter)
+        const result = operator.filters.some((filter) => doesUserPassFilter(filter))
         userFilterData = null
         return result
     } else {
-        const result = operator.filters.every(doesUserPassFilter)
+        const result = operator.filters.every((filter) => doesUserPassFilter(filter))
         userFilterData = null
         return result
     }
@@ -254,8 +254,8 @@ export function checkCustomData(data: JSON.Obj | null, filter: AudienceFilterOrO
     const operator = filter.comparator
 
     if (filter.dataKey) {
-        const firstValue = values && values[0]
-        const dataValue = data ? data.get(filter.dataKey) : null
+        const firstValue = values.length > 0 ? values[0] : null
+        const dataValue = data ? data.get(filter.dataKey as string) : null
 
         if (operator === 'exist') {
             return checkValueExists(dataValue)
@@ -403,8 +403,7 @@ function checkValueExists(value: JSON.Value | null): bool {
     const intValue = value.isInteger ? value as JSON.Integer : null
 
     // TODO: test these changes
-    return value !== undefined
-        && value !== null
+    return value !== null
         && (!stringValue || stringValue.valueOf() !== '')
         && (!floatValue || !isNaN(floatValue.valueOf()))
         && (!intValue || !isNaN(intValue.valueOf()))
