@@ -9,7 +9,7 @@ mocked(getConfigJson).mockImplementation(() => {
 
 describe('initialize tests', () => {
     it('should return client when calling initialize', () => {
-        const user = { user_id: 'bruh' }
+        const user = { user_id: 'user1' }
         const client = DVCClient.initialize('YOUR_CLIENT_SIDE_ID', user)
         expect(client).not.toBeNull()
     })
