@@ -49,7 +49,8 @@ client.onClientInitialized((err) => {
     if (err) {
         // error state
     }
-        const featureToggle = client.variable('YOUR_VARIABLE_KEY', false)
+    
+    const featureToggle = client.variable('YOUR_VARIABLE_KEY', false)
     if (featureToggle) {
         ...
     } else {
