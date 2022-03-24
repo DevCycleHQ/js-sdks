@@ -1,4 +1,4 @@
-import { JSON } from "assemblyscript-json";
+import { JSON } from 'assemblyscript-json'
 import { first, last } from '../helpers/lodashHelpers'
 import {
     ConfigBody, Target as PublicTarget, Feature as PublicFeature, BucketedUserConfig,
@@ -6,6 +6,7 @@ import {
     Target, Variation, Variable
 } from '../types'
 
+// TODO: implement murmurhash logic in AS
 // import murmurhash from 'murmurhash'
 import { evaluateOperator } from './segmentation'
 
@@ -21,6 +22,7 @@ class BoundedHash {
 export function generateBoundedHashes(user_id: string, target_id: string): BoundedHash {
     // The seed provided to murmurhash must be a number
     // So we first hash the target_id with a constant seed
+
     const targetHash = 1 //murmurhash.v3(target_id, baseSeed)
     const boundedHash: BoundedHash = {
         rolloutHash: generateBoundedHash(user_id + '_rollout', targetHash),
@@ -62,10 +64,6 @@ export function getCurrentRolloutPercentage(rollout: PublicRollout, currentDate:
     if (rollout.type === 'schedule') {
         return currentDateTime >= startDateTime ? 1 : 0
     }
-
-    // if (!(typeof start === 'number')) {
-    //     throw new Error('Invalid rollout configuration')
-    // }
 
     if (!rollout.stages) {
         return 0
