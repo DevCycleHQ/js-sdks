@@ -18,11 +18,11 @@ export class DVCVariable implements Variable {
         const { key, defaultValue } = variable
         checkParamType('key', key, 'string')
         checkParamDefined('defaultValue', defaultValue)
-        this.key = variable.key
+        this.key = key.toLowerCase()
 
         if (variable.value === undefined || variable.value === null) {
             this.isDefaulted = true
-            this.value = variable.defaultValue
+            this.value = defaultValue
         } else {
             this.value = variable.value
             this.isDefaulted = false
