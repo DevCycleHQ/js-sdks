@@ -209,8 +209,8 @@ export function generateBucketedConfig(
         featureVariationMap.set(feature._id, variation_id)
 
         let variation: Variation | null = null
-        for (let i = 0; i < feature.variations.length; i++) {
-            const featVariation = feature.variations[i]
+        for (let t = 0; t < feature.variations.length; t++) {
+            const featVariation = feature.variations[t]
             if (featVariation._id === variation_id) {
                 variation = featVariation
                 break
