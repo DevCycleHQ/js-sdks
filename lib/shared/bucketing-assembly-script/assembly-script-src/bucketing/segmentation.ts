@@ -4,9 +4,8 @@ import { OptionsType, versionCompare } from './versionCompare'
 import {
     TopLevelOperator, AudienceFilterOrOperator, DVCPopulatedUser, validSubTypes
 } from '../types'
-import { JSON } from "assemblyscript-json";
-import { getF64FromJSONValue } from "../helpers/jsonHelpers";
-// import UAParser from 'ua-parser-js'
+import { JSON } from 'assemblyscript-json'
+import { getF64FromJSONValue } from '../helpers/jsonHelpers'
 
 // TODO add support for OR/XOR as well as recursive filters
 /**
@@ -279,30 +278,6 @@ export function checkCustomData(data: JSON.Obj | null, filter: AudienceFilterOrO
     return true
 }
 
-// const checkListAudienceFilterOrOperator = ({ values = [], data, comparator }) => {
-//     const isInListAudience = values.some((value) => {
-//         if (!isObject(value)) {
-//             throw new Error('ListAudience filter must be an object, has not been prepared for segmentation')
-//         }
-//         return data.some((datum) => isEqual(datum, value))
-//     })
-//
-//     return comparator === '=' ? !!isInListAudience : !isInListAudience
-// }
-// exports.checkListAudienceFilter = checkListAudienceFilter
-
-//
-// const checkListAudienceFields = (data, filters) => {
-//     if (!filters || !filters.length) return true
-//
-//     return filters.every((filter) => {
-//         const values = getFilterValues(filter)
-//         const comparator = filter.comparator
-//         return checkListAudienceFilter({ data, values, comparator })
-//     })
-// }
-// exports.checkListAudienceFields = checkListAudienceFields
-
 export function getFilterValues(filter: AudienceFilterOrOperator): JSON.Value[] {
     if (!filter.values || !filter.isArr) return []
 
@@ -353,42 +328,6 @@ export function getFilterValuesAsBoolean(filter: AudienceFilterOrOperator): bool
         return accumulator
     }, [] as bool[])
 }
-
-// export const parseUserAgent = (uaString?: string): {
-//     browser?: string,
-//     browserDeviceType?: string
-// } => {
-//     // Note: Anything that is not in this map will return Desktop
-//     const DEVICES_MAP: Record<string, string> = {
-//         'mobile': 'Mobile',
-//         'tablet': 'Tablet'
-//     }
-//
-//     // Note: Anything that is not in this map will return Other
-//     const BROWSER_MAP: Record<string, string> = {
-//         'Chrome': 'Chrome',
-//         'Chrome Headless': 'Chrome',
-//         'Chrome WebView': 'Chrome',
-//         'Chromium': 'Chrome',
-//         'Firefox': 'Firefox',
-//         'Safari': 'Safari',
-//         'Mobile Safari': 'Safari'
-//     }
-//
-//     if (!uaString) {
-//         return {
-//             browser: undefined,
-//             browserDeviceType: undefined
-//         }
-//     }
-//
-//     const parser = new UAParser(uaString)
-//
-//     return {
-//         browser: BROWSER_MAP[parser.getBrowser().name || ''] || 'Other',
-//         browserDeviceType: DEVICES_MAP[parser.getDevice().type || ''] || 'Desktop'
-//     }
-// }
 
 /**
  * Returns true if the given value is not a type we define as "nonexistent" (NaN, empty string etc.)
