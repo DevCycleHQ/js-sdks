@@ -29,6 +29,9 @@
       "@devcycle/bucketing-assembly-script": [
         "lib/shared/bucketing-assembly-script/src/index.ts"
       ],
+      "@devcycle/bucketing-test-data": [
+        "lib/shared/bucketing-test-data/src/index.ts"
+      ],
       "@devcycle/devcycle-js-sdk": [
         "sdk/js/src/index.ts"
       ],

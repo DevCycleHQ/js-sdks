@@ -11,6 +11,7 @@
     "react": "sdk/react",
     "shared-bucketing": "lib/shared/bucketing",
     "shared-bucketing-as": "lib/shared/bucketing-assembly-script",
+    "shared-bucketing-test-data": "lib/shared/bucketing-test-data",
     "shared-types": "lib/shared/types"
   }
 }

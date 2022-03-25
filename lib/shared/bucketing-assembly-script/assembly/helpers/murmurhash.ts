@@ -1,8 +1,7 @@
-import { Console } from 'as-wasi/assembly'
 
 export function murmurhashV3(key: string, seed: i32): i32 {
     const keyBuffer = Uint8Array.wrap(String.UTF8.encode(key))
-    Console.log(`murmurhashV3 keyBuffer: ${keyBuffer}`)
+    console.log(`murmurhashV3 keyBuffer: ${keyBuffer}`)
 
     let remainder: i32, bytes: i32, h1: i32, h1b: i32, c1: i32, c2: i32, k1: i32, i: i32;
 

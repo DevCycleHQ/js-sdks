@@ -7,7 +7,7 @@ import {
     generateBucketedConfig,
     doesUserPassRollout
 } from '../src/bucketing'
-import { config, barrenConfig } from './data/testData'
+import { config, barrenConfig } from '@devcycle/bucketing-test-data/src/data/testData'
 
 import moment from 'moment'
 import * as _ from 'lodash'
@@ -277,8 +277,6 @@ describe('Config Parsing and Generating', () => {
             },
             'knownVariableKeys': [
                 3126796075,
-                2547774734,
-                1879689550,
                 2621975932,
                 4138596111
             ],
