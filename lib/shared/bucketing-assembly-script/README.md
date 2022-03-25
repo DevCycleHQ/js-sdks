@@ -15,10 +15,10 @@ See the AssemblyScript Documentation for further details: https://www.assemblysc
 
 ### Building WebAssembly
 
-```nx build shared-bucketing-as```
+```yarn nx build shared-bucketing-as```
 
 See WebAssembly output in `/build` folder.
 
 ### Testing
 
-```nx test shared```
+```yarn nx test shared-bucketing-as```
