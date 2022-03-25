@@ -340,9 +340,11 @@ function checkValueExists(value: JSON.Value | null): bool {
     const stringValue = value.isString ? value as JSON.Str : null
     const floatValue = value.isFloat ? value as JSON.Float : null
     const intValue = value.isInteger ? value as JSON.Integer : null
+    const boolValue = value.isBool ? value as JSON.Bool : null
 
     // TODO: test these changes
     return value !== null
+        && !!(stringValue || floatValue || intValue || boolValue)
         && (!stringValue || stringValue.valueOf() !== '')
         && (!floatValue || !isNaN(floatValue.valueOf()))
         && (!intValue || !isNaN(intValue.valueOf()))
