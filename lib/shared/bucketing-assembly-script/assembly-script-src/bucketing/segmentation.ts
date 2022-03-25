@@ -12,28 +12,35 @@ import { getF64FromJSONValue } from '../helpers/jsonHelpers'
  * Evaluate an operator object based on its contained filters and the user data given
  * Returns true if the user's data allows them through the segmentation
  * @param operator - The set of filters to evaluate, and the boolean operator to follow (AND, OR, XOR)
- * @param data - The incoming user, device, and user agent data
+ * @param user - The incoming user, device, and user agent data
  */
-export function evaluateOperator(operator: TopLevelOperator, data: DVCPopulatedUser): bool {
+export function evaluateOperator(operator: TopLevelOperator, user: DVCPopulatedUser): bool {
     if (!operator.filters.length) return false
 
-    userFilterData = data
     if (operator.operator === 'or') {
-        const result = operator.filters.some((filter) => doesUserPassFilter(filter))
-        userFilterData = null
-        return result
+        // Replace Array.some() logic
+        for (let i = 0; i < operator.filters.length; i++) {
+            const filter = operator.filters[i]
+            if (doesUserPassFilter(filter, user)) {
+                return true
+            }
+        }
+        return false
     } else {
-        const result = operator.filters.every((filter) => doesUserPassFilter(filter))
-        userFilterData = null
-        return result
+        // Replace Array.every() logic
+        for (let i = 0; i < operator.filters.length; i++) {
+            const filter = operator.filters[i]
+            if (!doesUserPassFilter(filter, user)) {
+                return false
+            }
+        }
+        return true
     }
 }
 
-// Hack because we can't capture data in closures
-let userFilterData: DVCPopulatedUser | null
-function doesUserPassFilter(filter: AudienceFilterOrOperator): bool {
+function doesUserPassFilter(filter: AudienceFilterOrOperator, user: DVCPopulatedUser): bool {
     if (filter.type === 'all') return true
-    if (!filter.subType || !userFilterData) {
+    if (!filter.subType || !user) {
         throw new Error(`Missing filter subType`)
     }
     const subType = filter.subType as string
@@ -41,7 +48,7 @@ function doesUserPassFilter(filter: AudienceFilterOrOperator): bool {
         throw new Error(`Invalid filter subType: ${subType}`)
     }
 
-    return filterFunctionsBySubtype(subType, userFilterData as DVCPopulatedUser, filter)
+    return filterFunctionsBySubtype(subType, user, filter)
 }
 
 function filterFunctionsBySubtype(subType: string, user: DVCPopulatedUser, filter: AudienceFilterOrOperator): bool {
