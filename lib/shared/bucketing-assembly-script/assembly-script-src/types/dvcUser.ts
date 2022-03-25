@@ -3,7 +3,19 @@ import {
     getF64FromJSONOptional, getStringFromJSON, getStringFromJSONOptional
 } from "../helpers/jsonHelpers"
 
-export class DVCUser extends JSON.Obj {
+interface DVCUserInterface {
+    user_id: string
+    email: string | null
+    name: string | null
+    language: string | null
+    country: string | null
+    appVersion: string | null
+    appBuild: f64
+    customData: JSON.Obj | null
+    privateCustomData: JSON.Obj | null
+}
+
+export class DVCUser extends JSON.Obj implements DVCUserInterface {
     user_id: string
     email: string | null
     name: string | null
@@ -54,7 +66,7 @@ export class DVCUser extends JSON.Obj {
     }
 }
 
-export class DVCPopulatedUser extends JSON.Value {
+export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
     user_id: string
     email: string | null
     name: string | null
