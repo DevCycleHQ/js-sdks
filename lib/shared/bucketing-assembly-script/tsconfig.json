@@ -3,7 +3,7 @@
   "files": [],
   "include": [],
   "exclude": [
-    "assembly-script-src/**/*.ts"
+      "assembly/**/*.ts"
   ],
   "compilerOptions": {
       "allowJs": true

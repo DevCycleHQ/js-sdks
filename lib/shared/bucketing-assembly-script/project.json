@@ -1,6 +1,6 @@
 {
     "root": "lib/shared/bucketing-assembly-script",
-    "sourceRoot": "lib/shared/bucketing-assembly-script/assembly-script-src",
+    "sourceRoot": "lib/shared/bucketing-assembly-script/assembly",
     "projectType": "library",
     "targets": {
         "test": {
@@ -23,10 +23,10 @@
             "options": {
                 "commands": [
                     {
-                      "command": "asc assembly-script-src/index.ts --target debug --exportRuntime --initialMemory 100 --maximumMemory 10000 --bindings"
+                      "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 100 --maximumMemory 10000 --bindings esm"
                     },
                     {
-                      "command": "asc assembly-script-src/index.ts --target release --exportRuntime --initialMemory 100 --maximumMemory 10000 --bindings"
+                      "command": "asc assembly/index.ts --target release --exportRuntime --initialMemory 100 --maximumMemory 10000 --bindings esm"
                     }
                 ],
                 "cwd": "lib/shared/bucketing-assembly-script",

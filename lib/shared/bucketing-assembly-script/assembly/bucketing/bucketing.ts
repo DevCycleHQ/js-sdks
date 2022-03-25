@@ -1,4 +1,4 @@
-import { JSON } from 'assemblyscript-json'
+import { JSON } from 'assemblyscript-json/assembly'
 import { first, last } from '../helpers/lodashHelpers'
 import {
     ConfigBody, Target as PublicTarget, Feature as PublicFeature, BucketedUserConfig,

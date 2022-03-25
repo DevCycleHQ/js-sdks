@@ -1,4 +1,4 @@
-import { JSON } from "assemblyscript-json"
+import { JSON } from 'assemblyscript-json/assembly'
 import {
     getDateFromJSON,
     getJSONArrayFromJSON,
@@ -6,8 +6,8 @@ import {
     isValidString,
     jsonArrFromValueArray,
     jsonObjFromMap
-} from "../helpers/jsonHelpers"
-import { Target } from "./target"
+} from '../helpers/jsonHelpers'
+import { Target } from './target'
 
 export class FeatureConfiguration extends JSON.Value {
     _id: string

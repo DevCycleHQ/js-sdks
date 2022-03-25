@@ -4753,10 +4753,9 @@ assemblyscript-json@^1.1.0:
   resolved "https://registry.yarnpkg.com/assemblyscript-json/-/assemblyscript-json-1.1.0.tgz#49d38bc21f1ac36f2887528a35de6cf7d59c17be"
   integrity sha512-UbE8ts8csTWQgd5TnSPN7MRV9NveuHv1bVnKmDLoo/tzjqxkmsZb3lu59Uk8H7SGoqdkDSEE049alx/nHnSdFw==
 
-assemblyscript-regex@^1.6.4:
-  version "1.6.4"
-  resolved "https://registry.yarnpkg.com/assemblyscript-regex/-/assemblyscript-regex-1.6.4.tgz#b0755b470fc817fdb0957b9d7b5f473b6474e809"
-  integrity sha512-LiuyzuPMASyZLRgZrIktyLyZjxihEhHkzfRHv8FPDnLhBn8WefFe45jGF6Ug06/0rMMdNNRuQS3qXVLy9YyO6g==
+"assemblyscript-regex@https://github.com/DevCycleHQ/assemblyscript-regex.git#fix-null-type-errors":
+  version "0.1.0"
+  resolved "https://github.com/DevCycleHQ/assemblyscript-regex.git#ba92c8262ffef368bd8307fd70b3cf9967a529b4"
 
 assemblyscript@^0.20.1:
   version "0.20.1"

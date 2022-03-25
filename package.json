@@ -26,7 +26,7 @@
     "as-wasi": "^0.4.6",
     "assemblyscript": "^0.20.1",
     "assemblyscript-json": "^1.1.0",
-    "assemblyscript-regex": "^1.6.4",
+    "assemblyscript-regex": "https://github.com/DevCycleHQ/assemblyscript-regex.git#fix-null-type-errors",
     "async": "^3.2.1",
     "axios": "^0.24.0",
     "axios-retry": "^3.2.4",

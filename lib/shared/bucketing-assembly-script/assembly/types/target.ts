@@ -1,4 +1,4 @@
-import { JSON } from "assemblyscript-json"
+import { JSON } from 'assemblyscript-json/assembly'
 import {
     getDateFromJSON,
     getF64FromJSON, getF64FromJSONOptional,
