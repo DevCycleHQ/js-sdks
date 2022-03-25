@@ -1,4 +1,3 @@
-import 'wasi'
 import {
     BucketedUserConfig, ConfigBody, DVCUser, DVCPopulatedUser
 } from "./types"

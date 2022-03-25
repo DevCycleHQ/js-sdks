@@ -190,34 +190,34 @@ export const variations: PublicVariation[] = [
             }
         ]
     },
-    // {
-    //     _id: '615382338424cb11646d7660',
-    //     name: 'feature 2 never used variation, bool',
-    //     variables: [
-    //         {
-    //             _var: variables[3]._id,
-    //             value: true
-    //         },
-    //         {
-    //             _var: variables[4]._id,
-    //             value: false
-    //         }
-    //     ]
-    // },
-    // {
-    //     _id: '615382338424cb11646d7661',
-    //     name: 'feature 2 never used variation, number',
-    //     variables: [
-    //         {
-    //             _var: variables[3]._id,
-    //             value: 610
-    //         },
-    //         {
-    //             _var: variables[4]._id,
-    //             value: 1114
-    //         }
-    //     ]
-    // }
+    {
+        _id: '615382338424cb11646d7660',
+        name: 'feature 2 never used variation, bool',
+        variables: [
+            {
+                _var: variables[3]._id,
+                value: true
+            },
+            {
+                _var: variables[4]._id,
+                value: false
+            }
+        ]
+    },
+    {
+        _id: '615382338424cb11646d7661',
+        name: 'feature 2 never used variation, number',
+        variables: [
+            {
+                _var: variables[3]._id,
+                value: 610
+            },
+            {
+                _var: variables[4]._id,
+                value: 1114
+            }
+        ]
+    }
 ]
 
 export const variableHashes: ConfigBody['variableHashes'] = {

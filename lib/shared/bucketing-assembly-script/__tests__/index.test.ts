@@ -1,20 +1,15 @@
-import { wasmModule } from '../node-module/asModule'
-import { config } from '../../bucketing/__test__/data/testData'
-
-const {
-    testConfigBodyClass, testDVCUserClass, __newString, __getString
-} = wasmModule.exports
+import { testConfigBodyClass, testDVCUserClass } from '../build/bucketing-lib.debug'
+import testData from '../../bucketing-test-data/json-data/testData.json'
 
 describe('WASM test', () => {
     it('should test ConfigBody class JSON parsing', () => {
-        const configStr = JSON.stringify(config)
+        const configStr = JSON.stringify(testData.config)
         console.log('configStr: ' + configStr)
-        const resultAdr = testConfigBodyClass(__newString(configStr))
-        const result = __getString(resultAdr)
+        const result = testConfigBodyClass(configStr)
         console.log('ConfigBody result: ' + result)
 
         const resultJSON = JSON.parse(result)
-        const configJSON = JSON.parse(JSON.stringify(config))
+        const configJSON = JSON.parse(JSON.stringify(testData.config))
         expect(resultJSON).toEqual(configJSON)
     })
 
@@ -37,8 +32,7 @@ describe('WASM test', () => {
             }
         }
 
-        const resultAdr = testDVCUserClass(__newString(JSON.stringify(userObj)))
-        const result = __getString(resultAdr)
+        const result = testDVCUserClass(JSON.stringify(userObj))
         const resultJSON = JSON.parse(result)
         console.log('DVCUser result: ' + result)
 

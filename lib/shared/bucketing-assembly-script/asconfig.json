@@ -1,16 +1,16 @@
 {
   "targets": {
     "debug": {
-      "binaryFile": "build/bucketing-lib-debug.wasm",
-      "textFile": "build/bucketing-lib-debug.wat",
-      "tsdFile": "build/bucketing-lib-debug.d.ts",
+      "outFile": "build/bucketing-lib.debug.wasm",
+      "textFile": "build/bucketing-lib.debug.wat",
+      "tsdFile": "build/bucketing-lib.debug.d.ts",
       "sourceMap": true,
       "debug": true
     },
     "release": {
-      "binaryFile": "build/bucketing-lib-release.wasm",
-      "textFile": "build/bucketing-lib-release.wat",
-      "tsdFile": "build/bucketing-lib-release.d.ts",
+      "outFile": "build/bucketing-lib.release.wasm",
+      "textFile": "build/bucketing-lib.release.wat",
+      "tsdFile": "build/bucketing-lib.release.d.ts",
       "sourceMap": true,
       "optimizeLevel": 3,
       "shrinkLevel": 0,
