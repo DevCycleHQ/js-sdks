@@ -6,8 +6,7 @@ import {
     Target, Variation, Variable
 } from '../types'
 
-// TODO: implement murmurhash logic in AS
-// import murmurhash from 'murmurhash'
+import { murmurhashV3 } from '../helpers/murmurhash'
 import { evaluateOperator } from './segmentation'
 
 // Max value of an unsigned 32-bit integer, which is what murmurhash returns
@@ -23,7 +22,7 @@ export function generateBoundedHashes(user_id: string, target_id: string): Bound
     // The seed provided to murmurhash must be a number
     // So we first hash the target_id with a constant seed
 
-    const targetHash = 1 //murmurhash.v3(target_id, baseSeed)
+    const targetHash = murmurhashV3(target_id, baseSeed)
     const boundedHash: BoundedHash = {
         rolloutHash: generateBoundedHash(user_id + '_rollout', targetHash),
         bucketingHash: generateBoundedHash(user_id, targetHash)
@@ -32,7 +31,7 @@ export function generateBoundedHashes(user_id: string, target_id: string): Bound
 }
 
 export function generateBoundedHash(input: string, hashSeed: i32): i32 {
-    const hash = 1 //murmurhash.v3(input, hashSeed)
+    const hash = murmurhashV3(input, hashSeed)
     return hash / MAX_HASH_VALUE
 }
 

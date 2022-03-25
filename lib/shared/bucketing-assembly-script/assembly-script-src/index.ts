@@ -1,7 +1,9 @@
+import 'wasi'
 import {
     BucketedUserConfig, ConfigBody, DVCUser, DVCPopulatedUser
 } from "./types"
 import * as bucketing from './bucketing'
+import { murmurhashV3 } from './helpers/murmurhash'
 
 export function generateBucketedConfig(configStr: string, userStr: string): string  {
     const config = new ConfigBody(configStr)
@@ -25,4 +27,8 @@ export function testDVCUserClass(userStr: string): string {
 export function testBucketedUserConfigClass(userConfigStr: string): string {
     const userConfig = BucketedUserConfig.bucketedUserConfigFromJSONString(userConfigStr)
     return userConfig.stringify()
+}
+
+export function testMurmurhashV3(key: string, seed: i32): i32 {
+    return murmurhashV3(key, seed)
 }
