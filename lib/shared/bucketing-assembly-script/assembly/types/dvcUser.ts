@@ -1,7 +1,7 @@
-import { JSON } from "assemblyscript-json"
+import { JSON } from 'assemblyscript-json/assembly'
 import {
     getF64FromJSONOptional, getStringFromJSON, getStringFromJSONOptional
-} from "../helpers/jsonHelpers"
+} from '../helpers/jsonHelpers'
 
 interface DVCUserInterface {
     user_id: string

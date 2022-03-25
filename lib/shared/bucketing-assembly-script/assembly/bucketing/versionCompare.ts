@@ -1,4 +1,4 @@
-import { RegExp } from 'assemblyscript-regex'
+import { RegExp } from 'assemblyscript-regex/assembly'
 
 export class OptionsType {
     public lexicographical: bool

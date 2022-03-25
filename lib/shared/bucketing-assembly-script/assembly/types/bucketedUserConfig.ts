@@ -1,4 +1,4 @@
-import { JSON } from "assemblyscript-json"
+import { JSON } from 'assemblyscript-json/assembly'
 import {
     getJSONArrayFromJSON, getJSONObjFromJSON, getJSONValueFromJSON, getStringFromJSON, getStringFromJSONOptional
 } from '../helpers/jsonHelpers'

@@ -1,12 +1,12 @@
-import { JSON } from "assemblyscript-json"
+import { JSON } from 'assemblyscript-json/assembly'
 import {
     getJSONArrayFromJSON,
     getJSONObjFromJSON, getJSONValueFromJSON,
     getStringFromJSON,
     isValidString,
     jsonArrFromValueArray
-} from "../helpers/jsonHelpers"
-import { FeatureConfiguration } from "./featureConfiguration"
+} from '../helpers/jsonHelpers'
+import { FeatureConfiguration } from './featureConfiguration'
 
 const validTypes = ['release', 'experiment', 'permission', 'ops']
 

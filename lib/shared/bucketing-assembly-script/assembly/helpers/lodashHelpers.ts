@@ -1,4 +1,4 @@
-import { RegExp } from 'assemblyscript-regex'
+import { RegExp } from 'assemblyscript-regex/assembly'
 
 export function find<T>(array: Array<T> | null, callbackfn: (value: T, index: i32, array: Array<T>) => bool): T | null {
     if (!array) return null

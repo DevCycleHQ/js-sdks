@@ -1,4 +1,4 @@
-import { Console } from 'as-wasi'
+import { Console } from 'as-wasi/assembly'
 
 export function murmurhashV3(key: string, seed: i32): i32 {
     const keyBuffer = Uint8Array.wrap(String.UTF8.encode(key))

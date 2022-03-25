@@ -9,6 +9,6 @@
   "exclude": [
       "**/*.spec.ts",
       "**/*.test.ts",
-      "assembly-script-src/**/*.ts"
+      "assembly/**/*.ts"
   ]
 }

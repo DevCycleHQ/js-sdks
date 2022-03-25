@@ -277,6 +277,8 @@ describe('Config Parsing and Generating', () => {
             },
             'knownVariableKeys': [
                 3126796075,
+                2547774734,
+                1879689550,
                 2621975932,
                 4138596111
             ],
