@@ -1,7 +1,10 @@
 DESCRIBE_OUTPUT=$(git describe --always --long --dirty --first-parent)
 
 # Get the last tagged sha from the output of "git describe"
-LAST_TAGGED_SHA=$(echo $DESCRIBE_OUTPUT | sed -En 's/^.*-g([0-9a-f]+)(-dirty)?$/\1/p')
+LAST_TAG=$(echo $DESCRIBE_OUTPUT | sed -En 's/^(@[^@]*@[^-]*)-.*$/\1/p')
+
+echo "Last Tag $LAST_TAG"
+LAST_TAGGED_SHA=$(git rev-list -n 1 $LAST_TAG)
 
 if [ -z "$LAST_TAGGED_SHA" ]; then
   echo "Unable to find last tagged sha"
