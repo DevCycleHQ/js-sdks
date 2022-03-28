@@ -47,4 +47,4 @@ done
 # join packages with comma
 PACKAGES=$(IFS=','; echo "${PACKAGES[*]}")
 
-yarn lerna version --force-publish=$PACKAGES --conventional-commits "$@"
+yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish" "$@"
