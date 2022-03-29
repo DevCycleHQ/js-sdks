@@ -33,6 +33,7 @@
     "class-transformer": "0.5.1",
     "class-validator": "^0.13.1",
     "core-js": "^3.6.5",
+    "iso-639-1": "^2.1.13",
     "jira-prepare-commit-msg": "^1.6.2",
     "lint-staged": "^11.2.3",
     "lodash": "^4.17.21",
