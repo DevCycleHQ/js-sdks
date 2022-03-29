@@ -10,6 +10,7 @@ import {
 import { Transform, Type } from 'class-transformer'
 import 'reflect-metadata'
 import { DVCJSON, IsDVCJSONObject } from '../../validators/dvcJSON'
+import { IsNotBlank } from '../../validators/isNotBlank'
 
 export const SDKTypeValues = ['client', 'server', 'mobile', 'api']
 export type SDKTypes = typeof SDKTypeValues[number]
@@ -34,10 +35,8 @@ export class DVCAPIUser {
     @Transform(boolTransform)
         isAnonymous?: boolean
 
-    /**
-     * Must be defined if `isAnonymous = false`
-     */
     @IsString()
+    @IsNotBlank()
     @IsNotEmpty()
         user_id: string
 
@@ -173,11 +172,9 @@ export class DVCClientAPIUser implements DVCAPIUser {
     @IsBoolean()
     @Transform(boolTransform)
         isAnonymous: boolean
-
-    /**
-     * Must be defined if `isAnonymous = false`
-     */
+    
     @IsString()
+    @IsNotBlank()
     @IsNotEmpty()
         user_id: string
 
