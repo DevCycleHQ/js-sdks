@@ -199,6 +199,7 @@ export class DVCClientAPIUser implements DVCAPIUser {
     /**
      * ISO 639-1 two-letter codes
      */
+    @IsISO6391()
     @IsString()
     @IsOptional()
         language?: string
