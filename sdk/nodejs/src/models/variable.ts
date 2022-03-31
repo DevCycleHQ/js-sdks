@@ -19,7 +19,7 @@ export class DVCVariable implements DVCVariableInterface {
         checkParamDefined('key', key)
         checkParamDefined('defaultValue', defaultValue)
         checkParamType('key', key, typeEnum.string)
-        this.key = key
+        this.key = key.toLowerCase()
         this.isDefaulted = (value === undefined || value === null)
         this.value = (value === undefined || value === null)
             ? defaultValue
