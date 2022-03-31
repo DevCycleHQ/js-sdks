@@ -37,4 +37,12 @@ describe('DVCVariable Unit Tests', () => {
             isDefaulted: true
         }))
     })
+
+    it('should lowercase key name', () => {
+        const variable = new DVCVariable({
+            key: 'camelCaseKey',
+            defaultValue: false
+        })
+        expect(variable.key).toBe('camelcasekey')
+    })
 })
