@@ -11,7 +11,7 @@ import { Transform, Type } from 'class-transformer'
 import 'reflect-metadata'
 import { DVCJSON, IsDVCJSONObject } from '../../validators/dvcJSON'
 import { IsNotBlank } from '../../validators/isNotBlank'
-import { IsISO6391 } from '../../validators/iso-639-1'
+import { IsISO6391 } from '../../validators/isIso6391'
 
 export const SDKTypeValues = ['client', 'server', 'mobile', 'api']
 export type SDKTypes = typeof SDKTypeValues[number]
