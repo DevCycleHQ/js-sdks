@@ -3,11 +3,12 @@ import { first, last } from '../helpers/lodashHelpers'
 import {
     ConfigBody, Target as PublicTarget, Feature as PublicFeature, BucketedUserConfig,
     Rollout as PublicRollout, DVCPopulatedUser, SDKVariable, SDKFeature, RolloutStage,
-    Target, Variation, Variable
+    Target, Variation, Variable, TargetDistribution
 } from '../types'
 
 import { murmurhashV3 } from '../helpers/murmurhash'
 import { evaluateOperator } from './segmentation'
+import { SortingArray, sortObjectsByString } from '../helpers/arrayHelpers'
 
 // Max value of an unsigned 32-bit integer, which is what murmurhash returns
 const MAX_HASH_VALUE: i32 = 4294967295
@@ -39,9 +40,14 @@ export function generateBoundedHash(input: string, hashSeed: i32): i32 {
  * Given the feature and a hash of the user_id, bucket the user according to the variation distribution percentages
  */
 export function decideTargetVariation(target: PublicTarget, boundedHash: i32): string {
-    //TODO: figure out sorting
-    const variations = target.distribution
-        //.sort((a, b) => a._variation > b._variation)
+    let sortingArray: SortingArray<TargetDistribution> = []
+    for (let i = 0; i < target.distribution.length; i++) {
+        sortingArray.push({
+            entry: target.distribution[i],
+            value: target.distribution[i]._variation
+        })
+    }
+    const variations = sortObjectsByString<TargetDistribution>(sortingArray)
 
     let distributionIndex: f64 = 0
     const previousDistributionIndex: f64 = 0
@@ -101,7 +107,7 @@ export function getCurrentRolloutPercentage(rollout: PublicRollout, currentDate:
     }
 
     const currentDatePercentage = (currentDateTime - currentStage.date.getTime()) /
-            (nextStage.date.getTime() - currentStage.date.getTime())
+        (nextStage.date.getTime() - currentStage.date.getTime())
 
     if (currentDatePercentage === 0) {
         return 0

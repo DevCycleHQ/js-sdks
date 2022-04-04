@@ -3,6 +3,7 @@ import {
 } from "./types"
 import * as bucketing from './bucketing'
 export { murmurhashV3, murmurhashV3_js } from './helpers/murmurhash'
+import { sortObjectsByString, SortingArray} from './helpers/arrayHelpers'
 
 export function generateBucketedConfig(configStr: string, userStr: string): string  {
     const config = new ConfigBody(configStr)
@@ -26,4 +27,11 @@ export function testDVCUserClass(userStr: string): string {
 export function testBucketedUserConfigClass(userConfigStr: string): string {
     const userConfig = BucketedUserConfig.bucketedUserConfigFromJSONString(userConfigStr)
     return userConfig.stringify()
+}
+
+class TestData {
+    key: string
+}
+export function testSortObjectsByString(arr: SortingArray<TestData>): TestData[]{
+    return sortObjectsByString<TestData>(arr)
 }
