@@ -2,7 +2,7 @@ import {
     BucketedUserConfig, ConfigBody, DVCUser, DVCPopulatedUser
 } from "./types"
 import * as bucketing from './bucketing'
-import { murmurhashV3 } from './helpers/murmurhash'
+import { murmurhashV3, testInternal } from './helpers/murmurhash'
 
 export function generateBucketedConfig(configStr: string, userStr: string): string  {
     const config = new ConfigBody(configStr)
@@ -28,6 +28,10 @@ export function testBucketedUserConfigClass(userConfigStr: string): string {
     return userConfig.stringify()
 }
 
-export function testMurmurhashV3(key: string, seed: i32): i32 {
+export function testMM3Internal(key: string, seed: u32): string {
+    return testInternal(key, seed)
+}
+
+export function testMurmurhashV3(key: string, seed: u32): u32 {
     return murmurhashV3(key, seed)
 }
