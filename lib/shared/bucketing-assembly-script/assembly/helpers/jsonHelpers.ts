@@ -62,16 +62,13 @@ export function getDateFromJSONOptional(jsonObj: JSON.Obj, key: string): Date | 
     return Date.fromString(dateStr as string)
 }
 
-export function getF64FromJSON(jsonObj: JSON.Obj, key: string): f64 {
-    const num = jsonObj.get(key)
-    if (num && num.isFloat) {
-        return (num as JSON.Float).valueOf()
-    } else if (num && num.isInteger) {
-        const int = num as JSON.Integer
-        return f64(int.valueOf())
-    } else {
+export function getF64FromJSONObj(jsonObj: JSON.Obj, key: string): f64 {
+    const value = jsonObj.get(key)
+    const num = value ? getF64FromJSONValue(value) : NaN
+    if (isNaN(num)) {
         throw new Error(`JSON Number missing for key: "${key}", obj: ${jsonObj.stringify()}`)
     }
+    return num
 }
 
 export function getF64FromJSONOptional(jsonObj: JSON.Obj, key: string, defaultValue: f64): f64 {

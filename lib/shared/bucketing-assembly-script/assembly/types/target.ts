@@ -1,7 +1,7 @@
 import { JSON } from 'assemblyscript-json/assembly'
 import {
     getDateFromJSON,
-    getF64FromJSON, getF64FromJSONOptional,
+    getF64FromJSONObj, getF64FromJSONOptional,
     getJSONArrayFromJSON,
     getJSONObjFromJSON,
     getStringFromJSON,
@@ -218,7 +218,7 @@ export class RolloutStage extends JSON.Value {
         super()
         this.type = isValidString(stage, 'type', validRolloutStages)
         this.date = getDateFromJSON(stage, 'date')
-        this.percentage = getF64FromJSON(stage, 'percentage')
+        this.percentage = getF64FromJSONObj(stage, 'percentage')
     }
 
     stringify(): string {
@@ -237,7 +237,7 @@ export class TargetDistribution extends JSON.Value {
     constructor(distribution: JSON.Obj) {
         super()
         this._variation = getStringFromJSON(distribution, '_variation')
-        this.percentage = getF64FromJSON(distribution, 'percentage')
+        this.percentage = getF64FromJSONObj(distribution, 'percentage')
     }
 
     stringify(): string {
