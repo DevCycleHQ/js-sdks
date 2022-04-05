@@ -7,8 +7,8 @@ import {
 } from '../types'
 
 import { murmurhashV3 } from '../helpers/murmurhash'
-import { evaluateOperator } from './segmentation'
 import { SortingArray, sortObjectsByString } from '../helpers/arrayHelpers'
+import { _evaluateOperator } from './segmentation'
 
 // Max value of an unsigned 32-bit integer, which is what murmurhash returns
 const MAX_HASH_VALUE: i32 = 4294967295
@@ -19,7 +19,15 @@ class BoundedHash {
     public bucketingHash: i32
 }
 
-export function generateBoundedHashes(user_id: string, target_id: string): BoundedHash {
+export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
+    const boundedHash = _generateBoundedHashes(user_id, target_id)
+    const json = new JSON.Obj()
+    json.set('rolloutHash', boundedHash.rolloutHash)
+    json.set('bucketingHash', boundedHash.bucketingHash)
+    return json.stringify()
+}
+
+export function _generateBoundedHashes(user_id: string, target_id: string): BoundedHash {
     // The seed provided to murmurhash must be a number
     // So we first hash the target_id with a constant seed
 
@@ -36,9 +44,17 @@ export function generateBoundedHash(input: string, hashSeed: i32): i32 {
     return hash / MAX_HASH_VALUE
 }
 
+export function decideTargetVariationFromJSON(targetStr: string, boundedHash: i32): string {
+    const targetJSON = JSON.parse(targetStr)
+    if (!targetJSON.isObj) throw new Error(`decideTargetVariationFromJSON targetStr param not a JSON Object`)
+    const target = new PublicTarget(targetJSON as JSON.Obj)
+    return _decideTargetVariation(target, boundedHash)
+}
+
 /**
  * Given the feature and a hash of the user_id, bucket the user according to the variation distribution percentages
  */
+<<<<<<< HEAD
 export function decideTargetVariation(target: PublicTarget, boundedHash: i32): string {
     let sortingArray: SortingArray<TargetDistribution> = []
     for (let i = 0; i < target.distribution.length; i++) {
@@ -48,6 +64,12 @@ export function decideTargetVariation(target: PublicTarget, boundedHash: i32): s
         })
     }
     const variations = sortObjectsByString<TargetDistribution>(sortingArray)
+=======
+function _decideTargetVariation(target: PublicTarget, boundedHash: i32): string {
+    //TODO: figure out sorting
+    const variations = target.distribution
+        //.sort((a, b) => a._variation > b._variation)
+>>>>>>> setting up buckeing / segmentation tests
 
     let distributionIndex: f64 = 0
     const previousDistributionIndex: f64 = 0
@@ -119,7 +141,14 @@ export function getCurrentRolloutPercentage(rollout: PublicRollout, currentDate:
     )
 }
 
-export function doesUserPassRollout(rollout: PublicRollout | null, boundedHash: i32): bool {
+export function doesUserPassRolloutFromJSON(rolloutStr: string | null, boundedHash: i32): bool {
+    const rolloutJSON = rolloutStr ? JSON.parse(rolloutStr) : null
+    if (rolloutJSON && !rolloutJSON.isObj) throw new Error(`doesUserPassRolloutFromJSON rolloutStr param not a JSON Object`)
+    const rollout = rolloutJSON ? new PublicRollout(rolloutJSON as JSON.Obj) : null
+    return _doesUserPassRollout(rollout, boundedHash)
+}
+
+function _doesUserPassRollout(rollout: PublicRollout | null, boundedHash: i32): bool {
     if (!rollout) return true
 
     const rolloutPercentage = getCurrentRolloutPercentage(rollout, new Date(Date.now()))
@@ -127,7 +156,7 @@ export function doesUserPassRollout(rollout: PublicRollout | null, boundedHash: 
 }
 
 export function bucketForSegmentedFeature(boundedHash: i32, target: PublicTarget): string {
-    return decideTargetVariation(target, boundedHash)
+    return _decideTargetVariation(target, boundedHash)
 }
 
 class SegmentedFeatureData {
@@ -148,7 +177,7 @@ export function getSegmentedFeatureDataFromConfig(
         let segmentedFeatureTarget: Target | null = null
         for (let i = 0; i < feature.configuration.targets.length; i++) {
             const target = feature.configuration.targets[i]
-            if (evaluateOperator(target._audience.filters, user)) {
+            if (_evaluateOperator(target._audience.filters, user)) {
                 segmentedFeatureTarget = target
                 break
             }
@@ -182,7 +211,15 @@ export function generateKnownVariableKeys(
     return knownVariableKeys
 }
 
-export function generateBucketedConfig(
+export function generateBucketedConfigFromJSON(configStr: string, userStr: string): string  {
+    const config = new ConfigBody(configStr)
+    const user = DVCPopulatedUser.populatedUserFromString(userStr)
+
+    const bucketedConfig = _generateBucketedConfig(config, user)
+    return bucketedConfig.stringify()
+}
+
+function _generateBucketedConfig(
     config: ConfigBody,
     user: DVCPopulatedUser
 ): BucketedUserConfig {
@@ -196,10 +233,10 @@ export function generateBucketedConfig(
         const feature = segmentedFeaturesData.feature
         const target = segmentedFeaturesData.target
 
-        const boundedHashData = generateBoundedHashes(user.user_id, target._id)
+        const boundedHashData = _generateBoundedHashes(user.user_id, target._id)
         const rolloutHash = boundedHashData.rolloutHash
         const bucketingHash = boundedHashData.bucketingHash
-        if (target.rollout && !doesUserPassRollout(target.rollout, rolloutHash)) {
+        if (target.rollout && !_doesUserPassRollout(target.rollout, rolloutHash)) {
             continue
         }
 
