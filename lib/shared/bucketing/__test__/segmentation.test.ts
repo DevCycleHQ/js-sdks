@@ -506,7 +506,7 @@ describe('SegmentationManager Unit Test', () => {
 
             const operator = {
                 filters,
-                operator: 'AND'
+                operator: 'and'
             } as unknown as TopLevelOperator
 
             assert.strictEqual(true, segmentation.evaluateOperator({ data: { country: 'Canada' }, operator }))
@@ -520,7 +520,7 @@ describe('SegmentationManager Unit Test', () => {
 
             const operator = {
                 filters,
-                operator: 'AND'
+                operator: 'and'
             } as unknown as TopLevelOperator
 
             assert.strictEqual(false, segmentation.evaluateOperator({ data: { country: 'Canada' }, operator }))
@@ -1210,7 +1210,7 @@ describe('SegmentationManager Unit Test', () => {
         it('should return true if all filters are equal', () => {
             const operatorFilter = {
                 filters: [filterStr, filterNum, filterBool],
-                operator: 'AND'
+                operator: 'and'
             } as unknown as TopLevelOperator
             assert.strictEqual(true,
                 segmentation.evaluateOperator({
@@ -1222,7 +1222,7 @@ describe('SegmentationManager Unit Test', () => {
         it('should return false if one custom data key is missing', () => {
             const operatorFilter = {
                 filters: [filterStr, filterNum, filterBool],
-                operator: 'AND'
+                operator: 'and'
             } as unknown as TopLevelOperator
             assert.strictEqual(false,
                 segmentation.evaluateOperator({
@@ -1237,7 +1237,7 @@ describe('SegmentationManager Unit Test', () => {
             filter.comparator = '!=' as FilterComparator
             const operatorFilter = {
                 filters: [filterStr, filter, filterBool],
-                operator: 'AND'
+                operator: 'and'
             } as unknown as TopLevelOperator
             assert.strictEqual(true,
                 segmentation.evaluateOperator({
@@ -1267,7 +1267,7 @@ describe('SegmentationManager Unit Test', () => {
             filter.comparator = '!=' as FilterComparator
             const operatorFilter = {
                 filters: [filterStr, filter, filterBool],
-                operator: 'AND'
+                operator: 'and'
             } as unknown as TopLevelOperator
             assert.strictEqual(false,
                 segmentation.evaluateOperator({
@@ -1282,7 +1282,7 @@ describe('SegmentationManager Unit Test', () => {
             filter.comparator = '!exist' as FilterComparator
             const operatorFilter = {
                 filters: [filterStr, filter, filterBool],
-                operator: 'AND'
+                operator: 'and'
             } as unknown as TopLevelOperator
             assert.strictEqual(false,
                 segmentation.evaluateOperator({
@@ -1497,7 +1497,7 @@ describe('SegmentationManager Unit Test', () => {
                         'subType': 'platform',
                         'type': 'user'
                     }],
-                    'operator': 'AND'
+                    'operator': 'and'
                 }
             },
             {
@@ -1512,7 +1512,7 @@ describe('SegmentationManager Unit Test', () => {
                         'subType': 'platform',
                         'type': 'user'
                     }],
-                    'operator': 'AND'
+                    'operator': 'and'
                 }
             },
             {
@@ -1526,7 +1526,7 @@ describe('SegmentationManager Unit Test', () => {
                         'subType': 'platform',
                         'type': 'user'
                     }],
-                    'operator': 'AND'
+                    'operator': 'and'
                 }
             },
             {
@@ -1540,7 +1540,7 @@ describe('SegmentationManager Unit Test', () => {
                         'subType': 'platform',
                         'type': 'user'
                     }],
-                    'operator': 'AND'
+                    'operator': 'and'
                 }
             },
             {
@@ -1554,7 +1554,7 @@ describe('SegmentationManager Unit Test', () => {
                         'subType': 'platform',
                         'type': 'user'
                     }],
-                    'operator': 'AND'
+                    'operator': 'and'
                 }
             }] as unknown as Audience[]
         it('should filter all Android TV audiences properly if it is included in data', () => {

@@ -1,57 +1,26 @@
 import {
-    BucketedUserConfig, ConfigBody, DVCUser, DVCPopulatedUser
-} from "./types"
-export { murmurhashV3, murmurhashV3_js } from './helpers/murmurhash'
-import { sortObjectsByString, SortingArray} from './helpers/arrayHelpers'
-
-import {
-    generateBoundedHashesFromJSON,
-    decideTargetVariationFromJSON,
-    generateBucketedConfigFromJSON,
-    doesUserPassRolloutFromJSON,
-    evaluateOperatorFromJSON,
-    checkStringsFilterFromJSON,
-    checkBooleanFilterFromJSON,
-    checkNumbersFilterFromJSON,
-    checkNumberFilterFromJSON,
-    checkVersionFiltersFromJSON,
-    checkVersionFilter,
-    checkCustomDataFromJSON
+    _generateBoundedHashes, _generateBucketedConfig,
 } from './bucketing'
 
-export function testConfigBodyClass(configStr: string): string {
+import { JSON } from 'assemblyscript-json/assembly'
+import { ConfigBody, DVCPopulatedUser } from './types'
+
+export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
+    const boundedHash = _generateBoundedHashes(user_id, target_id)
+    const json = new JSON.Obj()
+    json.set('rolloutHash', boundedHash.rolloutHash)
+    json.set('bucketingHash', boundedHash.bucketingHash)
+    return json.stringify()
+}
+
+export function generateBucketedConfigFromJSON(configStr: string, userStr: string): string  {
     const config = new ConfigBody(configStr)
-    return config.stringify()
+    const user = DVCPopulatedUser.populatedUserFromString(userStr)
+
+    const bucketedConfig = _generateBucketedConfig(config, user)
+    return bucketedConfig.stringify()
 }
 
-export function testDVCUserClass(userStr: string): string {
-    const user = new DVCUser(userStr)
-    const populatedUser = new DVCPopulatedUser(user)
-    return populatedUser.stringify()
-}
+export * from './test'
 
-export function testBucketedUserConfigClass(userConfigStr: string): string {
-    const userConfig = BucketedUserConfig.bucketedUserConfigFromJSONString(userConfigStr)
-    return userConfig.stringify()
-}
-
-class TestData {
-    key: string
-}
-export function testSortObjectsByString(arr: SortingArray<TestData>): TestData[] {
-    return sortObjectsByString<TestData>(arr)
-}
-export {
-    generateBoundedHashesFromJSON,
-    decideTargetVariationFromJSON,
-    generateBucketedConfigFromJSON,
-    doesUserPassRolloutFromJSON,
-    evaluateOperatorFromJSON,
-    checkStringsFilterFromJSON,
-    checkBooleanFilterFromJSON,
-    checkNumbersFilterFromJSON,
-    checkNumberFilterFromJSON,
-    checkVersionFiltersFromJSON,
-    checkVersionFilter,
-    checkCustomDataFromJSON
-}
+export { murmurhashV3, murmurhashV3_js } from './helpers/murmurhash'

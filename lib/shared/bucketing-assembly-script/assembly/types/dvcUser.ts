@@ -26,6 +26,12 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
     customData: JSON.Obj | null
     privateCustomData: JSON.Obj | null
 
+    // TODO remove this and update tests when we provide a method to initialize these values
+    platform: string | null
+    platformVersion: string | null
+    deviceModel: string | null
+
+
     constructor(userStr: string) {
         super()
         const userJSON = JSON.parse(userStr)
@@ -38,6 +44,10 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
         this.language = getStringFromJSONOptional(user, 'language')
         this.country = getStringFromJSONOptional(user, 'country')
         this.appVersion = getStringFromJSONOptional(user, 'appVersion')
+        this.platform = getStringFromJSONOptional(user, 'platform')
+        this.platformVersion = getStringFromJSONOptional(user, 'platformVersion')
+        this.deviceModel = getStringFromJSONOptional(user, 'deviceModel')
+
 
         // Need to set a default "null" value, as numbers can't be null in AS
         this.appBuild = getF64FromJSONOptional(user, 'appBuild', -1)
@@ -82,6 +92,7 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
     appBuild: f64
     customData: JSON.Obj | null
     privateCustomData: JSON.Obj | null
+    private combinedCustomData: JSON.Obj
     createdDate: Date
     lastSeenDate: Date
     platform: string
@@ -102,19 +113,44 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         this.customData = user.customData
         this.privateCustomData = user.privateCustomData
 
+        this.combinedCustomData = new JSON.Obj()
+
+        const customData = this.customData
+        if (customData) {
+            for (let i = 0; i < customData.keys.length; i++) {
+                const key = customData.keys[i]
+                this.combinedCustomData.set(key, customData.get(key))
+            }
+        }
+
+        const privateCustomData = this.privateCustomData
+        if (privateCustomData) {
+            for (let i = 0; i < privateCustomData.keys.length; i++) {
+                const key = privateCustomData.keys[i]
+                this.combinedCustomData.set(key, privateCustomData.get(key))
+            }
+        }
+
         this.createdDate = new Date(Date.now())
         this.lastSeenDate = new Date(Date.now())
 
         // TODO: set these from init function
-        this.platform = 'NodeJS'
-        this.platformVersion = ''
-        this.deviceModel = ''
+        const userPlatform = user.platform
+        const userPlatformVersion = user.platformVersion
+        const userDeviceModel = user.deviceModel
+        this.platform = userPlatform !== null ? userPlatform : 'NodeJS'
+        this.platformVersion = userPlatformVersion !== null ? userPlatformVersion : ''
+        this.deviceModel = userDeviceModel !== null ? userDeviceModel : ''
         this.sdkType = 'server'
         this.sdkVersion = '1.0.0'
     }
 
     static populatedUserFromString(userStr: string): DVCPopulatedUser {
         return new DVCPopulatedUser(new DVCUser(userStr))
+    }
+
+    getCombinedCustomData(): JSON.Obj {
+        return this.combinedCustomData
     }
 
     stringify(): string {

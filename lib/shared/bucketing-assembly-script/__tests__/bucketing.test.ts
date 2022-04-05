@@ -1,24 +1,15 @@
 import {
-    Audience,
-    BucketedUserConfig,
-    ConfigBody,
-    DVCPopulatedUser as DVCAPIUser,
-    // FeatureType,
-    Rollout as PublicRollout,
-    Target as PublicTarget,
-    Rollout
-} from '../assembly/types'
-import {
     generateBoundedHashesFromJSON,
     decideTargetVariationFromJSON,
     generateBucketedConfigFromJSON,
     doesUserPassRolloutFromJSON
 } from '../build/bucketing-lib.debug'
-import { config, barrenConfig } from '@devcycle/bucketing-test-data/src/data/testData'
+import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
+const { config, barrenConfig } = testData
 
 import moment from 'moment'
-import * as _ from 'lodash'
 import * as uuid from 'uuid'
+import { BucketedUserConfig } from '../assembly/types'
 
 type BoundedHash = { rolloutHash: number, bucketingHash: number }
 
@@ -29,14 +20,14 @@ const generateBoundedHashes = (user_id: string, target_id: string): BoundedHash 
 
 const decideTargetVariation = (
     { target, boundedHash }:
-    { target: PublicTarget, boundedHash: number}
+    { target: unknown, boundedHash: number}
 ): string => {
     return decideTargetVariationFromJSON(JSON.stringify(target), boundedHash)
 }
 
 const generateBucketedConfig = (
     { config, user }:
-    { config: ConfigBody, user: DVCAPIUser }
+    { config: unknown, user: unknown }
 ): BucketedUserConfig => {
     const bucketedConfig = generateBucketedConfigFromJSON(JSON.stringify(config), JSON.stringify(user))
     return JSON.parse(bucketedConfig) as BucketedUserConfig
@@ -44,16 +35,24 @@ const generateBucketedConfig = (
 
 const doesUserPassRollout = (
     { rollout, boundedHash }:
-    { rollout?: PublicRollout, boundedHash: number }
+    { rollout?: unknown, boundedHash: number }
 ): boolean => {
     return doesUserPassRolloutFromJSON(rollout ? JSON.stringify(rollout) : null, boundedHash)
 }
 
 describe('User Hashing and Bucketing', () => {
+
     it('generates buckets approximately in the same distribution as the variation distributions', () => {
-        const buckets: string[] = []
+        const buckets = {
+            var1: 0,
+            var2: 0,
+            var3: 0,
+            var4: 0,
+            total: 0
+        }
+
         const testTarget = {
-            _audience: { _id: 'id', filters: [] } as unknown as Audience,
+            _audience: { _id: 'id', filters: {filters: [], operator: 'and'}},
             _id: 'target',
             distribution: [
                 { _variation: 'var1', percentage: 0.25 },
@@ -62,25 +61,24 @@ describe('User Hashing and Bucketing', () => {
                 { _variation: 'var3', percentage: 0.1 }
             ]
         }
-        _.times(30000, () => {
+
+        for (let i = 0; i < 30000; i++) {
             const user_id = uuid.v4()
             const { bucketingHash } = generateBoundedHashes(user_id, testTarget._id)
-            buckets.push(decideTargetVariation({ target: testTarget, boundedHash: bucketingHash }))
-        })
 
-        const var1 = _.filter(buckets, (bucket) => bucket === 'var1')
-        const var2 = _.filter(buckets, (bucket) => bucket === 'var2')
-        const var3 = _.filter(buckets, (bucket) => bucket === 'var3')
-        const var4 = _.filter(buckets, (bucket) => bucket === 'var4')
+            const variation = decideTargetVariation({ target: testTarget, boundedHash: bucketingHash }) as keyof typeof buckets
+            buckets[variation]++
+            buckets.total++
+        }
 
-        expect(var1.length / buckets.length).toBeGreaterThan(0.24)
-        expect(var1.length / buckets.length).toBeLessThan(0.26)
-        expect(var2.length / buckets.length).toBeGreaterThan(0.44)
-        expect(var2.length / buckets.length).toBeLessThan(0.46)
-        expect(var4.length / buckets.length).toBeGreaterThan(0.19)
-        expect(var4.length / buckets.length).toBeLessThan(0.21)
-        expect(var3.length / buckets.length).toBeGreaterThan(0.09)
-        expect(var3.length / buckets.length).toBeLessThan(0.11)
+        expect(buckets.var1 / buckets.total).toBeGreaterThan(0.24)
+        expect(buckets.var1 / buckets.total).toBeLessThan(0.26)
+        expect(buckets.var2 / buckets.total).toBeGreaterThan(0.44)
+        expect(buckets.var2 / buckets.total).toBeLessThan(0.46)
+        expect(buckets.var4 / buckets.total).toBeGreaterThan(0.19)
+        expect(buckets.var4 / buckets.total).toBeLessThan(0.21)
+        expect(buckets.var3 / buckets.total).toBeGreaterThan(0.09)
+        expect(buckets.var3 / buckets.total).toBeLessThan(0.11)
     })
 
     it('that bucketing hash yields the same hash for user_id', () => {
@@ -153,7 +151,7 @@ describe('Config Parsing and Generating', () => {
                     'value': 'YEEEEOWZA'
                 }
             }
-        } as unknown as ConfigBody
+        }
         const c = generateBucketedConfig({ config, user })
         expect(c).toEqual(expected)
     })
@@ -402,7 +400,7 @@ describe('Config Parsing and Generating', () => {
 describe('Rollout Logic', () => {
     describe('gradual', () => {
         it('it should evaluate correctly given various hashes', () => {
-            const rollout: Rollout = {
+            const rollout = {
                 startDate: moment().subtract(1, 'days').toDate(),
                 startPercentage: 0,
                 type: 'gradual',
@@ -424,7 +422,7 @@ describe('Rollout Logic', () => {
         })
 
         it('should not pass rollout for startDates in the future', () => {
-            const rollout: Rollout = {
+            const rollout = {
                 startDate: moment().add(1, 'days').toDate(),
                 startPercentage: 0,
                 type: 'gradual',
@@ -441,7 +439,7 @@ describe('Rollout Logic', () => {
             expect(doesUserPassRollout({ rollout, boundedHash: 1 })).toBeFalsy()
         })
         it('should pass rollout for endDates in the past', () => {
-            const rollout: Rollout = {
+            const rollout = {
                 startDate: moment().subtract(2, 'days').toDate(),
                 startPercentage: 0,
                 type: 'gradual',
@@ -459,7 +457,7 @@ describe('Rollout Logic', () => {
         })
 
         it('returns start value when end date not set', () => {
-            const rollout: Rollout = {
+            const rollout = {
                 startDate: moment().subtract(30, 'seconds').toDate(),
                 startPercentage: 1,
                 type: 'gradual'
@@ -472,7 +470,7 @@ describe('Rollout Logic', () => {
         })
 
         it('returns 0 when end date not set and start in future', () => {
-            const rollout: Rollout = {
+            const rollout = {
                 startDate: moment().add(1, 'minute').toDate(),
                 startPercentage: 1,
                 type: 'gradual'
@@ -487,7 +485,7 @@ describe('Rollout Logic', () => {
 
     describe('schedule', () => {
         it('lets user through when schedule has passed', () => {
-            const rollout: Rollout = {
+            const rollout = {
                 startDate: moment().subtract(1, 'minute').toDate(),
                 type: 'schedule'
             }
@@ -499,7 +497,7 @@ describe('Rollout Logic', () => {
         })
 
         it('blocks user when schedule is in the future', () => {
-            const rollout: Rollout = {
+            const rollout = {
                 startDate: moment().add(1, 'minute').toDate(),
                 type: 'schedule'
             }
@@ -513,7 +511,7 @@ describe('Rollout Logic', () => {
 
     describe('stepped', () => {
         it('uses the exact percentage of the correct step in the rollout', () => {
-            const rollout: Rollout = {
+            const rollout = {
                 startDate: moment().subtract(3, 'days').toDate(),
                 startPercentage: 0,
                 type: 'stepped',
@@ -545,7 +543,7 @@ describe('Rollout Logic', () => {
     })
 
     it('throws when given an empty rollout object', () => {
-        const rollout = {} as Rollout
+        const rollout = {}
         expect(() => doesUserPassRollout({ rollout, boundedHash: 0 })).toThrow()
     })
 

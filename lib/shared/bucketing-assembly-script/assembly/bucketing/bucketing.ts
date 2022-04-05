@@ -11,20 +11,12 @@ import { SortingArray, sortObjectsByString } from '../helpers/arrayHelpers'
 import { _evaluateOperator } from './segmentation'
 
 // Max value of an unsigned 32-bit integer, which is what murmurhash returns
-const MAX_HASH_VALUE: i32 = 4294967295
+const MAX_HASH_VALUE: f64 = 4294967295
 const baseSeed: i32 = 1
 
-class BoundedHash {
-    public rolloutHash: i32
-    public bucketingHash: i32
-}
-
-export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
-    const boundedHash = _generateBoundedHashes(user_id, target_id)
-    const json = new JSON.Obj()
-    json.set('rolloutHash', boundedHash.rolloutHash)
-    json.set('bucketingHash', boundedHash.bucketingHash)
-    return json.stringify()
+export class BoundedHash {
+    public rolloutHash: f64
+    public bucketingHash: f64
 }
 
 export function _generateBoundedHashes(user_id: string, target_id: string): BoundedHash {
@@ -39,23 +31,15 @@ export function _generateBoundedHashes(user_id: string, target_id: string): Boun
     return boundedHash
 }
 
-export function generateBoundedHash(input: string, hashSeed: i32): i32 {
-    const hash = murmurhashV3(input, hashSeed)
+export function generateBoundedHash(input: string, hashSeed: i32): f64 {
+    const hash = murmurhashV3(input, hashSeed) as f64
     return hash / MAX_HASH_VALUE
-}
-
-export function decideTargetVariationFromJSON(targetStr: string, boundedHash: i32): string {
-    const targetJSON = JSON.parse(targetStr)
-    if (!targetJSON.isObj) throw new Error(`decideTargetVariationFromJSON targetStr param not a JSON Object`)
-    const target = new PublicTarget(targetJSON as JSON.Obj)
-    return _decideTargetVariation(target, boundedHash)
 }
 
 /**
  * Given the feature and a hash of the user_id, bucket the user according to the variation distribution percentages
  */
-<<<<<<< HEAD
-export function decideTargetVariation(target: PublicTarget, boundedHash: i32): string {
+export function _decideTargetVariation(target: PublicTarget, boundedHash: f64): string {
     let sortingArray: SortingArray<TargetDistribution> = []
     for (let i = 0; i < target.distribution.length; i++) {
         sortingArray.push({
@@ -63,13 +47,7 @@ export function decideTargetVariation(target: PublicTarget, boundedHash: i32): s
             value: target.distribution[i]._variation
         })
     }
-    const variations = sortObjectsByString<TargetDistribution>(sortingArray)
-=======
-function _decideTargetVariation(target: PublicTarget, boundedHash: i32): string {
-    //TODO: figure out sorting
-    const variations = target.distribution
-        //.sort((a, b) => a._variation > b._variation)
->>>>>>> setting up buckeing / segmentation tests
+    const variations = sortObjectsByString<TargetDistribution>(sortingArray, 'desc')
 
     let distributionIndex: f64 = 0
     const previousDistributionIndex: f64 = 0
@@ -92,19 +70,21 @@ export function getCurrentRolloutPercentage(rollout: PublicRollout, currentDate:
         return currentDateTime >= startDateTime ? 1 : 0
     }
 
-    if (!rollout.stages) {
-        return 0
-    }
-    const stages = rollout.stages as RolloutStage[]
+    const stages = rollout.stages
+
+
     const currentStages: RolloutStage[] = []
     const nextStages: RolloutStage[] = []
-    for (let i = 0; i < stages.length; i++) {
-        const stage = stages[i]
-        const stageTime = stage.date.getTime()
-        if (stageTime <= currentDateTime) {
-            currentStages.push(stage)
-        } else {
-            nextStages.push(stage)
+
+    if (stages) {
+        for (let i = 0; i < stages.length; i++) {
+            const stage = stages[i]
+            const stageTime = stage.date.getTime()
+            if (stageTime <= currentDateTime) {
+                currentStages.push(stage)
+            } else {
+                nextStages.push(stage)
+            }
         }
     }
 
@@ -114,7 +94,7 @@ export function getCurrentRolloutPercentage(rollout: PublicRollout, currentDate:
     let currentStage = _currentStage
     if (!_currentStage && (startDateTime < currentDateTime)) {
         const jsonObj = new JSON.Obj()
-        jsonObj.set('type', '')
+        jsonObj.set('type', 'discrete')
         jsonObj.set('percentage', start)
         jsonObj.set('date', rollout.startDate.toISOString())
         currentStage = new RolloutStage(jsonObj)
@@ -128,8 +108,8 @@ export function getCurrentRolloutPercentage(rollout: PublicRollout, currentDate:
         return currentStage.percentage
     }
 
-    const currentDatePercentage = (currentDateTime - currentStage.date.getTime()) /
-        (nextStage.date.getTime() - currentStage.date.getTime())
+    const currentDatePercentage: f64 = (currentDateTime - currentStage.date.getTime() as f64) /
+            (nextStage.date.getTime() - currentStage.date.getTime() as f64)
 
     if (currentDatePercentage === 0) {
         return 0
@@ -141,21 +121,14 @@ export function getCurrentRolloutPercentage(rollout: PublicRollout, currentDate:
     )
 }
 
-export function doesUserPassRolloutFromJSON(rolloutStr: string | null, boundedHash: i32): bool {
-    const rolloutJSON = rolloutStr ? JSON.parse(rolloutStr) : null
-    if (rolloutJSON && !rolloutJSON.isObj) throw new Error(`doesUserPassRolloutFromJSON rolloutStr param not a JSON Object`)
-    const rollout = rolloutJSON ? new PublicRollout(rolloutJSON as JSON.Obj) : null
-    return _doesUserPassRollout(rollout, boundedHash)
-}
-
-function _doesUserPassRollout(rollout: PublicRollout | null, boundedHash: i32): bool {
+export function _doesUserPassRollout(rollout: PublicRollout | null, boundedHash: f64): bool {
     if (!rollout) return true
 
     const rolloutPercentage = getCurrentRolloutPercentage(rollout, new Date(Date.now()))
     return !!rolloutPercentage && (boundedHash <= rolloutPercentage)
 }
 
-export function bucketForSegmentedFeature(boundedHash: i32, target: PublicTarget): string {
+export function bucketForSegmentedFeature(boundedHash: f64, target: PublicTarget): string {
     return _decideTargetVariation(target, boundedHash)
 }
 
@@ -203,23 +176,14 @@ export function generateKnownVariableKeys(
     for (let i = 0; i < hashKeys.length; i++) {
         const key = hashKeys[i]
         const hash = variableHashes.get(key)
-        const variable = variableMap.get(key)
-        if (!variable) {
+        if (!variableMap.has(key)) {
             knownVariableKeys.push(hash)
         }
     }
     return knownVariableKeys
 }
 
-export function generateBucketedConfigFromJSON(configStr: string, userStr: string): string  {
-    const config = new ConfigBody(configStr)
-    const user = DVCPopulatedUser.populatedUserFromString(userStr)
-
-    const bucketedConfig = _generateBucketedConfig(config, user)
-    return bucketedConfig.stringify()
-}
-
-function _generateBucketedConfig(
+export function _generateBucketedConfig(
     config: ConfigBody,
     user: DVCPopulatedUser
 ): BucketedUserConfig {
@@ -243,8 +207,8 @@ function _generateBucketedConfig(
         const variation_id = bucketForSegmentedFeature(bucketingHash, target)
         featureKeyMap.set(feature.key, new SDKFeature(
             feature._id,
-            feature.key,
             feature.type,
+            feature.key,
             variation_id,
             null
         ))

@@ -9,13 +9,14 @@ export type SortingArray<T> = SortingArrayItem<T>[]
  * Sorts an array of objects that have been preformatted to the "SortingArrayItem" format which includes the original
  * item under the "entry" field, and the value to sort by under the "value" field. Returns a sorted array of "entries"
  * @param arr
+ * @param direction - direction to sort by, either 'asc' or 'desc'
  */
-export function sortObjectsByString<T>(arr: SortingArray<T>): T[] {
+export function sortObjectsByString<T>(arr: SortingArray<T>, direction: string): T[] {
     const sorted = arr.sort((a, b) => {
         let cursor = 0
 
         // advance cursor while characters are the same
-        while (a.value.charCodeAt(cursor) === b.value.charCodeAt(cursor)) {
+        while (a.value.charCodeAt(cursor) === b.value.charCodeAt(cursor) && cursor < a.value.length) {
             cursor++
         }
 
@@ -46,5 +47,5 @@ export function sortObjectsByString<T>(arr: SortingArray<T>): T[] {
         result.push(sorted[i].entry)
     }
 
-    return result
+    return direction === 'desc' ? result.reverse() : result
 }
