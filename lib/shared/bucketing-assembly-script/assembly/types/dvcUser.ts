@@ -1,6 +1,6 @@
 import { JSON } from 'assemblyscript-json/assembly'
 import {
-    getF64FromJSONOptional, getStringFromJSON, getStringFromJSONOptional
+    getF64FromJSONOptional, getStringFromJSON, getStringFromJSONOptional, isFlatJSONObj
 } from '../helpers/jsonHelpers'
 
 interface DVCUserInterface {
@@ -43,10 +43,16 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
         this.appBuild = getF64FromJSONOptional(user, 'appBuild', -1)
 
         const customData = user.getObj('customData')
-        this.customData = (customData && customData.isObj) ? customData : null
+        if (!isFlatJSONObj(customData)) {
+            throw new Error(`DVCUser customData can't contain nested objects or arrays`)
+        }
+        this.customData = customData
 
         const privateCustomData = user.getObj('privateCustomData')
-        this.privateCustomData = (privateCustomData && privateCustomData.isObj) ? privateCustomData : null
+        if (!isFlatJSONObj(privateCustomData)) {
+            throw new Error(`DVCUser privateCustomData can't contain nested objects or arrays`)
+        }
+        this.privateCustomData = privateCustomData
 
         return this
     }

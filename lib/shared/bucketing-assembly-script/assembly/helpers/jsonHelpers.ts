@@ -125,3 +125,18 @@ export function getF64FromJSONValue(jsonValue: JSON.Value): f64 {
         ? (float as JSON.Float).valueOf()
         : (int ? f64((int as JSON.Integer).valueOf()) : NaN)
 }
+
+export function isFlatJSONObj(json: JSON.Obj | null): bool {
+    if (!json) return true
+
+    const jsonObj = json as JSON.Obj
+    const keys = jsonObj.keys
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i]
+        const value = jsonObj.get(key)
+        if (value && (value.isObj || value.isArr)) {
+            return false
+        }
+    }
+    return true
+}
