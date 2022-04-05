@@ -6,9 +6,10 @@ export class OptionsType {
 }
 
 function hasValidParts(lexicographical: bool, parts: string[]): bool {
-    const regex = lexicographical ? new RegExp("/^\d+[A-Za-z]*$/", "g") : new RegExp("/^\d+$/", "g")
     for (let i = 0; i < parts.length; i++) {
-        if (!regex.test(parts[i])) {
+        // Regex objects are stateful, have to recreate this on each iteration
+        const regex = lexicographical ? new RegExp("^\\d+[A-Za-z]*$", "g") : new RegExp("^\\d+$", "g")
+        if (!regex.test(`${parts[i]}`)) {
             return false
         }
     }

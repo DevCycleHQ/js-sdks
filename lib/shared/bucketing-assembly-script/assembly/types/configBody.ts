@@ -82,6 +82,7 @@ export class ConfigBody {
 
     constructor(configStr: string) {
         const configJSON = JSON.parse(configStr)
+
         if (!configJSON.isObj) throw new Error(`generateBucketedConfig config param not a JSON Object`)
         const configJSONObj = configJSON as JSON.Obj
 

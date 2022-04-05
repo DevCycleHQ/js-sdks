@@ -1,6 +1,11 @@
 import { JSON } from 'assemblyscript-json/assembly'
 import {
-    getJSONArrayFromJSON, getJSONObjFromJSON, getJSONValueFromJSON, getStringFromJSON, getStringFromJSONOptional
+    getJSONArrayFromJSON,
+    getJSONObjFromJSON,
+    getJSONValueFromJSON,
+    getStringFromJSON,
+    getStringFromJSONOptional,
+    jsonObjFromMap
 } from '../helpers/jsonHelpers'
 import { PublicProject, PublicEnvironment } from "./configBody"
 
@@ -76,9 +81,9 @@ export class BucketedUserConfig extends JSON.Obj {
         const json: JSON.Obj = new JSON.Obj()
         json.set('project', this.project)
         json.set('environment', this.environment)
-        json.set('features', this.features)
-        json.set('featureVariationMap', this.featureVariationMap)
-        json.set('variables', this.variables)
+        json.set('features', jsonObjFromMap(this.features))
+        json.set('featureVariationMap', jsonObjFromMap(this.featureVariationMap))
+        json.set('variables', jsonObjFromMap(this.variables))
         json.set('knownVariableKeys', this.knownVariableKeys)
         return json.stringify()
     }

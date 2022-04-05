@@ -3,20 +3,9 @@ import {  findString, includes, replace} from '../helpers/lodashHelpers'
 import { OptionsType, versionCompare } from './versionCompare'
 import {
     TopLevelOperator, AudienceFilterOrOperator, DVCPopulatedUser, validSubTypes,
-    DVCUser, Target as PublicTarget
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
-import {getF64FromJSONObj, getF64FromJSONValue} from '../helpers/jsonHelpers'
-
-export function evaluateOperatorFromJSON(operatorStr: string, userStr: string): bool {
-    const operatorJSON = JSON.parse(operatorStr)
-    if (!operatorJSON.isObj) {
-        throw new Error(`evaluateOperatorFromJSON operatorStr or userStr param not a JSON Object`)
-    }
-    const operator = new TopLevelOperator(operatorJSON as JSON.Obj)
-    const user = new DVCPopulatedUser(new DVCUser(userStr))
-    return _evaluateOperator(operator, user)
-}
+import {getF64FromJSONValue} from '../helpers/jsonHelpers'
 
 // TODO add support for OR/XOR as well as recursive filters
 /**
@@ -78,7 +67,7 @@ function filterFunctionsBySubtype(subType: string, user: DVCPopulatedUser, filte
     } else if (subType === 'platform') {
         return _checkStringsFilter(user.platform, filter)
     } else if (subType === 'customData') {
-        return _checkCustomData(user.customData, filter) || _checkCustomData(user.privateCustomData, filter)
+        return _checkCustomData(user.getCombinedCustomData(), filter)
     } else {
         return false
     }
@@ -100,7 +89,7 @@ export function checkVersionValue(
     filterVersion: string | null,
     version: string | null,
     operator: string | null
-): bool{
+): bool {
     if (version && filterVersion && filterVersion.length > 0) {
         const options: OptionsType = { zeroExtend: true, lexicographical: false }
         const result = versionCompare(version, filterVersion, options)
@@ -114,6 +103,7 @@ export function checkVersionValue(
             return true
         }
     }
+
     return false
 }
 
@@ -125,7 +115,7 @@ export function checkVersionFilter(
     if (!version || !filterVersions || !operator) {
         return false
     }
-    let filteredVersions = filterVersions as string[]
+
     let parsedVersion = version as string
     let parsedOperator = operator as string
 
@@ -138,23 +128,24 @@ export function checkVersionFilter(
     if (parsedOperator !== '=') {
         // remove any non-number and . characters, and remove everything after a hyphen
         // eg. 1.2.3a-b6 becomes 1.2.3
-        const regex1 = new RegExp("/[^(\d|.|\-)]/", "g")
-        const regex2 = new RegExp("/-.*/", "g")
+        const regex1 = new RegExp("[^(\\d|.|\\-)]", "g")
+        const regex2 = new RegExp("-.*", "g")
         parsedVersion = replace(replace(parsedVersion, regex1, ''), regex2, '')
 
-        let mappedfilteredVersions: string[] = []
+        let mappedFilterVersions: string[] = []
         // Replace Array.map(), because you can't access captured data in a closure
-        for (let i=0; i < filteredVersions.length; i++) {
-            mappedfilteredVersions.push(replace(replace(filteredVersions[i], regex1, ''), regex2, ''))
+        for (let i=0; i < filterVersions.length; i++) {
+            mappedFilterVersions.push(replace(replace(filterVersions[i], regex1, ''), regex2, ''))
         }
-        filteredVersions = mappedfilteredVersions
+        filterVersions = mappedFilterVersions
     }
 
     parsedVersion = convertToSemanticVersion(parsedVersion)
+
     let passed = false
     // Replace Array.some(), because you can't access captured data in a closure
-    for (let i = 0; i < filteredVersions.length; i++) {
-         if (checkVersionValue(filteredVersions[i], parsedVersion, operator)) {
+    for (let i = 0; i < filterVersions.length; i++) {
+         if (checkVersionValue(filterVersions[i], parsedVersion, operator)) {
              passed = true
              break
          }
@@ -163,24 +154,9 @@ export function checkVersionFilter(
     return !not ? passed : !passed
 }
 
-export function checkNumberFilterFromJSON(num: f64, filterNumsStr: string | null, operator: string | null): bool {
-    const filterNumsJSON = JSON.parse(filterNumsStr)
-    if (!filterNumsJSON.isArr) throw new Error(`checkNumberFilterFromJSON filterNumsStr param not a JSON Object`)
-
-    const filterNums: f64[] = []
-    const filterNumsJSONArr = (filterNumsJSON as JSON.Arr).valueOf()
-    for (let i = 0; i < filterNumsJSONArr.length; i++) {
-        const num = getF64FromJSONValue(filterNumsJSONArr[i])
-        if (!isNaN(num)) {
-            filterNums.push(num)
-        }
-    }
-    return _checkNumberFilter(num, filterNums, operator)
-}
-
 export function _checkNumberFilter(num: f64, filterNums: f64[] | null, operator: string | null): bool {
     if (operator && isString(operator)) {
-        if (operator === 'exists') {
+        if (operator === 'exist') {
             return !isNaN(num)
         } else if (operator === '!exist') {
             return isNaN(num)
@@ -222,15 +198,8 @@ export function _checkNumberFilter(num: f64, filterNums: f64[] | null, operator:
     return someValue
 }
 
-function checkNumbersFilterJSONValue(jsonValue: JSON.Value, filter: AudienceFilterOrOperator): bool {
+export function checkNumbersFilterJSONValue(jsonValue: JSON.Value, filter: AudienceFilterOrOperator): bool {
     return _checkNumbersFilter(getF64FromJSONValue(jsonValue), filter)
-}
-
-export function checkNumbersFilterFromJSON(number: f64, filterStr: string): bool {
-    const filterJSON = JSON.parse(filterStr)
-    if (!filterJSON.isObj) throw new Error(`checkStringsFilterFromJSON filterStr param not a JSON Object`)
-    const filter = new AudienceFilterOrOperator(filterJSON as JSON.Obj)
-    return _checkNumbersFilter(number, filter)
 }
 
 function _checkNumbersFilter(number: f64, filter: AudienceFilterOrOperator): bool {
@@ -239,14 +208,7 @@ function _checkNumbersFilter(number: f64, filter: AudienceFilterOrOperator): boo
     return _checkNumberFilter(number, values, operator)
 }
 
-export function checkStringsFilterFromJSON(string: string | null, filterStr: string): bool {
-    const filterJSON = JSON.parse(filterStr)
-    if (!filterJSON.isObj) throw new Error(`checkStringsFilterFromJSON filterStr param not a JSON Object`)
-    const filter = new AudienceFilterOrOperator(filterJSON as JSON.Obj)
-    return _checkStringsFilter(string, filter)
-}
-
-function _checkStringsFilter(string: string | null, filter: AudienceFilterOrOperator): bool {
+export function _checkStringsFilter(string: string | null, filter: AudienceFilterOrOperator): bool {
     const operator = filter.comparator
     const values = getFilterValuesAsStrings(filter)
 
@@ -267,13 +229,6 @@ function _checkStringsFilter(string: string | null, filter: AudienceFilterOrOper
     }
 }
 
-export function checkBooleanFilterFromJSON(bool: bool, filterStr: string): bool {
-    const filterJSON = JSON.parse(filterStr)
-    if (!filterJSON.isObj) throw new Error(`checkBooleanFilterFromJSON filterStr param not a JSON Object`)
-    const filter = new AudienceFilterOrOperator(filterJSON as JSON.Obj)
-    return _checkBooleanFilter(bool, filter)
-}
-
 export function _checkBooleanFilter(bool: bool, filter: AudienceFilterOrOperator): bool {
     const operator = filter.comparator
     const values = getFilterValuesAsBoolean(filter)
@@ -291,14 +246,7 @@ export function _checkBooleanFilter(bool: bool, filter: AudienceFilterOrOperator
     }
 }
 
-export function checkVersionFiltersFromJSON(appVersion: string | null, filterStr: string): bool {
-    const filterJSON = JSON.parse(filterStr)
-    if (!filterJSON.isObj) throw new Error(`checkVersionFiltersFromJSON filterStr param not a JSON Object`)
-    const filter = new AudienceFilterOrOperator(filterJSON as JSON.Obj)
-    return _checkVersionFilters(appVersion, filter)
-}
-
-function _checkVersionFilters(appVersion: string | null, filter: AudienceFilterOrOperator): bool {
+export function _checkVersionFilters(appVersion: string | null, filter: AudienceFilterOrOperator): bool {
     const operator = filter.comparator
     const values = getFilterValuesAsStrings(filter)
     // dont need to do semver if they're looking for an exact match. Adds support for non semver versions.
@@ -309,17 +257,7 @@ function _checkVersionFilters(appVersion: string | null, filter: AudienceFilterO
     }
 }
 
-export function checkCustomDataFromJSON(data: string | null, filterStr: string): bool {
-    const filterJSON = JSON.parse(filterStr)
-    const dataJSON = JSON.parse(data)
-    if (!filterJSON.isObj) throw new Error(`checkCustomDataFromJSON filterStr param not a JSON Object`)
-    if (dataJSON && !dataJSON.isObj) throw new Error(`checkCustomDataFromJSON data param not a JSON Object`)
-    const filter = new AudienceFilterOrOperator(filterJSON as JSON.Obj)
-    const dataJSONObj = dataJSON ? dataJSON as JSON.Obj : null
-    return _checkCustomData(dataJSONObj, filter)
-}
-
-function _checkCustomData(data: JSON.Obj | null, filter: AudienceFilterOrOperator): bool {
+export function _checkCustomData(data: JSON.Obj | null, filter: AudienceFilterOrOperator): bool {
     const values = getFilterValues(filter)
     const operator = filter.comparator
 
@@ -331,15 +269,19 @@ function _checkCustomData(data: JSON.Obj | null, filter: AudienceFilterOrOperato
             return checkValueExists(dataValue)
         } else if (operator === '!exist') {
             return !checkValueExists(dataValue)
-        } else if (firstValue && firstValue.isString && dataValue && dataValue.isString) {
-            const jsonStr = dataValue as JSON.Str
-            return _checkStringsFilter(jsonStr.valueOf(), filter)
+        } else if (firstValue && firstValue.isString && dataValue && (dataValue.isString || dataValue.isNull)) {
+            if (dataValue.isNull) {
+                return _checkStringsFilter(null, filter)
+            } else {
+                const jsonStr = dataValue as JSON.Str
+                return _checkStringsFilter(jsonStr.valueOf(), filter)
+            }
         } else if (firstValue && (firstValue.isFloat || firstValue.isInteger)
             && dataValue && (dataValue.isFloat || dataValue.isInteger)) {
             return checkNumbersFilterJSONValue(dataValue, filter)
         } else if (firstValue && firstValue.isBool && dataValue && dataValue.isBool) {
-            const jsonBool = dataValue as JSON.Bool
-            return _checkBooleanFilter(jsonBool.valueOf(), filter)
+            const boolValue = dataValue as JSON.Bool
+            return _checkBooleanFilter(boolValue.valueOf(), filter)
         } else if (!dataValue && operator === '!=') {
             return true
         } else {
@@ -350,10 +292,10 @@ function _checkCustomData(data: JSON.Obj | null, filter: AudienceFilterOrOperato
 }
 
 export function getFilterValues(filter: AudienceFilterOrOperator): JSON.Value[] {
-    if (!filter.values || !filter.isArr) return []
+    const values = filter.values
+    if (!values || !values.isArr) return []
 
-    const valuesArray = filter.values as JSON.Arr
-    return valuesArray.valueOf().reduce((accumulator, value) => {
+    return values.valueOf().reduce((accumulator, value) => {
         if (value !== null) {
             accumulator.push(value)
         }
@@ -393,7 +335,7 @@ export function getFilterValuesAsBoolean(filter: AudienceFilterOrOperator): bool
 
     return jsonValues.reduce((accumulator, value) => {
         const boolVal = value.isBool ? value as JSON.Bool : null
-        if (boolVal) {
+        if (boolVal !== null) {
             accumulator.push(boolVal.valueOf())
         }
         return accumulator
