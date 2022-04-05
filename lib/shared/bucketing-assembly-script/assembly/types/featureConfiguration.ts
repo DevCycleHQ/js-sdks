@@ -7,9 +7,17 @@ import {
     jsonArrFromValueArray,
     jsonObjFromMap
 } from '../helpers/jsonHelpers'
-import { Target } from './target'
+import { Target, ITarget } from './target'
 
-export class FeatureConfiguration extends JSON.Value {
+export interface IFeatureConfiguration {
+    _id: string
+    prerequisites: IFeaturePrerequisites[] | null
+    winningVariation: IFeatureWinningVariation | null
+    forcedUsers: Map<string, string> | null
+    targets: ITarget[]
+}
+
+export class FeatureConfiguration extends JSON.Value implements IFeatureConfiguration {
     _id: string
     prerequisites: FeaturePrerequisites[] | null
     winningVariation: FeatureWinningVariation | null
@@ -54,7 +62,12 @@ export class FeatureConfiguration extends JSON.Value {
 
 const comparatorValues = ['=', '!=']
 
-export class FeaturePrerequisites extends JSON.Value {
+export interface IFeaturePrerequisites {
+    _feature: string
+    comparator: string
+}
+
+export class FeaturePrerequisites extends JSON.Value implements IFeaturePrerequisites {
     _feature: string
     comparator: string
 
@@ -74,7 +87,12 @@ export class FeaturePrerequisites extends JSON.Value {
     }
 }
 
-export class FeatureWinningVariation extends JSON.Value {
+export interface IFeatureWinningVariation {
+    _variation: string
+    updatedAt: Date
+}
+
+export class FeatureWinningVariation extends JSON.Value implements IFeatureWinningVariation {
     _variation: string
     updatedAt: Date
 

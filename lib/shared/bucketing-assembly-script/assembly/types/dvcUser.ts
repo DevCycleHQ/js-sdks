@@ -3,7 +3,7 @@ import {
     getF64FromJSONOptional, getStringFromJSON, getStringFromJSONOptional, isFlatJSONObj
 } from '../helpers/jsonHelpers'
 
-interface DVCUserInterface {
+export interface DVCUserInterface {
     user_id: string
     email: string | null
     name: string | null
@@ -25,6 +25,8 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
     appBuild: f64
     customData: JSON.Obj | null
     privateCustomData: JSON.Obj | null
+    // TODO remove this and update tests when we provide a method to initialize these values
+    platform: string | null
 
     constructor(userStr: string) {
         super()
@@ -38,6 +40,7 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
         this.language = getStringFromJSONOptional(user, 'language')
         this.country = getStringFromJSONOptional(user, 'country')
         this.appVersion = getStringFromJSONOptional(user, 'appVersion')
+        this.platform = getStringFromJSONOptional(user, 'platform')
 
         // Need to set a default "null" value, as numbers can't be null in AS
         this.appBuild = getF64FromJSONOptional(user, 'appBuild', -1)
@@ -106,7 +109,8 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         this.lastSeenDate = new Date(Date.now())
 
         // TODO: set these from init function
-        this.platform = 'NodeJS'
+        const userPlatform = user.platform
+        this.platform = userPlatform !== null ? userPlatform : 'NodeJS'
         this.platformVersion = ''
         this.deviceModel = ''
         this.sdkType = 'server'

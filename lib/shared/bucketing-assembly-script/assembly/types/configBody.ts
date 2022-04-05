@@ -6,9 +6,15 @@ import {
     jsonArrFromValueArray,
     jsonObjFromMap, isValidString
 } from '../helpers/jsonHelpers'
-import { Feature,  } from "./feature"
+import { Feature, IFeature, } from "./feature"
 
-export class PublicProject extends JSON.Value {
+export interface IProject {
+    _id: string
+    key: string
+    a0_organization: string
+}
+
+export class PublicProject extends JSON.Value implements IProject {
     _id: string
     key: string
     a0_organization: string
@@ -30,7 +36,12 @@ export class PublicProject extends JSON.Value {
     }
 }
 
-export class PublicEnvironment extends JSON.Value {
+export interface IEnvironment {
+    _id: string
+    key: string
+}
+
+export class PublicEnvironment extends JSON.Value implements IEnvironment {
     _id: string
     key: string
 
@@ -52,7 +63,13 @@ const validVariableTypes = [
     'String', 'Boolean', 'Number', 'Semver'
 ]
 
-export class Variable extends JSON.Value {
+export interface IVariable {
+    _id: string
+    type: string
+    key: string
+}
+
+export class Variable extends JSON.Value implements IVariable {
     _id: string
     type: string
     key: string
@@ -73,7 +90,15 @@ export class Variable extends JSON.Value {
     }
 }
 
-export class ConfigBody {
+export interface IConfigBody {
+    project: IProject
+    environment: IEnvironment
+    features: IFeature[]
+    variables: IVariable[]
+    variableHashes: Map<string, i64>
+}
+
+export class ConfigBody extends JSON.Value implements IConfigBody {
     project: PublicProject
     environment: PublicEnvironment
     features: Feature[]
@@ -81,6 +106,7 @@ export class ConfigBody {
     variableHashes: Map<string, i64>
 
     constructor(configStr: string) {
+        super()
         const configJSON = JSON.parse(configStr)
         if (!configJSON.isObj) throw new Error(`generateBucketedConfig config param not a JSON Object`)
         const configJSONObj = configJSON as JSON.Obj

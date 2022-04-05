@@ -6,11 +6,19 @@ import {
     isValidString,
     jsonArrFromValueArray
 } from '../helpers/jsonHelpers'
-import { FeatureConfiguration } from './featureConfiguration'
+import { FeatureConfiguration, IFeatureConfiguration } from './featureConfiguration'
 
 const validTypes = ['release', 'experiment', 'permission', 'ops']
 
-export class Feature extends JSON.Value {
+export interface IFeature {
+    _id: string
+    type: string
+    key: string
+    variations: IVariation[]
+    configuration: IFeatureConfiguration
+}
+
+export class Feature extends JSON.Value implements IFeature {
     _id: string
     type: string
     key: string
@@ -44,6 +52,12 @@ export class Feature extends JSON.Value {
     }
 }
 
+export interface IVariation {
+    _id: string
+    name: string | null
+    variables: Array<IVariationVariable>
+}
+
 export class Variation extends JSON.Value {
     _id: string
     name: string | null
@@ -75,7 +89,12 @@ export class Variation extends JSON.Value {
     }
 }
 
-export class VariationVariable extends JSON.Value {
+export interface IVariationVariable {
+    _var: string
+    value: JSON.Value
+}
+
+export class VariationVariable extends JSON.Value implements IVariationVariable {
     _var: string
     value: JSON.Value
 

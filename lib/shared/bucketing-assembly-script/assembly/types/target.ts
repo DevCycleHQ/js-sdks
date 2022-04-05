@@ -9,7 +9,14 @@ import {
     isValidStringOptional, jsonArrFromValueArray
 } from '../helpers/jsonHelpers'
 
-export class Target extends JSON.Value {
+export interface ITarget {
+    _id: string
+    _audience: IAudience
+    rollout: IRollout | null
+    distribution: ITargetDistribution[]
+}
+
+export class Target extends JSON.Value implements ITarget {
     _id: string
     _audience: Audience
     rollout: Rollout | null
@@ -42,7 +49,12 @@ export class Target extends JSON.Value {
     }
 }
 
-export class Audience extends JSON.Value {
+interface IAudience {
+    _id: string
+    filters: ITopLevelOperator
+}
+
+export class Audience extends JSON.Value implements IAudience {
     _id: string
     filters: TopLevelOperator
 
@@ -63,7 +75,12 @@ export class Audience extends JSON.Value {
 
 const validAudienceOperators = ['and', 'or']
 
-export class TopLevelOperator extends JSON.Value {
+export interface ITopLevelOperator {
+    filters: IAudienceFilterOrOperator[]
+    operator: string
+}
+
+export class TopLevelOperator extends JSON.Value implements ITopLevelOperator {
     filters: AudienceFilterOrOperator[]
     operator: string
 
@@ -102,7 +119,18 @@ const validDataKeyTypes = [
 
 const validOperator = ['and', 'or']
 
-export class AudienceFilterOrOperator extends JSON.Value {
+export interface IAudienceFilterOrOperator {
+    type: string | null
+    subType: string | null
+    comparator: string | null
+    dataKey: string | null
+    dataKeyType: string | null
+    values: JSON.Arr | null
+    operator: string | null
+    filters: IAudienceFilterOrOperator[] | null
+}
+
+export class AudienceFilterOrOperator extends JSON.Value implements IAudienceFilterOrOperator {
     type: string | null
     subType: string | null
     comparator: string | null
@@ -174,7 +202,14 @@ export class AudienceFilterOrOperator extends JSON.Value {
 
 const validRolloutTypes = ['schedule', 'gradual', 'stepped']
 
-export class Rollout extends JSON.Value {
+export interface IRollout {
+    type: string
+    startPercentage: f64
+    startDate: Date
+    stages: IRolloutStage[] | null
+}
+
+export class Rollout extends JSON.Value implements IRollout {
     type: string
     startPercentage: f64
     startDate: Date
@@ -209,7 +244,13 @@ export class Rollout extends JSON.Value {
 
 const validRolloutStages = ['linear', 'discrete']
 
-export class RolloutStage extends JSON.Value {
+interface IRolloutStage {
+    type: string
+    date: Date
+    percentage: f64
+}
+
+export class RolloutStage extends JSON.Value implements IRolloutStage {
     type: string
     date: Date
     percentage: f64
@@ -230,7 +271,12 @@ export class RolloutStage extends JSON.Value {
     }
 }
 
-export class TargetDistribution extends JSON.Value {
+interface ITargetDistribution {
+    _variation: string
+    percentage: f64
+}
+
+export class TargetDistribution extends JSON.Value implements ITargetDistribution {
     _variation: string
     percentage: f64
 
