@@ -1,5 +1,5 @@
 import murmurhash from 'murmurhash'
-import {_murmurhashV3_js} from "../build/bucketing-lib.debug";
+import {murmurhashv3_js} from "../build/bucketing-lib.debug";
 
 function randstring(length: number) {
     let result = '';
@@ -15,17 +15,21 @@ function randstring(length: number) {
 describe('Test testMurmurhashV3 Assemblyscript implementation', () => {
     it('should return the correct hash for simple strings with a varying seed', () => {
         for (let i = 0; i < 2000; i++) {
-            expect(_murmurhashV3_js('some-long-ascii-string', i)).toContain(`${murmurhash.v3('some-long-ascii-string', i)}`)
-            expect(_murmurhashV3_js('some-long-ascii-string?', i)).toContain(`${murmurhash.v3('some-long-ascii-string?', i)}`)
-            expect(_murmurhashV3_js('some-long-ascii-string!', i)).toContain(`${murmurhash.v3('some-long-ascii-string!', i)}`)
-            expect(_murmurhashV3_js('some-long-ascii-string*', i)).toContain(`${murmurhash.v3('some-long-ascii-string*', i)}`)
+            expect(murmurhashv3_js('some-long-ascii-string', i)).toContain(`${murmurhash.v3('some-long-ascii-string', i)}`)
+            expect(murmurhashv3_js('some-long-ascii-string?', i)).toContain(`${murmurhash.v3('some-long-ascii-string?', i)}`)
+            expect(murmurhashv3_js('some-long-ascii-string!', i)).toContain(`${murmurhash.v3('some-long-ascii-string!', i)}`)
+            expect(murmurhashv3_js('some-long-ascii-string*', i)).toContain(`${murmurhash.v3('some-long-ascii-string*', i)}`)
         }
     })
 
     it('should return the correct hash for a random string with a varying seed', () => {
         for (let i = 0; i < 20000; i++) {
             const testString = randstring(100)
-            expect(_murmurhashV3_js(testString, i)).toContain(`${murmurhash.v3(testString, i)}`)
+            expect(murmurhashv3_js(testString, i)).toContain(`${murmurhash.v3(testString, i)}`)
         }
+    })
+
+    it('should fail for a non-ascii key', () => {
+        expect(() => murmurhashv3_js('\u11a7', 1)).toThrow('Unsupported character in key.')
     })
 })

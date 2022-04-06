@@ -28,7 +28,7 @@ export function testBucketedUserConfigClass(userConfigStr: string): string {
     return userConfig.stringify()
 }
 
-export function _murmurhashV3_js(key: string, seed: u32): string {
+export function murmurhashv3_js(key: string, seed: u32): string {
     return murmurhashV3_js(key, seed)
 }
 

@@ -3,14 +3,11 @@ export function murmurhashV3_js(key: string, seed: u32): string {
 }
 
 export function murmurhashV3(key: string, seed: u32): u32 {
-    if (seed < 0) {
-        throw new Error("Seed must be positive.")
-    }
     let keyBuffer = new Int32Array(key.length);
     for (let i = 0; i < key.length; i++) {
         let charCode = i32(key.charCodeAt(i))
         if (charCode > 255) {
-            throw new Error("Unsupported character in key.");
+            throw new Error('Unsupported character in key.');
         }
         keyBuffer[i] = charCode
     }
