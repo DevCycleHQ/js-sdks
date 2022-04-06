@@ -1,4 +1,4 @@
-export function testInternal(key: string, seed: u32): string {
+export function murmurhashV3_js(key: string, seed: u32): string {
     return `${murmurhashV3(key, seed)}`;
 }
 
