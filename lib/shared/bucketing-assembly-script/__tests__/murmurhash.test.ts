@@ -1,35 +1,35 @@
 import murmurhash from 'murmurhash'
-import {murmurhashv3_js} from "../build/bucketing-lib.debug";
+import { murmurhashV3_js } from '../build/bucketing-lib.debug'
 
-function randstring(length: number) {
-    let result = '';
-    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+/.,<>?;:[]{}|\'"';
-    let charactersLength = characters.length;
+function randString(length: number) {
+    let result = ''
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+/.,<>?;:[]{}|\'"'
+    const charactersLength = characters.length
     for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() *
-            charactersLength));
+        result += characters.charAt(Math.floor(Math.random() * charactersLength))
     }
-    return result;
+    return result
 }
 
-describe('Test testMurmurhashV3 Assemblyscript implementation', () => {
+describe('murmurhash V3 Assembly Script implementation', () => {
     it('should return the correct hash for simple strings with a varying seed', () => {
         for (let i = 0; i < 2000; i++) {
-            expect(murmurhashv3_js('some-long-ascii-string', i)).toContain(`${murmurhash.v3('some-long-ascii-string', i)}`)
-            expect(murmurhashv3_js('some-long-ascii-string?', i)).toContain(`${murmurhash.v3('some-long-ascii-string?', i)}`)
-            expect(murmurhashv3_js('some-long-ascii-string!', i)).toContain(`${murmurhash.v3('some-long-ascii-string!', i)}`)
-            expect(murmurhashv3_js('some-long-ascii-string*', i)).toContain(`${murmurhash.v3('some-long-ascii-string*', i)}`)
+            expect(murmurhashV3_js('some-long-ascii-string', i)).toContain(`${murmurhash.v3('some-long-ascii-string', i)}`)
+            expect(murmurhashV3_js('some-long-ascii-string?', i)).toContain(`${murmurhash.v3('some-long-ascii-string?', i)}`)
+            expect(murmurhashV3_js('some-long-ascii-string!', i)).toContain(`${murmurhash.v3('some-long-ascii-string!', i)}`)
+            expect(murmurhashV3_js('some-long-ascii-string*', i)).toContain(`${murmurhash.v3('some-long-ascii-string*', i)}`)
         }
     })
 
     it('should return the correct hash for a random string with a varying seed', () => {
         for (let i = 0; i < 20000; i++) {
-            const testString = randstring(100)
-            expect(murmurhashv3_js(testString, i)).toContain(`${murmurhash.v3(testString, i)}`)
+            const testString = randString(100)
+            expect(murmurhashV3_js(testString, i)).toContain(`${murmurhash.v3(testString, i)}`)
         }
     })
 
     it('should fail for a non-ascii key', () => {
-        expect(() => murmurhashv3_js('\u11a7', 1)).toThrow('Unsupported character in key.')
+        expect(() => murmurhashV3_js('\u11a7', 1))
+            .toThrow('Bucketing randomization key must contain only ascii characters')
     })
 })

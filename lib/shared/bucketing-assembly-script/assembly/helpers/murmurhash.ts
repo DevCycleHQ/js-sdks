@@ -1,13 +1,13 @@
 export function murmurhashV3_js(key: string, seed: u32): string {
-    return `${murmurhashV3(key, seed)}`;
+    return `${murmurhashV3(key, seed)}`
 }
 
 export function murmurhashV3(key: string, seed: u32): u32 {
     let keyBuffer = new Int32Array(key.length);
     for (let i = 0; i < key.length; i++) {
-        let charCode = i32(key.charCodeAt(i))
+        const charCode = i32(key.charCodeAt(i))
         if (charCode > 255) {
-            throw new Error('Unsupported character in key.');
+            throw new Error('Bucketing randomization key must contain only ascii characters')
         }
         keyBuffer[i] = charCode
     }
