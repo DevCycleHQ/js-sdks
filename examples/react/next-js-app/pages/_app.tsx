@@ -5,7 +5,7 @@ import { withDVCProvider } from '@devcycle/devcycle-react-sdk'
 
 const ENV_KEY = process.env['NX_CLIENT_KEY'] || 'test_token'
 const user = {
-    user_id: 'test-user',
+    user_id: 'userId1',
     isAnonymous: false
 }
 
