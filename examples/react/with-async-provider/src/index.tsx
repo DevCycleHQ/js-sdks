@@ -6,7 +6,12 @@ import { asyncWithDVCProvider } from '@devcycle/devcycle-react-sdk';
 
 (async () => {
     const ENV_KEY = process.env['NX_CLIENT_KEY'] || 'test_token'
-    const DVCProvider = await asyncWithDVCProvider({ envKey: ENV_KEY })
+    const user = { 
+        user_id: 'userId1',
+        isAnonymous: false
+     }
+      const DVCProvider = await asyncWithDVCProvider({ envKey: ENV_KEY, user: user  })
+
     ReactDOM.render(
         <React.StrictMode>
             <DVCProvider>

@@ -5,8 +5,19 @@ import styles from '../styles/Home.module.css'
 import { useVariable } from '@devcycle/devcycle-react-sdk'
 
 const Home: NextPage = () => {
-    const variableKey = 'test'
-    const variable = useVariable(variableKey, false)
+    const variableKey = 'feature-release'
+    const variableKeyString = 'variable-key-string'
+    const variableKeyNumber = 'variable-key-number'
+    const variableKeyBoolean = 'variable-key-boolean'
+    const variableKeyJson = 'json-key-string'
+
+
+    const variable = useVariable( variableKey, true)
+    const variableString = useVariable( variableKeyString, 'pink')
+    const variableNumber = useVariable( variableKeyNumber, 100)
+    const variableBoolean = useVariable( variableKeyBoolean, true)
+    const variableJson = useVariable( 'json-key-string', {'jsonStringKey1':'json string value 1'})
+
 
     return (
         <div className={styles.container}>
@@ -29,8 +40,25 @@ const Home: NextPage = () => {
                 </p>
 
                 <div className={styles.description}>
-                    <span> Your variable is {variable?.value ? 'ON' : 'OFF'} </span>
+                    <span> Your default variable feature-release = {variable?.value ? 'ON' : 'OFF'} </span>
+                    <div>
+                        Your variable variableString = {variableString.value}
+                    </div>
+                    <div>
+                        Your variable variableNumber = {variableNumber.value}
+                    </div>
+                    <div>
+                        Your variable variableBoolean = {variableBoolean.value ? 'ON' : 'OFF'}
+                    </div>
+                    <div>
+                        Your variable variableJson = {JSON.stringify(variableJson.value)}
+                    </div>
+                
                 </div>
+
+
+
+                
 
                 <div className={styles.grid}>
                     <a href="https://nextjs.org/docs" className={styles.card}>
