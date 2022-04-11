@@ -13,7 +13,7 @@ fi
 
 echo "Last tagged sha: $LAST_TAGGED_SHA"
 
-AFFECTED_PROJECTS=$(yarn --silent nx print-affected --base $LAST_TAGGED_SHA --select=projects)
+AFFECTED_PROJECTS=$(yarn nx print-affected --base $LAST_TAGGED_SHA --select=projects)
 echo "Affected projects: $AFFECTED_PROJECTS"
 
 # exit if no affected projects
