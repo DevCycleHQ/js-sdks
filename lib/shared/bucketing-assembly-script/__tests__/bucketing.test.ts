@@ -1,8 +1,10 @@
 import {
     generateBoundedHashesFromJSON,
     decideTargetVariationFromJSON,
-    generateBucketedConfigFromJSON,
-    doesUserPassRolloutFromJSON, setPlatformData
+    generateBucketedConfigForUser,
+    doesUserPassRolloutFromJSON,
+    setPlatformData,
+    setConfigData
 } from '../build/bucketing-lib.debug'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config, barrenConfig } = testData
@@ -43,7 +45,8 @@ const generateBucketedConfig = (
     { config, user }:
     { config: unknown, user: unknown }
 ): BucketedUserConfig => {
-    const bucketedConfig = generateBucketedConfigFromJSON(JSON.stringify(config), JSON.stringify(user))
+    setConfigData("token", JSON.stringify(config))
+    const bucketedConfig = generateBucketedConfigForUser("token", JSON.stringify(user))
     return JSON.parse(bucketedConfig) as BucketedUserConfig
 }
 
