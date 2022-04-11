@@ -15,28 +15,28 @@ export default function DevCycleExample(): React.ReactElement {
     const variableJson = useVariable( 'json-key-string', {'jsonStringKey1':'json string value 1'})
 
     return (
+<div>
     <div>
-        <div>
-            <span> Your defaulte variable feature-release selected Variation =  {variable?.value ? 'ON' : 'OFF'} </span>
-        </div>
-        <div>
-            <span> Your variable feature-release value = {JSON.stringify(variable.value)} </span>
-        </div>
-        <div>
-            <span> Your variable variableString = {variableString.value} </span>
-        </div>
-        <div>
-            <span> Your variable variableNumber = {variableNumber.value} </span>
-        </div>
-        <div>
-            <span> Your variable variableBoolean selected Variation = {variableBoolean.value ? 'OFF' : 'ON'} </span>
-        </div>
-        <div>
-            <span> Your variable variableBoolean value = {JSON.stringify(variableBoolean.value)} </span>
-        </div>
-        <div>   
-            <span> Your variable variableJson = {JSON.stringify(variableJson.value)} </span>
-        </div>
+        <span> Your defaulte variable feature-release selected Variation =  {variable?.value ? 'ON' : 'OFF'} </span>
     </div>
+    <div>
+        <span> Your variable feature-release value = {JSON.stringify(variable.value)} </span>
+    </div>
+    <div>
+        <span> Your variable variableString = {variableString.value} </span>
+    </div>
+    <div>
+        <span> Your variable variableNumber = {variableNumber.value} </span>
+    </div>
+    <div>
+        <span> Your variable variableBoolean selected Variation = {variableBoolean.value ? 'OFF' : 'ON'} </span>
+    </div>
+    <div>
+        <span> Your variable variableBoolean value = {JSON.stringify(variableBoolean.value)} </span>
+    </div>
+    <div>   
+        <span> Your variable variableJson = {JSON.stringify(variableJson.value)} </span>
+    </div>
+</div>
     )
 }
