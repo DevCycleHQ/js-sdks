@@ -14,7 +14,6 @@ export default function DevCycleExample(): React.ReactElement {
     const variableBoolean = useVariable( variableKeyBoolean, false)
     const variableJson = useVariable( 'json-key-string', {'jsonStringKey1':'json string value 1'})
 
-
     return (
     <div>
         <div>
