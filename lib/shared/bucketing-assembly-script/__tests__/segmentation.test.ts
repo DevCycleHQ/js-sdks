@@ -1,7 +1,20 @@
 import * as assert from 'assert'
 import {
-    evaluateOperatorFromJSON
+    evaluateOperatorFromJSON,
+    setPlatformData
 } from '../build/bucketing-lib.debug'
+
+const defaultPlatformData = {
+    platform: '',
+    platformVersion: '',
+    sdkType: '',
+    sdkVersion: '',
+    deviceModel: ''
+}
+
+const setPlatformDataJSON = (data: unknown) => {
+    setPlatformData(JSON.stringify(data))
+}
 
 const evaluateOperator = ({ operator, data }: {operator: unknown, data: Record<string, unknown>}) => {
     // set required field to make class constructors happy
@@ -90,6 +103,9 @@ const checkCustomData = (data: Record<string, unknown> | null, filter: unknown):
 }
 
 describe('SegmentationManager Unit Test', () => {
+    beforeEach(() => {
+        setPlatformDataJSON(defaultPlatformData)
+    })
     // TODO update and uncomment these tests when we incorporate list audiences
     // describe('listAudience filters', () => {
     //     it('passes segmentation for single list audience', () => {
@@ -449,7 +465,8 @@ describe('SegmentationManager Unit Test', () => {
                 operator: 'and'
             }
 
-            const data = { platformVersion: '15.1' }
+            const data = { }
+            setPlatformDataJSON({...defaultPlatformData, platformVersion: '15.1'})
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
@@ -464,7 +481,8 @@ describe('SegmentationManager Unit Test', () => {
                 operator: 'and'
             }
 
-            const data = { platform: 'iPadOS' }
+            const data = { }
+            setPlatformDataJSON({...defaultPlatformData, platform: 'iOS'})
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
@@ -479,7 +497,9 @@ describe('SegmentationManager Unit Test', () => {
                 operator: 'and'
             }
 
-            const data = { deviceModel: 'Samsung Galaxy F12' }
+            const data = {}
+            setPlatformDataJSON({...defaultPlatformData, deviceModel: 'Samsung Galaxy F12'})
+
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
@@ -1362,9 +1382,8 @@ describe('SegmentationManager Unit Test', () => {
                 }
             }]
         it('should filter all Android TV audiences properly if it is included in data', () => {
-            const data = {
-                platform: 'Android TV'
-            }
+            const data = {}
+            setPlatformDataJSON({...defaultPlatformData, platform: 'Android TV'})
             const filteredAudiences = audiences.filter((aud) => {
                 return evaluateOperator({ operator: aud.filters, data })
             })
@@ -1375,9 +1394,9 @@ describe('SegmentationManager Unit Test', () => {
         })
         it('should filter experiment with iOS properly', () => {
             const data = {
-                platform: 'iOS',
                 user_id: 'some_id'
             }
+            setPlatformDataJSON({...defaultPlatformData, platform: 'iOS'})
             const filteredAudiences = audiences.filter((aud) => {
                 return evaluateOperator({ operator: aud.filters, data })
             })

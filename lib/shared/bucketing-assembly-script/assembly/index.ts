@@ -3,7 +3,8 @@ import {
 } from './bucketing'
 
 import { JSON } from 'assemblyscript-json/assembly'
-import { ConfigBody, DVCPopulatedUser } from './types'
+import { ConfigBody, DVCPopulatedUser, PlatformData } from './types'
+import { _setPlatformData } from './managers/platformDataManager'
 
 export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
     const boundedHash = _generateBoundedHashes(user_id, target_id)
@@ -19,6 +20,11 @@ export function generateBucketedConfigFromJSON(configStr: string, userStr: strin
 
     const bucketedConfig = _generateBucketedConfig(config, user)
     return bucketedConfig.stringify()
+}
+
+export function setPlatformData(platformDataStr: string): void {
+    const platformData = new PlatformData(platformDataStr)
+    _setPlatformData(platformData)
 }
 
 export * from './test'
