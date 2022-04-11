@@ -1,5 +1,19 @@
-import { testConfigBodyClass, testDVCUserClass } from '../build/bucketing-lib.debug'
+import { setPlatformData, testConfigBodyClass, testDVCUserClass } from '../build/bucketing-lib.debug'
 import testData from '../../bucketing-test-data/json-data/testData.json'
+
+const defaultPlatformData = {
+    platform: 'NodeJS',
+    platformVersion: '',
+    sdkType: 'server',
+    sdkVersion: '1.0.0',
+    deviceModel: ''
+}
+
+const setPlatformDataJSON = (data: unknown) => {
+    setPlatformData(JSON.stringify(data))
+}
+
+setPlatformDataJSON(defaultPlatformData)
 
 describe('WASM test', () => {
     it('should test ConfigBody class JSON parsing', () => {

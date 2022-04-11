@@ -2,7 +2,7 @@ import {
     generateBoundedHashesFromJSON,
     decideTargetVariationFromJSON,
     generateBucketedConfigFromJSON,
-    doesUserPassRolloutFromJSON
+    doesUserPassRolloutFromJSON, setPlatformData
 } from '../build/bucketing-lib.debug'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config, barrenConfig } = testData
@@ -12,6 +12,20 @@ import * as uuid from 'uuid'
 import { BucketedUserConfig } from '../assembly/types'
 
 type BoundedHash = { rolloutHash: number, bucketingHash: number }
+
+const defaultPlatformData = {
+    platform: '',
+    platformVersion: '1.1.2',
+    sdkType: '',
+    sdkVersion: '',
+    deviceModel: ''
+}
+
+const setPlatformDataJSON = (data: unknown) => {
+    setPlatformData(JSON.stringify(data))
+}
+
+setPlatformDataJSON(defaultPlatformData)
 
 const generateBoundedHashes = (user_id: string, target_id: string): BoundedHash => {
     const boundedHashes = generateBoundedHashesFromJSON(user_id, target_id)

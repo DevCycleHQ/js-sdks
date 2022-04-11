@@ -2,6 +2,7 @@ import { JSON } from 'assemblyscript-json/assembly'
 import {
     getF64FromJSONOptional, getStringFromJSON, getStringFromJSONOptional, isFlatJSONObj
 } from '../helpers/jsonHelpers'
+import { _getPlatformData } from '../managers/platformDataManager'
 
 interface DVCUserInterface {
     user_id: string
@@ -15,6 +16,8 @@ interface DVCUserInterface {
     privateCustomData: JSON.Obj | null
 }
 
+
+
 export class DVCUser extends JSON.Obj implements DVCUserInterface {
     user_id: string
     email: string | null
@@ -27,9 +30,6 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
     privateCustomData: JSON.Obj | null
 
     // TODO remove this and update tests when we provide a method to initialize these values
-    platform: string | null
-    platformVersion: string | null
-    deviceModel: string | null
 
 
     constructor(userStr: string) {
@@ -44,10 +44,6 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
         this.language = getStringFromJSONOptional(user, 'language')
         this.country = getStringFromJSONOptional(user, 'country')
         this.appVersion = getStringFromJSONOptional(user, 'appVersion')
-        this.platform = getStringFromJSONOptional(user, 'platform')
-        this.platformVersion = getStringFromJSONOptional(user, 'platformVersion')
-        this.deviceModel = getStringFromJSONOptional(user, 'deviceModel')
-
 
         // Need to set a default "null" value, as numbers can't be null in AS
         this.appBuild = getF64FromJSONOptional(user, 'appBuild', -1)
@@ -134,15 +130,13 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         this.createdDate = new Date(Date.now())
         this.lastSeenDate = new Date(Date.now())
 
-        // TODO: set these from init function
-        const userPlatform = user.platform
-        const userPlatformVersion = user.platformVersion
-        const userDeviceModel = user.deviceModel
-        this.platform = userPlatform !== null ? userPlatform : 'NodeJS'
-        this.platformVersion = userPlatformVersion !== null ? userPlatformVersion : ''
-        this.deviceModel = userDeviceModel !== null ? userDeviceModel : ''
-        this.sdkType = 'server'
-        this.sdkVersion = '1.0.0'
+        const platformData = _getPlatformData()
+
+        this.platform = platformData.platform
+        this.platformVersion = platformData.platformVersion
+        this.deviceModel = platformData.deviceModel
+        this.sdkType = platformData.sdkType
+        this.sdkVersion = platformData.sdkVersion
     }
 
     static populatedUserFromString(userStr: string): DVCPopulatedUser {
