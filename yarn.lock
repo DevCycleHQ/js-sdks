@@ -1702,10 +1702,12 @@ __metadata:
 "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script"
+  dependencies:
+    "@devcycle/bucketing-test-data": 1.0.1
   languageName: unknown
   linkType: soft
 
-"@devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data":
+"@devcycle/bucketing-test-data@1.0.1, @devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data"
   languageName: unknown
@@ -1714,6 +1716,8 @@ __metadata:
 "@devcycle/bucketing@workspace:lib/shared/bucketing":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing@workspace:lib/shared/bucketing"
+  dependencies:
+    "@devcycle/bucketing-test-data": 1.0.1
   languageName: unknown
   linkType: soft
 
