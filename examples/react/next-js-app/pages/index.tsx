@@ -11,13 +11,11 @@ const Home: NextPage = () => {
     const variableKeyBoolean = 'variable-key-boolean'
     const variableKeyJson = 'json-key-string'
 
-
     const variable = useVariable( variableKey, true)
     const variableString = useVariable( variableKeyString, 'pink')
     const variableNumber = useVariable( variableKeyNumber, 100)
     const variableBoolean = useVariable( variableKeyBoolean, false)
     const variableJson = useVariable( 'json-key-string', {'jsonStringKey1':'json string value 1'})
-
 
     return (
         <div className={styles.container}>
