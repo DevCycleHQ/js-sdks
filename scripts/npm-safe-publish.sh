@@ -51,7 +51,7 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
     exit 1
   fi
 
-  yarn publish --otp=$OTP
+  npm publish --otp=$OTP
 else
   echo "Versions are the same ($NPM_SHOW = $NPM_LS). Not pushing"
 fi
