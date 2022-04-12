@@ -1,6 +1,6 @@
 import { ConfigBody } from '../types'
 
-let _configData: Map<string, ConfigBody> = new Map()
+const _configData: Map<string, ConfigBody> = new Map()
 
 export function _setConfigData(token: string, configData: ConfigBody): void {
     _configData.set(token, configData)

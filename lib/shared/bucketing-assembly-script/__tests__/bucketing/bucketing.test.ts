@@ -5,13 +5,13 @@ import {
     doesUserPassRolloutFromJSON,
     setPlatformData,
     setConfigData
-} from '../build/bucketing-lib.debug'
+} from '../../build/bucketing-lib.debug'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config, barrenConfig } = testData
 
 import moment from 'moment'
 import * as uuid from 'uuid'
-import { BucketedUserConfig } from '../assembly/types'
+import { BucketedUserConfig } from '../../assembly/types'
 
 type BoundedHash = { rolloutHash: number, bucketingHash: number }
 
@@ -45,8 +45,8 @@ const generateBucketedConfig = (
     { config, user }:
     { config: unknown, user: unknown }
 ): BucketedUserConfig => {
-    setConfigData("token", JSON.stringify(config))
-    const bucketedConfig = generateBucketedConfigForUser("token", JSON.stringify(user))
+    setConfigData('token', JSON.stringify(config))
+    const bucketedConfig = generateBucketedConfigForUser('token', JSON.stringify(user))
     return JSON.parse(bucketedConfig) as BucketedUserConfig
 }
 
