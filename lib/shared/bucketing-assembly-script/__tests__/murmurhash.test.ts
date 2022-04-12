@@ -14,10 +14,14 @@ function randString(length: number) {
 describe('murmurhash V3 Assembly Script implementation', () => {
     it('should return the correct hash for simple strings with a varying seed', () => {
         for (let i = 0; i < 2000; i++) {
-            expect(murmurhashV3_js('some-long-ascii-string', i)).toContain(`${murmurhash.v3('some-long-ascii-string', i)}`)
-            expect(murmurhashV3_js('some-long-ascii-string?', i)).toContain(`${murmurhash.v3('some-long-ascii-string?', i)}`)
-            expect(murmurhashV3_js('some-long-ascii-string!', i)).toContain(`${murmurhash.v3('some-long-ascii-string!', i)}`)
-            expect(murmurhashV3_js('some-long-ascii-string*', i)).toContain(`${murmurhash.v3('some-long-ascii-string*', i)}`)
+            expect(murmurhashV3_js('some-long-ascii-string', i))
+                .toContain(`${murmurhash.v3('some-long-ascii-string', i)}`)
+            expect(murmurhashV3_js('some-long-ascii-string?', i))
+                .toContain(`${murmurhash.v3('some-long-ascii-string?', i)}`)
+            expect(murmurhashV3_js('some-long-ascii-string!', i))
+                .toContain(`${murmurhash.v3('some-long-ascii-string!', i)}`)
+            expect(murmurhashV3_js('some-long-ascii-string*', i))
+                .toContain(`${murmurhash.v3('some-long-ascii-string*', i)}`)
         }
     })
 

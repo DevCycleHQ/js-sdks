@@ -23,8 +23,7 @@
           "lint",
           "check-types",
           "package",
-          "prepare",
-          "build:json"
+          "prepare"
         ],
         "parallel": 1
       }

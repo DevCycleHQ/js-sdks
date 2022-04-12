@@ -6,7 +6,7 @@ import {
     jsonArrFromValueArray,
     jsonObjFromMap, isValidString
 } from '../helpers/jsonHelpers'
-import { Feature,  } from "./feature"
+import { Feature,  } from './feature'
 
 export class PublicProject extends JSON.Value {
     _id: string
@@ -83,12 +83,12 @@ export class ConfigBody {
     constructor(configStr: string) {
         const configJSON = JSON.parse(configStr)
 
-        if (!configJSON.isObj) throw new Error(`generateBucketedConfig config param not a JSON Object`)
+        if (!configJSON.isObj) throw new Error('generateBucketedConfig config param not a JSON Object')
         const configJSONObj = configJSON as JSON.Obj
 
-        this.project = new PublicProject(getJSONObjFromJSON(configJSONObj, "project"))
+        this.project = new PublicProject(getJSONObjFromJSON(configJSONObj, 'project'))
 
-        this.environment = new PublicEnvironment(getJSONObjFromJSON(configJSONObj, "environment"))
+        this.environment = new PublicEnvironment(getJSONObjFromJSON(configJSONObj, 'environment'))
 
         const features = getJSONArrayFromJSON(configJSONObj, 'features')
         this.features = features.valueOf().map<Feature>((feature) => {
@@ -111,7 +111,6 @@ export class ConfigBody {
         }
         this.variableHashes = variableHashesMap
     }
-
 
     stringify(): string {
         const json: JSON.Obj = new JSON.Obj()

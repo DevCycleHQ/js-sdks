@@ -7,7 +7,7 @@ import {
     getStringFromJSONOptional,
     jsonObjFromMap
 } from '../helpers/jsonHelpers'
-import { PublicProject, PublicEnvironment } from "./configBody"
+import { PublicProject, PublicEnvironment } from './configBody'
 
 export class BucketedUserConfig extends JSON.Obj {
     constructor(
@@ -27,12 +27,12 @@ export class BucketedUserConfig extends JSON.Obj {
      */
     static bucketedUserConfigFromJSONString(userConfigStr: string): BucketedUserConfig {
         const userConfigJSON = JSON.parse(userConfigStr)
-        if (!userConfigJSON.isObj) throw new Error(`bucketedUserConfigFromJSONString not a JSON Object`)
+        if (!userConfigJSON.isObj) throw new Error('bucketedUserConfigFromJSONString not a JSON Object')
         const userConfigJSONObj = userConfigJSON as JSON.Obj
 
-        const project = new PublicProject(getJSONObjFromJSON(userConfigJSONObj, "project"))
+        const project = new PublicProject(getJSONObjFromJSON(userConfigJSONObj, 'project'))
 
-        const environment = new PublicEnvironment(getJSONObjFromJSON(userConfigJSONObj, "environment"))
+        const environment = new PublicEnvironment(getJSONObjFromJSON(userConfigJSONObj, 'environment'))
 
         const features = getJSONObjFromJSON(userConfigJSONObj, 'features')
         const featuresMap = new Map<string, SDKFeature>()

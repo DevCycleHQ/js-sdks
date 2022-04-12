@@ -11,7 +11,7 @@ export class PlatformData extends JSON.Obj {
     constructor(str: string) {
         super()
         const json = JSON.parse(str)
-        if (!json.isObj) throw new Error(`Platform data not a JSON Object`)
+        if (!json.isObj) throw new Error('Platform data not a JSON Object')
         const jsonObj = json as JSON.Obj
 
         this.platform = getStringFromJSON(jsonObj, 'platform')

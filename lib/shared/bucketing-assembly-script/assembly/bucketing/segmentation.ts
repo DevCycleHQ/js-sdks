@@ -1,11 +1,11 @@
 import { RegExp } from 'assemblyscript-regex/assembly'
-import {  findString, includes, replace} from '../helpers/lodashHelpers'
+import {  findString, includes, replace } from '../helpers/lodashHelpers'
 import { OptionsType, versionCompare } from './versionCompare'
 import {
     TopLevelOperator, AudienceFilterOrOperator, DVCPopulatedUser, validSubTypes,
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
-import {getF64FromJSONValue} from '../helpers/jsonHelpers'
+import { getF64FromJSONValue } from '../helpers/jsonHelpers'
 
 // TODO add support for OR/XOR as well as recursive filters
 /**
@@ -41,7 +41,7 @@ export function _evaluateOperator(operator: TopLevelOperator, user: DVCPopulated
 function doesUserPassFilter(filter: AudienceFilterOrOperator, user: DVCPopulatedUser): bool {
     if (filter.type === 'all') return true
     if (!filter.subType || !user) {
-        throw new Error(`Missing filter subType`)
+        throw new Error('Missing filter subType')
     }
     const subType = filter.subType as string
     if (!validSubTypes.includes(subType)) {
@@ -125,30 +125,31 @@ export function checkVersionFilter(
         not = true
     }
 
+    let parsedFilterVersions = filterVersions
     if (parsedOperator !== '=') {
         // remove any non-number and . characters, and remove everything after a hyphen
         // eg. 1.2.3a-b6 becomes 1.2.3
-        const regex1 = new RegExp("[^(\\d|.|\\-)]", "g")
-        const regex2 = new RegExp("-.*", "g")
+        const regex1 = new RegExp('[^(\\d|.|\\-)]', 'g')
+        const regex2 = new RegExp('-.*', 'g')
         parsedVersion = replace(replace(parsedVersion, regex1, ''), regex2, '')
 
-        let mappedFilterVersions: string[] = []
+        const mappedFilterVersions: string[] = []
         // Replace Array.map(), because you can't access captured data in a closure
         for (let i=0; i < filterVersions.length; i++) {
             mappedFilterVersions.push(replace(replace(filterVersions[i], regex1, ''), regex2, ''))
         }
-        filterVersions = mappedFilterVersions
+        parsedFilterVersions = mappedFilterVersions
     }
 
     parsedVersion = convertToSemanticVersion(parsedVersion)
 
     let passed = false
     // Replace Array.some(), because you can't access captured data in a closure
-    for (let i = 0; i < filterVersions.length; i++) {
-         if (checkVersionValue(filterVersions[i], parsedVersion, operator)) {
-             passed = true
-             break
-         }
+    for (let i = 0; i < parsedFilterVersions.length; i++) {
+        if (checkVersionValue(parsedFilterVersions[i], parsedVersion, operator)) {
+            passed = true
+            break
+        }
     }
 
     return !not ? passed : !passed

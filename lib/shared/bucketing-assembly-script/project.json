@@ -4,6 +4,24 @@
     "projectType": "library",
     "implicitDependencies": ["shared-bucketing-test-data"],
     "targets": {
+      "check-types": {
+        "executor": "@nrwl/workspace:run-commands",
+        "options": {
+          "command": "asc assembly/index.ts --target debug",
+          "cwd": "lib/shared/bucketing-assembly-script"
+        }
+      },
+      "lint": {
+        "executor": "@nrwl/linter:eslint",
+        "outputs": [
+          "{options.outputFile}"
+        ],
+        "options": {
+          "lintFilePatterns": [
+            "lib/shared/bucketing-assembly-script/**/*.ts"
+          ]
+        }
+      },
         "test": {
             "executor": "@nrwl/workspace:run-commands",
             "options": {
