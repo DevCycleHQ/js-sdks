@@ -2,9 +2,6 @@
   "private": true,
   "name": "devcycle-js-sdks",
   "version": "1.0.0",
-  "engines": {
-    "node": "^16.13"
-  },
   "workspaces": [
     "sdk/*",
     "lib/**/*",
