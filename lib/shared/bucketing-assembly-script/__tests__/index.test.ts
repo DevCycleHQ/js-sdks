@@ -37,12 +37,12 @@ describe('WASM test', () => {
             appVersion: '3.6.1',
             appBuild: 1911,
             customData: {
-                "string": "val",
-                "num": 610,
-                "bool": true
+                'string': 'val',
+                'num': 610,
+                'bool': true
             },
             privateCustomData: {
-                "key": "val"
+                'key': 'val'
             }
         }
 
@@ -66,8 +66,8 @@ describe('WASM test', () => {
         const userObj = {
             user_id: '24601',
             customData: {
-                "string": "val",
-                "num": [610, 2809],
+                'string': 'val',
+                'num': [610, 2809],
             },
         }
 
@@ -79,9 +79,9 @@ describe('WASM test', () => {
         const userObj = {
             user_id: '24601',
             privateCustomData: {
-                "key": "val",
-                "values": {
-                    "obj": true
+                'key': 'val',
+                'values': {
+                    'obj': true
                 }
             }
         }

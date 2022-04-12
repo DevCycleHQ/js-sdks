@@ -18,7 +18,7 @@ const setPlatformDataJSON = (data: unknown) => {
 
 const evaluateOperator = ({ operator, data }: {operator: unknown, data: Record<string, unknown>}) => {
     // set required field to make class constructors happy
-    data.user_id ||= "some_user"
+    data.user_id ||= 'some_user'
     return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
 }
 
@@ -51,7 +51,7 @@ const checkBooleanFilter = (bool: unknown, filter: {values?: unknown[], comparat
         'operator': 'and'
     }
 
-    const data = { customData: {key: bool}, user_id: 'some_user' }
+    const data = { customData: { key: bool }, user_id: 'some_user' }
 
     return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
 }
@@ -69,7 +69,7 @@ const checkNumbersFilter = (number: unknown, filter: {values?: unknown[], compar
         'operator': 'and'
     }
 
-    const data = { customData: {key: number}, user_id: 'some_user' }
+    const data = { customData: { key: number }, user_id: 'some_user' }
     return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
 }
 const checkVersionFilters = (appVersion: string, filter: {values?: unknown[], comparator: string}): boolean => {
@@ -278,7 +278,8 @@ describe('SegmentationManager Unit Test', () => {
     //         try {
     //             segmentation.evaluateFilters({ filters, data: appUser })
     //         } catch (e) {
-    //             expect(e.message).toBe('ListAudience filter must be an object, has not been prepared for segmentation')
+    //             expect(e.message)
+    //              .toBe('ListAudience filter must be an object, has not been prepared for segmentation')
     //             return
     //         }
     //
@@ -466,7 +467,7 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = { }
-            setPlatformDataJSON({...defaultPlatformData, platformVersion: '15.1'})
+            setPlatformDataJSON({ ...defaultPlatformData, platformVersion: '15.1' })
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
@@ -482,7 +483,7 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = { }
-            setPlatformDataJSON({...defaultPlatformData, platform: 'iOS'})
+            setPlatformDataJSON({ ...defaultPlatformData, platform: 'iOS' })
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
@@ -498,7 +499,7 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = {}
-            setPlatformDataJSON({...defaultPlatformData, deviceModel: 'Samsung Galaxy F12'})
+            setPlatformDataJSON({ ...defaultPlatformData, deviceModel: 'Samsung Galaxy F12' })
 
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
@@ -578,7 +579,7 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         it('should return false if string is not a string', () => {
-            assert.strictEqual(false, checkStringsFilter(1, {comparator: '='}))
+            assert.strictEqual(false, checkStringsFilter(1, { comparator: '=' }))
         })
         it('should return false if filter value is not a string', () => {
             const filter = { type: 'user', comparator: '=', values: [1, 2] }
@@ -874,7 +875,8 @@ describe('SegmentationManager Unit Test', () => {
     //         try {
     //             segmentation.checkListAudienceFilter({ data, values, comparator })
     //         } catch (e) {
-    //             assert.strictEqual(e.message, 'ListAudience filter must be an object, has not been prepared for segmentation')
+    //             assert.strictEqual(e.message,
+    //              'ListAudience filter must be an object, has not been prepared for segmentation')
     //             return
     //         }
     //         throw new Error()
@@ -1158,7 +1160,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, checkCustomData({ strKey: 'value' }, filterStr))
         })
         it('should return true if string is one OR value', () => {
-            const filter = {...filterStr}
+            const filter = { ...filterStr }
             filter.values = ['value', 'value too']
             assert.strictEqual(true, checkCustomData({ strKey: 'value' }, filter))
         })
@@ -1170,14 +1172,14 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false, checkCustomData({}, filterStr))
         })
 
-        const filterNum = {...filterStr}
+        const filterNum = { ...filterStr }
         filterNum.dataKey = 'numKey'
         filterNum.values = [0]
         it('should return true if number value is equal', () => {
             assert.strictEqual(true, checkCustomData({ numKey: 0 }, filterNum))
         })
         it('should return true if number is one OR value', () => {
-            const filter = {...filterNum}
+            const filter = { ...filterNum }
             filter.values = [0, 1]
             assert.strictEqual(true, checkCustomData({ numKey: 1 }, filter))
         })
@@ -1185,7 +1187,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false, checkCustomData({ numKey: 1 }, filterNum))
         })
 
-        const filterBool = {...filterStr}
+        const filterBool = { ...filterStr }
         filterBool.dataKey = 'boolKey'
         filterBool.values = [false]
         it('should return true if bool value is equal', () => {
@@ -1220,7 +1222,7 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         it('should return true if one custom data key is missing with not equal filter value', () => {
-            const filter = {...filterNum}
+            const filter = { ...filterNum }
             filter.comparator = '!='
             const operatorFilter = {
                 filters: [filterStr, filter, filterBool],
@@ -1235,14 +1237,14 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         it('should return true if no custom data is provided with not equal filter value', () => {
-            const filter = {...filterNum}
+            const filter = { ...filterNum }
             filter.comparator = '!='
             const data = null as unknown as Record<string, unknown>
             assert.strictEqual(true, checkCustomData(data, filter))
         })
 
         it('should return true if no custom data is provided with not exists filter value', () => {
-            const filter = {...filterNum}
+            const filter = { ...filterNum }
             filter.comparator = '!exist'
 
             const data = null as unknown as Record<string, unknown>
@@ -1250,7 +1252,7 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         it('should return false if no custom data is provided with not equal filter and others', () => {
-            const filter = {...filterNum}
+            const filter = { ...filterNum }
             filter.comparator = '!='
             const operatorFilter = {
                 filters: [filterStr, filter, filterBool],
@@ -1265,7 +1267,7 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         it('should return false if no custom data is provided with not exists filter and others', () => {
-            const filter = {...filterNum}
+            const filter = { ...filterNum }
             filter.comparator = '!exist'
             const operatorFilter = {
                 filters: [filterStr, filter, filterBool],
@@ -1383,7 +1385,7 @@ describe('SegmentationManager Unit Test', () => {
             }]
         it('should filter all Android TV audiences properly if it is included in data', () => {
             const data = {}
-            setPlatformDataJSON({...defaultPlatformData, platform: 'Android TV'})
+            setPlatformDataJSON({ ...defaultPlatformData, platform: 'Android TV' })
             const filteredAudiences = audiences.filter((aud) => {
                 return evaluateOperator({ operator: aud.filters, data })
             })
@@ -1396,7 +1398,7 @@ describe('SegmentationManager Unit Test', () => {
             const data = {
                 user_id: 'some_id'
             }
-            setPlatformDataJSON({...defaultPlatformData, platform: 'iOS'})
+            setPlatformDataJSON({ ...defaultPlatformData, platform: 'iOS' })
             const filteredAudiences = audiences.filter((aud) => {
                 return evaluateOperator({ operator: aud.filters, data })
             })

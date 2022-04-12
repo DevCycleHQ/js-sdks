@@ -16,8 +16,6 @@ interface DVCUserInterface {
     privateCustomData: JSON.Obj | null
 }
 
-
-
 export class DVCUser extends JSON.Obj implements DVCUserInterface {
     user_id: string
     email: string | null
@@ -31,11 +29,10 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
 
     // TODO remove this and update tests when we provide a method to initialize these values
 
-
     constructor(userStr: string) {
         super()
         const userJSON = JSON.parse(userStr)
-        if (!userJSON.isObj) throw new Error(`dvcUserFromJSONString not a JSON Object`)
+        if (!userJSON.isObj) throw new Error('dvcUserFromJSONString not a JSON Object')
         const user = userJSON as JSON.Obj
 
         this.user_id = getStringFromJSON(user, 'user_id')
@@ -50,13 +47,13 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
 
         const customData = user.getObj('customData')
         if (!isFlatJSONObj(customData)) {
-            throw new Error(`DVCUser customData can't contain nested objects or arrays`)
+            throw new Error('DVCUser customData can\'t contain nested objects or arrays')
         }
         this.customData = customData
 
         const privateCustomData = user.getObj('privateCustomData')
         if (!isFlatJSONObj(privateCustomData)) {
-            throw new Error(`DVCUser privateCustomData can't contain nested objects or arrays`)
+            throw new Error('DVCUser privateCustomData can\'t contain nested objects or arrays')
         }
         this.privateCustomData = privateCustomData
 

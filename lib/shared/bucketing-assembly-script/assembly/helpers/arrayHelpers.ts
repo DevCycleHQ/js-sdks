@@ -32,7 +32,6 @@ export function sortObjectsByString<T>(arr: SortingArray<T>, direction: string):
             }
         }
 
-
         if (isNaN(b.value.charCodeAt(cursor))) {
             // first string is longer
             return 1
@@ -42,7 +41,7 @@ export function sortObjectsByString<T>(arr: SortingArray<T>, direction: string):
         return a.value.charCodeAt(cursor) - b.value.charCodeAt(cursor)
     })
 
-    let result: T[] = []
+    const result: T[] = []
     for (let i = 0; i < sorted.length; i++) {
         result.push(sorted[i].entry)
     }

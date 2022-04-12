@@ -66,7 +66,7 @@ describe('User Hashing and Bucketing', () => {
         }
 
         const testTarget = {
-            _audience: { _id: 'id', filters: {filters: [], operator: 'and'}},
+            _audience: { _id: 'id', filters: { filters: [], operator: 'and' } },
             _id: 'target',
             distribution: [
                 { _variation: 'var1', percentage: 0.25 },
@@ -80,7 +80,9 @@ describe('User Hashing and Bucketing', () => {
             const user_id = uuid.v4()
             const { bucketingHash } = generateBoundedHashes(user_id, testTarget._id)
 
-            const variation = decideTargetVariation({ target: testTarget, boundedHash: bucketingHash }) as keyof typeof buckets
+            const variation = decideTargetVariation(
+                { target: testTarget, boundedHash: bucketingHash }
+            ) as keyof typeof buckets
             buckets[variation]++
             buckets.total++
         }

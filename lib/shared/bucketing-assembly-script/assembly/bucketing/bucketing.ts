@@ -40,7 +40,7 @@ export function generateBoundedHash(input: string, hashSeed: i32): f64 {
  * Given the feature and a hash of the user_id, bucket the user according to the variation distribution percentages
  */
 export function _decideTargetVariation(target: PublicTarget, boundedHash: f64): string {
-    let sortingArray: SortingArray<TargetDistribution> = []
+    const sortingArray: SortingArray<TargetDistribution> = []
     for (let i = 0; i < target.distribution.length; i++) {
         sortingArray.push({
             entry: target.distribution[i],
@@ -71,7 +71,6 @@ export function getCurrentRolloutPercentage(rollout: PublicRollout, currentDate:
     }
 
     const stages = rollout.stages
-
 
     const currentStages: RolloutStage[] = []
     const nextStages: RolloutStage[] = []

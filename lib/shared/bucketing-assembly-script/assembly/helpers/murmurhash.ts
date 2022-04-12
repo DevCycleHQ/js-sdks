@@ -1,3 +1,6 @@
+/* eslint-disable */
+// Linter disabled due to this code depending on semicolons etc. 
+
 export function murmurhashV3_js(key: string, seed: u32): string {
     return `${murmurhashV3(key, seed)}`
 }
