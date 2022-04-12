@@ -2,7 +2,7 @@ import * as assert from 'assert'
 import {
     evaluateOperatorFromJSON,
     setPlatformData
-} from '../build/bucketing-lib.debug'
+} from '../../build/bucketing-lib.debug'
 
 const defaultPlatformData = {
     platform: '',

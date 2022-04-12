@@ -1,4 +1,4 @@
-import { testSortObjectsByString } from '../build/bucketing-lib.debug'
+import { testSortObjectsByString } from '../../build/bucketing-lib.debug'
 
 describe('array helpers', () => {
     describe('sortObjectsByString', () => {

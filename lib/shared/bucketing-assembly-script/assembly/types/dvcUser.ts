@@ -126,7 +126,6 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         this.lastSeenDate = new Date(Date.now())
 
         const platformData = _getPlatformData()
-
         this.platform = platformData.platform
         this.platformVersion = platformData.platformVersion
         this.deviceModel = platformData.deviceModel

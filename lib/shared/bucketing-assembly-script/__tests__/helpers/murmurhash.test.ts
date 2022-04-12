@@ -1,5 +1,5 @@
 import murmurhash from 'murmurhash'
-import { murmurhashV3_js } from '../build/bucketing-lib.debug'
+import { murmurhashV3_js } from '../../build/bucketing-lib.debug'
 
 function randString(length: number) {
     let result = ''
@@ -32,8 +32,7 @@ describe('murmurhash V3 Assembly Script implementation', () => {
         }
     })
 
-    it('should fail for a non-ascii key', () => {
-        expect(() => murmurhashV3_js('\u11a7', 1))
-            .toThrow('Bucketing randomization key must contain only ascii characters')
+    it('should not fail for a non-ascii key', () => {
+        expect(() => murmurhashV3_js('\u11a7 5656 \u11a7', 1)).not.toThrow()
     })
 })

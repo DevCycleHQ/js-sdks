@@ -1,25 +1,21 @@
 /* eslint-disable */
-// Linter disabled due to this code depending on semicolons etc. 
+// Linter disabled due to this code depending on semicolons etc.
+import { unicodeEscape } from './stringHelpers'
 
 export function murmurhashV3_js(key: string, seed: u32): string {
     return `${murmurhashV3(key, seed)}`
 }
 
 export function murmurhashV3(key: string, seed: u32): u32 {
-    let keyBuffer = new Int32Array(key.length);
-    for (let i = 0; i < key.length; i++) {
-        const charCode = i32(key.charCodeAt(i))
-        if (charCode > 255) {
-            throw new Error('Bucketing randomization key must contain only ascii characters')
-        }
-        keyBuffer[i] = charCode
+    const asciiKey = unicodeEscape(key)
+    let keyBuffer = new Int32Array(asciiKey.length);
+    for (let i = 0; i < asciiKey.length; i++) {
+        keyBuffer[i] = asciiKey.charCodeAt(i);
     }
 
-    let remainder: i32, bytes: i32, h1b: i32, c1: i32, c2: i32, k1: i32, i: i32;
+    let remainder: i32, bytes: i32, h1b: i32, c1: i32, c2: i32, k1: i32, i: i32, h1: i32;
 
-    let h1: i32;
-
-    remainder = key.length & 3;
+    remainder = asciiKey.length & 3;
     bytes = keyBuffer.length - remainder;
     h1 = seed;
     c1 = 0xcc9e2d51;
