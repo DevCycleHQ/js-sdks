@@ -43,6 +43,7 @@ const checkBooleanFilter = (bool: unknown, filter: {values?: unknown[], comparat
         dataKey: 'key',
         type: 'user',
         subType: 'customData',
+        dataKeyType: 'Boolean',
         ...filter
     }
 
@@ -61,6 +62,7 @@ const checkNumbersFilter = (number: unknown, filter: {values?: unknown[], compar
         dataKey: 'key',
         type: 'user',
         subType: 'customData',
+        dataKeyType: 'Number',
         ...filter
     }
 
@@ -378,7 +380,13 @@ describe('SegmentationManager Unit Test', () => {
         it('should work for an AND operator containing a custom data filter', () => {
             const filters = [
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
-                { type: 'user', subType: 'customData', datakey: '', comparator: '=', values: ['Canada'] }
+                {   type: 'user',
+                    subType: 'customData',
+                    dataKey: 'something',
+                    comparator: '!=',
+                    values: ['Canada'],
+                    dataKeyType: 'String'
+                }
             ]
 
             const operator = {
@@ -1150,6 +1158,7 @@ describe('SegmentationManager Unit Test', () => {
             dataKey: 'strKey',
             type: 'user',
             subType: 'customData',
+            dataKeyType: 'String',
             values: ['value'] as unknown[]
         }
         it('should return false if filter and no data', () => {
@@ -1174,6 +1183,7 @@ describe('SegmentationManager Unit Test', () => {
 
         const filterNum = { ...filterStr }
         filterNum.dataKey = 'numKey'
+        filterNum.dataKeyType = 'Number'
         filterNum.values = [0]
         it('should return true if number value is equal', () => {
             assert.strictEqual(true, checkCustomData({ numKey: 0 }, filterNum))
@@ -1189,6 +1199,7 @@ describe('SegmentationManager Unit Test', () => {
 
         const filterBool = { ...filterStr }
         filterBool.dataKey = 'boolKey'
+        filterBool.dataKeyType = 'Boolean'
         filterBool.values = [false]
         it('should return true if bool value is equal', () => {
             assert.strictEqual(true, checkCustomData({ boolKey: false }, filterBool))
@@ -1286,6 +1297,7 @@ describe('SegmentationManager Unit Test', () => {
             type: 'user',
             subType: 'customData',
             dataKey: 'last_order_no',
+            dataKeyType: 'String',
             values: ['FP']
         }
         it('should return true if custom data contains value', () => {
@@ -1297,6 +1309,7 @@ describe('SegmentationManager Unit Test', () => {
             type: 'user',
             subType: 'customData',
             dataKey: 'field',
+            dataKeyType: 'String',
             values: []
         }
         it('should return true if custom data value exists', () => {
