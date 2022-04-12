@@ -30,7 +30,7 @@ const user = {
   isAnonymous: false
 }
 
-export const App = () => {
+export const App = (): JSX.Element => {
   const [whatsNextYCoord, setWhatsNextYCoord] = useState<number>(0);
   const scrollViewRef = useRef<null | ScrollView>(null);
   const [variables, setVariables] = useState({});
@@ -81,7 +81,8 @@ export const App = () => {
             </Text>
             <Text style={styles.textLg}>
               My device: <Text style={styles.textBold}>{DeviceInfo.getModel()}</Text> {'\n'}
-              The value for <Text style={styles.textBold}>{VARIABLE_KEY}</Text> is <Text style={styles.textBold}>{JSON.stringify(variable.value)}</Text>
+              The value for <Text style={styles.textBold}>{VARIABLE_KEY}</Text> is 
+              <Text style={styles.textBold}>{JSON.stringify(variable.value)}</Text>
             </Text>
             <TouchableOpacity
                 style={styles.whatsNextButton}
