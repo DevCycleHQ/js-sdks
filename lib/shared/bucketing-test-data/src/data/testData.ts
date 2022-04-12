@@ -1,14 +1,15 @@
 import {
+    AudienceOperator,
     ConfigBody,
+    DataKeyType,
+    FeatureType,
+    FilterComparator,
+    FilterType,
     PublicAudience,
     PublicEnvironment,
     PublicProject,
     PublicVariable,
     PublicVariation,
-    AudienceOperator,
-    FilterComparator,
-    FeatureType,
-    FilterType,
     UserSubType,
     VariableType
 } from '@devcycle/types'
@@ -70,6 +71,7 @@ export const audiences: PublicAudience[] = [
                 type: FilterType.user,
                 subType: UserSubType.customData,
                 dataKey: 'favouriteFood',
+                dataKeyType: DataKeyType.string,
                 comparator: FilterComparator['='],
                 values: ['pizza']
             },
@@ -77,6 +79,7 @@ export const audiences: PublicAudience[] = [
                 type: FilterType.user,
                 subType: UserSubType.customData,
                 dataKey: 'favouriteDrink',
+                dataKeyType: DataKeyType.string,
                 comparator: FilterComparator['='],
                 values: ['coffee']
             }],
@@ -90,12 +93,14 @@ export const audiences: PublicAudience[] = [
                 type: FilterType.user,
                 subType: UserSubType.customData,
                 dataKey: 'favouriteNumber',
+                dataKeyType: DataKeyType.number,
                 comparator: FilterComparator['='],
                 values: [610]
             }, {
                 type: FilterType.user,
                 subType: UserSubType.customData,
                 dataKey: 'favouriteBoolean',
+                dataKeyType: DataKeyType.boolean,
                 comparator: FilterComparator['='],
                 values: [true, false]
             }],

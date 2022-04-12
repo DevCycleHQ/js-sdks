@@ -4,7 +4,7 @@
 
 import { JSON } from 'assemblyscript-json/assembly'
 import {
-    AudienceFilterOrOperator, BucketedUserConfig, ConfigBody,
+    AudienceFilterOrOperator, BucketedUserConfig, ConfigBody, CustomDataFilter,
     DVCPopulatedUser,
     DVCUser,
     Rollout as PublicRollout,
@@ -35,11 +35,13 @@ export function checkVersionFiltersFromJSON(appVersion: string | null, filterStr
 export function checkCustomDataFromJSON(data: string | null, filterStr: string): bool {
     const filterJSON = JSON.parse(filterStr)
     const dataJSON = JSON.parse(data || 'null')
+
     if (!filterJSON.isObj) throw new Error('checkCustomDataFromJSON filterStr param not a JSON Object')
     if (dataJSON && !dataJSON.isNull && !dataJSON.isObj) {
         throw new Error('checkCustomDataFromJSON data param not a JSON Object')
     }
-    const filter = new AudienceFilterOrOperator(filterJSON as JSON.Obj)
+
+    const filter = new CustomDataFilter(filterJSON as JSON.Obj)
     const dataJSONObj = dataJSON && dataJSON.isObj ? dataJSON as JSON.Obj : null
     return _checkCustomData(dataJSONObj, filter)
 }

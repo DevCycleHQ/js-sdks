@@ -2,7 +2,7 @@ import { RegExp } from 'assemblyscript-regex/assembly'
 import {  findString, includes, replace } from '../helpers/lodashHelpers'
 import { OptionsType, versionCompare } from './versionCompare'
 import {
-    TopLevelOperator, AudienceFilterOrOperator, DVCPopulatedUser, validSubTypes,
+    TopLevelOperator, AudienceFilterOrOperator, DVCPopulatedUser, validSubTypes, CustomDataFilter,
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { getF64FromJSONValue } from '../helpers/jsonHelpers'
@@ -67,7 +67,7 @@ function filterFunctionsBySubtype(subType: string, user: DVCPopulatedUser, filte
     } else if (subType === 'platform') {
         return _checkStringsFilter(user.platform, filter)
     } else if (subType === 'customData') {
-        return _checkCustomData(user.getCombinedCustomData(), filter)
+        return _checkCustomData(user.getCombinedCustomData(), filter as CustomDataFilter)
     } else {
         return false
     }
@@ -258,38 +258,33 @@ export function _checkVersionFilters(appVersion: string | null, filter: Audience
     }
 }
 
-export function _checkCustomData(data: JSON.Obj | null, filter: AudienceFilterOrOperator): bool {
-    const values = getFilterValues(filter)
+export function _checkCustomData(data: JSON.Obj | null, filter: CustomDataFilter): bool {
     const operator = filter.comparator
 
-    if (filter.dataKey) {
-        const firstValue = values.length > 0 ? values[0] : null
-        const dataValue = data ? data.get(filter.dataKey as string) : null
+    const dataValue = data ? data.get(filter.dataKey as string) : null
 
-        if (operator === 'exist') {
-            return checkValueExists(dataValue)
-        } else if (operator === '!exist') {
-            return !checkValueExists(dataValue)
-        } else if (firstValue && firstValue.isString && dataValue && (dataValue.isString || dataValue.isNull)) {
-            if (dataValue.isNull) {
-                return _checkStringsFilter(null, filter)
-            } else {
-                const jsonStr = dataValue as JSON.Str
-                return _checkStringsFilter(jsonStr.valueOf(), filter)
-            }
-        } else if (firstValue && (firstValue.isFloat || firstValue.isInteger)
-            && dataValue && (dataValue.isFloat || dataValue.isInteger)) {
-            return checkNumbersFilterJSONValue(dataValue, filter)
-        } else if (firstValue && firstValue.isBool && dataValue && dataValue.isBool) {
-            const boolValue = dataValue as JSON.Bool
-            return _checkBooleanFilter(boolValue.valueOf(), filter)
-        } else if (!dataValue && operator === '!=') {
-            return true
+    if (operator === 'exist') {
+        return checkValueExists(dataValue)
+    } else if (operator === '!exist') {
+        return !checkValueExists(dataValue)
+    } else if (filter.dataKeyType === 'String' && dataValue && (dataValue.isString || dataValue.isNull)) {
+        if (dataValue.isNull) {
+            return _checkStringsFilter(null, filter)
         } else {
-            return false
+            const jsonStr = dataValue as JSON.Str
+            return _checkStringsFilter(jsonStr.valueOf(), filter)
         }
+    } else if (filter.dataKeyType === 'Number'
+        && dataValue && (dataValue.isFloat || dataValue.isInteger)) {
+        return checkNumbersFilterJSONValue(dataValue, filter)
+    } else if (filter.dataKeyType === 'Boolean' && dataValue && dataValue.isBool) {
+        const boolValue = dataValue as JSON.Bool
+        return _checkBooleanFilter(boolValue.valueOf(), filter)
+    } else if (!dataValue && operator === '!=') {
+        return true
+    } else {
+        return false
     }
-    return true
 }
 
 export function getFilterValues(filter: AudienceFilterOrOperator): JSON.Value[] {

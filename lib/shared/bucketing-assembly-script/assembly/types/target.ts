@@ -4,7 +4,7 @@ import {
     getF64FromJSONObj, getF64FromJSONOptional,
     getJSONArrayFromJSON,
     getJSONObjFromJSON,
-    getStringFromJSON,
+    getStringFromJSON, getStringFromJSONOptional,
     isValidString,
     isValidStringOptional, jsonArrFromValueArray
 } from '../helpers/jsonHelpers'
@@ -71,7 +71,7 @@ export class TopLevelOperator extends JSON.Value {
         super()
         const filters = getJSONArrayFromJSON(operator, 'filters')
         this.filters = filters.valueOf().map<AudienceFilterOrOperator>((filter) => {
-            return new AudienceFilterOrOperator(filter as JSON.Obj)
+            return initializeFilterClass(filter as JSON.Obj)
         })
 
         this.operator = isValidString(operator, 'operator', validAudienceOperators)
@@ -97,7 +97,7 @@ const validComparators = [
 ]
 
 const validDataKeyTypes = [
-    'String', 'Boolean', 'Number', 'Semver'
+    'String', 'Boolean', 'Number'
 ]
 
 const validOperator = ['and', 'or']
@@ -120,8 +120,7 @@ export class AudienceFilterOrOperator extends JSON.Value {
 
         this.comparator = isValidStringOptional(filter, 'comparator', validComparators)
 
-        const dataKey = filter.getString('dataKey')
-        this.dataKey = dataKey ? dataKey.toString() : null
+        this.dataKey = getStringFromJSONOptional(filter, 'dataKey')
 
         this.dataKeyType = isValidStringOptional(filter, 'dataKeyType', validDataKeyTypes)
 
@@ -137,7 +136,7 @@ export class AudienceFilterOrOperator extends JSON.Value {
         const filters = filter.getArr('filters')
         this.filters = filters ?
             filters.valueOf().map<AudienceFilterOrOperator>((filter) => {
-                return new AudienceFilterOrOperator(filter as JSON.Obj)
+                return initializeFilterClass(filter as JSON.Obj)
             }) : null
     }
 
@@ -170,6 +169,24 @@ export class AudienceFilterOrOperator extends JSON.Value {
 
         return json.stringify()
     }
+}
+
+export class CustomDataFilter extends AudienceFilterOrOperator {
+    dataKeyType: string
+    dataKey: string
+
+    constructor(filter: JSON.Obj) {
+        super(filter)
+        this.dataKey = getStringFromJSON(filter, 'dataKey')
+        this.dataKeyType = isValidString(filter, 'dataKeyType', validDataKeyTypes)
+    }
+}
+
+function initializeFilterClass(filter: JSON.Obj): AudienceFilterOrOperator {
+    if (getStringFromJSONOptional(filter, 'subType') === 'customData') {
+        return new CustomDataFilter(filter)
+    }
+    return new AudienceFilterOrOperator(filter)
 }
 
 const validRolloutTypes = ['schedule', 'gradual', 'stepped']

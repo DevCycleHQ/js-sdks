@@ -27,8 +27,6 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
     customData: JSON.Obj | null
     privateCustomData: JSON.Obj | null
 
-    // TODO remove this and update tests when we provide a method to initialize these values
-
     constructor(userStr: string) {
         super()
         const userJSON = JSON.parse(userStr)
