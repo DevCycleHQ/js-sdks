@@ -2,7 +2,7 @@ import { RegExp } from 'assemblyscript-regex/assembly'
 import {  findString, includes, replace } from '../helpers/lodashHelpers'
 import { OptionsType, versionCompare } from './versionCompare'
 import {
-    TopLevelOperator, AudienceFilterOrOperator, DVCPopulatedUser, validSubTypes, CustomDataFilter,
+    TopLevelOperator, AudienceFilterOrOperator, DVCPopulatedUser, validSubTypes, CustomDataFilter, UserFilter,
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { getF64FromJSONValue } from '../helpers/jsonHelpers'
@@ -40,10 +40,11 @@ export function _evaluateOperator(operator: TopLevelOperator, user: DVCPopulated
 
 function doesUserPassFilter(filter: AudienceFilterOrOperator, user: DVCPopulatedUser): bool {
     if (filter.type === 'all') return true
-    if (!filter.subType || !user) {
-        throw new Error('Missing filter subType')
+    if (!(filter instanceof UserFilter)) {
+        throw new Error('Invalid filter data')
     }
-    const subType = filter.subType as string
+
+    const subType = filter.subType
     if (!validSubTypes.includes(subType)) {
         throw new Error(`Invalid filter subType: ${subType}`)
     }
@@ -51,7 +52,7 @@ function doesUserPassFilter(filter: AudienceFilterOrOperator, user: DVCPopulated
     return filterFunctionsBySubtype(subType, user, filter)
 }
 
-function filterFunctionsBySubtype(subType: string, user: DVCPopulatedUser, filter: AudienceFilterOrOperator): bool {
+function filterFunctionsBySubtype(subType: string, user: DVCPopulatedUser, filter: UserFilter): bool {
     if (subType === 'country') {
         return _checkStringsFilter(user.country, filter)
     } else if (subType === 'email') {
@@ -67,7 +68,10 @@ function filterFunctionsBySubtype(subType: string, user: DVCPopulatedUser, filte
     } else if (subType === 'platform') {
         return _checkStringsFilter(user.platform, filter)
     } else if (subType === 'customData') {
-        return _checkCustomData(user.getCombinedCustomData(), filter as CustomDataFilter)
+        if (!(filter instanceof CustomDataFilter)) {
+            throw new Error('Invalid filter data')
+        }
+        return _checkCustomData(user.getCombinedCustomData(), filter)
     } else {
         return false
     }
@@ -86,11 +90,11 @@ export function convertToSemanticVersion(version: string): string {
 }
 
 export function checkVersionValue(
-    filterVersion: string | null,
+    filterVersion: string,
     version: string | null,
-    operator: string | null
+    operator: string
 ): bool {
-    if (version && filterVersion && filterVersion.length > 0) {
+    if (version && filterVersion.length > 0) {
         const options: OptionsType = { zeroExtend: true, lexicographical: false }
         const result = versionCompare(version, filterVersion, options)
         if (isNaN(result)) {
@@ -109,15 +113,15 @@ export function checkVersionValue(
 
 export function checkVersionFilter(
     version: string | null,
-    filterVersions: string[] | null,
-    operator: string | null
+    filterVersions: string[],
+    operator: string
 ): bool {
-    if (!version || !filterVersions || !operator) {
+    if (!version) {
         return false
     }
 
-    let parsedVersion = version as string
-    let parsedOperator = operator as string
+    let parsedVersion = version
+    let parsedOperator = operator
 
     let not = false
     if (parsedOperator === '!=') {
@@ -155,7 +159,7 @@ export function checkVersionFilter(
     return !not ? passed : !passed
 }
 
-export function _checkNumberFilter(num: f64, filterNums: f64[] | null, operator: string | null): bool {
+export function _checkNumberFilter(num: f64, filterNums: f64[], operator: string | null): bool {
     if (operator && isString(operator)) {
         if (operator === 'exist') {
             return !isNaN(num)
@@ -164,7 +168,7 @@ export function _checkNumberFilter(num: f64, filterNums: f64[] | null, operator:
         }
     }
 
-    if (!filterNums || isNaN(num)) {
+    if (isNaN(num)) {
         return false
     }
 
@@ -199,45 +203,45 @@ export function _checkNumberFilter(num: f64, filterNums: f64[] | null, operator:
     return someValue
 }
 
-export function checkNumbersFilterJSONValue(jsonValue: JSON.Value, filter: AudienceFilterOrOperator): bool {
+export function checkNumbersFilterJSONValue(jsonValue: JSON.Value, filter: UserFilter): bool {
     return _checkNumbersFilter(getF64FromJSONValue(jsonValue), filter)
 }
 
-function _checkNumbersFilter(number: f64, filter: AudienceFilterOrOperator): bool {
+function _checkNumbersFilter(number: f64, filter: UserFilter): bool {
     const operator = filter.comparator
     const values = getFilterValuesAsF64(filter)
     return _checkNumberFilter(number, values, operator)
 }
 
-export function _checkStringsFilter(string: string | null, filter: AudienceFilterOrOperator): bool {
+export function _checkStringsFilter(string: string | null, filter: UserFilter): bool {
     const operator = filter.comparator
     const values = getFilterValuesAsStrings(filter)
 
     if (operator === '=') {
-        return !!values && string !== null && values.includes(string)
+        return string !== null && values.includes(string)
     } else if (operator === '!=') {
-        return !!values && string !== null && !values.includes(string)
+        return string !== null && !values.includes(string)
     } else if (operator === 'exist') {
         return string !== null && string !== ''
     } else if (operator === '!exist') {
         return string === null || string === ''
     } else if (operator === 'contain') {
-        return (!!values && string !== null && !!findString(values, string))
+        return string !== null && !!findString(values, string)
     } else if (operator === '!contain') {
-        return (!!values && (string === null || !findString(values, string)))
+        return string === null || !findString(values, string)
     } else {
         return isString(string)
     }
 }
 
-export function _checkBooleanFilter(bool: bool, filter: AudienceFilterOrOperator): bool {
+export function _checkBooleanFilter(bool: bool, filter: UserFilter): bool {
     const operator = filter.comparator
     const values = getFilterValuesAsBoolean(filter)
 
     if (operator === 'contain' || operator === '=') {
-        return !!values && isBoolean(bool) && values.includes(bool)
+        return isBoolean(bool) && values.includes(bool)
     } else if (operator === '!contain' || operator === '!=') {
-        return !!values && isBoolean(bool) && !values.includes(bool)
+        return !isBoolean(bool) && !values.includes(bool)
     } else if (operator === 'exist') {
         return isBoolean(bool)
     } else if (operator === '!exist') {
@@ -247,7 +251,7 @@ export function _checkBooleanFilter(bool: bool, filter: AudienceFilterOrOperator
     }
 }
 
-export function _checkVersionFilters(appVersion: string | null, filter: AudienceFilterOrOperator): bool {
+export function _checkVersionFilters(appVersion: string | null, filter: UserFilter): bool {
     const operator = filter.comparator
     const values = getFilterValuesAsStrings(filter)
     // dont need to do semver if they're looking for an exact match. Adds support for non semver versions.
@@ -261,7 +265,7 @@ export function _checkVersionFilters(appVersion: string | null, filter: Audience
 export function _checkCustomData(data: JSON.Obj | null, filter: CustomDataFilter): bool {
     const operator = filter.comparator
 
-    const dataValue = data ? data.get(filter.dataKey as string) : null
+    const dataValue = data ? data.get(filter.dataKey) : null
 
     if (operator === 'exist') {
         return checkValueExists(dataValue)
@@ -287,9 +291,8 @@ export function _checkCustomData(data: JSON.Obj | null, filter: CustomDataFilter
     }
 }
 
-export function getFilterValues(filter: AudienceFilterOrOperator): JSON.Value[] {
+export function getFilterValues(filter: UserFilter): JSON.Value[] {
     const values = filter.values
-    if (!values || !values.isArr) return []
 
     return values.valueOf().reduce((accumulator, value) => {
         if (value !== null) {
@@ -299,9 +302,8 @@ export function getFilterValues(filter: AudienceFilterOrOperator): JSON.Value[] 
     }, [] as JSON.Value[])
 }
 
-export function getFilterValuesAsStrings(filter: AudienceFilterOrOperator): string[] {
+export function getFilterValuesAsStrings(filter: UserFilter): string[] {
     const jsonValues = getFilterValues(filter)
-    if (!jsonValues) return []
 
     return jsonValues.reduce((accumulator, value) => {
         const str = value.isString ? value as JSON.Str : null
@@ -312,9 +314,8 @@ export function getFilterValuesAsStrings(filter: AudienceFilterOrOperator): stri
     }, [] as string[])
 }
 
-export function getFilterValuesAsF64(filter: AudienceFilterOrOperator): f64[] {
+export function getFilterValuesAsF64(filter: UserFilter): f64[] {
     const jsonValues = getFilterValues(filter)
-    if (!jsonValues) return []
 
     return jsonValues.reduce((accumulator, value) => {
         const num = getF64FromJSONValue(value)
@@ -325,9 +326,8 @@ export function getFilterValuesAsF64(filter: AudienceFilterOrOperator): f64[] {
     }, [] as f64[])
 }
 
-export function getFilterValuesAsBoolean(filter: AudienceFilterOrOperator): bool[] {
+export function getFilterValuesAsBoolean(filter: UserFilter): bool[] {
     const jsonValues = getFilterValues(filter)
-    if (!jsonValues) return []
 
     return jsonValues.reduce((accumulator, value) => {
         const boolVal = value.isBool ? value as JSON.Bool : null
