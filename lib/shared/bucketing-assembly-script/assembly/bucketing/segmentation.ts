@@ -44,12 +44,14 @@ function doesUserPassFilter(filter: AudienceFilterOrOperator, user: DVCPopulated
         throw new Error('Invalid filter data')
     }
 
-    const subType = filter.subType
+    const userFilter = filter as UserFilter
+
+    const subType = userFilter.subType
     if (!validSubTypes.includes(subType)) {
         throw new Error(`Invalid filter subType: ${subType}`)
     }
 
-    return filterFunctionsBySubtype(subType, user, filter)
+    return filterFunctionsBySubtype(subType, user, userFilter)
 }
 
 function filterFunctionsBySubtype(subType: string, user: DVCPopulatedUser, filter: UserFilter): bool {
@@ -71,7 +73,7 @@ function filterFunctionsBySubtype(subType: string, user: DVCPopulatedUser, filte
         if (!(filter instanceof CustomDataFilter)) {
             throw new Error('Invalid filter data')
         }
-        return _checkCustomData(user.getCombinedCustomData(), filter)
+        return _checkCustomData(user.getCombinedCustomData(), filter as CustomDataFilter)
     } else {
         return false
     }
@@ -241,7 +243,7 @@ export function _checkBooleanFilter(bool: bool, filter: UserFilter): bool {
     if (operator === 'contain' || operator === '=') {
         return isBoolean(bool) && values.includes(bool)
     } else if (operator === '!contain' || operator === '!=') {
-        return !isBoolean(bool) && !values.includes(bool)
+        return isBoolean(bool) && !values.includes(bool)
     } else if (operator === 'exist') {
         return isBoolean(bool)
     } else if (operator === '!exist') {
@@ -283,7 +285,8 @@ export function _checkCustomData(data: JSON.Obj | null, filter: CustomDataFilter
         return checkNumbersFilterJSONValue(dataValue, filter)
     } else if (filter.dataKeyType === 'Boolean' && dataValue && dataValue.isBool) {
         const boolValue = dataValue as JSON.Bool
-        return _checkBooleanFilter(boolValue.valueOf(), filter)
+        const result = _checkBooleanFilter(boolValue.valueOf(), filter)
+        return result
     } else if (!dataValue && operator === '!=') {
         return true
     } else {

@@ -9,7 +9,7 @@ import {
     DVCUser,
     Rollout as PublicRollout,
     Target as PublicTarget,
-    TopLevelOperator
+    TopLevelOperator, UserFilter
 } from './types'
 import {
     _checkCustomData,
@@ -21,14 +21,14 @@ export function checkNumbersFilterFromJSON(number: string, filterStr: string): b
     const filterJSON = JSON.parse(filterStr)
     const parsedNumber = JSON.parse(number)
     if (!filterJSON.isObj) throw new Error('checkNumbersFilterFromJSON filterStr param not a JSON Object')
-    const filter = new AudienceFilterOrOperator(filterJSON as JSON.Obj)
+    const filter = new UserFilter(filterJSON as JSON.Obj)
     return checkNumbersFilterJSONValue(parsedNumber, filter)
 }
 
 export function checkVersionFiltersFromJSON(appVersion: string | null, filterStr: string): bool {
     const filterJSON = JSON.parse(filterStr)
     if (!filterJSON.isObj) throw new Error('checkVersionFiltersFromJSON filterStr param not a JSON Object')
-    const filter = new AudienceFilterOrOperator(filterJSON as JSON.Obj)
+    const filter = new UserFilter(filterJSON as JSON.Obj)
     return _checkVersionFilters(appVersion, filter)
 }
 

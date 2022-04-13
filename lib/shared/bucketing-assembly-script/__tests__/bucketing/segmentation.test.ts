@@ -26,6 +26,7 @@ const checkStringsFilter = (string: unknown, filter: {values?: unknown[], compar
     const emailFilter = {
         type: 'user',
         subType: 'email',
+        values: [],
         ...filter
     }
 
@@ -44,6 +45,7 @@ const checkBooleanFilter = (bool: unknown, filter: {values?: unknown[], comparat
         type: 'user',
         subType: 'customData',
         dataKeyType: 'Boolean',
+        values: [],
         ...filter
     }
 
@@ -63,6 +65,7 @@ const checkNumbersFilter = (number: unknown, filter: {values?: unknown[], compar
         type: 'user',
         subType: 'customData',
         dataKeyType: 'Number',
+        values: [],
         ...filter
     }
 
@@ -78,6 +81,7 @@ const checkVersionFilters = (appVersion: string, filter: {values?: unknown[], co
     const appVersionFilter = {
         type: 'user',
         subType: 'appVersion',
+        values: [],
         ...filter
     }
 
