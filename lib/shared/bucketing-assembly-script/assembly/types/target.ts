@@ -171,7 +171,24 @@ export class AudienceFilterOrOperator extends JSON.Value {
     }
 }
 
-export class CustomDataFilter extends AudienceFilterOrOperator {
+export class UserFilter extends AudienceFilterOrOperator {
+    type: string
+    subType: string
+    comparator: string
+    operator: string
+    values: JSON.Arr
+
+    constructor(filter: JSON.Obj) {
+        super(filter)
+        this.values = getJSONArrayFromJSON(filter, 'values')
+        this.type = isValidString(filter, 'type', validTypes)
+        this.subType = isValidString(filter, 'subType', validSubTypes)
+        this.comparator = isValidString(filter, 'comparator', validComparators)
+        this.operator = isValidString(filter, 'operator', validOperator)
+    }
+}
+
+export class CustomDataFilter extends UserFilter {
     dataKeyType: string
     dataKey: string
 
@@ -183,10 +200,16 @@ export class CustomDataFilter extends AudienceFilterOrOperator {
 }
 
 function initializeFilterClass(filter: JSON.Obj): AudienceFilterOrOperator {
-    if (getStringFromJSONOptional(filter, 'subType') === 'customData') {
-        return new CustomDataFilter(filter)
+    if (getStringFromJSONOptional(filter, 'type') === 'all') {
+        return new AudienceFilterOrOperator(filter)
+    } else if (getStringFromJSONOptional(filter, 'type') === 'user') {
+        if (getStringFromJSONOptional(filter, 'subType') === 'customData') {
+            return new CustomDataFilter(filter)
+        }
+        return new UserFilter(filter)
     }
-    return new AudienceFilterOrOperator(filter)
+
+    throw new Error('Invalid filter type')
 }
 
 const validRolloutTypes = ['schedule', 'gradual', 'stepped']
