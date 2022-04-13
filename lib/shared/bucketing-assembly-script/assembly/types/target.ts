@@ -175,7 +175,6 @@ export class UserFilter extends AudienceFilterOrOperator {
     type: string
     subType: string
     comparator: string
-    operator: string
     values: JSON.Arr
 
     constructor(filter: JSON.Obj) {
@@ -184,7 +183,6 @@ export class UserFilter extends AudienceFilterOrOperator {
         this.type = isValidString(filter, 'type', validTypes)
         this.subType = isValidString(filter, 'subType', validSubTypes)
         this.comparator = isValidString(filter, 'comparator', validComparators)
-        this.operator = isValidString(filter, 'operator', validOperator)
     }
 }
 

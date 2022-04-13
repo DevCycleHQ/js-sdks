@@ -46,7 +46,7 @@ export function isValidStringOptional(jsonObj: JSON.Obj, key: string, validStrin
 
     const str = value.toString()
     if (!validStrings.includes(str)) {
-        throw new Error(`Comparator must be one of: ${validStrings.join(',')}`)
+        throw new Error(`Not valid string value: ${value}, for key: ${key}, obj: ${jsonObj.stringify()}`)
     }
     return str
 }
