@@ -1966,6 +1966,8 @@ __metadata:
 "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
+  dependencies:
+    "@devcycle/bucketing-test-data": 1.0.1
   languageName: unknown
   linkType: soft
 
