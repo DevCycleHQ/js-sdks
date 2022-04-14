@@ -17,20 +17,26 @@
     "build": {
       "executor": "@nrwl/js:tsc",
       "outputs": [
-          "{options.outputPath}"
+        "{options.outputPath}"
       ],
       "options": {
-          "outputPath": "dist/lib/shared/bucketing-test-data",
-          "main": "lib/shared/bucketing-test-data/src/index.ts",
-          "tsConfig": "lib/shared/bucketing-test-data/tsconfig.lib.json"
+        "outputPath": "dist/lib/shared/bucketing-test-data",
+        "main": "lib/shared/bucketing-test-data/src/index.ts",
+        "tsConfig": "lib/shared/bucketing-test-data/tsconfig.lib.json"
       }
     },
     "build:json": {
-        "executor": "@nrwl/node:node",
-        "options": {
-            "buildTarget": "shared-bucketing-test-data:build",
-            "watch": false
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "shared-bucketing-test-data:build",
+        "watch": false
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "dependencies"
         }
+      ]
     }
   },
   "tags": []
