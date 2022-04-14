@@ -87,6 +87,5 @@ buck-out/
 
 ## CocoaPods
 **/ios/Pods/
-/
 
 react-native-app-e2e/artifacts
