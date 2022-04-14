@@ -1,8 +1,8 @@
 {
   "name": "@devcycle/bucketing-assembly-script",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "module",
   "devDependencies": {
-    "@devcycle/bucketing-test-data": "1.0.1"
+    "@devcycle/bucketing-test-data": "^1.0.2"
   }
 }
