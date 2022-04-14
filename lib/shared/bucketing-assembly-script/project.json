@@ -1,63 +1,72 @@
 {
-    "root": "lib/shared/bucketing-assembly-script",
-    "sourceRoot": "lib/shared/bucketing-assembly-script/assembly",
-    "projectType": "library",
-    "implicitDependencies": ["shared-bucketing-test-data"],
-    "targets": {
-      "check-types": {
-        "executor": "@nrwl/workspace:run-commands",
-        "options": {
-          "command": "asc assembly/index.ts --target debug",
-          "cwd": "lib/shared/bucketing-assembly-script"
-        }
-      },
-      "lint": {
-        "executor": "@nrwl/linter:eslint",
-        "outputs": [
-          "{options.outputFile}"
-        ],
-        "options": {
-          "lintFilePatterns": [
-            "lib/shared/bucketing-assembly-script/**/*.ts"
-          ]
-        }
-      },
-        "test": {
-            "executor": "@nrwl/workspace:run-commands",
-            "options": {
-                "commands": [
-                    {
-                        "command": "node --experimental-vm-modules ../../../node_modules/jest/bin/jest.js"
-                    }
-                ],
-                "cwd": "lib/shared/bucketing-assembly-script"
-            },
-            "dependsOn": [
-                {
-                    "target": "build",
-                    "projects": "self"
-                },
-                {
-                    "target": "build:json",
-                    "projects": "dependencies"
-                }
-            ]
-        },
-        "build": {
-            "executor": "@nrwl/workspace:run-commands",
-            "options": {
-                "commands": [
-                    {
-                      "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 10000 --maximumMemory 50000 --bindings esm"
-                    },
-                    {
-                      "command": "asc assembly/index.ts --target release --exportRuntime --initialMemory 10000 --maximumMemory 50000 --bindings esm"
-                    }
-                ],
-                "cwd": "lib/shared/bucketing-assembly-script",
-                "parallel": true
-            }
-        }
+  "root": "lib/shared/bucketing-assembly-script",
+  "sourceRoot": "lib/shared/bucketing-assembly-script/assembly",
+  "projectType": "library",
+  "implicitDependencies": [
+    "shared-bucketing-test-data"
+  ],
+  "targets": {
+    "check-types": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "asc assembly/index.ts --target debug",
+        "cwd": "lib/shared/bucketing-assembly-script"
+      }
     },
-    "tags": []
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "lib/shared/bucketing-assembly-script/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "node --experimental-vm-modules ../../../node_modules/jest/bin/jest.js"
+          }
+        ],
+        "cwd": "lib/shared/bucketing-assembly-script"
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        },
+        {
+          "target": "build:json",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 10000 --maximumMemory 50000 --bindings esm"
+          },
+          {
+            "command": "asc assembly/index.ts --target release --exportRuntime --initialMemory 10000 --maximumMemory 50000 --bindings esm"
+          }
+        ],
+        "cwd": "lib/shared/bucketing-assembly-script",
+        "parallel": true
+      }
+    },
+    "npm-publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/bucketing-assembly-script\"",
+        "cwd": "lib/shared/bucketing-assembly-script"
+      }
+    }
+  },
+  "tags": []
 }

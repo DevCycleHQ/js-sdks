@@ -47,7 +47,7 @@ export const getConfigJson = async (environmentKey: string, user: DVCPopulatedUs
     try {
         const res = await get(url)
         return res.data
-    } catch (ex) {
+    } catch (ex: any) {
         console.error(`Request to get config failed for url: ${url}, ` +
             `response message: ${ex.message}, response data: ${ex?.response?.data}`)
         throw new Error('Failed to download DevCycle config.')

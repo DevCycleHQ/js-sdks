@@ -58,8 +58,8 @@
     "@babel/core": "^7.17.7",
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
-    "@nrwl/cli": "13.8.8",
-    "@nrwl/detox": "13.10.1",
+    "@nrwl/cli": "13.9.3",
+    "@nrwl/detox": "13.9.3",
     "@nrwl/devkit": "13.9.3",
     "@nrwl/eslint-plugin-nx": "13.9.3",
     "@nrwl/jest": "13.9.3",
@@ -130,7 +130,8 @@
     "react-test-renderer": "17.0.2",
     "service-worker-mock": "^2.0.5",
     "ts-jest": "27.0.5",
-    "typescript": "~4.3.5"
+    "tslib": "^2.0.0",
+    "typescript": "4.6.3"
   },
   "lint-staged": {
     "**/*.{ts,js}": [
