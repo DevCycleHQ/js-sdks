@@ -113,6 +113,8 @@ export class DVCClient implements Client {
         let config: BucketedUserConfig
         if (this.config) {
             config = this.config
+        } else if (!callback) {
+            return this.userQueue.queueIdentify(user, callback)
         } else {
             throw new Error('Client not initialized')
         }

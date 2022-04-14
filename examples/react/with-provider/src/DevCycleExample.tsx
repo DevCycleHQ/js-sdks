@@ -1,6 +1,7 @@
 import { useVariable, useDVCClient } from '@devcycle/devcycle-react-sdk'
 import Button from 'react-bootstrap/Button'
 import React from 'react'
+import { useEffect } from 'react'
 
 export default function DevCycleExample(): React.ReactElement {
     const variableKey = 'feature-release'
@@ -18,6 +19,16 @@ export default function DevCycleExample(): React.ReactElement {
 
 
     const client = useDVCClient()
+
+    useEffect(() => {
+        client.identifyUser({
+            user_id: 'userId1',
+
+            isAnonymous: false
+        }).then((variables) => {
+            console.log('variables', variables)
+        })
+    }, [])
 
     const identify = () => {
         client?.identifyUser({
