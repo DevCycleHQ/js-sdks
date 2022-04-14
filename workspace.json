@@ -3,7 +3,6 @@
   "projects": {
     "example-nodejs-js": "examples/nodejs/js",
     "example-nodejs-typescript": "examples/nodejs/typescript",
-    "example-react-native-app": "examples/react/react-native-app",
     "example-react-next-js-app": "examples/react/next-js-app",
     "example-react-with-async-provider": "examples/react/with-async-provider",
     "example-react-with-provider": "examples/react/with-provider",
