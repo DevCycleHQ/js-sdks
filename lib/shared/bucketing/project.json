@@ -51,7 +51,13 @@
       "options": {
         "jestConfig": "lib/shared/bucketing/jest.config.js",
         "passWithNoTests": true
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "dependencies"
+        }
+      ]
     }
   },
   "tags": []
