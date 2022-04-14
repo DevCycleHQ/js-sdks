@@ -3553,22 +3553,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/detox@npm:13.9.3":
-  version: 13.9.3
-  resolution: "@nrwl/detox@npm:13.9.3"
-  dependencies:
-    "@nrwl/devkit": 13.9.3
-    "@nrwl/jest": 13.9.3
-    "@nrwl/linter": 13.9.3
-    "@nrwl/react": 13.9.3
-    "@nrwl/workspace": 13.9.3
-    chalk: ^4.1.0
-  peerDependencies:
-    detox: ^19.5.1
-  checksum: 2341e0cebca28e111a42f02e937e8709c901b1c1f3bd207d5af4e985c0a23403e5b8248639fdc3a94018c7e9eff41bad6a3f713ae0387550396ad989169b60a8
-  languageName: node
-  linkType: hard
-
 "@nrwl/devkit@npm:13.10.1":
   version: 13.10.1
   resolution: "@nrwl/devkit@npm:13.10.1"
@@ -3791,27 +3775,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/react-native@npm:13.9.3":
-  version: 13.9.3
-  resolution: "@nrwl/react-native@npm:13.9.3"
+"@nrwl/react-native@npm:^13.10.1":
+  version: 13.10.1
+  resolution: "@nrwl/react-native@npm:13.10.1"
   dependencies:
-    "@nrwl/detox": 13.9.3
-    "@nrwl/devkit": 13.9.3
-    "@nrwl/jest": 13.9.3
-    "@nrwl/linter": 13.9.3
-    "@nrwl/react": 13.9.3
-    "@nrwl/storybook": 13.9.3
-    "@nrwl/workspace": 13.9.3
+    "@nrwl/detox": 13.10.1
+    "@nrwl/devkit": 13.10.1
+    "@nrwl/jest": 13.10.1
+    "@nrwl/linter": 13.10.1
+    "@nrwl/react": 13.10.1
+    "@nrwl/storybook": 13.10.1
+    "@nrwl/workspace": 13.10.1
     chalk: ^4.1.0
     enhanced-resolve: ^5.8.3
     fs-extra: ^9.1.0
     ignore: ^5.0.4
-    metro-resolver: ^0.67.0
+    metro-resolver: ^0.69.1
     node-fetch: ^2.6.7
     tsconfig-paths: ^3.9.0
   peerDependencies:
     react-native: ^0.67.3
-  checksum: 355dcede1be0fee4d475a09e24162667e564a51338be0d1ceeada05c45f75f8f340e59409e7b80a3ebef932e4e48fdd50ebaada9752cc7b4ae231989f726ee7c
+  checksum: 5de30b0730974caa6ac1cbbe28ffa35db12436cb1e0f135a64bdf17a77be236735b3069529cb9eef29f136381eced62668926f6665da2d68950ba2f79223bf11
   languageName: node
   linkType: hard
 
@@ -10013,7 +9997,7 @@ __metadata:
     "@nrwl/next": 13.9.3
     "@nrwl/node": 13.9.3
     "@nrwl/react": 13.9.3
-    "@nrwl/react-native": 13.9.3
+    "@nrwl/react-native": ^13.10.1
     "@nrwl/web": 13.9.3
     "@nrwl/workspace": 13.9.3
     "@react-native-async-storage/async-storage": 1.16.3
@@ -16659,6 +16643,15 @@ __metadata:
   dependencies:
     absolute-path: ^0.0.0
   checksum: d72fd27dc7b1c1cbda9cefde82c25dbba43cae0681308e302bde8d4ef0890236d7ec844633579c9d40725d47e10dce2ec22835169ba3294f6851d6ab9b5de6aa
+  languageName: node
+  linkType: hard
+
+"metro-resolver@npm:^0.69.1":
+  version: 0.69.1
+  resolution: "metro-resolver@npm:0.69.1"
+  dependencies:
+    absolute-path: ^0.0.0
+  checksum: d0970c83361efdcc32f41a529ed305a2539339584d37f26e59560848515c3b7fb5e6daafe27763f3fe860c4730e5cf1fe6a0eed481fb2acc41b481c5c13be3f6
   languageName: node
   linkType: hard
 
