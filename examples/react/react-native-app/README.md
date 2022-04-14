@@ -4,8 +4,6 @@ Run the command below to get started:
 ## Installation
 ```sh
 yarn
-cd ios
-pod install
 ```
 
 ## Running the example

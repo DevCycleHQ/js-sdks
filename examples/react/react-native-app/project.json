@@ -68,6 +68,16 @@
           "examples/react/react-native-app/**/*.{ts,tsx,js,jsx}"
         ]
       }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/examples/react/react-native-app"
+      ],
+      "options": {
+        "jestConfig": "examples/react/react-native-app/jest.config.js",
+        "passWithNoTests": true
+      }
     }
   },
   "tags": []
