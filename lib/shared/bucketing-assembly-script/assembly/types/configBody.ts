@@ -49,7 +49,7 @@ export class PublicEnvironment extends JSON.Value {
 }
 
 const validVariableTypes = [
-    'String', 'Boolean', 'Number', 'Semver'
+    'String', 'Boolean', 'Number', 'JSON'
 ]
 
 export class Variable extends JSON.Value {
