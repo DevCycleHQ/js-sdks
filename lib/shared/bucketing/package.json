@@ -1,7 +1,7 @@
 {
   "name": "@devcycle/bucketing",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "devDependencies": {
-    "@devcycle/bucketing-test-data": "^1.0.2"
+    "@devcycle/bucketing-test-data": "^1.0.3"
   }
 }
