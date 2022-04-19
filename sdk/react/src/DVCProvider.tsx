@@ -11,13 +11,15 @@ type Props = {
 
 export default function DVCProvider(props: Props): React.ReactElement {
     const { envKey, user, options } = props.config
-    const [client, setClient] = useState<DVCClient | undefined>(undefined)
+    const [client, setClient] = useState<DVCClient>(undefined!)
     const [_, forceRerender] = useState({})
+
+    if (!client) {
+        setClient(initializeDVCClient(envKey, user, options))
+    }
 
     useEffect(() => {
         (async () => {
-            const client = await initializeDVCClient(envKey, user, options)
-            setClient(client)
             client.subscribe('variableUpdated:*', () => {
                 forceRerender({})
             })
