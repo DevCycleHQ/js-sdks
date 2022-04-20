@@ -1,8 +1,7 @@
 import { ProviderConfig } from './types'
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useMemo, useState } from 'react'
 import initializeDVCClient from './initializeDVCClient'
 import { Provider } from './context'
-import type { DVCClient } from '@devcycle/devcycle-js-sdk'
 
 type Props = {
   config: ProviderConfig
@@ -11,12 +10,8 @@ type Props = {
 
 export default function DVCProvider(props: Props): React.ReactElement {
     const { envKey, user, options } = props.config
-    const [client, setClient] = useState<DVCClient>(undefined!)
+    const client = useMemo(() => initializeDVCClient(envKey, user, options), [envKey, user, options])
     const [_, forceRerender] = useState({})
-
-    if (!client) {
-        setClient(initializeDVCClient(envKey, user, options))
-    }
 
     useEffect(() => {
         client.subscribe('variableUpdated:*', () => {
