@@ -2,10 +2,10 @@ import { createContext } from 'react'
 import type { DVCClient, DVCVariable } from '@devcycle/devcycle-js-sdk'
 
 interface DVCContext {
-  client: DVCClient
+  client?: DVCClient
 }
 
-const context = createContext<DVCContext>({ client: undefined! })
+const context = createContext<DVCContext>({ client: undefined })
 const { Provider, Consumer } = context
 
 export { Provider, Consumer }
