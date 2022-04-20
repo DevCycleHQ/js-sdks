@@ -19,11 +19,9 @@ export default function DVCProvider(props: Props): React.ReactElement {
     }
 
     useEffect(() => {
-        (async () => {
-            client.subscribe('variableUpdated:*', () => {
-                forceRerender({})
-            })
-        })()
+        client.subscribe('variableUpdated:*', () => {
+            forceRerender({})
+        })
     }, [])
   
     return (
