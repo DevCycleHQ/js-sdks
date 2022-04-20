@@ -4,7 +4,6 @@ import { getStringFromJSON } from '../helpers/jsonHelpers'
 export class PlatformData extends JSON.Obj {
     platform: string
     platformVersion: string
-    deviceModel: string
     sdkType: string
     sdkVersion: string
 
@@ -16,7 +15,6 @@ export class PlatformData extends JSON.Obj {
 
         this.platform = getStringFromJSON(jsonObj, 'platform')
         this.platformVersion = getStringFromJSON(jsonObj, 'platformVersion')
-        this.deviceModel = getStringFromJSON(jsonObj, 'deviceModel')
         this.sdkType = getStringFromJSON(jsonObj, 'sdkType')
         this.sdkVersion = getStringFromJSON(jsonObj, 'sdkVersion')
     }
@@ -25,7 +23,6 @@ export class PlatformData extends JSON.Obj {
         const json = new JSON.Obj()
         json.set('platform', this.platform)
         json.set('platformVersion', this.platformVersion)
-        json.set('deviceModel', this.deviceModel)
         json.set('sdkType', this.sdkType)
         json.set('sdkVersion', this.sdkVersion)
         return json.stringify()

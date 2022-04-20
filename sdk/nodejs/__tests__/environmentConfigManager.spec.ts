@@ -1,9 +1,11 @@
 jest.mock('../src/request')
 jest.useFakeTimers()
 jest.spyOn(global, 'setInterval')
+jest.mock('../src/bucketing')
 
 import { EnvironmentConfigManager } from '../src/environmentConfigManager'
 import { getEnvironmentConfig } from '../src/request'
+import { importBucketingLib, getBucketingLib } from '../src/bucketing'
 import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios'
 import { defaultLogger } from '../src'
@@ -13,6 +15,9 @@ const getEnvironmentConfig_mock = mocked(getEnvironmentConfig, true)
 const logger = defaultLogger()
 
 describe('EnvironmentConfigManager Unit Tests', () => {
+    beforeAll(async () => {
+        await importBucketingLib()
+    })
     beforeEach(() => {
         getEnvironmentConfig_mock.mockReset()
         setInterval_mock.mockReset()
@@ -29,7 +34,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         }
     }
 
-    it('should build manager from constructor', () => {
+    it('should build manager from constructor', async () => {
         getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 200 }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {
@@ -37,7 +42,8 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             configPollingTimeoutMS: 1000
         })
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
-        envConfig._fetchConfig()
+        await envConfig._fetchConfig()
+        expect(getBucketingLib().setConfigData).toHaveBeenCalledWith('envKey', '{}')
 
         expect(envConfig).toEqual(expect.objectContaining({
             environmentKey: 'envKey',
@@ -120,7 +126,6 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         await envConfig._fetchConfig()
 
         envConfig.cleanup()
-        expect(envConfig.config).toEqual(config)
         expect(getEnvironmentConfig_mock).toBeCalledTimes(3)
     })
 })

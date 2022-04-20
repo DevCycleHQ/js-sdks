@@ -16,6 +16,15 @@ import { EventTypes } from './models/requestEvent'
 import { EventQueue } from './eventQueue'
 import { defaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
+import * as packageJson from '../package.json'
+import { importBucketingLib, getBucketingLib } from './bucketing'
+
+interface IPlatformData {
+    platform: string
+    platformVersion: string
+    sdkType: string
+    sdkVersion: string
+}
 
 export class DVCClient {
     private environmentKey: string
@@ -24,17 +33,34 @@ export class DVCClient {
     private eventQueue: EventQueue
     private onInitialized: Promise<DVCClient>
     private logger: DVCLogger
+    private initialized = false
 
     constructor(environmentKey: string, options?: DVCOptions) {
         this.environmentKey = environmentKey
         this.options = options
         this.logger = options?.logger || defaultLogger()
-        this.configHelper = new EnvironmentConfigManager(this.logger, environmentKey, options || {})
-        this.eventQueue = new EventQueue(this.logger, environmentKey, options?.flushEventsMS)
 
-        this.onInitialized = this.configHelper.fetchConfigPromise
+        const initializePromise = importBucketingLib()
+            .then(() => {
+                this.configHelper = new EnvironmentConfigManager(this.logger, environmentKey, options || {})
+                this.eventQueue = new EventQueue(this.logger, environmentKey, options?.flushEventsMS)
+
+                const platformData: IPlatformData = {
+                    platform: 'NodeJS',
+                    platformVersion: process.version,
+                    sdkType: 'server',
+                    sdkVersion: packageJson.version
+                }
+
+                getBucketingLib().setPlatformData(JSON.stringify(platformData))
+
+                return this.configHelper.fetchConfigPromise
+            })
+
+        this.onInitialized = initializePromise
             .then(() => {
                 this.logger.info('DevCycle initialized')
+                this.initialized = true
                 return this
             })
             .catch((err) => {
@@ -63,8 +89,17 @@ export class DVCClient {
     }
 
     variable(user: DVCUser, key: string, defaultValue: DVCVariableValue): DVCVariableInterface {
+        if (!this.initialized) {
+            this.logger.warn('variable called before DVCClient initialized, returning default value')
+            return new DVCVariable({
+                value: defaultValue,
+                defaultValue,
+                key
+            })
+        }
+
         const requestUser = new DVCPopulatedUser(user)
-        const bucketedConfig = bucketUserForConfig(requestUser, this.configHelper?.config)
+        const bucketedConfig = bucketUserForConfig(requestUser, this.environmentKey)
 
         const variable = new DVCVariable({
             ...bucketedConfig?.variables?.[key],
@@ -84,21 +119,36 @@ export class DVCClient {
     }
 
     allVariables(user: DVCUser): DVCVariableSet {
+        if (!this.initialized) {
+            this.logger.warn('allVariables called before DVCClient initialized')
+            return {}
+        }
+
         const requestUser = new DVCPopulatedUser(user)
-        const bucketedConfig = bucketUserForConfig(requestUser, this.configHelper?.config)
+        const bucketedConfig = bucketUserForConfig(requestUser, this.environmentKey)
         return bucketedConfig?.variables || {}
     }
 
     allFeatures(user: DVCUser): DVCFeatureSet {
+        if (!this.initialized) {
+            this.logger.warn('allFeatures called before DVCClient initialized')
+            return {}
+        }
+
         const requestUser = new DVCPopulatedUser(user)
-        const bucketedConfig = bucketUserForConfig(requestUser, this.configHelper?.config)
+        const bucketedConfig = bucketUserForConfig(requestUser, this.environmentKey)
         return bucketedConfig?.features || {}
     }
 
     track(user: DVCUser, event: DVCEvent): void {
+        if (!this.initialized) {
+            this.logger.warn('track called before DVCClient initialized, event will not be tracked')
+            return
+        }
+
         checkParamDefined('type', event.type)
         const requestUser = new DVCPopulatedUser(user)
-        const bucketedConfig = bucketUserForConfig(requestUser, this.configHelper?.config)
+        const bucketedConfig = bucketUserForConfig(requestUser, this.environmentKey)
         this.eventQueue.queueEvent(requestUser, event, bucketedConfig)
     }
 
