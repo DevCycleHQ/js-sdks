@@ -5,5 +5,11 @@
   "license": "MIT",
   "devDependencies": {
     "@devcycle/bucketing-test-data": "^1.0.3"
+  },
+  "dependencies": {
+    "@devcycle/bucketing-assembly-script": "1.0.10"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   }
 }

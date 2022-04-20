@@ -28,7 +28,13 @@
       "options": {
         "jestConfig": "sdk/nodejs/jest.config.js",
         "passWithNoTests": true
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects":  "dependencies"
+        }
+      ]
     },
     "build": {
       "executor": "@nrwl/js:tsc",

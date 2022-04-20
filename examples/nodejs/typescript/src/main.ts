@@ -1,4 +1,3 @@
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { initialize } from '@devcycle/nodejs-server-sdk'
 
 async function startDVC() {
@@ -10,7 +9,7 @@ async function startDVC() {
         country: 'CA'
     }
 
-    const partyTime = dvcClient.variable(user, 'elliot-test', false)
+    const partyTime = dvcClient.variable(user, 'party-time', false)
     if (partyTime.value) {
         const invitation = dvcClient.variable(
             user,
@@ -31,7 +30,7 @@ async function startDVC() {
         }
     }
 
-    const defaultVariable = dvcClient.variable(user, 'noWay-thisisA-realKEY', true)
+    const defaultVariable = dvcClient.variable(user, 'not-real', true)
     console.log(`Value of the variable is ${defaultVariable.value} \n`)
     const variables = dvcClient.allVariables(user)
     console.log('Variables: ')

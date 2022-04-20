@@ -17,6 +17,7 @@ describe('dvcUser Tests', () => {
             country: 'Canada',
             appVersion: '3.6.1',
             appBuild: 1911,
+            deviceModel: 'iPhone',
             customData: {
                 'string': 'val',
                 'num': 610,
@@ -29,7 +30,7 @@ describe('dvcUser Tests', () => {
 
         expect(testDVCUser(userObj)).toEqual(expect.objectContaining({
             ...userObj,
-            deviceModel: '',
+            deviceModel: 'iPhone',
             platform: 'NodeJS',
             platformVersion: '',
             sdkType: 'server',
@@ -67,14 +68,13 @@ describe('dvcUser Tests', () => {
             .toThrow('DVCUser privateCustomData can\'t contain nested objects or arrays')
     })
 
-    it('should support user_id as email', () => {
+    it('should support user_id as email, and only require user_id to be set', () => {
         const userObj = {
             user_id: 'test@devcycle.com'
         }
 
         expect(testDVCUser(userObj)).toEqual(expect.objectContaining({
             ...userObj,
-            deviceModel: '',
             platform: 'NodeJS',
             platformVersion: '',
             sdkType: 'server',

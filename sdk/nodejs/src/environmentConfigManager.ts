@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios'
 import { ConfigBody } from '@devcycle/types'
 import { DVCLogger, DVCOptions } from './types'
 import { getEnvironmentConfig } from './request'
-import { plainToClass } from 'class-transformer'
+import { getBucketingLib } from './bucketing'
 
 type ConfigPollingOptions = DVCOptions & {
     cdnURI?: string
@@ -11,7 +11,7 @@ type ConfigPollingOptions = DVCOptions & {
 export class EnvironmentConfigManager {
     private readonly logger: DVCLogger
     private readonly environmentKey: string
-    config?: ConfigBody
+    private hasConfig = false
     configEtag?: string
     private readonly pollingIntervalMS: number
     private readonly requestTimeoutMS: number
@@ -68,9 +68,10 @@ export class EnvironmentConfigManager {
         if (res?.status === 304) {
             this.logger.debug(`Config not modified, using cache, etag: ${this.configEtag}`)
         } else if (res?.status === 200) {
-            this.config = res?.data ? plainToClass(ConfigBody, res.data): undefined
+            getBucketingLib().setConfigData(this.environmentKey, JSON.stringify(res.data))
+            this.hasConfig = true
             this.configEtag = res?.headers?.etag
-        } else if (this.config) {
+        } else if (this.hasConfig) {
             this.logger.error(`Failed to download config, using cached version. url: ${url}.`)
         } else {
             throw new Error('Failed to download DevCycle config.')

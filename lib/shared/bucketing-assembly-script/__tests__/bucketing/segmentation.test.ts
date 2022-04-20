@@ -510,8 +510,7 @@ describe('SegmentationManager Unit Test', () => {
                 operator: 'and'
             }
 
-            const data = {}
-            setPlatformDataJSON({ ...defaultPlatformData, deviceModel: 'Samsung Galaxy F12' })
+            const data = { deviceModel: 'Samsung Galaxy F12' }
 
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })

@@ -1925,7 +1925,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
+"@devcycle/bucketing-assembly-script@1.0.10, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script"
   dependencies:
@@ -1967,6 +1967,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
+    "@devcycle/bucketing-assembly-script": 1.0.10
     "@devcycle/bucketing-test-data": ^1.0.3
   languageName: unknown
   linkType: soft

@@ -12,6 +12,7 @@ interface DVCUserInterface {
     country: string | null
     appVersion: string | null
     appBuild: f64
+    deviceModel: string | null
     customData: JSON.Obj | null
     privateCustomData: JSON.Obj | null
 }
@@ -26,6 +27,7 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
     appBuild: f64
     customData: JSON.Obj | null
     privateCustomData: JSON.Obj | null
+    deviceModel: string | null
 
     constructor(userStr: string) {
         super()
@@ -42,6 +44,8 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
 
         // Need to set a default "null" value, as numbers can't be null in AS
         this.appBuild = getF64FromJSONOptional(user, 'appBuild', -1)
+
+        this.deviceModel = getStringFromJSONOptional(user, 'deviceModel')
 
         const customData = user.getObj('customData')
         if (!isFlatJSONObj(customData)) {
@@ -67,6 +71,7 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
         if (this.country) json.set('country', this.country)
         if (this.appVersion) json.set('appVersion', this.appVersion)
         if (this.appBuild != -1) json.set('appBuild', this.appBuild)
+        if (this.deviceModel) json.set('deviceModel', this.deviceModel)
         if (this.customData) json.set('customData', this.customData)
         if (this.privateCustomData) json.set('privateCustomData', this.privateCustomData)
         return json.stringify()
@@ -84,11 +89,12 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
     customData: JSON.Obj | null
     privateCustomData: JSON.Obj | null
     private combinedCustomData: JSON.Obj
+    deviceModel: string | null
+
     createdDate: Date
     lastSeenDate: Date
     platform: string
     platformVersion: string
-    deviceModel: string
     sdkType: string
     sdkVersion: string
 
@@ -103,6 +109,7 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         this.appBuild = user.appBuild
         this.customData = user.customData
         this.privateCustomData = user.privateCustomData
+        this.deviceModel = user.deviceModel
 
         this.combinedCustomData = new JSON.Obj()
 
@@ -128,7 +135,6 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         const platformData = _getPlatformData()
         this.platform = platformData.platform
         this.platformVersion = platformData.platformVersion
-        this.deviceModel = platformData.deviceModel
         this.sdkType = platformData.sdkType
         this.sdkVersion = platformData.sdkVersion
     }
@@ -150,6 +156,8 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         if (this.country) json.set('country', this.country)
         if (this.appVersion) json.set('appVersion', this.appVersion)
         if (this.appBuild != -1) json.set('appBuild', this.appBuild)
+        if (this.deviceModel) json.set('deviceModel', this.deviceModel)
+
         if (this.customData) {
             json.set('customData', this.customData)
         }
@@ -161,7 +169,6 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         json.set('lastSeenDate', (this.lastSeenDate as Date).toISOString())
         json.set('platform', this.platform)
         json.set('platformVersion', this.platformVersion)
-        json.set('deviceModel', this.deviceModel)
         json.set('sdkType', this.sdkType)
         json.set('sdkVersion', this.sdkVersion)
         return json.stringify()
