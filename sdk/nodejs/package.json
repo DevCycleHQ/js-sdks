@@ -1,13 +1,13 @@
 {
   "name": "@devcycle/nodejs-server-sdk",
-  "version": "1.0.22",
+  "version": "1.1.0",
   "description": "The DevCycle NodeJS Server SDK used for feature management.",
   "license": "MIT",
   "devDependencies": {
-    "@devcycle/bucketing-test-data": "^1.0.3"
+    "@devcycle/bucketing-test-data": "^1.0.4"
   },
   "dependencies": {
-    "@devcycle/bucketing-assembly-script": "1.0.10"
+    "@devcycle/bucketing-assembly-script": "^1.0.11"
   },
   "engines": {
     "node": ">=10.0.0"
