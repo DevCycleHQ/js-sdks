@@ -4,7 +4,9 @@
   "description": "The DevCycle NodeJS Server SDK used for feature management.",
   "license": "MIT",
   "devDependencies": {
-    "@devcycle/bucketing-test-data": "^1.0.4"
+    "@devcycle/bucketing-test-data": "^1.0.4",
+    "assemblyscript-json": "*",
+    "assemblyscript-regex": "*"
   },
   "dependencies": {
     "@devcycle/bucketing-assembly-script": "^1.0.11"

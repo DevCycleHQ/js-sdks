@@ -1925,15 +1925,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@devcycle/bucketing-assembly-script@1.0.10, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
+"@devcycle/bucketing-assembly-script@^1.0.11, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script"
   dependencies:
-    "@devcycle/bucketing-test-data": ^1.0.3
+    "@devcycle/bucketing-test-data": ^1.0.4
   languageName: unknown
   linkType: soft
 
-"@devcycle/bucketing-test-data@^1.0.3, @devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data":
+"@devcycle/bucketing-test-data@^1.0.4, @devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data"
   languageName: unknown
@@ -1943,7 +1943,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing@workspace:lib/shared/bucketing"
   dependencies:
-    "@devcycle/bucketing-test-data": ^1.0.3
+    "@devcycle/bucketing-test-data": ^1.0.4
   languageName: unknown
   linkType: soft
 
@@ -1967,8 +1967,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
-    "@devcycle/bucketing-assembly-script": 1.0.10
-    "@devcycle/bucketing-test-data": ^1.0.3
+    "@devcycle/bucketing-assembly-script": ^1.0.11
+    "@devcycle/bucketing-test-data": ^1.0.4
+    assemblyscript-json: "*"
+    assemblyscript-regex: "*"
   languageName: unknown
   linkType: soft
 
@@ -6764,7 +6766,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"assemblyscript-json@npm:^1.1.0":
+"assemblyscript-json@npm:*, assemblyscript-json@npm:^1.1.0":
   version: 1.1.0
   resolution: "assemblyscript-json@npm:1.1.0"
   checksum: 06e6df1b7b668f02e698af4c0713191220ac21573b9e945f81fb37666d25ca574b88e6ae01ead7363f2dd6c11a71c542e1f7e7abd9200a6e0ef55e3786e0e4b0
@@ -6775,6 +6777,13 @@ __metadata:
   version: 0.1.0
   resolution: "assemblyscript-regex@https://github.com/DevCycleHQ/assemblyscript-regex.git#commit=ba92c8262ffef368bd8307fd70b3cf9967a529b4"
   checksum: de890e464b0373cbf2332275204f2ebbe5d103299343ad84435a2970a620ac851776f014c18c6cfdc8a648ab5602befd489ef0feaf13d6a46560416d014bfc4a
+  languageName: node
+  linkType: hard
+
+"assemblyscript-regex@npm:*":
+  version: 1.6.4
+  resolution: "assemblyscript-regex@npm:1.6.4"
+  checksum: 04e5058cf5182cf13673c69b6fe23fa28129b99923d30de54c55d4b7872ed9f906eb63f800e660b848235b204bb21dd308b726b1e2e07974288c01c619c27ae8
   languageName: node
   linkType: hard
 
