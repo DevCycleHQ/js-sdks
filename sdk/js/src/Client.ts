@@ -16,6 +16,7 @@ import { EventQueue, EventTypes } from './EventQueue'
 import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
 import { BucketedUserConfig } from '@devcycle/types'
+import { RequestConsolidator } from './RequestConsolidator'
 
 export class DVCClient implements Client {
     private options?: DVCOptions
@@ -26,6 +27,7 @@ export class DVCClient implements Client {
     user: DVCPopulatedUser
     store: Store
     eventQueue: EventQueue
+    requestConsolidator: RequestConsolidator
     eventEmitter: EventEmitter
 
     constructor(environmentKey: string, user: DVCPopulatedUser, options?: DVCOptions) {
@@ -35,6 +37,7 @@ export class DVCClient implements Client {
         this.environmentKey = environmentKey
         this.variableDefaultMap = {}
         this.eventQueue = new EventQueue(environmentKey, this, options?.flushEventsMS)
+        this.requestConsolidator = new RequestConsolidator()
         this.eventEmitter = new EventEmitter()
 
         this.store.saveUser(this.user)
@@ -123,25 +126,26 @@ export class DVCClient implements Client {
 
                 const oldConfig = this.config || {} as BucketedUserConfig
 
-                getConfigJson(this.environmentKey, updatedUser)
-                    .then((config) => {
-                        this.config = config as BucketedUserConfig
-                        this.store.saveConfig(config)
-                            .then(() => console.log('Successfully saved config to local storage'))
-                        const oldFeatures = oldConfig.features || {}
-                        const oldVariables = oldConfig.variables || {}
-                        this.eventEmitter.emitFeatureUpdates(oldFeatures, config.features)
-                        this.eventEmitter.emitVariableUpdates(oldVariables,
-                            config.variables, this.variableDefaultMap)
+                this.requestConsolidator.queue('identify',
+                    getConfigJson(this.environmentKey, updatedUser)
+                ).then((config) => {
+                    this.config = config as BucketedUserConfig
+                    this.store.saveConfig(config)
+                        .then(() => console.log('Successfully saved config to local storage'))
+                    const oldFeatures = oldConfig.features || {}
+                    const oldVariables = oldConfig.variables || {}
+                    this.eventEmitter.emitFeatureUpdates(oldFeatures, config.features)
+                    this.eventEmitter.emitVariableUpdates(oldVariables,
+                        config.variables, this.variableDefaultMap)
 
-                        return config.variables
-                    })
-                    .then((variables) => {
-                        this.user = updatedUser
-                        this.store.saveUser(updatedUser)
-                            .then(() => console.log('Successfully saved user to local storage!'))
-                        return resolve(variables || {})
-                    })
+                    return config.variables
+                })
+                .then((variables) => {
+                    this.user = updatedUser
+                    this.store.saveUser(updatedUser)
+                        .then(() => console.log('Successfully saved user to local storage!'))
+                    return resolve(variables || {})
+                })
                     .catch((err) => Promise.reject(err))
             } catch (err) {
                 this.eventEmitter.emitError(err)
@@ -168,25 +172,26 @@ export class DVCClient implements Client {
                 this.eventQueue.flushEvents()
                 const oldConfig = this.config || {} as BucketedUserConfig
 
-                getConfigJson(this.environmentKey, anonUser)
-                    .then((config) => {
-                        this.config = config as BucketedUserConfig
-                        this.user = anonUser
-                        this.store.saveConfig(config).then(() => {
-                            console.log('Successfully saved config to local storage')
-                        })
-                        this.store.saveUser(anonUser).then(() => {
-                            console.log('Successfully saved user to local storage!')
-                        })
-                        const oldFeatures = oldConfig.features || {}
-                        const oldVariables = oldConfig.variables || {}
-                        this.eventEmitter.emitFeatureUpdates(oldFeatures, config.features)
-                        this.eventEmitter.emitVariableUpdates(oldVariables,
-                            config.variables, this.variableDefaultMap)
-                        resolve(config.variables || {})
-                    }).catch((e) => {
-                        reject(e)
+                this.requestConsolidator.queue('identify',
+                    getConfigJson(this.environmentKey, anonUser)
+                ).then((config) => {
+                    this.config = config as BucketedUserConfig
+                    this.user = anonUser
+                    this.store.saveConfig(config).then(() => {
+                        console.log('Successfully saved config to local storage')
                     })
+                    this.store.saveUser(anonUser).then(() => {
+                        console.log('Successfully saved user to local storage!')
+                    })
+                    const oldFeatures = oldConfig.features || {}
+                    const oldVariables = oldConfig.variables || {}
+                    this.eventEmitter.emitFeatureUpdates(oldFeatures, config.features)
+                    this.eventEmitter.emitVariableUpdates(oldVariables,
+                        config.variables, this.variableDefaultMap)
+                    resolve(config.variables || {})
+                }).catch((e) => {
+                    reject(e)
+                })
             } catch (e) {
                 this.eventEmitter.emitError(e)
                 reject(e)
