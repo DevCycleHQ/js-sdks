@@ -3,8 +3,11 @@ import context from './context'
 import type { DVCVariable, DVCVariableValue } from '@devcycle/devcycle-js-sdk'
 
 export const useVariable = (key: string, defaultValue: DVCVariableValue): DVCVariable => {
-    const { client } = useContext(context)
-    return client ? client.variable(key, defaultValue) : {
+    const dvcContext = useContext(context)
+
+    if (dvcContext === undefined) throw new Error('useVariable must be used within DVCProvider')
+
+    return dvcContext.client ? dvcContext.client.variable(key, defaultValue) : {
         value: defaultValue,
         defaultValue: defaultValue,
         isDefaulted: true,
