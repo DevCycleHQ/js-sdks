@@ -69,7 +69,7 @@ export class DVCClient {
             })
 
         process.on('exit', () => {
-            this.configHelper.cleanup()
+            this.configHelper?.cleanup()
         })
     }
 
@@ -79,7 +79,7 @@ export class DVCClient {
      *
      * @param onInitialized
      */
-    onClientInitialized(onInitialized?: (err?: Error) => void): Promise<DVCClient> {
+    async onClientInitialized(onInitialized?: (err?: Error) => void): Promise<DVCClient> {
         if (onInitialized && typeof onInitialized === 'function') {
             this.onInitialized
                 .then(() => onInitialized())
@@ -152,7 +152,7 @@ export class DVCClient {
         this.eventQueue.queueEvent(requestUser, event, bucketedConfig)
     }
 
-    flushEvents(callback?: () => void): Promise<void> {
+    async flushEvents(callback?: () => void): Promise<void> {
         return this.eventQueue.flushEvents().then(callback)
     }
 }
