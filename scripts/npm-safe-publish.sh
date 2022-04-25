@@ -10,14 +10,32 @@ if [[ $# -eq 0 ]]; then
 fi
 
 PACKAGE=$1
-NPM_SHOW="$(npm show "$PACKAGE" version)"
-NPM_LS="$(npm ls "$PACKAGE" --json | jq -r '.version')"
+JQ_PATH=".version"
 
-echo $2
+# Update jq search command for bucketing-assembly-script package
+if [[ "$2" == "--jq-path" ]]; then
+  JQ_PATH=".dependencies[\"$PACKAGE\"].version"
+fi
+
+NPM_SHOW="$(npm show "$PACKAGE" version)"
+NPM_LS="$(npm ls "$PACKAGE" --json | jq -r $JQ_PATH)"
+
+echo "$PACKAGE npm show: $NPM_SHOW, npm ls: $NPM_LS"
+
 while :; do
   case "$2" in
     --otp=*)
       OTP="${2#*=}"
+      ;;
+    *) break
+  esac
+  shift
+done
+
+while :; do
+  case "$3" in
+    --otp=*)
+      OTP="${3#*=}"
       ;;
     *) break
   esac
