@@ -126,8 +126,10 @@ export class DVCClient implements Client {
 
                 const oldConfig = this.config || {} as BucketedUserConfig
 
-                this.requestConsolidator.queue('identify',
-                    getConfigJson(this.environmentKey, updatedUser)
+                this.onInitialized.then(() =>
+                    this.requestConsolidator.queue('identify',
+                        getConfigJson(this.environmentKey, updatedUser)
+                    )
                 ).then((config) => {
                     this.config = config as BucketedUserConfig
                     this.store.saveConfig(config)
@@ -139,14 +141,13 @@ export class DVCClient implements Client {
                         config.variables, this.variableDefaultMap)
 
                     return config.variables
-                })
-                .then((variables) => {
+                }).then((variables) => {
                     this.user = updatedUser
                     this.store.saveUser(updatedUser)
                         .then(() => console.log('Successfully saved user to local storage!'))
                     return resolve(variables || {})
-                })
-                    .catch((err) => Promise.reject(err))
+                }).catch((err) => Promise.reject(err))
+                
             } catch (err) {
                 this.eventEmitter.emitError(err)
                 reject(err)
@@ -172,8 +173,10 @@ export class DVCClient implements Client {
                 this.eventQueue.flushEvents()
                 const oldConfig = this.config || {} as BucketedUserConfig
 
-                this.requestConsolidator.queue('identify',
-                    getConfigJson(this.environmentKey, anonUser)
+                this.onInitialized.then(() => 
+                    this.requestConsolidator.queue('identify',
+                        getConfigJson(this.environmentKey, anonUser)
+                    )
                 ).then((config) => {
                     this.config = config as BucketedUserConfig
                     this.user = anonUser
@@ -192,6 +195,7 @@ export class DVCClient implements Client {
                 }).catch((e) => {
                     reject(e)
                 })
+
             } catch (e) {
                 this.eventEmitter.emitError(e)
                 reject(e)
