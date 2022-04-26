@@ -44,8 +44,8 @@ describe('dvcUser Tests', () => {
         const userObj = {
             user_id: '24601',
             customData: {
-                'string': 'val',
-                'num': [610, 2809],
+                string: 'val',
+                num: [610, 2809]
             }
         }
 
@@ -57,10 +57,8 @@ describe('dvcUser Tests', () => {
         const userObj = {
             user_id: '24601',
             privateCustomData: {
-                'key': 'val',
-                'values': {
-                    'obj': true
-                }
+                key: 'val',
+                values: { obj: true }
             }
         }
 
@@ -82,5 +80,22 @@ describe('dvcUser Tests', () => {
             createdDate: expect.any(String),
             lastSeenDate: expect.any(String)
         }))
+    })
+
+    it('should throw if appBuild is not a number', () => {
+        const userObj = {
+            user_id: 'test',
+            appBuild: 'not a number'
+        }
+
+        expect(() => testDVCUser(userObj))
+            .toThrow('Invalid number value: not a number, for key: "appBuild"')
+    })
+
+    it('should throw is string key is not a string', () => {
+        const userObj = { user_id: true }
+
+        expect(() => testDVCUser(userObj))
+            .toThrow('Missing string value for key: "user_id",')
     })
 })
