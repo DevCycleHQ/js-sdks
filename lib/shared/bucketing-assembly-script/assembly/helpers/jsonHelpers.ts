@@ -2,20 +2,20 @@ import { JSON } from 'assemblyscript-json/assembly'
 
 export function getJSONObjFromJSON(jsonObj: JSON.Obj, key: string): JSON.Obj {
     const obj = jsonObj.getObj(key)
-    if (!obj) throw new Error(`JSON Object not found for key: "${key}", obj: ${jsonObj.stringify()}`)
+    if (!obj) throw new Error(`Object not found for key: "${key}", obj: ${jsonObj.stringify()}`)
     return obj
 }
 
 export function getJSONArrayFromJSON(jsonObj: JSON.Obj, key: string): JSON.Arr {
     const obj = jsonObj.getArr(key)
-    if (!obj) throw new Error(`JSON Array not found for key: "${key}", obj: ${jsonObj.stringify()}`)
+    if (!obj) throw new Error(`Array not found for key: "${key}", obj: ${jsonObj.stringify()}`)
     return obj
 }
 
 export function getStringFromJSON(jsonObj: JSON.Obj, key: string): string {
     const str = jsonObj.getString(key)
     if (!str) {
-        throw new Error(`JSON String missing for key: "${key}", obj: ${jsonObj.stringify()}`)
+        throw new Error(`Missing string value for key: "${key}", obj: ${jsonObj.stringify()}`)
     } else {
         return str.valueOf()
     }
@@ -33,7 +33,7 @@ export function getStringFromJSONOptional(jsonObj: JSON.Obj, key: string): strin
 export function isValidString(jsonObj: JSON.Obj, key: string, validStrings: string[]): string {
     const value = getStringFromJSON(jsonObj, key)
     if (!validStrings.includes(value)) {
-        throw new Error(`Not valid string value: ${value}, for key: ${key}, obj: ${jsonObj.stringify()}`)
+        throw new Error(`Invalid string value: ${value}, for key: ${key}, must be one of: ${validStrings.join(', ')}`)
     }
     return value
 }
@@ -46,7 +46,7 @@ export function isValidStringOptional(jsonObj: JSON.Obj, key: string, validStrin
 
     const str = value.toString()
     if (!validStrings.includes(str)) {
-        throw new Error(`Not valid string value: ${value}, for key: ${key}, obj: ${jsonObj.stringify()}`)
+        throw new Error(`Invalid string value: ${value}, for key: ${key}`)
     }
     return str
 }
@@ -66,7 +66,7 @@ export function getF64FromJSONObj(jsonObj: JSON.Obj, key: string): f64 {
     const value = jsonObj.get(key)
     const num = value ? getF64FromJSONValue(value) : NaN
     if (isNaN(num)) {
-        throw new Error(`JSON Number missing for key: "${key}", obj: ${jsonObj.stringify()}`)
+        throw new Error(`Invalid number value: ${num}, for key: "${key}"`)
     }
     return num
 }
@@ -81,7 +81,7 @@ export function getF64FromJSONOptional(jsonObj: JSON.Obj, key: string, defaultVa
         const int = num as JSON.Integer
         return f64(int.valueOf())
     } else {
-        throw new Error(`JSON Number missing for key: "${key}", obj: ${jsonObj.stringify()}`)
+        throw new Error(`Invalid number value: ${num}, for key: "${key}"`)
     }
 }
 
@@ -107,7 +107,7 @@ export function jsonObjFromMap<T>(objMap: Map<string, T>): JSON.Obj {
 export function getJSONValueFromJSON(jsonObj: JSON.Obj, key: string): JSON.Value {
     const value = jsonObj.get(key)
     if (!value) {
-        throw new Error(`JSON Value missing for key: "${key}", obj: ${jsonObj.stringify()}`)
+        throw new Error(`Value missing for key: "${key}", obj: ${jsonObj.stringify()}`)
     } else {
         return value
     }
