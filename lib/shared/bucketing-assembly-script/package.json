@@ -1,6 +1,6 @@
 {
   "name": "@devcycle/bucketing-assembly-script",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "type": "module",
   "main": "build/bucketing-lib.release.js",
   "types": "build/bucketing-lib.release.d.ts",
@@ -9,6 +9,6 @@
     "README.md"
   ],
   "devDependencies": {
-    "@devcycle/bucketing-test-data": "^1.0.4"
+    "@devcycle/bucketing-test-data": "^1.0.5"
   }
 }
