@@ -45,7 +45,7 @@ export class DVCAPIUser {
      * Email used for identifying a device user in the dashboard,
      * or used for audience segmentation.
      */
-    @IsEmail()
+    @IsString()
     @IsOptional()
         email?: string
 
@@ -174,7 +174,7 @@ export class DVCClientAPIUser implements DVCAPIUser {
     @IsBoolean()
     @Transform(boolTransform)
         isAnonymous: boolean
-    
+
     @IsString()
     @IsNotBlank()
     @IsNotEmpty()
