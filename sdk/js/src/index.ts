@@ -32,7 +32,7 @@ export const initialize = (environmentKey: string, user: DVCUser, options?: DVCO
         .catch((err) => console.log(`Error initializing DevCycle: ${err}`))
 
     if (!options?.reactNative) {
-        window.addEventListener('pagehide', () => {
+        window?.addEventListener('pagehide', () => {
             client.flushEvents()
         })
     }
