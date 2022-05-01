@@ -9,8 +9,8 @@ export * from './types'
 
 export const initialize = (environmentKey: string, user: DVCUser, options?: DVCOptions): DVCClient => {
     // TODO: implement logger
-    if (!window) {
-        console.log('Window is not defined, try initializing in a browser context')
+    if (typeof window === 'undefined') {
+        throw new Error('Window is not defined, try initializing in a browser context.')
     }
     if (!window.addEventListener && !options?.reactNative) {
         throw new Error('Window is not defined, try initializing in a browser context.' +
