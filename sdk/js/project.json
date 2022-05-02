@@ -34,7 +34,7 @@
         "coverage/sdk/js"
       ],
       "options": {
-        "jestConfig": "sdk/js/jest.config.js",
+        "jestConfig": "sdk/js/jest.config.ts",
         "passWithNoTests": true
       }
     },

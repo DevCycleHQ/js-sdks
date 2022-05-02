@@ -15,7 +15,8 @@
         "buildLibsFromSource": false
       },
       "configurations": {
-        "production": {}
+        "production": {},
+        "development": {}
       }
     },
     "serve": {
@@ -28,8 +29,13 @@
         "production": {
           "buildTarget": "example-react-next-js-app:build:production",
           "dev": false
+        },
+        "development": {
+          "buildTarget": "example-react-next-js-app:build:development",
+          "dev": true
         }
-      }
+      },
+      "defaultConfiguration": "development"
     },
     "export": {
       "executor": "@nrwl/next:export",

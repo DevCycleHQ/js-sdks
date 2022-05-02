@@ -1,6 +1,6 @@
 module.exports = {
     displayName: 'bucketing-lib',
-    preset: '../../../jest.preset.js',
+    
     globals: {
         'ts-jest': {
             tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -16,7 +16,7 @@ module.exports = {
         '<rootDir>/src/**/*.{ts,js}',
         '!<rootDir>/**/*.{spec,test,mock}.{ts,js}'
     ],
-    coverageDirectory: '../../../coverage/lib/shared/bucketing',
+    coverageDirectory: '../../../coverage/lib/shared/bucketing','preset': '../../../jest.preset.ts'
 }
 
 module.exports.reporters = [

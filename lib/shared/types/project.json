@@ -47,7 +47,7 @@
         "coverage/lib/shared/types"
       ],
       "options": {
-        "jestConfig": "lib/shared/types/jest.config.js",
+        "jestConfig": "lib/shared/types/jest.config.ts",
         "passWithNoTests": true
       }
     }

@@ -26,13 +26,13 @@
         "coverage/sdk/nodejs"
       ],
       "options": {
-        "jestConfig": "sdk/nodejs/jest.config.js",
+        "jestConfig": "sdk/nodejs/jest.config.ts",
         "passWithNoTests": true
       },
       "dependsOn": [
         {
           "target": "build",
-          "projects":  "dependencies"
+          "projects": "dependencies"
         }
       ]
     },
