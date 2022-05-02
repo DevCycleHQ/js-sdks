@@ -25,7 +25,7 @@
         "examples/react/react-native-app/build"
       ],
       "options": {
-        "entryFile": "examples/react/react-native-app/src/main.tsx",
+        "entryFile": "src/main.tsx",
         "platform": "ios",
         "bundleOutput": "dist/examples/react/react-native-app/ios/main.jsbundle"
       }
@@ -45,7 +45,7 @@
     "bundle-android": {
       "executor": "@nrwl/react-native:bundle",
       "options": {
-        "entryFile": "examples/react/react-native-app/src/main.tsx",
+        "entryFile": "src/main.tsx",
         "platform": "android",
         "bundleOutput": "dist/examples/react/react-native-app/android/main.jsbundle"
       }

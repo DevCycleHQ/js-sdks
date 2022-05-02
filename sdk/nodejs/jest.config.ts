@@ -1,23 +1,21 @@
-/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-    displayName: 'js-client-sdk',
-    preset: '../../jest.preset.js',
+    displayName: 'nodejs-server-sdk',
+    
     globals: {
         'ts-jest': {
-            tsconfig: '<rootDir>/tsconfig.spec.json'
+            tsconfig: '<rootDir>/tsconfig.spec.json',
         }
     },
     transform: {
-        '^.+\\.(ts|tsx|js|jsx)?$': 'ts-jest'
+        '^.+\\.[tj]sx?$':  'ts-jest'
     },
-    testEnvironment: 'jsdom',
+    moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     collectCoverage: true,
     collectCoverageFrom: [
         '<rootDir>/src/**/*.{ts,js}',
         '!<rootDir>/**/*.{spec,test,mock}.{ts,js}'
     ],
-    coverageDirectory: '../../coverage/sdk/js',
-    setupFiles: ['<rootDir>/__tests__/setupConfig.js']
+    coverageDirectory: '../../coverage/sdk/nodejs-server-sdk','preset': '../../jest.preset.ts'
 }
 
 module.exports.reporters = [

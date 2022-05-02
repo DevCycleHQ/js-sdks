@@ -52,7 +52,7 @@
         "coverage/sdk/react"
       ],
       "options": {
-        "jestConfig": "sdk/react/jest.config.js",
+        "jestConfig": "sdk/react/jest.config.ts",
         "passWithNoTests": true
       }
     },

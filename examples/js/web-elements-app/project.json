@@ -41,6 +41,12 @@
           "namedChunks": false,
           "extractLicenses": true,
           "vendorChunk": false
+        },
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
         }
       }
     },
@@ -52,8 +58,12 @@
       "configurations": {
         "production": {
           "buildTarget": "examples-js-web-elements-app:build:production"
+        },
+        "development": {
+          "buildTarget": "examples-js-web-elements-app:build:development"
         }
-      }
+      },
+      "defaultConfiguration": "development"
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",

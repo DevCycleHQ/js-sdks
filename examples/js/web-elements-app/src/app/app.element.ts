@@ -1,22 +1,22 @@
 /* eslint-disable max-len */
 
-import './app.element.css';
-import { initialize } from '@devcycle/devcycle-js-sdk';
+import './app.element.css'
+import { initialize } from '@devcycle/devcycle-js-sdk'
 
-const clientKey = process.env["NX_CLIENT_KEY"] || "<YOUR-CLIENT-KEY-HERE>"
+const clientKey = process.env['NX_CLIENT_KEY'] || '<YOUR-CLIENT-KEY-HERE>'
 
 export class AppElement extends HTMLElement {
-  constructor() {
-    super()
-  }
+    constructor() {
+        super()
+    }
 
-  public static observedAttributes = [
+    public static observedAttributes = [
 
-  ];
+    ]
 
-  connectedCallback(): void {
-    const titleVariable = client.variable("titlevariable", "Welcome 👋")
-    this.innerHTML = `
+    connectedCallback(): void {
+        const titleVariable = client.variable('titlevariable', 'Welcome 👋')
+        this.innerHTML = `
     <div class="wrapper">
       <div class="container">
         <!--  WELCOME  -->
@@ -388,13 +388,13 @@ nx affected:e2e</pre>
         </p>
       </div>
     </div>
-      `;
-  }
+      `
+    }
 }
 
 const user = {
-  user_id: 'user1',
-  isAnonymous: false
+    user_id: 'user1',
+    isAnonymous: false
 }
 const client = initialize(clientKey, user)
 client.onClientInitialized(() => customElements.define('devcycle-root', AppElement))

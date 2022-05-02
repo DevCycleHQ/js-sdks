@@ -8,6 +8,14 @@
       "outputs": [
         "{options.outputPath}"
       ],
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        }
+      },
       "options": {
         "compiler": "babel",
         "outputPath": "dist/examples/react/with-provider",
@@ -20,7 +28,8 @@
         ],
         "scripts": [],
         "webpackConfig": "@nrwl/react/plugins/webpack"
-      }
+      },
+      "defaultConfiguration": "production"
     },
     "serve": {
       "executor": "@nrwl/web:dev-server",
@@ -32,8 +41,12 @@
         "production": {
           "buildTarget": "example-react-with-provider:build:production",
           "hmr": false
+        },
+        "development": {
+          "buildTarget": "example-react-with-provider:build:development"
         }
-      }
+      },
+      "defaultConfiguration": "development"
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",

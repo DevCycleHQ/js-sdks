@@ -1,6 +1,5 @@
 import { BucketedUserConfig } from '@devcycle/types'
 
-
 export class RequestConsolidator {
     promiseMap: { [index: string]: PromiseConsolidator<BucketedUserConfig> }
 

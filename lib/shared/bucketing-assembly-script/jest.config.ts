@@ -2,7 +2,7 @@ const displayName = 'bucketing-lib-as'
 
 export default {
     displayName,
-    preset: '../../../jest.preset.js',
+    preset: '../../../jest.preset.ts',
     extensionsToTreatAsEsm: ['.ts'],
     globals: {
         'ts-jest': {
