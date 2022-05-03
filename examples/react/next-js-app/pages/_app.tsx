@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic'
 const ENV_KEY = process.env.NX_CLIENT_KEY || 'test_token'
 const user = {
     user_id: 'userId1',
+    email: 'auto@taplytics.com',
     isAnonymous: false
 }
 
