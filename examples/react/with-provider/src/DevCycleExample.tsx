@@ -43,7 +43,7 @@ export default function DevCycleExample(): React.ReactElement {
                 <span> Your variableString variable = {JSON.stringify(variableString.value)} </span>
             </div>
             <div>
-                <span> Your variableNumber variable = {variableNumber.value} </span>
+                <span> Your variableNumber variable = {JSON.stringify(variableNumber.value)} </span>
             </div>
             <div>
                 <span>
