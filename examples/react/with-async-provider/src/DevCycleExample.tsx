@@ -17,29 +17,29 @@ export default function DevCycleExample(): React.ReactElement {
     return (
         <div>
             <div>
-                <span> 
-            Your default feature-release variable and selected Variation  =  {variable?.value ? 'ON' : 'OFF'} 
+                <span>
+            Your default feature-release variable and selected Variation  =  {variable?.value ? 'ON' : 'OFF'}
                 </span>
             </div>
             <div>
                 <span> Your feature-release variable value = {JSON.stringify(variable.value)} </span>
             </div>
             <div>
-                <span> Your variableString variable = {variableString.value} </span>
+                <span> Your variableString variable = {JSON.stringify(variableString.value)} </span>
             </div>
             <div>
-                <span> Your variableNumber variable = {variableNumber.value} </span>
+                <span> Your variableNumber variable = {JSON.stringify(variableNumber.value)} </span>
             </div>
             <div>
-                <span> 
-            Your variableBoolean variable and selected Variation = {variableBoolean.value ? 'OFF' : 'ON'} 
+                <span>
+            Your variableBoolean variable and selected Variation = {variableBoolean.value ? 'OFF' : 'ON'}
                 </span>
             </div>
             <div>
-                <span> Your variableBoolean variable value = {JSON.stringify(variableBoolean.value)} 
+                <span> Your variableBoolean variable value = {JSON.stringify(variableBoolean.value)}
                 </span>
             </div>
-            <div>   
+            <div>
                 <span> Your variableJson variable = {JSON.stringify(variableJson.value)} </span>
             </div>
         </div>
