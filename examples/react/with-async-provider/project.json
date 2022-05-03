@@ -23,7 +23,6 @@
         "baseHref": "/",
         "main": "examples/react/with-async-provider/src/index.tsx",
         "tsConfig": "examples/react/with-async-provider/tsconfig.app.json",
-        "buildLibsFromSource": false,
         "assets": [
           "examples/react/with-async-provider/src/public"
         ],
