@@ -11,8 +11,7 @@
       "defaultConfiguration": "production",
       "options": {
         "root": "examples/react/next-js-app",
-        "outputPath": "dist/examples/react/next-js-app",
-        "buildLibsFromSource": false
+        "outputPath": "dist/examples/react/next-js-app"
       },
       "configurations": {
         "production": {},
