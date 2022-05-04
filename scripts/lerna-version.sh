@@ -48,3 +48,4 @@ done
 PACKAGES=$(IFS=','; echo "${PACKAGES[*]}")
 
 yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish" "$@"
+
