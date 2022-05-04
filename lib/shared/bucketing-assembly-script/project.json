@@ -63,7 +63,7 @@
     "npm-publish": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/bucketing-assembly-script\" --jq-path",
+        "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/bucketing-assembly-script\"",
         "cwd": "lib/shared/bucketing-assembly-script"
       }
     }
