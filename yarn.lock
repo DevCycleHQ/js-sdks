@@ -6978,16 +6978,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"assemblyscript@npm:^0.20.1":
-  version: 0.20.1
-  resolution: "assemblyscript@npm:0.20.1"
+"assemblyscript@npm:^0.20.6":
+  version: 0.20.6
+  resolution: "assemblyscript@npm:0.20.6"
   dependencies:
     binaryen: 106.0.0-nightly.20220320
     long: ^5.2.0
   bin:
     asc: bin/asc.js
     asinit: bin/asinit.js
-  checksum: 8c2ba23857f77678d7c2db215cde2ef58e8007ff6e81afb7fe037d747028977c024345a9cf67bd323efe7be7108c493530f1ce20b037da45fbfe5888dda0e3f4
+  checksum: e5bc2e28dd0a54ff80ed335435b1f54f5560ff1e7070b88e00b96d60d67cfa48408a3a24c6f732996bb3b0f30d57ce5504c08be415cc9aed24253b28578fec36
   languageName: node
   linkType: hard
 
@@ -9835,7 +9835,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": 5.18.0
     "@typescript-eslint/parser": 5.18.0
     as-wasi: ^0.4.6
-    assemblyscript: ^0.20.1
+    assemblyscript: ^0.20.6
     assemblyscript-json: ^1.1.0
     assemblyscript-regex: "https://github.com/DevCycleHQ/assemblyscript-regex.git#fix-null-type-errors"
     async: ^3.2.1
