@@ -52,10 +52,10 @@ const Home: NextPage = () => {
                             <span> Your feature-release variable value = {JSON.stringify(variable?.value)} </span>
                         </div>
                         <div>
-                            <span> Your variableString variable = {variableString?.value} </span>
+                            <span> Your variableString variable = {JSON.stringify(variableString?.value)} </span>
                         </div>
                         <div>
-                            <span> Your variableNumber variable = {variableNumber?.value} </span>
+                            <span> Your variableNumber variable = {JSON.stringify(variableNumber?.value)} </span>
                         </div>
                         <div>
                             <span>
