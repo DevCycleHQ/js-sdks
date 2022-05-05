@@ -9,6 +9,7 @@
         "{options.outputPath}"
       ],
       "configurations": {
+        "production": {},
         "development": {
           "extractLicenses": false,
           "optimization": false,
