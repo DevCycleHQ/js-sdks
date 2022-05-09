@@ -6,9 +6,14 @@ import { asyncWithDVCProvider } from '@devcycle/devcycle-react-sdk';
 
 (async () => {
     const ENV_KEY = process.env['NX_CLIENT_KEY'] || 'test_token'
-    const user = { 
+    const user = {
         user_id: 'userId1',
         email: 'auto@taplytics.com',
+        customData: {
+            cps: "Matthew",
+            cpn: 777,
+            cpb: true
+        },
         isAnonymous: false
     }
     const DVCProvider = await asyncWithDVCProvider({ envKey: ENV_KEY, user: user  })
