@@ -93,11 +93,11 @@ describe('Config Parsing and Generating', () => {
                 2621975932,
                 4138596111
             ],
-            'project': {
+            'project': expect.objectContaining({
                 '_id': '61535533396f00bab586cb17',
                 'a0_organization': 'org_12345612345',
                 'key': 'test-project'
-            },
+            }),
             'features': {
                 'feature1': {
                     '_id': '614ef6aa473928459060721a',
@@ -146,11 +146,11 @@ describe('Config Parsing and Generating', () => {
             'knownVariableKeys': [
                 1879689550
             ],
-            'project': {
+            'project': expect.objectContaining({
                 '_id': '61535533396f00bab586cb17',
                 'a0_organization': 'org_12345612345',
                 'key': 'test-project'
-            },
+            }),
             'features': {
                 'feature1': {
                     '_id': '614ef6aa473928459060721a',
@@ -227,11 +227,11 @@ describe('Config Parsing and Generating', () => {
                 2621975932,
                 4138596111
             ],
-            'project': {
+            'project': expect.objectContaining({
                 '_id': '61535533396f00bab586cb17',
                 'a0_organization': 'org_12345612345',
                 'key': 'test-project'
-            },
+            }),
             'features': {
                 'feature2': {
                     '_id': '614ef6aa475928459060721a',
@@ -280,11 +280,11 @@ describe('Config Parsing and Generating', () => {
                 2621975932,
                 4138596111
             ],
-            'project': {
+            'project': expect.objectContaining({
                 '_id': '61535533396f00bab586cb17',
                 'a0_organization': 'org_12345612345',
                 'key': 'test-project'
-            },
+            }),
             'features': {
                 'feature1': {
                     '_id': '614ef6aa473928459060721a',
