@@ -12,12 +12,14 @@ export class PublicProject extends JSON.Value {
     _id: string
     key: string
     a0_organization: string
+    settings: JSON.Obj
 
     constructor(project: JSON.Obj) {
         super()
         this._id = getStringFromJSON(project, '_id')
         this.key = getStringFromJSON(project, 'key')
         this.a0_organization = getStringFromJSON(project, 'a0_organization')
+        this.settings = getJSONObjFromJSON(project, 'settings')
     }
 
     stringify(): string {
@@ -25,6 +27,7 @@ export class PublicProject extends JSON.Value {
         json.set('_id', this._id)
         json.set('key', this.key)
         json.set('a0_organization', this.a0_organization)
+        json.set('settings', this.settings)
 
         return json.stringify()
     }
