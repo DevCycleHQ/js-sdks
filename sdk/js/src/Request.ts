@@ -40,8 +40,12 @@ export const get = async (url: string): Promise<AxiosResponse> => {
     })
 }
 
-export const getConfigJson = async (environmentKey: string, user: DVCPopulatedUser): Promise<BucketedUserConfig> => {
-    const queryParams = `${serializeUser(user)}`
+export const getConfigJson = async (
+    environmentKey: string, 
+    user: DVCPopulatedUser, 
+    enableCloudData?: boolean
+): Promise<BucketedUserConfig> => {
+    const queryParams = `${serializeUser(user)}${enableCloudData ? ('&enableCloudEntityData=' + enableCloudData): ''}`
     const url = `${BASE_URL}${HOST}${CONFIG_PATH}?envKey=${environmentKey}${queryParams && '&' + queryParams}`
 
     try {

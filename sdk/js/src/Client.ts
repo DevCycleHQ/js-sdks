@@ -43,7 +43,7 @@ export class DVCClient implements Client {
         this.store.saveUser(this.user)
             .then(() => console.log('Successfully saved user to local storage!'))
 
-        this.onInitialized = getConfigJson(environmentKey, this.user)
+        this.onInitialized = getConfigJson(environmentKey, this.user, options?.enableCloudData)
             .then((config) => {
                 const oldConfig = this.config
                 this.config = config as BucketedUserConfig
