@@ -1,4 +1,4 @@
-import { DVCFeatureSet, DVCVariableSet, DVCEvent } from './types'
+import { DVCFeatureSet, DVCVariableSet, DVCEvent, DVCUser } from './types'
 import { DVCPopulatedUser } from './User'
 import { serializeUser, generateEventPayload } from './utils'
 import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios'
@@ -24,6 +24,7 @@ export const EVENT_URL = 'https://events'
 
 export const CONFIG_PATH = '/v1/sdkConfig'
 export const EVENTS_PATH = '/v1/events'
+export const SAVE_ENTITY_PATH = '/v1/entities'
 
 export const baseRequestHeaders = (environmentKey?: string): AxiosRequestHeaders => {
     return {
@@ -45,11 +46,15 @@ export const getConfigJson = async (
     user: DVCPopulatedUser, 
     enableCloudData?: boolean
 ): Promise<BucketedUserConfig> => {
-    const queryParams = `${serializeUser(user)}${enableCloudData ? ('&enableCloudEntityData=' + enableCloudData): ''}`
-    const url = `${BASE_URL}${HOST}${CONFIG_PATH}?envKey=${environmentKey}${queryParams && '&' + queryParams}`
+    const queryParams = new URLSearchParams(`${serializeUser(user)}`)
+    queryParams.append('envKey', environmentKey)
+    if (enableCloudData) {
+        queryParams.append('enableCloudEntityData', 'true')
+    }
+    const url = new URL(`${BASE_URL}${HOST}${CONFIG_PATH}?${queryParams.toString()}`)
 
     try {
-        const res = await get(url)
+        const res = await get(url.toString())
         return res.data
     } catch (ex: any) {
         console.error(`Request to get config failed for url: ${url}, ` +
@@ -65,6 +70,19 @@ export const post = async (
 ): Promise<AxiosResponse> => {
     return await axiosClient.request({
         method: 'POST',
+        url,
+        data: body,
+        headers: baseRequestHeaders(environmentKey)
+    })
+}
+
+export const patch = async (
+    url: string,
+    environmentKey: string,
+    body: Record<string, unknown>
+): Promise<AxiosResponse> => {
+    return await axiosClient.request({
+        method: 'PATCH',
         url,
         data: body,
         headers: baseRequestHeaders(environmentKey)
@@ -89,12 +107,34 @@ export const publishEvents = async (
         envKey,
         payload as unknown as Record<string, unknown>
     )
-    if (res.status !== 201) {
+    if (res.status >= 400) {
         console.error(`Error posting events, status: ${res.status}, body: ${res.data}`)
     } else {
         console.log(`Posted Events, status: ${res.status}, body: ${res.data}`)
     }
 
+    return res
+}
+
+export const saveEntity = async (user: DVCUser, envKey: string): Promise<AxiosResponse> => {
+    if (!envKey) {
+        throw new Error('Missing envKey to save to cloud data!')
+    }
+
+    if (!user || !user.user_id) {
+        throw new Error('Missing user to save to cloud data!')
+    }
+
+    const res = await patch(
+        `${BASE_URL}${HOST}${SAVE_ENTITY_PATH}/${user.user_id}`,
+        envKey,
+        user as unknown as Record<string, unknown>
+    )
+    if (res.status >= 400) {
+        console.error(`Error saving user entity, status: ${res.status}, body: ${res.data}`)
+    } else {
+        console.log(`Saved user entity, status: ${res.status}, body: ${res.data}`)
+    }
     return res
 }
 
