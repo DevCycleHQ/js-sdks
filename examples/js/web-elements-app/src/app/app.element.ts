@@ -396,5 +396,10 @@ const user = {
     user_id: 'user1',
     isAnonymous: false
 }
-const client = initialize(clientKey, user)
+
+const options = {
+  enableCloudData: true
+}
+
+const client = initialize(clientKey, user, options)
 client.onClientInitialized(() => customElements.define('devcycle-root', AppElement))
