@@ -1,6 +1,7 @@
 {
   "name": "@devcycle/bucketing-assembly-script",
   "version": "1.0.17",
+  "license": "MIT",
   "type": "module",
   "main": "build/bucketing-lib.release.js",
   "types": "build/bucketing-lib.release.d.ts",
