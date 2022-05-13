@@ -7,7 +7,7 @@ import { EventQueue } from '../src/eventQueue'
 import { EventTypes } from '../src/models/requestEvent'
 import { publishEvents } from '../src/request'
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { BucketedUserConfig, PublicProject } from '@devcycle/types'
+import { BucketedUserConfig } from '@devcycle/types'
 import { mocked } from 'ts-jest/utils'
 import { defaultLogger } from '../src'
 
@@ -19,7 +19,7 @@ describe('EventQueue Unit Tests', () => {
         environment: { _id: '', key: '' },
         features: {},
         knownVariableKeys: [],
-        project: { _id: '', key: '', a0_organization: 'org_' } as PublicProject,
+        project: { _id: '', key: '', a0_organization: 'org_' },
         variables: {},
         featureVariationMap: { feature: 'var' }
     }
