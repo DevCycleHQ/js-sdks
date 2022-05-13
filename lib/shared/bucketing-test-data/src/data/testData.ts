@@ -19,12 +19,7 @@ import moment from 'moment'
 export const project: PublicProject = {
     _id: '61535533396f00bab586cb17',
     key: 'test-project',
-    a0_organization: 'org_12345612345',
-    settings: {
-        cloudEntityData: {
-            enabled: false
-        }
-    }
+    a0_organization: 'org_12345612345'
 }
 
 export const environment: PublicEnvironment = {

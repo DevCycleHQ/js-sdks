@@ -8,10 +8,4 @@ export class Project<IdType = string> {
     key: string
 
     a0_organization: string
-
-    settings: {
-        cloudEntityData: {
-            enabled: boolean
-        }
-    }
 }
