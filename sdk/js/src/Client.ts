@@ -254,5 +254,7 @@ export class DVCClient implements Client {
 const checkIfEdgeEnabled = (enableCloudData?: boolean, config?: BucketedUserConfig) => {
     return checkIfDefined(enableCloudData) && typeof enableCloudData === 'boolean'
         ? enableCloudData
-        : config?.project?.settings?.cloudEntityData?.enabled
+        // TODO: Uncomment when settings is implemented
+        // : config?.project?.settings?.cloudEntityData?.enabled
+        : false
 }
