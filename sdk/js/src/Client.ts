@@ -9,11 +9,11 @@ import {
     ErrorCallback
 } from './types'
 import { DVCVariable } from './Variable'
-import { getConfigJson, saveEntity } from './Request'
+import { getConfigJson } from './Request'
 import Store from './Store'
 import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
-import { checkParamDefined, checkIfDefined } from './utils'
+import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
 import { BucketedUserConfig } from '@devcycle/types'
 import { RequestConsolidator } from './RequestConsolidator'
@@ -47,12 +47,6 @@ export class DVCClient implements Client {
             .then((config) => {
                 const oldConfig = this.config
                 this.config = config as BucketedUserConfig
-
-                if (checkIfEdgeEnabled(this.options?.enableCloudData, this.config)) {
-                    saveEntity(this.user, this.environmentKey)
-                        .then((res) => console.log(`Saved response entity! ${res}`))
-                }
-
                 this.store.saveConfig(config)
                     .then(() => console.log('Successfully saved config to local storage'))
                 this.eventEmitter.emitInitialized(true)
@@ -119,7 +113,6 @@ export class DVCClient implements Client {
         user: DVCUser,
         callback?: ErrorCallback<DVCVariableSet>
     ): Promise<DVCVariableSet> | void {
-
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
             try {
                 this.eventQueue.flushEvents()
@@ -139,12 +132,6 @@ export class DVCClient implements Client {
                     )
                 ).then((config) => {
                     this.config = config as BucketedUserConfig
-
-                    if (checkIfEdgeEnabled(this.options?.enableCloudData, this.config)) {
-                        saveEntity(this.user, this.environmentKey)
-                            .then((res) => console.log(`Saved response entity! ${res}`))
-                    }
-
                     this.store.saveConfig(config)
                         .then(() => console.log('Successfully saved config to local storage'))
                     const oldFeatures = oldConfig.features || {}
@@ -249,10 +236,4 @@ export class DVCClient implements Client {
     flushEvents(callback?: () => void): Promise<void> {
         return this.eventQueue.flushEvents().then(() => callback?.())
     }
-}
-
-const checkIfEdgeEnabled = (enableCloudData?: boolean, config?: BucketedUserConfig) => {
-    return checkIfDefined(enableCloudData) && typeof enableCloudData === 'boolean'
-        ? enableCloudData
-        : config?.project?.settings?.cloudEntityData?.enabled
 }
