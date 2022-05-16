@@ -24,16 +24,9 @@ export const serializeUser = (user: DVCClientAPIUser): string => {
 }
 
 export const checkParamDefined = (name: string, param: unknown): void => {
-    if (!checkIfDefined(param)) {
+    if (param === undefined || param === null) {
         throw new Error(`Missing parameter: ${name}`)
     }
-}
-
-export const checkIfDefined = (variable: unknown): boolean => {
-    if (variable === undefined || variable === null) {
-        return false
-    }
-    return true
 }
 
 export const checkParamType = (name: string, param: unknown, type: string): void => {
