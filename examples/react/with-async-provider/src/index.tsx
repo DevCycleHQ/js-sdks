@@ -10,7 +10,7 @@ import { asyncWithDVCProvider } from '@devcycle/devcycle-react-sdk';
         user_id: 'userId1',
         email: 'auto@taplytics.com',
         customData: {
-            cps: "Matthew",
+            cps: 'Matthew',
             cpn: 777,
             cpb: true
         },
