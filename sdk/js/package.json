@@ -3,6 +3,5 @@
   "version": "1.2.7",
   "description": "The DevCycle JS SDK used for feature management.",
   "author": "",
-  "license": "MIT",
-  "browser": "src/index.ts"
+  "license": "MIT"
 }
