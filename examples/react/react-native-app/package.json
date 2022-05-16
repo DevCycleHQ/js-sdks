@@ -9,6 +9,17 @@
     "react-native-svg": "*",
     "@react-native-async-storage/async-storage": "*",
     "react-native-device-info": "*",
-    "react-native-get-random-values": "*"
+    "react-native-get-random-values": "*",
+    "hoist-non-react-statics": "*",
+    "ts-jest": "*",
+    "axios": "*",
+    "class-validator": "*",
+    "reflect-metadata": "*",
+    "lodash": "*",
+    "class-transformer": "*",
+    "iso-639-1": "*",
+    "uuid": "*",
+    "axios-retry": "*",
+    "ua-parser-js": "*"
   }
 }
