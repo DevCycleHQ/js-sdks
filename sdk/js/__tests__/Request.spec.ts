@@ -50,8 +50,8 @@ describe('Request tests', () => {
                     'Content-Type': 'application/json',
                 },
                 method: 'GET',
-                url: `https://sdk-api.devcycle.com/v1/sdkConfig?user_id=${user.user_id}&isAnonymous=false&envKey=${
-                    environmentKey}`
+                url: `https://sdk-api.devcycle.com/v1/sdkConfig?envKey=${
+                    environmentKey}&user_id=${user.user_id}&isAnonymous=false`
             })
         })
     })
