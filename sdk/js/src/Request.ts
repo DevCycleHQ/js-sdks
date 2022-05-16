@@ -46,15 +46,11 @@ export const getConfigJson = async (
     user: DVCPopulatedUser, 
     enableCloudData?: boolean
 ): Promise<BucketedUserConfig> => {
-    const queryParams = new URLSearchParams(`${serializeUser(user)}`)
-    queryParams.append('envKey', environmentKey)
-    if (enableCloudData) {
-        queryParams.append('enableCloudEntityData', 'true')
-    }
-    const url = new URL(`${BASE_URL}${HOST}${CONFIG_PATH}?${queryParams.toString()}`)
+    const queryParams = `${serializeUser(user)}${enableCloudData ? ('&enableCloudEntityData=' + enableCloudData): ''}`
+    const url = `${BASE_URL}${HOST}${CONFIG_PATH}?envKey=${environmentKey}${queryParams && '&' + queryParams}`
 
     try {
-        const res = await get(url.toString())
+        const res = await get(url)
         return res.data
     } catch (ex: any) {
         console.error(`Request to get config failed for url: ${url}, ` +
