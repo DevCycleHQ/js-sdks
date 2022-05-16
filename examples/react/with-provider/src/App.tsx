@@ -9,7 +9,7 @@ const user = {
     user_id: 'userId1',
     email: 'auto@taplytics.com',
     customData: {
-        cps: "Matthew",
+        cps: 'Matthew',
         cpn: 777,
         cpb: true
     },
