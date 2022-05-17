@@ -1,5 +1,4 @@
 import { DVCOptions, DVCUser, JSON } from './types'
-import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
 import * as packageJson from '../package.json'
 import UAParser from 'ua-parser-js'
