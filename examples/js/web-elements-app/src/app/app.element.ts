@@ -3,7 +3,7 @@
 import './app.element.css'
 import { initialize } from '@devcycle/devcycle-js-sdk'
 
-const clientKey = process.env['NX_CLIENT_KEY'] || '<YOUR-CLIENT-KEY-HERE>'
+const clientKey = process.env['NX_CLIENT_KEY'] || 'client-aa8c3d7a-8ad0-4df8-b37b-7533c22292ab'
 
 export class AppElement extends HTMLElement {
     constructor() {
@@ -22,6 +22,12 @@ export class AppElement extends HTMLElement {
         const variableKeyBoolean = client.variable('variable-key-boolean', true)
         const variableKeyJsonString = client.variable('variable-json-key-string', { 'jsonStringKeyDefault':'json string value default' })
 
+        const enableEdgeDB = client.variable('cloud-data-demo', false)
+        let enableStatus = 'Disabled'
+        if (enableEdgeDB.value) {
+            enableStatus = 'Enabled'
+        }
+
         this.innerHTML = `
     <div class="wrapper">
       <div class="container">
@@ -30,6 +36,8 @@ export class AppElement extends HTMLElement {
           <h1>
             <span> Hello there, </span>
             ${titleVariable.value}
+            <br><br>
+            <span> EnableEdgeDB status: ${enableStatus} </span>
           </h1>
         </div>
         <div id="variableKey">
@@ -441,17 +449,23 @@ nx affected:e2e</pre>
 }
 
 const user = {
-    user_id: 'userId1',
+    user_id: 'testUser10',
     email: 'auto@taplytics.com',
+    isAnonymous: false,
+    name: 'Test User 10',
+    language: 'en',
+    country: 'CA',
     customData: {
         cps: 'Matthew',
         cpn: 777,
-        cpb: true
+        cpb: true,
+        bucketUsingEdgeDB: true
     },
-    isAnonymous: false
 }
 
-const options = {}
+const options = {
+    enableCloudData: true
+}
 
 const client = initialize(clientKey, user, options)
 client.onClientInitialized(() => customElements.define('devcycle-root', AppElement))
