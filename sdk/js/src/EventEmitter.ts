@@ -85,6 +85,7 @@ export class EventEmitter {
                 if (variables) {
                     variables.forEach((variable) => {
                         variable.value = newVariableValue ?? variable.defaultValue
+                        variable.isDefaulted = false
                         variable.callback?.call(variable, variable.value)
                     })
                 }

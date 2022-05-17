@@ -233,7 +233,7 @@ export interface DVCVariable {
     /**
      * If the `variable.value` is set to use the `defaultValue` this will be `true`.
      */
-    readonly isDefaulted: boolean
+    isDefaulted: boolean
 
     /**
      * Evaluation Reason as to why the variable was segmented into a specific Feature and
