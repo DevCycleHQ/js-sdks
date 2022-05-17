@@ -19,7 +19,7 @@ import { BucketedUserConfig } from '@devcycle/types'
 import { RequestConsolidator } from './RequestConsolidator'
 
 export class DVCClient implements Client {
-    private options?: DVCOptions
+    private options: DVCOptions
     private onInitialized: Promise<DVCClient>
     private variableDefaultMap: { [key: string]: { [key: string]: DVCVariable } }
     private environmentKey: string
@@ -30,7 +30,7 @@ export class DVCClient implements Client {
     requestConsolidator: RequestConsolidator
     eventEmitter: EventEmitter
 
-    constructor(environmentKey: string, user: DVCPopulatedUser, options?: DVCOptions) {
+    constructor(environmentKey: string, user: DVCPopulatedUser, options: DVCOptions = {}) {
         this.store = new Store(window.localStorage)
         this.user = user
         this.options = options
@@ -121,7 +121,7 @@ export class DVCClient implements Client {
                 if (user.user_id === this.user.user_id) {
                     updatedUser = this.user.updateUser(user)
                 } else {
-                    updatedUser = new DVCPopulatedUser(user)
+                    updatedUser = new DVCPopulatedUser(user, this.options)
                 }
 
                 const oldConfig = this.config || {} as BucketedUserConfig
@@ -147,7 +147,7 @@ export class DVCClient implements Client {
                         .then(() => console.log('Successfully saved user to local storage!'))
                     return resolve(variables || {})
                 }).catch((err) => Promise.reject(err))
-                
+
             } catch (err) {
                 this.eventEmitter.emitError(err)
                 reject(err)
@@ -166,14 +166,14 @@ export class DVCClient implements Client {
     resetUser(): Promise<DVCVariableSet>
     resetUser(callback: ErrorCallback<DVCVariableSet>): void
     resetUser(callback?: ErrorCallback<DVCVariableSet>): Promise<DVCVariableSet> | void {
-        const anonUser = new DVCPopulatedUser({ isAnonymous: true })
+        const anonUser = new DVCPopulatedUser({ isAnonymous: true }, this.options)
 
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
             try {
                 this.eventQueue.flushEvents()
                 const oldConfig = this.config || {} as BucketedUserConfig
 
-                this.onInitialized.then(() => 
+                this.onInitialized.then(() =>
                     this.requestConsolidator.queue('identify',
                         getConfigJson(this.environmentKey, anonUser)
                     )

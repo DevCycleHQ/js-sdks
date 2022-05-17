@@ -7,7 +7,7 @@ import { DVCClient } from './Client'
 
 export * from './types'
 
-export const initialize = (environmentKey: string, user: DVCUser, options?: DVCOptions): DVCClient => {
+export const initialize = (environmentKey: string, user: DVCUser, options: DVCOptions = {}): DVCClient => {
     // TODO: implement logger
     if (typeof window === 'undefined') {
         console.log('Window is not defined, try initializing in a browser context')
