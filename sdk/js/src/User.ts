@@ -22,7 +22,7 @@ export class DVCPopulatedUser implements DVCUser {
     readonly sdkType: 'client' | 'server'
     readonly sdkVersion: string
 
-    constructor(user: DVCUser, options?: DVCOptions) {
+    constructor(user: DVCUser, options: DVCOptions) {
         if (!user.user_id && !user.isAnonymous) {
             throw new Error('Must have a user_id, or have "isAnonymous" set on the user')
         }
@@ -44,7 +44,7 @@ export class DVCPopulatedUser implements DVCUser {
          */
 
         const userAgent = new UAParser(window.navigator.userAgent)
-        const platformVersion = userAgent.getBrowser().name && 
+        const platformVersion = userAgent.getBrowser().name &&
              `${userAgent.getBrowser().name} ${userAgent.getBrowser().version}`
 
         this.createdDate = new Date()
