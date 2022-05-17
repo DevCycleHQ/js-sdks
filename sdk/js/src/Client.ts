@@ -81,6 +81,9 @@ export class DVCClient implements Client {
     }
 
     variable(key: string, defaultValue: DVCVariableValue): DVCVariable {
+        if (defaultValue === undefined || defaultValue === null) {
+            throw new Error('Default value is a required param')
+        }
         const defaultValueKey = typeof defaultValue === 'string' ? defaultValue : JSON.stringify(defaultValue)
 
         let variable
