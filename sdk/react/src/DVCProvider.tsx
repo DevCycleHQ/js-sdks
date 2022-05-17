@@ -14,7 +14,7 @@ export default function DVCProvider(props: Props): React.ReactElement {
     const [_, forceRerender] = useState({})
 
     useEffect(() => {
-        client.subscribe('variableUpdated:*', () => {
+        client.subscribe('newVariables', () => {
             forceRerender({})
         })
     }, [])
