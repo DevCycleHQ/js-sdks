@@ -11,7 +11,7 @@ export class DVCVariable implements Variable {
     value: DVCVariableValue
     callback?: (value: DVCVariableValue) => void
     readonly defaultValue: DVCVariableValue
-    readonly isDefaulted: boolean
+    isDefaulted: boolean
     readonly evalReason: any
 
     constructor(variable: VariableParam) {

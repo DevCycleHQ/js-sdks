@@ -82,19 +82,23 @@ export class DVCClient implements Client {
 
     variable(key: string, defaultValue: DVCVariableValue): DVCVariable {
         const defaultValueKey = typeof defaultValue === 'string' ? defaultValue : JSON.stringify(defaultValue)
-        if (this.variableDefaultMap[key] && this.variableDefaultMap[key][defaultValueKey]) {
-            return this.variableDefaultMap[key][defaultValueKey]
-        }
 
-        const data = {
-            key,
-            defaultValue,
-            ...this.config?.variables?.[key]
-        }
-        const variable = new DVCVariable(data)
-        this.variableDefaultMap[key] = {
-            [defaultValueKey]: variable,
-            ...this.variableDefaultMap[key]
+        let variable
+        if (this.variableDefaultMap[key] && this.variableDefaultMap[key][defaultValueKey]) {
+            variable = this.variableDefaultMap[key][defaultValueKey]
+        } else {
+            const data = {
+                key,
+                defaultValue,
+                ...this.config?.variables?.[key]
+            }
+
+            variable = new DVCVariable(data)
+
+            this.variableDefaultMap[key] = {
+                [defaultValueKey]: variable,
+                ...this.variableDefaultMap[key]
+            }
         }
 
         try {
