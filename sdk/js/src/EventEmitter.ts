@@ -4,6 +4,7 @@ import { checkParamType } from './utils'
 
 const EventNames = {
     INITIALIZED: 'initialized',
+    NEW_VARIABLES: 'newVariables',
     ERROR: 'error',
     VARIABLE_UPDATED: 'variableUpdated',
     FEATURE_UPDATED: 'featureUpdated',
@@ -25,7 +26,8 @@ export class EventEmitter {
         const eventNames = Object.keys(EventNames).map((e) => e.toLowerCase())
         if (!eventNames.includes(key) &&
             !key.startsWith(EventNames.VARIABLE_UPDATED) &&
-            !key.startsWith(EventNames.FEATURE_UPDATED)) {
+            !key.startsWith(EventNames.FEATURE_UPDATED) &&
+            !key.startsWith(EventNames.NEW_VARIABLES)) {
             throw new Error('Not a valid event to subscribe to')
         } else if (!this.events[key]) {
             this.events[key] = [ handler ]
@@ -75,14 +77,16 @@ export class EventEmitter {
         variableDefaultMap: { [key: string]: { [key: string]: DVCVariable } }
     ): void {
         const keys = Object.keys(oldVariableSet).concat(Object.keys(newVariableSet))
+        let newVariables = false
         keys.forEach((key) => {
             const oldVariableValue = oldVariableSet[key] && oldVariableSet[key].value
             const newVariable = newVariableSet[key]
             const newVariableValue = newVariable && newVariableSet[key].value
 
-            if (oldVariableValue !== newVariableValue) {
+            if (JSON.stringify(oldVariableValue) !== JSON.stringify(newVariableValue)) {
                 const variables = variableDefaultMap[key] && Object.values(variableDefaultMap[key])
                 if (variables) {
+                    newVariables = true
                     variables.forEach((variable) => {
                         variable.value = newVariableValue ?? variable.defaultValue
                         variable.isDefaulted = newVariableValue === undefined || newVariableValue === null
@@ -93,6 +97,9 @@ export class EventEmitter {
                 this.emit(`${EventNames.VARIABLE_UPDATED}:${key}`, key, newVariable)
             }
         })
+        if (newVariables) {
+            this.emit(`${EventNames.NEW_VARIABLES}`)
+        }
     }
 
     emitFeatureUpdates(oldFeatureSet: DVCFeatureSet, newFeatureSet: DVCFeatureSet): void {
