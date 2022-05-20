@@ -13,7 +13,7 @@
   "author": "",
   "license": "MIT",
   "peerDependencies": {
-    "react": "^17.0.2"
+    "react": ">=16.8.0"
   },
   "dependencies": {
     "hoist-non-react-statics": "^3.3.2"
