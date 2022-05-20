@@ -87,7 +87,7 @@ export const patch = async (
 
 export const publishEvents = async (
     envKey: string | null,
-    config: BucketedUserConfig,
+    config: BucketedUserConfig | null,
     user: DVCPopulatedUser,
     events: DVCEvent[]
 ): Promise<AxiosResponse> => {
