@@ -46,13 +46,13 @@ export const checkParamType = (name: string, param: unknown, type: string): void
 }
 
 export function generateEventPayload(
-    config: BucketedUserConfig,
+    config: BucketedUserConfig | null,
     user: DVCPopulatedUser,
     events: DVCEvent[]
 ): SDKEventRequestBody {
     return {
         events: events.map((event) => {
-            return new DVCRequestEvent(event, user.user_id, config.featureVariationMap)
+            return new DVCRequestEvent(event, user.user_id, config?.featureVariationMap)
         }),
         user
     }

@@ -31,11 +31,6 @@ export class EventQueue {
     }
 
     async flushEvents(): Promise<void> {
-        if (!this.client.config) {
-            console.log('DVC Client not initialized to flush events!')
-            return
-        }
-
         const eventsToFlush = [ ...this.eventQueue ]
         const aggregateEventsToFlush = this.eventsFromAggregateEventMap()
         eventsToFlush.push(...aggregateEventsToFlush)
@@ -52,7 +47,7 @@ export class EventQueue {
         try {
             const res = await publishEvents(
                 this.environmentKey,
-                this.client.config,
+                this.client.config || null,
                 this.client.user,
                 eventsToFlush
             )

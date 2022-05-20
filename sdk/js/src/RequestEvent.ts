@@ -22,7 +22,7 @@ export class DVCRequestEvent implements DVCEvent {
         this.user_id = user_id
         this.clientDate = date || Date.now()
         this.value = value
-        this.featureVars = featureVars
+        this.featureVars = featureVars || {}
         this.metaData = metaData
     }
 }
