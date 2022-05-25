@@ -16,6 +16,13 @@ export class AppElement extends HTMLElement {
 
     connectedCallback(): void {
         const titleVariable = client.variable('titlevariable', 'Welcome 👋')
+        const variableKey = client.variable('feature-release', 'feature-release')
+        const variableKeyString = client.variable('variable-key-string', 'green')
+        const variableKeyNumber = client.variable('variable-key-number', 600)
+        const variableKeyBoolean = client.variable('variable-key-boolean', true)
+        const variableKeyJsonString = client.variable('variable-json-key-string', {'jsonStringKeyDefault':'json string value default'})
+
+
         this.innerHTML = `
     <div class="wrapper">
       <div class="container">
@@ -26,6 +33,48 @@ export class AppElement extends HTMLElement {
             ${titleVariable.value}
           </h1>
         </div>
+        <div id="variableKey">
+          <h1>
+            <span> Your feature-release selected Variation = </span>
+            ${variableKey?.value ? 'ON' : 'OFF'}
+          </h1>
+        </div>
+        <div id="variableKey">
+        <h1>
+          <span> Your variable feature-release value = </span>
+          ${JSON.stringify(variableKey.value)}
+        </h1>
+      </div>
+        <div id="variableKeyString">
+          <h1>
+            <span> Your variable variableString value = </span>
+            ${JSON.stringify(variableKeyString.value)}
+          </h1>
+        </div>
+        <div id="variableKeyNumber">
+          <h1>
+            <span> Your variable variableNumber value = </span>
+            ${JSON.stringify(variableKeyNumber.value)}
+          </h1>
+        </div>
+        <div id="variableKeyNumber">
+        <h1>
+          <span> Your variable variableBoolean value and selected Variation = </span>
+          ${JSON.stringify(variableKeyBoolean.value ? 'OFF' : 'ON')}
+        </h1>
+      </div>
+        <div id="variableKeyNumber">
+          <h1>
+            <span> Your variable variableBoolean value = </span>
+            ${JSON.stringify(variableKeyBoolean.value)}
+          </h1>
+        </div>
+        <div id="variableKeyNumber">
+        <h1>
+          ${JSON.stringify(variableKeyJsonString.value)}
+        </h1>
+      </div>
+
 
         <!--  HERO  -->
         <div id="hero" class="rounded">
@@ -110,7 +159,7 @@ export class AppElement extends HTMLElement {
                   stroke-linejoin="round"
                   stroke-width="2"
                   d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
-                />
+                />00
               </svg>
               <span>
                 Blog
@@ -393,7 +442,13 @@ nx affected:e2e</pre>
 }
 
 const user = {
-    user_id: 'user1',
+    user_id: 'userId1',
+    email: 'auto@taplytics.com',
+    customData: {
+        cps: 'Matthew',
+        cpn: 777,
+        cpb: true
+    },
     isAnonymous: false
 }
 
