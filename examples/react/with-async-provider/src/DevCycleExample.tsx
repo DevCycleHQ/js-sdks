@@ -12,7 +12,7 @@ export default function DevCycleExample(): React.ReactElement {
     const variableString = useVariable( variableKeyString, 'pink')
     const variableNumber = useVariable( variableKeyNumber, 100)
     const variableBoolean = useVariable( variableKeyBoolean, false)
-    const variableJson = useVariable( 'json-key-string', { 'jsonStringKey1':'json string value 1' })
+    const variableJson = useVariable( variableKeyJson, { 'jsonStringKey1':'json string value 1' })
 
     return (
         <div>
