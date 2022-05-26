@@ -20,8 +20,7 @@ export class AppElement extends HTMLElement {
         const variableKeyString = client.variable('variable-key-string', 'green')
         const variableKeyNumber = client.variable('variable-key-number', 600)
         const variableKeyBoolean = client.variable('variable-key-boolean', true)
-        const variableKeyJsonString = client.variable('variable-json-key-string', {'jsonStringKeyDefault':'json string value default'})
-
+        const variableKeyJsonString = client.variable('variable-json-key-string', { 'jsonStringKeyDefault':'json string value default' })
 
         this.innerHTML = `
     <div class="wrapper">
@@ -452,9 +451,7 @@ const user = {
     isAnonymous: false
 }
 
-const options = {
-  enableCloudData: true
-}
+const options = {}
 
 const client = initialize(clientKey, user, options)
 client.onClientInitialized(() => customElements.define('devcycle-root', AppElement))
