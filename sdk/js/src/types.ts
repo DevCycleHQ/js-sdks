@@ -41,7 +41,7 @@ export type initialize = (
 export interface DVCOptions {
     flushEventsMS?: number
     reactNative?: boolean
-    enableCloudData?: boolean
+    enableEdgeDB?: boolean
 }
 
 export interface DVCUser {

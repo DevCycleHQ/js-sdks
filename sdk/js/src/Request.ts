@@ -24,7 +24,7 @@ export const EVENT_URL = 'https://events'
 
 export const CONFIG_PATH = '/v1/sdkConfig'
 export const EVENTS_PATH = '/v1/events'
-export const SAVE_ENTITY_PATH = '/v1/entities'
+export const SAVE_ENTITY_PATH = '/v1/edgedb'
 
 export const baseRequestHeaders = (environmentKey?: string): AxiosRequestHeaders => {
     return {
@@ -42,11 +42,11 @@ export const get = async (url: string): Promise<AxiosResponse> => {
 }
 
 export const getConfigJson = async (
-    environmentKey: string, 
-    user: DVCPopulatedUser, 
-    enableCloudData?: boolean
+    environmentKey: string,
+    user: DVCPopulatedUser,
+    enableEdgeDB?: boolean
 ): Promise<BucketedUserConfig> => {
-    const queryParams = `${serializeUser(user)}${enableCloudData ? ('&enableCloudEntityData=' + enableCloudData): ''}`
+    const queryParams = `${serializeUser(user)}${enableEdgeDB ? ('&enableEdgeDB=' + enableEdgeDB): ''}`
     const url = `${BASE_URL}${HOST}${CONFIG_PATH}?envKey=${environmentKey}${queryParams && '&' + queryParams}`
 
     try {
@@ -114,11 +114,11 @@ export const publishEvents = async (
 
 export const saveEntity = async (user: DVCUser, envKey: string): Promise<AxiosResponse> => {
     if (!envKey) {
-        throw new Error('Missing envKey to save to cloud data!')
+        throw new Error('Missing envKey to save to Edge DB!')
     }
 
     if (!user || !user.user_id) {
-        throw new Error('Missing user to save to cloud data!')
+        throw new Error('Missing user to save to Edge DB!')
     }
 
     const res = await patch(
