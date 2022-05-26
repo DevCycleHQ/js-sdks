@@ -43,12 +43,12 @@ export class DVCClient implements Client {
         this.store.saveUser(this.user)
             .then(() => console.log('Successfully saved user to local storage!'))
 
-        this.onInitialized = getConfigJson(environmentKey, this.user, options?.enableCloudData)
+        this.onInitialized = getConfigJson(environmentKey, this.user, options?.enableEdgeDB)
             .then((config) => {
                 const oldConfig = this.config
                 this.config = config as BucketedUserConfig
 
-                if (checkIfEdgeEnabled(this.options?.enableCloudData, this.config)) {
+                if (checkIfEdgeEnabled(this.options?.enableEdgeDB, this.config)) {
                     saveEntity(this.user, this.environmentKey)
                         .then((res) => console.log(`Saved response entity! ${res}`))
                 }
@@ -147,7 +147,7 @@ export class DVCClient implements Client {
                 ).then((config) => {
                     this.config = config as BucketedUserConfig
 
-                    if (checkIfEdgeEnabled(this.options?.enableCloudData, this.config)) {
+                    if (checkIfEdgeEnabled(this.options?.enableEdgeDB, this.config)) {
                         saveEntity(this.user, this.environmentKey)
                             .then((res) => console.log(`Saved response entity! ${res}`))
                     }
@@ -258,11 +258,11 @@ export class DVCClient implements Client {
     }
 }
 
-const checkIfEdgeEnabled = (enableCloudData?: boolean, config?: BucketedUserConfig) => {
-    return checkIfDefined(enableCloudData) && typeof enableCloudData === 'boolean'
-        ? enableCloudData
+const checkIfEdgeEnabled = (enableEdgeDB?: boolean, config?: BucketedUserConfig) => {
+    return checkIfDefined(enableEdgeDB) && typeof enableEdgeDB === 'boolean'
+        ? enableEdgeDB
         // TODO: Implement when settings is available on the config
-        // : config?.project?.settings?.cloudEntityData?.enabled
+        // : config?.project?.settings?.edgeDB?.enabled
         : false
 
 }
