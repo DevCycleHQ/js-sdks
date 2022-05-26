@@ -3,7 +3,7 @@
 import './app.element.css'
 import { initialize } from '@devcycle/devcycle-js-sdk'
 
-const clientKey = process.env['NX_CLIENT_KEY'] || 'client-aa8c3d7a-8ad0-4df8-b37b-7533c22292ab'
+const clientKey = process.env['NX_CLIENT_KEY'] || '<YOUR-CLIENT-KEY-HERE>'
 
 export class AppElement extends HTMLElement {
     constructor() {
@@ -37,7 +37,7 @@ export class AppElement extends HTMLElement {
             <span> Hello there, </span>
             ${titleVariable.value}
             <br><br>
-            <span> EnableEdgeDB status: ${enableStatus} </span>
+            <span> Demo Flag Status: ${enableStatus} </span>
           </h1>
         </div>
         <div id="variableKey">
@@ -450,8 +450,8 @@ nx affected:e2e</pre>
 
 const user = {
     user_id: 'testUser10',
-    email: 'auto@taplytics.com',
     isAnonymous: false,
+    email: 'auto@taplytics.com',
     name: 'Test User 10',
     language: 'en',
     country: 'CA',
