@@ -191,7 +191,7 @@ export const generateBucketedConfig = (
     })
 
     return {
-        project: pick(config.project, ['_id', 'key', 'a0_organization']),
+        project: pick(config.project, ['_id', 'key', 'a0_organization', 'settings']),
         environment: pick(config.environment, ['_id', 'key']),
         features: featureKeyMap,
         featureVariationMap,

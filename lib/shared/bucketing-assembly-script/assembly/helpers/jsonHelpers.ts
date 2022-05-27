@@ -6,6 +6,14 @@ export function getJSONObjFromJSON(jsonObj: JSON.Obj, key: string): JSON.Obj {
     return obj
 }
 
+export function getJSONObjFromJSONOptional(jsonObj: JSON.Obj, key: string): JSON.Obj | null {
+    const obj = jsonObj.getObj(key)
+    if (!obj) {
+        return null
+    }
+    return obj
+}
+
 export function getJSONArrayFromJSON(jsonObj: JSON.Obj, key: string): JSON.Arr {
     const obj = jsonObj.getArr(key)
     if (!obj) throw new Error(`Array not found for key: "${key}", obj: ${jsonObj.stringify()}`)
