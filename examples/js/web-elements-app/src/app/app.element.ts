@@ -464,7 +464,7 @@ const user = {
 }
 
 const options = {
-    enableCloudData: true
+    enableEdgeDB: true
 }
 
 const client = initialize(clientKey, user, options)
