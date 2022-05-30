@@ -13,8 +13,7 @@ export default function DevCycleExample(): React.ReactElement {
     const variableString = useVariable( variableKeyString, 'green')
     const variableNumber = useVariable( variableKeyNumber, 600)
     const variableBoolean = useVariable( variableKeyBoolean, false)
-    //const variableJson = useVariable( variableKeyJson, { 'jsonStringKey1':'json string value 1' })
-     const variableJsonString = useVariable( variableKeyJsonString, { 'jsonStringKeyDefault':'json string value default' })
+    const variableJsonString = useVariable( variableKeyJsonString, { 'jsonStringKeyDefault':'json string value default' })
 
 
    
