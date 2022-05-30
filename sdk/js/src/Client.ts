@@ -148,7 +148,7 @@ export class DVCClient implements Client {
                     this.config = config as BucketedUserConfig
 
                     if (checkIfEdgeEnabled(this.options?.enableEdgeDB, this.config)) {
-                        saveEntity(this.user, this.environmentKey)
+                        saveEntity(updatedUser, this.environmentKey)
                             .then((res) => console.log(`Saved response entity! ${res}`))
                     }
 
