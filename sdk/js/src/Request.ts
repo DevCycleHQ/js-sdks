@@ -122,7 +122,7 @@ export const saveEntity = async (user: DVCUser, envKey: string): Promise<AxiosRe
     }
 
     const res = await patch(
-        `${BASE_URL}${HOST}${SAVE_ENTITY_PATH}/${user.user_id}`,
+        `${BASE_URL}${HOST}${SAVE_ENTITY_PATH}/${encodeURIComponent(user.user_id)}`,
         envKey,
         user as unknown as Record<string, unknown>
     )
