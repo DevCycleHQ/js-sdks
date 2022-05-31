@@ -43,7 +43,7 @@ describe('Request tests', () => {
             const environmentKey = 'my_env_key'
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
-            await Request.getConfigJson(environmentKey, user as DVCPopulatedUser)
+            await Request.getConfigJson(environmentKey, user as DVCPopulatedUser, false)
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: {
@@ -113,7 +113,7 @@ describe('Request tests', () => {
                     isAnonymous: false
                 },
                 method: 'PATCH',
-                url: `https://sdk-api.devcycle.com/v1/edgedb/user%40example.com`
+                url: 'https://sdk-api.devcycle.com/v1/edgedb/user%40example.com'
             })
         })
     })

@@ -43,7 +43,7 @@ export class DVCClient implements Client {
         this.store.saveUser(this.user)
             .then(() => console.log('Successfully saved user to local storage!'))
 
-        this.onInitialized = getConfigJson(environmentKey, this.user, options?.enableEdgeDB)
+        this.onInitialized = getConfigJson(environmentKey, this.user, options?.enableEdgeDB || false)
             .then((config) => {
                 const oldConfig = this.config
                 this.config = config as BucketedUserConfig
@@ -142,7 +142,7 @@ export class DVCClient implements Client {
 
                 this.onInitialized.then(() =>
                     this.requestConsolidator.queue('identify',
-                        getConfigJson(this.environmentKey, updatedUser)
+                        getConfigJson(this.environmentKey, updatedUser, this.options?.enableEdgeDB || false)
                     )
                 ).then((config) => {
                     this.config = config as BucketedUserConfig
@@ -195,7 +195,8 @@ export class DVCClient implements Client {
 
                 this.onInitialized.then(() =>
                     this.requestConsolidator.queue('identify',
-                        getConfigJson(this.environmentKey, anonUser)
+                        // don't send edgedb param for anonymous users
+                        getConfigJson(this.environmentKey, anonUser, false)
                     )
                 ).then((config) => {
                     this.config = config as BucketedUserConfig
