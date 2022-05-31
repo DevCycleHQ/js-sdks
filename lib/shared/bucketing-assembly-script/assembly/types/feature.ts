@@ -46,15 +46,14 @@ export class Feature extends JSON.Value {
 
 export class Variation extends JSON.Value {
     _id: string
-    name: string | null
+    name: string
     variables: Array<VariationVariable>
 
     constructor(variation: JSON.Obj) {
         super()
         this._id = getStringFromJSON(variation, '_id')
 
-        const name = variation.getString('name')
-        this.name = name ? name.toString() : null
+        this.name = getStringFromJSON(variation, 'name')
 
         const variables = getJSONArrayFromJSON(variation, 'variables')
         this.variables = variables.valueOf().map<VariationVariable>((variable) => {
@@ -65,10 +64,7 @@ export class Variation extends JSON.Value {
     stringify(): string {
         const json = new JSON.Obj()
         json.set('_id', this._id)
-        if (this.name) {
-            json.set('name', this.name)
-        }
-
+        json.set('name', this.name)
         json.set('variables', jsonArrFromValueArray(this.variables))
 
         return json.stringify()

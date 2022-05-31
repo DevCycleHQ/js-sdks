@@ -170,23 +170,31 @@ export const generateBucketedConfig = (
         }
 
         const variation_id = bucketForSegmentedFeature({ boundedHash: bucketingHash, target })
-        featureKeyMap[key] = {
-            _id,
-            key,
-            type,
-            _variation: variation_id
-        }
-        featureVariationMap[_id] = variation_id
         const variation = variations.find((v) => v._id === variation_id)
         if (!variation) {
             throw new Error(`Config missing variation: ${variation_id}`)
         }
+
+        featureKeyMap[key] = {
+            _id,
+            key,
+            type,
+            _variation: variation_id,
+            variationName: variation.name
+        }
+        featureVariationMap[_id] = variation_id
         variation.variables.forEach(({ _var, value }) => {
             const variable = config.variables.find((v) => v._id === _var)
             if (!variable) {
                 throw new Error(`Config missing variable: ${_var}`)
             }
-            variableMap[variable.key] = { ...variable, value }
+            variableMap[variable.key] = { 
+                ...variable, 
+                value, 
+                variationName: variation.name, 
+                _variation: variation._id,
+                featureKey: key
+            }
         })
     })
 

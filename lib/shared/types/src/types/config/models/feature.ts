@@ -13,7 +13,7 @@ export class Variation<IdType = string> {
      */
     _id: IdType
 
-    name?: string
+    name: string
 
     /**
      * Defining variable values.
