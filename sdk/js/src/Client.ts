@@ -48,7 +48,7 @@ export class DVCClient implements Client {
                 const oldConfig = this.config
                 this.config = config as BucketedUserConfig
 
-                if (checkIfEdgeEnabled(this.options?.enableEdgeDB, this.config)) {
+                if (checkIfEdgeEnabled(this.config, this.options?.enableEdgeDB, true)) {
                     if (!this.user.isAnonymous) {
                         saveEntity(this.user, this.environmentKey)
                             .then((res) => console.log(`Saved response entity! ${res}`))
@@ -149,7 +149,7 @@ export class DVCClient implements Client {
                 ).then((config) => {
                     this.config = config as BucketedUserConfig
 
-                    if (checkIfEdgeEnabled(this.options?.enableEdgeDB, this.config)) {
+                    if (checkIfEdgeEnabled(this.config, this.options?.enableEdgeDB)) {
                         if (!updatedUser.isAnonymous) {
                             saveEntity(updatedUser, this.environmentKey)
                                 .then((res) => console.log(`Saved response entity! ${res}`))
@@ -263,11 +263,13 @@ export class DVCClient implements Client {
     }
 }
 
-const checkIfEdgeEnabled = (enableEdgeDB?: boolean, config?: BucketedUserConfig) => {
-    return checkIfDefined(enableEdgeDB) && typeof enableEdgeDB === 'boolean'
-        ? enableEdgeDB
-        // TODO: Implement when settings is available on the config
-        // : config?.project?.settings?.edgeDB?.enabled
-        : false
-
+const checkIfEdgeEnabled = (config: BucketedUserConfig, enableEdgeDB?: boolean, logWarning = false) => {
+    if (config.project.settings?.edgeDB?.enabled) {
+        return !!enableEdgeDB
+    } else {
+        if (enableEdgeDB && logWarning) {
+            console.warn('EdgeDB is not enabled for this project. Only using local user data.')
+        }
+        return false
+    }
 }

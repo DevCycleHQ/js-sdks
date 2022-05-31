@@ -15,7 +15,13 @@ const createClientWithConfigImplementation = (implementation) => {
 
 describe('DVCClient tests', () => {
     const testConfig = {
-        project: {},
+        project: {
+            settings: {
+                edgeDB: {
+                    enabled: true
+                }
+            }
+        },
         environment: {},
         features: {},
         featureVariationMap: {},
@@ -45,15 +51,39 @@ describe('DVCClient tests', () => {
         expect(client.config).toStrictEqual(testConfig)
     })
 
-    it('should send the edgedb parameter when enabled', async () => {
+    it('should send the edgedb parameter when enabled, then save user', async () => {
         getConfigJson_mock.mockImplementation(() => {
             return Promise.resolve(testConfig)
         })
         const client = new DVCClient('test_env_key', { user_id: 'user1' }, { enableEdgeDB: true })
         expect(getConfigJson_mock).toBeCalledWith('test_env_key', expect.objectContaining({ user_id: 'user1'}), true)
-        await client.onInitialized
+        await client.onClientInitialized()
         expect(getConfigJson_mock.mock.calls.length).toBe(1)
         expect(client.config).toStrictEqual(testConfig)
+        expect(saveEntity_mock).toBeCalledWith(expect.objectContaining({ user_id: 'user1'}), 'test_env_key')
+    })
+
+    it('should send the edgedb parameter when enabled but project disabled, not save user', async () => {
+        getConfigJson_mock.mockImplementation(() => {
+            return Promise.resolve({...testConfig, project: { settings: { edgeDB: { enabled: false } } } })
+        })
+        const client = new DVCClient('test_env_key', { user_id: 'user1' }, { enableEdgeDB: true })
+        expect(getConfigJson_mock).toBeCalledWith('test_env_key', expect.objectContaining({ user_id: 'user1'}), true)
+        await client.onClientInitialized()
+        expect(getConfigJson_mock.mock.calls.length).toBe(1)
+        expect(saveEntity_mock).not.toBeCalled()
+    })
+
+    it('should not send the edgedb parameter when disabled but project enabled, not save user', async () => {
+        getConfigJson_mock.mockImplementation(() => {
+            return Promise.resolve(testConfig)
+        })
+        const client = new DVCClient('test_env_key', { user_id: 'user1' }, { enableEdgeDB: false })
+        expect(getConfigJson_mock).toBeCalledWith('test_env_key', expect.objectContaining({ user_id: 'user1'}), false)
+        await client.onClientInitialized()
+        expect(getConfigJson_mock.mock.calls.length).toBe(1)
+        expect(client.config).toStrictEqual(testConfig)
+        expect(saveEntity_mock).not.toBeCalled()
     })
 
     it('should still return client if config request fails', async () => {

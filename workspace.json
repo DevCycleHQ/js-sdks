@@ -7,7 +7,7 @@
     "example-react-next-js-app": "examples/react/next-js-app",
     "example-react-with-async-provider": "examples/react/with-async-provider",
     "example-react-with-provider": "examples/react/with-provider",
-    "examples-js-web-elements-app": "examples/js/web-elements-app",
+    "example-js-web-elements-app": "examples/js/web-elements-app",
     "js": "sdk/js",
     "nodejs": "sdk/nodejs",
     "react": "sdk/react",
