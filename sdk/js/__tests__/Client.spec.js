@@ -1,8 +1,8 @@
 import { DVCClient } from '../src/Client'
-import {getConfigJson, publishEvents, saveEntity} from '../src/Request'
+import { getConfigJson, publishEvents, saveEntity } from '../src/Request'
 import { mocked } from 'ts-jest/utils'
 import { DVCVariable } from '../src/Variable'
-import { DVCPopulatedUser } from "../src/User"
+import { DVCPopulatedUser } from '../src/User'
 
 jest.mock('../src/Request')
 const getConfigJson_mock = mocked(getConfigJson)
@@ -94,6 +94,19 @@ describe('DVCClient tests', () => {
             expect(onInitialized).toBeFalsy()
             await client.onInitialized
             expect(callback).toBeCalled()
+        })
+
+        it('should not send a request to edgedb for an anonymous user', async () => {
+            saveEntity_mock.mockResolvedValue({})
+
+            const client = new DVCClient('test_env_key', 
+                new DVCPopulatedUser({ isAnonymous: true }), 
+                { enableEdgeDB: true }
+            )
+            await client.onClientInitialized()
+
+            expect(getConfigJson_mock).toBeCalled()
+            expect(saveEntity_mock).not.toBeCalled()
         })
     })
 
@@ -245,12 +258,30 @@ describe('DVCClient tests', () => {
             const client = new DVCClient('test_env_key', { user_id: 'user1' }, {enableEdgeDB: true})
             await client.onClientInitialized()
             getConfigJson_mock.mockClear()
+            saveEntity_mock.mockClear() 
+            await client.identifyUser(newUser)
+
+            expect(getConfigJson_mock).toBeCalledWith('test_env_key', expect.objectContaining({user_id: 'user2'}), true)
+            expect(saveEntity_mock).toBeCalledWith(expect.objectContaining(newUser), 'test_env_key')
+            expect(saveEntity_mock).toBeCalledWith(expect.any(DVCPopulatedUser), 'test_env_key')
+        })
+
+        it('should not send a request to edgedb after getting the config for an anonymous user', async () => {
+            const newUser = { isAnonymous: true, country: 'CA' }
+            getConfigJson_mock.mockResolvedValue(testConfig)
+            saveEntity_mock.mockResolvedValue({})
+
+            const client = new DVCClient('test_env_key', 
+                new DVCPopulatedUser({ isAnonymous: true }), 
+                { enableEdgeDB: true }
+            )
+            await client.onClientInitialized()
+            getConfigJson_mock.mockClear()
             saveEntity_mock.mockClear()
             await client.identifyUser(newUser)
 
-            expect(getConfigJson).toBeCalledWith('test_env_key', expect.objectContaining({ user_id: 'user2' }), true)
-            expect(saveEntity_mock).toBeCalledWith(expect.objectContaining(newUser), 'test_env_key')
-            expect(saveEntity_mock).toBeCalledWith(expect.any(DVCPopulatedUser), 'test_env_key')
+            expect(getConfigJson_mock).toBeCalled()
+            expect(saveEntity_mock).not.toBeCalled()
         })
 
         it('should throw an error if the user is invalid', async () => {

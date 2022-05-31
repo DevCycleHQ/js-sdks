@@ -121,6 +121,10 @@ export const saveEntity = async (user: DVCPopulatedUser, envKey: string): Promis
         throw new Error('Missing user to save to Edge DB!')
     }
 
+    if (user.isAnonymous) {
+        throw new Error('Cannot save user data for an anonymous user!')
+    }
+
     const res = await patch(
         `${BASE_URL}${HOST}${SAVE_ENTITY_PATH}/${encodeURIComponent(user.user_id)}`,
         envKey,
