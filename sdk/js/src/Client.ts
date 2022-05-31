@@ -49,8 +49,10 @@ export class DVCClient implements Client {
                 this.config = config as BucketedUserConfig
 
                 if (checkIfEdgeEnabled(this.options?.enableEdgeDB, this.config)) {
-                    saveEntity(this.user, this.environmentKey)
-                        .then((res) => console.log(`Saved response entity! ${res}`))
+                    if (!this.user.isAnonymous) {
+                        saveEntity(this.user, this.environmentKey)
+                            .then((res) => console.log(`Saved response entity! ${res}`))
+                    }
                 }
 
                 this.store.saveConfig(config)
@@ -148,8 +150,10 @@ export class DVCClient implements Client {
                     this.config = config as BucketedUserConfig
 
                     if (checkIfEdgeEnabled(this.options?.enableEdgeDB, this.config)) {
-                        saveEntity(updatedUser, this.environmentKey)
-                            .then((res) => console.log(`Saved response entity! ${res}`))
+                        if (!updatedUser.isAnonymous) {
+                            saveEntity(updatedUser, this.environmentKey)
+                                .then((res) => console.log(`Saved response entity! ${res}`))
+                        }
                     }
 
                     this.store.saveConfig(config)
