@@ -8,9 +8,9 @@ type Props = {
 }
 
 export default async function asyncWithDVCProvider(config: ProviderConfig): Promise<React.FC<Props>> {
-    const { envKey, user } = config
+    const { envKey, user, options } = config
 
-    const client = initializeDVCClient(envKey, user)
+    const client = initializeDVCClient(envKey, user, options)
     await client.onClientInitialized()
 
     return ({ children }) => {
