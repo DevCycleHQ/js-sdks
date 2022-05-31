@@ -156,7 +156,8 @@ describe('Config Parsing and Generating', () => {
                     '_id': '614ef6aa473928459060721a',
                     'key': 'feature1',
                     'type': 'release',
-                    '_variation': '615357cf7e9ebdca58446ed0'
+                    '_variation': '615357cf7e9ebdca58446ed0',
+                    'variationName': 'variation 2'
                 }
             },
             'featureVariationMap': {
@@ -167,7 +168,10 @@ describe('Config Parsing and Generating', () => {
                     '_id': '615356f120ed334a6054564c',
                     'key': 'swagTest',
                     'type': 'String',
-                    'value': 'YEEEEOWZA'
+                    'value': 'YEEEEOWZA',
+                    '_variation': '615357cf7e9ebdca58446ed0',
+                    'variationName': 'variation 2',
+                    'featureKey': 'feature1',
                 }
             }
         }
@@ -209,13 +213,15 @@ describe('Config Parsing and Generating', () => {
                     '_id': '614ef6aa473928459060721a',
                     'key': 'feature1',
                     'type': 'release',
-                    '_variation': '6153553b8cf4e45e0464268d'
+                    '_variation': '6153553b8cf4e45e0464268d',
+                    'variationName': 'variation 1'
                 },
                 'feature2': {
                     '_id': '614ef6aa475928459060721a',
                     'key': 'feature2',
                     'type': 'release',
-                    '_variation': '615382338424cb11646d7668'
+                    '_variation': '615382338424cb11646d7668',
+                    'variationName': 'feature 2 variation'
                 }
             },
             'featureVariationMap': {
@@ -227,25 +233,37 @@ describe('Config Parsing and Generating', () => {
                     '_id': '61538237b0a70b58ae6af71g',
                     'key': 'feature2.cool',
                     'type': 'String',
-                    'value': 'multivar first'
+                    'value': 'multivar first',
+                    '_variation': '615382338424cb11646d7668',
+                    'variationName': 'feature 2 variation',
+                    'featureKey': 'feature2',
                 },
                 'feature2.hello': {
                     '_id': '61538237b0a70b58ae6af71h',
                     'key': 'feature2.hello',
                     'type': 'String',
-                    'value': 'multivar last'
+                    'value': 'multivar last',
+                    '_variation': '615382338424cb11646d7668',
+                    'variationName': 'feature 2 variation',
+                    'featureKey': 'feature2',
                 },
                 'swagTest': {
                     '_id': '615356f120ed334a6054564c',
                     'key': 'swagTest',
                     'type': 'String',
-                    'value': 'man'
+                    'value': 'man',
+                    '_variation': '6153553b8cf4e45e0464268d',
+                    'variationName': 'variation 1',
+                    'featureKey': 'feature1',
                 },
                 'test': {
                     '_id': '614ef6ea475129459160721a',
                     'key': 'test',
                     'type': 'String',
-                    'value': 'scat'
+                    'value': 'scat',
+                    '_variation': '6153553b8cf4e45e0464268d',
+                    'variationName': 'variation 1',
+                    'featureKey': 'feature1',
                 }
             }
         }
@@ -290,7 +308,8 @@ describe('Config Parsing and Generating', () => {
                     '_id': '614ef6aa475928459060721a',
                     'key': 'feature2',
                     'type': 'release',
-                    '_variation': '615382338424cb11646d7667'
+                    '_variation': '615382338424cb11646d7667',
+                    'variationName': 'variation 1 aud 2'
                 }
             },
             'featureVariationMap': {
@@ -301,7 +320,10 @@ describe('Config Parsing and Generating', () => {
                     '_id': '61538237b0a70b58ae6af71f',
                     'key': 'feature2Var',
                     'type': 'String',
-                    'value': 'Var 1 aud 2'
+                    'value': 'Var 1 aud 2',
+                    '_variation': '615382338424cb11646d7667',
+                    'variationName': 'variation 1 aud 2',
+                    'featureKey': 'feature2',
                 }
             }
         }
@@ -343,13 +365,15 @@ describe('Config Parsing and Generating', () => {
                     '_id': '614ef6aa473928459060721a',
                     'key': 'feature1',
                     'type': 'release',
-                    '_variation': '615357cf7e9ebdca58446ed0'
+                    '_variation': '615357cf7e9ebdca58446ed0',
+                    'variationName': 'variation 2'
                 },
                 'feature2': {
                     '_id': '614ef6aa475928459060721a',
                     'key': 'feature2',
                     'type': 'release',
-                    '_variation': '615382338424cb11646d7667'
+                    '_variation': '615382338424cb11646d7667',
+                    'variationName': 'variation 1 aud 2',
                 }
             },
             'featureVariationMap': {
@@ -361,13 +385,20 @@ describe('Config Parsing and Generating', () => {
                     '_id': '615356f120ed334a6054564c',
                     'key': 'swagTest',
                     'type': 'String',
-                    'value': 'YEEEEOWZA'
+                    'value': 'YEEEEOWZA',
+                    '_variation': '615357cf7e9ebdca58446ed0',
+                    'variationName': 'variation 2',
+                    'featureKey': 'feature1',
                 },
                 'feature2Var': {
                     '_id': '61538237b0a70b58ae6af71f',
                     'key': 'feature2Var',
                     'type': 'String',
-                    'value': 'Var 1 aud 2'
+                    'value': 'Var 1 aud 2',
+                    '_variation': '615382338424cb11646d7667',
+                    'variationName': 'variation 1 aud 2',
+                    'featureKey': 'feature2',
+
                 }
             }
         }

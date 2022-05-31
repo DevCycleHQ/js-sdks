@@ -204,15 +204,6 @@ export function _generateBucketedConfig(
         }
 
         const variation_id = bucketForSegmentedFeature(bucketingHash, target)
-        featureKeyMap.set(feature.key, new SDKFeature(
-            feature._id,
-            feature.type,
-            feature.key,
-            variation_id,
-            null
-        ))
-        featureVariationMap.set(feature._id, variation_id)
-
         let variation: Variation | null = null
         for (let t = 0; t < feature.variations.length; t++) {
             const featVariation = feature.variations[t]
@@ -224,6 +215,15 @@ export function _generateBucketedConfig(
         if (!variation) {
             throw new Error(`Config missing variation: ${variation_id}`)
         }
+        featureKeyMap.set(feature.key, new SDKFeature(
+            feature._id,
+            feature.type,
+            feature.key,
+            variation_id,
+            variation.name,
+            null
+        ))
+        featureVariationMap.set(feature._id, variation_id)
 
         for (let y = 0; y < variation.variables.length; y++) {
             const variationVar = variation.variables[y]
@@ -246,6 +246,9 @@ export function _generateBucketedConfig(
                 variable.type,
                 variable.key,
                 variationVar.value,
+                variation._id,
+                variation.name,
+                feature.key,
                 null
             )
             variableMap.set(variable.key, newVar)

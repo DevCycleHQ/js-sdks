@@ -95,6 +95,7 @@ export class SDKFeature extends JSON.Obj {
         public type: string,
         public key: string,
         public _variation: string,
+        public variationName: string,
         public evalReason: string | null
     ) {
         super()
@@ -106,6 +107,7 @@ export class SDKFeature extends JSON.Obj {
             getStringFromJSON(feature, 'type'),
             getStringFromJSON(feature, 'key'),
             getStringFromJSON(feature, '_variation'),
+            getStringFromJSON(feature, 'variationName'),
             getStringFromJSONOptional(feature, 'evalReason')
         )
     }
@@ -116,6 +118,7 @@ export class SDKFeature extends JSON.Obj {
         json.set('type', this.type)
         json.set('key', this.key)
         json.set('_variation', this._variation)
+        json.set('variationName', this.variationName)
         if (this.evalReason) {
             json.set('evalReason', this.evalReason)
         }
@@ -129,7 +132,10 @@ export class SDKVariable extends JSON.Obj {
         public type: string,
         public key: string,
         public value: JSON.Value,
-        public evalReason: string | null
+        public _variation: string,
+        public variationName: string,
+        public featureKey: string, 
+        public evalReason: string | null,
     ) {
         super()
     }
@@ -140,6 +146,9 @@ export class SDKVariable extends JSON.Obj {
             getStringFromJSON(variable, 'type'),
             getStringFromJSON(variable, 'key'),
             getJSONValueFromJSON(variable, 'value'),
+            getStringFromJSON(variable, '_variation'),
+            getStringFromJSON(variable, 'variationName'),
+            getStringFromJSON(variable, 'featureKey'),
             getStringFromJSONOptional(variable, 'evalReason')
         )
     }
@@ -150,6 +159,9 @@ export class SDKVariable extends JSON.Obj {
         json.set('type', this.type)
         json.set('key', this.key)
         json.set('value', this.value)
+        json.set('_variation', this._variation)
+        json.set('variationName', this.variationName)
+        json.set('featureKey', this.featureKey)
         if (this.evalReason) {
             json.set('evalReason', this.evalReason)
         }
