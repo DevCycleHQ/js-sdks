@@ -112,7 +112,7 @@ export const publishEvents = async (
     return res
 }
 
-export const saveEntity = async (user: DVCUser, envKey: string): Promise<AxiosResponse> => {
+export const saveEntity = async (user: DVCPopulatedUser, envKey: string): Promise<AxiosResponse> => {
     if (!envKey) {
         throw new Error('Missing envKey to save to Edge DB!')
     }

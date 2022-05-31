@@ -16,7 +16,7 @@ const Home: NextPage = () => {
     const variableNumber = useVariable(variableKeyNumber, 600)
     const variableBoolean = useVariable(variableKeyBoolean, false)
     const variableJsonString = useVariable(
-        variableKeyJsonString, 
+        variableKeyJsonString,
         { 'jsonStringKeyDefault':'json string value default' }
     )
     return (
@@ -72,7 +72,8 @@ const Home: NextPage = () => {
                             </span>
                         </div>
                         <div>
-                            <span> Your variable variableJsonString value = {JSON.stringify(variableJsonString?.value)} </span>
+                            <span> Your variable variableJsonString value = {
+                                JSON.stringify(variableJsonString?.value)} </span>
                         </div>
                     </div>
                 </div>

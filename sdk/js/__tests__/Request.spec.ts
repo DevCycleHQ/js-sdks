@@ -94,4 +94,27 @@ describe('Request tests', () => {
             })
         })
     })
+
+    describe('saveEntity', () => {
+        it('should send user data to edgedb api with url-encoded id', async () => {
+            const user = { user_id: 'user@example.com', isAnonymous: false }
+            const environmentKey = 'my_env_key'
+            axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
+
+            await Request.saveEntity(user as DVCPopulatedUser, environmentKey)
+
+            expect(axiosRequestMock).toBeCalledWith({
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'my_env_key'
+                },
+                data: {
+                    user_id: 'user@example.com',
+                    isAnonymous: false
+                },
+                method: 'PATCH',
+                url: `https://sdk-api.devcycle.com/v1/edgedb/user%40example.com`
+            })
+        })
+    })
 })

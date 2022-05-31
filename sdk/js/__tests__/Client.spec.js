@@ -1,15 +1,12 @@
 import { DVCClient } from '../src/Client'
-import { getConfigJson, publishEvents } from '../src/Request'
+import {getConfigJson, publishEvents, saveEntity} from '../src/Request'
 import { mocked } from 'ts-jest/utils'
 import { DVCVariable } from '../src/Variable'
+import { DVCPopulatedUser } from "../src/User"
 
 jest.mock('../src/Request')
 const getConfigJson_mock = mocked(getConfigJson)
-
-beforeEach(() => {
-    getConfigJson_mock.mockClear()
-    window.localStorage.clear()
-})
+const saveEntity_mock = mocked(saveEntity)
 
 const createClientWithConfigImplementation = (implementation) => {
     getConfigJson_mock.mockImplementation(implementation)
@@ -31,12 +28,29 @@ describe('DVCClient tests', () => {
         }
     }
 
+    beforeEach(() => {
+        getConfigJson_mock.mockClear()
+        saveEntity_mock.mockClear()
+        window.localStorage.clear()
+    })
+
     it('should make a call to get a config', async () => {
         getConfigJson_mock.mockImplementation(() => {
             return Promise.resolve(testConfig)
         })
         const client = new DVCClient('test_env_key', { user_id: 'user1' })
         expect(getConfigJson_mock).toBeCalled()
+        await client.onInitialized
+        expect(getConfigJson_mock.mock.calls.length).toBe(1)
+        expect(client.config).toStrictEqual(testConfig)
+    })
+
+    it('should send the edgedb parameter when enabled', async () => {
+        getConfigJson_mock.mockImplementation(() => {
+            return Promise.resolve(testConfig)
+        })
+        const client = new DVCClient('test_env_key', { user_id: 'user1' }, { enableEdgeDB: true })
+        expect(getConfigJson_mock).toBeCalledWith('test_env_key', expect.objectContaining({ user_id: 'user1'}), true)
         await client.onInitialized
         expect(getConfigJson_mock.mock.calls.length).toBe(1)
         expect(client.config).toStrictEqual(testConfig)
@@ -201,7 +215,7 @@ describe('DVCClient tests', () => {
             expect(result).not.toBeInstanceOf(Promise)
         })
 
-        it('should get the config again and return new features', async () => {
+        it('should get the config again and return new features, but not call edgedb', async () => {
             const newUser = { user_id: 'user2' }
             const newVariables = {
                 variables: {
@@ -218,7 +232,22 @@ describe('DVCClient tests', () => {
             const result = await client.identifyUser(newUser)
 
             expect(getConfigJson).toBeCalled()
+            expect(saveEntity_mock).not.toBeCalled()
             expect(result).toEqual(newVariables.variables)
+        })
+
+        it('should send a request to edgedb after getting the config', async () => {
+            const newUser = { user_id: 'user2' }
+            getConfigJson_mock.mockImplementation(() => {
+                return Promise.resolve(testConfig)
+            })
+            saveEntity_mock.mockResolvedValue({})
+            const client = new DVCClient('test_env_key', { user_id: 'user1' }, {enableEdgeDB: true})
+            await client.identifyUser(newUser)
+
+            expect(getConfigJson).toBeCalled()
+            expect(saveEntity_mock).toBeCalledWith(expect.objectContaining(newUser), 'test_env_key')
+            expect(saveEntity_mock).toBeCalledWith(expect.any(DVCPopulatedUser), 'test_env_key')
         })
 
         it('should throw an error if the user is invalid', async () => {
