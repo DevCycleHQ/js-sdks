@@ -243,9 +243,12 @@ describe('DVCClient tests', () => {
             })
             saveEntity_mock.mockResolvedValue({})
             const client = new DVCClient('test_env_key', { user_id: 'user1' }, {enableEdgeDB: true})
+            await client.onClientInitialized()
+            getConfigJson_mock.mockClear()
+            saveEntity_mock.mockClear()
             await client.identifyUser(newUser)
 
-            expect(getConfigJson).toBeCalled()
+            expect(getConfigJson).toBeCalledWith('test_env_key', expect.objectContaining({ user_id: 'user2' }), true)
             expect(saveEntity_mock).toBeCalledWith(expect.objectContaining(newUser), 'test_env_key')
             expect(saveEntity_mock).toBeCalledWith(expect.any(DVCPopulatedUser), 'test_env_key')
         })
@@ -313,9 +316,28 @@ describe('DVCClient tests', () => {
             const result = await client.resetUser()
             const anonUser = getConfigJson.mock.calls[0][1]
 
-            expect(getConfigJson).toBeCalled()
+            expect(getConfigJson).toBeCalledWith('test_env_key', expect.objectContaining(anonUser), false)
             expect(result).toEqual(newVariables.variables)
             expect(anonUser.isAnonymous).toBe(true)
+        })
+
+        it('should not send a request to edgedb after getting the config, and not send edgedb param', async () => {
+            getConfigJson_mock.mockImplementation(() => {
+                return Promise.resolve(testConfig)
+            })
+            saveEntity_mock.mockResolvedValue({})
+            const client = new DVCClient('test_env_key', { user_id: 'user1' }, {enableEdgeDB: true})
+            await client.onClientInitialized()
+            getConfigJson_mock.mockClear()
+            saveEntity_mock.mockClear()
+            await client.resetUser()
+
+            expect(getConfigJson).toBeCalledWith(
+                'test_env_key',
+                expect.objectContaining({ user_id: expect.any(String) }),
+                false
+            )
+            expect(saveEntity_mock).not.toBeCalled()
         })
 
         it('should flush events before resetting user', async () => {
