@@ -70,7 +70,7 @@ export class AppElement extends HTMLElement {
         </div>
         <div id="variableKeyNumber">
         <h1>
-        <span> Your variable variableJson value = </span>
+        <span> Your variable variableJsonString value = </span>
           ${JSON.stringify(variableKeyJsonString.value)}
         </h1>
       </div>
