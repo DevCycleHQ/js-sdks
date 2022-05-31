@@ -452,7 +452,7 @@ const user = {
     isAnonymous: false
 }
 
-const options = {}
+const options = { enableEdgeDB: true }
 
 const client = initialize(clientKey, user, options)
 client.onClientInitialized(() => customElements.define('devcycle-root', AppElement))

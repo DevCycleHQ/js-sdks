@@ -1,5 +1,5 @@
 module.exports = {
-    displayName: 'examples-js-web-elements-app',
+    displayName: 'example-js-web-elements-app',
     preset: '../../../jest.preset.ts',
     setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
     transform: {
