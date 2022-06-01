@@ -14,6 +14,7 @@ export class Variation<IdType = string> {
     _id: IdType
 
     name: string
+    key: string
 
     /**
      * Defining variable values.

@@ -180,7 +180,8 @@ export const generateBucketedConfig = (
             key,
             type,
             _variation: variation_id,
-            variationName: variation.name
+            variationName: variation.name,
+            variationKey: variation.key
         }
         featureVariationMap[_id] = variation_id
         variation.variables.forEach(({ _var, value }) => {
@@ -190,10 +191,8 @@ export const generateBucketedConfig = (
             }
             variableMap[variable.key] = { 
                 ...variable, 
-                value, 
-                variationName: variation.name, 
+                value,
                 _variation: variation._id,
-                featureKey: key
             }
         })
     })
