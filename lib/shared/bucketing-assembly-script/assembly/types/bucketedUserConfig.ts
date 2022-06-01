@@ -96,6 +96,7 @@ export class SDKFeature extends JSON.Obj {
         public key: string,
         public _variation: string,
         public variationName: string,
+        public variationKey: string,
         public evalReason: string | null
     ) {
         super()
@@ -108,6 +109,7 @@ export class SDKFeature extends JSON.Obj {
             getStringFromJSON(feature, 'key'),
             getStringFromJSON(feature, '_variation'),
             getStringFromJSON(feature, 'variationName'),
+            getStringFromJSON(feature, 'variationKey'),
             getStringFromJSONOptional(feature, 'evalReason')
         )
     }
@@ -119,6 +121,7 @@ export class SDKFeature extends JSON.Obj {
         json.set('key', this.key)
         json.set('_variation', this._variation)
         json.set('variationName', this.variationName)
+        json.set('variationKey', this.variationKey)
         if (this.evalReason) {
             json.set('evalReason', this.evalReason)
         }
@@ -133,8 +136,6 @@ export class SDKVariable extends JSON.Obj {
         public key: string,
         public value: JSON.Value,
         public _variation: string,
-        public variationName: string,
-        public featureKey: string, 
         public evalReason: string | null,
     ) {
         super()
@@ -147,8 +148,6 @@ export class SDKVariable extends JSON.Obj {
             getStringFromJSON(variable, 'key'),
             getJSONValueFromJSON(variable, 'value'),
             getStringFromJSON(variable, '_variation'),
-            getStringFromJSON(variable, 'variationName'),
-            getStringFromJSON(variable, 'featureKey'),
             getStringFromJSONOptional(variable, 'evalReason')
         )
     }
@@ -160,8 +159,6 @@ export class SDKVariable extends JSON.Obj {
         json.set('key', this.key)
         json.set('value', this.value)
         json.set('_variation', this._variation)
-        json.set('variationName', this.variationName)
-        json.set('featureKey', this.featureKey)
         if (this.evalReason) {
             json.set('evalReason', this.evalReason)
         }

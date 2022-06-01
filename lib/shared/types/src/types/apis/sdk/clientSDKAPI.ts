@@ -303,14 +303,13 @@ export class DVCClientAPIUser implements DVCAPIUser {
 export type SDKVariable = PublicVariable & {
     value: VariableValue
     _variation: string
-    variationName: string
-    featureKey: string
     evalReason?: unknown
 }
 
 export type SDKFeature = Pick<PublicFeature, '_id' | 'key' | 'type'> & {
     _variation: string,
     variationName: string,
+    variationKey: string
     evalReason?: unknown
 }
 

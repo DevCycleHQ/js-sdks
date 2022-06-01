@@ -221,6 +221,7 @@ export function _generateBucketedConfig(
             feature.key,
             variation_id,
             variation.name,
+            variation.key,
             null
         ))
         featureVariationMap.set(feature._id, variation_id)
@@ -247,8 +248,6 @@ export function _generateBucketedConfig(
                 variable.key,
                 variationVar.value,
                 variation._id,
-                variation.name,
-                feature.key,
                 null
             )
             variableMap.set(variable.key, newVar)

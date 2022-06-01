@@ -141,6 +141,7 @@ export const variations: PublicVariation[] = [
     {
         _id: '6153553b8cf4e45e0464268d',
         name: 'variation 1',
+        key: 'variation-1-key',
         variables: [{
             _var: variables[0]._id,
             value: 'scat'
@@ -152,6 +153,7 @@ export const variations: PublicVariation[] = [
     }, {
         _id: '615357cf7e9ebdca58446ed0',
         name: 'variation 2',
+        key: 'variation-2-key',
         variables: [
             {
                 _var: variables[1]._id,
@@ -161,6 +163,7 @@ export const variations: PublicVariation[] = [
     {
         _id: '615382338424cb11646d7667',
         name: 'variation 1 aud 2',
+        key: 'variation-1-aud-2-key',
         variables: [
             {
                 _var: variables[2]._id,
@@ -170,6 +173,7 @@ export const variations: PublicVariation[] = [
     {
         _id: '615382338424cb11646d7668',
         name: 'feature 2 variation',
+        key: 'variation-feature-2-key',
         variables: [
             {
                 _var: variables[3]._id,
@@ -184,6 +188,7 @@ export const variations: PublicVariation[] = [
     {
         _id: '615382338424cb11646d7668',
         name: 'feature 2 never used variation',
+        key: 'variation-never-used-key',
         variables: [
             {
                 _var: variables[3]._id,
@@ -198,6 +203,7 @@ export const variations: PublicVariation[] = [
     {
         _id: '615382338424cb11646d7660',
         name: 'feature 2 never used variation, bool',
+        key: 'variation-bool-key',
         variables: [
             {
                 _var: variables[3]._id,
@@ -212,6 +218,7 @@ export const variations: PublicVariation[] = [
     {
         _id: '615382338424cb11646d7661',
         name: 'feature 2 never used variation, number',
+        key: 'variation-number-key',
         variables: [
             {
                 _var: variables[3]._id,
