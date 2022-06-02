@@ -302,7 +302,6 @@ export class DVCClientAPIUser implements DVCAPIUser {
 
 export type SDKVariable = PublicVariable & {
     value: VariableValue
-    _variation: string
     evalReason?: unknown
 }
 

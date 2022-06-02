@@ -135,7 +135,6 @@ export class SDKVariable extends JSON.Obj {
         public type: string,
         public key: string,
         public value: JSON.Value,
-        public _variation: string,
         public evalReason: string | null,
     ) {
         super()
@@ -147,7 +146,6 @@ export class SDKVariable extends JSON.Obj {
             getStringFromJSON(variable, 'type'),
             getStringFromJSON(variable, 'key'),
             getJSONValueFromJSON(variable, 'value'),
-            getStringFromJSON(variable, '_variation'),
             getStringFromJSONOptional(variable, 'evalReason')
         )
     }
@@ -158,7 +156,6 @@ export class SDKVariable extends JSON.Obj {
         json.set('type', this.type)
         json.set('key', this.key)
         json.set('value', this.value)
-        json.set('_variation', this._variation)
         if (this.evalReason) {
             json.set('evalReason', this.evalReason)
         }
