@@ -36,3 +36,5 @@ export function setConfigData(token: string, configDataStr: string): void {
 export * from './test'
 
 export { murmurhashV3, murmurhashV3_js } from './helpers/murmurhash'
+export * from './helpers/setTimeout'
+export * from './helpers/setInterval'
