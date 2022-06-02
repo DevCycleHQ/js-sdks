@@ -170,7 +170,6 @@ describe('Config Parsing and Generating', () => {
                     'key': 'swagTest',
                     'type': 'String',
                     'value': 'YEEEEOWZA',
-                    '_variation': '615357cf7e9ebdca58446ed0',
                 }
             }
         }
@@ -235,28 +234,24 @@ describe('Config Parsing and Generating', () => {
                     'key': 'feature2.cool',
                     'type': 'String',
                     'value': 'multivar first',
-                    '_variation': '615382338424cb11646d7668'
                 },
                 'feature2.hello': {
                     '_id': '61538237b0a70b58ae6af71h',
                     'key': 'feature2.hello',
                     'type': 'String',
                     'value': 'multivar last',
-                    '_variation': '615382338424cb11646d7668'
                 },
                 'swagTest': {
                     '_id': '615356f120ed334a6054564c',
                     'key': 'swagTest',
                     'type': 'String',
                     'value': 'man',
-                    '_variation': '6153553b8cf4e45e0464268d'
                 },
                 'test': {
                     '_id': '614ef6ea475129459160721a',
                     'key': 'test',
                     'type': 'String',
                     'value': 'scat',
-                    '_variation': '6153553b8cf4e45e0464268d'
                 }
             }
         }
@@ -315,7 +310,6 @@ describe('Config Parsing and Generating', () => {
                     'key': 'feature2Var',
                     'type': 'String',
                     'value': 'Var 1 aud 2',
-                    '_variation': '615382338424cb11646d7667'
                 }
             }
         }
@@ -380,14 +374,12 @@ describe('Config Parsing and Generating', () => {
                     'key': 'swagTest',
                     'type': 'String',
                     'value': 'YEEEEOWZA',
-                    '_variation': '615357cf7e9ebdca58446ed0'
                 },
                 'feature2Var': {
                     '_id': '61538237b0a70b58ae6af71f',
                     'key': 'feature2Var',
                     'type': 'String',
                     'value': 'Var 1 aud 2',
-                    '_variation': '615382338424cb11646d7667'
 
                 }
             }
