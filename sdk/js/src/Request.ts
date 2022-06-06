@@ -130,7 +130,10 @@ export const saveEntity = async (user: DVCPopulatedUser, envKey: string): Promis
         envKey,
         user as unknown as Record<string, unknown>
     )
-    if (res.status >= 400) {
+
+    if (res.status === 403) {
+        console.warn('Warning: EdgeDB feature is not enabled for this project')
+    } else if (res.status >= 400) {
         console.error(`Error saving user entity, status: ${res.status}, body: ${res.data}`)
     } else {
         console.log(`Saved user entity, status: ${res.status}, body: ${res.data}`)
