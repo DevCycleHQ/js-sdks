@@ -60,6 +60,11 @@ export interface DVCOptions {
     logger?: DVCLogger
 
     /**
+     * Set log level of the default logger
+     */
+    logLevel?: DVCDefaultLogLevel
+
+    /**
      * Controls the polling interval in milliseconds to fetch new environment config changes, defaults to 10 seconds.
      * @min 1000
      */
@@ -174,8 +179,10 @@ export interface DVCLogger {
     debug(message: string): void
 }
 
+export type DVCDefaultLogLevel = 'debug' | 'info' | 'warn' | 'error'
+
 export type DVCDefaultLoggerOptions = {
-    level?: 'debug' | 'info' | 'warn' | 'error'
+    level?: DVCDefaultLogLevel
 
     logWriter?: (message: string) => void
 }

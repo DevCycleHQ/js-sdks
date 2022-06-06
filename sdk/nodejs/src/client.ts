@@ -38,7 +38,7 @@ export class DVCClient {
     constructor(environmentKey: string, options?: DVCOptions) {
         this.environmentKey = environmentKey
         this.options = options
-        this.logger = options?.logger || defaultLogger()
+        this.logger = options?.logger || defaultLogger({ level: options?.logLevel })
 
         const initializePromise = importBucketingLib()
             .then(() => {
