@@ -1,6 +1,6 @@
 {
   "name": "@devcycle/nodejs-server-sdk",
-  "version": "1.1.11-alpha.0",
+  "version": "1.1.11",
   "description": "The DevCycle NodeJS Server SDK used for feature management.",
   "license": "MIT",
   "devDependencies": {
@@ -9,7 +9,7 @@
     "assemblyscript-regex": "*"
   },
   "dependencies": {
-    "@devcycle/bucketing-assembly-script": "^1.0.20-alpha.0"
+    "@devcycle/bucketing-assembly-script": "^1.0.19"
   },
   "engines": {
     "node": ">=14.0.0"
