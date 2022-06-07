@@ -3,10 +3,11 @@
   "version": "1.0.20-alpha.0",
   "license": "MIT",
   "type": "module",
-  "main": "build/bucketing-lib.release.js",
-  "types": "build/bucketing-lib.release.d.ts",
+  "main": "build/bucketing-lib.debug.js",
+  "types": "build/bucketing-lib.debug.d.ts",
   "files": [
     "build/bucketing-lib.release*",
+    "build/bucketing-lib.debug*",
     "README.md"
   ],
   "devDependencies": {
