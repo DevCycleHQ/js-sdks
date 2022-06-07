@@ -160,6 +160,10 @@ export interface DVCEvent {
 export interface DVCFeature {
     readonly _id: string
 
+    readonly _variation: string
+    readonly variationKey: string
+    readonly variationName: string
+
     readonly key: string
 
     readonly type: string

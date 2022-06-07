@@ -17,6 +17,8 @@ export type DVCVariableSet = {
 export type DVCFeature = {
     readonly _id: string
     readonly _variation: string
+    readonly variationKey: string
+    readonly variationName: string
     readonly key: string
     readonly type: string
     readonly evalReason?: any
