@@ -22,3 +22,9 @@ See WebAssembly output in `/build` folder.
 ### Testing
 
 ```yarn nx test shared-bucketing-as```
+
+
+### Flags
+
+To toggle between using the release version and debug version of the WASM module - use `DEVCYCLE_USE_DEBUG_WASM=1` as an environment variable. This will
+have a small negative impact on performance, but will give better logging for troubleshooting with DevCycle support.
