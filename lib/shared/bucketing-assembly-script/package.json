@@ -3,7 +3,7 @@
   "version": "1.0.20-alpha.0",
   "license": "MIT",
   "type": "module",
-  "main": "build/bucketing-lib.debug.js",
+  "main": "hotload.js",
   "types": "build/bucketing-lib.debug.d.ts",
   "files": [
     "build/bucketing-lib.release*",
