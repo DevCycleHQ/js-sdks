@@ -1,13 +1,8 @@
 import testData from '../../../bucketing-test-data/json-data/testData.json'
 import { testConfigBodyClass } from '../../build/bucketing-lib.debug'
 import _ from 'lodash'
-import * as fs from 'fs'
 
 describe('Config Body', () => {
-    it('should parse our project config', () => {
-        console.log('DIR', __dirname + '/config.json')
-        testConfigBodyClass(fs.readFileSync(__dirname + '/config.json', 'utf8'))
-    })
     it('should parse valid JSON into ConfigBody class', () => {
         const result = JSON.parse(testConfigBodyClass(JSON.stringify(testData.config)))
         expect(result).toEqual(JSON.parse(JSON.stringify(testData.config)))
