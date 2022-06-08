@@ -18,11 +18,10 @@
     "lerna:version": "scripts/lerna-version.sh"
   },
   "dependencies": {
-    "@assemblyscript/loader": "^0.20.1",
     "@nrwl/next": "13.8.5",
     "as-wasi": "^0.4.6",
     "assemblyscript": "^0.20.6",
-    "assemblyscript-json": "^1.1.0",
+    "assemblyscript-json": "https://github.com/DevCycleHQ/assemblyscript-json",
     "assemblyscript-regex": "https://github.com/DevCycleHQ/assemblyscript-regex.git#fix-null-type-errors",
     "async": "^3.2.1",
     "axios": "^0.24.0",

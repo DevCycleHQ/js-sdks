@@ -58,7 +58,6 @@ const doesUserPassRollout = (
 }
 
 describe('User Hashing and Bucketing', () => {
-
     it('generates buckets approximately in the same distribution as the variation distributions', () => {
         const buckets = {
             var1: 0,
