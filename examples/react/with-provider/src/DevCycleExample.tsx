@@ -18,10 +18,6 @@ export default function DevCycleExample(): React.ReactElement {
         { 'jsonStringKeyDefault':'json string value default' }
     )
 
-
-
-
-
     const client = useDVCClient()
 
     const identify = () => {

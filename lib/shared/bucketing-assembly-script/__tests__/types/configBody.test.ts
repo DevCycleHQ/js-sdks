@@ -100,4 +100,10 @@ describe('Config Body', () => {
         } as typeof filters.filters[0]
         expect(() => testConfigBodyClass(JSON.stringify(config))).not.toThrow()
     })
+
+    it('does not fail on multiple iterations of testConfigBodyClass', () => {
+        for (let i = 0; i < 1000; i++) {
+            testConfigBodyClass(JSON.stringify(testData.config))
+        }
+    })
 })

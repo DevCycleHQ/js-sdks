@@ -15,13 +15,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@assemblyscript/loader@npm:^0.20.1":
-  version: 0.20.6
-  resolution: "@assemblyscript/loader@npm:0.20.6"
-  checksum: 31392f17291b52fdc0ccc28cc9c99fa8a130c8771f353aaca3d6bfa91c975e2f823e9a98b0139f0581feeefc4ed009d4c8553497d2b57bb001c487693e43f644
-  languageName: node
-  linkType: hard
-
 "@babel/code-frame@npm:7.12.11":
   version: 7.12.11
   resolution: "@babel/code-frame@npm:7.12.11"
@@ -6649,7 +6642,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"assemblyscript-json@npm:*, assemblyscript-json@npm:^1.1.0":
+"assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json":
+  version: 1.1.0
+  resolution: "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json.git#commit=d2ce65ec18b305e1f3db8a4fe4394b417631b024"
+  checksum: 480283ed02d57eacb400facc060f293b7dcb773a90dc5b7c80eae86b0007e3a748b2cb6c298a1a32010cba41e48686fcd0078c02c6db1d917fda85bb7c08ded1
+  languageName: node
+  linkType: hard
+
+"assemblyscript-json@npm:*":
   version: 1.1.0
   resolution: "assemblyscript-json@npm:1.1.0"
   checksum: 06e6df1b7b668f02e698af4c0713191220ac21573b9e945f81fb37666d25ca574b88e6ae01ead7363f2dd6c11a71c542e1f7e7abd9200a6e0ef55e3786e0e4b0
@@ -9421,7 +9421,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "devcycle-js-sdks@workspace:."
   dependencies:
-    "@assemblyscript/loader": ^0.20.1
     "@babel/core": ^7.17.7
     "@commitlint/cli": ^16.2.3
     "@commitlint/config-conventional": ^16.2.1
@@ -9458,7 +9457,7 @@ __metadata:
     "@typescript-eslint/parser": 5.18.0
     as-wasi: ^0.4.6
     assemblyscript: ^0.20.6
-    assemblyscript-json: ^1.1.0
+    assemblyscript-json: "https://github.com/DevCycleHQ/assemblyscript-json"
     assemblyscript-regex: "https://github.com/DevCycleHQ/assemblyscript-regex.git#fix-null-type-errors"
     async: ^3.2.1
     axios: ^0.24.0
