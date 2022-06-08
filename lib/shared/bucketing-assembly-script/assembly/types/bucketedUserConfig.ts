@@ -95,8 +95,8 @@ export class SDKFeature extends JSON.Obj {
         public type: string,
         public key: string,
         public _variation: string,
-        public variationName: string,
-        public variationKey: string,
+        public variationName: string | null,
+        public variationKey: string | null,
         public evalReason: string | null
     ) {
         super()
@@ -120,8 +120,12 @@ export class SDKFeature extends JSON.Obj {
         json.set('type', this.type)
         json.set('key', this.key)
         json.set('_variation', this._variation)
-        json.set('variationName', this.variationName)
-        json.set('variationKey', this.variationKey)
+        if (this.variationName) {
+            json.set('variationName', this.variationName)
+        }
+        if (this.variationKey) {
+            json.set('variationKey', this.variationKey)
+        }
         if (this.evalReason) {
             json.set('evalReason', this.evalReason)
         }
