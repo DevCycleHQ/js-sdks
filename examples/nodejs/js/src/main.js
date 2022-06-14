@@ -1,7 +1,25 @@
 const DVC = require('@devcycle/nodejs-server-sdk')
+const express = require('express')
+const bodyParser = require('body-parser')
+const classTransformer = require('class-transformer')
+const dvcTypes = require('@devcycle/types')
+
+const app = express()
+const port = 5000
+const defaultHeaders = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Access-Control-Allow-Origin, Content-Type',
+    'Access-Control-Allow-Methods': 'GET, OPTIONS'
+}
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
+let dvcClient
 
 async function startDVC() {
-    const dvcClient = DVC.initialize('<DVC_SERVER_KEY>')
+    dvcClient = DVC.initialize('<DVC_SERVER_KEY>')
     await dvcClient.onClientInitialized()
     console.log('DVC onClientInitialized')
 
@@ -42,3 +60,35 @@ async function startDVC() {
 }
 
 startDVC()
+
+function createUserFromQueryParams(queryParams) {
+    let user = {}
+    if (!queryParams) {
+        throw new Error('Invalid query parameters')
+    }
+    for (const key in queryParams) {
+        user[key] = queryParams[key]
+    }
+    if (!user.user_id) {
+        throw new Error('user_id must be defined')
+    }
+    return user
+}
+
+app.get('/variables', (req, res) => {
+    let user = createUserFromQueryParams(req.query)
+
+    res.set(defaultHeaders)
+    res.send(JSON.stringify(dvcClient.allVariables(user)))
+})
+
+app.get('/features', (req, res) => {
+    let user = createUserFromQueryParams(req.query)
+
+    res.set(defaultHeaders)
+    res.send(JSON.stringify(dvcClient.allFeatures(user)))
+})
+
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`)
+})
