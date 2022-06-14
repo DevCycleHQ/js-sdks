@@ -1,7 +1,37 @@
-import { initialize } from '@devcycle/nodejs-server-sdk'
+import { DVCClient, initialize } from '@devcycle/nodejs-server-sdk'
+import { DVCClientAPIUser } from '@devcycle/types'
+import { plainToClass } from 'class-transformer'
+import express from 'express'
+import bodyParser from 'body-parser'
+
+const app = express()
+const port = 5001
+const defaultHeaders = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Access-Control-Allow-Origin, Content-Type',
+    'Access-Control-Allow-Methods': 'GET, OPTIONS'
+}
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
+let dvcClient: DVCClient
+
+async function validateUserFromQueryParams(queryParams: any): Promise<DVCClientAPIUser> {
+    if (!queryParams) {
+        throw new Error('Invalid query parameters')
+    }
+
+    const user = plainToClass(DVCClientAPIUser, queryParams || {})
+    if (!user.user_id) {
+        throw new Error('user_id must be defined')
+    }
+    return user
+}
 
 async function startDVC() {
-    const dvcClient = await initialize('<DVC_SERVER_KEY>').onClientInitialized()
+    dvcClient = await initialize('<DVC_SERVER_KEY>').onClientInitialized()
     console.log('DVC onClientInitialized')
 
     const user = {
@@ -9,7 +39,7 @@ async function startDVC() {
         country: 'CA'
     }
 
-    const partyTime = dvcClient.variable(user, 'party-time', false)
+    const partyTime = dvcClient.variable(user, 'elliot-test', false)
     if (partyTime.value) {
         const invitation = dvcClient.variable(
             user,
@@ -41,3 +71,21 @@ async function startDVC() {
 }
 
 startDVC()
+
+app.get('/variables', async(req: express.Request, res: express.Response) => {
+  const user = await validateUserFromQueryParams(req.query)
+
+  res.set(defaultHeaders)
+  res.send(JSON.stringify(dvcClient.allVariables(user)))
+})
+
+app.get('/features', async(req: express.Request, res: express.Response) => {
+  const user = await validateUserFromQueryParams(req.query)
+
+  res.set(defaultHeaders)
+  res.send(JSON.stringify(dvcClient.allFeatures(user)))
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
