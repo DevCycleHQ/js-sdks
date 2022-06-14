@@ -5,6 +5,7 @@ import useVariableValue from './useVariableValue'
 import withDVCProvider from './withDVCProvider'
 import DVCProvider from './DVCProvider'
 import useDVCVariable  from './useDVCVariable'
+import useDVCInitialized from './useDVCInitialized'
 
 export { 
     DVCProvider, 
@@ -13,5 +14,6 @@ export {
     useVariableValue, 
     useDVCVariable, 
     asyncWithDVCProvider, 
-    withDVCProvider 
+    withDVCProvider,
+    useDVCInitialized
 }
