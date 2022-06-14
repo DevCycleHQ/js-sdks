@@ -13,7 +13,7 @@ import {
 
 import 'react-native-get-random-values'
 import DeviceInfo from 'react-native-device-info'
-import { useDVCClient, useVariable, withDVCProvider } from '@devcycle/devcycle-react-sdk'
+import { useDVCClient, useDVCInitialized, useVariable, withDVCProvider } from '@devcycle/devcycle-react-sdk'
 
 import Checkmark from './icons/checkmark.svg'
 import Terminal from './icons/terminal.svg'
@@ -33,6 +33,8 @@ const user = {
 export const App = (): JSX.Element => {
     const [whatsNextYCoord, setWhatsNextYCoord] = useState<number>(0)
     const scrollViewRef = useRef<null | ScrollView>(null)
+
+    const dvcReady = useDVCInitialized()
     const [variables, setVariables] = useState({})
     const variable = useVariable(VARIABLE_KEY, DEFAULT_VALUE)
     const client = useDVCClient()
@@ -58,6 +60,8 @@ export const App = (): JSX.Element => {
             .catch((err) => console.log({ err }))
     }
 
+    if (!dvcReady) return <SafeAreaView><Text style={styles.textXL}>DVC is not ready!</Text></SafeAreaView>
+    
     return (
         <>
             <StatusBar barStyle="dark-content" />
