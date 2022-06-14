@@ -1,8 +1,6 @@
 const DVC = require('@devcycle/nodejs-server-sdk')
 const express = require('express')
 const bodyParser = require('body-parser')
-const classTransformer = require('class-transformer')
-const dvcTypes = require('@devcycle/types')
 
 const app = express()
 const port = 5000

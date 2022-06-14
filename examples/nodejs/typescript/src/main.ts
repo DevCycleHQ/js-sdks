@@ -1,6 +1,7 @@
 import { DVCClient, initialize } from '@devcycle/nodejs-server-sdk'
 import { DVCClientAPIUser } from '@devcycle/types'
 import { plainToClass } from 'class-transformer'
+import { Query } from 'express-serve-static-core'
 import express from 'express'
 import bodyParser from 'body-parser'
 
@@ -18,7 +19,7 @@ app.use(bodyParser.json())
 
 let dvcClient: DVCClient
 
-async function validateUserFromQueryParams(queryParams: any): Promise<DVCClientAPIUser> {
+async function validateUserFromQueryParams(queryParams: Query): Promise<DVCClientAPIUser> {
     if (!queryParams) {
         throw new Error('Invalid query parameters')
     }
