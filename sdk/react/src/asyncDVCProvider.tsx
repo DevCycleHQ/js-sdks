@@ -9,7 +9,8 @@ type Props = {
 
 /**
  *
- * @deprecated Use the `useDVCInitialized` hook to block rendering of your application until SDK initialization is complete
+ * @deprecated Use the `useDVCInitialized` hook to block rendering of your application
+ *             until SDK initialization is complete
  *
  */
 export default async function asyncWithDVCProvider(config: ProviderConfig): Promise<React.FC<Props>> {

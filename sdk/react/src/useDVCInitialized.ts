@@ -3,11 +3,11 @@ import context from './context'
 
 export const useDVCInitialized = (): boolean => {
     const [isDVCReady, setIsDVCReady] = useState(false)
-    if (isDVCReady) return isDVCReady
-
     const dvcContext = useContext(context)
 
     if (dvcContext === undefined) throw new Error('useDVCInitialized must be used within DVCProvider')
+    
+    if (isDVCReady) return isDVCReady
 
     dvcContext.client.onClientInitialized()
     .then(() => {
