@@ -17,7 +17,7 @@ app.use(bodyParser.json())
 let dvcClient
 
 async function startDVC() {
-    dvcClient = DVC.initialize('<DVC_SERVER_KEY>')
+    dvcClient = DVC.initialize('<DVC_SERVER_KEY>', { logLevel: 'error' })
     await dvcClient.onClientInitialized()
     console.log('DVC onClientInitialized')
 

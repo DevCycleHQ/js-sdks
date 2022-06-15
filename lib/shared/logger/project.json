@@ -24,13 +24,6 @@
         "main": "lib/shared/logger/src/index.ts",
         "tsConfig": "lib/shared/logger/tsconfig.lib.json"
       }
-    },
-    "build:json": {
-      "executor": "@nrwl/node:node",
-      "options": {
-        "buildTarget": "shared-logger:build",
-        "watch": false
-      }
     }
   },
   "tags": []
