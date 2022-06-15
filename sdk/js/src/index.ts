@@ -10,7 +10,7 @@ export * from './types'
 export const initialize = (environmentKey: string, user: DVCUser, options: DVCOptions = {}): DVCClient => {
     // TODO: implement logger
     if (typeof window === 'undefined') {
-        console.log('Window is not defined, try initializing in a browser context')
+        console.warn('Window is not defined, try initializing in a browser context')
     }
 
     if (typeof window !== 'undefined' && !window.addEventListener && !options?.reactNative) {
@@ -31,8 +31,8 @@ export const initialize = (environmentKey: string, user: DVCUser, options: DVCOp
     const client = new DVCClient(environmentKey, dvcUser, options)
 
     client.onClientInitialized()
-        .then(() => console.log('Successfully initialized DevCycle!'))
-        .catch((err) => console.log(`Error initializing DevCycle: ${err}`))
+        .then(() => client.logger.info('Successfully initialized DevCycle!'))
+        .catch((err) => client.logger.error(`Error initializing DevCycle: ${err}`))
 
     if (!options?.reactNative && typeof window !== 'undefined') {
         window.addEventListener('pagehide', () => {

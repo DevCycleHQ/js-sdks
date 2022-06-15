@@ -1,4 +1,5 @@
-import { DVCEvent, DVCLogger } from './types'
+import { DVCEvent } from './types'
+import { DVCLogger } from '@devcycle/logger'
 import { publishEvents } from './request'
 import { checkParamDefined, checkParamString } from './utils/paramUtils'
 import { DVCRequestEvent } from './models/requestEvent'

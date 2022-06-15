@@ -13,16 +13,18 @@ import { getConfigJson, saveEntity } from './Request'
 import Store from './Store'
 import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
-import { checkParamDefined, checkIfDefined } from './utils'
+import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
 import { BucketedUserConfig } from '@devcycle/types'
 import { RequestConsolidator } from './RequestConsolidator'
+import { dvcDefaultLogger, DVCLogger } from '@devcycle/logger'
 
 export class DVCClient implements Client {
     private options: DVCOptions
     private onInitialized: Promise<DVCClient>
     private variableDefaultMap: { [key: string]: { [key: string]: DVCVariable } }
     private environmentKey: string
+    logger: DVCLogger
     config?: BucketedUserConfig
     user: DVCPopulatedUser
     store: Store
@@ -39,24 +41,25 @@ export class DVCClient implements Client {
         this.eventQueue = new EventQueue(environmentKey, this, options?.flushEventsMS)
         this.requestConsolidator = new RequestConsolidator()
         this.eventEmitter = new EventEmitter()
+        this.logger = options?.logger || dvcDefaultLogger({ level: options?.logLevel })
 
         this.store.saveUser(this.user)
-            .then(() => console.log('Successfully saved user to local storage!'))
+            .then(() => this.logger.info('Successfully saved user to local storage!'))
 
-        this.onInitialized = getConfigJson(environmentKey, this.user, options?.enableEdgeDB || false)
+        this.onInitialized = getConfigJson(environmentKey, this.user, options?.enableEdgeDB || false, this.logger)
             .then((config) => {
                 const oldConfig = this.config
                 this.config = config as BucketedUserConfig
 
-                if (checkIfEdgeEnabled(this.config, this.options?.enableEdgeDB, true)) {
+                if (checkIfEdgeEnabled(this.config, this.logger, this.options?.enableEdgeDB, true)) {
                     if (!this.user.isAnonymous) {
-                        saveEntity(this.user, this.environmentKey)
-                            .then((res) => console.log(`Saved response entity! ${res}`))
+                        saveEntity(this.user, this.environmentKey, this.logger)
+                            .then((res) => this.logger.info(`Saved response entity! ${res}`))
                     }
                 }
 
                 this.store.saveConfig(config)
-                    .then(() => console.log('Successfully saved config to local storage'))
+                    .then(() => this.logger.info('Successfully saved config to local storage'))
                 this.eventEmitter.emitInitialized(true)
                 this.eventEmitter.emitFeatureUpdates(oldConfig?.features || {}, this.config.features)
                 this.eventEmitter.emitVariableUpdates(oldConfig?.variables || {},
@@ -115,7 +118,7 @@ export class DVCClient implements Client {
             })
         } catch (e) {
             this.eventEmitter.emitError(e)
-            console.log('Error with queueing aggregate events', e)
+            this.logger.error(`Error with queueing aggregate events ${e}`)
         }
 
         return variable
@@ -123,7 +126,7 @@ export class DVCClient implements Client {
 
     identifyUser(user: DVCUser): Promise<DVCVariableSet>
     identifyUser(user: DVCUser,
-                 callback?: ErrorCallback<DVCVariableSet>): void
+        callback?: ErrorCallback<DVCVariableSet>): void
     identifyUser(
         user: DVCUser,
         callback?: ErrorCallback<DVCVariableSet>
@@ -144,20 +147,21 @@ export class DVCClient implements Client {
 
                 this.onInitialized.then(() =>
                     this.requestConsolidator.queue('identify',
-                        getConfigJson(this.environmentKey, updatedUser, this.options?.enableEdgeDB || false)
+                        getConfigJson(this.environmentKey, updatedUser, this.options?.enableEdgeDB || false,
+                            this.logger)
                     )
                 ).then((config) => {
                     this.config = config as BucketedUserConfig
 
-                    if (checkIfEdgeEnabled(this.config, this.options?.enableEdgeDB)) {
+                    if (checkIfEdgeEnabled(this.config, this.logger, this.options?.enableEdgeDB)) {
                         if (!updatedUser.isAnonymous) {
-                            saveEntity(updatedUser, this.environmentKey)
-                                .then((res) => console.log(`Saved response entity! ${res}`))
+                            saveEntity(updatedUser, this.environmentKey, this.logger)
+                                .then((res) => this.logger.info(`Saved response entity! ${res}`))
                         }
                     }
 
                     this.store.saveConfig(config)
-                        .then(() => console.log('Successfully saved config to local storage'))
+                        .then(() => this.logger.info('Successfully saved config to local storage'))
                     const oldFeatures = oldConfig.features || {}
                     const oldVariables = oldConfig.variables || {}
                     this.eventEmitter.emitFeatureUpdates(oldFeatures, config.features)
@@ -168,7 +172,7 @@ export class DVCClient implements Client {
                 }).then((variables) => {
                     this.user = updatedUser
                     this.store.saveUser(updatedUser)
-                        .then(() => console.log('Successfully saved user to local storage!'))
+                        .then(() => this.logger.info('Successfully saved user to local storage!'))
                     return resolve(variables || {})
                 }).catch((err) => Promise.reject(err))
 
@@ -200,16 +204,16 @@ export class DVCClient implements Client {
                 this.onInitialized.then(() =>
                     this.requestConsolidator.queue('identify',
                         // don't send edgedb param for anonymous users
-                        getConfigJson(this.environmentKey, anonUser, false)
+                        getConfigJson(this.environmentKey, anonUser, false, this.logger)
                     )
                 ).then((config) => {
                     this.config = config as BucketedUserConfig
                     this.user = anonUser
                     this.store.saveConfig(config).then(() => {
-                        console.log('Successfully saved config to local storage')
+                        this.logger.info('Successfully saved config to local storage')
                     })
                     this.store.saveUser(anonUser).then(() => {
-                        console.log('Successfully saved user to local storage!')
+                        this.logger.info('Successfully saved user to local storage!')
                     })
                     const oldFeatures = oldConfig.features || {}
                     const oldVariables = oldConfig.variables || {}
@@ -263,12 +267,12 @@ export class DVCClient implements Client {
     }
 }
 
-const checkIfEdgeEnabled = (config: BucketedUserConfig, enableEdgeDB?: boolean, logWarning = false) => {
+const checkIfEdgeEnabled = (config: BucketedUserConfig, logger: DVCLogger, enableEdgeDB?: boolean, logWarning = false) => {
     if (config.project.settings?.edgeDB?.enabled) {
         return !!enableEdgeDB
     } else {
         if (enableEdgeDB && logWarning) {
-            console.warn('EdgeDB is not enabled for this project. Only using local user data.')
+            logger.warn('EdgeDB is not enabled for this project. Only using local user data.')
         }
         return false
     }

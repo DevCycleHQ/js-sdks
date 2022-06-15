@@ -35,6 +35,9 @@
       "@devcycle/devcycle-react-sdk": [
         "sdk/react/src/index.ts"
       ],
+      "@devcycle/logger": [
+        "lib/shared/logger/src/index.ts"
+      ],
       "@devcycle/nodejs-server-sdk": [
         "sdk/nodejs/src/index.ts"
       ],

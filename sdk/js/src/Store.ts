@@ -1,4 +1,3 @@
-import { DVCUser } from './types'
 import { BucketedUserConfig } from '@devcycle/types'
 import { DVCPopulatedUser } from './User'
 
@@ -37,7 +36,7 @@ export class Store {
                 resolve(modify(storeKey))
             })
         } catch (e) {
-            console.log(e)
+            console.error(e)
             return Promise.resolve()
         }
     }

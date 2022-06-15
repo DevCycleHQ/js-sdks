@@ -1,7 +1,7 @@
 import { isNumber } from 'lodash'
 import {
     DVCDefaultLoggerOptions, DVCLogger
-} from '../types'
+} from '../types/types'
 
 const prefix = '[DevCycle]: '
 export enum DVCLogLevels {
@@ -11,11 +11,11 @@ export enum DVCLogLevels {
     error
 }
 
-export function defaultLogger(options?: DVCDefaultLoggerOptions): DVCLogger {
+export function dvcDefaultLogger(options?: DVCDefaultLoggerOptions): DVCLogger {
     const minLevel = (options?.level && isNumber(DVCLogLevels[options?.level]))
         ? DVCLogLevels[options?.level]
-        : DVCLogLevels.info
-    const logWriter = options?.logWriter || console.error
+        : DVCLogLevels.error
+    const logWriter = options?.logWriter || console.log
 
     const writeLog = (message: string): void => logWriter(prefix + message)
     // eslint-disable-next-line @typescript-eslint/no-empty-function
