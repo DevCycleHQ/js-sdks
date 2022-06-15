@@ -21,16 +21,33 @@ export class AppElement extends HTMLElement {
         const variableKeyNumber = client.variable('variable-key-number', 600)
         const variableKeyBoolean = client.variable('variable-key-boolean', true)
         const variableKeyJsonString = client.variable('variable-json-key-string', { 'jsonStringKeyDefault':'json string value default' })
+        
+        const demoVariable = client.variable('demo-feature', false)
+        // let demoVariableStatus = 'OFF'
+        // if (demoVariable.value) {
+        //     demoVariableStatus = 'ON'
+        // }
 
         this.innerHTML = `
     <div class="wrapper">
       <div class="container">
         <!--  WELCOME  -->
         <div id="welcome">
+        ${demoVariable.value ? (
+        `
+        <h2>
+        <span> You are being served variation ON </span>
+        <h2>
+        `
+    ) : (
+        `
           <h1>
             <span> Hello there, </span>
             ${titleVariable.value}
           </h1>
+          <h2>
+            <span> You are being served variation OFF </span>
+          <h2>
         </div>
         <div id="variableKey">
           <h1>
@@ -74,8 +91,8 @@ export class AppElement extends HTMLElement {
           ${JSON.stringify(variableKeyJsonString.value)}
         </h1>
       </div>
-
-
+      `
+    )}
         <!--  HERO  -->
         <div id="hero" class="rounded">
           <div class="text-container">
@@ -442,12 +459,13 @@ nx affected:e2e</pre>
 }
 
 const user = {
-    user_id: 'userId1',
-    email: 'auto@taplytics.com',
+    user_id: 'rabia',
+    email: 'dfgdfg@taplytics.com',
     customData: {
         cps: 'Matthew',
         cpn: 777,
-        cpb: true
+        cpb: true,
+        isPreparingDemo: true,
     },
     isAnonymous: false
 }
