@@ -3,6 +3,13 @@
   "sourceRoot": "lib/shared/logger/src",
   "projectType": "library",
   "targets": {
+    "npm-publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "../../../../scripts/npm-safe-publish.sh \"@devcycle/logger\"",
+        "cwd": "dist/lib/shared/logger"
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": [
