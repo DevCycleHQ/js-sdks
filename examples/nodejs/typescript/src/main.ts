@@ -4,6 +4,7 @@ import { plainToClass } from 'class-transformer'
 import { Query } from 'express-serve-static-core'
 import express from 'express'
 import bodyParser from 'body-parser'
+import { dvcDefaultLogger } from '@devcycle/logger'
 
 const app = express()
 const port = 5001
@@ -32,7 +33,7 @@ async function validateUserFromQueryParams(queryParams: Query): Promise<DVCClien
 }
 
 async function startDVC() {
-    dvcClient = await initialize('<DVC_SERVER_KEY>').onClientInitialized()
+    dvcClient = await initialize('<DVC_SERVER_KEY>', { logLevel: 'error' }).onClientInitialized()
     console.log('DVC onClientInitialized')
 
     const user = {
