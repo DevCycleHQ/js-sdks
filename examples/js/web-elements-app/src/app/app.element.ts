@@ -452,6 +452,37 @@ const user = {
     isAnonymous: false
 }
 
+let dvcClient: { variable: (arg0: string, arg1: boolean) => any }
+
+try {
+  // Call initialize with the client key and a user object
+  // await on the features to be loaded from our servers
+  const dvcClient = await initialize('YOUR_CLIENT_KEY', user)
+                          .onClientInitialized()
+  
+  useDVCVariable()
+} catch(ex) {
+  console.log('Error initializing DVC: ${ex}')
+}
+
+function useDVCVariable() {
+  if (!dvcClient) return
+  
+  // Fetch variable values using the identifier key coupled with a default value
+  // The default value can be of type string, boolean, number, or object
+  const dvcVariable = dvcClient.variable('new-variable', false)
+  if (dvcVariable.value) {
+    console.log("test message")
+  } else {
+    console.log("another test message")
+  }
+  
+  // Register a callback to be notified when a value is updated
+  dvcVariable.onUpdate((_value: any) => {
+    // updated variable value is available
+  })
+}
+
 const options = { enableEdgeDB: true }
 
 const client = initialize(clientKey, user, options)
