@@ -1,5 +1,6 @@
 {
   "name": "@devcycle/logger",
   "version": "0.0.1",
+  "license": "MIT",
   "type": "commonjs"
 }
