@@ -1,3 +1,4 @@
+import { DVCLogger, DVCDefaultLogLevel } from '@devcycle/logger'
 
 export type DVCVariableValue = string | number | boolean | JSON
 export type JSON = { [key: string]: string | number | boolean }
@@ -44,6 +45,8 @@ export interface DVCOptions {
     flushEventsMS?: number
     reactNative?: boolean
     enableEdgeDB?: boolean
+    logger?: DVCLogger
+    logLevel?: DVCDefaultLogLevel
 }
 
 export interface DVCUser {

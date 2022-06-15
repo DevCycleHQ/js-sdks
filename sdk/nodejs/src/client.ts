@@ -5,7 +5,6 @@ import {
     DVCVariableSet,
     DVCFeatureSet,
     DVCEvent,
-    DVCLogger,
     DVCUser
 } from './types'
 import { EnvironmentConfigManager } from './environmentConfigManager'
@@ -14,7 +13,7 @@ import { DVCVariable } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
 import { EventTypes } from './models/requestEvent'
 import { EventQueue } from './eventQueue'
-import { defaultLogger } from './utils/logger'
+import { dvcDefaultLogger, DVCLogger } from '@devcycle/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
 import * as packageJson from '../package.json'
 import { importBucketingLib, getBucketingLib } from './bucketing'
@@ -38,7 +37,7 @@ export class DVCClient {
     constructor(environmentKey: string, options?: DVCOptions) {
         this.environmentKey = environmentKey
         this.options = options
-        this.logger = options?.logger || defaultLogger({ level: options?.logLevel })
+        this.logger = options?.logger || dvcDefaultLogger({ level: options?.logLevel })
 
         const initializePromise = importBucketingLib()
             .then(() => {

@@ -1,0 +1,37 @@
+{
+  "root": "lib/shared/logger",
+  "sourceRoot": "lib/shared/logger/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "lib/shared/logger/**/*.ts"
+        ]
+      }
+    },
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/lib/shared/logger",
+        "main": "lib/shared/logger/src/index.ts",
+        "tsConfig": "lib/shared/logger/tsconfig.lib.json"
+      }
+    },
+    "build:json": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "shared-logger:build",
+        "watch": false
+      }
+    }
+  },
+  "tags": []
+}

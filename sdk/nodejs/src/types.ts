@@ -1,3 +1,5 @@
+import { DVCLogger, DVCDefaultLogLevel } from '@devcycle/logger'
+
 export interface DVCUser {
     /**
      * Identifies the current user. Must be defined
@@ -172,23 +174,3 @@ export interface DVCFeature {
 }
 
 export type DVCFeatureSet = Record<string, DVCFeature>
-
-export interface DVCLogger {
-    error(message: string): void
-
-    warn(message: string): void
-
-    info(message: string): void
-
-    debug(message: string): void
-}
-
-export type DVCDefaultLogLevel = 'debug' | 'info' | 'warn' | 'error'
-
-export type DVCDefaultLoggerOptions = {
-    level?: DVCDefaultLogLevel
-
-    logWriter?: (message: string) => void
-}
-
-export type defaultLogger = (options?: DVCDefaultLoggerOptions) => DVCLogger

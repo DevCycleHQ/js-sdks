@@ -1,9 +1,10 @@
-import { DVCFeatureSet, DVCVariableSet, DVCEvent, DVCUser } from './types'
+import { DVCEvent } from './types'
 import { DVCPopulatedUser } from './User'
 import { serializeUser, generateEventPayload } from './utils'
 import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios'
 import axiosRetry from 'axios-retry'
 import { BucketedUserConfig } from '@devcycle/types'
+import { DVCLogger } from '@devcycle/logger'
 
 const axiosClient = axios.create({
     validateStatus: (status: number) => status < 400 && status >= 200,
@@ -44,7 +45,8 @@ export const get = async (url: string): Promise<AxiosResponse> => {
 export const getConfigJson = async (
     environmentKey: string,
     user: DVCPopulatedUser,
-    enableEdgeDB: boolean
+    enableEdgeDB: boolean,
+    logger: DVCLogger
 ): Promise<BucketedUserConfig> => {
     const queryParams = `${serializeUser(user)}${enableEdgeDB ? ('&enableEdgeDB=' + enableEdgeDB): ''}`
     const url = `${BASE_URL}${HOST}${CONFIG_PATH}?envKey=${environmentKey}${queryParams && '&' + queryParams}`
@@ -53,7 +55,7 @@ export const getConfigJson = async (
         const res = await get(url)
         return res.data
     } catch (ex: any) {
-        console.error(`Request to get config failed for url: ${url}, ` +
+        logger.error(`Request to get config failed for url: ${url}, ` +
             `response message: ${ex.message}, response data: ${ex?.response?.data}`)
         throw new Error('Failed to download DevCycle config.')
     }
@@ -89,14 +91,15 @@ export const publishEvents = async (
     envKey: string | null,
     config: BucketedUserConfig | null,
     user: DVCPopulatedUser,
-    events: DVCEvent[]
+    events: DVCEvent[],
+    logger: DVCLogger
 ): Promise<AxiosResponse> => {
     if (!envKey) {
         throw new Error('Missing envKey to publish events to Events API')
     }
 
     const payload = generateEventPayload(config, user, events)
-    console.log(`Submit Events Payload: ${JSON.stringify(payload)}`)
+    logger.info(`Submit Events Payload: ${JSON.stringify(payload)}`)
 
     const res = await post(
         `${EVENT_URL}${HOST}${EVENTS_PATH}`,
@@ -104,15 +107,15 @@ export const publishEvents = async (
         payload as unknown as Record<string, unknown>
     )
     if (res.status >= 400) {
-        console.error(`Error posting events, status: ${res.status}, body: ${res.data}`)
+        logger.error(`Error posting events, status: ${res.status}, body: ${res.data}`)
     } else {
-        console.log(`Posted Events, status: ${res.status}, body: ${res.data}`)
+        logger.info(`Posted Events, status: ${res.status}, body: ${res.data}`)
     }
 
     return res
 }
 
-export const saveEntity = async (user: DVCPopulatedUser, envKey: string): Promise<AxiosResponse> => {
+export const saveEntity = async (user: DVCPopulatedUser, envKey: string, logger: DVCLogger): Promise<AxiosResponse> => {
     if (!envKey) {
         throw new Error('Missing envKey to save to Edge DB!')
     }
@@ -132,11 +135,11 @@ export const saveEntity = async (user: DVCPopulatedUser, envKey: string): Promis
     )
 
     if (res.status === 403) {
-        console.warn('Warning: EdgeDB feature is not enabled for this project')
+        logger.warn('Warning: EdgeDB feature is not enabled for this project')
     } else if (res.status >= 400) {
-        console.error(`Error saving user entity, status: ${res.status}, body: ${res.data}`)
+        logger.error(`Error saving user entity, status: ${res.status}, body: ${res.data}`)
     } else {
-        console.log(`Saved user entity, status: ${res.status}, body: ${res.data}`)
+        logger.info(`Saved user entity, status: ${res.status}, body: ${res.data}`)
     }
     return res
 }

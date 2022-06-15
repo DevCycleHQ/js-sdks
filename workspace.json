@@ -9,6 +9,7 @@
     "example-react-with-provider": "examples/react/with-provider",
     "example-js-web-elements-app": "examples/js/web-elements-app",
     "js": "sdk/js",
+    "logger": "lib/shared/logger",
     "nodejs": "sdk/nodejs",
     "react": "sdk/react",
     "shared-bucketing": "lib/shared/bucketing",

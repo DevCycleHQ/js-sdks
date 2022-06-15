@@ -39,7 +39,7 @@ export class EventQueue {
             return
         }
 
-        console.log(`DVC Flush ${eventsToFlush.length} Events`)
+        this.client.logger.info(`DVC Flush ${eventsToFlush.length} Events`)
 
         this.eventQueue = []
         this.aggregateEventMap = {}
@@ -49,12 +49,13 @@ export class EventQueue {
                 this.environmentKey,
                 this.client.config || null,
                 this.client.user,
-                eventsToFlush
+                eventsToFlush,
+                this.client.logger
             )
             if (res.status !== 201) {
                 this.eventQueue.push(...eventsToFlush)
             } else {
-                console.log(`DVC Flushed ${eventsToFlush.length} Events.`)
+                this.client.logger.info(`DVC Flushed ${eventsToFlush.length} Events.`)
             }
         } catch (ex) {
             this.client.eventEmitter.emitError(ex)

@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios'
 import { ConfigBody } from '@devcycle/types'
-import { DVCLogger, DVCOptions } from './types'
+import { DVCLogger } from '@devcycle/logger'
+import { DVCOptions } from './types'
 import { getEnvironmentConfig } from './request'
 import { getBucketingLib } from './bucketing'
 
