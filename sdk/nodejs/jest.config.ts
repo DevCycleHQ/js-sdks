@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     displayName: 'nodejs-server-sdk',
     
     globals: {

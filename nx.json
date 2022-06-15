@@ -98,5 +98,29 @@
       }
     }
   },
-  "defaultProject": "react"
+  "defaultProject": "react",
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "prepare": {
+      "dependsOn": [
+        "^prepare"
+      ]
+    },
+    "package": {
+      "dependsOn": [
+        "^package"
+      ]
+    },
+    "npm-publish": {
+      "dependsOn": [
+        "^npm-publish",
+        "build"
+      ]
+    }
+  }
 }

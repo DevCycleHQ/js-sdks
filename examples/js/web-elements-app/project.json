@@ -1,6 +1,6 @@
 {
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "root": "examples/js/web-elements-app",
   "sourceRoot": "examples/js/web-elements-app/src",
   "tags": [],
   "targets": {

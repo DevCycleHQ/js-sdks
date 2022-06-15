@@ -1,5 +1,5 @@
 {
-  "root": "examples/nodejs/js",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "examples/nodejs/js/src",
   "projectType": "application",
   "targets": {

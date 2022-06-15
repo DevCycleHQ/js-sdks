@@ -1,13 +1,13 @@
 {
   "version": 2,
   "projects": {
+    "example-js-web-elements-app": "examples/js/web-elements-app",
     "example-nodejs-js": "examples/nodejs/js",
     "example-nodejs-typescript": "examples/nodejs/typescript",
     "example-react-native-app": "examples/react/react-native-app",
     "example-react-next-js-app": "examples/react/next-js-app",
     "example-react-with-async-provider": "examples/react/with-async-provider",
     "example-react-with-provider": "examples/react/with-provider",
-    "example-js-web-elements-app": "examples/js/web-elements-app",
     "js": "sdk/js",
     "nodejs": "sdk/nodejs",
     "react": "sdk/react",
@@ -15,5 +15,6 @@
     "shared-bucketing-as": "lib/shared/bucketing-assembly-script",
     "shared-bucketing-test-data": "lib/shared/bucketing-test-data",
     "shared-types": "lib/shared/types"
-  }
+  },
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }
