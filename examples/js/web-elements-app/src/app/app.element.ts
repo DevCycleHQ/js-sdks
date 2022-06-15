@@ -457,7 +457,7 @@ let dvcClient: { variable: (arg0: string, arg1: boolean) => any }
 try {
   // Call initialize with the client key and a user object
   // await on the features to be loaded from our servers
-  const dvcClient = await initialize('YOUR_CLIENT_KEY', user)
+  const dvcClient = await initialize('YOUR_CLIENT_KEY_HERE', user)
                           .onClientInitialized()
   
   useDVCVariable()
