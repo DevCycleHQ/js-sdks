@@ -3,8 +3,7 @@ import { DVCPopulatedUser } from './User'
 import { serializeUser, generateEventPayload } from './utils'
 import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios'
 import axiosRetry from 'axios-retry'
-import { BucketedUserConfig } from '@devcycle/types'
-import { DVCLogger } from '@devcycle/logger'
+import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 
 const axiosClient = axios.create({
     validateStatus: (status: number) => status < 400 && status >= 200,

@@ -1,4 +1,4 @@
-import { DVCLogger, DVCDefaultLogLevel } from '@devcycle/logger'
+import { DVCLogger, DVCDefaultLogLevel } from '@devcycle/types'
 
 export interface DVCUser {
     /**

@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios'
-import { DVCLogger } from '@devcycle/logger'
-import { SDKEventBatchRequestBody } from '@devcycle/types'
+import { SDKEventBatchRequestBody, DVCLogger } from '@devcycle/types'
 
 const axiosClient = axios.create({
     validateStatus: (status: number) => status < 400 && status >= 200,

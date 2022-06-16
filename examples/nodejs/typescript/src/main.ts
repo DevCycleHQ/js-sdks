@@ -4,7 +4,6 @@ import { plainToClass } from 'class-transformer'
 import { Query } from 'express-serve-static-core'
 import express from 'express'
 import bodyParser from 'body-parser'
-import { dvcDefaultLogger } from '@devcycle/logger'
 
 const app = express()
 const port = 5001

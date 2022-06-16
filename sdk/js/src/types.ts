@@ -1,4 +1,4 @@
-import { DVCLogger, DVCDefaultLogLevel } from '@devcycle/logger'
+import { DVCLogger, DVCDefaultLogLevel } from '@devcycle/types'
 
 export type DVCVariableValue = string | number | boolean | JSON
 export type JSON = { [key: string]: string | number | boolean }
