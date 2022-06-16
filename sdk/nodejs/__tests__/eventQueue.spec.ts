@@ -9,10 +9,10 @@ import { publishEvents } from '../src/request'
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { BucketedUserConfig, PublicProject } from '@devcycle/types'
 import { mocked } from 'ts-jest/utils'
-import { defaultLogger } from '../src'
+import { dvcDefaultLogger } from '../src/utils/logger'
 
 const publishEvents_mock = mocked(publishEvents, true)
-const logger = defaultLogger()
+const logger = dvcDefaultLogger()
 
 describe('EventQueue Unit Tests', () => {
     const config: BucketedUserConfig = {

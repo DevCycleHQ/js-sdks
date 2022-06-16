@@ -8,8 +8,8 @@ createMock.mockImplementation(() => {
     return { request: axiosRequestMock } as unknown as AxiosInstance
 })
 
-import { defaultLogger } from '../src'
-const logger = defaultLogger()
+import { dvcDefaultLogger } from '../src/utils/logger'
+const logger = dvcDefaultLogger()
 import { publishEvents, getEnvironmentConfig, post, get } from '../src/request'
 
 describe('request.ts Unit Tests', () => {

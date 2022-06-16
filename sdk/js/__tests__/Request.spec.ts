@@ -16,6 +16,9 @@ createMock.mockImplementation((): AxiosInstance => {
 
 import * as Request from '../src/Request'
 import { BucketedUserConfig } from '@devcycle/types'
+import { dvcDefaultLogger } from '../src/logger'
+
+const defaultLogger = dvcDefaultLogger({ level: 'debug' })
 
 describe('Request tests', () => {
     beforeEach(() => {
@@ -43,7 +46,7 @@ describe('Request tests', () => {
             const environmentKey = 'my_env_key'
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
-            await Request.getConfigJson(environmentKey, user as DVCPopulatedUser, false)
+            await Request.getConfigJson(environmentKey, user as DVCPopulatedUser, false, defaultLogger)
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: {
@@ -65,7 +68,7 @@ describe('Request tests', () => {
             const events = [{ type: 'event_1_type' }, { type: 'event_2_type' }]
             axiosRequestMock.mockResolvedValue({ status: 200, data: 'messages' })
 
-            await Request.publishEvents(environmentKey, config, user, events)
+            await Request.publishEvents(environmentKey, config, user, events, defaultLogger)
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: {
@@ -101,7 +104,7 @@ describe('Request tests', () => {
             const environmentKey = 'my_env_key'
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
-            await Request.saveEntity(user as DVCPopulatedUser, environmentKey)
+            await Request.saveEntity(user as DVCPopulatedUser, environmentKey, defaultLogger)
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: {
