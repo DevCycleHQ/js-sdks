@@ -17,7 +17,8 @@ import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
 import { BucketedUserConfig } from '@devcycle/types'
 import { RequestConsolidator } from './RequestConsolidator'
-import { dvcDefaultLogger, DVCLogger } from '@devcycle/logger'
+import { dvcDefaultLogger } from './logger'
+import { DVCLogger } from '@devcycle/types'
 
 export class DVCClient implements Client {
     private options: DVCOptions
@@ -267,7 +268,9 @@ export class DVCClient implements Client {
     }
 }
 
-const checkIfEdgeEnabled = (config: BucketedUserConfig, logger: DVCLogger, enableEdgeDB?: boolean, logWarning = false) => {
+const checkIfEdgeEnabled = (
+    config: BucketedUserConfig, logger: DVCLogger, enableEdgeDB?: boolean, logWarning = false
+) => {
     if (config.project.settings?.edgeDB?.enabled) {
         return !!enableEdgeDB
     } else {

@@ -1,10 +1,9 @@
 import { DVCEvent } from './types'
-import { DVCLogger } from '@devcycle/logger'
 import { publishEvents } from './request'
 import { checkParamDefined, checkParamString } from './utils/paramUtils'
 import { DVCRequestEvent } from './models/requestEvent'
 import { DVCPopulatedUser } from './models/populatedUser'
-import { BucketedUserConfig } from '@devcycle/types'
+import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 
 export const EventTypes: Record<string, string> = {
     variableEvaluated: 'variableEvaluated',

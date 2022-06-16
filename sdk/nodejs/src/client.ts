@@ -13,10 +13,11 @@ import { DVCVariable } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
 import { EventTypes } from './models/requestEvent'
 import { EventQueue } from './eventQueue'
-import { dvcDefaultLogger, DVCLogger } from '@devcycle/logger'
+import { dvcDefaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
 import * as packageJson from '../package.json'
 import { importBucketingLib, getBucketingLib } from './bucketing'
+import { DVCLogger } from '@devcycle/types'
 
 interface IPlatformData {
     platform: string
