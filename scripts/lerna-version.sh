@@ -1,3 +1,15 @@
+# check if we're on main branch
+if [[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then
+  echo "Not on main branch. Aborting."
+  exit 1
+fi
+
+# check if working directory is clean
+if [[ -n "$(git status --porcelain)" ]]; then
+  echo "Working directory is not clean. Aborting."
+  exit 1
+fi
+
 # Get the last tagged sha from the output of "git describe"
 LAST_TAG=$(git describe --always --dirty --first-parent --abbrev=0)
 
@@ -45,5 +57,16 @@ done
 # join packages with comma
 PACKAGES=$(IFS=','; echo "${PACKAGES[*]}")
 
-yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish" "$@"
+yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish" "$@" --no-push
+# store the tags created for this commit
+RELEASE_TAGS=$(git tag --points-at HEAD)
+#  run yarn and add any lockfile changes
+yarn
+git add yarn.lock
+# amend the previous commit with the new lock file. Now the SHA is different and the tags are wrong
+git commit --amend --no-edit --no-verify
 
+# fix the tags by iterating over them and moving them to the new commit
+while IFS= read -r line; do
+  git tag -f "$line" -m "$line"
+done <<< "$RELEASE_TAGS"
