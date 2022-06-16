@@ -8,11 +8,11 @@ import { getEnvironmentConfig } from '../src/request'
 import { importBucketingLib, getBucketingLib } from '../src/bucketing'
 import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios'
-import { defaultLogger } from '../src'
+import { dvcDefaultLogger } from '../src/utils/logger'
 
 const setInterval_mock = mocked(setInterval, true)
 const getEnvironmentConfig_mock = mocked(getEnvironmentConfig, true)
-const logger = defaultLogger()
+const logger = dvcDefaultLogger()
 
 describe('EnvironmentConfigManager Unit Tests', () => {
     beforeAll(async () => {
