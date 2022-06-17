@@ -1,3 +1,4 @@
+export * from './logger'
 export * from './utils'
 export * from './types/apis/sdk/clientSDKAPI'
 export * from './types/apis/sdk/track'
