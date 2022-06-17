@@ -27,6 +27,10 @@ export const initialize = (environmentKey: string, user: DVCUser, options: DVCOp
         throw new Error('Missing environment key! Call initialize with a valid environment key')
     }
 
+    if (!user) {
+        throw new Error('Missing user! Call initialize with a valid user')
+    }
+
     if (!options || options === null) {
         throw new Error('Invalid options! Call initialize with valid options')
     }
