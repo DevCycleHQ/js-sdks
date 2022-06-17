@@ -34,7 +34,6 @@ export class DVCClient implements Client {
     eventEmitter: EventEmitter
 
     constructor(environmentKey: string, user: DVCPopulatedUser, options: DVCOptions = {}) {
-        this.store = new Store(window.localStorage)
         this.user = user
         this.options = options
         this.environmentKey = environmentKey
@@ -43,6 +42,7 @@ export class DVCClient implements Client {
         this.requestConsolidator = new RequestConsolidator()
         this.eventEmitter = new EventEmitter()
         this.logger = options?.logger || dvcDefaultLogger({ level: options?.logLevel })
+        this.store = new Store(window.localStorage, this.logger)
 
         this.store.saveUser(this.user)
             .then(() => this.logger.info('Successfully saved user to local storage!'))

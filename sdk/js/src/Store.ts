@@ -1,4 +1,4 @@
-import { BucketedUserConfig } from '@devcycle/types'
+import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 import { DVCPopulatedUser } from './User'
 
 export const StoreKey = {
@@ -9,9 +9,11 @@ export const StoreKey = {
 
 export class Store {
     store?: Storage
+    logger?: DVCLogger
 
-    constructor(localStorage: Storage) {
+    constructor(localStorage: Storage, logger: DVCLogger) {
         this.store = localStorage
+        this.logger = logger
     }
 
     save(storeKey: string, data: unknown): Promise<void> {
@@ -36,7 +38,7 @@ export class Store {
                 resolve(modify(storeKey))
             })
         } catch (e) {
-            console.error(e)
+            this.logger?.error(e as string)
             return Promise.resolve()
         }
     }
