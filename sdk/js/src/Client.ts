@@ -41,7 +41,7 @@ export class DVCClient implements Client {
         this.eventQueue = new EventQueue(environmentKey, this, options?.flushEventsMS)
         this.requestConsolidator = new RequestConsolidator()
         this.eventEmitter = new EventEmitter()
-        this.logger = options?.logger || dvcDefaultLogger({ level: options?.logLevel })
+        this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.store = new Store(window.localStorage, this.logger)
 
         this.store.saveUser(this.user)

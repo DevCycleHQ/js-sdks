@@ -7,6 +7,8 @@ jest.spyOn(Request, 'getConfigJson').mockImplementation(() => {
 })
 
 const missingKeyError = 'Missing environment key! Call initialize with a valid environment key'
+const missingUserError = 'Missing user! Call initialize with a valid user'
+const invalidUserError = 'Must have a user_id, or have "isAnonymous" set on the user'
 const invalidOptionsError = 'Invalid options! Call initialize with valid options'
 
 describe('initialize tests', () => {
@@ -22,7 +24,12 @@ describe('initialize tests', () => {
     })
 
     it('should throw an error if user is not passed in initialize', () => {
-        expect(() => DVCClient.initialize('YOUR_CLIENT_SIDE_ID')).toThrow(expect.anything())
+        expect(() => DVCClient.initialize('YOUR_CLIENT_SIDE_ID')).toThrow(missingUserError)
+    })
+
+    it('should throw an error if invalid user is passed in initialize', () => {
+        const badUser = { 'who': 'me' }
+        expect(() => DVCClient.initialize('YOUR_CLIENT_SIDE_ID', badUser)).toThrow(invalidUserError)
     })
 
     it('should throw an error if invalid optioins are passed in initialize', () => {
