@@ -27,6 +27,7 @@ describe('EventQueue tests', () => {
                 'test_env_key',
                 dvcClient.config,
                 dvcClient.user,
+                expect.any(Object),
                 expect.any(Object)
             )
         })
