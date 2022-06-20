@@ -1,7 +1,7 @@
 import React from 'react'
 import logo from './logo.svg'
 import './App.css'
-import { useDVCInitialized, withDVCProvider } from '@devcycle/devcycle-react-sdk'
+import { useIsDVCInitialized, withDVCProvider } from '@devcycle/devcycle-react-sdk'
 import DevCycleExample from './DevCycleExample'
 
 const ENV_KEY = process.env['NX_CLIENT_KEY'] || 'test_token'
@@ -17,7 +17,7 @@ const user = {
 }
 
 function App() {
-    const dvcReady = useDVCInitialized()
+    const dvcReady = useIsDVCInitialized()
 
     if (!dvcReady) return <div><h1>DVC is not ready!</h1></div>
     return (

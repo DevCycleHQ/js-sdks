@@ -9,7 +9,7 @@ type Props = {
 
 /**
  *
- * @deprecated Use the `useDVCInitialized` hook to block rendering of your application
+ * @deprecated Use the `useIsDVCInitialized` hook to block rendering of your application
  *             until SDK initialization is complete
  *
  */

@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import context from './context'
 
-export const useDVCInitialized = (): boolean => {
+export const useIsDVCInitialized = (): boolean => {
     const [isDVCReady, setIsDVCReady] = useState(false)
     const dvcContext = useContext(context)
 
@@ -21,4 +21,4 @@ export const useDVCInitialized = (): boolean => {
     return isDVCReady
 }
 
-export default useDVCInitialized
+export default useIsDVCInitialized
