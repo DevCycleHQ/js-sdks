@@ -32,7 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
 
         @Override
         protected String getJSMainModuleName() {
-          return "examples/react/react-native-app/src/main";
+          return "src/main.tsx";
         }
       };
 
