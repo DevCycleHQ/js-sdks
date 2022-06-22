@@ -4,4 +4,6 @@ Example app for using the DevCycle NodeJS Server SDK with nodeJS and javascript.
 
 ### Run
 
-```yarn start```
+run from the repo's root folder: 
+
+```yarn nx serve example-nodejs-js```

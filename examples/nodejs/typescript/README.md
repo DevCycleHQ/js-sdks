@@ -4,4 +4,6 @@ Example app for using the DevCycle NodeJS Server SDK with nodejs and typescript.
 
 ### Build and Run
 
-```yarn start```
+run from the repo's root folder:
+
+```yarn nx serve example-nodejs-typescript```
