@@ -6663,16 +6663,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"assemblyscript@npm:^0.20.6":
-  version: 0.20.6
-  resolution: "assemblyscript@npm:0.20.6"
+"assemblyscript@npm:^0.20.12":
+  version: 0.20.12
+  resolution: "assemblyscript@npm:0.20.12"
   dependencies:
-    binaryen: 106.0.0-nightly.20220320
+    binaryen: 108.0.0-nightly.20220528
     long: ^5.2.0
   bin:
     asc: bin/asc.js
     asinit: bin/asinit.js
-  checksum: e5bc2e28dd0a54ff80ed335435b1f54f5560ff1e7070b88e00b96d60d67cfa48408a3a24c6f732996bb3b0f30d57ce5504c08be415cc9aed24253b28578fec36
+  checksum: be753945cba13e35ac57aff5411c5b6bd35d461066712d2042d422720c1efda7699bc721a9f50f274cb2a1df1c56e5505be2461ffaa720bd2a64bef12b757d16
   languageName: node
   linkType: hard
 
@@ -7157,13 +7157,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"binaryen@npm:106.0.0-nightly.20220320":
-  version: 106.0.0-nightly.20220320
-  resolution: "binaryen@npm:106.0.0-nightly.20220320"
+"binaryen@npm:108.0.0-nightly.20220528":
+  version: 108.0.0-nightly.20220528
+  resolution: "binaryen@npm:108.0.0-nightly.20220528"
   bin:
     wasm-opt: bin/wasm-opt
     wasm2js: bin/wasm2js
-  checksum: f6a48951e5413243e9de453520c9d037538261d47b9b708a5b8ef7ec9160ab5e79c91181da0db8da7f8741452ed46160a32b98baf5a57430fc7d83f90d911b5f
+  checksum: e5cb8a68db50c8f538b87ad522b7daf69567d71d23904e92a361b4645a128bc5188b507bf3d620e834e68dd72299061bfd70b0b6a05a087c356fdbc3d8d68c0c
   languageName: node
   linkType: hard
 
@@ -9449,7 +9449,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": 5.18.0
     "@typescript-eslint/parser": 5.18.0
     as-wasi: ^0.4.6
-    assemblyscript: ^0.20.6
+    assemblyscript: ^0.20.12
     assemblyscript-json: "https://github.com/DevCycleHQ/assemblyscript-json"
     assemblyscript-regex: "https://github.com/DevCycleHQ/assemblyscript-regex.git#fix-null-type-errors"
     async: ^3.2.1
