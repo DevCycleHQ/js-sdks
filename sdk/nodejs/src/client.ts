@@ -108,9 +108,9 @@ export class DVCClient {
         })
 
         const variableEvent = {
-            type: variable.value === variable.defaultValue
-                ? EventTypes.variableDefaulted
-                : EventTypes.variableEvaluated,
+            type: variable.key in bucketedConfig.variables
+                ? EventTypes.variableEvaluated
+                : EventTypes.variableDefaulted,
             target: variable.key
         }
         this.eventQueue.queueAggregateEvent(requestUser, variableEvent, bucketedConfig)
