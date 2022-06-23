@@ -111,7 +111,7 @@ export class DVCAPIUser {
      */
     @IsDate()
     @IsOptional()
-    @Transform(({ value }) => value ? new Date(Number(value)) : undefined)
+    @Transform(({ value }) => value ? new Date(value) : undefined)
         createdDate?: Date
 
     /**
@@ -119,7 +119,7 @@ export class DVCAPIUser {
      */
     @IsDate()
     @IsOptional()
-    @Transform(({ value }) => value ? new Date(Number(value)) : undefined)
+    @Transform(({ value }) => value ? new Date(value) : undefined)
         lastSeenDate?: Date
 
     /**
@@ -249,14 +249,14 @@ export class DVCClientAPIUser implements DVCAPIUser {
      * Set by SDK automatically
      */
     @IsDate()
-    @Transform(({ value }) => value ? new Date(Number(value)) : undefined)
+    @Transform(({ value }) => value ? new Date(value) : undefined)
         createdDate: Date
 
     /**
      * Set by SDK automatically
      */
     @IsDate()
-    @Transform(({ value }) => value ? new Date(Number(value)) : undefined)
+    @Transform(({ value }) => value ? new Date(value) : undefined)
         lastSeenDate: Date
 
     /**
