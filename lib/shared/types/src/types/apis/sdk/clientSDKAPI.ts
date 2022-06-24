@@ -4,7 +4,7 @@ import {
 } from '../../config/configBody'
 import { VariableValue } from '../../config/models'
 import {
-    IsEmail, IsDate, IsOptional, IsNumber, IsBoolean,
+    IsDate, IsOptional, IsNumber, IsBoolean,
     IsString, IsIn, IsNotEmpty, IsISO31661Alpha2
 } from 'class-validator'
 import { Transform, Type } from 'class-transformer'
@@ -25,6 +25,16 @@ const boolTransform = ({ value }: { value:  unknown }) => {
         return false
     }
     return value
+}
+
+const dateTransform = ({ value }: { value:  string | number }) => {
+    if (!value) return undefined
+    const numberValue = Number(value)
+    if (!isNaN(numberValue)) { // value is a time string
+        return new Date(numberValue)
+    } else { // value is a date-time string
+        return new Date(value)
+    }
 }
 
 /**
@@ -111,7 +121,7 @@ export class DVCAPIUser {
      */
     @IsDate()
     @IsOptional()
-    @Transform(({ value }) => value ? new Date(value) : undefined)
+    @Transform(dateTransform)
         createdDate?: Date
 
     /**
@@ -119,7 +129,7 @@ export class DVCAPIUser {
      */
     @IsDate()
     @IsOptional()
-    @Transform(({ value }) => value ? new Date(value) : undefined)
+    @Transform(dateTransform)
         lastSeenDate?: Date
 
     /**
@@ -249,14 +259,14 @@ export class DVCClientAPIUser implements DVCAPIUser {
      * Set by SDK automatically
      */
     @IsDate()
-    @Transform(({ value }) => value ? new Date(value) : undefined)
+    @Transform(dateTransform)
         createdDate: Date
 
     /**
      * Set by SDK automatically
      */
     @IsDate()
-    @Transform(({ value }) => value ? new Date(value) : undefined)
+    @Transform(dateTransform)
         lastSeenDate: Date
 
     /**
