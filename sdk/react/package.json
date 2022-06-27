@@ -1,6 +1,6 @@
 {
   "name": "@devcycle/devcycle-react-sdk",
-  "version": "1.2.23",
+  "version": "1.2.24",
   "description": "The DevCycle React SDK used for feature management.",
   "main": "dist/index.js",
   "scripts": {
