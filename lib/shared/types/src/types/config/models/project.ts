@@ -9,9 +9,9 @@ export class Project<IdType = string> {
 
     a0_organization: string
 
-    settings?: {
-        edgeDB?: {
-            enabled?: boolean
+    settings: {
+        edgeDB: {
+            enabled: boolean
         }
     }
 }
