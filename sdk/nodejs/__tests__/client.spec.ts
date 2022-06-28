@@ -18,3 +18,34 @@ describe('DVCClient', () => {
         })
     })
 })
+
+describe('variable', () => {
+    const user = {
+        user_id: 'node_sdk_test',
+        country: 'CA'
+    }
+    const expectedUser = expect.objectContaining({
+        user_id: 'node_sdk_test',
+        country: 'CA'
+    })
+    
+    describe('variableDefaulted event', () => {
+        test('does not get sent if variable is in bucketed config',async () => {
+            const client = new DVCClient('token')
+
+            await client.onClientInitialized()
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            client.eventQueue.queueAggregateEvent = jest.fn()
+            client.variable(user, 'test-key', false)
+
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            expect(client.eventQueue.queueAggregateEvent)
+                .toBeCalledWith(expectedUser, 
+                    { type: 'variableEvaluated', target: 'test-key' }, 
+                    { 'variables': { ['test-key']: true } }
+                )
+        })
+    })
+})
