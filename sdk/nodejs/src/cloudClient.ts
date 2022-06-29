@@ -72,6 +72,6 @@ export class DVCCloudClient {
     track(user: DVCUser, event: DVCEvent): void {
         checkParamDefined('type', event.type)
         const requestUser = new DVCPopulatedUser(user, true)
-        postTrack(requestUser, event, this.environmentKey)
+        postTrack(requestUser, event, this.environmentKey, this.logger)
     }
 }

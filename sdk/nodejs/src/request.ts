@@ -78,7 +78,12 @@ export async function getVariable(user: DVCPopulatedUser, envKey: string, variab
     })
 }
 
-export async function postTrack(user: DVCPopulatedUser, event: DVCEvent, envKey: string): Promise<void> {
+    export async function postTrack(
+        user: DVCPopulatedUser,
+        event: DVCEvent,
+        envKey: string,
+        logger: DVCLogger
+    ): Promise<void> {
     try {
         const res = await post({
             url: `${BUCKETING_URL}${HOST}${TRACK_PATH}`,
@@ -89,13 +94,12 @@ export async function postTrack(user: DVCPopulatedUser, event: DVCEvent, envKey:
             }
         })
         if (res.status !== 201) {
-            throw new Error(`Error tracking events, status: ${res.status}, body: ${res.data}`)
+            throw new Error(`Error tracking event, status: ${res.status}, body: ${res.data}`)
         } else {
-            this.logger.debug(`DVC Event Tracked`)
+            logger.debug(`DVC Event Tracked`)
         }
     } catch (ex) {
-        this.logger.error(`DVC Error Flushing Events response message: ${ex.message}, ` +
-            `response data: ${ex?.response?.data}`)
+        logger.error(`DVC Error Tracking Event. Response message: ${ex.message}`)
     }
 
 }
