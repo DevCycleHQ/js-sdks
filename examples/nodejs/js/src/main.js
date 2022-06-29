@@ -17,16 +17,14 @@ app.use(bodyParser.json())
 let dvcClient
 
 async function startDVC() {
-    dvcClient = DVC.initialize('<DVC_SERVER_KEY>', { logLevel: 'error' })
-    await dvcClient.onClientInitialized()
-    console.log('DVC onClientInitialized')
+    dvcClient = DVC.initialize('<DVC_SERVER_KEY>', { logLevel: 'info', enabledCloudBucketing: true })
 
     const user = {
         user_id: 'node_sdk_test',
         country: 'CA'
     }
 
-    const partyTime = dvcClient.variable(user, 'elliot-test', false)
+    const partyTime = await dvcClient.variable(user, 'elliot-test', false)
     if (partyTime.value) {
         const invitation = dvcClient.variable(
             user,
@@ -49,10 +47,10 @@ async function startDVC() {
 
     const defaultVariable = dvcClient.variable(user, 'noWay-thisisA-realKEY', true)
     console.log(`Value of the variable is ${defaultVariable.value} \n`)
-    const variables = dvcClient.allVariables(user)
+    const variables = await dvcClient.allVariables(user)
     console.log('Variables: ')
     console.dir(variables)
-    const features = dvcClient.allFeatures(user)
+    const features = await dvcClient.allFeatures(user)
     console.log('Features: ')
     console.dir(features)
 }
