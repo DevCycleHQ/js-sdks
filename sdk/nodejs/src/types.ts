@@ -88,6 +88,11 @@ export interface DVCOptions {
      * Disables logging of any events or user data to DevCycle.
      */
     disableEventLogging?: boolean
+
+    /**
+     * Switches the SDK to use Cloud Bucketing (via the DevCycle Bucketing API) instead of Local Bucketing.
+     */
+    enabledCloudBucketing?: boolean
 }
 
 export type DVCVariableValue = string | number | boolean | JSON
