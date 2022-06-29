@@ -1,5 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios'
 import { SDKEventBatchRequestBody, DVCLogger } from '@devcycle/types'
+import { DVCPopulatedUser } from './models/populatedUser'
+import { DVCEvent } from './types'
 
 const axiosClient = axios.create({
     validateStatus: (status: number) => status < 400 && status >= 200,
@@ -7,6 +9,11 @@ const axiosClient = axios.create({
 export const HOST = '.devcycle.com'
 export const EVENT_URL = 'https://events'
 export const EVENTS_PATH = '/v1/events/batch'
+
+const BUCKETING_URL = 'https://bucketing-api'
+const VARIABLES_PATH = '/v1/variables'
+const FEATURES_PATH = '/v1/features'
+const TRACK_PATH = '/v1/track'
 
 export async function publishEvents(
     logger: DVCLogger,
@@ -45,6 +52,52 @@ export async function getEnvironmentConfig(
         timeout: requestTimeout,
         headers: headers
     })
+}
+
+export async function getAllFeatures(user: DVCPopulatedUser, envKey: string): Promise<AxiosResponse> {
+    return await post({
+        url: `${BUCKETING_URL}${HOST}${FEATURES_PATH}`,
+        headers: { 'Authorization': envKey },
+        data: user
+    })
+}
+
+export async function getAllVariables(user: DVCPopulatedUser, envKey: string): Promise<AxiosResponse> {
+    return await post({
+        url: `${BUCKETING_URL}${HOST}${VARIABLES_PATH}`,
+        headers: { 'Authorization': envKey },
+        data: user
+    })
+}
+
+export async function getVariable(user: DVCPopulatedUser, envKey: string, variableKey: string): Promise<AxiosResponse> {
+    return await post({
+        url: `${BUCKETING_URL}${HOST}${VARIABLES_PATH}/${variableKey}`,
+        headers: { 'Authorization': envKey },
+        data: user
+    })
+}
+
+export async function postTrack(user: DVCPopulatedUser, event: DVCEvent, envKey: string): Promise<void> {
+    try {
+        const res = await post({
+            url: `${BUCKETING_URL}${HOST}${TRACK_PATH}`,
+            headers: { 'Authorization': envKey },
+            data: {
+                user,
+                events: [event]
+            }
+        })
+        if (res.status !== 201) {
+            throw new Error(`Error tracking events, status: ${res.status}, body: ${res.data}`)
+        } else {
+            this.logger.debug(`DVC Event Tracked`)
+        }
+    } catch (ex) {
+        this.logger.error(`DVC Error Flushing Events response message: ${ex.message}, ` +
+            `response data: ${ex?.response?.data}`)
+    }
+
 }
 
 export async function post(requestConfig: AxiosRequestConfig): Promise<AxiosResponse> {
