@@ -10,10 +10,11 @@ export const HOST = '.devcycle.com'
 export const EVENT_URL = 'https://events'
 export const EVENTS_PATH = '/v1/events/batch'
 
-const BUCKETING_URL = 'https://bucketing-api'
+const BUCKETING_BASE = 'https://bucketing-api'
 const VARIABLES_PATH = '/v1/variables'
 const FEATURES_PATH = '/v1/features'
 const TRACK_PATH = '/v1/track'
+const BUCKETING_URL = `${BUCKETING_BASE}${HOST}`
 
 export async function publishEvents(
     logger: DVCLogger,
@@ -55,7 +56,7 @@ export async function getEnvironmentConfig(
 
 export async function getAllFeatures(user: DVCPopulatedUser, envKey: string): Promise<AxiosResponse> {
     return await post({
-        url: `${BUCKETING_URL}${HOST}${FEATURES_PATH}`,
+        url: `${BUCKETING_URL}${FEATURES_PATH}`,
         data: user
     },
         envKey)
@@ -63,14 +64,14 @@ export async function getAllFeatures(user: DVCPopulatedUser, envKey: string): Pr
 
 export async function getAllVariables(user: DVCPopulatedUser, envKey: string): Promise<AxiosResponse> {
     return await post({
-        url: `${BUCKETING_URL}${HOST}${VARIABLES_PATH}`,
+        url: `${BUCKETING_URL}${VARIABLES_PATH}`,
         data: user
     }, envKey)
 }
 
 export async function getVariable(user: DVCPopulatedUser, envKey: string, variableKey: string): Promise<AxiosResponse> {
     return await post({
-        url: `${BUCKETING_URL}${HOST}${VARIABLES_PATH}/${variableKey}`,
+        url: `${BUCKETING_URL}${VARIABLES_PATH}/${variableKey}`,
         data: user
     }, envKey)
 }
@@ -83,7 +84,7 @@ export async function postTrack(
 ): Promise<void> {
     try {
         await post({
-            url: `${BUCKETING_URL}${HOST}${TRACK_PATH}`,
+            url: `${BUCKETING_URL}${TRACK_PATH}`,
             data: {
                 user,
                 events: [event]

@@ -73,6 +73,9 @@ export class DVCCloudClient {
     }
 
     track(user: DVCUser, event: DVCEvent): void {
+        if (event === undefined || event === null || typeof event.type !== 'string' || event.type.length === 0) {
+            throw new Error(`Invalid Event`)
+        }
         checkParamDefined('type', event.type)
         const requestUser = new DVCPopulatedUser(user)
         postTrack(requestUser, event, this.environmentKey, this.logger)

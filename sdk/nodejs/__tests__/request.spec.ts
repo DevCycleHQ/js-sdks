@@ -56,10 +56,11 @@ describe('request.ts Unit Tests', () => {
 
     describe('post', () => {
         it('should make POST request', async () => {
-            await post({ url: 'https://test.com' })
+            await post({ url: 'https://test.com' }, 'token')
             expect(axiosRequestMock).toBeCalledWith(expect.objectContaining({
                 method: 'POST',
-                url: 'https://test.com'
+                url: 'https://test.com',
+                headers: { 'Authorization': 'token' }
             }))
         })
     })
