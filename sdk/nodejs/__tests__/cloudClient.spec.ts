@@ -30,6 +30,26 @@ describe('DVCCloudClient', () => {
             expect(res.value).toBe(false)
             expect(res.isDefaulted).toBe(true)
         })
+
+        it('to throw an error if key is not defined', async () => {
+            try {
+                await client.variable(user, undefined as unknown as string, false)
+            } catch (ex) {
+                expect(ex.message).toBe(
+                    'Missing parameter: key'
+                )
+            }
+        })
+
+        it('to throw an error if defaultValue is not defined', async () => {
+            try {
+                await client.variable(user, 'test-key', undefined as unknown as string)
+            } catch (ex) {
+                expect(ex.message).toBe(
+                    'Missing parameter: defaultValue'
+                )
+            }
+        })
     })
 
     describe('allVariables', () => {
