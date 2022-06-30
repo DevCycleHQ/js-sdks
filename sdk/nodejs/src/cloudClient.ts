@@ -19,10 +19,12 @@ import { AxiosError, AxiosResponse } from 'axios'
 export class DVCCloudClient {
     private environmentKey: string
     private logger: DVCLogger
+    private options: DVCOptions
 
     constructor(environmentKey: string, options: DVCOptions) {
         this.environmentKey = environmentKey
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
+        this.options = options
         this.logger.info(`Running DevCycle NodeJS SDK in Cloud Bucketing mode`)
     }
 
@@ -32,7 +34,7 @@ export class DVCCloudClient {
         checkParamDefined('key', key)
         checkParamDefined('defaultValue', defaultValue)
 
-        return getVariable(requestUser, this.environmentKey, key)
+        return getVariable(requestUser, this.environmentKey, key, this.options.enableEdgeDB)
             .then((res: AxiosResponse) => {
                 return new DVCVariable({
                     ...res.data,
@@ -50,7 +52,7 @@ export class DVCCloudClient {
 
     allVariables(user: DVCUser): Promise<DVCVariableSet> {
         const requestUser = new DVCPopulatedUser(user)
-        return getAllVariables(requestUser, this.environmentKey)
+        return getAllVariables(requestUser, this.environmentKey, this.options.enableEdgeDB)
             .then((res: AxiosResponse) => {
                 return res.data || {}
             })
@@ -62,7 +64,7 @@ export class DVCCloudClient {
 
     allFeatures(user: DVCUser): Promise<DVCFeatureSet> {
         const requestUser = new DVCPopulatedUser(user)
-        return getAllFeatures(requestUser, this.environmentKey)
+        return getAllFeatures(requestUser, this.environmentKey, this.options.enableEdgeDB)
             .then((res: AxiosResponse) => {
                 return res.data || {}
             })
@@ -78,6 +80,6 @@ export class DVCCloudClient {
         }
         checkParamDefined('type', event.type)
         const requestUser = new DVCPopulatedUser(user)
-        postTrack(requestUser, event, this.environmentKey, this.logger)
+        postTrack(requestUser, event, this.environmentKey, this.logger, this.options.enableEdgeDB)
     }
 }

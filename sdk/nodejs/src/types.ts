@@ -93,6 +93,12 @@ export interface DVCOptions {
      * Switches the SDK to use Cloud Bucketing (via the DevCycle Bucketing API) instead of Local Bucketing.
      */
     enableCloudBucketing?: boolean
+
+    /**
+     * Enables the usage of EdgeDB for DevCycle that syncs User Data to DevCycle.
+     * NOTE: This is only available with Cloud Bucketing.
+     */
+    enableEdgeDB?: boolean
 }
 
 export type DVCVariableValue = string | number | boolean | JSON
