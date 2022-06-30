@@ -15,6 +15,7 @@ const VARIABLES_PATH = '/v1/variables'
 const FEATURES_PATH = '/v1/features'
 const TRACK_PATH = '/v1/track'
 const BUCKETING_URL = `${BUCKETING_BASE}${HOST}`
+const EDGE_DB_QUERY_PARAM = '?enableEdgeDB='
 
 export async function publishEvents(
     logger: DVCLogger,
@@ -54,24 +55,44 @@ export async function getEnvironmentConfig(
     })
 }
 
-export async function getAllFeatures(user: DVCPopulatedUser, envKey: string): Promise<AxiosResponse> {
+export async function getAllFeatures(
+    user: DVCPopulatedUser,
+    envKey: string,
+    enableEdgeDB: boolean = false
+): Promise<AxiosResponse> {
+    const baseUrl = `${BUCKETING_URL}${FEATURES_PATH}`
+    const postUrl = baseUrl.concat(enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
     return await post({
-        url: `${BUCKETING_URL}${FEATURES_PATH}`,
+        url: postUrl,
         data: user
     },
         envKey)
 }
 
-export async function getAllVariables(user: DVCPopulatedUser, envKey: string): Promise<AxiosResponse> {
+export async function getAllVariables(
+    user: DVCPopulatedUser,
+    envKey: string,
+    enableEdgeDB: boolean = false
+): Promise<AxiosResponse> {
+    const baseUrl = `${BUCKETING_URL}${VARIABLES_PATH}`
+    const postUrl = baseUrl.concat(enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
     return await post({
-        url: `${BUCKETING_URL}${VARIABLES_PATH}`,
+        url: postUrl,
+        headers: { 'Authorization': envKey, 'Content-Type': 'application/json' },
         data: user
     }, envKey)
 }
 
-export async function getVariable(user: DVCPopulatedUser, envKey: string, variableKey: string): Promise<AxiosResponse> {
+export async function getVariable(
+    user: DVCPopulatedUser,
+    envKey: string,
+    variableKey: string,
+    enableEdgeDB: boolean = false
+): Promise<AxiosResponse> {
+    const baseUrl = `${BUCKETING_URL}${VARIABLES_PATH}/${variableKey}`
+    const postUrl = baseUrl.concat(enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
     return await post({
-        url: `${BUCKETING_URL}${VARIABLES_PATH}/${variableKey}`,
+        url: postUrl,
         data: user
     }, envKey)
 }
@@ -80,11 +101,14 @@ export async function postTrack(
     user: DVCPopulatedUser,
     event: DVCEvent,
     envKey: string,
-    logger: DVCLogger
-): Promise<void> {
+    logger: DVCLogger,
+    enableEdgeDB: boolean = false
+    ): Promise<void> {
+    const baseUrl = `${BUCKETING_URL}${TRACK_PATH}`
+    const postUrl = baseUrl.concat(enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
     try {
         await post({
-            url: `${BUCKETING_URL}${TRACK_PATH}`,
+            url: postUrl,
             data: {
                 user,
                 events: [event]
