@@ -1,3 +1,4 @@
+import { DVCEvent } from '../src/types'
 import * as DVC from '../src'
 import { server } from '../src/__mocks__/server'
 
@@ -106,22 +107,43 @@ describe('DVCCloudClient', () => {
         const event = {
             type: 'test-event',
         }
-        it('an event successfully', async () => {
-            try {
-                client.track(user, event)
-            } catch (ex) {
-                expect(ex).not.toHaveBeenCalled()
-            }
+        it('an event successfully', () => {
+            expect(async () => await client.track(user, event)).not.toThrow()
         })
 
-        it('fails', async () => {
-            try {
-                client.track(badUser, event)
-            } catch (ex) {
-                expect(ex.message).toBe(
-                    'DVC Error Tracking Event. Response message: Unauthorized'
-                )
-            }
+        it('throws an error for a null event', () => {
+            const badEvent = null
+            expect(async () => await client.track(user, badEvent as unknown as DVCEvent))
+            .rejects
+            .toThrow('Invalid Event')
+        })
+
+        it('throws an error for a undefined event', () => {
+            const badEvent = undefined
+            expect(async () => await client.track(user, badEvent as unknown as DVCEvent))
+            .rejects
+            .toThrow('Invalid Event')
+        })
+
+        it('throws an error for an event with no type', () => {
+            const badEvent = { target: 'test' }
+            expect(async () => await client.track(user, badEvent as unknown as DVCEvent))
+            .rejects
+            .toThrow('Invalid Event')
+        })
+
+        test.each([
+            '',
+            7,
+            false,
+            { test: 'test' },
+            null,
+            undefined
+        ])('Invalid Track (Invalid Event Type: %s)', async (type) => {
+            const badEvent = { type }
+            expect(async () => await client.track(user, badEvent as unknown as DVCEvent))
+            .rejects
+            .toThrow('Invalid Event')
         })
     })
 })
