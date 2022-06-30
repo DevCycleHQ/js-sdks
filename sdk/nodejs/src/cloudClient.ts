@@ -27,7 +27,7 @@ export class DVCCloudClient {
     }
 
     variable(user: DVCUser, key: string, defaultValue: DVCVariableValue): Promise<DVCVariableInterface> {
-        const requestUser = new DVCPopulatedUser(user, true)
+        const requestUser = new DVCPopulatedUser(user)
 
         checkParamDefined('key', key)
         checkParamDefined('defaultValue', defaultValue)
@@ -49,7 +49,7 @@ export class DVCCloudClient {
     }
 
     allVariables(user: DVCUser): Promise<DVCVariableSet> {
-        const requestUser = new DVCPopulatedUser(user, true)
+        const requestUser = new DVCPopulatedUser(user)
         return getAllVariables(requestUser, this.environmentKey)
             .then((res: AxiosResponse) => {
                 return res.data || {}
@@ -61,7 +61,7 @@ export class DVCCloudClient {
     }
 
     allFeatures(user: DVCUser): Promise<DVCFeatureSet> {
-        const requestUser = new DVCPopulatedUser(user, true)
+        const requestUser = new DVCPopulatedUser(user)
         return getAllFeatures(requestUser, this.environmentKey)
             .then((res: AxiosResponse) => {
                 return res.data || {}
@@ -74,7 +74,7 @@ export class DVCCloudClient {
 
     track(user: DVCUser, event: DVCEvent): void {
         checkParamDefined('type', event.type)
-        const requestUser = new DVCPopulatedUser(user, true)
+        const requestUser = new DVCPopulatedUser(user)
         postTrack(requestUser, event, this.environmentKey, this.logger)
     }
 }

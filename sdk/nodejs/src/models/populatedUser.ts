@@ -19,7 +19,7 @@ export class DVCPopulatedUser implements DVCUser {
     readonly sdkType: 'server'
     readonly sdkVersion: string
 
-    constructor(user: DVCUser, usingCloudBucketing: boolean = false) {
+    constructor(user: DVCUser) {
         if (!user.user_id) {
             throw new Error('Must have a user_id set on the user')
         }
@@ -40,7 +40,7 @@ export class DVCPopulatedUser implements DVCUser {
          * Read only properties initialized once
          */
         this.createdDate = new Date()
-        this.platform = usingCloudBucketing ? 'NodeJS Cloud' : 'NodeJS'
+        this.platform = 'NodeJS'
         this.platformVersion = process.version
         this.sdkType = 'server'
         this.sdkVersion = packageJson.version
