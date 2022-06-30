@@ -78,12 +78,12 @@ export async function getVariable(user: DVCPopulatedUser, envKey: string, variab
     })
 }
 
-    export async function postTrack(
-        user: DVCPopulatedUser,
-        event: DVCEvent,
-        envKey: string,
-        logger: DVCLogger
-    ): Promise<void> {
+export async function postTrack(
+    user: DVCPopulatedUser,
+    event: DVCEvent,
+    envKey: string,
+    logger: DVCLogger
+): Promise<void> {
     try {
         const res = await post({
             url: `${BUCKETING_URL}${HOST}${TRACK_PATH}`,

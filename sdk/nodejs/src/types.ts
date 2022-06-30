@@ -92,7 +92,7 @@ export interface DVCOptions {
     /**
      * Switches the SDK to use Cloud Bucketing (via the DevCycle Bucketing API) instead of Local Bucketing.
      */
-    enabledCloudBucketing?: boolean
+    enableCloudBucketing?: boolean
 }
 
 export type DVCVariableValue = string | number | boolean | JSON
