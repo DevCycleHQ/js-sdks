@@ -29,6 +29,9 @@ export class DVCCloudClient {
     variable(user: DVCUser, key: string, defaultValue: DVCVariableValue): Promise<DVCVariableInterface> {
         const requestUser = new DVCPopulatedUser(user, true)
 
+        checkParamDefined('key', key)
+        checkParamDefined('defaultValue', defaultValue)
+
         return getVariable(requestUser, this.environmentKey, key)
             .then((res: AxiosResponse) => {
                 return new DVCVariable({
