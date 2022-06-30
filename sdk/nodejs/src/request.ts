@@ -26,9 +26,8 @@ export async function publishEvents(
 
     const res = await post({
         url: `${EVENT_URL}${HOST}${EVENTS_PATH}`,
-        headers: { 'Authorization': envKey },
         data: { batch: eventsBatch }
-    })
+    }, envKey)
     if (res.status !== 201) {
         logger.error(`Error posting events, status: ${res.status}, body: ${res.data?.message}`)
     } else {
@@ -57,25 +56,23 @@ export async function getEnvironmentConfig(
 export async function getAllFeatures(user: DVCPopulatedUser, envKey: string): Promise<AxiosResponse> {
     return await post({
         url: `${BUCKETING_URL}${HOST}${FEATURES_PATH}`,
-        headers: { 'Authorization': envKey, 'Content-Type': 'application/json' },
         data: user
-    })
+    },
+        envKey)
 }
 
 export async function getAllVariables(user: DVCPopulatedUser, envKey: string): Promise<AxiosResponse> {
     return await post({
         url: `${BUCKETING_URL}${HOST}${VARIABLES_PATH}`,
-        headers: { 'Authorization': envKey, 'Content-Type': 'application/json' },
         data: user
-    })
+    }, envKey)
 }
 
 export async function getVariable(user: DVCPopulatedUser, envKey: string, variableKey: string): Promise<AxiosResponse> {
     return await post({
         url: `${BUCKETING_URL}${HOST}${VARIABLES_PATH}/${variableKey}`,
-        headers: { 'Authorization': envKey, 'Content-Type': 'application/json' },
         data: user
-    })
+    }, envKey)
 }
 
 export async function postTrack(
@@ -85,28 +82,23 @@ export async function postTrack(
     logger: DVCLogger
 ): Promise<void> {
     try {
-        const res = await post({
+        await post({
             url: `${BUCKETING_URL}${HOST}${TRACK_PATH}`,
-            headers: { 'Authorization': envKey, 'Content-Type': 'application/json' },
             data: {
                 user,
                 events: [event]
             }
-        })
-        if (res.status !== 201) {
-            throw new Error(`Error tracking event, status: ${res.status}, body: ${res.data}`)
-        } else {
-            logger.debug(`DVC Event Tracked`)
-        }
+        }, envKey)
+        logger.debug(`DVC Event Tracked`)
     } catch (ex) {
         logger.error(`DVC Error Tracking Event. Response message: ${ex.message}`)
     }
-
 }
 
-export async function post(requestConfig: AxiosRequestConfig): Promise<AxiosResponse> {
+export async function post(requestConfig: AxiosRequestConfig, envKey: string): Promise<AxiosResponse> {
     return await axiosClient.request({
         ...requestConfig,
+        headers: { 'Authorization': envKey },
         method: 'POST'
     })
 }
