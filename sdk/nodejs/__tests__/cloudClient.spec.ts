@@ -13,7 +13,7 @@ const emptyUser = { user_id: 'empty' }
 
 describe('DVCCloudClient', () => {
     beforeAll(async () => {
-        client = DVC.initialize('token', { logLevel: 'error', enabledCloudBucketing: true }) as DVC.DVCCloudClient
+        client = DVC.initialize('token', { logLevel: 'error', enableCloudBucketing: true })
     })
 
     beforeEach(() => {

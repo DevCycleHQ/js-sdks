@@ -5,13 +5,17 @@ import { DVCCloudClient } from './cloudClient'
 export { DVCClient, DVCCloudClient }
 export * from './types'
 
-export function initialize(environmentKey: string, options: DVCOptions = { enabledCloudBucketing: false }):
-DVCClient | DVCCloudClient {
+export type DVCOptionsCloudEnabled = DVCOptions & { enableCloudBucketing: true }
+export type DVCOptionsLocalEnabled = DVCOptions & { enableCloudBucketing: false }
+
+export function initialize(environmentKey: string, options: DVCOptionsLocalEnabled): DVCClient
+export function initialize(environmentKey: string, options: DVCOptionsCloudEnabled): DVCCloudClient
+export function initialize(environmentKey: string, options: DVCOptions): DVCClient | DVCCloudClient {
     if (!environmentKey) {
         throw new Error('Missing environment key! Call initialize with a valid environment key')
     }
 
-    if (options.enabledCloudBucketing) {
+    if (options.enableCloudBucketing) {
         return new DVCCloudClient(environmentKey, options)
     }
     return new DVCClient(environmentKey, options)
