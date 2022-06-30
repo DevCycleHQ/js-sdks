@@ -1,8 +1,7 @@
 import * as DVC from '../src'
+import { server } from '../src/__mocks__/server'
 
 let client: DVC.DVCCloudClient
-
-jest.mock("axios")
 
 const user = {
     user_id: 'node_sdk_test',
@@ -14,11 +13,10 @@ const emptyUser = { user_id: 'empty' }
 describe('DVCCloudClient', () => {
     beforeAll(async () => {
         client = DVC.initialize('token', { logLevel: 'error', enableCloudBucketing: true })
+        server.listen()
     })
-
-    beforeEach(() => {
-        jest.clearAllMocks()
-    })
+    afterEach(() => server.resetHandlers())
+    afterAll(() => server.close())
 
     describe('variable', () => {
         it('to return a Value and not be defaulted', async () => {

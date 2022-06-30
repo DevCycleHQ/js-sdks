@@ -5,8 +5,8 @@ import { DVCCloudClient } from './cloudClient'
 export { DVCClient, DVCCloudClient }
 export * from './types'
 
-export type DVCOptionsCloudEnabled = DVCOptions & { enableCloudBucketing: true }
-export type DVCOptionsLocalEnabled = DVCOptions & { enableCloudBucketing: false }
+type DVCOptionsCloudEnabled = DVCOptions & { enableCloudBucketing: true }
+type DVCOptionsLocalEnabled = DVCOptions & { enableCloudBucketing: false }
 
 export function initialize(environmentKey: string, options: DVCOptionsLocalEnabled): DVCClient
 export function initialize(environmentKey: string, options: DVCOptionsCloudEnabled): DVCCloudClient
