@@ -24,6 +24,7 @@ describe('DVCCloudClient without EdgeDB', () => {
             const res = await client.variable(user, 'test-key', false)
             expect(res.value).toBe(true)
             expect(res.isDefaulted).toBe(false)
+            expect(res.key).not.toContain('edgedb')
         })
 
         it('to return the Default Value and be defaulted', async () => {
