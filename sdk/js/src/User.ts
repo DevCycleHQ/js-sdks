@@ -43,7 +43,7 @@ export class DVCPopulatedUser implements DVCUser {
          * Read only properties initialized once
          */
 
-        const userAgent = new UAParser(window.navigator.userAgent)
+        const userAgent = new UAParser(typeof window !== "undefined" ? window.navigator.userAgent : undefined)
         const platformVersion = userAgent.getBrowser().name &&
              `${userAgent.getBrowser().name} ${userAgent.getBrowser().version}`
 
@@ -51,8 +51,8 @@ export class DVCPopulatedUser implements DVCUser {
         this.platform = options?.reactNative ? 'ReactNative' : 'web'
         this.platformVersion = platformVersion ?? 'unknown'
         this.deviceModel = options?.reactNative && globalThis.DeviceInfo
-            ? globalThis.DeviceInfo.getModel()
-            : window.navigator.userAgent
+            ? globalThis.DeviceInfo.getModel() : typeof window !== "undefined" 
+            ? window.navigator.userAgent : 'SSR - unknown'
         this.sdkType = 'client'
         this.sdkVersion = packageJson.version
     }
