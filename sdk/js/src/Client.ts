@@ -42,7 +42,14 @@ export class DVCClient implements Client {
         this.requestConsolidator = new RequestConsolidator()
         this.eventEmitter = new EventEmitter()
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
-        this.store = new Store(window.localStorage, this.logger)
+        const stubbedLocalStorage = { 
+            getItem: () => null,
+            setItem: () => undefined,
+            removeItem: () => undefined,
+            clear: () => undefined,
+            key: () => null,
+            length: 0 }
+        this.store = new Store(typeof window !== "undefined" ? window.localStorage : stubbedLocalStorage, this.logger)
 
         this.store.saveUser(this.user)
             .then(() => this.logger.info('Successfully saved user to local storage!'))
