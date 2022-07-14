@@ -85,9 +85,14 @@ export interface DVCOptions {
     flushEventsMS?: number
 
     /**
-     * Disables logging of any events or user data to DevCycle.
+     * Disables logging of sdk generated events (e.g. variableEvaluated, variableDefaulted) to DevCycle.
      */
-    disableEventLogging?: boolean
+    disableAutomaticEventLogging?: boolean
+
+    /**
+     * Disables logging of custom events or user data to DevCycle.
+     */
+    disableCustomEventLogging?: boolean
 
     /**
      * Switches the SDK to use Cloud Bucketing (via the DevCycle Bucketing API) instead of Local Bucketing.

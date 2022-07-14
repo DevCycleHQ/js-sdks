@@ -24,22 +24,29 @@ type UserEventsBatchRecord = {
 export type UserEventsBatchRequestPayload = UserEventsBatchRecord[]
 type UserEventQueue = Record<string, UserEventsBatchRecord>
 
+type options = {
+    flushEventsMS?: number,
+    disableAutomaticEventLogging?: boolean,
+    disableCustomEventLogging?: boolean
+}
 export class EventQueue {
     private readonly logger: DVCLogger
     private readonly environmentKey: string
     private userEventQueue: UserEventQueue
     private aggregateUserEventMap: AggregateUserEventMap
     flushEventsMS: number
-    disableEventLogging: boolean
+    disableAutomaticEventLogging: boolean
+    disableCustomEventLogging: boolean
     private flushInterval: NodeJS.Timer
 
-    constructor(logger: DVCLogger, environmentKey: string, flushEventsMS?: number, disableEventLogging?: boolean) {
+    constructor(logger: DVCLogger, environmentKey: string, options?: options) {
         this.logger = logger
         this.environmentKey = environmentKey
         this.userEventQueue = {}
         this.aggregateUserEventMap = {}
-        this.flushEventsMS = flushEventsMS || 10 * 1000
-        this.disableEventLogging = disableEventLogging || false
+        this.flushEventsMS = options?.flushEventsMS || 10 * 1000
+        this.disableAutomaticEventLogging = options?.disableAutomaticEventLogging || false
+        this.disableCustomEventLogging = options?.disableCustomEventLogging || false
 
         this.flushInterval = setInterval(this.flushEvents.bind(this), this.flushEventsMS)
     }
@@ -96,11 +103,18 @@ export class EventQueue {
         }
     }
 
+    private checkIfEventLoggingDisabled(event: DVCEvent) {
+        if (!EventTypes[event.type]) {
+            return this.disableCustomEventLogging
+        } else {
+            return this.disableAutomaticEventLogging
+        }
+    }
     /**
      * Queue DVCAPIEvent for publishing to DevCycle Events API.
      */
     queueEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void {
-        if (this.disableEventLogging) {
+        if (this.checkIfEventLoggingDisabled(event)) {
             return
         }
         let userEvents = this.userEventQueue[user.user_id]
@@ -164,7 +178,7 @@ export class EventQueue {
      * by incrementing the 'value' field.
      */
     queueAggregateEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void {
-        if (this.disableEventLogging) {
+        if (this.checkIfEventLoggingDisabled(event)) {
             return
         }
         checkParamDefined('user_id', user?.user_id)

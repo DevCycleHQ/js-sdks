@@ -50,8 +50,7 @@ export class DVCClient {
                 this.eventQueue = new EventQueue(
                     this.logger,
                     environmentKey,
-                    options?.flushEventsMS,
-                    options?.disableEventLogging
+                    options
                 )
 
                 const platformData: IPlatformData = {
