@@ -82,6 +82,23 @@ describe('EventQueue Unit Tests', () => {
         ])
     })
 
+    it('should setup Event Queue and not process events if disableEventLogging is true', async () => {
+        publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
+
+        const eventQueue = new EventQueue(logger, 'envKey', undefined, true)
+        const user = new DVCPopulatedUser({ user_id: 'user1' })
+        const event = { type: 'test_event' }
+        eventQueue.queueEvent(user, event, config)
+
+        const aggEvent = { type: EventTypes.variableEvaluated, target: 'key' }
+        eventQueue.queueAggregateEvent(user, aggEvent, config)
+
+        await eventQueue.flushEvents()
+        eventQueue.cleanup()
+
+        expect(publishEvents_mock).not.toBeCalled()
+    })
+
     it('should save multiple events from multiple users with aggregated values', async () => {
         publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
 
