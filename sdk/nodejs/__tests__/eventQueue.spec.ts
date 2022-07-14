@@ -6,7 +6,6 @@ import { AxiosResponse } from 'axios'
 import { EventQueue } from '../src/eventQueue'
 import { EventTypes } from '../src/models/requestEvent'
 import { publishEvents } from '../src/request'
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { BucketedUserConfig, PublicProject } from '@devcycle/types'
 import { mocked } from 'ts-jest/utils'
 import { dvcDefaultLogger } from '../src/utils/logger'
@@ -292,5 +291,94 @@ describe('EventQueue Unit Tests', () => {
                 ])
             }
         ])
+    })
+
+    it('should send request in chunks when there are too many events, and requeue just the failed ones', async () => {
+        const eventQueue = new EventQueue(logger, 'envKey')
+        const user = new DVCPopulatedUser({ user_id: 'user1' })
+        const aggEvent = { type: EventTypes.variableEvaluated, target: 'key' }
+
+        for (let i = 0; i < 150; i++) {
+            eventQueue.queueEvent(user, { type: 'test_event' }, config)
+        }
+
+        for (let i = 0; i < 150; i++) {
+            eventQueue.queueAggregateEvent(new DVCPopulatedUser({ user_id: `user${i}` }), aggEvent, config)
+        }
+
+        // 300 events total, thats three chunks
+
+        publishEvents_mock.mockResolvedValueOnce(mockAxiosResponse({ status: 201 }))
+        // fail on the second chunk
+        publishEvents_mock.mockResolvedValueOnce(mockAxiosResponse({ status: 500 }))
+        publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
+
+        await eventQueue.flushEvents()
+        // flush again to trigger the retry of the failed chunk
+        await eventQueue.flushEvents()
+        eventQueue.cleanup()
+
+        // first two calls are from first flush (two chunks)
+        // third call is from second flush (retrying the failed chunk)
+        expect(publishEvents_mock).toBeCalledTimes(4)
+        const firstPublishPayloads = publishEvents_mock.mock.calls[0][2]
+        const secondPublishPayloads = publishEvents_mock.mock.calls[1][2]
+        const thirdPublishPayloads = publishEvents_mock.mock.calls[2][2]
+        const fourthPublishPayloads = publishEvents_mock.mock.calls[3][2]
+
+        expect(firstPublishPayloads).toEqual([
+            {
+                user: expect.objectContaining({ user_id: 'user1' }),
+                events: expect.arrayContaining([
+                    expect.objectContaining({ customType: 'test_event' })
+                ])
+            }
+        ])
+
+        expect(secondPublishPayloads).toEqual(expect.arrayContaining([
+            {
+                user: expect.objectContaining({ user_id: 'user1' }),
+                events: expect.arrayContaining([
+                    expect.objectContaining({ customType: 'test_event' })
+                ])
+            },
+            {
+                user: expect.objectContaining({ user_id: 'user20' }),
+                events: expect.arrayContaining([
+                    expect.objectContaining({ type: 'variableEvaluated', value: 1 })
+                ])
+            }
+        ]))
+
+        expect(fourthPublishPayloads).toEqual(expect.arrayContaining([
+            {
+                user: expect.objectContaining({ user_id: 'user1' }),
+                events: expect.arrayContaining([
+                    expect.objectContaining({ customType: 'test_event' })
+                ])
+            },
+            {
+                user: expect.objectContaining({ user_id: 'user20' }),
+                events: expect.arrayContaining([
+                    expect.objectContaining({ type: 'variableEvaluated', value: 1 })
+                ])
+            }
+        ]))
+
+        expect(
+            firstPublishPayloads.reduce((val: number, payload) => val + payload.events.length, 0)
+        ).toBe(100)
+
+        expect(
+            secondPublishPayloads.reduce((val: number, payload) => val + payload.events.length, 0)
+        ).toBe(100)
+
+        expect(
+            thirdPublishPayloads.reduce((val: number, payload) => val + payload.events.length, 0)
+        ).toBe(100)
+
+        expect(
+            fourthPublishPayloads.reduce((val: number, payload) => val + payload.events.length, 0)
+        ).toBe(100)
     })
 })
