@@ -82,10 +82,14 @@ describe('EventQueue Unit Tests', () => {
         ])
     })
 
-    it('should setup Event Queue and not process events if disableEventLogging is true', async () => {
+    it('should setup Event Queue and not process custom events if disableCustomEventLogging is true', async () => {
         publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
 
-        const eventQueue = new EventQueue(logger, 'envKey', undefined, true)
+        const eventQueue = new EventQueue(logger, 'envKey',
+            {
+                disableAutomaticEventLogging: false,
+                disableCustomEventLogging: true
+            })
         const user = new DVCPopulatedUser({ user_id: 'user1' })
         const event = { type: 'test_event' }
         eventQueue.queueEvent(user, event, config)
@@ -96,7 +100,74 @@ describe('EventQueue Unit Tests', () => {
         await eventQueue.flushEvents()
         eventQueue.cleanup()
 
-        expect(publishEvents_mock).not.toBeCalled()
+        expect(publishEvents_mock).toBeCalledWith(logger, 'envKey', [
+            {
+                user: expect.objectContaining({
+                    user_id: 'user1',
+                    createdDate: expect.any(Date),
+                    lastSeenDate: expect.any(Date),
+                    platform: 'NodeJS',
+                    platformVersion: expect.any(String),
+                    sdkType: 'server',
+                    sdkVersion: expect.any(String)
+                }),
+                events: [
+                    expect.objectContaining({
+                        type: 'variableEvaluated',
+                        target: 'key',
+                        clientDate: expect.any(Number),
+                        date: expect.any(Number),
+                        featureVars: { 'feature': 'var' },
+                        user_id: 'user1',
+                        value: 1
+                    })
+                ]
+            }
+        ])
+    })
+
+    it('should setup Event Queue and not process automatic events if disableAutomaticEventLogging is true',
+        async () => {
+        publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
+
+        const eventQueue = new EventQueue(logger, 'envKey',
+            {
+                disableAutomaticEventLogging: true,
+                disableCustomEventLogging: false
+            })
+        const user = new DVCPopulatedUser({ user_id: 'user1' })
+        const event = { type: 'test_event' }
+        eventQueue.queueEvent(user, event, config)
+
+        const aggEvent = { type: EventTypes.variableEvaluated, target: 'key' }
+        eventQueue.queueAggregateEvent(user, aggEvent, config)
+
+        await eventQueue.flushEvents()
+        eventQueue.cleanup()
+
+        expect(publishEvents_mock).toBeCalledWith(logger, 'envKey', [
+            {
+                user: expect.objectContaining({
+                    user_id: 'user1',
+                    createdDate: expect.any(Date),
+                    lastSeenDate: expect.any(Date),
+                    platform: 'NodeJS',
+                    platformVersion: expect.any(String),
+                    sdkType: 'server',
+                    sdkVersion: expect.any(String)
+                }),
+                events: [
+                    expect.objectContaining({
+                        clientDate: expect.any(Number),
+                        customType: 'test_event',
+                        date: expect.any(Number),
+                        featureVars: { 'feature': 'var' },
+                        type: 'customEvent',
+                        user_id: 'user1'
+                    })
+                ]
+            }
+        ])
     })
 
     it('should save multiple events from multiple users with aggregated values', async () => {
