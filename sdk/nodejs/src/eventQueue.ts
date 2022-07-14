@@ -30,14 +30,16 @@ export class EventQueue {
     private userEventQueue: UserEventQueue
     private aggregateUserEventMap: AggregateUserEventMap
     flushEventsMS: number
+    disableEventLogging: boolean
     private flushInterval: NodeJS.Timer
 
-    constructor(logger: DVCLogger, environmentKey: string, flushEventsMS?: number) {
+    constructor(logger: DVCLogger, environmentKey: string, flushEventsMS?: number, disableEventLogging?: boolean) {
         this.logger = logger
         this.environmentKey = environmentKey
         this.userEventQueue = {}
         this.aggregateUserEventMap = {}
         this.flushEventsMS = flushEventsMS || 10 * 1000
+        this.disableEventLogging = disableEventLogging || false
 
         this.flushInterval = setInterval(this.flushEvents.bind(this), this.flushEventsMS)
     }
@@ -98,6 +100,9 @@ export class EventQueue {
      * Queue DVCAPIEvent for publishing to DevCycle Events API.
      */
     queueEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void {
+        if (this.disableEventLogging) {
+            return
+        }
         let userEvents = this.userEventQueue[user.user_id]
         if (!userEvents) {
             userEvents = this.userEventQueue[user.user_id] = {
@@ -159,6 +164,9 @@ export class EventQueue {
      * by incrementing the 'value' field.
      */
     queueAggregateEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void {
+        if (this.disableEventLogging) {
+            return
+        }
         checkParamDefined('user_id', user?.user_id)
         checkParamDefined('type', event.type)
         checkParamDefined('target', event.target)

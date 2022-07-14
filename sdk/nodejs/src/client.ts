@@ -47,7 +47,12 @@ export class DVCClient {
         const initializePromise = importBucketingLib()
             .then(() => {
                 this.configHelper = new EnvironmentConfigManager(this.logger, environmentKey, options || {})
-                this.eventQueue = new EventQueue(this.logger, environmentKey, options?.flushEventsMS)
+                this.eventQueue = new EventQueue(
+                    this.logger,
+                    environmentKey,
+                    options?.flushEventsMS,
+                    options?.disableEventLogging
+                )
 
                 const platformData: IPlatformData = {
                     platform: 'NodeJS',
