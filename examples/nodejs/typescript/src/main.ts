@@ -73,20 +73,20 @@ async function startDVC() {
 
 startDVC()
 
-app.get('/variables', async(req: express.Request, res: express.Response) => {
-  const user = await validateUserFromQueryParams(req.query)
+app.get('/variables', async (req: express.Request, res: express.Response) => {
+    const user = await validateUserFromQueryParams(req.query)
 
-  res.set(defaultHeaders)
-  res.send(JSON.stringify(dvcClient.allVariables(user)))
+    res.set(defaultHeaders)
+    res.send(JSON.stringify(dvcClient.allVariables(user)))
 })
 
-app.get('/features', async(req: express.Request, res: express.Response) => {
-  const user = await validateUserFromQueryParams(req.query)
+app.get('/features', async (req: express.Request, res: express.Response) => {
+    const user = await validateUserFromQueryParams(req.query)
 
-  res.set(defaultHeaders)
-  res.send(JSON.stringify(dvcClient.allFeatures(user)))
+    res.set(defaultHeaders)
+    res.send(JSON.stringify(dvcClient.allFeatures(user)))
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+    console.log(`Example app listening on port ${port}`)
 })

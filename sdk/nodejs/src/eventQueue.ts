@@ -4,10 +4,15 @@ import { checkParamDefined, checkParamString } from './utils/paramUtils'
 import { DVCRequestEvent } from './models/requestEvent'
 import { DVCPopulatedUser } from './models/populatedUser'
 import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
+import { chunk } from 'lodash'
 
-export const EventTypes: Record<string, string> = {
+export const AggregateEventTypes: Record<string, string> = {
     variableEvaluated: 'variableEvaluated',
     variableDefaulted: 'variableDefaulted',
+}
+
+export const EventTypes: Record<string, string> = {
+    ...AggregateEventTypes
 }
 
 type EventsMap = Record<string, Record<string, DVCRequestEvent>>
@@ -21,7 +26,7 @@ type UserEventsBatchRecord = {
     user: DVCPopulatedUser,
     events: DVCRequestEvent[]
 }
-export type UserEventsBatchRequestPayload = UserEventsBatchRecord[]
+export type FlushPayload = UserEventsBatchRecord[]
 type UserEventQueue = Record<string, UserEventsBatchRecord>
 
 type options = {
@@ -59,46 +64,49 @@ export class EventQueue {
      * Flush events in queue to DevCycle Events API. Requeue events if flush fails
      */
     async flushEvents(): Promise<void> {
-        const userEventBatch = this.combineUserEventsToFlush()
-        if (!userEventBatch.length) {
+        const flushPayloads = this.constructFlushPayloads(100)
+        if (!flushPayloads.length) {
             return
         }
 
-        const reducer = (val: number, batch: UserEventsBatchRecord) => val + batch.events.length
-        const eventCount = userEventBatch.reduce(reducer, 0)
-        this.logger.debug(`DVC Flush ${eventCount} Events, for ${userEventBatch.length} Users`)
+        const innerReducer = (val: number, batch: UserEventsBatchRecord) => val + batch.events.length
+        const reducer = (val: number, batches: UserEventsBatchRecord[]) => val + batches.reduce(innerReducer, 0)
+        const eventCount = flushPayloads.reduce(reducer, 0)
+        this.logger.debug(`DVC Flush ${eventCount} Events, for ${flushPayloads.length} Users`)
 
-        const savingUserEventQueue = this.userEventQueue
         this.userEventQueue = {}
-        const savingAggregateUserEventMap = this.aggregateUserEventMap
         this.aggregateUserEventMap = {}
 
-        try {
-            const res = await publishEvents(this.logger, this.environmentKey, userEventBatch)
-            if (res.status !== 201) {
-                throw new Error(`Error publishing events, status: ${res.status}, body: ${res.data}`)
-            } else {
-                this.logger.debug(`DVC Flushed ${eventCount} Events, for ${userEventBatch.length} Users`)
+        await Promise.all(flushPayloads.map(async (flushPayload) => {
+            try {
+                const res = await publishEvents(this.logger, this.environmentKey, flushPayload)
+                if (res.status !== 201) {
+                    throw new Error(`Error publishing events, status: ${res.status}, body: ${res.data}`)
+                } else {
+                    this.logger.debug(`DVC Flushed ${eventCount} Events, for ${chunk.length} Users`)
+                }
+            } catch (ex) {
+                this.logger.error(`DVC Error Flushing Events response message: ${ex.message}, ` +
+                    `response data: ${ex?.response?.data}`)
+                this.requeueEvents(flushPayload)
             }
-        } catch (ex) {
-            this.logger.error(`DVC Error Flushing Events response message: ${ex.message}, ` +
-                `response data: ${ex?.response?.data}`)
-            this.requeueUserEvents(savingUserEventQueue)
-            this.requeueAggUserEventMap(savingAggregateUserEventMap)
-        }
+        }))
+    }
+
+    private requeueEvents(eventsBatches: UserEventsBatchRecord[]) {
+        this.requeueUserEvents(eventsBatches)
+        this.requeueAggUserEventMap(eventsBatches)
     }
 
     /**
      * Requeue user events after failed request to DevCycle Events API.
      */
-    private requeueUserEvents(userEventQueueToMerge: UserEventQueue) {
-        for (const user_id in userEventQueueToMerge) {
-            const mergeRecord = userEventQueueToMerge[user_id]
-            const userRecord = this.userEventQueue[user_id]
-            if (!userRecord) {
-                this.userEventQueue[user_id] = { ...mergeRecord }
-            } else {
-                userRecord.events.push(...mergeRecord.events)
+    private requeueUserEvents(eventsBatches: UserEventsBatchRecord[]) {
+        for (const batch of eventsBatches) {
+            for (const event of batch.events) {
+                if (!AggregateEventTypes[event.type]) {
+                    this.addEventToQueue(batch.user, event)
+                }
             }
         }
     }
@@ -117,6 +125,11 @@ export class EventQueue {
         if (this.checkIfEventLoggingDisabled(event)) {
             return
         }
+
+        this.addEventToQueue(user, new DVCRequestEvent(event, user.user_id, bucketedConfig?.featureVariationMap))
+    }
+
+    private addEventToQueue(user: DVCPopulatedUser, event: DVCRequestEvent) {
         let userEvents = this.userEventQueue[user.user_id]
         if (!userEvents) {
             userEvents = this.userEventQueue[user.user_id] = {
@@ -128,29 +141,19 @@ export class EventQueue {
             userEvents.user = user
         }
 
-        userEvents.events.push(
-            new DVCRequestEvent(event, user.user_id, bucketedConfig?.featureVariationMap)
-        )
+        userEvents.events.push(event)
+
     }
 
     /**
      * Requeue aggregated user event map after failed request to DevCycle Events API.
      */
-    private requeueAggUserEventMap(aggUserEventMapToMerge: AggregateUserEventMap) {
-        for (const user_id in aggUserEventMapToMerge) {
-            const mergeEventMap = aggUserEventMapToMerge[user_id]
-            let userEventMap = this.aggregateUserEventMap[user_id]
-
-            if (!userEventMap) {
-                userEventMap = this.aggregateUserEventMap[user_id] = {
-                    user: mergeEventMap.user,
-                    events: {}
+    private requeueAggUserEventMap(eventsBatches: UserEventsBatchRecord[]) {
+        for (const batch of eventsBatches) {
+            for (const event of batch.events) {
+                if (AggregateEventTypes[event.type]) {
+                    this.saveAggUserEvent(batch.user, event)
                 }
-            }
-
-            const aggEvents = this.eventsFromAggregateEventMap(mergeEventMap.events)
-            for (const event of aggEvents) {
-                this.saveAggUserEvent(userEventMap, event)
             }
         }
     }
@@ -158,9 +161,20 @@ export class EventQueue {
     /**
      * Save aggregated user event (i.e. variableEvaluated / variableDefaulted) to userEventMap.
      */
-    private saveAggUserEvent(userEventMap: UserEventsMap, event: DVCRequestEvent) {
+    private saveAggUserEvent(user: DVCPopulatedUser, event: DVCRequestEvent) {
         const { target } = event
         if (!target) return
+
+        let userEventMap = this.aggregateUserEventMap[user.user_id]
+        if (!userEventMap) {
+            userEventMap = this.aggregateUserEventMap[user.user_id] = {
+                user,
+                events: {}
+            }
+        } else {
+            // Always keep the latest user object
+            userEventMap.user = user
+        }
 
         const aggEventType = userEventMap.events[event.type]
         const aggEvent = aggEventType?.[target]
@@ -189,57 +203,68 @@ export class EventQueue {
         eventCopy.date = Date.now()
         eventCopy.value = 1
 
-        let userEventMap = this.aggregateUserEventMap[user.user_id]
-        if (!userEventMap) {
-            userEventMap = this.aggregateUserEventMap[user.user_id] = {
-                user,
-                events: {}
-            }
-        } else {
-            // Always keep the latest user object
-            userEventMap.user = user
-        }
-
         const requestEvent = new DVCRequestEvent(eventCopy, user.user_id, bucketedConfig?.featureVariationMap)
-        this.saveAggUserEvent(userEventMap, requestEvent)
+        this.saveAggUserEvent(user, requestEvent)
     }
 
     /**
-     * Turn the Aggregate Event Map into an UserEventsBatchRequestPayload for publishing.
+     * Turn the set of pending events in the queue (plain and aggregate events) into a set of
+     * FlushPayloads for publishing. Each payload can only contain at most "chunkSize" events.
+     * Uses an "aggregator" object to collect the pairings of events and users together. If the number of events
+     * collected exceeds the chunkSize, a new aggregator will be started. Each aggregator will correspond to a
+     * distinct request to the events api
      */
-    private combineUserEventsToFlush(): UserEventsBatchRequestPayload {
-        const userRequestEventsToFlush: Record<string, UserEventsBatchRecord> = {}
+    private constructFlushPayloads(chunkSize: number): FlushPayload[] {
+        const payloadAggregator: Record<string, UserEventsBatchRecord> = {}
+        let currentUserRequestAggregator = payloadAggregator
+
+        const flushAggregators: (typeof payloadAggregator)[] = [payloadAggregator]
+
+        let eventCount = 0
+
+        const addEventToCurrentAggregator = (user: DVCPopulatedUser, events: DVCRequestEvent[]) => {
+            const existingUserRequestEvents = currentUserRequestAggregator[user.user_id]
+
+            if (!existingUserRequestEvents) {
+                currentUserRequestAggregator[user.user_id] = {
+                    user,
+                    events: []
+                }
+            }
+
+            for (const event of events) {
+                eventCount++
+
+                if (eventCount > chunkSize) {
+                    currentUserRequestAggregator = {
+                        [user.user_id]: {
+                            user,
+                            events: []
+                        }
+                    }
+                    flushAggregators.push(currentUserRequestAggregator)
+                    eventCount = 1
+                }
+
+                currentUserRequestAggregator[user.user_id].events.push(event)
+            }
+        }
 
         for (const user_id in this.userEventQueue) {
             const userEventsRecord = this.userEventQueue[user_id]
-            const existingUserRequestEvents = userRequestEventsToFlush[user_id]
-
-            if (existingUserRequestEvents) {
-                existingUserRequestEvents.events.push(
-                    ...userEventsRecord.events
-                )
-            } else {
-                userRequestEventsToFlush[user_id] = userEventsRecord
-            }
+            addEventToCurrentAggregator(userEventsRecord.user, userEventsRecord.events)
         }
 
         for (const user_id in this.aggregateUserEventMap) {
             const aggUserEventsRecord = this.aggregateUserEventMap[user_id]
-            const existingUserRequestEvents = userRequestEventsToFlush[user_id]
 
-            if (existingUserRequestEvents) {
-                existingUserRequestEvents.events.push(
-                    ...this.eventsFromAggregateEventMap(aggUserEventsRecord.events)
-                )
-            } else {
-                userRequestEventsToFlush[user_id] = {
-                    user: aggUserEventsRecord.user,
-                    events: this.eventsFromAggregateEventMap(aggUserEventsRecord.events)
-                }
-            }
+            addEventToCurrentAggregator(
+                aggUserEventsRecord.user,
+                this.eventsFromAggregateEventMap(aggUserEventsRecord.events)
+            )
         }
 
-        return Object.values(userRequestEventsToFlush)
+        return flushAggregators.map((aggregator) => Object.values(aggregator))
     }
 
     /**
