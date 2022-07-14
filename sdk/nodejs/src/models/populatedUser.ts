@@ -24,6 +24,9 @@ export class DVCPopulatedUser implements DVCUser {
             throw new Error('Must have a user_id set on the user')
         }
         checkParamType('user_id', user.user_id, typeEnum.string)
+        if (user.user_id.length > 200) {
+            throw new Error('user_id cannot be longer than 200 characters')
+        }
 
         this.user_id = user.user_id
         this.email = user.email
