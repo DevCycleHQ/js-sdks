@@ -18,7 +18,12 @@ describe('EventQueue Unit Tests', () => {
         environment: { _id: '', key: '' },
         features: {},
         knownVariableKeys: [],
-        project: { _id: '', key: '', a0_organization: 'org_' } as PublicProject,
+        project: { 
+            _id: '', 
+            key: '', 
+            a0_organization: 'org_', 
+            settings: { edgeDB: { enabled: false } } 
+        } as PublicProject,
         variables: {},
         featureVariationMap: { feature: 'var' }
     }
@@ -380,5 +385,62 @@ describe('EventQueue Unit Tests', () => {
         expect(
             fourthPublishPayloads.reduce((val: number, payload) => val + payload.events.length, 0)
         ).toBe(100)
+    })
+
+    it('should not queue user event if user event and aggregate event queue exceeds max event queue size', () => {
+        const logger = dvcDefaultLogger()
+        logger.warn = jest.fn()
+
+        const eventQueue = new EventQueue(logger, 'envKey')
+        const user = new DVCPopulatedUser({ user_id: 'user1' })
+        const aggEvent = { type: EventTypes.variableEvaluated, target: 'key' }
+
+        for (let i = 0; i < 500; i++) {
+            eventQueue.queueAggregateEvent(new DVCPopulatedUser({ user_id: `user${i}` }), aggEvent, config)
+        }
+
+        for (let i = 0; i < 500; i++) {
+            eventQueue.queueEvent(user, { type: 'test_event' }, config)
+        }
+
+        eventQueue.queueEvent(user, { type: 'test_event2' }, config)
+
+        expect(logger.warn).toBeCalledTimes(1)
+        expect(logger.warn).toBeCalledWith(expect.stringContaining('Max event queue size reached, dropping event'))
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        expect(eventQueue.userEventQueue[user.user_id].events.find(event => event.type === 'test_event2')).toBeFalsy()
+    })
+
+    it('should not queue aggregate event if user event and aggregate event queue exceeds max event queue size', () => {
+        const logger = dvcDefaultLogger()
+        logger.warn = jest.fn()
+
+        const eventQueue = new EventQueue(logger, 'envKey')
+        const user = new DVCPopulatedUser({ user_id: 'user1' })
+        const aggEvent = { type: EventTypes.variableEvaluated, target: 'key' }
+
+        for (let i = 0; i < 500; i++) {
+            eventQueue.queueEvent(user, { type: 'test_event' }, config)
+        }
+
+        for (let i = 0; i < 500; i++) {
+            eventQueue.queueAggregateEvent(new DVCPopulatedUser({ user_id: `user${i}` }), aggEvent, config)
+        }
+
+        eventQueue.queueAggregateEvent(
+            new DVCPopulatedUser({ user_id: `user1001` }), 
+            { type: EventTypes.variableEvaluated, target: 'key2' }, 
+            config
+        )
+
+        expect(logger.warn).toBeCalledTimes(1)
+        expect(logger.warn).toBeCalledWith(
+            expect.stringContaining('Max event queue size reached, dropping aggregate event')
+        )
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        expect(eventQueue.aggregateUserEventMap[user.user_id].events[EventTypes.variableEvaluated]['key2'])
+            .toBeUndefined()
     })
 })
