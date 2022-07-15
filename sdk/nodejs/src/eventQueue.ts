@@ -43,6 +43,7 @@ export class EventQueue {
     disableAutomaticEventLogging: boolean
     disableCustomEventLogging: boolean
     private flushInterval: NodeJS.Timer
+    maxEventQueueSize: number
 
     constructor(logger: DVCLogger, environmentKey: string, options?: options) {
         this.logger = logger
@@ -54,6 +55,8 @@ export class EventQueue {
         this.disableCustomEventLogging = options?.disableCustomEventLogging || false
 
         this.flushInterval = setInterval(this.flushEvents.bind(this), this.flushEventsMS)
+
+        this.maxEventQueueSize = 1000
     }
 
     cleanup(): void {
@@ -126,10 +129,15 @@ export class EventQueue {
             return
         }
 
+        this.maxEventQueueSize = bucketedConfig?.project.settings.sdkSettings?.eventQueueLimit ?? this.maxEventQueueSize
+
         this.addEventToQueue(user, new DVCRequestEvent(event, user.user_id, bucketedConfig?.featureVariationMap))
     }
 
     private addEventToQueue(user: DVCPopulatedUser, event: DVCRequestEvent) {
+        if (this.eventQueueSize() >= this.maxEventQueueSize) {
+            return this.logger.warn(`Max event queue size reached, dropping event: ${event}`)
+        }
         let userEvents = this.userEventQueue[user.user_id]
         if (!userEvents) {
             userEvents = this.userEventQueue[user.user_id] = {
@@ -142,7 +150,6 @@ export class EventQueue {
         }
 
         userEvents.events.push(event)
-
     }
 
     /**
@@ -164,6 +171,10 @@ export class EventQueue {
     private saveAggUserEvent(user: DVCPopulatedUser, event: DVCRequestEvent) {
         const { target } = event
         if (!target) return
+
+        if (this.eventQueueSize() >= this.maxEventQueueSize) {
+            return this.logger.warn(`Max event queue size reached, dropping aggregate event: ${event}`)
+        }
 
         let userEventMap = this.aggregateUserEventMap[user.user_id]
         if (!userEventMap) {
@@ -195,6 +206,8 @@ export class EventQueue {
         if (this.checkIfEventLoggingDisabled(event)) {
             return
         }
+        this.maxEventQueueSize = bucketedConfig?.project.settings.sdkSettings?.eventQueueLimit ?? this.maxEventQueueSize
+        
         checkParamDefined('user_id', user?.user_id)
         checkParamDefined('type', event.type)
         checkParamDefined('target', event.target)
@@ -272,5 +285,14 @@ export class EventQueue {
      */
     private eventsFromAggregateEventMap(eventsMap: EventsMap): DVCRequestEvent[] {
         return Object.values(eventsMap).map((typeMap) => Object.values(typeMap)).flat()
+    }
+
+    private eventQueueSize(): number {
+        const userEventQueueSize = Object.values(this.userEventQueue)
+            .reduce<number>((prev, curr) => prev + curr.events.length, 0)
+        const aggregateEventQueueSize = Object.keys(this.aggregateUserEventMap).reduce<number>((prev, curr) => {
+            return prev + this.eventsFromAggregateEventMap(this.aggregateUserEventMap[curr].events).length
+        }, 0)
+        return userEventQueueSize + aggregateEventQueueSize
     }
 }
