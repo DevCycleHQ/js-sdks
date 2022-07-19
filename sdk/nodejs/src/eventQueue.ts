@@ -55,7 +55,6 @@ export class EventQueue {
         this.disableCustomEventLogging = options?.disableCustomEventLogging || false
 
         this.flushInterval = setInterval(this.flushEvents.bind(this), this.flushEventsMS)
-
         this.maxEventQueueSize = 1000
     }
 
@@ -136,7 +135,9 @@ export class EventQueue {
 
     private addEventToQueue(user: DVCPopulatedUser, event: DVCRequestEvent) {
         if (this.eventQueueSize() >= this.maxEventQueueSize) {
-            return this.logger.warn(`Max event queue size reached, dropping event: ${event}`)
+            this.logger.warn(`Max event queue size reached, dropping event: ${event}`)
+            this.flushEvents()
+            return
         }
         let userEvents = this.userEventQueue[user.user_id]
         if (!userEvents) {
@@ -173,7 +174,9 @@ export class EventQueue {
         if (!target) return
 
         if (this.eventQueueSize() >= this.maxEventQueueSize) {
-            return this.logger.warn(`Max event queue size reached, dropping aggregate event: ${event}`)
+            this.logger.warn(`Max event queue size reached, dropping aggregate event: ${event}`)
+            this.flushEvents()
+            return
         }
 
         let userEventMap = this.aggregateUserEventMap[user.user_id]
