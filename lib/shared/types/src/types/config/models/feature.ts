@@ -75,4 +75,8 @@ export class Feature<IdType = string> {
      * Defines feature-level settings 
      */
     settings?: FeatureSettings
+
+    name?: string
+
+    description?: string
 }

@@ -15,6 +15,16 @@ export class Project<IdType = string> {
         },
         sdkSettings?: {
             eventQueueLimit: 1000
+        },
+        optIn?: {
+            enabled: boolean
+            title?: string
+            description?: string
+            imageURL?: string
+            colors?: {
+                primary: string
+                secondary: string
+            }
         }
     }
 }
