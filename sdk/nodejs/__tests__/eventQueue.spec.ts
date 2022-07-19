@@ -409,7 +409,7 @@ describe('EventQueue Unit Tests', () => {
         expect(logger.warn).toBeCalledWith(expect.stringContaining('Max event queue size reached, dropping event'))
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        expect(eventQueue.userEventQueue[user.user_id].events.find(event => event.type === 'test_event2')).toBeFalsy()
+        expect(eventQueue.eventQueueSize()).toEqual(0)
     })
 
     it('should not queue aggregate event if user event and aggregate event queue exceeds max event queue size', () => {
@@ -440,7 +440,48 @@ describe('EventQueue Unit Tests', () => {
         )
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        expect(eventQueue.aggregateUserEventMap[user.user_id].events[EventTypes.variableEvaluated]['key2'])
-            .toBeUndefined()
+        expect(eventQueue.eventQueueSize()).toEqual(0)
+    })
+
+    it('should flush event queues once max queue size has been reached before adding another user event', async () => {
+        const eventQueue = new EventQueue(logger, 'envKey')
+        const flushEvents_mock = jest.spyOn(eventQueue, 'flushEvents')
+
+        const user = new DVCPopulatedUser({ user_id: 'user1' })
+        const aggEvent = { type: EventTypes.variableEvaluated, target: 'key' }
+
+        // set eventQueueSize to 1000
+        for (let i = 0; i < 500; i++) {
+            eventQueue.queueEvent(user, { type: 'test_event' }, config)
+        }
+        for (let i = 0; i < 500; i++) {
+            eventQueue.queueAggregateEvent(new DVCPopulatedUser({ user_id: `user${i}` }), aggEvent, config)
+        }
+        expect(flushEvents_mock).toBeCalledTimes(0)
+
+        // try adding new event to userEventQueue; since max queue size has been reached, events will be flushed 
+        eventQueue.queueEvent(user, { type: 'test_event' }, config)
+        expect(flushEvents_mock).toBeCalledTimes(1)
+    })
+
+    it('should flush event queues once max queue size has been reached before adding another agg event', async () => {
+        const eventQueue = new EventQueue(logger, 'envKey')
+        const flushEvents_mock = jest.spyOn(eventQueue, 'flushEvents')
+
+        const user = new DVCPopulatedUser({ user_id: 'user1' })
+        const aggEvent = { type: EventTypes.variableEvaluated, target: 'key' }
+
+        // set eventQueueSize to 1000
+        for (let i = 0; i < 500; i++) {
+            eventQueue.queueEvent(user, { type: 'test_event' }, config)
+        }
+        for (let i = 0; i < 500; i++) {
+            eventQueue.queueAggregateEvent(new DVCPopulatedUser({ user_id: `user${i}` }), aggEvent, config)
+        }
+        expect(flushEvents_mock).toBeCalledTimes(0)
+
+        // try adding new event to userEventQueue; since max queue size has been reached, events will be flushed 
+        eventQueue.queueAggregateEvent(new DVCPopulatedUser({ user_id: 'last_user' }), aggEvent, config)
+        expect(flushEvents_mock).toBeCalledTimes(1)
     })
 })
