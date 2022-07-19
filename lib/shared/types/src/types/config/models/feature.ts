@@ -39,6 +39,10 @@ export enum FeatureType {
     ops = 'ops'
 }
 
+export type FeatureSettings = {
+    optInEnabled: boolean
+}
+
 /**
  * Feature Model. Defines the project-level "container" for a given feature
  */
@@ -66,4 +70,9 @@ export class Feature<IdType = string> {
 
     @Type(() => FeatureConfiguration)
         configuration: FeatureConfiguration<IdType>
+    
+    /**
+     * Defines feature-level settings 
+     */
+    settings?: FeatureSettings
 }

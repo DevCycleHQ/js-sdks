@@ -293,7 +293,7 @@ export const config: ConfigBody = {
                     }]
                 }]
             },
-            variations: [variations[0], variations[1]]
+            variations: [variations[0], variations[1]],
         },
         {
             _id: '614ef6aa475928459060721a',
@@ -321,7 +321,7 @@ export const config: ConfigBody = {
                     }]
                 }]
             },
-            variations: [variations[0], variations[1], variations[2], variations[3], variations[4]]
+            variations: [variations[0], variations[1], variations[2], variations[3], variations[4]],
         }],
     variables,
     variableHashes
@@ -350,7 +350,7 @@ export const barrenConfig: ConfigBody = {
                     }]
                 }]
             },
-            variations: [variations[0], variations[1]]
+            variations: [variations[0], variations[1]],
         },
         {
             _id: '614ef6aa475928459060721a',
@@ -378,7 +378,7 @@ export const barrenConfig: ConfigBody = {
                     }]
                 }]
             },
-            variations: [variations[0], variations[1], variations[2], variations[3], variations[4]]
+            variations: [variations[0], variations[1], variations[2], variations[3], variations[4]],
         }],
     variables: [],
     variableHashes: {}
