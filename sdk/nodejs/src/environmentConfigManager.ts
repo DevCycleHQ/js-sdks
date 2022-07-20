@@ -3,6 +3,7 @@ import { ConfigBody, DVCLogger } from '@devcycle/types'
 import { DVCOptions } from './types'
 import { getEnvironmentConfig } from './request'
 import { getBucketingLib } from './bucketing'
+import { EventEmitter, EventNames } from './eventEmitter'
 
 type ConfigPollingOptions = DVCOptions & {
     cdnURI?: string
@@ -18,6 +19,7 @@ export class EnvironmentConfigManager {
     private readonly cdnURI: string
     fetchConfigPromise: Promise<void>
     private intervalTimeout: NodeJS.Timeout
+    private eventEmitter: EventEmitter
 
     constructor(
         logger: DVCLogger,
@@ -26,7 +28,8 @@ export class EnvironmentConfigManager {
             configPollingIntervalMS = 10000,
             configPollingTimeoutMS = 5000,
             cdnURI = 'https://config-cdn.devcycle.com'
-        }: ConfigPollingOptions
+        }: ConfigPollingOptions,
+        eventEmitter: EventEmitter
     ) {
         this.logger = logger
         this.environmentKey = environmentKey
@@ -37,6 +40,7 @@ export class EnvironmentConfigManager {
             ? this.pollingIntervalMS
             : configPollingTimeoutMS
         this.cdnURI = cdnURI
+        this.eventEmitter = eventEmitter
 
         this.fetchConfigPromise = this._fetchConfig().then(() => {
             this.logger.debug('DevCycle initial config loaded')
@@ -71,6 +75,7 @@ export class EnvironmentConfigManager {
             getBucketingLib().setConfigData(this.environmentKey, JSON.stringify(res.data))
             this.hasConfig = true
             this.configEtag = res?.headers?.etag
+            this.eventEmitter.emit(EventNames.CONFIG_UPDATED)
         } else if (this.hasConfig) {
             this.logger.error(`Failed to download config, using cached version. url: ${url}.`)
         } else {
