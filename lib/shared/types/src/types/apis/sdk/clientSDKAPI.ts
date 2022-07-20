@@ -315,7 +315,7 @@ export type SDKVariable = PublicVariable & {
     evalReason?: unknown
 }
 
-export type SDKFeature = Pick<PublicFeature, '_id' | 'key' | 'type' | 'settings' | 'name' | 'description' > & {
+export type SDKFeature = Pick<PublicFeature, '_id' | 'key' | 'type' | 'settings' > & {
     _variation: string,
     variationName: string,
     variationKey: string
