@@ -1,3 +1,4 @@
+import EventSource from 'eventsource'
 export const EventNames = {
     CONFIG_UPDATED: 'configUpdated'
 }
@@ -6,9 +7,13 @@ type eventHandler = (...args: any[]) => void
 
 export class EventEmitter {
     events: Record<string, eventHandler[]>
+    eventSource: EventSource
 
-    constructor() {
+    constructor(eventSourceUrl?: string) {
         this.events = {}
+        if (eventSourceUrl) {
+            this.eventSource = new EventSource(eventSourceUrl, { headers: { authorization: '<token_here>' } })
+        }
     }
 
     subscribe(key: string, handler: eventHandler): void {
@@ -20,6 +25,9 @@ export class EventEmitter {
             this.events[key] = [ handler ]
         } else {
             this.events[key].push(handler)
+        }
+        this.eventSource.onmessage = (message) => {
+            console.log(`message: ${message}`)
         }
     }
 

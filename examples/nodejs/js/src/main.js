@@ -1,9 +1,10 @@
 const DVC = require('@devcycle/nodejs-server-sdk')
 const express = require('express')
 const bodyParser = require('body-parser')
+const { EventNames } = require('sdk/nodejs/src/eventEmitter')
 
 const app = express()
-const port = 5000
+const port = 5001
 const defaultHeaders = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
@@ -17,7 +18,7 @@ app.use(bodyParser.json())
 let dvcClient
 
 async function startDVC() {
-    dvcClient = DVC.initialize('<DVC_SERVER_KEY>', { logLevel: 'info', enableCloudBucketing: true })
+    dvcClient = DVC.initialize('server-939ecf39-866f-4682-8bfe-3639773b0fce', { logLevel: 'info', enableCloudBucketing: false })
 
     const user = {
         user_id: 'node_sdk_test',
@@ -53,6 +54,10 @@ async function startDVC() {
     const features = await dvcClient.allFeatures(user)
     console.log('Features: ')
     console.dir(features)
+
+    dvcClient.subscribe(EventNames.CONFIG_UPDATED, () => {
+        console.log('config updated')
+    })    
 }
 
 startDVC()

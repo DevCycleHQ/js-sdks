@@ -5058,6 +5058,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/eventsource@npm:^1.1.9":
+  version: 1.1.9
+  resolution: "@types/eventsource@npm:1.1.9"
+  checksum: 91f15a6219c541cf3050eda3015bfbf0fde6e9e6f17db0391555da6dbb4f855938277d16601e70fd5ddf307323159fe480112bcc86253c2d6d3bd71a8f33e0f5
+  languageName: node
+  linkType: hard
+
 "@types/express-serve-static-core@npm:*, @types/express-serve-static-core@npm:^4.17.18":
   version: 4.17.28
   resolution: "@types/express-serve-static-core@npm:4.17.28"
@@ -9522,6 +9529,7 @@ __metadata:
     "@react-native-community/cli-platform-ios": 7.0.1
     "@testing-library/react": 13.1.1
     "@types/async": ^3.2.8
+    "@types/eventsource": ^1.1.9
     "@types/hoist-non-react-statics": ^3.3.1
     "@types/jest": 27.4.1
     "@types/lodash": ^4.14.175
@@ -9565,6 +9573,7 @@ __metadata:
     eslint-plugin-react: 7.29.4
     eslint-plugin-react-hooks: 4.4.0
     eslint-plugin-standard: ^4.0.1
+    eventsource: ^2.0.2
     hoist-non-react-statics: ^3.3.2
     husky: ^7.0.0
     iso-639-1: ^2.1.13
@@ -10954,6 +10963,13 @@ __metadata:
   version: 3.3.0
   resolution: "events@npm:3.3.0"
   checksum: f6f487ad2198aa41d878fa31452f1a3c00958f46e9019286ff4787c84aac329332ab45c9cdc8c445928fc6d7ded294b9e005a7fce9426488518017831b272780
+  languageName: node
+  linkType: hard
+
+"eventsource@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "eventsource@npm:2.0.2"
+  checksum: c0072d972753e10c705d9b2285b559184bf29d011bc208973dde9c8b6b8b7b6fdad4ef0846cecb249f7b1585e860fdf324cbd2ac854a76bc53649e797496e99a
   languageName: node
   linkType: hard
 
