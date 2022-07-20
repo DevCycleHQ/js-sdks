@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@nrwl/next": "13.8.5",
+    "@types/eventsource": "^1.1.9",
     "as-wasi": "^0.4.6",
     "assemblyscript": "^0.20.12",
     "assemblyscript-json": "https://github.com/DevCycleHQ/assemblyscript-json",
@@ -30,6 +31,7 @@
     "class-transformer": "0.5.1",
     "class-validator": "^0.13.1",
     "core-js": "^3.6.5",
+    "eventsource": "^2.0.2",
     "hoist-non-react-statics": "^3.3.2",
     "iso-639-1": "^2.1.13",
     "jira-prepare-commit-msg": "^1.6.2",
