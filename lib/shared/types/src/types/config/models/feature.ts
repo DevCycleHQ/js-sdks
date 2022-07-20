@@ -1,4 +1,4 @@
-import { Variable, VariableValue } from './variable'
+import { VariableValue } from './variable'
 import { Type } from 'class-transformer'
 import { FeatureConfiguration } from './featureConfiguration'
 
@@ -41,6 +41,8 @@ export enum FeatureType {
 
 export type FeatureSettings = {
     optInEnabled: boolean
+    publicName: string
+    publicDescription: string
 }
 
 /**
@@ -75,8 +77,4 @@ export class Feature<IdType = string> {
      * Defines feature-level settings 
      */
     settings?: FeatureSettings
-
-    name?: string
-
-    description?: string
 }
