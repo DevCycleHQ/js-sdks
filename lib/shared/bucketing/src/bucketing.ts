@@ -163,7 +163,7 @@ export const generateBucketedConfig = (
     const segmentedFeatures = getSegmentedFeatureDataFromConfig({ config, user })
 
     segmentedFeatures.forEach(({ feature, target }) => {
-        const { _id, key, type, variations } = feature
+        const { _id, key, type, variations, name, description, settings } = feature
         const { rolloutHash, bucketingHash } = generateBoundedHashes(user.user_id, target._id)
         if (target.rollout && !doesUserPassRollout({ boundedHash: rolloutHash, rollout: target.rollout })) {
             return
@@ -181,7 +181,10 @@ export const generateBucketedConfig = (
             type,
             _variation: variation_id,
             variationName: variation.name,
-            variationKey: variation.key
+            variationKey: variation.key,
+            name,
+            description,
+            settings
         }
         featureVariationMap[_id] = variation_id
         variation.variables.forEach(({ _var, value }) => {
