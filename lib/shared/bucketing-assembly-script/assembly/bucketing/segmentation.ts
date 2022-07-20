@@ -2,7 +2,12 @@ import { RegExp } from 'assemblyscript-regex/assembly'
 import {  findString, includes, replace } from '../helpers/lodashHelpers'
 import { OptionsType, versionCompare } from './versionCompare'
 import {
-    TopLevelOperator, AudienceFilterOrOperator, DVCPopulatedUser, validSubTypes, CustomDataFilter, UserFilter,
+    TopLevelOperator, 
+    AudienceFilterOrOperator, 
+    DVCPopulatedUser, 
+    validSubTypes, 
+    CustomDataFilter,
+    UserFilter, 
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { getF64FromJSONValue } from '../helpers/jsonHelpers'
@@ -14,14 +19,19 @@ import { getF64FromJSONValue } from '../helpers/jsonHelpers'
  * @param operator - The set of filters to evaluate, and the boolean operator to follow (AND, OR, XOR)
  * @param user - The incoming user, device, and user agent data
  */
-export function _evaluateOperator(operator: TopLevelOperator, user: DVCPopulatedUser): bool {
+export function _evaluateOperator(
+    operator: TopLevelOperator, 
+    user: DVCPopulatedUser, 
+    featureId: string, 
+    isOptInEnabled: boolean
+): bool {
     if (!operator.filters.length) return false
 
     if (operator.operator === 'or') {
         // Replace Array.some() logic
         for (let i = 0; i < operator.filters.length; i++) {
             const filter = operator.filters[i]
-            if (doesUserPassFilter(filter, user)) {
+            if (doesUserPassFilter(filter, user, featureId, isOptInEnabled)) {
                 return true
             }
         }
@@ -30,7 +40,7 @@ export function _evaluateOperator(operator: TopLevelOperator, user: DVCPopulated
         // Replace Array.every() logic
         for (let i = 0; i < operator.filters.length; i++) {
             const filter = operator.filters[i]
-            if (!doesUserPassFilter(filter, user)) {
+            if (!doesUserPassFilter(filter, user, featureId, isOptInEnabled)) {
                 return false
             }
         }
@@ -38,8 +48,23 @@ export function _evaluateOperator(operator: TopLevelOperator, user: DVCPopulated
     }
 }
 
-function doesUserPassFilter(filter: AudienceFilterOrOperator, user: DVCPopulatedUser): bool {
+function doesUserPassFilter(
+    filter: AudienceFilterOrOperator, 
+    user: DVCPopulatedUser, 
+    featureId: string, 
+    isOptInEnabled: boolean
+): bool {
     if (filter.type === 'all') return true
+    if (
+        filter.type === 'optIn' && isOptInEnabled
+    ) {
+        const featureOptIn = user.optIns !== null ? user.optIns.getBool(featureId) : null
+        if (featureOptIn !== null && featureOptIn.valueOf()) {
+            // opt-in toggle iframe has set this feature id to true
+            return true
+        }
+    }
+
     if (!(filter instanceof UserFilter)) {
         throw new Error('Invalid filter data')
     }

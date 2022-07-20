@@ -16,10 +16,18 @@ const setPlatformDataJSON = (data: unknown) => {
     setPlatformData(JSON.stringify(data))
 }
 
-const evaluateOperator = ({ operator, data }: {operator: unknown, data: Record<string, unknown>}) => {
+const evaluateOperator = (
+    { operator, data, featureId, isOptInEnabled }: 
+    {operator: unknown, data: Record<string, unknown>, featureId?: string, isOptInEnabled?: boolean}
+) => {
     // set required field to make class constructors happy
     data.user_id ||= 'some_user'
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
+    return evaluateOperatorFromJSON(
+        JSON.stringify(operator), 
+        JSON.stringify(data), 
+        featureId || 'testId', 
+        isOptInEnabled || false
+    )
 }
 
 const checkStringsFilter = (string: unknown, filter: {values?: unknown[], comparator: string}) => {
@@ -335,6 +343,43 @@ describe('SegmentationManager Unit Test', () => {
                 platform: 'iOS'
             }
             assert.strictEqual(true, evaluateOperator({ data, operator }))
+        })
+
+        it('should handle optIn filter', () => {
+            const filters = [{
+                type: 'optIn',
+                comparator: '=',
+                values: []
+            }]
+
+            const operator = {
+                filters,
+                operator: 'and'
+            }
+
+            const data = {
+                country: 'Canada',
+                email: 'brooks@big.lunch',
+                platformVersion: '2.0.0',
+                platform: 'iOS',
+                optIn: {
+                    testFeature: true
+                }
+            }
+            assert.strictEqual(
+                true, 
+                evaluateOperator({ data, operator, featureId: 'testFeature', isOptInEnabled: true })
+            )
+
+            assert.strictEqual(
+                false, 
+                evaluateOperator({ data, operator, featureId: 'testFeature', isOptInEnabled: false })
+            )
+
+            assert.strictEqual(
+                false, 
+                evaluateOperator({ data, operator, featureId: 'featureNotInOptins', isOptInEnabled: true })
+            )
         })
 
         it('should work for an AND operator', () => {

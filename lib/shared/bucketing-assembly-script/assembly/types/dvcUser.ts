@@ -1,6 +1,6 @@
 import { JSON } from 'assemblyscript-json/assembly'
 import {
-    getF64FromJSONOptional, getStringFromJSON, getStringFromJSONOptional, isFlatJSONObj
+    getF64FromJSONOptional, getJSONObjFromJSONOptional, getStringFromJSON, getStringFromJSONOptional, isFlatJSONObj
 } from '../helpers/jsonHelpers'
 import { _getPlatformData } from '../managers/platformDataManager'
 
@@ -26,6 +26,7 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
     appVersion: string | null
     appBuild: f64
     customData: JSON.Obj | null
+    optIns: JSON.Obj | null
     privateCustomData: JSON.Obj | null
     deviceModel: string | null
 
@@ -41,6 +42,7 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
         this.language = getStringFromJSONOptional(user, 'language')
         this.country = getStringFromJSONOptional(user, 'country')
         this.appVersion = getStringFromJSONOptional(user, 'appVersion')
+        this.optIns = getJSONObjFromJSONOptional(user, 'optIns')
 
         // Need to set a default "null" value, as numbers can't be null in AS
         this.appBuild = getF64FromJSONOptional(user, 'appBuild', -1)
@@ -88,6 +90,7 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
     appBuild: f64
     customData: JSON.Obj | null
     privateCustomData: JSON.Obj | null
+    optIns: JSON.Obj | null
     private combinedCustomData: JSON.Obj
     deviceModel: string | null
 
@@ -108,6 +111,7 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         this.appVersion = user.appVersion
         this.appBuild = user.appBuild
         this.customData = user.customData
+        this.optIns = user.optIns
         this.privateCustomData = user.privateCustomData
         this.deviceModel = user.deviceModel
 

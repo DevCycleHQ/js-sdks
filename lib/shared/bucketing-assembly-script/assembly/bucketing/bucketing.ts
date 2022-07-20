@@ -142,14 +142,27 @@ export function getSegmentedFeatureDataFromConfig(
 ): SegmentedFeatureData[] {
     const accumulator: SegmentedFeatureData[] = []
 
+    const projectSettings = config.project.settings as JSON.Obj
+
+    const projectOptIn = projectSettings.getObj('optIn')
+    const projectOptInEnabled = projectOptIn ? projectOptIn.getBool('enabled') : null
+
     for (let y = 0; y < config.features.length; y++) {
         const feature = config.features[y]
+
+        const featureOptInEnabled = feature.settings !== null ? feature.settings.getBool('optInEnabled') : null
+
+        const isOptInEnabled = 
+            projectOptInEnabled !== null
+            && projectOptInEnabled.valueOf()
+            && featureOptInEnabled !== null
+            && featureOptInEnabled.valueOf()
 
         // Returns the first target for which the user passes segmentation
         let segmentedFeatureTarget: Target | null = null
         for (let i = 0; i < feature.configuration.targets.length; i++) {
             const target = feature.configuration.targets[i]
-            if (_evaluateOperator(target._audience.filters, user)) {
+            if (_evaluateOperator(target._audience.filters, user, feature._id, !!isOptInEnabled)) {
                 segmentedFeatureTarget = target
                 break
             }
