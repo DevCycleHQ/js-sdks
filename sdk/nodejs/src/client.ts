@@ -18,6 +18,7 @@ import { DVCPopulatedUser } from './models/populatedUser'
 import * as packageJson from '../package.json'
 import { importBucketingLib, getBucketingLib } from './bucketing'
 import { DVCLogger } from '@devcycle/types'
+import { EventEmitter } from './eventEmitter'
 
 interface IPlatformData {
     platform: string
@@ -33,12 +34,14 @@ export class DVCClient {
     private eventQueue: EventQueue
     private onInitialized: Promise<DVCClient>
     private logger: DVCLogger
+    private eventEmitter: EventEmitter
     private initialized = false
 
     constructor(environmentKey: string, options?: DVCOptions) {
         this.environmentKey = environmentKey
         this.options = options
         this.logger = options?.logger || dvcDefaultLogger({ level: options?.logLevel })
+        this.eventEmitter = new EventEmitter()
 
         if (options?.enableEdgeDB) {
             this.logger.info('EdgeDB can only be enabled for the DVC Cloud Client.')
@@ -46,7 +49,12 @@ export class DVCClient {
 
         const initializePromise = importBucketingLib()
             .then(() => {
-                this.configHelper = new EnvironmentConfigManager(this.logger, environmentKey, options || {})
+                this.configHelper = new EnvironmentConfigManager(
+                    this.logger, 
+                    environmentKey, 
+                    options || {}, 
+                    this.eventEmitter
+                )
                 this.eventQueue = new EventQueue(
                     this.logger,
                     environmentKey,
@@ -158,6 +166,14 @@ export class DVCClient {
         const requestUser = new DVCPopulatedUser(user)
         const bucketedConfig = bucketUserForConfig(requestUser, this.environmentKey)
         this.eventQueue.queueEvent(requestUser, event, bucketedConfig)
+    }
+
+    subscribe(key: string, handler: (...args: any[]) => void): void {
+        this.eventEmitter.subscribe(key, handler)
+    }
+
+    unsubscribe(key: string, handler?: (...args: any[]) => void): void {
+        this.eventEmitter.unsubscribe(key, handler)
     }
 
     async flushEvents(callback?: () => void): Promise<void> {
