@@ -507,6 +507,46 @@ describe('DVCClient tests', () => {
         })
     })
 
+    describe('getOptInSettings', () => {
+        const testConfigWithVariables = {
+            ...testConfig,
+            project: {
+                settings: {
+                    optIn: {
+                        enabled: true,
+                        title: 'header text',
+                        description: 'opt in to features',
+                        imageURL: 'https://assets.website-files.com/614e240a0e0b0fa195b146ed/6165d20df0705e273562dc89_devcycle-togglebot-full-colour.svg',
+                        colors: {
+                            primary: '#1D4ED8',
+                            secondary: '#DBEAFE'
+                        }
+                    }
+                }
+            }
+        }
+        let client
+        it('should return all features', async () => {
+            client = createClientWithConfigImplementation(() => {
+                return Promise.resolve(testConfigWithVariables)
+            })
+            await client.onClientInitialized()
+            const optInSettings = client.getOptInSettings()
+            expect(optInSettings).toStrictEqual(testConfigWithVariables.project.settings.optIn)
+        })
+
+        it('should return enabled: false if no config', async () => {
+            client = createClientWithConfigImplementation(() => {
+                return Promise.resolve({})
+            })
+            await client.onClientInitialized()
+            const optInSettings = client.getOptInSettings()
+            expect(optInSettings).toStrictEqual({
+                enabled: false
+            })
+        })
+    })
+
     describe('track', () => {
         it('should throw if no type given', async () => {
             expect(() => client.track({})).toThrow(expect.any(Error))

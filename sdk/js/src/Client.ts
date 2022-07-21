@@ -6,7 +6,8 @@ import {
     DVCVariableValue,
     DVCEvent as ClientEvent,
     DVCUser,
-    ErrorCallback
+    ErrorCallback,
+    OptInSettings
 } from './types'
 import { DVCVariable } from './Variable'
 import { getConfigJson, saveEntity } from './Request'
@@ -15,7 +16,7 @@ import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
 import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
-import { BucketedUserConfig } from '@devcycle/types'
+import {BucketedUserConfig, Project} from '@devcycle/types'
 import { RequestConsolidator } from './RequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
@@ -42,7 +43,7 @@ export class DVCClient implements Client {
         this.requestConsolidator = new RequestConsolidator()
         this.eventEmitter = new EventEmitter()
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
-        const stubbedLocalStorage = { 
+        const stubbedLocalStorage = {
             getItem: () => null,
             setItem: () => undefined,
             removeItem: () => undefined,
@@ -253,6 +254,10 @@ export class DVCClient implements Client {
 
     allVariables(): DVCVariableSet {
         return this.config?.variables || {}
+    }
+
+    getOptInSettings(): Project["settings"]["optIn"] {
+        return this.config?.project.settings.optIn || { enabled: false }
     }
 
     subscribe(key: string, handler: (...args: any[]) => void): void {

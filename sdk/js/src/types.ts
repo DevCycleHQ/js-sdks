@@ -1,4 +1,4 @@
-import { DVCLogger, DVCDefaultLogLevel } from '@devcycle/types'
+import {DVCLogger, DVCDefaultLogLevel, Project} from '@devcycle/types'
 
 export type DVCVariableValue = string | number | boolean | JSON
 export type JSON = { [key: string]: string | number | boolean }
@@ -27,6 +27,17 @@ export type DVCFeature = {
 
 export type DVCFeatureSet = {
     [key: string]: DVCFeature
+}
+
+export type OptInSettings = {
+    enabled: boolean
+    title?: string
+    description?: string
+    imageURL?: string
+    colors?: {
+        primary: string
+        secondary: string
+    }
 }
 
 /**
@@ -177,6 +188,11 @@ export interface DVCClient {
      * Retrieve all data on all Variables, Object mapped by feature `key`.
      */
     allVariables(): DVCVariableSet
+
+    /**
+     * Retrieve configuration settings related to Opt-in
+     */
+    getOptInSettings(): Project["settings"]["optIn"]
 
     /**
      * Subscribe to events emitted by the SDK, `onUpdate` will be called everytime an
