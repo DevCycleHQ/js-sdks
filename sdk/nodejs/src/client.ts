@@ -41,7 +41,7 @@ export class DVCClient {
         this.environmentKey = environmentKey
         this.options = options
         this.logger = options?.logger || dvcDefaultLogger({ level: options?.logLevel })
-        this.eventEmitter = new EventEmitter('http://localhost:4001/sse/')
+        this.eventEmitter = new EventEmitter(environmentKey)
 
         if (options?.enableEdgeDB) {
             this.logger.info('EdgeDB can only be enabled for the DVC Cloud Client.')
@@ -86,6 +86,7 @@ export class DVCClient {
 
         process.on('exit', () => {
             this.configHelper?.cleanup()
+            this.eventEmitter.eventSource?.close()
         })
     }
 

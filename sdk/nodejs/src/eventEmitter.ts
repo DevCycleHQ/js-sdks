@@ -5,15 +5,15 @@ export const EventNames = {
 
 type eventHandler = (...args: any[]) => void
 
+const EVENT_SOURCE_URL = 'http://localhost:4001/sse'
+
 export class EventEmitter {
     events: Record<string, eventHandler[]>
     eventSource: EventSource
 
-    constructor(eventSourceUrl?: string) {
+    constructor(environmentKey: string) {
         this.events = {}
-        if (eventSourceUrl) {
-            this.eventSource = new EventSource(eventSourceUrl, { headers: { authorization: '<token_here>' } })
-        }
+        this.eventSource = new EventSource(`${EVENT_SOURCE_URL}/${environmentKey}`, { headers: { authorization: '<token_here>' } })
     }
 
     subscribe(key: string, handler: eventHandler): void {

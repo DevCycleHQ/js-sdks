@@ -18,7 +18,7 @@ app.use(bodyParser.json())
 let dvcClient
 
 async function startDVC() {
-    dvcClient = DVC.initialize('server-939ecf39-866f-4682-8bfe-3639773b0fce', { logLevel: 'info', enableCloudBucketing: false })
+    dvcClient = DVC.initialize('<DVC_SERVER_KEY>', { logLevel: 'info', enableCloudBucketing: false })
 
     const user = {
         user_id: 'node_sdk_test',
