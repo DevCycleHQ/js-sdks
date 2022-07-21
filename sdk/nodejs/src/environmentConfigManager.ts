@@ -4,10 +4,13 @@ import { DVCOptions } from './types'
 import { getEnvironmentConfig } from './request'
 import { getBucketingLib } from './bucketing'
 import { EventEmitter, EventNames } from './eventEmitter'
+import EventSource from 'eventsource'
 
 type ConfigPollingOptions = DVCOptions & {
     cdnURI?: string
 }
+
+const EVENT_SOURCE_URL = 'http://localhost:4001/sse'
 
 export class EnvironmentConfigManager {
     private readonly logger: DVCLogger
@@ -20,6 +23,7 @@ export class EnvironmentConfigManager {
     fetchConfigPromise: Promise<void>
     private intervalTimeout: NodeJS.Timeout
     private eventEmitter: EventEmitter
+    eventSource: EventSource
 
     constructor(
         logger: DVCLogger,
@@ -27,9 +31,11 @@ export class EnvironmentConfigManager {
         {
             configPollingIntervalMS = 10000,
             configPollingTimeoutMS = 5000,
-            cdnURI = 'https://config-cdn.devcycle.com'
+            cdnURI = 'https://config-cdn.devcycle.com',
+            enableSse
         }: ConfigPollingOptions,
-        eventEmitter: EventEmitter
+        eventEmitter: EventEmitter,
+        eventSource?: EventSource
     ) {
         this.logger = logger
         this.environmentKey = environmentKey
@@ -45,11 +51,24 @@ export class EnvironmentConfigManager {
         this.fetchConfigPromise = this._fetchConfig().then(() => {
             this.logger.debug('DevCycle initial config loaded')
         })
-        this.intervalTimeout = setInterval(() => this._fetchConfig(), this.pollingIntervalMS)
+
+        if (!enableSse) {
+            this.intervalTimeout = setInterval(() => this._fetchConfig(), this.pollingIntervalMS)
+        } else {
+            this.eventSource = new EventSource(`${EVENT_SOURCE_URL}/${environmentKey}`, { 
+                headers: { authorization: '<token_here>' } 
+            })
+            this.eventSource.onmessage = (message) => {
+                console.log(`Message: ${message}`)
+                this._fetchConfig()
+            }
+        }
     }
 
     cleanup(): void {
-        clearInterval(this.intervalTimeout)
+        if (this.intervalTimeout) {
+            clearInterval(this.intervalTimeout)
+        }
     }
 
     getConfigURL(): string {
