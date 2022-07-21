@@ -22,8 +22,8 @@ export class Project<IdType = string> {
             description?: string
             imageURL?: string
             colors?: {
-                primary: string
-                secondary: string
+                primary?: string
+                secondary?: string
             }
         }
     }
