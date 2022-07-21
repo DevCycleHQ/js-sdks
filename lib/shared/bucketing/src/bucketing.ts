@@ -127,8 +127,15 @@ export const getSegmentedFeatureDataFromConfig = (
     const initialValue: SegmentedFeatureData[] = []
     return config.features.reduce((accumulator, feature) => {
         // Returns the first target for which the user passes segmentation
+        const isOptInEnabled = feature.settings?.['optInEnabled'] && config.project.settings?.['optIn']?.['enabled'] 
+
         const segmentedFeatureTarget = feature.configuration.targets.find((target) => {
-            return evaluateOperator({ operator: target._audience.filters, data: user })
+            return evaluateOperator({ 
+                operator: target._audience.filters, 
+                data: user, 
+                featureId: feature._id, 
+                isOptInEnabled: !!isOptInEnabled
+            })
         })
         if (segmentedFeatureTarget) {
             accumulator.push({

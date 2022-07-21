@@ -9,6 +9,7 @@ import {
 import { murmurhashV3 } from '../helpers/murmurhash'
 import { SortingArray, sortObjectsByString } from '../helpers/arrayHelpers'
 import { _evaluateOperator } from './segmentation'
+import { Bool } from 'assemblyscript-json/assembly/JSON'
 
 // Max value of an unsigned 32-bit integer, which is what murmurhash returns
 const MAX_HASH_VALUE: f64 = 4294967295
@@ -150,13 +151,14 @@ export function getSegmentedFeatureDataFromConfig(
     for (let y = 0; y < config.features.length; y++) {
         const feature = config.features[y]
 
-        const featureOptInEnabled = feature.settings !== null ? feature.settings.getBool('optInEnabled') : null
+        const settings = feature.settings
+        const featureOptInEnabled = settings !== null ? settings.getBool('optInEnabled') : null
+        const featureOptInEnabledBool = featureOptInEnabled !== null ? featureOptInEnabled.valueOf() : false
 
         const isOptInEnabled = 
             projectOptInEnabled !== null
             && projectOptInEnabled.valueOf()
-            && featureOptInEnabled !== null
-            && featureOptInEnabled.valueOf()
+            && featureOptInEnabledBool
 
         // Returns the first target for which the user passes segmentation
         let segmentedFeatureTarget: Target | null = null

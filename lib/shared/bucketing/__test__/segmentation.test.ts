@@ -192,6 +192,9 @@ describe('SegmentationManager Unit Test', () => {
     //     })
     // })
 
+    const featureId = 'testID'
+    const isOptInEnabled = false
+
     describe('evaluateOperator', () => {
         it('should fail for empty filters', () => {
             const filters: Record<string, unknown>[] = []
@@ -207,12 +210,12 @@ describe('SegmentationManager Unit Test', () => {
                 platformVersion: '2.0.0',
                 platform: 'iOS'
             }
-            assert.strictEqual(false, segmentation.evaluateOperator({ data, operator }))
+            assert.strictEqual(false, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
             const orOp: TopLevelOperator = {
                 filters,
                 operator: AudienceOperator.or
             }
-            assert.strictEqual(false, segmentation.evaluateOperator({ data: {}, operator: orOp }))
+            assert.strictEqual(false, segmentation.evaluateOperator({ data: {}, operator: orOp, featureId, isOptInEnabled }))
         })
 
         it('should pass for all filter', () => {
@@ -233,7 +236,7 @@ describe('SegmentationManager Unit Test', () => {
                 platformVersion: '2.0.0',
                 platform: 'iOS'
             }
-            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
+            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
         })
 
         it('should work for an AND operator', () => {
@@ -255,7 +258,7 @@ describe('SegmentationManager Unit Test', () => {
                 appVersion: '2.0.2',
                 platform: 'iOS'
             }
-            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
+            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
         })
 
         it('should work for an OR operator', () => {
@@ -277,7 +280,7 @@ describe('SegmentationManager Unit Test', () => {
                 appVersion: '2.0.2',
                 platform: 'iOS'
             }
-            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
+            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
         })
 
         it('should work for an AND operator containing a custom data filter', () => {
@@ -297,7 +300,7 @@ describe('SegmentationManager Unit Test', () => {
                 appVersion: '2.0.0',
                 platform: 'iOS'
             }
-            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
+            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
         })
 
         it('should pass for user_id filter', () => {
@@ -312,7 +315,7 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { user_id: 'test_user' }
-            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
+            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
         })
 
         it('should pass for email filter', () => {
@@ -327,7 +330,7 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { email: 'test@devcycle.com' }
-            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
+            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
         })
 
         it('should pass for country filter', () => {
@@ -342,7 +345,7 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { country: 'CA' }
-            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
+            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
         })
 
         it('should pass for appVersion filter', () => {
@@ -357,7 +360,7 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { appVersion: '1.0.1' }
-            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
+            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
         })
 
         it('should pass for platformVersion filter', () => {
@@ -372,7 +375,7 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { platformVersion: '15.1' }
-            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
+            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
         })
 
         it('should pass for platform filter', () => {
@@ -387,7 +390,7 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { platform: 'iPadOS' }
-            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
+            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
         })
 
         it('should pass for deviceModel filter', () => {
@@ -402,7 +405,7 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { deviceModel: 'Samsung Galaxy F12' }
-            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
+            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
         })
 
         it('should pass for customData filter', () => {
@@ -419,8 +422,52 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { customData: { testKey: 'dataValue' } }
-            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator }))
+            assert.strictEqual(true, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
         })
+
+        describe('evaluateOperator with optIn filter', () => {
+            const optInOperator = {
+                filters: [{
+                    type: 'optIn',
+                    comparator: '=',
+                    values: []
+                }] as AudienceFilterOrOperator[],
+                operator: 'and'
+            } as TopLevelOperator
+
+            const optInData = {
+                country: 'Canada',
+                email: 'brooks@big.lunch',
+                platformVersion: '2.0.0',
+                platform: 'iOS',
+                optIns: {
+                    testFeature: true
+                }
+            }
+
+            it('should pass optIn filter when feature in optIns and isOptInEnabled', () => {
+
+                assert.strictEqual(
+                    true, 
+                    segmentation.evaluateOperator({ data: optInData, operator: optInOperator, featureId: 'testFeature', isOptInEnabled: true })
+                )
+            })
+
+            it('should fail optIn filter when feature in optIns but isOptInEnabled is false', () => {
+                assert.strictEqual(
+                    false, 
+                    segmentation.evaluateOperator({ data: optInData, operator: optInOperator, featureId: 'testFeature', isOptInEnabled: false })
+                )
+            })
+
+            it('should fail optIn filter when feature not in optIns', () => {
+                assert.strictEqual(
+                    false, 
+                    segmentation.evaluateOperator({ data: optInData, operator: optInOperator, featureId: 'featureNotInOptins', isOptInEnabled: true })
+                )
+            })
+        })
+
     })
 
     describe('checkStringsFilter', () => {
@@ -509,7 +556,7 @@ describe('SegmentationManager Unit Test', () => {
                 operator: 'and'
             } as unknown as TopLevelOperator
 
-            assert.strictEqual(true, segmentation.evaluateOperator({ data: { country: 'Canada' }, operator }))
+            assert.strictEqual(true, segmentation.evaluateOperator({ data: { country: 'Canada' }, operator, featureId, isOptInEnabled }))
         })
 
         it('should return false if string is not equal to multiple filters', () => {
@@ -523,7 +570,7 @@ describe('SegmentationManager Unit Test', () => {
                 operator: 'and'
             } as unknown as TopLevelOperator
 
-            assert.strictEqual(false, segmentation.evaluateOperator({ data: { country: 'Canada' }, operator }))
+            assert.strictEqual(false, segmentation.evaluateOperator({ data: { country: 'Canada' }, operator, featureId, isOptInEnabled }))
         })
     })
 
@@ -1215,7 +1262,8 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true,
                 segmentation.evaluateOperator({
                     data: { customData: { strKey: 'value', numKey: 0, boolKey: false } },
-                    operator: operatorFilter
+                    operator: operatorFilter,
+                    featureId, isOptInEnabled
                 })
             )
         })
@@ -1227,7 +1275,8 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false,
                 segmentation.evaluateOperator({
                     data: { customData: { strKey: 'value', boolKey: false } },
-                    operator: operatorFilter
+                    operator: operatorFilter,
+                    featureId, isOptInEnabled
                 })
             )
         })
@@ -1242,7 +1291,8 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true,
                 segmentation.evaluateOperator({
                     data: { customData: { strKey: 'value', boolKey: false } },
-                    operator: operatorFilter
+                    operator: operatorFilter,
+                    featureId, isOptInEnabled
                 })
             )
         })
@@ -1272,7 +1322,8 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false,
                 segmentation.evaluateOperator({
                     data: { customData: null },
-                    operator: operatorFilter
+                    operator: operatorFilter,
+                    featureId, isOptInEnabled
                 })
             )
         })
@@ -1287,7 +1338,8 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false,
                 segmentation.evaluateOperator({
                     data: { customData: null },
-                    operator: operatorFilter
+                    operator: operatorFilter,
+                    featureId, isOptInEnabled
                 })
             )
         })
@@ -1562,7 +1614,7 @@ describe('SegmentationManager Unit Test', () => {
                 platform: 'Android TV'
             }
             const filteredAudiences = audiences.filter((aud) => {
-                return segmentation.evaluateOperator({ operator: aud.filters, data })
+                return segmentation.evaluateOperator({ operator: aud.filters, data, featureId, isOptInEnabled })
             })
             expect(filteredAudiences.length).toEqual(3)
             expect(filteredAudiences[0]._id).toEqual('60cca1d8230f17002542b909')
@@ -1574,7 +1626,7 @@ describe('SegmentationManager Unit Test', () => {
                 platform: 'iOS'
             }
             const filteredAudiences = audiences.filter((aud) => {
-                return segmentation.evaluateOperator({ operator: aud.filters, data })
+                return segmentation.evaluateOperator({ operator: aud.filters, data, featureId, isOptInEnabled })
             })
             expect(filteredAudiences.length).toEqual(1)
             expect(filteredAudiences[0]._id).toEqual('60cca1d8230f17002542b913')

@@ -45,7 +45,7 @@ const checkStringsFilter = (string: unknown, filter: {values?: unknown[], compar
 
     const data = { email: string, user_id: 'some_user' }
 
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
+    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data), 'test', false)
 }
 const checkBooleanFilter = (bool: unknown, filter: {values?: unknown[], comparator: string}) => {
     const customDataFilter = {
@@ -64,7 +64,7 @@ const checkBooleanFilter = (bool: unknown, filter: {values?: unknown[], comparat
 
     const data = { customData: { key: bool }, user_id: 'some_user' }
 
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
+    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data), 'test', false)
 }
 
 const checkNumbersFilter = (number: unknown, filter: {values?: unknown[], comparator: string}): boolean => {
@@ -83,7 +83,7 @@ const checkNumbersFilter = (number: unknown, filter: {values?: unknown[], compar
     }
 
     const data = { customData: { key: number }, user_id: 'some_user' }
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
+    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data), 'test', false)
 }
 const checkVersionFilters = (appVersion: string, filter: {values?: unknown[], comparator: string}): boolean => {
     const appVersionFilter = {
@@ -99,7 +99,7 @@ const checkVersionFilters = (appVersion: string, filter: {values?: unknown[], co
     }
 
     const data = { appVersion: appVersion, user_id: 'some_user' }
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
+    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data), 'test', false)
 }
 
 const checkVersionFilter = (appVersion: string, values: string[], comparator: string): boolean => {
@@ -113,7 +113,7 @@ const checkCustomData = (data: Record<string, unknown> | null, filter: unknown):
     }
 
     const user = { customData: data, user_id: 'some_user' }
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(user))
+    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(user), 'test',  false)
 }
 
 describe('SegmentationManager Unit Test', () => {
@@ -345,41 +345,52 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
-        it('should handle optIn filter', () => {
+        describe('evaluateOperator should handle optIn filter', () => {
             const filters = [{
                 type: 'optIn',
                 comparator: '=',
                 values: []
             }]
 
-            const operator = {
+            const optInOperator = {
                 filters,
                 operator: 'and'
             }
 
-            const data = {
+            const optInData = {
                 country: 'Canada',
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
                 platform: 'iOS',
-                optIn: {
+                optIns: {
                     testFeature: true
                 }
             }
-            assert.strictEqual(
-                true, 
-                evaluateOperator({ data, operator, featureId: 'testFeature', isOptInEnabled: true })
-            )
+            it ('should pass optIn filter when feature in optIns and isOptInEnabled ', () => {
+                assert.strictEqual(
+                    true, 
+                    evaluateOperator({ 
+                        data: optInData, operator: optInOperator, featureId: 'testFeature', isOptInEnabled: true 
+                    })
+                )
+            })
+            it ('should fail optIn filter when feature in optIns but isOptInEnabled is false ', () => {
+                assert.strictEqual(
+                    false, 
+                    evaluateOperator({ 
+                        data: optInData, operator: optInOperator, featureId: 'testFeature', isOptInEnabled: false 
+                    })
+                )
+            })
+            it ('should false optIn filter when feature not in optIns', () => {
+                assert.strictEqual(
+                    false, 
+                    evaluateOperator({ 
+                        data: optInData, operator: optInOperator, featureId: 'featureNotInOptins', isOptInEnabled: true 
+                    })
+                )
+            })
 
-            assert.strictEqual(
-                false, 
-                evaluateOperator({ data, operator, featureId: 'testFeature', isOptInEnabled: false })
-            )
-
-            assert.strictEqual(
-                false, 
-                evaluateOperator({ data, operator, featureId: 'featureNotInOptins', isOptInEnabled: true })
-            )
         })
 
         it('should work for an AND operator', () => {

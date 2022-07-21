@@ -117,6 +117,13 @@ export class DVCAPIUser {
         privateCustomData?: DVCJSON
 
     /**
+     * JSON data recording user opt-in features.
+     */
+     @IsOptional()
+     @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
+         optIns?: Record<string, boolean>
+ 
+    /**
      * Set by SDK automatically
      */
     @IsDate()

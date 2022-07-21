@@ -4,7 +4,7 @@
 
 import { JSON } from 'assemblyscript-json/assembly'
 import {
-    AudienceFilterOrOperator, BucketedUserConfig, ConfigBody, CustomDataFilter,
+    BucketedUserConfig, ConfigBody, CustomDataFilter,
     DVCPopulatedUser,
     DVCUser,
     Rollout as PublicRollout,
@@ -49,8 +49,8 @@ export function checkCustomDataFromJSON(data: string | null, filterStr: string):
 export function evaluateOperatorFromJSON(
     operatorStr: string, 
     userStr: string, 
-    featureId: string = 'testID', 
-    isOptInEnabled: boolean = false
+    featureId: string, 
+    isOptInEnabled: boolean
 ): bool {
     const operatorJSON = JSON.parse(operatorStr)
     if (!operatorJSON.isObj) {

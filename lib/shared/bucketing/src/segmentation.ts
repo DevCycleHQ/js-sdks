@@ -15,11 +15,18 @@ import UAParser from 'ua-parser-js'
  * @param data - The incoming user, device, and user agent data
  * @returns {*|boolean|boolean}
  */
-export const evaluateOperator = ({ operator, data }: {operator: TopLevelOperator, data: unknown}): boolean => {
+export const evaluateOperator = (
+    { operator, data, featureId, isOptInEnabled }:
+    {operator: TopLevelOperator, data: any, featureId: string, isOptInEnabled: boolean}
+): boolean => {
     if (!operator.filters.length) return false
 
     const doesUserPassFilter = (filter: AudienceFilterOrOperator) => {
         if (filter.type === 'all') return true
+        if (filter.type === 'optIn') {
+            const optIns = data.optIns as Record<string, boolean>
+            return isOptInEnabled && !!optIns?.[featureId]
+        }
         if (!filter.subType || !filterFunctionsBySubtype[filter.subType]) {
             throw new Error(`Invalid filter subType: ${filter.subType}`)
         }

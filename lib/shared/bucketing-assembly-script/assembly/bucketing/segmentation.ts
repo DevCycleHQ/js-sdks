@@ -56,13 +56,12 @@ function doesUserPassFilter(
 ): bool {
     if (filter.type === 'all') return true
     if (
-        filter.type === 'optIn' && isOptInEnabled
+        filter.type === 'optIn'
     ) {
-        const featureOptIn = user.optIns !== null ? user.optIns.getBool(featureId) : null
-        if (featureOptIn !== null && featureOptIn.valueOf()) {
-            // opt-in toggle iframe has set this feature id to true
-            return true
-        }
+        const userOptIns = user.optIns
+        const featureOptIn = userOptIns !== null ? userOptIns.getBool(featureId) : null
+
+        return isOptInEnabled && featureOptIn !== null && featureOptIn.valueOf()
     }
 
     if (!(filter instanceof UserFilter)) {
