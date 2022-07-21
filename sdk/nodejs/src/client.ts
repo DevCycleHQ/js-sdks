@@ -19,6 +19,7 @@ import * as packageJson from '../package.json'
 import { importBucketingLib, getBucketingLib } from './bucketing'
 import { DVCLogger } from '@devcycle/types'
 import { EventEmitter } from './eventEmitter'
+import EventSource from 'eventsource'
 
 interface IPlatformData {
     platform: string
@@ -26,6 +27,8 @@ interface IPlatformData {
     sdkType: string
     sdkVersion: string
 }
+
+const EVENT_SOURCE_URL = 'http://localhost:4001/sse'
 
 export class DVCClient {
     private environmentKey: string
@@ -35,13 +38,21 @@ export class DVCClient {
     private onInitialized: Promise<DVCClient>
     private logger: DVCLogger
     private eventEmitter: EventEmitter
+    private eventSource: EventSource
     private initialized = false
 
     constructor(environmentKey: string, options?: DVCOptions) {
         this.environmentKey = environmentKey
         this.options = options
         this.logger = options?.logger || dvcDefaultLogger({ level: options?.logLevel })
-        this.eventEmitter = new EventEmitter(environmentKey)
+        this.eventEmitter = new EventEmitter()
+
+        if (options?.enableSse) {
+            this.eventSource = new EventSource(`${EVENT_SOURCE_URL}/${environmentKey}`, { headers: { authorization: '<token_here>' } })
+            this.eventSource.onmessage = (message) => {
+                console.log(`Message from SSE endpoint: ${message}`)
+            }
+        }
 
         if (options?.enableEdgeDB) {
             this.logger.info('EdgeDB can only be enabled for the DVC Cloud Client.')
@@ -86,7 +97,7 @@ export class DVCClient {
 
         process.on('exit', () => {
             this.configHelper?.cleanup()
-            this.eventEmitter.eventSource?.close()
+            this.eventSource?.close()
         })
     }
 

@@ -104,6 +104,12 @@ export interface DVCOptions {
      * NOTE: This is only available with Cloud Bucketing.
      */
     enableEdgeDB?: boolean
+
+    /**
+     * Enables server-sent events instead of polling the cdn config. Creates a one-way connection with the server
+     * to receive server-sent events
+     */
+    enableSse?: boolean
 }
 
 export type DVCVariableValue = string | number | boolean | JSON
