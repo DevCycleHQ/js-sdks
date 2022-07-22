@@ -86,13 +86,13 @@ export class EventEmitter {
             if (JSON.stringify(oldVariableValue) !== JSON.stringify(newVariableValue)) {
                 const variables = variableDefaultMap[key] && Object.values(variableDefaultMap[key])
                 if (variables) {
-                    newVariables = true
                     variables.forEach((variable) => {
                         variable.value = newVariableValue ?? variable.defaultValue
                         variable.isDefaulted = newVariableValue === undefined || newVariableValue === null
                         variable.callback?.call(variable, variable.value)
                     })
                 }
+                newVariables = true
                 this.emit(`${EventNames.VARIABLE_UPDATED}:*`, key, newVariable)
                 this.emit(`${EventNames.VARIABLE_UPDATED}:${key}`, key, newVariable)
             }
