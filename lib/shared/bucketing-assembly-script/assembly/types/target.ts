@@ -85,7 +85,7 @@ export class TopLevelOperator extends JSON.Value {
     }
 }
 
-const validTypes = ['all', 'user']
+const validTypes = ['all', 'user', 'optIn']
 
 export const validSubTypes = [
     'user_id', 'email', 'ip', 'country', 'platform',
@@ -198,7 +198,7 @@ export class CustomDataFilter extends UserFilter {
 }
 
 function initializeFilterClass(filter: JSON.Obj): AudienceFilterOrOperator {
-    if (getStringFromJSONOptional(filter, 'type') === 'all') {
+    if (getStringFromJSONOptional(filter, 'type') === 'all' || getStringFromJSONOptional(filter, 'type') === 'optIn') {
         return new AudienceFilterOrOperator(filter)
     } else if (getStringFromJSONOptional(filter, 'type') === 'user') {
         if (getStringFromJSONOptional(filter, 'subType') === 'customData') {

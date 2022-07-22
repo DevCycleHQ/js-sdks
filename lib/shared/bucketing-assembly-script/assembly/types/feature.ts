@@ -1,7 +1,7 @@
 import { JSON } from 'assemblyscript-json/assembly'
 import {
     getJSONArrayFromJSON,
-    getJSONObjFromJSON, getJSONValueFromJSON,
+    getJSONObjFromJSON, getJSONObjFromJSONOptional, getJSONValueFromJSON,
     getStringFromJSON,
     isValidString,
     jsonArrFromValueArray
@@ -16,6 +16,7 @@ export class Feature extends JSON.Value {
     key: string
     variations: Variation[]
     configuration: FeatureConfiguration
+    settings: JSON.Obj | null
 
     constructor(feature: JSON.Obj) {
         super()
@@ -31,6 +32,9 @@ export class Feature extends JSON.Value {
         })
 
         this.configuration = new FeatureConfiguration(getJSONObjFromJSON(feature, 'configuration'))
+
+        this.settings = getJSONObjFromJSONOptional(feature, 'settings')
+        
     }
 
     stringify(): string {
