@@ -16,10 +16,16 @@ const setPlatformDataJSON = (data: unknown) => {
     setPlatformData(JSON.stringify(data))
 }
 
-const evaluateOperator = ({ operator, data }: {operator: unknown, data: Record<string, unknown>}) => {
+const evaluateOperator = (
+    { operator, data }: 
+    {operator: unknown, data: Record<string, unknown>}
+) => {
     // set required field to make class constructors happy
     data.user_id ||= 'some_user'
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
+    return evaluateOperatorFromJSON(
+        JSON.stringify(operator), 
+        JSON.stringify(data)
+    )
 }
 
 const checkStringsFilter = (string: unknown, filter: {values?: unknown[], comparator: string}) => {
@@ -335,6 +341,34 @@ describe('SegmentationManager Unit Test', () => {
                 platform: 'iOS'
             }
             assert.strictEqual(true, evaluateOperator({ data, operator }))
+        })
+
+        describe('evaluateOperator should handle optIn filter', () => {
+            const filters = [{
+                type: 'optIn',
+                comparator: '=',
+                values: []
+            }]
+
+            const optInOperator = {
+                filters,
+                operator: 'and'
+            }
+
+            const optInData = {
+                country: 'Canada',
+                email: 'brooks@big.lunch',
+                platformVersion: '2.0.0',
+                platform: 'iOS'
+            }
+            it ('should pass optIn filter when feature in optIns and isOptInEnabled ', () => {
+                assert.strictEqual(
+                    false, 
+                    evaluateOperator({ 
+                        data: optInData, operator: optInOperator
+                    })
+                )
+            })
         })
 
         it('should work for an AND operator', () => {

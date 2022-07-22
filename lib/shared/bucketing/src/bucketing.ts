@@ -1,7 +1,7 @@
 'use strict'
 import { orderBy, pick, last, first } from 'lodash'
 import {
-    ConfigBody, PublicTarget, PublicFeature, BucketedUserConfig, PublicRollout, DVCAPIUser, PublicRolloutStage
+    ConfigBody, PublicTarget, PublicFeature, BucketedUserConfig, PublicRollout, PublicRolloutStage, DVCBucketingUser
 } from '@devcycle/types'
 
 import murmurhash from 'murmurhash'
@@ -122,13 +122,20 @@ type SegmentedFeatureData = {
 
 export const getSegmentedFeatureDataFromConfig = (
     { config, user }:
-    { config: ConfigBody, user: DVCAPIUser }
+    { config: ConfigBody, user: DVCBucketingUser}
 ): SegmentedFeatureData[] => {
     const initialValue: SegmentedFeatureData[] = []
     return config.features.reduce((accumulator, feature) => {
         // Returns the first target for which the user passes segmentation
+        const isOptInEnabled = feature.settings?.['optInEnabled'] && config.project.settings?.['optIn']?.['enabled'] 
+
         const segmentedFeatureTarget = feature.configuration.targets.find((target) => {
-            return evaluateOperator({ operator: target._audience.filters, data: user })
+            return evaluateOperator({ 
+                operator: target._audience.filters, 
+                data: user, 
+                featureId: feature._id, 
+                isOptInEnabled: !!isOptInEnabled
+            })
         })
         if (segmentedFeatureTarget) {
             accumulator.push({
@@ -155,7 +162,7 @@ export const generateKnownVariableKeys = (
 
 export const generateBucketedConfig = (
     { config, user }:
-    { config: ConfigBody, user: DVCAPIUser }
+    { config: ConfigBody, user: DVCBucketingUser }
 ): BucketedUserConfig => {
     const variableMap: BucketedUserConfig['variables'] = {}
     const featureKeyMap: BucketedUserConfig['features'] = {}
