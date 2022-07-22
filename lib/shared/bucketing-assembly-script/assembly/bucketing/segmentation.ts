@@ -2,7 +2,12 @@ import { RegExp } from 'assemblyscript-regex/assembly'
 import {  findString, includes, replace } from '../helpers/lodashHelpers'
 import { OptionsType, versionCompare } from './versionCompare'
 import {
-    TopLevelOperator, AudienceFilterOrOperator, DVCPopulatedUser, validSubTypes, CustomDataFilter, UserFilter,
+    TopLevelOperator, 
+    AudienceFilterOrOperator, 
+    DVCPopulatedUser, 
+    validSubTypes, 
+    CustomDataFilter,
+    UserFilter, 
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { getF64FromJSONValue } from '../helpers/jsonHelpers'
@@ -14,7 +19,10 @@ import { getF64FromJSONValue } from '../helpers/jsonHelpers'
  * @param operator - The set of filters to evaluate, and the boolean operator to follow (AND, OR, XOR)
  * @param user - The incoming user, device, and user agent data
  */
-export function _evaluateOperator(operator: TopLevelOperator, user: DVCPopulatedUser): bool {
+export function _evaluateOperator(
+    operator: TopLevelOperator, 
+    user: DVCPopulatedUser
+): bool {
     if (!operator.filters.length) return false
 
     if (operator.operator === 'or') {
@@ -38,8 +46,12 @@ export function _evaluateOperator(operator: TopLevelOperator, user: DVCPopulated
     }
 }
 
-function doesUserPassFilter(filter: AudienceFilterOrOperator, user: DVCPopulatedUser): bool {
+function doesUserPassFilter(
+    filter: AudienceFilterOrOperator, 
+    user: DVCPopulatedUser
+): bool {
     if (filter.type === 'all') return true
+    if (filter.type === 'optIn') return false
     if (!(filter instanceof UserFilter)) {
         throw new Error('Invalid filter data')
     }
