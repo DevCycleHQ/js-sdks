@@ -55,14 +55,14 @@ export class DVCClient implements Client {
         this.store.saveUser(this.user)
             .then(() => this.logger.info('Successfully saved user to local storage!'))
 
-        this.onInitialized = getConfigJson(environmentKey, this.user, options?.enableEdgeDB || false, this.logger)
+        this.onInitialized = getConfigJson(environmentKey, this.user, this.logger, this.options)
             .then((config) => {
                 const oldConfig = this.config
                 this.config = config as BucketedUserConfig
 
                 if (checkIfEdgeEnabled(this.config, this.logger, this.options?.enableEdgeDB, true)) {
                     if (!this.user.isAnonymous) {
-                        saveEntity(this.user, this.environmentKey, this.logger)
+                        saveEntity(this.user, this.environmentKey, this.logger, this.options)
                             .then((res) => this.logger.info(`Saved response entity! ${res}`))
                     }
                 }
@@ -163,15 +163,14 @@ export class DVCClient implements Client {
 
                 this.onInitialized.then(() =>
                     this.requestConsolidator.queue('identify',
-                        getConfigJson(this.environmentKey, updatedUser, this.options?.enableEdgeDB || false,
-                            this.logger)
+                        getConfigJson(this.environmentKey, updatedUser, this.logger, this.options)
                     )
                 ).then((config) => {
                     this.config = config as BucketedUserConfig
 
                     if (checkIfEdgeEnabled(this.config, this.logger, this.options?.enableEdgeDB)) {
                         if (!updatedUser.isAnonymous) {
-                            saveEntity(updatedUser, this.environmentKey, this.logger)
+                            saveEntity(updatedUser, this.environmentKey, this.logger, this.options)
                                 .then((res) => this.logger.info(`Saved response entity! ${res}`))
                         }
                     }
@@ -220,7 +219,7 @@ export class DVCClient implements Client {
                 this.onInitialized.then(() =>
                     this.requestConsolidator.queue('identify',
                         // don't send edgedb param for anonymous users
-                        getConfigJson(this.environmentKey, anonUser, false, this.logger)
+                        getConfigJson(this.environmentKey, anonUser, this.logger, this.options)
                     )
                 ).then((config) => {
                     this.config = config as BucketedUserConfig

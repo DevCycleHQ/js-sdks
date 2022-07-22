@@ -1,4 +1,4 @@
-import { DVCClient, initialize } from '@devcycle/nodejs-server-sdk'
+import { DVCCloudClient, initialize } from '@devcycle/nodejs-server-sdk'
 import { DVCClientAPIUser } from '@devcycle/types'
 import { plainToClass } from 'class-transformer'
 import { Query } from 'express-serve-static-core'
@@ -17,7 +17,7 @@ const defaultHeaders = {
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-let dvcClient: DVCClient
+let dvcClient: DVCCloudClient
 
 async function validateUserFromQueryParams(queryParams: Query): Promise<DVCClientAPIUser> {
     if (!queryParams) {
@@ -32,7 +32,10 @@ async function validateUserFromQueryParams(queryParams: Query): Promise<DVCClien
 }
 
 async function startDVC() {
-    dvcClient = await initialize('<DVC_SERVER_KEY>', { logLevel: 'error' }).onClientInitialized()
+    dvcClient = await initialize('<DVC_SERVER_KEY>', {
+        logLevel: 'debug',
+        enableCloudBucketing: true
+    })
     console.log('DVC onClientInitialized')
 
     const user = {
@@ -40,9 +43,9 @@ async function startDVC() {
         country: 'CA'
     }
 
-    const partyTime = dvcClient.variable(user, 'elliot-test', false)
+    const partyTime = await dvcClient.variable(user, 'elliot-test', false)
     if (partyTime.value) {
-        const invitation = dvcClient.variable(
+        const invitation = await dvcClient.variable(
             user,
             'invitation-message',
             'My birthday has been cancelled this year'
@@ -61,12 +64,12 @@ async function startDVC() {
         }
     }
 
-    const defaultVariable = dvcClient.variable(user, 'not-real', true)
+    const defaultVariable = await dvcClient.variable(user, 'not-real', true)
     console.log(`Value of the variable is ${defaultVariable.value} \n`)
-    const variables = dvcClient.allVariables(user)
+    const variables = await dvcClient.allVariables(user)
     console.log('Variables: ')
     console.dir(variables)
-    const features = dvcClient.allFeatures(user)
+    const features = await dvcClient.allFeatures(user)
     console.log('Features: ')
     console.dir(features)
 }
@@ -77,14 +80,14 @@ app.get('/variables', async (req: express.Request, res: express.Response) => {
     const user = await validateUserFromQueryParams(req.query)
 
     res.set(defaultHeaders)
-    res.send(JSON.stringify(dvcClient.allVariables(user)))
+    res.send(JSON.stringify(await dvcClient.allVariables(user)))
 })
 
 app.get('/features', async (req: express.Request, res: express.Response) => {
     const user = await validateUserFromQueryParams(req.query)
 
     res.set(defaultHeaders)
-    res.send(JSON.stringify(dvcClient.allFeatures(user)))
+    res.send(JSON.stringify(await dvcClient.allFeatures(user)))
 })
 
 app.listen(port, () => {

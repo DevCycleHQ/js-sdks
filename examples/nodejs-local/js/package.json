@@ -1,0 +1,7 @@
+{
+  "name": "nodejs-example-js",
+  "version": "1.0.0",
+  "dependencies": {
+    "@devcycle/nodejs-server-sdk": "*"
+  }
+}

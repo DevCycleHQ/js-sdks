@@ -452,5 +452,8 @@ const user = {
     isAnonymous: false
 }
 
-const client = initialize(clientKey, user, { enableEdgeDB: false, logLevel: 'error' })
+const client = initialize(clientKey, user, {
+    enableEdgeDB: false,
+    logLevel: 'error'
+})
 client.onClientInitialized(() => customElements.define('devcycle-root', AppElement))
