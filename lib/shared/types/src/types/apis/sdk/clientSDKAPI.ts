@@ -115,7 +115,7 @@ export class DVCAPIUser {
     @IsOptional()
     @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
         privateCustomData?: DVCJSON
-
+ 
     /**
      * Set by SDK automatically
      */
@@ -168,6 +168,15 @@ export class DVCAPIUser {
     @IsString()
     @IsOptional()
         sdkVersion?: string
+}
+
+export class DVCBucketingUser extends DVCAPIUser { 
+    /**
+    * JSON data recording user opt-in features.
+     */
+    @IsOptional()
+    @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
+        optIns?: Record<string, boolean>
 }
 
 /**
