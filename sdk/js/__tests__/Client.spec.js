@@ -55,12 +55,13 @@ describe('DVCClient tests', () => {
         getConfigJson_mock.mockImplementation(() => {
             return Promise.resolve(testConfig)
         })
-        const client = new DVCClient('test_env_key', { user_id: 'user1' }, { enableEdgeDB: true })
+        const dvcOptions = { enableEdgeDB: true }
+        const client = new DVCClient('test_env_key', { user_id: 'user1' }, dvcOptions)
         expect(getConfigJson_mock).toBeCalledWith(
             'test_env_key',
             expect.objectContaining({ user_id: 'user1' }),
-            true,
-            expect.any(Object)
+            expect.any(Object),
+            dvcOptions
         )
         await client.onClientInitialized()
         expect(getConfigJson_mock.mock.calls.length).toBe(1)
@@ -68,7 +69,8 @@ describe('DVCClient tests', () => {
         expect(saveEntity_mock).toBeCalledWith(
             expect.objectContaining({ user_id: 'user1' }),
             'test_env_key',
-            expect.any(Object)
+            expect.any(Object),
+            dvcOptions
         )
     })
 
@@ -76,12 +78,13 @@ describe('DVCClient tests', () => {
         getConfigJson_mock.mockImplementation(() => {
             return Promise.resolve({ ...testConfig, project: { settings: { edgeDB: { enabled: false } } } })
         })
-        const client = new DVCClient('test_env_key', { user_id: 'user1' }, { enableEdgeDB: true })
+        const dvcOptions = { enableEdgeDB: true }
+        const client = new DVCClient('test_env_key', { user_id: 'user1' }, dvcOptions)
         expect(getConfigJson_mock).toBeCalledWith(
             'test_env_key',
             expect.objectContaining({ user_id: 'user1' }),
-            true,
-            expect.any(Object)
+            expect.any(Object),
+            dvcOptions
         )
         await client.onClientInitialized()
         expect(getConfigJson_mock.mock.calls.length).toBe(1)
@@ -92,12 +95,13 @@ describe('DVCClient tests', () => {
         getConfigJson_mock.mockImplementation(() => {
             return Promise.resolve(testConfig)
         })
-        const client = new DVCClient('test_env_key', { user_id: 'user1' }, { enableEdgeDB: false })
+        const dvcOptions = { enableEdgeDB: false }
+        const client = new DVCClient('test_env_key', { user_id: 'user1' }, dvcOptions)
         expect(getConfigJson_mock).toBeCalledWith(
             'test_env_key',
             expect.objectContaining({ user_id: 'user1' }),
-            false,
-            expect.any(Object)
+            expect.any(Object),
+            dvcOptions
         )
         await client.onClientInitialized()
         expect(getConfigJson_mock.mock.calls.length).toBe(1)
@@ -304,7 +308,9 @@ describe('DVCClient tests', () => {
                 return Promise.resolve(testConfig)
             })
             saveEntity_mock.mockResolvedValue({})
-            const client = new DVCClient('test_env_key', { user_id: 'user1' }, { enableEdgeDB: true })
+            const dvcOptions = { enableEdgeDB: true }
+            const client = new DVCClient('test_env_key', { user_id: 'user1' }, dvcOptions)
+
             await client.onClientInitialized()
             getConfigJson_mock.mockClear()
             saveEntity_mock.mockClear()
@@ -313,15 +319,21 @@ describe('DVCClient tests', () => {
             expect(getConfigJson_mock).toBeCalledWith(
                 'test_env_key',
                 expect.objectContaining({ user_id: 'user2' }),
-                true,
-                expect.any(Object)
+                expect.any(Object),
+                dvcOptions
             )
             expect(saveEntity_mock).toBeCalledWith(
                 expect.objectContaining(newUser),
                 'test_env_key',
-                expect.any(Object)
+                expect.any(Object),
+                dvcOptions
             )
-            expect(saveEntity_mock).toBeCalledWith(expect.any(DVCPopulatedUser), 'test_env_key', expect.any(Object))
+            expect(saveEntity_mock).toBeCalledWith(
+                expect.any(DVCPopulatedUser),
+                'test_env_key',
+                expect.any(Object),
+                dvcOptions
+            )
         })
 
         it('should not send a request to edgedb after getting the config for an anonymous user', async () => {
@@ -408,8 +420,8 @@ describe('DVCClient tests', () => {
             expect(getConfigJson).toBeCalledWith(
                 'test_env_key',
                 expect.objectContaining(anonUser),
-                false,
-                expect.any(Object)
+                expect.any(Object),
+                {}
             )
             expect(result).toEqual(newVariables.variables)
             expect(anonUser.isAnonymous).toBe(true)
@@ -420,7 +432,8 @@ describe('DVCClient tests', () => {
                 return Promise.resolve(testConfig)
             })
             saveEntity_mock.mockResolvedValue({})
-            const client = new DVCClient('test_env_key', { user_id: 'user1' }, { enableEdgeDB: true })
+            const dvcOptions = { enableEdgeDB: true }
+            const client = new DVCClient('test_env_key', { user_id: 'user1' }, dvcOptions)
             await client.onClientInitialized()
             getConfigJson_mock.mockClear()
             saveEntity_mock.mockClear()
@@ -429,8 +442,8 @@ describe('DVCClient tests', () => {
             expect(getConfigJson).toBeCalledWith(
                 'test_env_key',
                 expect.objectContaining({ user_id: expect.any(String) }),
-                false,
-                expect.any(Object)
+                expect.any(Object),
+                dvcOptions
             )
             expect(saveEntity_mock).not.toBeCalled()
         })

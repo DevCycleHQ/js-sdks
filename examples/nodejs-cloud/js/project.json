@@ -1,0 +1,36 @@
+{
+  "root": "examples/nodejs-cloud/js",
+  "sourceRoot": "examples/nodejs-cloud/js/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/examples/nodejs-cloud/js",
+        "main": "examples/nodejs-cloud/js/src/main.js",
+        "tsConfig": "examples/nodejs-cloud/js/tsconfig.app.json"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "example-nodejs-cloud-js:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "examples/nodejs-cloud/js/**/*.js"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

@@ -47,6 +47,7 @@ export interface DVCOptions {
     enableEdgeDB?: boolean
     logger?: DVCLogger
     logLevel?: DVCDefaultLogLevel
+    apiProxyURL?: string
 }
 
 export interface DVCUser {

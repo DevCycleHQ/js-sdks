@@ -2,8 +2,10 @@
   "version": 2,
   "projects": {
     "example-js-web-elements-app": "examples/js/web-elements-app",
-    "example-nodejs-js": "examples/nodejs/js",
-    "example-nodejs-typescript": "examples/nodejs/typescript",
+    "example-nodejs-local-js": "examples/nodejs-local/js",
+    "example-nodejs-local-typescript": "examples/nodejs-local/typescript",
+    "example-nodejs-cloud-js": "examples/nodejs-cloud/js",
+    "example-nodejs-cloud-typescript": "examples/nodejs-cloud/typescript",
     "example-react-native-app": "examples/react/react-native-app",
     "example-react-next-js-app": "examples/react/next-js-app",
     "example-react-with-async-provider": "examples/react/with-async-provider",

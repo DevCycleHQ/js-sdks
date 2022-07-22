@@ -15,7 +15,6 @@ import { DVCLogger } from '@devcycle/types'
 import { getAllFeatures, getAllVariables, getVariable, postTrack } from './request'
 import { AxiosError, AxiosResponse } from 'axios'
 
-
 export class DVCCloudClient {
     private environmentKey: string
     private logger: DVCLogger
@@ -25,7 +24,7 @@ export class DVCCloudClient {
         this.environmentKey = environmentKey
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.options = options
-        this.logger.info(`Running DevCycle NodeJS SDK in Cloud Bucketing mode`)
+        this.logger.info('Running DevCycle NodeJS SDK in Cloud Bucketing mode')
     }
 
     variable(user: DVCUser, key: string, defaultValue: DVCVariableValue): Promise<DVCVariableInterface> {
@@ -34,7 +33,7 @@ export class DVCCloudClient {
         checkParamDefined('key', key)
         checkParamDefined('defaultValue', defaultValue)
 
-        return getVariable(requestUser, this.environmentKey, key, this.options.enableEdgeDB)
+        return getVariable(requestUser, this.environmentKey, key, this.options)
             .then((res: AxiosResponse) => {
                 return new DVCVariable({
                     ...res.data,
@@ -52,7 +51,7 @@ export class DVCCloudClient {
 
     allVariables(user: DVCUser): Promise<DVCVariableSet> {
         const requestUser = new DVCPopulatedUser(user)
-        return getAllVariables(requestUser, this.environmentKey, this.options.enableEdgeDB)
+        return getAllVariables(requestUser, this.environmentKey, this.options)
             .then((res: AxiosResponse) => {
                 return res.data || {}
             })
@@ -64,7 +63,7 @@ export class DVCCloudClient {
 
     allFeatures(user: DVCUser): Promise<DVCFeatureSet> {
         const requestUser = new DVCPopulatedUser(user)
-        return getAllFeatures(requestUser, this.environmentKey, this.options.enableEdgeDB)
+        return getAllFeatures(requestUser, this.environmentKey, this.options)
             .then((res: AxiosResponse) => {
                 return res.data || {}
             })
@@ -76,10 +75,10 @@ export class DVCCloudClient {
 
     track(user: DVCUser, event: DVCEvent): void {
         if (event === undefined || event === null || typeof event.type !== 'string' || event.type.length === 0) {
-            throw new Error(`Invalid Event`)
+            throw new Error('Invalid Event')
         }
         checkParamDefined('type', event.type)
         const requestUser = new DVCPopulatedUser(user)
-        postTrack(requestUser, event, this.environmentKey, this.logger, this.options.enableEdgeDB)
+        postTrack(requestUser, event, this.environmentKey, this.logger, this.options)
     }
 }

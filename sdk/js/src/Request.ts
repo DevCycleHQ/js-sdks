@@ -1,4 +1,4 @@
-import { DVCEvent } from './types'
+import { DVCEvent, DVCOptions } from './types'
 import { DVCPopulatedUser } from './User'
 import { serializeUser, generateEventPayload } from './utils'
 import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios'
@@ -19,8 +19,8 @@ axiosRetry(axiosClient, {
 })
 
 export const HOST = '.devcycle.com'
-export const BASE_URL = 'https://sdk-api'
-export const EVENT_URL = 'https://events'
+export const CLIENT_SDK_URL = 'https://sdk-api' + HOST
+export const EVENT_URL = 'https://events' + HOST
 
 export const CONFIG_PATH = '/v1/sdkConfig'
 export const EVENTS_PATH = '/v1/events'
@@ -33,31 +33,15 @@ export const baseRequestHeaders = (environmentKey?: string): AxiosRequestHeaders
     }
 }
 
+/**
+ * Base Requests
+ */
 export const get = async (url: string): Promise<AxiosResponse> => {
     return await axiosClient.request({
         method: 'GET',
         url: `${url}`,
         headers: baseRequestHeaders()
     })
-}
-
-export const getConfigJson = async (
-    environmentKey: string,
-    user: DVCPopulatedUser,
-    enableEdgeDB: boolean,
-    logger: DVCLogger
-): Promise<BucketedUserConfig> => {
-    const queryParams = `${serializeUser(user)}${enableEdgeDB ? ('&enableEdgeDB=' + enableEdgeDB): ''}`
-    const url = `${BASE_URL}${HOST}${CONFIG_PATH}?envKey=${environmentKey}${queryParams && '&' + queryParams}`
-
-    try {
-        const res = await get(url)
-        return res.data
-    } catch (ex: any) {
-        logger.error(`Request to get config failed for url: ${url}, ` +
-            `response message: ${ex.message}, response data: ${ex?.response?.data}`)
-        throw new Error('Failed to download DevCycle config.')
-    }
 }
 
 export const post = async (
@@ -86,12 +70,36 @@ export const patch = async (
     })
 }
 
+/**
+ * Endpoints
+ */
+export const getConfigJson = async (
+    environmentKey: string,
+    user: DVCPopulatedUser,
+    logger: DVCLogger,
+    options?: DVCOptions
+): Promise<BucketedUserConfig> => {
+    const queryParams = `${serializeUser(user)}${options?.enableEdgeDB ? ('&enableEdgeDB=' + options.enableEdgeDB): ''}`
+    const url = `${options?.apiProxyURL || CLIENT_SDK_URL}${CONFIG_PATH}` +
+                `?envKey=${environmentKey}${queryParams && '&' + queryParams}`
+
+    try {
+        const res = await get(url)
+        return res.data
+    } catch (ex: any) {
+        logger.error(`Request to get config failed for url: ${url}, ` +
+            `response message: ${ex.message}, response data: ${ex?.response?.data}`)
+        throw new Error('Failed to download DevCycle config.')
+    }
+}
+
 export const publishEvents = async (
     envKey: string | null,
     config: BucketedUserConfig | null,
     user: DVCPopulatedUser,
     events: DVCEvent[],
-    logger: DVCLogger
+    logger: DVCLogger,
+    options?: DVCOptions
 ): Promise<AxiosResponse> => {
     if (!envKey) {
         throw new Error('Missing envKey to publish events to Events API')
@@ -101,7 +109,7 @@ export const publishEvents = async (
     logger.info(`Submit Events Payload: ${JSON.stringify(payload)}`)
 
     const res = await post(
-        `${EVENT_URL}${HOST}${EVENTS_PATH}`,
+        `${options?.apiProxyURL || EVENT_URL}${EVENTS_PATH}`,
         envKey,
         payload as unknown as Record<string, unknown>
     )
@@ -114,7 +122,12 @@ export const publishEvents = async (
     return res
 }
 
-export const saveEntity = async (user: DVCPopulatedUser, envKey: string, logger: DVCLogger): Promise<AxiosResponse> => {
+export const saveEntity = async (
+    user: DVCPopulatedUser,
+    envKey: string,
+    logger: DVCLogger,
+    options?: DVCOptions
+): Promise<AxiosResponse> => {
     if (!envKey) {
         throw new Error('Missing envKey to save to Edge DB!')
     }
@@ -128,7 +141,7 @@ export const saveEntity = async (user: DVCPopulatedUser, envKey: string, logger:
     }
 
     const res = await patch(
-        `${BASE_URL}${HOST}${SAVE_ENTITY_PATH}/${encodeURIComponent(user.user_id)}`,
+        `${options?.apiProxyURL || CLIENT_SDK_URL}${SAVE_ENTITY_PATH}/${encodeURIComponent(user.user_id)}`,
         envKey,
         user as unknown as Record<string, unknown>
     )

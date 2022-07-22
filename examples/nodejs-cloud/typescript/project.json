@@ -1,6 +1,6 @@
 {
-  "root": "examples/nodejs/typescript",
-  "sourceRoot": "examples/nodejs/typescript/src",
+  "root": "examples/nodejs-cloud/typescript",
+  "sourceRoot": "examples/nodejs-cloud/typescript/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -9,15 +9,15 @@
         "{options.outputPath}"
       ],
       "options": {
-        "outputPath": "dist/examples/nodejs/typescript",
-        "main": "examples/nodejs/typescript/src/main.ts",
-        "tsConfig": "examples/nodejs/typescript/tsconfig.app.json"
+        "outputPath": "dist/examples/nodejs-cloud/typescript",
+        "main": "examples/nodejs-cloud/typescript/src/main.ts",
+        "tsConfig": "examples/nodejs-cloud/typescript/tsconfig.app.json"
       }
     },
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
-        "buildTarget": "example-nodejs-typescript:build"
+        "buildTarget": "example-nodejs-cloud-typescript:build"
       }
     },
     "lint": {
@@ -27,7 +27,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "examples/nodejs/typescript/**/*.ts"
+          "examples/nodejs-cloud/typescript/**/*.ts"
         ]
       }
     }

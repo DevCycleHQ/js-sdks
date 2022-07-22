@@ -46,15 +46,29 @@ describe('Request tests', () => {
             const environmentKey = 'my_env_key'
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
-            await Request.getConfigJson(environmentKey, user as DVCPopulatedUser, false, defaultLogger)
+            await Request.getConfigJson(environmentKey, user as DVCPopulatedUser, defaultLogger)
 
             expect(axiosRequestMock).toBeCalledWith({
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 method: 'GET',
-                url: `https://sdk-api.devcycle.com/v1/sdkConfig?envKey=${
-                    environmentKey}&user_id=${user.user_id}&isAnonymous=false`
+                url: `https://sdk-api.devcycle.com/v1/sdkConfig?envKey=` +
+                     `${environmentKey}&user_id=${user.user_id}&isAnonymous=false`
+            })
+        })
+
+        it('should call local proxy for apiProxyURL option', async () => {
+            const user = { user_id: 'my_user', isAnonymous: false }
+            const environmentKey = 'my_env_key'
+            const dvcOptions = { apiProxyURL: 'http://localhost:4000' }
+            axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
+
+            await Request.getConfigJson(environmentKey, user as DVCPopulatedUser, defaultLogger, dvcOptions)
+
+            expect(axiosRequestMock).toBeCalledWith({
+                headers: { 'Content-Type': 'application/json' },
+                method: 'GET',
+                url: `${dvcOptions.apiProxyURL}/v1/sdkConfig?envKey=` +
+                     `${environmentKey}&user_id=${user.user_id}&isAnonymous=false`
             })
         })
     })
