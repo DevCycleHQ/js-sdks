@@ -34,6 +34,7 @@ export class DVCClient implements Client {
     requestConsolidator: RequestConsolidator
     eventEmitter: EventEmitter
     eventSource: EventSource
+    debounce: boolean
 
     constructor(environmentKey: string, user: DVCPopulatedUser, options: DVCOptions = {}) {
         this.user = user
@@ -49,29 +50,36 @@ export class DVCClient implements Client {
             this.eventSource = new EventSourcePolyfill(`http://localhost:4001/sse/${environmentKey}`, { 
                 headers: { authorization: '<auth-token-here>' } 
             })
-            this.eventSource.onmessage = (message) => {
-                console.log(`Message: ${JSON.stringify(message.data)}`)
-                this.requestConsolidator.queue('identify',
+            const getConfig = () => {
+                if (!this.debounce) {
                     getConfigJson(this.environmentKey, this.user, this.options?.enableEdgeDB || false,
                         this.logger)
-                ).then((config) => {
-                    const oldConfig = this.config
-                    this.config = config as BucketedUserConfig
-    
-                    this.store.saveConfig(config)
-                        .then(() => this.logger.info('Successfully saved config to local storage'))
-                    this.eventEmitter.emitInitialized(true)
-                    this.eventEmitter.emitFeatureUpdates(oldConfig?.features || {}, this.config.features)
-                    this.eventEmitter.emitVariableUpdates(oldConfig?.variables || {},
-                        this.config.variables, this.variableDefaultMap)
-                    return this
-                })
-                .catch((err) => {
-                    this.eventEmitter.emitInitialized(false)
-                    this.eventEmitter.emitError(err)
-                    return this
-                })
+                    .then((config) => {
+                        const oldConfig = this.config
+                        this.config = config as BucketedUserConfig
+        
+                        this.store.saveConfig(config)
+                            .then(() => this.logger.info('Successfully saved config to local storage'))
+                        this.eventEmitter.emitFeatureUpdates(oldConfig?.features || {}, this.config.features)
+                        this.eventEmitter.emitVariableUpdates(oldConfig?.variables || {},
+                            this.config.variables, this.variableDefaultMap)
+                        return this
+                    })
+                    .catch((err) => {
+                        this.eventEmitter.emitInitialized(false)
+                        this.eventEmitter.emitError(err)
+                        return this
+                    })
+                    this.debounce = true
+                    setInterval(() => {
+                        this.debounce = false
+                    }, 5000)
+                }
+            }
+            this.eventSource.onmessage = (message) => {
+                console.log(`Message: ${JSON.stringify(message.data)}`)
 
+                getConfig()
             }
         }
 
