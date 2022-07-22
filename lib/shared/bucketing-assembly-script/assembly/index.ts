@@ -6,6 +6,7 @@ import { JSON } from 'assemblyscript-json/assembly'
 import { ConfigBody, DVCPopulatedUser, PlatformData } from './types'
 import { _setPlatformData } from './managers/platformDataManager'
 import { _getConfigData, _setConfigData } from './managers/configDataManager'
+import { EnvironmentConfigManager } from './managers/environmentConfigManager'
 
 export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
     const boundedHash = _generateBoundedHashes(user_id, target_id)
@@ -33,8 +34,14 @@ export function setConfigData(token: string, configDataStr: string): void {
     _setConfigData(token, configData)
 }
 
+let envConfigManager: EnvironmentConfigManager | null = null
+
+export function setEnvironmentConfigManager(token: string): void {
+    envConfigManager = new EnvironmentConfigManager(token)
+}
+
 export * from './test'
 
 export { murmurhashV3, murmurhashV3_js } from './helpers/murmurhash'
 export * from './helpers/setTimeout'
-export * from './helpers/setInterval'
+// export * from './helpers/setInterval'
