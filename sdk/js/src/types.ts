@@ -46,7 +46,8 @@ export interface DVCOptions {
     reactNative?: boolean
     enableEdgeDB?: boolean
     logger?: DVCLogger
-    logLevel?: DVCDefaultLogLevel
+    logLevel?: DVCDefaultLogLevel,
+    enableSse?: boolean
 }
 
 export interface DVCUser {

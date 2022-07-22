@@ -19,6 +19,7 @@ import { BucketedUserConfig } from '@devcycle/types'
 import { RequestConsolidator } from './RequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
+import { EventSourcePolyfill } from 'event-source-polyfill'
 
 export class DVCClient implements Client {
     private options: DVCOptions
@@ -32,6 +33,7 @@ export class DVCClient implements Client {
     eventQueue: EventQueue
     requestConsolidator: RequestConsolidator
     eventEmitter: EventEmitter
+    eventSource: EventSource
 
     constructor(environmentKey: string, user: DVCPopulatedUser, options: DVCOptions = {}) {
         this.user = user
@@ -42,6 +44,37 @@ export class DVCClient implements Client {
         this.requestConsolidator = new RequestConsolidator()
         this.eventEmitter = new EventEmitter()
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
+        
+        if (options?.enableSse) {
+            this.eventSource = new EventSourcePolyfill(`http://localhost:4001/sse/${environmentKey}`, { 
+                headers: { authorization: '<auth-token-here>' } 
+            })
+            this.eventSource.onmessage = (message) => {
+                console.log(`Message: ${JSON.stringify(message.data)}`)
+                this.requestConsolidator.queue('identify',
+                    getConfigJson(this.environmentKey, this.user, this.options?.enableEdgeDB || false,
+                        this.logger)
+                ).then((config) => {
+                    const oldConfig = this.config
+                    this.config = config as BucketedUserConfig
+    
+                    this.store.saveConfig(config)
+                        .then(() => this.logger.info('Successfully saved config to local storage'))
+                    this.eventEmitter.emitInitialized(true)
+                    this.eventEmitter.emitFeatureUpdates(oldConfig?.features || {}, this.config.features)
+                    this.eventEmitter.emitVariableUpdates(oldConfig?.variables || {},
+                        this.config.variables, this.variableDefaultMap)
+                    return this
+                })
+                .catch((err) => {
+                    this.eventEmitter.emitInitialized(false)
+                    this.eventEmitter.emitError(err)
+                    return this
+                })
+
+            }
+        }
+
         const stubbedLocalStorage = { 
             getItem: () => null,
             setItem: () => undefined,

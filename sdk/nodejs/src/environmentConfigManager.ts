@@ -35,7 +35,6 @@ export class EnvironmentConfigManager {
             enableSse
         }: ConfigPollingOptions,
         eventEmitter: EventEmitter,
-        eventSource?: EventSource
     ) {
         this.logger = logger
         this.environmentKey = environmentKey
