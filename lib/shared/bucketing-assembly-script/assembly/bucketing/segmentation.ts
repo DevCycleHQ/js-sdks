@@ -1,13 +1,13 @@
 import { RegExp } from 'assemblyscript-regex/assembly'
-import {  findString, includes, replace } from '../helpers/lodashHelpers'
+import { findString, includes, replace } from '../helpers/lodashHelpers'
 import { OptionsType, versionCompare } from './versionCompare'
 import {
-    TopLevelOperator, 
-    AudienceFilterOrOperator, 
-    DVCPopulatedUser, 
-    validSubTypes, 
+    TopLevelOperator,
+    AudienceFilterOrOperator,
+    DVCPopulatedUser,
+    validSubTypes,
     CustomDataFilter,
-    UserFilter, 
+    UserFilter,
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { getF64FromJSONValue } from '../helpers/jsonHelpers'
@@ -20,7 +20,7 @@ import { getF64FromJSONValue } from '../helpers/jsonHelpers'
  * @param user - The incoming user, device, and user agent data
  */
 export function _evaluateOperator(
-    operator: TopLevelOperator, 
+    operator: TopLevelOperator,
     user: DVCPopulatedUser
 ): bool {
     if (!operator.filters.length) return false
@@ -47,20 +47,28 @@ export function _evaluateOperator(
 }
 
 function doesUserPassFilter(
-    filter: AudienceFilterOrOperator, 
+    filter: AudienceFilterOrOperator,
     user: DVCPopulatedUser
 ): bool {
     if (filter.type === 'all') return true
     if (filter.type === 'optIn') return false
     if (!(filter instanceof UserFilter)) {
-        throw new Error('Invalid filter data')
+        console.log(`
+            [DevCycle] Error: Invalid filter data ${filter}.
+            To leverage this new filter definition, please update to the latest version of the DevCycle SDK in use
+        `)
+        return false
     }
 
     const userFilter = filter as UserFilter
 
     const subType = userFilter.subType
     if (!validSubTypes.includes(subType)) {
-        throw new Error(`Invalid filter subType: ${subType}`)
+        console.log(`
+            [DevCycle] Error: Invalid filter subType: ${subType}.
+            To leverage this new filter definition, please update to the latest version of the DevCycle SDK in use
+        `)
+        return false
     }
 
     return filterFunctionsBySubtype(subType, user, userFilter)
@@ -153,7 +161,7 @@ export function checkVersionFilter(
 
         const mappedFilterVersions: string[] = []
         // Replace Array.map(), because you can't access captured data in a closure
-        for (let i=0; i < filterVersions.length; i++) {
+        for (let i = 0; i < filterVersions.length; i++) {
             mappedFilterVersions.push(replace(replace(filterVersions[i], regex1, ''), regex2, ''))
         }
         parsedFilterVersions = mappedFilterVersions
