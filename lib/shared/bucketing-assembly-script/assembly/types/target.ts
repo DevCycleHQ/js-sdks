@@ -5,6 +5,7 @@ import {
     getJSONArrayFromJSON,
     getJSONObjFromJSON,
     getStringFromJSON, getStringFromJSONOptional,
+    isUsableString, isUsableStringOptional,
     isValidString,
     isValidStringOptional, jsonArrFromValueArray
 } from '../helpers/jsonHelpers'
@@ -89,7 +90,7 @@ const validTypes = ['all', 'user', 'optIn']
 
 export const validSubTypes = [
     'user_id', 'email', 'ip', 'country', 'platform',
-    'platformVersion', 'appVersion','deviceModel', 'customData'
+    'platformVersion', 'appVersion', 'deviceModel', 'customData'
 ]
 
 const validComparators = [
@@ -114,9 +115,9 @@ export class AudienceFilterOrOperator extends JSON.Value {
 
     constructor(filter: JSON.Obj) {
         super()
-        this.type = isValidStringOptional(filter, 'type', validTypes)
+        this.type = isUsableString(filter, 'type', validTypes)
 
-        this.subType = isValidStringOptional(filter, 'subType', validSubTypes)
+        this.subType = isUsableStringOptional(filter, 'subType', validSubTypes)
 
         this.comparator = isValidStringOptional(filter, 'comparator', validComparators)
 
@@ -180,8 +181,8 @@ export class UserFilter extends AudienceFilterOrOperator {
     constructor(filter: JSON.Obj) {
         super(filter)
         this.values = getJSONArrayFromJSON(filter, 'values')
-        this.type = isValidString(filter, 'type', validTypes)
-        this.subType = isValidString(filter, 'subType', validSubTypes)
+        this.type = isUsableString(filter, 'type', validTypes)
+        this.subType = isUsableString(filter, 'subType', validSubTypes)
         this.comparator = isValidString(filter, 'comparator', validComparators)
     }
 }
@@ -198,16 +199,14 @@ export class CustomDataFilter extends UserFilter {
 }
 
 function initializeFilterClass(filter: JSON.Obj): AudienceFilterOrOperator {
-    if (getStringFromJSONOptional(filter, 'type') === 'all' || getStringFromJSONOptional(filter, 'type') === 'optIn') {
-        return new AudienceFilterOrOperator(filter)
-    } else if (getStringFromJSONOptional(filter, 'type') === 'user') {
+    if (getStringFromJSONOptional(filter, 'type') === 'user') {
         if (getStringFromJSONOptional(filter, 'subType') === 'customData') {
             return new CustomDataFilter(filter)
         }
         return new UserFilter(filter)
+    } else {
+        return new AudienceFilterOrOperator(filter)
     }
-
-    throw new Error('Invalid filter type')
 }
 
 const validRolloutTypes = ['schedule', 'gradual', 'stepped']

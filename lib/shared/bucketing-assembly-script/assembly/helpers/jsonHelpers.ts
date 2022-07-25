@@ -46,6 +46,27 @@ export function isValidString(jsonObj: JSON.Obj, key: string, validStrings: stri
     return value
 }
 
+export function isUsableString(jsonObj: JSON.Obj, key: string, validStrings: string[]): string {
+    const str = getStringFromJSON(jsonObj, key)
+    if (!validStrings.includes(str)) {
+        console.log(`[DevCycle] Warning: String value: ${str}, for key: ${key} does not match a valid string.`)
+    }
+    return str
+}
+
+export function isUsableStringOptional(jsonObj: JSON.Obj, key: string, validStrings: string[]): string | null {
+    const value = jsonObj.getString(key)
+    if (!value) {
+        return null
+    }
+
+    const str = value.toString()
+    if (!validStrings.includes(str)) {
+        console.log(`[DevCycle] Warning: String value: ${str}, for key: ${key} does not match a valid string.`)
+    }
+    return str
+}
+
 export function isValidStringOptional(jsonObj: JSON.Obj, key: string, validStrings: string[]): string | null {
     const value = jsonObj.getString(key)
     if (!value) {
