@@ -17,18 +17,18 @@ const setPlatformDataJSON = (data: unknown) => {
 }
 
 const evaluateOperator = (
-    { operator, data }: 
-    {operator: unknown, data: Record<string, unknown>}
+    { operator, data }:
+        { operator: unknown, data: Record<string, unknown> }
 ) => {
     // set required field to make class constructors happy
     data.user_id ||= 'some_user'
     return evaluateOperatorFromJSON(
-        JSON.stringify(operator), 
+        JSON.stringify(operator),
         JSON.stringify(data)
     )
 }
 
-const checkStringsFilter = (string: unknown, filter: {values?: unknown[], comparator: string}) => {
+const checkStringsFilter = (string: unknown, filter: { values?: unknown[], comparator: string }) => {
     const emailFilter = {
         type: 'user',
         subType: 'email',
@@ -45,7 +45,7 @@ const checkStringsFilter = (string: unknown, filter: {values?: unknown[], compar
 
     return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
 }
-const checkBooleanFilter = (bool: unknown, filter: {values?: unknown[], comparator: string}) => {
+const checkBooleanFilter = (bool: unknown, filter: { values?: unknown[], comparator: string }) => {
     const customDataFilter = {
         dataKey: 'key',
         type: 'user',
@@ -65,7 +65,7 @@ const checkBooleanFilter = (bool: unknown, filter: {values?: unknown[], comparat
     return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
 }
 
-const checkNumbersFilter = (number: unknown, filter: {values?: unknown[], comparator: string}): boolean => {
+const checkNumbersFilter = (number: unknown, filter: { values?: unknown[], comparator: string }): boolean => {
     const customDataFilter = {
         dataKey: 'key',
         type: 'user',
@@ -83,7 +83,7 @@ const checkNumbersFilter = (number: unknown, filter: {values?: unknown[], compar
     const data = { customData: { key: number }, user_id: 'some_user' }
     return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
 }
-const checkVersionFilters = (appVersion: string, filter: {values?: unknown[], comparator: string}): boolean => {
+const checkVersionFilters = (appVersion: string, filter: { values?: unknown[], comparator: string }): boolean => {
     const appVersionFilter = {
         type: 'user',
         subType: 'appVersion',
@@ -361,13 +361,60 @@ describe('SegmentationManager Unit Test', () => {
                 platformVersion: '2.0.0',
                 platform: 'iOS'
             }
-            it ('should pass optIn filter when feature in optIns and isOptInEnabled ', () => {
+            it('should fail optIn filter when feature in optIns and isOptInEnabled ', () => {
                 assert.strictEqual(
-                    false, 
-                    evaluateOperator({ 
+                    false,
+                    evaluateOperator({
                         data: optInData, operator: optInOperator
                     })
                 )
+            })
+        })
+
+        describe('evaluateOperator should handle a new filter (myNewFilter) type', () => {
+            const filters = [{
+                type: 'myNewFilter',
+                comparator: '=',
+                values: []
+            }]
+
+            const operator = {
+                filters,
+                operator: 'and'
+            }
+
+            const data = {
+                country: 'Canada',
+                email: 'brooks@big.lunch',
+                platformVersion: '2.0.0',
+                platform: 'iOS'
+            }
+            it('should fail myNewFilter filter', () => {
+                assert.strictEqual(false, evaluateOperator({ data, operator }))
+            })
+        })
+
+        describe('evaluateOperator should handle a new user sub-filter (myNewFilter) type', () => {
+            const filters = [{
+                type: 'user',
+                subType: 'myNewFilter',
+                comparator: '=',
+                values: []
+            }]
+
+            const operator = {
+                filters,
+                operator: 'and'
+            }
+
+            const data = {
+                country: 'Canada',
+                email: 'brooks@big.lunch',
+                platformVersion: '2.0.0',
+                platform: 'iOS'
+            }
+            it('should fail for user filter with subType of myNewFilter', () => {
+                assert.strictEqual(false, evaluateOperator({ data, operator }))
             })
         })
 
@@ -418,7 +465,8 @@ describe('SegmentationManager Unit Test', () => {
         it('should work for an AND operator containing a custom data filter', () => {
             const filters = [
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
-                {   type: 'user',
+                {
+                    type: 'user',
                     subType: 'customData',
                     dataKey: 'something',
                     comparator: '!=',
@@ -512,7 +560,7 @@ describe('SegmentationManager Unit Test', () => {
                 operator: 'and'
             }
 
-            const data = { }
+            const data = {}
             setPlatformDataJSON({ ...defaultPlatformData, platformVersion: '15.1' })
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
@@ -528,7 +576,7 @@ describe('SegmentationManager Unit Test', () => {
                 operator: 'and'
             }
 
-            const data = { }
+            const data = {}
             setPlatformDataJSON({ ...defaultPlatformData, platform: 'iOS' })
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })

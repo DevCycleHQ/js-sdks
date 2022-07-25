@@ -46,7 +46,7 @@ describe('Config Body', () => {
             subType: 'subtype'
         } as unknown as typeof filters.filters[0]
         expect(() => testConfigBodyClass(JSON.stringify(config)))
-            .toThrow('Invalid string value: subtype, for key: subType')
+            .toThrow('Missing string value for key: "comparator", obj: {"type":"user","values":[],"subType":"subtype"')
     })
 
     it('should throw if custom data filter is missing dataKey', () => {
