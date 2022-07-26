@@ -5,7 +5,6 @@ import {
     getJSONArrayFromJSON,
     getJSONObjFromJSON,
     getStringFromJSON, getStringFromJSONOptional,
-    isUsableString, isUsableStringOptional,
     isValidString,
     isValidStringOptional, jsonArrFromValueArray
 } from '../helpers/jsonHelpers'
@@ -115,9 +114,9 @@ export class AudienceFilterOrOperator extends JSON.Value {
 
     constructor(filter: JSON.Obj) {
         super()
-        this.type = isUsableString(filter, 'type', validTypes)
+        this.type = isValidStringOptional(filter, 'type', validTypes, false)
 
-        this.subType = isUsableStringOptional(filter, 'subType', validSubTypes)
+        this.subType = isValidStringOptional(filter, 'subType', validSubTypes, false)
 
         this.comparator = isValidStringOptional(filter, 'comparator', validComparators)
 
@@ -181,8 +180,8 @@ export class UserFilter extends AudienceFilterOrOperator {
     constructor(filter: JSON.Obj) {
         super(filter)
         this.values = getJSONArrayFromJSON(filter, 'values')
-        this.type = isUsableString(filter, 'type', validTypes)
-        this.subType = isUsableString(filter, 'subType', validSubTypes)
+        this.type = isValidString(filter, 'type', validTypes, false)
+        this.subType = isValidString(filter, 'subType', validSubTypes, false)
         this.comparator = isValidString(filter, 'comparator', validComparators)
     }
 }
