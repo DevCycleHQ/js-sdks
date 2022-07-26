@@ -54,8 +54,8 @@ function doesUserPassFilter(
     if (filter.type === 'optIn') return false
     if (!(filter instanceof UserFilter)) {
         console.log(`
-            [DevCycle] Error: Invalid filter data ${filter}.
-            To leverage this new filter definition, please update to the latest version of the DevCycle SDK in use
+            [DevCycle] Warning: Invalid filter data ${filter}.
+            To leverage this new filter definition, please update to the latest version of the DevCycle SDK.
         `)
         return false
     }
@@ -65,8 +65,8 @@ function doesUserPassFilter(
     const subType = userFilter.subType
     if (!validSubTypes.includes(subType)) {
         console.log(`
-            [DevCycle] Error: Invalid filter subType: ${subType}.
-            To leverage this new filter definition, please update to the latest version of the DevCycle SDK in use
+            [DevCycle] Warning: Invalid filter subType: ${subType}.
+            To leverage this new filter definition, please update to the latest version of the DevCycle SDK.
         `)
         return false
     }
