@@ -123,6 +123,11 @@ export class DVCClient implements Client {
                     ? EventTypes.variableDefaulted
                     : EventTypes.variableEvaluated,
                 target: variable.key,
+                metaData: {
+                    value: variable.value,
+                    type: typeof(variable.defaultValue),
+                    _variable: this.config?.variables?.[key]._id
+                }
             })
         } catch (e) {
             this.eventEmitter.emitError(e)
