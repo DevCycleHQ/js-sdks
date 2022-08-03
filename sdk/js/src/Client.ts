@@ -15,7 +15,7 @@ import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
 import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
-import { BucketedUserConfig } from '@devcycle/types'
+import { BucketedUserConfig, VariableType, VariableValue } from '@devcycle/types'
 import { RequestConsolidator } from './RequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
@@ -42,13 +42,14 @@ export class DVCClient implements Client {
         this.requestConsolidator = new RequestConsolidator()
         this.eventEmitter = new EventEmitter()
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
-        const stubbedLocalStorage = { 
+        const stubbedLocalStorage = {
             getItem: () => null,
             setItem: () => undefined,
             removeItem: () => undefined,
             clear: () => undefined,
             key: () => null,
-            length: 0 }
+            length: 0
+        }
         this.store = new Store(typeof window !== "undefined" ? window.localStorage : stubbedLocalStorage, this.logger)
 
         this.store.saveUser(this.user)
@@ -118,6 +119,8 @@ export class DVCClient implements Client {
         }
 
         try {
+            const variableFromConfig = this.config?.variables?.[key]
+            
             this.eventQueue.queueAggregateEvent({
                 type: variable.isDefaulted
                     ? EventTypes.variableDefaulted
@@ -125,8 +128,8 @@ export class DVCClient implements Client {
                 target: variable.key,
                 metaData: {
                     value: variable.value,
-                    type: typeof(variable.defaultValue),
-                    _variable: this.config?.variables?.[key]._id
+                    type: getTypeFromDefaultValue(variable.defaultValue, variable.key, this.logger),
+                    _variable: variableFromConfig?._id
                 }
             })
         } catch (e) {
@@ -290,5 +293,20 @@ const checkIfEdgeEnabled = (
             logger.warn('EdgeDB is not enabled for this project. Only using local user data.')
         }
         return false
+    }
+}
+
+const getTypeFromDefaultValue = (defaultValue: VariableValue, key: string, logger: DVCLogger) => {
+    if (typeof defaultValue === 'boolean') {
+        return VariableType.boolean
+    } else if (typeof defaultValue === 'number') {
+        return VariableType.number
+    } else if (typeof defaultValue === 'string') {
+        return VariableType.string
+    } else if (typeof defaultValue === 'object') {
+        return VariableType.object
+    } else {
+        logger.warn(`The default value for variable ${key} is not of type Boolean, Number, String, or JSON`)
+        return undefined
     }
 }
