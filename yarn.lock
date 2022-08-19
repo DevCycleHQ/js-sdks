@@ -6724,16 +6724,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"assemblyscript@https://github.com/DevCycleHQ/assemblyscript":
+"assemblyscript@https://github.com/DevCycleHQ/assemblyscript#56a01ceccab1f2836505b8cfcdeec366cb78883f":
   version: 0.0.0
-  resolution: "assemblyscript@https://github.com/DevCycleHQ/assemblyscript.git#commit=9aa8a2da4184d2e8869a3c81d4ed30fd26debe6c"
+  resolution: "assemblyscript@https://github.com/DevCycleHQ/assemblyscript.git#commit=56a01ceccab1f2836505b8cfcdeec366cb78883f"
   dependencies:
     binaryen: 109.0.0-nightly.20220813
     long: ^5.2.0
   bin:
     asc: ./bin/asc.js
     asinit: ./bin/asinit.js
-  checksum: 277cf479479a293e6b5cc10a6fdae2fd2749570d224678ccdd638ccea93ec189c37b58bb322207bd6176f2d1b008eaf6cd8c17e60768713bab5e94bd8862044c
+  checksum: aa7259c7bedb66c7c8467736ad009cda7bb226adaeba072a57827edebbb54ff6f2f9e0318defbd7e2140c3d9ff3780e7531c50cbe58cfb49408963cb0d78d9e1
   languageName: node
   linkType: hard
 
@@ -9534,7 +9534,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": 5.18.0
     "@typescript-eslint/parser": 5.18.0
     as-wasi: ^0.4.6
-    assemblyscript: "https://github.com/DevCycleHQ/assemblyscript"
+    assemblyscript: "https://github.com/DevCycleHQ/assemblyscript#56a01ceccab1f2836505b8cfcdeec366cb78883f"
     assemblyscript-json: "https://github.com/DevCycleHQ/assemblyscript-json"
     assemblyscript-regex: "https://github.com/DevCycleHQ/assemblyscript-regex.git#fix-null-type-errors"
     async: ^3.2.1
