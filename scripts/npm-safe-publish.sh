@@ -12,11 +12,6 @@ fi
 PACKAGE=$1
 JQ_PATH=".version"
 
-# Update jq search command for bucketing-assembly-script package
-if [[ "$2" == "--jq-path" ]]; then
-  JQ_PATH=".dependencies[\"$PACKAGE\"].version"
-fi
-
 NPM_SHOW="$(npm show "$PACKAGE" version)"
 NPM_LS="$(npm ls "$PACKAGE" --json | jq -r $JQ_PATH)"
 
