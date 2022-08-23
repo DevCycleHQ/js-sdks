@@ -4,7 +4,7 @@
 // import { getEnvironmentConfig } from './request'
 // import { getBucketingLib } from './bucketing'
 
-import { setInterval, clearInterval } from '../helpers/setInterval'
+// import { setInterval, clearInterval } from '../helpers/setInterval'
 
 // type ConfigPollingOptions = {
 //     /**
@@ -62,15 +62,15 @@ export class EnvironmentConfigManager {
             console.log('DevCycle initial config loaded')
         })
 
-        this.intervalTimeout = setInterval(() => {
-            console.log('_fetchConfig()')
-            // self._fetchConfig(callback)
-        }, this.pollingIntervalMS)
+        // this.intervalTimeout = setInterval(() => {
+        //     console.log('_fetchConfig()')
+        //     // self._fetchConfig(callback)
+        // }, this.pollingIntervalMS)
     }
 
-    cleanup(): void {
-        clearInterval(this.intervalTimeout)
-    }
+    // cleanup(): void {
+    //     clearInterval(this.intervalTimeout)
+    // }
 
     getConfigURL(): string {
         return `${this.cdnURI}/config/v1/server/${this.environmentKey}.json`
