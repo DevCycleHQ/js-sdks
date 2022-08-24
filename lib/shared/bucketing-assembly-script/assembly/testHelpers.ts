@@ -47,7 +47,7 @@ export function checkCustomDataFromJSON(data: string | null, filterStr: string):
 }
 
 export function evaluateOperatorFromJSON(
-    operatorStr: string, 
+    operatorStr: string,
     userStr: string
 ): bool {
     const operatorJSON = JSON.parse(operatorStr)
@@ -55,7 +55,7 @@ export function evaluateOperatorFromJSON(
         throw new Error('evaluateOperatorFromJSON operatorStr or userStr param not a JSON Object')
     }
     const operator = new TopLevelOperator(operatorJSON as JSON.Obj)
-    const user = new DVCPopulatedUser(new DVCUser(userStr))
+    const user = DVCPopulatedUser.fromJSONString(userStr)
     return _evaluateOperator(operator, user)
 }
 
@@ -81,13 +81,13 @@ export function testConfigBodyClass(configStr: string): string {
 }
 
 export function testDVCUserClass(userStr: string): string {
-    const user = new DVCUser(userStr)
+    const user = DVCUser.fromJSONString(userStr)
     const populatedUser = new DVCPopulatedUser(user)
     return populatedUser.stringify()
 }
 
 export function testBucketedUserConfigClass(userConfigStr: string): string {
-    const userConfig = BucketedUserConfig.bucketedUserConfigFromJSONString(userConfigStr)
+    const userConfig = BucketedUserConfig.fromJSONString(userConfigStr)
     return userConfig.stringify()
 }
 

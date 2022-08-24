@@ -34,7 +34,6 @@ export class Feature extends JSON.Value {
         this.configuration = new FeatureConfiguration(getJSONObjFromJSON(feature, 'configuration'))
 
         this.settings = getJSONObjFromJSONOptional(feature, 'settings')
-        
     }
 
     stringify(): string {

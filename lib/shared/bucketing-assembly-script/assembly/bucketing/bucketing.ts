@@ -251,7 +251,6 @@ export function _generateBucketedConfig(
                 variableVariationMap.set(variable.key, featVarMap)
             }
             featVarMap.push(`${feature._id}.${variation_id}`)
-            console.log(`Set var feature map, key: ${variable.key}`)
 
             const newVar = new SDKVariable(
                 variable._id,

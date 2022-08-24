@@ -19,12 +19,12 @@ export interface DVCUser {
     name?: string
 
     /**
-     * ISO 639-1 two letter codes, or ISO 639-2 three letter codes
+     * ISO 639-1 two-letter codes, or ISO 639-2 three-letter codes
      */
     language?: string
 
     /**
-     * ISO 3166 two or three letter codes
+     * ISO 3166 two or three-letter codes
      */
     country?: string
 
@@ -109,6 +109,11 @@ export interface DVCOptions {
      * Allows the SDK to communicate with a proxy of DVC bucketing API / client SDK API.
      */
     apiProxyURL?: string
+
+    /**
+     * Switch to use new AssemblyScript EventQueue for testing
+     */
+    useASEventQueue?: boolean
 }
 
 export type DVCVariableValue = string | number | boolean | JSON

@@ -12,7 +12,8 @@ import { bucketUserForConfig } from './utils/userBucketingHelper'
 import { DVCVariable } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
 import { EventTypes } from './models/requestEvent'
-import { EventQueue } from './eventQueue'
+import { EventQueue, EventQueueInterface } from './eventQueue'
+import { EventQueueAS } from './eventQueueAS'
 import { dvcDefaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
 import * as packageJson from '../package.json'
@@ -30,7 +31,7 @@ export class DVCClient {
     private environmentKey: string
     private options?: DVCOptions
     private configHelper: EnvironmentConfigManager
-    private eventQueue: EventQueue
+    private eventQueue: EventQueueInterface
     private onInitialized: Promise<DVCClient>
     private logger: DVCLogger
     private initialized = false
@@ -47,11 +48,17 @@ export class DVCClient {
         const initializePromise = importBucketingLib()
             .then(() => {
                 this.configHelper = new EnvironmentConfigManager(this.logger, environmentKey, options || {})
-                this.eventQueue = new EventQueue(
-                    this.logger,
-                    environmentKey,
-                    options
-                )
+                this.eventQueue = options?.useASEventQueue ?
+                    new EventQueueAS(
+                        this.logger,
+                        environmentKey,
+                        options
+                    ) :
+                    new EventQueue(
+                        this.logger,
+                        environmentKey,
+                        options
+                    )
 
                 const platformData: IPlatformData = {
                     platform: 'NodeJS',
@@ -115,10 +122,11 @@ export class DVCClient {
             defaultValue
         })
 
+        const useAS = this.options?.useASEventQueue
         const variableEvent = {
             type: variable.key in bucketedConfig.variables
-                ? EventTypes.variableEvaluated
-                : EventTypes.variableDefaulted,
+                ? (useAS ? EventTypes.aggVariableEvaluated : EventTypes.variableEvaluated)
+                : (useAS ? EventTypes.aggVariableDefaulted : EventTypes.variableDefaulted),
             target: variable.key
         }
         this.eventQueue.queueAggregateEvent(requestUser, variableEvent, bucketedConfig)
