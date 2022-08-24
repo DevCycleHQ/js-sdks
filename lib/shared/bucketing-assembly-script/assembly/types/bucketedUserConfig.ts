@@ -28,7 +28,7 @@ export class BucketedUserConfig extends JSON.Obj {
      * Making this a method instead of constructor that we can use just for testing these models,
      * these values will be generated from the bucketing code.
      */
-    static bucketedUserConfigFromJSONString(userConfigStr: string): BucketedUserConfig {
+    static fromJSONString(userConfigStr: string): BucketedUserConfig {
         const userConfigJSON = JSON.parse(userConfigStr)
         if (!userConfigJSON.isObj) throw new Error('bucketedUserConfigFromJSONString not a JSON Object')
         const userConfigJSONObj = userConfigJSON as JSON.Obj
@@ -41,7 +41,7 @@ export class BucketedUserConfig extends JSON.Obj {
         const featuresMap = new Map<string, SDKFeature>()
         for (let i = 0; i < features.keys.length; i++) {
             const key = features.keys[i]
-            features.set(key, SDKFeature.sdkFeatureFromJSONObj(features.get(key) as JSON.Obj))
+            features.set(key, SDKFeature.fromJSONString(features.get(key) as JSON.Obj))
         }
 
         const featureVar = getJSONObjFromJSON(userConfigJSONObj, 'featureVariationMap')
@@ -58,7 +58,7 @@ export class BucketedUserConfig extends JSON.Obj {
         const variablesMap = new Map<string, SDKVariable>()
         for (let i = 0; i < variables.keys.length; i++) {
             const key = variables.keys[i]
-            variablesMap.set(key, SDKVariable.sdkVariableFromJSONObj(variables.get(key) as JSON.Obj))
+            variablesMap.set(key, SDKVariable.fromJSONString(variables.get(key) as JSON.Obj))
         }
 
         const knownVariableKeys = getJSONArrayFromJSON(userConfigJSONObj, 'knownVariableKeys')
@@ -109,15 +109,15 @@ export class SDKFeature extends JSON.Obj {
         super()
     }
 
-    static sdkFeatureFromJSONObj(feature: JSON.Obj): SDKFeature {
+    static fromJSONString(featureStr: JSON.Obj): SDKFeature {
         return new SDKFeature(
-            getStringFromJSON(feature, '_id'),
-            getStringFromJSON(feature, 'type'),
-            getStringFromJSON(feature, 'key'),
-            getStringFromJSON(feature, '_variation'),
-            getStringFromJSON(feature, 'variationName'),
-            getStringFromJSON(feature, 'variationKey'),
-            getStringFromJSONOptional(feature, 'evalReason')
+            getStringFromJSON(featureStr, '_id'),
+            getStringFromJSON(featureStr, 'type'),
+            getStringFromJSON(featureStr, 'key'),
+            getStringFromJSON(featureStr, '_variation'),
+            getStringFromJSON(featureStr, 'variationName'),
+            getStringFromJSON(featureStr, 'variationKey'),
+            getStringFromJSONOptional(featureStr, 'evalReason')
         )
     }
 
@@ -147,13 +147,13 @@ export class SDKVariable extends JSON.Obj {
         super()
     }
 
-    static sdkVariableFromJSONObj(variable: JSON.Obj): SDKVariable {
+    static fromJSONString(variableStr: JSON.Obj): SDKVariable {
         return new SDKVariable(
-            getStringFromJSON(variable, '_id'),
-            getStringFromJSON(variable, 'type'),
-            getStringFromJSON(variable, 'key'),
-            getJSONValueFromJSON(variable, 'value'),
-            getStringFromJSONOptional(variable, 'evalReason')
+            getStringFromJSON(variableStr, '_id'),
+            getStringFromJSON(variableStr, 'type'),
+            getStringFromJSON(variableStr, 'key'),
+            getJSONValueFromJSON(variableStr, 'value'),
+            getStringFromJSONOptional(variableStr, 'evalReason')
         )
     }
 

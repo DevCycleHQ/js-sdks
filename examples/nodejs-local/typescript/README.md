@@ -6,4 +6,4 @@ Example app for using the DevCycle NodeJS Server SDK with nodejs and typescript.
 
 run from the repo's root folder:
 
-```yarn nx serve example-nodejs-typescript```
+```yarn nx serve example-nodejs-local-typescript```

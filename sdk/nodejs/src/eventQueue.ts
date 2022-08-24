@@ -8,7 +8,9 @@ import { chunk } from 'lodash'
 
 export const AggregateEventTypes: Record<string, string> = {
     variableEvaluated: 'variableEvaluated',
+    aggVariableEvaluated: 'aggVariableEvaluated',
     variableDefaulted: 'variableDefaulted',
+    aggVariableDefaulted: 'aggVariableDefaulted'
 }
 
 export const EventTypes: Record<string, string> = {
@@ -34,7 +36,18 @@ type options = {
     disableAutomaticEventLogging?: boolean,
     disableCustomEventLogging?: boolean
 }
-export class EventQueue {
+
+export interface EventQueueInterface {
+    cleanup(): void
+
+    flushEvents(): Promise<void>
+
+    queueEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void
+
+    queueAggregateEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void
+}
+
+export class EventQueue implements EventQueueInterface {
     private readonly logger: DVCLogger
     private readonly environmentKey: string
     private userEventQueue: UserEventQueue
@@ -210,7 +223,7 @@ export class EventQueue {
             return
         }
         this.maxEventQueueSize = bucketedConfig?.project.settings.sdkSettings?.eventQueueLimit ?? this.maxEventQueueSize
-        
+
         checkParamDefined('user_id', user?.user_id)
         checkParamDefined('type', event.type)
         checkParamDefined('target', event.target)
