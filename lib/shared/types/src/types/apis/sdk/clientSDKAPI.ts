@@ -115,7 +115,7 @@ export class DVCAPIUser {
     @IsOptional()
     @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
         privateCustomData?: DVCJSON
- 
+
     /**
      * Set by SDK automatically
      */
@@ -170,7 +170,7 @@ export class DVCAPIUser {
         sdkVersion?: string
 }
 
-export class DVCBucketingUser extends DVCAPIUser { 
+export class DVCBucketingUser extends DVCAPIUser {
     /**
     * JSON data recording user opt-in features.
      */
@@ -354,6 +354,11 @@ export interface BucketedUserConfig {
      * Map of `feature._id` to `variation._id` used for event logging.
      */
     featureVariationMap: Record<string, string>
+
+    /**
+     * Map<`variable.key`, Map<`feature._id`,`variation._id`>> used for aggregated event logging.
+     */
+    variableFeatureVariationMap: Record<string, Record<string, string>>
 
     /**
      * Mapping of `ClientSDKDynamicVariable.key` to `ClientSDKDynamicVariable` values.

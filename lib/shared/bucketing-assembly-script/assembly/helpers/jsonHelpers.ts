@@ -132,6 +132,17 @@ export function jsonObjFromMap<T>(objMap: Map<string, T>): JSON.Obj {
     return jsonObj
 }
 
+export function jsonObjFromDoubleMap<T>(objMap: Map<string, Map<string, T>>): JSON.Obj {
+    const jsonObj = new JSON.Obj()
+    const keys = objMap.keys()
+
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i]
+        jsonObj.set(key, jsonObjFromMap(objMap.get(key)))
+    }
+    return jsonObj
+}
+
 export function getJSONValueFromJSON(jsonObj: JSON.Obj, key: string): JSON.Value {
     const value = jsonObj.get(key)
     if (!value) {
@@ -149,6 +160,16 @@ export function getF64FromJSONValue(jsonValue: JSON.Value): f64 {
     return float
         ? (float as JSON.Float).valueOf()
         : (int ? f64((int as JSON.Integer).valueOf()) : NaN)
+}
+
+export function getStringMapFromJSONObj(jsonObj: JSON.Obj): Map<string, string> {
+    const stringMap = new Map<string, string>()
+    for (let i = 0; i < jsonObj.keys.length; i++) {
+        const key = jsonObj.keys[i]
+        const jsonString = jsonObj.get(key) as JSON.Str
+        stringMap.set(key, jsonString.valueOf())
+    }
+    return stringMap
 }
 
 export function isFlatJSONObj(json: JSON.Obj | null): bool {

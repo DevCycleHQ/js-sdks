@@ -18,14 +18,15 @@ describe('EventQueue Unit Tests', () => {
         environment: { _id: '', key: '' },
         features: {},
         knownVariableKeys: [],
-        project: { 
-            _id: '', 
-            key: '', 
-            a0_organization: 'org_', 
-            settings: { edgeDB: { enabled: false } } 
+        project: {
+            _id: '',
+            key: '',
+            a0_organization: 'org_',
+            settings: { edgeDB: { enabled: false } }
         } as PublicProject,
         variables: {},
-        featureVariationMap: { feature: 'var' }
+        featureVariationMap: { feature: 'var' },
+        variableFeatureVariationMap: { }
     }
     const mockAxiosResponse = (obj: any): AxiosResponse => ({
         status: 200,
@@ -132,47 +133,48 @@ describe('EventQueue Unit Tests', () => {
 
     it('should setup Event Queue and not process automatic events if disableAutomaticEventLogging is true',
         async () => {
-        publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
+            publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
 
-        const eventQueue = new EventQueue(logger, 'envKey',
-            {
-                disableAutomaticEventLogging: true,
-                disableCustomEventLogging: false
-            })
-        const user = new DVCPopulatedUser({ user_id: 'user1' })
-        const event = { type: 'test_event' }
-        eventQueue.queueEvent(user, event, config)
+            const eventQueue = new EventQueue(logger, 'envKey',
+                {
+                    disableAutomaticEventLogging: true,
+                    disableCustomEventLogging: false
+                })
+            const user = new DVCPopulatedUser({ user_id: 'user1' })
+            const event = { type: 'test_event' }
+            eventQueue.queueEvent(user, event, config)
 
-        const aggEvent = { type: EventTypes.variableEvaluated, target: 'key' }
-        eventQueue.queueAggregateEvent(user, aggEvent, config)
+            const aggEvent = { type: EventTypes.variableEvaluated, target: 'key' }
+            eventQueue.queueAggregateEvent(user, aggEvent, config)
 
-        await eventQueue.flushEvents()
-        eventQueue.cleanup()
+            await eventQueue.flushEvents()
+            eventQueue.cleanup()
 
-        expect(publishEvents_mock).toBeCalledWith(logger, 'envKey', [
-            {
-                user: expect.objectContaining({
-                    user_id: 'user1',
-                    createdDate: expect.any(Date),
-                    lastSeenDate: expect.any(Date),
-                    platform: 'NodeJS',
-                    platformVersion: expect.any(String),
-                    sdkType: 'server',
-                    sdkVersion: expect.any(String)
-                }),
-                events: [
-                    expect.objectContaining({
-                        clientDate: expect.any(Number),
-                        customType: 'test_event',
-                        date: expect.any(Number),
-                        featureVars: { 'feature': 'var' },
-                        type: 'customEvent',
-                        user_id: 'user1'
-                    })
-                ]
-            }
-        ])
-    })
+            expect(publishEvents_mock).toBeCalledWith(logger, 'envKey', [
+                {
+                    user: expect.objectContaining({
+                        user_id: 'user1',
+                        createdDate: expect.any(Date),
+                        lastSeenDate: expect.any(Date),
+                        platform: 'NodeJS',
+                        platformVersion: expect.any(String),
+                        sdkType: 'server',
+                        sdkVersion: expect.any(String)
+                    }),
+                    events: [
+                        expect.objectContaining({
+                            clientDate: expect.any(Number),
+                            customType: 'test_event',
+                            date: expect.any(Number),
+                            featureVars: { 'feature': 'var' },
+                            type: 'customEvent',
+                            user_id: 'user1'
+                        })
+                    ]
+                }
+            ])
+        }
+    )
 
     it('should save multiple events from multiple users with aggregated values', async () => {
         publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
@@ -429,8 +431,8 @@ describe('EventQueue Unit Tests', () => {
         }
 
         eventQueue.queueAggregateEvent(
-            new DVCPopulatedUser({ user_id: `user1001` }), 
-            { type: EventTypes.variableEvaluated, target: 'key2' }, 
+            new DVCPopulatedUser({ user_id: 'user1001' }),
+            { type: EventTypes.variableEvaluated, target: 'key2' },
             config
         )
 
@@ -459,7 +461,7 @@ describe('EventQueue Unit Tests', () => {
         }
         expect(flushEvents_mock).toBeCalledTimes(0)
 
-        // since max event queue size has been reached, attempting to add a new user event will flush the queue 
+        // since max event queue size has been reached, attempting to add a new user event will flush the queue
         eventQueue.queueEvent(user, { type: 'test_event' }, config)
         expect(flushEvents_mock).toBeCalledTimes(1)
     })
@@ -480,7 +482,7 @@ describe('EventQueue Unit Tests', () => {
         }
         expect(flushEvents_mock).toBeCalledTimes(0)
 
-        // since max event queue size has been reached, attempting to add a new agg event will flush the queue 
+        // since max event queue size has been reached, attempting to add a new agg event will flush the queue
         eventQueue.queueAggregateEvent(new DVCPopulatedUser({ user_id: 'last_user' }), aggEvent, config)
         expect(flushEvents_mock).toBeCalledTimes(1)
     })

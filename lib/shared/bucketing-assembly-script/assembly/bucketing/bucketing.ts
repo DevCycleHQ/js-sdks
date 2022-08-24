@@ -189,6 +189,7 @@ export function _generateBucketedConfig(
     const variableMap = new Map<string, SDKVariable>()
     const featureKeyMap = new Map<string, SDKFeature>()
     const featureVariationMap = new Map<string, string>()
+    const variableFeatureVariationMap = new Map<string, Map<string, string>>()
     const segmentedFeatures = getSegmentedFeatureDataFromConfig(config, user)
 
     for (let i = 0; i < segmentedFeatures.length; i++) {
@@ -242,6 +243,17 @@ export function _generateBucketedConfig(
                 throw new Error(`Config missing variable: ${variationVar._var}`)
             }
 
+            let featVarMap: Map<string, string>
+            if (variableFeatureVariationMap.has(variable.key)) {
+                featVarMap = variableFeatureVariationMap.get(variable.key)
+                featVarMap.set(feature._id, variation_id)
+            } else {
+                featVarMap = new Map<string, string>()
+                featVarMap.set(feature._id, variation_id)
+            }
+            console.log(`Set var feature map, key: ${variable.key}`)
+            variableFeatureVariationMap.set(variable.key, featVarMap)
+
             const newVar = new SDKVariable(
                 variable._id,
                 variable.type,
@@ -258,6 +270,7 @@ export function _generateBucketedConfig(
         config.environment,
         featureKeyMap,
         featureVariationMap,
+        variableFeatureVariationMap,
         variableMap,
         generateKnownVariableKeys(config.variableHashes, variableMap)
     )
