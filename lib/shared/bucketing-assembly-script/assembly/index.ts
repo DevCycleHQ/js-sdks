@@ -33,6 +33,8 @@ export function setConfigData(token: string, configDataStr: string): void {
     _setConfigData(token, configData)
 }
 
+export * from './managers/eventQueueManager'
+
 export * from './test'
 
 export { murmurhashV3, murmurhashV3_js } from './helpers/murmurhash'

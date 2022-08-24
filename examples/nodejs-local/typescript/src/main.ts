@@ -32,7 +32,10 @@ async function validateUserFromQueryParams(queryParams: Query): Promise<DVCClien
 }
 
 async function startDVC() {
-    dvcClient = await initialize('<DVC_SERVER_KEY>', { logLevel: 'debug' }).onClientInitialized()
+    dvcClient = await initialize(
+        'server-e5ca5a58-6824-48e1-965c-35dbcd98c7ce',
+        { logLevel: 'debug' }
+    ).onClientInitialized()
     console.log('DVC onClientInitialized')
 
     const user = {

@@ -1,0 +1,62 @@
+import { EventQueue } from '../eventQueue/eventQueue'
+import { EventQueueOptions, DVCPopulatedUser, DVCEvent } from '../types'
+import { _getConfigData } from './configDataManager'
+import { _generateBucketedConfig } from '../bucketing'
+
+const _eventQueueMap: Map<string, EventQueue> = new Map()
+
+function getEventQueue(envKey: string): EventQueue {
+    if (!_eventQueueMap.has(envKey)) {
+        throw new Error(`No Event Queue found for envKey: ${envKey}`)
+    }
+    return _eventQueueMap.get(envKey)
+}
+
+/**
+ * This should be called from the Native code where the existing EventQueue Class is setup.
+ * This creates the WASM EventQueue class and stores it in a map by env envKey,
+ * this is needed because our SDKs support creating multiple DVCClient objects by token.
+ */
+export function initEventQueue(envKey: string, optionsStr: string): void {
+    if (_eventQueueMap.has(envKey)) {
+        throw new Error(`Event Queue already exists for envKey: ${envKey}`)
+    }
+
+    const options = new EventQueueOptions(optionsStr)
+    const queue = new EventQueue(envKey, options)
+    _eventQueueMap.set(envKey, queue)
+    console.log('Initialized Event Queue, envKey: ' + envKey)
+}
+
+export function flushEventQueue(envKey: string): string {
+    const eventQueue = getEventQueue(envKey)
+    return eventQueue.flush()
+}
+
+export function onPayloadSuccess(envKey: string, payloadId: string): void {
+    const eventQueue = getEventQueue(envKey)
+    eventQueue.onPayloadSuccess(payloadId)
+}
+
+export function onPayloadFailure(envKey: string, payloadId: string, retryable: boolean): void {
+    const eventQueue = getEventQueue(envKey)
+    eventQueue.onPayloadFailure(payloadId, retryable)
+}
+
+export function queueEvent(envKey: string, userStr: string, eventStr: string): void {
+    const eventQueue = getEventQueue(envKey)
+    const dvcUser = DVCPopulatedUser.populatedUserFromString(userStr)
+    const event = new DVCEvent(eventStr)
+
+    const bucketedConfig = _generateBucketedConfig(_getConfigData(envKey), dvcUser)
+    eventQueue.queueEvent(dvcUser, event, bucketedConfig)
+}
+
+export function queueAggregateEvent(envKey: string, userStr: string, eventStr: string): void {
+    const eventQueue = getEventQueue(envKey)
+    const dvcUser = DVCPopulatedUser.populatedUserFromString(userStr)
+    const event = new DVCEvent(eventStr)
+
+    const bucketedConfig = _generateBucketedConfig(_getConfigData(envKey), dvcUser)
+    eventQueue.queueAggregateEvent(event, bucketedConfig)
+}

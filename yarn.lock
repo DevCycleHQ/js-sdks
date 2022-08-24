@@ -6673,6 +6673,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"as-uuid@npm:^0.0.4":
+  version: 0.0.4
+  resolution: "as-uuid@npm:0.0.4"
+  checksum: c77685355b949e6efde6bff441bde0c4906ffae22f2d1dc0ac0cbae1b81a518dd77d48568951c81179d4d5ad670581015102eca3c9a7f4453d1c457e6558b784
+  languageName: node
+  linkType: hard
+
 "as-wasi@npm:^0.4.6":
   version: 0.4.6
   resolution: "as-wasi@npm:0.4.6"
@@ -9533,6 +9540,7 @@ __metadata:
     "@types/uuid": ^8.3.1
     "@typescript-eslint/eslint-plugin": 5.18.0
     "@typescript-eslint/parser": 5.18.0
+    as-uuid: ^0.0.4
     as-wasi: ^0.4.6
     assemblyscript: "https://github.com/DevCycleHQ/assemblyscript#56a01ceccab1f2836505b8cfcdeec366cb78883f"
     assemblyscript-json: "https://github.com/DevCycleHQ/assemblyscript-json"

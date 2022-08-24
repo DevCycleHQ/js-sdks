@@ -62,6 +62,10 @@ export class DVCClient {
 
                 getBucketingLib().setPlatformData(JSON.stringify(platformData))
 
+                getBucketingLib().initEventQueue(environmentKey, JSON.stringify(options))
+
+                setInterval(() => this.flushEventsAS(), options?.flushEventsMS || 10 * 1000)
+
                 return this.configHelper.fetchConfigPromise
             })
 
@@ -79,6 +83,11 @@ export class DVCClient {
         process.on('exit', () => {
             this.configHelper?.cleanup()
         })
+    }
+
+    flushEventsAS(): void {
+        const flushPayloads = getBucketingLib().flushEventQueue(this.environmentKey)
+        console.log(`Flush Payloads: ${flushPayloads}`)
     }
 
     /**

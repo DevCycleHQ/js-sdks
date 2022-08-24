@@ -210,7 +210,7 @@ export class EventQueue {
             return
         }
         this.maxEventQueueSize = bucketedConfig?.project.settings.sdkSettings?.eventQueueLimit ?? this.maxEventQueueSize
-        
+
         checkParamDefined('user_id', user?.user_id)
         checkParamDefined('type', event.type)
         checkParamDefined('target', event.target)
