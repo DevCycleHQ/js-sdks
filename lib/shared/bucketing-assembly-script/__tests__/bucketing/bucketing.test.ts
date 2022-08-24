@@ -163,6 +163,11 @@ describe('Config Parsing and Generating', () => {
             'featureVariationMap': {
                 '614ef6aa473928459060721a': '615357cf7e9ebdca58446ed0'
             },
+            'variableFeatureVariationMap': {
+                'swagTest': {
+                    '614ef6aa473928459060721a': '615357cf7e9ebdca58446ed0'
+                }
+            },
             'variables': {
                 'swagTest': {
                     '_id': '615356f120ed334a6054564c',
@@ -226,6 +231,20 @@ describe('Config Parsing and Generating', () => {
             'featureVariationMap': {
                 '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
                 '614ef6aa475928459060721a': '615382338424cb11646d7668'
+            },
+            'variableFeatureVariationMap': {
+                'feature2.cool': {
+                    '614ef6aa475928459060721a': '615382338424cb11646d7668'
+                },
+                'feature2.hello': {
+                    '614ef6aa475928459060721a': '615382338424cb11646d7668'
+                },
+                'swagTest': {
+                    '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d'
+                },
+                'test': {
+                    '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d'
+                }
             },
             'variables': {
                 'feature2.cool': {
@@ -300,6 +319,11 @@ describe('Config Parsing and Generating', () => {
                     'variationKey': 'variation-1-aud-2-key',
                 }
             },
+            'variableFeatureVariationMap': {
+                'feature2Var': {
+                    '614ef6aa475928459060721a': '615382338424cb11646d7667'
+                }
+            },
             'featureVariationMap': {
                 '614ef6aa475928459060721a': '615382338424cb11646d7667'
             },
@@ -367,19 +391,26 @@ describe('Config Parsing and Generating', () => {
                 '614ef6aa473928459060721a': '615357cf7e9ebdca58446ed0',
                 '614ef6aa475928459060721a': '615382338424cb11646d7667'
             },
+            'variableFeatureVariationMap': {
+                'feature2Var': {
+                    '614ef6aa475928459060721a': '615382338424cb11646d7667'
+                },
+                'swagTest': {
+                    '614ef6aa473928459060721a': '615357cf7e9ebdca58446ed0'
+                }
+            },
             'variables': {
                 'swagTest': {
                     '_id': '615356f120ed334a6054564c',
                     'key': 'swagTest',
                     'type': 'String',
-                    'value': 'YEEEEOWZA',
+                    'value': 'YEEEEOWZA'
                 },
                 'feature2Var': {
                     '_id': '61538237b0a70b58ae6af71f',
                     'key': 'feature2Var',
                     'type': 'String',
-                    'value': 'Var 1 aud 2',
-
+                    'value': 'Var 1 aud 2'
                 }
             }
         }

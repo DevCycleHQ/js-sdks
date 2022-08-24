@@ -127,13 +127,13 @@ export const getSegmentedFeatureDataFromConfig = (
     const initialValue: SegmentedFeatureData[] = []
     return config.features.reduce((accumulator, feature) => {
         // Returns the first target for which the user passes segmentation
-        const isOptInEnabled = feature.settings?.['optInEnabled'] && config.project.settings?.['optIn']?.['enabled'] 
+        const isOptInEnabled = feature.settings?.['optInEnabled'] && config.project.settings?.['optIn']?.['enabled']
 
         const segmentedFeatureTarget = feature.configuration.targets.find((target) => {
-            return evaluateOperator({ 
-                operator: target._audience.filters, 
-                data: user, 
-                featureId: feature._id, 
+            return evaluateOperator({
+                operator: target._audience.filters,
+                data: user,
+                featureId: feature._id,
                 isOptInEnabled: !!isOptInEnabled
             })
         })
@@ -197,8 +197,8 @@ export const generateBucketedConfig = (
             if (!variable) {
                 throw new Error(`Config missing variable: ${_var}`)
             }
-            variableMap[variable.key] = { 
-                ...variable, 
+            variableMap[variable.key] = {
+                ...variable,
                 value,
             }
         })
@@ -209,6 +209,8 @@ export const generateBucketedConfig = (
         environment: pick(config.environment, ['_id', 'key']),
         features: featureKeyMap,
         featureVariationMap,
+        // Return empty object for now, until we switch to WASM bucketing logic
+        variableFeatureVariationMap: {},
         knownVariableKeys: generateKnownVariableKeys({
             variableHashes: config.variableHashes,
             variableMap
