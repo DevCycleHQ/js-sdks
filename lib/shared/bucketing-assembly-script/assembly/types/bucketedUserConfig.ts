@@ -3,9 +3,10 @@ import {
     getJSONArrayFromJSON,
     getJSONObjFromJSON,
     getJSONValueFromJSON,
+    getStringArrayFromJSON,
     getStringFromJSON,
     getStringFromJSONOptional,
-    getStringMapFromJSONObj, jsonObjFromDoubleMap,
+    getStringMapFromJSONObj,
     jsonObjFromMap
 } from '../helpers/jsonHelpers'
 import { PublicProject, PublicEnvironment } from './configBody'
@@ -16,7 +17,7 @@ export class BucketedUserConfig extends JSON.Obj {
         public environment: PublicEnvironment,
         public features: Map<string, SDKFeature>,
         public featureVariationMap: Map<string, string>,
-        public variableFeatureVariationMap: Map<string, Map<string, string>>,
+        public variableVariationMap: Map<string, string[]>,
         public variables: Map<string, SDKVariable>,
         public knownVariableKeys: i64[]
     ) {
@@ -46,12 +47,11 @@ export class BucketedUserConfig extends JSON.Obj {
         const featureVar = getJSONObjFromJSON(userConfigJSONObj, 'featureVariationMap')
         const featureVarMap = getStringMapFromJSONObj(featureVar)
 
-        const variableFeatureVariation = getJSONObjFromJSON(userConfigJSONObj, 'variableFeatureVariationMap')
-        const variableFeatureVariationMap = new Map<string, Map<string, string>>()
+        const variableFeatureVariation = getJSONObjFromJSON(userConfigJSONObj, 'variableVariationMap')
+        const variableVariationMap = new Map<string, string[]>()
         for (let i = 0; i < variableFeatureVariation.keys.length; i++) {
             const key = variableFeatureVariation.keys[i]
-            const featureVarJSON = variableFeatureVariation.get(key) as JSON.Obj
-            variableFeatureVariationMap.set(key, getStringMapFromJSONObj(featureVarJSON))
+            variableVariationMap.set(key, getStringArrayFromJSON(variableFeatureVariation, key))
         }
 
         const variables = getJSONObjFromJSON(userConfigJSONObj, 'variables')
@@ -77,7 +77,7 @@ export class BucketedUserConfig extends JSON.Obj {
             environment,
             featuresMap,
             featureVarMap,
-            variableFeatureVariationMap,
+            variableVariationMap,
             variablesMap,
             knownVariableKeysArray
         )
@@ -89,7 +89,7 @@ export class BucketedUserConfig extends JSON.Obj {
         json.set('environment', this.environment)
         json.set('features', jsonObjFromMap(this.features))
         json.set('featureVariationMap', jsonObjFromMap(this.featureVariationMap))
-        json.set('variableFeatureVariationMap', jsonObjFromDoubleMap(this.variableFeatureVariationMap))
+        json.set('variableVariationMap', jsonObjFromMap(this.variableVariationMap))
         json.set('variables', jsonObjFromMap(this.variables))
         json.set('knownVariableKeys', this.knownVariableKeys)
         return json.stringify()

@@ -29,6 +29,16 @@ export function getStringFromJSON(jsonObj: JSON.Obj, key: string): string {
     }
 }
 
+export function getStringArrayFromJSON(jsonObj: JSON.Obj, key: string): string[] {
+    const strArray = getJSONArrayFromJSON(jsonObj, key).valueOf()
+    const strings = new Array<string>()
+    for (let i=0; i < strArray.length; i++) {
+        const value = strArray[i]
+        strings.push(value.toString())
+    }
+    return strings
+}
+
 export function getStringFromJSONOptional(jsonObj: JSON.Obj, key: string): string | null {
     const str = jsonObj.getString(key)
     if (!str) {
@@ -128,17 +138,6 @@ export function jsonObjFromMap<T>(objMap: Map<string, T>): JSON.Obj {
     for (let i = 0; i < keys.length; i++) {
         const key = keys[i]
         jsonObj.set(key, objMap.get(key))
-    }
-    return jsonObj
-}
-
-export function jsonObjFromDoubleMap<T>(objMap: Map<string, Map<string, T>>): JSON.Obj {
-    const jsonObj = new JSON.Obj()
-    const keys = objMap.keys()
-
-    for (let i = 0; i < keys.length; i++) {
-        const key = keys[i]
-        jsonObj.set(key, jsonObjFromMap(objMap.get(key)))
     }
     return jsonObj
 }
