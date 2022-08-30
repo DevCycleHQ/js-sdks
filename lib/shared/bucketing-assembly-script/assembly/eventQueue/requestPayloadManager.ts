@@ -1,7 +1,13 @@
 import {
+    DVCEvent,
+    DVCUser,
+    DVCPopulatedUser,
+    DVCRequestEvent,
     FlushPayload,
     UserEventsBatchRecord
 } from '../types'
+import { jsonObjFromMap } from '../helpers/jsonHelpers'
+import { JSON } from 'assemblyscript-json/assembly'
 
 /**
  * This RequestPayloadManager Class handles all the logic for creating event flushing payloads,
@@ -12,7 +18,7 @@ export class RequestPayloadManager {
 
     constructFlushPayloads(
         userEventQueue: Map<string, UserEventsBatchRecord>,
-        aggEventQueue: Map<string, Map<string, i64>>,
+        aggEventQueue: Map<string, Map<string, Map<string, i64>>>,
         chunkSize: i32 = 100
     ): FlushPayload[] {
         this.pendingPayloads = []
@@ -21,32 +27,73 @@ export class RequestPayloadManager {
         for (let i = 0; i < userEventQueueKeys.length; i++) {
             const key = userEventQueueKeys[i]
             const userEventsRecord = userEventQueue.get(key)
-            this.addEventToCurrentAggregator(userEventsRecord, chunkSize)
+            this.addEventsToPendingPayloads(userEventsRecord, chunkSize)
         }
 
-        // TODO: add agg events
+        this.addAggEventsToPendingPayloads(aggEventQueue, chunkSize)
 
         return this.pendingPayloads
     }
 
-    private addEventToCurrentAggregator(record: UserEventsBatchRecord, chunkSize: i32): void {
-        let lastPayload = this.pendingPayloads.length > 0 ? this.pendingPayloads.pop() : new FlushPayload([])
-        if (lastPayload.records.length >= chunkSize) {
-            this.pendingPayloads.push(lastPayload)
-            lastPayload = new FlushPayload([])
+    private addAggEventsToPendingPayloads(
+        aggEventQueue: Map<string, Map<string, Map<string, i64>>>,
+        chunkSize: i32
+    ): void {
+        const aggEventQueueKeys = aggEventQueue.keys()
+        const aggEvents: DVCRequestEvent[] = []
+        // TODO: Implement hostName support
+        const user_id = 'aggregate'
+
+        for (let i = 0; i < aggEventQueueKeys.length; i++) {
+            const type = aggEventQueueKeys[i]
+            const typeAggMap: Map<string, Map<string, i64>> = aggEventQueue.get(type)
+            const typeAggMapKeys = typeAggMap.keys()
+
+            for (let y = 0; y < typeAggMapKeys.length; y++) {
+                const target = typeAggMapKeys[y]
+                const targetAggMap: Map<string, i64> = typeAggMap.get(target)
+                let value: f64 = NaN
+                let metaData: JSON.Obj | null = null
+                if (targetAggMap.has('value')) {
+                    value = f64(targetAggMap.get('value'))
+                } else {
+                    metaData = jsonObjFromMap(targetAggMap)
+                }
+
+                const dvcEvent = new DVCEvent(
+                    type,
+                    target,
+                    null,
+                    value,
+                    metaData
+                )
+                aggEvents.push(new DVCRequestEvent(dvcEvent, user_id, null))
+            }
         }
+
+        const dvcUser = new DVCPopulatedUser(new DVCUser(
+            user_id, null, null, null, null, NaN, null, null, null, null
+        ))
+        this.addEventsToPendingPayloads(
+            new UserEventsBatchRecord(dvcUser, aggEvents),
+            chunkSize
+        )
+    }
+
+    private addEventsToPendingPayloads(record: UserEventsBatchRecord, chunkSize: i32): void {
+        let flushPayload =  new FlushPayload([])
 
         while (record.events.length > chunkSize) {
             const batchRecord = new UserEventsBatchRecord(record.user, record.events.splice(0, chunkSize))
-            lastPayload.records.push(batchRecord)
-            this.pendingPayloads.push(lastPayload)
-            lastPayload = new FlushPayload([])
+            flushPayload.records.push(batchRecord)
+            this.pendingPayloads.push(flushPayload)
+            flushPayload = new FlushPayload([])
         }
         if (record.events.length > 0) {
-            lastPayload.records.push(record)
+            flushPayload.records.push(record)
         }
-        if (lastPayload.records.length > 0) {
-            this.pendingPayloads.push(lastPayload)
+        if (flushPayload.records.length > 0) {
+            this.pendingPayloads.push(flushPayload)
         }
     }
 

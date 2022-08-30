@@ -24,42 +24,47 @@ EventTypes.add('variableDefaulted')
 EventTypes.add('aggVariableEvaluated')
 
 export class DVCEvent extends JSON.Value implements DVCUserInterface {
-    /**
-     * type of the event
-     */
-    type: string
+    constructor(
+        /**
+         * type of the event
+         */
+        public type: string,
 
-    /**
-     * date event occurred according to client stored as time since epoch
-     */
-    date: Date | null
+        /**
+         * target / subject of event. Contextual to event type
+         */
+        public target: string | null,
 
-    /**
-     * target / subject of event. Contextual to event type
-     */
-    target: string | null
+        /**
+         * date event occurred according to client stored as time since epoch
+         */
+        public date: Date | null,
 
-    /**
-     * value for numerical events. Contextual to event type
-     */
-    value: f64
+        /**
+         * value for numerical events. Contextual to event type
+         */
+        public value: f64,
 
-    /**
-     * extra metadata for event. Contextual to event type
-     */
-    metaData: JSON.Obj | null
-
-    constructor(eventStr: string) {
+        /**
+         * extra metadata for event. Contextual to event type
+         */
+        public metaData: JSON.Obj | null
+    ) {
         super()
+    }
+
+    static fromJSONString(eventStr: string): DVCEvent {
         const eventJSON = JSON.parse(eventStr)
         if (!eventJSON.isObj) throw new Error('DVCEvent eventStr not a JSON Object')
         const event = eventJSON as JSON.Obj
 
-        this.type = getStringFromJSON(event, 'type')
-        this.date = getDateFromJSONOptional(event, 'date')
-        this.target = getStringFromJSONOptional(event, 'target')
-        this.value = getF64FromJSONOptional(event, 'value', NaN)
-        this.metaData = getJSONObjFromJSONOptional(event, 'metaData')
+        return new DVCEvent(
+            getStringFromJSON(event, 'type'),
+            getStringFromJSONOptional(event, 'target'),
+            getDateFromJSONOptional(event, 'date'),
+            getF64FromJSONOptional(event, 'value', NaN),
+            getJSONObjFromJSONOptional(event, 'metaData')
+        )
     }
 
     stringify(): string {

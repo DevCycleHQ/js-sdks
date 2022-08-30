@@ -15,15 +15,21 @@ export class EventQueue {
     private envKey: string
     private options: EventQueueOptions
     private userEventQueue: Map<string, UserEventsBatchRecord>
-    // Map<variable.key, Map<feature/var string, counter>>
-    private aggEventQueue: Map<string, Map<string, i64>>
+    /**
+     * Map<'aggVariableDefaulted' | 'aggVariableEvaluated,
+     *      Map<variable.key,
+     *          Map<`${feature_id}.${variation_id}`, counter>
+     *      >
+     * >
+     */
+    private aggEventQueue: Map<string, Map<string, Map<string, i64>>>
 
     constructor(envKey: string, options: EventQueueOptions) {
         this.requestPayloadManager = new RequestPayloadManager()
         this.envKey = envKey
         this.options = options
         this.userEventQueue = new Map<string, UserEventsBatchRecord>()
-        this.aggEventQueue = new Map<string, Map<string, i64>>()
+        this.aggEventQueue = new Map<string, Map<string, Map<string, i64>>>()
     }
 
     /**
@@ -59,7 +65,7 @@ export class EventQueue {
             this.aggEventQueue
         )
         this.userEventQueue = new Map<string, UserEventsBatchRecord>()
-        this.aggEventQueue = new Map<string, Map<string, i64>>()
+        this.aggEventQueue = new Map<string, Map<string, Map<string, i64>>>()
         return jsonArrFromValueArray(failedPayloads.concat(payloads)).stringify()
     }
 
@@ -103,23 +109,13 @@ export class EventQueue {
         userEvents.events.push(event)
     }
 
-    /**
-     * See sdk/nodejs/src/eventQueue.ts for context on how this should be implemented.
-     *
-     * However, the aggregation code will need to be changed to not aggregate based on user_id,
-     * but based on variable.key and variableFeatureVariationMap data.
-     */
     queueAggregateEvent(event: DVCEvent, bucketedConfig: BucketedUserConfig): void {
         console.log(`queueAggregateEvent event: ${event.type}`)
-
-        event.date = new Date(Date.now())
-        // TODO: should we use host.name for user_id?
-        const user_id = 'aggregate'
-        const requestEvent = new DVCRequestEvent(event, user_id, bucketedConfig.featureVariationMap)
-        this.saveAggEvent(requestEvent, bucketedConfig)
+        this.saveAggEvent(event, bucketedConfig)
     }
 
-    private saveAggEvent(event: DVCRequestEvent, bucketedConfig: BucketedUserConfig): void {
+    private saveAggEvent(event: DVCEvent, bucketedConfig: BucketedUserConfig): void {
+        const type = event.type
         const target = event.target
         if (!target) {
             throw new Error('Event missing target to save aggregate event')
@@ -132,12 +128,20 @@ export class EventQueue {
         //     return
         // }
 
+        let typeAggMap: Map<string, Map<string, i64>>
+        if (this.aggEventQueue.has(type)) {
+            typeAggMap = this.aggEventQueue.get(type)
+        } else {
+            typeAggMap = new Map<string, Map<string, i64>>()
+            this.aggEventQueue.set(type, typeAggMap)
+        }
+
         let targetAggMap: Map<string, i64>
-        if (this.aggEventQueue.has(target)) {
-            targetAggMap = this.aggEventQueue.get(target)
+        if (typeAggMap.has(target)) {
+            targetAggMap = typeAggMap.get(target)
         } else {
             targetAggMap = new Map<string, i64>()
-            this.aggEventQueue.set(target, targetAggMap)
+            typeAggMap.set(target, targetAggMap)
         }
 
         // TODO: Do we need to check that the type is aggVariableEvaluated here?
@@ -146,20 +150,21 @@ export class EventQueue {
 
             for (let i = 0; i < targetVariations.length; i++) {
                 const featureKey = targetVariations[i]
-                let featureCount: i64
                 if (targetAggMap.has(featureKey)) {
-                    featureCount = targetAggMap.get(featureKey)
+                    let featureCount: i64 = targetAggMap.get(featureKey)
                     targetAggMap.set(featureKey, featureCount++)
                 } else {
                     targetAggMap.set(featureKey, 1)
                 }
             }
-        } else {
-            // TODO: Do we need to check that the type is aggVariableDefaulted here?
-            if (event.value) {
-                event.value = event.value++
+        }
+        // TODO: Do we need to check that the type is aggVariableDefaulted here?
+        else {
+            if (targetAggMap.has('value')) {
+                let count: i64 = targetAggMap.get('value')
+                targetAggMap.set('value', count++)
             } else {
-                event.value = 1
+                targetAggMap.set('value', 1)
             }
         }
     }

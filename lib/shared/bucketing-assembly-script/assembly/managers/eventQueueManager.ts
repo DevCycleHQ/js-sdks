@@ -45,8 +45,8 @@ export function onPayloadFailure(envKey: string, payloadId: string, retryable: b
 
 export function queueEvent(envKey: string, userStr: string, eventStr: string): void {
     const eventQueue = getEventQueue(envKey)
-    const dvcUser = DVCPopulatedUser.populatedUserFromString(userStr)
-    const event = new DVCEvent(eventStr)
+    const dvcUser = DVCPopulatedUser.fromJSONString(userStr)
+    const event = DVCEvent.fromJSONString(eventStr)
 
     const bucketedConfig = _generateBucketedConfig(_getConfigData(envKey), dvcUser)
     eventQueue.queueEvent(dvcUser, event, bucketedConfig)
@@ -54,8 +54,8 @@ export function queueEvent(envKey: string, userStr: string, eventStr: string): v
 
 export function queueAggregateEvent(envKey: string, userStr: string, eventStr: string): void {
     const eventQueue = getEventQueue(envKey)
-    const dvcUser = DVCPopulatedUser.populatedUserFromString(userStr)
-    const event = new DVCEvent(eventStr)
+    const dvcUser = DVCPopulatedUser.fromJSONString(userStr)
+    const event = DVCEvent.fromJSONString(eventStr)
 
     const bucketedConfig = _generateBucketedConfig(_getConfigData(envKey), dvcUser)
     eventQueue.queueAggregateEvent(event, bucketedConfig)

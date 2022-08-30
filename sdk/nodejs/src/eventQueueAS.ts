@@ -5,8 +5,7 @@ import { DVCLogger } from '@devcycle/types'
 
 import { getBucketingLib } from './bucketing'
 import { EventQueueInterface } from './eventQueue'
-import {publishEvents} from "./request";
-import {chunk} from "lodash";
+import { publishEvents } from './request'
 
 export const AggregateEventTypes: Record<string, string> = {
     variableEvaluated: 'variableEvaluated',
@@ -79,7 +78,7 @@ export class EventQueueAS implements EventQueueInterface {
                         getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, false)
                     }
                 } else {
-                    this.logger.debug(`DVC Flushed ${eventCount} Events, for ${chunk.length} Users`)
+                    this.logger.debug(`DVC Flushed ${eventCount} Events, for ${flushPayload.records.length} Users`)
                     getBucketingLib().onPayloadSuccess(this.environmentKey, flushPayload.payloadId)
                 }
             } catch (ex) {
@@ -96,6 +95,7 @@ export class EventQueueAS implements EventQueueInterface {
             return this.disableAutomaticEventLogging
         }
     }
+
     /**
      * Queue DVCAPIEvent for publishing to DevCycle Events API.
      */

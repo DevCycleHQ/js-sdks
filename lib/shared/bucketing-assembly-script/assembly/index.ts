@@ -17,7 +17,7 @@ export function generateBoundedHashesFromJSON(user_id: string, target_id: string
 
 export function generateBucketedConfigForUser(token: string, userStr: string): string  {
     const config = _getConfigData(token)
-    const user = DVCPopulatedUser.populatedUserFromString(userStr)
+    const user = DVCPopulatedUser.fromJSONString(userStr)
 
     const bucketedConfig = _generateBucketedConfig(config, user)
     return bucketedConfig.stringify()

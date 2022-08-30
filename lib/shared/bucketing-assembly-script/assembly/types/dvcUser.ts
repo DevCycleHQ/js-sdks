@@ -18,48 +18,49 @@ interface DVCUserInterface {
 }
 
 export class DVCUser extends JSON.Obj implements DVCUserInterface {
-    user_id: string
-    email: string | null
-    name: string | null
-    language: string | null
-    country: string | null
-    appVersion: string | null
-    appBuild: f64
-    customData: JSON.Obj | null
-    privateCustomData: JSON.Obj | null
-    deviceModel: string | null
-
-    constructor(userStr: string) {
+    constructor(
+        public user_id: string,
+        public email: string | null,
+        public name: string | null,
+        public language: string | null,
+        public country: string | null,
+        public appBuild: f64,
+        public appVersion: string | null,
+        public deviceModel: string | null,
+        public customData: JSON.Obj | null,
+        public privateCustomData: JSON.Obj | null
+    ) {
         super()
+    }
+
+    static fromJSONString(userStr: string): DVCUser {
         const userJSON = JSON.parse(userStr)
         if (!userJSON.isObj) throw new Error('dvcUserFromJSONString not a JSON Object')
         const user = userJSON as JSON.Obj
-
-        this.user_id = getStringFromJSON(user, 'user_id')
-        this.email = getStringFromJSONOptional(user, 'email')
-        this.name = getStringFromJSONOptional(user, 'name')
-        this.language = getStringFromJSONOptional(user, 'language')
-        this.country = getStringFromJSONOptional(user, 'country')
-        this.appVersion = getStringFromJSONOptional(user, 'appVersion')
-
-        // Need to set a default "null" value, as numbers can't be null in AS
-        this.appBuild = getF64FromJSONOptional(user, 'appBuild', -1)
-
-        this.deviceModel = getStringFromJSONOptional(user, 'deviceModel')
 
         const customData = user.getObj('customData')
         if (!isFlatJSONObj(customData)) {
             throw new Error('DVCUser customData can\'t contain nested objects or arrays')
         }
-        this.customData = customData
 
         const privateCustomData = user.getObj('privateCustomData')
         if (!isFlatJSONObj(privateCustomData)) {
             throw new Error('DVCUser privateCustomData can\'t contain nested objects or arrays')
         }
-        this.privateCustomData = privateCustomData
 
-        return this
+        return new DVCUser(
+            getStringFromJSON(user, 'user_id'),
+            // Need to set a default "null" value, as numbers can't be null in AS
+            getStringFromJSONOptional(user, 'email'),
+            getStringFromJSONOptional(user, 'name'),
+            getStringFromJSONOptional(user, 'language'),
+            getStringFromJSONOptional(user, 'country'),
+            getF64FromJSONOptional(user, 'appBuild', NaN),
+            getStringFromJSONOptional(user, 'appVersion'),
+            getStringFromJSONOptional(user, 'deviceModel'),
+            customData,
+            privateCustomData
+        )
     }
 
     stringify(): string {
@@ -70,7 +71,7 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
         if (this.language) json.set('language', this.language)
         if (this.country) json.set('country', this.country)
         if (this.appVersion) json.set('appVersion', this.appVersion)
-        if (this.appBuild != -1) json.set('appBuild', this.appBuild)
+        if (!isNaN(this.appBuild)) json.set('appBuild', this.appBuild)
         if (this.deviceModel) json.set('deviceModel', this.deviceModel)
         if (this.customData) json.set('customData', this.customData)
         if (this.privateCustomData) json.set('privateCustomData', this.privateCustomData)
@@ -139,8 +140,8 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         this.sdkVersion = platformData.sdkVersion
     }
 
-    static populatedUserFromString(userStr: string): DVCPopulatedUser {
-        return new DVCPopulatedUser(new DVCUser(userStr))
+    static fromJSONString(userStr: string): DVCPopulatedUser {
+        return new DVCPopulatedUser(DVCUser.fromJSONString(userStr))
     }
 
     getCombinedCustomData(): JSON.Obj {
@@ -155,7 +156,7 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         if (this.language) json.set('language', this.language)
         if (this.country) json.set('country', this.country)
         if (this.appVersion) json.set('appVersion', this.appVersion)
-        if (this.appBuild != -1) json.set('appBuild', this.appBuild)
+        if (!isNaN(this.appBuild)) json.set('appBuild', this.appBuild)
         if (this.deviceModel) json.set('deviceModel', this.deviceModel)
 
         if (this.customData) {
