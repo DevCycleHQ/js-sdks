@@ -1,6 +1,9 @@
 {
-  "name": "nodejs-example-js",
+  "name": "@devcycle/nodejs-server-sdk-js-example",
   "version": "1.0.0",
+  "description": "DevCycle NodeJS JS Example App",
+  "keywords": [],
+  "license": "MIT",
   "dependencies": {
     "@devcycle/nodejs-server-sdk": "*"
   }

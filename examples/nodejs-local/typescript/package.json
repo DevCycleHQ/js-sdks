@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "description": "DevCycle NodeJS Typescript Example App",
   "keywords": [],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@devcycle/nodejs-server-sdk": "*"
+  }
 }

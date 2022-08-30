@@ -1,0 +1,34 @@
+name: NodeJS JS Local Bucketing SDK Example App Tests
+on:
+  schedule:
+    # Runs at 7am & 3pm every day (see https://crontab.guru)
+    - cron: '0 7,15 * * *'
+  pull_request:
+    branches: [main]
+jobs:
+  run-nodejs-ts-example:
+    runs-on: ubuntu-latest
+    env:
+          DVC_SERVER_TOKEN: ${{ secrets.DVC_NODE_JS_E2E_TEST_TOKEN }}
+
+    steps:
+      - name: Checkout JS-SDK
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          cache: 'yarn'
+
+      - name: Setup yarn
+        run: npm install -g yarn
+
+      - name: Yarn Install
+        run: yarn --immutable
+
+      - name: Build NodeJS SDK for Example Apps
+        run: yarn nx run nodejs:build
+      
+      - name: Startup Examples - NodeJS JS App
+        run: timeout --signal=SIGINT 5m yarn nx serve example-nodejs-local-js || true
