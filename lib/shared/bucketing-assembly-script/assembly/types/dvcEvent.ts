@@ -171,7 +171,9 @@ export class FlushPayload extends JSON.Value {
     }
 
     stringify(): string {
-        const jsonArray = jsonArrFromValueArray(this.records)
-        return jsonArray.stringify()
+        const jsonObj = new JSON.Obj()
+        jsonObj.set('records', jsonArrFromValueArray(this.records))
+        jsonObj.set('payloadId', this.payloadId)
+        return jsonObj.stringify()
     }
 }

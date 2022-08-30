@@ -12,12 +12,13 @@ import { bucketUserForConfig } from './utils/userBucketingHelper'
 import { DVCVariable } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
 import { EventTypes } from './models/requestEvent'
-import { EventQueue } from './eventQueue'
+import { EventQueue, EventQueueInterface } from './eventQueue'
 import { dvcDefaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
 import * as packageJson from '../package.json'
 import { importBucketingLib, getBucketingLib } from './bucketing'
 import { DVCLogger } from '@devcycle/types'
+import { EventQueueAS } from './eventQueueAS'
 
 interface IPlatformData {
     platform: string
@@ -30,7 +31,7 @@ export class DVCClient {
     private environmentKey: string
     private options?: DVCOptions
     private configHelper: EnvironmentConfigManager
-    private eventQueue: EventQueue
+    private eventQueue: EventQueueInterface
     private onInitialized: Promise<DVCClient>
     private logger: DVCLogger
     private initialized = false
@@ -47,11 +48,17 @@ export class DVCClient {
         const initializePromise = importBucketingLib()
             .then(() => {
                 this.configHelper = new EnvironmentConfigManager(this.logger, environmentKey, options || {})
-                this.eventQueue = new EventQueue(
-                    this.logger,
-                    environmentKey,
-                    options
-                )
+                this.eventQueue = options?.useASEventQueue ?
+                    new EventQueueAS(
+                        this.logger,
+                        environmentKey,
+                        options
+                    ) :
+                    new EventQueue(
+                        this.logger,
+                        environmentKey,
+                        options
+                    )
 
                 const platformData: IPlatformData = {
                     platform: 'NodeJS',
@@ -61,10 +68,6 @@ export class DVCClient {
                 }
 
                 getBucketingLib().setPlatformData(JSON.stringify(platformData))
-
-                getBucketingLib().initEventQueue(environmentKey, JSON.stringify(options))
-
-                setInterval(() => this.flushEventsAS(), options?.flushEventsMS || 10 * 1000)
 
                 return this.configHelper.fetchConfigPromise
             })
@@ -83,11 +86,6 @@ export class DVCClient {
         process.on('exit', () => {
             this.configHelper?.cleanup()
         })
-    }
-
-    flushEventsAS(): void {
-        const flushPayloads = getBucketingLib().flushEventQueue(this.environmentKey)
-        console.log(`Flush Payloads: ${flushPayloads}`)
     }
 
     /**

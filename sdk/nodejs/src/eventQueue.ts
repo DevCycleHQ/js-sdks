@@ -34,7 +34,18 @@ type options = {
     disableAutomaticEventLogging?: boolean,
     disableCustomEventLogging?: boolean
 }
-export class EventQueue {
+
+export interface EventQueueInterface {
+    cleanup(): void
+
+    flushEvents(): Promise<void>
+
+    queueEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void
+
+    queueAggregateEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void
+}
+
+export class EventQueue implements EventQueueInterface {
     private readonly logger: DVCLogger
     private readonly environmentKey: string
     private userEventQueue: UserEventQueue
