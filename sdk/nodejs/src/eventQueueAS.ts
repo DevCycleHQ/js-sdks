@@ -5,6 +5,8 @@ import { DVCLogger } from '@devcycle/types'
 
 import { getBucketingLib } from './bucketing'
 import { EventQueueInterface } from './eventQueue'
+import {publishEvents} from "./request";
+import {chunk} from "lodash";
 
 export const AggregateEventTypes: Record<string, string> = {
     variableEvaluated: 'variableEvaluated',
@@ -59,12 +61,32 @@ export class EventQueueAS implements EventQueueInterface {
         const flushPayloadsStr = getBucketingLib().flushEventQueue(this.environmentKey)
         this.logger.debug(`AS Flush Payloads: ${flushPayloadsStr}`)
         const flushPayloads = JSON.parse(flushPayloadsStr) as FlushPayload[]
+        if (flushPayloads.length === 0) return
 
-        // TODO: send requests
+        const innerReducer = (val: number, batch: UserEventsBatchRecord) => val + batch.events.length
+        const reducer = (val: number, batches: FlushPayload) => val + batches.records.reduce(innerReducer, 0)
+        const eventCount = flushPayloads.reduce(reducer, 0)
+        this.logger.debug(`DVC Flush ${eventCount} AS Events, for ${flushPayloads.length} Users`)
 
-        for (const payload of flushPayloads) {
-            getBucketingLib().onPayloadSuccess(this.environmentKey, payload.payloadId)
-        }
+        await Promise.all(flushPayloads.map(async (flushPayload) => {
+            try {
+                const res = await publishEvents(this.logger, this.environmentKey, flushPayload.records)
+                if (res.status !== 201) {
+                    this.logger.error(`Error publishing events, status: ${res.status}, body: ${res.data}`)
+                    if (res.status >= 500) {
+                        getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, true)
+                    } else {
+                        getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, false)
+                    }
+                } else {
+                    this.logger.debug(`DVC Flushed ${eventCount} Events, for ${chunk.length} Users`)
+                    getBucketingLib().onPayloadSuccess(this.environmentKey, flushPayload.payloadId)
+                }
+            } catch (ex) {
+                this.logger.error(`DVC Error Flushing Events response message: ${ex.message}`)
+                getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, false)
+            }
+        }))
     }
 
     private checkIfEventLoggingDisabled(event: DVCEvent) {

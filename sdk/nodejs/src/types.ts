@@ -110,6 +110,9 @@ export interface DVCOptions {
      */
     apiProxyURL?: string
 
+    /**
+     * Switch to use new AssemblyScript EventQueue for testing
+     */
     useASEventQueue?: boolean
 }
 
