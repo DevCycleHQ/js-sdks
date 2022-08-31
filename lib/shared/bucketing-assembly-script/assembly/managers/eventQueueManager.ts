@@ -18,6 +18,9 @@ function getEventQueue(envKey: string): EventQueue {
  * this is needed because our SDKs support creating multiple DVCClient objects by token.
  */
 export function initEventQueue(envKey: string, optionsStr: string): void {
+    if (!envKey) {
+        throw new Error('Missing envKey to initialize Event Queue')
+    }
     if (_eventQueueMap.has(envKey)) {
         throw new Error(`Event Queue already exists for envKey: ${envKey}`)
     }
@@ -25,7 +28,6 @@ export function initEventQueue(envKey: string, optionsStr: string): void {
     const options = new EventQueueOptions(optionsStr)
     const queue = new EventQueue(envKey, options)
     _eventQueueMap.set(envKey, queue)
-    console.log('Initialized Event Queue, envKey: ' + envKey)
 }
 
 export function flushEventQueue(envKey: string): string {

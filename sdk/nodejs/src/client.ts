@@ -122,10 +122,11 @@ export class DVCClient {
             defaultValue
         })
 
+        const useAS = this.options?.useASEventQueue
         const variableEvent = {
             type: variable.key in bucketedConfig.variables
-                ? EventTypes.variableEvaluated
-                : EventTypes.variableDefaulted,
+                ? (useAS ? EventTypes.aggVariableEvaluated : EventTypes.variableEvaluated)
+                : (useAS ? EventTypes.aggVariableDefaulted : EventTypes.variableDefaulted),
             target: variable.key
         }
         this.eventQueue.queueAggregateEvent(requestUser, variableEvent, bucketedConfig)

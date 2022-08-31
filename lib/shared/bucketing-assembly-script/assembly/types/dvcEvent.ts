@@ -4,7 +4,9 @@ import {
     getF64FromJSONOptional,
     getJSONObjFromJSONOptional,
     getStringFromJSON,
-    getStringFromJSONOptional, jsonArrFromValueArray, jsonObjFromMap
+    getStringFromJSONOptional,
+    jsonArrFromValueArray,
+    jsonObjFromMap
 } from '../helpers/jsonHelpers'
 import { DVCPopulatedUser } from './dvcUser'
 import uuid from 'as-uuid/assembly'
@@ -163,7 +165,6 @@ export class UserEventsBatchRecord extends JSON.Value {
 }
 
 export class FlushPayload extends JSON.Value {
-    // TODO: implement
     public payloadId: string
     public status: string
 
@@ -175,10 +176,20 @@ export class FlushPayload extends JSON.Value {
         this.payloadId = uuid()
     }
 
+    private eventCount(): i64 {
+        let count: i64 = 0
+        for (let i = 0; i < this.records.length; i++) {
+            const record = this.records[i]
+            count += record.events.length
+        }
+        return count
+    }
+
     stringify(): string {
         const jsonObj = new JSON.Obj()
         jsonObj.set('records', jsonArrFromValueArray(this.records))
         jsonObj.set('payloadId', this.payloadId)
+        jsonObj.set('eventCount', this.eventCount())
         return jsonObj.stringify()
     }
 }

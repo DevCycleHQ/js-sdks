@@ -13,3 +13,7 @@ export function _getPlatformData(): PlatformData {
         return _platformData as PlatformData
     }
 }
+
+export function _clearPlatformData(): void {
+    _platformData = null
+}
