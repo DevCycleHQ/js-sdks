@@ -14,8 +14,8 @@ import { FlushPayload } from '../../assembly/types'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
 
-const initEventQueue = (envKey: string, options: unknown) => {
-    initEventQueue_AS(envKey, JSON.stringify(options))
+const initEventQueue = (envKey: unknown, options: unknown) => {
+    initEventQueue_AS(envKey as string, JSON.stringify(options))
 }
 
 const flushEventQueue = (envKey: string): FlushPayload[] => {
@@ -27,8 +27,8 @@ const queueEvent = (envKey: string, user: unknown, event: unknown) => {
     queueEvent_AS(envKey, JSON.stringify(user), JSON.stringify(event))
 }
 
-const queueAggregateEvent = (envKey: string, user: unknown, event: unknown) => {
-    queueAggregateEvent_AS(envKey, JSON.stringify(user), JSON.stringify(event))
+const queueAggregateEvent = (envKey: string, event: unknown, variableVariationMap: unknown) => {
+    queueAggregateEvent_AS(envKey, JSON.stringify(event), JSON.stringify(variableVariationMap))
 }
 
 const initSDK = (envKey: string, eventOptions: unknown = {}) => {
@@ -51,13 +51,11 @@ describe('EventQueueManager Tests', () => {
         })
 
         it('should throw error if no envKey', () => {
-            // @ts-ignore
-            expect(() => initEventQueue()).toThrow('value must not be null')
+            expect(() => initEventQueue(undefined, undefined)).toThrow('value must not be null')
         })
 
         it('should throw error if no options', () => {
-            // @ts-ignore
-            expect(() => initEventQueue('env_key_test_2')).toThrow('value must not be null')
+            expect(() => initEventQueue('env_key_test_2', undefined)).toThrow('value must not be null')
         })
 
         it('should throw if EnvQueue already setup for envKey', () => {
@@ -92,7 +90,7 @@ describe('EventQueueManager Tests', () => {
 
             initSDK(envKey)
             queueEvent(envKey, dvcUser, event)
-            queueAggregateEvent(envKey, dvcUser, aggEvent)
+            queueAggregateEvent(envKey, aggEvent, {})
             expect(flushEventQueue(envKey)).toEqual(expect.arrayContaining([
                 {
                     'payloadId': expect.any(String),
@@ -332,47 +330,45 @@ describe('EventQueueManager Tests', () => {
     })
 
     describe('queueAggregateEvent', () => {
-        const dvcUser = { user_id: 'user_id' }
         const event = {
             type: 'aggVariableDefaulted',
             target: 'testTarget'
         }
 
-        it('should throw error if SDK is not initialized', () => {
+        it('should throw error if no variableVariationMap', () => {
             const envKey = 'env_key_queueAggEvent_test'
             initEventQueue(envKey, {})
-            expect(() => queueAggregateEvent(envKey, dvcUser, event)).toThrow('Platform data is not set')
+            expect(() => queueAggregateEvent(envKey, event, null))
+                .toThrow('variableVariationMap is not a JSON Object')
         })
 
-        it('should throw error if config data not set', () => {
-            const envKey = 'env_key_queueAggEvent_test_2'
-            initEventQueue(envKey, {})
-            setPlatformData(JSON.stringify({
-                platform: 'NodeJS',
-                platformVersion: '16.0',
-                sdkType: 'server',
-                sdkVersion: '1.0.0'
-            }))
-            expect(() => queueAggregateEvent(envKey, dvcUser, event)).toThrow('Config data is not set.')
+        it('should throw if no variable key value found for aggVariableEvaluated', () => {
+            const envKey = 'env_key_agg_event_throw_test'
+            const eventEvaluated = {
+                type: 'aggVariableEvaluated',
+                target: 'testTarget'
+            }
+            const variableVariationMap = {
+                test: ['614ef6aa473928459060721a.6153553b8cf4e45e0464268d'],
+                swagTest: ['614ef6aa473928459060721a.6153553b8cf4e45e0464268d']
+            }
+
+            initSDK(envKey)
+            expect(() => queueAggregateEvent(envKey, eventEvaluated, variableVariationMap))
+                .toThrow('Missing variableVariationMap mapping for target')
+        })
+
+        it('should throw if no target on event', () => {
+            const envKey = 'env_key_agg_event_no_target_test'
+            const eventEvaluated = { type: 'aggVariableEvaluated' }
+
+            initSDK(envKey)
+            expect(() => queueAggregateEvent(envKey, eventEvaluated, {}))
+                .toThrow('Event missing target to save aggregate event')
         })
 
         it('should aggregate aggVariableDefaulted and aggVariableEvaluated events', () => {
             const envKey = 'env_key_agg_event_test'
-            const user = {
-                country: 'U S AND A',
-                user_id: 'asuh',
-                customData: {
-                    favouriteFood: 'pizza'
-                },
-                privateCustomData: {
-                    favouriteDrink: 'coffee',
-                    favouriteNumber: 610,
-                    favouriteBoolean: true
-                },
-                platformVersion: '1.1.2',
-                os: 'Android',
-                email: 'test@email.com'
-            }
             const eventDefaulted = {
                 type: 'aggVariableDefaulted',
                 target: 'testTarget'
@@ -381,23 +377,27 @@ describe('EventQueueManager Tests', () => {
                 type: 'aggVariableEvaluated',
                 target: 'testTarget'
             }
+            const variableVariationMap = {
+                test: ['614ef6aa473928459060721a.6153553b8cf4e45e0464268d'],
+                swagTest: ['614ef6aa473928459060721a.6153553b8cf4e45e0464268d']
+            }
 
             initSDK(envKey)
             for (let i = 0; i < 36; i++) {
                 eventDefaulted.target = 'testey_test'
-                queueAggregateEvent(envKey, user, eventDefaulted)
+                queueAggregateEvent(envKey, eventDefaulted, variableVariationMap)
             }
             for (let i = 0; i < 11; i++) {
                 eventDefaulted.target = 'swageyTest'
-                queueAggregateEvent(envKey, user, eventDefaulted)
+                queueAggregateEvent(envKey, eventDefaulted, variableVariationMap)
             }
             for (let i = 0; i < 36; i++) {
                 eventEvaluated.target = 'test'
-                queueAggregateEvent(envKey, user, eventEvaluated)
+                queueAggregateEvent(envKey, eventEvaluated, variableVariationMap)
             }
             for (let i = 0; i < 11; i++) {
                 eventEvaluated.target = 'swagTest'
-                queueAggregateEvent(envKey, user, eventEvaluated)
+                queueAggregateEvent(envKey, eventEvaluated, variableVariationMap)
             }
 
             const payloads = flushEventQueue(envKey)

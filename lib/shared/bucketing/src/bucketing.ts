@@ -210,7 +210,7 @@ export const generateBucketedConfig = (
         features: featureKeyMap,
         featureVariationMap,
         // Return empty object for now, until we switch to WASM bucketing logic
-        variableFeatureVariationMap: {},
+        variableVariationMap: {},
         knownVariableKeys: generateKnownVariableKeys({
             variableHashes: config.variableHashes,
             variableMap
