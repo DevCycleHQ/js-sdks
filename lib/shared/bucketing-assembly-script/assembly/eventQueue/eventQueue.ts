@@ -14,7 +14,12 @@ export class EventQueue {
     private requestPayloadManager: RequestPayloadManager
     private envKey: string
     private options: EventQueueOptions
+
+    /**
+     * Map<user_id, UserEventsBatchRecord>
+     */
     private userEventQueue: Map<string, UserEventsBatchRecord>
+
     /**
      * Map<'aggVariableDefaulted' | 'aggVariableEvaluated,
      *      Map<variable.key,
@@ -25,7 +30,7 @@ export class EventQueue {
     private aggEventQueue: Map<string, Map<string, Map<string, i64>>>
 
     constructor(envKey: string, options: EventQueueOptions) {
-        this.requestPayloadManager = new RequestPayloadManager()
+        this.requestPayloadManager = new RequestPayloadManager(options)
         this.envKey = envKey
         this.options = options
         this.userEventQueue = new Map<string, UserEventsBatchRecord>()
@@ -57,31 +62,24 @@ export class EventQueue {
      * exception to the native code.
      */
     flush(): string {
-        console.log(`Flush Events Queue for envKey: ${this.envKey}`)
-
-        const failedPayloads = this.requestPayloadManager.fetchFailedPayloads()
         const payloads: FlushPayload[] = this.requestPayloadManager.constructFlushPayloads(
             this.userEventQueue,
             this.aggEventQueue
         )
         this.userEventQueue = new Map<string, UserEventsBatchRecord>()
         this.aggEventQueue = new Map<string, Map<string, Map<string, i64>>>()
-        return jsonArrFromValueArray(failedPayloads.concat(payloads)).stringify()
+        return jsonArrFromValueArray(payloads).stringify()
     }
 
     onPayloadSuccess(payloadId: string): void {
-        console.log(`onPayloadSuccess payloadId: ${payloadId}`)
         this.requestPayloadManager.markPayloadSuccess(payloadId)
     }
 
     onPayloadFailure(payloadId: string, retryable: boolean): void {
-        console.log(`onPayloadFailure payloadId: ${payloadId}`)
         this.requestPayloadManager.markPayloadFailure(payloadId, retryable)
     }
 
     queueEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig: BucketedUserConfig): void {
-        console.log(`queueEvent user_id: ${user.user_id}, event: ${event.type}`)
-
         // TODO: Implement max queue size
         // this.maxEventQueueSize = bucketedConfig?.project.settings.sdkSettings?.eventQueueLimit ?? this.maxEventQueueSize
 
@@ -110,7 +108,6 @@ export class EventQueue {
     }
 
     queueAggregateEvent(event: DVCEvent, bucketedConfig: BucketedUserConfig): void {
-        console.log(`queueAggregateEvent event: ${event.type}`)
         this.saveAggEvent(event, bucketedConfig)
     }
 
@@ -151,8 +148,8 @@ export class EventQueue {
             for (let i = 0; i < targetVariations.length; i++) {
                 const featureKey = targetVariations[i]
                 if (targetAggMap.has(featureKey)) {
-                    let featureCount: i64 = targetAggMap.get(featureKey)
-                    targetAggMap.set(featureKey, featureCount++)
+                    const featureCount: i64 = targetAggMap.get(featureKey)
+                    targetAggMap.set(featureKey, featureCount + 1)
                 } else {
                     targetAggMap.set(featureKey, 1)
                 }
@@ -161,8 +158,8 @@ export class EventQueue {
         // TODO: Do we need to check that the type is aggVariableDefaulted here?
         else {
             if (targetAggMap.has('value')) {
-                let count: i64 = targetAggMap.get('value')
-                targetAggMap.set('value', count++)
+                const count: i64 = targetAggMap.get('value')
+                targetAggMap.set('value', count + 1)
             } else {
                 targetAggMap.set('value', 1)
             }

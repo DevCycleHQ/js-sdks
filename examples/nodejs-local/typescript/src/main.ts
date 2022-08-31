@@ -32,10 +32,7 @@ async function validateUserFromQueryParams(queryParams: Query): Promise<DVCClien
 }
 
 async function startDVC() {
-    dvcClient = await initialize(
-        'server-e5ca5a58-6824-48e1-965c-35dbcd98c7ce',
-        { logLevel: 'debug', useASEventQueue: true }
-    ).onClientInitialized()
+    dvcClient = await initialize('<DVC_SERVER_KEY>', { logLevel: 'debug' }).onClientInitialized()
     console.log('DVC onClientInitialized')
 
     const user = {
@@ -72,13 +69,6 @@ async function startDVC() {
     const features = dvcClient.allFeatures(user)
     console.log('Features: ')
     console.dir(features)
-
-    const event = {
-        'type': 'customType',
-        'target': 'test_target',
-        'date': Date.now()
-    }
-    dvcClient.track(user, event)
 }
 
 startDVC()

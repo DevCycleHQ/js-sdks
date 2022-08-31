@@ -4,7 +4,9 @@ import {
     getF64FromJSONOptional,
     getJSONObjFromJSONOptional,
     getStringFromJSON,
-    getStringFromJSONOptional, jsonArrFromValueArray, jsonObjFromMap
+    getStringFromJSONOptional,
+    jsonArrFromValueArray,
+    jsonObjFromMap
 } from '../helpers/jsonHelpers'
 import { DVCPopulatedUser } from './dvcUser'
 import uuid from 'as-uuid/assembly'

@@ -19,12 +19,12 @@ export interface DVCUser {
     name?: string
 
     /**
-     * ISO 639-1 two letter codes, or ISO 639-2 three letter codes
+     * ISO 639-1 two-letter codes, or ISO 639-2 three-letter codes
      */
     language?: string
 
     /**
-     * ISO 3166 two or three letter codes
+     * ISO 3166 two or three-letter codes
      */
     country?: string
 

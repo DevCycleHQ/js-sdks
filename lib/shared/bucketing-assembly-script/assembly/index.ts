@@ -4,7 +4,7 @@ import {
 
 import { JSON } from 'assemblyscript-json/assembly'
 import { ConfigBody, DVCPopulatedUser, PlatformData } from './types'
-import { _setPlatformData } from './managers/platformDataManager'
+import { _clearPlatformData, _setPlatformData } from './managers/platformDataManager'
 import { _getConfigData, _setConfigData } from './managers/configDataManager'
 
 export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
@@ -26,6 +26,10 @@ export function generateBucketedConfigForUser(token: string, userStr: string): s
 export function setPlatformData(platformDataStr: string): void {
     const platformData = new PlatformData(platformDataStr)
     _setPlatformData(platformData)
+}
+
+export function clearPlatformData(): void {
+    _clearPlatformData()
 }
 
 export function setConfigData(token: string, configDataStr: string): void {

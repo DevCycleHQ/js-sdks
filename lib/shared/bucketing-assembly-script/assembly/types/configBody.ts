@@ -4,7 +4,8 @@ import {
     getJSONObjFromJSON,
     getJSONArrayFromJSON,
     jsonArrFromValueArray,
-    jsonObjFromMap, isValidString, getJSONObjFromJSONOptional
+    jsonObjFromMap,
+    isValidString
 } from '../helpers/jsonHelpers'
 import { Feature,  } from './feature'
 
