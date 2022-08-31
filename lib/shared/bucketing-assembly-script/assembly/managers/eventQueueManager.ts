@@ -1,5 +1,7 @@
 import { EventQueue } from '../eventQueue/eventQueue'
 import { EventQueueOptions, DVCPopulatedUser, DVCEvent } from '../types'
+import { getStringArrayMapFromJSONObj } from '../helpers/jsonHelpers'
+import { JSON } from 'assemblyscript-json/assembly'
 import { _getConfigData } from './configDataManager'
 import { _generateBucketedConfig } from '../bucketing'
 
@@ -45,20 +47,31 @@ export function onPayloadFailure(envKey: string, payloadId: string, retryable: b
     eventQueue.onPayloadFailure(payloadId, retryable)
 }
 
-export function queueEvent(envKey: string, userStr: string, eventStr: string): void {
+export function queueEvent(
+    envKey: string,
+    userStr: string,
+    eventStr: string
+): void {
     const eventQueue = getEventQueue(envKey)
     const dvcUser = DVCPopulatedUser.fromJSONString(userStr)
     const event = DVCEvent.fromJSONString(eventStr)
 
     const bucketedConfig = _generateBucketedConfig(_getConfigData(envKey), dvcUser)
-    eventQueue.queueEvent(dvcUser, event, bucketedConfig)
+    eventQueue.queueEvent(dvcUser, event, bucketedConfig.featureVariationMap)
 }
 
-export function queueAggregateEvent(envKey: string, userStr: string, eventStr: string): void {
+export function queueAggregateEvent(
+    envKey: string,
+    eventStr: string,
+    variableVariationMapStr: string
+): void {
     const eventQueue = getEventQueue(envKey)
-    const dvcUser = DVCPopulatedUser.fromJSONString(userStr)
     const event = DVCEvent.fromJSONString(eventStr)
 
-    const bucketedConfig = _generateBucketedConfig(_getConfigData(envKey), dvcUser)
-    eventQueue.queueAggregateEvent(event, bucketedConfig)
+    const variableVariationMapJSON = JSON.parse(variableVariationMapStr)
+    if (!variableVariationMapJSON.isObj) throw new Error('variableVariationMap is not a JSON Object')
+    const variableVariationMap = getStringArrayMapFromJSONObj(variableVariationMapJSON as JSON.Obj)
+
+    const aggByVariation = (event.type === 'aggVariableEvaluated')
+    eventQueue.queueAggregateEvent(event, variableVariationMap, aggByVariation)
 }

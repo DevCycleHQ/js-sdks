@@ -79,11 +79,11 @@ export class EventQueue {
         this.requestPayloadManager.markPayloadFailure(payloadId, retryable)
     }
 
-    queueEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig: BucketedUserConfig): void {
+    queueEvent(user: DVCPopulatedUser, event: DVCEvent, featureVariationMap: Map<string, string>): void {
         // TODO: Implement max queue size
         // this.maxEventQueueSize = bucketedConfig?.project.settings.sdkSettings?.eventQueueLimit ?? this.maxEventQueueSize
 
-        const requestEvent = new DVCRequestEvent(event, user.user_id, bucketedConfig.featureVariationMap)
+        const requestEvent = new DVCRequestEvent(event, user.user_id, featureVariationMap)
         this.addEventToQueue(user, requestEvent)
     }
 
@@ -107,11 +107,11 @@ export class EventQueue {
         userEvents.events.push(event)
     }
 
-    queueAggregateEvent(event: DVCEvent, bucketedConfig: BucketedUserConfig): void {
-        this.saveAggEvent(event, bucketedConfig)
-    }
-
-    private saveAggEvent(event: DVCEvent, bucketedConfig: BucketedUserConfig): void {
+    queueAggregateEvent(
+        event: DVCEvent,
+        variableVariationMap: Map<string, string[]>,
+        aggByVariation: boolean
+    ): void {
         const type = event.type
         const target = event.target
         if (!target) {
@@ -141,10 +141,12 @@ export class EventQueue {
             typeAggMap.set(target, targetAggMap)
         }
 
-        // TODO: Do we need to check that the type is aggVariableEvaluated here?
-        if (bucketedConfig.variableVariationMap.has(target)) {
-            const targetVariations: string[] = bucketedConfig.variableVariationMap.get(target)
+        if (aggByVariation) {
+            if (!variableVariationMap.has(target)) {
+                throw new Error(`Missing variableVariationMap mapping for target: ${target} to aggregate by variation`)
+            }
 
+            const targetVariations: string[] = variableVariationMap.get(target)
             for (let i = 0; i < targetVariations.length; i++) {
                 const featureKey = targetVariations[i]
                 if (targetAggMap.has(featureKey)) {
@@ -154,9 +156,7 @@ export class EventQueue {
                     targetAggMap.set(featureKey, 1)
                 }
             }
-        }
-        // TODO: Do we need to check that the type is aggVariableDefaulted here?
-        else {
+        } else {
             if (targetAggMap.has('value')) {
                 const count: i64 = targetAggMap.get('value')
                 targetAggMap.set('value', count + 1)

@@ -111,7 +111,7 @@ describe('Config Parsing and Generating', () => {
             'featureVariationMap': {
                 '614ef6aa473928459060721a': '615357cf7e9ebdca58446ed0'
             },
-            'variableFeatureVariationMap': {},
+            'variableVariationMap': {},
             'variables': {
                 'swagTest': {
                     '_id': '615356f120ed334a6054564c',
@@ -176,7 +176,7 @@ describe('Config Parsing and Generating', () => {
                 '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
                 '614ef6aa475928459060721a': '615382338424cb11646d7668'
             },
-            'variableFeatureVariationMap': {},
+            'variableVariationMap': {},
             'variables': {
                 'feature2.cool': {
                     '_id': '61538237b0a70b58ae6af71g',
@@ -253,7 +253,7 @@ describe('Config Parsing and Generating', () => {
             'featureVariationMap': {
                 '614ef6aa475928459060721a': '615382338424cb11646d7667'
             },
-            'variableFeatureVariationMap': {},
+            'variableVariationMap': {},
             'variables': {
                 'feature2Var': {
                     '_id': '61538237b0a70b58ae6af71f',
@@ -318,7 +318,7 @@ describe('Config Parsing and Generating', () => {
                 '614ef6aa473928459060721a': '615357cf7e9ebdca58446ed0',
                 '614ef6aa475928459060721a': '615382338424cb11646d7667'
             },
-            'variableFeatureVariationMap': {},
+            'variableVariationMap': {},
             'variables': {
                 'swagTest': {
                     '_id': '615356f120ed334a6054564c',

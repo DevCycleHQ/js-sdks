@@ -1,7 +1,7 @@
 import { DVCEvent } from './types'
 import { DVCRequestEvent } from './models/requestEvent'
 import { DVCPopulatedUser } from './models/populatedUser'
-import { DVCLogger } from '@devcycle/types'
+import {BucketedUserConfig, DVCLogger} from '@devcycle/types'
 
 import { getBucketingLib } from './bucketing'
 import { EventQueueInterface, EventTypes } from './eventQueue'
@@ -108,15 +108,15 @@ export class EventQueueAS implements EventQueueInterface {
      * Queue DVCEvent that can be aggregated together, where multiple calls are aggregated
      * by incrementing the 'value' field.
      */
-    queueAggregateEvent(user: DVCPopulatedUser, event: DVCEvent): void {
+    queueAggregateEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void {
         if (this.checkIfEventLoggingDisabled(event)) {
             return
         }
 
         getBucketingLib().queueAggregateEvent(
             this.environmentKey,
-            JSON.stringify(user),
-            JSON.stringify(event)
+            JSON.stringify(event),
+            JSON.stringify(bucketedConfig?.variableVariationMap || {})
         )
     }
 }

@@ -26,7 +26,7 @@ describe('EventQueue Unit Tests', () => {
         } as PublicProject,
         variables: {},
         featureVariationMap: { feature: 'var' },
-        variableFeatureVariationMap: { }
+        variableVariationMap: { }
     }
     const mockAxiosResponse = (obj: any): AxiosResponse => ({
         status: 200,

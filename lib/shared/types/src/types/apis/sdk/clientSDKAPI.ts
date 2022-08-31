@@ -358,7 +358,7 @@ export interface BucketedUserConfig {
     /**
      * Map<`variable.key`, Map<`feature._id`,`variation._id`>> used for aggregated event logging.
      */
-    variableFeatureVariationMap: Record<string, Record<string, string>>
+    variableVariationMap: Record<string, Record<string, string>>
 
     /**
      * Mapping of `ClientSDKDynamicVariable.key` to `ClientSDKDynamicVariable` values.
