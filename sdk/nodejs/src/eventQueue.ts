@@ -8,7 +8,9 @@ import { chunk } from 'lodash'
 
 export const AggregateEventTypes: Record<string, string> = {
     variableEvaluated: 'variableEvaluated',
+    aggVariableEvaluated: 'aggVariableEvaluated',
     variableDefaulted: 'variableDefaulted',
+    aggVariableDefaulted: 'aggVariableDefaulted'
 }
 
 export const EventTypes: Record<string, string> = {

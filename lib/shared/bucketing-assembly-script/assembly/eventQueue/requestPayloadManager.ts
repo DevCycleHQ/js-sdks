@@ -142,7 +142,9 @@ export class RequestPayloadManager {
      */
     checkForFailedPayloads(): void {
         this.pendingPayloads.values().forEach((payload) => {
-            if (payload.status !== 'failed') {
+            if (payload.status === 'failed') {
+                payload.status = 'sending'
+            } else {
                 throw new Error(`Request Payload: ${payload.payloadId} has not finished sending`)
             }
         })

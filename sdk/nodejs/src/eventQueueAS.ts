@@ -4,15 +4,8 @@ import { DVCPopulatedUser } from './models/populatedUser'
 import { DVCLogger } from '@devcycle/types'
 
 import { getBucketingLib } from './bucketing'
-import { EventQueueInterface } from './eventQueue'
+import { EventQueueInterface, EventTypes } from './eventQueue'
 import { publishEvents } from './request'
-
-export const AggregateEventTypes: Record<string, string> = {
-    variableEvaluated: 'variableEvaluated',
-    variableDefaulted: 'variableDefaulted',
-}
-
-export const EventTypes: Record<string, string> = { ...AggregateEventTypes }
 
 type UserEventsBatchRecord = {
     user: DVCPopulatedUser,
@@ -20,6 +13,7 @@ type UserEventsBatchRecord = {
 }
 export type FlushPayload = {
     payloadId: string,
+    eventCount: number,
     records: UserEventsBatchRecord[]
 }
 
@@ -62,8 +56,7 @@ export class EventQueueAS implements EventQueueInterface {
         const flushPayloads = JSON.parse(flushPayloadsStr) as FlushPayload[]
         if (flushPayloads.length === 0) return
 
-        const innerReducer = (val: number, batch: UserEventsBatchRecord) => val + batch.events.length
-        const reducer = (val: number, batches: FlushPayload) => val + batches.records.reduce(innerReducer, 0)
+        const reducer = (val: number, batches: FlushPayload) => val + batches.eventCount
         const eventCount = flushPayloads.reduce(reducer, 0)
         this.logger.debug(`DVC Flush ${eventCount} AS Events, for ${flushPayloads.length} Users`)
 

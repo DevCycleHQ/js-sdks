@@ -96,6 +96,7 @@ describe('EventQueueManager Tests', () => {
             expect(flushEventQueue(envKey)).toEqual(expect.arrayContaining([
                 {
                     'payloadId': expect.any(String),
+                    'eventCount': 1,
                     'records': [{
                         'events': [{
                             'clientDate': expect.any(Number),
@@ -121,6 +122,7 @@ describe('EventQueueManager Tests', () => {
                 },
                 {
                     'payloadId': expect.any(String),
+                    'eventCount': 1,
                     'records': [{
                         'events': [{
                             'clientDate': expect.any(Number),
