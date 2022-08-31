@@ -164,7 +164,8 @@ export class DVCClient {
 
         checkParamDefined('type', event.type)
         const requestUser = new DVCPopulatedUser(user)
-        const bucketedConfig = bucketUserForConfig(requestUser, this.environmentKey)
+        const useAS = this.options?.useASEventQueue
+        const bucketedConfig = useAS ? undefined : bucketUserForConfig(requestUser, this.environmentKey)
         this.eventQueue.queueEvent(requestUser, event, bucketedConfig)
     }
 

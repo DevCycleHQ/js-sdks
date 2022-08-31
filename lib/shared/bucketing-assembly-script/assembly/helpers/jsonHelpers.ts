@@ -171,6 +171,15 @@ export function getStringMapFromJSONObj(jsonObj: JSON.Obj): Map<string, string> 
     return stringMap
 }
 
+export function getStringArrayMapFromJSONObj(jsonObj: JSON.Obj): Map<string, string[]> {
+    const stringMap = new Map<string, string[]>()
+    for (let i = 0; i < jsonObj.keys.length; i++) {
+        const key = jsonObj.keys[i]
+        stringMap.set(key, getStringArrayFromJSON(jsonObj, key))
+    }
+    return stringMap
+}
+
 export function isFlatJSONObj(json: JSON.Obj | null): bool {
     if (!json) return true
 
