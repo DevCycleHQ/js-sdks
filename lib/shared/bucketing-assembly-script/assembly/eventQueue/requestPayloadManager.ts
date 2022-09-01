@@ -20,7 +20,7 @@ export class RequestPayloadManager {
 
     constructor(options: EventQueueOptions) {
         this.pendingPayloads = new Map<string, FlushPayload>()
-        this.chunkSize = options.chunkSize
+        this.chunkSize = options.eventRequestChunkSize
     }
 
     constructFlushPayloads(
