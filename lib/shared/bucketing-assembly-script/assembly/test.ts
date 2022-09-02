@@ -17,6 +17,8 @@ import {
 } from './bucketing'
 import { SortingArray, sortObjectsByString } from './helpers/arrayHelpers'
 
+export { testPlatformDataClass } from './types'
+
 export function checkNumbersFilterFromJSON(number: string, filterStr: string): bool {
     const filterJSON = JSON.parse(filterStr)
     const parsedNumber = JSON.parse(number)
