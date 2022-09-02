@@ -19,12 +19,14 @@ import { DVCPopulatedUser } from './models/populatedUser'
 import * as packageJson from '../package.json'
 import { importBucketingLib, getBucketingLib } from './bucketing'
 import { DVCLogger } from '@devcycle/types'
+import os from 'os'
 
 interface IPlatformData {
     platform: string
     platformVersion: string
     sdkType: string
-    sdkVersion: string
+    sdkVersion: string,
+    hostname?: string
 }
 
 export class DVCClient {
@@ -64,7 +66,8 @@ export class DVCClient {
                     platform: 'NodeJS',
                     platformVersion: process.version,
                     sdkType: 'server',
-                    sdkVersion: packageJson.version
+                    sdkVersion: packageJson.version,
+                    hostname: os.hostname()
                 }
 
                 getBucketingLib().setPlatformData(JSON.stringify(platformData))

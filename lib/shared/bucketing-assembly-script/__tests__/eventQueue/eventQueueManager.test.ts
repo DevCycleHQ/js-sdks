@@ -37,7 +37,8 @@ const initSDK = (envKey: string, eventOptions: unknown = {}) => {
         platform: 'NodeJS',
         platformVersion: '16.0',
         sdkType: 'server',
-        sdkVersion: '1.0.0'
+        sdkVersion: '1.0.0',
+        hostname: 'host.name'
     }))
     setConfigData(envKey, JSON.stringify(config))
 }
@@ -128,7 +129,7 @@ describe('EventQueueManager Tests', () => {
                             'date': expect.any(Number),
                             'target': 'variableKey',
                             'type': 'customEvent',
-                            'user_id': 'aggregate',
+                            'user_id': 'host.name',
                             'value': 1
                         }],
                         'user': {
@@ -138,7 +139,7 @@ describe('EventQueueManager Tests', () => {
                             'platformVersion': '16.0',
                             'sdkType': 'server',
                             'sdkVersion': '1.0.0',
-                            'user_id': 'aggregate'
+                            'user_id': 'host.name'
                         }
                     }]
                 }
@@ -409,7 +410,7 @@ describe('EventQueueManager Tests', () => {
                     'date': expect.any(Number),
                     'target': 'testey_test',
                     'type': 'customEvent',
-                    'user_id': 'aggregate',
+                    'user_id': 'host.name',
                     'value': 36
                 }, {
                     'clientDate': expect.any(Number),
@@ -417,14 +418,14 @@ describe('EventQueueManager Tests', () => {
                     'date': expect.any(Number),
                     'target': 'swageyTest',
                     'type': 'customEvent',
-                    'user_id': 'aggregate',
+                    'user_id': 'host.name',
                     'value': 11
                 }, {
                     'clientDate': expect.any(Number),
                     'date': expect.any(Number),
                     'target': 'test',
                     'type': 'aggVariableEvaluated',
-                    'user_id': 'aggregate',
+                    'user_id': 'host.name',
                     'metaData': {
                         '614ef6aa473928459060721a.6153553b8cf4e45e0464268d': 36
                     }
@@ -433,13 +434,13 @@ describe('EventQueueManager Tests', () => {
                     'date': expect.any(Number),
                     'target': 'swagTest',
                     'type': 'aggVariableEvaluated',
-                    'user_id': 'aggregate',
+                    'user_id': 'host.name',
                     'metaData': {
                         '614ef6aa473928459060721a.6153553b8cf4e45e0464268d': 11
                     }
                 }
             ])
-            expect(payloads[0].records[0].user.user_id).toEqual('aggregate')
+            expect(payloads[0].records[0].user.user_id).toEqual('host.name')
         })
     })
 })

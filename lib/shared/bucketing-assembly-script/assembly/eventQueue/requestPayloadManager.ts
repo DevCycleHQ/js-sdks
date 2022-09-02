@@ -8,6 +8,7 @@ import {
 } from '../types'
 import { jsonObjFromMap } from '../helpers/jsonHelpers'
 import { JSON } from 'assemblyscript-json/assembly'
+import { _getPlatformData } from '../managers/platformDataManager'
 
 /**
  * This RequestPayloadManager Class handles all the logic for creating event flushing payloads,
@@ -19,7 +20,7 @@ export class RequestPayloadManager {
 
     constructor(options: EventQueueOptions) {
         this.pendingPayloads = new Map<string, FlushPayload>()
-        this.chunkSize = options.chunkSize
+        this.chunkSize = options.eventRequestChunkSize
     }
 
     constructFlushPayloads(
@@ -50,8 +51,9 @@ export class RequestPayloadManager {
     ): void {
         const aggEventQueueKeys = aggEventQueue.keys()
         const aggEvents: DVCRequestEvent[] = []
-        // TODO: Implement hostName support
-        const user_id = 'aggregate'
+
+        const platformData = _getPlatformData()
+        const user_id = platformData.hostname ? platformData.hostname as string : 'aggregate'
 
         for (let i = 0; i < aggEventQueueKeys.length; i++) {
             const type = aggEventQueueKeys[i]

@@ -1,11 +1,14 @@
 import { JSON } from 'assemblyscript-json/assembly'
-import { getF64FromJSONOptional } from '../helpers/jsonHelpers'
+import {
+    getF64FromJSONValue,
+    getI32FromJSONValue
+} from '../helpers/jsonHelpers'
 
 export class EventQueueOptions extends JSON.Obj {
-    flushEventsMS: f64
+    flushEventsMS: f64 = 10 * 1000
     disableAutomaticEventLogging: bool = false
     disableCustomEventLogging: bool = false
-    chunkSize: i32 = 100
+    eventRequestChunkSize: i32 = 100
 
     constructor(str: string) {
         super()
@@ -13,7 +16,10 @@ export class EventQueueOptions extends JSON.Obj {
         if (!json.isObj) throw new Error('EventQueueOptions not a JSON Object')
         const jsonObj = json as JSON.Obj
 
-        this.flushEventsMS = getF64FromJSONOptional(jsonObj, 'flushEventsMS', 10 * 1000)
+        const flushEventsMSValue = jsonObj.get('flushEventsMS')
+        if (flushEventsMSValue) {
+            this.flushEventsMS = getF64FromJSONValue(flushEventsMSValue)
+        }
 
         const disableAutomaticEventLogging = jsonObj.getBool('disableAutomaticEventLogging')
         if (disableAutomaticEventLogging) {
@@ -25,9 +31,23 @@ export class EventQueueOptions extends JSON.Obj {
             this.disableCustomEventLogging = disableCustomEventLogging.valueOf()
         }
 
-        const chunkSize = jsonObj.getInteger('eventRequestChunkSize')
-        if (chunkSize) {
-            this.chunkSize = i32(chunkSize.valueOf())
+        const chunkSizeValue = jsonObj.get('eventRequestChunkSize')
+        if (chunkSizeValue) {
+            this.eventRequestChunkSize = getI32FromJSONValue(chunkSizeValue)
         }
     }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('flushEventsMS', this.flushEventsMS)
+        json.set('disableAutomaticEventLogging', this.disableAutomaticEventLogging)
+        json.set('disableCustomEventLogging', this.disableCustomEventLogging)
+        json.set('eventRequestChunkSize', this.eventRequestChunkSize)
+        return json.stringify()
+    }
+}
+
+export function testEventQueueOptionsClass(optionsStr: string): string {
+    const options = new EventQueueOptions(optionsStr)
+    return options.stringify()
 }

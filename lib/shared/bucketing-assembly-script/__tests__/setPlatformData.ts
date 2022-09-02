@@ -5,7 +5,8 @@ const defaultPlatformData = {
     platformVersion: '',
     sdkType: 'server',
     sdkVersion: '1.0.0',
-    deviceModel: ''
+    deviceModel: '',
+    hostname: 'host.name'
 }
 
 export const setPlatformDataJSON = (data: unknown = defaultPlatformData): void => {

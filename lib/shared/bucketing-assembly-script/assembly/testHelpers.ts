@@ -17,6 +17,13 @@ import {
 } from './bucketing'
 import { SortingArray, sortObjectsByString } from './helpers/arrayHelpers'
 
+export {
+    testEventQueueOptionsClass,
+    testDVCEventClass,
+    testDVCRequestEventClass,
+    testPlatformDataClass,
+} from './types'
+
 export function checkNumbersFilterFromJSON(number: string, filterStr: string): bool {
     const filterJSON = JSON.parse(filterStr)
     const parsedNumber = JSON.parse(number)
@@ -97,3 +104,4 @@ class TestData {
 export function testSortObjectsByString(arr: SortingArray<TestData>, direction: string): TestData[] {
     return sortObjectsByString<TestData>(arr, direction)
 }
+

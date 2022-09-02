@@ -161,6 +161,15 @@ export function getF64FromJSONValue(jsonValue: JSON.Value): f64 {
         : (int ? f64((int as JSON.Integer).valueOf()) : NaN)
 }
 
+export function getI32FromJSONValue(jsonValue: JSON.Value): i32 {
+    const int = jsonValue.isInteger ? jsonValue as JSON.Integer : null
+    if (!int) {
+        throw new Error(`Unable to get i32 value from JSON.Value: ${jsonValue.toString()}`)
+    }
+
+    return i32((int as JSON.Integer).valueOf())
+}
+
 export function getStringMapFromJSONObj(jsonObj: JSON.Obj): Map<string, string> {
     const stringMap = new Map<string, string>()
     for (let i = 0; i < jsonObj.keys.length; i++) {
