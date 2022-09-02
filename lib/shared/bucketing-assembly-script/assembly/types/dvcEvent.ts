@@ -5,6 +5,7 @@ import {
     getJSONObjFromJSONOptional,
     getStringFromJSON,
     getStringFromJSONOptional,
+    getStringMapFromJSONObj,
     jsonArrFromValueArray,
     jsonObjFromMap
 } from '../helpers/jsonHelpers'
@@ -192,4 +193,21 @@ export class FlushPayload extends JSON.Value {
         jsonObj.set('eventCount', this.eventCount())
         return jsonObj.stringify()
     }
+}
+
+export function testDVCEventClass(eventStr: string): string {
+    const event = DVCEvent.fromJSONString(eventStr)
+    return event.stringify()
+}
+
+export function testDVCRequestEventClass(eventStr: string, user_id: string, featureVarsStr: string): string {
+    const featureVarsJSON = JSON.parse(featureVarsStr)
+    if (!featureVarsJSON.isObj) throw new Error('featureVarsJSON is not a JSON Object')
+
+    const requestEvent = new DVCRequestEvent(
+        DVCEvent.fromJSONString(eventStr),
+        user_id,
+        getStringMapFromJSONObj(featureVarsJSON as JSON.Obj)
+    )
+    return requestEvent.stringify()
 }
