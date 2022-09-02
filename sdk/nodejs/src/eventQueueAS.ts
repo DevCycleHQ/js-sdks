@@ -1,7 +1,7 @@
 import { DVCEvent } from './types'
 import { DVCRequestEvent } from './models/requestEvent'
 import { DVCPopulatedUser } from './models/populatedUser'
-import {BucketedUserConfig, DVCLogger} from '@devcycle/types'
+import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 
 import { getBucketingLib } from './bucketing'
 import { EventQueueInterface, EventTypes } from './eventQueue'

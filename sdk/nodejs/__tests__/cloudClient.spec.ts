@@ -115,22 +115,22 @@ describe('DVCCloudClient without EdgeDB', () => {
         it('throws an error for a null event', () => {
             const badEvent = null
             expect(async () => await client.track(user, badEvent as unknown as DVCEvent))
-            .rejects
-            .toThrow('Invalid Event')
+                .rejects
+                .toThrow('Invalid Event')
         })
 
         it('throws an error for a undefined event', () => {
             const badEvent = undefined
             expect(async () => await client.track(user, badEvent as unknown as DVCEvent))
-            .rejects
-            .toThrow('Invalid Event')
+                .rejects
+                .toThrow('Invalid Event')
         })
 
         it('throws an error for an event with no type', () => {
             const badEvent = { target: 'test' }
             expect(async () => await client.track(user, badEvent as unknown as DVCEvent))
-            .rejects
-            .toThrow('Invalid Event')
+                .rejects
+                .toThrow('Invalid Event')
         })
 
         test.each([
@@ -143,8 +143,8 @@ describe('DVCCloudClient without EdgeDB', () => {
         ])('Invalid Track (Invalid Event Type: %s)', async (type) => {
             const badEvent = { type }
             expect(async () => await client.track(user, badEvent as unknown as DVCEvent))
-            .rejects
-            .toThrow('Invalid Event')
+                .rejects
+                .toThrow('Invalid Event')
         })
     })
 })

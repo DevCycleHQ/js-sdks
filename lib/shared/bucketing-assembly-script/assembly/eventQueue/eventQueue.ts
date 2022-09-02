@@ -81,7 +81,8 @@ export class EventQueue {
 
     queueEvent(user: DVCPopulatedUser, event: DVCEvent, featureVariationMap: Map<string, string>): void {
         // TODO: Implement max queue size
-        // this.maxEventQueueSize = bucketedConfig?.project.settings.sdkSettings?.eventQueueLimit ?? this.maxEventQueueSize
+        // this.maxEventQueueSize = bucketedConfig?.project.settings.sdkSettings?.eventQueueLimit
+        // ?? this.maxEventQueueSize
 
         const requestEvent = new DVCRequestEvent(event, user.user_id, featureVariationMap)
         this.addEventToQueue(user, requestEvent)

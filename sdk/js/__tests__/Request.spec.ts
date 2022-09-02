@@ -51,7 +51,7 @@ describe('Request tests', () => {
             expect(axiosRequestMock).toBeCalledWith({
                 headers: { 'Content-Type': 'application/json' },
                 method: 'GET',
-                url: `https://sdk-api.devcycle.com/v1/sdkConfig?envKey=` +
+                url: 'https://sdk-api.devcycle.com/v1/sdkConfig?envKey=' +
                      `${environmentKey}&user_id=${user.user_id}&isAnonymous=false`
             })
         })

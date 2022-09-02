@@ -14,8 +14,8 @@ import { FlushPayload } from '../../assembly/types'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
 
-const initEventQueue = (envKey: string, options: unknown) => {
-    initEventQueue_AS(envKey, JSON.stringify(options))
+const initEventQueue = (envKey: unknown, options: unknown) => {
+    initEventQueue_AS(envKey as string, JSON.stringify(options))
 }
 
 const flushEventQueue = (envKey: string): FlushPayload[] => {
@@ -51,13 +51,11 @@ describe('EventQueueManager Tests', () => {
         })
 
         it('should throw error if no envKey', () => {
-            // @ts-ignore
-            expect(() => initEventQueue()).toThrow('value must not be null')
+            expect(() => initEventQueue(undefined, undefined)).toThrow('value must not be null')
         })
 
         it('should throw error if no options', () => {
-            // @ts-ignore
-            expect(() => initEventQueue('env_key_test_2')).toThrow('value must not be null')
+            expect(() => initEventQueue('env_key_test_2', undefined)).toThrow('value must not be null')
         })
 
         it('should throw if EnvQueue already setup for envKey', () => {

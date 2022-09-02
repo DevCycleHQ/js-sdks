@@ -10,13 +10,13 @@ export const useIsDVCInitialized = (): boolean => {
     if (isDVCReady) return isDVCReady
 
     dvcContext.client.onClientInitialized()
-    .then(() => {
-        setIsDVCReady(true)
-    }).catch(() => {
+        .then(() => {
+            setIsDVCReady(true)
+        }).catch(() => {
         // set to true to unblock app load
-        console.log('Error initializing DevCycle.')
-        setIsDVCReady(true)
-    })
+            console.log('Error initializing DevCycle.')
+            setIsDVCReady(true)
+        })
 
     return isDVCReady
 }
