@@ -51,7 +51,14 @@ export class EventQueueAS implements EventQueueInterface {
      * Flush events in queue to DevCycle Events API. Requeue events if flush fails
      */
     async flushEvents(): Promise<void> {
-        const flushPayloadsStr = getBucketingLib().flushEventQueue(this.environmentKey)
+        let flushPayloadsStr
+        try {
+            flushPayloadsStr = getBucketingLib().flushEventQueue(this.environmentKey)
+        } catch (ex) {
+            this.logger.error(`DVC Error Flushing Events: ${ex.message}`)
+        }
+
+        if (!flushPayloadsStr) return
         this.logger.debug(`AS Flush Payloads: ${flushPayloadsStr}`)
         const flushPayloads = JSON.parse(flushPayloadsStr) as FlushPayload[]
         if (flushPayloads.length === 0) return

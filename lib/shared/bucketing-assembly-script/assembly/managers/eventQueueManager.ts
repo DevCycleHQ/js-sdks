@@ -5,6 +5,9 @@ import { JSON } from 'assemblyscript-json/assembly'
 import { _getConfigData } from './configDataManager'
 import { _generateBucketedConfig } from '../bucketing'
 
+/**
+ * Map<environmentKey, EventQueue>
+ */
 const _eventQueueMap: Map<string, EventQueue> = new Map()
 
 function getEventQueue(envKey: string): EventQueue {
