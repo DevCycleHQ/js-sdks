@@ -18,8 +18,10 @@ import {
 import { SortingArray, sortObjectsByString } from './helpers/arrayHelpers'
 
 export {
+    testEventQueueOptionsClass,
+    testDVCEventClass,
+    testDVCRequestEventClass,
     testPlatformDataClass,
-    testEventQueueOptionsClass
 } from './types'
 
 export function checkNumbersFilterFromJSON(number: string, filterStr: string): bool {
