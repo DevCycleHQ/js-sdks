@@ -1,11 +1,15 @@
 import { JSON } from 'assemblyscript-json/assembly'
-import { getStringFromJSON } from '../helpers/jsonHelpers'
+import {
+    getStringFromJSON,
+    getStringFromJSONOptional
+} from '../helpers/jsonHelpers'
 
 export class PlatformData extends JSON.Obj {
     platform: string
     platformVersion: string
     sdkType: string
     sdkVersion: string
+    hostname: string | null
 
     constructor(str: string) {
         super()
@@ -17,6 +21,7 @@ export class PlatformData extends JSON.Obj {
         this.platformVersion = getStringFromJSON(jsonObj, 'platformVersion')
         this.sdkType = getStringFromJSON(jsonObj, 'sdkType')
         this.sdkVersion = getStringFromJSON(jsonObj, 'sdkVersion')
+        this.hostname = getStringFromJSONOptional(jsonObj, 'hostname')
     }
 
     stringify(): string {
@@ -25,6 +30,13 @@ export class PlatformData extends JSON.Obj {
         json.set('platformVersion', this.platformVersion)
         json.set('sdkType', this.sdkType)
         json.set('sdkVersion', this.sdkVersion)
+        if (this.hostname) json.set('hostname', this.hostname)
         return json.stringify()
     }
 }
+
+export function testPlatformDataClass(dataStr: string): string {
+    const platformData = new PlatformData(dataStr)
+    return platformData.stringify()
+}
+
