@@ -164,9 +164,10 @@ describe('Config Parsing and Generating', () => {
                 '614ef6aa473928459060721a': '615357cf7e9ebdca58446ed0'
             },
             'variableVariationMap': {
-                'swagTest': [
-                    '614ef6aa473928459060721a.615357cf7e9ebdca58446ed0'
-                ]
+                'swagTest': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '615357cf7e9ebdca58446ed0'
+                }
             },
             'variables': {
                 'swagTest': {
@@ -233,18 +234,22 @@ describe('Config Parsing and Generating', () => {
                 '614ef6aa475928459060721a': '615382338424cb11646d7668'
             },
             'variableVariationMap': {
-                'feature2.cool': [
-                    '614ef6aa475928459060721a.615382338424cb11646d7668'
-                ],
-                'feature2.hello': [
-                    '614ef6aa475928459060721a.615382338424cb11646d7668'
-                ],
-                'swagTest': [
-                    '614ef6aa473928459060721a.6153553b8cf4e45e0464268d'
-                ],
-                'test': [
-                    '614ef6aa473928459060721a.6153553b8cf4e45e0464268d'
-                ]
+                'feature2.cool': {
+                    _feature: '614ef6aa475928459060721a',
+                    _variation: '615382338424cb11646d7668'
+                },
+                'feature2.hello': {
+                    _feature: '614ef6aa475928459060721a',
+                    _variation: '615382338424cb11646d7668'
+                },
+                'swagTest': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d'
+                },
+                'test': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d'
+                }
             },
             'variables': {
                 'feature2.cool': {
@@ -320,9 +325,10 @@ describe('Config Parsing and Generating', () => {
                 }
             },
             'variableVariationMap': {
-                'feature2Var': [
-                    '614ef6aa475928459060721a.615382338424cb11646d7667'
-                ]
+                'feature2Var': {
+                    _feature: '614ef6aa475928459060721a',
+                    _variation: '615382338424cb11646d7667'
+                }
             },
             'featureVariationMap': {
                 '614ef6aa475928459060721a': '615382338424cb11646d7667'
@@ -392,12 +398,14 @@ describe('Config Parsing and Generating', () => {
                 '614ef6aa475928459060721a': '615382338424cb11646d7667'
             },
             'variableVariationMap': {
-                'feature2Var': [
-                    '614ef6aa475928459060721a.615382338424cb11646d7667'
-                ],
-                'swagTest': [
-                    '614ef6aa473928459060721a.615357cf7e9ebdca58446ed0'
-                ]
+                'feature2Var': {
+                    '_feature': '614ef6aa475928459060721a',
+                    '_variation': '615382338424cb11646d7667'
+                },
+                'swagTest': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '615357cf7e9ebdca58446ed0'
+                }
             },
             'variables': {
                 'swagTest': {

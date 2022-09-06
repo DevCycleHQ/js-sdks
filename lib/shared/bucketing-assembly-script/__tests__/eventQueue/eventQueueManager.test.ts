@@ -350,8 +350,14 @@ describe('EventQueueManager Tests', () => {
                 target: 'testTarget'
             }
             const variableVariationMap = {
-                test: ['614ef6aa473928459060721a.6153553b8cf4e45e0464268d'],
-                swagTest: ['614ef6aa473928459060721a.6153553b8cf4e45e0464268d']
+                test: {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d'
+                },
+                swagTest: {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d'
+                }
             }
 
             initSDK(envKey)
@@ -379,8 +385,14 @@ describe('EventQueueManager Tests', () => {
                 target: 'testTarget'
             }
             const variableVariationMap = {
-                test: ['614ef6aa473928459060721a.6153553b8cf4e45e0464268d'],
-                swagTest: ['614ef6aa473928459060721a.6153553b8cf4e45e0464268d']
+                test: {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d'
+                },
+                swagTest: {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d'
+                }
             }
 
             initSDK(envKey)
@@ -426,8 +438,10 @@ describe('EventQueueManager Tests', () => {
                     'target': 'test',
                     'type': 'aggVariableEvaluated',
                     'user_id': 'host.name',
+                    'value': 36,
                     'metaData': {
-                        '614ef6aa473928459060721a.6153553b8cf4e45e0464268d': 36
+                        _feature: '614ef6aa473928459060721a',
+                        _variation: '6153553b8cf4e45e0464268d'
                     }
                 }, {
                     'clientDate': expect.any(Number),
@@ -435,8 +449,10 @@ describe('EventQueueManager Tests', () => {
                     'target': 'swagTest',
                     'type': 'aggVariableEvaluated',
                     'user_id': 'host.name',
+                    'value': 11,
                     'metaData': {
-                        '614ef6aa473928459060721a.6153553b8cf4e45e0464268d': 11
+                        _feature: '614ef6aa473928459060721a',
+                        _variation: '6153553b8cf4e45e0464268d'
                     }
                 }
             ])

@@ -3,7 +3,7 @@ import { first, last } from '../helpers/lodashHelpers'
 import {
     ConfigBody, Target as PublicTarget, Feature as PublicFeature, BucketedUserConfig,
     Rollout as PublicRollout, DVCPopulatedUser, SDKVariable, SDKFeature, RolloutStage,
-    Target, Variation, Variable, TargetDistribution
+    Target, Variation, Variable, TargetDistribution, FeatureVariation
 } from '../types'
 
 import { murmurhashV3 } from '../helpers/murmurhash'
@@ -189,7 +189,7 @@ export function _generateBucketedConfig(
     const variableMap = new Map<string, SDKVariable>()
     const featureKeyMap = new Map<string, SDKFeature>()
     const featureVariationMap = new Map<string, string>()
-    const variableVariationMap = new Map<string, string[]>()
+    const variableVariationMap = new Map<string, FeatureVariation>()
     const segmentedFeatures = getSegmentedFeatureDataFromConfig(config, user)
 
     for (let i = 0; i < segmentedFeatures.length; i++) {
@@ -243,14 +243,10 @@ export function _generateBucketedConfig(
                 throw new Error(`Config missing variable: ${variationVar._var}`)
             }
 
-            let featVarMap: string[]
-            if (variableVariationMap.has(variable.key)) {
-                featVarMap = variableVariationMap.get(variable.key)
-            } else {
-                featVarMap = new Array<string>()
-                variableVariationMap.set(variable.key, featVarMap)
-            }
-            featVarMap.push(`${feature._id}.${variation_id}`)
+            variableVariationMap.set(
+                variable.key,
+                new FeatureVariation(feature._id, variation_id)
+            )
 
             const newVar = new SDKVariable(
                 variable._id,

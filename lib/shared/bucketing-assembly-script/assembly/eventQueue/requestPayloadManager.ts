@@ -6,9 +6,9 @@ import {
     FlushPayload,
     UserEventsBatchRecord, EventQueueOptions
 } from '../types'
-import { jsonObjFromMap } from '../helpers/jsonHelpers'
 import { JSON } from 'assemblyscript-json/assembly'
 import { _getPlatformData } from '../managers/platformDataManager'
+import { AggEventQueue } from './eventQueue'
 
 /**
  * This RequestPayloadManager Class handles all the logic for creating event flushing payloads,
@@ -25,7 +25,7 @@ export class RequestPayloadManager {
 
     constructFlushPayloads(
         userEventQueue: Map<string, UserEventsBatchRecord>,
-        aggEventQueue: Map<string, Map<string, Map<string, i64>>>
+        aggEventQueue: AggEventQueue
     ): FlushPayload[] {
         this.checkForFailedPayloads()
 
@@ -47,7 +47,7 @@ export class RequestPayloadManager {
      * generate aggregated events by resolving aggregated event map into DVCEvent's.
      */
     private addAggEventsToPendingPayloads(
-        aggEventQueue: Map<string, Map<string, Map<string, i64>>>
+        aggEventQueue: AggEventQueue
     ): void {
         const aggEventQueueKeys = aggEventQueue.keys()
         const aggEvents: DVCRequestEvent[] = []
@@ -57,28 +57,47 @@ export class RequestPayloadManager {
 
         for (let i = 0; i < aggEventQueueKeys.length; i++) {
             const type = aggEventQueueKeys[i]
-            const typeAggMap: Map<string, Map<string, i64>> = aggEventQueue.get(type)
-            const typeAggMapKeys = typeAggMap.keys()
+            const variableFeatureVarAggMap: Map<string, Map<string, Map<string, i64>>> = aggEventQueue.get(type)
+            const variableFeatureVarAggMapKeys = variableFeatureVarAggMap.keys()
 
-            for (let y = 0; y < typeAggMapKeys.length; y++) {
-                const target = typeAggMapKeys[y]
-                const targetAggMap: Map<string, i64> = typeAggMap.get(target)
+            for (let y = 0; y < variableFeatureVarAggMapKeys.length; y++) {
+                const variableKey = variableFeatureVarAggMapKeys[y]
+                const featureVarAggMap: Map<string, Map<string, i64>> = variableFeatureVarAggMap.get(variableKey)
+
                 let value: f64 = NaN
-                let metaData: JSON.Obj | null = null
-                if (targetAggMap.has('value')) {
-                    value = f64(targetAggMap.get('value'))
-                } else {
-                    metaData = jsonObjFromMap(targetAggMap)
-                }
+                if (featureVarAggMap.has('value')) {
+                    const varAggMap = featureVarAggMap.get('value')
+                    if (varAggMap.has('value')) {
+                        value = f64(varAggMap.get('value'))
 
-                const dvcEvent = new DVCEvent(
-                    type,
-                    target,
-                    null,
-                    value,
-                    metaData
-                )
-                aggEvents.push(new DVCRequestEvent(dvcEvent, user_id, null))
+                        // Add aggVariableDefaulted Events
+                        const dvcEvent = new DVCEvent(type, variableKey, null, value, null)
+                        aggEvents.push(new DVCRequestEvent(dvcEvent, user_id, null))
+                    } else {
+                        throw new Error('Missing sub value map to write aggVariableDefaulted events')
+                    }
+                } else {
+                    const featureVarAggMapKeys = featureVarAggMap.keys()
+
+                    for (let x = 0; x < featureVarAggMapKeys.length; x++) {
+                        const _feature = featureVarAggMapKeys[x]
+                        const variationAggMap: Map<string, i64> = featureVarAggMap.get(_feature)
+                        const variationAggMapKeys = variationAggMap.keys()
+
+                        for (let z = 0; z < variationAggMapKeys.length; z++) {
+                            const _variation = variationAggMapKeys[z]
+                            value = f64(variationAggMap.get(_variation))
+
+                            const metaData = new JSON.Obj()
+                            metaData.set('_feature', _feature)
+                            metaData.set('_variation', _variation)
+
+                            // Add aggVariableEvaluated Events
+                            const dvcEvent = new DVCEvent(type, variableKey, null, value, metaData)
+                            aggEvents.push(new DVCRequestEvent(dvcEvent, user_id, null))
+                        }
+                    }
+                }
             }
         }
 
