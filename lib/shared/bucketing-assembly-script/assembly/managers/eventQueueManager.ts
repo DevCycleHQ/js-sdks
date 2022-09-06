@@ -1,5 +1,5 @@
 import { EventQueue } from '../eventQueue/eventQueue'
-import { EventQueueOptions, DVCPopulatedUser, DVCEvent } from '../types'
+import {EventQueueOptions, DVCPopulatedUser, DVCEvent, FeatureVariation} from '../types'
 import { getStringArrayMapFromJSONObj } from '../helpers/jsonHelpers'
 import { JSON } from 'assemblyscript-json/assembly'
 import { _getConfigData } from './configDataManager'
@@ -73,7 +73,9 @@ export function queueAggregateEvent(
 
     const variableVariationMapJSON = JSON.parse(variableVariationMapStr)
     if (!variableVariationMapJSON.isObj) throw new Error('variableVariationMap is not a JSON Object')
-    const variableVariationMap = getStringArrayMapFromJSONObj(variableVariationMapJSON as JSON.Obj)
+    const variableVariationMap = FeatureVariation.getVariableVariationMapFromJSONObj(
+        variableVariationMapJSON as JSON.Obj
+    )
 
     const aggByVariation = (event.type === 'aggVariableEvaluated')
     eventQueue.queueAggregateEvent(event, variableVariationMap, aggByVariation)
