@@ -3,7 +3,6 @@ import {
     getJSONArrayFromJSON,
     getJSONObjFromJSON,
     getJSONValueFromJSON,
-    getStringArrayFromJSON,
     getStringFromJSON,
     getStringFromJSONOptional,
     getStringMapFromJSONObj,
@@ -11,13 +10,51 @@ import {
 } from '../helpers/jsonHelpers'
 import { PublicProject, PublicEnvironment } from './configBody'
 
+export class FeatureVariation extends JSON.Obj {
+    constructor(
+        public _feature: string,
+        public _variation: string
+    ) {
+        super()
+    }
+
+    static fromJSONObj(jsonObj: JSON.Obj): FeatureVariation {
+        const _feature = jsonObj.getString('_feature')
+        const _variation = jsonObj.getString('_variation')
+        if (!_feature) throw new Error('Feature Variation missing _feature')
+        if (!_variation) throw new Error('Feature Variation missing _variation')
+        return new FeatureVariation(_feature.valueOf(), _variation.valueOf())
+    }
+
+    static getVariableVariationMapFromJSONObj(jsonObj: JSON.Obj): Map<string, FeatureVariation> {
+        const featureVarMap = new Map<string, FeatureVariation>()
+        const keys = jsonObj.keys
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i]
+            const featureVarJSON = jsonObj.getObj(key)
+            if (featureVarJSON) {
+                featureVarMap.set(key, this.fromJSONObj(featureVarJSON))
+            }
+        }
+
+        return featureVarMap
+    }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('_feature', this._feature)
+        json.set('_variation', this._variation)
+        return json.stringify()
+    }
+}
+
 export class BucketedUserConfig extends JSON.Obj {
     constructor(
         public project: PublicProject,
         public environment: PublicEnvironment,
         public features: Map<string, SDKFeature>,
         public featureVariationMap: Map<string, string>,
-        public variableVariationMap: Map<string, string[]>,
+        public variableVariationMap: Map<string, FeatureVariation>,
         public variables: Map<string, SDKVariable>,
         public knownVariableKeys: i64[]
     ) {
@@ -48,10 +85,12 @@ export class BucketedUserConfig extends JSON.Obj {
         const featureVarMap = getStringMapFromJSONObj(featureVar)
 
         const variableFeatureVariation = getJSONObjFromJSON(userConfigJSONObj, 'variableVariationMap')
-        const variableVariationMap = new Map<string, string[]>()
+        const variableVariationMap = new Map<string, FeatureVariation>()
         for (let i = 0; i < variableFeatureVariation.keys.length; i++) {
             const key = variableFeatureVariation.keys[i]
-            variableVariationMap.set(key, getStringArrayFromJSON(variableFeatureVariation, key))
+            const json = variableFeatureVariation.getObj(key)
+            if (!json) throw new Error('Missing FeatureVariation object in variableVariationMap')
+            variableVariationMap.set(key, FeatureVariation.fromJSONObj(json))
         }
 
         const variables = getJSONObjFromJSON(userConfigJSONObj, 'variables')
