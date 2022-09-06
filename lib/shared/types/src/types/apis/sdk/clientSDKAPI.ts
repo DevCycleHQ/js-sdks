@@ -331,6 +331,11 @@ export type SDKFeature = Pick<PublicFeature, '_id' | 'key' | 'type' | 'settings'
     evalReason?: unknown
 }
 
+type FeatureVariation = {
+    _feature: string,
+    _variation: string
+}
+
 export interface BucketedUserConfig {
     /**
      * Project data used for logging
@@ -356,9 +361,9 @@ export interface BucketedUserConfig {
     featureVariationMap: Record<string, string>
 
     /**
-     * Map<`variable.key`, Map<`feature._id`,`variation._id`>> used for aggregated event logging.
+     * Map<`variable.key`, FeatureVariation> used for aggregated event logging.
      */
-    variableVariationMap: Record<string, Record<string, string>>
+    variableVariationMap: Record<string, FeatureVariation>
 
     /**
      * Mapping of `ClientSDKDynamicVariable.key` to `ClientSDKDynamicVariable` values.
