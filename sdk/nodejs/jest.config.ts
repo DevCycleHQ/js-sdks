@@ -1,6 +1,5 @@
 module.exports = {
     displayName: 'nodejs-server-sdk',
-    
     globals: {
         'ts-jest': {
             tsconfig: '<rootDir>/tsconfig.spec.json',

@@ -21,19 +21,20 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/sdk/nodejs"
-      ],
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "jestConfig": "sdk/nodejs/jest.config.ts",
-        "passWithNoTests": true
+          "commands": [
+              {
+                  "command": "node --experimental-vm-modules ../../node_modules/jest/bin/jest.js"
+              }
+          ],
+          "cwd": "sdk/nodejs"
       },
       "dependsOn": [
-        {
-          "target": "build",
-          "projects": "dependencies"
-        }
+          {
+              "target": "build",
+              "projects": "dependencies"
+          }
       ]
     },
     "build": {

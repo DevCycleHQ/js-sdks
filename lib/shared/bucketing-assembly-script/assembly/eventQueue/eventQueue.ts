@@ -4,23 +4,28 @@ import {
     EventQueueOptions,
     DVCRequestEvent,
     UserEventsBatchRecord,
-    FlushPayload,
     FeatureVariation
 } from '../types'
-import { jsonArrFromValueArray } from '../helpers/jsonHelpers'
-import { RequestPayloadManager } from './requestPayloadManager'
 
-export type AggEventQueue = Map<string, Map<string, Map<string, Map<string, i64>>>>
+export type VariationAggMap = Map<string, i64>
+export type FeatureAggMap = Map<string, VariationAggMap>
+export type VariableAggMap = Map<string, FeatureAggMap>
+export type AggEventQueue = Map<string, VariableAggMap>
+export type UserEventQueue = Map<string, UserEventsBatchRecord>
+
+export class FlushEventQueues {
+    public userEventQueue: UserEventQueue
+    public aggEventQueue: AggEventQueue
+}
 
 export class EventQueue {
-    private requestPayloadManager: RequestPayloadManager
     private envKey: string
     private options: EventQueueOptions
 
     /**
      * Map<user_id, UserEventsBatchRecord>
      */
-    private userEventQueue: Map<string, UserEventsBatchRecord>
+    private userEventQueue: UserEventQueue
 
     /**
      * Map<'aggVariableDefaulted',
@@ -42,53 +47,18 @@ export class EventQueue {
     private aggEventQueue: AggEventQueue
 
     constructor(envKey: string, options: EventQueueOptions) {
-        this.requestPayloadManager = new RequestPayloadManager(options)
         this.envKey = envKey
         this.options = options
         this.userEventQueue = new Map<string, UserEventsBatchRecord>()
-        this.aggEventQueue = new Map<string, Map<string, Map<string, Map<string, i64>>>>()
+        this.aggEventQueue = new Map<string, VariableAggMap>()
     }
 
-    /**
-     * See sdk/nodejs/src/eventQueue.ts for rough context on how this should be implemented,
-     * with these changes described below:
-     *
-     * This should be called by the native code on an interval set by the `flushEventsMS` option.
-     * It will generate an array of payloads, with each payload up to a maximum batch size
-     * (should be configurable by an option, nodejs uses 100).
-     *
-     * It should take the data from the eventQueue and aggregate events and generate request payloads.
-     * After generating these paylods it should clear the data from the eventQueue and aggregate events queues.
-     * The payload objects should be stored in a sending paylods queue with their status of 'inProgress'.
-     * Each Payload object should generate a unique payloadId that will be used for the onPayloadSuccess() and
-     * onPayloadFailure() methods.
-     *
-     * If onPayloadSuccess() is called for a payloadId, it can be removed from the sending payloads queue.
-     *
-     * If onPayloadFailure() is called for a payloadId and retryable = true, it should be marked as 'failed'.
-     * If it retryable = false, it should be removed from the sending payload queue.
-     * Then on subsequent calls to `flush()` the 'failed' payloads should be marked as 'inProgress' and returned
-     * as payloads to be sent by the Native code again.
-     *
-     * If there are payloads that are still marked as `inProgress` when `flush()` is called, it should return an
-     * exception to the native code.
-     */
-    flush(): string {
-        const payloads: FlushPayload[] = this.requestPayloadManager.constructFlushPayloads(
-            this.userEventQueue,
-            this.aggEventQueue
-        )
+    flushAndResetEventQueue(): FlushEventQueues {
+        const userEventQueue = this.userEventQueue
+        const aggEventQueue = this.aggEventQueue
         this.userEventQueue = new Map<string, UserEventsBatchRecord>()
-        this.aggEventQueue = new Map<string, Map<string, Map<string, Map<string, i64>>>>()
-        return jsonArrFromValueArray(payloads).stringify()
-    }
-
-    onPayloadSuccess(payloadId: string): void {
-        this.requestPayloadManager.markPayloadSuccess(payloadId)
-    }
-
-    onPayloadFailure(payloadId: string, retryable: boolean): void {
-        this.requestPayloadManager.markPayloadFailure(payloadId, retryable)
+        this.aggEventQueue = new Map<string, VariableAggMap>()
+        return { userEventQueue, aggEventQueue }
     }
 
     queueEvent(user: DVCPopulatedUser, event: DVCEvent, featureVariationMap: Map<string, string>): void {
@@ -138,19 +108,19 @@ export class EventQueue {
         //     return
         // }
 
-        let variableFeatureVarAggMap: Map<string, Map<string, Map<string, i64>>>
+        let variableFeatureVarAggMap: VariableAggMap
         if (this.aggEventQueue.has(type)) {
             variableFeatureVarAggMap = this.aggEventQueue.get(type)
         } else {
-            variableFeatureVarAggMap = new Map<string, Map<string, Map<string, i64>>>()
+            variableFeatureVarAggMap = new Map<string, FeatureAggMap>()
             this.aggEventQueue.set(type, variableFeatureVarAggMap)
         }
 
-        let featureVarAggMap: Map<string, Map<string, i64>>
+        let featureVarAggMap: FeatureAggMap
         if (variableFeatureVarAggMap.has(target)) {
             featureVarAggMap = variableFeatureVarAggMap.get(target)
         } else {
-            featureVarAggMap = new Map<string, Map<string, i64>>()
+            featureVarAggMap = new Map<string, VariationAggMap>()
             variableFeatureVarAggMap.set(target, featureVarAggMap)
         }
 
@@ -160,7 +130,7 @@ export class EventQueue {
             }
             const featureVariation: FeatureVariation = variableVariationMap.get(target)
 
-            let variationAggMap: Map<string, i64>
+            let variationAggMap: VariationAggMap
             if (featureVarAggMap.has(featureVariation._feature)) {
                 variationAggMap = featureVarAggMap.get(featureVariation._feature)
             } else {
@@ -180,7 +150,7 @@ export class EventQueue {
              * we need to set an empty map here to fit the same schema for tracking `aggVariableDefaulted` events.
              */
             if (featureVarAggMap.has('value')) {
-                const variationAggMap: Map<string, i64> = featureVarAggMap.get('value')
+                const variationAggMap: VariationAggMap = featureVarAggMap.get('value')
                 if (variationAggMap.has('value')) {
                     const count: i64 = variationAggMap.get('value')
                     variationAggMap.set('value', count + 1)
