@@ -1,10 +1,6 @@
 import { DVCEvent } from '../types'
 import { checkParamDefined, checkParamString } from '../utils/paramUtils'
-
-export const EventTypes: Record<string, string> = {
-    variableEvaluated: 'variableEvaluated',
-    variableDefaulted: 'variableDefaulted',
-}
+import { EventTypes } from '../eventQueue'
 
 export class DVCRequestEvent {
     type: string

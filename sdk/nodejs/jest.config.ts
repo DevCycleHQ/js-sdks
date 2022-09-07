@@ -1,7 +1,6 @@
 /* eslint-disable */
 export default {
     displayName: 'nodejs-server-sdk',
-
     globals: {
         'ts-jest': {
             tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -16,7 +15,8 @@ export default {
         '<rootDir>/src/**/*.{ts,js}',
         '!<rootDir>/**/*.{spec,test,mock}.{ts,js}'
     ],
-    coverageDirectory: '../../coverage/sdk/nodejs-server-sdk','preset': '../../jest.preset.js'
+    coverageDirectory: '../../coverage/sdk/nodejs-server-sdk',
+    preset: '../../jest.preset.js'
 }
 
 module.exports.reporters = [

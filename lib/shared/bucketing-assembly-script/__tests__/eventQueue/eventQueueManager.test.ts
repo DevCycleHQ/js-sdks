@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import {
     setPlatformData,
     clearPlatformData,
@@ -9,12 +8,15 @@ import {
     onPayloadFailure,
     queueEvent as queueEvent_AS,
     queueAggregateEvent as queueAggregateEvent_AS,
+    cleanupEventQueue
 } from '../../build/bucketing-lib.debug'
 import { FlushPayload } from '../../assembly/types'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
 
+let currentEnvKey: string | null = null
 const initEventQueue = (envKey: unknown, options: unknown) => {
+    currentEnvKey = envKey as string
     initEventQueue_AS(envKey as string, JSON.stringify(options))
 }
 
@@ -44,7 +46,13 @@ const initSDK = (envKey: string, eventOptions: unknown = {}) => {
 }
 
 describe('EventQueueManager Tests', () => {
-    afterEach(() => clearPlatformData())
+    afterEach(() => {
+        clearPlatformData()
+        if (currentEnvKey) {
+            cleanupEventQueue(currentEnvKey)
+            currentEnvKey = null
+        }
+    })
 
     describe('initEventQueue', () => {
         it('should init EventQueue without any options', () => {
@@ -95,53 +103,50 @@ describe('EventQueueManager Tests', () => {
             expect(flushEventQueue(envKey)).toEqual(expect.arrayContaining([
                 {
                     'payloadId': expect.any(String),
-                    'eventCount': 1,
-                    'records': [{
-                        'events': [{
-                            'clientDate': expect.any(Number),
-                            'customType': 'testType',
-                            'date': expect.any(Number),
-                            'featureVars': {},
-                            'metaData': { 'test': 'data', },
-                            'target': 'testTarget',
-                            'type': 'customEvent',
-                            'user_id': 'user_id',
-                            'value': 10,
-                        }],
-                        'user': {
-                            'createdDate': expect.any(String),
-                            'lastSeenDate': expect.any(String),
-                            'platform': 'NodeJS',
-                            'platformVersion': '16.0',
-                            'sdkType': 'server',
-                            'sdkVersion': '1.0.0',
-                            'user_id': 'user_id',
+                    'eventCount': 2,
+                    'records': [
+                        {
+                            'events': [{
+                                'clientDate': expect.any(String),
+                                'customType': 'testType',
+                                'date': expect.any(String),
+                                'featureVars': {},
+                                'metaData': { 'test': 'data' },
+                                'target': 'testTarget',
+                                'type': 'customEvent',
+                                'user_id': 'user_id',
+                                'value': 10,
+                            }],
+                            'user': {
+                                'createdDate': expect.any(String),
+                                'lastSeenDate': expect.any(String),
+                                'platform': 'NodeJS',
+                                'platformVersion': '16.0',
+                                'sdkType': 'server',
+                                'sdkVersion': '1.0.0',
+                                'user_id': 'user_id',
+                            }
+                        },
+                        {
+                            'events': [{
+                                'clientDate': expect.any(String),
+                                'date': expect.any(String),
+                                'target': 'variableKey',
+                                'type': 'aggVariableDefaulted',
+                                'user_id': 'host.name',
+                                'value': 1
+                            }],
+                            'user': {
+                                'createdDate': expect.any(String),
+                                'lastSeenDate': expect.any(String),
+                                'platform': 'NodeJS',
+                                'platformVersion': '16.0',
+                                'sdkType': 'server',
+                                'sdkVersion': '1.0.0',
+                                'user_id': 'host.name'
+                            }
                         }
-                    }]
-                },
-                {
-                    'payloadId': expect.any(String),
-                    'eventCount': 1,
-                    'records': [{
-                        'events': [{
-                            'clientDate': expect.any(Number),
-                            'customType': 'aggVariableDefaulted',
-                            'date': expect.any(Number),
-                            'target': 'variableKey',
-                            'type': 'customEvent',
-                            'user_id': 'host.name',
-                            'value': 1
-                        }],
-                        'user': {
-                            'createdDate': expect.any(String),
-                            'lastSeenDate': expect.any(String),
-                            'platform': 'NodeJS',
-                            'platformVersion': '16.0',
-                            'sdkType': 'server',
-                            'sdkVersion': '1.0.0',
-                            'user_id': 'host.name'
-                        }
-                    }]
+                    ]
                 }
             ]))
         })
@@ -201,7 +206,7 @@ describe('EventQueueManager Tests', () => {
             }
 
             const payloads = flushEventQueue(envKey)
-            expect(payloads.length).toEqual(5)
+            expect(payloads.length).toEqual(4)
             let user1Count = 0
             let user2Count = 0
             for (const payload of payloads) {
@@ -215,8 +220,23 @@ describe('EventQueueManager Tests', () => {
             }
             expect(user1Count).toEqual(3)
             expect(user2Count).toEqual(2)
-            expect(_.last(payloads)?.records[0].events.length).toEqual(4)
-            expect(_.last(payloads)?.records[0].user.user_id).toEqual(dvcUser2.user_id)
+            expect(payloads[0].records.length).toEqual(1)
+            expect(payloads[0].records[0].user.user_id).toEqual(dvcUser.user_id)
+            expect(payloads[0].records[0].events.length).toEqual(10)
+
+            expect(payloads[1].records.length).toEqual(1)
+            expect(payloads[1].records[0].user.user_id).toEqual(dvcUser.user_id)
+            expect(payloads[1].records[0].events.length).toEqual(10)
+
+            expect(payloads[2].records.length).toEqual(2)
+            expect(payloads[2].records[0].user.user_id).toEqual(dvcUser.user_id)
+            expect(payloads[2].records[0].events.length).toEqual(6)
+            expect(payloads[2].records[1].user.user_id).toEqual(dvcUser2.user_id)
+            expect(payloads[2].records[1].events.length).toEqual(4)
+
+            expect(payloads[3].records.length).toEqual(1)
+            expect(payloads[3].records[0].user.user_id).toEqual(dvcUser2.user_id)
+            expect(payloads[3].records[0].events.length).toEqual(10)
 
             for (const payload of payloads) {
                 onPayloadSuccess(envKey, payload.payloadId)
@@ -244,17 +264,21 @@ describe('EventQueueManager Tests', () => {
             expect(payloads.length).toEqual(4)
             onPayloadSuccess(envKey, payloads[0].payloadId)
             onPayloadFailure(envKey, payloads[1].payloadId, true)
-            onPayloadFailure(envKey, payloads[2].payloadId, true)
-            onPayloadFailure(envKey, payloads[3].payloadId, false)
+            onPayloadFailure(envKey, payloads[2].payloadId, false)
+            onPayloadFailure(envKey, payloads[3].payloadId, true)
+            expect(payloads[3].records[0].events.length).toEqual(6)
 
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 4; i++) {
                 event.target = `target_after_failed_${i}`
                 queueEvent(envKey, dvcUser, event)
             }
             const failedPayloads = flushEventQueue(envKey)
             expect(failedPayloads.length).toEqual(3)
             expect(failedPayloads[0]).toEqual(payloads[1])
-            expect(failedPayloads[1]).toEqual(payloads[2])
+            expect(failedPayloads[1]).toEqual(payloads[3])
+            expect(failedPayloads[2].records.length).toEqual(1)
+            expect(failedPayloads[2].records[0].user.user_id).toEqual(dvcUser.user_id)
+            expect(failedPayloads[2].records[0].events.length).toEqual(4)
 
             for (const payload of failedPayloads) {
                 onPayloadSuccess(envKey, payload.payloadId)
@@ -417,24 +441,22 @@ describe('EventQueueManager Tests', () => {
             expect(payloads.length).toEqual(1)
             expect(payloads[0].records[0].events).toEqual([
                 {
-                    'clientDate': expect.any(Number),
-                    'customType': 'aggVariableDefaulted',
-                    'date': expect.any(Number),
+                    'clientDate': expect.any(String),
+                    'date': expect.any(String),
                     'target': 'testey_test',
-                    'type': 'customEvent',
+                    'type': 'aggVariableDefaulted',
                     'user_id': 'host.name',
                     'value': 36
                 }, {
-                    'clientDate': expect.any(Number),
-                    'customType': 'aggVariableDefaulted',
-                    'date': expect.any(Number),
+                    'clientDate': expect.any(String),
+                    'date': expect.any(String),
                     'target': 'swageyTest',
-                    'type': 'customEvent',
+                    'type': 'aggVariableDefaulted',
                     'user_id': 'host.name',
                     'value': 11
                 }, {
-                    'clientDate': expect.any(Number),
-                    'date': expect.any(Number),
+                    'clientDate': expect.any(String),
+                    'date': expect.any(String),
                     'target': 'test',
                     'type': 'aggVariableEvaluated',
                     'user_id': 'host.name',
@@ -444,8 +466,8 @@ describe('EventQueueManager Tests', () => {
                         _variation: '6153553b8cf4e45e0464268d'
                     }
                 }, {
-                    'clientDate': expect.any(Number),
-                    'date': expect.any(Number),
+                    'clientDate': expect.any(String),
+                    'date': expect.any(String),
                     'target': 'swagTest',
                     'type': 'aggVariableEvaluated',
                     'user_id': 'host.name',
