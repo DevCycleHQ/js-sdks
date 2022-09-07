@@ -54,8 +54,8 @@ describe('DVCEvent tests', () => {
                 user_id,
                 type: 'customEvent',
                 customType: eventObj.type,
-                date: expect.any(Number),
-                clientDate: eventObj.date.getTime(),
+                date: expect.any(String),
+                clientDate: eventObj.date.toISOString(),
                 featureVars
             }))
         })

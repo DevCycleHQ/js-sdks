@@ -8,7 +8,12 @@ import {
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { _getPlatformData } from '../managers/platformDataManager'
-import { AggEventQueue } from './eventQueue'
+import {
+    AggEventQueue,
+    FeatureAggMap,
+    VariableAggMap,
+    VariationAggMap
+} from './eventQueue'
 
 /**
  * This RequestPayloadManager Class handles all the logic for creating event flushing payloads,
@@ -28,27 +33,34 @@ export class RequestPayloadManager {
         aggEventQueue: AggEventQueue
     ): FlushPayload[] {
         this.checkForFailedPayloads()
-
-        // Add events from user event queue
-        const userEventQueueKeys = userEventQueue.keys()
-        for (let i = 0; i < userEventQueueKeys.length; i++) {
-            const key = userEventQueueKeys[i]
-            const userEventsRecord = userEventQueue.get(key)
-            this.addEventsToPendingPayloads(userEventsRecord)
-        }
-
-        // Add events from aggregate events
-        this.addAggEventsToPendingPayloads(aggEventQueue)
+        const records = this.constructBatchRecordsFromUserEvents(userEventQueue)
+        records.push(this.constructBatchRecordsFromAggEvents(aggEventQueue))
+        this.addEventRecordsToPendingPayloads(records)
 
         return this.pendingPayloads.values()
     }
 
     /**
-     * generate aggregated events by resolving aggregated event map into DVCEvent's.
+     * Generate UserEventsBatchRecord from User Event Queue
      */
-    private addAggEventsToPendingPayloads(
+    private constructBatchRecordsFromUserEvents(
+        userEventQueue: Map<string, UserEventsBatchRecord>
+    ): UserEventsBatchRecord[] {
+        const records = new Array<UserEventsBatchRecord>()
+        const userEventQueueValues = userEventQueue.values()
+
+        for (let i = 0; i < userEventQueueValues.length; i++) {
+            records.push(userEventQueueValues[i])
+        }
+        return records
+    }
+
+    /**
+     * generate aggregated events by resolving aggregated event map into DVCEvents.
+     */
+    private constructBatchRecordsFromAggEvents(
         aggEventQueue: AggEventQueue
-    ): void {
+    ): UserEventsBatchRecord {
         const aggEventQueueKeys = aggEventQueue.keys()
         const aggEvents: DVCRequestEvent[] = []
 
@@ -57,12 +69,12 @@ export class RequestPayloadManager {
 
         for (let i = 0; i < aggEventQueueKeys.length; i++) {
             const type = aggEventQueueKeys[i]
-            const variableFeatureVarAggMap: Map<string, Map<string, Map<string, i64>>> = aggEventQueue.get(type)
-            const variableFeatureVarAggMapKeys = variableFeatureVarAggMap.keys()
+            const variableAggMap: VariableAggMap = aggEventQueue.get(type)
+            const variableFeatureVarAggMapKeys = variableAggMap.keys()
 
             for (let y = 0; y < variableFeatureVarAggMapKeys.length; y++) {
                 const variableKey = variableFeatureVarAggMapKeys[y]
-                const featureVarAggMap: Map<string, Map<string, i64>> = variableFeatureVarAggMap.get(variableKey)
+                const featureVarAggMap: FeatureAggMap = variableAggMap.get(variableKey)
 
                 let value: f64 = NaN
                 if (featureVarAggMap.has('value')) {
@@ -81,7 +93,7 @@ export class RequestPayloadManager {
 
                     for (let x = 0; x < featureVarAggMapKeys.length; x++) {
                         const _feature = featureVarAggMapKeys[x]
-                        const variationAggMap: Map<string, i64> = featureVarAggMap.get(_feature)
+                        const variationAggMap: VariationAggMap = featureVarAggMap.get(_feature)
                         const variationAggMapKeys = variationAggMap.keys()
 
                         for (let z = 0; z < variationAggMapKeys.length; z++) {
@@ -101,33 +113,46 @@ export class RequestPayloadManager {
             }
         }
 
-        // Generate defaulted agreagate user as our events APIs require a user / user_id
+        // Generate defaulted aggregate user as our events APIs require a user / user_id
         const dvcUser = new DVCPopulatedUser(new DVCUser(
             user_id, null, null, null, null, NaN, null, null, null, null
         ))
-        this.addEventsToPendingPayloads(new UserEventsBatchRecord(dvcUser, aggEvents))
+        return new UserEventsBatchRecord(dvcUser, aggEvents)
+    }
+
+    /**
+     * Find existing FlushPayload that is less than this.chunkSize, and isn't a failed payload
+     */
+    private getFlushPayload(): FlushPayload {
+        const payloads = this.pendingPayloads.values()
+
+        for (let i=0; i < payloads.length; i++) {
+            const payload = payloads[i]
+            if (payload.status === 'failed') {
+                continue
+            }
+            if (payload.eventCount() < this.chunkSize) {
+                return payload
+            }
+        }
+
+        return new FlushPayload([])
     }
 
     /**
      * Chunk up UserEventsBatchRecord's into payloads of size: this.chunkSize
      */
-    private addEventsToPendingPayloads(record: UserEventsBatchRecord): void {
-        let flushPayload = new FlushPayload([])
+    private addEventRecordsToPendingPayloads(records: UserEventsBatchRecord[]): void {
+        for (let i = 0; i < records.length; i++) {
+            const record: UserEventsBatchRecord = records[i]
 
-        while (record.events.length > this.chunkSize) {
-            const batchRecord = new UserEventsBatchRecord(
-                record.user,
-                record.events.splice(0, this.chunkSize)
-            )
-            flushPayload.records.push(batchRecord)
-            this.pendingPayloads.set(flushPayload.payloadId, flushPayload)
-            flushPayload = new FlushPayload([])
-        }
-        if (record.events.length > 0) {
-            flushPayload.records.push(record)
-        }
-        if (flushPayload.records.length > 0) {
-            this.pendingPayloads.set(flushPayload.payloadId, flushPayload)
+            while (record.events.length > 0) {
+                const flushPayload = this.getFlushPayload()
+                flushPayload.addBatchRecordForUser(record, this.chunkSize)
+                if (flushPayload.records.length > 0) {
+                    this.pendingPayloads.set(flushPayload.payloadId, flushPayload)
+                }
+            }
         }
     }
 
@@ -163,9 +188,7 @@ export class RequestPayloadManager {
      */
     checkForFailedPayloads(): void {
         this.pendingPayloads.values().forEach((payload) => {
-            if (payload.status === 'failed') {
-                payload.status = 'sending'
-            } else {
+            if (payload.status !== 'failed') {
                 throw new Error(`Request Payload: ${payload.payloadId} has not finished sending`)
             }
         })

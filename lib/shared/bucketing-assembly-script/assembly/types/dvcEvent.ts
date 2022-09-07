@@ -24,7 +24,7 @@ export const EventTypes = new Set<string>()
 EventTypes.add('variableEvaluated')
 EventTypes.add('aggVariableEvaluated')
 EventTypes.add('variableDefaulted')
-EventTypes.add('aggVariableEvaluated')
+EventTypes.add('aggVariableDefaulted')
 
 export class DVCEvent extends JSON.Value implements DVCUserInterface {
     constructor(
@@ -100,9 +100,9 @@ export class DVCRequestEvent extends JSON.Value {
     /**
      * date event occurred according to client stored as time since epoch
      */
-    date: i64
+    date: Date
 
-    clientDate: i64
+    clientDate: Date
 
     /**
      * value for numerical events. Contextual to event type
@@ -125,9 +125,9 @@ export class DVCRequestEvent extends JSON.Value {
         this.target = event.target
         this.customType = isCustomEvent ? event.type : null
         this.user_id = user_id
-        this.date = Date.now()
+        this.date = new Date(Date.now())
         const eventDate = event.date ? event.date : null
-        this.clientDate = eventDate ? eventDate.getTime() : Date.now()
+        this.clientDate = eventDate ? eventDate: new Date(Date.now())
         this.value = event.value
         this.featureVars = featureVars
         this.metaData = event.metaData
@@ -139,8 +139,8 @@ export class DVCRequestEvent extends JSON.Value {
         if (this.target) json.set('target', this.target)
         if (this.customType) json.set('customType', this.customType)
         json.set('user_id', this.user_id)
-        json.set('date', this.date)
-        json.set('clientDate', this.clientDate)
+        json.set('date', this.date.toISOString())
+        json.set('clientDate', this.clientDate.toISOString())
         if (!isNaN(this.value)) json.set('value', this.value)
         const featureVars = this.featureVars // nullable check only works like this
         if (featureVars) json.set('featureVars', jsonObjFromMap(featureVars))
@@ -177,8 +177,45 @@ export class FlushPayload extends JSON.Value {
         this.payloadId = uuid()
     }
 
-    private eventCount(): i64 {
-        let count: i64 = 0
+    /**
+     * Add batchRecord for user, first check if there is an existing record for the user,
+     * otherwise create a new record with a max `chunkSize` number of events.
+     */
+    addBatchRecordForUser(record: UserEventsBatchRecord, chunkSize: i32): void {
+        const userRecord = this.recordForUser(record.user.user_id)
+        const splicedEvents = record.events.splice(0, chunkSize - this.eventCount())
+        if (splicedEvents.length === 0) return
+
+        if (userRecord) {
+            userRecord.user = record.user
+            userRecord.events = userRecord.events.concat(splicedEvents)
+        } else {
+            const newBatchRecord = new UserEventsBatchRecord(
+                record.user,
+                splicedEvents
+            )
+            this.records.push(newBatchRecord)
+        }
+    }
+
+    /**
+     * Fetch an existing UserEventsBatchRecord for a `user_id`
+     */
+    recordForUser(user_id: string): UserEventsBatchRecord | null {
+        for (let i = 0; i < this.records.length; i++) {
+            const record = this.records[i]
+            if (record.user.user_id === user_id) {
+                return record
+            }
+        }
+        return null
+    }
+
+    /**
+     * Fetch the total event count for all the records in the batch
+     */
+    eventCount(): i32 {
+        let count: i32 = 0
         for (let i = 0; i < this.records.length; i++) {
             const record = this.records[i]
             count += record.events.length

@@ -7,7 +7,6 @@ const testEventQueueOptions = (optionsObj: unknown): unknown => {
 describe('eventQueueOptions Tests', () => {
     it('should test eventQueueOptions JSON parsing', () => {
         const options = {
-            flushEventsMS: 60 * 1000,
             disableAutomaticEventLogging: true,
             disableCustomEventLogging: false,
             eventRequestChunkSize: 10000
@@ -17,10 +16,9 @@ describe('eventQueueOptions Tests', () => {
 
     it('should set default values', () => {
         expect(testEventQueueOptions({})).toEqual({
-            flushEventsMS: 10 * 1000,
+            eventRequestChunkSize: 100,
             disableAutomaticEventLogging: false,
-            disableCustomEventLogging: false,
-            eventRequestChunkSize: 100
+            disableCustomEventLogging: false
         })
     })
 })

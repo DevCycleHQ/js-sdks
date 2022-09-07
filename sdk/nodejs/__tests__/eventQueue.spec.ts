@@ -3,8 +3,7 @@ import { DVCPopulatedUser } from '../src/models/populatedUser'
 jest.mock('../src/request')
 
 import { AxiosResponse } from 'axios'
-import { EventQueue } from '../src/eventQueue'
-import { EventTypes } from '../src/models/requestEvent'
+import { EventQueue, EventTypes } from '../src/eventQueue'
 import { publishEvents } from '../src/request'
 import { BucketedUserConfig, PublicProject } from '@devcycle/types'
 import { mocked } from 'jest-mock'
