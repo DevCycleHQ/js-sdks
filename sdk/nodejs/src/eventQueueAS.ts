@@ -17,10 +17,11 @@ export type FlushPayload = {
     records: UserEventsBatchRecord[]
 }
 
-type options = {
+export type EventQueueASOptions = {
     flushEventsMS?: number,
     disableAutomaticEventLogging?: boolean,
-    disableCustomEventLogging?: boolean
+    disableCustomEventLogging?: boolean,
+    eventRequestChunkSize?: number
 }
 
 export class EventQueueAS implements EventQueueInterface {
@@ -31,7 +32,7 @@ export class EventQueueAS implements EventQueueInterface {
     disableCustomEventLogging: boolean
     private flushInterval: NodeJS.Timer
 
-    constructor(logger: DVCLogger, environmentKey: string, options?: options) {
+    constructor(logger: DVCLogger, environmentKey: string, options: EventQueueASOptions = {}) {
         this.logger = logger
         this.environmentKey = environmentKey
         this.flushEventsMS = options?.flushEventsMS || 10 * 1000

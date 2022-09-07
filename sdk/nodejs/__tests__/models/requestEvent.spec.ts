@@ -1,4 +1,5 @@
-import { DVCRequestEvent, EventTypes } from '../../src/models/requestEvent'
+import { DVCRequestEvent } from '../../src/models/requestEvent'
+import { EventTypes } from '../../src/eventQueue'
 
 describe('DVCRequestEvent Unit Tests', () => {
     it('should construct custom DVCRequestEvent from DVCEvent', () => {
