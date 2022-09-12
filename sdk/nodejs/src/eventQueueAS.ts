@@ -4,7 +4,7 @@ import { DVCPopulatedUser } from './models/populatedUser'
 import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 
 import { getBucketingLib } from './bucketing'
-import { EventQueueInterface, EventTypes } from './eventQueue'
+import { EventQueueInterface } from './eventQueue'
 import { publishEvents } from './request'
 
 type UserEventsBatchRecord = {
@@ -36,8 +36,6 @@ export class EventQueueAS implements EventQueueInterface {
         this.logger = logger
         this.environmentKey = environmentKey
         this.flushEventsMS = options?.flushEventsMS || 10 * 1000
-        this.disableAutomaticEventLogging = options?.disableAutomaticEventLogging || false
-        this.disableCustomEventLogging = options?.disableCustomEventLogging || false
 
         this.flushInterval = setInterval(this.flushEvents.bind(this), this.flushEventsMS)
 
@@ -89,22 +87,10 @@ export class EventQueueAS implements EventQueueInterface {
         }))
     }
 
-    private checkIfEventLoggingDisabled(event: DVCEvent) {
-        if (!EventTypes[event.type]) {
-            return this.disableCustomEventLogging
-        } else {
-            return this.disableAutomaticEventLogging
-        }
-    }
-
     /**
      * Queue DVCAPIEvent for publishing to DevCycle Events API.
      */
     queueEvent(user: DVCPopulatedUser, event: DVCEvent): void {
-        if (this.checkIfEventLoggingDisabled(event)) {
-            return
-        }
-
         getBucketingLib().queueEvent(
             this.environmentKey,
             JSON.stringify(user),
@@ -117,10 +103,6 @@ export class EventQueueAS implements EventQueueInterface {
      * by incrementing the 'value' field.
      */
     queueAggregateEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void {
-        if (this.checkIfEventLoggingDisabled(event)) {
-            return
-        }
-
         getBucketingLib().queueAggregateEvent(
             this.environmentKey,
             JSON.stringify(event),
