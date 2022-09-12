@@ -95,6 +95,16 @@ export interface DVCOptions {
     disableCustomEventLogging?: boolean
 
     /**
+     * Controls the maximum size the event queue can grow to until events are dropped.
+     */
+    maxEventQueueSize?: number
+
+    /**
+     * Controls the maximum size the event queue can grow to until a flush is forced.
+     */
+    flushEventQueueSize?: number
+
+    /**
      * Switches the SDK to use Cloud Bucketing (via the DevCycle Bucketing API) instead of Local Bucketing.
      */
     enableCloudBucketing?: boolean

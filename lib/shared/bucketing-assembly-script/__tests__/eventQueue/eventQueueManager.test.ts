@@ -8,7 +8,8 @@ import {
     onPayloadFailure,
     queueEvent as queueEvent_AS,
     queueAggregateEvent as queueAggregateEvent_AS,
-    cleanupEventQueue
+    cleanupEventQueue,
+    eventQueueSize as eventQueueSize_AS
 } from '../../build/bucketing-lib.debug'
 import { FlushPayload } from '../../assembly/types'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
@@ -26,11 +27,15 @@ const flushEventQueue = (envKey: string): FlushPayload[] => {
 }
 
 const queueEvent = (envKey: string, user: unknown, event: unknown) => {
-    queueEvent_AS(envKey, JSON.stringify(user), JSON.stringify(event))
+    return queueEvent_AS(envKey, JSON.stringify(user), JSON.stringify(event))
 }
 
 const queueAggregateEvent = (envKey: string, event: unknown, variableVariationMap: unknown) => {
-    queueAggregateEvent_AS(envKey, JSON.stringify(event), JSON.stringify(variableVariationMap))
+    return queueAggregateEvent_AS(envKey, JSON.stringify(event), JSON.stringify(variableVariationMap))
+}
+
+const eventQueueSize = (envKey: string): number => {
+    return eventQueueSize_AS(envKey)
 }
 
 const initSDK = (envKey: string, eventOptions: unknown = {}) => {
@@ -79,6 +84,16 @@ describe('EventQueueManager Tests', () => {
             initEventQueue('env_key_test_6', {})
             initEventQueue('env_key_test_7', {})
         })
+
+        it('should throw if eventRequestChunkSize is < 10', () => {
+            expect(() => initEventQueue('env_key_eventRequestChunkSize', { eventRequestChunkSize: 9 }))
+                .toThrow('eventRequestChunkSize: 9 must be larger than 10')
+        })
+
+        it('should throw if eventRequestChunkSize is > 20,000', () => {
+            expect(() => initEventQueue('env_key_eventRequestChunkSize', { eventRequestChunkSize: 900000 }))
+                .toThrow('eventRequestChunkSize: 900000 must be smaller than 10000')
+        })
     })
 
     describe('flushEventQueue', () => {
@@ -100,6 +115,7 @@ describe('EventQueueManager Tests', () => {
             initSDK(envKey)
             queueEvent(envKey, dvcUser, event)
             queueAggregateEvent(envKey, aggEvent, {})
+            expect(eventQueueSize(envKey)).toEqual(2)
             expect(flushEventQueue(envKey)).toEqual(expect.arrayContaining([
                 {
                     'payloadId': expect.any(String),
@@ -167,6 +183,7 @@ describe('EventQueueManager Tests', () => {
                 queueEvent(envKey, dvcUser, event)
             }
             const payloads = flushEventQueue(envKey)
+            expect(eventQueueSize(envKey)).toEqual(100)
             expect(payloads.length).toEqual(10)
             expect(payloads[0].records[0].events.length).toEqual(10)
             expect(payloads[0].records[0].user).toEqual({
@@ -205,6 +222,7 @@ describe('EventQueueManager Tests', () => {
                     queueEvent(envKey, dvcUser2, event)
                 }
             }
+            expect(eventQueueSize(envKey)).toEqual(40)
 
             const payloads = flushEventQueue(envKey)
             expect(payloads.length).toEqual(4)
@@ -260,6 +278,7 @@ describe('EventQueueManager Tests', () => {
                 event.target = `target_${i}`
                 queueEvent(envKey, dvcUser, event)
             }
+            expect(eventQueueSize(envKey)).toEqual(36)
 
             const payloads = flushEventQueue(envKey)
             expect(payloads.length).toEqual(4)
@@ -273,6 +292,8 @@ describe('EventQueueManager Tests', () => {
                 event.target = `target_after_failed_${i}`
                 queueEvent(envKey, dvcUser, event)
             }
+            expect(eventQueueSize(envKey)).toEqual(20)
+
             const failedPayloads = flushEventQueue(envKey)
             expect(failedPayloads.length).toEqual(3)
             expect(failedPayloads[0]).toEqual(payloads[1])
@@ -302,6 +323,7 @@ describe('EventQueueManager Tests', () => {
                 event.target = `target_${i}`
                 queueEvent(envKey, dvcUser, event)
             }
+            expect(eventQueueSize(envKey)).toEqual(36)
 
             const payloads = flushEventQueue(envKey)
             expect(payloads.length).toEqual(4)
@@ -315,6 +337,7 @@ describe('EventQueueManager Tests', () => {
                 event.target = `target_after_failed_${i}`
                 queueEvent(envKey, dvcUser, event)
             }
+            expect(eventQueueSize(envKey)).toEqual(16)
             onPayloadFailure(envKey, payloads[3].payloadId, true)
 
             const failedPayloads = flushEventQueue(envKey)
@@ -437,6 +460,7 @@ describe('EventQueueManager Tests', () => {
                 eventEvaluated.target = 'swagTest'
                 queueAggregateEvent(envKey, eventEvaluated, variableVariationMap)
             }
+            expect(eventQueueSize(envKey)).toEqual(4)
 
             const payloads = flushEventQueue(envKey)
             expect(payloads.length).toEqual(1)

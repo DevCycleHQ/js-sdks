@@ -26,6 +26,11 @@ export class EventQueueOptions extends JSON.Obj {
         if (chunkSizeValue) {
             this.eventRequestChunkSize = getI32FromJSONValue(chunkSizeValue)
         }
+        if (this.eventRequestChunkSize < 10) {
+            throw new Error(`eventRequestChunkSize: ${this.eventRequestChunkSize} must be larger than 10`)
+        } else if (this.eventRequestChunkSize > 10000) {
+            throw new Error(`eventRequestChunkSize: ${this.eventRequestChunkSize} must be smaller than 10000`)
+        }
     }
 
     stringify(): string {
