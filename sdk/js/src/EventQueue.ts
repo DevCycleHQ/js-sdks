@@ -17,17 +17,17 @@ export class EventQueue {
     client: DVCClient
     eventQueue: DVCEvent[]
     aggregateEventMap: Record<string, Record<string, AggregateEvent>>
-    flushEventsMS: number
+    eventFlushIntervalMS: number
     flushInterval: ReturnType<typeof setInterval>
 
-    constructor(environmentKey: string, dvcClient: DVCClient, flushEventsMS?: number) {
+    constructor(environmentKey: string, dvcClient: DVCClient, eventFlushIntervalMS?: number) {
         this.environmentKey = environmentKey
         this.client = dvcClient
         this.eventQueue = []
         this.aggregateEventMap = {}
-        this.flushEventsMS = flushEventsMS || 10 * 1000
+        this.eventFlushIntervalMS = eventFlushIntervalMS || 10 * 1000
 
-        this.flushInterval = setInterval(this.flushEvents.bind(this), this.flushEventsMS)
+        this.flushInterval = setInterval(this.flushEvents.bind(this), this.eventFlushIntervalMS)
     }
 
     async flushEvents(): Promise<void> {

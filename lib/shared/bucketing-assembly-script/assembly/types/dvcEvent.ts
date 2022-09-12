@@ -12,21 +12,16 @@ import {
 import { DVCPopulatedUser } from './dvcUser'
 import uuid from 'as-uuid/assembly'
 
-interface DVCUserInterface {
-    type: string
-    date: Date | null
-    target: string | null
-    value: f64
-    metaData: JSON.Obj | null
-}
-
 export const EventTypes = new Set<string>()
 EventTypes.add('variableEvaluated')
 EventTypes.add('aggVariableEvaluated')
 EventTypes.add('variableDefaulted')
 EventTypes.add('aggVariableDefaulted')
 
-export class DVCEvent extends JSON.Value implements DVCUserInterface {
+/**
+ * Public interface for DVCEvent passed into SDK methods.
+ */
+export class DVCEvent extends JSON.Value {
     constructor(
         /**
          * type of the event
@@ -82,6 +77,9 @@ export class DVCEvent extends JSON.Value implements DVCUserInterface {
     }
 }
 
+/**
+ * Internal interface for events after they've been populated with user_id and featureVars.
+ */
 export class DVCRequestEvent extends JSON.Value {
     /**
      * type of the event
@@ -109,14 +107,14 @@ export class DVCRequestEvent extends JSON.Value {
      */
     value: f64
 
-    featureVars: Map<string, string> | null
+    featureVars: Map<string, string>
 
     /**
      * extra metadata for event. Contextual to event type
      */
     metaData: JSON.Obj | null
 
-    constructor(event: DVCEvent, user_id: string, featureVars: Map<string, string> | null) {
+    constructor(event: DVCEvent, user_id: string, featureVars: Map<string, string>) {
         super()
 
         const isCustomEvent = !EventTypes.has(event.type)

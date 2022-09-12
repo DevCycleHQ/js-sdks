@@ -55,7 +55,7 @@ export function initEventQueue(envKey: string, optionsStr: string): void {
 }
 
 /**
- * This should be called by the native code on an interval set by the `flushEventsMS` option.
+ * This should be called by the native code on an interval set by the `eventFlushIntervalMS` option.
  * It will generate an array of payloads, with each payload up to a maximum batch size
  * (should be configurable by an option, nodejs uses 100).
  *
