@@ -18,6 +18,12 @@ export class FlushEventQueues {
     public aggEventQueue: AggEventQueue
 }
 
+const EventTypesSet = new Set<string>()
+EventTypesSet.add('variableEvaluated')
+EventTypesSet.add('aggVariableEvaluated')
+EventTypesSet.add('variableDefaulted')
+EventTypesSet.add('aggVariableDefaulted')
+
 export class EventQueue {
     private envKey: string
     private options: EventQueueOptions
@@ -61,7 +67,19 @@ export class EventQueue {
         return { userEventQueue, aggEventQueue }
     }
 
+    private checkIfEventLoggingDisabled(event: DVCEvent): bool {
+        if (!EventTypesSet.has(event.type)) {
+            return this.options.disableCustomEventLogging
+        } else {
+            return this.options.disableAutomaticEventLogging
+        }
+    }
+
     queueEvent(user: DVCPopulatedUser, event: DVCEvent, featureVariationMap: Map<string, string>): void {
+        if (this.checkIfEventLoggingDisabled(event)) {
+            return
+        }
+
         // TODO: Implement max queue size
         // this.maxEventQueueSize = bucketedConfig?.project.settings.sdkSettings?.eventQueueLimit
         // ?? this.maxEventQueueSize
@@ -95,6 +113,10 @@ export class EventQueue {
         variableVariationMap: Map<string, FeatureVariation>,
         aggByVariation: boolean
     ): void {
+        if (this.checkIfEventLoggingDisabled(event)) {
+            return
+        }
+
         const type = event.type
         const target = event.target
         if (!target) {
