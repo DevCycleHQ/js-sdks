@@ -38,7 +38,7 @@ export class DVCClient implements Client {
         this.options = options
         this.environmentKey = environmentKey
         this.variableDefaultMap = {}
-        this.eventQueue = new EventQueue(environmentKey, this, options?.flushEventsMS)
+        this.eventQueue = new EventQueue(environmentKey, this, options?.eventFlushIntervalMS)
         this.requestConsolidator = new RequestConsolidator()
         this.eventEmitter = new EventEmitter()
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })

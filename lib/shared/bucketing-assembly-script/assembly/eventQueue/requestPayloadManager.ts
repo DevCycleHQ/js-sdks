@@ -66,6 +66,7 @@ export class RequestPayloadManager {
 
         const platformData = _getPlatformData()
         const user_id = platformData.hostname ? platformData.hostname as string : 'aggregate'
+        const emptyFeatureVars = new Map<string, string>()
 
         for (let i = 0; i < aggEventQueueKeys.length; i++) {
             const type = aggEventQueueKeys[i]
@@ -84,7 +85,7 @@ export class RequestPayloadManager {
 
                         // Add aggVariableDefaulted Events
                         const dvcEvent = new DVCEvent(type, variableKey, null, value, null)
-                        aggEvents.push(new DVCRequestEvent(dvcEvent, user_id, null))
+                        aggEvents.push(new DVCRequestEvent(dvcEvent, user_id, emptyFeatureVars))
                     } else {
                         throw new Error('Missing sub value map to write aggVariableDefaulted events')
                     }
@@ -106,7 +107,7 @@ export class RequestPayloadManager {
 
                             // Add aggVariableEvaluated Events
                             const dvcEvent = new DVCEvent(type, variableKey, null, value, metaData)
-                            aggEvents.push(new DVCRequestEvent(dvcEvent, user_id, null))
+                            aggEvents.push(new DVCRequestEvent(dvcEvent, user_id, emptyFeatureVars))
                         }
                     }
                 }

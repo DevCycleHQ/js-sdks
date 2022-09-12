@@ -32,7 +32,7 @@ export type FlushPayload = UserEventsBatchRecord[]
 type UserEventQueue = Record<string, UserEventsBatchRecord>
 
 type options = {
-    flushEventsMS?: number,
+    eventFlushIntervalMS?: number,
     disableAutomaticEventLogging?: boolean,
     disableCustomEventLogging?: boolean
 }
@@ -52,7 +52,7 @@ export class EventQueue implements EventQueueInterface {
     private readonly environmentKey: string
     private userEventQueue: UserEventQueue
     private aggregateUserEventMap: AggregateUserEventMap
-    flushEventsMS: number
+    eventFlushIntervalMS: number
     disableAutomaticEventLogging: boolean
     disableCustomEventLogging: boolean
     private flushInterval: NodeJS.Timer
@@ -63,11 +63,11 @@ export class EventQueue implements EventQueueInterface {
         this.environmentKey = environmentKey
         this.userEventQueue = {}
         this.aggregateUserEventMap = {}
-        this.flushEventsMS = options?.flushEventsMS || 10 * 1000
+        this.eventFlushIntervalMS = options?.eventFlushIntervalMS || 10 * 1000
         this.disableAutomaticEventLogging = options?.disableAutomaticEventLogging || false
         this.disableCustomEventLogging = options?.disableCustomEventLogging || false
 
-        this.flushInterval = setInterval(this.flushEvents.bind(this), this.flushEventsMS)
+        this.flushInterval = setInterval(this.flushEvents.bind(this), this.eventFlushIntervalMS)
         this.maxEventQueueSize = 1000
     }
 

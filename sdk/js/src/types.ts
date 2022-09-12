@@ -42,7 +42,7 @@ export type initialize = (
 ) => DVCClient
 
 export interface DVCOptions {
-    flushEventsMS?: number
+    eventFlushIntervalMS?: number
     reactNative?: boolean
     enableEdgeDB?: boolean
     logger?: DVCLogger

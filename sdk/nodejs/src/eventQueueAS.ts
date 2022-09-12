@@ -4,7 +4,7 @@ import { DVCPopulatedUser } from './models/populatedUser'
 import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 
 import { getBucketingLib } from './bucketing'
-import { EventQueueInterface, EventTypes } from './eventQueue'
+import { EventQueueInterface } from './eventQueue'
 import { publishEvents } from './request'
 
 type UserEventsBatchRecord = {
@@ -18,7 +18,7 @@ export type FlushPayload = {
 }
 
 export type EventQueueASOptions = {
-    flushEventsMS?: number,
+    eventFlushIntervalMS?: number,
     disableAutomaticEventLogging?: boolean,
     disableCustomEventLogging?: boolean,
     eventRequestChunkSize?: number
@@ -27,7 +27,7 @@ export type EventQueueASOptions = {
 export class EventQueueAS implements EventQueueInterface {
     private readonly logger: DVCLogger
     private readonly environmentKey: string
-    flushEventsMS: number
+    eventFlushIntervalMS: number
     disableAutomaticEventLogging: boolean
     disableCustomEventLogging: boolean
     private flushInterval: NodeJS.Timer
@@ -35,11 +35,9 @@ export class EventQueueAS implements EventQueueInterface {
     constructor(logger: DVCLogger, environmentKey: string, options: EventQueueASOptions = {}) {
         this.logger = logger
         this.environmentKey = environmentKey
-        this.flushEventsMS = options?.flushEventsMS || 10 * 1000
-        this.disableAutomaticEventLogging = options?.disableAutomaticEventLogging || false
-        this.disableCustomEventLogging = options?.disableCustomEventLogging || false
+        this.eventFlushIntervalMS = options?.eventFlushIntervalMS || 10 * 1000
 
-        this.flushInterval = setInterval(this.flushEvents.bind(this), this.flushEventsMS)
+        this.flushInterval = setInterval(this.flushEvents.bind(this), this.eventFlushIntervalMS)
 
         getBucketingLib().initEventQueue(environmentKey, JSON.stringify(options))
     }
@@ -84,27 +82,15 @@ export class EventQueueAS implements EventQueueInterface {
                 }
             } catch (ex) {
                 this.logger.error(`DVC Error Flushing Events response message: ${ex.message}`)
-                getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, false)
+                getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, true)
             }
         }))
-    }
-
-    private checkIfEventLoggingDisabled(event: DVCEvent) {
-        if (!EventTypes[event.type]) {
-            return this.disableCustomEventLogging
-        } else {
-            return this.disableAutomaticEventLogging
-        }
     }
 
     /**
      * Queue DVCAPIEvent for publishing to DevCycle Events API.
      */
     queueEvent(user: DVCPopulatedUser, event: DVCEvent): void {
-        if (this.checkIfEventLoggingDisabled(event)) {
-            return
-        }
-
         getBucketingLib().queueEvent(
             this.environmentKey,
             JSON.stringify(user),
@@ -117,10 +103,6 @@ export class EventQueueAS implements EventQueueInterface {
      * by incrementing the 'value' field.
      */
     queueAggregateEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void {
-        if (this.checkIfEventLoggingDisabled(event)) {
-            return
-        }
-
         getBucketingLib().queueAggregateEvent(
             this.environmentKey,
             JSON.stringify(event),

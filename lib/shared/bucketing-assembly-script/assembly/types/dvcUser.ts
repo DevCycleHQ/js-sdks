@@ -50,7 +50,6 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
 
         return new DVCUser(
             getStringFromJSON(user, 'user_id'),
-            // Need to set a default "null" value, as numbers can't be null in AS
             getStringFromJSONOptional(user, 'email'),
             getStringFromJSONOptional(user, 'name'),
             getStringFromJSONOptional(user, 'language'),

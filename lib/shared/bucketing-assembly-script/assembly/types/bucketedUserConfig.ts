@@ -78,7 +78,7 @@ export class BucketedUserConfig extends JSON.Obj {
         const featuresMap = new Map<string, SDKFeature>()
         for (let i = 0; i < features.keys.length; i++) {
             const key = features.keys[i]
-            features.set(key, SDKFeature.fromJSONString(features.get(key) as JSON.Obj))
+            features.set(key, SDKFeature.fromJSONObj(features.get(key) as JSON.Obj))
         }
 
         const featureVar = getJSONObjFromJSON(userConfigJSONObj, 'featureVariationMap')
@@ -97,7 +97,7 @@ export class BucketedUserConfig extends JSON.Obj {
         const variablesMap = new Map<string, SDKVariable>()
         for (let i = 0; i < variables.keys.length; i++) {
             const key = variables.keys[i]
-            variablesMap.set(key, SDKVariable.fromJSONString(variables.get(key) as JSON.Obj))
+            variablesMap.set(key, SDKVariable.fromJSONObj(variables.get(key) as JSON.Obj))
         }
 
         const knownVariableKeys = getJSONArrayFromJSON(userConfigJSONObj, 'knownVariableKeys')
@@ -148,15 +148,15 @@ export class SDKFeature extends JSON.Obj {
         super()
     }
 
-    static fromJSONString(featureStr: JSON.Obj): SDKFeature {
+    static fromJSONObj(featureObj: JSON.Obj): SDKFeature {
         return new SDKFeature(
-            getStringFromJSON(featureStr, '_id'),
-            getStringFromJSON(featureStr, 'type'),
-            getStringFromJSON(featureStr, 'key'),
-            getStringFromJSON(featureStr, '_variation'),
-            getStringFromJSON(featureStr, 'variationName'),
-            getStringFromJSON(featureStr, 'variationKey'),
-            getStringFromJSONOptional(featureStr, 'evalReason')
+            getStringFromJSON(featureObj, '_id'),
+            getStringFromJSON(featureObj, 'type'),
+            getStringFromJSON(featureObj, 'key'),
+            getStringFromJSON(featureObj, '_variation'),
+            getStringFromJSON(featureObj, 'variationName'),
+            getStringFromJSON(featureObj, 'variationKey'),
+            getStringFromJSONOptional(featureObj, 'evalReason')
         )
     }
 
@@ -186,13 +186,13 @@ export class SDKVariable extends JSON.Obj {
         super()
     }
 
-    static fromJSONString(variableStr: JSON.Obj): SDKVariable {
+    static fromJSONObj(variableObj: JSON.Obj): SDKVariable {
         return new SDKVariable(
-            getStringFromJSON(variableStr, '_id'),
-            getStringFromJSON(variableStr, 'type'),
-            getStringFromJSON(variableStr, 'key'),
-            getJSONValueFromJSON(variableStr, 'value'),
-            getStringFromJSONOptional(variableStr, 'evalReason')
+            getStringFromJSON(variableObj, '_id'),
+            getStringFromJSON(variableObj, 'type'),
+            getStringFromJSON(variableObj, 'key'),
+            getJSONValueFromJSON(variableObj, 'value'),
+            getStringFromJSONOptional(variableObj, 'evalReason')
         )
     }
 

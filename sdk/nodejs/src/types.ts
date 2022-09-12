@@ -82,7 +82,7 @@ export interface DVCOptions {
     /**
      * Controls the interval between flushing events to the DevCycle servers, defaults to 30 seconds.
      */
-    flushEventsMS?: number
+    eventFlushIntervalMS?: number
 
     /**
      * Disables logging of sdk generated events (e.g. variableEvaluated, variableDefaulted) to DevCycle.
