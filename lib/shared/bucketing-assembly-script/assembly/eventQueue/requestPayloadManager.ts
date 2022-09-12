@@ -33,27 +33,32 @@ export class RequestPayloadManager {
         aggEventQueue: AggEventQueue
     ): FlushPayload[] {
         this.checkForFailedPayloads()
-        const records = new Array<UserEventsBatchRecord>()
-
-        // Add events from user event queue
-        const userEventQueueKeys = userEventQueue.keys()
-        for (let i = 0; i < userEventQueueKeys.length; i++) {
-            const key = userEventQueueKeys[i]
-            const userEventsRecord = userEventQueue.get(key)
-            records.push(userEventsRecord)
-        }
-
-        // Add events from aggregate events
-        records.push(this.addAggEventsToPendingPayloads(aggEventQueue))
+        const records = this.constructBatchRecordsFromUserEvents(userEventQueue)
+        records.push(this.constructBatchRecordsFromAggEvents(aggEventQueue))
         this.addEventRecordsToPendingPayloads(records)
 
         return this.pendingPayloads.values()
     }
 
     /**
+     * Generate UserEventsBatchRecord from User Event Queue
+     */
+    private constructBatchRecordsFromUserEvents(
+        userEventQueue: Map<string, UserEventsBatchRecord>
+    ): UserEventsBatchRecord[] {
+        const records = new Array<UserEventsBatchRecord>()
+        const userEventQueueValues = userEventQueue.values()
+
+        for (let i = 0; i < userEventQueueValues.length; i++) {
+            records.push(userEventQueueValues[i])
+        }
+        return records
+    }
+
+    /**
      * generate aggregated events by resolving aggregated event map into DVCEvent's.
      */
-    private addAggEventsToPendingPayloads(
+    private constructBatchRecordsFromAggEvents(
         aggEventQueue: AggEventQueue
     ): UserEventsBatchRecord {
         const aggEventQueueKeys = aggEventQueue.keys()
@@ -141,13 +146,13 @@ export class RequestPayloadManager {
         for (let i = 0; i < records.length; i++) {
             const record: UserEventsBatchRecord = records[i]
 
-            do {
+            while (record.events.length > 0) {
                 const flushPayload = this.getFlushPayload()
                 flushPayload.addBatchRecordForUser(record, this.chunkSize)
                 if (flushPayload.records.length > 0) {
                     this.pendingPayloads.set(flushPayload.payloadId, flushPayload)
                 }
-            } while (record.events.length > 0)
+            }
         }
     }
 
