@@ -18,7 +18,7 @@ export type FlushPayload = {
 }
 
 export type EventQueueASOptions = {
-    flushEventsMS?: number,
+    eventFlushIntervalMS?: number,
     disableAutomaticEventLogging?: boolean,
     disableCustomEventLogging?: boolean,
     eventRequestChunkSize?: number
@@ -27,7 +27,7 @@ export type EventQueueASOptions = {
 export class EventQueueAS implements EventQueueInterface {
     private readonly logger: DVCLogger
     private readonly environmentKey: string
-    flushEventsMS: number
+    eventFlushIntervalMS: number
     disableAutomaticEventLogging: boolean
     disableCustomEventLogging: boolean
     private flushInterval: NodeJS.Timer
@@ -35,9 +35,9 @@ export class EventQueueAS implements EventQueueInterface {
     constructor(logger: DVCLogger, environmentKey: string, options: EventQueueASOptions = {}) {
         this.logger = logger
         this.environmentKey = environmentKey
-        this.flushEventsMS = options?.flushEventsMS || 10 * 1000
+        this.eventFlushIntervalMS = options?.eventFlushIntervalMS || 10 * 1000
 
-        this.flushInterval = setInterval(this.flushEvents.bind(this), this.flushEventsMS)
+        this.flushInterval = setInterval(this.flushEvents.bind(this), this.eventFlushIntervalMS)
 
         getBucketingLib().initEventQueue(environmentKey, JSON.stringify(options))
     }
@@ -82,7 +82,7 @@ export class EventQueueAS implements EventQueueInterface {
                 }
             } catch (ex) {
                 this.logger.error(`DVC Error Flushing Events response message: ${ex.message}`)
-                getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, false)
+                getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, true)
             }
         }))
     }
