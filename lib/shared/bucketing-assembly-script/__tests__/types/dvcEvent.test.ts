@@ -1,7 +1,7 @@
 import {
     testDVCEventClass,
     testDVCRequestEventClass
-} from '../../build/bucketing-lib.debug'
+} from '../bucketingImportHelper'
 
 const testDVCEvent = (event: unknown): unknown => {
     return JSON.parse(testDVCEventClass(JSON.stringify(event)))

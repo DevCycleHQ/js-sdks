@@ -35,4 +35,4 @@ jobs:
       - run: yarn affected:lint
       - name: Run Affected Tests
         shell: bash
-        run: yarn affected:test
+        run: yarn affected:test --verbose

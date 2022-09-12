@@ -8178,6 +8178,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"as-uuid@npm:^0.0.4":
+  version: 0.0.4
+  resolution: "as-uuid@npm:0.0.4"
+  checksum: c77685355b949e6efde6bff441bde0c4906ffae22f2d1dc0ac0cbae1b81a518dd77d48568951c81179d4d5ad670581015102eca3c9a7f4453d1c457e6558b784
+  languageName: node
+  linkType: hard
+
 "as-wasi@npm:^0.4.6":
   version: 0.4.6
   resolution: "as-wasi@npm:0.4.6"
@@ -8821,6 +8828,15 @@ __metadata:
     wasm-opt: bin/wasm-opt
     wasm2js: bin/wasm2js
   checksum: e6c9ba5b842c8a4dfba9d1256730b21d14eb3e239a6a4a3e03672b70b43fe4555df6989e239ff180a12af1638fcaf82fde380c9955629f1972e20f7428260172
+  languageName: node
+  linkType: hard
+
+"bindings@npm:^1.2.1":
+  version: 1.5.0
+  resolution: "bindings@npm:1.5.0"
+  dependencies:
+    file-uri-to-path: 1.0.0
+  checksum: 65b6b48095717c2e6105a021a7da4ea435aa8d3d3cd085cb9e85bcb6e5773cf318c4745c3f7c504412855940b585bdf9b918236612a1c7a7942491de176f1ae7
   languageName: node
   linkType: hard
 
@@ -11180,6 +11196,7 @@ __metadata:
     "@types/uuid": ^8.3.1
     "@typescript-eslint/eslint-plugin": 5.33.1
     "@typescript-eslint/parser": 5.33.1
+    as-uuid: ^0.0.4
     as-wasi: ^0.4.6
     assemblyscript: "https://github.com/DevCycleHQ/assemblyscript#56a01ceccab1f2836505b8cfcdeec366cb78883f"
     assemblyscript-json: "https://github.com/DevCycleHQ/assemblyscript-json"
@@ -11252,6 +11269,7 @@ __metadata:
     react-test-renderer: 18.2.0
     reflect-metadata: ^0.1.13
     regenerator-runtime: 0.13.7
+    segfault-handler: ^1.3.0
     service-worker-mock: ^2.0.5
     source-map-support: ^0.5.19
     terser-webpack-plugin: ^4.2.3
@@ -13106,6 +13124,13 @@ __metadata:
   peerDependencies:
     webpack: ^4.0.0 || ^5.0.0
   checksum: faf43eecf233f4897b0150aaa874eeeac214e4f9de49738a9e0ef734a30b5260059e85b7edadf852b98e415f875bd5f12587768a93fd52aaf2e479ecf95fab20
+  languageName: node
+  linkType: hard
+
+"file-uri-to-path@npm:1.0.0":
+  version: 1.0.0
+  resolution: "file-uri-to-path@npm:1.0.0"
+  checksum: b648580bdd893a008c92c7ecc96c3ee57a5e7b6c4c18a9a09b44fb5d36d79146f8e442578bc0e173dc027adf3987e254ba1dfd6e3ec998b7c282873010502144
   languageName: node
   linkType: hard
 
@@ -23382,6 +23407,17 @@ __metadata:
   version: 3.0.1
   resolution: "secure-compare@npm:3.0.1"
   checksum: 0a8d8d3e54d5772d2cf1c02325f01fc7366d0bd33f964a08a84fe3ee5f34d46435a6ae729c1d239c750e160ef9b58c764d3efb945a1d07faf47978a8e4161594
+  languageName: node
+  linkType: hard
+
+"segfault-handler@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "segfault-handler@npm:1.3.0"
+  dependencies:
+    bindings: ^1.2.1
+    nan: ^2.14.0
+    node-gyp: latest
+  checksum: 253860dd1e07492bb288a66366f146241b6d69e5cbac0f8f0076bb30fc4f28be94519451cad2cca6452352bba9c46b627fb69d953f5a7b523ae083eece234118
   languageName: node
   linkType: hard
 
