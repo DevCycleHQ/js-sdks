@@ -50,6 +50,7 @@ describe('EventQueueManager Tests', () => {
         clearPlatformData()
         if (currentEnvKey) {
             cleanupEventQueue(currentEnvKey)
+            currentEnvKey = null
         }
     })
 
