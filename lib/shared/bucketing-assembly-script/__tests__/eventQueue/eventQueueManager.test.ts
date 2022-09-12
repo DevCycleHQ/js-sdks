@@ -133,6 +133,7 @@ describe('EventQueueManager Tests', () => {
                                 'date': expect.any(String),
                                 'target': 'variableKey',
                                 'type': 'aggVariableDefaulted',
+                                'featureVars': {},
                                 'user_id': 'host.name',
                                 'value': 1
                             }],
@@ -445,6 +446,7 @@ describe('EventQueueManager Tests', () => {
                     'date': expect.any(String),
                     'target': 'testey_test',
                     'type': 'aggVariableDefaulted',
+                    'featureVars': {},
                     'user_id': 'host.name',
                     'value': 36
                 }, {
@@ -452,6 +454,7 @@ describe('EventQueueManager Tests', () => {
                     'date': expect.any(String),
                     'target': 'swageyTest',
                     'type': 'aggVariableDefaulted',
+                    'featureVars': {},
                     'user_id': 'host.name',
                     'value': 11
                 }, {
@@ -459,6 +462,7 @@ describe('EventQueueManager Tests', () => {
                     'date': expect.any(String),
                     'target': 'test',
                     'type': 'aggVariableEvaluated',
+                    'featureVars': {},
                     'user_id': 'host.name',
                     'value': 36,
                     'metaData': {
@@ -470,6 +474,7 @@ describe('EventQueueManager Tests', () => {
                     'date': expect.any(String),
                     'target': 'swagTest',
                     'type': 'aggVariableEvaluated',
+                    'featureVars': {},
                     'user_id': 'host.name',
                     'value': 11,
                     'metaData': {

@@ -109,14 +109,14 @@ export class DVCRequestEvent extends JSON.Value {
      */
     value: f64
 
-    featureVars: Map<string, string> | null
+    featureVars: Map<string, string>
 
     /**
      * extra metadata for event. Contextual to event type
      */
     metaData: JSON.Obj | null
 
-    constructor(event: DVCEvent, user_id: string, featureVars: Map<string, string> | null) {
+    constructor(event: DVCEvent, user_id: string, featureVars: Map<string, string>) {
         super()
 
         const isCustomEvent = !EventTypes.has(event.type)
