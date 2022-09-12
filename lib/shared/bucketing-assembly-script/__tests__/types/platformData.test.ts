@@ -1,4 +1,4 @@
-import { testPlatformDataClass } from '../../build/bucketing-lib.debug'
+import { testPlatformDataClass } from '../bucketingImportHelper'
 
 const testPlatformData = (data: unknown): unknown => {
     return JSON.parse(testPlatformDataClass(JSON.stringify(data)))

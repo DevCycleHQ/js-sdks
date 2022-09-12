@@ -28,7 +28,8 @@ export function setPlatformData(platformDataStr: string): void {
     _setPlatformData(platformData)
 }
 
-export function clearPlatformData(): void {
+// Add empty input string to make AS compiler work
+export function clearPlatformData(empty: string): void {
     _clearPlatformData()
 }
 
@@ -38,8 +39,6 @@ export function setConfigData(token: string, configDataStr: string): void {
 }
 
 export * from './managers/eventQueueManager'
-
-export * from './test'
 
 export * from './testHelpers'
 

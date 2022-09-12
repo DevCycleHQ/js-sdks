@@ -1,4 +1,4 @@
-import { testEventQueueOptionsClass } from '../../build/bucketing-lib.debug'
+import { testEventQueueOptionsClass } from '../bucketingImportHelper'
 
 const testEventQueueOptions = (optionsObj: unknown): unknown => {
     return JSON.parse(testEventQueueOptionsClass(JSON.stringify(optionsObj)))

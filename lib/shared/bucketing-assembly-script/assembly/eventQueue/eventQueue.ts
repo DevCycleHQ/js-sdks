@@ -52,11 +52,14 @@ export class EventQueue {
      */
     private aggEventQueue: AggEventQueue
 
+    public eventQueueCount: i32
+
     constructor(envKey: string, options: EventQueueOptions) {
         this.envKey = envKey
         this.options = options
         this.userEventQueue = new Map<string, UserEventsBatchRecord>()
         this.aggEventQueue = new Map<string, VariableAggMap>()
+        this.eventQueueCount = 0
     }
 
     flushAndResetEventQueue(): FlushEventQueues {
@@ -64,6 +67,7 @@ export class EventQueue {
         const aggEventQueue = this.aggEventQueue
         this.userEventQueue = new Map<string, UserEventsBatchRecord>()
         this.aggEventQueue = new Map<string, VariableAggMap>()
+        this.eventQueueCount = 0
         return { userEventQueue, aggEventQueue }
     }
 
@@ -80,22 +84,7 @@ export class EventQueue {
             return
         }
 
-        // TODO: Implement max queue size
-        // this.maxEventQueueSize = bucketedConfig?.project.settings.sdkSettings?.eventQueueLimit
-        // ?? this.maxEventQueueSize
-
         const requestEvent = new DVCRequestEvent(event, user.user_id, featureVariationMap)
-        this.addEventToQueue(user, requestEvent)
-    }
-
-    private addEventToQueue(user: DVCPopulatedUser, event: DVCRequestEvent): void {
-        // TODO: implement?
-        // if (this.eventQueueSize() >= this.maxEventQueueSize) {
-        //     this.logger.warn(`Max event queue size reached, dropping event: ${event}`)
-        //     this.flushEvents()
-        //     return
-        // }
-
         const user_id = user.user_id
         let userEvents: UserEventsBatchRecord
         if (!this.userEventQueue.has(user_id)) {
@@ -105,7 +94,9 @@ export class EventQueue {
             userEvents = this.userEventQueue.get(user_id)
             userEvents.user = user
         }
-        userEvents.events.push(event)
+
+        userEvents.events.push(requestEvent)
+        this.eventQueueCount++
     }
 
     queueAggregateEvent(
@@ -122,13 +113,6 @@ export class EventQueue {
         if (!target) {
             throw new Error('Event missing target to save aggregate event')
         }
-
-        // TODO: implement?
-        // if (this.eventQueueSize() >= this.maxEventQueueSize) {
-        //     this.logger.warn(`Max event queue size reached, dropping aggregate event: ${event}`)
-        //     this.flushEvents()
-        //     return
-        // }
 
         let variableFeatureVarAggMap: VariableAggMap
         if (this.aggEventQueue.has(type)) {
@@ -165,6 +149,7 @@ export class EventQueue {
                 variationAggMap.set(featureVariation._variation, variationCount + 1)
             } else {
                 variationAggMap.set(featureVariation._variation, 1)
+                this.eventQueueCount++
             }
         } else {
             /**
@@ -183,6 +168,7 @@ export class EventQueue {
                 const variationAggMap = new Map<string, i64>()
                 variationAggMap.set('value', 1)
                 featureVarAggMap.set('value', variationAggMap)
+                this.eventQueueCount++
             }
         }
     }

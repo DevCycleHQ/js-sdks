@@ -194,4 +194,10 @@ export class RequestPayloadManager {
             }
         })
     }
+
+    payloadEventCount(): i32 {
+        return this.pendingPayloads.values().reduce((count: i32, payload) => {
+            return count + payload.eventCount()
+        }, 0 as i32)
+    }
 }

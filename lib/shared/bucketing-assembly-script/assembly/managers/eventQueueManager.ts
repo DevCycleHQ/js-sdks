@@ -136,3 +136,9 @@ export function cleanupEventQueue(envKey: string): void {
         _requestPayloadMap.delete(envKey)
     }
 }
+
+export function eventQueueSize(envKey: string): i32 {
+    const eventQueue = getEventQueue(envKey)
+    const requestPayloadManager = getRequestPayloadManager(envKey)
+    return eventQueue.eventQueueCount + requestPayloadManager.payloadEventCount()
+}

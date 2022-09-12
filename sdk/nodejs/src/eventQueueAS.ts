@@ -21,7 +21,9 @@ export type EventQueueASOptions = {
     eventFlushIntervalMS?: number,
     disableAutomaticEventLogging?: boolean,
     disableCustomEventLogging?: boolean,
-    eventRequestChunkSize?: number
+    eventRequestChunkSize?: number,
+    maxEventQueueSize?: number,
+    flushEventQueueSize?: number
 }
 
 export class EventQueueAS implements EventQueueInterface {
@@ -30,12 +32,39 @@ export class EventQueueAS implements EventQueueInterface {
     eventFlushIntervalMS: number
     disableAutomaticEventLogging: boolean
     disableCustomEventLogging: boolean
+    flushEventQueueSize: number
+    maxEventQueueSize: number
     private flushInterval: NodeJS.Timer
+    private flushInProgress = false
 
     constructor(logger: DVCLogger, environmentKey: string, options: EventQueueASOptions = {}) {
         this.logger = logger
         this.environmentKey = environmentKey
         this.eventFlushIntervalMS = options?.eventFlushIntervalMS || 10 * 1000
+        if (this.eventFlushIntervalMS < 500) {
+            throw new Error(`eventFlushIntervalMS: ${this.eventFlushIntervalMS} must be larger than 500ms`)
+        } else if (this.eventFlushIntervalMS > (60 * 1000)) {
+            throw new Error(`eventFlushIntervalMS: ${this.eventFlushIntervalMS} must be smaller than 1 minute`)
+        }
+
+        this.disableAutomaticEventLogging = options?.disableAutomaticEventLogging || false
+        this.disableCustomEventLogging = options?.disableCustomEventLogging || false
+
+        this.flushEventQueueSize = options?.flushEventQueueSize || 1000
+        this.maxEventQueueSize = options?.maxEventQueueSize || 2000
+        const chunkSize = options?.eventRequestChunkSize || 100
+        if (this.flushEventQueueSize >= this.maxEventQueueSize) {
+            throw new Error(`flushEventQueueSize: ${this.flushEventQueueSize} must be larger than ` +
+                `maxEventQueueSize: ${this.maxEventQueueSize}`)
+        } else if (this.flushEventQueueSize < chunkSize || this.maxEventQueueSize < chunkSize) {
+            throw new Error(`flushEventQueueSize: ${this.flushEventQueueSize} and ` +
+                `maxEventQueueSize: ${this.maxEventQueueSize} ` +
+                `must be smaller than eventRequestChunkSize: ${chunkSize}`)
+        } else if (this.flushEventQueueSize > 20000 || this.maxEventQueueSize > 20000) {
+            throw new Error(`flushEventQueueSize: ${this.flushEventQueueSize} or ` +
+                `maxEventQueueSize: ${this.maxEventQueueSize} ` +
+                'must be smaller than 20,000')
+        }
 
         this.flushInterval = setInterval(this.flushEvents.bind(this), this.eventFlushIntervalMS)
 
@@ -65,6 +94,7 @@ export class EventQueueAS implements EventQueueInterface {
         const reducer = (val: number, batches: FlushPayload) => val + batches.eventCount
         const eventCount = flushPayloads.reduce(reducer, 0)
         this.logger.debug(`DVC Flush ${eventCount} AS Events, for ${flushPayloads.length} Users`)
+        this.flushInProgress = true
 
         await Promise.all(flushPayloads.map(async (flushPayload) => {
             try {
@@ -85,12 +115,18 @@ export class EventQueueAS implements EventQueueInterface {
                 getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, true)
             }
         }))
+        this.flushInProgress = false
     }
 
     /**
      * Queue DVCAPIEvent for publishing to DevCycle Events API.
      */
     queueEvent(user: DVCPopulatedUser, event: DVCEvent): void {
+        if (this.checkEventQueueSize()) {
+            this.logger.warn(`Max event queue size reached, dropping event: ${event}`)
+            return
+        }
+
         getBucketingLib().queueEvent(
             this.environmentKey,
             JSON.stringify(user),
@@ -103,10 +139,29 @@ export class EventQueueAS implements EventQueueInterface {
      * by incrementing the 'value' field.
      */
     queueAggregateEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void {
+        if (this.checkEventQueueSize()) {
+            this.logger.warn(`Max event queue size reached, dropping aggregate event: ${event}`)
+            return
+        }
+
         getBucketingLib().queueAggregateEvent(
             this.environmentKey,
             JSON.stringify(event),
             JSON.stringify(bucketedConfig?.variableVariationMap || {})
         )
+    }
+
+    private checkEventQueueSize(): boolean {
+        const queueSize = getBucketingLib().eventQueueSize(this.environmentKey)
+        if (queueSize >= this.flushEventQueueSize) {
+            if (!this.flushInProgress) {
+                this.flushEvents()
+            }
+
+            if (queueSize >= this.maxEventQueueSize) {
+                return true
+            }
+        }
+        return false
     }
 }
