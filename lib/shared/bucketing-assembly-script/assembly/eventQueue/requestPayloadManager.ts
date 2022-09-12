@@ -56,7 +56,7 @@ export class RequestPayloadManager {
     }
 
     /**
-     * generate aggregated events by resolving aggregated event map into DVCEvent's.
+     * generate aggregated events by resolving aggregated event map into DVCEvents.
      */
     private constructBatchRecordsFromAggEvents(
         aggEventQueue: AggEventQueue
