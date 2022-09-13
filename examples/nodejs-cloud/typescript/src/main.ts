@@ -6,7 +6,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 
 const app = express()
-const port = 5001
+const port = 5002
 const defaultHeaders = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
@@ -32,7 +32,7 @@ async function validateUserFromQueryParams(queryParams: Query): Promise<DVCClien
 }
 
 async function startDVC() {
-    dvcClient = await initialize('<DVC_SERVER_KEY>', {
+    dvcClient = await initialize('server-9c96e23a-afd7-451a-bfb2-0ca91b08c2d9', {
         logLevel: 'debug',
         enableCloudBucketing: true
     })

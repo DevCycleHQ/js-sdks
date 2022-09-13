@@ -39,6 +39,7 @@
     "moment": "^2.29.1",
     "murmurhash": "^2.0.0",
     "next": "12.1.5",
+    "node-fetch": "^3.2.10",
     "react-bootstrap": "^2.2.1",
     "react-dom": "18.0.0",
     "react-is": "18.0.0",

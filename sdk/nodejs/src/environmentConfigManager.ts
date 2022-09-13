@@ -1,6 +1,5 @@
-import { AxiosResponse } from 'axios'
 import { ConfigBody, DVCLogger } from '@devcycle/types'
-import { DVCOptions } from './types'
+import { DVCOptions, JSONResponse } from './types'
 import { getEnvironmentConfig } from './request'
 import { getBucketingLib } from './bucketing'
 
@@ -54,7 +53,7 @@ export class EnvironmentConfigManager {
 
     async _fetchConfig(): Promise<void> {
         const url = this.getConfigURL()
-        let res: AxiosResponse<ConfigBody> | null
+        let res: JSONResponse<ConfigBody> | null
         try {
             this.logger.debug(`Requesting new config for ${url}, etag: ${this.configEtag}`)
             res = await getEnvironmentConfig(url, this.requestTimeoutMS, this.configEtag)
@@ -68,9 +67,9 @@ export class EnvironmentConfigManager {
         if (res?.status === 304) {
             this.logger.debug(`Config not modified, using cache, etag: ${this.configEtag}`)
         } else if (res?.status === 200) {
-            getBucketingLib().setConfigData(this.environmentKey, JSON.stringify(res.data))
+            getBucketingLib().setConfigData(this.environmentKey, JSON.stringify(res.body))
             this.hasConfig = true
-            this.configEtag = res?.headers?.etag
+            this.configEtag = res?.headers?.etag as string
         } else if (this.hasConfig) {
             this.logger.error(`Failed to download config, using cached version. url: ${url}.`)
         } else {

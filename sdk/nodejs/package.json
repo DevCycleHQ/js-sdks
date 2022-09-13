@@ -9,7 +9,8 @@
     "assemblyscript-regex": "*"
   },
   "dependencies": {
-    "@devcycle/bucketing-assembly-script": "^1.0.28"
+    "@devcycle/bucketing-assembly-script": "^1.0.28",
+    "node-fetch": "^3.2.10"
   },
   "engines": {
     "node": ">=14.0.0"

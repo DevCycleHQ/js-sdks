@@ -3,7 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 
 const app = express()
-const port = 5000
+const port = 5001
 const defaultHeaders = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
@@ -17,7 +17,7 @@ app.use(bodyParser.json())
 let dvcClient
 
 async function startDVC() {
-    dvcClient = DVC.initialize('<DVC_SERVER_KEY>', { logLevel: 'info', enableCloudBucketing: true })
+    dvcClient = DVC.initialize('server-9c96e23a-afd7-451a-bfb2-0ca91b08c2d9', { logLevel: 'debug', enableCloudBucketing: true })
 
     const user = {
         user_id: 'node_sdk_test',

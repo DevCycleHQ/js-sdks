@@ -83,7 +83,7 @@ export class EventQueue {
             try {
                 const res = await publishEvents(this.logger, this.environmentKey, flushPayload)
                 if (res.status !== 201) {
-                    throw new Error(`Error publishing events, status: ${res.status}, body: ${res.data}`)
+                    throw new Error(`Error publishing events, status: ${res.status}, body: ${res.body}`)
                 } else {
                     this.logger.debug(`DVC Flushed ${eventCount} Events, for ${chunk.length} Users`)
                 }

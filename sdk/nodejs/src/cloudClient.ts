@@ -5,7 +5,8 @@ import {
     DVCVariableSet,
     DVCFeatureSet,
     DVCEvent,
-    DVCUser
+    DVCUser,
+    JSONResponse
 } from './types'
 import { DVCVariable } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
@@ -13,7 +14,6 @@ import { dvcDefaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
 import { DVCLogger } from '@devcycle/types'
 import { getAllFeatures, getAllVariables, getVariable, postTrack } from './request'
-import { AxiosError, AxiosResponse } from 'axios'
 
 export class DVCCloudClient {
     private environmentKey: string
@@ -34,14 +34,14 @@ export class DVCCloudClient {
         checkParamDefined('defaultValue', defaultValue)
 
         return getVariable(requestUser, this.environmentKey, key, this.options)
-            .then((res: AxiosResponse) => {
+            .then((res: JSONResponse<DVCVariableInterface>) => {
                 return new DVCVariable({
-                    ...res.data,
+                    ...res.body,
                     defaultValue
                 })
             })
-            .catch((err: AxiosError) => {
-                this.logger.error(`Request to get variable: ${key} failed with response message: ${err.message}`)
+            .catch((err: Response) => {
+                this.logger.error(`Request to get variable: ${key} failed with response message: ${err}`)
                 return new DVCVariable({
                     defaultValue,
                     key
@@ -52,11 +52,11 @@ export class DVCCloudClient {
     allVariables(user: DVCUser): Promise<DVCVariableSet> {
         const requestUser = new DVCPopulatedUser(user)
         return getAllVariables(requestUser, this.environmentKey, this.options)
-            .then((res: AxiosResponse) => {
-                return res.data || {}
+            .then((res: JSONResponse<DVCVariableSet>) => {
+                return res.body || {}
             })
-            .catch((err: AxiosError) => {
-                this.logger.error(`Request to get all variable failed with response message: ${err.message}`)
+            .catch((err: Response) => {
+                this.logger.error(`Request to get all variable failed with response message: ${err}`)
                 return {}
             })
     }
@@ -64,11 +64,11 @@ export class DVCCloudClient {
     allFeatures(user: DVCUser): Promise<DVCFeatureSet> {
         const requestUser = new DVCPopulatedUser(user)
         return getAllFeatures(requestUser, this.environmentKey, this.options)
-            .then((res: AxiosResponse) => {
-                return res.data || {}
+            .then((res: JSONResponse<DVCFeatureSet>) => {
+                return res.body || {}
             })
-            .catch((err: AxiosError) => {
-                this.logger.error(`Request to get all features failed with response message: ${err.message}`)
+            .catch((err: Response) => {
+                this.logger.error(`Request to get all features failed with response message: ${err}`)
                 return {}
             })
     }

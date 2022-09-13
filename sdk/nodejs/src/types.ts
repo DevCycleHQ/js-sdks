@@ -195,3 +195,11 @@ export interface DVCFeature {
 }
 
 export type DVCFeatureSet = Record<string, DVCFeature>
+
+export type JSONResponse<T> = {
+    status: number
+    statusText: string
+    ok: boolean
+    headers: Record<string, string>
+    body: T
+}
