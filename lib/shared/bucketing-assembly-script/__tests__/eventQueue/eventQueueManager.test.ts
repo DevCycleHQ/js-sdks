@@ -104,6 +104,7 @@ describe('EventQueueManager Tests', () => {
                 {
                     'payloadId': expect.any(String),
                     'eventCount': 2,
+                    'retryCount': 0,
                     'records': [
                         {
                             'events': [{
@@ -275,8 +276,8 @@ describe('EventQueueManager Tests', () => {
             }
             const failedPayloads = flushEventQueue(envKey)
             expect(failedPayloads.length).toEqual(3)
-            expect(failedPayloads[0]).toEqual(payloads[1])
-            expect(failedPayloads[1]).toEqual(payloads[3])
+            expect(failedPayloads[0]).toEqual({ ...payloads[1], retryCount: 1 })
+            expect(failedPayloads[1]).toEqual({ ...payloads[3], retryCount: 1 })
             expect(failedPayloads[2].records.length).toEqual(1)
             expect(failedPayloads[2].records[0].user.user_id).toEqual(dvcUser.user_id)
             expect(failedPayloads[2].records[0].events.length).toEqual(4)

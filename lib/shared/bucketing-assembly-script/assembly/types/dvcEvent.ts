@@ -166,6 +166,7 @@ export class UserEventsBatchRecord extends JSON.Value {
 export class FlushPayload extends JSON.Value {
     public payloadId: string
     public status: string
+    public retryCount: i32 = 0
 
     constructor(
         public records: UserEventsBatchRecord[]
@@ -226,6 +227,7 @@ export class FlushPayload extends JSON.Value {
         jsonObj.set('records', jsonArrFromValueArray(this.records))
         jsonObj.set('payloadId', this.payloadId)
         jsonObj.set('eventCount', this.eventCount())
+        jsonObj.set('retryCount', this.retryCount)
         return jsonObj.stringify()
     }
 }

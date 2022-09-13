@@ -33,10 +33,12 @@ export class RequestPayloadManager {
         aggEventQueue: AggEventQueue
     ): FlushPayload[] {
         this.checkForFailedPayloads()
+
         const records = this.constructBatchRecordsFromUserEvents(userEventQueue)
         records.push(this.constructBatchRecordsFromAggEvents(aggEventQueue))
         this.addEventRecordsToPendingPayloads(records)
 
+        this.updateFailedPayloadsStatus()
         return this.pendingPayloads.values()
     }
 
@@ -187,10 +189,19 @@ export class RequestPayloadManager {
      * Check that the pendingPayloads queue is empty or only contains retryable failed payloads
      * before creating new batch of payloads.
      */
-    checkForFailedPayloads(): void {
+    private checkForFailedPayloads(): void {
         this.pendingPayloads.values().forEach((payload) => {
             if (payload.status !== 'failed') {
                 throw new Error(`Request Payload: ${payload.payloadId} has not finished sending`)
+            }
+        })
+    }
+
+    private updateFailedPayloadsStatus(): void {
+        this.pendingPayloads.values().forEach((payload) => {
+            if (payload.status === 'failed') {
+                payload.status = 'sending'
+                payload.retryCount += 1
             }
         })
     }
