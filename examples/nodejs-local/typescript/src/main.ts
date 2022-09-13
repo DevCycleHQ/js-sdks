@@ -19,7 +19,7 @@ app.use(bodyParser.json())
 
 let dvcClient: DVCClient
 
-async function validateUserFromQueryParams(queryParams: Query): Promise<DVCClientAPIUser> {
+function validateUserFromQueryParams(queryParams: Query): DVCClientAPIUser {
     if (!queryParams) {
         throw new Error('Invalid query parameters')
     }
@@ -32,8 +32,8 @@ async function validateUserFromQueryParams(queryParams: Query): Promise<DVCClien
 }
 
 async function startDVC() {
-    dvcClient = await initialize('<DVC_SERVER_KEY>').onClientInitialized()
-    console.log('DVC onClientInitialized')
+    dvcClient = await initialize('<DVC_SERVER_KEY>', { logLevel: 'info', enableEdgeDB: true }).onClientInitialized()
+    console.log('DVC Local Bucketing TypeScript Client Initialized')
 
     const user = {
         user_id: 'node_sdk_test',
@@ -73,15 +73,15 @@ async function startDVC() {
 
 startDVC()
 
-app.get('/variables', async (req: express.Request, res: express.Response) => {
-    const user = await validateUserFromQueryParams(req.query)
+app.get('/variables', (req: express.Request, res: express.Response) => {
+    const user = validateUserFromQueryParams(req.query)
 
     res.set(defaultHeaders)
     res.send(JSON.stringify(dvcClient.allVariables(user)))
 })
 
-app.get('/features', async (req: express.Request, res: express.Response) => {
-    const user = await validateUserFromQueryParams(req.query)
+app.get('/features', (req: express.Request, res: express.Response) => {
+    const user = validateUserFromQueryParams(req.query)
 
     res.set(defaultHeaders)
     res.send(JSON.stringify(dvcClient.allFeatures(user)))

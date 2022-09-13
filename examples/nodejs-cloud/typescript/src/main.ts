@@ -32,11 +32,8 @@ async function validateUserFromQueryParams(queryParams: Query): Promise<DVCClien
 }
 
 async function startDVC() {
-    dvcClient = await initialize('<DVC_SERVER_KEY>', {
-        logLevel: 'debug',
-        enableCloudBucketing: true
-    })
-    console.log('DVC onClientInitialized')
+    dvcClient = initialize('<DVC_SERVER_KEY>', { logLevel: 'info', enableCloudBucketing: true })
+    console.log('DVC Cloud Bucketing TypeScript Client Ready')
 
     const user = {
         user_id: 'node_sdk_test',
