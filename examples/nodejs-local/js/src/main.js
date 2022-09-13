@@ -18,14 +18,14 @@ let dvcClient
 
 async function startDVC() {
     dvcClient = await DVC.initialize('<DVC_SERVER_KEY>', { logLevel: 'info' }).onClientInitialized()
-    console.log('DVC onClientInitialized')
+    console.log('DVC Local Bucketing JS Client Initialized')
 
     const user = {
         user_id: 'node_sdk_test',
         country: 'CA'
     }
 
-    const partyTime = await dvcClient.variable(user, 'elliot-test', false)
+    const partyTime = dvcClient.variable(user, 'elliot-test', false)
     if (partyTime.value) {
         const invitation = dvcClient.variable(
             user,
@@ -48,10 +48,10 @@ async function startDVC() {
 
     const defaultVariable = dvcClient.variable(user, 'noWay-thisisA-realKEY', true)
     console.log(`Value of the variable is ${defaultVariable.value} \n`)
-    const variables = await dvcClient.allVariables(user)
+    const variables = dvcClient.allVariables(user)
     console.log('Variables: ')
     console.dir(variables)
-    const features = await dvcClient.allFeatures(user)
+    const features = dvcClient.allFeatures(user)
     console.log('Features: ')
     console.dir(features)
 }
