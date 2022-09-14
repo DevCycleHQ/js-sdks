@@ -70,3 +70,5 @@ git commit --amend --no-edit --no-verify
 while IFS= read -r line; do
   git tag -f "$line" -m "$line"
 done <<< "$RELEASE_TAGS"
+
+git push --follow-tags
