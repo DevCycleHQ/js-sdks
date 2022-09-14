@@ -1,5 +1,5 @@
 {
-  "root": "examples/react/next-js-app",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "examples/react/next-js-app",
   "projectType": "application",
   "targets": {
@@ -15,7 +15,9 @@
       },
       "configurations": {
         "production": {},
-        "development": {}
+        "development": {
+          "outputPath": "examples/react/next-js-app"
+        }
       }
     },
     "serve": {

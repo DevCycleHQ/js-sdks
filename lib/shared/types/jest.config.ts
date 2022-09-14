@@ -1,6 +1,7 @@
-module.exports = {
+/* eslint-disable */
+export default {
     displayName: 'shared-types',
-    
+
     globals: {
         'ts-jest': {
             tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -10,7 +11,7 @@ module.exports = {
         '^.+\\.[tj]s$': 'ts-jest'
     },
     moduleFileExtensions: ['ts', 'js', 'html'],
-    coverageDirectory: '../../../coverage/lib/shared/types','preset': '../../../jest.preset.ts'
+    coverageDirectory: '../../../coverage/lib/shared/types','preset': '../../../jest.preset.js'
 }
 
 module.exports.reporters = [

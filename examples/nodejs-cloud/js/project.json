@@ -1,5 +1,5 @@
 {
-  "root": "examples/nodejs-cloud/js",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "examples/nodejs-cloud/js/src",
   "projectType": "application",
   "targets": {

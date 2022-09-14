@@ -1,6 +1,6 @@
 module.exports = {
     displayName: 'example-js-web-elements-app',
-    preset: '../../../jest.preset.ts',
+    preset: '../../../jest.preset.js',
     setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
     transform: {
         '^.+\\.[tj]s$': 'babel-jest'

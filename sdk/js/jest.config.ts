@@ -1,7 +1,8 @@
+/* eslint-disable */
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
-module.exports = {
+export default {
     displayName: 'js-client-sdk',
-    
+
     globals: {
         'ts-jest': {
             tsconfig: '<rootDir>/tsconfig.spec.json'
@@ -17,7 +18,7 @@ module.exports = {
         '!<rootDir>/**/*.{spec,test,mock}.{ts,js}'
     ],
     coverageDirectory: '../../coverage/sdk/js',
-    setupFiles: ['<rootDir>/__tests__/setupConfig.js'],'preset': '../../jest.preset.ts'
+    setupFiles: ['<rootDir>/__tests__/setupConfig.js'],'preset': '../../jest.preset.js'
 }
 
 module.exports.reporters = [

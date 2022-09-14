@@ -7,7 +7,7 @@ import { EventQueue } from '../src/eventQueue'
 import { EventTypes } from '../src/models/requestEvent'
 import { publishEvents } from '../src/request'
 import { BucketedUserConfig, PublicProject } from '@devcycle/types'
-import { mocked } from 'ts-jest/utils'
+import { mocked } from 'jest-mock'
 import { dvcDefaultLogger } from '../src/utils/logger'
 
 const publishEvents_mock = mocked(publishEvents, true)

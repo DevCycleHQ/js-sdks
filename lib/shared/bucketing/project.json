@@ -1,5 +1,5 @@
 {
-  "root": "lib/shared/bucketing",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "lib/shared/bucketing/src",
   "projectType": "library",
   "targets": {

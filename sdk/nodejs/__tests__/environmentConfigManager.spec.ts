@@ -6,7 +6,7 @@ jest.mock('../src/bucketing')
 import { EnvironmentConfigManager } from '../src/environmentConfigManager'
 import { getEnvironmentConfig } from '../src/request'
 import { importBucketingLib, getBucketingLib } from '../src/bucketing'
-import { mocked } from 'ts-jest/utils'
+import { mocked } from 'jest-mock'
 import { AxiosResponse } from 'axios'
 import { dvcDefaultLogger } from '../src/utils/logger'
 

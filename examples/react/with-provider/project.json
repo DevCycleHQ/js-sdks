@@ -1,5 +1,5 @@
 {
-  "root": "examples/react/with-provider",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "examples/react/with-provider/src",
   "projectType": "application",
   "targets": {

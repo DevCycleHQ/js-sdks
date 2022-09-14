@@ -1,5 +1,5 @@
 {
-  "root": "lib/shared/bucketing-assembly-script",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "lib/shared/bucketing-assembly-script/assembly",
   "projectType": "library",
   "implicitDependencies": [

@@ -1,6 +1,7 @@
-module.exports = {
+/* eslint-disable */
+export default {
     displayName: 'bucketing-lib',
-    
+
     globals: {
         'ts-jest': {
             tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -16,7 +17,7 @@ module.exports = {
         '<rootDir>/src/**/*.{ts,js}',
         '!<rootDir>/**/*.{spec,test,mock}.{ts,js}'
     ],
-    coverageDirectory: '../../../coverage/lib/shared/bucketing','preset': '../../../jest.preset.ts'
+    coverageDirectory: '../../../coverage/lib/shared/bucketing','preset': '../../../jest.preset.js'
 }
 
 module.exports.reporters = [
