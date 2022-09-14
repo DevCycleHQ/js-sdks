@@ -2,7 +2,7 @@
   "extends": "nx/presets/npm.json",
   "npmScope": "devcycle",
   "workspaceLayout": {
-    "libsDir": "",
+    "libsDir": "lib",
     "appsDir": ""
   },
   "implicitDependencies": {
@@ -12,6 +12,11 @@
     },
     ".eslintrc.json": "*",
     ".circleci/config.yml": "*"
+  },
+  "pluginsConfig": {
+    "@nrwl/js": {
+      "analyzeSourceFiles": true
+    }
   },
   "tasksRunnerOptions": {
     "default": {
@@ -28,36 +33,6 @@
         "parallel": 1
       }
     }
-  },
-  "targetDependencies": {
-    "build": [
-      {
-        "target": "build",
-        "projects": "dependencies"
-      }
-    ],
-    "prepare": [
-      {
-        "target": "prepare",
-        "projects": "dependencies"
-      }
-    ],
-    "package": [
-      {
-        "target": "package",
-        "projects": "dependencies"
-      }
-    ],
-    "npm-publish": [
-      {
-        "target": "npm-publish",
-        "projects": "dependencies"
-      },
-      {
-        "target": "build",
-        "projects": "self"
-      }
-    ]
   },
   "affected": {
     "defaultBase": "main"
@@ -98,5 +73,29 @@
       }
     }
   },
-  "defaultProject": "react"
+  "defaultProject": "react",
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "prepare": {
+      "dependsOn": [
+        "^prepare"
+      ]
+    },
+    "package": {
+      "dependsOn": [
+        "^package"
+      ]
+    },
+    "npm-publish": {
+      "dependsOn": [
+        "^npm-publish",
+        "build"
+      ]
+    }
+  }
 }

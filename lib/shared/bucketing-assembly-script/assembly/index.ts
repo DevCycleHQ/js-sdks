@@ -33,6 +33,6 @@ export function setConfigData(token: string, configDataStr: string): void {
     _setConfigData(token, configData)
 }
 
-export * from './test'
+export * from './testHelpers'
 
 export { murmurhashV3, murmurhashV3_js } from './helpers/murmurhash'

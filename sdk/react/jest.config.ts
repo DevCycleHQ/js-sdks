@@ -1,9 +1,10 @@
-module.exports = {
+/* eslint-disable */
+export default {
     displayName: 'react-lib',
-    
+
     transform: {
-        '^.+\\.[tj]sx?$': 'babel-jest'
+        '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nrwl/react/babel'] }]
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-    coverageDirectory: '../../coverage/lib/react-lib','preset': '../../jest.preset.ts'
+    coverageDirectory: '../../coverage/lib/react-lib','preset': '../../jest.preset.js'
 }

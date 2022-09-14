@@ -1,5 +1,5 @@
 {
-  "root": "lib/shared/types",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "lib/shared/types/src",
   "targets": {
     "check-types": {

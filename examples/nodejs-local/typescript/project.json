@@ -1,5 +1,5 @@
 {
-  "root": "examples/nodejs-local/typescript",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "examples/nodejs-local/typescript/src",
   "projectType": "application",
   "targets": {

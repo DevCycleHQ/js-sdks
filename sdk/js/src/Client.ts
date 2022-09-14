@@ -50,7 +50,7 @@ export class DVCClient implements Client {
             key: () => null,
             length: 0
         }
-        this.store = new Store(typeof window !== "undefined" ? window.localStorage : stubbedLocalStorage, this.logger)
+        this.store = new Store(typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger)
 
         this.store.saveUser(this.user)
             .then(() => this.logger.info('Successfully saved user to local storage!'))

@@ -89,3 +89,6 @@ buck-out/
 **/ios/Pods/
 
 react-native-app-e2e/artifacts
+
+# Next.js
+.next
