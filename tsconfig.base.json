@@ -10,7 +10,7 @@
     "experimentalDecorators": true,
     "noImplicitAny": true,
     "importHelpers": false,
-    "target": "es5",
+    "target": "es2015",
     "module": "esnext",
     "lib": [
       "es2019",

@@ -10314,7 +10314,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-fetch@npm:^3.0.4":
+"cross-fetch@npm:^3.0.4, cross-fetch@npm:^3.1.5":
   version: 3.1.5
   resolution: "cross-fetch@npm:3.1.5"
   dependencies:
@@ -11105,6 +11105,7 @@ __metadata:
     commitizen: ^4.2.5
     core-js: ^3.6.5
     cross-env: ^7.0.3
+    cross-fetch: ^3.1.5
     cypress: ^9.1.0
     cz-conventional-changelog: ^3.3.0
     detox: ~19.12.1
@@ -11124,6 +11125,7 @@ __metadata:
     eslint-plugin-react: 7.31.1
     eslint-plugin-react-hooks: ~4.6.0
     eslint-plugin-standard: ^4.0.1
+    fetch-retry: ^5.0.3
     hoist-non-react-statics: ^3.3.2
     husky: ^7.0.0
     iso-639-1: ^2.1.13
@@ -12964,6 +12966,13 @@ __metadata:
   version: 4.2.3
   resolution: "fecha@npm:4.2.3"
   checksum: f94e2fb3acf5a7754165d04549460d3ae6c34830394d20c552197e3e000035d69732d74af04b9bed3283bf29fe2a9ebdcc0085e640b0be3cc3658b9726265e31
+  languageName: node
+  linkType: hard
+
+"fetch-retry@npm:^5.0.3":
+  version: 5.0.3
+  resolution: "fetch-retry@npm:5.0.3"
+  checksum: b4eebc04bd41651417e89ae9287e5b9e5421970ce07058c6e1e22f7d9c1cd5f935fc39a328fd66b433247c0ae1bb8a6b2d48c073d5a9f911992f72c5d311b14d
   languageName: node
   linkType: hard
 

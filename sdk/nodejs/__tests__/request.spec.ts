@@ -1,18 +1,9 @@
-jest.mock('axios')
-import axios, { AxiosInstance } from 'axios'
-import { mocked } from 'jest-mock'
+jest.mock('cross-fetch')
+import fetch, { Response } from 'cross-fetch'
 
-const axiosRequestMock = jest.fn()
-const createMock = mocked(axios.create, true)
-createMock.mockImplementation((): AxiosInstance => {
-    return {
-        request: axiosRequestMock,
-        interceptors: {
-            request: { use: jest.fn() },
-            response: { use: jest.fn() }
-        }
-    } as unknown as AxiosInstance
-})
+global.fetch = fetch
+
+const fetchRequestMock = fetch as jest.MockedFn<typeof fetch>
 
 import { dvcDefaultLogger } from '../src/utils/logger'
 const logger = dvcDefaultLogger()
@@ -20,7 +11,7 @@ import { publishEvents, getEnvironmentConfig, post, get } from '../src/request'
 
 describe('request.ts Unit Tests', () => {
     beforeEach(() => {
-        axiosRequestMock.mockReset()
+        fetchRequestMock.mockReset()
     })
 
     describe('publishEvents', () => {
@@ -32,41 +23,59 @@ describe('request.ts Unit Tests', () => {
 
     describe('getEnvironmentConfig', () => {
         it('should get environment config', async () => {
-            const config = {}
             const url = 'https://test.devcycle.com/config'
             const etag = 'etag_value'
-            axiosRequestMock.mockResolvedValue({ status: 200, config })
+            fetchRequestMock.mockResolvedValue(new Response('', { status: 200 }) as any)
 
             const res = await getEnvironmentConfig(url, 60000, etag)
             expect(res.status).toEqual(200)
-            expect(axiosRequestMock).toBeCalledWith({
+            expect(fetchRequestMock).toBeCalledWith(url, {
                 'headers': {
                     'If-None-Match': etag,
                 },
+                retries: 1,
+                retryDelay: expect.any(Function),
+                retryOn: expect.any(Function),
                 'method': 'GET',
-                'timeout': 60000,
-                'url': url,
+                'signal': expect.any(AbortSignal),
             })
         })
     })
 
     describe('get', () => {
         it('should make GET request', async () => {
-            await get({ url: 'https://test.com' })
-            expect(axiosRequestMock).toBeCalledWith(expect.objectContaining({
+            fetchRequestMock.mockResolvedValue(new Response('', { status: 200 }))
+            await get('https://test.com', {})
+            expect(fetchRequestMock).toBeCalledWith('https://test.com', expect.objectContaining({
                 method: 'GET',
-                url: 'https://test.com'
+            }))
+        })
+
+        it('should fail on GET request for 500 error', async () => {
+            fetchRequestMock.mockResolvedValue(new Response('', { status: 500 }))
+            await expect(get('https://test.com', {})).rejects.toThrow()
+            expect(fetchRequestMock).toBeCalledWith('https://test.com', expect.objectContaining({
+                method: 'GET',
             }))
         })
     })
 
     describe('post', () => {
         it('should make POST request', async () => {
-            await post({ url: 'https://test.com' }, 'token')
-            expect(axiosRequestMock).toBeCalledWith(expect.objectContaining({
+            fetchRequestMock.mockResolvedValue(new Response('', { status: 200 }))
+            await post('https://test.com', {}, 'token')
+            expect(fetchRequestMock).toBeCalledWith('https://test.com', expect.objectContaining({
                 method: 'POST',
-                url: 'https://test.com',
-                headers: { 'Authorization': 'token' }
+                headers: { 'Authorization': 'token', 'Content-Type': 'application/json' }
+            }))
+        })
+
+        it('should fail on POST request for 500 error', async () => {
+            fetchRequestMock.mockResolvedValue(new Response('', { status: 500 }))
+            await expect(post('https://test.com', {}, 'token')).rejects.toThrow()
+            expect(fetchRequestMock).toBeCalledWith('https://test.com', expect.objectContaining({
+                method: 'POST',
+                headers: { 'Authorization': 'token', 'Content-Type': 'application/json' }
             }))
         })
     })

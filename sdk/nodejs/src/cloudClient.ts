@@ -11,8 +11,7 @@ import { checkParamDefined } from './utils/paramUtils'
 import { dvcDefaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
 import { DVCLogger, getVariableTypeFromValue } from '@devcycle/types'
-import { getAllFeatures, getAllVariables, getVariable, postTrack } from './request'
-import { AxiosError, AxiosResponse } from 'axios'
+import { getAllFeatures, getAllVariables, getVariable, postTrack, ResponseError } from './request'
 import { DVCUser } from './models/user'
 
 const castIncomingUser = (user: DVCUser) => {
@@ -22,13 +21,34 @@ const castIncomingUser = (user: DVCUser) => {
     return user
 }
 
-const throwIfUserError = (err: AxiosError) => {
-    const data = err.response?.data as { message?: string }
-    const code = err.response?.status || 0
+/**
+ * Handle response errors from API
+ * Suppress 5xx errors and log them instead while returning defaults to the caller
+ * Throw 4XX errors back to the caller to notify of invalid SDK usage
+ * Special handling of 404 error, which indicates "variable not found"
+ * @param err
+ */
+const throwIfUserError = (err: unknown) => {
+    if (err instanceof ResponseError) {
+        const code = err.status
 
-    if (code !== 404 && code < 500) {
-        throw new Error(`DevCycle request failed with status ${code}. ${data.message || ''}`)
+        // throw the error if it indicates there was user error in this call
+        // (e.g. invalid auth credentials or bad user data)
+        if (code !== 404 && code < 500) {
+            throw new Error(`DevCycle request failed with status ${code}. ${err.message || ''}`)
+        }
+
+        // Catch non-4xx errors so we can log them instead
+        return
     }
+
+    if (err instanceof SyntaxError) {
+        // JSON parse error, log instead of throwing
+        return
+    }
+
+    // if not a ResponseError, throw it
+    throw err
 }
 
 export class DVCCloudClient {
@@ -51,12 +71,13 @@ export class DVCCloudClient {
         checkParamDefined('key', key)
         checkParamDefined('defaultValue', defaultValue)
         const type = getVariableTypeFromValue(defaultValue, key, this.logger, true)
+
         return getVariable(populatedUser, this.environmentKey, key, this.options)
-            .then((res: AxiosResponse) => {
-                const variable = res.data
-                if (variable.type !== type) {
+            .then(async (res: Response) => {
+                const variableResponse = await res.json()
+                if (variableResponse.type !== type) {
                     this.logger.error(
-                        `Type mismatch for variable ${key}. Expected ${type}, got ${variable.type}`
+                        `Type mismatch for variable ${key}. Expected ${type}, got ${variableResponse.type}`
                     )
                     return new DVCVariable({
                         defaultValue,
@@ -65,13 +86,15 @@ export class DVCCloudClient {
                     })
                 }
                 return new DVCVariable({
-                    ...variable,
+                    ...variableResponse,
                     defaultValue
                 })
             })
-            .catch((err: AxiosError) => {
+            .catch((err: unknown) => {
                 throwIfUserError(err)
-                this.logger.error(`Request to get variable: ${key} failed with response message: ${err.message}`)
+                this.logger.error(
+                    `Request to get variable: ${key} failed with response message: ${(err as any).message}`
+                )
                 return new DVCVariable({
                     defaultValue,
                     type,
@@ -84,13 +107,18 @@ export class DVCCloudClient {
         const incomingUser = castIncomingUser(user)
 
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+
         return getAllVariables(populatedUser, this.environmentKey, this.options)
-            .then((res: AxiosResponse) => {
-                return res.data || {}
+            .then(async (res: Response) => {
+                const variablesResponse = await res.json()
+
+                return variablesResponse || {}
             })
-            .catch((err: AxiosError) => {
+            .catch((err: unknown) => {
                 throwIfUserError(err)
-                this.logger.error(`Request to get all variable failed with response message: ${err.message}`)
+                this.logger.error(
+                    `Request to get all variable failed with response message: ${(err as any).message}`
+                )
                 return {}
             })
     }
@@ -99,13 +127,16 @@ export class DVCCloudClient {
         const incomingUser = castIncomingUser(user)
 
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+
         return getAllFeatures(populatedUser, this.environmentKey, this.options)
-            .then((res: AxiosResponse) => {
-                return res.data || {}
+            .then(async (res: Response) => {
+                const featuresResponse = await res.json()
+
+                return featuresResponse || {}
             })
-            .catch((err: AxiosError) => {
+            .catch((err: unknown) => {
                 throwIfUserError(err)
-                this.logger.error(`Request to get all features failed with response message: ${err.message}`)
+                this.logger.error(`Request to get all features failed with response message: ${(err as any).message}`)
                 return {}
             })
     }
@@ -121,9 +152,9 @@ export class DVCCloudClient {
         return postTrack(populatedUser, event, this.environmentKey, this.options)
             .then(() => {
                 this.logger.debug('DVC Event Tracked')
-            }).catch((err: AxiosError) => {
+            }).catch((err: unknown) => {
                 throwIfUserError(err)
-                this.logger.error(`DVC Error Tracking Event. Response message: ${err.message}`)
+                this.logger.error(`DVC Error Tracking Event. Response message: ${(err as any).message}`)
             })
     }
 }

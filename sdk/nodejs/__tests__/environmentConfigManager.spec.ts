@@ -7,8 +7,8 @@ import { EnvironmentConfigManager } from '../src/environmentConfigManager'
 import { getEnvironmentConfig } from '../src/request'
 import { importBucketingLib, getBucketingLib } from '../src/bucketing'
 import { mocked } from 'jest-mock'
-import { AxiosResponse } from 'axios'
 import { dvcDefaultLogger } from '../src/utils/logger'
+import { Response } from 'cross-fetch'
 
 const setInterval_mock = mocked(setInterval, true)
 const getEnvironmentConfig_mock = mocked(getEnvironmentConfig, true)
@@ -23,19 +23,18 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         setInterval_mock.mockReset()
     })
 
-    function mockAxiosResponse(obj: any): AxiosResponse {
-        return {
+    function mockFetchResponse(obj: any): Response {
+        return new Response('{}', {
             status: 200,
             statusText: '',
-            data: {},
             headers: {},
             config: {},
             ...obj
-        }
+        })
     }
 
     it('should build manager from constructor', async () => {
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 200 }))
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 200 }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {
             configPollingIntervalMS: 1000,
@@ -57,7 +56,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
     })
 
     it('should override the configPollingIntervalMS and configPollingTimeoutMS settings', async () => {
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 200 }))
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 200 }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {
             configPollingIntervalMS: 10,
@@ -78,7 +77,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
     })
 
     it('should call fetch config on the interval period time', async () => {
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 200 }))
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 200 }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {
             configPollingIntervalMS: 1000,
@@ -89,7 +88,8 @@ describe('EnvironmentConfigManager Unit Tests', () => {
 
         await envConfig._fetchConfig()
 
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 304 }))
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 304 }))
+
         await envConfig._fetchConfig()
 
         envConfig.cleanup()
@@ -103,14 +103,14 @@ describe('EnvironmentConfigManager Unit Tests', () => {
     })
 
     it('should throw error fetching config fails with 500 error', () => {
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 500 }))
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 500 }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {})
         expect(envConfig.fetchConfigPromise).rejects.toThrow('Failed to download DevCycle config.')
     })
 
     it('should throw invalid sdk key fetching config fails with 403 error', () => {
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 403 }))
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 403 }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {})
         expect(envConfig.fetchConfigPromise).rejects.toThrow('Invalid SDK key provided:')
@@ -125,7 +125,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
 
     it('should use cached config if fetching config fails', async () => {
         const config = { config: {} }
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 200, data: config }))
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 200, data: config }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {
             configPollingIntervalMS: 1000,
@@ -135,7 +135,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
         await envConfig._fetchConfig()
 
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 500 }))
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 500 }))
         await envConfig._fetchConfig()
 
         envConfig.cleanup()
@@ -143,7 +143,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
     })
 
     it('should start interval if initial config fails', async () => {
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 403 }))
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 403 }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {})
         await expect(envConfig.fetchConfigPromise).rejects.toThrow('Invalid SDK key provided:')
