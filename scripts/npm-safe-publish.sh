@@ -10,7 +10,7 @@ if [[ $# -eq 0 ]]; then
 fi
 
 PACKAGE=$1
-JQ_PATH=".version"
+JQ_PATH=".dependencies.\"${PACKAGE}\".version"
 
 NPM_SHOW="$(npm show "$PACKAGE" version)"
 NPM_LS="$(npm ls "$PACKAGE" --json | jq -r $JQ_PATH)"
