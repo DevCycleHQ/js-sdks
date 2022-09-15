@@ -1,6 +1,5 @@
 import { getBucketingLib } from '../src/bucketing'
 import { DVCClient } from '../src/client'
-jest.mock('../src/bucketing')
 jest.mock('../src/environmentConfigManager')
 
 describe('DVCClient', () => {
@@ -28,7 +27,7 @@ describe('variable', () => {
         user_id: 'node_sdk_test',
         country: 'CA'
     })
-    
+
     describe('variableDefaulted event', () => {
         let client: DVCClient
 
@@ -42,15 +41,15 @@ describe('variable', () => {
         beforeEach(() => {
             jest.clearAllMocks()
         })
-    
+
         it('does not get sent if variable is in bucketed config',async () => {
             client.variable(user, 'test-key', false)
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             expect(client.eventQueue.queueAggregateEvent)
-                .toBeCalledWith(expectedUser, 
-                    { type: 'variableEvaluated', target: 'test-key' }, 
+                .toBeCalledWith(expectedUser,
+                    { type: 'variableEvaluated', target: 'test-key' },
                     { 'variables': { ['test-key']: true } }
                 )
         })
@@ -60,8 +59,8 @@ describe('variable', () => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             expect(client.eventQueue.queueAggregateEvent)
-                .toBeCalledWith(expectedUser, 
-                    { type: 'variableDefaulted', target: 'test-key-not-in-config' }, 
+                .toBeCalledWith(expectedUser,
+                    { type: 'variableDefaulted', target: 'test-key-not-in-config' },
                     { 'variables': { ['test-key']: true } }
                 )
         })

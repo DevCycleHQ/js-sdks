@@ -14,7 +14,7 @@ describe('NodeJS SDK Initialize', () => {
     })
 
     it('fails to initialize in Local Bucketing mode when no token is provided', () => {
-        expect(() => 
+        expect(() =>
             initialize(undefined as unknown as string)
         ).toThrow('Missing environment key! Call initialize with a valid environment key')
     })

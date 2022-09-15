@@ -1,8 +1,8 @@
-let Bucketing: typeof import('@devcycle/bucketing-assembly-script')
+import { instantiate, Exports } from '@devcycle/bucketing-assembly-script'
+
+let Bucketing: Exports
 export const importBucketingLib = async (): Promise<void> => {
-    Bucketing = await (Function('return import("@devcycle/bucketing-assembly-script")')() as Promise<
-        typeof import('@devcycle/bucketing-assembly-script')
-        >)
+    Bucketing = await instantiate()
 }
 
 export const getBucketingLib = (): typeof Bucketing => {
