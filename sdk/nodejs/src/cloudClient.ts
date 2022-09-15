@@ -13,7 +13,6 @@ import { dvcDefaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
 import { DVCLogger } from '@devcycle/types'
 import { getAllFeatures, getAllVariables, getVariable, postTrack } from './request'
-import { AxiosError, AxiosResponse } from 'axios'
 
 export class DVCCloudClient {
     private environmentKey: string
@@ -34,13 +33,14 @@ export class DVCCloudClient {
         checkParamDefined('defaultValue', defaultValue)
 
         return getVariable(requestUser, this.environmentKey, key, this.options)
-            .then((res: AxiosResponse) => {
+            .then(async (res: Response) => {
+                const variableResponse = await res.json()
                 return new DVCVariable({
-                    ...res.data,
+                    ...variableResponse,
                     defaultValue
                 })
             })
-            .catch((err: AxiosError) => {
+            .catch((err: Error) => {
                 this.logger.error(`Request to get variable: ${key} failed with response message: ${err.message}`)
                 return new DVCVariable({
                     defaultValue,
@@ -52,10 +52,12 @@ export class DVCCloudClient {
     allVariables(user: DVCUser): Promise<DVCVariableSet> {
         const requestUser = new DVCPopulatedUser(user)
         return getAllVariables(requestUser, this.environmentKey, this.options)
-            .then((res: AxiosResponse) => {
-                return res.data || {}
+            .then(async (res: Response) => {
+                const variablesResponse = await res.json()
+
+                return variablesResponse || {}
             })
-            .catch((err: AxiosError) => {
+            .catch((err: Error) => {
                 this.logger.error(`Request to get all variable failed with response message: ${err.message}`)
                 return {}
             })
@@ -64,10 +66,12 @@ export class DVCCloudClient {
     allFeatures(user: DVCUser): Promise<DVCFeatureSet> {
         const requestUser = new DVCPopulatedUser(user)
         return getAllFeatures(requestUser, this.environmentKey, this.options)
-            .then((res: AxiosResponse) => {
-                return res.data || {}
+            .then(async (res: Response) => {
+                const featuresResponse = await res.json()
+                
+                return featuresResponse || {}
             })
-            .catch((err: AxiosError) => {
+            .catch((err: Error) => {
                 this.logger.error(`Request to get all features failed with response message: ${err.message}`)
                 return {}
             })

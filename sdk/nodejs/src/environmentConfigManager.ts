@@ -54,11 +54,11 @@ export class EnvironmentConfigManager {
 
     async _fetchConfig(): Promise<void> {
         const url = this.getConfigURL()
-        let res: AxiosResponse<ConfigBody> | null
+        let res: Response | null
         try {
             this.logger.debug(`Requesting new config for ${url}, etag: ${this.configEtag}`)
             res = await getEnvironmentConfig(url, this.requestTimeoutMS, this.configEtag)
-            this.logger.debug(`Downloaded config, status: ${res?.status}, etag: ${res?.headers?.etag}`)
+            this.logger.debug(`Downloaded config, status: ${res?.status}, etag: ${res?.headers.get('etag')}`)
         } catch (ex) {
             this.logger.error(`Request to get config failed for url: ${url}, ` +
                 `response message: ${ex.message}, response data ${ex?.response?.data}`)
@@ -68,9 +68,10 @@ export class EnvironmentConfigManager {
         if (res?.status === 304) {
             this.logger.debug(`Config not modified, using cache, etag: ${this.configEtag}`)
         } else if (res?.status === 200) {
-            getBucketingLib().setConfigData(this.environmentKey, JSON.stringify(res.data))
+            const projectConfig = await res.json()
+            getBucketingLib().setConfigData(this.environmentKey, JSON.stringify(projectConfig))
             this.hasConfig = true
-            this.configEtag = res?.headers?.etag
+            this.configEtag = res?.headers.get('etag') || ''
         } else if (this.hasConfig) {
             this.logger.error(`Failed to download config, using cached version. url: ${url}.`)
         } else {
