@@ -3,7 +3,7 @@
   "version": "1.0.31",
   "license": "MIT",
   "main": "index.cjs",
-  "types": "index.d.ts",
+  "types": "index.d.cts",
   "files": [
     "build/bucketing-lib.release*",
     "index*",

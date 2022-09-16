@@ -5,7 +5,7 @@ import {
     doesUserPassRolloutFromJSON,
     setPlatformData,
     setConfigData
-} from '../../build/bucketing-lib.debug'
+} from '../bucketingImportHelper'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config, barrenConfig } = testData
 
