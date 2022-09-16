@@ -1,4 +1,4 @@
-import { setPlatformData } from '../build/bucketing-lib.debug'
+import { setPlatformData } from './bucketingImportHelper'
 
 const defaultPlatformData = {
     platform: 'NodeJS',

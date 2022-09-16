@@ -1,5 +1,5 @@
 import testData from '../../../bucketing-test-data/json-data/testData.json'
-import { testConfigBodyClass } from '../../build/bucketing-lib.debug'
+import { testConfigBodyClass } from '../bucketingImportHelper'
 import _ from 'lodash'
 
 describe('Config Body', () => {

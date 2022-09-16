@@ -1,5 +1,5 @@
 import murmurhash from 'murmurhash'
-import { murmurhashV3_js } from '../../build/bucketing-lib.debug'
+import { murmurhashV3_js } from '../bucketingImportHelper'
 
 function randString(length: number) {
     let result = ''

@@ -3,13 +3,12 @@ const displayName = 'bucketing-lib-as'
 export default {
     displayName,
     preset: '../../../jest.preset.js',
-    extensionsToTreatAsEsm: ['.ts'],
     globals: {
         'ts-jest': {
-            useESM: true,
             tsconfig: '<rootDir>/tsconfig.spec.json',
         }
     },
+    setupFiles: ['<rootDir>/__tests__/setup.js'],
     testEnvironment: 'node',
     transformIgnorePatterns: [
         '<rootDir>/node_modules/(?!@assemblyscript/.*)'

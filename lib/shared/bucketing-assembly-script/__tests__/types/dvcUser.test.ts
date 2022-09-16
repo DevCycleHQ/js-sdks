@@ -1,4 +1,4 @@
-import { testDVCUserClass } from '../../build/bucketing-lib.debug'
+import { testDVCUserClass } from '../bucketingImportHelper'
 import { setPlatformDataJSON } from '../setPlatformData'
 
 setPlatformDataJSON()
