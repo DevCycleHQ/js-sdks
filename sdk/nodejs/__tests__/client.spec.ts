@@ -1,5 +1,6 @@
 import { getBucketingLib } from '../src/bucketing'
 import { DVCClient } from '../src/client'
+jest.mock('../src/bucketing')
 jest.mock('../src/environmentConfigManager')
 
 describe('DVCClient', () => {
