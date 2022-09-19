@@ -21,7 +21,7 @@
     "@nrwl/next": "13.8.5",
     "as-uuid": "^0.0.4",
     "as-wasi": "^0.4.6",
-    "assemblyscript": "https://github.com/DevCycleHQ/assemblyscript#56a01ceccab1f2836505b8cfcdeec366cb78883f",
+    "assemblyscript": "~0.21.3",
     "assemblyscript-json": "https://github.com/DevCycleHQ/assemblyscript-json",
     "assemblyscript-regex": "https://github.com/DevCycleHQ/assemblyscript-regex.git#fix-null-type-errors",
     "async": "^3.2.1",
