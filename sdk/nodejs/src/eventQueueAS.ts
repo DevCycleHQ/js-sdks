@@ -7,6 +7,7 @@ import { getBucketingLib } from './bucketing'
 import { EventQueueInterface } from './eventQueue'
 import { publishEvents } from './request'
 
+// test log
 type UserEventsBatchRecord = {
     user: DVCPopulatedUser,
     events: DVCRequestEvent[]
