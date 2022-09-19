@@ -48,7 +48,8 @@
       ],
       "options": {
         "jestConfig": "lib/shared/types/jest.config.ts",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "codeCoverage": true
       }
     }
   },
