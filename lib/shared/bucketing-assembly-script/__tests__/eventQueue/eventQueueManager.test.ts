@@ -14,6 +14,7 @@ import {
 import { FlushPayload } from '../../assembly/types'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
+import random_JSON from './random_json_2kb.json'
 
 let currentEnvKey: string | null = null
 const initEventQueue = (envKey: unknown, options: unknown) => {
@@ -508,6 +509,41 @@ describe('EventQueueManager Tests', () => {
                 }
             ])
             expect(payloads[0].records[0].user.user_id).toEqual('host.name')
+        })
+    })
+
+    describe('memory usage test', () => {
+        it('should save a large number of events to AS Event Queue', () => {
+            const envKey = 'env_key_memory_test'
+            const event = {
+                type: 'testType_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test_long_name',
+                target: 'testTarget_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
+                date: new Date(),
+                value: 10000,
+                metaData: random_JSON
+            }
+            const dvcUser = {
+                user_id: 'user_id_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
+                email: '_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
+                language: 'en',
+                country: 'CA',
+                appBuild: 1000000,
+                appVersion: '1000000.1000000.10099999',
+                deviceModel: 'deviceModel_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
+                customData: random_JSON,
+                privateCustomData: random_JSON
+            }
+
+            initSDK(envKey)
+            for (let i = 0; i < 2000; i++) {
+                event.target += i
+                dvcUser.user_id += i
+                queueEvent(envKey, dvcUser, event)
+            }
+
+            const payloads = flushEventQueue(envKey)
+            expect(eventQueueSize(envKey)).toEqual(2000)
+            expect(payloads.length).toEqual(20)
         })
     })
 })
