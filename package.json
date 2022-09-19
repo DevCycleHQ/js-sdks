@@ -12,7 +12,7 @@
     "lint": "nx run-many --parallel --target lint --all",
     "test": "nx run-many --parallel --target test --all",
     "affected:lint": "nx affected --base=origin/main --head=HEAD --target=lint --fix",
-    "affected:test": "nx affected --base=origin/main --head=HEAD --target=test --codeCoverage",
+    "affected:test": "nx affected --base=origin/main --head=HEAD --target=test",
     "npm-publish": "nx affected --base=origin/main~1 --target=npm-publish",
     "start": "nx serve",
     "lerna:version": "scripts/lerna-version.sh"

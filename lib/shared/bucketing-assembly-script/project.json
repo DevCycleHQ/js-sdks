@@ -31,7 +31,8 @@
       ],
       "options": {
         "jestConfig": "lib/shared/bucketing-assembly-script/jest.config.ts",
-        "passWithNoTests": false
+        "passWithNoTests": false,
+        "codeCoverage": false
       },
       "dependsOn": [
         {

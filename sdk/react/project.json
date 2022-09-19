@@ -53,7 +53,8 @@
       ],
       "options": {
         "jestConfig": "sdk/react/jest.config.ts",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "codeCoverage": true
       }
     },
     "npm-publish": {

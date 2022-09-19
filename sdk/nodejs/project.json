@@ -27,7 +27,8 @@
       ],
       "options": {
         "jestConfig": "sdk/nodejs/jest.config.ts",
-        "passWithNoTests": true
+        "passWithNoTests": false,
+        "codeCoverage": true
       },
       "dependsOn": [
         {
