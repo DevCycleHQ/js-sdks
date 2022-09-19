@@ -8236,16 +8236,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"assemblyscript@https://github.com/DevCycleHQ/assemblyscript#56a01ceccab1f2836505b8cfcdeec366cb78883f":
-  version: 0.0.0
-  resolution: "assemblyscript@https://github.com/DevCycleHQ/assemblyscript.git#commit=56a01ceccab1f2836505b8cfcdeec366cb78883f"
+"assemblyscript@npm:~0.21.3":
+  version: 0.21.3
+  resolution: "assemblyscript@npm:0.21.3"
   dependencies:
-    binaryen: 109.0.0-nightly.20220813
+    binaryen: 109.0.0-nightly.20220831
     long: ^5.2.0
   bin:
-    asc: ./bin/asc.js
-    asinit: ./bin/asinit.js
-  checksum: aa7259c7bedb66c7c8467736ad009cda7bb226adaeba072a57827edebbb54ff6f2f9e0318defbd7e2140c3d9ff3780e7531c50cbe58cfb49408963cb0d78d9e1
+    asc: bin/asc.js
+    asinit: bin/asinit.js
+  checksum: 31747c901c709db6fc5b0279d51f64b7d9d9d38acd1c175aabb2066dc2ed375ba91f81a0c01efddf4e8441481f5bbdd4063f455645aa92c7e8bc1fbe5eaeb343
   languageName: node
   linkType: hard
 
@@ -8821,13 +8821,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"binaryen@npm:109.0.0-nightly.20220813":
-  version: 109.0.0-nightly.20220813
-  resolution: "binaryen@npm:109.0.0-nightly.20220813"
+"binaryen@npm:109.0.0-nightly.20220831":
+  version: 109.0.0-nightly.20220831
+  resolution: "binaryen@npm:109.0.0-nightly.20220831"
   bin:
     wasm-opt: bin/wasm-opt
     wasm2js: bin/wasm2js
-  checksum: e6c9ba5b842c8a4dfba9d1256730b21d14eb3e239a6a4a3e03672b70b43fe4555df6989e239ff180a12af1638fcaf82fde380c9955629f1972e20f7428260172
+  checksum: da037846c7417f0666ced817382cb06bb16481ae2d87b883f2f65fff5c1b6f8d4159239962cd12f6d4e6d60d2fa40823eab886f90d51eca9121201748555a78d
   languageName: node
   linkType: hard
 
@@ -11198,7 +11198,7 @@ __metadata:
     "@typescript-eslint/parser": 5.33.1
     as-uuid: ^0.0.4
     as-wasi: ^0.4.6
-    assemblyscript: "https://github.com/DevCycleHQ/assemblyscript#56a01ceccab1f2836505b8cfcdeec366cb78883f"
+    assemblyscript: ~0.21.3
     assemblyscript-json: "https://github.com/DevCycleHQ/assemblyscript-json"
     assemblyscript-regex: "https://github.com/DevCycleHQ/assemblyscript-regex.git#fix-null-type-errors"
     async: ^3.2.1
