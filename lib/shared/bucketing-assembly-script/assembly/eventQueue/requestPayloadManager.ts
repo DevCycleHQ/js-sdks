@@ -33,10 +33,12 @@ export class RequestPayloadManager {
         aggEventQueue: AggEventQueue
     ): FlushPayload[] {
         this.checkForFailedPayloads()
+
         const records = this.constructBatchRecordsFromUserEvents(userEventQueue)
         records.push(this.constructBatchRecordsFromAggEvents(aggEventQueue))
         this.addEventRecordsToPendingPayloads(records)
 
+        this.updateFailedPayloads()
         return this.pendingPayloads.values()
     }
 
@@ -191,6 +193,17 @@ export class RequestPayloadManager {
         this.pendingPayloads.values().forEach((payload) => {
             if (payload.status !== 'failed') {
                 throw new Error(`Request Payload: ${payload.payloadId} has not finished sending`)
+            }
+        })
+    }
+
+    /**
+     * Update all the failed payload statuses to sending after generating all new payloads to be sent.
+     */
+    updateFailedPayloads(): void {
+        this.pendingPayloads.values().forEach((payload) => {
+            if (payload.status === 'failed') {
+                payload.status = 'sending'
             }
         })
     }

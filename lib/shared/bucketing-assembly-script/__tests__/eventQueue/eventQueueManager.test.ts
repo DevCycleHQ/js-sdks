@@ -309,6 +309,40 @@ describe('EventQueueManager Tests', () => {
             expect(nextFlush).toEqual([])
         })
 
+        it('should throw error if requeued payload hasn\'t finished sending', () => {
+            const envKey = 'env_key_requeued_failed_test'
+            const event = {
+                type: 'testType',
+                target: 'testTarget',
+                value: 10,
+                metaData: { test: 'data' }
+            }
+
+            initSDK(envKey, { eventRequestChunkSize: 10 })
+            for (let i = 0; i < 36; i++) {
+                event.target = `target_${i}`
+                queueEvent(envKey, dvcUser, event)
+            }
+
+            const payloads = flushEventQueue(envKey)
+            onPayloadSuccess(envKey, payloads[0].payloadId)
+            onPayloadFailure(envKey, payloads[1].payloadId, true)
+            onPayloadFailure(envKey, payloads[2].payloadId, false)
+            onPayloadFailure(envKey, payloads[3].payloadId, true)
+
+            for (let i = 0; i < 4; i++) {
+                event.target = `target_after_failed_${i}`
+                queueEvent(envKey, dvcUser, event)
+            }
+
+            const failedPayloads = flushEventQueue(envKey)
+            // failedPayloads[0] has not finished
+            onPayloadSuccess(envKey, failedPayloads[1].payloadId)
+            onPayloadSuccess(envKey, failedPayloads[2].payloadId)
+
+            expect(() => flushEventQueue(envKey)).toThrow('has not finished sending')
+        })
+
         it('should throw error if all payloads have not finished sending', () => {
             const envKey = 'env_key_flush_not_finished_test'
             const event = {
