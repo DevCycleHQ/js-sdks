@@ -30,8 +30,6 @@ export class EventQueueAS implements EventQueueInterface {
     private readonly logger: DVCLogger
     private readonly environmentKey: string
     eventFlushIntervalMS: number
-    disableAutomaticEventLogging: boolean
-    disableCustomEventLogging: boolean
     flushEventQueueSize: number
     maxEventQueueSize: number
     private flushInterval: NodeJS.Timer
@@ -46,9 +44,6 @@ export class EventQueueAS implements EventQueueInterface {
         } else if (this.eventFlushIntervalMS > (60 * 1000)) {
             throw new Error(`eventFlushIntervalMS: ${this.eventFlushIntervalMS} must be smaller than 1 minute`)
         }
-
-        this.disableAutomaticEventLogging = options?.disableAutomaticEventLogging || false
-        this.disableCustomEventLogging = options?.disableCustomEventLogging || false
 
         this.flushEventQueueSize = options?.flushEventQueueSize || 1000
         this.maxEventQueueSize = options?.maxEventQueueSize || 2000
