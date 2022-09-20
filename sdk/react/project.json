@@ -20,6 +20,7 @@
         "tsConfig": "sdk/react/tsconfig.lib.json",
         "project": "sdk/react/package.json",
         "entryFile": "sdk/react/src/index.ts",
+        "format": ["esm", "cjs"],
         "external": [
           "react/jsx-runtime"
         ],
