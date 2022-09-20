@@ -1,4 +1,4 @@
-import { instantiate, Exports } from '../index.cjs'
+import { instantiate, Exports } from '../index'
 
 async function initialize() {
     const methods = await instantiate()
