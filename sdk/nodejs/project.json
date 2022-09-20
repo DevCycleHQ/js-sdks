@@ -1,9 +1,6 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "sdk/nodejs/src",
-  "implicitDependencies": [
-    "shared-bucketing-as"
-  ],
   "targets": {
     "check-types": {
       "executor": "@nrwl/workspace:run-commands",
@@ -32,17 +29,7 @@
           "jestConfig": "sdk/nodejs/jest.config.ts",
           "passWithNoTests": false,
           "codeCoverage": true
-      },
-      "dependsOn": [
-          {
-              "target": "build",
-              "projects": "self"
-          },
-          {
-              "target": "build",
-              "projects": "dependencies"
-          }
-      ]
+      }
     },
     "build": {
       "executor": "@nrwl/js:tsc",

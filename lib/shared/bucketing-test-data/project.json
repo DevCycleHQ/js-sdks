@@ -23,7 +23,13 @@
         "outputPath": "dist/lib/shared/bucketing-test-data",
         "main": "lib/shared/bucketing-test-data/src/index.ts",
         "tsConfig": "lib/shared/bucketing-test-data/tsconfig.lib.json"
-      }
+      },
+      "dependsOn": [
+        {
+            "target": "build:json",
+            "projects": "self"
+        }
+      ]
     },
     "build:json": {
       "executor": "@nrwl/node:node",
