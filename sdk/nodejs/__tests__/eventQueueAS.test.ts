@@ -1,6 +1,3 @@
-import SegfaultHandler from 'segfault-handler'
-SegfaultHandler.registerHandler('segfault-crash.log')
-
 import { DVCPopulatedUser } from '../src/models/populatedUser'
 
 jest.mock('../src/request')
