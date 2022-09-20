@@ -2,8 +2,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "sdk/nodejs/src",
   "implicitDependencies": [
-    "shared-bucketing-as",
-    "shared-bucketing-test-data"
+    "shared-bucketing-as"
   ],
   "targets": {
     "check-types": {
@@ -40,7 +39,7 @@
               "projects": "self"
           },
           {
-              "target": "build:json",
+              "target": "build",
               "projects": "dependencies"
           }
       ]

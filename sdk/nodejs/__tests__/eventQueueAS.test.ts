@@ -20,6 +20,7 @@ const { config } = testData
 const publishEvents_mock = mocked(publishEvents, true)
 const defaultLogger = dvcDefaultLogger()
 
+
 describe('EventQueue Unit Tests', () => {
     const bucketedUserConfig: BucketedUserConfig = {
         environment: { _id: '', key: '' },
