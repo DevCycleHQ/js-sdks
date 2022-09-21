@@ -1,12 +1,7 @@
-jest.mock('axios')
-import axios, { AxiosInstance } from 'axios'
-import { mocked } from 'jest-mock'
+jest.mock('node-fetch-cjs')
+import fetch, { Response } from 'node-fetch-cjs'
 
-const axiosRequestMock = jest.fn()
-const createMock = mocked(axios.create, true)
-createMock.mockImplementation(() => {
-    return { request: axiosRequestMock } as unknown as AxiosInstance
-})
+const fetchRequestMock = fetch as jest.MockedFn<typeof fetch>
 
 import { dvcDefaultLogger } from '../src/utils/logger'
 const logger = dvcDefaultLogger()
@@ -14,7 +9,7 @@ import { publishEvents, getEnvironmentConfig, post, get } from '../src/request'
 
 describe('request.ts Unit Tests', () => {
     beforeEach(() => {
-        axiosRequestMock.mockReset()
+        fetchRequestMock.mockReset()
     })
 
     describe('publishEvents', () => {
@@ -26,40 +21,36 @@ describe('request.ts Unit Tests', () => {
 
     describe('getEnvironmentConfig', () => {
         it('should get environment config', async () => {
-            const config = {}
             const url = 'https://test.devcycle.com/config'
             const etag = 'etag_value'
-            axiosRequestMock.mockResolvedValue({ status: 200, config })
+            fetchRequestMock.mockResolvedValue(new Response('', { status: 200 }) as any)
 
             const res = await getEnvironmentConfig(url, 60000, etag)
             expect(res.status).toEqual(200)
-            expect(axiosRequestMock).toBeCalledWith({
+            expect(fetchRequestMock).toBeCalledWith(url, {
                 'headers': {
                     'If-None-Match': etag,
                 },
                 'method': 'GET',
-                'timeout': 60000,
-                'url': url,
+                'signal': expect.any(AbortSignal),
             })
         })
     })
 
     describe('get', () => {
         it('should make GET request', async () => {
-            await get({ url: 'https://test.com' })
-            expect(axiosRequestMock).toBeCalledWith(expect.objectContaining({
+            await get('https://test.com')
+            expect(fetchRequestMock).toBeCalledWith('https://test.com', expect.objectContaining({
                 method: 'GET',
-                url: 'https://test.com'
             }))
         })
     })
 
     describe('post', () => {
         it('should make POST request', async () => {
-            await post({ url: 'https://test.com' }, 'token')
-            expect(axiosRequestMock).toBeCalledWith(expect.objectContaining({
+            await post('https://test.com', {}, 'token')
+            expect(fetchRequestMock).toBeCalledWith('https://test.com', expect.objectContaining({
                 method: 'POST',
-                url: 'https://test.com',
                 headers: { 'Authorization': 'token' }
             }))
         })

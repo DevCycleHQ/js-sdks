@@ -1,6 +1,7 @@
 import { DVCEvent } from '../src/types'
 import * as DVC from '../src'
 import { server } from '../src/__mocks__/server'
+jest.unmock('node-fetch-cjs')
 
 let client: DVC.DVCCloudClient
 

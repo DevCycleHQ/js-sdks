@@ -105,7 +105,7 @@ export class EventQueue {
             try {
                 const res = await publishEvents(this.logger, this.environmentKey, flushPayload.records)
                 if (res.status !== 201) {
-                    this.logger.error(`Error publishing events, status: ${res.status}, body: ${res.body}`)
+                    this.logger.error(`Error publishing events, status: ${res.status}, body: ${await res.json()}`)
                     if (res.status >= 500) {
                         getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, true)
                     } else {

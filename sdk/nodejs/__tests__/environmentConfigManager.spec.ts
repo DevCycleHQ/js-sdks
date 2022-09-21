@@ -3,11 +3,11 @@ jest.useFakeTimers()
 jest.spyOn(global, 'setInterval')
 jest.mock('../src/bucketing')
 
+import { Response } from 'node-fetch-cjs'
 import { EnvironmentConfigManager } from '../src/environmentConfigManager'
 import { getEnvironmentConfig } from '../src/request'
 import { importBucketingLib, getBucketingLib } from '../src/bucketing'
 import { mocked } from 'jest-mock'
-import { AxiosResponse } from 'axios'
 import { dvcDefaultLogger } from '../src/utils/logger'
 
 const setInterval_mock = mocked(setInterval, true)
@@ -23,19 +23,18 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         setInterval_mock.mockReset()
     })
 
-    function mockAxiosResponse(obj: any): AxiosResponse {
-        return {
+    function mockFetchResponse(obj: any): Response {
+        return new Response('{}', {
             status: 200,
             statusText: '',
-            data: {},
             headers: {},
             config: {},
             ...obj
-        }
+        })
     }
 
     it('should build manager from constructor', async () => {
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 200 }))
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 200 }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {
             configPollingIntervalMS: 1000,
@@ -55,7 +54,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
     })
 
     it('should override the configPollingIntervalMS and configPollingTimeoutMS settings', () => {
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 200 }))
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 200 }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {
             configPollingIntervalMS: 10,
@@ -74,7 +73,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
     })
 
     it('should call fetch config on the interval period time', (done) => {
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 200 }))
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 200 }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {
             configPollingIntervalMS: 1000,
@@ -83,7 +82,8 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
         envConfig._fetchConfig()
 
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 304 }))
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 304 }))
+
         envConfig._fetchConfig()
 
         envConfig.cleanup()
@@ -98,7 +98,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
     })
 
     it('should throw error fetching config fails with 500 error', () => {
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 500 }))
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 500 }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {})
         expect(envConfig.fetchConfigPromise).rejects.toThrow('Failed to download DevCycle config.')
@@ -113,7 +113,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
 
     it('should use cached config if fetching config fails', async () => {
         const config = { config: {} }
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 200, data: config }))
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 200, data: config }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {
             configPollingIntervalMS: 1000,
@@ -122,7 +122,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
         await envConfig._fetchConfig()
 
-        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 500 }))
+        getEnvironmentConfig_mock.mockResolvedValue(mockFetchResponse({ status: 500 }))
         await envConfig._fetchConfig()
 
         envConfig.cleanup()

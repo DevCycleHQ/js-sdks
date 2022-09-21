@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios'
 import { ConfigBody, DVCLogger } from '@devcycle/types'
 import { DVCOptions } from './types'
-import { getEnvironmentConfig } from './request'
+import { FetchResponse, getEnvironmentConfig } from './request'
 import { getBucketingLib } from './bucketing'
 
 type ConfigPollingOptions = DVCOptions & {
@@ -54,7 +54,7 @@ export class EnvironmentConfigManager {
 
     async _fetchConfig(): Promise<void> {
         const url = this.getConfigURL()
-        let res: Response | null
+        let res: FetchResponse | null
         try {
             this.logger.debug(`Requesting new config for ${url}, etag: ${this.configEtag}`)
             res = await getEnvironmentConfig(url, this.requestTimeoutMS, this.configEtag)

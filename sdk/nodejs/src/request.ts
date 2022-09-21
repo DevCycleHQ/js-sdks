@@ -1,6 +1,7 @@
 import { SDKEventBatchRequestBody, DVCLogger } from '@devcycle/types'
 import { DVCPopulatedUser } from './models/populatedUser'
 import { DVCEvent, DVCOptions } from './types'
+import nodeFetch, { Response as NodeFetchResponse } from 'node-fetch-cjs'
 
 export const HOST = '.devcycle.com'
 export const EVENT_URL = 'https://events'
@@ -13,34 +14,38 @@ const TRACK_PATH = '/v1/track'
 const BUCKETING_URL = `${BUCKETING_BASE}${HOST}`
 const EDGE_DB_QUERY_PARAM = '?enableEdgeDB='
 
+type RequestConfig = (Pick<RequestInit, 'signal'> & {
+    body?: string
+    headers?: Record<string, string>
+}) | undefined
+
+export type FetchResponse = Response | NodeFetchResponse
+
 export async function publishEvents(
     logger: DVCLogger,
     envKey: string | null,
     eventsBatch: SDKEventBatchRequestBody
-): Promise<Response> {
+): Promise<FetchResponse> {
     if (!envKey) {
         throw new Error('DevCycle is not yet initialized to publish events.')
     }
 
     const eventUrl = `${EVENT_URL}${HOST}${EVENTS_PATH}`
-    const res = await post(eventUrl, {
-        data: { batch: eventsBatch }
+    return await post(eventUrl, {
+        body: JSON.stringify({ batch: eventsBatch })
     }, envKey)
-    if (res.status !== 201) {
-        logger.error(`Error posting events, status: ${res.status}, body: ${res.body}`)
-    } else {
-        logger.debug(`Posted Events, status: ${res.status}, body: ${res.body}`)
-    }
-
-    return res
 }
 
 export async function getEnvironmentConfig(
     url: string,
     requestTimeout: number,
     etag?: string
-): Promise<Response> {
-    const headers = etag ? { 'If-None-Match': etag } : {}
+): Promise<FetchResponse> {
+    const headers: Record<string, string> = {}
+
+    if (etag) {
+        headers['If-None-Match'] = etag
+    }
 
     return await getWithTimeout(url, {
         headers: headers
@@ -51,7 +56,7 @@ export async function getAllFeatures(
     user: DVCPopulatedUser,
     envKey: string,
     options: DVCOptions
-): Promise<Response> {
+): Promise<FetchResponse> {
     const baseUrl = `${options.apiProxyURL || BUCKETING_URL}${FEATURES_PATH}`
     const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
     return await post(postUrl, {
@@ -63,7 +68,7 @@ export async function getAllVariables(
     user: DVCPopulatedUser,
     envKey: string,
     options: DVCOptions
-): Promise<Response> {
+): Promise<FetchResponse> {
     const baseUrl = `${options.apiProxyURL || BUCKETING_URL}${VARIABLES_PATH}`
     const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
     return await post(postUrl, {
@@ -77,7 +82,7 @@ export async function getVariable(
     envKey: string,
     variableKey: string,
     options: DVCOptions
-): Promise<Response> {
+): Promise<FetchResponse> {
     const baseUrl = `${options.apiProxyURL || BUCKETING_URL}${VARIABLES_PATH}/${variableKey}`
     const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
     return await post(postUrl, {
@@ -107,41 +112,42 @@ export async function postTrack(
     }
 }
 
-export async function post(url: string, requestConfig: any, envKey: string): Promise<Response> {
+export async function post(url: string, requestConfig: RequestConfig, envKey: string): Promise<FetchResponse> {
     const _fetch = await getFetch()
-    const postHeaders = { ...requestConfig.headers, 'Authorization': envKey }
+    const headers = { ...requestConfig?.headers, 'Authorization': envKey }
     return await _fetch(url, {
         ...requestConfig,
-        postHeaders,
+        headers,
         method: 'POST'
-    }) as unknown as Response
+    })
 }
 
-export async function get(url: string, requestConfig: any): Promise<Response> {
+export async function get(url: string, requestConfig?: RequestConfig): Promise<FetchResponse> {
     const _fetch = await getFetch()
 
     return _fetch(url, {
         ...requestConfig,
         method: 'GET'
-    }) as unknown as Response
+    })
 }
 
-async function getWithTimeout(url: string, requestConfig: any, timeout: number): Promise<Response> {
+async function getWithTimeout(url: string, requestConfig: RequestConfig, timeout: number): Promise<FetchResponse> {
     const controller = new AbortController()
-    const id = setTimeout(() => controller.abort(), timeout)
+    const id = setTimeout(() => {
+        controller.abort()
+    }, timeout)
     const response = await get(url, {
-      ...requestConfig,
-      signal: controller.signal  
+        ...requestConfig,
+        signal: controller.signal
     })
     clearTimeout(id)
     return response
 }
 
-
-async function getFetch() {
-    if (typeof fetch !== undefined) {
+function getFetch() {
+    if (typeof fetch !== 'undefined') {
         return fetch
     }
 
-    return (await import('node-fetch')).default
+    return nodeFetch
 }
