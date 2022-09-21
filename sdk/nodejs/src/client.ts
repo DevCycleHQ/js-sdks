@@ -16,7 +16,7 @@ import { EventQueueAS } from './eventQueueAS'
 import { dvcDefaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
 import * as packageJson from '../package.json'
-import { importBucketingLib, getBucketingLib } from './bucketing'
+import { importBucketingLib, getBucketingLib, cleanupBucketingLib } from './bucketing'
 import { DVCLogger } from '@devcycle/types'
 import os from 'os'
 
@@ -86,7 +86,7 @@ export class DVCClient {
             })
 
         process.on('exit', () => {
-            this.configHelper?.cleanup()
+            this.close()
         })
     }
 
@@ -173,5 +173,12 @@ export class DVCClient {
 
     async flushEvents(callback?: () => void): Promise<void> {
         return this.eventQueue.flushEvents().then(callback)
+    }
+
+    async close(): Promise<void> {
+        await this.onInitialized
+        cleanupBucketingLib()
+        this.configHelper.cleanup()
+        this.eventQueue.cleanup()
     }
 }
