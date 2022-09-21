@@ -13,7 +13,8 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "../../../../scripts/npm-safe-publish.sh \"@devcycle/types\"",
-        "cwd": "dist/lib/shared/types"
+        "cwd": "dist/lib/shared/types",
+        "forwardAllArgs": true
       }
     },
     "build": {

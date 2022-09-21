@@ -65,7 +65,8 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/nodejs-server-sdk\"",
-        "cwd": "dist/sdk/nodejs"
+        "cwd": "dist/sdk/nodejs",
+        "forwardAllArgs": true
       }
     }
   },

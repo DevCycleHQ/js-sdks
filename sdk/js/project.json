@@ -7,7 +7,8 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/devcycle-js-sdk\"",
-        "cwd": "dist/sdk/js"
+        "cwd": "dist/sdk/js",
+        "forwardAllArgs": true
       }
     },
     "check-types": {
