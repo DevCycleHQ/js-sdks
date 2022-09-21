@@ -14,7 +14,8 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "../../../../scripts/npm-safe-publish.sh \"@devcycle/bucketing\"",
-        "cwd": "dist/lib/shared/bucketing"
+        "cwd": "dist/lib/shared/bucketing",
+        "forwardAllArgs": true
       }
     },
     "build": {
