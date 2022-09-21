@@ -14,7 +14,8 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "incremental": true
+    "incremental": true,
+    "moduleResolution": "node"
   },
   "include": [
     "**/*.ts",

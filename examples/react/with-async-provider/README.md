@@ -2,9 +2,7 @@
 Run the command below to get started:
 
 ## Installation
-```sh
-yarn
-```
+Install all packages using `yarn` in the root directory.
 
 ## Running the example
 
@@ -15,6 +13,6 @@ You can find this under Settings / Environments on the DevCycle dashboard.
 
 You can now start the app by running:
 ```sh 
-yarn start
+yarn nx serve example-react-with-async-provider
 ```
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [http://localhost:4200](http://localhost:4200) to view it in the browser.

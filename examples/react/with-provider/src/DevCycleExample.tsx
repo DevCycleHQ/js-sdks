@@ -1,5 +1,4 @@
-import { useVariable, useDVCClient } from '@devcycle/devcycle-react-sdk'
-import Button from 'react-bootstrap/Button'
+import { useVariable } from '@devcycle/devcycle-react-sdk'
 import React from 'react'
 
 export default function DevCycleExample(): React.ReactElement {
@@ -14,23 +13,9 @@ export default function DevCycleExample(): React.ReactElement {
     const variableNumber = useVariable( variableKeyNumber, 600)
     const variableBoolean = useVariable( variableKeyBoolean, false)
     const variableJsonString = useVariable(
-        variableKeyJsonString, 
+        variableKeyJsonString,
         { 'jsonStringKeyDefault':'json string value default' }
     )
-
-    const client = useDVCClient()
-
-    const identify = () => {
-        client?.identifyUser({
-            user_id: 'userId1',
-
-            isAnonymous: false
-        })
-    }
-
-    const reset = () => {
-        client?.resetUser()
-    }
 
     return (
         <div>
