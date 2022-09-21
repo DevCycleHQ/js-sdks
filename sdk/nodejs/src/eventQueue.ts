@@ -1,10 +1,10 @@
 import { DVCEvent } from './types'
-import { publishEvents } from './request'
-import { checkParamDefined, checkParamString } from './utils/paramUtils'
 import { DVCRequestEvent } from './models/requestEvent'
 import { DVCPopulatedUser } from './models/populatedUser'
 import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
-import { chunk } from 'lodash'
+
+import { getBucketingLib } from './bucketing'
+import { publishEvents } from './request'
 
 export const AggregateEventTypes: Record<string, string> = {
     variableEvaluated: 'variableEvaluated',
@@ -17,58 +17,63 @@ export const EventTypes: Record<string, string> = {
     ...AggregateEventTypes
 }
 
-type EventsMap = Record<string, Record<string, DVCRequestEvent>>
-type UserEventsMap = {
-    user: DVCPopulatedUser,
-    events: EventsMap
-}
-type AggregateUserEventMap = Record<string, UserEventsMap>
-
 type UserEventsBatchRecord = {
     user: DVCPopulatedUser,
     events: DVCRequestEvent[]
 }
-export type FlushPayload = UserEventsBatchRecord[]
-type UserEventQueue = Record<string, UserEventsBatchRecord>
+export type FlushPayload = {
+    payloadId: string,
+    eventCount: number,
+    records: UserEventsBatchRecord[]
+}
 
-type options = {
+export type EventQueueOptions = {
     eventFlushIntervalMS?: number,
     disableAutomaticEventLogging?: boolean,
-    disableCustomEventLogging?: boolean
+    disableCustomEventLogging?: boolean,
+    eventRequestChunkSize?: number,
+    maxEventQueueSize?: number,
+    flushEventQueueSize?: number
 }
 
-export interface EventQueueInterface {
-    cleanup(): void
-
-    flushEvents(): Promise<void>
-
-    queueEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void
-
-    queueAggregateEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void
-}
-
-export class EventQueue implements EventQueueInterface {
+export class EventQueue {
     private readonly logger: DVCLogger
     private readonly environmentKey: string
-    private userEventQueue: UserEventQueue
-    private aggregateUserEventMap: AggregateUserEventMap
     eventFlushIntervalMS: number
-    disableAutomaticEventLogging: boolean
-    disableCustomEventLogging: boolean
-    private flushInterval: NodeJS.Timer
+    flushEventQueueSize: number
     maxEventQueueSize: number
+    private flushInterval: NodeJS.Timer
+    private flushInProgress = false
 
-    constructor(logger: DVCLogger, environmentKey: string, options?: options) {
+    constructor(logger: DVCLogger, environmentKey: string, options: EventQueueOptions = {}) {
         this.logger = logger
         this.environmentKey = environmentKey
-        this.userEventQueue = {}
-        this.aggregateUserEventMap = {}
         this.eventFlushIntervalMS = options?.eventFlushIntervalMS || 10 * 1000
-        this.disableAutomaticEventLogging = options?.disableAutomaticEventLogging || false
-        this.disableCustomEventLogging = options?.disableCustomEventLogging || false
+        if (this.eventFlushIntervalMS < 500) {
+            throw new Error(`eventFlushIntervalMS: ${this.eventFlushIntervalMS} must be larger than 500ms`)
+        } else if (this.eventFlushIntervalMS > (60 * 1000)) {
+            throw new Error(`eventFlushIntervalMS: ${this.eventFlushIntervalMS} must be smaller than 1 minute`)
+        }
+
+        this.flushEventQueueSize = options?.flushEventQueueSize || 1000
+        this.maxEventQueueSize = options?.maxEventQueueSize || 2000
+        const chunkSize = options?.eventRequestChunkSize || 100
+        if (this.flushEventQueueSize >= this.maxEventQueueSize) {
+            throw new Error(`flushEventQueueSize: ${this.flushEventQueueSize} must be larger than ` +
+                `maxEventQueueSize: ${this.maxEventQueueSize}`)
+        } else if (this.flushEventQueueSize < chunkSize || this.maxEventQueueSize < chunkSize) {
+            throw new Error(`flushEventQueueSize: ${this.flushEventQueueSize} and ` +
+                `maxEventQueueSize: ${this.maxEventQueueSize} ` +
+                `must be smaller than eventRequestChunkSize: ${chunkSize}`)
+        } else if (this.flushEventQueueSize > 20000 || this.maxEventQueueSize > 20000) {
+            throw new Error(`flushEventQueueSize: ${this.flushEventQueueSize} or ` +
+                `maxEventQueueSize: ${this.maxEventQueueSize} ` +
+                'must be smaller than 20,000')
+        }
 
         this.flushInterval = setInterval(this.flushEvents.bind(this), this.eventFlushIntervalMS)
-        this.maxEventQueueSize = 1000
+
+        getBucketingLib().initEventQueue(environmentKey, JSON.stringify(options))
     }
 
     cleanup(): void {
@@ -79,139 +84,59 @@ export class EventQueue implements EventQueueInterface {
      * Flush events in queue to DevCycle Events API. Requeue events if flush fails
      */
     async flushEvents(): Promise<void> {
-        const flushPayloads = this.constructFlushPayloads(100)
-        if (!flushPayloads.length) {
-            return
+        let flushPayloadsStr
+        try {
+            flushPayloadsStr = getBucketingLib().flushEventQueue(this.environmentKey)
+        } catch (ex) {
+            this.logger.error(`DVC Error Flushing Events: ${ex.message}`)
         }
 
-        const innerReducer = (val: number, batch: UserEventsBatchRecord) => val + batch.events.length
-        const reducer = (val: number, batches: UserEventsBatchRecord[]) => val + batches.reduce(innerReducer, 0)
+        if (!flushPayloadsStr) return
+        this.logger.debug(`Flush Payloads: ${flushPayloadsStr}`)
+        const flushPayloads = JSON.parse(flushPayloadsStr) as FlushPayload[]
+        if (flushPayloads.length === 0) return
+
+        const reducer = (val: number, batches: FlushPayload) => val + batches.eventCount
         const eventCount = flushPayloads.reduce(reducer, 0)
         this.logger.debug(`DVC Flush ${eventCount} Events, for ${flushPayloads.length} Users`)
-
-        this.userEventQueue = {}
-        this.aggregateUserEventMap = {}
+        this.flushInProgress = true
 
         await Promise.all(flushPayloads.map(async (flushPayload) => {
             try {
-                const res = await publishEvents(this.logger, this.environmentKey, flushPayload)
+                const res = await publishEvents(this.logger, this.environmentKey, flushPayload.records)
                 if (res.status !== 201) {
-                    throw new Error(`Error publishing events, status: ${res.status}, body: ${res.data}`)
+                    this.logger.error(`Error publishing events, status: ${res.status}, body: ${res.data}`)
+                    if (res.status >= 500) {
+                        getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, true)
+                    } else {
+                        getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, false)
+                    }
                 } else {
-                    this.logger.debug(`DVC Flushed ${eventCount} Events, for ${chunk.length} Users`)
+                    this.logger.debug(`DVC Flushed ${eventCount} Events, for ${flushPayload.records.length} Users`)
+                    getBucketingLib().onPayloadSuccess(this.environmentKey, flushPayload.payloadId)
                 }
             } catch (ex) {
-                this.logger.error(`DVC Error Flushing Events response message: ${ex.message}, ` +
-                    `response data: ${ex?.response?.data}`)
-                this.requeueEvents(flushPayload)
+                this.logger.error(`DVC Error Flushing Events response message: ${ex.message}`)
+                getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, true)
             }
         }))
+        this.flushInProgress = false
     }
 
-    private requeueEvents(eventsBatches: UserEventsBatchRecord[]) {
-        this.requeueUserEvents(eventsBatches)
-        this.requeueAggUserEventMap(eventsBatches)
-    }
-
-    /**
-     * Requeue user events after failed request to DevCycle Events API.
-     */
-    private requeueUserEvents(eventsBatches: UserEventsBatchRecord[]) {
-        for (const batch of eventsBatches) {
-            for (const event of batch.events) {
-                if (!AggregateEventTypes[event.type]) {
-                    this.addEventToQueue(batch.user, event)
-                }
-            }
-        }
-    }
-
-    private checkIfEventLoggingDisabled(event: DVCEvent) {
-        if (!EventTypes[event.type]) {
-            return this.disableCustomEventLogging
-        } else {
-            return this.disableAutomaticEventLogging
-        }
-    }
     /**
      * Queue DVCAPIEvent for publishing to DevCycle Events API.
      */
-    queueEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void {
-        if (this.checkIfEventLoggingDisabled(event)) {
-            return
-        }
-
-        this.maxEventQueueSize = bucketedConfig?.project.settings.sdkSettings?.eventQueueLimit ?? this.maxEventQueueSize
-
-        this.addEventToQueue(user, new DVCRequestEvent(event, user.user_id, bucketedConfig?.featureVariationMap))
-    }
-
-    private addEventToQueue(user: DVCPopulatedUser, event: DVCRequestEvent) {
-        if (this.eventQueueSize() >= this.maxEventQueueSize) {
+    queueEvent(user: DVCPopulatedUser, event: DVCEvent): void {
+        if (this.checkEventQueueSize()) {
             this.logger.warn(`Max event queue size reached, dropping event: ${event}`)
-            this.flushEvents()
-            return
-        }
-        let userEvents = this.userEventQueue[user.user_id]
-        if (!userEvents) {
-            userEvents = this.userEventQueue[user.user_id] = {
-                user,
-                events: []
-            }
-        } else {
-            // Save updated User every time.
-            userEvents.user = user
-        }
-
-        userEvents.events.push(event)
-    }
-
-    /**
-     * Requeue aggregated user event map after failed request to DevCycle Events API.
-     */
-    private requeueAggUserEventMap(eventsBatches: UserEventsBatchRecord[]) {
-        for (const batch of eventsBatches) {
-            for (const event of batch.events) {
-                if (AggregateEventTypes[event.type]) {
-                    this.saveAggUserEvent(batch.user, event)
-                }
-            }
-        }
-    }
-
-    /**
-     * Save aggregated user event (i.e. variableEvaluated / variableDefaulted) to userEventMap.
-     */
-    private saveAggUserEvent(user: DVCPopulatedUser, event: DVCRequestEvent) {
-        const { target } = event
-        if (!target) return
-
-        if (this.eventQueueSize() >= this.maxEventQueueSize) {
-            this.logger.warn(`Max event queue size reached, dropping aggregate event: ${event}`)
-            this.flushEvents()
             return
         }
 
-        let userEventMap = this.aggregateUserEventMap[user.user_id]
-        if (!userEventMap) {
-            userEventMap = this.aggregateUserEventMap[user.user_id] = {
-                user,
-                events: {}
-            }
-        } else {
-            // Always keep the latest user object
-            userEventMap.user = user
-        }
-
-        const aggEventType = userEventMap.events[event.type]
-        const aggEvent = aggEventType?.[target]
-        if (!aggEventType) {
-            userEventMap.events[event.type] = { [target]: event }
-        } else if (aggEvent && aggEvent.value) {
-            aggEvent.value += event.value || 1
-        } else {
-            aggEventType[target] = event
-        }
+        getBucketingLib().queueEvent(
+            this.environmentKey,
+            JSON.stringify(user),
+            JSON.stringify(event)
+        )
     }
 
     /**
@@ -219,96 +144,29 @@ export class EventQueue implements EventQueueInterface {
      * by incrementing the 'value' field.
      */
     queueAggregateEvent(user: DVCPopulatedUser, event: DVCEvent, bucketedConfig?: BucketedUserConfig): void {
-        if (this.checkIfEventLoggingDisabled(event)) {
+        if (this.checkEventQueueSize()) {
+            this.logger.warn(`Max event queue size reached, dropping aggregate event: ${event}`)
             return
         }
-        this.maxEventQueueSize = bucketedConfig?.project.settings.sdkSettings?.eventQueueLimit ?? this.maxEventQueueSize
 
-        checkParamDefined('user_id', user?.user_id)
-        checkParamDefined('type', event.type)
-        checkParamDefined('target', event.target)
-        checkParamString('target', event.target)
-        const eventCopy = { ...event }
-        eventCopy.date = Date.now()
-        eventCopy.value = 1
-
-        const requestEvent = new DVCRequestEvent(eventCopy, user.user_id, bucketedConfig?.featureVariationMap)
-        this.saveAggUserEvent(user, requestEvent)
+        getBucketingLib().queueAggregateEvent(
+            this.environmentKey,
+            JSON.stringify(event),
+            JSON.stringify(bucketedConfig?.variableVariationMap || {})
+        )
     }
 
-    /**
-     * Turn the set of pending events in the queue (plain and aggregate events) into a set of
-     * FlushPayloads for publishing. Each payload can only contain at most "chunkSize" events.
-     * Uses an "aggregator" object to collect the pairings of events and users together. If the number of events
-     * collected exceeds the chunkSize, a new aggregator will be started. Each aggregator will correspond to a
-     * distinct request to the events api
-     */
-    private constructFlushPayloads(chunkSize: number): FlushPayload[] {
-        const payloadAggregator: Record<string, UserEventsBatchRecord> = {}
-        let currentUserRequestAggregator = payloadAggregator
-
-        const flushAggregators: (typeof payloadAggregator)[] = [payloadAggregator]
-
-        let eventCount = 0
-
-        const addEventToCurrentAggregator = (user: DVCPopulatedUser, events: DVCRequestEvent[]) => {
-            const existingUserRequestEvents = currentUserRequestAggregator[user.user_id]
-
-            if (!existingUserRequestEvents) {
-                currentUserRequestAggregator[user.user_id] = {
-                    user,
-                    events: []
-                }
+    private checkEventQueueSize(): boolean {
+        const queueSize = getBucketingLib().eventQueueSize(this.environmentKey)
+        if (queueSize >= this.flushEventQueueSize) {
+            if (!this.flushInProgress) {
+                this.flushEvents()
             }
 
-            for (const event of events) {
-                eventCount++
-
-                if (eventCount > chunkSize) {
-                    currentUserRequestAggregator = {
-                        [user.user_id]: {
-                            user,
-                            events: []
-                        }
-                    }
-                    flushAggregators.push(currentUserRequestAggregator)
-                    eventCount = 1
-                }
-
-                currentUserRequestAggregator[user.user_id].events.push(event)
+            if (queueSize >= this.maxEventQueueSize) {
+                return true
             }
         }
-
-        for (const user_id in this.userEventQueue) {
-            const userEventsRecord = this.userEventQueue[user_id]
-            addEventToCurrentAggregator(userEventsRecord.user, userEventsRecord.events)
-        }
-
-        for (const user_id in this.aggregateUserEventMap) {
-            const aggUserEventsRecord = this.aggregateUserEventMap[user_id]
-
-            addEventToCurrentAggregator(
-                aggUserEventsRecord.user,
-                this.eventsFromAggregateEventMap(aggUserEventsRecord.events)
-            )
-        }
-
-        return flushAggregators.map((aggregator) => Object.values(aggregator))
-    }
-
-    /**
-     * Convert aggregated events map into array of individual events for publishing
-     */
-    private eventsFromAggregateEventMap(eventsMap: EventsMap): DVCRequestEvent[] {
-        return Object.values(eventsMap).map((typeMap) => Object.values(typeMap)).flat()
-    }
-
-    private eventQueueSize(): number {
-        const userEventQueueSize = Object.values(this.userEventQueue)
-            .reduce<number>((prev, curr) => prev + curr.events.length, 0)
-        const aggregateEventQueueSize = Object.keys(this.aggregateUserEventMap).reduce<number>((prev, curr) => {
-            return prev + this.eventsFromAggregateEventMap(this.aggregateUserEventMap[curr].events).length
-        }, 0)
-        return userEventQueueSize + aggregateEventQueueSize
+        return false
     }
 }

@@ -119,11 +119,6 @@ export interface DVCOptions {
      * Allows the SDK to communicate with a proxy of DVC bucketing API / client SDK API.
      */
     apiProxyURL?: string
-
-    /**
-     * Switch to use new AssemblyScript EventQueue for testing
-     */
-    useASEventQueue?: boolean
 }
 
 export type DVCVariableValue = string | number | boolean | JSON

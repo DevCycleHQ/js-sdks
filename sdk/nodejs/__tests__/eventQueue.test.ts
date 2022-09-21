@@ -2,7 +2,7 @@ import { DVCPopulatedUser } from '../src/models/populatedUser'
 
 jest.mock('../src/request')
 import { AxiosResponse } from 'axios'
-import { EventQueueAS as EventQueue, EventQueueASOptions } from '../src/eventQueueAS'
+import { EventQueue, EventQueueOptions } from '../src/eventQueue'
 import { EventTypes } from '../src/eventQueue'
 import { publishEvents } from '../src/request'
 import { BucketedUserConfig, DVCLogger, PublicProject } from '@devcycle/types'
@@ -63,7 +63,7 @@ describe('EventQueue Unit Tests', () => {
     })
 
     let currentEventKey = ''
-    const initEventQueue = (envKey: string, options?: EventQueueASOptions, logger?: DVCLogger): EventQueue => {
+    const initEventQueue = (envKey: string, options?: EventQueueOptions, logger?: DVCLogger): EventQueue => {
         getBucketingLib().setConfigData(envKey, JSON.stringify(config))
         currentEventKey = envKey
         return new EventQueue(logger || defaultLogger, envKey, options)
@@ -638,7 +638,7 @@ describe('EventQueue Unit Tests', () => {
         })
     })
 
-    describe('EventQueueAS init validation', () => {
+    describe('EventQueue init validation', () => {
         it('should validate flushEventsMS', () => {
             expect(() => new EventQueue(defaultLogger, 'test', { eventFlushIntervalMS: 400 }))
                 .toThrow('eventFlushIntervalMS: 400 must be larger than 500ms')

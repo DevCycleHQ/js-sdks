@@ -3,6 +3,7 @@ import { DVCClient } from '../src/client'
 
 jest.mock('../src/bucketing')
 jest.mock('../src/environmentConfigManager')
+jest.mock('../src/eventQueue')
 
 describe('DVCClient', () => {
     it('imports bucketing lib on initialize', async () => {
@@ -52,7 +53,7 @@ describe('variable', () => {
             // @ts-ignore
             expect(client.eventQueue.queueAggregateEvent)
                 .toBeCalledWith(expectedUser,
-                    { type: 'variableEvaluated', target: 'test-key' },
+                    { type: 'aggVariableEvaluated', target: 'test-key' },
                     { 'variables': { ['test-key']: true } }
                 )
         })
@@ -63,7 +64,7 @@ describe('variable', () => {
             // @ts-ignore
             expect(client.eventQueue.queueAggregateEvent)
                 .toBeCalledWith(expectedUser,
-                    { type: 'variableDefaulted', target: 'test-key-not-in-config' },
+                    { type: 'aggVariableDefaulted', target: 'test-key-not-in-config' },
                     { 'variables': { ['test-key']: true } }
                 )
         })
