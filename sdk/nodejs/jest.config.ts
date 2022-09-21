@@ -9,6 +9,7 @@ export default {
     transform: {
         '^.+\\.[tj]sx?$':  'ts-jest'
     },
+    testEnvironment: 'node',
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     collectCoverage: true,
     collectCoverageFrom: [
