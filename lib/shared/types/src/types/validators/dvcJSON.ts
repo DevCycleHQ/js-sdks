@@ -1,5 +1,5 @@
 import { isString, isNumber, isBoolean, isPlainObject, isNull, isUndefined } from 'lodash'
-import { registerDecorator, ValidationOptions } from 'class-validator'
+import { registerDecorator, ValidationOptions } from '@nestjs/class-validator'
 
 export type DVCJSON = { [key: string]: string | number | boolean }
 

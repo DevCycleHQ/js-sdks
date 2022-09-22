@@ -6,7 +6,7 @@ import { VariableValue } from '../../config/models'
 import {
     IsDate, IsOptional, IsNumber, IsBoolean,
     IsString, IsIn, IsNotEmpty, IsISO31661Alpha2
-} from 'class-validator'
+} from '@nestjs/class-validator'
 import { Transform, Type } from 'class-transformer'
 import 'reflect-metadata'
 import { DVCJSON, IsDVCJSONObject } from '../../validators/dvcJSON'

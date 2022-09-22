@@ -1,4 +1,4 @@
-import { ValidationOptions, ValidateBy, buildMessage } from 'class-validator'
+import { ValidationOptions, ValidateBy, buildMessage } from '@nestjs/class-validator'
 import ISO6391 from 'iso-639-1'
 
 export const IS_ISO6391 = 'isISO6391'

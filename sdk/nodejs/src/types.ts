@@ -67,6 +67,17 @@ export interface DVCOptions {
     logLevel?: DVCDefaultLogLevel
 
     /**
+     * Switches the SDK to use Cloud Bucketing (via the DevCycle Bucketing API) instead of Local Bucketing.
+     */
+    enableCloudBucketing?: boolean
+
+    /**
+     * Enables the usage of EdgeDB for DevCycle that syncs User Data to DevCycle.
+     * NOTE: This is only available with Cloud Bucketing.
+     */
+    enableEdgeDB?: boolean
+
+    /**
      * Controls the polling interval in milliseconds to fetch new environment config changes, defaults to 10 seconds.
      * @min 1000
      */
@@ -85,7 +96,7 @@ export interface DVCOptions {
     eventFlushIntervalMS?: number
 
     /**
-     * Disables logging of sdk generated events (e.g. variableEvaluated, variableDefaulted) to DevCycle.
+     * Disables logging of sdk generated events (e.g. aggVariableEvaluated, aggVariableDefaulted) to DevCycle.
      */
     disableAutomaticEventLogging?: boolean
 
@@ -95,25 +106,14 @@ export interface DVCOptions {
     disableCustomEventLogging?: boolean
 
     /**
-     * Controls the maximum size the event queue can grow to until events are dropped.
-     */
-    maxEventQueueSize?: number
-
-    /**
-     * Controls the maximum size the event queue can grow to until a flush is forced.
+     * Controls the maximum size the event queue can grow to until a flush is forced. Defaults to `1000`.
      */
     flushEventQueueSize?: number
 
     /**
-     * Switches the SDK to use Cloud Bucketing (via the DevCycle Bucketing API) instead of Local Bucketing.
+     * Controls the maximum size the event queue can grow to until events are dropped. Defaults to `2000`.
      */
-    enableCloudBucketing?: boolean
-
-    /**
-     * Enables the usage of EdgeDB for DevCycle that syncs User Data to DevCycle.
-     * NOTE: This is only available with Cloud Bucketing.
-     */
-    enableEdgeDB?: boolean
+    maxEventQueueSize?: number
 
     /**
      * Allows the SDK to communicate with a proxy of DVC bucketing API / client SDK API.
