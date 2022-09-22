@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@nestjs/class-validator": "*",
     "react": "*",
     "react-native": "*",
     "react-native-config": "*",
@@ -13,7 +14,6 @@
     "hoist-non-react-statics": "*",
     "ts-jest": "*",
     "axios": "*",
-    "class-validator": "*",
     "reflect-metadata": "*",
     "lodash": "*",
     "class-transformer": "*",

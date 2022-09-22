@@ -1,5 +1,5 @@
 import { DVCAPIUser } from './clientSDKAPI'
-import { IsArray, IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, ValidateNested } from 'class-validator'
+import { IsArray, IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, ValidateNested } from '@nestjs/class-validator'
 import { Type } from 'class-transformer'
 
 /**

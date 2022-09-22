@@ -1,4 +1,4 @@
-import { registerDecorator, ValidationOptions } from 'class-validator'
+import { registerDecorator, ValidationOptions } from '@nestjs/class-validator'
 
 /**
  * Validates that string is not filled with spaces
