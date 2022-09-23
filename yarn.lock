@@ -4785,7 +4785,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/cli@npm:14.7.11, @nrwl/cli@npm:~14.7.5":
+"@nrwl/cli@npm:14.7.11":
   version: 14.7.11
   resolution: "@nrwl/cli@npm:14.7.11"
   dependencies:
@@ -4794,7 +4794,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/cypress@npm:14.7.11, @nrwl/cypress@npm:~14.7.5":
+"@nrwl/cypress@npm:14.7.11":
   version: 14.7.11
   resolution: "@nrwl/cypress@npm:14.7.11"
   dependencies:
@@ -4823,7 +4823,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/detox@npm:14.7.11, @nrwl/detox@npm:~14.7.5":
+"@nrwl/detox@npm:14.7.11":
   version: 14.7.11
   resolution: "@nrwl/detox@npm:14.7.11"
   dependencies:
@@ -4839,7 +4839,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/devkit@npm:14.7.11, @nrwl/devkit@npm:~14.7.5":
+"@nrwl/devkit@npm:14.7.11":
   version: 14.7.11
   resolution: "@nrwl/devkit@npm:14.7.11"
   dependencies:
@@ -4853,7 +4853,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/eslint-plugin-nx@npm:~14.7.5":
+"@nrwl/eslint-plugin-nx@npm:14.7.11":
   version: 14.7.11
   resolution: "@nrwl/eslint-plugin-nx@npm:14.7.11"
   dependencies:
@@ -4873,7 +4873,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/jest@npm:14.7.11, @nrwl/jest@npm:~14.7.5":
+"@nrwl/jest@npm:14.7.11":
   version: 14.7.11
   resolution: "@nrwl/jest@npm:14.7.11"
   dependencies:
@@ -4893,7 +4893,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/js@npm:14.7.11, @nrwl/js@npm:~14.7.5":
+"@nrwl/js@npm:14.7.11":
   version: 14.7.11
   resolution: "@nrwl/js@npm:14.7.11"
   dependencies:
@@ -4914,7 +4914,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/linter@npm:14.7.11, @nrwl/linter@npm:~14.7.5":
+"@nrwl/linter@npm:14.7.11":
   version: 14.7.11
   resolution: "@nrwl/linter@npm:14.7.11"
   dependencies:
@@ -4933,7 +4933,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/next@npm:~14.7.5":
+"@nrwl/next@npm:14.7.11":
   version: 14.7.11
   resolution: "@nrwl/next@npm:14.7.11"
   dependencies:
@@ -4961,7 +4961,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/node@npm:~14.7.5":
+"@nrwl/node@npm:14.7.11":
   version: 14.7.11
   resolution: "@nrwl/node@npm:14.7.11"
   dependencies:
@@ -4977,7 +4977,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/react-native@npm:~14.7.5":
+"@nrwl/react-native@npm:14.7.11":
   version: 14.7.11
   resolution: "@nrwl/react-native@npm:14.7.11"
   dependencies:
@@ -5002,7 +5002,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/react@npm:14.7.11, @nrwl/react@npm:~14.7.5":
+"@nrwl/react@npm:14.7.11":
   version: 14.7.11
   resolution: "@nrwl/react@npm:14.7.11"
   dependencies:
@@ -5086,7 +5086,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/web@npm:14.7.11, @nrwl/web@npm:~14.7.5":
+"@nrwl/web@npm:14.7.11":
   version: 14.7.11
   resolution: "@nrwl/web@npm:14.7.11"
   dependencies:
@@ -5171,7 +5171,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/workspace@npm:14.7.11, @nrwl/workspace@npm:~14.7.5":
+"@nrwl/workspace@npm:14.7.11":
   version: 14.7.11
   resolution: "@nrwl/workspace@npm:14.7.11"
   dependencies:
@@ -10825,20 +10825,20 @@ __metadata:
     "@commitlint/cli": ^16.2.3
     "@commitlint/config-conventional": ^16.2.1
     "@nestjs/class-validator": ^0.13.4
-    "@nrwl/cli": ~14.7.5
-    "@nrwl/cypress": ~14.7.5
-    "@nrwl/detox": ~14.7.5
-    "@nrwl/devkit": ~14.7.5
-    "@nrwl/eslint-plugin-nx": ~14.7.5
-    "@nrwl/jest": ~14.7.5
-    "@nrwl/js": ~14.7.5
-    "@nrwl/linter": ~14.7.5
-    "@nrwl/next": ~14.7.5
-    "@nrwl/node": ~14.7.5
-    "@nrwl/react": ~14.7.5
-    "@nrwl/react-native": ~14.7.5
-    "@nrwl/web": ~14.7.5
-    "@nrwl/workspace": ~14.7.5
+    "@nrwl/cli": 14.7.11
+    "@nrwl/cypress": 14.7.11
+    "@nrwl/detox": 14.7.11
+    "@nrwl/devkit": 14.7.11
+    "@nrwl/eslint-plugin-nx": 14.7.11
+    "@nrwl/jest": 14.7.11
+    "@nrwl/js": 14.7.11
+    "@nrwl/linter": 14.7.11
+    "@nrwl/next": 14.7.11
+    "@nrwl/node": 14.7.11
+    "@nrwl/react": 14.7.11
+    "@nrwl/react-native": 14.7.11
+    "@nrwl/web": 14.7.11
+    "@nrwl/workspace": 14.7.11
     "@react-native-async-storage/async-storage": ^1.17.7
     "@react-native-community/cli": ^9.0.0
     "@react-native-community/cli-platform-android": ^9.0.0
@@ -10911,7 +10911,7 @@ __metadata:
     murmurhash: ^2.0.0
     next: 12.2.5
     npm-run-all: ^4.1.5
-    nx: ~14.7.5
+    nx: 14.7.11
     prettier: ^2.7.1
     prettier-eslint: ~12.0.0
     prettier-eslint-cli: ~5.0.1
@@ -18697,7 +18697,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:14.7.11, nx@npm:>=14.6.1 < 16, nx@npm:~14.7.5":
+"nx@npm:14.7.11":
   version: 14.7.11
   resolution: "nx@npm:14.7.11"
   dependencies:
