@@ -16,10 +16,10 @@ export class AppElement extends HTMLElement {
 
     connectedCallback(): void {
         const titleVariable = client.variable('titlevariable', 'Welcome 👋')
-        const variableKey = client.variable('feature-release', 'feature-release')
+        const variableKey = client.variable('feature-release', true)
         const variableKeyString = client.variable('variable-key-string', 'green')
         const variableKeyNumber = client.variable('variable-key-number', 600)
-        const variableKeyBoolean = client.variable('variable-key-boolean', true)
+        const variableKeyBoolean = client.variable('variable-key-boolean', false)
         const variableKeyJsonString = client.variable('variable-json-key-string', { 'jsonStringKeyDefault':'json string value default' })
 
         this.innerHTML = `
