@@ -379,4 +379,11 @@ export interface BucketedUserConfig {
      * requests for new Variables for known variables.
      */
     knownVariableKeys: number[]
+
+    /**
+     * Information about how to establish a streaming connection to receive config updates
+     */
+    sse?: {
+        url?: string
+    }
 }

@@ -1,6 +1,6 @@
 // DVC Logger Shared types, used by JS and NodeJS SDKs
 export interface DVCLogger {
-  error(message: string): void
+  error(message: string, error?: unknown): void
 
   warn(message: string): void
 

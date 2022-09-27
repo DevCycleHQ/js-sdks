@@ -19,6 +19,7 @@ import { BucketedUserConfig, VariableType, VariableValue } from '@devcycle/types
 import { RequestConsolidator } from './RequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
+import { StreamingConnection } from './StreamingConnection'
 
 export class DVCClient implements Client {
     private options: DVCOptions
@@ -32,6 +33,7 @@ export class DVCClient implements Client {
     eventQueue: EventQueue
     requestConsolidator: RequestConsolidator
     eventEmitter: EventEmitter
+    streamingConnection?: StreamingConnection
 
     constructor(environmentKey: string, user: DVCPopulatedUser, options: DVCOptions = {}) {
         this.user = user
@@ -42,14 +44,6 @@ export class DVCClient implements Client {
         this.requestConsolidator = new RequestConsolidator()
         this.eventEmitter = new EventEmitter()
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
-        const stubbedLocalStorage = {
-            getItem: () => null,
-            setItem: () => undefined,
-            removeItem: () => undefined,
-            clear: () => undefined,
-            key: () => null,
-            length: 0
-        }
         this.store = new Store(typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger)
 
         this.store.saveUser(this.user)
@@ -73,6 +67,15 @@ export class DVCClient implements Client {
                 this.eventEmitter.emitFeatureUpdates(oldConfig?.features || {}, this.config.features)
                 this.eventEmitter.emitVariableUpdates(oldConfig?.variables || {},
                     this.config.variables, this.variableDefaultMap)
+
+                if (this.config.sse?.url) {
+                    this.streamingConnection = new StreamingConnection(
+                        this.config.sse?.url,
+                        this.onSSEMessage.bind(this),
+                        this.logger
+                    )
+                }
+
                 return this
             })
             .catch((err) => {
@@ -120,7 +123,7 @@ export class DVCClient implements Client {
 
         try {
             const variableFromConfig = this.config?.variables?.[key]
-            
+
             this.eventQueue.queueAggregateEvent({
                 type: variable.isDefaulted
                     ? EventTypes.variableDefaulted
@@ -280,6 +283,10 @@ export class DVCClient implements Client {
     flushEvents(callback?: () => void): Promise<void> {
         return this.eventQueue.flushEvents().then(() => callback?.())
     }
+
+    private onSSEMessage = (message: string) => {
+        // TODO implement
+    }
 }
 
 const checkIfEdgeEnabled = (
@@ -308,4 +315,13 @@ const getTypeFromDefaultValue = (defaultValue: VariableValue, key: string, logge
         logger.warn(`The default value for variable ${key} is not of type Boolean, Number, String, or JSON`)
         return undefined
     }
+}
+
+const stubbedLocalStorage = {
+    getItem: () => null,
+    setItem: () => undefined,
+    removeItem: () => undefined,
+    clear: () => undefined,
+    key: () => null,
+    length: 0
 }

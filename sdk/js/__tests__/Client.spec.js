@@ -5,6 +5,7 @@ import { DVCVariable } from '../src/Variable'
 import { DVCPopulatedUser } from '../src/User'
 
 jest.mock('../src/Request')
+jest.mock('../src/StreamingConnection')
 const getConfigJson_mock = mocked(getConfigJson)
 const saveEntity_mock = mocked(saveEntity)
 
@@ -49,6 +50,16 @@ describe('DVCClient tests', () => {
         await client.onInitialized
         expect(getConfigJson_mock.mock.calls.length).toBe(1)
         expect(client.config).toStrictEqual(testConfig)
+    })
+
+    it('should establish a streaming connection if available', async () => {
+        getConfigJson_mock.mockImplementation(() => {
+            return Promise.resolve({...testConfig, sse: {url: 'example.com'}})
+        })
+        const client = new DVCClient('test_env_key', { user_id: 'user1' })
+        expect(getConfigJson_mock).toBeCalled()
+        await client.onInitialized
+        expect(client.streamingConnection).toBeDefined()
     })
 
     it('should send the edgedb parameter when enabled, then save user', async () => {
