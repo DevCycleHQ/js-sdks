@@ -16,13 +16,15 @@ export function dvcDefaultLogger(options?: DVCDefaultLoggerOptions): DVCLogger {
         ? DVCLogLevels[options?.level]
         : DVCLogLevels.error
     const logWriter = options?.logWriter || console.log
+    const errorWriter = options?.logWriter || console.error
 
     const writeLog = (message: string): void => logWriter(prefix + message)
+    const writeError = (message: string, error: unknown): void => errorWriter(prefix + message, error)
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     const noOpLog = (message: string): void => { }
 
     return {
-        error: DVCLogLevels.error >= minLevel ? writeLog : noOpLog,
+        error: DVCLogLevels.error >= minLevel ? writeError : noOpLog,
         warn: DVCLogLevels.warn >= minLevel ? writeLog : noOpLog,
         info: DVCLogLevels.info >= minLevel ? writeLog : noOpLog,
         debug: DVCLogLevels.debug >= minLevel ? writeLog : noOpLog,
