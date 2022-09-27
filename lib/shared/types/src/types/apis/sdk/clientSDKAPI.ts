@@ -386,4 +386,10 @@ export interface BucketedUserConfig {
     sse?: {
         url?: string
     }
+
+    /**
+     * the etag representing the CDN config used to generate this bucketed config. Can be used to determine config
+     * staleness.
+     */
+    etag?: string
 }

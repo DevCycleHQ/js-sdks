@@ -16,7 +16,7 @@ import { EventQueue, EventTypes } from './EventQueue'
 import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
 import { BucketedUserConfig, VariableType, VariableValue } from '@devcycle/types'
-import { RequestConsolidator } from './RequestConsolidator'
+import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
@@ -26,12 +26,13 @@ export class DVCClient implements Client {
     private onInitialized: Promise<DVCClient>
     private variableDefaultMap: { [key: string]: { [key: string]: DVCVariable } }
     private environmentKey: string
+    private userSaved = false
     logger: DVCLogger
     config?: BucketedUserConfig
     user: DVCPopulatedUser
     store: Store
     eventQueue: EventQueue
-    requestConsolidator: RequestConsolidator
+    requestConsolidator: ConfigRequestConsolidator
     eventEmitter: EventEmitter
     streamingConnection?: StreamingConnection
 
@@ -41,36 +42,22 @@ export class DVCClient implements Client {
         this.environmentKey = environmentKey
         this.variableDefaultMap = {}
         this.eventQueue = new EventQueue(environmentKey, this, options?.eventFlushIntervalMS)
-        this.requestConsolidator = new RequestConsolidator()
+        this.requestConsolidator = new ConfigRequestConsolidator(
+            (user: DVCPopulatedUser) => getConfigJson(this.environmentKey, user, this.logger, this.options),
+            (user: DVCPopulatedUser, config: BucketedUserConfig) => this.handleConfigReceived(user, config),
+            this.user
+        )
         this.eventEmitter = new EventEmitter()
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.store = new Store(typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger)
 
-        this.store.saveUser(this.user)
-            .then(() => this.logger.info('Successfully saved user to local storage!'))
-
-        this.onInitialized = getConfigJson(environmentKey, this.user, this.logger, this.options)
-            .then((config) => {
-                const oldConfig = this.config
-                this.config = config as BucketedUserConfig
-
-                if (checkIfEdgeEnabled(this.config, this.logger, this.options?.enableEdgeDB, true)) {
-                    if (!this.user.isAnonymous) {
-                        saveEntity(this.user, this.environmentKey, this.logger, this.options)
-                            .then((res) => this.logger.info(`Saved response entity! ${res}`))
-                    }
-                }
-
-                this.store.saveConfig(config)
-                    .then(() => this.logger.info('Successfully saved config to local storage'))
+        this.onInitialized = this.requestConsolidator.queue(this.user)
+            .then(() => {
                 this.eventEmitter.emitInitialized(true)
-                this.eventEmitter.emitFeatureUpdates(oldConfig?.features || {}, this.config.features)
-                this.eventEmitter.emitVariableUpdates(oldConfig?.variables || {},
-                    this.config.variables, this.variableDefaultMap)
 
-                if (this.config.sse?.url) {
+                if (this.config?.sse?.url) {
                     this.streamingConnection = new StreamingConnection(
-                        this.config.sse?.url,
+                        this.config?.sse?.url,
                         this.onSSEMessage.bind(this),
                         this.logger
                     )
@@ -152,52 +139,23 @@ export class DVCClient implements Client {
     ): Promise<DVCVariableSet> | void {
 
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
-            try {
-                this.eventQueue.flushEvents()
+            this.eventQueue.flushEvents()
 
-                let updatedUser: DVCPopulatedUser
-                if (user.user_id === this.user.user_id) {
-                    updatedUser = this.user.updateUser(user)
-                } else {
-                    updatedUser = new DVCPopulatedUser(user, this.options)
-                }
+            let updatedUser: DVCPopulatedUser
+            if (user.user_id === this.user.user_id) {
+                updatedUser = this.user.updateUser(user)
+            } else {
+                updatedUser = new DVCPopulatedUser(user, this.options)
+            }
 
-                const oldConfig = this.config || {} as BucketedUserConfig
-
-                this.onInitialized.then(() =>
-                    this.requestConsolidator.queue('identify',
-                        getConfigJson(this.environmentKey, updatedUser, this.logger, this.options)
-                    )
-                ).then((config) => {
-                    this.config = config as BucketedUserConfig
-
-                    if (checkIfEdgeEnabled(this.config, this.logger, this.options?.enableEdgeDB)) {
-                        if (!updatedUser.isAnonymous) {
-                            saveEntity(updatedUser, this.environmentKey, this.logger, this.options)
-                                .then((res) => this.logger.info(`Saved response entity! ${res}`))
-                        }
-                    }
-
-                    this.store.saveConfig(config)
-                        .then(() => this.logger.info('Successfully saved config to local storage'))
-                    const oldFeatures = oldConfig.features || {}
-                    const oldVariables = oldConfig.variables || {}
-                    this.eventEmitter.emitFeatureUpdates(oldFeatures, config.features)
-                    this.eventEmitter.emitVariableUpdates(oldVariables,
-                        config.variables, this.variableDefaultMap)
-
-                    return config.variables
-                }).then((variables) => {
-                    this.user = updatedUser
-                    this.store.saveUser(updatedUser)
-                        .then(() => this.logger.info('Successfully saved user to local storage!'))
-                    return resolve(variables || {})
-                }).catch((err) => Promise.reject(err))
-
-            } catch (err) {
+            this.onInitialized.then(() =>
+                this.requestConsolidator.queue(updatedUser)
+            ).then((config) => {
+                resolve(config.variables || {})
+            }).catch((err) => {
                 this.eventEmitter.emitError(err)
                 reject(err)
-            }
+            })
         })
 
         if (callback && typeof callback == 'function') {
@@ -215,38 +173,15 @@ export class DVCClient implements Client {
         const anonUser = new DVCPopulatedUser({ isAnonymous: true }, this.options)
 
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
-            try {
-                this.eventQueue.flushEvents()
-                const oldConfig = this.config || {} as BucketedUserConfig
+            this.eventQueue.flushEvents()
 
-                this.onInitialized.then(() =>
-                    this.requestConsolidator.queue('identify',
-                        // don't send edgedb param for anonymous users
-                        getConfigJson(this.environmentKey, anonUser, this.logger, this.options)
-                    )
-                ).then((config) => {
-                    this.config = config as BucketedUserConfig
-                    this.user = anonUser
-                    this.store.saveConfig(config).then(() => {
-                        this.logger.info('Successfully saved config to local storage')
-                    })
-                    this.store.saveUser(anonUser).then(() => {
-                        this.logger.info('Successfully saved user to local storage!')
-                    })
-                    const oldFeatures = oldConfig.features || {}
-                    const oldVariables = oldConfig.variables || {}
-                    this.eventEmitter.emitFeatureUpdates(oldFeatures, config.features)
-                    this.eventEmitter.emitVariableUpdates(oldVariables,
-                        config.variables, this.variableDefaultMap)
+            this.onInitialized.then(() => this.requestConsolidator.queue(anonUser))
+                .then((config) => {
                     resolve(config.variables || {})
                 }).catch((e) => {
+                    this.eventEmitter.emitError(e)
                     reject(e)
                 })
-
-            } catch (e) {
-                this.eventEmitter.emitError(e)
-                reject(e)
-            }
         })
 
         if (callback && typeof callback == 'function') {
@@ -284,8 +219,57 @@ export class DVCClient implements Client {
         return this.eventQueue.flushEvents().then(() => callback?.())
     }
 
-    private onSSEMessage = (message: string) => {
-        // TODO implement
+    private async refetchConfig() {
+        await this.onInitialized
+        await this.requestConsolidator.queue(this.user)
+    }
+
+    private handleConfigReceived(user: DVCPopulatedUser, config: BucketedUserConfig) {
+        const oldConfig = this.config
+        this.config = config
+
+        this.store.saveConfig(config).then(() => {
+            this.logger.info('Successfully saved config to local storage')
+        })
+
+        if (this.user != user || !this.userSaved) {
+            this.user = user
+
+            this.store.saveUser(user).then(() => {
+                this.logger.info('Successfully saved user to local storage')
+            })
+
+            if (!this.user.isAnonymous && checkIfEdgeEnabled(config, this.logger, this.options?.enableEdgeDB, true)) {
+                saveEntity(this.user, this.environmentKey, this.logger, this.options)
+                    .then((res) => this.logger.info(`Saved response entity! ${res}`))
+            }
+
+            this.userSaved = true
+        }
+
+        const oldFeatures = oldConfig?.features || {}
+        const oldVariables = oldConfig?.variables || {}
+        this.eventEmitter.emitFeatureUpdates(oldFeatures, config.features)
+        this.eventEmitter.emitVariableUpdates(oldVariables,
+            config.variables, this.variableDefaultMap)
+
+    }
+
+    private onSSEMessage(message: unknown) {
+        try {
+            const parsedMessage = JSON.parse(message as string)
+            const messageData = parsedMessage.data
+            if (!messageData) {
+                return
+            }
+            if (messageData.etag !== this.config?.etag || !this.config?.etag) {
+                this.refetchConfig().catch((e) => {
+                    this.logger.error('Failed to refetch config', e)
+                })
+            }
+        } catch (e) {
+            this.logger.error('Streaming Connection: Unparseable message', e)
+        }
     }
 }
 
