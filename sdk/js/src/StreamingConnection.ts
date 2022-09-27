@@ -5,7 +5,7 @@ export class StreamingConnection {
 
     constructor(
         url: string,
-        onMessage: (message: string) => void,
+        onMessage: (message: unknown) => void,
         logger: DVCLogger
     ) {
         this.connection = new EventSource(url, { withCredentials: true })

@@ -1,4 +1,4 @@
-import React from 'react'
+import React  from 'react'
 import logo from './logo.svg'
 import './App.css'
 import { useIsDVCInitialized, withDVCProvider } from '@devcycle/devcycle-react-sdk'
@@ -20,6 +20,7 @@ function App() {
     const dvcReady = useIsDVCInitialized()
 
     if (!dvcReady) return <div><h1>DVC is not ready!</h1></div>
+
     return (
         <div className="App">
             <header className="App-header">
@@ -42,4 +43,4 @@ function App() {
     )
 }
 
-export default withDVCProvider({ envKey: ENV_KEY, user: user, options: {logLevel: 'debug'}})(App)
+export default withDVCProvider({ envKey: ENV_KEY, user: user, options: { logLevel: 'debug' } })(App)
