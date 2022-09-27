@@ -22,7 +22,8 @@
       "options": {
         "outputPath": "dist/lib/shared/bucketing-test-data",
         "main": "lib/shared/bucketing-test-data/src/index.ts",
-        "tsConfig": "lib/shared/bucketing-test-data/tsconfig.lib.json"
+        "tsConfig": "lib/shared/bucketing-test-data/tsconfig.lib.json",
+        "buildableProjectDepsInPackageJsonType": "dependencies"
       }
     },
     "build:json": {
