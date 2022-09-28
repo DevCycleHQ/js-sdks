@@ -369,4 +369,11 @@ export interface BucketedUserConfig {
      * requests for new Variables for known variables.
      */
     knownVariableKeys: number[]
+
+    /**
+     * Server Sent Events data used for connections
+     */
+    sse?: {
+        url: string
+    }
 }
