@@ -56,4 +56,11 @@ export class ConfigBody<IdType = string> {
      * TODO make required when implemented
      */
      listAudiences?: ListAudience<IdType>[]
+
+     /**
+     * Ably information used for establishing connections
+     */
+     ably?: {
+        apiKey: string
+    }
 }
