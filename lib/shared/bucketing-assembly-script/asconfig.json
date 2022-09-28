@@ -16,6 +16,16 @@
       "shrinkLevel": 0,
       "converge": false,
       "noAssert": false
+    },
+    "worker": {
+      "outFile": "build/bucketing-lib.worker.wasm",
+      "textFile": "build/bucketing-lib.worker.wat",
+      "tsdFile": "build/bucketing-lib.worker.d.ts",
+      "sourceMap": true,
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false
     }
   },
   "options": {}

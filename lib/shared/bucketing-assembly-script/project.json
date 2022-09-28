@@ -50,10 +50,13 @@
       "options": {
         "commands": [
           {
-            "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 1000 --maximumMemory 50000 --bindings raw"
+            "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 10000 --maximumMemory 50000 --bindings raw"
           },
           {
-            "command": "asc assembly/index.ts --target release --exportRuntime --initialMemory 1000 --maximumMemory 50000 --bindings raw"
+            "command": "asc assembly/index.ts --target release --exportRuntime --initialMemory 10000 --maximumMemory 50000 --bindings raw"
+          },
+          {
+            "command": "asc assembly/index.ts --target worker --exportRuntime --initialMemory 1000 --maximumMemory 10000 --bindings raw"
           },
           {
             "command": "sed -i.bu 's/export async function instantiate/exports.instantiate = async function instantiate/g' build/bucketing-lib.release.js"
@@ -62,7 +65,10 @@
             "command": "sed -i.bu 's/export async function instantiate/exports.instantiate = async function instantiate/g' build/bucketing-lib.debug.js"
           },
           {
-            "command": "rm build/bucketing-lib.release.js.bu && rm build/bucketing-lib.debug.js.bu"
+            "command": "sed -i.bu 's/export async function instantiate/exports.instantiate = async function instantiate/g' build/bucketing-lib.worker.js"
+          },
+          {
+            "command": "rm build/bucketing-lib.release.js.bu && rm build/bucketing-lib.debug.js.bu && rm build/bucketing-lib.worker.js.bu"
           }
         ],
         "cwd": "lib/shared/bucketing-assembly-script",
