@@ -27,6 +27,8 @@ export class DVCClient implements Client {
     private variableDefaultMap: { [key: string]: { [key: string]: DVCVariable } }
     private environmentKey: string
     private userSaved = false
+    private closing = false
+
     logger: DVCLogger
     config?: BucketedUserConfig
     user: DVCPopulatedUser
@@ -211,6 +213,10 @@ export class DVCClient implements Client {
     }
 
     track(event: ClientEvent): void {
+        if (this.closing) {
+            this.logger.error('Client is closing, cannot track new events.')
+            return
+        }
         checkParamDefined('type', event.type)
         this.onInitialized.then(() => {
             this.eventQueue.queueEvent(event)
@@ -219,6 +225,18 @@ export class DVCClient implements Client {
 
     flushEvents(callback?: () => void): Promise<void> {
         return this.eventQueue.flushEvents().then(() => callback?.())
+    }
+
+    async close(): Promise<void> {
+        this.closing = true
+
+        if (document && this.pageVisibilityHandler) {
+            document.removeEventListener('visibilitychange', this.pageVisibilityHandler)
+        }
+
+        this.streamingConnection?.close()
+
+        await this.eventQueue.close()
     }
 
     private async refetchConfig() {
