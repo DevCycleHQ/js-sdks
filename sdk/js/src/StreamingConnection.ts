@@ -4,24 +4,34 @@ export class StreamingConnection {
     private connection: EventSource
 
     constructor(
-        url: string,
-        onMessage: (message: unknown) => void,
-        logger: DVCLogger
+        private url: string,
+        private onMessage: (message: unknown) => void,
+        private logger: DVCLogger
     ) {
-        this.connection = new EventSource(url, { withCredentials: true })
+        this.openConnection()
+    }
+
+    private openConnection() {
+        this.connection = new EventSource(this.url, { withCredentials: true })
         this.connection.onmessage = (event) => {
-            onMessage(event.data)
+            this.onMessage(event.data)
         }
         this.connection.onerror = (err) => {
-            logger.error('StreamingConnection error', err)
+            this.logger.error('StreamingConnection error', err)
         }
         this.connection.onopen = () => {
-            logger.debug('StreamingConnection opened')
+            this.logger.debug('StreamingConnection opened')
         }
     }
 
     isConnected(): boolean {
         return this.connection.readyState === this.connection.OPEN
+    }
+
+    reopen(): void {
+        if (!this.isConnected()) {
+            this.openConnection()
+        }
     }
 
     close(): void {
