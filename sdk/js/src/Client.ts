@@ -30,11 +30,12 @@ export class DVCClient implements Client {
     logger: DVCLogger
     config?: BucketedUserConfig
     user: DVCPopulatedUser
-    store: Store
-    eventQueue: EventQueue
-    requestConsolidator: ConfigRequestConsolidator
+    private store: Store
+    private eventQueue: EventQueue
+    private requestConsolidator: ConfigRequestConsolidator
     eventEmitter: EventEmitter
-    streamingConnection?: StreamingConnection
+    private streamingConnection?: StreamingConnection
+    private pageVisibilityHandler?: () => void
 
     constructor(environmentKey: string, user: DVCPopulatedUser, options: DVCOptions = {}) {
         this.user = user
@@ -50,6 +51,7 @@ export class DVCClient implements Client {
         this.eventEmitter = new EventEmitter()
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.store = new Store(typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger)
+        this.registerVisibilityChangeHandler()
 
         this.onInitialized = this.requestConsolidator.queue(this.user)
             .then(() => {
@@ -269,6 +271,25 @@ export class DVCClient implements Client {
             }
         } catch (e) {
             this.logger.error('Streaming Connection: Unparseable message', e)
+        }
+    }
+
+    private registerVisibilityChangeHandler() {
+        if (typeof document !== 'undefined') {
+            this.pageVisibilityHandler = () => {
+                if (document.visibilityState === 'visible') {
+                    this.logger.debug('Page became visible, refetching config')
+                    this.refetchConfig().catch((e) => {
+                        this.logger.error('Failed to refetch config', e)
+                    })
+                    this.streamingConnection?.reopen()
+                } else {
+                    this.logger.debug('Page is not visible, closing streaming connection')
+                    this.streamingConnection?.close()
+                }
+            }
+
+            document.addEventListener?.('visibilitychange', this.pageVisibilityHandler)
         }
     }
 }
