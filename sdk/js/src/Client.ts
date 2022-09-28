@@ -27,7 +27,7 @@ export class DVCClient implements Client {
     private variableDefaultMap: { [key: string]: { [key: string]: DVCVariable } }
     private environmentKey: string
     private userSaved = false
-    private closing = false
+    private _closing = false
 
     logger: DVCLogger
     config?: BucketedUserConfig
@@ -61,7 +61,7 @@ export class DVCClient implements Client {
 
                 if (this.config?.sse?.url) {
                     this.streamingConnection = new StreamingConnection(
-                        this.config?.sse?.url,
+                        this.config.sse.url,
                         this.onSSEMessage.bind(this),
                         this.logger
                     )
@@ -213,7 +213,7 @@ export class DVCClient implements Client {
     }
 
     track(event: ClientEvent): void {
-        if (this.closing) {
+        if (this._closing) {
             this.logger.error('Client is closing, cannot track new events.')
             return
         }
@@ -228,7 +228,9 @@ export class DVCClient implements Client {
     }
 
     async close(): Promise<void> {
-        this.closing = true
+        this.logger.debug('Closing client')
+
+        this._closing = true
 
         if (document && this.pageVisibilityHandler) {
             document.removeEventListener('visibilitychange', this.pageVisibilityHandler)
@@ -237,6 +239,10 @@ export class DVCClient implements Client {
         this.streamingConnection?.close()
 
         await this.eventQueue.close()
+    }
+
+    get closing(): boolean {
+        return this._closing
     }
 
     private async refetchConfig() {
@@ -279,6 +285,7 @@ export class DVCClient implements Client {
         try {
             const parsedMessage = JSON.parse(message as string)
             const messageData = parsedMessage.data
+
             if (!messageData) {
                 return
             }
