@@ -90,4 +90,26 @@ describe('EventQueue tests', () => {
             expect(eventArray[1].value).toBe(2)
         })
     })
+
+    describe('close', () => {
+        it('should flush events and clear flush interval', async () => {
+            const clearIntervalSpy = jest.spyOn(global, 'clearInterval')
+            Request.publishEvents.mockResolvedValue({ status: 201 })
+
+            eventQueue.queueEvent({ type: 'test_type' })
+            await eventQueue.close()
+
+            expect(Request.publishEvents).toBeCalledWith(
+                'test_env_key',
+                dvcClient.config,
+                dvcClient.user,
+                expect.any(Object),
+                expect.any(Object)
+            )
+
+            expect(eventQueue.eventQueue).toHaveLength(0)
+
+            expect(clearIntervalSpy).toHaveBeenCalledWith(eventQueue.flushInterval)
+        })
+    })
 })
