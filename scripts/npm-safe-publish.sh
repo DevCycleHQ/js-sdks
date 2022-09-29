@@ -37,12 +37,6 @@ while :; do
   shift
 done
 
-# check if otp is set
-if [[ -z "$OTP" ]]; then
-  echo "Must specify the NPM one-time password using the --otp option."
-  exit 1
-fi
-
 if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
   echo "Versions are not the same, (Remote = $NPM_SHOW; Local = $NPM_LS). Checking for publish eligibility."
 
@@ -61,6 +55,12 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
   # check if current commit is tagged with the requested version
   if [[ -z "$(git tag --points-at HEAD "$PACKAGE@$NPM_LS")" ]]; then
     echo "Current commit is not tagged with the requested version. Aborting."
+    exit 1
+  fi
+
+  # check if otp is set
+  if [[ -z "$OTP" ]]; then
+    echo "Must specify the NPM one-time password using the --otp option."
     exit 1
   fi
 
