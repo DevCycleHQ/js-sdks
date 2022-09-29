@@ -6,6 +6,7 @@
   "types": "index.d.ts",
   "files": [
     "build/bucketing-lib.release*",
+    "build/bucketing-lib.worker*",
     "index*",
     "README.md"
   ],
