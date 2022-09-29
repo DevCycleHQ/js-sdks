@@ -77,9 +77,12 @@ export const getConfigJson = async (
     environmentKey: string,
     user: DVCPopulatedUser,
     logger: DVCLogger,
-    options?: DVCOptions
+    options?: DVCOptions,
+    sse?: boolean
 ): Promise<BucketedUserConfig> => {
-    const queryParams = `${serializeUser(user)}${options?.enableEdgeDB ? ('&enableEdgeDB=' + options.enableEdgeDB): ''}`
+    const edgeDBParam = options?.enableEdgeDB ? ('&enableEdgeDB=' + options.enableEdgeDB): ''
+    const sseParam = sse ? '&sse=1' : ''
+    const queryParams = `${serializeUser(user)}${edgeDBParam}${sseParam}`
     const url = `${options?.apiProxyURL || CLIENT_SDK_URL}${CONFIG_PATH}` +
                 `?envKey=${environmentKey}${queryParams && '&' + queryParams}`
 

@@ -96,4 +96,9 @@ export class EventQueue {
     private eventsFromAggregateEventMap(): DVCEvent[] {
         return Object.values(this.aggregateEventMap).map((typeMap) => Object.values(typeMap)).flat()
     }
+
+    async close(): Promise<void> {
+        clearInterval(this.flushInterval)
+        await this.flushEvents()
+    }
 }

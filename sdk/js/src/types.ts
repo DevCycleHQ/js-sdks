@@ -217,6 +217,17 @@ export interface DVCClient {
      * @param callback
      */
     flushEvents(callback?: () => void): Promise<void>
+
+    /**
+     * Close all open connections to DevCycle, flush any pending events and stop any running timers and event handlers.
+     * Use to clean up a client instance that is no longer needed.
+     */
+    close(): Promise<void>
+
+    /**
+     * Reflects whether `close()` has been called on the client instance.
+     */
+    closing: boolean
 }
 
 export interface DVCVariable {
