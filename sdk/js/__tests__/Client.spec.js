@@ -164,7 +164,7 @@ describe('DVCClient tests', () => {
             saveEntity_mock.mockResolvedValue({})
 
             const client = new DVCClient('test_env_key',
-                new DVCPopulatedUser({ isAnonymous: true }),
+                { isAnonymous: true },
                 { enableEdgeDB: true }
             )
             await client.onClientInitialized()
@@ -292,7 +292,7 @@ describe('DVCClient tests', () => {
             expect(result).not.toBeInstanceOf(Promise)
         })
 
-        it('should get the config again and return new features, but not call edgedb', async () => {
+        it('should get the config again and return new features, but not call edgedb when its disabled', async () => {
             const newUser = { user_id: 'user2' }
             const newVariables = {
                 variables: {
@@ -314,7 +314,7 @@ describe('DVCClient tests', () => {
         })
 
         it('should send a request to edgedb after getting the config', async () => {
-            const newUser = { user_id: 'user2' }
+            const newUser = { user_id: 'user1', email: 'test@example.com' }
             getConfigJson_mock.mockImplementation(() => {
                 return Promise.resolve(testConfig)
             })
@@ -329,7 +329,7 @@ describe('DVCClient tests', () => {
 
             expect(getConfigJson_mock).toBeCalledWith(
                 'test_env_key',
-                expect.objectContaining({ user_id: 'user2' }),
+                expect.objectContaining({ user_id: 'user1' }),
                 expect.any(Object),
                 dvcOptions
             )

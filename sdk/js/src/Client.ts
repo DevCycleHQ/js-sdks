@@ -39,15 +39,15 @@ export class DVCClient implements Client {
     private streamingConnection?: StreamingConnection
     private pageVisibilityHandler?: () => void
 
-    constructor(environmentKey: string, user: DVCPopulatedUser, options: DVCOptions = {}) {
-        this.user = user
+    constructor(environmentKey: string, user: DVCUser, options: DVCOptions = {}) {
+        this.user = new DVCPopulatedUser(user, options)
         this.options = options
         this.environmentKey = environmentKey
         this.variableDefaultMap = {}
         this.eventQueue = new EventQueue(environmentKey, this, options?.eventFlushIntervalMS)
         this.requestConsolidator = new ConfigRequestConsolidator(
             (user: DVCPopulatedUser) => getConfigJson(this.environmentKey, user, this.logger, this.options),
-            (user: DVCPopulatedUser, config: BucketedUserConfig) => this.handleConfigReceived(user, config),
+            (config: BucketedUserConfig, user: DVCPopulatedUser) => this.handleConfigReceived(config, user),
             this.user
         )
         this.eventEmitter = new EventEmitter()
@@ -147,7 +147,7 @@ export class DVCClient implements Client {
 
             let updatedUser: DVCPopulatedUser
             if (user.user_id === this.user.user_id) {
-                updatedUser = this.user.updateUser(user)
+                updatedUser = this.user.updateUser(user, this.options)
             } else {
                 updatedUser = new DVCPopulatedUser(user, this.options)
             }
@@ -250,7 +250,7 @@ export class DVCClient implements Client {
         await this.requestConsolidator.queue(this.user)
     }
 
-    private handleConfigReceived(user: DVCPopulatedUser, config: BucketedUserConfig) {
+    private handleConfigReceived(config: BucketedUserConfig, user: DVCPopulatedUser) {
         const oldConfig = this.config
         this.config = config
 

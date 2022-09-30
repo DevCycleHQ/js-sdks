@@ -3,18 +3,22 @@ import { v4 as uuidv4 } from 'uuid'
 import * as packageJson from '../package.json'
 import UAParser from 'ua-parser-js'
 
+type StaticData = Pick<DVCPopulatedUser, 'createdDate' | 'platform' |
+    'platformVersion' | 'deviceModel' | 'sdkType' | 'sdkVersion'>
+
 export class DVCPopulatedUser implements DVCUser {
-    isAnonymous: boolean
-    user_id: string
-    email?: string
-    name?: string
-    language?: string
-    country?: string
-    appVersion?: string
-    appBuild?: number
-    customData?: JSON
-    privateCustomData?: JSON
-    lastSeenDate: Date
+    readonly isAnonymous: boolean
+    readonly user_id: string
+    readonly email?: string
+    readonly name?: string
+    readonly language?: string
+    readonly country?: string
+    readonly appVersion?: string
+    readonly appBuild?: number
+    readonly customData?: JSON
+    readonly privateCustomData?: JSON
+    readonly lastSeenDate: Date
+
     readonly createdDate: Date
     readonly platform: string
     readonly platformVersion: string
@@ -22,7 +26,7 @@ export class DVCPopulatedUser implements DVCUser {
     readonly sdkType: 'client' | 'server'
     readonly sdkVersion: string
 
-    constructor(user: DVCUser, options: DVCOptions) {
+    constructor(user: DVCUser, options: DVCOptions, staticData?: StaticData) {
         if (!user.user_id && !user.isAnonymous) {
             throw new Error('Must have a user_id, or have "isAnonymous" set on the user')
         }
@@ -43,35 +47,41 @@ export class DVCPopulatedUser implements DVCUser {
          * Read only properties initialized once
          */
 
-        const userAgent = new UAParser(typeof window !== 'undefined' ? window.navigator.userAgent : undefined)
-        const platformVersion = userAgent.getBrowser().name &&
-             `${userAgent.getBrowser().name} ${userAgent.getBrowser().version}`
+        if (staticData) {
+            Object.assign(this, staticData)
+        } else {
+            const userAgent = new UAParser(typeof window !== 'undefined' ? window.navigator.userAgent : undefined)
+            const platformVersion = userAgent.getBrowser().name &&
+                `${userAgent.getBrowser().name} ${userAgent.getBrowser().version}`
 
-        this.createdDate = new Date()
-        this.platform = options?.reactNative ? 'ReactNative' : 'web'
-        this.platformVersion = platformVersion ?? 'unknown'
-        this.deviceModel = options?.reactNative && globalThis.DeviceInfo
-            ? globalThis.DeviceInfo.getModel() : typeof window !== 'undefined' 
-                ? window.navigator.userAgent : 'SSR - unknown'
-        this.sdkType = 'client'
-        this.sdkVersion = packageJson.version
+            this.createdDate = new Date()
+            this.platform = options?.reactNative ? 'ReactNative' : 'web'
+            this.platformVersion = platformVersion ?? 'unknown'
+            this.deviceModel = options?.reactNative && globalThis.DeviceInfo
+                ? globalThis.DeviceInfo.getModel() : typeof window !== 'undefined'
+                    ? window.navigator.userAgent : 'SSR - unknown'
+            this.sdkType = 'client'
+            this.sdkVersion = packageJson.version
+        }
     }
 
-    updateUser(user: DVCUser): DVCPopulatedUser {
+    getStaticData(): StaticData {
+        return {
+            createdDate: this.createdDate,
+            platform: this.platform,
+            platformVersion: this.platformVersion,
+            deviceModel: this.deviceModel,
+            sdkType: this.sdkType,
+            sdkVersion: this.sdkVersion,
+        }
+    }
+
+    updateUser(user: DVCUser, options: DVCOptions): DVCPopulatedUser {
         if (this.user_id !== user.user_id) {
             throw new Error('Cannot update a user with a different user_id')
         }
-        this.email = user.email
-        this.name = user.name
-        this.language = user.language
-        this.country = user.country
-        this.appVersion = user.appVersion
-        this.appBuild = user.appBuild
-        this.customData = user.customData
-        this.privateCustomData = user.privateCustomData
-        this.lastSeenDate = new Date()
 
-        return this
+        return new DVCPopulatedUser(user, options, this.getStaticData())
     }
 }
 
