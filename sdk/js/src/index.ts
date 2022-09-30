@@ -35,8 +35,7 @@ export const initialize = (environmentKey: string, user: DVCUser, options: DVCOp
         throw new Error('Invalid options! Call initialize with valid options')
     }
 
-    const dvcUser = new DVCPopulatedUser(user, options)
-    const client = new DVCClient(environmentKey, dvcUser, options)
+    const client = new DVCClient(environmentKey, user, options)
 
     client.onClientInitialized()
         .then(() => client.logger.info('Successfully initialized DevCycle!'))

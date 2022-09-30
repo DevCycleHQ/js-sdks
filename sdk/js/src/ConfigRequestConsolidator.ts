@@ -16,7 +16,7 @@ export class ConfigRequestConsolidator {
 
     constructor(
         private requestConfigFunction: (user: DVCPopulatedUser) => Promise<BucketedUserConfig>,
-        private handleConfigReceivedFunction: (user: DVCPopulatedUser, config: BucketedUserConfig) => void,
+        private handleConfigReceivedFunction: (config: BucketedUserConfig, user: DVCPopulatedUser) => void,
         private nextUser: DVCPopulatedUser
     ) {}
 
@@ -59,7 +59,7 @@ export class ConfigRequestConsolidator {
         this.currentPromise = this.requestConfigFunction(user)
         const bucketedConfig = await this.currentPromise
         this.currentPromise = null
-        this.handleConfigReceivedFunction(user, bucketedConfig)
+        this.handleConfigReceivedFunction(bucketedConfig, user)
         return bucketedConfig
     }
 }
