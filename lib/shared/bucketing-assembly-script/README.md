@@ -11,6 +11,7 @@ Web browser, NodeJS, or any other environment that supports it.
 
 See the AssemblyScript Documentation for further details: https://www.assemblyscript.org/introduction.html
 
+
 ## Usage
 
 ### Building WebAssembly
