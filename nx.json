@@ -93,7 +93,7 @@
     },
     "npm-publish": {
       "dependsOn": [
-        "^npm-publish",
+        {"projects":  "dependencies", "target": "npm-publish", "params":  "forward"},
         "build"
       ]
     }
