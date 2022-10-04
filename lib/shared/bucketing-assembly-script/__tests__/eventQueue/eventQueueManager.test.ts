@@ -51,6 +51,13 @@ const initSDK = (envKey: string, eventOptions: unknown = {}) => {
     setConfigData(envKey, JSON.stringify(config))
 }
 
+describe('One-off Tests', () => {
+    it('Returns payloads with a valid user id', () => {
+        initEventQueue_AS('server-7b4f4857-87bc-419d-9754-803e4eaa1f9e', '{"ConfigPollingIntervalMs":1000,"ConfigPollingTimeoutMs":5000,"CdnUri":"https://config-cdn.devcycle.com","CdnSlug":"/config/v1/server/server-7b4f4857-87bc-419d-9754-803e4eaa1f9e.json","DisableAutomaticEvents":false,"DisableCustomEvents":false,"MaxEventsInQueue":1000,"EventRequestChunkSize":100,"FlushEventQueueSize":1000,"EventFlushIntervalMs":10000,"EventsApiUri":"https://events.devcycle.com","EventsApiSlug":"/v1/events/batch","CdnCustomHeaders":{},"EventsApiCustomHeaders":{}}');
+
+    })
+})
+
 describe('EventQueueManager Tests', () => {
     afterEach(() => {
         clearPlatformData('')
