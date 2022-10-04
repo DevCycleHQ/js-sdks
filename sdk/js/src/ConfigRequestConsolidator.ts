@@ -45,7 +45,12 @@ export class ConfigRequestConsolidator {
 
         const resolvers = this.resolvers.splice(0)
         await this.performRequest(this.nextUser).then((result) => {
-            resolvers.forEach(({ resolve }) => resolve(result))
+            if (this.resolvers.length) {
+                this.resolvers.push(...resolvers)
+            } else {
+                resolvers.forEach(({ resolve }) => resolve(result))
+                this.handleConfigReceivedFunction(result, this.nextUser)
+            }
         }).catch((err) => {
             resolvers.forEach(({ reject }) => reject(err))
         })
@@ -59,7 +64,6 @@ export class ConfigRequestConsolidator {
         this.currentPromise = this.requestConfigFunction(user)
         const bucketedConfig = await this.currentPromise
         this.currentPromise = null
-        this.handleConfigReceivedFunction(bucketedConfig, user)
         return bucketedConfig
     }
 }
