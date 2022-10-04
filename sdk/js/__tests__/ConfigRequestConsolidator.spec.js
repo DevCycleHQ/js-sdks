@@ -36,9 +36,9 @@ describe('ConfigRequestConsolidator Tests', () => {
         expect(requestFn).toHaveBeenCalledTimes(2)
         expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'})
         expect(requestFn).toHaveBeenCalledWith({user_id: 'user3'})
-        expect(receiveFn).toHaveBeenCalledWith('test1', {user_id: 'user1'})
         expect(receiveFn).toHaveBeenCalledWith('test2', {user_id: 'user3'})
-        expect(result1).toEqual('test1')
+        expect(receiveFn).toHaveBeenCalledTimes(1)
+        expect(result1).toEqual('test2')
         expect(result2).toEqual('test2')
         expect(result3).toEqual('test2')
     })
@@ -65,15 +65,13 @@ describe('ConfigRequestConsolidator Tests', () => {
         requestFn.mockRejectedValueOnce('test2')
         const promise1 = requestConsolidator.queue({user_id: 'user1'})
         const promise2 = requestConsolidator.queue({user_id: 'user2'})
-
+        
+        await expect(promise1).rejects.toEqual('test2')
         await expect(promise2).rejects.toEqual('test2')
-        const result1 = await promise1
 
         expect(requestFn).toHaveBeenCalledTimes(2)
         expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'})
         expect(requestFn).toHaveBeenCalledWith({user_id: 'user2'})
-        expect(receiveFn).toHaveBeenCalledTimes(1)
-        expect(receiveFn).toHaveBeenCalledWith('test1', {user_id: 'user1'})
-        expect(result1).toEqual('test1')
+        expect(receiveFn).toHaveBeenCalledTimes(0)
     })
 })
