@@ -30,6 +30,7 @@ export class StreamingConnection {
 
     reopen(): void {
         if (!this.isConnected()) {
+            this.close()
             this.openConnection()
         }
     }
