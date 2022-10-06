@@ -2954,15 +2954,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@devcycle/bucketing-assembly-script@^1.1.7, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
+"@devcycle/bucketing-assembly-script@^1.1.8, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script"
   dependencies:
-    "@devcycle/bucketing-test-data": ^1.0.27
+    "@devcycle/bucketing-test-data": ^1.0.28
   languageName: unknown
   linkType: soft
 
-"@devcycle/bucketing-test-data@^1.0.27, @devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data":
+"@devcycle/bucketing-test-data@^1.0.28, @devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data"
   languageName: unknown
@@ -2972,7 +2972,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing@workspace:lib/shared/bucketing"
   dependencies:
-    "@devcycle/bucketing-test-data": ^1.0.27
+    "@devcycle/bucketing-test-data": ^1.0.28
   languageName: unknown
   linkType: soft
 
@@ -2996,8 +2996,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
-    "@devcycle/bucketing-assembly-script": ^1.1.7
-    "@devcycle/bucketing-test-data": ^1.0.27
+    "@devcycle/bucketing-assembly-script": ^1.1.8
+    "@devcycle/bucketing-test-data": ^1.0.28
     assemblyscript-json: "*"
     assemblyscript-regex: "*"
   languageName: unknown
