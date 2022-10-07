@@ -244,28 +244,32 @@ describe('DVCClient tests', () => {
             expect(callback).not.toHaveBeenCalled()
         })
 
-        it('should call onUpdate after variable updates are emitted', (done) => {
+        it('should call onUpdate after variable updates are emitted', async () => {
             client = createClientWithConfigImplementation(() => {
                 return Promise.resolve(testConfig)
             })
+            await client.onClientInitialized()
             const variable = new DVCVariable({
                 _id: 'id',
                 key: 'key',
                 value: 'my-value',
                 defaultValue: 'default-value'
             })
-            function onUpdate(value) {
+
+            const onUpdate = jest.fn().mockImplementation(function(value) {
                 expect(value).toBe('my-new-value')
                 expect(this).toBe(variable)
-                done()
-            }
+            })
+
             variable.onUpdate(onUpdate)
-            client.eventEmitter.emitVariableUpdates({ 'key': variable }, {
+            client.eventEmitter.emitVariableUpdates({ 'key': {...variable} }, {
                 'key': {
                     ...variable,
                     value: 'my-new-value'
                 }
             }, { 'key': { 'default-value': variable } })
+
+            expect(onUpdate).toBeCalledTimes(1)
         })
 
     })

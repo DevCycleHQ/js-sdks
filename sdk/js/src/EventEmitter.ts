@@ -74,9 +74,9 @@ export class EventEmitter {
     emitVariableUpdates(
         oldVariableSet: DVCVariableSet,
         newVariableSet: DVCVariableSet,
-        variableDefaultMap: { [key: string]: { [key: string]: DVCVariable } }
+        variableDefaultMap: { [key: string]: { [defaultValue: string]: DVCVariable } }
     ): void {
-        const keys = Object.keys(oldVariableSet).concat(Object.keys(newVariableSet))
+        const keys = new Set(Object.keys(oldVariableSet).concat(Object.keys(newVariableSet)))
         let newVariables = false
         keys.forEach((key) => {
             const oldVariableValue = oldVariableSet[key] && oldVariableSet[key].value
