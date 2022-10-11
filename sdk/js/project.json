@@ -55,6 +55,36 @@
           "sdk/js/*.md"
         ]
       }
+    },
+    "build:cdn": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "libraryName": "DevCycle",
+        "libraryTarget": "umd",
+        "outputPath": "dist/sdk/js",
+        "tsConfig": "sdk/js/tsconfig.lib.json",
+        "packageJson": "sdk/js/package.json",
+        "buildableProjectDepsInPackageJsonType": "dependencies",
+        "main": "sdk/js/src/index.ts",
+        "index": "",
+        "optimization": true,
+        "assets": [
+          {
+            "input": "sdk/js",
+            "glob": "*.md",
+            "output": "assets"
+          }
+        ],
+        "extractLicenses": false,
+        "runtimeChunk": false,
+        "vendorChunk": false,
+        "commonChunk": false,
+        "namedChunks": false,
+        "webpackConfig": "sdk/js/webpack.config.js"
+      }
     }
   }
 }
