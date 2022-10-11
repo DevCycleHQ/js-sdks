@@ -25,7 +25,7 @@ export class Project<IdType = string> {
                 primary: string
                 secondary: string
             }
-            poweredByPosition?: 'center' | 'left' | 'right'
+            poweredByAlignment?: 'center' | 'left' | 'right'
         }
     }
 }
