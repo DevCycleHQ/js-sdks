@@ -384,7 +384,10 @@ export interface BucketedUserConfig {
      * Information about how to establish a streaming connection to receive config updates
      */
     sse?: {
-        url?: string
+        url?: string,
+        // The number in milliseconds that the sdk should wait after the page is backgrounded
+        // before it closes the streaming connection
+        inactivityDelay?: number
     }
 
     /**
