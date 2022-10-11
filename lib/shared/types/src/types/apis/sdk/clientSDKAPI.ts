@@ -9,7 +9,8 @@ import {
 } from '@nestjs/class-validator'
 import { Transform, Type } from 'class-transformer'
 import 'reflect-metadata'
-import { DVCJSON, IsDVCJSONObject } from '../../validators/dvcJSON'
+import { IsDVCJSONObject } from '../../validators/dvcJSON'
+import type { DVCJSON } from '../../validators/dvcJSON'
 import { IsNotBlank } from '../../validators/isNotBlank'
 import { IsISO6391 } from '../../validators/isIso6391'
 
