@@ -38,6 +38,7 @@ export class DVCClient implements Client {
     eventEmitter: EventEmitter
     private streamingConnection?: StreamingConnection
     private pageVisibilityHandler?: () => void
+    private inactivityHandlerId?: number
 
     constructor(environmentKey: string, user: DVCUser, options: DVCOptions = {}) {
         this.user = new DVCPopulatedUser(user, options)
@@ -300,22 +301,33 @@ export class DVCClient implements Client {
     }
 
     private registerVisibilityChangeHandler() {
-        if (typeof document !== 'undefined') {
-            this.pageVisibilityHandler = () => {
-                if (document.visibilityState === 'visible') {
+        if (typeof document === 'undefined') {
+            return
+        }
+
+        const inactivityDelay = this.config?.sse?.inactivityDelay || 120000
+        this.pageVisibilityHandler = () => {
+            if (!this.config?.sse) {
+                return
+            } else if (document.visibilityState === 'visible') {
+                if (!this.streamingConnection?.isConnected()) {
                     this.logger.debug('Page became visible, refetching config')
                     this.refetchConfig().catch((e) => {
                         this.logger.error('Failed to refetch config', e)
                     })
                     this.streamingConnection?.reopen()
-                } else {
+                }
+                window?.clearTimeout(this.inactivityHandlerId)
+            } else {
+                window?.clearTimeout(this.inactivityHandlerId)
+                this.inactivityHandlerId = window?.setTimeout(() => {
                     this.logger.debug('Page is not visible, closing streaming connection')
                     this.streamingConnection?.close()
-                }
+                }, inactivityDelay)
             }
-
-            document.addEventListener?.('visibilitychange', this.pageVisibilityHandler)
         }
+
+        document.addEventListener?.('visibilitychange', this.pageVisibilityHandler)
     }
 }
 
