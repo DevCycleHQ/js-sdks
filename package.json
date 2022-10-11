@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@nestjs/class-validator": "^0.13.4",
+    "@nrwl/webpack": "^14.8.3",
     "as-uuid": "^0.0.4",
     "as-wasi": "^0.4.6",
     "assemblyscript": "~0.21.3",
