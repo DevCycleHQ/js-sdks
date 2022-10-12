@@ -1,4 +1,4 @@
-import { DVCLogger, DVCDefaultLogLevel } from '@devcycle/types'
+import { DVCLogger, DVCDefaultLogLevel, DVCReporter } from '@devcycle/types'
 
 export interface DVCUser {
     /**
@@ -60,6 +60,11 @@ export interface DVCOptions {
      * Logger override to replace default logger
      */
     logger?: DVCLogger
+
+    /**
+     * Metrics reporter to capture data about event processing
+     */
+    reporter?: DVCReporter
 
     /**
      * Set log level of the default logger

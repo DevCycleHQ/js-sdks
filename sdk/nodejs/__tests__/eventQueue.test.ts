@@ -5,13 +5,14 @@ import { AxiosResponse } from 'axios'
 import { EventQueue, EventQueueOptions } from '../src/eventQueue'
 import { EventTypes } from '../src/eventQueue'
 import { publishEvents } from '../src/request'
-import { BucketedUserConfig, DVCLogger, PublicProject } from '@devcycle/types'
+import { BucketedUserConfig, DVCLogger, DVCReporter, FlushResults, PublicProject } from '@devcycle/types'
 import { mocked } from 'jest-mock'
 import { dvcDefaultLogger } from '../src/utils/logger'
 import { cleanupBucketingLib, getBucketingLib, importBucketingLib } from '../src/bucketing'
 import { setPlatformDataJSON } from './utils/setPlatformData'
 
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
+import { report } from 'process'
 const { config } = testData
 
 const publishEvents_mock = mocked(publishEvents, true)
@@ -63,10 +64,10 @@ describe('EventQueue Unit Tests', () => {
     })
 
     let currentEventKey = ''
-    const initEventQueue = (envKey: string, options?: EventQueueOptions, logger?: DVCLogger): EventQueue => {
+    const initEventQueue = (envKey: string, options?: EventQueueOptions, logger?: DVCLogger, reporter?:DVCReporter): EventQueue => {
         getBucketingLib().setConfigData(envKey, JSON.stringify(config))
         currentEventKey = envKey
-        return new EventQueue(logger || defaultLogger, envKey, options)
+        return new EventQueue(logger || defaultLogger, envKey, options, reporter)
     }
 
     beforeAll(async () => {
@@ -81,6 +82,35 @@ describe('EventQueue Unit Tests', () => {
     afterEach(() => {
         publishEvents_mock.mockReset()
         getBucketingLib().cleanupEventQueue(currentEventKey)
+    })
+
+    it('should report metrics', async () => {
+        publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
+
+        const reporter:DVCReporter = {
+            reportFlushResults: jest.fn(),
+            reportMetric: jest.fn()
+        }
+
+        const envKey = 'envKey'
+        const eventQueue = initEventQueue(envKey, undefined, undefined, reporter)
+        const user = new DVCPopulatedUser({ user_id: 'user_id' })
+        const event = { type: 'test_event' }
+        eventQueue.queueEvent(user, event)
+
+        const aggEvent = { type: EventTypes.aggVariableEvaluated, target: 'key' }
+        eventQueue.queueAggregateEvent(user, aggEvent, bucketedUserConfig)
+
+        await eventQueue.flushEvents()
+        eventQueue.cleanup()
+
+        await new Promise(resolve => setTimeout(resolve, 1000))
+
+        expect(reporter.reportFlushResults).toBeCalled()
+        expect(reporter.reportMetric).toBeCalledWith('queueLength', 2, expect.objectContaining({envKey}))
+        expect(reporter.reportMetric).toBeCalledWith('flushPayloadSize', expect.any(Number), expect.objectContaining({envKey}))
+        expect(reporter.reportMetric).toBeCalledWith('jsonParseDuration', expect.any(Number), expect.objectContaining({envKey}))
+        expect(reporter.reportMetric).toBeCalledWith('flushRequestDuration', expect.any(Number), expect.objectContaining({envKey}))
     })
 
     it('should setup Event Queue and process events', async () => {
