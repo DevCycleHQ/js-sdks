@@ -1,7 +1,7 @@
 import { DVCEvent } from './types'
 import { DVCRequestEvent } from './models/requestEvent'
 import { DVCPopulatedUser } from './models/populatedUser'
-import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
+import { BucketedUserConfig, DVCLogger, DVCReporter, FlushResults } from '@devcycle/types'
 
 import { getBucketingLib } from './bucketing'
 import { publishEvents } from './request'
@@ -38,6 +38,7 @@ export type EventQueueOptions = {
 
 export class EventQueue {
     private readonly logger: DVCLogger
+    private readonly reporter?: DVCReporter
     private readonly environmentKey: string
     eventFlushIntervalMS: number
     flushEventQueueSize: number
@@ -45,8 +46,9 @@ export class EventQueue {
     private flushInterval: NodeJS.Timer
     private flushInProgress = false
 
-    constructor(logger: DVCLogger, environmentKey: string, options: EventQueueOptions = {}) {
+    constructor(logger: DVCLogger, environmentKey: string, options: EventQueueOptions = {}, reporter?: DVCReporter) {
         this.logger = logger
+        this.reporter = reporter
         this.environmentKey = environmentKey
         this.eventFlushIntervalMS = options?.eventFlushIntervalMS || 10 * 1000
         if (this.eventFlushIntervalMS < 500) {
@@ -84,16 +86,31 @@ export class EventQueue {
      * Flush events in queue to DevCycle Events API. Requeue events if flush fails
      */
     async flushEvents(): Promise<void> {
+        const metricTags = {
+            envKey: this.environmentKey
+        }
+        this.reporter?.reportMetric('queueLength', getBucketingLib().eventQueueSize(this.environmentKey), metricTags)
+
         let flushPayloadsStr
         try {
             flushPayloadsStr = getBucketingLib().flushEventQueue(this.environmentKey)
+            this.reporter?.reportMetric('flushPayloadSize', flushPayloadsStr?.length, metricTags);
         } catch (ex) {
             this.logger.error(`DVC Error Flushing Events: ${ex.message}`)
         }
 
+        const results: FlushResults = {
+            failures: 0,
+            retries: 0,
+            successes: 0
+        }
+
         if (!flushPayloadsStr) return
         this.logger.debug(`Flush Payloads: ${flushPayloadsStr}`)
+        const startTimeJson = Date.now()
         const flushPayloads = JSON.parse(flushPayloadsStr) as FlushPayload[]
+        const endTimeJson = Date.now()
+        this.reporter?.reportMetric('jsonParseDuration', endTimeJson - startTimeJson, metricTags)
         if (flushPayloads.length === 0) return
 
         const reducer = (val: number, batches: FlushPayload) => val + batches.eventCount
@@ -101,26 +118,35 @@ export class EventQueue {
         this.logger.debug(`DVC Flush ${eventCount} Events, for ${flushPayloads.length} Users`)
         this.flushInProgress = true
 
+        const startTimeRequests = Date.now()
         await Promise.all(flushPayloads.map(async (flushPayload) => {
             try {
                 const res = await publishEvents(this.logger, this.environmentKey, flushPayload.records)
                 if (res.status !== 201) {
                     this.logger.error(`Error publishing events, status: ${res.status}, body: ${res.data}`)
                     if (res.status >= 500) {
+                        results.retries++;
                         getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, true)
                     } else {
+                        results.failures++;
                         getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, false)
                     }
                 } else {
                     this.logger.debug(`DVC Flushed ${eventCount} Events, for ${flushPayload.records.length} Users`)
                     getBucketingLib().onPayloadSuccess(this.environmentKey, flushPayload.payloadId)
+                    results.successes++;
                 }
             } catch (ex) {
                 this.logger.error(`DVC Error Flushing Events response message: ${ex.message}`)
                 getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, true)
+                results.retries++;
             }
         }))
         this.flushInProgress = false
+        const endTimeRequests = Date.now()
+
+        this.reporter?.reportMetric('flushRequestDuration', endTimeRequests - startTimeRequests, metricTags)
+        this.reporter?.reportFlushResults(results, metricTags)
     }
 
     /**
