@@ -319,6 +319,13 @@ export class DVCClientAPIUser implements DVCAPIUser {
         isDebug?: boolean
 }
 
+export class DVCOptInUser {
+    @IsString()
+    @IsNotBlank()
+    @IsNotEmpty()
+    user_id: string
+}
+
 export type SDKVariable = PublicVariable & {
     value: VariableValue
     evalReason?: unknown
