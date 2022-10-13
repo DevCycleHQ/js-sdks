@@ -75,6 +75,14 @@ export class DVCClient implements Client {
                 this.eventEmitter.emitError(err)
                 return this
             })
+            
+        if (!options?.reactNative && typeof window !== 'undefined') {
+            window.addEventListener('message', (event) => {
+                if (event.data === 'DVC.optIn.saved') {
+                    this.refetchConfig()
+                }
+            })
+        }
     }
 
     onClientInitialized(): Promise<DVCClient>
