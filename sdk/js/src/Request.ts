@@ -10,8 +10,10 @@ const axiosClient = axios.create({
     validateStatus: (status: number) => status < 400 && status >= 200,
 })
 axiosRetry(axiosClient, {
+    retries: 5,
     // will do exponential retry until axios.timeout
     retryDelay: axiosRetry.exponentialDelay,
+    shouldResetTimeout: true,
     retryCondition: (error) => {
         return !error.response || (error.response.status || 0) >= 500
     }
