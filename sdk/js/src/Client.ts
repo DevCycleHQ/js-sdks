@@ -39,6 +39,7 @@ export class DVCClient implements Client {
     private streamingConnection?: StreamingConnection
     private pageVisibilityHandler?: () => void
     private inactivityHandlerId?: number
+    private windowMessageHandler?: (event: MessageEvent) => void
 
     constructor(environmentKey: string, user: DVCUser, options: DVCOptions = {}) {
         this.user = new DVCPopulatedUser(user, options)
@@ -75,14 +76,15 @@ export class DVCClient implements Client {
                 this.eventEmitter.emitError(err)
                 return this
             })
-            
+
         if (!options?.reactNative && typeof window !== 'undefined') {
-            window.addEventListener('message', (event) => {
+            this.windowMessageHandler = (event: MessageEvent) => {
                 const message = event.data
                 if (message?.type === 'DVC.optIn.saved') {
                     this.refetchConfig()
                 }
-            })
+            }
+            window.addEventListener('message', this.windowMessageHandler)
         }
     }
 
@@ -244,6 +246,10 @@ export class DVCClient implements Client {
 
         if (document && this.pageVisibilityHandler) {
             document.removeEventListener('visibilitychange', this.pageVisibilityHandler)
+        }
+
+        if (this.windowMessageHandler) {
+            window.removeEventListener('message', this.windowMessageHandler)
         }
 
         this.streamingConnection?.close()
