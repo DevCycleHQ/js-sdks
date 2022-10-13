@@ -10,7 +10,10 @@ const createMock = mocked(axios.create, true)
 createMock.mockImplementation((): AxiosInstance => {
     return {
         request: axiosRequestMock,
-        interceptors: { request: { use: jest.fn() }, response: { use: jest.fn() } }
+        interceptors: {
+            request: { use: jest.fn() },
+            response: { use: jest.fn() }
+        }
     } as unknown as AxiosInstance
 })
 

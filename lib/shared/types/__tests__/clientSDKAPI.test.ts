@@ -39,7 +39,6 @@ describe('clientSDKAPI types', () => {
                 lastSeenDate: date.toLocaleDateString()
             })
             expect(await validate(userObj)).toHaveLength(0)
-
         })
 
         it('should accept dates as numbers', async () => {
@@ -49,7 +48,6 @@ describe('clientSDKAPI types', () => {
                 lastSeenDate: date.getTime()
             })
             expect(await validate(userObj)).toHaveLength(0)
-
         })
 
         it('should accept dates as number strings', async () => {

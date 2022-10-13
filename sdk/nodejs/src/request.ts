@@ -1,11 +1,21 @@
 import axios, { AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios'
+import axiosRetry from 'axios-retry'
 import { SDKEventBatchRequestBody, DVCLogger } from '@devcycle/types'
 import { DVCPopulatedUser } from './models/populatedUser'
 import { DVCEvent, DVCOptions } from './types'
 
 const axiosClient = axios.create({
+    timeout: 10 * 1000,
     validateStatus: (status: number) => status < 400 && status >= 200,
 })
+axiosRetry(axiosClient, {
+    // will do exponential retry until axios.timeout
+    retryDelay: axiosRetry.exponentialDelay,
+    retryCondition: (error) => {
+        return !error.response || (error.response.status || 0) >= 500
+    }
+})
+
 export const HOST = '.devcycle.com'
 export const EVENT_URL = 'https://events'
 export const EVENTS_PATH = '/v1/events/batch'
