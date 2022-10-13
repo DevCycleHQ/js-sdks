@@ -6,15 +6,14 @@ import axiosRetry from 'axios-retry'
 import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 
 const axiosClient = axios.create({
+    timeout: 10 * 1000,
     validateStatus: (status: number) => status < 400 && status >= 200,
 })
 axiosRetry(axiosClient, {
-    retries: 5,
-    retryDelay: (retryCount) => {
-        return Math.pow(2, retryCount) * 1000
-    },
+    // will do exponential retry until axios.timeout
+    retryDelay: axiosRetry.exponentialDelay,
     retryCondition: (error) => {
-        return (error?.response?.status || 0) >= 500
+        return !error.response || (error.response.status || 0) >= 500
     }
 })
 

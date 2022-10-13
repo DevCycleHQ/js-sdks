@@ -4,8 +4,14 @@ import { mocked } from 'jest-mock'
 
 const axiosRequestMock = jest.fn()
 const createMock = mocked(axios.create, true)
-createMock.mockImplementation(() => {
-    return { request: axiosRequestMock } as unknown as AxiosInstance
+createMock.mockImplementation((): AxiosInstance => {
+    return {
+        request: axiosRequestMock,
+        interceptors: {
+            request: { use: jest.fn() },
+            response: { use: jest.fn() }
+        }
+    } as unknown as AxiosInstance
 })
 
 import { dvcDefaultLogger } from '../src/utils/logger'
