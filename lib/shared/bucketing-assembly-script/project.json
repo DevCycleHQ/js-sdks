@@ -47,6 +47,9 @@
     },
     "build": {
       "executor": "@nrwl/workspace:run-commands",
+      "outputs": [
+        "lib/shared/bucketing-assembly-script"
+      ],
       "options": {
         "commands": [
           {

@@ -6,7 +6,7 @@ import axiosRetry from 'axios-retry'
 import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 
 const axiosClient = axios.create({
-    timeout: 10 * 1000,
+    timeout: 5 * 1000,
     validateStatus: (status: number) => status < 400 && status >= 200,
 })
 axiosRetry(axiosClient, {
