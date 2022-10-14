@@ -1,14 +1,19 @@
 import axios, { AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios'
-import axiosRetry from 'axios-retry'
+import axiosRetry, { IAxiosRetryConfig } from 'axios-retry'
 import { SDKEventBatchRequestBody, DVCLogger } from '@devcycle/types'
 import { DVCPopulatedUser } from './models/populatedUser'
 import { DVCEvent, DVCOptions } from './types'
 
+const validateStatus = (status: number) => status < 400 && status >= 200
 const axiosClient = axios.create({
     timeout: 10 * 1000,
-    validateStatus: (status: number) => status < 400 && status >= 200,
+    validateStatus,
 })
-axiosRetry(axiosClient, {
+const axiosRetryableClient = axios.create({
+    timeout: 5 * 1000,
+    validateStatus,
+})
+const retryConfig: IAxiosRetryConfig = {
     retries: 5,
     // will do exponential retry until axios.timeout
     retryDelay: axiosRetry.exponentialDelay,
@@ -16,6 +21,15 @@ axiosRetry(axiosClient, {
     retryCondition: (error) => {
         return !error.response || (error.response.status || 0) >= 500
     }
+}
+axiosRetry(axiosRetryableClient, retryConfig)
+const axiosRetryableConfigClient = axios.create({
+    timeout: 5 * 1000,
+    validateStatus,
+})
+axiosRetry(axiosRetryableConfigClient, {
+    ...retryConfig,
+    retries: 1
 })
 
 export const HOST = '.devcycle.com'
@@ -41,7 +55,7 @@ export async function publishEvents(
     const res = await post({
         url: `${EVENT_URL}${HOST}${EVENTS_PATH}`,
         data: { batch: eventsBatch }
-    }, envKey)
+    }, envKey, false)
     if (res.status !== 201) {
         logger.error(`Error posting events, status: ${res.status}, body: ${res.data?.message}`)
     } else {
@@ -60,7 +74,8 @@ export async function getEnvironmentConfig(
     if (etag) {
         headers['If-None-Match'] = etag
     }
-    return await get({
+    return await axiosRetryableConfigClient.request({
+        method: 'GET',
         url,
         timeout: requestTimeout,
         headers: headers
@@ -90,8 +105,9 @@ export async function getAllVariables(
     return await post({
         url: postUrl,
         headers: { 'Authorization': envKey, 'Content-Type': 'application/json' },
-        data: user
-    }, envKey)
+        data: user,
+    },
+    envKey)
 }
 
 export async function getVariable(
@@ -105,7 +121,8 @@ export async function getVariable(
     return await post({
         url: postUrl,
         data: user
-    }, envKey)
+    },
+    envKey)
 }
 
 export async function postTrack(
@@ -131,16 +148,25 @@ export async function postTrack(
     }
 }
 
-export async function post(requestConfig: AxiosRequestConfig, envKey: string): Promise<AxiosResponse> {
-    return await axiosClient.request({
+export async function post(
+    requestConfig: AxiosRequestConfig,
+    envKey: string,
+    retryable = true
+): Promise<AxiosResponse> {
+    const client = retryable ? axiosRetryableClient : axiosClient
+    return await client.request({
         ...requestConfig,
         headers: { 'Authorization': envKey },
         method: 'POST'
     })
 }
 
-export async function get(requestConfig: AxiosRequestConfig): Promise<AxiosResponse> {
-    return await axiosClient.request({
+export async function get(
+    requestConfig: AxiosRequestConfig,
+    retryable = true
+): Promise<AxiosResponse> {
+    const client = retryable ? axiosRetryableClient : axiosClient
+    return await client.request({
         ...requestConfig,
         method: 'GET'
     })

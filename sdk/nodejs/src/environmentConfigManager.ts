@@ -60,19 +60,24 @@ export class EnvironmentConfigManager {
             res = await getEnvironmentConfig(url, this.requestTimeoutMS, this.configEtag)
             this.logger.debug(`Downloaded config, status: ${res?.status}, etag: ${res?.headers?.etag}`)
         } catch (ex) {
-            this.logger.error(`Request to get config failed for url: ${url}, ` +
-                `response message: ${ex.message}, response data ${ex?.response?.data}`)
+            const errMsg = `Request to get config failed for url: ${url}, ` +
+                `response message: ${ex.message}, response data ${ex?.response?.data}`
+            if (this.hasConfig) {
+                this.logger.debug(errMsg)
+            } else {
+                this.logger.error(errMsg)
+            }
             res = null
         }
 
         if (res?.status === 304) {
             this.logger.debug(`Config not modified, using cache, etag: ${this.configEtag}`)
-        } else if (res?.status === 200) {
+        } else if (res?.status === 200 && res?.data) {
             getBucketingLib().setConfigData(this.environmentKey, JSON.stringify(res.data))
             this.hasConfig = true
             this.configEtag = res?.headers?.etag
         } else if (this.hasConfig) {
-            this.logger.error(`Failed to download config, using cached version. url: ${url}.`)
+            this.logger.debug(`Failed to download config, using cached version. url: ${url}.`)
         } else {
             throw new Error('Failed to download DevCycle config.')
         }
