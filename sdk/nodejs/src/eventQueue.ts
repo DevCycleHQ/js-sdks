@@ -33,7 +33,9 @@ export type EventQueueOptions = {
     disableCustomEventLogging?: boolean,
     eventRequestChunkSize?: number,
     maxEventQueueSize?: number,
-    flushEventQueueSize?: number
+    flushEventQueueSize?: number,
+    logger: DVCLogger,
+    reporter?: DVCReporter
 }
 
 export class EventQueue {
@@ -46,9 +48,9 @@ export class EventQueue {
     private flushInterval: NodeJS.Timer
     private flushInProgress = false
 
-    constructor(logger: DVCLogger, environmentKey: string, options: EventQueueOptions = {}, reporter?: DVCReporter) {
-        this.logger = logger
-        this.reporter = reporter
+    constructor(environmentKey: string, options: EventQueueOptions) {
+        this.logger = options.logger
+        this.reporter = options.reporter
         this.environmentKey = environmentKey
         this.eventFlushIntervalMS = options?.eventFlushIntervalMS || 10 * 1000
         if (this.eventFlushIntervalMS < 500) {
@@ -94,7 +96,7 @@ export class EventQueue {
         let flushPayloadsStr
         try {
             flushPayloadsStr = getBucketingLib().flushEventQueue(this.environmentKey)
-            this.reporter?.reportMetric('flushPayloadSize', flushPayloadsStr?.length, metricTags);
+            this.reporter?.reportMetric('flushPayloadSize', flushPayloadsStr?.length, metricTags)
         } catch (ex) {
             this.logger.error(`DVC Error Flushing Events: ${ex.message}`)
         }
@@ -125,21 +127,21 @@ export class EventQueue {
                 if (res.status !== 201) {
                     this.logger.error(`Error publishing events, status: ${res.status}, body: ${res.data}`)
                     if (res.status >= 500) {
-                        results.retries++;
+                        results.retries++
                         getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, true)
                     } else {
-                        results.failures++;
+                        results.failures++
                         getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, false)
                     }
                 } else {
                     this.logger.debug(`DVC Flushed ${eventCount} Events, for ${flushPayload.records.length} Users`)
                     getBucketingLib().onPayloadSuccess(this.environmentKey, flushPayload.payloadId)
-                    results.successes++;
+                    results.successes++
                 }
             } catch (ex) {
                 this.logger.error(`DVC Error Flushing Events response message: ${ex.message}`)
                 getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, true)
-                results.retries++;
+                results.retries++
             }
         }))
         this.flushInProgress = false
