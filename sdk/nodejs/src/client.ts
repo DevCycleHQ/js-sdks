@@ -29,7 +29,6 @@ interface IPlatformData {
 
 export class DVCClient {
     private environmentKey: string
-    private options?: DVCOptions
     private configHelper: EnvironmentConfigManager
     private eventQueue: EventQueue
     private onInitialized: Promise<DVCClient>
@@ -38,7 +37,6 @@ export class DVCClient {
 
     constructor(environmentKey: string, options?: DVCOptions) {
         this.environmentKey = environmentKey
-        this.options = options
         this.logger = options?.logger || dvcDefaultLogger({ level: options?.logLevel })
 
         if (options?.enableEdgeDB) {
@@ -49,10 +47,11 @@ export class DVCClient {
             .then(() => {
                 this.configHelper = new EnvironmentConfigManager(this.logger, environmentKey, options || {})
                 this.eventQueue = new EventQueue(
-                    this.logger,
                     environmentKey,
-                    options,
-                    options?.reporter
+                    {
+                        ...options,
+                        logger: this.logger
+                    },
                 )
 
                 const platformData: IPlatformData = {

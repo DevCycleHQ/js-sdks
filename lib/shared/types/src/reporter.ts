@@ -14,6 +14,6 @@ export type MetricName =
     | 'jsonParseDuration'
 
 export interface DVCReporter {
-    reportFlushResults(results:FlushResults, tags:Tags):void
-    reportMetric(key: MetricName, value: number, tags:Tags):void
+    reportFlushResults(results: FlushResults, tags: Tags): void
+    reportMetric(key: MetricName, value: number, tags: Tags): void
 }
