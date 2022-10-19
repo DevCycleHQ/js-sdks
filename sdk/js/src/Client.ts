@@ -263,7 +263,7 @@ export class DVCClient implements Client {
 
     private async refetchConfig() {
         await this.onInitialized
-        await this.requestConsolidator.queue(this.user)
+        await this.requestConsolidator.queue()
     }
 
     private handleConfigReceived(config: BucketedUserConfig, user: DVCPopulatedUser) {
