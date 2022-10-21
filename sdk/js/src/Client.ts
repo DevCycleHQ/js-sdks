@@ -305,10 +305,12 @@ export class DVCClient implements Client {
             if (!messageData) {
                 return
             }
-            if (messageData.etag !== this.config?.etag || !this.config?.etag) {
-                this.refetchConfig().catch((e) => {
-                    this.logger.error('Failed to refetch config', e)
-                })
+            if (!messageData.type || messageData.type === 'refetchConfig') {
+                if (!this.config?.etag || messageData.etag !== this.config?.etag) {
+                    this.refetchConfig().catch((e) => {
+                        this.logger.error('Failed to refetch config', e)
+                    })
+                }
             }
         } catch (e) {
             this.logger.error('Streaming Connection: Unparseable message', e)
