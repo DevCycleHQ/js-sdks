@@ -41,11 +41,13 @@ export class EnvironmentConfigManager {
         this.fetchConfigPromise = this._fetchConfig().then(() => {
             this.logger.debug('DevCycle initial config loaded')
         }).finally(() => {
-            try {
-                this.intervalTimeout = setInterval(() => this._fetchConfig(), this.pollingIntervalMS)
-            } catch (ex) {
-                this.logger.error(ex.message)
-            }
+            this.intervalTimeout = setInterval(async () => {
+                try {
+                    await this._fetchConfig()
+                } catch (ex) {
+                    this.logger.error(ex.message)
+                }
+            }, this.pollingIntervalMS)
         })
     }
 
