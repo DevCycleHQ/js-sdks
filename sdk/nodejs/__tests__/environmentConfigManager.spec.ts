@@ -41,7 +41,9 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             configPollingIntervalMS: 1000,
             configPollingTimeoutMS: 1000
         })
+        await envConfig.fetchConfigPromise
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
+
         await envConfig._fetchConfig()
         expect(getBucketingLib().setConfigData).toHaveBeenCalledWith('envKey', '{}')
 
@@ -54,15 +56,17 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         envConfig.cleanup()
     })
 
-    it('should override the configPollingIntervalMS and configPollingTimeoutMS settings', () => {
+    it('should override the configPollingIntervalMS and configPollingTimeoutMS settings', async () => {
         getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 200 }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {
             configPollingIntervalMS: 10,
             configPollingTimeoutMS: 10000
         })
+        await envConfig.fetchConfigPromise
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
-        envConfig._fetchConfig()
+
+        await envConfig._fetchConfig()
 
         expect(envConfig).toEqual(expect.objectContaining({
             environmentKey: 'envKey',
@@ -73,18 +77,20 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         envConfig.cleanup()
     })
 
-    it('should call fetch config on the interval period time', (done) => {
+    it('should call fetch config on the interval period time', async () => {
         getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 200 }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {
             configPollingIntervalMS: 1000,
             configPollingTimeoutMS: 1000
         })
+        await envConfig.fetchConfigPromise
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
-        envConfig._fetchConfig()
+
+        await envConfig._fetchConfig()
 
         getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 304 }))
-        envConfig._fetchConfig()
+        await envConfig._fetchConfig()
 
         envConfig.cleanup()
         expect(envConfig).toEqual(expect.objectContaining({
@@ -94,7 +100,6 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             requestTimeoutMS: 1000
         }))
         expect(getEnvironmentConfig_mock).toBeCalledTimes(3)
-        done()
     })
 
     it('should throw error fetching config fails with 500 error', () => {
@@ -102,6 +107,13 @@ describe('EnvironmentConfigManager Unit Tests', () => {
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {})
         expect(envConfig.fetchConfigPromise).rejects.toThrow('Failed to download DevCycle config.')
+    })
+
+    it('should throw invalid sdk key fetching config fails with 403 error', () => {
+        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 403 }))
+
+        const envConfig = new EnvironmentConfigManager(logger, 'envKey', {})
+        expect(envConfig.fetchConfigPromise).rejects.toThrow('Invalid SDK key provided:')
     })
 
     it('should throw error fetching config throws', () => {
@@ -119,6 +131,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             configPollingIntervalMS: 1000,
             configPollingTimeoutMS: 1000
         })
+        await envConfig.fetchConfigPromise
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
         await envConfig._fetchConfig()
 
@@ -127,5 +140,13 @@ describe('EnvironmentConfigManager Unit Tests', () => {
 
         envConfig.cleanup()
         expect(getEnvironmentConfig_mock).toBeCalledTimes(3)
+    })
+
+    it('should start interval if initial config fails', async () => {
+        getEnvironmentConfig_mock.mockResolvedValue(mockAxiosResponse({ status: 403 }))
+
+        const envConfig = new EnvironmentConfigManager(logger, 'envKey', {})
+        await expect(envConfig.fetchConfigPromise).rejects.toThrow('Invalid SDK key provided:')
+        expect(setInterval_mock).toHaveBeenCalledTimes(1)
     })
 })
