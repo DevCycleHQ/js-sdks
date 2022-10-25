@@ -17,7 +17,7 @@ export class EnvironmentConfigManager {
     private readonly requestTimeoutMS: number
     private readonly cdnURI: string
     fetchConfigPromise: Promise<void>
-    private intervalTimeout: NodeJS.Timeout
+    private intervalTimeout?: NodeJS.Timeout
 
     constructor(
         logger: DVCLogger,
@@ -40,8 +40,13 @@ export class EnvironmentConfigManager {
 
         this.fetchConfigPromise = this._fetchConfig().then(() => {
             this.logger.debug('DevCycle initial config loaded')
+        }).finally(() => {
+            try {
+                this.intervalTimeout = setInterval(() => this._fetchConfig(), this.pollingIntervalMS)
+            } catch (ex) {
+                this.logger.error(ex.message)
+            }
         })
-        this.intervalTimeout = setInterval(() => this._fetchConfig(), this.pollingIntervalMS)
     }
 
     cleanup(): void {
@@ -78,6 +83,8 @@ export class EnvironmentConfigManager {
             this.configEtag = res?.headers?.etag
         } else if (this.hasConfig) {
             this.logger.debug(`Failed to download config, using cached version. url: ${url}.`)
+        } else if (res?.status === 403) {
+            throw new Error(`Invalid SDK key provided: ${this.environmentKey}`)
         } else {
             throw new Error('Failed to download DevCycle config.')
         }
