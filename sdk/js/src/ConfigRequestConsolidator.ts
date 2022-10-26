@@ -6,6 +6,8 @@ type PromiseResolver = {
     reject: (err?: any) => void
 }
 
+type RequestParams = {sse: boolean, lastModified?: number}
+
 /**
  * Ensures we only have one active config request at a time
  * any calls made while another is ongoing will be merged together by using the latest user object provided
@@ -13,16 +15,24 @@ type PromiseResolver = {
 export class ConfigRequestConsolidator {
     currentPromise: Promise<BucketedUserConfig> | null
     resolvers: PromiseResolver[] = []
+    requestParams: RequestParams | null = null
 
     constructor(
-        private requestConfigFunction: (user: DVCPopulatedUser) => Promise<BucketedUserConfig>,
+        private requestConfigFunction: (user: DVCPopulatedUser, params?: RequestParams) => Promise<BucketedUserConfig>,
         private handleConfigReceivedFunction: (config: BucketedUserConfig, user: DVCPopulatedUser) => void,
         private nextUser: DVCPopulatedUser
     ) {}
 
-    async queue(user?: DVCPopulatedUser): Promise<BucketedUserConfig> {
+    async queue(
+        user: DVCPopulatedUser | null,
+        requestParams?: RequestParams
+    ): Promise<BucketedUserConfig> {
         if (user) {
             this.nextUser = user
+        }
+
+        if (requestParams) {
+            this.requestParams = requestParams
         }
 
         const resolver = new Promise<BucketedUserConfig>((resolve, reject) => {
@@ -46,6 +56,8 @@ export class ConfigRequestConsolidator {
         const resolvers = this.resolvers.splice(0)
         await this.performRequest(this.nextUser).then((result) => {
             if (this.resolvers.length) {
+                // if more resolvers have been registered since this request was made, don't resolve anything and just
+                // make another request while keeping all the previous resolvers
                 this.resolvers.push(...resolvers)
             } else {
                 resolvers.forEach(({ resolve }) => resolve(result))
@@ -61,7 +73,8 @@ export class ConfigRequestConsolidator {
     }
 
     private async performRequest(user: DVCPopulatedUser): Promise<BucketedUserConfig> {
-        this.currentPromise = this.requestConfigFunction(user)
+        this.currentPromise = this.requestConfigFunction(user, this.requestParams ? this.requestParams : undefined)
+        this.requestParams = null
         const bucketedConfig = await this.currentPromise
         this.currentPromise = null
         return bucketedConfig

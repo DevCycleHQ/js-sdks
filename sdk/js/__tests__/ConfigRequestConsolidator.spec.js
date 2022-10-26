@@ -20,7 +20,7 @@ describe('ConfigRequestConsolidator Tests', () => {
     it('calls request fn using provided user and then calls response fn', async () => {
         requestFn.mockResolvedValue('test')
         const result = await requestConsolidator.queue({user_id: 'user1'})
-        expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'})
+        expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'}, undefined)
         expect(receiveFn).toHaveBeenCalledWith('test', {user_id: 'user1'})
         expect(result).toEqual('test')
     })
@@ -34,13 +34,39 @@ describe('ConfigRequestConsolidator Tests', () => {
 
         const [result1, result2, result3] = await Promise.all([promise1, promise2, promise3])
         expect(requestFn).toHaveBeenCalledTimes(2)
-        expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'})
-        expect(requestFn).toHaveBeenCalledWith({user_id: 'user3'})
+        expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'}, undefined)
+        expect(requestFn).toHaveBeenCalledWith({user_id: 'user3'}, undefined)
         expect(receiveFn).toHaveBeenCalledWith('test2', {user_id: 'user3'})
         expect(receiveFn).toHaveBeenCalledTimes(1)
         expect(result1).toEqual('test2')
         expect(result2).toEqual('test2')
         expect(result3).toEqual('test2')
+    })
+
+    it('queues extra operations with extraParams set', async () => {
+        requestFn.mockResolvedValueOnce('test1')
+        requestFn.mockResolvedValueOnce('test2')
+        const promise1 = requestConsolidator.queue({user_id: 'user1'}, {sse: true, lastModified: 2345})
+        const promise2 = requestConsolidator.queue({user_id: 'user2'})
+        const promise3 = requestConsolidator.queue({user_id: 'user3'}, {sse: true, lastModified: 5678})
+
+        await Promise.all([promise1, promise2, promise3])
+        expect(requestFn).toHaveBeenCalledTimes(2)
+        expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'},  {sse: true, lastModified: 2345})
+        expect(requestFn).toHaveBeenCalledWith({user_id: 'user3'}, {sse: true, lastModified: 5678})
+    })
+
+    it('queues extra operations with extraParams set and clears them after', async () => {
+        requestFn.mockResolvedValueOnce('test1')
+        requestFn.mockResolvedValueOnce('test2')
+        const promise1 = requestConsolidator.queue({user_id: 'user1'}, {sse: true, lastModified: 2345})
+        const promise2 = requestConsolidator.queue({user_id: 'user2'})
+        const promise3 = requestConsolidator.queue({user_id: 'user3'})
+
+        await Promise.all([promise1, promise2, promise3])
+        expect(requestFn).toHaveBeenCalledTimes(2)
+        expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'},  {sse: true, lastModified: 2345})
+        expect(requestFn).toHaveBeenCalledWith({user_id: 'user3'}, undefined)
     })
 
     it('processes failures correctly', async () => {
@@ -53,8 +79,8 @@ describe('ConfigRequestConsolidator Tests', () => {
         const result2 = await promise2
 
         expect(requestFn).toHaveBeenCalledTimes(2)
-        expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'})
-        expect(requestFn).toHaveBeenCalledWith({user_id: 'user2'})
+        expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'}, undefined)
+        expect(requestFn).toHaveBeenCalledWith({user_id: 'user2'}, undefined)
         expect(receiveFn).toHaveBeenCalledTimes(1)
         expect(receiveFn).toHaveBeenCalledWith('test2', {user_id: 'user2'})
         expect(result2).toEqual('test2')
@@ -65,13 +91,13 @@ describe('ConfigRequestConsolidator Tests', () => {
         requestFn.mockRejectedValueOnce('test2')
         const promise1 = requestConsolidator.queue({user_id: 'user1'})
         const promise2 = requestConsolidator.queue({user_id: 'user2'})
-        
+
         await expect(promise1).rejects.toEqual('test2')
         await expect(promise2).rejects.toEqual('test2')
 
         expect(requestFn).toHaveBeenCalledTimes(2)
-        expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'})
-        expect(requestFn).toHaveBeenCalledWith({user_id: 'user2'})
+        expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'}, undefined)
+        expect(requestFn).toHaveBeenCalledWith({user_id: 'user2'}, undefined)
         expect(receiveFn).toHaveBeenCalledTimes(0)
     })
 })
