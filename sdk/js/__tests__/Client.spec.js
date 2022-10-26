@@ -72,7 +72,8 @@ describe('DVCClient tests', () => {
             'test_env_key',
             expect.objectContaining({ user_id: 'user1' }),
             expect.any(Object),
-            dvcOptions
+            dvcOptions,
+            undefined
         )
         await client.onClientInitialized()
         expect(getConfigJson_mock.mock.calls.length).toBe(1)
@@ -95,7 +96,8 @@ describe('DVCClient tests', () => {
             'test_env_key',
             expect.objectContaining({ user_id: 'user1' }),
             expect.any(Object),
-            dvcOptions
+            dvcOptions,
+            undefined
         )
         await client.onClientInitialized()
         expect(getConfigJson_mock.mock.calls.length).toBe(1)
@@ -112,7 +114,8 @@ describe('DVCClient tests', () => {
             'test_env_key',
             expect.objectContaining({ user_id: 'user1' }),
             expect.any(Object),
-            dvcOptions
+            dvcOptions,
+            undefined
         )
         await client.onClientInitialized()
         expect(getConfigJson_mock.mock.calls.length).toBe(1)
@@ -335,7 +338,8 @@ describe('DVCClient tests', () => {
                 'test_env_key',
                 expect.objectContaining({ user_id: 'user1' }),
                 expect.any(Object),
-                dvcOptions
+                dvcOptions,
+                undefined
             )
             expect(saveEntity_mock).toBeCalledWith(
                 expect.objectContaining(newUser),
@@ -436,7 +440,8 @@ describe('DVCClient tests', () => {
                 'test_env_key',
                 expect.objectContaining(anonUser),
                 expect.any(Object),
-                {}
+                {},
+                undefined
             )
             expect(result).toEqual(newVariables.variables)
             expect(anonUser.isAnonymous).toBe(true)
@@ -458,7 +463,8 @@ describe('DVCClient tests', () => {
                 'test_env_key',
                 expect.objectContaining({ user_id: expect.any(String) }),
                 expect.any(Object),
-                dvcOptions
+                dvcOptions,
+                undefined
             )
             expect(saveEntity_mock).not.toBeCalled()
         })

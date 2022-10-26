@@ -48,7 +48,9 @@ export class DVCClient implements Client {
         this.variableDefaultMap = {}
         this.eventQueue = new EventQueue(environmentKey, this, options?.eventFlushIntervalMS)
         this.requestConsolidator = new ConfigRequestConsolidator(
-            (user: DVCPopulatedUser) => getConfigJson(this.environmentKey, user, this.logger, this.options),
+            (user: DVCPopulatedUser, extraParams) => getConfigJson(
+                this.environmentKey, user, this.logger, this.options, extraParams
+            ),
             (config: BucketedUserConfig, user: DVCPopulatedUser) => this.handleConfigReceived(config, user),
             this.user
         )
@@ -81,7 +83,7 @@ export class DVCClient implements Client {
             this.windowMessageHandler = (event: MessageEvent) => {
                 const message = event.data
                 if (message?.type === 'DVC.optIn.saved') {
-                    this.refetchConfig()
+                    this.refetchConfig(false)
                 }
             }
             window.addEventListener('message', this.windowMessageHandler)
@@ -261,9 +263,9 @@ export class DVCClient implements Client {
         return this._closing
     }
 
-    private async refetchConfig() {
+    private async refetchConfig(sse: boolean, lastModified?: number) {
         await this.onInitialized
-        await this.requestConsolidator.queue()
+        await this.requestConsolidator.queue(null, { sse, lastModified })
     }
 
     private handleConfigReceived(config: BucketedUserConfig, user: DVCPopulatedUser) {
@@ -300,14 +302,14 @@ export class DVCClient implements Client {
     private onSSEMessage(message: unknown) {
         try {
             const parsedMessage = JSON.parse(message as string)
-            const messageData = parsedMessage.data
+            const messageData = JSON.parse(parsedMessage.data)
 
             if (!messageData) {
                 return
             }
             if (!messageData.type || messageData.type === 'refetchConfig') {
                 if (!this.config?.etag || messageData.etag !== this.config?.etag) {
-                    this.refetchConfig().catch((e) => {
+                    this.refetchConfig(true, messageData.lastModified).catch((e) => {
                         this.logger.error('Failed to refetch config', e)
                     })
                 }
@@ -329,7 +331,7 @@ export class DVCClient implements Client {
             } else if (document.visibilityState === 'visible') {
                 if (!this.streamingConnection?.isConnected()) {
                     this.logger.debug('Page became visible, refetching config')
-                    this.refetchConfig().catch((e) => {
+                    this.refetchConfig(false).catch((e) => {
                         this.logger.error('Failed to refetch config', e)
                     })
                     this.streamingConnection?.reopen()

@@ -49,13 +49,16 @@ describe('Request tests', () => {
             const environmentKey = 'my_env_key'
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
-            await Request.getConfigJson(environmentKey, user as DVCPopulatedUser, defaultLogger)
+            await Request.getConfigJson(environmentKey, user as DVCPopulatedUser, defaultLogger, {}, {
+                sse: true,
+                lastModified: 1234
+            })
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: { 'Content-Type': 'application/json' },
                 method: 'GET',
                 url: 'https://sdk-api.devcycle.com/v1/sdkConfig?envKey=' +
-                     `${environmentKey}&user_id=${user.user_id}&isAnonymous=false`
+                     `${environmentKey}&user_id=${user.user_id}&isAnonymous=false&sse=1&sseLastModified=1234`
             })
         })
 
