@@ -43,7 +43,7 @@ export class DVCClient {
             this.logger.info('EdgeDB can only be enabled for the DVC Cloud Client.')
         }
 
-        const initializePromise = importBucketingLib()
+        const initializePromise = importBucketingLib({ options, logger: this.logger })
             .then(() => {
                 this.configHelper = new EnvironmentConfigManager(this.logger, environmentKey, options || {})
                 this.eventQueue = new EventQueue(
