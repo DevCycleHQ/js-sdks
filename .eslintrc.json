@@ -1,11 +1,12 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx"],
+  "plugins": ["@nrwl/nx", "lodash"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
+        "lodash/import-scope": [2, "method"],
         "@nrwl/nx/enforce-module-boundaries": [
           "error",
           {
