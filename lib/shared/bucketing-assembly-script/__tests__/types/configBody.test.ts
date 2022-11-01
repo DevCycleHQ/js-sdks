@@ -1,6 +1,6 @@
 import testData from '../../../bucketing-test-data/json-data/testData.json'
 import { testConfigBodyClass } from '../bucketingImportHelper'
-import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 
 describe('Config Body', () => {
     it('should parse valid JSON into ConfigBody class', () => {
@@ -9,7 +9,7 @@ describe('Config Body', () => {
     })
 
     it('should throw if target.rollout is missing type', () => {
-        const config = _.cloneDeep(testData.config)
+        const config = cloneDeep(testData.config)
         const target: any = config.features[0].configuration.targets[0]
         target.rollout = {
             startDate: new Date()
@@ -19,7 +19,7 @@ describe('Config Body', () => {
     })
 
     it('should throw if feature.type is missing not a valid type', () => {
-        const config = _.cloneDeep(testData.config)
+        const config = cloneDeep(testData.config)
         const feature: any = config.features[0]
         feature.type = 'invalid'
         expect(() => testConfigBodyClass(JSON.stringify(config)))
@@ -28,7 +28,7 @@ describe('Config Body', () => {
     })
 
     it('should throw if audience is missing fields for user filter', () => {
-        const config = _.cloneDeep(testData.config)
+        const config = cloneDeep(testData.config)
         const filters = config.features[0].configuration.targets[0]._audience.filters
         filters.filters[0] = {
             type: 'user'
@@ -38,7 +38,7 @@ describe('Config Body', () => {
     })
 
     it('should throw if audience is missing comparator for user filter', () => {
-        const config = _.cloneDeep(testData.config)
+        const config = cloneDeep(testData.config)
         const filters = config.features[0].configuration.targets[0]._audience.filters
         filters.filters[0] = {
             type: 'user',
@@ -50,7 +50,7 @@ describe('Config Body', () => {
     })
 
     it('should throw if custom data filter is missing dataKey', () => {
-        const config = _.cloneDeep(testData.config)
+        const config = cloneDeep(testData.config)
         const filters = config.features[0].configuration.targets[0]._audience.filters
         filters.filters[0] = {
             type: 'user',
@@ -64,7 +64,7 @@ describe('Config Body', () => {
     })
 
     it('should throw if custom data filter is missing dataKeyType', () => {
-        const config = _.cloneDeep(testData.config)
+        const config = cloneDeep(testData.config)
         const filters = config.features[0].configuration.targets[0]._audience.filters
         filters.filters[0] = {
             type: 'user',
@@ -78,7 +78,7 @@ describe('Config Body', () => {
     })
 
     it('should throw if custom data filter has invalid dataKeyType', () => {
-        const config = _.cloneDeep(testData.config)
+        const config = cloneDeep(testData.config)
         const filters = config.features[0].configuration.targets[0]._audience.filters
         filters.filters[0] = {
             type: 'user',
@@ -93,7 +93,7 @@ describe('Config Body', () => {
     })
 
     it('should pass if audience is missing fields but type is all', () => {
-        const config = _.cloneDeep(testData.config)
+        const config = cloneDeep(testData.config)
         const filters = config.features[0].configuration.targets[0]._audience.filters
         filters.filters[0] = {
             type: 'all'
