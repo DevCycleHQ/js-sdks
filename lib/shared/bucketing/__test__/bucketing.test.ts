@@ -10,7 +10,8 @@ import {
 import { config, barrenConfig } from '@devcycle/bucketing-test-data/src/data/testData'
 
 import moment from 'moment'
-import * as _ from 'lodash'
+import times from 'lodash/times'
+import filter from 'lodash/filter'
 import * as uuid from 'uuid'
 
 describe('User Hashing and Bucketing', () => {
@@ -26,16 +27,16 @@ describe('User Hashing and Bucketing', () => {
                 { _variation: 'var3', percentage: 0.1 }
             ]
         }
-        _.times(30000, () => {
+        times(30000, () => {
             const user_id = uuid.v4()
             const { bucketingHash } = generateBoundedHashes(user_id, testTarget._id)
             buckets.push(decideTargetVariation({ target: testTarget, boundedHash: bucketingHash }))
         })
 
-        const var1 = _.filter(buckets, (bucket) => bucket === 'var1')
-        const var2 = _.filter(buckets, (bucket) => bucket === 'var2')
-        const var3 = _.filter(buckets, (bucket) => bucket === 'var3')
-        const var4 = _.filter(buckets, (bucket) => bucket === 'var4')
+        const var1 = filter(buckets, (bucket) => bucket === 'var1')
+        const var2 = filter(buckets, (bucket) => bucket === 'var2')
+        const var3 = filter(buckets, (bucket) => bucket === 'var3')
+        const var4 = filter(buckets, (bucket) => bucket === 'var4')
 
         expect(var1.length / buckets.length).toBeGreaterThan(0.24)
         expect(var1.length / buckets.length).toBeLessThan(0.26)

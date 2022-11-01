@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import * as _ from 'lodash'
+import clone from 'lodash/clone'
 import * as assert from 'assert'
 import * as segmentation from '../src/segmentation'
 import {
@@ -1218,7 +1218,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, segmentation.checkCustomData({ strKey: 'value' }, filterStr))
         })
         it('should return true if string is one OR value', () => {
-            const filter = _.clone(filterStr)
+            const filter = clone(filterStr)
             filter.values = ['value', 'value too']
             assert.strictEqual(true, segmentation.checkCustomData({ strKey: 'value' }, filter))
         })
@@ -1230,14 +1230,14 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false, segmentation.checkCustomData({}, filterStr))
         })
 
-        const filterNum = _.clone(filterStr)
+        const filterNum = clone(filterStr)
         filterNum.dataKey = 'numKey'
         filterNum.values = [0]
         it('should return true if number value is equal', () => {
             assert.strictEqual(true, segmentation.checkCustomData({ numKey: 0 }, filterNum))
         })
         it('should return true if number is one OR value', () => {
-            const filter = _.clone(filterNum)
+            const filter = clone(filterNum)
             filter.values = [0, 1]
             assert.strictEqual(true, segmentation.checkCustomData({ numKey: 1 }, filter))
         })
@@ -1245,7 +1245,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false, segmentation.checkCustomData({ numKey: 1 }, filterNum))
         })
 
-        const filterBool = _.clone(filterStr)
+        const filterBool = clone(filterStr)
         filterBool.dataKey = 'boolKey'
         filterBool.values = [false]
         it('should return true if bool value is equal', () => {
@@ -1282,7 +1282,7 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         it('should return true if one custom data key is missing with not equal filter value', () => {
-            const filter = _.clone(filterNum)
+            const filter = clone(filterNum)
             filter.comparator = '!=' as FilterComparator
             const operatorFilter = {
                 filters: [filterStr, filter, filterBool],
@@ -1298,14 +1298,14 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         it('should return true if no custom data is provided with not equal filter value', () => {
-            const filter = _.clone(filterNum)
+            const filter = clone(filterNum)
             filter.comparator = '!=' as FilterComparator
             const data = null as unknown as Record<string, unknown>
             assert.strictEqual(true, segmentation.checkCustomData(data, filter))
         })
 
         it('should return true if no custom data is provided with not exists filter value', () => {
-            const filter = _.clone(filterNum)
+            const filter = clone(filterNum)
             filter.comparator = '!exist' as FilterComparator
 
             const data = null as unknown as Record<string, unknown>
@@ -1313,7 +1313,7 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         it('should return false if no custom data is provided with not equal filter and others', () => {
-            const filter = _.clone(filterNum)
+            const filter = clone(filterNum)
             filter.comparator = '!=' as FilterComparator
             const operatorFilter = {
                 filters: [filterStr, filter, filterBool],
@@ -1329,7 +1329,7 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         it('should return false if no custom data is provided with not exists filter and others', () => {
-            const filter = _.clone(filterNum)
+            const filter = clone(filterNum)
             filter.comparator = '!exist' as FilterComparator
             const operatorFilter = {
                 filters: [filterStr, filter, filterBool],
