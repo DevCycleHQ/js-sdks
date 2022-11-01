@@ -588,107 +588,107 @@ describe('EventQueue Unit Tests', () => {
 
         it('should not queue aggregate event if user event and aggregate event queue' +
             ' exceeds max event queue size', () => {
-                const logger = dvcDefaultLogger()
-                logger.warn = jest.fn()
+            const logger = dvcDefaultLogger()
+            logger.warn = jest.fn()
 
-                const envKey = 'envKey'
-                const eventQueue = initEventQueue(envKey, { logger })
-                const user = new DVCPopulatedUser({ user_id: 'user1' })
+            const envKey = 'envKey'
+            const eventQueue = initEventQueue(envKey, { logger })
+            const user = new DVCPopulatedUser({ user_id: 'user1' })
 
-                for (let i = 0; i < 500; i++) {
-                    eventQueue.queueEvent(user, { type: 'test_event' })
-                }
-                for (let i = 0; i < 500; i++) {
-                    const target = `key${i}`
-                    const aggEvent = { type: EventTypes.aggVariableEvaluated, target }
-                    eventQueue.queueAggregateEvent(user, aggEvent, {
-                        ...bucketedUserConfig,
-                        variableVariationMap: { [target]: { _feature: 'feat', _variation: 'var' } }
-                    })
-                }
-                expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1000)
+            for (let i = 0; i < 500; i++) {
+                eventQueue.queueEvent(user, { type: 'test_event' })
+            }
+            for (let i = 0; i < 500; i++) {
+                const target = `key${i}`
+                const aggEvent = { type: EventTypes.aggVariableEvaluated, target }
+                eventQueue.queueAggregateEvent(user, aggEvent, {
+                    ...bucketedUserConfig,
+                    variableVariationMap: { [target]: { _feature: 'feat', _variation: 'var' } }
+                })
+            }
+            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1000)
 
-                for (let i = 0; i < 1000; i++) {
-                    eventQueue.queueEvent(user, { type: 'test_event' })
-                }
-                expect(getBucketingLib().eventQueueSize(envKey)).toEqual(2000)
+            for (let i = 0; i < 1000; i++) {
+                eventQueue.queueEvent(user, { type: 'test_event' })
+            }
+            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(2000)
 
-                eventQueue.queueAggregateEvent(
-                    user,
-                    { type: EventTypes.aggVariableEvaluated, target: 'key_test_2' },
-                    bucketedUserConfig
-                )
+            eventQueue.queueAggregateEvent(
+                user,
+                { type: EventTypes.aggVariableEvaluated, target: 'key_test_2' },
+                bucketedUserConfig
+            )
 
-                expect(logger.warn).toBeCalledTimes(1)
-                expect(logger.warn).toBeCalledWith(
-                    expect.stringContaining('Max event queue size reached, dropping aggregate event')
-                )
-                expect(getBucketingLib().eventQueueSize(envKey)).toEqual(2000)
-            })
+            expect(logger.warn).toBeCalledTimes(1)
+            expect(logger.warn).toBeCalledWith(
+                expect.stringContaining('Max event queue size reached, dropping aggregate event')
+            )
+            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(2000)
+        })
 
         it('should flush event queues once max queue size has been reached before' +
             ' adding another user event', async () => {
-                const envKey = 'envKey'
-                const eventQueue = initEventQueue(envKey)
-                const flushEvents_mock = jest.spyOn(eventQueue, 'flushEvents')
-                const user = new DVCPopulatedUser({ user_id: 'user1' })
+            const envKey = 'envKey'
+            const eventQueue = initEventQueue(envKey)
+            const flushEvents_mock = jest.spyOn(eventQueue, 'flushEvents')
+            const user = new DVCPopulatedUser({ user_id: 'user1' })
 
-                // set eventQueueSize to 1000
-                for (let i = 0; i < 500; i++) {
-                    eventQueue.queueEvent(user, { type: 'test_event' })
-                }
-                for (let i = 0; i < 500; i++) {
-                    const target = `key${i}`
-                    const aggEvent = { type: EventTypes.aggVariableEvaluated, target }
-                    eventQueue.queueAggregateEvent(user, aggEvent, {
-                        ...bucketedUserConfig,
-                        variableVariationMap: { [target]: { _feature: 'feat', _variation: 'var' } }
-                    })
-                }
-                expect(flushEvents_mock).toBeCalledTimes(0)
-                expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1000)
-
-                // since max event queue size has been reached, attempting to add a new user event will flush the queue
+            // set eventQueueSize to 1000
+            for (let i = 0; i < 500; i++) {
                 eventQueue.queueEvent(user, { type: 'test_event' })
-                expect(flushEvents_mock).toBeCalledTimes(1)
-                expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1001)
-            })
+            }
+            for (let i = 0; i < 500; i++) {
+                const target = `key${i}`
+                const aggEvent = { type: EventTypes.aggVariableEvaluated, target }
+                eventQueue.queueAggregateEvent(user, aggEvent, {
+                    ...bucketedUserConfig,
+                    variableVariationMap: { [target]: { _feature: 'feat', _variation: 'var' } }
+                })
+            }
+            expect(flushEvents_mock).toBeCalledTimes(0)
+            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1000)
+
+            // since max event queue size has been reached, attempting to add a new user event will flush the queue
+            eventQueue.queueEvent(user, { type: 'test_event' })
+            expect(flushEvents_mock).toBeCalledTimes(1)
+            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1001)
+        })
 
         it('should flush event queues once max queue size has been reached before ' +
             'adding another agg event', async () => {
-                const envKey = 'envKey'
-                const eventQueue = initEventQueue(envKey)
-                const flushEvents_mock = jest.spyOn(eventQueue, 'flushEvents')
+            const envKey = 'envKey'
+            const eventQueue = initEventQueue(envKey)
+            const flushEvents_mock = jest.spyOn(eventQueue, 'flushEvents')
 
-                const user = new DVCPopulatedUser({ user_id: 'user1' })
+            const user = new DVCPopulatedUser({ user_id: 'user1' })
 
-                // set eventQueueSize to 1000
-                for (let i = 0; i < 500; i++) {
-                    eventQueue.queueEvent(user, { type: 'test_event' })
+            // set eventQueueSize to 1000
+            for (let i = 0; i < 500; i++) {
+                eventQueue.queueEvent(user, { type: 'test_event' })
+            }
+            for (let i = 0; i < 500; i++) {
+                const target = `key${i}`
+                const aggEvent = { type: EventTypes.aggVariableEvaluated, target }
+                eventQueue.queueAggregateEvent(user, aggEvent, {
+                    ...bucketedUserConfig,
+                    variableVariationMap: { [target]: { _feature: 'feat', _variation: 'var' } }
+                })
+            }
+            expect(flushEvents_mock).toBeCalledTimes(0)
+            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1000)
+
+            // since max event queue size has been reached, attempting to add a new agg event will flush the queue
+            eventQueue.queueAggregateEvent(
+                user,
+                { type: EventTypes.aggVariableEvaluated, target: 'key_final' },
+                {
+                    ...bucketedUserConfig,
+                    variableVariationMap: { 'key_final': { _feature: 'feat', _variation: 'var' } }
                 }
-                for (let i = 0; i < 500; i++) {
-                    const target = `key${i}`
-                    const aggEvent = { type: EventTypes.aggVariableEvaluated, target }
-                    eventQueue.queueAggregateEvent(user, aggEvent, {
-                        ...bucketedUserConfig,
-                        variableVariationMap: { [target]: { _feature: 'feat', _variation: 'var' } }
-                    })
-                }
-                expect(flushEvents_mock).toBeCalledTimes(0)
-                expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1000)
-
-                // since max event queue size has been reached, attempting to add a new agg event will flush the queue
-                eventQueue.queueAggregateEvent(
-                    user,
-                    { type: EventTypes.aggVariableEvaluated, target: 'key_final' },
-                    {
-                        ...bucketedUserConfig,
-                        variableVariationMap: { 'key_final': { _feature: 'feat', _variation: 'var' } }
-                    }
-                )
-                expect(flushEvents_mock).toBeCalledTimes(1)
-                expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1001)
-            })
+            )
+            expect(flushEvents_mock).toBeCalledTimes(1)
+            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1001)
+        })
     })
 
     describe('EventQueue init validation', () => {
