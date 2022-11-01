@@ -1,5 +1,8 @@
 'use strict'
-import { orderBy, pick, last, first } from 'lodash'
+import orderBy from 'lodash/orderBy'
+import pick from 'lodash/pick'
+import last from 'lodash/last'
+import first from 'lodash/first'
 import {
     ConfigBody, PublicTarget, PublicFeature, BucketedUserConfig, PublicRollout, PublicRolloutStage, DVCBucketingUser
 } from '@devcycle/types'

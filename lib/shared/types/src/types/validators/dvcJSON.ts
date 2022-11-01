@@ -1,4 +1,9 @@
-import { isString, isNumber, isBoolean, isPlainObject, isNull, isUndefined } from 'lodash'
+import isString from 'lodash/isString'
+import isNumber from 'lodash/isNumber'
+import isBoolean from 'lodash/isBoolean'
+import isPlainObject from 'lodash/isPlainObject'
+import isNull from 'lodash/isNull'
+import isUndefined from 'lodash/isUndefined'
 import { registerDecorator, ValidationOptions } from '@nestjs/class-validator'
 
 export type DVCJSON = { [key: string]: string | number | boolean }
