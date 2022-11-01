@@ -1,6 +1,9 @@
-import {
-    isArray, isNumber, isString, isBoolean, includes, find
-} from 'lodash'
+import isArray from 'lodash/isArray'
+import isNumber from 'lodash/isNumber'
+import isString from 'lodash/isString'
+import isBoolean from 'lodash/isBoolean'
+import includes from 'lodash/includes'
+import find from 'lodash/find'
 import { versionCompare } from './versionCompare'
 import {
     TopLevelOperator, AudienceFilterOrOperator, UserSubType
