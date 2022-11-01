@@ -6,7 +6,7 @@
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "lodash/import-scope": [2, "method"],
+        "lodash/import-scope": ["error", "method"],
         "@nrwl/nx/enforce-module-boundaries": [
           "error",
           {
