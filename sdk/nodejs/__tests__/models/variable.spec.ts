@@ -1,6 +1,7 @@
 import { DVCVariable } from '../../src/models/variable'
 
 describe('DVCVariable Unit Tests', () => {
+
     it('should construct DVCVariable from VariableParam', () => {
         const variable = new DVCVariable({
             key: 'key',

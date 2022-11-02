@@ -32,19 +32,57 @@ describe('variable', () => {
         country: 'CA'
     })
 
-    describe('variableDefaulted event', () => {
-        let client: DVCClient
+    let client: DVCClient
 
-        beforeAll(async () => {
-            client = new DVCClient('token')
-            await client.onClientInitialized()
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            client.eventQueue.queueAggregateEvent = jest.fn()
-        })
-        beforeEach(() => {
-            jest.clearAllMocks()
-        })
+    beforeAll(async () => {
+        client = new DVCClient('token')
+        await client.onClientInitialized()
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        client.eventQueue.queueAggregateEvent = jest.fn()
+    })
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
+
+    it('returns a valid variable object for a variable that is in the config', () => {
+        const variable = client.variable(user, 'test-key', false)
+        expect(variable.value).toEqual(true)
+    })
+
+    it('returns a valid variable object for a variable that is not in the config', () => {
+        const variable = client.variable(user, 'test-key2', false)
+        expect(variable.value).toEqual(false)
+        expect(variable.isDefaulted).toEqual(true)
+    })
+
+    it('returns a defaulted variable object for a variable that is in the config but the wrong type', () => {
+        const variable = client.variable(user, 'test-key', 'test')
+        expect(variable.value).toEqual('test')
+        expect(variable.isDefaulted).toEqual(true)
+    })
+
+    it('returns a variable with the correct type for string', () => {
+        const variable = client.variable(user, 'test-key', 'test')
+        // this will be a type error for non-strings
+        variable.value.concat()
+        // should allow assignment to different string
+        variable.value = 'test2'
+    })
+
+    it('returns a variable with the correct type for number', () => {
+        const variable = client.variable(user, 'test-key', 1)
+        // this will be a type error for non-numbers
+        variable.value.toFixed()
+    })
+
+    it('returns a variable with the correct type for JSON', () => {
+        const variable = client.variable(user, 'test-key', { key: 'test' })
+        // this will be a type error for non-JSON
+        console.log(variable.value.asdasdas)
+    })
+
+    describe('variableDefaulted event', () => {
 
         it('does not get sent if variable is in bucketed config',async () => {
             client.variable(user, 'test-key', false)
@@ -54,7 +92,12 @@ describe('variable', () => {
             expect(client.eventQueue.queueAggregateEvent)
                 .toBeCalledWith(expectedUser,
                     { type: 'aggVariableEvaluated', target: 'test-key' },
-                    { 'variables': { ['test-key']: true } }
+                    { 'variables': {
+                        ['test-key']: {
+                            value: true,
+                            type: 'Boolean'
+                        }
+                    } }
                 )
         })
         it('gets sent if variable is not in bucketed config',async () => {
@@ -65,7 +108,12 @@ describe('variable', () => {
             expect(client.eventQueue.queueAggregateEvent)
                 .toBeCalledWith(expectedUser,
                     { type: 'aggVariableDefaulted', target: 'test-key-not-in-config' },
-                    { 'variables': { ['test-key']: true } }
+                    { 'variables': {
+                        ['test-key']: {
+                            value: true,
+                            type: 'Boolean'
+                        }
+                    } }
                 )
         })
     })
