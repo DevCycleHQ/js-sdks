@@ -1,6 +1,6 @@
 {
   "name": "@devcycle/types",
-  "version": "1.0.47",
+  "version": "1.0.48",
   "license": "MIT",
   "type": "commonjs",
   "dependencies": {
