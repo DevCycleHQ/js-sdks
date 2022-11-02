@@ -41,3 +41,12 @@ export enum VariableType {
  */
 export type VariableValue = string | boolean | number | JSON
 type JSON = { [key: string]: string | boolean | number }
+
+// alias to resolve a generic type constrained by `VariableValue` back into its original type
+export type VariableTypeAlias<T> = T extends boolean ? boolean : (
+        T extends number ? number : (
+            T extends string ? string : (
+                T extends JSON ? JSON : never
+                )
+            )
+        )

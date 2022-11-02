@@ -31,6 +31,7 @@ describe('DVCClient tests', () => {
             key: {
                 _id: 'id',
                 value: 'value1',
+                type: 'String',
                 default_value: 'default_value'
             }
         }
@@ -187,6 +188,22 @@ describe('DVCClient tests', () => {
                 })
             })
         }
+
+        it('return a variable with the correct value from the config', async () => {
+            client = createClientWithDelay(0)
+            await client.onClientInitialized()
+            const variable = client.variable('key', 'default_value')
+            expect(variable.value).toBe('value1')
+            expect(variable.defaultValue).toBe('default_value')
+        })
+
+        it('return the default value for the variable if the types do not match', async () => {
+            client = createClientWithDelay(0)
+            await client.onClientInitialized()
+            const variable = client.variable('key', false)
+            expect(variable.value).toBe(false)
+            expect(variable.defaultValue).toBe(false)
+        })
 
         it('should create a variable if get fails to get config', async () => {
             client = createClientWithConfigImplementation(() => {
