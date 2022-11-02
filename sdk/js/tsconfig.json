@@ -6,7 +6,6 @@
     "strict": true,
     "noImplicitOverride": true,
     "allowJs": true,
-    "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },

@@ -1,7 +1,7 @@
 import { DVCLogger, DVCDefaultLogLevel } from '@devcycle/types'
 
 export type DVCVariableValue = string | number | boolean | JSON
-export type JSON = { [key: string]: string | number | boolean }
+export type JSON = Record<string, string | number | boolean>
 
 export interface ErrorCallback<T> {
     (err: Error, result?: null | undefined): void

@@ -6,16 +6,22 @@ import {
     DVCVariableValue,
     DVCEvent as ClientEvent,
     DVCUser,
-    ErrorCallback
+    ErrorCallback, JSON
 } from './types'
-import { DVCVariable } from './Variable'
+import { DVCVariable, DVCVariableOptions } from './Variable'
 import { getConfigJson, saveEntity } from './Request'
 import Store from './Store'
 import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
 import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
-import { BucketedUserConfig, VariableType, VariableValue } from '@devcycle/types'
+import {
+    BucketedUserConfig,
+    getVariableTypeFromValue,
+    VariableType,
+    VariableTypeAlias,
+    VariableValue
+} from '@devcycle/types'
 import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
@@ -24,7 +30,7 @@ import { StreamingConnection } from './StreamingConnection'
 export class DVCClient implements Client {
     private options: DVCOptions
     private onInitialized: Promise<DVCClient>
-    private variableDefaultMap: { [key: string]: { [key: string]: DVCVariable } }
+    private variableDefaultMap: { [key: string]: { [key: string]: DVCVariable<any> } }
     private environmentKey: string
     private userSaved = false
     private _closing = false
@@ -102,23 +108,39 @@ export class DVCClient implements Client {
         return this.onInitialized
     }
 
-    variable(key: string, defaultValue: DVCVariableValue): DVCVariable {
+    variable<T extends DVCVariableValue>(key: string, defaultValue: T): DVCVariable<T> {
         if (defaultValue === undefined || defaultValue === null) {
             throw new Error('Default value is a required param')
         }
+
+        // this will throw if type is invalid
+        const type = getVariableTypeFromValue(defaultValue, key, this.logger, true)
+
         const defaultValueKey = typeof defaultValue === 'string' ? defaultValue : JSON.stringify(defaultValue)
 
         let variable
         if (this.variableDefaultMap[key] && this.variableDefaultMap[key][defaultValueKey]) {
-            variable = this.variableDefaultMap[key][defaultValueKey]
+            variable = this.variableDefaultMap[key][defaultValueKey] as DVCVariable<T>
         } else {
-            const data = {
+            const configVariable = this.config?.variables?.[key]
+
+            const data: DVCVariableOptions<T> = {
                 key,
                 defaultValue,
-                ...this.config?.variables?.[key]
             }
 
-            variable = new DVCVariable(data)
+            if (configVariable) {
+                if (configVariable.type === type) {
+                    data.value = configVariable.value as VariableTypeAlias<T>
+                    data.evalReason = configVariable.evalReason
+                } else {
+                    this.logger.error(
+                        `Type mismatch for variable ${key}. Expected ${type}, got ${configVariable.type}`
+                    )
+                }
+            }
+
+            variable = new DVCVariable<T>(data)
 
             this.variableDefaultMap[key] = {
                 [defaultValueKey]: variable,
@@ -136,7 +158,7 @@ export class DVCClient implements Client {
                 target: variable.key,
                 metaData: {
                     value: variable.value,
-                    type: getTypeFromDefaultValue(variable.defaultValue, variable.key, this.logger),
+                    type: getVariableTypeFromValue(variable.defaultValue, variable.key, this.logger),
                     _variable: variableFromConfig?._id
                 }
             })
@@ -360,21 +382,6 @@ const checkIfEdgeEnabled = (
             logger.warn('EdgeDB is not enabled for this project. Only using local user data.')
         }
         return false
-    }
-}
-
-const getTypeFromDefaultValue = (defaultValue: VariableValue, key: string, logger: DVCLogger) => {
-    if (typeof defaultValue === 'boolean') {
-        return VariableType.boolean
-    } else if (typeof defaultValue === 'number') {
-        return VariableType.number
-    } else if (typeof defaultValue === 'string') {
-        return VariableType.string
-    } else if (typeof defaultValue === 'object') {
-        return VariableType.object
-    } else {
-        logger.warn(`The default value for variable ${key} is not of type Boolean, Number, String, or JSON`)
-        return undefined
     }
 }
 
