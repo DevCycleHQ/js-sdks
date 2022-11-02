@@ -1,7 +1,6 @@
 import {
     DVCOptions,
     DVCVariableValue,
-    DVCVariable as DVCVariableInterface,
     DVCVariableSet,
     DVCFeatureSet,
     DVCEvent,
@@ -9,15 +8,16 @@ import {
 } from './types'
 import { EnvironmentConfigManager } from './environmentConfigManager'
 import { bucketUserForConfig } from './utils/userBucketingHelper'
-import { DVCVariable } from './models/variable'
+import { DVCVariable, VariableParam } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
 import { EventQueue, EventTypes } from './eventQueue'
 import { dvcDefaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
 import * as packageJson from '../package.json'
 import { importBucketingLib, getBucketingLib, cleanupBucketingLib } from './bucketing'
-import { DVCLogger } from '@devcycle/types'
+import { DVCLogger, getVariableTypeFromValue, VariableTypeAlias } from '@devcycle/types'
 import os from 'os'
+import { JSON } from '@devcycle/devcycle-js-sdk'
 
 interface IPlatformData {
     platform: string
@@ -98,24 +98,38 @@ export class DVCClient {
         return this.onInitialized
     }
 
-    variable(user: DVCUser, key: string, defaultValue: DVCVariableValue): DVCVariableInterface {
+    variable<T extends DVCVariableValue>(user: DVCUser, key: string, defaultValue: T): DVCVariable<T> {
         if (!this.initialized) {
             this.logger.warn('variable called before DVCClient initialized, returning default value')
             return new DVCVariable({
-                value: defaultValue,
                 defaultValue,
                 key
             })
         }
 
+        // this will throw if type is invalid
+        const type = getVariableTypeFromValue(defaultValue, key, this.logger, true)
+
         const requestUser = new DVCPopulatedUser(user)
         const bucketedConfig = bucketUserForConfig(requestUser, this.environmentKey)
 
-        const variable = new DVCVariable({
-            ...bucketedConfig?.variables?.[key],
+        const options: VariableParam<T> = {
             key,
             defaultValue
-        })
+        }
+        const configVariable = bucketedConfig?.variables?.[key]
+        if (configVariable) {
+            if (type === configVariable.type) {
+                options.value = configVariable.value as VariableTypeAlias<T>
+                options.evalReason = configVariable.evalReason
+            } else {
+                this.logger.error(
+                    `Type mismatch for variable ${key}. Expected ${type}, got ${configVariable.type}`
+                )
+            }
+        }
+
+        const variable = new DVCVariable(options)
 
         const variableEvent = {
             type: variable.key in bucketedConfig.variables

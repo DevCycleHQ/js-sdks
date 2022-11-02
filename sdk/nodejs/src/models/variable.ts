@@ -1,20 +1,23 @@
-import { DVCVariable as DVCVariableInterface, DVCVariableValue } from '../types'
+import { VariableTypeAlias } from '@devcycle/types'
+import { DVCVariable as DVCVariableInterface, DVCVariableValue, JSON } from '../types'
 import { checkParamDefined, checkParamType, typeEnum } from '../utils/paramUtils'
 
-type VariableParam = Pick<DVCVariableInterface, 'key' | 'defaultValue'> & {
-    value?: DVCVariableValue
+export type VariableParam<T extends DVCVariableValue> = {
+    key: string,
+    defaultValue: T,
+    value?: VariableTypeAlias<T>
     evalReason?: unknown
 }
 
-export class DVCVariable implements DVCVariableInterface {
+export class DVCVariable<T extends DVCVariableValue> implements DVCVariableInterface {
     key: string
-    value: DVCVariableValue
-    readonly defaultValue: DVCVariableValue
+    value: VariableTypeAlias<T>
+    readonly defaultValue: T
     readonly isDefaulted: boolean
     readonly type?: 'String' | 'Number' | 'Boolean' | 'JSON'
     readonly evalReason?: unknown
 
-    constructor(variable: VariableParam) {
+    constructor(variable: VariableParam<T>) {
         const { key, defaultValue, value, evalReason } = variable
         checkParamDefined('key', key)
         checkParamDefined('defaultValue', defaultValue)
@@ -22,7 +25,7 @@ export class DVCVariable implements DVCVariableInterface {
         this.key = key.toLowerCase()
         this.isDefaulted = (value === undefined || value === null)
         this.value = (value === undefined || value === null)
-            ? defaultValue
+            ? defaultValue as unknown as VariableTypeAlias<T>
             : value
         this.defaultValue = defaultValue
         this.evalReason = evalReason
