@@ -10922,6 +10922,7 @@ __metadata:
     msw: ^0.47.3
     murmurhash: ^2.0.0
     next: 12.2.5
+    next-compose-plugins: ^2.2.1
     next-transpile-modules: ^10.0.0
     npm-run-all: ^4.1.5
     nx: 14.7.11
@@ -18266,6 +18267,13 @@ __metadata:
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: deac9f8d00eda7b2e5cd1b2549e26e10a0faa70adaa6fdadca701cc55f49ee9018e427f424bac0c790b7c7e2d3068db97f3093f1093975f2acb8f8818b936ed9
+  languageName: node
+  linkType: hard
+
+"next-compose-plugins@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "next-compose-plugins@npm:2.2.1"
+  checksum: 771762fda2b12b81daf10431cbb494816cff96be02b44009692c6c0eefbacd62cbf51ddb93af8d3380ec00254c6a95d64d10f744d4b9ddadefc21efee7dc69fc
   languageName: node
   linkType: hard
 

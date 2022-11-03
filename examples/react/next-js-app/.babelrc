@@ -1,0 +1,14 @@
+{
+    "presets": [
+      [
+        "@nrwl/next/babel", {
+          "runtime": "automatic"
+          
+        }
+      ]
+    ],
+    "plugins": [
+      
+    ]
+  }
+  
