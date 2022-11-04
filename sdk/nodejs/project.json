@@ -7,7 +7,7 @@
   ],
   "targets": {
     "check-types": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn run -T tsc -b --incremental",
         "cwd": "sdk/nodejs"
@@ -27,22 +27,22 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": [
-          "coverage/sdk/nodejs"
+        "{workspaceRoot}/coverage/sdk/nodejs"
       ],
       "options": {
-          "jestConfig": "sdk/nodejs/jest.config.ts",
-          "passWithNoTests": false,
-          "codeCoverage": true
+        "jestConfig": "sdk/nodejs/jest.config.ts",
+        "passWithNoTests": false,
+        "codeCoverage": true
       },
       "dependsOn": [
-          {
-              "target": "build",
-              "projects": "self"
-          },
-          {
-              "target": "build:json",
-              "projects": "dependencies"
-          }
+        {
+          "target": "build",
+          "projects": "self"
+        },
+        {
+          "target": "build:json",
+          "projects": "dependencies"
+        }
       ]
     },
     "build": {
@@ -62,7 +62,7 @@
       }
     },
     "npm-publish": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/nodejs-server-sdk\"",
         "cwd": "dist/sdk/nodejs",

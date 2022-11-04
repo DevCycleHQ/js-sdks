@@ -93,8 +93,25 @@
     },
     "npm-publish": {
       "dependsOn": [
-        {"projects":  "dependencies", "target": "npm-publish", "params":  "forward"},
+        {
+          "projects": "dependencies",
+          "target": "npm-publish",
+          "params": "forward"
+        },
         "build"
+      ]
+    },
+    "test": {
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/jest.preset.js"
+      ]
+    },
+    "lint": {
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintrc.json"
       ]
     }
   }

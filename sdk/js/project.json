@@ -4,7 +4,7 @@
   "implicitDependencies": [],
   "targets": {
     "npm-publish": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/devcycle-js-sdk\"",
         "cwd": "dist/sdk/js",
@@ -12,7 +12,7 @@
       }
     },
     "check-types": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn run -T tsc -b --incremental",
         "cwd": "sdk/js"
@@ -32,7 +32,7 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": [
-        "coverage/sdk/js"
+        "{workspaceRoot}/coverage/sdk/js"
       ],
       "options": {
         "jestConfig": "sdk/js/jest.config.ts",

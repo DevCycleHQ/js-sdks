@@ -3,14 +3,14 @@
   "sourceRoot": "lib/shared/types/src",
   "targets": {
     "check-types": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn run -T tsc -b --incremental",
         "cwd": "lib/shared/types"
       }
     },
     "npm-publish": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "../../../../scripts/npm-safe-publish.sh \"@devcycle/types\"",
         "cwd": "dist/lib/shared/types",
@@ -46,7 +46,7 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": [
-        "coverage/lib/shared/types"
+        "{workspaceRoot}/coverage/lib/shared/types"
       ],
       "options": {
         "jestConfig": "lib/shared/types/jest.config.ts",

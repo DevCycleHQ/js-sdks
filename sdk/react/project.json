@@ -4,14 +4,14 @@
   "implicitDependencies": [],
   "targets": {
     "check-types": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn run -T tsc -b --incremental",
         "cwd": "sdk/react"
       }
     },
     "build": {
-      "executor": "@nrwl/web:rollup",
+      "executor": "@nrwl/rollup:rollup",
       "outputs": [
         "{options.outputPath}"
       ],
@@ -20,7 +20,10 @@
         "tsConfig": "sdk/react/tsconfig.lib.json",
         "project": "sdk/react/package.json",
         "entryFile": "sdk/react/src/index.ts",
-        "format": ["esm", "cjs"],
+        "format": [
+          "esm",
+          "cjs"
+        ],
         "external": [
           "react/jsx-runtime"
         ],
@@ -50,7 +53,7 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": [
-        "coverage/sdk/react"
+        "{workspaceRoot}/coverage/sdk/react"
       ],
       "options": {
         "jestConfig": "sdk/react/jest.config.ts",
@@ -59,7 +62,7 @@
       }
     },
     "npm-publish": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/devcycle-react-sdk\"",
         "cwd": "dist/sdk/react",

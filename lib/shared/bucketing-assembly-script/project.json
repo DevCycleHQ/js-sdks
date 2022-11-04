@@ -7,7 +7,7 @@
   ],
   "targets": {
     "check-types": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "asc assembly/index.ts --target debug",
         "cwd": "lib/shared/bucketing-assembly-script"
@@ -27,7 +27,7 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": [
-        "coverage/lib/shared/bucketing-assembly-script"
+        "{workspaceRoot}/coverage/lib/shared/bucketing-assembly-script"
       ],
       "options": {
         "jestConfig": "lib/shared/bucketing-assembly-script/jest.config.ts",
@@ -46,9 +46,9 @@
       ]
     },
     "build": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "outputs": [
-        "lib/shared/bucketing-assembly-script"
+        "{projectRoot}"
       ],
       "options": {
         "commands": [
@@ -79,7 +79,7 @@
       }
     },
     "npm-publish": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/bucketing-assembly-script\"",
         "cwd": "lib/shared/bucketing-assembly-script",

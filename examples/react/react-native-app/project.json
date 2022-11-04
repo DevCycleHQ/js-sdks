@@ -10,7 +10,7 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "nx start example-react-native-app"
       }
@@ -22,7 +22,7 @@
     "bundle-ios": {
       "executor": "@nrwl/react-native:bundle",
       "outputs": [
-        "examples/react/react-native-app/build"
+        "{projectRoot}/build"
       ],
       "options": {
         "entryFile": "src/main.tsx",
@@ -37,8 +37,8 @@
     "build-android": {
       "executor": "@nrwl/react-native:build-android",
       "outputs": [
-        "examples/react/react-native-app/android/app/build/outputs/bundle",
-        "examples/react/react-native-app/android/app/build/outputs/apk"
+        "{projectRoot}/android/app/build/outputs/bundle",
+        "{projectRoot}/android/app/build/outputs/apk"
       ],
       "options": {}
     },
