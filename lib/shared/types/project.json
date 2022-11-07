@@ -18,18 +18,24 @@
       }
     },
     "build": {
-      "executor": "@nrwl/js:tsc",
+      "executor": "@nrwl/web:rollup",
       "outputs": [
         "{options.outputPath}"
       ],
       "options": {
+        "project": "lib/shared/types/package.json",
         "outputPath": "dist/lib/shared/types",
-        "main": "lib/shared/types/src/index.ts",
+        "entryFile": "lib/shared/types/src/index.ts",
         "tsConfig": "lib/shared/types/tsconfig.lib.json",
         "buildableProjectDepsInPackageJsonType": "dependencies",
         "assets": [
-          "lib/shared/types/*.md"
-        ]
+          {
+            "glob": "*.md",
+            "input": "lib/shared/types",
+            "output": "."
+          }
+        ],
+        "skipTypeField": true
       }
     },
     "lint": {

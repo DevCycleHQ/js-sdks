@@ -1,5 +1,5 @@
 import { JSON, DVCUser } from '../types'
-import * as packageJson from '../../package.json'
+import packageJson from '../../package.json'
 import { checkParamType, typeEnum } from '../utils/paramUtils'
 
 export class DVCPopulatedUser implements DVCUser {
