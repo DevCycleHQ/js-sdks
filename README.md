@@ -65,6 +65,33 @@ yarn test                 - run all tests in the repo
 yarn lint                 - lint all projects in the repo
 ```
 
+### Running a local npm server to publish to and pull from
+
+This will update your yarn and npm configs to point to the new registry, and start up the new registry locally.
+
+```
+yarn local-registry enable
+yarn local-registry start
+```
+
+The first time you run this, you'll need to add your user:
+
+```
+npm adduser --registry http://localhost:4873
+```
+
+The username is test, and the password is test.
+
+To disable the server, just exit the process. Then run:
+
+```
+yarn local-registry disable
+```
+
+Keeping the server active may interfere with normal npm and npx activities, so if anything's acting strange, just kill the server and disable the registry updates.
+
+Corresponding updates have been added to the `npm-safe-publish.sh` script to account for the locally running server.
+
 ### Linting and Running Tests
 
 You can run commands in every javascript project using Nx: `nx run-many --target test --all`

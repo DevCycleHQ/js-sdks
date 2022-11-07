@@ -18,6 +18,7 @@
         }
       },
       "options": {
+        "statsJson": true,
         "compiler": "babel",
         "outputPath": "dist/examples/react/with-provider",
         "index": "examples/react/with-provider/src/index.html",
