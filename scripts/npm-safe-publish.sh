@@ -14,6 +14,7 @@ JQ_PATH=".version"
 
 NPM_SHOW="$(npm show "$PACKAGE" version)"
 NPM_LS="$(cat package.json | jq -r $JQ_PATH)"
+NPM_REGISTRY="$(npm config get registry)"
 
 echo "$PACKAGE npm show: $NPM_SHOW, npm ls: $NPM_LS"
 
@@ -40,31 +41,35 @@ done
 if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
   echo "Versions are not the same, (Remote = $NPM_SHOW; Local = $NPM_LS). Checking for publish eligibility."
 
-  # check if we're on main branch
-  if [[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then
-    echo "Not on main branch. Aborting."
-    exit 1
-  fi
+  if [[ "$NPM_REGISTRY" = "https://registry.npmjs.org/" ]]; then
+    # check if we're on main branch
+    if [[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then
+      echo "Not on main branch. Aborting."
+      exit 1
+    fi
 
-  # check if working directory is clean
-  if [[ -n "$(git status --porcelain)" ]]; then
-    echo "Working directory is not clean. Aborting."
-    exit 1
-  fi
+    # check if working directory is clean
+    if [[ -n "$(git status --porcelain)" ]]; then
+      echo "Working directory is not clean. Aborting."
+      exit 1
+    fi
 
-  # check if current commit is tagged with the requested version
-  if [[ -z "$(git tag --points-at HEAD "$PACKAGE@$NPM_LS")" ]]; then
-    echo "Current commit is not tagged with the requested version. Aborting."
-    exit 1
-  fi
+    # check if current commit is tagged with the requested version
+    if [[ -z "$(git tag --points-at HEAD "$PACKAGE@$NPM_LS")" ]]; then
+      echo "Current commit is not tagged with the requested version. Aborting."
+      exit 1
+    fi
 
-  # check if otp is set
-  if [[ -z "$OTP" ]]; then
-    echo "Must specify the NPM one-time password using the --otp option."
-    exit 1
-  fi
+    # check if otp is set
+    if [[ -z "$OTP" ]]; then
+      echo "Must specify the NPM one-time password using the --otp option."
+      exit 1
+    fi
 
-  npm publish --otp=$OTP
+    npm publish --otp=$OTP
+  else
+    npm publish --local
+  fi
 else
   echo "Versions are the same ($NPM_SHOW = $NPM_LS). Not pushing"
 fi

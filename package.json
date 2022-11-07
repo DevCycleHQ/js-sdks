@@ -15,7 +15,8 @@
     "affected:test": "nx affected --base=origin/main --head=HEAD --target=test",
     "npm-publish": "nx affected --base=origin/main~1 --target=npm-publish",
     "start": "nx serve",
-    "lerna:version": "scripts/lerna-version.sh"
+    "lerna:version": "scripts/lerna-version.sh",
+    "local-registry": "./scripts/local-registry.sh"
   },
   "dependencies": {
     "@nestjs/class-validator": "^0.13.4",
@@ -140,7 +141,8 @@
     "ts-jest": "~28.0.8",
     "ts-node": "~10.9.1",
     "tslib": "^2.0.0",
-    "typescript": "~4.7.4"
+    "typescript": "~4.7.4",
+    "verdaccio": "^5.15.4"
   },
   "lint-staged": {
     "**/*.{ts,js}": [
