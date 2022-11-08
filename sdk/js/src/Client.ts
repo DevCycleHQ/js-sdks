@@ -6,7 +6,7 @@ import {
     DVCVariableValue,
     DVCEvent as ClientEvent,
     DVCUser,
-    ErrorCallback, JSON
+    ErrorCallback
 } from './types'
 import { DVCVariable, DVCVariableOptions } from './Variable'
 import { getConfigJson, saveEntity } from './Request'
@@ -18,9 +18,7 @@ import { EventEmitter } from './EventEmitter'
 import {
     BucketedUserConfig,
     getVariableTypeFromValue,
-    VariableType,
     VariableTypeAlias,
-    VariableValue
 } from '@devcycle/types'
 import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
