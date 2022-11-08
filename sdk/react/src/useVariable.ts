@@ -2,7 +2,7 @@ import { useContext, useState } from 'react'
 import context from './context'
 import type { DVCVariable, DVCVariableValue } from '@devcycle/devcycle-js-sdk'
 
-export const useVariable = (key: string, defaultValue: DVCVariableValue): DVCVariable => {
+export const useVariable = <T extends DVCVariableValue>(key: string, defaultValue: T): DVCVariable<T> => {
     const dvcContext = useContext(context)
     const [_, forceRerender] = useState({})
 

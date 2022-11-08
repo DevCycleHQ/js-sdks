@@ -1,4 +1,4 @@
-import { DVCLogger, DVCDefaultLogLevel } from '@devcycle/types'
+import { DVCLogger, DVCDefaultLogLevel, VariableTypeAlias } from '@devcycle/types'
 
 export type DVCVariableValue = string | number | boolean | JSON
 export type JSON = Record<string, string | number | boolean>
@@ -9,7 +9,7 @@ export interface ErrorCallback<T> {
 }
 
 export type DVCVariableSet = {
-    [key: string]: Pick<DVCVariable, 'key' | 'value' | 'evalReason'> & {
+    [key: string]: Pick<DVCVariable<DVCVariableValue>, 'key' | 'value' | 'evalReason'> & {
         '_id': string,
         'type': string
     }
@@ -134,10 +134,10 @@ export interface DVCClient {
      * @param key
      * @param defaultValue
      */
-    variable(
+    variable<T extends DVCVariableValue>(
         key: string,
-        defaultValue: DVCVariableValue
-    ): DVCVariable
+        defaultValue: T
+    ): DVCVariable<T>
 
     /**
      * Update user data after SDK initialization, this will trigger updates to Feature Flag /
@@ -230,7 +230,7 @@ export interface DVCClient {
     closing: boolean
 }
 
-export interface DVCVariable {
+export interface DVCVariable<T extends DVCVariableValue> {
     /**
      * Unique "key" by Project to use for this Dynamic Variable.
      */
@@ -240,12 +240,12 @@ export interface DVCVariable {
      * The value for this Dynamic Variable which will be set to the `defaultValue`
      * if accessed before the SDK is fully Initialized
      */
-    readonly value: DVCVariableValue
+    readonly value: VariableTypeAlias<T>
 
     /**
      * Default value set when creating the variable
      */
-    readonly defaultValue: DVCVariableValue
+    readonly defaultValue: T
 
     /**
      * If the `variable.value` is set to use the `defaultValue` this will be `true`.
@@ -264,7 +264,7 @@ export interface DVCVariable {
      *
      * @param callback
      */
-    onUpdate(callback: (value: DVCVariableValue) => void): DVCVariable
+    onUpdate(callback: (value: DVCVariableValue) => void): DVCVariable<T>
 }
 
 export interface DVCEvent {

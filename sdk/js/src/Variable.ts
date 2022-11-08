@@ -9,7 +9,7 @@ export interface DVCVariableOptions<T> {
     evalReason?: any,
 }
 
-export class DVCVariable<T extends DVCVariableValue> implements Variable {
+export class DVCVariable<T extends DVCVariableValue> implements Variable<T> {
     key: string
     // prevent more specific typing based on type of defaultValue
     value: VariableTypeAlias<T>
