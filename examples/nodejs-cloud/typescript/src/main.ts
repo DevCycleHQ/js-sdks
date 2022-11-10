@@ -1,6 +1,6 @@
 import { DVCCloudClient, initialize } from '@devcycle/nodejs-server-sdk'
 import { DVCClientAPIUser } from '@devcycle/types'
-import { plainToClass } from 'class-transformer'
+import { plainToInstance } from 'class-transformer'
 import { Query } from 'express-serve-static-core'
 import express from 'express'
 import bodyParser from 'body-parser'
@@ -24,7 +24,7 @@ async function validateUserFromQueryParams(queryParams: Query): Promise<DVCClien
         throw new Error('Invalid query parameters')
     }
 
-    const user = plainToClass(DVCClientAPIUser, queryParams || {})
+    const user = plainToInstance(DVCClientAPIUser, queryParams || {})
     if (!user.user_id) {
         throw new Error('user_id must be defined')
     }
