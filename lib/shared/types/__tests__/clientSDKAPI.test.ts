@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer'
+import { plainToInstance } from 'class-transformer'
 import { DVCAPIUser } from '../src/types/apis/sdk/clientSDKAPI'
 import { validate } from '@nestjs/class-validator'
 
@@ -28,12 +28,12 @@ describe('clientSDKAPI types', () => {
 
     describe('date transformation', () => {
         it('should accept dates as date objects', async () => {
-            const userObj = plainToClass(DVCAPIUser, testUserData)
+            const userObj = plainToInstance(DVCAPIUser, testUserData)
             expect(await validate(userObj)).toHaveLength(0)
         })
 
         it('should accept dates as date-time strings', async () => {
-            const userObj = plainToClass(DVCAPIUser, {
+            const userObj = plainToInstance(DVCAPIUser, {
                 ...testUserData,
                 createdDate: date.toLocaleDateString(),
                 lastSeenDate: date.toLocaleDateString()
@@ -42,7 +42,7 @@ describe('clientSDKAPI types', () => {
         })
 
         it('should accept dates as numbers', async () => {
-            const userObj = plainToClass(DVCAPIUser, {
+            const userObj = plainToInstance(DVCAPIUser, {
                 ...testUserData,
                 createdDate: date.getTime(),
                 lastSeenDate: date.getTime()
@@ -51,7 +51,7 @@ describe('clientSDKAPI types', () => {
         })
 
         it('should accept dates as number strings', async () => {
-            const userObj = plainToClass(DVCAPIUser, {
+            const userObj = plainToInstance(DVCAPIUser, {
                 ...testUserData,
                 createdDate: `${date.getTime()}`,
                 lastSeenDate: `${date.getTime()}`
