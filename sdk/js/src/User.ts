@@ -1,4 +1,4 @@
-import { DVCOptions, DVCUser, JSON } from './types'
+import { DVCOptions, DVCUser, DVCJSON } from './types'
 import { v4 as uuidv4 } from 'uuid'
 import * as packageJson from '../package.json'
 import UAParser from 'ua-parser-js'
@@ -15,8 +15,8 @@ export class DVCPopulatedUser implements DVCUser {
     readonly country?: string
     readonly appVersion?: string
     readonly appBuild?: number
-    readonly customData?: JSON
-    readonly privateCustomData?: JSON
+    readonly customData?: DVCJSON
+    readonly privateCustomData?: DVCJSON
     readonly lastSeenDate: Date
 
     readonly createdDate: Date

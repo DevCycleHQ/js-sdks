@@ -2,7 +2,6 @@ import {
     DVCOptions,
     DVCUser
 } from './types'
-import { DVCPopulatedUser } from './User'
 import { DVCClient } from './Client'
 
 export * from './types'

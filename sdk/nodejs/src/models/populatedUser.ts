@@ -1,4 +1,4 @@
-import { JSON, DVCUser } from '../types'
+import { DVCJSON, DVCUser } from '../types'
 import * as packageJson from '../../package.json'
 import { checkParamType, typeEnum } from '../utils/paramUtils'
 
@@ -10,8 +10,8 @@ export class DVCPopulatedUser implements DVCUser {
     country?: string
     appVersion?: string
     appBuild?: number
-    customData?: JSON
-    privateCustomData?: JSON
+    customData?: DVCJSON
+    privateCustomData?: DVCJSON
     readonly lastSeenDate: Date
     readonly createdDate: Date
     readonly platform: string

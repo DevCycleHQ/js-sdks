@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
     displayName: 'react-lib',
-
+    testEnvironment: 'jsdom',
     transform: {
         '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nrwl/react/babel'] }]
     },

@@ -39,14 +39,14 @@ export enum VariableType {
 /**
  * Supported variable values
  */
-export type VariableValue = string | boolean | number | JSON
-type JSON = { [key: string]: string | boolean | number }
+export type DVCJSON = { [key: string]: string | boolean | number }
+export type VariableValue = string | boolean | number | DVCJSON
 
 // alias to resolve a generic type constrained by `VariableValue` back into its original type
 export type VariableTypeAlias<T> = T extends boolean ? boolean : (
         T extends number ? number : (
             T extends string ? string : (
-                T extends JSON ? JSON : never
+                T extends DVCJSON ? DVCJSON : never
                 )
             )
         )

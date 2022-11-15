@@ -6,8 +6,6 @@ import isNull from 'lodash/isNull'
 import isUndefined from 'lodash/isUndefined'
 import { registerDecorator, ValidationOptions } from '@nestjs/class-validator'
 
-export type DVCJSON = { [key: string]: string | number | boolean }
-
 /**
  * Validates that JSON Object is a valid JSON Object with only
  * top-level string / number / boolean values.
