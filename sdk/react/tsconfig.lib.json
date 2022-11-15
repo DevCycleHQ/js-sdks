@@ -19,6 +19,7 @@
     "**/*.test.js",
     "**/*.spec.jsx",
     "**/*.test.jsx",
+    "**/__mocks__/**/*.ts",
     "jest.config.ts"
   ],
   "include": [

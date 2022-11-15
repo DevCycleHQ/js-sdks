@@ -1,7 +1,7 @@
-import { DVCLogger, DVCDefaultLogLevel, VariableTypeAlias } from '@devcycle/types'
+import { DVCLogger, DVCDefaultLogLevel, VariableTypeAlias, VariableValue, DVCJSON } from '@devcycle/types'
 
-export type DVCVariableValue = string | number | boolean | JSON
-export type JSON = Record<string, string | number | boolean>
+export type DVCVariableValue = VariableValue
+export type { DVCJSON }
 
 export interface ErrorCallback<T> {
     (err: Error, result?: null | undefined): void
@@ -99,14 +99,14 @@ export interface DVCUser {
      * Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will be logged to DevCycle's servers and available in the dashboard to view.
      */
-    customData?: JSON
+    customData?: DVCJSON
 
     /**
      * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will not be logged to DevCycle's servers and
      * will not be available in the dashboard.
      */
-    privateCustomData?: JSON
+    privateCustomData?: DVCJSON
 }
 
 export interface DVCClient {

@@ -1,5 +1,5 @@
 import { VariableTypeAlias } from '@devcycle/types'
-import { DVCVariable as DVCVariableInterface, DVCVariableValue, JSON } from '../types'
+import { DVCVariable as DVCVariableInterface, DVCVariableValue } from '../types'
 import { checkParamDefined, checkParamType, typeEnum } from '../utils/paramUtils'
 
 export type VariableParam<T extends DVCVariableValue> = {

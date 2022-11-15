@@ -1,4 +1,4 @@
-import { DVCLogger, DVCDefaultLogLevel, DVCReporter } from '@devcycle/types'
+import { DVCLogger, DVCDefaultLogLevel, DVCReporter, DVCJSON, VariableValue } from '@devcycle/types'
 
 export interface DVCUser {
     /**
@@ -42,14 +42,14 @@ export interface DVCUser {
      * Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will be logged to DevCycle's servers and available in the dashboard to view.
      */
-    customData?: JSON
+    customData?: DVCJSON
 
     /**
      * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will not be logged to DevCycle's servers and
      * will not be available in the dashboard.
      */
-    privateCustomData?: JSON
+    privateCustomData?: DVCJSON
 }
 
 /**
@@ -126,8 +126,9 @@ export interface DVCOptions {
     apiProxyURL?: string
 }
 
-export type DVCVariableValue = string | number | boolean | JSON
-export type JSON = { [key: string]: string | number | boolean }
+export type DVCVariableValue = VariableValue
+export type JSON = DVCJSON
+export type { DVCJSON }
 
 export type DVCVariableSet = Record<string,
     Omit<DVCVariable, 'defaultValue' | 'isDefaulted'> & { _id: string }

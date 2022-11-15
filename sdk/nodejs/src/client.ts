@@ -17,7 +17,6 @@ import * as packageJson from '../package.json'
 import { importBucketingLib, getBucketingLib, cleanupBucketingLib } from './bucketing'
 import { DVCLogger, getVariableTypeFromValue, VariableTypeAlias } from '@devcycle/types'
 import os from 'os'
-import { JSON } from '@devcycle/devcycle-js-sdk'
 
 interface IPlatformData {
     platform: string

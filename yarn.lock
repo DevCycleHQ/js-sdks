@@ -6222,7 +6222,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:^13.3.0":
+"@testing-library/react@npm:^13.4.0":
   version: 13.4.0
   resolution: "@testing-library/react@npm:13.4.0"
   dependencies:
@@ -8164,7 +8164,7 @@ __metadata:
 "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json":
   version: 1.1.0
   resolution: "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json.git#commit=d2ce65ec18b305e1f3db8a4fe4394b417631b024"
-  checksum: 480283ed02d57eacb400facc060f293b7dcb773a90dc5b7c80eae86b0007e3a748b2cb6c298a1a32010cba41e48686fcd0078c02c6db1d917fda85bb7c08ded1
+  checksum: 045c8dc54cb8ee61d022c017e483f6c8729347a2e30167a4e3227b9d4d80293b032a8cff7fcaf83040b23eacc23bf62188ebb9f2091df85ef2ee21425f8957f7
   languageName: node
   linkType: hard
 
@@ -11038,7 +11038,7 @@ __metadata:
     "@react-native-community/cli": ^9.0.0
     "@react-native-community/cli-platform-android": ^9.0.0
     "@react-native-community/cli-platform-ios": ^9.0.0
-    "@testing-library/react": ^13.3.0
+    "@testing-library/react": ^13.4.0
     "@types/async": ^3.2.8
     "@types/hoist-non-react-statics": ^3.3.1
     "@types/jest": 28.1.8

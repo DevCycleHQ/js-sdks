@@ -2,7 +2,7 @@ import isString from 'lodash/isString'
 import {
     PublicEnvironment, PublicFeature, PublicProject, PublicVariable
 } from '../../config/configBody'
-import { VariableValue } from '../../config/models'
+import type { DVCJSON, VariableValue } from '../../config/models'
 import {
     IsDate, IsOptional, IsNumber, IsBoolean,
     IsString, IsIn, IsNotEmpty, IsISO31661Alpha2
@@ -10,7 +10,6 @@ import {
 import { Transform, Type } from 'class-transformer'
 import 'reflect-metadata'
 import { IsDVCJSONObject } from '../../validators/dvcJSON'
-import type { DVCJSON } from '../../validators/dvcJSON'
 import { IsNotBlank } from '../../validators/isNotBlank'
 import { IsISO6391 } from '../../validators/isIso6391'
 
