@@ -3,6 +3,7 @@ import { getConfigJson, publishEvents, saveEntity } from '../src/Request'
 import { mocked } from 'jest-mock'
 import { DVCVariable } from '../src/Variable'
 import { DVCPopulatedUser } from '../src/User'
+import { StoreKey } from '../src/Store'
 
 jest.mock('../src/Request')
 jest.mock('../src/StreamingConnection')
@@ -132,6 +133,18 @@ describe('DVCClient tests', () => {
         expect(getConfigJson_mock).toBeCalled()
         await client.onInitialized
         expect(client.config).toBeUndefined()
+    })
+
+    it('should have same value for anonymous user id from local storage and user_id if anonId exists and isAnonymous is true', async () => {
+        const client = new DVCClient('test_env_key', { isAnonymous: true })
+        const anonymousUserId = await client.store.load(StoreKey.AnonUser)
+        expect(JSON.parse(anonymousUserId)).toEqual(client.user.user_id)
+    })
+
+    it('should not save anonymous user id in local storage if isAnonymous is false', async () => {
+        const client = new DVCClient('test_env_key', { user_id: 'user1', isAnonymous: false })
+        const anonymousUserId = await client.store.load(StoreKey.AnonUser)
+        expect(anonymousUserId).toBeNull()
     })
 
     describe('onClientInitialized', () => {
