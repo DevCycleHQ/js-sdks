@@ -227,8 +227,9 @@ export class DVCClient implements Client {
     resetUser(): Promise<DVCVariableSet>
     resetUser(callback: ErrorCallback<DVCVariableSet>): void
     resetUser(callback?: ErrorCallback<DVCVariableSet>): Promise<DVCVariableSet> | void {
+        this.store.remove(StoreKey.AnonUser)
         const anonUser = new DVCPopulatedUser({ isAnonymous: true }, this.options)
-
+        this.store.save(StoreKey.AnonUser, anonUser.user_id)
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
             this.eventQueue.flushEvents()
 
