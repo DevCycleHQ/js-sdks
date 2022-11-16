@@ -49,7 +49,7 @@ export class DVCClient implements Client {
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.store = new Store(typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger)
         
-        const storedAnonymousId = this.store.store?.getItem(StoreKey.AnonUser)
+        const storedAnonymousId = this.store.load(StoreKey.AnonUser)
         if (user.isAnonymous && storedAnonymousId) {
             user.user_id = storedAnonymousId
         }
@@ -303,16 +303,12 @@ export class DVCClient implements Client {
         const oldConfig = this.config
         this.config = config
 
-        this.store.saveConfig(config).then(() => {
-            this.logger.info('Successfully saved config to local storage')
-        })
+        this.store.saveConfig(config)
 
         if (this.user != user || !this.userSaved) {
             this.user = user
 
-            this.store.saveUser(user).then(() => {
-                this.logger.info('Successfully saved user to local storage')
-            })
+            this.store.saveUser(user)
 
             if (!this.user.isAnonymous && checkIfEdgeEnabled(config, this.logger, this.options?.enableEdgeDB, true)) {
                 saveEntity(this.user, this.environmentKey, this.logger, this.options)
