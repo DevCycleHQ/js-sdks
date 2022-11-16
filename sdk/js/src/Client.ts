@@ -48,7 +48,7 @@ export class DVCClient implements Client {
     constructor(environmentKey: string, user: DVCUser, options: DVCOptions = {}) {
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.store = new Store(typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger)
-        
+
         const storedAnonymousId = this.store.load(StoreKey.AnonUser)
         if (user.isAnonymous && storedAnonymousId) {
             user.user_id = storedAnonymousId
@@ -191,7 +191,12 @@ export class DVCClient implements Client {
             this.eventQueue.flushEvents()
 
             let updatedUser: DVCPopulatedUser
+            const bothAnonymous = this.user.isAnonymous && user.isAnonymous
+
             if (user.user_id === this.user.user_id) {
+                updatedUser = this.user.updateUser(user, this.options)
+            } else if (bothAnonymous) {
+                user.user_id = this.user.user_id
                 updatedUser = this.user.updateUser(user, this.options)
             } else {
                 updatedUser = new DVCPopulatedUser(user, this.options)
@@ -200,6 +205,9 @@ export class DVCClient implements Client {
             this.onInitialized.then(() =>
                 this.requestConsolidator.queue(updatedUser)
             ).then((config) => {
+                if (!bothAnonymous) {
+                    this.store.remove(StoreKey.AnonUser)
+                }
                 resolve(config.variables || {})
             }).catch((err) => {
                 this.eventEmitter.emitError(err)
