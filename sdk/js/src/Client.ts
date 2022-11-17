@@ -10,7 +10,7 @@ import {
 } from './types'
 import { DVCVariable, DVCVariableOptions } from './Variable'
 import { getConfigJson, saveEntity } from './Request'
-import Store from './Store'
+import Store, { StoreKey } from './Store'
 import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
 import { checkParamDefined } from './utils'
@@ -46,7 +46,20 @@ export class DVCClient implements Client {
     private windowMessageHandler?: (event: MessageEvent) => void
 
     constructor(environmentKey: string, user: DVCUser, options: DVCOptions = {}) {
+        this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
+        this.store = new Store(typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger)
+        
+        const storedAnonymousId = this.store.load(StoreKey.AnonUser)
+        if (user.isAnonymous && storedAnonymousId) {
+            user.user_id = storedAnonymousId
+        }
+
         this.user = new DVCPopulatedUser(user, options)
+
+        if (user.isAnonymous && !storedAnonymousId) {
+            this.store.save(StoreKey.AnonUser, this.user.user_id)
+        }
+
         this.options = options
         this.environmentKey = environmentKey
         this.variableDefaultMap = {}
@@ -59,8 +72,6 @@ export class DVCClient implements Client {
             this.user
         )
         this.eventEmitter = new EventEmitter()
-        this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
-        this.store = new Store(typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger)
         this.registerVisibilityChangeHandler()
 
         this.onInitialized = this.requestConsolidator.queue(this.user)
@@ -292,16 +303,12 @@ export class DVCClient implements Client {
         const oldConfig = this.config
         this.config = config
 
-        this.store.saveConfig(config).then(() => {
-            this.logger.info('Successfully saved config to local storage')
-        })
+        this.store.saveConfig(config)
 
         if (this.user != user || !this.userSaved) {
             this.user = user
 
-            this.store.saveUser(user).then(() => {
-                this.logger.info('Successfully saved user to local storage')
-            })
+            this.store.saveUser(user)
 
             if (!this.user.isAnonymous && checkIfEdgeEnabled(config, this.logger, this.options?.enableEdgeDB, true)) {
                 saveEntity(this.user, this.environmentKey, this.logger, this.options)

@@ -16,53 +16,36 @@ export class Store {
         this.logger = logger
     }
 
-    save(storeKey: string, data: unknown): Promise<void> {
-        return this.modifyStore((storeKey: string) => {
-            this.store?.setItem(storeKey, JSON.stringify(data))
-        }, storeKey)
+    save(storeKey: string, data: unknown): void {
+        this.store?.setItem(storeKey, JSON.stringify(data))
     }
 
-    load(storeKey: string): Promise<string | null | undefined> {
-        return new Promise((resolve) => {
-            resolve(this.store?.getItem(storeKey))
-        })
+    load(storeKey: string): string | null | undefined {
+        return this.store?.getItem(storeKey)
     }
 
-    clear(storeKey: string): Promise<void> {
-        return this.modifyStore((storeKey: string) => this.store?.removeItem(storeKey), storeKey)
+    remove(storeKey: string): void {
+        this.store?.removeItem(storeKey)
     }
 
-    modifyStore(modify: (storeKey: string) => void, storeKey: string): Promise<void> {
-        try {
-            return new Promise((resolve) => {
-                resolve(modify(storeKey))
-            })
-        } catch (e) {
-            this.logger?.error(e as string)
-            return Promise.resolve()
-        }
+    saveConfig(data: BucketedUserConfig): void {
+        this.save(StoreKey.Config, data)
+        this.logger?.info('Successfully saved config to local storage')
     }
 
-    saveConfig(data: BucketedUserConfig): Promise<void> {
-        return this.save(StoreKey.Config, data)
-    }
-
-    loadConfig(): Promise<string | null | undefined> {
+    loadConfig(): string | null | undefined {
         return this.load(StoreKey.Config)
     }
 
-    saveUser(user: DVCPopulatedUser): Promise<void> {
+    saveUser(user: DVCPopulatedUser): void {
         if (!user) {
-            return Promise.reject('No user to save')
+            throw new Error('No user to save')
         }
-        const saveUserPromise = this.save(StoreKey.User, user)
-        if (user.isAnonymous) {
-            saveUserPromise.then(() => this.save(StoreKey.AnonUser, user))
-        }
-        return saveUserPromise
+        this.save(StoreKey.User, user)
+        this.logger?.info('Successfully saved user to local storage')
     }
 
-    loadUser(): Promise<string  | null | undefined> {
+    loadUser(): string | null | undefined {
         return this.load(StoreKey.User)
     }
 }
