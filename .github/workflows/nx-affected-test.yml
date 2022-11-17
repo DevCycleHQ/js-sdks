@@ -36,3 +36,13 @@ jobs:
       - name: Run Affected Tests
         shell: bash
         run: yarn affected:test
+      - uses: convictional/trigger-workflow-and-wait@v1.6.1
+        with:
+          owner: DevCycleHQ
+          repo: test-harness
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          workflow_file_name: config.yml
+          ref: main
+          propagate_failure: true
+          trigger_workflow: true
+          wait_workflow: true
