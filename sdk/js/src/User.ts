@@ -26,13 +26,13 @@ export class DVCPopulatedUser implements DVCUser {
     readonly sdkType: 'client' | 'server'
     readonly sdkVersion: string
 
-    constructor(user: DVCUser, options: DVCOptions, staticData?: StaticData) {
+    constructor(user: DVCUser, options: DVCOptions, staticData?: StaticData, anonymousUserId?: string) {
         if (!user.user_id && !user.isAnonymous) {
             throw new Error('Must have a user_id, or have "isAnonymous" set on the user')
         }
 
-        this.user_id = !user.user_id ? uuidv4() : user.user_id
-        this.isAnonymous = user.user_id ? false : user.isAnonymous
+        this.user_id =  user.isAnonymous ? anonymousUserId || uuidv4() : user.user_id || uuidv4()
+        this.isAnonymous = user.isAnonymous || false
         this.email = user.email
         this.name = user.name
         this.language = user.language

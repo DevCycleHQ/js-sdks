@@ -53,11 +53,8 @@ export class DVCClient implements Client {
             this.store.remove(StoreKey.AnonUser)
         }
         const storedAnonymousId = this.store.load(StoreKey.AnonUser)
-        if (user.isAnonymous && storedAnonymousId) {
-            user.user_id = storedAnonymousId
-        }
-
-        this.user = new DVCPopulatedUser(user, options)
+        
+        this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId ?? undefined)
 
         if (user.isAnonymous && !storedAnonymousId) {
             this.store.save(StoreKey.AnonUser, this.user.user_id)
