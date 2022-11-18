@@ -49,6 +49,9 @@ export class DVCClient implements Client {
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.store = new Store(typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger)
 
+        if (!user.isAnonymous) {
+            this.store.remove(StoreKey.AnonUser)
+        }
         const storedAnonymousId = this.store.load(StoreKey.AnonUser)
         if (user.isAnonymous && storedAnonymousId) {
             user.user_id = storedAnonymousId
