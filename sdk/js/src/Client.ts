@@ -50,14 +50,14 @@ export class DVCClient implements Client {
         this.store = new Store(typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger)
 
         if (!user.isAnonymous) {
-            this.store.remove(StoreKey.AnonUser)
+            this.store.remove(StoreKey.AnonUserId)
         }
-        const storedAnonymousId = this.store.load(StoreKey.AnonUser)
+        const storedAnonymousId = this.store.load(StoreKey.AnonUserId)
         
         this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId ?? undefined)
 
         if (user.isAnonymous && !storedAnonymousId) {
-            this.store.save(StoreKey.AnonUser, this.user.user_id)
+            this.store.save(StoreKey.AnonUserId, this.user.user_id)
         }
 
         this.options = options
@@ -206,7 +206,7 @@ export class DVCClient implements Client {
                 this.requestConsolidator.queue(updatedUser)
             ).then((config) => {
                 if (!bothAnonymous) {
-                    this.store.remove(StoreKey.AnonUser)
+                    this.store.remove(StoreKey.AnonUserId)
                 }
                 resolve(config.variables || {})
             }).catch((err) => {
@@ -227,9 +227,9 @@ export class DVCClient implements Client {
     resetUser(): Promise<DVCVariableSet>
     resetUser(callback: ErrorCallback<DVCVariableSet>): void
     resetUser(callback?: ErrorCallback<DVCVariableSet>): Promise<DVCVariableSet> | void {
-        this.store.remove(StoreKey.AnonUser)
+        this.store.remove(StoreKey.AnonUserId)
         const anonUser = new DVCPopulatedUser({ isAnonymous: true }, this.options)
-        this.store.save(StoreKey.AnonUser, anonUser.user_id)
+        this.store.save(StoreKey.AnonUserId, anonUser.user_id)
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
             this.eventQueue.flushEvents()
 

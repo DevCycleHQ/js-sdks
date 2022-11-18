@@ -4,7 +4,7 @@ import { DVCPopulatedUser } from './User'
 export const StoreKey = {
     Config: 'dvc:config',
     User: 'dvc:user',
-    AnonUser: 'dvc:anonymous_user'
+    AnonUserId: 'dvc:anonymous_user_id'
 }
 
 export class Store {

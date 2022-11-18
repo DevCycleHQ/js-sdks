@@ -137,18 +137,18 @@ describe('DVCClient tests', () => {
 
     it('should have same value for anonymous user id from local storage and user_id if anonId exists and isAnonymous is true', () => {
         const client = new DVCClient('test_env_key', { isAnonymous: true })
-        const anonymousUserId = client.store.load(StoreKey.AnonUser)
+        const anonymousUserId = client.store.load(StoreKey.AnonUserId)
         expect(JSON.parse(anonymousUserId)).toEqual(client.user.user_id)
     })
 
     it('should not save anonymous user id in local storage if isAnonymous is false', () => {
         const client = new DVCClient('test_env_key', { user_id: 'user1', isAnonymous: false })
-        const anonymousUserId = client.store.load(StoreKey.AnonUser)
+        const anonymousUserId = client.store.load(StoreKey.AnonUserId)
         expect(anonymousUserId).toBeNull()
     })
 
     it('should get the anonymous user id from local storage if it exists', () => {
-        window.localStorage.setItem(StoreKey.AnonUser, 'test_anon_user_id')
+        window.localStorage.setItem(StoreKey.AnonUserId, 'test_anon_user_id')
         const client = new DVCClient('test_env_key', { isAnonymous: true })
         expect(client.user.user_id).toEqual('test_anon_user_id')
     })
@@ -445,11 +445,11 @@ describe('DVCClient tests', () => {
 
         it('should clear existing anon user id from local storage', async () => {
             const newUser = { user_id: 'user2' }
-            client.store.save(StoreKey.AnonUser, 'anon-user-id')
+            client.store.save(StoreKey.AnonUserId, 'anon-user-id')
 
             await client.onClientInitialized()
             await client.identifyUser(newUser)
-            const anonUser = client.store.load(StoreKey.AnonUser)
+            const anonUser = client.store.load(StoreKey.AnonUserId)
 
             expect(anonUser).toBe(null)
         })
@@ -459,10 +459,10 @@ describe('DVCClient tests', () => {
             client = createClientWithConfigImplementation(() =>
                 setTimeout(() => Promise.resolve(testConfig), 1000)
             )
-            client.store.save(StoreKey.AnonUser, 'anon-user-id')
+            client.store.save(StoreKey.AnonUserId, 'anon-user-id')
 
             await client.identifyUser(newUser)
-            const anonUser = client.store.load(StoreKey.AnonUser)
+            const anonUser = client.store.load(StoreKey.AnonUserId)
 
             expect(anonUser).toBe(null)
         })
@@ -474,7 +474,7 @@ describe('DVCClient tests', () => {
 
             await client.onClientInitialized()
             await client.identifyUser({ isAnonymous: true })
-            const anonUser = client.store.load(StoreKey.AnonUser)
+            const anonUser = client.store.load(StoreKey.AnonUserId)
 
             expect(anonUser).not.toBe(null)
         })
@@ -570,11 +570,11 @@ describe('DVCClient tests', () => {
 
         it('should remove anonymous user id from local storage', async () => {
             const client = new DVCClient('test_env_key', { isAnonymous: true })
-            const oldAnonymousId = client.store.load(StoreKey.AnonUser)
+            const oldAnonymousId = client.store.load(StoreKey.AnonUserId)
             expect(oldAnonymousId).toBeTruthy()
 
             await client.resetUser()
-            const newAnonymousId = client.store.load(StoreKey.AnonUser)
+            const newAnonymousId = client.store.load(StoreKey.AnonUserId)
             expect(oldAnonymousId).not.toEqual(newAnonymousId)
             expect(client.user.user_id).toEqual(JSON.parse(newAnonymousId))
         })
