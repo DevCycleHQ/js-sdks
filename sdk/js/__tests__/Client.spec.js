@@ -560,6 +560,17 @@ describe('DVCClient tests', () => {
 
             expect(publishEvents).toBeCalled()
         })
+
+        it('should remove anonymous user id from local storage', async () => {
+            const client = new DVCClient('test_env_key', { isAnonymous: true })
+            const oldAnonymousId = client.store.load(StoreKey.AnonUser)
+            expect(oldAnonymousId).toBeTruthy()
+
+            await client.resetUser()
+            const newAnonymousId = client.store.load(StoreKey.AnonUser)
+            expect(oldAnonymousId).not.toEqual(newAnonymousId)
+            expect(client.user.user_id).toEqual(JSON.parse(newAnonymousId))
+        })
     })
 
     describe('allFeatures', () => {
