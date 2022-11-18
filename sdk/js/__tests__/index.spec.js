@@ -32,7 +32,7 @@ describe('initialize tests', () => {
         expect(() => DVCClient.initialize('YOUR_CLIENT_SIDE_ID', badUser)).toThrow(invalidUserError)
     })
 
-    it('should throw an error if invalid optioins are passed in initialize', () => {
+    it('should throw an error if invalid options are passed in initialize', () => {
         const user = { user_id: 'user1' }
         expect(() => DVCClient.initialize('YOUR_CLIENT_SIDE_ID', user, null)).toThrow(invalidOptionsError)
         expect(() => DVCClient.initialize('YOUR_CLIENT_SIDE_ID', user, false)).toThrow(invalidOptionsError)
