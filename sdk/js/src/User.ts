@@ -32,7 +32,7 @@ export class DVCPopulatedUser implements DVCUser {
         }
 
         this.user_id =  user.isAnonymous ? anonymousUserId || uuidv4() : user.user_id || uuidv4()
-        this.isAnonymous = user.isAnonymous || false
+        this.isAnonymous = user.user_id ? false : (user.isAnonymous ?? true)
         this.email = user.email
         this.name = user.name
         this.language = user.language

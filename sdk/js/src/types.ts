@@ -56,7 +56,7 @@ export interface DVCUser {
      * generate a random `user_id` for them. If they are `isAnonymous = false`
      * a `user_id` value must be provided.
      */
-    isAnonymous: boolean
+    isAnonymous?: boolean
 
     /**
      * Must be defined if `isAnonymous = false`
