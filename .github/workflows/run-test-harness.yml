@@ -2,6 +2,8 @@ name: Run Test Harness
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'sdk/nodejs/*'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,30 +11,6 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: git fetch origin main
-      - name: Cache node modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-yarn-cache
-        with:
-          path: |
-            .yarn/cache
-            .yarn/unplugged
-            node_modules/.cache
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - run: yarn --immutable
-      - run: yarn affected:lint
       - uses: convictional/trigger-workflow-and-wait@v1.6.1
         with:
           owner: DevCycleHQ
