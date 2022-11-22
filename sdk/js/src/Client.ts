@@ -51,18 +51,19 @@ export class DVCClient implements Client {
         if (options?.reactNative) {
             this.store = new ReactNativeStore(this.logger)
         } else {
-            this.store = new Store(typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger)
+            this.store = new Store(
+                typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger
+            )
         }
 
-        if (!user.isAnonymous) {
+        if (user.user_id || user.isAnonymous === false) {
             this.store.remove(StoreKey.AnonUserId)
         }
         const storedAnonymousId = this.store.load(StoreKey.AnonUserId)
-        console.log(`storedAnonId ${storedAnonymousId}`)
-        
+
         this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId ?? undefined)
 
-        if (user.isAnonymous && !storedAnonymousId) {
+        if (this.user.isAnonymous && !storedAnonymousId) {
             this.store.save(StoreKey.AnonUserId, this.user.user_id)
         }
 
@@ -197,7 +198,7 @@ export class DVCClient implements Client {
             this.eventQueue.flushEvents()
 
             let updatedUser: DVCPopulatedUser
-            const bothAnonymous = this.user.isAnonymous && (user.isAnonymous || true)
+            const bothAnonymous = this.user.isAnonymous && (user.isAnonymous || !user.user_id)
 
             if (user.user_id === this.user.user_id) {
                 updatedUser = this.user.updateUser(user, this.options)

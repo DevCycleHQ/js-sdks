@@ -63,12 +63,11 @@ export const App = (): JSX.Element => {
     }
 
     const resetUser = () => {
-        console.log(`reset user`)
-        client && client.resetUser().catch(err => console.error(err))
+        client && client.resetUser().catch((err) => console.log({ err }))
     }
 
     const identifyAnonUser = () => {
-        client && client.identifyUser(anonUser)
+        client && client.identifyUser(anonUser).catch((err) => console.log({ err }))
     }
 
     if (!dvcReady) return <SafeAreaView><Text style={styles.textXL}>DVC is not ready!</Text></SafeAreaView>

@@ -13,22 +13,18 @@ export class ReactNativeStore {
     }
 
     save(storeKey: string, data: unknown): void {
-        console.log(`storing ${JSON.stringify(data)} for ${storeKey}`)
         this.store.setItem(storeKey, JSON.stringify(data))
     }
 
     load(storeKey: string): any {
         let storedValue
         (async () => {
-            try{
+            try {
                 storedValue = await this.store.getItem(storeKey)
-                console.log(`trying, ${storeKey} returning ${storedValue}`)
             }
-            catch(e){
-                console.log(`failed RIP, ${storeKey} returning null`)
+            catch (e) {
                 storedValue = null
             }
-            console.log(`here, ${storeKey} returning ${storedValue}`)
             return storedValue
         })()
     }
