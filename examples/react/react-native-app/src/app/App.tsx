@@ -30,6 +30,8 @@ const user = {
     isAnonymous: false
 }
 
+const anonUser = {}
+
 export const App = (): JSX.Element => {
     const [whatsNextYCoord, setWhatsNextYCoord] = useState<number>(0)
     const scrollViewRef = useRef<null | ScrollView>(null)
@@ -58,6 +60,15 @@ export const App = (): JSX.Element => {
                 console.log('Updated variables: ', variables)
             })
             .catch((err) => console.log({ err }))
+    }
+
+    const resetUser = () => {
+        console.log(`reset user`)
+        client && client.resetUser().catch(err => console.error(err))
+    }
+
+    const identifyAnonUser = () => {
+        client && client.identifyUser(anonUser)
     }
 
     if (!dvcReady) return <SafeAreaView><Text style={styles.textXL}>DVC is not ready!</Text></SafeAreaView>
@@ -94,6 +105,22 @@ export const App = (): JSX.Element => {
                         >
                             <Text style={[styles.textMd, styles.textCenter]}>
                   Identify new user
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.whatsNextButton}
+                            onPress={() => resetUser()}
+                        >
+                            <Text style={[styles.textMd, styles.textCenter]}>
+                  Reset User
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.whatsNextButton}
+                            onPress={() => identifyAnonUser()}
+                        >
+                            <Text style={[styles.textMd, styles.textCenter]}>
+                  Identify Anon User
                             </Text>
                         </TouchableOpacity>
                     </View>

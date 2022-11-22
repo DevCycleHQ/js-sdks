@@ -18,6 +18,9 @@
     "lerna:version": "scripts/lerna-version.sh",
     "local-registry": "./scripts/local-registry.sh"
   },
+  "modulePathIgnorePatterns": [
+    "<rootDir>/build"
+  ],
   "dependencies": {
     "@nestjs/class-validator": "^0.13.4",
     "as-uuid": "^0.0.4",
@@ -76,7 +79,7 @@
     "@nrwl/web": "14.7.11",
     "@nrwl/webpack": "14.7.11",
     "@nrwl/workspace": "14.7.11",
-    "@react-native-async-storage/async-storage": "^1.17.7",
+    "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-native-community/cli": "^9.0.0",
     "@react-native-community/cli-platform-android": "^9.0.0",
     "@react-native-community/cli-platform-ios": "^9.0.0",

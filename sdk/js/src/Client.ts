@@ -24,6 +24,7 @@ import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
+import ReactNativeStore from './ReactNativeStore'
 
 export class DVCClient implements Client {
     private options: DVCOptions
@@ -36,7 +37,7 @@ export class DVCClient implements Client {
     logger: DVCLogger
     config?: BucketedUserConfig
     user: DVCPopulatedUser
-    private store: Store
+    private store: Store | ReactNativeStore
     private eventQueue: EventQueue
     private requestConsolidator: ConfigRequestConsolidator
     eventEmitter: EventEmitter
@@ -47,12 +48,17 @@ export class DVCClient implements Client {
 
     constructor(environmentKey: string, user: DVCUser, options: DVCOptions = {}) {
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
-        this.store = new Store(typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger)
+        if (options?.reactNative) {
+            this.store = new ReactNativeStore(this.logger)
+        } else {
+            this.store = new Store(typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger)
+        }
 
         if (!user.isAnonymous) {
             this.store.remove(StoreKey.AnonUserId)
         }
         const storedAnonymousId = this.store.load(StoreKey.AnonUserId)
+        console.log(`storedAnonId ${storedAnonymousId}`)
         
         this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId ?? undefined)
 
@@ -191,7 +197,7 @@ export class DVCClient implements Client {
             this.eventQueue.flushEvents()
 
             let updatedUser: DVCPopulatedUser
-            const bothAnonymous = this.user.isAnonymous && user.isAnonymous
+            const bothAnonymous = this.user.isAnonymous && (user.isAnonymous || true)
 
             if (user.user_id === this.user.user_id) {
                 updatedUser = this.user.updateUser(user, this.options)
