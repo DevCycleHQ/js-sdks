@@ -27,10 +27,14 @@ export class DVCPopulatedUser implements DVCUser {
     readonly sdkVersion: string
 
     constructor(user: DVCUser, options: DVCOptions, staticData?: StaticData, anonymousUserId?: string) {
-        this.user_id =  (user.isAnonymous || !user.user_id) ? 
+        if (user.user_id?.trim() === '') {
+            throw new Error('A User cannot be created with a user_id that is an empty string')
+        }
+        
+        this.user_id = (user.isAnonymous || !user.user_id) ? 
             (anonymousUserId || uuidv4()) :
             user.user_id
-        this.isAnonymous = user.user_id ? false : (user.isAnonymous || true)
+        this.isAnonymous = (user.isAnonymous || !user.user_id)
         this.email = user.email
         this.name = user.name
         this.language = user.language

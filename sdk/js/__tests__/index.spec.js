@@ -27,9 +27,10 @@ describe('initialize tests', () => {
         expect(() => DVCClient.initialize('YOUR_CLIENT_SIDE_ID')).toThrow(missingUserError)
     })
 
-    it('should throw an error if invalid user is passed in initialize', () => {
+    it('should NOT throw an error if invalid user is passed in initialize', () => {
         const badUser = { 'who': 'me' }
-        expect(() => DVCClient.initialize('YOUR_CLIENT_SIDE_ID', badUser)).toThrow(invalidUserError)
+        const client = DVCClient.initialize('YOUR_CLIENT_SIDE_ID', badUser)
+        expect(client).not.toBeNull()
     })
 
     it('should throw an error if invalid options are passed in initialize', () => {

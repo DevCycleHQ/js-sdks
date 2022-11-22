@@ -158,7 +158,7 @@ describe('DVCClient tests', () => {
         const client = new DVCClient('test_env_key', { user_id: 'user1'})
         expect(client.user.user_id).toEqual('user1')
         expect(window.localStorage.getItem(StoreKey.AnonUserId)).toBeNull()
-    }
+    })
 
     describe('onClientInitialized', () => {
         beforeEach(() => {
@@ -427,9 +427,9 @@ describe('DVCClient tests', () => {
         })
 
         it('should throw an error if the user is invalid', async () => {
-            await expect(client.identifyUser({}))
+            await expect(client.identifyUser({ user_id: '' }))
                 .rejects
-                .toThrow(new Error('Must have a user_id, or have "isAnonymous" set on the user'))
+                .toThrow(new Error('A User cannot be created with a user_id that is an empty string'))
         })
 
         it('should flush events before identifying user', async () => {
