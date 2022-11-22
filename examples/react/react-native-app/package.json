@@ -20,6 +20,7 @@
     "iso-639-1": "*",
     "uuid": "*",
     "axios-retry": "*",
-    "ua-parser-js": "*"
+    "ua-parser-js": "*",
+    "@testing-library/react": "*"
   }
 }

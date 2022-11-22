@@ -2979,6 +2979,11 @@ __metadata:
 "@devcycle/devcycle-js-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/devcycle-js-sdk@workspace:sdk/js"
+  peerDependencies:
+    "@react-native-async-storage/async-storage": ^1.17.11
+  peerDependenciesMeta:
+    "@react-native-async-storage/async-storage":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -2986,6 +2991,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/devcycle-react-sdk@workspace:sdk/react"
   dependencies:
+    "@react-native-async-storage/async-storage": ^1.17.11
     hoist-non-react-statics: ^3.3.2
   peerDependencies:
     react: ">=16.8.0"
@@ -5435,14 +5441,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-async-storage/async-storage@npm:^1.17.7":
-  version: 1.17.10
-  resolution: "@react-native-async-storage/async-storage@npm:1.17.10"
+"@react-native-async-storage/async-storage@npm:^1.17.11":
+  version: 1.17.11
+  resolution: "@react-native-async-storage/async-storage@npm:1.17.11"
   dependencies:
     merge-options: ^3.0.4
   peerDependencies:
-    react-native: ^0.0.0-0 || 0.60 - 0.70 || 1000.0.0
-  checksum: 66a49bc82c498e70f2154ab6e25318e370fa1de8bd94fa3225246dfc269a377f9e1af3737dd845e19160c35a6d644383054aaef7e9734c0a84af7b8fe40694cd
+    react-native: ^0.0.0-0 || 0.60 - 0.71 || 1000.0.0
+  checksum: 691f2b74498160d0b532f673402d8affeecb28b005b1c6d6fa2e7c87f89ab3068177e8e2d2686738306e7592a39c6d7148aa4c426b7e8e149c43a336ad446648
   languageName: node
   linkType: hard
 
@@ -8164,7 +8170,7 @@ __metadata:
 "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json":
   version: 1.1.0
   resolution: "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json.git#commit=d2ce65ec18b305e1f3db8a4fe4394b417631b024"
-  checksum: 7deb76a9587afb10ea0a9e3b8df2e53e3bb773fdbe4534f509c58e1a07fec5191eb2f60eecdf4eafa9cc280c2c301722925161709769fed2d7dbec318ed1a2ea
+  checksum: 045c8dc54cb8ee61d022c017e483f6c8729347a2e30167a4e3227b9d4d80293b032a8cff7fcaf83040b23eacc23bf62188ebb9f2091df85ef2ee21425f8957f7
   languageName: node
   linkType: hard
 
@@ -11034,7 +11040,7 @@ __metadata:
     "@nrwl/web": 14.7.11
     "@nrwl/webpack": 14.7.11
     "@nrwl/workspace": 14.7.11
-    "@react-native-async-storage/async-storage": ^1.17.7
+    "@react-native-async-storage/async-storage": ^1.17.11
     "@react-native-community/cli": ^9.0.0
     "@react-native-community/cli-platform-android": ^9.0.0
     "@react-native-community/cli-platform-ios": ^9.0.0
