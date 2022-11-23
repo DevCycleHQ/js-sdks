@@ -10,7 +10,7 @@ import {
 } from './types'
 import { DVCVariable, DVCVariableOptions } from './Variable'
 import { getConfigJson, saveEntity } from './Request'
-import Store, { StoreKey } from './Store'
+import CacheStore, { StoreKey } from './CacheStore'
 import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
 import { checkParamDefined } from './utils'
@@ -24,6 +24,7 @@ import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
+import Store from './Store'
 import ReactNativeStore from './ReactNativeStore'
 
 export class DVCClient implements Client {
@@ -37,7 +38,7 @@ export class DVCClient implements Client {
     logger: DVCLogger
     config?: BucketedUserConfig
     user: DVCPopulatedUser
-    private store: Store | ReactNativeStore
+    private store: CacheStore
     private eventQueue: EventQueue
     private requestConsolidator: ConfigRequestConsolidator
     eventEmitter: EventEmitter
