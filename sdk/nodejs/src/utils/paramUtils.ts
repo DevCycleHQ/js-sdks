@@ -35,3 +35,7 @@ export function checkParamString(name: string, param: unknown): string {
     checkParamType(name, param, typeEnum.string)
     return param as string
 }
+
+export function isValidServerEnvKey(envKey: string): boolean {
+    return envKey?.startsWith('server') || envKey?.startsWith('dvc_server')
+}
