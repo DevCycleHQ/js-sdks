@@ -7,6 +7,7 @@
     "example-nodejs-local-js": "examples/nodejs-local/js",
     "example-nodejs-local-typescript": "examples/nodejs-local/typescript",
     "example-react-native-app": "examples/react/react-native-app",
+    "example-react-native-test-app": "examples/react/react-native-test-app/apps/react-native-test-app",
     "example-react-next-js-app": "examples/react/next-js-app",
     "example-react-with-async-provider": "examples/react/with-async-provider",
     "example-react-with-provider": "examples/react/with-provider",

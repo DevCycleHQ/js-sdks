@@ -1,0 +1,76 @@
+{
+  "name": "react-native-test-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/react-native-test-app/src",
+  "projectType": "application",
+  "targets": {
+    "start": {
+      "executor": "@nrwl/react-native:start",
+      "options": {
+        "port": 8081
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx start react-native-test-app"
+      }
+    },
+    "run-ios": {
+      "executor": "@nrwl/react-native:run-ios",
+      "options": {}
+    },
+    "bundle-ios": {
+      "executor": "@nrwl/react-native:bundle",
+      "options": {
+        "entryFile": "src/main.tsx",
+        "platform": "ios",
+        "bundleOutput": "dist/apps/react-native-test-app/ios/main.jsbundle"
+      }
+    },
+    "run-android": {
+      "executor": "@nrwl/react-native:run-android",
+      "options": {}
+    },
+    "build-android": {
+      "executor": "@nrwl/react-native:build-android",
+      "outputs": [
+        "{projectRoot}/android/app/build/outputs/bundle",
+        "{projectRoot}/android/app/build/outputs/apk"
+      ],
+      "options": {}
+    },
+    "bundle-android": {
+      "executor": "@nrwl/react-native:bundle",
+      "options": {
+        "entryFile": "src/main.tsx",
+        "platform": "android",
+        "bundleOutput": "dist/apps/react-native-test-app/android/main.jsbundle"
+      }
+    },
+    "sync-deps": {
+      "executor": "@nrwl/react-native:sync-deps",
+      "options": {}
+    },
+    "ensure-symlink": {
+      "executor": "@nrwl/react-native:ensure-symlink",
+      "options": {}
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/react-native-test-app/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/react-native-test-app/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
