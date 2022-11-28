@@ -13,7 +13,7 @@ const emptyUser = { user_id: 'empty' }
 
 describe('DVCCloudClient without EdgeDB', () => {
     beforeAll(async () => {
-        client = DVC.initialize('token', { logLevel: 'error', enableCloudBucketing: true })
+        client = DVC.initialize('dvc_server_token', { logLevel: 'error', enableCloudBucketing: true })
         server.listen()
     })
     afterEach(() => server.resetHandlers())
@@ -151,7 +151,11 @@ describe('DVCCloudClient without EdgeDB', () => {
 
 describe('DVCCloudClient with EdgeDB Enabled', () => {
     beforeAll(async () => {
-        client = DVC.initialize('token', { logLevel: 'error', enableCloudBucketing: true, enableEdgeDB: true })
+        client = DVC.initialize('dvc_server_token', {
+            logLevel: 'error',
+            enableCloudBucketing: true,
+            enableEdgeDB: true
+        })
         server.listen()
     })
     afterEach(() => server.resetHandlers())
