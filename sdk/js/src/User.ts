@@ -30,9 +30,9 @@ export class DVCPopulatedUser implements DVCUser {
         if (user.user_id?.trim() === '') {
             throw new Error('A User cannot be created with a user_id that is an empty string')
         }
-        
-        this.user_id = (user.isAnonymous || !user.user_id) ? 
-            (anonymousUserId || uuidv4()) :
+
+        this.user_id = (user.isAnonymous || !user.user_id) ?
+            (user.user_id || anonymousUserId || uuidv4()) :
             user.user_id
         this.isAnonymous = (user.isAnonymous || !user.user_id)
         this.email = user.email

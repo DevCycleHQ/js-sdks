@@ -58,7 +58,7 @@ export class DVCClient implements Client {
         }
 
         const storedAnonymousId = this.store.load(StoreKey.AnonUserId)
-        this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId ?? undefined)
+        this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId ? JSON.parse(storedAnonymousId) : undefined)
 
         this.options = options
         this.environmentKey = environmentKey
@@ -197,12 +197,8 @@ export class DVCClient implements Client {
             this.eventQueue.flushEvents()
 
             let updatedUser: DVCPopulatedUser
-            const bothAnonymous = this.user.isAnonymous && (user.isAnonymous || !user.user_id)
 
             if (user.user_id === this.user.user_id) {
-                updatedUser = this.user.updateUser(user, this.options)
-            } else if (bothAnonymous) {
-                user.user_id = this.user.user_id
                 updatedUser = this.user.updateUser(user, this.options)
             } else {
                 updatedUser = new DVCPopulatedUser(user, this.options)
@@ -211,8 +207,8 @@ export class DVCClient implements Client {
             this.onInitialized.then(() =>
                 this.requestConsolidator.queue(updatedUser)
             ).then((config) => {
-                if (user.isAnonymous) {
-                    this.store.save(StoreKey.AnonUserId, user.user_id)
+                if (user.isAnonymous|| !user.user_id) {
+                    this.store.save(StoreKey.AnonUserId, updatedUser.user_id)
                 } else {
                     this.store.remove(StoreKey.AnonUserId)
                 }
@@ -248,7 +244,7 @@ export class DVCClient implements Client {
                 }).catch((e) => {
                     this.eventEmitter.emitError(e)
                     if (oldAnonymousId) {
-                        this.store.save(StoreKey.AnonUserId, oldAnonymousId)
+                        this.store.save(StoreKey.AnonUserId, JSON.parse(oldAnonymousId))
                     }
                     reject(e)
                 })
