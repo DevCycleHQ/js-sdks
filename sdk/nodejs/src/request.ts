@@ -46,14 +46,15 @@ const EDGE_DB_QUERY_PARAM = '?enableEdgeDB='
 export async function publishEvents(
     logger: DVCLogger,
     envKey: string | null,
-    eventsBatch: SDKEventBatchRequestBody
+    eventsBatch: SDKEventBatchRequestBody,
+    baseURLOverride?: string
 ): Promise<AxiosResponse> {
     if (!envKey) {
         throw new Error('DevCycle is not yet initialized to publish events.')
     }
-
+    const url = baseURLOverride ? `${baseURLOverride}${EVENTS_PATH}` : `${EVENT_URL}${HOST}${EVENTS_PATH}`
     const res = await post({
-        url: `${EVENT_URL}${HOST}${EVENTS_PATH}`,
+        url,
         data: { batch: eventsBatch }
     }, envKey, false)
     if (res.status !== 201) {
@@ -87,7 +88,7 @@ export async function getAllFeatures(
     envKey: string,
     options: DVCOptions
 ): Promise<AxiosResponse> {
-    const baseUrl = `${options.apiProxyURL || BUCKETING_URL}${FEATURES_PATH}`
+    const baseUrl = `${options.baseURLOverride || options.apiProxyURL || BUCKETING_URL}${FEATURES_PATH}`
     const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
     return await post({
         url: postUrl,
@@ -100,7 +101,7 @@ export async function getAllVariables(
     envKey: string,
     options: DVCOptions
 ): Promise<AxiosResponse> {
-    const baseUrl = `${options.apiProxyURL || BUCKETING_URL}${VARIABLES_PATH}`
+    const baseUrl = `${options.baseURLOverride || options.apiProxyURL || BUCKETING_URL}${VARIABLES_PATH}`
     const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
     return await post({
         url: postUrl,
@@ -116,7 +117,7 @@ export async function getVariable(
     variableKey: string,
     options: DVCOptions
 ): Promise<AxiosResponse> {
-    const baseUrl = `${options.apiProxyURL || BUCKETING_URL}${VARIABLES_PATH}/${variableKey}`
+    const baseUrl = `${options.baseURLOverride || options.apiProxyURL || BUCKETING_URL}${VARIABLES_PATH}/${variableKey}`
     const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
     return await post({
         url: postUrl,
@@ -132,7 +133,7 @@ export async function postTrack(
     logger: DVCLogger,
     options: DVCOptions
 ): Promise<void> {
-    const baseUrl = `${options.apiProxyURL || BUCKETING_URL}${TRACK_PATH}`
+    const baseUrl = `${options.baseURLOverride || options.apiProxyURL || BUCKETING_URL}${TRACK_PATH}`
     const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
     try {
         await post({
