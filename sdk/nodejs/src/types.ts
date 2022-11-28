@@ -124,6 +124,11 @@ export interface DVCOptions {
      * Allows the SDK to communicate with a proxy of DVC bucketing API / client SDK API.
      */
     apiProxyURL?: string
+
+    /**
+     * Allows the override of the baseUrl for ALL requests from the SDK. Mainly used for testing.
+     */
+    baseURLOverride?: string
 }
 
 export type DVCVariableValue = VariableValue

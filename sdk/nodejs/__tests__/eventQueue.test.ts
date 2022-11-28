@@ -139,7 +139,7 @@ describe('EventQueue Unit Tests', () => {
     it('should setup Event Queue and process events', async () => {
         publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
 
-        const eventQueue = initEventQueue('envKey')
+        const eventQueue = initEventQueue('envKey', { baseURLOverride: 'localhost:3000/client/1' })
         const user = new DVCPopulatedUser({ user_id: 'user_id' })
         const event = { type: 'test_event' }
         eventQueue.queueEvent(user, event)
@@ -197,7 +197,7 @@ describe('EventQueue Unit Tests', () => {
                     })
                 ]
             }
-        ])
+        ], 'localhost:3000/client/1')
     })
 
     it('should setup Event Queue and not process custom events if disableCustomEventLogging is true', async () => {
@@ -393,7 +393,7 @@ describe('EventQueue Unit Tests', () => {
                     })
                 ]
             }
-        ])
+        ], undefined)
     })
 
     it('should handle event request failures and re-queue events', async () => {
