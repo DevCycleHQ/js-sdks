@@ -15,6 +15,7 @@ JQ_PATH=".version"
 NPM_SHOW="$(npm show "$PACKAGE" version)"
 NPM_LS="$(cat package.json | jq -r $JQ_PATH)"
 NPM_REGISTRY="$(npm config get registry)"
+SHA="$(git rev-parse HEAD)"
 
 echo "$PACKAGE npm show: $NPM_SHOW, npm ls: $NPM_LS"
 
@@ -42,6 +43,13 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
   echo "Versions are not the same, (Remote = $NPM_SHOW; Local = $NPM_LS). Checking for publish eligibility."
 
   if [[ "$NPM_REGISTRY" = "https://registry.npmjs.org/" ]]; then
+    DEVCYCLE_PROD_SLEUTH_API_TOKEN="$(aws secretsmanager get-secret-value --secret-id=DEVCYCLE_PROD_SLEUTH_API_TOKEN | jq -r .SecretString )"
+    # make sure we're able to track this deployment
+    if [[ -z "$DEVCYCLE_PROD_SLEUTH_API_TOKEN" ]]; then
+      echo "Sleuth.io deployment tracking token not found. Aborting."
+      exit 1
+    fi
+
     # check if we're on main branch
     if [[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then
       echo "Not on main branch. Aborting."
@@ -67,6 +75,16 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
     fi
 
     npm publish --otp=$OTP
+
+    if [[ "$?" != 0 ]]; then
+      echo "Publish failed. Aborting."
+      exit 1
+    fi
+
+    curl -X POST \
+      -d api_key=$DEVCYCLE_PROD_SLEUTH_API_TOKEN \
+      -d environment=production \
+      -d sha=$SHA https://app.sleuth.io/api/1/deployments/taplytics/js-sdks-2/register_deploy
   else
     npm publish --local
   fi
