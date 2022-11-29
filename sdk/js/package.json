@@ -1,6 +1,6 @@
 {
   "name": "@devcycle/devcycle-js-sdk",
-  "version": "1.5.12",
+  "version": "1.5.13",
   "description": "The DevCycle JS SDK used for feature management.",
   "author": "",
   "license": "MIT",
