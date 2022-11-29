@@ -126,7 +126,7 @@ export interface DVCOptions {
     apiProxyURL?: string
 
     /**
-     * Allows the override of the baseUrl for ALL requests from the SDK. Mainly used for testing.
+     * Allows the override of the baseUrl for ALL requests from the SDK (including events). Mainly used for testing.
      */
     baseURLOverride?: string
 }
