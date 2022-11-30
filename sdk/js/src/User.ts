@@ -1,6 +1,6 @@
 import { DVCOptions, DVCUser, DVCJSON } from './types'
 import { v4 as uuidv4 } from 'uuid'
-import * as packageJson from '../package.json'
+import packageJson from '../package.json'
 import UAParser from 'ua-parser-js'
 
 type StaticData = Pick<DVCPopulatedUser, 'createdDate' | 'platform' |

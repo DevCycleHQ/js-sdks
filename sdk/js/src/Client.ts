@@ -57,8 +57,8 @@ export class DVCClient implements Client {
             )
         }
 
-        const storedAnonymousId = this.store.load(StoreKey.AnonUserId)
-        this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId ? JSON.parse(storedAnonymousId) : undefined)
+        const storedAnonymousId = this.store.loadAnonUserId()
+        this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId ?? undefined)
 
         this.options = options
         this.environmentKey = environmentKey
@@ -79,7 +79,7 @@ export class DVCClient implements Client {
                 this.eventEmitter.emitInitialized(true)
 
                 if (this.user.isAnonymous) {
-                    this.store.save(StoreKey.AnonUserId, this.user.user_id)
+                    this.store.saveAnonUserId(this.user.user_id)
                 } else {
                     this.store.remove(StoreKey.AnonUserId)
                 }
@@ -208,7 +208,7 @@ export class DVCClient implements Client {
                 this.requestConsolidator.queue(updatedUser)
             ).then((config) => {
                 if (user.isAnonymous|| !user.user_id) {
-                    this.store.save(StoreKey.AnonUserId, updatedUser.user_id)
+                    this.store.saveAnonUserId(updatedUser.user_id)
                 } else {
                     this.store.remove(StoreKey.AnonUserId)
                 }
@@ -231,7 +231,7 @@ export class DVCClient implements Client {
     resetUser(): Promise<DVCVariableSet>
     resetUser(callback: ErrorCallback<DVCVariableSet>): void
     resetUser(callback?: ErrorCallback<DVCVariableSet>): Promise<DVCVariableSet> | void {
-        const oldAnonymousId = this.store.load(StoreKey.AnonUserId)
+        const oldAnonymousId = this.store.loadAnonUserId()
         this.store.remove(StoreKey.AnonUserId)
         const anonUser = new DVCPopulatedUser({ isAnonymous: true }, this.options)
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
@@ -239,12 +239,12 @@ export class DVCClient implements Client {
 
             this.onInitialized.then(() => this.requestConsolidator.queue(anonUser))
                 .then((config) => {
-                    this.store.save(StoreKey.AnonUserId, anonUser.user_id)
+                    this.store.saveAnonUserId(anonUser.user_id)
                     resolve(config.variables || {})
                 }).catch((e) => {
                     this.eventEmitter.emitError(e)
                     if (oldAnonymousId) {
-                        this.store.save(StoreKey.AnonUserId, JSON.parse(oldAnonymousId))
+                        this.store.saveAnonUserId(oldAnonymousId)
                     }
                     reject(e)
                 })

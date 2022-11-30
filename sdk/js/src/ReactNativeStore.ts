@@ -8,6 +8,7 @@ export class ReactNativeStore extends CacheStore {
     constructor(logger: DVCLogger) {
         super(AsyncStorage, logger)
         this.store = AsyncStorage
+
     }
 
     override load(storeKey: string): any {
@@ -15,8 +16,7 @@ export class ReactNativeStore extends CacheStore {
         (async () => {
             try {
                 storedValue = await this.store.getItem(storeKey)
-            }
-            catch (e) {
+            } catch (e) {
                 storedValue = null
             }
             return storedValue
