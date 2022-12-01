@@ -25,7 +25,6 @@ import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
 import Store from './Store'
-import ReactNativeStore from './ReactNativeStore'
 
 export class DVCClient implements Client {
     private options: DVCOptions
@@ -50,7 +49,10 @@ export class DVCClient implements Client {
     constructor(environmentKey: string, user: DVCUser, options: DVCOptions = {}) {
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
         if (options?.reactNative) {
-            this.store = new ReactNativeStore(this.logger)
+            (async () => {
+                const { ReactNativeStore } = await import('./ReactNativeStore.js')
+                this.store = new ReactNativeStore(this.logger)
+            })()
         } else {
             this.store = new Store(
                 typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger
@@ -207,7 +209,7 @@ export class DVCClient implements Client {
             this.onInitialized.then(() =>
                 this.requestConsolidator.queue(updatedUser)
             ).then((config) => {
-                if (user.isAnonymous|| !user.user_id) {
+                if (user.isAnonymous || !user.user_id) {
                     this.store.saveAnonUserId(updatedUser.user_id)
                 } else {
                     this.store.remove(StoreKey.AnonUserId)
