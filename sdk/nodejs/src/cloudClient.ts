@@ -11,7 +11,7 @@ import { DVCVariable } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
 import { dvcDefaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
-import { DVCLogger } from '@devcycle/types'
+import { DVCLogger, getVariableTypeFromValue } from '@devcycle/types'
 import { getAllFeatures, getAllVariables, getVariable, postTrack } from './request'
 import { AxiosError, AxiosResponse } from 'axios'
 
@@ -32,11 +32,21 @@ export class DVCCloudClient {
 
         checkParamDefined('key', key)
         checkParamDefined('defaultValue', defaultValue)
-
+        const type = getVariableTypeFromValue(defaultValue, key, this.logger, true)
         return getVariable(requestUser, this.environmentKey, key, this.options)
             .then((res: AxiosResponse) => {
+                const variable = res.data
+                if (variable.type !== type) {
+                    this.logger.error(
+                        `Type mismatch for variable ${key}. Expected ${type}, got ${variable.type}`
+                    )
+                    return new DVCVariable({
+                        defaultValue,
+                        key
+                    })
+                }
                 return new DVCVariable({
-                    ...res.data,
+                    ...variable,
                     defaultValue
                 })
             })
