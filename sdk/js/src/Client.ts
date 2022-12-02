@@ -25,7 +25,6 @@ import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
 import Store from './Store'
-import ReactNativeStore from './ReactNativeStore'
 
 export class DVCClient implements Client {
     private options: DVCOptions
@@ -49,13 +48,9 @@ export class DVCClient implements Client {
 
     constructor(environmentKey: string, user: DVCUser, options: DVCOptions = {}) {
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
-        if (options?.reactNative) {
-            this.store = new ReactNativeStore(this.logger)
-        } else {
-            this.store = new Store(
-                typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger
-            )
-        }
+        this.store = new Store(
+            typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger
+        )
 
         const storedAnonymousId = this.store.loadAnonUserId()
         this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId ?? undefined)

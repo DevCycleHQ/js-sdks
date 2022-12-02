@@ -1,5 +1,4 @@
 import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { DVCPopulatedUser } from './User'
 
 export const StoreKey = {
@@ -9,10 +8,10 @@ export const StoreKey = {
 }
 
 export abstract class CacheStore {
-    store?: Storage | typeof AsyncStorage
+    store?: Storage
     logger?: DVCLogger
 
-    constructor(localStorage?: Storage | typeof AsyncStorage, logger?: DVCLogger) {
+    constructor(localStorage?: Storage, logger?: DVCLogger) {
         this.store = localStorage
         this.logger = logger
     }
@@ -21,7 +20,7 @@ export abstract class CacheStore {
         this.store?.setItem(storeKey, JSON.stringify(data))
     }
 
-    protected load(storeKey: string): string | null | undefined | any {
+    protected load(storeKey: string): string | null | undefined {
         return this.store?.getItem(storeKey)
     }
 
