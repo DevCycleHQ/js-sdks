@@ -2979,11 +2979,6 @@ __metadata:
 "@devcycle/devcycle-js-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/devcycle-js-sdk@workspace:sdk/js"
-  peerDependencies:
-    "@react-native-async-storage/async-storage": ^1.17.11
-  peerDependenciesMeta:
-    "@react-native-async-storage/async-storage":
-      optional: true
   languageName: unknown
   linkType: soft
 
@@ -2991,7 +2986,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/devcycle-react-sdk@workspace:sdk/react"
   dependencies:
-    "@react-native-async-storage/async-storage": ^1.17.11
     hoist-non-react-statics: ^3.3.2
   peerDependencies:
     react: ">=16.8.0"
