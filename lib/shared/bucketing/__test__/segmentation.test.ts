@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-
 import clone from 'lodash/clone'
 import * as assert from 'assert'
 import * as segmentation from '../src/segmentation'
@@ -425,6 +424,57 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
         })
 
+        it('should pass for customData filter != multiple values', () => {
+            const operator = {
+                filters: [{
+                    type: 'user',
+                    subType: 'customData',
+                    dataKey: 'testKey',
+                    dataKeyType: 'String',
+                    comparator: '!=',
+                    values: ['dataValue', 'dataValue2']
+                }] as AudienceFilterOrOperator[],
+                operator: 'and'
+            } as TopLevelOperator
+
+            const data = { customData: { testKey: 'dataValue' } }
+            assert.strictEqual(false, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
+        })
+
+        it('should pass for private customData filter != multiple values', () => {
+            const operator = {
+                filters: [{
+                    type: 'user',
+                    subType: 'customData',
+                    dataKey: 'testKey',
+                    dataKeyType: 'String',
+                    comparator: '!=',
+                    values: ['dataValue', 'dataValue2']
+                }] as AudienceFilterOrOperator[],
+                operator: 'and'
+            } as TopLevelOperator
+
+            const data = { privateCustomData: { testKey: 'dataValue' } }
+            assert.strictEqual(false, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
+        })
+
+        it('should pass for customData filter does not contain multiple values', () => {
+            const operator = {
+                filters: [{
+                    type: 'user',
+                    subType: 'customData',
+                    dataKey: 'testKey',
+                    dataKeyType: 'String',
+                    comparator: '!contain',
+                    values: ['dataValue', 'otherValue']
+                }] as AudienceFilterOrOperator[],
+                operator: 'and'
+            } as TopLevelOperator
+
+            const data = { customData: { testKey: 'otherValue' } }
+            assert.strictEqual(false, segmentation.evaluateOperator({ data, operator, featureId, isOptInEnabled }))
+        })
+
         describe('evaluateOperator with optIn filter', () => {
             const optInOperator = {
                 filters: [{
@@ -448,21 +498,21 @@ describe('SegmentationManager Unit Test', () => {
             it('should pass optIn filter when feature in optIns and isOptInEnabled', () => {
 
                 assert.strictEqual(
-                    true, 
+                    true,
                     segmentation.evaluateOperator({ data: optInData, operator: optInOperator, featureId: 'testFeature', isOptInEnabled: true })
                 )
             })
 
             it('should fail optIn filter when feature in optIns but isOptInEnabled is false', () => {
                 assert.strictEqual(
-                    false, 
+                    false,
                     segmentation.evaluateOperator({ data: optInData, operator: optInOperator, featureId: 'testFeature', isOptInEnabled: false })
                 )
             })
 
             it('should fail optIn filter when feature not in optIns', () => {
                 assert.strictEqual(
-                    false, 
+                    false,
                     segmentation.evaluateOperator({ data: optInData, operator: optInOperator, featureId: 'featureNotInOptins', isOptInEnabled: true })
                 )
             })
@@ -544,6 +594,14 @@ describe('SegmentationManager Unit Test', () => {
         it('should return true if string is one of multiple values', () => {
             const filter = { type: 'user', comparator: '=', values: ['iPhone OS', 'Android'] } as AudienceFilterOrOperator
             assert.strictEqual(true, segmentation.checkStringsFilter('iPhone OS', filter))
+        })
+        it('should return true if string is not one of multiple values', () => {
+            const filter = {
+                type: 'user',
+                comparator: '!=',
+                values: ['iPhone OS', 'Android', 'Android TV', 'web']
+            }  as AudienceFilterOrOperator
+            assert.strictEqual(true, segmentation.checkStringsFilter('Roku', filter))
         })
         it('should return true if string is equal to multiple filters', () => {
             const filters = [
@@ -1206,9 +1264,11 @@ describe('SegmentationManager Unit Test', () => {
         const filterStr = {
             comparator: '=',
             dataKey: 'strKey',
+            dataKeyType: 'String',
             type: 'user',
             subType: 'customData',
-            values: ['value']
+            values: ['value'],
+            filters: []
         } as AudienceFilterOrOperator
         it('should return false if filter and no data', () => {
             const data = null as unknown as Record<string, unknown>
@@ -1228,6 +1288,22 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should return false if string value isnt present', () => {
             assert.strictEqual(false, segmentation.checkCustomData({}, filterStr))
+        })
+        it('should return true if string is not equal to multiple values', () => {
+            const filter = {
+                ...filterStr,
+                comparator: FilterComparator['!='],
+                values: ['value1', 'value2', 'value3']
+            }
+            assert.strictEqual(true, segmentation.checkCustomData({ strKey: 'value' }, filter))
+        })
+        it('should return false if string is not equal to multiple values', () => {
+            const filter = {
+                ...filterStr,
+                comparator: FilterComparator['!='],
+                values: ['value1', 'value2', 'value3']
+            }
+            assert.strictEqual(false, segmentation.checkCustomData({ strKey: 'value2' }, filter))
         })
 
         const filterNum = clone(filterStr)

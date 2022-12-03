@@ -488,6 +488,57 @@ describe('SegmentationManager Unit Test', () => {
             }
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
+        
+        it('should pass for customData filter != multiple values', () => {
+            const operator = {
+                filters: [{
+                    type: 'user',
+                    subType: 'customData',
+                    dataKey: 'testKey',
+                    dataKeyType: 'String',
+                    comparator: '!=',
+                    values: ['dataValue', 'dataValue2']
+                }],
+                operator: 'and'
+            }
+
+            const data = { customData: { testKey: 'dataValue' } }
+            assert.strictEqual(false, evaluateOperator({ data, operator }))
+        })
+
+        it('should pass for private customData filter != multiple values', () => {
+            const operator = {
+                filters: [{
+                    type: 'user',
+                    subType: 'customData',
+                    dataKey: 'testKey',
+                    dataKeyType: 'String',
+                    comparator: '!=',
+                    values: ['dataValue', 'dataValue2']
+                }],
+                operator: 'and'
+            }
+
+            const data = { privateCustomData: { testKey: 'dataValue' } }
+            assert.strictEqual(false, evaluateOperator({ data, operator }))
+        })
+
+        it('should pass for customData filter does not contain multiple values', () => {
+            const operator = {
+                filters: [{
+                    type: 'user',
+                    subType: 'customData',
+                    dataKey: 'testKey',
+                    dataKeyType: 'String',
+                    comparator: '!contain',
+                    values: ['dataValue', 'otherValue']
+                }],
+                operator: 'and'
+            }
+
+            const data = { customData: { testKey: 'otherValue' } }
+            assert.strictEqual(false, evaluateOperator({ data, operator }))
+        })
 
         it('should pass for user_id filter', () => {
             const operator = {
@@ -613,6 +664,23 @@ describe('SegmentationManager Unit Test', () => {
             const data = { customData: { testKey: 'dataValue' } }
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
+
+        it('should pass for customData filter != multiple values', () => {
+            const operator = {
+                filters: [{
+                    type: 'user',
+                    subType: 'customData',
+                    dataKey: 'testKey',
+                    dataKeyType: 'String',
+                    comparator: '!=',
+                    values: ['dataValue', 'dataValue2']
+                }],
+                operator: 'and'
+            }
+
+            const data = { customData: { testKey: 'dataValue' } }
+            assert.strictEqual(false, evaluateOperator({ data, operator }))
+        })
     })
 
     describe('checkStringsFilter', () => {
@@ -689,6 +757,10 @@ describe('SegmentationManager Unit Test', () => {
         it('should return true if string is one of multiple values', () => {
             const filter = { type: 'user', comparator: '=', values: ['iPhone OS', 'Android'] }
             assert.strictEqual(true, checkStringsFilter('iPhone OS', filter))
+        })
+        it('should return true if string is not one of multiple values', () => {
+            const filter = { type: 'user', comparator: '!=', values: ['iPhone OS', 'Android', 'Android TV', 'web'] }
+            assert.strictEqual(true, checkStringsFilter('Roku', filter))
         })
         it('should return true if string is equal to multiple filters', () => {
             const filters = [
@@ -1244,7 +1316,8 @@ describe('SegmentationManager Unit Test', () => {
             type: 'user',
             subType: 'customData',
             dataKeyType: 'String',
-            values: ['value'] as unknown[]
+            values: ['value'] as unknown[],
+            filters: []
         }
         it('should return false if filter and no data', () => {
             const data = null as unknown as Record<string, unknown>
@@ -1261,9 +1334,12 @@ describe('SegmentationManager Unit Test', () => {
         it('should return false if string value is not equal', () => {
             assert.strictEqual(false, checkCustomData({ strKey: 'not value' }, filterStr))
         })
-
         it('should return false if string value isnt present', () => {
             assert.strictEqual(false, checkCustomData({}, filterStr))
+        })
+        it('should return true if string is not equal to multiple values', () => {
+            const filter = { ...filterStr, comparator: '!=', values: ['value1', 'value2', 'value3'] }
+            assert.strictEqual(true, checkCustomData({ strKey: 'value' }, filter))
         })
 
         const filterNum = { ...filterStr }
