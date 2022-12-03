@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-
 import { Audience, FeatureType, Rollout } from '@devcycle/types'
 import {
     generateBoundedHashes,

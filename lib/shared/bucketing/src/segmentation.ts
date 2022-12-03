@@ -55,8 +55,13 @@ const filterFunctionsBySubtype: FilterFunctionsBySubtype = {
     platformVersion: (data, filter) => checkVersionFilters(data.platformVersion, filter),
     deviceModel: (data, filter) => checkStringsFilter(data.deviceModel, filter),
     platform: (data, filter) => checkStringsFilter(data.platform, filter),
-    customData: (data, filter) =>
-        checkCustomData(data.customData, filter) || checkCustomData(data.privateCustomData, filter),
+    customData: (data, filter) => {
+        const combinedCustomData = {
+            ...data.customData,
+            ...data.privateCustomData
+        }
+        return checkCustomData(combinedCustomData, filter)
+    }
 }
 
 export const convertToSemanticVersion = (version: string): string => {
