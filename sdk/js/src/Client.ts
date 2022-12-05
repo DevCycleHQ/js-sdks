@@ -25,6 +25,7 @@ import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
 import Store from './Store'
+import _ from 'lodash'
 
 export class DVCClient implements Client {
     private options: DVCOptions
@@ -33,6 +34,7 @@ export class DVCClient implements Client {
     private environmentKey: string
     private userSaved = false
     private _closing = false
+    private isConfigCached = false
 
     logger: DVCLogger
     config?: BucketedUserConfig
@@ -54,8 +56,24 @@ export class DVCClient implements Client {
 
         const storedAnonymousId = this.store.loadAnonUserId()
         this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId ?? undefined)
-
         this.options = options
+        if (!this.options.configCacheTTL) {
+            this.options.configCacheTTL = 604800000
+        }
+
+        const cachedConfig = this.store.loadConfig(this.user)
+        const userId = this.store.loadConfigUserId(this.user)
+        const shouldGetConfigCache = !this.options.disableConfigCache && 
+        this.user.user_id === userId && 
+        cachedConfig &&
+        !this.isConfigCacheTTLExpired()
+        
+        if (shouldGetConfigCache) {
+            this.getConfigCache(cachedConfig)
+        } else {
+            this.logger.info("Skipping config cache")
+        }
+
         this.environmentKey = environmentKey
         this.variableDefaultMap = {}
         this.eventQueue = new EventQueue(environmentKey, this, options?.eventFlushIntervalMS)
@@ -114,6 +132,9 @@ export class DVCClient implements Client {
                 .then(() => onInitialized(null, this))
                 .catch((err) => onInitialized(err))
             return
+        }
+        if (this.isConfigCached) {
+            this.logger.info("Initialized with a cached config")
         }
         return this.onInitialized
     }
@@ -314,8 +335,7 @@ export class DVCClient implements Client {
     private handleConfigReceived(config: BucketedUserConfig, user: DVCPopulatedUser) {
         const oldConfig = this.config
         this.config = config
-
-        this.store.saveConfig(config)
+        this.cacheConfig(config, user)
 
         if (this.user != user || !this.userSaved) {
             this.user = user
@@ -387,6 +407,27 @@ export class DVCClient implements Client {
 
         document.addEventListener?.('visibilitychange', this.pageVisibilityHandler)
     }
+
+    private cacheConfig(config: BucketedUserConfig, user: DVCPopulatedUser) {
+        this.store.saveConfig(config, user)
+        this.store.saveConfigUserId(user)
+        this.store.saveConfigFetchDate(user)
+        this.isConfigCached = false
+    }
+
+    private getConfigCache(config: BucketedUserConfig) {
+        this.config = config
+        this.isConfigCached = true
+    }
+
+    private isConfigCacheTTLExpired() {
+        const cachedFetchDate = parseInt(this.store.loadConfigFetchDate(this.user) || "")
+        if (this.options.configCacheTTL) {
+            return _.now() - cachedFetchDate > this.options.configCacheTTL
+        }
+        return true
+    }
+
 }
 
 const checkIfEdgeEnabled = (
