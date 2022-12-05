@@ -33,6 +33,7 @@ export class DVCClient implements Client {
     private environmentKey: string
     private userSaved = false
     private _closing = false
+    private isConfigCached = false
 
     logger: DVCLogger
     config?: BucketedUserConfig
@@ -54,8 +55,8 @@ export class DVCClient implements Client {
 
         const storedAnonymousId = this.store.loadAnonUserId()
         this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId ?? undefined)
-
         this.options = options
+
         this.environmentKey = environmentKey
         this.variableDefaultMap = {}
         this.eventQueue = new EventQueue(environmentKey, this, options?.eventFlushIntervalMS)
@@ -68,6 +69,12 @@ export class DVCClient implements Client {
         )
         this.eventEmitter = new EventEmitter()
         this.registerVisibilityChangeHandler()
+
+        if (!this.options.disableConfigCache) {
+            this.getConfigCache()
+        } else {
+            this.logger.info('Skipping config cache')
+        }
 
         this.onInitialized = this.requestConsolidator.queue(this.user)
             .then(() => {
@@ -314,8 +321,8 @@ export class DVCClient implements Client {
     private handleConfigReceived(config: BucketedUserConfig, user: DVCPopulatedUser) {
         const oldConfig = this.config
         this.config = config
-
-        this.store.saveConfig(config)
+        this.store.saveConfig(config, user)
+        this.isConfigCached = false
 
         if (this.user != user || !this.userSaved) {
             this.user = user
@@ -386,6 +393,19 @@ export class DVCClient implements Client {
         }
 
         document.addEventListener?.('visibilitychange', this.pageVisibilityHandler)
+    }
+
+    private getConfigCache() {
+        const cachedConfig = this.store.loadConfig(this.user, this.options.configCacheTTL)
+        if (cachedConfig) {
+            this.config = cachedConfig
+            this.isConfigCached = true
+            this.eventEmitter.emitFeatureUpdates({}, cachedConfig.features)
+            this.eventEmitter.emitVariableUpdates({}, cachedConfig.variables, this.variableDefaultMap)
+            this.logger.info('Initialized with a cached config')
+        } else {
+            this.logger.info('No cached config found')
+        }
     }
 }
 

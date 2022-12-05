@@ -48,6 +48,8 @@ export interface DVCOptions {
     logger?: DVCLogger
     logLevel?: DVCDefaultLogLevel
     apiProxyURL?: string
+    disableConfigCache?: boolean
+    configCacheTTL?: number
 }
 
 export interface DVCUser {
