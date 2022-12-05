@@ -1,6 +1,6 @@
 {
   "name": "@devcycle/bucketing",
-  "version": "1.0.49",
+  "version": "1.0.50",
   "license": "MIT",
   "devDependencies": {
     "@devcycle/bucketing-test-data": "^1.0.40"
