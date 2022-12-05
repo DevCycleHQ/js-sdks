@@ -25,7 +25,6 @@ import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
 import Store from './Store'
-import now from 'lodash/now'
 
 export class DVCClient implements Client {
     private options: DVCOptions
@@ -60,16 +59,9 @@ export class DVCClient implements Client {
         if (!this.options.configCacheTTL) {
             this.options.configCacheTTL = 604800000
         }
-
-        const cachedConfig = this.store.loadConfig(this.user)
-        const userId = this.store.loadConfigUserId(this.user)
-        const shouldGetConfigCache = !this.options.disableConfigCache && 
-        this.user.user_id === userId && 
-        cachedConfig &&
-        !this.isConfigCacheTTLExpired()
         
-        if (shouldGetConfigCache) {
-            this.getConfigCache(cachedConfig)
+        if (!this.options.disableConfigCache) {
+            this.getConfigCache()
         } else {
             this.logger.info("Skipping config cache")
         }
@@ -410,22 +402,18 @@ export class DVCClient implements Client {
 
     private cacheConfig(config: BucketedUserConfig, user: DVCPopulatedUser) {
         this.store.saveConfig(config, user)
-        this.store.saveConfigUserId(user)
-        this.store.saveConfigFetchDate(user)
         this.isConfigCached = false
     }
 
-    private getConfigCache(config: BucketedUserConfig) {
-        this.config = config
-        this.isConfigCached = true
-    }
-
-    private isConfigCacheTTLExpired() {
-        const cachedFetchDate = parseInt(this.store.loadConfigFetchDate(this.user) || "")
+    private getConfigCache() {
         if (this.options.configCacheTTL) {
-            return now() - cachedFetchDate > this.options.configCacheTTL
+            const cachedConfig = this.store.loadConfig(this.user, this.options.configCacheTTL)
+            if (cachedConfig) {
+                this.config = cachedConfig
+                this.isConfigCached = true
+            }
         }
-        return true
+       
     }
 
 }

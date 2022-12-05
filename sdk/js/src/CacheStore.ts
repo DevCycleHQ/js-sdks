@@ -43,6 +43,31 @@ export abstract class CacheStore {
         return user.isAnonymous ? StoreKey.AnonymousConfigDate : StoreKey.IdentifiedConfigDate
     }
 
+    private saveConfigUserId(user: DVCPopulatedUser): void {
+        const { user_id: userId, isAnonymous } = user
+        const userIdKey = this.getUserIdStoreKey(user)
+        this.save(userIdKey, userId)
+        this.logger?.info(`Successfully saved ${isAnonymous ? 'anonymous': 'identified'} user id to local storage`)
+    }
+
+    private saveConfigFetchDate(user: DVCPopulatedUser): void {
+        const fetchDateKey = this.getConfigFetchDateKey(user)
+        this.save(fetchDateKey, now())
+        this.logger?.info('Successfully saved config fetch date to local storage')
+    }
+
+    private loadConfigUserId(user: DVCPopulatedUser): string | null | undefined {
+        const userIdKey = this.getUserIdStoreKey(user)
+        const userId = this.load(userIdKey)
+        return userId ? JSON.parse(userId) : userId
+    }
+
+    private loadConfigFetchDate(user: DVCPopulatedUser): string | null | undefined {
+        const fetchDateKey = this.getConfigFetchDateKey(user)
+        const fetchDate = this.load(fetchDateKey)
+        return fetchDate ? JSON.parse(fetchDate) : fetchDate
+    }
+
     remove(storeKey: string): void {
         this.store?.removeItem(storeKey)
     }
@@ -50,12 +75,20 @@ export abstract class CacheStore {
     saveConfig(data: BucketedUserConfig, user: DVCPopulatedUser): void {
         const configKey = this.getConfigStoreKey(user)
         this.save(configKey, data)
+        this.saveConfigFetchDate(user)
+        this.saveConfigUserId(user)
         this.logger?.info('Successfully saved config to local storage')
     }
 
-    loadConfig(user: DVCPopulatedUser): BucketedUserConfig | null | undefined {
+    loadConfig(user: DVCPopulatedUser, configCacheTTL: number): BucketedUserConfig | null | undefined {
+        const userId = this.loadConfigUserId(user)
+        const cachedFetchDate = parseInt(this.loadConfigFetchDate(user) || "")
         const configKey = this.getConfigStoreKey(user)
-        const config = this.load(configKey)
+        const isConfigCacheTTLExpired = (now() - cachedFetchDate) > configCacheTTL
+        let config
+        if (user.user_id === userId  && !isConfigCacheTTLExpired) {
+            config = this.load(configKey)
+        }
         return config ? JSON.parse(config) : config
     }
 
@@ -80,31 +113,6 @@ export abstract class CacheStore {
     loadAnonUserId(): string | null | undefined {
         const anonUserId = this.load(StoreKey.AnonUserId)
         return anonUserId ? JSON.parse(anonUserId) : anonUserId
-    }
-
-    saveConfigUserId(user: DVCPopulatedUser): void {
-        const { user_id: userId, isAnonymous } = user
-        const userIdKey = this.getUserIdStoreKey(user)
-        this.save(userIdKey, userId)
-        this.logger?.info(`Successfully saved ${isAnonymous ? 'anonymous': 'identified'} user id to local storage`)
-    }
-
-    loadConfigUserId(user: DVCPopulatedUser): string | null | undefined {
-        const userIdKey = this.getUserIdStoreKey(user)
-        const userId = this.load(userIdKey)
-        return userId ? JSON.parse(userId) : userId
-    }
-
-    saveConfigFetchDate(user: DVCPopulatedUser): void {
-        const fetchDateKey = this.getConfigFetchDateKey(user)
-        this.save(fetchDateKey, now())
-        this.logger?.info('Successfully saved config fetch date to local storage')
-    }
-
-    loadConfigFetchDate(user: DVCPopulatedUser): string | null | undefined {
-        const fetchDateKey = this.getConfigFetchDateKey(user)
-        const fetchDate = this.load(fetchDateKey)
-        return fetchDate ? JSON.parse(fetchDate) : fetchDate
     }
 }
 
