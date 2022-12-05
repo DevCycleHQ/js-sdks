@@ -56,7 +56,7 @@ describe('DVCClient tests', () => {
 
     it('should establish a streaming connection if available', async () => {
         getConfigJson_mock.mockImplementation(() => {
-            return Promise.resolve({...testConfig, sse: {url: 'example.com'}})
+            return Promise.resolve({ ...testConfig, sse: { url: 'example.com' } })
         })
         const client = new DVCClient('test_env_key', { user_id: 'user1' })
         expect(getConfigJson_mock).toBeCalled()
@@ -142,7 +142,7 @@ describe('DVCClient tests', () => {
         const client = new DVCClient('test_env_key', { isAnonymous: true })
         await client.onClientInitialized()
         const anonymousUserId = client.store.load(StoreKey.AnonUserId)
-        expect(JSON.parse(anonymousUserId)).toEqual(client.user.user_id)
+        expect(anonymousUserId).toEqual(client.user.user_id)
     })
 
     it('should not save anonymous user id in local storage if isAnonymous is false', () => {
@@ -313,13 +313,26 @@ describe('DVCClient tests', () => {
             })
 
             variable.onUpdate(onUpdate)
-            client.eventEmitter.emitVariableUpdates({ 'key': {...variable} }, {
+            client.eventEmitter.emitVariableUpdates({ 'key': { ...variable } }, {
                 'key': {
                     ...variable,
                     value: 'my-new-value'
                 }
             }, { 'key': { 'default-value': variable } })
 
+            expect(onUpdate).toBeCalledTimes(1)
+        })
+
+        it('should have same variable value with config cache and call onUpdate after config cache is updated', async () => {
+            client = createClientWithConfigImplementation(() => {
+                return Promise.resolve(testConfig)
+            })
+            const variable = client.variable('key', 'default_value')
+            const onUpdate = jest.fn()
+            variable.onUpdate(onUpdate)
+            await client.onClientInitialized()
+            const cachedConfig = client.store.loadConfig(client.user, client.configCacheTTL)
+            expect(variable.value).toEqual(cachedConfig.variables.key.value)
             expect(onUpdate).toBeCalledTimes(1)
         })
 
@@ -582,7 +595,7 @@ describe('DVCClient tests', () => {
             await client.resetUser()
             const newAnonymousId = client.store.load(StoreKey.AnonUserId)
             expect(oldAnonymousId).not.toEqual(newAnonymousId)
-            expect(client.user.user_id).toEqual(JSON.parse(newAnonymousId))
+            expect(client.user.user_id).toEqual(newAnonymousId)
         })
     })
 
@@ -662,14 +675,14 @@ describe('DVCClient tests', () => {
 
         it('should queue a valid event', async () => {
             client.track({ type: 'test' })
-            await new Promise(resolve => setTimeout(resolve, 0))
-            expect(client.eventQueue.queueEvent).toHaveBeenCalledWith({type: 'test'})
+            await new Promise((resolve) => setTimeout(resolve, 0))
+            expect(client.eventQueue.queueEvent).toHaveBeenCalledWith({ type: 'test' })
         })
 
         it('should prevent tracking if close has been called', async () => {
             client.close()
             client.track({ type: 'test' })
-            await new Promise(resolve => setTimeout(resolve, 0))
+            await new Promise((resolve) => setTimeout(resolve, 0))
             expect(client.eventQueue.queueEvent).not.toHaveBeenCalled()
         })
     })
@@ -707,7 +720,7 @@ describe('DVCClient tests', () => {
         let client
         beforeEach(async () => {
             getConfigJson_mock.mockImplementation(() => {
-                return Promise.resolve({...testConfig, sse: {url: 'example.com'}})
+                return Promise.resolve({ ...testConfig, sse: { url: 'example.com' } })
             })
             client = new DVCClient('test_env_key', { user_id: 'user1' })
             await client.onClientInitialized()

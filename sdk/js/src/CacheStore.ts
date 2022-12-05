@@ -4,7 +4,9 @@ import { DVCPopulatedUser } from './User'
 export const StoreKey = {
     Config: 'dvc:config',
     User: 'dvc:user',
-    AnonUserId: 'dvc:anonymous_user_id'
+    AnonUserId: 'dvc:anonymous_user_id',
+    AnonymousConfig: 'dvc:anonymous_config',
+    IdentifiedConfig: 'dvc:identified_config',
 }
 
 export abstract class CacheStore {
@@ -20,22 +22,57 @@ export abstract class CacheStore {
         this.store?.setItem(storeKey, JSON.stringify(data))
     }
 
-    protected load(storeKey: string): string | null | undefined {
-        return this.store?.getItem(storeKey)
+    protected load<T>(storeKey: string): T | null | undefined {
+        const item = this.store?.getItem(storeKey)
+        return item ? JSON.parse(item) : null
+    }
+
+    private getConfigKey(user: DVCPopulatedUser) {
+        return user.isAnonymous ? StoreKey.AnonymousConfig : StoreKey.IdentifiedConfig
+    }
+
+    private getConfigUserIdKey(user: DVCPopulatedUser) {
+        return `${this.getConfigKey(user)}.user_id`
+    }
+
+    private getConfigFetchDateKey(user: DVCPopulatedUser) {
+        return `${this.getConfigKey(user)}.fetch_date`
+    }
+
+    private loadConfigUserId(user: DVCPopulatedUser): string | null | undefined {
+        const userIdKey = this.getConfigUserIdKey(user)
+        return this.load<string>(userIdKey)
+    }
+
+    private loadConfigFetchDate(user: DVCPopulatedUser): number {
+        const fetchDateKey = this.getConfigFetchDateKey(user)
+        return parseInt(this.load<string>(fetchDateKey) || '0', 10)
     }
 
     remove(storeKey: string): void {
         this.store?.removeItem(storeKey)
     }
 
-    saveConfig(data: BucketedUserConfig): void {
-        this.save(StoreKey.Config, data)
+    saveConfig(data: BucketedUserConfig, user: DVCPopulatedUser): void {
+        const configKey = this.getConfigKey(user)
+        const fetchDateKey = this.getConfigFetchDateKey(user)
+        const userIdKey = this.getConfigUserIdKey(user)
+        this.save(configKey, data)
+        this.save(fetchDateKey, Date.now())
+        this.save(userIdKey, user.user_id)
         this.logger?.info('Successfully saved config to local storage')
     }
 
-    loadConfig(): BucketedUserConfig | null | undefined {
-        const config = this.load(StoreKey.Config)
-        return config ? JSON.parse(config) : config
+    loadConfig(user: DVCPopulatedUser, configCacheTTL= 604800000): BucketedUserConfig | null | undefined {
+        const userId = this.loadConfigUserId(user)
+        const cachedFetchDate = this.loadConfigFetchDate(user)
+        const isConfigCacheTTLExpired = Date.now() - cachedFetchDate > configCacheTTL
+
+        if (user.user_id === userId && !isConfigCacheTTLExpired) {
+            const configKey = this.getConfigKey(user)
+            return this.load<BucketedUserConfig>(configKey)
+        }
+        return null
     }
 
     saveUser(user: DVCPopulatedUser): void {
@@ -47,8 +84,7 @@ export abstract class CacheStore {
     }
 
     loadUser(): DVCPopulatedUser | null | undefined {
-        const user = this.load(StoreKey.User)
-        return user ? JSON.parse(user) : user
+        return this.load<DVCPopulatedUser>(StoreKey.User)
     }
 
     saveAnonUserId(userId: string): void {
@@ -57,8 +93,7 @@ export abstract class CacheStore {
     }
 
     loadAnonUserId(): string | null | undefined {
-        const anonUserId = this.load(StoreKey.AnonUserId)
-        return anonUserId ? JSON.parse(anonUserId) : anonUserId
+        return this.load<string>(StoreKey.AnonUserId)
     }
 }
 
