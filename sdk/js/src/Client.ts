@@ -25,7 +25,7 @@ import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
 import Store from './Store'
-import _ from 'lodash'
+import now from 'lodash/now'
 
 export class DVCClient implements Client {
     private options: DVCOptions
@@ -423,7 +423,7 @@ export class DVCClient implements Client {
     private isConfigCacheTTLExpired() {
         const cachedFetchDate = parseInt(this.store.loadConfigFetchDate(this.user) || "")
         if (this.options.configCacheTTL) {
-            return _.now() - cachedFetchDate > this.options.configCacheTTL
+            return now() - cachedFetchDate > this.options.configCacheTTL
         }
         return true
     }

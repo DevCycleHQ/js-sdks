@@ -1,5 +1,5 @@
 import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
-import _ from 'lodash'
+import now from 'lodash/now'
 import { DVCPopulatedUser } from './User'
 
 export const StoreKey = {
@@ -97,7 +97,7 @@ export abstract class CacheStore {
 
     saveConfigFetchDate(user: DVCPopulatedUser): void {
         const fetchDateKey = this.getConfigFetchDateKey(user)
-        this.save(fetchDateKey, _.now())
+        this.save(fetchDateKey, now())
         this.logger?.info('Successfully saved config fetch date to local storage')
     }
 
