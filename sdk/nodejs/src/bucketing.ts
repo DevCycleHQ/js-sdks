@@ -8,6 +8,7 @@ export const importBucketingLib = async (
     { logger, options }:
     { logger?: DVCLogger, options?: DVCOptions } = {}
 ): Promise<void> => {
+    if (Bucketing) return
     Bucketing = await instantiate()
     startTrackingMemoryUsage(Bucketing, logger, options?.reporter)
 }
