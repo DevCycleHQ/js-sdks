@@ -535,7 +535,7 @@ describe('DVCClient tests', () => {
                 'test_env_key',
                 expect.objectContaining(anonUser),
                 expect.any(Object),
-                {},
+                { configCacheTTL: 604800000 },
                 undefined
             )
             expect(result).toEqual(newVariables.variables)

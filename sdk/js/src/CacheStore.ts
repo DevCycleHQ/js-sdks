@@ -74,7 +74,7 @@ export abstract class CacheStore {
         const configKey = this.getConfigStoreKey(user)
         const isConfigCacheTTLExpired = (Date.now() - cachedFetchDate) > configCacheTTL
         let config
-        if (user.user_id === userId  && !isConfigCacheTTLExpired) {
+        if (user.user_id === userId && !isConfigCacheTTLExpired) {
             config = this.load(configKey)
         }
         return config ? JSON.parse(config) : config
