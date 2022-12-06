@@ -42,19 +42,6 @@ export abstract class CacheStore {
         return user.isAnonymous ? StoreKey.AnonymousConfigDate : StoreKey.IdentifiedConfigDate
     }
 
-    private saveConfigUserId(user: DVCPopulatedUser): void {
-        const { user_id: userId, isAnonymous } = user
-        const userIdKey = this.getUserIdStoreKey(user)
-        this.save(userIdKey, userId)
-        this.logger?.info(`Successfully saved ${isAnonymous ? 'anonymous': 'identified'} user id to local storage`)
-    }
-
-    private saveConfigFetchDate(user: DVCPopulatedUser): void {
-        const fetchDateKey = this.getConfigFetchDateKey(user)
-        this.save(fetchDateKey, Date.now())
-        this.logger?.info('Successfully saved config fetch date to local storage')
-    }
-
     private loadConfigUserId(user: DVCPopulatedUser): string | null | undefined {
         const userIdKey = this.getUserIdStoreKey(user)
         const userId = this.load(userIdKey)
@@ -73,9 +60,11 @@ export abstract class CacheStore {
 
     saveConfig(data: BucketedUserConfig, user: DVCPopulatedUser): void {
         const configKey = this.getConfigStoreKey(user)
+        const fetchDateKey = this.getConfigFetchDateKey(user)
+        const userIdKey = this.getUserIdStoreKey(user)
         this.save(configKey, data)
-        this.saveConfigFetchDate(user)
-        this.saveConfigUserId(user)
+        this.save(fetchDateKey, Date.now())
+        this.save(userIdKey, user.user_id)
         this.logger?.info('Successfully saved config to local storage')
     }
 
