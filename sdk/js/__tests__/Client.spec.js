@@ -48,8 +48,8 @@ describe('DVCClient tests', () => {
             return Promise.resolve(testConfig)
         })
         const client = new DVCClient('test_env_key', { user_id: 'user1' })
-        expect(getConfigJson_mock).toBeCalled()
         await client.onInitialized
+        expect(getConfigJson_mock).toBeCalled()
         expect(getConfigJson_mock.mock.calls.length).toBe(1)
         expect(client.config).toStrictEqual(testConfig)
     })
@@ -59,8 +59,8 @@ describe('DVCClient tests', () => {
             return Promise.resolve({ ...testConfig, sse: { url: 'example.com' } })
         })
         const client = new DVCClient('test_env_key', { user_id: 'user1' })
-        expect(getConfigJson_mock).toBeCalled()
         await client.onInitialized
+        expect(getConfigJson_mock).toBeCalled()
         expect(client.streamingConnection).toBeDefined()
     })
 
@@ -70,6 +70,7 @@ describe('DVCClient tests', () => {
         })
         const dvcOptions = { enableEdgeDB: true }
         const client = new DVCClient('test_env_key', { user_id: 'user1' }, dvcOptions)
+        await client.onClientInitialized()
         expect(getConfigJson_mock).toBeCalledWith(
             'test_env_key',
             expect.objectContaining({ user_id: 'user1' }),
@@ -77,7 +78,6 @@ describe('DVCClient tests', () => {
             dvcOptions,
             undefined
         )
-        await client.onClientInitialized()
         expect(getConfigJson_mock.mock.calls.length).toBe(1)
         expect(client.config).toStrictEqual(testConfig)
         expect(saveEntity_mock).toBeCalledWith(
@@ -94,6 +94,7 @@ describe('DVCClient tests', () => {
         })
         const dvcOptions = { enableEdgeDB: true }
         const client = new DVCClient('test_env_key', { user_id: 'user1' }, dvcOptions)
+        await client.onClientInitialized()
         expect(getConfigJson_mock).toBeCalledWith(
             'test_env_key',
             expect.objectContaining({ user_id: 'user1' }),
@@ -101,7 +102,6 @@ describe('DVCClient tests', () => {
             dvcOptions,
             undefined
         )
-        await client.onClientInitialized()
         expect(getConfigJson_mock.mock.calls.length).toBe(1)
         expect(saveEntity_mock).not.toBeCalled()
     })
@@ -112,6 +112,7 @@ describe('DVCClient tests', () => {
         })
         const dvcOptions = { enableEdgeDB: false }
         const client = new DVCClient('test_env_key', { user_id: 'user1' }, dvcOptions)
+        await client.onClientInitialized()
         expect(getConfigJson_mock).toBeCalledWith(
             'test_env_key',
             expect.objectContaining({ user_id: 'user1' }),
@@ -119,7 +120,6 @@ describe('DVCClient tests', () => {
             dvcOptions,
             undefined
         )
-        await client.onClientInitialized()
         expect(getConfigJson_mock.mock.calls.length).toBe(1)
         expect(client.config).toStrictEqual(testConfig)
         expect(saveEntity_mock).not.toBeCalled()
@@ -130,8 +130,8 @@ describe('DVCClient tests', () => {
             return Promise.reject(new Error('test error'))
         })
         const client = new DVCClient('test_env_key', { user_id: 'user1' })
-        expect(getConfigJson_mock).toBeCalled()
         await client.onInitialized
+        expect(getConfigJson_mock).toBeCalled()
         expect(client.config).toBeUndefined()
     })
 
@@ -141,19 +141,20 @@ describe('DVCClient tests', () => {
         })
         const client = new DVCClient('test_env_key', { isAnonymous: true })
         await client.onClientInitialized()
-        const anonymousUserId = client.store.load(StoreKey.AnonUserId)
+        const anonymousUserId = await client.store.load(StoreKey.AnonUserId)
         expect(anonymousUserId).toEqual(client.user.user_id)
     })
 
-    it('should not save anonymous user id in local storage if isAnonymous is false', () => {
+    it('should not save anonymous user id in local storage if isAnonymous is false', async () => {
         const client = new DVCClient('test_env_key', { user_id: 'user1', isAnonymous: false })
-        const anonymousUserId = client.store.load(StoreKey.AnonUserId)
+        const anonymousUserId = await client.store.load(StoreKey.AnonUserId)
         expect(anonymousUserId).toBeNull()
     })
 
-    it('should get the anonymous user id from local storage if it exists', () => {
+    it('should get the anonymous user id from local storage if it exists', async () => {
         window.localStorage.setItem(StoreKey.AnonUserId, JSON.stringify('test_anon_user_id'))
         const client = new DVCClient('test_env_key', { isAnonymous: true })
+        await client.onClientInitialized()
         expect(client.user.user_id).toEqual('test_anon_user_id')
     })
 
@@ -345,7 +346,7 @@ describe('DVCClient tests', () => {
             const onUpdate = jest.fn()
             variable.onUpdate(onUpdate)
             await client.onClientInitialized()
-            const cachedConfig = client.store.loadConfig(client.user, client.configCacheTTL)
+            const cachedConfig = await client.store.loadConfig(client.user, client.configCacheTTL)
             expect(variable.value).toEqual(cachedConfig.variables.key.value)
             expect(onUpdate).toBeCalledTimes(1)
         })
@@ -483,7 +484,7 @@ describe('DVCClient tests', () => {
             client.store.save(StoreKey.AnonUserId, 'anon-user-id')
 
             await client.identifyUser(newUser)
-            const anonUser = client.store.load(StoreKey.AnonUserId)
+            const anonUser = await client.store.load(StoreKey.AnonUserId)
 
             expect(anonUser).toBe(null)
         })
@@ -594,11 +595,11 @@ describe('DVCClient tests', () => {
         it('should remove anonymous user id from local storage', async () => {
             const client = new DVCClient('test_env_key', { isAnonymous: true })
             await client.onClientInitialized()
-            const oldAnonymousId = client.store.load(StoreKey.AnonUserId)
+            const oldAnonymousId = await client.store.load(StoreKey.AnonUserId)
             expect(oldAnonymousId).toBeTruthy()
 
             await client.resetUser()
-            const newAnonymousId = client.store.load(StoreKey.AnonUserId)
+            const newAnonymousId = await client.store.load(StoreKey.AnonUserId)
             expect(oldAnonymousId).not.toEqual(newAnonymousId)
             expect(client.user.user_id).toEqual(newAnonymousId)
         })
