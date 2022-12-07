@@ -28,7 +28,7 @@ describe('Store tests', () => {
         const store = new Store(localStorage)
         localStorage.getItem.mockReturnValue(JSON.stringify("test_user"))
         const user = new DVCPopulatedUser({ user_id: "test_user" })
-        store.loadConfig(user, 604800000)
+        await store.loadConfig(user, 604800000)
         expect(localStorage.getItem).toBeCalledWith(`${StoreKey.IdentifiedConfig}.user_id`)
         expect(localStorage.getItem).toBeCalledWith(`${StoreKey.IdentifiedConfig}.fetch_date`)
         expect(localStorage.getItem).toBeCalledWith(StoreKey.IdentifiedConfig)
