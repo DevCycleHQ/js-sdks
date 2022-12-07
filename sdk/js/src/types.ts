@@ -1,4 +1,12 @@
-import { DVCLogger, DVCDefaultLogLevel, VariableTypeAlias, VariableValue, DVCJSON } from '@devcycle/types'
+import {
+    DVCLogger,
+    DVCDefaultLogLevel,
+    VariableTypeAlias,
+    VariableValue,
+    DVCJSON,
+    BucketedUserConfig
+} from '@devcycle/types'
+import { DVCPopulatedUser } from './User'
 
 export type DVCVariableValue = VariableValue
 export type { DVCJSON }
@@ -50,6 +58,7 @@ export interface DVCOptions {
     apiProxyURL?: string
     disableConfigCache?: boolean
     configCacheTTL?: number
+    cacheStore?: DVCCacheStore
 }
 
 export interface DVCUser {
@@ -294,6 +303,39 @@ export interface DVCEvent {
      * extra metadata for event. Contextual to event type
      */
     metaData?: Record<string, unknown>
+}
+
+export interface DVCCacheStore {
+    /**
+     * Save a value to the cache store
+     * @param key
+     * @param value
+     **/
+    save(key: string, value: string): void
+
+    /**
+     * Get a value from the cache store
+     * @param key
+    */
+    load(key: string): Promise<string | null | undefined>
+
+    /**
+     * Remove a value from the cache store
+     * @param key
+     */
+    remove(key: string): void
+
+    saveConfig(config: BucketedUserConfig, user: DVCPopulatedUser, dateFetched: number): void
+
+    loadConfig(user: DVCPopulatedUser, configCacheTTL?: number): Promise<BucketedUserConfig | null>
+
+    saveUser(user: DVCPopulatedUser): void
+
+    loadUser(): Promise<DVCPopulatedUser | null | undefined>
+
+    saveAnonUserId(userId: string): void
+
+    loadAnonUserId(): Promise<string | null | undefined>
 }
 
 type DeviceInfo = {

@@ -6,7 +6,8 @@ import {
     DVCVariableValue,
     DVCEvent as ClientEvent,
     DVCUser,
-    ErrorCallback
+    ErrorCallback,
+    DVCCacheStore
 } from './types'
 import { DVCVariable, DVCVariableOptions } from './Variable'
 import { getConfigJson, saveEntity } from './Request'
@@ -24,7 +25,6 @@ import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
-import Store from './Store'
 
 export class DVCClient implements Client {
     private options: DVCOptions
@@ -38,7 +38,7 @@ export class DVCClient implements Client {
     logger: DVCLogger
     config?: BucketedUserConfig
     user: DVCPopulatedUser
-    private store: CacheStore
+    private store: DVCCacheStore
     private eventQueue: EventQueue
     private requestConsolidator: ConfigRequestConsolidator
     eventEmitter: EventEmitter
@@ -49,58 +49,43 @@ export class DVCClient implements Client {
 
     constructor(environmentKey: string, user: DVCUser, options: DVCOptions = {}) {
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
-        this.store = new Store(
+        this.store = options.cacheStore || new CacheStore(
             typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger
         )
 
-        const storedAnonymousId = this.store.loadAnonUserId()
-        this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId ?? undefined)
         this.options = options
 
         this.environmentKey = environmentKey
         this.variableDefaultMap = {}
         this.eventQueue = new EventQueue(environmentKey, this, options?.eventFlushIntervalMS)
-        this.requestConsolidator = new ConfigRequestConsolidator(
-            (user: DVCPopulatedUser, extraParams) => getConfigJson(
-                this.environmentKey, user, this.logger, this.options, extraParams
-            ),
-            (config: BucketedUserConfig, user: DVCPopulatedUser) => this.handleConfigReceived(config, user, Date.now()),
-            this.user
-        )
+
         this.eventEmitter = new EventEmitter()
         this.registerVisibilityChangeHandler()
 
-        if (!this.options.disableConfigCache) {
-            this.getConfigCache()
-        } else {
-            this.logger.info('Skipping config cache')
-        }
 
-        this.onInitialized = this.requestConsolidator.queue(this.user)
-            .then(() => {
-                this.eventEmitter.emitInitialized(true)
 
-                if (this.user.isAnonymous) {
-                    this.store.saveAnonUserId(this.user.user_id)
-                } else {
-                    this.store.remove(StoreKey.AnonUserId)
-                }
+        this.onInitialized = this.store.loadAnonUserId().then((storedAnonymousId) => {
+            this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId ?? undefined)
+            this.requestConsolidator = new ConfigRequestConsolidator(
+                (user: DVCPopulatedUser, extraParams) => getConfigJson(
+                    this.environmentKey, user, this.logger, this.options, extraParams
+                ),
+                (config: BucketedUserConfig, user: DVCPopulatedUser) => this.handleConfigReceived(config, user, Date.now()),
+                this.user
+            )
 
-                if (this.config?.sse?.url) {
-                    this.streamingConnection = new StreamingConnection(
-                        this.config.sse.url,
-                        this.onSSEMessage.bind(this),
-                        this.logger
-                    )
-                }
-
-                return this
-            })
-            .catch((err) => {
-                this.eventEmitter.emitInitialized(false)
-                this.eventEmitter.emitError(err)
-                return this
-            })
+            if (!this.options.disableConfigCache) {
+                return this.getConfigCache()
+            } else {
+                this.logger.info('Skipping config cache')
+                return
+            }
+        }).then(() => {
+            return this.initializeClient()
+        }).then(() => {
+            this.logger.info('Client initialized')
+            return this
+        })
 
         if (!options?.reactNative && typeof window !== 'undefined') {
             this.windowMessageHandler = (event: MessageEvent) => {
@@ -200,17 +185,18 @@ export class DVCClient implements Client {
 
             let updatedUser: DVCPopulatedUser
 
-            if (user.user_id === this.user.user_id) {
-                updatedUser = this.user.updateUser(user, this.options)
-            } else {
-                const storedAnonymousId = this.store.loadAnonUserId()
-                updatedUser = new DVCPopulatedUser(user, this.options, undefined, storedAnonymousId ?? undefined)
-            }
+            this.onInitialized.then(() => {
+                return this.store.loadAnonUserId()
+            }).then((storedAnonymousId) => {
+                if (user.user_id === this.user.user_id) {
+                    updatedUser = this.user.updateUser(user, this.options)
+                } else {
+                    updatedUser = new DVCPopulatedUser(user, this.options, undefined, storedAnonymousId ?? undefined)
+                }
 
-            this.onInitialized.then(() =>
-                this.requestConsolidator.queue(updatedUser)
-            ).then((config) => {
-                if (user.isAnonymous|| !user.user_id) {
+                return this.requestConsolidator.queue(updatedUser)
+            }).then((config) => {
+                if (user.isAnonymous || !user.user_id) {
                     this.store.saveAnonUserId(updatedUser.user_id)
                 }
                 resolve(config.variables || {})
@@ -232,13 +218,18 @@ export class DVCClient implements Client {
     resetUser(): Promise<DVCVariableSet>
     resetUser(callback: ErrorCallback<DVCVariableSet>): void
     resetUser(callback?: ErrorCallback<DVCVariableSet>): Promise<DVCVariableSet> | void {
-        const oldAnonymousId = this.store.loadAnonUserId()
-        this.store.remove(StoreKey.AnonUserId)
+        let oldAnonymousId: string | null | undefined
         const anonUser = new DVCPopulatedUser({ isAnonymous: true }, this.options)
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
             this.eventQueue.flushEvents()
 
-            this.onInitialized.then(() => this.requestConsolidator.queue(anonUser))
+            this.onInitialized.then(() => this.store.loadAnonUserId())
+                .then((cachedAnonId) => {
+                    this.store.remove(StoreKey.AnonUserId)
+                    oldAnonymousId = cachedAnonId
+                    return
+                })
+                .then(() => this.requestConsolidator.queue(anonUser))
                 .then((config) => {
                     this.store.saveAnonUserId(anonUser.user_id)
                     resolve(config.variables || {})
@@ -339,9 +330,7 @@ export class DVCClient implements Client {
         const oldFeatures = oldConfig?.features || {}
         const oldVariables = oldConfig?.variables || {}
         this.eventEmitter.emitFeatureUpdates(oldFeatures, config.features)
-        this.eventEmitter.emitVariableUpdates(oldVariables,
-            config.variables, this.variableDefaultMap)
-
+        this.eventEmitter.emitVariableUpdates(oldVariables, config.variables, this.variableDefaultMap)
     }
 
     private onSSEMessage(message: unknown) {
@@ -394,8 +383,8 @@ export class DVCClient implements Client {
         document.addEventListener?.('visibilitychange', this.pageVisibilityHandler)
     }
 
-    private getConfigCache() {
-        const cachedConfig = this.store.loadConfig(this.user, this.options.configCacheTTL)
+    private async getConfigCache() {
+        const cachedConfig = await this.store.loadConfig(this.user, this.options.configCacheTTL)
         if (cachedConfig) {
             this.config = cachedConfig
             this.isConfigCached = true
@@ -403,6 +392,34 @@ export class DVCClient implements Client {
             this.eventEmitter.emitVariableUpdates({}, cachedConfig.variables, this.variableDefaultMap)
             this.logger.debug('Initialized with a cached config')
         }
+    }
+
+    private async initializeClient() {
+        return this.requestConsolidator.queue(this.user)
+            .then(() => {
+                this.eventEmitter.emitInitialized(true)
+
+                if (this.user.isAnonymous) {
+                    this.store.saveAnonUserId(this.user.user_id)
+                } else {
+                    this.store.remove(StoreKey.AnonUserId)
+                }
+
+                if (this.config?.sse?.url) {
+                    this.streamingConnection = new StreamingConnection(
+                        this.config.sse.url,
+                        this.onSSEMessage.bind(this),
+                        this.logger
+                    )
+                }
+
+                return this
+            })
+            .catch((err) => {
+                this.eventEmitter.emitInitialized(false)
+                this.eventEmitter.emitError(err)
+                return this
+            })
     }
 }
 
