@@ -2,7 +2,6 @@ import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 import { DVCPopulatedUser } from './User'
 
 export const StoreKey = {
-    Config: 'dvc:config',
     User: 'dvc:user',
     AnonUserId: 'dvc:anonymous_user_id',
     AnonymousConfig: 'dvc:anonymous_config',
@@ -53,12 +52,12 @@ export abstract class CacheStore {
         this.store?.removeItem(storeKey)
     }
 
-    saveConfig(data: BucketedUserConfig, user: DVCPopulatedUser): void {
+    saveConfig(data: BucketedUserConfig, user: DVCPopulatedUser, dateFetched: number): void {
         const configKey = this.getConfigKey(user)
         const fetchDateKey = this.getConfigFetchDateKey(user)
         const userIdKey = this.getConfigUserIdKey(user)
         this.save(configKey, data)
-        this.save(fetchDateKey, Date.now())
+        this.save(fetchDateKey, dateFetched)
         this.save(userIdKey, user.user_id)
         this.logger?.info('Successfully saved config to local storage')
     }

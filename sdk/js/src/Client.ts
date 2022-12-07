@@ -64,7 +64,7 @@ export class DVCClient implements Client {
             (user: DVCPopulatedUser, extraParams) => getConfigJson(
                 this.environmentKey, user, this.logger, this.options, extraParams
             ),
-            (config: BucketedUserConfig, user: DVCPopulatedUser) => this.handleConfigReceived(config, user),
+            (config: BucketedUserConfig, user: DVCPopulatedUser) => this.handleConfigReceived(config, user, Date.now()),
             this.user
         )
         this.eventEmitter = new EventEmitter()
@@ -318,10 +318,10 @@ export class DVCClient implements Client {
         await this.requestConsolidator.queue(null, { sse, lastModified })
     }
 
-    private handleConfigReceived(config: BucketedUserConfig, user: DVCPopulatedUser) {
+    private handleConfigReceived(config: BucketedUserConfig, user: DVCPopulatedUser, dateFetched: number) {
         const oldConfig = this.config
         this.config = config
-        this.store.saveConfig(config, user)
+        this.store.saveConfig(config, user, dateFetched)
         this.isConfigCached = false
 
         if (this.user != user || !this.userSaved) {
