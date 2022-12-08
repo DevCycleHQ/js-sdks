@@ -180,7 +180,6 @@ export class DVCClient {
 
     async close(): Promise<void> {
         await this.onInitialized
-        cleanupBucketingLib()
         this.configHelper.cleanup()
         this.eventQueue.cleanup()
     }
