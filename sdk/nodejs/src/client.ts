@@ -14,7 +14,7 @@ import { EventQueue, EventTypes } from './eventQueue'
 import { dvcDefaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
 import * as packageJson from '../package.json'
-import { importBucketingLib, getBucketingLib, cleanupBucketingLib } from './bucketing'
+import {importBucketingLib, getBucketingLib, cleanupBucketingLib, cleanupClientBucketingData} from './bucketing'
 import { DVCLogger, getVariableTypeFromValue, VariableTypeAlias } from '@devcycle/types'
 import os from 'os'
 
@@ -62,6 +62,7 @@ export class DVCClient {
                 }
 
                 getBucketingLib().setPlatformData(JSON.stringify(platformData))
+                getBucketingLib().setClientTokenData(environmentKey)
 
                 return this.configHelper.fetchConfigPromise
             })
@@ -180,7 +181,7 @@ export class DVCClient {
 
     async close(): Promise<void> {
         await this.onInitialized
-        cleanupBucketingLib()
+        cleanupClientBucketingData(this.environmentKey)
         this.configHelper.cleanup()
         this.eventQueue.cleanup()
     }

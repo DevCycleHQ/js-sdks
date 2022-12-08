@@ -13,3 +13,9 @@ export function _getConfigData(token: string): ConfigBody {
         return _configData.get(token)
     }
 }
+
+export function _clearConfigData(token: string): void {
+    if (_configData.has(token)) {
+        _configData.delete(token)
+    }
+}

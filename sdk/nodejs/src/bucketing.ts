@@ -1,6 +1,7 @@
 import { instantiate, Exports } from '@devcycle/bucketing-assembly-script'
 import { DVCLogger, DVCReporter } from '@devcycle/types'
 import { DVCOptions } from './types'
+import {clearConfigData, clearClientTokenData, cleanupEventQueue } from '@devcycle/bucketing-assembly-script/assembly'
 
 let Bucketing: Exports | null
 
@@ -44,4 +45,10 @@ export const getBucketingLib = (): Exports => {
 
 export const cleanupBucketingLib = (): void => {
     Bucketing = null
+}
+
+export const cleanupClientBucketingData = (token: string): void => {
+    cleanupEventQueue(token)
+    clearConfigData(token)
+    clearClientTokenData(token)
 }

@@ -5,7 +5,8 @@ import {
 import { JSON } from 'assemblyscript-json/assembly'
 import { ConfigBody, DVCPopulatedUser, PlatformData } from './types'
 import { _clearPlatformData, _setPlatformData } from './managers/platformDataManager'
-import { _getConfigData, _setConfigData } from './managers/configDataManager'
+import { _clearConfigData, _getConfigData, _setConfigData } from './managers/configDataManager'
+import { _clearClientTokenData, _setClientTokenData } from './managers/clientTokenManager'
 
 export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
     const boundedHash = _generateBoundedHashes(user_id, target_id)
@@ -26,6 +27,18 @@ export function generateBucketedConfigForUser(token: string, userStr: string): s
 export function setPlatformData(platformDataStr: string): void {
     const platformData = new PlatformData(platformDataStr)
     _setPlatformData(platformData)
+}
+
+export function setClientTokenData(token: string): void {
+    _setClientTokenData(token)
+}
+
+export function clearClientTokenData(token: string): void {
+    _clearClientTokenData(token)
+}
+
+export function clearConfigData(token: string): void {
+    _clearConfigData(token)
 }
 
 // Add empty input string to make AS compiler work
