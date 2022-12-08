@@ -63,16 +63,28 @@ export abstract class CacheStore {
         this.logger?.info('Successfully saved config to local storage')
     }
 
-    loadConfig(user: DVCPopulatedUser, configCacheTTL= 604800000): BucketedUserConfig | null | undefined {
+    loadConfig(user: DVCPopulatedUser, configCacheTTL= 604800000): BucketedUserConfig | null {
         const userId = this.loadConfigUserId(user)
+        if (user.user_id !== userId) {
+            this.logger?.debug("Skipping cached config: user ID does not match")
+            return null
+        }
+
         const cachedFetchDate = this.loadConfigFetchDate(user)
         const isConfigCacheTTLExpired = Date.now() - cachedFetchDate > configCacheTTL
-
-        if (user.user_id === userId && !isConfigCacheTTLExpired) {
-            const configKey = this.getConfigKey(user)
-            return this.load<BucketedUserConfig>(configKey)
+        if (isConfigCacheTTLExpired) {
+            this.logger?.debug("Skipping cached config: last fetched date is too old")
+            return null
         }
-        return null
+
+        const configKey = this.getConfigKey(user)
+        const config = this.load<BucketedUserConfig>(configKey)
+        if (config === null || config === undefined) {
+            this.logger?.debug("Skipping cached config: no config found")
+            return null
+        }
+
+        return config
     }
 
     saveUser(user: DVCPopulatedUser): void {
