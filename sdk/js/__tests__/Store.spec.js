@@ -18,7 +18,7 @@ describe('Store tests', () => {
         const store = new Store(localStorage)
         const config = {}
         const user = new DVCPopulatedUser({ user_id: "test_user" })
-        store.saveConfig(config, user)
+        store.saveConfig(config, user, Date.now())
         expect(localStorage.setItem).toBeCalledWith(StoreKey.IdentifiedConfig, JSON.stringify(config))
         expect(localStorage.setItem).toBeCalledWith(`${StoreKey.IdentifiedConfig}.fetch_date`, JSON.stringify(Date.now()))
         expect(localStorage.setItem).toBeCalledWith(`${StoreKey.IdentifiedConfig}.user_id`, JSON.stringify(user.user_id))

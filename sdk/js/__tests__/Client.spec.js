@@ -207,6 +207,20 @@ describe('DVCClient tests', () => {
             expect(getConfigJson_mock).toBeCalled()
             expect(saveEntity_mock).not.toBeCalled()
         })
+
+        it('should save config for user', async () => {
+            const client = new DVCClient('test_env_key', { user_id: 'user1' })
+            await client.onClientInitialized()
+            expect(window.localStorage.getItem(`${StoreKey.IdentifiedConfig}.user_id`)).toBe(JSON.stringify('user1'))
+            expect(window.localStorage.getItem(StoreKey.IdentifiedConfig)).toBe(JSON.stringify(testConfig))
+        })
+
+        it('should save config for anonymous user', async () => {
+            const client = new DVCClient('test_env_key', { isAnonymous: true })
+            await client.onClientInitialized()
+            expect(window.localStorage.getItem(StoreKey.AnonymousConfig)).toBe(JSON.stringify(testConfig))
+        })
+
     })
 
     describe('variable', () => {
