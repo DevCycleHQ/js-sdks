@@ -64,15 +64,15 @@ export abstract class CacheStore {
 
     loadConfig(user: DVCPopulatedUser, configCacheTTL= 604800000): BucketedUserConfig | null {
         const userId = this.loadConfigUserId(user)
-        if (userId && user.user_id !== userId) {
-            this.logger?.debug("Skipping cached config: user ID does not match")
+        if (user.user_id !== userId) {
+            this.logger?.debug(`Skipping cached config: no config for user ID ${user.user_id}`)
             return null
         }
 
         const cachedFetchDate = this.loadConfigFetchDate(user)
         const isConfigCacheTTLExpired = Date.now() - cachedFetchDate > configCacheTTL
-        if (cachedFetchDate && isConfigCacheTTLExpired) {
-            this.logger?.debug("Skipping cached config: last fetched date is too old")
+        if (isConfigCacheTTLExpired) {
+            this.logger?.debug('Skipping cached config: last fetched date is too old')
             return null
         }
 
