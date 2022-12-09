@@ -62,15 +62,14 @@ export class DVCClient implements Client {
         this.eventEmitter = new EventEmitter()
         this.registerVisibilityChangeHandler()
 
-
-
         this.onInitialized = this.store.loadAnonUserId().then((storedAnonymousId) => {
             this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId ?? undefined)
             this.requestConsolidator = new ConfigRequestConsolidator(
                 (user: DVCPopulatedUser, extraParams) => getConfigJson(
                     this.environmentKey, user, this.logger, this.options, extraParams
                 ),
-                (config: BucketedUserConfig, user: DVCPopulatedUser) => this.handleConfigReceived(config, user, Date.now()),
+                (config: BucketedUserConfig, user: DVCPopulatedUser) =>
+                    this.handleConfigReceived(config, user, Date.now()),
                 this.user
             )
 
