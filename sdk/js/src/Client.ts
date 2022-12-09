@@ -402,9 +402,7 @@ export class DVCClient implements Client {
             this.isConfigCached = true
             this.eventEmitter.emitFeatureUpdates({}, cachedConfig.features)
             this.eventEmitter.emitVariableUpdates({}, cachedConfig.variables, this.variableDefaultMap)
-            this.logger.info('Initialized with a cached config')
-        } else {
-            this.logger.info('No cached config found')
+            this.logger.debug('Initialized with a cached config')
         }
     }
 }
