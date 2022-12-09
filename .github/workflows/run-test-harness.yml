@@ -2,8 +2,7 @@ name: Run Test Harness
 on:
   pull_request:
     branches: [main]
-    paths:
-      - 'sdk/nodejs/*'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,7 +10,18 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Run Yarn
+        run: yarn --immutable
+      - name: Check affected projects
+        run: |
+          if yarn nx print-affected --base=origin/main --select=projects | grep -q '[^-]nodejs'; then
+            echo "TRIGGER_NODEJS_TEST_HARNESS=true" >> $GITHUB_ENV
+          fi
       - uses: convictional/trigger-workflow-and-wait@v1.6.1
+        if: contains(env.TRIGGER_NODEJS_TEST_HARNESS, 'true')
         with:
           owner: DevCycleHQ
           repo: test-harness
