@@ -1,13 +1,6 @@
 import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
-import { DVCCacheStore } from './types'
+import { DVCCacheStore, StoreKey } from './types'
 import { DVCPopulatedUser } from './User'
-
-export const StoreKey = {
-    User: 'dvc:user',
-    AnonUserId: 'dvc:anonymous_user_id',
-    AnonymousConfig: 'dvc:anonymous_config',
-    IdentifiedConfig: 'dvc:identified_config',
-}
 
 export class CacheStore implements DVCCacheStore {
     store?: Storage

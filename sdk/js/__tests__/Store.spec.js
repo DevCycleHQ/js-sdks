@@ -1,4 +1,5 @@
-import Store, { StoreKey } from '../src/CacheStore'
+import Store from '../src/CacheStore'
+import { StoreKey } from '../src/types'
 import { DVCPopulatedUser } from '../src/User'
 
 describe('Store tests', () => {

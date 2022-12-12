@@ -338,6 +338,13 @@ export interface DVCCacheStore {
     loadAnonUserId(): Promise<string | null | undefined>
 }
 
+export const StoreKey = {
+    User: 'dvc:user',
+    AnonUserId: 'dvc:anonymous_user_id',
+    AnonymousConfig: 'dvc:anonymous_config',
+    IdentifiedConfig: 'dvc:identified_config',
+}
+
 type DeviceInfo = {
     getModel: () => string
 }
