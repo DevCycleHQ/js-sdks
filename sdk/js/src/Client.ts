@@ -7,11 +7,12 @@ import {
     DVCEvent as ClientEvent,
     DVCUser,
     ErrorCallback,
-    DVCCacheStore
+    DVCCacheStore,
+    StoreKey,
 } from './types'
 import { DVCVariable, DVCVariableOptions } from './Variable'
 import { getConfigJson, saveEntity } from './Request'
-import CacheStore, { StoreKey } from './CacheStore'
+import CacheStore from './CacheStore'
 import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
 import { checkParamDefined } from './utils'

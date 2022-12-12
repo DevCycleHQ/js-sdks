@@ -3,7 +3,7 @@ import { getConfigJson, publishEvents, saveEntity } from '../src/Request'
 import { mocked } from 'jest-mock'
 import { DVCVariable } from '../src/Variable'
 import { DVCPopulatedUser } from '../src/User'
-import { StoreKey } from '../src/CacheStore'
+import { StoreKey } from '../src/types'
 
 jest.mock('../src/Request')
 jest.mock('../src/StreamingConnection')
