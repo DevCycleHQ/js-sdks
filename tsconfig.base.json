@@ -32,6 +32,9 @@
       "@devcycle/devcycle-js-sdk": [
         "sdk/js/src/index.ts"
       ],
+      "@devcycle/devcycle-react-native-sdk": [
+        "sdk/react-native/src/index.ts"
+      ],
       "@devcycle/devcycle-react-sdk": [
         "sdk/react/src/index.ts"
       ],
