@@ -475,17 +475,6 @@ describe('DVCClient tests', () => {
             expect(publishEvents).toBeCalled()
         })
 
-        it('should clear existing anon user id from local storage', async () => {
-            const newUser = { user_id: 'user2' }
-            client.store.save(StoreKey.AnonUserId, 'anon-user-id')
-
-            await client.onClientInitialized()
-            await client.identifyUser(newUser)
-            const anonUser = client.store.load(StoreKey.AnonUserId)
-
-            expect(anonUser).toBe(null)
-        })
-
         it('should clear existing anon user id from local storage when client initialize is delayed', async () => {
             const newUser = { user_id: 'user2' }
             client = createClientWithConfigImplementation(() =>

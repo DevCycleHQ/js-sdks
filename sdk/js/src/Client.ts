@@ -211,8 +211,6 @@ export class DVCClient implements Client {
             ).then((config) => {
                 if (user.isAnonymous|| !user.user_id) {
                     this.store.saveAnonUserId(updatedUser.user_id)
-                } else {
-                    this.store.remove(StoreKey.AnonUserId)
                 }
                 resolve(config.variables || {})
             }).catch((err) => {
