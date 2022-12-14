@@ -11,6 +11,7 @@ import {
 import { DVCVariable, DVCVariableOptions } from './Variable'
 import { getConfigJson, saveEntity } from './Request'
 import CacheStore from './CacheStore'
+import DefaultStorage from './DefaultStorage'
 import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
 import { checkParamDefined } from './utils'
@@ -24,7 +25,6 @@ import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
-import DefaultCacheStore from './DefaultCacheStore'
 
 export class DVCClient implements Client {
     private options: DVCOptions
@@ -50,7 +50,7 @@ export class DVCClient implements Client {
     constructor(environmentKey: string, user: DVCUser, options: DVCOptions = {}) {
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.store = new CacheStore(
-            options.cacheStore || new DefaultCacheStore(), this.logger
+            options.storage || new DefaultStorage(), this.logger
         )
 
         this.options = options
