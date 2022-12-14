@@ -1,12 +1,12 @@
 import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
-import { DVCCacheStore, StoreKey } from './types'
+import { DVCStorage, StoreKey } from './types'
 import { DVCPopulatedUser } from './User'
 
 export class CacheStore {
-    store: DVCCacheStore
+    store: DVCStorage
     logger: DVCLogger
 
-    constructor(storage: DVCCacheStore, logger: DVCLogger) {
+    constructor(storage: DVCStorage, logger: DVCLogger) {
         this.store = storage
         this.logger = logger
     }
@@ -30,7 +30,8 @@ export class CacheStore {
 
     private async loadConfigFetchDate(user: DVCPopulatedUser): Promise<number> {
         const fetchDateKey = this.getConfigFetchDateKey(user)
-        return parseInt(await this.store.load<string>(fetchDateKey) || '0', 10)
+        const fetchDate = await this.store.load<string>(fetchDateKey) || '0'
+        return parseInt(fetchDate, 10)
     }
 
     saveConfig(data: BucketedUserConfig, user: DVCPopulatedUser, dateFetched: number): void {

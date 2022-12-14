@@ -58,7 +58,7 @@ export interface DVCOptions {
     apiProxyURL?: string
     disableConfigCache?: boolean
     configCacheTTL?: number
-    cacheStore?: DVCCacheStore
+    storage?: DVCStorage
 }
 
 export interface DVCUser {
@@ -305,7 +305,7 @@ export interface DVCEvent {
     metaData?: Record<string, unknown>
 }
 
-export interface DVCCacheStore {
+export interface DVCStorage {
     /**
      * Save a value to the cache store
      * @param key
