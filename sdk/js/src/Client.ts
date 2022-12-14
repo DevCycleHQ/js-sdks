@@ -25,6 +25,7 @@ import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
+import DefaultCacheStore from './DefaultCacheStore'
 
 export class DVCClient implements Client {
     private options: DVCOptions
