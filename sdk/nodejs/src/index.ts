@@ -11,6 +11,7 @@ type DVCOptionsLocalEnabled = DVCOptions & { enableCloudBucketing?: false }
 
 export function initialize(environmentKey: string, options?: DVCOptionsLocalEnabled): DVCClient
 export function initialize(environmentKey: string, options: DVCOptionsCloudEnabled): DVCCloudClient
+export function initialize(environmentKey: string, options?: DVCOptions): DVCClient | DVCCloudClient
 export function initialize(environmentKey: string, options: DVCOptions = {}): DVCClient | DVCCloudClient {
     if (!environmentKey) {
         throw new Error('Missing environment key! Call initialize with a valid environment key')
