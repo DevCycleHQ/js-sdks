@@ -2,24 +2,13 @@ import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 import { DVCCacheStore, StoreKey } from './types'
 import { DVCPopulatedUser } from './User'
 
-export class CacheStore implements DVCCacheStore {
-    store?: Storage
-    logger?: DVCLogger
+export class CacheStore {
+    store: DVCCacheStore
+    logger: DVCLogger
 
-    constructor(localStorage?: Storage, logger?: DVCLogger) {
-        this.store = localStorage
+    constructor(storage: DVCCacheStore, logger: DVCLogger) {
+        this.store = storage
         this.logger = logger
-    }
-
-    save(storeKey: string, data: unknown): void {
-        this.store?.setItem(storeKey, JSON.stringify(data))
-    }
-
-    load<T>(storeKey: string): Promise<T | null | undefined> {
-        return new Promise((resolve) => {
-            const item = this.store?.getItem(storeKey)
-            resolve(item ? JSON.parse(item) : null)
-        })
     }
 
     private getConfigKey(user: DVCPopulatedUser) {
@@ -36,25 +25,21 @@ export class CacheStore implements DVCCacheStore {
 
     private async loadConfigUserId(user: DVCPopulatedUser): Promise<string | null | undefined> {
         const userIdKey = this.getConfigUserIdKey(user)
-        return this.load<string>(userIdKey)
+        return this.store.load<string>(userIdKey)
     }
 
     private async loadConfigFetchDate(user: DVCPopulatedUser): Promise<number> {
         const fetchDateKey = this.getConfigFetchDateKey(user)
-        return parseInt(await this.load<string>(fetchDateKey) || '0', 10)
-    }
-
-    remove(storeKey: string): void {
-        this.store?.removeItem(storeKey)
+        return parseInt(await this.store.load<string>(fetchDateKey) || '0', 10)
     }
 
     saveConfig(data: BucketedUserConfig, user: DVCPopulatedUser, dateFetched: number): void {
         const configKey = this.getConfigKey(user)
         const fetchDateKey = this.getConfigFetchDateKey(user)
         const userIdKey = this.getConfigUserIdKey(user)
-        this.save(configKey, data)
-        this.save(fetchDateKey, dateFetched)
-        this.save(userIdKey, user.user_id)
+        this.store.save(configKey, data)
+        this.store.save(fetchDateKey, dateFetched)
+        this.store.save(userIdKey, user.user_id)
         this.logger?.info('Successfully saved config to local storage')
     }
 
@@ -73,7 +58,7 @@ export class CacheStore implements DVCCacheStore {
         }
 
         const configKey = await this.getConfigKey(user)
-        const config = await this.load<BucketedUserConfig>(configKey)
+        const config = await this.store.load<BucketedUserConfig>(configKey)
         if (config === null || config === undefined) {
             this.logger?.debug('Skipping cached config: no config found')
             return null
@@ -86,21 +71,25 @@ export class CacheStore implements DVCCacheStore {
         if (!user) {
             throw new Error('No user to save')
         }
-        this.save(StoreKey.User, user)
+        this.store.save(StoreKey.User, user)
         this.logger?.info('Successfully saved user to local storage')
     }
 
     async loadUser(): Promise<DVCPopulatedUser | null | undefined> {
-        return this.load<DVCPopulatedUser>(StoreKey.User)
+        return this.store.load<DVCPopulatedUser>(StoreKey.User)
     }
 
     saveAnonUserId(userId: string): void {
-        this.save(StoreKey.AnonUserId, userId)
+        this.store.save(StoreKey.AnonUserId, userId)
         this.logger?.info('Successfully saved anonymous user id to local storage')
     }
 
     async loadAnonUserId(): Promise<string | null | undefined> {
-        return await this.load<string>(StoreKey.AnonUserId)
+        return await this.store.load<string>(StoreKey.AnonUserId)
+    }
+
+    removeAnonUserId(): void {
+        this.store.remove(StoreKey.AnonUserId)
     }
 }
 

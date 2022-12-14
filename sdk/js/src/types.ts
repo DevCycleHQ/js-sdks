@@ -311,31 +311,19 @@ export interface DVCCacheStore {
      * @param key
      * @param value
      **/
-    save(key: string, value: string): void
+    save(key: string, value: unknown): void
 
     /**
      * Get a value from the cache store
      * @param key
     */
-    load(key: string): Promise<string | null | undefined>
+    load<T>(key: string): Promise<T | null | undefined>
 
     /**
      * Remove a value from the cache store
      * @param key
      */
     remove(key: string): void
-
-    saveConfig(config: BucketedUserConfig, user: DVCPopulatedUser, dateFetched: number): void
-
-    loadConfig(user: DVCPopulatedUser, configCacheTTL?: number): Promise<BucketedUserConfig | null>
-
-    saveUser(user: DVCPopulatedUser): void
-
-    loadUser(): Promise<DVCPopulatedUser | null | undefined>
-
-    saveAnonUserId(userId: string): void
-
-    loadAnonUserId(): Promise<string | null | undefined>
 }
 
 export const StoreKey = {

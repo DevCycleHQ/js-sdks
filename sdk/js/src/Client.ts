@@ -7,8 +7,6 @@ import {
     DVCEvent as ClientEvent,
     DVCUser,
     ErrorCallback,
-    DVCCacheStore,
-    StoreKey,
 } from './types'
 import { DVCVariable, DVCVariableOptions } from './Variable'
 import { getConfigJson, saveEntity } from './Request'
@@ -26,6 +24,7 @@ import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
+import DefaultCacheStore from './DefaultCacheStore'
 
 export class DVCClient implements Client {
     private options: DVCOptions
@@ -39,7 +38,7 @@ export class DVCClient implements Client {
     logger: DVCLogger
     config?: BucketedUserConfig
     user: DVCPopulatedUser
-    private store: DVCCacheStore
+    private store: CacheStore
     private eventQueue: EventQueue
     private requestConsolidator: ConfigRequestConsolidator
     eventEmitter: EventEmitter
@@ -50,8 +49,8 @@ export class DVCClient implements Client {
 
     constructor(environmentKey: string, user: DVCUser, options: DVCOptions = {}) {
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
-        this.store = options.cacheStore || new CacheStore(
-            typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage, this.logger
+        this.store = new CacheStore(
+            options.cacheStore || new DefaultCacheStore(), this.logger
         )
 
         this.options = options
@@ -225,7 +224,7 @@ export class DVCClient implements Client {
 
             this.onInitialized.then(() => this.store.loadAnonUserId())
                 .then((cachedAnonId) => {
-                    this.store.remove(StoreKey.AnonUserId)
+                    this.store.removeAnonUserId()
                     oldAnonymousId = cachedAnonId
                     return
                 })
@@ -402,7 +401,7 @@ export class DVCClient implements Client {
                 if (this.user.isAnonymous) {
                     this.store.saveAnonUserId(this.user.user_id)
                 } else {
-                    this.store.remove(StoreKey.AnonUserId)
+                    this.store.removeAnonUserId()
                 }
 
                 if (this.config?.sse?.url) {
@@ -434,13 +433,4 @@ const checkIfEdgeEnabled = (
         }
         return false
     }
-}
-
-const stubbedLocalStorage = {
-    getItem: () => null,
-    setItem: () => undefined,
-    removeItem: () => undefined,
-    clear: () => undefined,
-    key: () => null,
-    length: 0
 }
