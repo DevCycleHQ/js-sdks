@@ -3,33 +3,42 @@ import { DVCLogger, DVCReporter } from '@devcycle/types'
 import { DVCOptions } from './types'
 
 let Bucketing: Exports | null
+let InstantiatePromise: Promise<Exports> | null
 
 export const importBucketingLib = async (
     { logger, options }:
     { logger?: DVCLogger, options?: DVCOptions } = {}
 ): Promise<void> => {
-    if (Bucketing) return
-    Bucketing = await instantiate()
-    startTrackingMemoryUsage(Bucketing, logger, options?.reporter)
+    if (InstantiatePromise) {
+        await InstantiatePromise
+        return
+    }
+    InstantiatePromise = instantiate().then((exports) => {
+        Bucketing = exports
+        return Bucketing
+    })
+    await InstantiatePromise
+    startTrackingMemoryUsage(logger, options?.reporter)
 }
 
 export const startTrackingMemoryUsage = (
-    Bucketing: Exports,
     logger?: DVCLogger,
     reporter?: DVCReporter,
     interval: number = 30 * 1000
 ): void => {
     if (!reporter) return
-    trackMemoryUsage(Bucketing, reporter, logger)
-    setInterval(() => trackMemoryUsage(Bucketing, reporter, logger), interval)
+    trackMemoryUsage(reporter, logger)
+    setInterval(() => trackMemoryUsage(reporter, logger), interval)
 }
 
 export const trackMemoryUsage = (
-    Bucketing: Exports,
     reporter: DVCReporter,
     logger?: DVCLogger,
 ): void => {
     if (!reporter) return
+    if (!Bucketing) {
+        throw new Error('Bucketing lib not initialized')
+    }
     const memoryUsageMB = Bucketing.memory.buffer.byteLength / 1e6
     logger?.debug(`WASM memory usage: ${memoryUsageMB} MB`)
     reporter.reportMetric('wasmMemoryMB', memoryUsageMB, {})
