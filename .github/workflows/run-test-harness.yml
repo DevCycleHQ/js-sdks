@@ -25,7 +25,7 @@ jobs:
         with:
           owner: DevCycleHQ
           repo: test-harness
-          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          github_token: ${{ secrets.TEST_HARNESS_GH_SECRET }}
           workflow_file_name: config.yml
           ref: main
           propagate_failure: true
