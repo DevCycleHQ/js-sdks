@@ -17,7 +17,7 @@ jobs:
         run: yarn --immutable
       - name: Check affected projects
         run: |
-          if yarn nx print-affected --base=origin/main --select=projects | grep -q '[^-]nodejs'; then
+          if yarn nx print-affected --base=origin/main --select=projects | grep -E '(^nodejs|[^-]nodejs)'; then
             echo "TRIGGER_NODEJS_TEST_HARNESS=true" >> $GITHUB_ENV
           fi
       - uses: convictional/trigger-workflow-and-wait@v1.6.1
