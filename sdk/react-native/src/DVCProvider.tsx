@@ -2,7 +2,7 @@ import React from 'react'
 import { DVCProvider as ReactDVCProvider } from '@devcycle/devcycle-react-sdk'
 import ReactNativeStore from './ReactNativeCacheStore'
 
-type configType = Parameters<typeof ReactDVCProvider>[0]
+type PropsType = Parameters<typeof ReactDVCProvider>[0]
 
 export const DVCProvider: typeof ReactDVCProvider = (props) => {
     const config = getReactNativeConfig(props.config)
@@ -10,7 +10,7 @@ export const DVCProvider: typeof ReactDVCProvider = (props) => {
     return <ReactDVCProvider config={config}>{props.children}</ReactDVCProvider>
 }
 
-export const getReactNativeConfig = (config: configType['config']) => {
+export const getReactNativeConfig = (config: PropsType['config']) => {
     const rnConfig = {
         ...config,
         options: {
