@@ -13,7 +13,7 @@ import {
 
 import 'react-native-get-random-values'
 import DeviceInfo from 'react-native-device-info'
-import { useDVCClient, useIsDVCInitialized, useVariable, withDVCProvider } from '@devcycle/devcycle-react-sdk'
+import { useDVCClient, useIsDVCInitialized, useVariable, withDVCProvider } from '@devcycle/devcycle-react-native-sdk'
 
 import Checkmark from './icons/checkmark.svg'
 import Terminal from './icons/terminal.svg'
