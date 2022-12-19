@@ -1,6 +1,6 @@
 {
   "name": "@devcycle/types",
-  "version": "1.0.52",
+  "version": "1.0.53",
   "license": "MIT",
   "dependencies": {
     "@types/validator": "13.7.6"
