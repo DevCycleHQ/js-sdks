@@ -203,7 +203,8 @@ export class DVCClient implements Client {
             if (user.user_id === this.user.user_id) {
                 updatedUser = this.user.updateUser(user, this.options)
             } else {
-                updatedUser = new DVCPopulatedUser(user, this.options)
+                const storedAnonymousId = this.store.loadAnonUserId()
+                updatedUser = new DVCPopulatedUser(user, this.options, undefined, storedAnonymousId ?? undefined)
             }
 
             this.onInitialized.then(() =>
