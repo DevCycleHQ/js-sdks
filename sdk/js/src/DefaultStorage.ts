@@ -9,10 +9,10 @@ export class DefaultStorage {
         this.store.setItem(storeKey, JSON.stringify(data))
     }
 
-    load<T>(storeKey: string): Promise<T | null | undefined> {
+    load<T>(storeKey: string): Promise<T | undefined> {
         return new Promise((resolve) => {
             const item = this.store.getItem(storeKey)
-            resolve(item ? JSON.parse(item) : null)
+            resolve(item ? JSON.parse(item) : undefined)
         })
     }
 
