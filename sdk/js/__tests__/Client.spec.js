@@ -494,10 +494,10 @@ describe('DVCClient tests', () => {
 
             const client = new DVCClient('test_env_key', { isAnonymous: true })
 
-            const originalAnonUserId = client.user.user_id
             await client.onClientInitialized()
+            const originalAnonUserId = client.user.user_id
             await client.identifyUser({ isAnonymous: true })
-            const anonUserId = client.store.store.load(StoreKey.AnonUserId)
+            const anonUserId = await client.store.store.load(StoreKey.AnonUserId)
 
             expect(anonUserId).toBe(originalAnonUserId)
             expect(anonUserId).not.toBe(null)
