@@ -23,7 +23,7 @@ export class CacheStore {
         return `${this.getConfigKey(user)}.fetch_date`
     }
 
-    private async loadConfigUserId(user: DVCPopulatedUser): Promise<string | null | undefined> {
+    private async loadConfigUserId(user: DVCPopulatedUser): Promise<string | undefined> {
         const userIdKey = this.getConfigUserIdKey(user)
         return this.store.load<string>(userIdKey)
     }
@@ -76,7 +76,7 @@ export class CacheStore {
         this.logger?.info('Successfully saved user to local storage')
     }
 
-    async loadUser(): Promise<DVCPopulatedUser | null | undefined> {
+    async loadUser(): Promise<DVCPopulatedUser | undefined> {
         return this.store.load<DVCPopulatedUser>(StoreKey.User)
     }
 
@@ -85,7 +85,7 @@ export class CacheStore {
         this.logger?.info('Successfully saved anonymous user id to local storage')
     }
 
-    async loadAnonUserId(): Promise<string | null | undefined> {
+    async loadAnonUserId(): Promise<string | undefined> {
         return await this.store.load<string>(StoreKey.AnonUserId)
     }
 
