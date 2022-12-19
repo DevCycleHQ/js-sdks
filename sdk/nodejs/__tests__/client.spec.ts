@@ -1,5 +1,6 @@
 import { getBucketingLib } from '../src/bucketing'
 import { DVCClient } from '../src/client'
+import { DVCUser } from '../src/models/user'
 
 jest.mock('../src/bucketing')
 jest.mock('../src/environmentConfigManager')
@@ -47,6 +48,12 @@ describe('variable', () => {
 
     it('returns a valid variable object for a variable that is in the config', () => {
         const variable = client.variable(user, 'test-key', false)
+        expect(variable.value).toEqual(true)
+    })
+
+    it('returns a valid variable object for a variable that is in the config with a DVCUser instance', () => {
+        const dvcUser = new DVCUser(user)
+        const variable = client.variable(dvcUser, 'test-key', false)
         expect(variable.value).toEqual(true)
     })
 

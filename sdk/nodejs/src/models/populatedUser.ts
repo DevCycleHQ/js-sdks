@@ -1,6 +1,6 @@
-import { DVCJSON, DVCUser } from '../types'
+import { DVCJSON } from '../types'
 import * as packageJson from '../../package.json'
-import { checkParamType, typeEnum } from '../utils/paramUtils'
+import { DVCUser } from './user'
 
 export class DVCPopulatedUser implements DVCUser {
     user_id: string
@@ -20,14 +20,6 @@ export class DVCPopulatedUser implements DVCUser {
     readonly sdkVersion: string
 
     constructor(user: DVCUser) {
-        if (!user.user_id) {
-            throw new Error('Must have a user_id set on the user')
-        }
-        checkParamType('user_id', user.user_id, typeEnum.string)
-        if (user.user_id.length > 200) {
-            throw new Error('user_id cannot be longer than 200 characters')
-        }
-
         this.user_id = user.user_id
         this.email = user.email
         this.name = user.name
@@ -47,5 +39,9 @@ export class DVCPopulatedUser implements DVCUser {
         this.platformVersion = process.version
         this.sdkType = 'server'
         this.sdkVersion = packageJson.version
+    }
+
+    static fromDVCUser(user: DVCUser): DVCPopulatedUser {
+        return new DVCPopulatedUser(user)
     }
 }

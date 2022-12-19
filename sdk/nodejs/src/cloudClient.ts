@@ -4,8 +4,7 @@ import {
     DVCVariable as DVCVariableInterface,
     DVCVariableSet,
     DVCFeatureSet,
-    DVCEvent,
-    DVCUser
+    DVCEvent
 } from './types'
 import { DVCVariable } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
@@ -14,6 +13,14 @@ import { DVCPopulatedUser } from './models/populatedUser'
 import { DVCLogger, getVariableTypeFromValue } from '@devcycle/types'
 import { getAllFeatures, getAllVariables, getVariable, postTrack } from './request'
 import { AxiosError, AxiosResponse } from 'axios'
+import { DVCUser } from './models/user'
+
+const castIncomingUser = (user: DVCUser) => {
+    if (!(user instanceof DVCUser)) {
+        return new DVCUser(user)
+    }
+    return user
+}
 
 export class DVCCloudClient {
     private environmentKey: string
@@ -28,12 +35,14 @@ export class DVCCloudClient {
     }
 
     variable(user: DVCUser, key: string, defaultValue: DVCVariableValue): Promise<DVCVariableInterface> {
-        const requestUser = new DVCPopulatedUser(user)
+        const incomingUser = castIncomingUser(user)
+
+        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
 
         checkParamDefined('key', key)
         checkParamDefined('defaultValue', defaultValue)
         const type = getVariableTypeFromValue(defaultValue, key, this.logger, true)
-        return getVariable(requestUser, this.environmentKey, key, this.options)
+        return getVariable(populatedUser, this.environmentKey, key, this.options)
             .then((res: AxiosResponse) => {
                 const variable = res.data
                 if (variable.type !== type) {
@@ -60,8 +69,10 @@ export class DVCCloudClient {
     }
 
     allVariables(user: DVCUser): Promise<DVCVariableSet> {
-        const requestUser = new DVCPopulatedUser(user)
-        return getAllVariables(requestUser, this.environmentKey, this.options)
+        const incomingUser = castIncomingUser(user)
+
+        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+        return getAllVariables(populatedUser, this.environmentKey, this.options)
             .then((res: AxiosResponse) => {
                 return res.data || {}
             })
@@ -72,8 +83,10 @@ export class DVCCloudClient {
     }
 
     allFeatures(user: DVCUser): Promise<DVCFeatureSet> {
-        const requestUser = new DVCPopulatedUser(user)
-        return getAllFeatures(requestUser, this.environmentKey, this.options)
+        const incomingUser = castIncomingUser(user)
+
+        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+        return getAllFeatures(populatedUser, this.environmentKey, this.options)
             .then((res: AxiosResponse) => {
                 return res.data || {}
             })
@@ -84,11 +97,13 @@ export class DVCCloudClient {
     }
 
     track(user: DVCUser, event: DVCEvent): void {
+        const incomingUser = castIncomingUser(user)
+
         if (event === undefined || event === null || typeof event.type !== 'string' || event.type.length === 0) {
             throw new Error('Invalid Event')
         }
         checkParamDefined('type', event.type)
-        const requestUser = new DVCPopulatedUser(user)
-        postTrack(requestUser, event, this.environmentKey, this.logger, this.options)
+        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+        postTrack(populatedUser, event, this.environmentKey, this.logger, this.options)
     }
 }

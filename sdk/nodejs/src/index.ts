@@ -6,6 +6,8 @@ import { isValidServerEnvKey } from './utils/paramUtils'
 export { DVCClient, DVCCloudClient }
 export * from './types'
 
+export { DVCUser } from './models/user'
+
 type DVCOptionsCloudEnabled = DVCOptions & { enableCloudBucketing: true }
 type DVCOptionsLocalEnabled = DVCOptions & { enableCloudBucketing?: false }
 
