@@ -64,7 +64,7 @@ export class DVCClient implements Client {
         this.registerVisibilityChangeHandler()
 
         this.onInitialized = this.store.loadAnonUserId().then((storedAnonymousId) => {
-            this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId ?? undefined)
+            this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId)
             this.requestConsolidator = new ConfigRequestConsolidator(
                 (user: DVCPopulatedUser, extraParams) => getConfigJson(
                     this.environmentKey, user, this.logger, this.options, extraParams
@@ -191,7 +191,7 @@ export class DVCClient implements Client {
                 if (user.user_id === this.user.user_id) {
                     updatedUser = this.user.updateUser(user, this.options)
                 } else {
-                    updatedUser = new DVCPopulatedUser(user, this.options, undefined, storedAnonymousId ?? undefined)
+                    updatedUser = new DVCPopulatedUser(user, this.options, undefined, storedAnonymousId)
                 }
 
                 return this.requestConsolidator.queue(updatedUser)

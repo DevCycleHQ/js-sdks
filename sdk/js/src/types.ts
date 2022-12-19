@@ -317,7 +317,7 @@ export interface DVCStorage {
      * Get a value from the cache store
      * @param key
     */
-    load<T>(key: string): Promise<T | null | undefined>
+    load<T>(key: string): Promise<T | undefined>
 
     /**
      * Remove a value from the cache store
