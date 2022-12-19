@@ -1,57 +1,5 @@
 import { DVCLogger, DVCDefaultLogLevel, DVCReporter, DVCJSON, VariableValue } from '@devcycle/types'
 
-export interface DVCUser {
-    /**
-     * Identifies the current user. Must be defined
-     */
-    user_id: string
-
-    /**
-     * Email used for identifying a device user in the dashboard,
-     * or used for audience segmentation.
-     */
-    email?: string
-
-    /**
-     * Name of the user which can be used for identifying a device user,
-     * or used for audience segmentation.
-     */
-    name?: string
-
-    /**
-     * ISO 639-1 two-letter codes, or ISO 639-2 three-letter codes
-     */
-    language?: string
-
-    /**
-     * ISO 3166 two or three-letter codes
-     */
-    country?: string
-
-    /**
-     * Application Version, can be used for audience segmentation.
-     */
-    appVersion?: string
-
-    /**
-     * Application Build, can be used for audience segmentation.
-     */
-    appBuild?: number
-
-    /**
-     * Custom JSON data used for audience segmentation, must be limited to __kb in size.
-     * Values will be logged to DevCycle's servers and available in the dashboard to view.
-     */
-    customData?: DVCJSON
-
-    /**
-     * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
-     * Values will not be logged to DevCycle's servers and
-     * will not be available in the dashboard.
-     */
-    privateCustomData?: DVCJSON
-}
-
 /**
  * Options to control the setup of the DevCycle NodeJS Server SDK.
  */

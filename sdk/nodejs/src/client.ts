@@ -3,8 +3,7 @@ import {
     DVCVariableValue,
     DVCVariableSet,
     DVCFeatureSet,
-    DVCEvent,
-    DVCUser
+    DVCEvent
 } from './types'
 import { EnvironmentConfigManager } from './environmentConfigManager'
 import { bucketUserForConfig } from './utils/userBucketingHelper'
@@ -14,9 +13,10 @@ import { EventQueue, EventTypes } from './eventQueue'
 import { dvcDefaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
 import * as packageJson from '../package.json'
-import { importBucketingLib, getBucketingLib, cleanupBucketingLib } from './bucketing'
+import { importBucketingLib, getBucketingLib } from './bucketing'
 import { DVCLogger, getVariableTypeFromValue, VariableTypeAlias } from '@devcycle/types'
 import os from 'os'
+import { DVCUser } from './models/user'
 
 interface IPlatformData {
     platform: string
@@ -24,6 +24,13 @@ interface IPlatformData {
     sdkType: string
     sdkVersion: string,
     hostname?: string
+}
+
+const castIncomingUser = (user: DVCUser) => {
+    if (!(user instanceof DVCUser)) {
+        return new DVCUser(user)
+    }
+    return user
 }
 
 export class DVCClient {
@@ -98,6 +105,8 @@ export class DVCClient {
     }
 
     variable<T extends DVCVariableValue>(user: DVCUser, key: string, defaultValue: T): DVCVariable<T> {
+        const incomingUser = castIncomingUser(user)
+
         if (!this.initialized) {
             this.logger.warn('variable called before DVCClient initialized, returning default value')
             return new DVCVariable({
@@ -109,8 +118,8 @@ export class DVCClient {
         // this will throw if type is invalid
         const type = getVariableTypeFromValue(defaultValue, key, this.logger, true)
 
-        const requestUser = new DVCPopulatedUser(user)
-        const bucketedConfig = bucketUserForConfig(requestUser, this.environmentKey)
+        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+        const bucketedConfig = bucketUserForConfig(populatedUser, this.environmentKey)
 
         const options: VariableParam<T> = {
             key,
@@ -136,42 +145,48 @@ export class DVCClient {
                 : EventTypes.aggVariableDefaulted,
             target: variable.key
         }
-        this.eventQueue.queueAggregateEvent(requestUser, variableEvent, bucketedConfig)
+        this.eventQueue.queueAggregateEvent(populatedUser, variableEvent, bucketedConfig)
 
         return variable
     }
 
     allVariables(user: DVCUser): DVCVariableSet {
+        const incomingUser = castIncomingUser(user)
+
         if (!this.initialized) {
             this.logger.warn('allVariables called before DVCClient initialized')
             return {}
         }
 
-        const requestUser = new DVCPopulatedUser(user)
-        const bucketedConfig = bucketUserForConfig(requestUser, this.environmentKey)
+        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+        const bucketedConfig = bucketUserForConfig(populatedUser, this.environmentKey)
         return bucketedConfig?.variables || {}
     }
 
     allFeatures(user: DVCUser): DVCFeatureSet {
+        const incomingUser = castIncomingUser(user)
+
         if (!this.initialized) {
             this.logger.warn('allFeatures called before DVCClient initialized')
             return {}
         }
 
-        const requestUser = new DVCPopulatedUser(user)
-        const bucketedConfig = bucketUserForConfig(requestUser, this.environmentKey)
+        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+        const bucketedConfig = bucketUserForConfig(populatedUser, this.environmentKey)
         return bucketedConfig?.features || {}
     }
 
     track(user: DVCUser, event: DVCEvent): void {
+        const incomingUser = castIncomingUser(user)
+
         if (!this.initialized) {
             this.logger.warn('track called before DVCClient initialized, event will not be tracked')
             return
         }
 
         checkParamDefined('type', event.type)
-        const requestUser = new DVCPopulatedUser(user)
-        this.eventQueue.queueEvent(requestUser, event)
+        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+        this.eventQueue.queueEvent(populatedUser, event)
     }
 
     async flushEvents(callback?: () => void): Promise<void> {
