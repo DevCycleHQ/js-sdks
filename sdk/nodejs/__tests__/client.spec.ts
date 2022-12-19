@@ -49,6 +49,7 @@ describe('variable', () => {
     it('returns a valid variable object for a variable that is in the config', () => {
         const variable = client.variable(user, 'test-key', false)
         expect(variable.value).toEqual(true)
+        expect(variable.type).toEqual('Boolean')
     })
 
     it('returns a valid variable object for a variable that is in the config with a DVCUser instance', () => {
@@ -75,6 +76,7 @@ describe('variable', () => {
         variable.value.concat()
         // should allow assignment to different string
         variable.value = 'test2'
+        expect(variable.type).toEqual('String')
     })
 
     it('returns a variable with the correct type for number', () => {

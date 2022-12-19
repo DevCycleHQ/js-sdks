@@ -106,23 +106,24 @@ export class DVCClient {
 
     variable<T extends DVCVariableValue>(user: DVCUser, key: string, defaultValue: T): DVCVariable<T> {
         const incomingUser = castIncomingUser(user)
+        // this will throw if type is invalid
+        const type = getVariableTypeFromValue(defaultValue, key, this.logger, true)
 
         if (!this.initialized) {
             this.logger.warn('variable called before DVCClient initialized, returning default value')
             return new DVCVariable({
                 defaultValue,
+                type,
                 key
             })
         }
-
-        // this will throw if type is invalid
-        const type = getVariableTypeFromValue(defaultValue, key, this.logger, true)
 
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
         const bucketedConfig = bucketUserForConfig(populatedUser, this.environmentKey)
 
         const options: VariableParam<T> = {
             key,
+            type,
             defaultValue
         }
         const configVariable = bucketedConfig?.variables?.[key]
