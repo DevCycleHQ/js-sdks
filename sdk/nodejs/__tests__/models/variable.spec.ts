@@ -1,4 +1,5 @@
 import { DVCVariable } from '../../src/models/variable'
+import { VariableType } from '@devcycle/types'
 
 describe('DVCVariable Unit Tests', () => {
 
@@ -7,6 +8,7 @@ describe('DVCVariable Unit Tests', () => {
             key: 'key',
             defaultValue: false,
             value: true,
+            type: VariableType.boolean,
             evalReason: 'reason'
         })
         expect(variable).toEqual({
@@ -14,6 +16,7 @@ describe('DVCVariable Unit Tests', () => {
             isDefaulted: false,
             value: true,
             defaultValue: false,
+            type: 'Boolean',
             evalReason: 'reason'
         })
     })
@@ -29,11 +32,13 @@ describe('DVCVariable Unit Tests', () => {
     it('should set isDefaulted properly', () => {
         const variable = new DVCVariable({
             key: 'key',
-            defaultValue: false
+            defaultValue: false,
+            type: VariableType.boolean
         })
         expect(variable).toEqual(expect.objectContaining({
             key: 'key',
             value: false,
+            type: 'Boolean',
             defaultValue: false,
             isDefaulted: true
         }))
@@ -42,6 +47,7 @@ describe('DVCVariable Unit Tests', () => {
     it('should lowercase key name', () => {
         const variable = new DVCVariable({
             key: 'camelCaseKey',
+            type: VariableType.boolean,
             defaultValue: false
         })
         expect(variable.key).toBe('camelcasekey')

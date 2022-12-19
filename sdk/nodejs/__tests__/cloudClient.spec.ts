@@ -25,6 +25,7 @@ describe('DVCCloudClient without EdgeDB', () => {
             expect(res.value).toBe(true)
             expect(res.isDefaulted).toBe(false)
             expect(res.key).not.toContain('edgedb')
+            expect(res.type).toEqual('Boolean')
         })
 
         it('to return default if type doesnt align with the type of defaultValue', async () => {
@@ -32,12 +33,14 @@ describe('DVCCloudClient without EdgeDB', () => {
             expect(res.value).toBe('string')
             expect(res.isDefaulted).toBe(true)
             expect(res.key).not.toContain('edgedb')
+            expect(res.type).toEqual('String')
         })
 
         it('to return the Default Value and be defaulted', async () => {
             const res = await client.variable(user, 'test-key-not-in-config', false)
             expect(res.value).toBe(false)
             expect(res.isDefaulted).toBe(true)
+            expect(res.type).toEqual('Boolean')
         })
 
         it('to throw an error if key is not defined', async () => {

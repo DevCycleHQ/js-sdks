@@ -51,6 +51,7 @@ export class DVCCloudClient {
                     )
                     return new DVCVariable({
                         defaultValue,
+                        type,
                         key
                     })
                 }
@@ -63,6 +64,7 @@ export class DVCCloudClient {
                 this.logger.error(`Request to get variable: ${key} failed with response message: ${err.message}`)
                 return new DVCVariable({
                     defaultValue,
+                    type,
                     key
                 })
             })
