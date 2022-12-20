@@ -148,7 +148,7 @@ describe('DVCClient tests', () => {
     it('should not save anonymous user id in local storage if isAnonymous is false', async () => {
         const client = new DVCClient('test_env_key', { user_id: 'user1', isAnonymous: false })
         const anonymousUserId = await client.store.store.load(StoreKey.AnonUserId)
-        expect(anonymousUserId).toBeNull()
+        expect(anonymousUserId).toBeUndefined()
     })
 
     it('should get the anonymous user id from local storage if it exists', async () => {
@@ -486,7 +486,7 @@ describe('DVCClient tests', () => {
             await client.identifyUser(newUser)
             const anonUser = await client.store.store.load(StoreKey.AnonUserId)
 
-            expect(anonUser).toBe(null)
+            expect(anonUser).toBeUndefined()
         })
 
         it('should not clear existing anon user id if called with anon user', async () => {
