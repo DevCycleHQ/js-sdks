@@ -48,6 +48,14 @@
         "jestConfig": "sdk/react-native/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "npm-publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/devcycle-react-native-sdk\"",
+        "cwd": "dist/sdk/react-native",
+        "forwardAllArgs": true
+      }
     }
   }
 }
