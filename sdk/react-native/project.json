@@ -4,6 +4,13 @@
   "projectType": "library",
   "tags": [],
   "targets": {
+    "check-types": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn run -T tsc -b --incremental",
+        "cwd": "sdk/react-native"
+      }
+    },
     "build": {
       "executor": "@nrwl/web:rollup",
       "outputs": [
@@ -14,11 +21,14 @@
         "tsConfig": "sdk/react-native/tsconfig.lib.json",
         "project": "sdk/react-native/package.json",
         "entryFile": "sdk/react-native/src/index.ts",
+        "format": ["esm", "cjs"],
         "external": [
           "react/jsx-runtime",
           "react-native"
         ],
         "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "buildableProjectDepsInPackageJsonType": "dependencies",
+        "compiler": "babel",
         "assets": [
           {
             "glob": "sdk/react-native/README.md",
@@ -46,7 +56,8 @@
       ],
       "options": {
         "jestConfig": "sdk/react-native/jest.config.ts",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "codeCoverage": true
       }
     },
     "npm-publish": {
