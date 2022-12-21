@@ -71,17 +71,17 @@ export interface DVCOptions {
     /**
      * Allows the SDK to communicate with a proxy of DVC bucketing API / client SDK API. Overrides the base URL.
      */
-    bucketingAPIBaseURL?: string
+    bucketingAPIURI?: string
 
     /**
      * Overrides the default URL for the DVC Events API when using local bucketing.
      */
-    eventsAPIBaseURL?: string
+    eventsAPIURI?: string
 
     /**
      * Overrides the default URL for the DVC Config CDN when using local bucketing.
      */
-    configCDNBaseURL?: string
+    configCDNURI?: string
 }
 
 export type DVCVariableValue = VariableValue

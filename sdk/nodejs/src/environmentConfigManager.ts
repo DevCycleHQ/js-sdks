@@ -25,7 +25,7 @@ export class EnvironmentConfigManager {
         {
             configPollingIntervalMS = 10000,
             configPollingTimeoutMS = 5000,
-            configCDNBaseURL,
+            configCDNURI,
             cdnURI = 'https://config-cdn.devcycle.com'
         }: ConfigPollingOptions
     ) {
@@ -37,7 +37,7 @@ export class EnvironmentConfigManager {
         this.requestTimeoutMS = configPollingTimeoutMS >= this.pollingIntervalMS
             ? this.pollingIntervalMS
             : configPollingTimeoutMS
-        this.cdnURI = configCDNBaseURL || cdnURI
+        this.cdnURI = configCDNURI || cdnURI
 
         this.fetchConfigPromise = this._fetchConfig().then(() => {
             this.logger.debug('DevCycle initial config loaded')

@@ -88,7 +88,7 @@ export async function getAllFeatures(
     envKey: string,
     options: DVCOptions
 ): Promise<AxiosResponse> {
-    const baseUrl = `${options.bucketingAPIBaseURL || BUCKETING_URL}${FEATURES_PATH}`
+    const baseUrl = `${options.bucketingAPIURI || BUCKETING_URL}${FEATURES_PATH}`
     const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
     return await post({
         url: postUrl,
@@ -101,7 +101,7 @@ export async function getAllVariables(
     envKey: string,
     options: DVCOptions
 ): Promise<AxiosResponse> {
-    const baseUrl = `${options.bucketingAPIBaseURL || BUCKETING_URL}${VARIABLES_PATH}`
+    const baseUrl = `${options.bucketingAPIURI || BUCKETING_URL}${VARIABLES_PATH}`
     const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
     return await post({
         url: postUrl,
@@ -117,7 +117,7 @@ export async function getVariable(
     variableKey: string,
     options: DVCOptions
 ): Promise<AxiosResponse> {
-    const baseUrl = `${options.bucketingAPIBaseURL || BUCKETING_URL}${VARIABLES_PATH}/${variableKey}`
+    const baseUrl = `${options.bucketingAPIURI || BUCKETING_URL}${VARIABLES_PATH}/${variableKey}`
     const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
     return await post({
         url: postUrl,
@@ -133,7 +133,7 @@ export async function postTrack(
     logger: DVCLogger,
     options: DVCOptions
 ): Promise<void> {
-    const baseUrl = `${options.bucketingAPIBaseURL || BUCKETING_URL}${TRACK_PATH}`
+    const baseUrl = `${options.bucketingAPIURI || BUCKETING_URL}${TRACK_PATH}`
     const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
     try {
         await post({
