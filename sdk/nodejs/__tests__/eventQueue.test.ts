@@ -140,7 +140,7 @@ describe('EventQueue Unit Tests', () => {
         publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
 
         const eventQueue = initEventQueue('envKey', {
-            eventsAPIBaseURLOverride: 'localhost:3000/client/1'
+            eventsAPIURI: 'localhost:3000/client/1'
         })
         const user = new DVCPopulatedUser({ user_id: 'user_id' })
         const event = { type: 'test_event' }

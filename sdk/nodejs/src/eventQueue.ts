@@ -36,14 +36,14 @@ export type EventQueueOptions = {
     flushEventQueueSize?: number,
     logger: DVCLogger,
     reporter?: DVCReporter,
-    eventsAPIBaseURLOverride?: string
+    eventsAPIURI?: string
 }
 
 export class EventQueue {
     private readonly logger: DVCLogger
     private readonly reporter?: DVCReporter
     private readonly environmentKey: string
-    private readonly eventsAPIBaseURLOverride?: string
+    private readonly eventsAPIURI?: string
     eventFlushIntervalMS: number
     flushEventQueueSize: number
     maxEventQueueSize: number
@@ -53,7 +53,7 @@ export class EventQueue {
     constructor(environmentKey: string, options: EventQueueOptions) {
         this.logger = options.logger
         this.reporter = options.reporter
-        this.eventsAPIBaseURLOverride = options.eventsAPIBaseURLOverride
+        this.eventsAPIURI = options.eventsAPIURI
         this.environmentKey = environmentKey
         this.eventFlushIntervalMS = options?.eventFlushIntervalMS || 10 * 1000
         if (this.eventFlushIntervalMS < 500) {
@@ -130,7 +130,7 @@ export class EventQueue {
                     this.logger,
                     this.environmentKey,
                     flushPayload.records,
-                    this.eventsAPIBaseURLOverride
+                    this.eventsAPIURI
                 )
                 if (res.status !== 201) {
                     this.logger.error(`Error publishing events, status: ${res.status}, body: ${res.data}`)
