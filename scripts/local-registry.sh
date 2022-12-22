@@ -7,7 +7,7 @@ if [[ $COMMAND == "enable" ]]; then
 	echo "To Disable: yarn local-registry disable"
 	npm config set registry http://localhost:4873/
 	yarn config set npmRegistryServer http://localhost:4873/
-    yarn config set unsafeHttpWhitelist ['localhost:4873']
+    yarn config set unsafeHttpWhitelist --json '["localhost"]'
 fi
 
 if [[ $COMMAND == "disable" ]]; then
