@@ -127,23 +127,25 @@ export class DVCClient {
             defaultValue
         }
         const configVariable = bucketedConfig?.variables?.[key]
+        let eventType = EventTypes.aggVariableEvaluated
         if (configVariable) {
             if (type === configVariable.type) {
                 options.value = configVariable.value as VariableTypeAlias<T>
                 options.evalReason = configVariable.evalReason
             } else {
+                eventType = EventTypes.aggVariableDefaulted
                 this.logger.error(
                     `Type mismatch for variable ${key}. Expected ${type}, got ${configVariable.type}`
                 )
             }
+        } else {
+            eventType = EventTypes.aggVariableDefaulted
         }
 
         const variable = new DVCVariable(options)
 
         const variableEvent = {
-            type: variable.key in bucketedConfig.variables
-                ? EventTypes.aggVariableEvaluated
-                : EventTypes.aggVariableDefaulted,
+            type: eventType,
             target: variable.key
         }
         this.eventQueue.queueAggregateEvent(populatedUser, variableEvent, bucketedConfig)

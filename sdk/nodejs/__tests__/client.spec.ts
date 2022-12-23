@@ -109,6 +109,24 @@ describe('variable', () => {
                     } }
                 )
         })
+
+        it('does get sent if variable type doesnt match default value type',async () => {
+            client.variable(user, 'test-key', "string")
+
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            expect(client.eventQueue.queueAggregateEvent)
+                .toBeCalledWith(expectedUser,
+                    { type: 'aggVariableDefaulted', target: 'test-key' },
+                    { 'variables': {
+                            ['test-key']: {
+                                value: true,
+                                type: 'Boolean'
+                            }
+                        } }
+                )
+        })
+
         it('gets sent if variable is not in bucketed config',async () => {
             client.variable(user, 'test-key-not-in-config', false)
 
