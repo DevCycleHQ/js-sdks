@@ -98,7 +98,7 @@ export class DVCCloudClient {
             })
     }
 
-    track(user: DVCUser, event: DVCEvent): void {
+    track(user: DVCUser, event: DVCEvent): Promise<void> {
         const incomingUser = castIncomingUser(user)
 
         if (event === undefined || event === null || typeof event.type !== 'string' || event.type.length === 0) {
@@ -106,6 +106,6 @@ export class DVCCloudClient {
         }
         checkParamDefined('type', event.type)
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
-        postTrack(populatedUser, event, this.environmentKey, this.logger, this.options)
+        return postTrack(populatedUser, event, this.environmentKey, this.logger, this.options)
     }
 }
