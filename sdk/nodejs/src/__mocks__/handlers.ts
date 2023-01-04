@@ -4,11 +4,19 @@ import { rest } from 'msw'
 export const handlers = [
     rest.post('https://bucketing-api.devcycle.com/v1/variables/test-key-not-in-config', (req, res, ctx) => {
         return res(
-            ctx.status(400)
+            ctx.status(404),
+            ctx.json({})
         )
     }),
     rest.post('https://bucketing-api.devcycle.com/v1/variables/test-key', (req, res, ctx) => {
         const enableEdgeDB = req.url.searchParams.get('enableEdgeDB')
+        const { user_id } = req.body as Record<string, any>
+
+        if (user_id === '500') {
+            return res(
+                ctx.status(500)
+            )
+        }
 
         if (enableEdgeDB) {
             return res(
@@ -38,7 +46,11 @@ export const handlers = [
 
         if (user_id === 'bad') {
             return res(
-                ctx.status(401)
+                ctx.status(400)
+            )
+        } else if (user_id === '500') {
+            return res(
+                ctx.status(500)
             )
         } else if (user_id === 'empty') {
             return res(
@@ -79,7 +91,11 @@ export const handlers = [
 
         if (user_id === 'bad') {
             return res(
-                ctx.status(401)
+                ctx.status(400)
+            )
+        } else if (user_id === '500') {
+            return res(
+                ctx.status(500)
             )
         } else if (user_id === 'empty') {
             return res(
@@ -123,7 +139,7 @@ export const handlers = [
 
         if (user.user_id === 'bad') {
             return res(
-                ctx.status(401)
+                ctx.status(400)
             )
         } else {
             return res(

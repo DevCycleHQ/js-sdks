@@ -22,6 +22,15 @@ const castIncomingUser = (user: DVCUser) => {
     return user
 }
 
+const throwIfUserError = (err: AxiosError) => {
+    const data = err.response?.data as { message?: string }
+    const code = err.response?.status || 0
+
+    if (code !== 404 && code < 500) {
+        throw new Error(`DevCycle request failed with status ${code}. ${data.message || ''}`)
+    }
+}
+
 export class DVCCloudClient {
     private environmentKey: string
     private logger: DVCLogger
@@ -61,6 +70,7 @@ export class DVCCloudClient {
                 })
             })
             .catch((err: AxiosError) => {
+                throwIfUserError(err)
                 this.logger.error(`Request to get variable: ${key} failed with response message: ${err.message}`)
                 return new DVCVariable({
                     defaultValue,
@@ -79,6 +89,7 @@ export class DVCCloudClient {
                 return res.data || {}
             })
             .catch((err: AxiosError) => {
+                throwIfUserError(err)
                 this.logger.error(`Request to get all variable failed with response message: ${err.message}`)
                 return {}
             })
@@ -93,6 +104,7 @@ export class DVCCloudClient {
                 return res.data || {}
             })
             .catch((err: AxiosError) => {
+                throwIfUserError(err)
                 this.logger.error(`Request to get all features failed with response message: ${err.message}`)
                 return {}
             })
@@ -106,6 +118,12 @@ export class DVCCloudClient {
         }
         checkParamDefined('type', event.type)
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
-        return postTrack(populatedUser, event, this.environmentKey, this.logger, this.options)
+        return postTrack(populatedUser, event, this.environmentKey, this.options)
+            .then(() => {
+                this.logger.debug('DVC Event Tracked')
+            }).catch((err: AxiosError) => {
+                throwIfUserError(err)
+                this.logger.error(`DVC Error Tracking Event. Response message: ${err.message}`)
+            })
     }
 }

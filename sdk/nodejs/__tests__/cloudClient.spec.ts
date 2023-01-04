@@ -10,6 +10,9 @@ const user = {
 }
 const badUser = { user_id: 'bad' }
 const emptyUser = { user_id: 'empty' }
+const respond500User = { user_id: '500' }
+
+jest.mock('axios-retry')
 
 describe('DVCCloudClient without EdgeDB', () => {
     beforeAll(async () => {
@@ -62,6 +65,12 @@ describe('DVCCloudClient without EdgeDB', () => {
                 )
             }
         })
+    
+        it('returns default when variable request fails', async () => {
+            const res = await client.variable(respond500User, 'test-key', false)
+            expect(res.value).toBe(false)
+            expect(res.isDefaulted).toBe(true)
+        })
     })
 
     describe('allVariables', () => {
@@ -82,8 +91,14 @@ describe('DVCCloudClient without EdgeDB', () => {
             expect(res).toEqual({})
         })
 
-        it('to return no variables when allVariables call fails', async () => {
-            const res = await client.allVariables(badUser)
+        it('throws exception when allVariables called with invalid user', async () => {
+            await expect(async () => {
+                await client.allVariables(badUser)
+            }).rejects.toThrow('DevCycle request failed with status 400.')
+        })
+
+        it('returns empty object when allVariables request fails', async () => {
+            const res = await client.allVariables(respond500User)
             expect(res).toEqual({})
         })
     })
@@ -108,8 +123,14 @@ describe('DVCCloudClient without EdgeDB', () => {
             expect(res).toEqual({})
         })
 
-        it('to return no features when allFeatures call fails', async () => {
-            const res = await client.allFeatures(badUser)
+        it('throws exception when allFeatures called with invalid user', async () => {
+            await expect(async () => {
+                await client.allFeatures(badUser)
+            }).rejects.toThrow('DevCycle request failed with status 400.')
+        })
+
+        it('returns empty object when allFeatures request fails', async () => {
+            const res = await client.allFeatures(respond500User)
             expect(res).toEqual({})
         })
     })
@@ -205,6 +226,12 @@ describe('DVCCloudClient with EdgeDB Enabled', () => {
                 )
             }
         })
+
+        it('returns default when variable request fails', async () => {
+            const res = await client.variable(respond500User, 'test-key', false)
+            expect(res.value).toBe(false)
+            expect(res.isDefaulted).toBe(true)
+        })
     })
 
     describe('allVariables', () => {
@@ -225,8 +252,14 @@ describe('DVCCloudClient with EdgeDB Enabled', () => {
             expect(res).toEqual({})
         })
 
-        it('to return no variables when allVariables call fails', async () => {
-            const res = await client.allVariables(badUser)
+        it('throws exception when allVariables called with invalid user', async () => {
+            await expect(async () => {
+                await client.allVariables(badUser)
+            }).rejects.toThrow('DevCycle request failed with status 400.')
+        })
+
+        it('returns empty object when allVariables request fails', async () => {
+            const res = await client.allVariables(respond500User)
             expect(res).toEqual({})
         })
     })
@@ -251,8 +284,14 @@ describe('DVCCloudClient with EdgeDB Enabled', () => {
             expect(res).toEqual({})
         })
 
-        it('to return no features when allFeatures call fails', async () => {
-            const res = await client.allFeatures(badUser)
+        it('throws exception when allFeatures called with invalid user', async () => {
+            await expect(async () => {
+                await client.allFeatures(badUser)
+            }).rejects.toThrow('DevCycle request failed with status 400.')
+        })
+
+        it('returns empty object when allFeatures request fails', async () => {
+            const res = await client.allFeatures(respond500User)
             expect(res).toEqual({})
         })
     })
