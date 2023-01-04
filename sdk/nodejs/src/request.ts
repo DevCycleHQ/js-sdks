@@ -130,23 +130,17 @@ export async function postTrack(
     user: DVCPopulatedUser,
     event: DVCEvent,
     envKey: string,
-    logger: DVCLogger,
     options: DVCOptions
 ): Promise<void> {
     const baseUrl = `${options.bucketingAPIURI || BUCKETING_URL}${TRACK_PATH}`
     const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
-    try {
-        await post({
-            url: postUrl,
-            data: {
-                user,
-                events: [event]
-            }
-        }, envKey)
-        logger.debug('DVC Event Tracked')
-    } catch (ex) {
-        logger.error(`DVC Error Tracking Event. Response message: ${ex.message}`)
-    }
+    await post({
+        url: postUrl,
+        data: {
+            user,
+            events: [event]
+        }
+    }, envKey)
 }
 
 export async function post(

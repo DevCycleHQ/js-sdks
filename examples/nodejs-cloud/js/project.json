@@ -18,7 +18,8 @@
       "executor": "@nrwl/node:node",
       "options": {
         "buildTarget": "example-nodejs-cloud-js:build"
-      }
+      },
+      "dependsOn": ["^build"]
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
