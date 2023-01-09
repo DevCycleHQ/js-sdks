@@ -31,5 +31,5 @@ jobs:
           propagate_failure: true
           trigger_workflow: true
           wait_workflow: true
-          client_payload: '{ "sha": "${{ github.event.pull_request.head.sha }}", "sdk": "nodejs" }'
+          client_payload: '{ "sha": "${{ github.event.pull_request.head.sha }}", "sdk": "nodejs", "title": "NodeJS PR: ${{ github.event.pull_request.title }}" }'
           comment_downstream_url: ${{ github.event.pull_request.comments_url }}
