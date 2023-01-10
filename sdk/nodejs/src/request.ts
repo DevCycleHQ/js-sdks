@@ -24,7 +24,7 @@ export class ResponseError extends Error {
 }
 
 const exponentialBackoff: RequestInitWithRetry['retryDelay'] = (
-    attempt, error, response
+    attempt
 ) => {
     return Math.pow(2, attempt) * 1000
 }
@@ -167,9 +167,11 @@ export async function get(
     requestConfig: RequestInit | RequestInitWithRetry
 ): Promise<Response> {
     const [_fetch, config] = await getFetchAndConfig(requestConfig)
+    const headers = { ...config.headers, 'Content-Type': 'application/json' }
 
     const res = await _fetch(url, {
         ...config,
+        headers,
         method: 'GET'
     })
 

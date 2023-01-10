@@ -62,30 +62,44 @@ export class EnvironmentConfigManager {
     async _fetchConfig(): Promise<void> {
         const url = this.getConfigURL()
         let res: Response | null
-        let projectConfig: ConfigBody | null = null
-        try {
-            this.logger.debug(`Requesting new config for ${url}, etag: ${this.configEtag}`)
-            res = await getEnvironmentConfig(url, this.requestTimeoutMS, this.configEtag)
-            projectConfig = await res.json()
-            this.logger.debug(`Downloaded config, status: ${res?.status}, etag: ${res?.headers.get('etag')}`)
-        } catch (ex) {
+        let projectConfig: string | null = null
+
+        const logError = (error: any) => {
             const errMsg = `Request to get config failed for url: ${url}, ` +
-                `response message: ${ex.message}, response data ${ex?.response?.data}`
+                `response message: ${error.message}, response data: ${projectConfig}`
             if (this.hasConfig) {
                 this.logger.debug(errMsg)
             } else {
                 this.logger.error(errMsg)
             }
+        }
+
+        try {
+            this.logger.debug(`Requesting new config for ${url}, etag: ${this.configEtag}`)
+            res = await getEnvironmentConfig(url, this.requestTimeoutMS, this.configEtag)
+            projectConfig = await res.text()
+            this.logger.debug(`Downloaded config, status: ${res?.status}, etag: ${res?.headers.get('etag')}`)
+        } catch (ex) {
+            logError(ex)
             res = null
         }
 
         if (res?.status === 304) {
             this.logger.debug(`Config not modified, using cache, etag: ${this.configEtag}`)
+            return
         } else if (res?.status === 200 && projectConfig) {
-            getBucketingLib().setConfigData(this.environmentKey, JSON.stringify(projectConfig))
-            this.hasConfig = true
-            this.configEtag = res?.headers.get('etag') || ''
-        } else if (this.hasConfig) {
+            try {
+                getBucketingLib().setConfigData(this.environmentKey, projectConfig)
+                this.hasConfig = true
+                this.configEtag = res?.headers.get('etag') || ''
+                return
+            } catch (e) {
+                logError(new Error('Invalid JSON'))
+                res = null
+            }
+        }
+
+        if (this.hasConfig) {
             this.logger.debug(`Failed to download config, using cached version. url: ${url}.`)
         } else if (res?.status === 403) {
             throw new Error(`Invalid SDK key provided: ${this.environmentKey}`)
