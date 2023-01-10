@@ -32,6 +32,7 @@ describe('request.ts Unit Tests', () => {
             expect(fetchRequestMock).toBeCalledWith(url, {
                 'headers': {
                     'If-None-Match': etag,
+                    'Content-Type': 'application/json'
                 },
                 retries: 1,
                 retryDelay: expect.any(Function),
