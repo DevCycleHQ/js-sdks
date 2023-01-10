@@ -1,3 +1,6 @@
+jest.unmock('cross-fetch')
+import fetch from 'cross-fetch'
+global.fetch = fetch
 import { DVCEvent } from '../src/types'
 import * as DVC from '../src'
 import { server } from '../src/__mocks__/server'
@@ -12,7 +15,7 @@ const badUser = { user_id: 'bad' }
 const emptyUser = { user_id: 'empty' }
 const respond500User = { user_id: '500' }
 
-jest.mock('axios-retry')
+jest.mock('fetch-retry')
 
 describe('DVCCloudClient without EdgeDB', () => {
     beforeAll(async () => {
@@ -65,7 +68,7 @@ describe('DVCCloudClient without EdgeDB', () => {
                 )
             }
         })
-    
+
         it('returns default when variable request fails', async () => {
             const res = await client.variable(respond500User, 'test-key', false)
             expect(res.value).toBe(false)

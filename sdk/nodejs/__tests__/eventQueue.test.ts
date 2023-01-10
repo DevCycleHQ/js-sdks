@@ -1,7 +1,6 @@
 import { DVCPopulatedUser } from '../src/models/populatedUser'
 
 jest.mock('../src/request')
-import { AxiosResponse } from 'axios'
 import { EventQueue, EventQueueOptions } from '../src/eventQueue'
 import { EventTypes } from '../src/eventQueue'
 import { publishEvents } from '../src/request'
@@ -14,6 +13,7 @@ import { mocked } from 'jest-mock'
 import { dvcDefaultLogger } from '../src/utils/logger'
 import { cleanupBucketingLib, getBucketingLib, importBucketingLib } from '../src/bucketing'
 import { setPlatformDataJSON } from './utils/setPlatformData'
+import { Response } from 'cross-fetch'
 
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
@@ -57,10 +57,9 @@ describe('EventQueue Unit Tests', () => {
             }
         }
     }
-    const mockAxiosResponse = (obj: any): AxiosResponse => ({
+    const mockFetchResponse = (obj: any): Response => new Response('{}', {
         status: 200,
         statusText: '',
-        data: {},
         headers: {},
         config: {},
         ...obj
@@ -92,7 +91,7 @@ describe('EventQueue Unit Tests', () => {
     })
 
     it('should report metrics', async () => {
-        publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
+        publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
         const reporter: DVCReporter = {
             reportFlushResults: jest.fn(),
@@ -137,7 +136,7 @@ describe('EventQueue Unit Tests', () => {
     })
 
     it('should setup Event Queue and process events', async () => {
-        publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
+        publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
         const eventQueue = initEventQueue('envKey', {
             eventsAPIURI: 'localhost:3000/client/1'
@@ -203,7 +202,7 @@ describe('EventQueue Unit Tests', () => {
     })
 
     it('should setup Event Queue and not process custom events if disableCustomEventLogging is true', async () => {
-        publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
+        publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
         const eventQueue = initEventQueue('envKey', {
             disableAutomaticEventLogging: false,
@@ -251,7 +250,7 @@ describe('EventQueue Unit Tests', () => {
 
     it('should setup Event Queue and not process automatic events if disableAutomaticEventLogging is true',
         async () => {
-            publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
+            publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
             const eventQueue = initEventQueue('envKey', {
                 disableAutomaticEventLogging: true,
@@ -295,7 +294,7 @@ describe('EventQueue Unit Tests', () => {
     )
 
     it('should save multiple events from multiple users with aggregated values', async () => {
-        publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
+        publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
         const eventQueue = initEventQueue('envKey')
         const user1 = new DVCPopulatedUser({ user_id: 'user1' })
@@ -414,7 +413,7 @@ describe('EventQueue Unit Tests', () => {
             eventQueue.queueAggregateEvent(user, aggEvent, bucketedUserConfig)
             eventQueue.queueAggregateEvent(user2, aggEvent, bucketedUserConfig)
 
-            return mockAxiosResponse({ status: 500 })
+            return mockFetchResponse({ status: 500 })
         })
 
         await eventQueue.flushEvents()
@@ -475,10 +474,10 @@ describe('EventQueue Unit Tests', () => {
         }
 
         // 300 events total, that's three chunks
-        publishEvents_mock.mockResolvedValueOnce(mockAxiosResponse({ status: 201 }))
+        publishEvents_mock.mockResolvedValueOnce(mockFetchResponse({ status: 201 }))
         // fail on the second chunk
-        publishEvents_mock.mockResolvedValueOnce(mockAxiosResponse({ status: 500 }))
-        publishEvents_mock.mockResolvedValue(mockAxiosResponse({ status: 201 }))
+        publishEvents_mock.mockResolvedValueOnce(mockFetchResponse({ status: 500 }))
+        publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
         await eventQueue.flushEvents()
         expect(publishEvents_mock).toBeCalledTimes(3)

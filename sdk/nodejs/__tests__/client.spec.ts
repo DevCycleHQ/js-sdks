@@ -111,7 +111,7 @@ describe('variable', () => {
         })
 
         it('does get sent if variable type doesnt match default value type',async () => {
-            client.variable(user, 'test-key', "string")
+            client.variable(user, 'test-key', 'string')
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
@@ -119,11 +119,11 @@ describe('variable', () => {
                 .toBeCalledWith(expectedUser,
                     { type: 'aggVariableDefaulted', target: 'test-key' },
                     { 'variables': {
-                            ['test-key']: {
-                                value: true,
-                                type: 'Boolean'
-                            }
-                        } }
+                        ['test-key']: {
+                            value: true,
+                            type: 'Boolean'
+                        }
+                    } }
                 )
         })
 

@@ -133,7 +133,7 @@ export class EventQueue {
                     this.eventsAPIURI
                 )
                 if (res.status !== 201) {
-                    this.logger.error(`Error publishing events, status: ${res.status}, body: ${res.data}`)
+                    this.logger.error(`Error publishing events, status: ${res.status}, body: ${await res.text()}`)
                     if (res.status >= 500) {
                         results.retries++
                         getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, true)
