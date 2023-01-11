@@ -9,41 +9,34 @@ export default function DevCycleExample(): React.ReactElement {
     const variableKeyJsonString = 'variable-json-key-string'
 
     const variable = useVariable( variableKey, true)
-    const variableString = useVariable( variableKeyString, 'green')
-    const variableNumber = useVariable( variableKeyNumber, 600)
-    const variableBoolean = useVariable( variableKeyBoolean, false)
+    const variableString = useVariable( variableKeyString, 'default')
+    const variableNumber = useVariable( variableKeyNumber, 100)
+    const variableBoolean = useVariable( variableKeyBoolean, true)
     const variableJsonString = useVariable(
         variableKeyJsonString,
-        { 'jsonStringKeyDefault':'json string value default' }
+        { 'jsonStringKeyDefault':'json string default' }
     )
 
     return (
         <div>
             <div>
-                <span>
-            Your feature-release selected Variation  =  {variable?.value ? 'ON' : 'OFF'}
+                <span>React With Provider</span>
+            </div>
+            <div>
+                <span>variable feature-release = {JSON.stringify(variable.value)} </span>
+            </div>
+            <div>
+                <span>variable variableString = {JSON.stringify(variableString.value)} </span>
+            </div>
+            <div>
+                <span>variable variableNumber = {JSON.stringify(variableNumber.value)} </span>
+            </div>
+            <div>
+                <span>variable variableBoolean = {JSON.stringify(variableBoolean.value)}
                 </span>
             </div>
             <div>
-                <span> Your variable feature-release value = {JSON.stringify(variable.value)} </span>
-            </div>
-            <div>
-                <span> Your variable variableString  value = {JSON.stringify(variableString.value)} </span>
-            </div>
-            <div>
-                <span> Your variable variableNumber value  = {JSON.stringify(variableNumber.value)} </span>
-            </div>
-            <div>
-                <span>
-            Your variable variableBoolean value and selected Variation = {variableBoolean.value ? 'OFF' : 'ON'}
-                </span>
-            </div>
-            <div>
-                <span> Your variable variableBoolean value = {JSON.stringify(variableBoolean.value)}
-                </span>
-            </div>
-            <div>
-                <span> Your variable variableJsonString value = {JSON.stringify(variableJsonString.value)} </span>
+                <span>variable variableJsonString = {JSON.stringify(variableJsonString.value)} </span>
             </div>
         </div>
     )

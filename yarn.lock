@@ -8202,7 +8202,7 @@ __metadata:
 "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json":
   version: 1.1.0
   resolution: "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json.git#commit=d2ce65ec18b305e1f3db8a4fe4394b417631b024"
-  checksum: 480283ed02d57eacb400facc060f293b7dcb773a90dc5b7c80eae86b0007e3a748b2cb6c298a1a32010cba41e48686fcd0078c02c6db1d917fda85bb7c08ded1
+  checksum: 7485348b948af8a6c8dde91714d09dd1d966597a670fb3d4d484135a58151f17b71caaf423c0d2b46869cc9d06d0febb10e69064c849f501d1396f071369a82b
   languageName: node
   linkType: hard
 

@@ -17,10 +17,10 @@ export class AppElement extends HTMLElement {
     connectedCallback(): void {
         const titleVariable = client.variable('titlevariable', 'Welcome 👋')
         const variableKey = client.variable('feature-release', true)
-        const variableKeyString = client.variable('variable-key-string', 'green')
-        const variableKeyNumber = client.variable('variable-key-number', 600)
-        const variableKeyBoolean = client.variable('variable-key-boolean', false)
-        const variableKeyJsonString = client.variable('variable-json-key-string', { 'jsonStringKeyDefault':'json string value default' })
+        const variableKeyString = client.variable('variable-key-string', 'default')
+        const variableKeyNumber = client.variable('variable-key-number', 100)
+        const variableKeyBoolean = client.variable('variable-key-boolean', true)
+        const variableKeyJsonString = client.variable('variable-json-key-string', { 'jsonStringKeyDefault':'json default' })
 
         this.innerHTML = `
     <div class="wrapper">
@@ -34,43 +34,36 @@ export class AppElement extends HTMLElement {
         </div>
         <div id="variableKey">
           <h1>
-            <span> Your feature-release selected Variation = </span>
-            ${variableKey?.value ? 'ON' : 'OFF'}
+            <span> JS Web Elements</span>
           </h1>
         </div>
         <div id="variableKey">
         <h1>
-          <span> Your variable feature-release value = </span>
+          <span>variable feature-release value = </span>
           ${JSON.stringify(variableKey.value)}
         </h1>
       </div>
         <div id="variableKeyString">
           <h1>
-            <span> Your variable variableString value = </span>
+            <span>variable variableString value = </span>
             ${JSON.stringify(variableKeyString.value)}
           </h1>
         </div>
         <div id="variableKeyNumber">
           <h1>
-            <span> Your variable variableNumber value = </span>
+            <span>variable variableNumber value = </span>
             ${JSON.stringify(variableKeyNumber.value)}
           </h1>
         </div>
-        <div id="variableKeyNumber">
-        <h1>
-          <span> Your variable variableBoolean value and selected Variation = </span>
-          ${JSON.stringify(variableKeyBoolean.value ? 'OFF' : 'ON')}
-        </h1>
-      </div>
-        <div id="variableKeyNumber">
+        <div id="variableKeyBoolean">
           <h1>
-            <span> Your variable variableBoolean value = </span>
+            <span>variable variableBoolean value = </span>
             ${JSON.stringify(variableKeyBoolean.value)}
           </h1>
         </div>
-        <div id="variableKeyNumber">
+        <div id="variableKeyJsonString">
         <h1>
-        <span> Your variable variableJsonString value = </span>
+        <span>variable variableJsonString value = </span>
           ${JSON.stringify(variableKeyJsonString.value)}
         </h1>
       </div>
