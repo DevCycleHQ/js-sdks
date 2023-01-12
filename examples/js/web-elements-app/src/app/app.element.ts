@@ -39,31 +39,31 @@ export class AppElement extends HTMLElement {
         </div>
         <div id="variableKey">
         <h1>
-          <span>variable feature-release value = </span>
+          <span>variable feature-release = </span>
           ${JSON.stringify(variableKey.value)}
         </h1>
       </div>
         <div id="variableKeyString">
           <h1>
-            <span>variable variableString value = </span>
+            <span>variable variable-key-string = </span>
             ${JSON.stringify(variableKeyString.value)}
           </h1>
         </div>
         <div id="variableKeyNumber">
           <h1>
-            <span>variable variableNumber value = </span>
+            <span>variable variable-key-number = </span>
             ${JSON.stringify(variableKeyNumber.value)}
           </h1>
         </div>
         <div id="variableKeyBoolean">
           <h1>
-            <span>variable variableBoolean value = </span>
+            <span>variable variable-key-boolean = </span>
             ${JSON.stringify(variableKeyBoolean.value)}
           </h1>
         </div>
         <div id="variableKeyJsonString">
         <h1>
-        <span>variable variableJsonString value = </span>
+        <span>variable variable-json-key-string = </span>
           ${JSON.stringify(variableKeyJsonString.value)}
         </h1>
       </div>
