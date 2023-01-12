@@ -50,17 +50,17 @@ const Home: NextPage = () => {
                             <span>variable feature-release = {JSON.stringify(variable?.value)} </span>
                         </div>
                         <div>
-                            <span>variable variableString = {JSON.stringify(variableString?.value)} </span>
+                            <span>variable variable-key-string = {JSON.stringify(variableString?.value)} </span>
                         </div>
                         <div>
-                            <span>variable variableNumber = {JSON.stringify(variableNumber?.value)} </span>
+                            <span>variable variable-key-number = {JSON.stringify(variableNumber?.value)} </span>
                         </div>
                         <div>
-                            <span>variable variableBoolean = {JSON.stringify(variableBoolean?.value)}
+                            <span>variable variable-key-boolean = {JSON.stringify(variableBoolean?.value)}
                             </span>
                         </div>
                         <div>
-                            <span>variable variableJsonString value = {
+                            <span>variable variable-json-key-string = {
                                 JSON.stringify(variableJsonString?.value)} </span>
                         </div>
                     </div>
