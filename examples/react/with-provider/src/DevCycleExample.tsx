@@ -29,7 +29,7 @@ export default function DevCycleExample(): React.ReactElement {
                 <span>variable variable-json-key-string = {JSON.stringify(variableString.value)} </span>
             </div>
             <div>
-                <span>variable ariable-key-number = {JSON.stringify(variableNumber.value)} </span>
+                <span>variable variable-key-number = {JSON.stringify(variableNumber.value)} </span>
             </div>
             <div>
                 <span>variable variable-key-boolean = {JSON.stringify(variableBoolean.value)}
