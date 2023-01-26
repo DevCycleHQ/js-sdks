@@ -43,4 +43,4 @@ function App() {
     )
 }
 
-export default withDVCProvider({ envKey: ENV_KEY, user: user, options: { logLevel: 'debug' } })(App)
+export default withDVCProvider({ sdkKey: ENV_KEY, user: user, options: { logLevel: 'debug' } })(App)

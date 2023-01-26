@@ -19,4 +19,4 @@ function MyApp({ Component, pageProps }: AppProps) {
     return <Component {...pageProps} />
 }
 
-export default withDVCProvider({ envKey: ENV_KEY, user: user })(MyApp as React.FC)
+export default withDVCProvider({ sdkKey: ENV_KEY, user: user })(MyApp as React.FC)

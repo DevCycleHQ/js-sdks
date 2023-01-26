@@ -71,7 +71,7 @@ export const App = (): JSX.Element => {
     }
 
     if (!dvcReady) return <SafeAreaView><Text style={styles.textXL}>DVC is not ready!</Text></SafeAreaView>
-    
+
     return (
         <>
             <StatusBar barStyle="dark-content" />
@@ -95,7 +95,7 @@ export const App = (): JSX.Element => {
                         </Text>
                         <Text style={styles.textLg}>
               My device: <Text style={styles.textBold}>{DeviceInfo.getModel()}</Text> {'\n'}
-              The value for <Text style={styles.textBold}>{VARIABLE_KEY}</Text> is 
+              The value for <Text style={styles.textBold}>{VARIABLE_KEY}</Text> is
                             <Text style={styles.textBold}>{JSON.stringify(variable.value)}</Text>
                         </Text>
                         <TouchableOpacity
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
 })
 
 export default withDVCProvider({
-    envKey: ENV_KEY,
+    sdkKey: ENV_KEY,
     user,
     options: {
         reactNative: true

@@ -7,7 +7,7 @@ import { ReactElement } from 'react'
 jest.mock('@devcycle/devcycle-js-sdk')
 
 const ProviderWrapper = ({ children }: {children: ReactElement}) => {
-    return <DVCProvider config={{ user: { user_id: 'test', isAnonymous: false }, envKey: 'test' }}>
+    return <DVCProvider config={{ user: { user_id: 'test', isAnonymous: false }, sdkKey: 'test' }}>
         {children}
     </DVCProvider>
 }

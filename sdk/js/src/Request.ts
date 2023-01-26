@@ -86,7 +86,7 @@ export const getConfigJson = async (
     const lastModified = extraParams?.lastModified ? `&sseLastModified=${extraParams.lastModified}` : ''
     const queryParams = `${serializeUser(user)}${edgeDBParam}${sseParam}${lastModified}`
     const url = `${options?.apiProxyURL || CLIENT_SDK_URL}${CONFIG_PATH}` +
-                `?envKey=${environmentKey}${queryParams && '&' + queryParams}`
+                `?sdkKey=${environmentKey}${queryParams && '&' + queryParams}`
 
     try {
         const res = await get(url)
@@ -99,15 +99,15 @@ export const getConfigJson = async (
 }
 
 export const publishEvents = async (
-    envKey: string | null,
+    sdkKey: string | null,
     config: BucketedUserConfig | null,
     user: DVCPopulatedUser,
     events: DVCEvent[],
     logger: DVCLogger,
     options?: DVCOptions
 ): Promise<AxiosResponse> => {
-    if (!envKey) {
-        throw new Error('Missing envKey to publish events to Events API')
+    if (!sdkKey) {
+        throw new Error('Missing sdkKey to publish events to Events API')
     }
 
     const payload = generateEventPayload(config, user, events)
@@ -115,7 +115,7 @@ export const publishEvents = async (
 
     const res = await post(
         `${options?.apiProxyURL || EVENT_URL}${EVENTS_PATH}`,
-        envKey,
+        sdkKey,
         payload as unknown as Record<string, unknown>
     )
     if (res.status >= 400) {
@@ -129,25 +129,23 @@ export const publishEvents = async (
 
 export const saveEntity = async (
     user: DVCPopulatedUser,
-    envKey: string,
+    sdkKey: string,
     logger: DVCLogger,
     options?: DVCOptions
 ): Promise<AxiosResponse> => {
-    if (!envKey) {
-        throw new Error('Missing envKey to save to Edge DB!')
+    if (!sdkKey) {
+        throw new Error('Missing sdkKey to save to Edge DB!')
     }
-
     if (!user || !user.user_id) {
         throw new Error('Missing user to save to Edge DB!')
     }
-
     if (user.isAnonymous) {
         throw new Error('Cannot save user data for an anonymous user!')
     }
 
     const res = await patch(
         `${options?.apiProxyURL || CLIENT_SDK_URL}${SAVE_ENTITY_PATH}/${encodeURIComponent(user.user_id)}`,
-        envKey,
+        sdkKey,
         user as unknown as Record<string, unknown>
     )
 

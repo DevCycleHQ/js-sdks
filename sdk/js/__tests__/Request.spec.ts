@@ -57,7 +57,7 @@ describe('Request tests', () => {
             expect(axiosRequestMock).toBeCalledWith({
                 headers: { 'Content-Type': 'application/json' },
                 method: 'GET',
-                url: 'https://sdk-api.devcycle.com/v1/sdkConfig?envKey=' +
+                url: 'https://sdk-api.devcycle.com/v1/sdkConfig?sdkKey=' +
                      `${environmentKey}&user_id=${user.user_id}&isAnonymous=false&sse=1&sseLastModified=1234`
             })
         })
@@ -73,7 +73,7 @@ describe('Request tests', () => {
             expect(axiosRequestMock).toBeCalledWith({
                 headers: { 'Content-Type': 'application/json' },
                 method: 'GET',
-                url: `${dvcOptions.apiProxyURL}/v1/sdkConfig?envKey=` +
+                url: `${dvcOptions.apiProxyURL}/v1/sdkConfig?sdkKey=` +
                      `${environmentKey}&user_id=${user.user_id}&isAnonymous=false`
             })
         })
