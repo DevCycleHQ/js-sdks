@@ -25,7 +25,7 @@ EventTypesSet.add('variableDefaulted')
 EventTypesSet.add('aggVariableDefaulted')
 
 export class EventQueue {
-    private envKey: string
+    private sdkKey: string
     private options: EventQueueOptions
 
     /**
@@ -54,8 +54,8 @@ export class EventQueue {
 
     public eventQueueCount: i32
 
-    constructor(envKey: string, options: EventQueueOptions) {
-        this.envKey = envKey
+    constructor(sdkKey: string, options: EventQueueOptions) {
+        this.sdkKey = sdkKey
         this.options = options
         this.userEventQueue = new Map<string, UserEventsBatchRecord>()
         this.aggEventQueue = new Map<string, VariableAggMap>()

@@ -15,8 +15,8 @@ export function generateBoundedHashesFromJSON(user_id: string, target_id: string
     return json.stringify()
 }
 
-export function generateBucketedConfigForUser(token: string, userStr: string): string  {
-    const config = _getConfigData(token)
+export function generateBucketedConfigForUser(sdkKey: string, userStr: string): string  {
+    const config = _getConfigData(sdkKey)
     const user = DVCPopulatedUser.fromJSONString(userStr)
 
     const bucketedConfig = _generateBucketedConfig(config, user)
@@ -33,9 +33,9 @@ export function clearPlatformData(empty: string): void {
     _clearPlatformData()
 }
 
-export function setConfigData(token: string, configDataStr: string): void {
+export function setConfigData(sdkKey: string, configDataStr: string): void {
     const configData = new ConfigBody(configDataStr)
-    _setConfigData(token, configData)
+    _setConfigData(sdkKey, configData)
 }
 
 export * from './managers/eventQueueManager'

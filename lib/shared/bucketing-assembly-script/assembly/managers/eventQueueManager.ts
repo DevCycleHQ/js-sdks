@@ -16,42 +16,45 @@ import { jsonArrFromValueArray } from '../helpers/jsonHelpers'
  */
 const _eventQueueMap = new Map<string, EventQueue>()
 
-function getEventQueue(envKey: string): EventQueue {
-    if (!_eventQueueMap.has(envKey)) {
-        throw new Error(`No Event Queue found for envKey: ${envKey}`)
+function getEventQueue(sdkKey: string): EventQueue {
+    if (!_eventQueueMap.has(sdkKey)) {
+        throw new Error(`No Event Queue found for sdkKey: ${sdkKey}`)
     }
-    return _eventQueueMap.get(envKey)
+    return _eventQueueMap.get(sdkKey)
 }
 
 const _requestPayloadMap = new Map<string, RequestPayloadManager>()
 
-function getRequestPayloadManager(envKey: string): RequestPayloadManager {
-    if (!_requestPayloadMap.has(envKey)) {
-        throw new Error(`No Request Payload Manager found for envKey: ${envKey}`)
+function getRequestPayloadManager(sdkKey: string): RequestPayloadManager {
+    if (!_requestPayloadMap.has(sdkKey)) {
+        throw new Error(`No Request Payload Manager found for sdkKey: ${sdkKey}`)
     }
-    return _requestPayloadMap.get(envKey)
+    return _requestPayloadMap.get(sdkKey)
 }
 
 /**
  * This should be called from the Native code where the existing EventQueue Class is setup.
- * This creates the WASM EventQueue class and stores it in a map by env envKey,
- * this is needed because our SDKs support creating multiple DVCClient objects by token.
+ * This creates the WASM EventQueue class and stores it in a map by env sdkKey,
+ * this is needed because our SDKs support creating multiple DVCClient objects by sdkKey.
  */
-export function initEventQueue(envKey: string, optionsStr: string): void {
-    if (!envKey) {
-        throw new Error('Missing envKey to initialize Event Queue')
+export function initEventQueue(sdkKey: string, optionsStr: string): void {
+    if (!sdkKey) {
+        throw new Error('Missing sdkKey to initialize Event Queue')
     }
-    if (_eventQueueMap.has(envKey) || _requestPayloadMap.has(envKey)) {
-        throw new Error(`Event Queue already exists for envKey: ${envKey}`)
+    if (_eventQueueMap.has(sdkKey) || _requestPayloadMap.has(sdkKey)) {
+        throw new Error(
+            `Event Queue already exists for sdkKey: ${sdkKey}, ` +
+            'you can only initialize the DevCycle SDK once per sdkKey'
+        )
     }
 
     const options = new EventQueueOptions(optionsStr)
 
-    const queue = new EventQueue(envKey, options)
-    _eventQueueMap.set(envKey, queue)
+    const queue = new EventQueue(sdkKey, options)
+    _eventQueueMap.set(sdkKey, queue)
 
     const requestPayloadManager = new RequestPayloadManager(options)
-    _requestPayloadMap.set(envKey, requestPayloadManager)
+    _requestPayloadMap.set(sdkKey, requestPayloadManager)
 }
 
 /**
@@ -75,9 +78,9 @@ export function initEventQueue(envKey: string, optionsStr: string): void {
  * If there are payloads that are still marked as `inProgress` when `flush()` is called, it should return an
  * exception to the native code.
  */
-export function flushEventQueue(envKey: string): string {
-    const eventQueue = getEventQueue(envKey)
-    const requestPayloadManager = getRequestPayloadManager(envKey)
+export function flushEventQueue(sdkKey: string): string {
+    const eventQueue = getEventQueue(sdkKey)
+    const requestPayloadManager = getRequestPayloadManager(sdkKey)
 
     const eventQueues = eventQueue.flushAndResetEventQueue()
     const payloads = requestPayloadManager.constructFlushPayloads(
@@ -87,35 +90,27 @@ export function flushEventQueue(envKey: string): string {
     return jsonArrFromValueArray(payloads).stringify()
 }
 
-export function onPayloadSuccess(envKey: string, payloadId: string): void {
-    const requestPayloadManager = getRequestPayloadManager(envKey)
+export function onPayloadSuccess(sdkKey: string, payloadId: string): void {
+    const requestPayloadManager = getRequestPayloadManager(sdkKey)
     requestPayloadManager.markPayloadSuccess(payloadId)
 }
 
-export function onPayloadFailure(envKey: string, payloadId: string, retryable: boolean): void {
-    const requestPayloadManager = getRequestPayloadManager(envKey)
+export function onPayloadFailure(sdkKey: string, payloadId: string, retryable: boolean): void {
+    const requestPayloadManager = getRequestPayloadManager(sdkKey)
     requestPayloadManager.markPayloadFailure(payloadId, retryable)
 }
 
-export function queueEvent(
-    envKey: string,
-    userStr: string,
-    eventStr: string
-): void {
-    const eventQueue = getEventQueue(envKey)
+export function queueEvent(sdkKey: string, userStr: string, eventStr: string): void {
+    const eventQueue = getEventQueue(sdkKey)
     const dvcUser = DVCPopulatedUser.fromJSONString(userStr)
     const event = DVCEvent.fromJSONString(eventStr)
 
-    const bucketedConfig = _generateBucketedConfig(_getConfigData(envKey), dvcUser)
+    const bucketedConfig = _generateBucketedConfig(_getConfigData(sdkKey), dvcUser)
     eventQueue.queueEvent(dvcUser, event, bucketedConfig.featureVariationMap)
 }
 
-export function queueAggregateEvent(
-    envKey: string,
-    eventStr: string,
-    variableVariationMapStr: string
-): void {
-    const eventQueue = getEventQueue(envKey)
+export function queueAggregateEvent(sdkKey: string, eventStr: string, variableVariationMapStr: string): void {
+    const eventQueue = getEventQueue(sdkKey)
     const event = DVCEvent.fromJSONString(eventStr)
 
     const variableVariationMapJSON = JSON.parse(variableVariationMapStr)
@@ -128,17 +123,17 @@ export function queueAggregateEvent(
     eventQueue.queueAggregateEvent(event, variableVariationMap, aggByVariation)
 }
 
-export function cleanupEventQueue(envKey: string): void {
-    if (_eventQueueMap.has(envKey)) {
-        _eventQueueMap.delete(envKey)
+export function cleanupEventQueue(sdkKey: string): void {
+    if (_eventQueueMap.has(sdkKey)) {
+        _eventQueueMap.delete(sdkKey)
     }
-    if (_requestPayloadMap.has(envKey)) {
-        _requestPayloadMap.delete(envKey)
+    if (_requestPayloadMap.has(sdkKey)) {
+        _requestPayloadMap.delete(sdkKey)
     }
 }
 
-export function eventQueueSize(envKey: string): i32 {
-    const eventQueue = getEventQueue(envKey)
-    const requestPayloadManager = getRequestPayloadManager(envKey)
+export function eventQueueSize(sdkKey: string): i32 {
+    const eventQueue = getEventQueue(sdkKey)
+    const requestPayloadManager = getRequestPayloadManager(sdkKey)
     return eventQueue.eventQueueCount + requestPayloadManager.payloadEventCount()
 }
