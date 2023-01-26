@@ -38,7 +38,7 @@ async function startDVC() {
     const user = {
         user_id: 'node_sdk_test',
         country: 'CA'
-    }
+    }g
 
     const partyTime = dvcClient.variable(user, 'elliot-test', false)
     if (partyTime.value) {

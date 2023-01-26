@@ -1,4 +1,4 @@
-import { ConfigBody, DVCLogger } from '@devcycle/types'
+import { DVCLogger } from '@devcycle/types'
 import { DVCOptions } from './types'
 import { getEnvironmentConfig, ResponseError } from './request'
 import { getBucketingLib } from './bucketing'
@@ -10,7 +10,7 @@ type ConfigPollingOptions = DVCOptions & {
 
 export class EnvironmentConfigManager {
     private readonly logger: DVCLogger
-    private readonly environmentKey: string
+    private readonly sdkKey: string
     private hasConfig = false
     configEtag?: string
     private readonly pollingIntervalMS: number
@@ -22,7 +22,7 @@ export class EnvironmentConfigManager {
 
     constructor(
         logger: DVCLogger,
-        environmentKey: string,
+        sdkKey: string,
         {
             configPollingIntervalMS = 10000,
             configPollingTimeoutMS = 5000,
@@ -31,7 +31,7 @@ export class EnvironmentConfigManager {
         }: ConfigPollingOptions
     ) {
         this.logger = logger
-        this.environmentKey = environmentKey
+        this.sdkKey = sdkKey
         this.pollingIntervalMS = configPollingIntervalMS >= 1000
             ? configPollingIntervalMS
             : 1000
@@ -66,7 +66,7 @@ export class EnvironmentConfigManager {
     }
 
     getConfigURL(): string {
-        return `${this.cdnURI}/config/v1/server/${this.environmentKey}.json`
+        return `${this.cdnURI}/config/v1/server/${this.sdkKey}.json`
     }
 
     async _fetchConfig(): Promise<void> {
@@ -103,7 +103,7 @@ export class EnvironmentConfigManager {
             return
         } else if (res?.status === 200 && projectConfig) {
             try {
-                getBucketingLib().setConfigData(this.environmentKey, projectConfig)
+                getBucketingLib().setConfigData(this.sdkKey, projectConfig)
                 this.hasConfig = true
                 this.configEtag = res?.headers.get('etag') || ''
                 return
@@ -117,7 +117,7 @@ export class EnvironmentConfigManager {
             this.logger.debug(`Failed to download config, using cached version. url: ${url}.`)
         } else if (responseError?.status === 403) {
             this.stopPolling()
-            throw new UserError(`Invalid SDK key provided: ${this.environmentKey}`)
+            throw new UserError(`Invalid SDK key provided: ${this.sdkKey}`)
         } else {
             throw new Error('Failed to download DevCycle config.')
         }

@@ -64,17 +64,17 @@ const handleResponse = async (res: Response) => {
 
 export async function publishEvents(
     logger: DVCLogger,
-    envKey: string | null,
+    sdkKey: string | null,
     eventsBatch: SDKEventBatchRequestBody,
     eventsBaseURLOverride?: string
 ): Promise<Response> {
-    if (!envKey) {
+    if (!sdkKey) {
         throw new Error('DevCycle is not yet initialized to publish events.')
     }
     const url = eventsBaseURLOverride ? `${eventsBaseURLOverride}${EVENTS_PATH}` : `${EVENT_URL}${HOST}${EVENTS_PATH}`
     return await post(url, {
         body: JSON.stringify({ batch: eventsBatch })
-    }, envKey)
+    }, sdkKey)
 }
 
 export async function getEnvironmentConfig(
@@ -92,7 +92,7 @@ export async function getEnvironmentConfig(
 
 export async function getAllFeatures(
     user: DVCPopulatedUser,
-    envKey: string,
+    sdkKey: string,
     options: DVCOptions
 ): Promise<Response> {
     const baseUrl = `${options.bucketingAPIURI || BUCKETING_URL}${FEATURES_PATH}`
@@ -100,12 +100,12 @@ export async function getAllFeatures(
     return await post(postUrl, {
         body: JSON.stringify(user),
         retries: 5
-    }, envKey)
+    }, sdkKey)
 }
 
 export async function getAllVariables(
     user: DVCPopulatedUser,
-    envKey: string,
+    sdkKey: string,
     options: DVCOptions
 ): Promise<Response> {
     const baseUrl = `${options.bucketingAPIURI || BUCKETING_URL}${VARIABLES_PATH}`
@@ -114,12 +114,12 @@ export async function getAllVariables(
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user),
         retries: 5
-    }, envKey)
+    }, sdkKey)
 }
 
 export async function getVariable(
     user: DVCPopulatedUser,
-    envKey: string,
+    sdkKey: string,
     variableKey: string,
     options: DVCOptions
 ): Promise<Response> {
@@ -128,13 +128,13 @@ export async function getVariable(
     return await post(postUrl, {
         body: JSON.stringify(user),
         retries: 5
-    }, envKey)
+    }, sdkKey)
 }
 
 export async function postTrack(
     user: DVCPopulatedUser,
     event: DVCEvent,
-    envKey: string,
+    sdkKey: string,
     options: DVCOptions
 ): Promise<void> {
     const baseUrl = `${options.bucketingAPIURI || BUCKETING_URL}${TRACK_PATH}`
@@ -145,16 +145,16 @@ export async function postTrack(
             events: [event]
         }),
         retries: 5
-    }, envKey)
+    }, sdkKey)
 }
 
 export async function post(
     url: string,
     requestConfig: RequestInit | RequestInitWithRetry,
-    envKey: string
+    sdkKey: string
 ): Promise<Response> {
     const [_fetch, config] = await getFetchAndConfig(requestConfig)
-    const postHeaders = { ...config.headers, 'Authorization': envKey, 'Content-Type': 'application/json' }
+    const postHeaders = { ...config.headers, 'Authorization': sdkKey, 'Content-Type': 'application/json' }
     const res = await _fetch(url, {
         ...config,
         headers: postHeaders,

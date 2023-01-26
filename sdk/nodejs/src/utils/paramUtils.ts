@@ -36,6 +36,6 @@ export function checkParamString(name: string, param: unknown): string {
     return param as string
 }
 
-export function isValidServerEnvKey(envKey: string): boolean {
-    return envKey?.startsWith('server') || envKey?.startsWith('dvc_server')
+export function isValidServerSDKKey(sdkKey: string): boolean {
+    return sdkKey?.startsWith('server') || sdkKey?.startsWith('dvc_server')
 }

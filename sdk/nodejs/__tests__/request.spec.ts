@@ -15,7 +15,7 @@ describe('request.ts Unit Tests', () => {
     })
 
     describe('publishEvents', () => {
-        it('should throw errors for missing envKey / config', async () => {
+        it('should throw errors for missing sdkKey / config', async () => {
             await expect(() => publishEvents(logger, null, []))
                 .rejects.toThrow('DevCycle is not yet initialized to publish events.')
         })
