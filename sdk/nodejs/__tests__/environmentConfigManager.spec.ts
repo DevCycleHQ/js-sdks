@@ -143,10 +143,18 @@ describe('EnvironmentConfigManager Unit Tests', () => {
     })
 
     it('should start interval if initial config fails', async () => {
+        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 500 }))
+
+        const envConfig = new EnvironmentConfigManager(logger, 'envKey', {})
+        await expect(envConfig.fetchConfigPromise).rejects.toThrow()
+        expect(setInterval_mock).toHaveBeenCalledTimes(1)
+    })
+
+    it('should not start interval if initial config fails with 403', async () => {
         getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 403 }))
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {})
         await expect(envConfig.fetchConfigPromise).rejects.toThrow('Invalid SDK key provided:')
-        expect(setInterval_mock).toHaveBeenCalledTimes(1)
+        expect(setInterval_mock).toHaveBeenCalledTimes(0)
     })
 })
