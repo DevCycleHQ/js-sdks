@@ -198,6 +198,7 @@ export class DVCClient {
 
     async close(): Promise<void> {
         await this.onInitialized
+        await this.flushEvents()
         this.configHelper.cleanup()
         this.eventQueue.cleanup()
     }
