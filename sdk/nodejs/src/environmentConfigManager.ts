@@ -1,6 +1,6 @@
 import { ConfigBody, DVCLogger } from '@devcycle/types'
 import { DVCOptions } from './types'
-import { getEnvironmentConfig } from './request'
+import { getEnvironmentConfig, ResponseError } from './request'
 import { getBucketingLib } from './bucketing'
 
 type ConfigPollingOptions = DVCOptions & {
@@ -72,6 +72,7 @@ export class EnvironmentConfigManager {
         const url = this.getConfigURL()
         let res: Response | null
         let projectConfig: string | null = null
+        let responseError: ResponseError | null = null
 
         const logError = (error: any) => {
             const errMsg = `Request to get config failed for url: ${url}, ` +
@@ -91,6 +92,9 @@ export class EnvironmentConfigManager {
         } catch (ex) {
             logError(ex)
             res = null
+            if (ex instanceof ResponseError) {
+                responseError = ex
+            }
         }
 
         if (res?.status === 304) {
@@ -103,14 +107,14 @@ export class EnvironmentConfigManager {
                 this.configEtag = res?.headers.get('etag') || ''
                 return
             } catch (e) {
-                logError(new Error('Invalid JSON'))
+                logError(new Error('Invalid config JSON.'))
                 res = null
             }
         }
 
         if (this.hasConfig) {
             this.logger.debug(`Failed to download config, using cached version. url: ${url}.`)
-        } else if (res?.status === 403) {
+        } else if (responseError?.status === 403) {
             this.stopPolling()
             throw new Error(`Invalid SDK key provided: ${this.environmentKey}`)
         } else {

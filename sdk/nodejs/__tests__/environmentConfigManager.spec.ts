@@ -4,7 +4,7 @@ jest.spyOn(global, 'setInterval')
 jest.mock('../src/bucketing')
 
 import { EnvironmentConfigManager } from '../src/environmentConfigManager'
-import { getEnvironmentConfig } from '../src/request'
+import { getEnvironmentConfig, ResponseError } from '../src/request'
 import { importBucketingLib, getBucketingLib } from '../src/bucketing'
 import { mocked } from 'jest-mock'
 import { dvcDefaultLogger } from '../src/utils/logger'
@@ -24,6 +24,11 @@ describe('EnvironmentConfigManager Unit Tests', () => {
     })
 
     function mockFetchResponse(obj: any): Response {
+        if (obj.status >= 400) {
+            const error = new ResponseError('')
+            error.status = obj.status
+            throw error
+        }
         return new Response('{}', {
             status: 200,
             statusText: '',
@@ -114,6 +119,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
 
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {})
         expect(envConfig.fetchConfigPromise).rejects.toThrow('Invalid SDK key provided:')
+        expect(setInterval_mock).toHaveBeenCalledTimes(0)
     })
 
     it('should throw error fetching config throws', () => {
@@ -148,13 +154,5 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         const envConfig = new EnvironmentConfigManager(logger, 'envKey', {})
         await expect(envConfig.fetchConfigPromise).rejects.toThrow()
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
-    })
-
-    it('should not start interval if initial config fails with 403', async () => {
-        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 403 }))
-
-        const envConfig = new EnvironmentConfigManager(logger, 'envKey', {})
-        await expect(envConfig.fetchConfigPromise).rejects.toThrow('Invalid SDK key provided:')
-        expect(setInterval_mock).toHaveBeenCalledTimes(0)
     })
 })
