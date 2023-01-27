@@ -26,7 +26,9 @@ export class ResponseError extends Error {
 const exponentialBackoff: RequestInitWithRetry['retryDelay'] = (
     attempt
 ) => {
-    return Math.pow(2, attempt) * 1000
+    const delay = Math.pow(2, attempt) * 100
+    const randomSum = delay * 0.2 * Math.random()
+    return delay + randomSum
 }
 
 type retryOnRequestErrorFunc = (retries: number) => RequestInitWithRetry['retryOn']
