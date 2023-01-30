@@ -2,6 +2,7 @@ import { ConfigBody, DVCLogger } from '@devcycle/types'
 import { DVCOptions } from './types'
 import { getEnvironmentConfig, ResponseError } from './request'
 import { getBucketingLib } from './bucketing'
+import { UserError } from './utils/userError'
 
 type ConfigPollingOptions = DVCOptions & {
     cdnURI?: string
@@ -116,7 +117,7 @@ export class EnvironmentConfigManager {
             this.logger.debug(`Failed to download config, using cached version. url: ${url}.`)
         } else if (responseError?.status === 403) {
             this.stopPolling()
-            throw new Error(`Invalid SDK key provided: ${this.environmentKey}`)
+            throw new UserError(`Invalid SDK key provided: ${this.environmentKey}`)
         } else {
             throw new Error('Failed to download DevCycle config.')
         }

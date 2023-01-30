@@ -17,6 +17,7 @@ import { importBucketingLib, getBucketingLib } from './bucketing'
 import { DVCLogger, getVariableTypeFromValue, VariableTypeAlias } from '@devcycle/types'
 import os from 'os'
 import { DVCUser } from './models/user'
+import { UserError } from './utils/userError'
 
 interface IPlatformData {
     platform: string
@@ -50,6 +51,9 @@ export class DVCClient {
         }
 
         const initializePromise = importBucketingLib({ options, logger: this.logger })
+            .catch((bucketingErr) => {
+                throw new UserError(bucketingErr)
+            })
             .then(() => {
                 this.configHelper = new EnvironmentConfigManager(this.logger, environmentKey, options || {})
                 this.eventQueue = new EventQueue(
@@ -81,6 +85,9 @@ export class DVCClient {
             })
             .catch((err) => {
                 this.logger.error(`Error initializing DevCycle: ${err}`)
+                if (err instanceof UserError) {
+                    throw err
+                }
                 return this
             })
 
