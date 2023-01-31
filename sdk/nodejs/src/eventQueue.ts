@@ -49,6 +49,7 @@ export class EventQueue {
     maxEventQueueSize: number
     private flushInterval: NodeJS.Timer
     private flushInProgress = false
+    private flushCallbacks: Array<(arg: unknown) => void> = []
 
     constructor(sdkKey: string, options: EventQueueOptions) {
         this.logger = options.logger
@@ -91,6 +92,12 @@ export class EventQueue {
      * Flush events in queue to DevCycle Events API. Requeue events if flush fails
      */
     async flushEvents(): Promise<void> {
+        if (this.flushInProgress) {
+            await new Promise((resolve) => { this.flushCallbacks.push(resolve) })
+            return
+        }
+        const currentFlushCallbacks = this.flushCallbacks.splice(0, this.flushCallbacks.length)
+
         const metricTags = {
             envKey: this.sdkKey,
             sdkKey: this.sdkKey
@@ -117,7 +124,12 @@ export class EventQueue {
         const flushPayloads = JSON.parse(flushPayloadsStr) as FlushPayload[]
         const endTimeJson = Date.now()
         this.reporter?.reportMetric('jsonParseDuration', endTimeJson - startTimeJson, metricTags)
-        if (flushPayloads.length === 0) return
+        if (flushPayloads.length === 0) {
+            if (currentFlushCallbacks.length > 0) {
+                currentFlushCallbacks.forEach((cb) => cb(null))
+            }
+            return
+        }
 
         const reducer = (val: number, batches: FlushPayload) => val + batches.eventCount
         const eventCount = flushPayloads.reduce(reducer, 0)
@@ -158,6 +170,11 @@ export class EventQueue {
 
         this.reporter?.reportMetric('flushRequestDuration', endTimeRequests - startTimeRequests, metricTags)
         this.reporter?.reportFlushResults(results, metricTags)
+
+        currentFlushCallbacks.forEach((cb) => cb(null))
+        if (this.flushCallbacks.length > 0) {
+            this.flushEvents()
+        }
     }
 
     /**
@@ -196,10 +213,7 @@ export class EventQueue {
     private checkEventQueueSize(): boolean {
         const queueSize = getBucketingLib().eventQueueSize(this.sdkKey)
         if (queueSize >= this.flushEventQueueSize) {
-            if (!this.flushInProgress) {
-                this.flushEvents()
-            }
-
+            this.flushEvents()
             if (queueSize >= this.maxEventQueueSize) {
                 return true
             }
