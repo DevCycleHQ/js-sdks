@@ -57,9 +57,9 @@ export enum SemverFilterComparator {
 export enum FilterType {
     all = 'all',
     user = 'user',
-    optIn = 'optIn'
+    optIn = 'optIn',
+    audienceMatch = 'audienceMatch',
     // TODO: Implement later
-    // audienceTemplate = 'audienceTemplate',
     // listAudience = 'listAudience'
 }
 
