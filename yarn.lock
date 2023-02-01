@@ -2954,15 +2954,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@devcycle/bucketing-assembly-script@^1.1.26, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
+"@devcycle/bucketing-assembly-script@^1.1.27, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script"
   dependencies:
-    "@devcycle/bucketing-test-data": ^1.0.44
+    "@devcycle/bucketing-test-data": ^1.0.45
   languageName: unknown
   linkType: soft
 
-"@devcycle/bucketing-test-data@^1.0.44, @devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data":
+"@devcycle/bucketing-test-data@^1.0.45, @devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data"
   languageName: unknown
@@ -2972,7 +2972,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing@workspace:lib/shared/bucketing"
   dependencies:
-    "@devcycle/bucketing-test-data": ^1.0.44
+    "@devcycle/bucketing-test-data": ^1.0.45
   languageName: unknown
   linkType: soft
 
@@ -3008,8 +3008,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
-    "@devcycle/bucketing-assembly-script": ^1.1.26
-    "@devcycle/bucketing-test-data": ^1.0.44
+    "@devcycle/bucketing-assembly-script": ^1.1.27
+    "@devcycle/bucketing-test-data": ^1.0.45
     assemblyscript-json: "*"
     assemblyscript-regex: "*"
   languageName: unknown
@@ -8202,7 +8202,7 @@ __metadata:
 "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json":
   version: 1.1.0
   resolution: "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json.git#commit=d2ce65ec18b305e1f3db8a4fe4394b417631b024"
-  checksum: 7485348b948af8a6c8dde91714d09dd1d966597a670fb3d4d484135a58151f17b71caaf423c0d2b46869cc9d06d0febb10e69064c849f501d1396f071369a82b
+  checksum: 045c8dc54cb8ee61d022c017e483f6c8729347a2e30167a4e3227b9d4d80293b032a8cff7fcaf83040b23eacc23bf62188ebb9f2091df85ef2ee21425f8957f7
   languageName: node
   linkType: hard
 
