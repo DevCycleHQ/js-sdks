@@ -132,7 +132,7 @@ export class ConfigBody {
         const json: JSON.Obj = new JSON.Obj()
         json.set('project', this.project)
         json.set('environment', this.environment)
-        json.set('audiences', this.audiences)
+        json.set('audiences', jsonObjFromMap(this.audiences))
         json.set('features', jsonArrFromValueArray(this.features))
         json.set('variables', jsonArrFromValueArray(this.variables))
         json.set('variableHashes', jsonObjFromMap(this.variableHashes))

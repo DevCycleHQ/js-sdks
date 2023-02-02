@@ -9,7 +9,8 @@ import {
     DVCUser,
     Rollout as PublicRollout,
     Target as PublicTarget,
-    TopLevelOperator, UserFilter
+    TopLevelOperator, UserFilter,
+    Audience
 } from './types'
 import {
     _checkCustomData,
@@ -55,15 +56,29 @@ export function checkCustomDataFromJSON(data: string | null, filterStr: string):
 
 export function evaluateOperatorFromJSON(
     operatorStr: string,
-    userStr: string
+    userStr: string,
+    audiencesStr: string | null = ''
 ): bool {
     const operatorJSON = JSON.parse(operatorStr)
     if (!operatorJSON.isObj) {
         throw new Error('evaluateOperatorFromJSON operatorStr or userStr param not a JSON Object')
     }
+    const audiences = new Map<string, Audience>()
+    if (audiencesStr !== '' && audiencesStr !== '{}') {
+        const audiencesJSON = JSON.parse(audiencesStr) as JSON.Obj
+        if (!audiencesJSON.isObj) {
+            throw new Error('evaluateOperatorFromJSON operatorStr or userStr param not a JSON Object')
+        }
+        const keys = audiencesJSON.keys
+        for (let i = 0; i < keys.length; i++) {
+            const aud = audiencesJSON.get(keys[i]) as JSON.Obj
+            audiences.set(keys[i], new Audience(aud))
+        }
+    }
+
     const operator = new TopLevelOperator(operatorJSON as JSON.Obj)
     const user = DVCPopulatedUser.fromJSONString(userStr)
-    return _evaluateOperator(operator, user)
+    return _evaluateOperator(operator, user, audiences)
 }
 
 export function decideTargetVariationFromJSON(targetStr: string, boundedHash: f64): string {

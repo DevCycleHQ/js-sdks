@@ -8,6 +8,7 @@ import {
     validSubTypes,
     CustomDataFilter,
     UserFilter,
+    Audience, AudienceMatchFilter
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { getF64FromJSONValue } from '../helpers/jsonHelpers'
@@ -18,10 +19,12 @@ import { getF64FromJSONValue } from '../helpers/jsonHelpers'
  * Returns true if the user's data allows them through the segmentation
  * @param operator - The set of filters to evaluate, and the boolean operator to follow (AND, OR, XOR)
  * @param user - The incoming user, device, and user agent data
+ * @param audiences - a map of audience_id to audience, used for audienceMatch filters
  */
 export function _evaluateOperator(
     operator: TopLevelOperator,
-    user: DVCPopulatedUser
+    user: DVCPopulatedUser,
+    audiences: Map<string, Audience>
 ): bool {
     if (!operator.filters.length) return false
 
@@ -29,7 +32,7 @@ export function _evaluateOperator(
         // Replace Array.some() logic
         for (let i = 0; i < operator.filters.length; i++) {
             const filter = operator.filters[i]
-            if (doesUserPassFilter(filter, user)) {
+            if (doesUserPassFilter(filter, user, audiences)) {
                 return true
             }
         }
@@ -38,7 +41,7 @@ export function _evaluateOperator(
         // Replace Array.every() logic
         for (let i = 0; i < operator.filters.length; i++) {
             const filter = operator.filters[i]
-            if (!doesUserPassFilter(filter, user)) {
+            if (!doesUserPassFilter(filter, user, audiences)) {
                 return false
             }
         }
@@ -48,11 +51,15 @@ export function _evaluateOperator(
 
 function doesUserPassFilter(
     filter: AudienceFilterOrOperator,
-    user: DVCPopulatedUser
+    user: DVCPopulatedUser,
+    audiences: Map<string, Audience>
 ): bool {
     if (filter.type === 'all') return true
-    if (filter.type === 'optIn') return false
-    if (!(filter instanceof UserFilter)) {
+    else if (filter.type === 'optIn') return false
+    else if (filter.type === 'audienceMatch') {
+        return filterForAudienceMatch(filter as AudienceMatchFilter, user, audiences)
+    }
+    else if (!(filter instanceof UserFilter)) {
         console.log(`
             [DevCycle] Warning: Invalid filter data ${filter}.
             To leverage this new filter definition, please update to the latest version of the DevCycle SDK.
@@ -74,6 +81,24 @@ function doesUserPassFilter(
     return filterFunctionsBySubtype(subType, user, userFilter)
 }
 
+function filterForAudienceMatch(
+    filter: AudienceMatchFilter,
+    user: DVCPopulatedUser,
+    configAudiences: Map<string, Audience>
+): bool {
+    const audiences = getFilterAudiencesAsStrings(filter)
+    const comparator = filter.comparator
+    // Recursively evaluate every audience in the _audiences array
+    for (let i = 0; i < audiences.length; i++) {
+        const audience = configAudiences.get(audiences[i])
+        if (_evaluateOperator(audience.filters, user, configAudiences)) {
+            // If the user is in any of the audiences return early.
+            return comparator === '='
+        }
+    }
+    // The user is not in any of the audiences.
+    return comparator === '!='
+}
 function filterFunctionsBySubtype(subType: string, user: DVCPopulatedUser, filter: UserFilter): bool {
     if (subType === 'country') {
         return _checkStringsFilter(user.country, filter)
@@ -312,6 +337,29 @@ export function _checkCustomData(data: JSON.Obj | null, filter: CustomDataFilter
     } else {
         return false
     }
+}
+
+export function getFilterAudiences(filter: AudienceMatchFilter): JSON.Value[] {
+    const _audiences = filter._audiences
+
+    return _audiences.valueOf().reduce((accumulator, audience) => {
+        if (audience !== null) {
+            accumulator.push(audience)
+        }
+        return accumulator
+    }, [] as JSON.Value[])
+}
+
+export function getFilterAudiencesAsStrings(filter: AudienceMatchFilter): string[] {
+    const jsonAudiences = getFilterAudiences(filter)
+
+    return jsonAudiences.reduce((accumulator, audience) => {
+        const str = audience.isString ? audience as JSON.Str : null
+        if (str) {
+            accumulator.push(str.valueOf())
+        }
+        return accumulator
+    }, [] as string[])
 }
 
 export function getFilterValues(filter: UserFilter): JSON.Value[] {

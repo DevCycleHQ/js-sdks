@@ -111,6 +111,28 @@ export const audiences: PublicAudience[] = [
             }],
             operator: AudienceOperator.and
         }
+    },
+    {
+        _id: '614ef6ea475929459060721a',
+        filters: {
+            filters: [{
+                type: FilterType.user,
+                subType: UserSubType.email,
+                comparator: FilterComparator['='],
+                values: ['AFHGFDSFGHFHGAFGHHFAGHGFHGF']
+            }],
+            operator: AudienceOperator.and
+        }
+    }, {
+        _id: '6153557f1ed7bac7268ea074',
+        filters: {
+            filters: [{
+                type: FilterType.audienceMatch,
+                comparator: FilterComparator['='],
+                _audiences: ['614ef6ea475929459060721a']
+            }],
+            operator: AudienceOperator.and
+        }
     }
 ]
 
@@ -248,7 +270,12 @@ export const variableHashes: ConfigBody['variableHashes'] = {
 export const config: ConfigBody = {
     project,
     environment,
-    audiences: {},
+    audiences: {
+        [audiences[0]._id]: audiences[0],
+        [audiences[1]._id]: audiences[1],
+        [audiences[2]._id]: audiences[2],
+        [audiences[3]._id]: audiences[3]
+    },
     features: [
         {
             _id: '614ef6aa473928459060721a',
@@ -323,7 +350,30 @@ export const config: ConfigBody = {
                 }]
             },
             variations: [variations[0], variations[1], variations[2], variations[3], variations[4]]
+        },
+        {
+            _id: '614ef6aa475928459060721c',
+            type: FeatureType.release,
+            key: 'feature3',
+            configuration: {
+                _id: '61536f62502d80fff97ed640',
+                targets: [{
+                    _id: '61536f468fd67f0091982531',
+                    _audience: audiences[4],
+                    distribution: [{
+                        _variation: variations[3]._id,
+                        percentage: 1
+                    },
+                        {
+                            _variation: variations[4]._id,
+                            percentage: 0
+                        }]
+                }]
+
+            },
+            variations: [variations[0], variations[1], variations[2], variations[3], variations[4]]
         }],
+
     variables,
     variableHashes
 }
