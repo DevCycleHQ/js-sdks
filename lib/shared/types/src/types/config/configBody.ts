@@ -40,6 +40,13 @@ export class ConfigBody<IdType = string> {
      */
      variables: Variable<IdType>[]
 
+    /**
+     * Map of audience id to audience document, used to populate the _audience field for audienceMatch filters
+     */
+    audiences: {
+        [id: string]: Audience
+    }
+
      /**
      * Map of `variable.key` to `hash(variable.key + environment.apiKey)`
      * of all known variable keys. This is used to generate the `knownVariableKeys`
