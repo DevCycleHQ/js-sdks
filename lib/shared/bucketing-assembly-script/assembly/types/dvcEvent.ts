@@ -153,6 +153,9 @@ export class UserEventsBatchRecord extends JSON.Value {
         public events: DVCRequestEvent[]
     ) {
         super()
+
+        // remove privateCustomData from user before sending events to server
+        this.user.privateCustomData = null
     }
 
     stringify(): string {
