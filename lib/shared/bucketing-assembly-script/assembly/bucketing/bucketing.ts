@@ -149,7 +149,7 @@ export function getSegmentedFeatureDataFromConfig(
         let segmentedFeatureTarget: Target | null = null
         for (let i = 0; i < feature.configuration.targets.length; i++) {
             const target = feature.configuration.targets[i]
-            if (_evaluateOperator(target._audience.filters, user)) {
+            if (_evaluateOperator(target._audience.filters, user, config.audiences)) {
                 segmentedFeatureTarget = target
                 break
             }
