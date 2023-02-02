@@ -40,10 +40,10 @@ export class ConfigBody<IdType = string> {
      */
      variables: Variable<IdType>[]
 
-    /**
+     /**
      * Map of audience id to audience document, used to populate the _audience field for audienceMatch filters
      */
-    audiences: {
+     audiences?: {
         [id: string]: Audience
     }
 
