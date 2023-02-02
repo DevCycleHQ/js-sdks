@@ -8,6 +8,7 @@ import {
     isValidString
 } from '../helpers/jsonHelpers'
 import { Feature,  } from './feature'
+import { Audience } from './target'
 
 export class PublicProject extends JSON.Value {
     _id: string
@@ -79,6 +80,7 @@ export class Variable extends JSON.Value {
 
 export class ConfigBody {
     project: PublicProject
+    audiences: Map<string, Audience>
     environment: PublicEnvironment
     features: Feature[]
     variables: Variable[]
@@ -97,7 +99,14 @@ export class ConfigBody {
         this.features = features.valueOf().map<Feature>((feature) => {
             return new Feature(feature as JSON.Obj)
         })
-
+        const audiences = getJSONObjFromJSON(configJSONObj, 'audiences')
+        this.audiences = new Map<string, Audience>()
+        const audienceKeys = audiences.keys
+        for (let i=0; i < audienceKeys.length; i++) {
+            const audience_id = audienceKeys[i]
+            const aud = audiences.get(audience_id)
+            this.audiences.set(audience_id, new Audience(aud as JSON.Obj))
+        }
         const variables = getJSONArrayFromJSON(configJSONObj, 'variables')
         this.variables = variables.valueOf().map<Variable>((variable) => {
             return new Variable(variable as JSON.Obj)
@@ -119,6 +128,7 @@ export class ConfigBody {
         const json: JSON.Obj = new JSON.Obj()
         json.set('project', this.project)
         json.set('environment', this.environment)
+        json.set('audiences', this.audiences)
         json.set('features', jsonArrFromValueArray(this.features))
         json.set('variables', jsonArrFromValueArray(this.variables))
         json.set('variableHashes', jsonObjFromMap(this.variableHashes))

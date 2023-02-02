@@ -105,7 +105,7 @@ export enum AudienceOperator {
 /**
  * Audience filter used to describe a segmentation for a user audience.
  */
-export class AudienceFilterOrOperator {
+export class AudienceFilterOrOperator<idType = string> {
     /**
      * Filter type of this audience filter (user, audienceTemplate etc.)
      */
@@ -140,6 +140,11 @@ export class AudienceFilterOrOperator {
      * Operator type if this object represents an operator, and not a filter
      */
     operator?: AudienceOperator
+
+    /**
+     * Array of audience id's for filters of type audienceMatch
+     */
+    _audiences?: idType[]
 
     /**
      * Filters to apply using the "operator" operation if this is an operator object

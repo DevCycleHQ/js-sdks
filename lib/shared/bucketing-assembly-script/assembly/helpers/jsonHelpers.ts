@@ -38,7 +38,14 @@ export function getStringArrayFromJSON(jsonObj: JSON.Obj, key: string): string[]
     }
     return strings
 }
-
+export function getArrayFromJSONOptional(jsonObj: JSON.Obj, key: string): JSON.Arr | null {
+    const array = jsonObj.getArr(key)
+    if (array) {
+        return array
+    } else {
+        return null
+    }
+}
 export function getStringFromJSONOptional(jsonObj: JSON.Obj, key: string): string | null {
     const str = jsonObj.getString(key)
     if (!str) {
