@@ -1,6 +1,5 @@
 import { JSON } from 'assemblyscript-json/assembly'
 import {
-    getArrayFromJSONOptional,
     getDateFromJSON,
     getF64FromJSONObj, getF64FromJSONOptional,
     getJSONArrayFromJSON,
@@ -86,7 +85,7 @@ export class TopLevelOperator extends JSON.Value {
     }
 }
 
-const validTypes = ['all', 'user', 'optIn', 'audienceMatch']
+const validTypes = ['all', 'user', 'optIn']
 
 export const validSubTypes = [
     'user_id', 'email', 'ip', 'country', 'platform',
@@ -97,7 +96,6 @@ const validComparators = [
     '=', '!=', '>', '>=', '<', '<=', 'exist', '!exist', 'contain', '!contain'
 ]
 
-const validAudienceMatchComparators = ['=', '!=']
 const validDataKeyTypes = [
     'String', 'Boolean', 'Number'
 ]
@@ -111,7 +109,6 @@ export class AudienceFilterOrOperator extends JSON.Value {
     dataKey: string | null
     dataKeyType: string | null
     values: JSON.Arr | null
-    _audiences: JSON.Arr | null
     operator: string | null
     filters: AudienceFilterOrOperator[] | null
 
@@ -127,9 +124,12 @@ export class AudienceFilterOrOperator extends JSON.Value {
 
         this.dataKeyType = isValidStringOptional(filter, 'dataKeyType', validDataKeyTypes)
 
-        this.values = getArrayFromJSONOptional(filter, 'values')
-
-        this._audiences = getArrayFromJSONOptional(filter, '_audiences')
+        const valuesArr = filter.getArr('values')
+        if (valuesArr) {
+            this.values = valuesArr
+        } else {
+            this.values = null
+        }
 
         this.operator = isValidStringOptional(filter, 'operator', validOperator)
 
@@ -160,9 +160,6 @@ export class AudienceFilterOrOperator extends JSON.Value {
         if (this.values) {
             json.set('values', this.values)
         }
-        if (this._audiences) {
-            json.set('_audiences', this._audiences)
-        }
         if (this.operator) {
             json.set('operator', this.operator)
         }
@@ -171,19 +168,6 @@ export class AudienceFilterOrOperator extends JSON.Value {
         }
 
         return json.stringify()
-    }
-}
-
-export class AudienceMatchFilter extends AudienceFilterOrOperator {
-    type: string
-    comparator: string
-    _audiences: JSON.Arr
-
-    constructor(filter: JSON.Obj) {
-        super(filter)
-        this._audiences = getJSONArrayFromJSON(filter, '_audiences')
-        this.type = isValidString(filter, 'type', validTypes, false)
-        this.comparator = isValidString(filter, 'comparator', validAudienceMatchComparators)
     }
 }
 
@@ -219,8 +203,6 @@ function initializeFilterClass(filter: JSON.Obj): AudienceFilterOrOperator {
             return new CustomDataFilter(filter)
         }
         return new UserFilter(filter)
-    } else if (getStringFromJSONOptional(filter, 'type') === 'audienceMatch'){
-        return new AudienceMatchFilter(filter)
     } else {
         return new AudienceFilterOrOperator(filter)
     }

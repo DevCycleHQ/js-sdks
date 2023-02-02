@@ -248,7 +248,6 @@ export const variableHashes: ConfigBody['variableHashes'] = {
 export const config: ConfigBody = {
     project,
     environment,
-    audiences: {},
     features: [
         {
             _id: '614ef6aa473928459060721a',
@@ -331,7 +330,6 @@ export const config: ConfigBody = {
 export const barrenConfig: ConfigBody = {
     project,
     environment,
-    audiences: {},
     features: [
         {
             _id: '614ef6aa473928459060721a',
