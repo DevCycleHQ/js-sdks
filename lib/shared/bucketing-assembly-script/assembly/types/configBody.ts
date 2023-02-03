@@ -5,7 +5,7 @@ import {
     getJSONArrayFromJSON,
     jsonArrFromValueArray,
     jsonObjFromMap,
-    isValidString
+    isValidString, getJSONObjFromJSONOptional
 } from '../helpers/jsonHelpers'
 import { Feature,  } from './feature'
 import { Audience } from './target'
@@ -99,13 +99,17 @@ export class ConfigBody {
         this.features = features.valueOf().map<Feature>((feature) => {
             return new Feature(feature as JSON.Obj)
         })
-        const audiences = getJSONObjFromJSON(configJSONObj, 'audiences')
+        const audiences = getJSONObjFromJSONOptional(configJSONObj, 'audiences')
+
         this.audiences = new Map<string, Audience>()
-        const audienceKeys = audiences.keys
-        for (let i=0; i < audienceKeys.length; i++) {
-            const audience_id = audienceKeys[i]
-            const aud = audiences.get(audience_id)
-            this.audiences.set(audience_id, new Audience(aud as JSON.Obj))
+
+        if (audiences) {
+            const audienceKeys = audiences.keys
+            for (let i=0; i < audienceKeys.length; i++) {
+                const audience_id = audienceKeys[i]
+                const aud = audiences.get(audience_id)
+                this.audiences.set(audience_id, new Audience(aud as JSON.Obj))
+            }
         }
         const variables = getJSONArrayFromJSON(configJSONObj, 'variables')
         this.variables = variables.valueOf().map<Variable>((variable) => {
