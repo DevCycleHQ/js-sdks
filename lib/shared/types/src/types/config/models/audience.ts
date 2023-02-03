@@ -105,7 +105,7 @@ export enum AudienceOperator {
 /**
  * Audience filter used to describe a segmentation for a user audience.
  */
-export class AudienceFilterOrOperator<idType = string> {
+export class AudienceFilterOrOperator<IdType = string> {
     /**
      * Filter type of this audience filter (user, audienceTemplate etc.)
      */
@@ -144,7 +144,7 @@ export class AudienceFilterOrOperator<idType = string> {
     /**
      * Array of audience id's for filters of type audienceMatch
      */
-    _audiences?: idType[]
+    _audiences?: IdType[]
 
     /**
      * Filters to apply using the "operator" operation if this is an operator object
@@ -156,8 +156,8 @@ export class AudienceFilterOrOperator<idType = string> {
  * ** Initially only `and` operator will be supported **
  * Special filter used to establish a boolean operator. Can be used for top-level OR, etc.
  */
-export class TopLevelOperator {
-    filters: (AudienceFilterOrOperator)[]
+export class TopLevelOperator<IdType = string> {
+    filters: (AudienceFilterOrOperator<IdType>)[]
 
     operator: AudienceOperator
 }
@@ -174,5 +174,5 @@ export class Audience<IdType = string> {
     /**
      * Audience filters, describing logic for segmenting users
      */
-    filters: TopLevelOperator
+    filters: TopLevelOperator<IdType>
 }
