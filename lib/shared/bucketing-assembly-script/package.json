@@ -1,6 +1,6 @@
 {
   "name": "@devcycle/bucketing-assembly-script",
-  "version": "1.1.28",
+  "version": "1.1.29",
   "license": "MIT",
   "main": "index.js",
   "types": "index.d.ts",
@@ -11,6 +11,6 @@
     "README.md"
   ],
   "devDependencies": {
-    "@devcycle/bucketing-test-data": "^1.0.45"
+    "@devcycle/bucketing-test-data": "^1.0.46"
   }
 }
