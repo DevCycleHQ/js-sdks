@@ -98,7 +98,17 @@ describe('EventQueueManager Tests', () => {
     })
 
     describe('flushEventQueue', () => {
-        const dvcUser = { user_id: 'user_id' }
+        const dvcUser = {
+            user_id: 'user_id',
+            email: 'email@devcycle.com',
+            language: 'en',
+            country: 'us',
+            appVersion: '6.1.0',
+            appBuild: 188,
+            deviceModel: 'dvcServer',
+            customData: { custom: 'data' },
+            privateCustomData: { private: 'customData' }
+        }
 
         it('should flush queued events', () => {
             const envKey = 'env_key_flush_test'
@@ -142,6 +152,13 @@ describe('EventQueueManager Tests', () => {
                                 'sdkType': 'server',
                                 'sdkVersion': '1.0.0',
                                 'user_id': 'user_id',
+                                'email': 'email@devcycle.com',
+                                'language': 'en',
+                                'country': 'us',
+                                'appVersion': '6.1.0',
+                                'appBuild': 188,
+                                'deviceModel': 'dvcServer',
+                                'customData': { 'custom': 'data' }
                             }
                         },
                         {
@@ -194,8 +211,16 @@ describe('EventQueueManager Tests', () => {
                 'platformVersion': '16.0',
                 'sdkType': 'server',
                 'sdkVersion': '1.0.0',
-                'user_id': 'user_id'
+                'user_id': 'user_id',
+                'email': 'email@devcycle.com',
+                'language': 'en',
+                'country': 'us',
+                'appVersion': '6.1.0',
+                'appBuild': 188,
+                'deviceModel': 'dvcServer',
+                'customData': { 'custom': 'data' }
             })
+            expect(payloads[0].records[0].user.privateCustomData).not.toBeDefined()
 
             for (const payload of payloads) {
                 onPayloadSuccess(envKey, payload.payloadId)
@@ -310,7 +335,7 @@ describe('EventQueueManager Tests', () => {
             expect(nextFlush).toEqual([])
         })
 
-        it('should throw error if requeued payload hasn\'t finished sending', () => {
+        it('should throw error if re-queued payload hasn\'t finished sending', () => {
             const envKey = 'env_key_requeued_failed_test'
             const event = {
                 type: 'testType',
