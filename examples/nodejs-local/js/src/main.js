@@ -17,7 +17,7 @@ app.use(bodyParser.json())
 let dvcClient
 
 async function startDVC() {
-    dvcClient = await DVC.initialize('<DVC_SERVER_KEY>', { logLevel: 'info' }).onClientInitialized()
+    dvcClient = await DVC.initialize('<DVC_SERVER_SDK_KEY>', { logLevel: 'info' }).onClientInitialized()
     console.log('DVC Local Bucketing JS Client Initialized')
 
     const user = {

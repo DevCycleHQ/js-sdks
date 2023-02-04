@@ -32,7 +32,7 @@ function validateUserFromQueryParams(queryParams: Query): DVCClientAPIUser {
 }
 
 async function startDVC() {
-    dvcClient = await initialize('<DVC_SERVER_KEY>', { logLevel: 'info' }).onClientInitialized()
+    dvcClient = await initialize('<DVC_SERVER_SDK_KEY>', { logLevel: 'info' }).onClientInitialized()
     console.log('DVC Local Bucketing TypeScript Client Initialized')
 
     const user = {

@@ -17,7 +17,7 @@ app.use(bodyParser.json())
 let dvcClient
 
 async function startDVC() {
-    dvcClient = DVC.initialize('<DVC_SERVER_KEY>', { logLevel: 'info', enableCloudBucketing: true })
+    dvcClient = DVC.initialize('<DVC_SERVER_SDK_KEY>', { logLevel: 'info', enableCloudBucketing: true })
     console.log('DVC Cloud Bucketing JS Client Ready')
 
     const user = {

@@ -42,7 +42,7 @@ export type EventQueueOptions = {
 export class EventQueue {
     private readonly logger: DVCLogger
     private readonly reporter?: DVCReporter
-    private readonly environmentKey: string
+    private readonly sdkKey: string
     private readonly eventsAPIURI?: string
     eventFlushIntervalMS: number
     flushEventQueueSize: number
@@ -50,11 +50,11 @@ export class EventQueue {
     private flushInterval: NodeJS.Timer
     private flushInProgress = false
 
-    constructor(environmentKey: string, options: EventQueueOptions) {
+    constructor(sdkKey: string, options: EventQueueOptions) {
         this.logger = options.logger
         this.reporter = options.reporter
         this.eventsAPIURI = options.eventsAPIURI
-        this.environmentKey = environmentKey
+        this.sdkKey = sdkKey
         this.eventFlushIntervalMS = options?.eventFlushIntervalMS || 10 * 1000
         if (this.eventFlushIntervalMS < 500) {
             throw new Error(`eventFlushIntervalMS: ${this.eventFlushIntervalMS} must be larger than 500ms`)
@@ -80,7 +80,7 @@ export class EventQueue {
 
         this.flushInterval = setInterval(this.flushEvents.bind(this), this.eventFlushIntervalMS)
 
-        getBucketingLib().initEventQueue(environmentKey, JSON.stringify(options))
+        getBucketingLib().initEventQueue(sdkKey, JSON.stringify(options))
     }
 
     cleanup(): void {
@@ -92,13 +92,14 @@ export class EventQueue {
      */
     async flushEvents(): Promise<void> {
         const metricTags = {
-            envKey: this.environmentKey
+            envKey: this.sdkKey,
+            sdkKey: this.sdkKey
         }
-        this.reporter?.reportMetric('queueLength', getBucketingLib().eventQueueSize(this.environmentKey), metricTags)
+        this.reporter?.reportMetric('queueLength', getBucketingLib().eventQueueSize(this.sdkKey), metricTags)
 
         let flushPayloadsStr
         try {
-            flushPayloadsStr = getBucketingLib().flushEventQueue(this.environmentKey)
+            flushPayloadsStr = getBucketingLib().flushEventQueue(this.sdkKey)
             this.reporter?.reportMetric('flushPayloadSize', flushPayloadsStr?.length, metricTags)
         } catch (ex) {
             this.logger.error(`DVC Error Flushing Events: ${ex.message}`)
@@ -128,7 +129,7 @@ export class EventQueue {
             try {
                 const res = await publishEvents(
                     this.logger,
-                    this.environmentKey,
+                    this.sdkKey,
                     flushPayload.records,
                     this.eventsAPIURI
                 )
@@ -136,19 +137,19 @@ export class EventQueue {
                     this.logger.error(`Error publishing events, status: ${res.status}, body: ${await res.text()}`)
                     if (res.status >= 500) {
                         results.retries++
-                        getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, true)
+                        getBucketingLib().onPayloadFailure(this.sdkKey, flushPayload.payloadId, true)
                     } else {
                         results.failures++
-                        getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, false)
+                        getBucketingLib().onPayloadFailure(this.sdkKey, flushPayload.payloadId, false)
                     }
                 } else {
                     this.logger.debug(`DVC Flushed ${eventCount} Events, for ${flushPayload.records.length} Users`)
-                    getBucketingLib().onPayloadSuccess(this.environmentKey, flushPayload.payloadId)
+                    getBucketingLib().onPayloadSuccess(this.sdkKey, flushPayload.payloadId)
                     results.successes++
                 }
             } catch (ex) {
                 this.logger.error(`DVC Error Flushing Events response message: ${ex.message}`)
-                getBucketingLib().onPayloadFailure(this.environmentKey, flushPayload.payloadId, true)
+                getBucketingLib().onPayloadFailure(this.sdkKey, flushPayload.payloadId, true)
                 results.retries++
             }
         }))
@@ -169,7 +170,7 @@ export class EventQueue {
         }
 
         getBucketingLib().queueEvent(
-            this.environmentKey,
+            this.sdkKey,
             JSON.stringify(user),
             JSON.stringify(event)
         )
@@ -186,14 +187,14 @@ export class EventQueue {
         }
 
         getBucketingLib().queueAggregateEvent(
-            this.environmentKey,
+            this.sdkKey,
             JSON.stringify(event),
             JSON.stringify(bucketedConfig?.variableVariationMap || {})
         )
     }
 
     private checkEventQueueSize(): boolean {
-        const queueSize = getBucketingLib().eventQueueSize(this.environmentKey)
+        const queueSize = getBucketingLib().eventQueueSize(this.sdkKey)
         if (queueSize >= this.flushEventQueueSize) {
             if (!this.flushInProgress) {
                 this.flushEvents()

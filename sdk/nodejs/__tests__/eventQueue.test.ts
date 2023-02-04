@@ -66,14 +66,14 @@ describe('EventQueue Unit Tests', () => {
     })
 
     let currentEventKey = ''
-    const initEventQueue = (envKey: string, optionsOverrides?: Partial<EventQueueOptions>): EventQueue => {
-        getBucketingLib().setConfigData(envKey, JSON.stringify(config))
-        currentEventKey = envKey
+    const initEventQueue = (sdkKey: string, optionsOverrides?: Partial<EventQueueOptions>): EventQueue => {
+        getBucketingLib().setConfigData(sdkKey, JSON.stringify(config))
+        currentEventKey = sdkKey
         const options = {
             logger: defaultLogger,
             ...optionsOverrides
         }
-        return new EventQueue(envKey, options)
+        return new EventQueue(sdkKey, options)
     }
 
     beforeAll(async () => {
@@ -98,8 +98,8 @@ describe('EventQueue Unit Tests', () => {
             reportMetric: jest.fn()
         }
 
-        const envKey = 'envKey'
-        const eventQueue = initEventQueue(envKey, { reporter })
+        const sdkKey = 'sdkKey'
+        const eventQueue = initEventQueue(sdkKey, { reporter })
         const user = new DVCPopulatedUser({ user_id: 'user_id' })
         const event = { type: 'test_event' }
         eventQueue.queueEvent(user, event)
@@ -116,29 +116,29 @@ describe('EventQueue Unit Tests', () => {
         expect(reporter.reportMetric).toBeCalledWith(
             'queueLength',
             2,
-            expect.objectContaining({ envKey })
+            expect.objectContaining({ sdkKey })
         )
         expect(reporter.reportMetric).toBeCalledWith(
             'flushPayloadSize',
             expect.any(Number),
-            expect.objectContaining({ envKey })
+            expect.objectContaining({ sdkKey })
         )
         expect(reporter.reportMetric).toBeCalledWith(
             'jsonParseDuration',
             expect.any(Number),
-            expect.objectContaining({ envKey })
+            expect.objectContaining({ sdkKey })
         )
         expect(reporter.reportMetric).toBeCalledWith(
             'flushRequestDuration',
             expect.any(Number),
-            expect.objectContaining({ envKey })
+            expect.objectContaining({ sdkKey })
         )
     })
 
     it('should setup Event Queue and process events', async () => {
         publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
-        const eventQueue = initEventQueue('envKey', {
+        const eventQueue = initEventQueue('sdkKey', {
             eventsAPIURI: 'localhost:3000/client/1'
         })
         const user = new DVCPopulatedUser({ user_id: 'user_id' })
@@ -151,7 +151,7 @@ describe('EventQueue Unit Tests', () => {
         await eventQueue.flushEvents()
         eventQueue.cleanup()
 
-        expect(publishEvents_mock).toBeCalledWith(defaultLogger, 'envKey', [
+        expect(publishEvents_mock).toBeCalledWith(defaultLogger, 'sdkKey', [
             {
                 user: expect.objectContaining({
                     user_id: 'user_id',
@@ -204,7 +204,7 @@ describe('EventQueue Unit Tests', () => {
     it('should setup Event Queue and not process custom events if disableCustomEventLogging is true', async () => {
         publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
-        const eventQueue = initEventQueue('envKey', {
+        const eventQueue = initEventQueue('sdkKey', {
             disableAutomaticEventLogging: false,
             disableCustomEventLogging: true
         })
@@ -252,7 +252,7 @@ describe('EventQueue Unit Tests', () => {
         async () => {
             publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
-            const eventQueue = initEventQueue('envKey', {
+            const eventQueue = initEventQueue('sdkKey', {
                 disableAutomaticEventLogging: true,
                 disableCustomEventLogging: false
             })
@@ -296,7 +296,7 @@ describe('EventQueue Unit Tests', () => {
     it('should save multiple events from multiple users with aggregated values', async () => {
         publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
-        const eventQueue = initEventQueue('envKey')
+        const eventQueue = initEventQueue('sdkKey')
         const user1 = new DVCPopulatedUser({ user_id: 'user1' })
         const user2 = new DVCPopulatedUser({ user_id: 'user2' })
         eventQueue.queueEvent(user1, { type: 'test_event_1' })
@@ -334,7 +334,7 @@ describe('EventQueue Unit Tests', () => {
         await eventQueue.flushEvents()
         eventQueue.cleanup()
 
-        expect(publishEvents_mock).toBeCalledWith(defaultLogger, 'envKey', [
+        expect(publishEvents_mock).toBeCalledWith(defaultLogger, 'sdkKey', [
             {
                 user: expect.objectContaining({ user_id: 'user1' }),
                 events: [
@@ -398,7 +398,7 @@ describe('EventQueue Unit Tests', () => {
     })
 
     it('should handle event request failures and re-queue events', async () => {
-        const eventQueue = initEventQueue('envKey')
+        const eventQueue = initEventQueue('sdkKey')
         const user = new DVCPopulatedUser({ user_id: 'user1' })
         const user2 = new DVCPopulatedUser({ user_id: 'user2' })
         eventQueue.queueEvent(user, { type: 'test_event' })
@@ -454,7 +454,7 @@ describe('EventQueue Unit Tests', () => {
     })
 
     it('should send request in chunks when there are too many events, and requeue just the failed ones', async () => {
-        const eventQueue = initEventQueue('envKey')
+        const eventQueue = initEventQueue('sdkKey')
 
         for (let i = 0; i < 150; i++) {
             const user = new DVCPopulatedUser({ user_id: `user${i}` })
@@ -557,8 +557,8 @@ describe('EventQueue Unit Tests', () => {
             const logger = dvcDefaultLogger()
             logger.warn = jest.fn()
 
-            const envKey = 'envKey'
-            const eventQueue = initEventQueue(envKey, { logger })
+            const sdkKey = 'sdkKey'
+            const eventQueue = initEventQueue(sdkKey, { logger })
             const user = new DVCPopulatedUser({ user_id: 'user1' })
 
             for (let i = 0; i < 500; i++) {
@@ -573,18 +573,18 @@ describe('EventQueue Unit Tests', () => {
             for (let i = 0; i < 500; i++) {
                 eventQueue.queueEvent(user, { type: 'test_event' })
             }
-            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1000)
+            expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(1000)
 
             for (let i = 0; i < 1000; i++) {
                 eventQueue.queueEvent(user, { type: 'test_event' })
             }
-            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(2000)
+            expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(2000)
 
             eventQueue.queueEvent(user, { type: 'test_event2' })
 
             expect(logger.warn).toBeCalledTimes(1)
             expect(logger.warn).toBeCalledWith(expect.stringContaining('Max event queue size reached, dropping event'))
-            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(2000)
+            expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(2000)
         })
 
         it('should not queue aggregate event if user event and aggregate event queue' +
@@ -592,8 +592,8 @@ describe('EventQueue Unit Tests', () => {
             const logger = dvcDefaultLogger()
             logger.warn = jest.fn()
 
-            const envKey = 'envKey'
-            const eventQueue = initEventQueue(envKey, { logger })
+            const sdkKey = 'sdkKey'
+            const eventQueue = initEventQueue(sdkKey, { logger })
             const user = new DVCPopulatedUser({ user_id: 'user1' })
 
             for (let i = 0; i < 500; i++) {
@@ -607,12 +607,12 @@ describe('EventQueue Unit Tests', () => {
                     variableVariationMap: { [target]: { _feature: 'feat', _variation: 'var' } }
                 })
             }
-            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1000)
+            expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(1000)
 
             for (let i = 0; i < 1000; i++) {
                 eventQueue.queueEvent(user, { type: 'test_event' })
             }
-            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(2000)
+            expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(2000)
 
             eventQueue.queueAggregateEvent(
                 user,
@@ -624,13 +624,13 @@ describe('EventQueue Unit Tests', () => {
             expect(logger.warn).toBeCalledWith(
                 expect.stringContaining('Max event queue size reached, dropping aggregate event')
             )
-            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(2000)
+            expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(2000)
         })
 
         it('should flush event queues once max queue size has been reached before' +
             ' adding another user event', async () => {
-            const envKey = 'envKey'
-            const eventQueue = initEventQueue(envKey)
+            const sdkKey = 'sdkKey'
+            const eventQueue = initEventQueue(sdkKey)
             const flushEvents_mock = jest.spyOn(eventQueue, 'flushEvents')
             const user = new DVCPopulatedUser({ user_id: 'user1' })
 
@@ -647,18 +647,18 @@ describe('EventQueue Unit Tests', () => {
                 })
             }
             expect(flushEvents_mock).toBeCalledTimes(0)
-            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1000)
+            expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(1000)
 
             // since max event queue size has been reached, attempting to add a new user event will flush the queue
             eventQueue.queueEvent(user, { type: 'test_event' })
             expect(flushEvents_mock).toBeCalledTimes(1)
-            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1001)
+            expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(1001)
         })
 
         it('should flush event queues once max queue size has been reached before ' +
             'adding another agg event', async () => {
-            const envKey = 'envKey'
-            const eventQueue = initEventQueue(envKey)
+            const sdkKey = 'sdkKey'
+            const eventQueue = initEventQueue(sdkKey)
             const flushEvents_mock = jest.spyOn(eventQueue, 'flushEvents')
 
             const user = new DVCPopulatedUser({ user_id: 'user1' })
@@ -676,7 +676,7 @@ describe('EventQueue Unit Tests', () => {
                 })
             }
             expect(flushEvents_mock).toBeCalledTimes(0)
-            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1000)
+            expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(1000)
 
             // since max event queue size has been reached, attempting to add a new agg event will flush the queue
             eventQueue.queueAggregateEvent(
@@ -688,7 +688,7 @@ describe('EventQueue Unit Tests', () => {
                 }
             )
             expect(flushEvents_mock).toBeCalledTimes(1)
-            expect(getBucketingLib().eventQueueSize(envKey)).toEqual(1001)
+            expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(1001)
         })
     })
 
