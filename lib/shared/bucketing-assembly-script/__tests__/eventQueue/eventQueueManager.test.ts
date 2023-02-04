@@ -16,31 +16,31 @@ import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
 import random_JSON from './random_json_2kb.json'
 
-let currentEnvKey: string | null = null
-const initEventQueue = (envKey: unknown, options: unknown) => {
-    currentEnvKey = envKey as string
-    initEventQueue_AS(envKey as string, JSON.stringify(options))
+let currentSDKKey: string | null = null
+const initEventQueue = (sdkKey: unknown, options: unknown) => {
+    currentSDKKey = sdkKey as string
+    initEventQueue_AS(sdkKey as string, JSON.stringify(options))
 }
 
-const flushEventQueue = (envKey: string): FlushPayload[] => {
-    const flushPayloadsStr = flushEventQueue_AS(envKey)
+const flushEventQueue = (sdkKey: string): FlushPayload[] => {
+    const flushPayloadsStr = flushEventQueue_AS(sdkKey)
     return JSON.parse(flushPayloadsStr) as FlushPayload[]
 }
 
-const queueEvent = (envKey: string, user: unknown, event: unknown) => {
-    return queueEvent_AS(envKey, JSON.stringify(user), JSON.stringify(event))
+const queueEvent = (sdkKey: string, user: unknown, event: unknown) => {
+    return queueEvent_AS(sdkKey, JSON.stringify(user), JSON.stringify(event))
 }
 
-const queueAggregateEvent = (envKey: string, event: unknown, variableVariationMap: unknown) => {
-    return queueAggregateEvent_AS(envKey, JSON.stringify(event), JSON.stringify(variableVariationMap))
+const queueAggregateEvent = (sdkKey: string, event: unknown, variableVariationMap: unknown) => {
+    return queueAggregateEvent_AS(sdkKey, JSON.stringify(event), JSON.stringify(variableVariationMap))
 }
 
-const eventQueueSize = (envKey: string): number => {
-    return eventQueueSize_AS(envKey)
+const eventQueueSize = (sdkKey: string): number => {
+    return eventQueueSize_AS(sdkKey)
 }
 
-const initSDK = (envKey: string, eventOptions: unknown = {}) => {
-    initEventQueue(envKey, eventOptions)
+const initSDK = (sdkKey: string, eventOptions: unknown = {}) => {
+    initEventQueue(sdkKey, eventOptions)
     setPlatformData(JSON.stringify({
         platform: 'NodeJS',
         platformVersion: '16.0',
@@ -48,51 +48,51 @@ const initSDK = (envKey: string, eventOptions: unknown = {}) => {
         sdkVersion: '1.0.0',
         hostname: 'host.name'
     }))
-    setConfigData(envKey, JSON.stringify(config))
+    setConfigData(sdkKey, JSON.stringify(config))
 }
 
 describe('EventQueueManager Tests', () => {
     afterEach(() => {
         clearPlatformData('')
-        if (currentEnvKey) {
-            cleanupEventQueue(currentEnvKey)
-            currentEnvKey = null
+        if (currentSDKKey) {
+            cleanupEventQueue(currentSDKKey)
+            currentSDKKey = null
         }
     })
 
     describe('initEventQueue', () => {
         it('should init EventQueue without any options', () => {
-            initEventQueue('env_key_test', {})
+            initEventQueue('sdk_key_test', {})
         })
 
-        it('should throw error if no envKey', () => {
+        it('should throw error if no sdkKey', () => {
             expect(() => initEventQueue(undefined, undefined)).toThrow('value must not be null')
         })
 
         it('should throw error if no options', () => {
-            expect(() => initEventQueue('env_key_test_2', undefined)).toThrow('value must not be null')
+            expect(() => initEventQueue('sdk_key_test_2', undefined)).toThrow('value must not be null')
         })
 
-        it('should throw if EnvQueue already setup for envKey', () => {
-            initEventQueue('env_key_test_3', {})
-            expect(() => initEventQueue('env_key_test_3', {}))
-                .toThrow('Event Queue already exists for envKey')
+        it('should throw if EnvQueue already setup for sdkKey', () => {
+            initEventQueue('sdk_key_test_3', {})
+            expect(() => initEventQueue('sdk_key_test_3', {}))
+                .toThrow('Event Queue already exists for sdkKey')
         })
 
-        it('should let you setup multiple EventQueues for multiple envKeys', () => {
-            initEventQueue('env_key_test_4', {})
-            initEventQueue('env_key_test_5', {})
-            initEventQueue('env_key_test_6', {})
-            initEventQueue('env_key_test_7', {})
+        it('should let you setup multiple EventQueues for multiple sdkKeys', () => {
+            initEventQueue('sdk_key_test_4', {})
+            initEventQueue('sdk_key_test_5', {})
+            initEventQueue('sdk_key_test_6', {})
+            initEventQueue('sdk_key_test_7', {})
         })
 
         it('should throw if eventRequestChunkSize is < 10', () => {
-            expect(() => initEventQueue('env_key_eventRequestChunkSize', { eventRequestChunkSize: 9 }))
+            expect(() => initEventQueue('sdk_key_eventRequestChunkSize', { eventRequestChunkSize: 9 }))
                 .toThrow('eventRequestChunkSize: 9 must be larger than 10')
         })
 
         it('should throw if eventRequestChunkSize is > 20,000', () => {
-            expect(() => initEventQueue('env_key_eventRequestChunkSize', { eventRequestChunkSize: 900000 }))
+            expect(() => initEventQueue('sdk_key_eventRequestChunkSize', { eventRequestChunkSize: 900000 }))
                 .toThrow('eventRequestChunkSize: 900000 must be smaller than 10000')
         })
     })
@@ -111,7 +111,7 @@ describe('EventQueueManager Tests', () => {
         }
 
         it('should flush queued events', () => {
-            const envKey = 'env_key_flush_test'
+            const sdkKey = 'sdk_key_flush_test'
             const event = {
                 type: 'testType',
                 target: 'testTarget',
@@ -123,11 +123,11 @@ describe('EventQueueManager Tests', () => {
                 target: 'variableKey'
             }
 
-            initSDK(envKey)
-            queueEvent(envKey, dvcUser, event)
-            queueAggregateEvent(envKey, aggEvent, {})
-            expect(eventQueueSize(envKey)).toEqual(2)
-            expect(flushEventQueue(envKey)).toEqual(expect.arrayContaining([
+            initSDK(sdkKey)
+            queueEvent(sdkKey, dvcUser, event)
+            queueAggregateEvent(sdkKey, aggEvent, {})
+            expect(eventQueueSize(sdkKey)).toEqual(2)
+            expect(flushEventQueue(sdkKey)).toEqual(expect.arrayContaining([
                 {
                     'payloadId': expect.any(String),
                     'eventCount': 2,
@@ -187,7 +187,7 @@ describe('EventQueueManager Tests', () => {
         })
 
         it('should generate multiple batches for chunkSize and handle onPayloadSuccess', () => {
-            const envKey = 'env_key_flush_batch_test'
+            const sdkKey = 'sdk_key_flush_batch_test'
             const event = {
                 type: 'testType',
                 target: 'testTarget',
@@ -195,13 +195,13 @@ describe('EventQueueManager Tests', () => {
                 metaData: { test: 'data' }
             }
 
-            initSDK(envKey, { eventRequestChunkSize: 10 })
+            initSDK(sdkKey, { eventRequestChunkSize: 10 })
             for (let i = 0; i < 100; i++) {
                 event.target = `target_${i}`
-                queueEvent(envKey, dvcUser, event)
+                queueEvent(sdkKey, dvcUser, event)
             }
-            const payloads = flushEventQueue(envKey)
-            expect(eventQueueSize(envKey)).toEqual(100)
+            const payloads = flushEventQueue(sdkKey)
+            expect(eventQueueSize(sdkKey)).toEqual(100)
             expect(payloads.length).toEqual(10)
             expect(payloads[0].records[0].events.length).toEqual(10)
             expect(payloads[0].records[0].user).toEqual({
@@ -223,14 +223,14 @@ describe('EventQueueManager Tests', () => {
             expect(payloads[0].records[0].user.privateCustomData).not.toBeDefined()
 
             for (const payload of payloads) {
-                onPayloadSuccess(envKey, payload.payloadId)
+                onPayloadSuccess(sdkKey, payload.payloadId)
             }
-            const nextFlush = flushEventQueue(envKey)
+            const nextFlush = flushEventQueue(sdkKey)
             expect(nextFlush).toEqual([])
         })
 
         it('should queue events from multiple users', () => {
-            const envKey = 'env_key_flush_batch_users_test'
+            const sdkKey = 'sdk_key_flush_batch_users_test'
             const event = {
                 type: 'testType',
                 target: 'testTarget',
@@ -239,18 +239,18 @@ describe('EventQueueManager Tests', () => {
             }
             const dvcUser2 = { user_id: 'user_2' }
 
-            initSDK(envKey, { eventRequestChunkSize: 10 })
+            initSDK(sdkKey, { eventRequestChunkSize: 10 })
             for (let i = 0; i < 26; i++) {
                 event.target = `target_${i}`
-                queueEvent(envKey, dvcUser, event)
+                queueEvent(sdkKey, dvcUser, event)
                 if (i < 14) {
                     event.target = `target_${i}`
-                    queueEvent(envKey, dvcUser2, event)
+                    queueEvent(sdkKey, dvcUser2, event)
                 }
             }
-            expect(eventQueueSize(envKey)).toEqual(40)
+            expect(eventQueueSize(sdkKey)).toEqual(40)
 
-            const payloads = flushEventQueue(envKey)
+            const payloads = flushEventQueue(sdkKey)
             expect(payloads.length).toEqual(4)
             let user1Count = 0
             let user2Count = 0
@@ -284,14 +284,14 @@ describe('EventQueueManager Tests', () => {
             expect(payloads[3].records[0].events.length).toEqual(10)
 
             for (const payload of payloads) {
-                onPayloadSuccess(envKey, payload.payloadId)
+                onPayloadSuccess(sdkKey, payload.payloadId)
             }
-            const nextFlush = flushEventQueue(envKey)
+            const nextFlush = flushEventQueue(sdkKey)
             expect(nextFlush).toEqual([])
         })
 
         it('should requeue retryable failed payloads', () => {
-            const envKey = 'env_key_flush_failed_test'
+            const sdkKey = 'sdk_key_flush_failed_test'
             const event = {
                 type: 'testType',
                 target: 'testTarget',
@@ -299,28 +299,28 @@ describe('EventQueueManager Tests', () => {
                 metaData: { test: 'data' }
             }
 
-            initSDK(envKey, { eventRequestChunkSize: 10 })
+            initSDK(sdkKey, { eventRequestChunkSize: 10 })
             for (let i = 0; i < 36; i++) {
                 event.target = `target_${i}`
-                queueEvent(envKey, dvcUser, event)
+                queueEvent(sdkKey, dvcUser, event)
             }
-            expect(eventQueueSize(envKey)).toEqual(36)
+            expect(eventQueueSize(sdkKey)).toEqual(36)
 
-            const payloads = flushEventQueue(envKey)
+            const payloads = flushEventQueue(sdkKey)
             expect(payloads.length).toEqual(4)
-            onPayloadSuccess(envKey, payloads[0].payloadId)
-            onPayloadFailure(envKey, payloads[1].payloadId, true)
-            onPayloadFailure(envKey, payloads[2].payloadId, false)
-            onPayloadFailure(envKey, payloads[3].payloadId, true)
+            onPayloadSuccess(sdkKey, payloads[0].payloadId)
+            onPayloadFailure(sdkKey, payloads[1].payloadId, true)
+            onPayloadFailure(sdkKey, payloads[2].payloadId, false)
+            onPayloadFailure(sdkKey, payloads[3].payloadId, true)
             expect(payloads[3].records[0].events.length).toEqual(6)
 
             for (let i = 0; i < 4; i++) {
                 event.target = `target_after_failed_${i}`
-                queueEvent(envKey, dvcUser, event)
+                queueEvent(sdkKey, dvcUser, event)
             }
-            expect(eventQueueSize(envKey)).toEqual(20)
+            expect(eventQueueSize(sdkKey)).toEqual(20)
 
-            const failedPayloads = flushEventQueue(envKey)
+            const failedPayloads = flushEventQueue(sdkKey)
             expect(failedPayloads.length).toEqual(3)
             expect(failedPayloads[0]).toEqual(payloads[1])
             expect(failedPayloads[1]).toEqual(payloads[3])
@@ -329,14 +329,14 @@ describe('EventQueueManager Tests', () => {
             expect(failedPayloads[2].records[0].events.length).toEqual(4)
 
             for (const payload of failedPayloads) {
-                onPayloadSuccess(envKey, payload.payloadId)
+                onPayloadSuccess(sdkKey, payload.payloadId)
             }
-            const nextFlush = flushEventQueue(envKey)
+            const nextFlush = flushEventQueue(sdkKey)
             expect(nextFlush).toEqual([])
         })
 
         it('should throw error if re-queued payload hasn\'t finished sending', () => {
-            const envKey = 'env_key_requeued_failed_test'
+            const sdkKey = 'env_key_requeued_failed_test'
             const event = {
                 type: 'testType',
                 target: 'testTarget',
@@ -344,33 +344,33 @@ describe('EventQueueManager Tests', () => {
                 metaData: { test: 'data' }
             }
 
-            initSDK(envKey, { eventRequestChunkSize: 10 })
+            initSDK(sdkKey, { eventRequestChunkSize: 10 })
             for (let i = 0; i < 36; i++) {
                 event.target = `target_${i}`
-                queueEvent(envKey, dvcUser, event)
+                queueEvent(sdkKey, dvcUser, event)
             }
 
-            const payloads = flushEventQueue(envKey)
-            onPayloadSuccess(envKey, payloads[0].payloadId)
-            onPayloadFailure(envKey, payloads[1].payloadId, true)
-            onPayloadFailure(envKey, payloads[2].payloadId, false)
-            onPayloadFailure(envKey, payloads[3].payloadId, true)
+            const payloads = flushEventQueue(sdkKey)
+            onPayloadSuccess(sdkKey, payloads[0].payloadId)
+            onPayloadFailure(sdkKey, payloads[1].payloadId, true)
+            onPayloadFailure(sdkKey, payloads[2].payloadId, false)
+            onPayloadFailure(sdkKey, payloads[3].payloadId, true)
 
             for (let i = 0; i < 4; i++) {
                 event.target = `target_after_failed_${i}`
-                queueEvent(envKey, dvcUser, event)
+                queueEvent(sdkKey, dvcUser, event)
             }
 
-            const failedPayloads = flushEventQueue(envKey)
+            const failedPayloads = flushEventQueue(sdkKey)
             // failedPayloads[0] has not finished
-            onPayloadSuccess(envKey, failedPayloads[1].payloadId)
-            onPayloadSuccess(envKey, failedPayloads[2].payloadId)
+            onPayloadSuccess(sdkKey, failedPayloads[1].payloadId)
+            onPayloadSuccess(sdkKey, failedPayloads[2].payloadId)
 
-            expect(() => flushEventQueue(envKey)).toThrow('has not finished sending')
+            expect(() => flushEventQueue(sdkKey)).toThrow('has not finished sending')
         })
 
         it('should throw error if all payloads have not finished sending', () => {
-            const envKey = 'env_key_flush_not_finished_test'
+            const sdkKey = 'sdk_key_flush_not_finished_test'
             const event = {
                 type: 'testType',
                 target: 'testTarget',
@@ -378,36 +378,36 @@ describe('EventQueueManager Tests', () => {
                 metaData: { test: 'data' }
             }
 
-            initSDK(envKey, { eventRequestChunkSize: 10 })
+            initSDK(sdkKey, { eventRequestChunkSize: 10 })
             for (let i = 0; i < 36; i++) {
                 event.target = `target_${i}`
-                queueEvent(envKey, dvcUser, event)
+                queueEvent(sdkKey, dvcUser, event)
             }
-            expect(eventQueueSize(envKey)).toEqual(36)
+            expect(eventQueueSize(sdkKey)).toEqual(36)
 
-            const payloads = flushEventQueue(envKey)
+            const payloads = flushEventQueue(sdkKey)
             expect(payloads.length).toEqual(4)
-            onPayloadSuccess(envKey, payloads[0].payloadId)
-            onPayloadFailure(envKey, payloads[1].payloadId, false)
-            onPayloadFailure(envKey, payloads[2].payloadId, false)
+            onPayloadSuccess(sdkKey, payloads[0].payloadId)
+            onPayloadFailure(sdkKey, payloads[1].payloadId, false)
+            onPayloadFailure(sdkKey, payloads[2].payloadId, false)
 
-            expect(() => flushEventQueue(envKey)).toThrow('has not finished sending')
+            expect(() => flushEventQueue(sdkKey)).toThrow('has not finished sending')
 
             for (let i = 0; i < 10; i++) {
                 event.target = `target_after_failed_${i}`
-                queueEvent(envKey, dvcUser, event)
+                queueEvent(sdkKey, dvcUser, event)
             }
-            expect(eventQueueSize(envKey)).toEqual(16)
-            onPayloadFailure(envKey, payloads[3].payloadId, true)
+            expect(eventQueueSize(sdkKey)).toEqual(16)
+            onPayloadFailure(sdkKey, payloads[3].payloadId, true)
 
-            const failedPayloads = flushEventQueue(envKey)
+            const failedPayloads = flushEventQueue(sdkKey)
             expect(failedPayloads.length).toEqual(2)
             expect(failedPayloads[0].payloadId).toEqual(payloads[3].payloadId)
 
             for (const payload of failedPayloads) {
-                onPayloadSuccess(envKey, payload.payloadId)
+                onPayloadSuccess(sdkKey, payload.payloadId)
             }
-            const nextFlush = flushEventQueue(envKey)
+            const nextFlush = flushEventQueue(sdkKey)
             expect(nextFlush).toEqual([])
         })
     })
@@ -420,21 +420,21 @@ describe('EventQueueManager Tests', () => {
         }
 
         it('should throw error if SDK is not initialized', () => {
-            const envKey = 'env_key_queueEvent_test'
-            initEventQueue(envKey, {})
-            expect(() => queueEvent(envKey, dvcUser, event)).toThrow('Platform data is not set')
+            const sdkKey = 'sdk_key_queueEvent_test'
+            initEventQueue(sdkKey, {})
+            expect(() => queueEvent(sdkKey, dvcUser, event)).toThrow('Platform data is not set')
         })
 
         it('should throw error if config data not set', () => {
-            const envKey = 'env_key_queueEvent_test_2'
-            initEventQueue(envKey, {})
+            const sdkKey = 'sdk_key_queueEvent_test_2'
+            initEventQueue(sdkKey, {})
             setPlatformData(JSON.stringify({
                 platform: 'NodeJS',
                 platformVersion: '16.0',
                 sdkType: 'server',
                 sdkVersion: '1.0.0'
             }))
-            expect(() => queueEvent(envKey, dvcUser, event)).toThrow('Config data is not set.')
+            expect(() => queueEvent(sdkKey, dvcUser, event)).toThrow('Config data is not set.')
         })
     })
 
@@ -445,14 +445,14 @@ describe('EventQueueManager Tests', () => {
         }
 
         it('should throw error if no variableVariationMap', () => {
-            const envKey = 'env_key_queueAggEvent_test'
-            initEventQueue(envKey, {})
-            expect(() => queueAggregateEvent(envKey, event, null))
+            const sdkKey = 'sdk_key_queueAggEvent_test'
+            initEventQueue(sdkKey, {})
+            expect(() => queueAggregateEvent(sdkKey, event, null))
                 .toThrow('variableVariationMap is not a JSON Object')
         })
 
         it('should throw if no variable key value found for aggVariableEvaluated', () => {
-            const envKey = 'env_key_agg_event_throw_test'
+            const sdkKey = 'sdk_key_agg_event_throw_test'
             const eventEvaluated = {
                 type: 'aggVariableEvaluated',
                 target: 'testTarget'
@@ -468,22 +468,22 @@ describe('EventQueueManager Tests', () => {
                 }
             }
 
-            initSDK(envKey)
-            expect(() => queueAggregateEvent(envKey, eventEvaluated, variableVariationMap))
+            initSDK(sdkKey)
+            expect(() => queueAggregateEvent(sdkKey, eventEvaluated, variableVariationMap))
                 .toThrow('Missing variableVariationMap mapping for target')
         })
 
         it('should throw if no target on event', () => {
-            const envKey = 'env_key_agg_event_no_target_test'
+            const sdkKey = 'sdk_key_agg_event_no_target_test'
             const eventEvaluated = { type: 'aggVariableEvaluated' }
 
-            initSDK(envKey)
-            expect(() => queueAggregateEvent(envKey, eventEvaluated, {}))
+            initSDK(sdkKey)
+            expect(() => queueAggregateEvent(sdkKey, eventEvaluated, {}))
                 .toThrow('Event missing target to save aggregate event')
         })
 
         it('should aggregate aggVariableDefaulted and aggVariableEvaluated events', () => {
-            const envKey = 'env_key_agg_event_test'
+            const sdkKey = 'sdk_key_agg_event_test'
             const eventDefaulted = {
                 type: 'aggVariableDefaulted',
                 target: 'testTarget'
@@ -503,26 +503,26 @@ describe('EventQueueManager Tests', () => {
                 }
             }
 
-            initSDK(envKey)
+            initSDK(sdkKey)
             for (let i = 0; i < 36; i++) {
                 eventDefaulted.target = 'testey_test'
-                queueAggregateEvent(envKey, eventDefaulted, variableVariationMap)
+                queueAggregateEvent(sdkKey, eventDefaulted, variableVariationMap)
             }
             for (let i = 0; i < 11; i++) {
                 eventDefaulted.target = 'swageyTest'
-                queueAggregateEvent(envKey, eventDefaulted, variableVariationMap)
+                queueAggregateEvent(sdkKey, eventDefaulted, variableVariationMap)
             }
             for (let i = 0; i < 36; i++) {
                 eventEvaluated.target = 'test'
-                queueAggregateEvent(envKey, eventEvaluated, variableVariationMap)
+                queueAggregateEvent(sdkKey, eventEvaluated, variableVariationMap)
             }
             for (let i = 0; i < 11; i++) {
                 eventEvaluated.target = 'swagTest'
-                queueAggregateEvent(envKey, eventEvaluated, variableVariationMap)
+                queueAggregateEvent(sdkKey, eventEvaluated, variableVariationMap)
             }
-            expect(eventQueueSize(envKey)).toEqual(4)
+            expect(eventQueueSize(sdkKey)).toEqual(4)
 
-            const payloads = flushEventQueue(envKey)
+            const payloads = flushEventQueue(sdkKey)
             expect(payloads.length).toEqual(1)
             expect(payloads[0].records[0].events).toEqual([
                 {
@@ -573,7 +573,7 @@ describe('EventQueueManager Tests', () => {
 
     describe('memory usage test', () => {
         it('should save a large number of events to AS Event Queue', () => {
-            const envKey = 'env_key_memory_test'
+            const sdkKey = 'sdk_key_memory_test'
             const event = {
                 type: 'testType_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test_long_name',
                 target: 'testTarget_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
@@ -593,15 +593,15 @@ describe('EventQueueManager Tests', () => {
                 privateCustomData: random_JSON
             }
 
-            initSDK(envKey)
+            initSDK(sdkKey)
             for (let i = 0; i < 2000; i++) {
                 event.target += i
                 dvcUser.user_id += i
-                queueEvent(envKey, dvcUser, event)
+                queueEvent(sdkKey, dvcUser, event)
             }
 
-            const payloads = flushEventQueue(envKey)
-            expect(eventQueueSize(envKey)).toEqual(2000)
+            const payloads = flushEventQueue(sdkKey)
+            expect(eventQueueSize(sdkKey)).toEqual(2000)
             expect(payloads.length).toEqual(20)
         })
     })

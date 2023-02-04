@@ -45,8 +45,8 @@ const generateBucketedConfig = (
     { config, user }:
     { config: unknown, user: unknown }
 ): BucketedUserConfig => {
-    setConfigData('token', JSON.stringify(config))
-    const bucketedConfig = generateBucketedConfigForUser('token', JSON.stringify(user))
+    setConfigData('sdkKey', JSON.stringify(config))
+    const bucketedConfig = generateBucketedConfigForUser('sdkKey', JSON.stringify(user))
     return JSON.parse(bucketedConfig) as BucketedUserConfig
 }
 
