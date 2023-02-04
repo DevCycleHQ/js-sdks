@@ -32,13 +32,13 @@ function validateUserFromQueryParams(queryParams: Query): DVCClientAPIUser {
 }
 
 async function startDVC() {
-    dvcClient = await initialize('<DVC_SERVER_KEY>', { logLevel: 'info' }).onClientInitialized()
+    dvcClient = await initialize('<DVC_SERVER_SDK_KEY>', { logLevel: 'info' }).onClientInitialized()
     console.log('DVC Local Bucketing TypeScript Client Initialized')
 
     const user = {
         user_id: 'node_sdk_test',
         country: 'CA'
-    }g
+    }
 
     const partyTime = dvcClient.variable(user, 'elliot-test', false)
     if (partyTime.value) {
