@@ -111,19 +111,7 @@ export const audiences: PublicAudience[] = [
             }],
             operator: AudienceOperator.and
         }
-    },
-    {
-        _id: '614ef6ea475929459060721a',
-        filters: {
-            filters: [{
-                type: FilterType.user,
-                subType: UserSubType.email,
-                comparator: FilterComparator['='],
-                values: ['AFHGFDSFGHFHGAFGHHFAGHGFHGF']
-            }],
-            operator: AudienceOperator.and
-        }
-    }, {
+    },{
         _id: '6153557f1ed7bac7268ea074',
         filters: {
             filters: [{
@@ -161,6 +149,11 @@ export const variables: PublicVariable[] = [
         _id: '61538237b0a70b58ae6af71h',
         type: VariableType.string,
         key: 'feature2.hello'
+    },
+    {
+        _id: '61538237b0a70b58ae6af71z',
+        type: VariableType.string,
+        key: 'audience-match'
     }
 ]
 
@@ -177,7 +170,8 @@ export const variations: PublicVariation[] = [
             _var: variables[1]._id,
             value: 'man'
         }]
-    }, {
+    },
+    {
         _id: '615357cf7e9ebdca58446ed0',
         name: 'variation 2',
         key: 'variation-2-key',
@@ -228,6 +222,17 @@ export const variations: PublicVariation[] = [
         ]
     },
     {
+        _id: '615382338424cb11646d7662',
+        name: 'audience match variation',
+        key: 'audience-match-variation',
+        variables: [
+            {
+                _var: variables[5]._id,
+                value: 'audience_match'
+            }
+        ]
+    },
+    {
         _id: '615382338424cb11646d7660',
         name: 'feature 2 never used variation, bool',
         key: 'variation-bool-key',
@@ -274,7 +279,9 @@ export const config: ConfigBody = {
         [audiences[0]._id]: audiences[0],
         [audiences[1]._id]: audiences[1],
         [audiences[2]._id]: audiences[2],
-        [audiences[3]._id]: audiences[3]
+        [audiences[3]._id]: audiences[3],
+        [audiences[4]._id]: audiences[4]
+
     },
     features: [
         {
@@ -361,17 +368,13 @@ export const config: ConfigBody = {
                     _id: '61536f468fd67f0091982531',
                     _audience: audiences[4],
                     distribution: [{
-                        _variation: variations[3]._id,
+                        _variation: variations[5]._id,
                         percentage: 1
-                    },
-                        {
-                            _variation: variations[4]._id,
-                            percentage: 0
-                        }]
+                    }]
                 }]
 
             },
-            variations: [variations[0], variations[1], variations[2], variations[3], variations[4]]
+            variations: [variations[5]]
         }],
 
     variables,
