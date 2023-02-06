@@ -8,7 +8,7 @@ import {
     validSubTypes,
     CustomDataFilter,
     UserFilter,
-    Audience, AudienceMatchFilter
+    NoIdAudience, AudienceMatchFilter
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { getF64FromJSONValue } from '../helpers/jsonHelpers'
@@ -24,7 +24,7 @@ import { getF64FromJSONValue } from '../helpers/jsonHelpers'
 export function _evaluateOperator(
     operator: TopLevelOperator,
     user: DVCPopulatedUser,
-    audiences: Map<string, Audience>
+    audiences: Map<string, NoIdAudience>
 ): bool {
     if (!operator.filters.length) return false
 
@@ -52,7 +52,7 @@ export function _evaluateOperator(
 function doesUserPassFilter(
     filter: AudienceFilterOrOperator,
     user: DVCPopulatedUser,
-    audiences: Map<string, Audience>
+    audiences: Map<string, NoIdAudience>
 ): bool {
     if (filter.type === 'all') return true
     else if (filter.type === 'optIn') return false
@@ -84,7 +84,7 @@ function doesUserPassFilter(
 function filterForAudienceMatch(
     filter: AudienceMatchFilter,
     user: DVCPopulatedUser,
-    configAudiences: Map<string, Audience>
+    configAudiences: Map<string, NoIdAudience>
 ): bool {
     const audiences = getFilterAudiencesAsStrings(filter)
     const comparator = filter.comparator
