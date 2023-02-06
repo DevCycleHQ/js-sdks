@@ -54,19 +54,30 @@ function doesUserPassFilter(
     user: DVCPopulatedUser,
     audiences: Map<string, NoIdAudience>
 ): bool {
+    const invalidFilterLog = `
+            [DevCycle] Warning: Invalid filter data ${filter}.
+            To leverage this new filter definition, please update to the latest version of the DevCycle SDK.
+        `
+
     if (filter.type === 'all') return true
     else if (filter.type === 'optIn') return false
     else if (filter.type === 'audienceMatch') {
+        if (!(filter as AudienceMatchFilter).isValid) {
+            console.log(invalidFilterLog)
+            return false
+        }
         return filterForAudienceMatch(filter as AudienceMatchFilter, user, audiences)
     } else if (!(filter instanceof UserFilter)) {
-        console.log(`
-            [DevCycle] Warning: Invalid filter data ${filter}.
-            To leverage this new filter definition, please update to the latest version of the DevCycle SDK.
-        `)
+        console.log(invalidFilterLog)
         return false
     }
 
     const userFilter = filter as UserFilter
+
+    if (!userFilter.isValid) {
+        console.log(invalidFilterLog)
+        return false
+    }
 
     const subType = userFilter.subType
     if (!validSubTypes.includes(subType)) {
