@@ -8,7 +8,7 @@ import {
     isValidString, getJSONObjFromJSONOptional
 } from '../helpers/jsonHelpers'
 import { Feature,  } from './feature'
-import {Audience, NoIdAudience} from './target'
+import { Audience, NoIdAudience } from './target'
 
 export class PublicProject extends JSON.Value {
     _id: string
