@@ -30,9 +30,20 @@ export const evaluateOperator = (
             const optIns = data.optIns
             return isOptInEnabled && !!optIns?.[featureId]
         }
-        if (!filter.subType || !filterFunctionsBySubtype[filter.subType]) {
-            throw new Error(`Invalid filter subType: ${filter.subType}`)
+        if (filter.type !== 'user') {
+            console.error(`Invalid filter type: ${filter.type}`)
+            return false
         }
+
+        if (!filter.subType) {
+            throw new Error('Non-existent filter subType')
+        }
+
+        if (!filterFunctionsBySubtype[filter.subType]) {
+            console.error(`Invalid filter subType: ${filter.subType}`)
+            return false
+        }
+
         return filterFunctionsBySubtype[filter.subType](data, filter)
     }
 
