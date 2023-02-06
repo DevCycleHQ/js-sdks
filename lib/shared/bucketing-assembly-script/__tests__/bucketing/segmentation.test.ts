@@ -17,7 +17,7 @@ const setPlatformDataJSON = (data: unknown) => {
 }
 
 const evaluateOperator = (
-    { operator, data, audiences = {}}:
+    { operator, data, audiences = {} }:
         { operator: unknown, data: Record<string, unknown>, audiences?: Record<string, unknown>}
 ) => {
     // set required field to make class constructors happy
@@ -568,7 +568,7 @@ describe('SegmentationManager Unit Test', () => {
                     operator: 'and'
                 }
                 assert.strictEqual(false, evaluateOperator(
-                    {data, operator: audienceMatchOperatorMultiple, audiences }))
+                    { data, operator: audienceMatchOperatorMultiple, audiences }))
             })
 
         })

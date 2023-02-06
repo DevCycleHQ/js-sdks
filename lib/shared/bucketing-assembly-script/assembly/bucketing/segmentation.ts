@@ -58,8 +58,7 @@ function doesUserPassFilter(
     else if (filter.type === 'optIn') return false
     else if (filter.type === 'audienceMatch') {
         return filterForAudienceMatch(filter as AudienceMatchFilter, user, audiences)
-    }
-    else if (!(filter instanceof UserFilter)) {
+    } else if (!(filter instanceof UserFilter)) {
         console.log(`
             [DevCycle] Warning: Invalid filter data ${filter}.
             To leverage this new filter definition, please update to the latest version of the DevCycle SDK.
