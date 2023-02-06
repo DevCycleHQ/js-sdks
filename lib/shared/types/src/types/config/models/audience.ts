@@ -149,7 +149,7 @@ export class AudienceFilterOrOperator<IdType = string> {
     /**
      * Filters to apply using the "operator" operation if this is an operator object
      */
-    filters?: AudienceFilterOrOperator[]
+    filters?: AudienceFilterOrOperator<IdType>[]
 }
 
 /**
