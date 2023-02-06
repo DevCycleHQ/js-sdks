@@ -597,6 +597,35 @@ describe('SegmentationManager Unit Test', () => {
             })
         })
 
+        describe('evaluateOperator should handle a new comparator type', () => {
+            const filters = [{
+                type: 'user',
+                subType: 'email',
+                comparator: 'wowNewComparator',
+                values: []
+            }, {
+                type: 'audienceMatch',
+                _audiences: [],
+                comparator: 'wowNewComparator'
+            }]
+
+            const operator = {
+                filters,
+                operator: 'and'
+            }
+
+            const data = {
+                country: 'Canada',
+                email: 'brooks@big.lunch',
+                platformVersion: '2.0.0',
+                platform: 'iOS'
+            }
+
+            it('should fail for user and audienceMatch filters with comparator of myNewFilter', () => {
+                assert.strictEqual(false, evaluateOperator({ data, operator }))
+            })
+        })
+
         it('should work for an AND operator', () => {
             const filters = [
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },

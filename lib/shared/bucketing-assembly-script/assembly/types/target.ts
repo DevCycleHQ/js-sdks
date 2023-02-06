@@ -137,7 +137,7 @@ export class AudienceFilterOrOperator extends JSON.Value {
 
         this.subType = isValidStringOptional(filter, 'subType', validSubTypes, false)
 
-        this.comparator = isValidStringOptional(filter, 'comparator', validComparators)
+        this.comparator = isValidStringOptional(filter, 'comparator', validComparators, false)
 
         this.dataKey = getStringFromJSONOptional(filter, 'dataKey')
 
@@ -194,12 +194,14 @@ export class AudienceMatchFilter extends AudienceFilterOrOperator {
     type: string
     comparator: string
     _audiences: JSON.Arr
+    readonly isValid: bool
 
     constructor(filter: JSON.Obj) {
         super(filter)
         this._audiences = getJSONArrayFromJSON(filter, '_audiences')
         this.type = isValidString(filter, 'type', validTypes, false)
-        this.comparator = isValidString(filter, 'comparator', validAudienceMatchComparators)
+        this.comparator = isValidString(filter, 'comparator', validAudienceMatchComparators, false)
+        this.isValid = validAudienceMatchComparators.includes(this.comparator)
     }
 }
 
@@ -208,13 +210,15 @@ export class UserFilter extends AudienceFilterOrOperator {
     subType: string
     comparator: string
     values: JSON.Arr
+    readonly isValid: bool
 
     constructor(filter: JSON.Obj) {
         super(filter)
         this.values = getJSONArrayFromJSON(filter, 'values')
         this.type = isValidString(filter, 'type', validTypes, false)
         this.subType = isValidString(filter, 'subType', validSubTypes, false)
-        this.comparator = isValidString(filter, 'comparator', validComparators)
+        this.comparator = isValidString(filter, 'comparator', validComparators, false)
+        this.isValid = validComparators.includes(this.comparator)
     }
 }
 
