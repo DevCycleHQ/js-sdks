@@ -43,12 +43,28 @@ export class Target extends JSON.Value {
     }
 }
 
-export class Audience extends JSON.Value {
-    _id: string
+export class NoIdAudience extends JSON.Value {
     filters: TopLevelOperator
 
     constructor(audience: JSON.Obj) {
         super()
+
+        this.filters = new TopLevelOperator(getJSONObjFromJSON(audience, 'filters'))
+    }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('filters', this.filters)
+        return json.stringify()
+    }
+}
+
+export class Audience extends NoIdAudience {
+    _id: string
+    filters: TopLevelOperator
+
+    constructor(audience: JSON.Obj) {
+        super(audience)
         this._id = getStringFromJSON(audience, '_id')
 
         this.filters = new TopLevelOperator(getJSONObjFromJSON(audience, 'filters'))

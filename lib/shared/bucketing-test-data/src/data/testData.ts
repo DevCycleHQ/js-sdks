@@ -272,17 +272,19 @@ export const variableHashes: ConfigBody['variableHashes'] = {
     'feature2.hello': 4138596111
 }
 
+function configBodyAudiences (audiences: PublicAudience[]): { [id: string]: Omit<PublicAudience<string>, '_id'> }{
+    const auds: {[id: string]: Omit<PublicAudience<string>, "_id">} = {}
+    audiences.forEach((aud: PublicAudience) => {
+        auds[aud._id] = {
+            ...aud
+        }
+    })
+    return auds
+}
 export const config: ConfigBody = {
     project,
     environment,
-    audiences: {
-        [audiences[0]._id]: audiences[0],
-        [audiences[1]._id]: audiences[1],
-        [audiences[2]._id]: audiences[2],
-        [audiences[3]._id]: audiences[3],
-        [audiences[4]._id]: audiences[4]
-
-    },
+    audiences: configBodyAudiences(audiences),
     features: [
         {
             _id: '614ef6aa473928459060721a',

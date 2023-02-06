@@ -10,7 +10,7 @@ import {
     Rollout as PublicRollout,
     Target as PublicTarget,
     TopLevelOperator, UserFilter,
-    Audience
+    NoIdAudience
 } from './types'
 import {
     _checkCustomData,
@@ -63,7 +63,7 @@ export function evaluateOperatorFromJSON(
     if (!operatorJSON.isObj) {
         throw new Error('evaluateOperatorFromJSON operatorStr or userStr param not a JSON Object')
     }
-    const audiences = new Map<string, Audience>()
+    const audiences = new Map<string, NoIdAudience>()
     if (audiencesStr !== '' && audiencesStr !== '{}') {
         const audiencesJSON = JSON.parse(audiencesStr) as JSON.Obj
         if (!audiencesJSON.isObj) {
@@ -72,7 +72,7 @@ export function evaluateOperatorFromJSON(
         const keys = audiencesJSON.keys
         for (let i = 0; i < keys.length; i++) {
             const aud = audiencesJSON.get(keys[i]) as JSON.Obj
-            audiences.set(keys[i], new Audience(aud))
+            audiences.set(keys[i], new NoIdAudience(aud))
         }
     }
 
