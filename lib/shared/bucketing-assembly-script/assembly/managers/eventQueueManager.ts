@@ -10,6 +10,7 @@ import { _getConfigData } from './configDataManager'
 import { _generateBucketedConfig } from '../bucketing'
 import { RequestPayloadManager } from '../eventQueue/requestPayloadManager'
 import { jsonArrFromValueArray } from '../helpers/jsonHelpers'
+import { _getClientCustomData } from './clientCustomDataManager'
 
 /**
  * Map<environmentKey, EventQueue>
@@ -105,7 +106,7 @@ export function queueEvent(sdkKey: string, userStr: string, eventStr: string): v
     const dvcUser = DVCPopulatedUser.fromJSONString(userStr)
     const event = DVCEvent.fromJSONString(eventStr)
 
-    const bucketedConfig = _generateBucketedConfig(_getConfigData(sdkKey), dvcUser)
+    const bucketedConfig = _generateBucketedConfig(_getConfigData(sdkKey), dvcUser, _getClientCustomData(sdkKey))
     eventQueue.queueEvent(dvcUser, event, bucketedConfig.featureVariationMap)
 }
 

@@ -138,7 +138,8 @@ class SegmentedFeatureData {
 
 export function getSegmentedFeatureDataFromConfig(
     config: ConfigBody,
-    user: DVCPopulatedUser
+    user: DVCPopulatedUser,
+    clientCustomData: JSON.Obj
 ): SegmentedFeatureData[] {
     const accumulator: SegmentedFeatureData[] = []
 
@@ -149,7 +150,7 @@ export function getSegmentedFeatureDataFromConfig(
         let segmentedFeatureTarget: Target | null = null
         for (let i = 0; i < feature.configuration.targets.length; i++) {
             const target = feature.configuration.targets[i]
-            if (_evaluateOperator(target._audience.filters, user, config.audiences)) {
+            if (_evaluateOperator(target._audience.filters, config.audiences, user, clientCustomData)) {
                 segmentedFeatureTarget = target
                 break
             }
@@ -184,13 +185,14 @@ export function generateKnownVariableKeys(
 
 export function _generateBucketedConfig(
     config: ConfigBody,
-    user: DVCPopulatedUser
+    user: DVCPopulatedUser,
+    clientCustomData: JSON.Obj
 ): BucketedUserConfig {
     const variableMap = new Map<string, SDKVariable>()
     const featureKeyMap = new Map<string, SDKFeature>()
     const featureVariationMap = new Map<string, string>()
     const variableVariationMap = new Map<string, FeatureVariation>()
-    const segmentedFeatures = getSegmentedFeatureDataFromConfig(config, user)
+    const segmentedFeatures = getSegmentedFeatureDataFromConfig(config, user, clientCustomData)
 
     for (let i = 0; i < segmentedFeatures.length; i++) {
         const segmentedFeaturesData = segmentedFeatures[i]
