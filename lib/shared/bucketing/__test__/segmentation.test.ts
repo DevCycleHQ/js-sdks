@@ -7,7 +7,9 @@ import {
     AudienceFilterOrOperator,
     AudienceOperator,
     FilterComparator,
-    TopLevelOperator
+    FilterType,
+    TopLevelOperator,
+    UserSubType
 } from '@devcycle/types'
 
 describe('SegmentationManager Unit Test', () => {
@@ -518,6 +520,173 @@ describe('SegmentationManager Unit Test', () => {
             })
         })
 
+        describe('evaluateOperator should handle audienceMatch filter', () => {
+            const filters = [
+                { type: FilterType.user, subType: UserSubType.country, comparator: FilterComparator['='], values: ['Canada'] },
+                { type: FilterType.user, subType: UserSubType.email, comparator: FilterComparator['='], values: ['dexter@smells.nice', 'brooks@big.lunch'] },
+                { type: FilterType.user, subType: UserSubType.appVersion, comparator: FilterComparator['>'], values: ['1.0.0'] }
+            ]
+            const operator = {
+                filters,
+                operator: AudienceOperator.and
+            }
+            const data = {
+                country: 'Canada',
+                email: 'brooks@big.lunch',
+                platformVersion: '2.0.0',
+                appVersion: '2.0.2',
+                platform: 'iOS'
+            }
+            const audienceMatchOperator = {
+                filters: [
+                    {
+                        type: FilterType.audienceMatch,
+                        comparator: FilterComparator['='],
+                        _audiences: ['test']
+                    }
+                ],
+                operator: AudienceOperator.and
+            }
+
+            const audienceMatchOperatorNotEqual = {
+                filters: [
+                    {
+                        type: FilterType.audienceMatch,
+                        comparator: FilterComparator['!='],
+                        _audiences: ['test']
+                    }
+                ],
+                operator: AudienceOperator.and
+            }
+            it('should pass seg for happy path case', () => {
+
+                const audiences = {
+                    'test': {
+                        filters: operator
+                    }
+                }
+                assert.strictEqual(true, segmentation.evaluateOperator(
+                    { data, operator: audienceMatchOperator, audiences, featureId, isOptInEnabled }))
+            })
+            it('should not pass seg when not in audience for happy path case', () => {
+
+                const audiences = {
+                    'test': {
+                        filters: operator
+                    }
+                }
+
+                assert.strictEqual(false, segmentation.evaluateOperator(
+                    { data, operator: audienceMatchOperatorNotEqual, audiences, featureId, isOptInEnabled }))
+            })
+            it('should pass seg for nested audiences', () => {
+                const nestedAudienceMatchOperator = {
+                    filters: [
+                        {
+                            type: FilterType.audienceMatch,
+                            comparator: FilterComparator['='],
+                            _audiences: ['nested']
+                        }
+                    ],
+                    operator: AudienceOperator.and
+                }
+
+                const audiences = {
+                    'test': {
+                        filters: operator
+                    },
+                    'nested': {
+                        filters: audienceMatchOperator
+                    }
+                }
+                assert.strictEqual(true, segmentation.evaluateOperator(
+                    { data, operator: nestedAudienceMatchOperator, audiences, featureId, isOptInEnabled }))
+            })
+            it('should not pass seg for nested audiences with !=', () => {
+                const nestedAudienceMatchOperator = {
+                    filters: [
+                        {
+                            type: FilterType.audienceMatch,
+                            comparator: FilterComparator['!='],
+                            _audiences: ['nested']
+                        }
+                    ],
+                    operator: AudienceOperator.and
+                }
+
+                const audiences = {
+                    'test': {
+                        filters: operator
+                    },
+                    'nested': {
+                        filters: audienceMatchOperator
+                    }
+                }
+                assert.strictEqual(false, segmentation.evaluateOperator(
+                    { data, operator: nestedAudienceMatchOperator, audiences, featureId, isOptInEnabled }))
+            })
+            it('should pass seg for an AND operator with multiple values', () => {
+
+                const filters = [
+                    { type: FilterType.user, subType: UserSubType.country, comparator: FilterComparator['='], values: ['USA'] },
+                ]
+
+                const audiences = {
+                    'test': {
+                        filters: operator
+                    },
+                    'test2': {
+                        filters: {
+                            filters,
+                            operator: AudienceOperator.and
+                        }
+                    }
+                }
+                const audienceMatchOperatorMultiple = {
+                    filters: [
+                        {
+                            type: FilterType.audienceMatch,
+                            comparator: FilterComparator['='],
+                            _audiences: ['test', 'test2']
+                        }
+                    ],
+                    operator: AudienceOperator.and
+                }
+                assert.strictEqual(true, segmentation.evaluateOperator(
+                    { data, operator: audienceMatchOperatorMultiple, audiences, featureId, isOptInEnabled }))
+            })
+            it('should not pass seg for an AND operator with multiple values', () => {
+
+                const filters = [
+                    { type: FilterType.user, subType: UserSubType.country, comparator: FilterComparator['='], values: ['USA'] },
+                ]
+
+                const audiences = {
+                    'test': {
+                        filters: operator
+                    },
+                    'test2': {
+                        filters: {
+                            filters,
+                            operator: AudienceOperator.and
+                        }
+                    }
+                }
+                const audienceMatchOperatorMultiple = {
+                    filters: [
+                        {
+                            type: FilterType.audienceMatch,
+                            comparator: FilterComparator['!='],
+                            _audiences: ['test', 'test2']
+                        }
+                    ],
+                    operator: AudienceOperator.and
+                }
+                assert.strictEqual(false, segmentation.evaluateOperator(
+                    { data, operator: audienceMatchOperatorMultiple, audiences, featureId, isOptInEnabled }))
+            })
+
+        })
     })
 
     describe('checkStringsFilter', () => {
