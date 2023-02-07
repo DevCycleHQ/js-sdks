@@ -170,14 +170,29 @@ describe('Config Parsing and Generating', () => {
                     '_variation': '615382338424cb11646d7668',
                     'variationName': 'feature 2 variation',
                     'variationKey': 'variation-feature-2-key',
+                },
+                'feature3': {
+                    '_id': '614ef6aa475928459060721c',
+                    '_variation': '615382338424cb11646d7662',
+                    'key': 'feature3',
+                    'type': 'release',
+                    'variationKey': 'audience-match-variation',
+                    'variationName': 'audience match variation'
                 }
             },
             'featureVariationMap': {
                 '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
-                '614ef6aa475928459060721a': '615382338424cb11646d7668'
+                '614ef6aa475928459060721a': '615382338424cb11646d7668',
+                '614ef6aa475928459060721c': '615382338424cb11646d7662'
             },
             'variableVariationMap': {},
             'variables': {
+                'audience-match': {
+                    '_id': '61538237b0a70b58ae6af71z',
+                    'key': 'audience-match',
+                    'type': 'String',
+                    'value': 'audience_match'
+                },
                 'feature2.cool': {
                     '_id': '61538237b0a70b58ae6af71g',
                     'key': 'feature2.cool',

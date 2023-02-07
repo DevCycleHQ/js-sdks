@@ -137,7 +137,8 @@ export const getSegmentedFeatureDataFromConfig = (
                 operator: target._audience.filters,
                 data: user,
                 featureId: feature._id,
-                isOptInEnabled: !!isOptInEnabled
+                isOptInEnabled: !!isOptInEnabled,
+                audiences: config.audiences
             })
         })
         if (segmentedFeatureTarget) {

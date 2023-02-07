@@ -6,7 +6,7 @@ import includes from 'lodash/includes'
 import find from 'lodash/find'
 import { versionCompare } from './versionCompare'
 import {
-    TopLevelOperator, AudienceFilterOrOperator, UserSubType
+    PublicAudience, AudienceFilterOrOperator, UserSubType
 } from '@devcycle/types'
 import UAParser from 'ua-parser-js'
 
@@ -19,16 +19,22 @@ import UAParser from 'ua-parser-js'
  * @returns {*|boolean|boolean}
  */
 export const evaluateOperator = (
-    { operator, data, featureId, isOptInEnabled }:
-    {operator: TopLevelOperator, data: any, featureId: string, isOptInEnabled: boolean}
+    { operator, data, featureId, isOptInEnabled, audiences = {} }:
+    {
+        operator: AudienceFilterOrOperator, data: any, featureId: string, isOptInEnabled: boolean
+        audiences?:{ [id: string]: Omit<PublicAudience<string>, '_id'> }
+    }
 ): boolean => {
-    if (!operator.filters.length) return false
+    if (!operator?.filters?.length) return false
 
     const doesUserPassFilter = (filter: AudienceFilterOrOperator) => {
         if (filter.type === 'all') return true
         if (filter.type === 'optIn') {
             const optIns = data.optIns
             return isOptInEnabled && !!optIns?.[featureId]
+        }
+        if (filter.type === 'audienceMatch') {
+            return filterForAudienceMatch({ operator: filter, data, featureId, isOptInEnabled, audiences})
         }
         if (filter.type !== 'user') {
             console.error(`Invalid filter type: ${filter.type}`)
@@ -55,6 +61,34 @@ export const evaluateOperator = (
 }
 type FilterFunctionsBySubtype = {
     [key in UserSubType]: (data: any, filter: AudienceFilterOrOperator) => boolean
+}
+
+function filterForAudienceMatch({
+    operator, data, featureId, isOptInEnabled, audiences = {}
+}: {
+    operator: AudienceFilterOrOperator, data: any, featureId: string, isOptInEnabled: boolean
+    audiences?:{ [id: string]: Omit<PublicAudience<string>, '_id'> }
+}): boolean {
+    if (!operator?._audiences) return false
+    const comparator = operator.comparator
+    // Recursively evaluate every audience in the _audiences array
+    for (let _audience of operator._audiences) {
+        // grab actual audience from the provided config data
+        const audience = audiences[_audience]
+        if (!audience) {
+            throw new Error(`Audience ${_audience} not found in config`)
+        }
+        if (evaluateOperator({
+            operator: audience.filters,
+            data,
+            featureId,
+            isOptInEnabled,
+            audiences
+        })) {
+            return comparator === '='
+        }
+    }
+    return comparator === '!='
 }
 
 const filterFunctionsBySubtype: FilterFunctionsBySubtype = {
