@@ -444,6 +444,12 @@ describe('SegmentationManager Unit Test', () => {
                 assert.strictEqual(true, evaluateOperator(
                     { data, operator: audienceMatchOperator, audiences }))
             })
+
+            it('should not pass seg when referenced audience does not exist', () => {
+                assert.strictEqual(false, evaluateOperator(
+                    { data, operator: audienceMatchOperator, audiences: {} }))
+            })
+
             it('should not pass seg when not in audience for an AND operator', () => {
 
                 const audiences = {

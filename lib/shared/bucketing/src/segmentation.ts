@@ -22,7 +22,7 @@ export const evaluateOperator = (
     { operator, data, featureId, isOptInEnabled, audiences = {} }:
     {
         operator: AudienceFilterOrOperator, data: any, featureId: string, isOptInEnabled: boolean
-        audiences?:{ [id: string]: Omit<PublicAudience<string>, '_id'> }
+        audiences?: { [id: string]: Omit<PublicAudience<string>, '_id'> }
     }
 ): boolean => {
     if (!operator?.filters?.length) return false
@@ -34,7 +34,7 @@ export const evaluateOperator = (
             return isOptInEnabled && !!optIns?.[featureId]
         }
         if (filter.type === 'audienceMatch') {
-            return filterForAudienceMatch({ operator: filter, data, featureId, isOptInEnabled, audiences})
+            return filterForAudienceMatch({ operator: filter, data, featureId, isOptInEnabled, audiences })
         }
         if (filter.type !== 'user') {
             console.error(`Invalid filter type: ${filter.type}`)
@@ -67,16 +67,17 @@ function filterForAudienceMatch({
     operator, data, featureId, isOptInEnabled, audiences = {}
 }: {
     operator: AudienceFilterOrOperator, data: any, featureId: string, isOptInEnabled: boolean
-    audiences?:{ [id: string]: Omit<PublicAudience<string>, '_id'> }
+    audiences?: { [id: string]: Omit<PublicAudience<string>, '_id'> }
 }): boolean {
     if (!operator?._audiences) return false
     const comparator = operator.comparator
     // Recursively evaluate every audience in the _audiences array
-    for (let _audience of operator._audiences) {
+    for (const _audience of operator._audiences) {
         // grab actual audience from the provided config data
         const audience = audiences[_audience]
         if (!audience) {
-            throw new Error(`Audience ${_audience} not found in config`)
+            console.error('Invalid audience referenced by audienceMatch filter.')
+            return false
         }
         if (evaluateOperator({
             operator: audience.filters,

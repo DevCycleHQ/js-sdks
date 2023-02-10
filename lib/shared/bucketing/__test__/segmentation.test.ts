@@ -568,6 +568,11 @@ describe('SegmentationManager Unit Test', () => {
                 assert.strictEqual(true, segmentation.evaluateOperator(
                     { data, operator: audienceMatchOperator, audiences, featureId, isOptInEnabled }))
             })
+
+            it('should not pass seg for nonexistent audience', () => {
+                assert.strictEqual(false, segmentation.evaluateOperator(
+                    { data, operator: audienceMatchOperator, audiences: {}, featureId, isOptInEnabled }))
+            })
             it('should not pass seg when not in audience for happy path case', () => {
 
                 const audiences = {

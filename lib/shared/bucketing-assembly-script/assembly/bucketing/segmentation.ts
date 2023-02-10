@@ -104,6 +104,12 @@ function filterForAudienceMatch(
     const comparator = filter.comparator
     // Recursively evaluate every audience in the _audiences array
     for (let i = 0; i < audiences.length; i++) {
+        if (!configAudiences.has(audiences[i])){
+            console.log(`
+            [DevCycle] Warning: Invalid audience referenced by audienceMatch filter.
+        `)
+            return false
+        }
         const audience = configAudiences.get(audiences[i])
         if (_evaluateOperator(audience.filters, configAudiences, user, clientCustomData)) {
             // If the user is in any of the audiences return early.
