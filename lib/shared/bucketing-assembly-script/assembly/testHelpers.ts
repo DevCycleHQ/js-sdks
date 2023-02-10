@@ -51,7 +51,7 @@ export function checkCustomDataFromJSON(data: string | null, filterStr: string):
 
     const filter = new CustomDataFilter(filterJSON as JSON.Obj)
     const dataJSONObj = dataJSON && dataJSON.isObj ? dataJSON as JSON.Obj : null
-    return _checkCustomData(dataJSONObj, filter)
+    return _checkCustomData(dataJSONObj, new JSON.Obj(), filter)
 }
 
 export function evaluateOperatorFromJSON(
@@ -78,7 +78,7 @@ export function evaluateOperatorFromJSON(
 
     const operator = new TopLevelOperator(operatorJSON as JSON.Obj)
     const user = DVCPopulatedUser.fromJSONString(userStr)
-    return _evaluateOperator(operator, user, audiences)
+    return _evaluateOperator(operator, audiences, user, new JSON.Obj())
 }
 
 export function decideTargetVariationFromJSON(targetStr: string, boundedHash: f64): string {

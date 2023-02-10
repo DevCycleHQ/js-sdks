@@ -6,6 +6,7 @@ import { JSON } from 'assemblyscript-json/assembly'
 import { ConfigBody, DVCPopulatedUser, PlatformData } from './types'
 import { _clearPlatformData, _setPlatformData } from './managers/platformDataManager'
 import { _getConfigData, _setConfigData } from './managers/configDataManager'
+import { _getClientCustomData, _setClientCustomData } from './managers/clientCustomDataManager'
 
 export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
     const boundedHash = _generateBoundedHashes(user_id, target_id)
@@ -19,7 +20,7 @@ export function generateBucketedConfigForUser(sdkKey: string, userStr: string): 
     const config = _getConfigData(sdkKey)
     const user = DVCPopulatedUser.fromJSONString(userStr)
 
-    const bucketedConfig = _generateBucketedConfig(config, user)
+    const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
     return bucketedConfig.stringify()
 }
 
@@ -36,6 +37,15 @@ export function clearPlatformData(empty: string): void {
 export function setConfigData(sdkKey: string, configDataStr: string): void {
     const configData = new ConfigBody(configDataStr)
     _setConfigData(sdkKey, configData)
+}
+
+export function setClientCustomData(sdkKey: string, data: string): void {
+    const parsed = JSON.parse(data)
+    if (!parsed.isObj) {
+        throw new Error('invalid global data')
+    }
+
+    _setClientCustomData(sdkKey, parsed as JSON.Obj)
 }
 
 export * from './managers/eventQueueManager'

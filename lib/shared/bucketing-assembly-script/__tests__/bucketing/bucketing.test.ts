@@ -4,7 +4,8 @@ import {
     generateBucketedConfigForUser,
     doesUserPassRolloutFromJSON,
     setPlatformData,
-    setConfigData
+    setConfigData,
+    setClientCustomData
 } from '../bucketingImportHelper'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config, barrenConfig } = testData
@@ -28,6 +29,10 @@ const setPlatformDataJSON = (data: unknown) => {
 }
 
 setPlatformDataJSON(defaultPlatformData)
+
+const setClientCustomDataJSON = (data: unknown) => {
+    setClientCustomData('sdkKey', JSON.stringify(data))
+}
 
 const generateBoundedHashes = (user_id: string, target_id: string): BoundedHash => {
     const boundedHashes = generateBoundedHashesFromJSON(user_id, target_id)
@@ -642,5 +647,59 @@ describe('Rollout Logic', () => {
         expect(doesUserPassRollout({ boundedHash: 0.4 })).toBeTruthy()
         expect(doesUserPassRollout({ boundedHash: 0.6 })).toBeTruthy()
         expect(doesUserPassRollout({ boundedHash: 0.9 })).toBeTruthy()
+    })
+})
+
+describe('Client Data', () => {
+    it('uses client data to allow a user into a feature', () => {
+        const user = {
+            user_id: 'client-test',
+            customData: {
+                favouriteFood: 'pizza',
+            },
+            platformVersion: '1.1.2'
+        }
+        const clientData = {
+            'favouriteFood': 'NOT PIZZA!!',
+            favouriteDrink: 'coffee'
+        }
+
+        const c1 = generateBucketedConfig({ config, user })
+        expect(c1).toEqual(expect.objectContaining({
+            'featureVariationMap': {}
+        }))
+
+        setClientCustomDataJSON(clientData)
+
+        const expected = {
+            'featureVariationMap': {
+                '614ef6aa473928459060721a': '615357cf7e9ebdca58446ed0',
+                '614ef6aa475928459060721a': '615382338424cb11646d7667'
+            }
+        }
+        const c2 = generateBucketedConfig({ config, user })
+        expect(c2).toEqual(expect.objectContaining(expected))
+
+        setClientCustomDataJSON({
+            'favouriteFood': 'pizza',
+            favouriteDrink: 'coffee'
+        }
+        )
+
+        const user2 = {
+            user_id: 'hates-pizza',
+            customData: {
+                favouriteFood: 'NOT PIZZA!!',
+            },
+            platformVersion: '1.1.2'
+        }
+
+        const c3 = generateBucketedConfig({ config, user: user2 })
+        expect(c3).toEqual(expect.objectContaining({
+            'featureVariationMap': {}
+        }))
+
+        // cleanup
+        setClientCustomDataJSON({})
     })
 })

@@ -18,13 +18,15 @@ import { getF64FromJSONValue } from '../helpers/jsonHelpers'
  * Evaluate an operator object based on its contained filters and the user data given
  * Returns true if the user's data allows them through the segmentation
  * @param operator - The set of filters to evaluate, and the boolean operator to follow (AND, OR, XOR)
- * @param user - The incoming user, device, and user agent data
  * @param audiences - a map of audience_id to audience, used for audienceMatch filters
+ * @param user - The incoming user, device, and user agent data
+ * @param clientCustomData - The custom data object associated with the client instance
  */
 export function _evaluateOperator(
     operator: TopLevelOperator,
+    audiences: Map<string, NoIdAudience>,
     user: DVCPopulatedUser,
-    audiences: Map<string, NoIdAudience>
+    clientCustomData: JSON.Obj
 ): bool {
     if (!operator.filters.length) return false
 
@@ -32,7 +34,7 @@ export function _evaluateOperator(
         // Replace Array.some() logic
         for (let i = 0; i < operator.filters.length; i++) {
             const filter = operator.filters[i]
-            if (doesUserPassFilter(filter, user, audiences)) {
+            if (doesUserPassFilter(filter, audiences, user, clientCustomData)) {
                 return true
             }
         }
@@ -41,7 +43,7 @@ export function _evaluateOperator(
         // Replace Array.every() logic
         for (let i = 0; i < operator.filters.length; i++) {
             const filter = operator.filters[i]
-            if (!doesUserPassFilter(filter, user, audiences)) {
+            if (!doesUserPassFilter(filter, audiences, user, clientCustomData)) {
                 return false
             }
         }
@@ -51,8 +53,9 @@ export function _evaluateOperator(
 
 function doesUserPassFilter(
     filter: AudienceFilterOrOperator,
+    audiences: Map<string, NoIdAudience>,
     user: DVCPopulatedUser,
-    audiences: Map<string, NoIdAudience>
+    clientCustomData: JSON.Obj
 ): bool {
     const invalidFilterLog = `
             [DevCycle] Warning: Invalid filter data ${filter}.
@@ -66,7 +69,7 @@ function doesUserPassFilter(
             console.log(invalidFilterLog)
             return false
         }
-        return filterForAudienceMatch(filter as AudienceMatchFilter, user, audiences)
+        return filterForAudienceMatch(filter as AudienceMatchFilter, audiences, user, clientCustomData)
     } else if (!(filter instanceof UserFilter)) {
         console.log(invalidFilterLog)
         return false
@@ -88,20 +91,21 @@ function doesUserPassFilter(
         return false
     }
 
-    return filterFunctionsBySubtype(subType, user, userFilter)
+    return filterFunctionsBySubtype(subType, user, userFilter, clientCustomData)
 }
 
 function filterForAudienceMatch(
     filter: AudienceMatchFilter,
+    configAudiences: Map<string, NoIdAudience>,
     user: DVCPopulatedUser,
-    configAudiences: Map<string, NoIdAudience>
+    clientCustomData: JSON.Obj
 ): bool {
     const audiences = getFilterAudiencesAsStrings(filter)
     const comparator = filter.comparator
     // Recursively evaluate every audience in the _audiences array
     for (let i = 0; i < audiences.length; i++) {
         const audience = configAudiences.get(audiences[i])
-        if (_evaluateOperator(audience.filters, user, configAudiences)) {
+        if (_evaluateOperator(audience.filters, configAudiences, user, clientCustomData)) {
             // If the user is in any of the audiences return early.
             return comparator === '='
         }
@@ -109,7 +113,8 @@ function filterForAudienceMatch(
     // The user is not in any of the audiences.
     return comparator === '!='
 }
-function filterFunctionsBySubtype(subType: string, user: DVCPopulatedUser, filter: UserFilter): bool {
+function filterFunctionsBySubtype(subType: string, user: DVCPopulatedUser,
+    filter: UserFilter, clientCustomData: JSON.Obj): bool {
     if (subType === 'country') {
         return _checkStringsFilter(user.country, filter)
     } else if (subType === 'email') {
@@ -128,7 +133,7 @@ function filterFunctionsBySubtype(subType: string, user: DVCPopulatedUser, filte
         if (!(filter instanceof CustomDataFilter)) {
             throw new Error('Invalid filter data')
         }
-        return _checkCustomData(user.getCombinedCustomData(), filter as CustomDataFilter)
+        return _checkCustomData(user.getCombinedCustomData(), clientCustomData, filter as CustomDataFilter)
     } else {
         return false
     }
@@ -319,10 +324,13 @@ export function _checkVersionFilters(appVersion: string | null, filter: UserFilt
     }
 }
 
-export function _checkCustomData(data: JSON.Obj | null, filter: CustomDataFilter): bool {
+export function _checkCustomData(data: JSON.Obj | null, clientCustomData: JSON.Obj, filter: CustomDataFilter): bool {
     const operator = filter.comparator
 
-    const dataValue = data ? data.get(filter.dataKey) : null
+    let dataValue = data ? data.get(filter.dataKey) : null
+    if (dataValue === null) {
+        dataValue = clientCustomData.get(filter.dataKey)
+    }
 
     if (operator === 'exist') {
         return checkValueExists(dataValue)
