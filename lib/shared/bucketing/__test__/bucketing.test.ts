@@ -80,7 +80,8 @@ describe('Config Parsing and Generating', () => {
         const user = {
             country: 'canada',
             user_id: 'asuh',
-            email: 'test'
+            email: 'test',
+            platform: 'android'
         }
         const expected = {
             'environment': {
@@ -218,6 +219,90 @@ describe('Config Parsing and Generating', () => {
                     'value': 'scat',
                 }
             }
+        }
+        const c = generateBucketedConfig({ config, user })
+        expect(c).toEqual(expected)
+    })
+
+    it('correctly buckets based on nested filters', () => {
+        const user = {
+            country: 'Canada',
+            user_id: 'asuh',
+            platform: 'Android',
+            email: 'test1@email.com'
+        }
+        const expected = {
+            'environment': {
+                '_id': '6153553b8cf4e45e0464268d',
+                'key': 'test-environment'
+            },
+            'knownVariableKeys': [
+                3126796075,
+                1879689550,
+                2621975932,
+                4138596111,
+            ],
+            'project': expect.objectContaining({
+                '_id': '61535533396f00bab586cb17',
+                'a0_organization': 'org_12345612345',
+                'key': 'test-project'
+            }),
+            'features': {
+                'feature1': {
+                    '_id': '614ef6aa473928459060721a',
+                    'key': 'feature1',
+                    "settings": undefined,
+                    'type': FeatureType.release,
+                    '_variation': '615357cf7e9ebdca58446ed0',
+                    'variationName': 'variation 2',
+                    'variationKey': 'variation-2-key',
+                }
+            },
+            'featureVariationMap': {
+                '614ef6aa473928459060721a': '615357cf7e9ebdca58446ed0',
+            },
+            'variableVariationMap': {},
+            'variables': {
+                'swagTest': {
+                    '_id': '615356f120ed334a6054564c',
+                    'key': 'swagTest',
+                    'type': 'String',
+                    'value': 'YEEEEOWZA',
+                }
+            }
+        }
+        const c = generateBucketedConfig({ config, user })
+        expect(c).toEqual(expected)
+    })
+
+    it('correctly doesnt bucket with nested filters', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'asuh',
+            platform: 'Android',
+            email: 'notthisemail@email.com'
+        }
+        const expected = {
+            'environment': {
+                '_id': '6153553b8cf4e45e0464268d',
+                'key': 'test-environment'
+            },
+            'knownVariableKeys': [
+                3126796075,
+                2547774734,
+                1879689550,
+                2621975932,
+                4138596111,
+            ],
+            'project': expect.objectContaining({
+                '_id': '61535533396f00bab586cb17',
+                'a0_organization': 'org_12345612345',
+                'key': 'test-project'
+            }),
+            'features': {},
+            'featureVariationMap': {},
+            'variableVariationMap': {},
+            'variables': {}
         }
         const c = generateBucketedConfig({ config, user })
         expect(c).toEqual(expected)
@@ -387,7 +472,8 @@ describe('Config Parsing and Generating', () => {
         const user = {
             country: 'canada',
             user_id: 'asuh',
-            email: 'test@notemail.com'
+            email: 'test@notemail.com',
+            platform: 'Android'
         }
         expect(() => generateBucketedConfig({ config: barrenConfig, user }))
             .toThrow('Config missing variable: 61538237b0a70b58ae6af71g')
