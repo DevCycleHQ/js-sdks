@@ -270,8 +270,6 @@ function initializeFilterClass(filter: JSON.Obj): AudienceFilter | null {
         return new UserFilter(filter)
     } else if (getStringFromJSONOptional(filter, 'type') === 'audienceMatch'){
         return new AudienceMatchFilter(filter)
-    } else if (getStringFromJSONOptional(filter, 'type') === 'all'){
-        return new AudienceFilter(filter)
     } else {
         return new AudienceFilter(filter)
     }
