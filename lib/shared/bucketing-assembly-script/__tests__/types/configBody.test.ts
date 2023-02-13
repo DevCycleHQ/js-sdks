@@ -31,10 +31,19 @@ describe('Config Body', () => {
         const config = cloneDeep(testData.config)
         const filters = config.features[0].configuration.targets[0]._audience.filters
         filters.filters[0] = {
-            type: 'user'
+            type: 'user',
+            comparator: '='
         } as typeof filters.filters[0]
         expect(() => testConfigBodyClass(JSON.stringify(config)))
             .toThrow('Array not found for key: "values"')
+    })
+
+    it('should not throw if audience is using invalid operator', () => {
+        const config = cloneDeep(testData.config)
+        const filters = config.features[0].configuration.targets[0]._audience.filters
+        filters.operator = 'xylophone'
+        expect(() => testConfigBodyClass(JSON.stringify(config)))
+            .not.toThrow()
     })
 
     it('should throw if audience is missing comparator for user filter', () => {

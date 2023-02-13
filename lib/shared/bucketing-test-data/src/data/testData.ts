@@ -49,6 +49,20 @@ export const audiences: PublicAudience[] = [
         _id: '6153557f1ed7bac7268ea0d9',
         filters: {
             filters: [{
+                filters: [{
+                    type: FilterType.user,
+                    subType: UserSubType.user_id,
+                    comparator: FilterComparator['='],
+                    values: ['asuh']
+                },
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.country,
+                    comparator: FilterComparator['!='],
+                    values: ['U S AND A']
+                }],
+                operator: AudienceOperator.and
+            }, {
                 type: FilterType.user,
                 subType: UserSubType.user_id,
                 comparator: FilterComparator['='],

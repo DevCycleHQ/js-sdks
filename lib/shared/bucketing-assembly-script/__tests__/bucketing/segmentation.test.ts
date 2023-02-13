@@ -395,6 +395,30 @@ describe('SegmentationManager Unit Test', () => {
             })
         })
 
+        describe('evaluateOperator should handle a new operator (xylophone) type', () => {
+            const filters = [{
+                type: 'user',
+                subType: 'email',
+                comparator: '=',
+                values: ['brooks@big.lunch']
+            }]
+
+            const operator = {
+                filters,
+                operator: 'xylophone'
+            }
+
+            const data = {
+                country: 'Canada',
+                email: 'brooks@big.lunch',
+                platformVersion: '2.0.0',
+                platform: 'iOS'
+            }
+            it('should fail xylophone operator', () => {
+                assert.strictEqual(false, evaluateOperator({ data, operator }))
+            })
+        })
+
         describe('evaluateOperator should handle audienceMatch filter', () => {
             const filters = [
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
@@ -444,6 +468,23 @@ describe('SegmentationManager Unit Test', () => {
                 assert.strictEqual(true, evaluateOperator(
                     { data, operator: audienceMatchOperator, audiences }))
             })
+
+            it('should pass seg for a nested audiencematch filter', () => {
+
+                const audiences = {
+                    'test': {
+                        _id: 'test',
+                        filters: operator
+                    }
+                }
+                const parentOperator = {
+                    operator: 'and',
+                    filters: [audienceMatchOperator, operator]
+                }
+                assert.strictEqual(true, evaluateOperator(
+                    { data, operator: parentOperator, audiences }))
+            })
+
 
             it('should not pass seg when referenced audience does not exist', () => {
                 assert.strictEqual(false, evaluateOperator(
@@ -654,6 +695,33 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
+        it('should work for a top level AND with nested AND operator', () => {
+            const filters = [
+                { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
+                { type: 'user', subType: 'email', comparator: '=', values: ['dexter@smells.nice', 'brooks@big.lunch'] },
+                { type: 'user', subType: 'appVersion', comparator: '>', values: ['1.0.0'] }
+            ]
+
+            const topLevelFilter = { type: 'user', subType: 'country', comparator: '!=', values: ['Nanada'] }
+            const nestedOperator = {
+                filters,
+                operator: 'and'
+            }
+
+            const operator = {
+                filters: [topLevelFilter, nestedOperator],
+                operator: 'and'
+            }
+            const data = {
+                country: 'Canada',
+                email: 'brooks@big.lunch',
+                platformVersion: '2.0.0',
+                appVersion: '2.0.2',
+                platform: 'iOS'
+            }
+            assert.strictEqual(true, evaluateOperator({ data, operator }))
+        })
+
         it('should work for an OR operator', () => {
             const filters = [
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
@@ -675,6 +743,33 @@ describe('SegmentationManager Unit Test', () => {
             }
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
+
+        it('should work for a nested OR operator', () => {
+            const filters = [
+                { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
+                { type: 'user', subType: 'email', comparator: '=', values: ['dexter@smells.nice', 'brooks@big.lunch'] },
+                { type: 'user', subType: 'appVersion', comparator: '>', values: ['1.0.0'] }
+            ]
+
+            const nestedOperator = {
+                filters,
+                operator: 'or'
+            }
+
+            const operator = {
+                filters: [nestedOperator, { type: 'user', subType: 'country', comparator: '=', values: ['Nanada'] }],
+                operator: 'or'
+            }
+            const data = {
+                country: 'whomp',
+                email: 'fake@email.com',
+                platformVersion: '2.0.0',
+                appVersion: '2.0.2',
+                platform: 'iOS'
+            }
+            assert.strictEqual(true, evaluateOperator({ data, operator }))
+        })
+
 
         it('should work for an AND operator containing a custom data filter', () => {
             const filters = [

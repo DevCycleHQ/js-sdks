@@ -9,7 +9,7 @@ import {
     DVCUser,
     Rollout as PublicRollout,
     Target as PublicTarget,
-    TopLevelOperator, UserFilter,
+    AudienceOperator, UserFilter,
     NoIdAudience
 } from './types'
 import {
@@ -76,7 +76,7 @@ export function evaluateOperatorFromJSON(
         }
     }
 
-    const operator = new TopLevelOperator(operatorJSON as JSON.Obj)
+    const operator = new AudienceOperator(operatorJSON as JSON.Obj)
     const user = DVCPopulatedUser.fromJSONString(userStr)
     return _evaluateOperator(operator, audiences, user, new JSON.Obj())
 }

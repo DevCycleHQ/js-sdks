@@ -2,8 +2,8 @@ import { RegExp } from 'assemblyscript-regex/assembly'
 import { findString, includes, replace } from '../helpers/lodashHelpers'
 import { OptionsType, versionCompare } from './versionCompare'
 import {
-    TopLevelOperator,
-    AudienceFilterOrOperator,
+    AudienceOperator,
+    AudienceFilter,
     DVCPopulatedUser,
     validSubTypes,
     CustomDataFilter,
@@ -23,7 +23,7 @@ import { getF64FromJSONValue } from '../helpers/jsonHelpers'
  * @param clientCustomData - The custom data object associated with the client instance
  */
 export function _evaluateOperator(
-    operator: TopLevelOperator,
+    operator: AudienceOperator,
     audiences: Map<string, NoIdAudience>,
     user: DVCPopulatedUser,
     clientCustomData: JSON.Obj
@@ -34,25 +34,33 @@ export function _evaluateOperator(
         // Replace Array.some() logic
         for (let i = 0; i < operator.filters.length; i++) {
             const filter = operator.filters[i]
-            if (doesUserPassFilter(filter, audiences, user, clientCustomData)) {
+            if (filter.operatorClass !== null) {
+                return _evaluateOperator(filter.operatorClass as AudienceOperator, audiences, user, clientCustomData)
+            } else if (filter.filterClass !== null
+                && doesUserPassFilter(filter.filterClass as AudienceFilter, audiences, user, clientCustomData)) {
                 return true
             }
         }
         return false
-    } else {
+    } else if (operator.operator === 'and'){
         // Replace Array.every() logic
         for (let i = 0; i < operator.filters.length; i++) {
             const filter = operator.filters[i]
-            if (!doesUserPassFilter(filter, audiences, user, clientCustomData)) {
+            if (filter.operatorClass !== null) {
+                return _evaluateOperator(filter.operatorClass as AudienceOperator, audiences, user, clientCustomData)
+            } else if (filter.filterClass !== null
+                && !doesUserPassFilter(filter.filterClass as AudienceFilter, audiences, user, clientCustomData)) {
                 return false
             }
         }
         return true
+    } else {
+        return false
     }
 }
 
 function doesUserPassFilter(
-    filter: AudienceFilterOrOperator,
+    filter: AudienceFilter,
     audiences: Map<string, NoIdAudience>,
     user: DVCPopulatedUser,
     clientCustomData: JSON.Obj

@@ -28,6 +28,9 @@ export const evaluateOperator = (
     if (!operator?.filters?.length) return false
 
     const doesUserPassFilter = (filter: AudienceFilterOrOperator) => {
+        if (filter.operator) {
+            return evaluateOperator({ operator: filter, data, featureId, isOptInEnabled, audiences })
+        }
         if (filter.type === 'all') return true
         if (filter.type === 'optIn') {
             const optIns = data.optIns
