@@ -38,6 +38,14 @@ describe('Config Body', () => {
             .toThrow('Array not found for key: "values"')
     })
 
+    it('should not throw if audience is using invalid operator', () => {
+        const config = cloneDeep(testData.config)
+        const filters = config.features[0].configuration.targets[0]._audience.filters
+        filters.operator = 'xylophone'
+        expect(() => testConfigBodyClass(JSON.stringify(config)))
+            .not.toThrow()
+    })
+
     it('should throw if audience is missing comparator for user filter', () => {
         const config = cloneDeep(testData.config)
         const filters = config.features[0].configuration.targets[0]._audience.filters

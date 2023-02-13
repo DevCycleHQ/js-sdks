@@ -42,7 +42,7 @@ export function _evaluateOperator(
             }
         }
         return false
-    } else {
+    } else if (operator.operator === 'and'){
         // Replace Array.every() logic
         for (let i = 0; i < operator.filters.length; i++) {
             const filter = operator.filters[i]
@@ -54,6 +54,8 @@ export function _evaluateOperator(
             }
         }
         return true
+    } else {
+        return false
     }
 }
 

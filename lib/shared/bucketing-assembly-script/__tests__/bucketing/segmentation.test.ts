@@ -395,6 +395,30 @@ describe('SegmentationManager Unit Test', () => {
             })
         })
 
+        describe('evaluateOperator should handle a new operator (xylophone) type', () => {
+            const filters = [{
+                type: 'user',
+                subType: 'email',
+                comparator: '=',
+                values: ['brooks@big.lunch']
+            }]
+
+            const operator = {
+                filters,
+                operator: 'xylophone'
+            }
+
+            const data = {
+                country: 'Canada',
+                email: 'brooks@big.lunch',
+                platformVersion: '2.0.0',
+                platform: 'iOS'
+            }
+            it('should fail xylophone operator', () => {
+                assert.strictEqual(false, evaluateOperator({ data, operator }))
+            })
+        })
+
         describe('evaluateOperator should handle audienceMatch filter', () => {
             const filters = [
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },

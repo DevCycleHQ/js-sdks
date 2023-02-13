@@ -69,9 +69,9 @@ export class AudienceFilterOrOperator extends JSON.Value {
 
     constructor(filter: JSON.Obj) {
         super()
-        const operator = isValidStringOptional(filter, 'operator', validAudienceOperators)
+        const operator = isValidStringOptional(filter, 'operator', validAudienceOperators, false)
         this.operatorClass = operator ? new AudienceOperator(filter) : null
-        this.filterClass = initializeFilterClass(filter)
+        this.filterClass = operator ? null : initializeFilterClass(filter)
     }
 
     stringify(): string {
@@ -258,11 +258,7 @@ export class CustomDataFilter extends UserFilter {
     }
 }
 
-function initializeFilterClass(filter: JSON.Obj): AudienceFilter | null {
-    if (isValidStringOptional(filter, 'operator', validAudienceOperators)){
-        return null
-    }
-
+function initializeFilterClass(filter: JSON.Obj): AudienceFilter {
     if (getStringFromJSONOptional(filter, 'type') === 'user') {
         if (getStringFromJSONOptional(filter, 'subType') === 'customData') {
             return new CustomDataFilter(filter)
