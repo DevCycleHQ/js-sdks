@@ -105,7 +105,7 @@ export function queueEvent(sdkKey: string, userStr: string, eventStr: string): v
     const eventQueue = getEventQueue(sdkKey)
     const dvcUser = DVCPopulatedUser.fromJSONString(userStr)
     const event = DVCEvent.fromJSONString(eventStr)
-
+    dvcUser.mergeClientCustomData(_getClientCustomData(sdkKey))
     const bucketedConfig = _generateBucketedConfig(_getConfigData(sdkKey), dvcUser, _getClientCustomData(sdkKey))
     eventQueue.queueEvent(dvcUser, event, bucketedConfig.featureVariationMap)
 }

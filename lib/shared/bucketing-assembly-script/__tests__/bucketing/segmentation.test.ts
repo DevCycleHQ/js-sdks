@@ -485,7 +485,6 @@ describe('SegmentationManager Unit Test', () => {
                     { data, operator: parentOperator, audiences }))
             })
 
-
             it('should not pass seg when referenced audience does not exist', () => {
                 assert.strictEqual(false, evaluateOperator(
                     { data, operator: audienceMatchOperator, audiences: {} }))
@@ -769,7 +768,6 @@ describe('SegmentationManager Unit Test', () => {
             }
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
-
 
         it('should work for an AND operator containing a custom data filter', () => {
             const filters = [

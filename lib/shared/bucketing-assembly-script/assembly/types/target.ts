@@ -81,7 +81,7 @@ export class AudienceFilterOrOperator extends JSON.Value {
         if (this.filterClass !== null) {
             return (this.filterClass as AudienceFilter).stringify()
         }
-        return ""
+        return ''
     }
 }
 
@@ -192,7 +192,6 @@ export class AudienceMatchFilter extends AudienceFilter {
         return json.stringify()
     }
 }
-
 
 export class UserFilter extends AudienceFilter {
     subType: string
