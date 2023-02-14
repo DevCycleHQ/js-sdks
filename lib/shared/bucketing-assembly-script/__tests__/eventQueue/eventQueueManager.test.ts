@@ -9,7 +9,8 @@ import {
     queueEvent as queueEvent_AS,
     queueAggregateEvent as queueAggregateEvent_AS,
     cleanupEventQueue,
-    eventQueueSize as eventQueueSize_AS
+    eventQueueSize as eventQueueSize_AS,
+    setClientCustomData
 } from '../bucketingImportHelper'
 import { FlushPayload } from '../../assembly/types'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
@@ -56,6 +57,7 @@ describe('EventQueueManager Tests', () => {
         clearPlatformData('')
         if (currentSDKKey) {
             cleanupEventQueue(currentSDKKey)
+            setClientCustomData(currentSDKKey, '{}')
             currentSDKKey = null
         }
     })
@@ -179,6 +181,59 @@ describe('EventQueueManager Tests', () => {
                                 'sdkType': 'server',
                                 'sdkVersion': '1.0.0',
                                 'user_id': 'host.name'
+                            }
+                        }
+                    ]
+                }
+            ]))
+        })
+
+        it('should merge client custom data into event user data', () => {
+            const sdkKey = 'sdk_key_custom_data'
+            const event = {
+                type: 'testType',
+                target: 'testTarget',
+                value: 10,
+                metaData: { test: 'data' }
+            }
+
+            initSDK(sdkKey)
+            setClientCustomData(sdkKey, JSON.stringify({ clientCustom: 'data', private: 'field' }))
+
+            queueEvent(sdkKey, dvcUser, event)
+
+            expect(flushEventQueue(sdkKey)).toEqual(expect.arrayContaining([
+                {
+                    'payloadId': expect.any(String),
+                    'eventCount': 1,
+                    'records': [
+                        {
+                            'events': [{
+                                'clientDate': expect.any(String),
+                                'customType': 'testType',
+                                'date': expect.any(String),
+                                'featureVars': {},
+                                'metaData': { 'test': 'data' },
+                                'target': 'testTarget',
+                                'type': 'customEvent',
+                                'user_id': 'user_id',
+                                'value': 10,
+                            }],
+                            'user': {
+                                'createdDate': expect.any(String),
+                                'lastSeenDate': expect.any(String),
+                                'platform': 'NodeJS',
+                                'platformVersion': '16.0',
+                                'sdkType': 'server',
+                                'sdkVersion': '1.0.0',
+                                'user_id': 'user_id',
+                                'email': 'email@devcycle.com',
+                                'language': 'en',
+                                'country': 'us',
+                                'appVersion': '6.1.0',
+                                'appBuild': 188,
+                                'deviceModel': 'dvcServer',
+                                'customData': { 'custom': 'data', 'clientCustom': 'data' }
                             }
                         }
                     ]
