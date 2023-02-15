@@ -14,18 +14,18 @@ let client: DVCClient | undefined
 export default function DVCProvider(props: Props): React.ReactElement {
     const { config } = props
     const { user, options } = config
-    let key: string
+    let sdkKey: string
     if ('sdkKey' in config) {
-        key = config.sdkKey
+        sdkKey = config.sdkKey
     } else {
-        key = config.envKey
+        sdkKey = config.envKey
     }
-    if (!key) {
+    if (!sdkKey) {
         throw new Error('You must provide a sdkKey to DVCProvider')
     }
 
     if (!client) {
-        client = initializeDVCClient(key, user, options)
+        client = initializeDVCClient(sdkKey, user, options)
     }
 
     useEffect(() => {

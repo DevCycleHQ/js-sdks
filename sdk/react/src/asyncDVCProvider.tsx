@@ -14,7 +14,16 @@ type Props = {
  *
  */
 export default async function asyncWithDVCProvider(config: ProviderConfig): Promise<React.FC<Props>> {
-    const { sdkKey, user, options } = config
+    const { user, options } = config
+    let sdkKey: string
+    if ('sdkKey' in config) {
+        sdkKey = config.sdkKey
+    } else {
+        sdkKey = config.envKey
+    }
+    if (!sdkKey) {
+        throw new Error('You must provide a sdkKey to asyncWithDVCProvider')
+    }
 
     const client = initializeDVCClient(sdkKey, user, options)
     await client.onClientInitialized()
