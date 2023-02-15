@@ -5,7 +5,7 @@ import App from './App'
 import { asyncWithDVCProvider } from '@devcycle/devcycle-react-sdk';
 
 (async () => {
-    const SDK_KEY = process.env['NX_CLIENT_KEY'] || 'test_token'
+    const SDK_KEY = process.env['DVC_CLIENT_SDK_KEY'] || 'test_token'
     const user = {
         user_id: 'userId1',
         email: 'auto@taplytics.com',
