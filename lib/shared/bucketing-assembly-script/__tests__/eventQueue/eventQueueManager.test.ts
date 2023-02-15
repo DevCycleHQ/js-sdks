@@ -391,7 +391,7 @@ describe('EventQueueManager Tests', () => {
         })
 
         it('should throw error if re-queued payload hasn\'t finished sending', () => {
-            const sdkKey = 'env_key_requeued_failed_test'
+            const sdkKey = 'sdk_key_requeued_failed_test'
             const event = {
                 type: 'testType',
                 target: 'testTarget',

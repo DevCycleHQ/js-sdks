@@ -3,7 +3,7 @@
 import './app.element.css'
 import { initialize } from '@devcycle/devcycle-js-sdk'
 
-const clientKey = process.env['NX_CLIENT_KEY'] || '<YOUR-CLIENT-KEY-HERE>'
+const SDK_KEY = process.env['NX_CLIENT_KEY'] || '<YOUR-CLIENT-KEY-HERE>'
 
 export class AppElement extends HTMLElement {
     constructor() {
@@ -445,7 +445,7 @@ const user = {
     isAnonymous: false
 }
 
-const client = initialize(clientKey, user, {
+const client = initialize(SDK_KEY, user, {
     enableEdgeDB: false,
     logLevel: 'error'
 })

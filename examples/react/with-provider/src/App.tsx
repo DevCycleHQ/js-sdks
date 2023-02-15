@@ -4,7 +4,7 @@ import './App.css'
 import { useIsDVCInitialized, withDVCProvider } from '@devcycle/devcycle-react-sdk'
 import DevCycleExample from './DevCycleExample'
 
-const ENV_KEY = process.env['NX_CLIENT_KEY'] || 'test_token'
+const SDK_KEY = process.env['NX_CLIENT_KEY'] || 'test_token'
 const user = {
     user_id: 'userId1',
     email: 'auto@taplytics.com',
@@ -26,7 +26,7 @@ function App() {
             <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo" />
                 <p>
-            Update the <code>ENV_KEY</code> and <code>user_id</code> fields
+            Update the <code>SDK_KEY</code> and <code>user_id</code> fields
             inside <code>src/App.tsx</code> and save to reload.
                 </p>
                 <a
@@ -43,4 +43,4 @@ function App() {
     )
 }
 
-export default withDVCProvider({ sdkKey: ENV_KEY, user: user, options: { logLevel: 'debug' } })(App)
+export default withDVCProvider({ sdkKey: SDK_KEY, user: user, options: { logLevel: 'debug' } })(App)

@@ -21,7 +21,7 @@ import Heart from './icons/heart.svg'
 
 global.DeviceInfo = DeviceInfo
 
-const ENV_KEY = process.env['NX_CLIENT_KEY'] || 'test_token'
+const SDK_KEY = process.env['NX_CLIENT_KEY'] || 'test_token'
 const VARIABLE_KEY = 'test_variable_key'
 const DEFAULT_VALUE = false
 
@@ -91,7 +91,7 @@ export const App = (): JSX.Element => {
                     </View>
                     <View style={styles.section}>
                         <Text style={styles.textMd}>
-              Update the ENV_KEY and VARIABLE_KEY values in App.tsx and reload. {'\n\n'}
+              Update the SDK_KEY and VARIABLE_KEY values in App.tsx and reload. {'\n\n'}
                         </Text>
                         <Text style={styles.textLg}>
               My device: <Text style={styles.textBold}>{DeviceInfo.getModel()}</Text> {'\n'}
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
 })
 
 export default withDVCProvider({
-    sdkKey: ENV_KEY,
+    sdkKey: SDK_KEY,
     user,
     options: {
         reactNative: true

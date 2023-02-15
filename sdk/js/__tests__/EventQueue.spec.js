@@ -5,9 +5,9 @@ let eventQueue, dvcClient
 
 describe('EventQueue tests', () => {
     beforeAll(() => {
-        dvcClient = new DVCClient('test_env_key', { user_id: 'user1' })
+        dvcClient = new DVCClient('test_sdk_key', { user_id: 'user1' })
         dvcClient.config = { features: [] }
-        eventQueue = new EventQueue('test_env_key', dvcClient)
+        eventQueue = new EventQueue('test_sdk_key', dvcClient)
     })
 
     beforeEach(() => {
@@ -24,7 +24,7 @@ describe('EventQueue tests', () => {
             await eventQueue.flushEvents()
 
             expect(Request.publishEvents).toBeCalledWith(
-                'test_env_key',
+                'test_sdk_key',
                 dvcClient.config,
                 dvcClient.user,
                 expect.any(Object),
@@ -100,7 +100,7 @@ describe('EventQueue tests', () => {
             await eventQueue.close()
 
             expect(Request.publishEvents).toBeCalledWith(
-                'test_env_key',
+                'test_sdk_key',
                 dvcClient.config,
                 dvcClient.user,
                 expect.any(Object),

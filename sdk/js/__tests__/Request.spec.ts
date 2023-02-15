@@ -31,9 +31,9 @@ describe('Request tests', () => {
     describe('baseRequestParams', () => {
         const { baseRequestHeaders } = Request
         it('should add environmentKey header if passed in', () => {
-            const params = baseRequestHeaders('my_env_key')
+            const params = baseRequestHeaders('my_sdk_key')
             expect(params['Content-Type']).toBe('application/json')
-            expect(params['Authorization']).toBe('my_env_key')
+            expect(params['Authorization']).toBe('my_sdk_key')
         })
 
         it('should not add header if no environmentKey passed in', () => {
@@ -46,7 +46,7 @@ describe('Request tests', () => {
     describe('getConfigJson', () => {
         it('should call get with serialized user and environment key in params', async () => {
             const user = { user_id: 'my_user', isAnonymous: false }
-            const environmentKey = 'my_env_key'
+            const environmentKey = 'my_sdk_key'
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
             await Request.getConfigJson(environmentKey, user as DVCPopulatedUser, defaultLogger, {}, {
@@ -64,7 +64,7 @@ describe('Request tests', () => {
 
         it('should call local proxy for apiProxyURL option', async () => {
             const user = { user_id: 'my_user', isAnonymous: false }
-            const environmentKey = 'my_env_key'
+            const environmentKey = 'my_sdk_key'
             const dvcOptions = { apiProxyURL: 'http://localhost:4000' }
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
@@ -84,7 +84,7 @@ describe('Request tests', () => {
         it('should call get with serialized user and environment key in params', async () => {
             const user = { user_id: 'my_user' } as DVCPopulatedUser
             const config = {} as BucketedUserConfig
-            const environmentKey = 'my_env_key'
+            const environmentKey = 'my_sdk_key'
             const events = [{ type: 'event_1_type' }, { type: 'event_2_type' }]
             axiosRequestMock.mockResolvedValue({ status: 200, data: 'messages' })
 
@@ -92,7 +92,7 @@ describe('Request tests', () => {
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: {
-                    'Authorization': 'my_env_key',
+                    'Authorization': 'my_sdk_key',
                     'Content-Type': 'application/json',
                 },
                 method: 'POST',
@@ -121,7 +121,7 @@ describe('Request tests', () => {
     describe('saveEntity', () => {
         it('should send user data to edgedb api with url-encoded id', async () => {
             const user = { user_id: 'user@example.com', isAnonymous: false }
-            const environmentKey = 'my_env_key'
+            const environmentKey = 'my_sdk_key'
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
             await Request.saveEntity(user as DVCPopulatedUser, environmentKey, defaultLogger)
@@ -129,7 +129,7 @@ describe('Request tests', () => {
             expect(axiosRequestMock).toBeCalledWith({
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'my_env_key'
+                    'Authorization': 'my_sdk_key'
                 },
                 data: {
                     user_id: 'user@example.com',
