@@ -1,14 +1,17 @@
 const jsSDK: any = jest.genMockFromModule('@devcycle/devcycle-js-sdk')
 
+const mockVariableFunction = jest.fn().mockImplementation((key: string, defaultValue: unknown) => {
+    const variable: any = {
+        value: defaultValue,
+    }
+
+    variable.onUpdate = jest.fn().mockReturnValue(variable)
+
+    return variable
+})
 class Client {
     variable(key: string, defaultValue: unknown) {
-        const variable: any = {
-            value: defaultValue,
-        }
-
-        variable.onUpdate = jest.fn().mockReturnValue(variable)
-
-        return variable
+        return mockVariableFunction(key, defaultValue)
     }
     close() {
         // no-op
@@ -17,6 +20,7 @@ class Client {
 
 module.exports = {
     ...jsSDK,
+    mockVariableFunction,
     initialize: () => {
         return new Client()
     }

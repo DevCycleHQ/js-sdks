@@ -3,6 +3,9 @@ import { render, renderHook } from '@testing-library/react'
 import DVCProvider from './DVCProvider'
 import type { DVCJSON } from '@devcycle/devcycle-js-sdk'
 import { ReactElement } from 'react'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { mockVariableFunction } from '@devcycle/devcycle-js-sdk' // defined in the mock
 
 jest.mock('@devcycle/devcycle-js-sdk')
 
@@ -13,6 +16,9 @@ const ProviderWrapper = ({ children }: {children: ReactElement}) => {
 }
 
 describe('useVariableValue', () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
     it('uses the correct type for string', () => {
         const { result } = renderHook(() => useVariableValue('test', 'default'), { wrapper: ProviderWrapper })
         expect(result.current).toEqual('default')
@@ -51,5 +57,13 @@ describe('useVariableValue', () => {
         // @ts-expect-error this indicates wrong type
         const _testNumber: number = result.current
         const _testJSON: DVCJSON = result.current
+    })
+
+    it('calls the variable method on the SDK once per hook instance, not per invocation', () => {
+        const { result, rerender } = renderHook(() => useVariableValue('test', 'default'), { wrapper: ProviderWrapper })
+        expect(result.current).toEqual('default')
+        rerender()
+        expect(result.current).toEqual('default')
+        expect(mockVariableFunction).toHaveBeenCalledTimes(1)
     })
 })
