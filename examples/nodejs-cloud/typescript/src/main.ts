@@ -5,6 +5,8 @@ import { Query } from 'express-serve-static-core'
 import express from 'express'
 import bodyParser from 'body-parser'
 
+const DVC_SERVER_SDK_KEY = process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
+
 const app = express()
 const port = 5001
 const defaultHeaders = {
@@ -32,7 +34,7 @@ async function validateUserFromQueryParams(queryParams: Query): Promise<DVCClien
 }
 
 async function startDVC() {
-    dvcClient = initialize('<DVC_SERVER_SDK_KEY>', { logLevel: 'info', enableCloudBucketing: true })
+    dvcClient = initialize(DVC_SERVER_SDK_KEY, { logLevel: 'info', enableCloudBucketing: true })
     console.log('DVC Cloud Bucketing TypeScript Client Ready')
 
     const user = {

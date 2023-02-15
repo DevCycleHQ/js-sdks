@@ -5,7 +5,7 @@ import App from './App'
 import { asyncWithDVCProvider } from '@devcycle/devcycle-react-sdk';
 
 (async () => {
-    const ENV_KEY = process.env['NX_CLIENT_KEY'] || 'test_token'
+    const SDK_KEY = process.env['DVC_CLIENT_SDK_KEY'] || '<YOUR_DVC_CLIENT_SDK_KEY>'
     const user = {
         user_id: 'userId1',
         email: 'auto@taplytics.com',
@@ -16,7 +16,7 @@ import { asyncWithDVCProvider } from '@devcycle/devcycle-react-sdk';
         },
         isAnonymous: false
     }
-    const DVCProvider = await asyncWithDVCProvider({ envKey: ENV_KEY, user: user  })
+    const DVCProvider = await asyncWithDVCProvider({ sdkKey: SDK_KEY, user: user  })
 
     ReactDOM.render(
         <React.StrictMode>

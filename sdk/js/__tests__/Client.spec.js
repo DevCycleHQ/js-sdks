@@ -13,7 +13,7 @@ const saveEntity_mock = mocked(saveEntity)
 
 const createClientWithConfigImplementation = (implementation) => {
     getConfigJson_mock.mockImplementation(implementation)
-    return new DVCClient('test_env_key', { user_id: 'user1' })
+    return new DVCClient('test_sdk_key', { user_id: 'user1' })
 }
 
 describe('DVCClient tests', () => {
@@ -47,7 +47,7 @@ describe('DVCClient tests', () => {
         getConfigJson_mock.mockImplementation(() => {
             return Promise.resolve(testConfig)
         })
-        const client = new DVCClient('test_env_key', { user_id: 'user1' })
+        const client = new DVCClient('test_sdk_key', { user_id: 'user1' })
         await client.onInitialized
         expect(getConfigJson_mock).toBeCalled()
         expect(getConfigJson_mock.mock.calls.length).toBe(1)
@@ -58,7 +58,7 @@ describe('DVCClient tests', () => {
         getConfigJson_mock.mockImplementation(() => {
             return Promise.resolve({ ...testConfig, sse: { url: 'example.com' } })
         })
-        const client = new DVCClient('test_env_key', { user_id: 'user1' })
+        const client = new DVCClient('test_sdk_key', { user_id: 'user1' })
         await client.onInitialized
         expect(getConfigJson_mock).toBeCalled()
         expect(client.streamingConnection).toBeDefined()
@@ -69,10 +69,10 @@ describe('DVCClient tests', () => {
             return Promise.resolve(testConfig)
         })
         const dvcOptions = { enableEdgeDB: true }
-        const client = new DVCClient('test_env_key', { user_id: 'user1' }, dvcOptions)
+        const client = new DVCClient('test_sdk_key', { user_id: 'user1' }, dvcOptions)
         await client.onClientInitialized()
         expect(getConfigJson_mock).toBeCalledWith(
-            'test_env_key',
+            'test_sdk_key',
             expect.objectContaining({ user_id: 'user1' }),
             expect.any(Object),
             dvcOptions,
@@ -82,7 +82,7 @@ describe('DVCClient tests', () => {
         expect(client.config).toStrictEqual(testConfig)
         expect(saveEntity_mock).toBeCalledWith(
             expect.objectContaining({ user_id: 'user1' }),
-            'test_env_key',
+            'test_sdk_key',
             expect.any(Object),
             dvcOptions
         )
@@ -93,10 +93,10 @@ describe('DVCClient tests', () => {
             return Promise.resolve({ ...testConfig, project: { settings: { edgeDB: { enabled: false } } } })
         })
         const dvcOptions = { enableEdgeDB: true }
-        const client = new DVCClient('test_env_key', { user_id: 'user1' }, dvcOptions)
+        const client = new DVCClient('test_sdk_key', { user_id: 'user1' }, dvcOptions)
         await client.onClientInitialized()
         expect(getConfigJson_mock).toBeCalledWith(
-            'test_env_key',
+            'test_sdk_key',
             expect.objectContaining({ user_id: 'user1' }),
             expect.any(Object),
             dvcOptions,
@@ -111,10 +111,10 @@ describe('DVCClient tests', () => {
             return Promise.resolve(testConfig)
         })
         const dvcOptions = { enableEdgeDB: false }
-        const client = new DVCClient('test_env_key', { user_id: 'user1' }, dvcOptions)
+        const client = new DVCClient('test_sdk_key', { user_id: 'user1' }, dvcOptions)
         await client.onClientInitialized()
         expect(getConfigJson_mock).toBeCalledWith(
-            'test_env_key',
+            'test_sdk_key',
             expect.objectContaining({ user_id: 'user1' }),
             expect.any(Object),
             dvcOptions,
@@ -129,7 +129,7 @@ describe('DVCClient tests', () => {
         getConfigJson_mock.mockImplementation(() => {
             return Promise.reject(new Error('test error'))
         })
-        const client = new DVCClient('test_env_key', { user_id: 'user1' })
+        const client = new DVCClient('test_sdk_key', { user_id: 'user1' })
         await client.onInitialized
         expect(getConfigJson_mock).toBeCalled()
         expect(client.config).toBeUndefined()
@@ -139,28 +139,28 @@ describe('DVCClient tests', () => {
         getConfigJson_mock.mockImplementation(() => {
             return Promise.resolve(testConfig)
         })
-        const client = new DVCClient('test_env_key', { isAnonymous: true })
+        const client = new DVCClient('test_sdk_key', { isAnonymous: true })
         await client.onClientInitialized()
         const anonymousUserId = await client.store.store.load(StoreKey.AnonUserId)
         expect(anonymousUserId).toEqual(client.user.user_id)
     })
 
     it('should not save anonymous user id in local storage if isAnonymous is false', async () => {
-        const client = new DVCClient('test_env_key', { user_id: 'user1', isAnonymous: false })
+        const client = new DVCClient('test_sdk_key', { user_id: 'user1', isAnonymous: false })
         const anonymousUserId = await client.store.store.load(StoreKey.AnonUserId)
         expect(anonymousUserId).toBeUndefined()
     })
 
     it('should get the anonymous user id from local storage if it exists', async () => {
         window.localStorage.setItem(StoreKey.AnonUserId, JSON.stringify('test_anon_user_id'))
-        const client = new DVCClient('test_env_key', { isAnonymous: true })
+        const client = new DVCClient('test_sdk_key', { isAnonymous: true })
         await client.onClientInitialized()
         expect(client.user.user_id).toEqual('test_anon_user_id')
     })
 
     it('should clear the anonymous user id from local storage when initialized with non-anon user', async () => {
         window.localStorage.setItem(StoreKey.AnonUserId, JSON.stringify('anon_user_id'))
-        const client = new DVCClient('test_env_key', { user_id: 'user1' })
+        const client = new DVCClient('test_sdk_key', { user_id: 'user1' })
         await client.onClientInitialized()
         expect(client.user.user_id).toEqual('user1')
         expect(window.localStorage.getItem(StoreKey.AnonUserId)).toBeNull()
@@ -174,21 +174,21 @@ describe('DVCClient tests', () => {
         })
 
         it('should return promise if no callback given', () => {
-            const client = new DVCClient('test_env_key', { user_id: 'user1' })
+            const client = new DVCClient('test_sdk_key', { user_id: 'user1' })
             const onInitialized = client.onClientInitialized()
             expect(onInitialized).not.toBeFalsy()
             expect(onInitialized).toBeInstanceOf(Promise)
         })
 
         it('should return promise if non-callback given', async () => {
-            const client = new DVCClient('test_env_key', { user_id: 'user1' })
+            const client = new DVCClient('test_sdk_key', { user_id: 'user1' })
             const onInitialized = client.onClientInitialized('not a callback')
             expect(onInitialized).not.toBeFalsy()
             expect(onInitialized).toBeInstanceOf(Promise)
         })
 
         it('should not return promise if callback given', async () => {
-            const client = new DVCClient('test_env_key', { user_id: 'user1' })
+            const client = new DVCClient('test_sdk_key', { user_id: 'user1' })
             const callback = jest.fn()
             const onInitialized = client.onClientInitialized(callback)
             expect(onInitialized).toBeFalsy()
@@ -199,7 +199,7 @@ describe('DVCClient tests', () => {
         it('should not send a request to edgedb for an anonymous user', async () => {
             saveEntity_mock.mockResolvedValue({})
 
-            const client = new DVCClient('test_env_key',
+            const client = new DVCClient('test_sdk_key',
                 { isAnonymous: true },
                 { enableEdgeDB: true }
             )
@@ -210,14 +210,14 @@ describe('DVCClient tests', () => {
         })
 
         it('should save config for user', async () => {
-            const client = new DVCClient('test_env_key', { user_id: 'user1' })
+            const client = new DVCClient('test_sdk_key', { user_id: 'user1' })
             await client.onClientInitialized()
             expect(window.localStorage.getItem(`${StoreKey.IdentifiedConfig}.user_id`)).toBe(JSON.stringify('user1'))
             expect(window.localStorage.getItem(StoreKey.IdentifiedConfig)).toBe(JSON.stringify(testConfig))
         })
 
         it('should save config for anonymous user', async () => {
-            const client = new DVCClient('test_env_key', { isAnonymous: true })
+            const client = new DVCClient('test_sdk_key', { isAnonymous: true })
             await client.onClientInitialized()
             expect(window.localStorage.getItem(StoreKey.AnonymousConfig)).toBe(JSON.stringify(testConfig))
         })
@@ -413,7 +413,7 @@ describe('DVCClient tests', () => {
             })
             saveEntity_mock.mockResolvedValue({})
             const dvcOptions = { enableEdgeDB: true }
-            const client = new DVCClient('test_env_key', { user_id: 'user1' }, dvcOptions)
+            const client = new DVCClient('test_sdk_key', { user_id: 'user1' }, dvcOptions)
 
             await client.onClientInitialized()
             getConfigJson_mock.mockClear()
@@ -421,7 +421,7 @@ describe('DVCClient tests', () => {
             await client.identifyUser(newUser)
 
             expect(getConfigJson_mock).toBeCalledWith(
-                'test_env_key',
+                'test_sdk_key',
                 expect.objectContaining({ user_id: 'user1' }),
                 expect.any(Object),
                 dvcOptions,
@@ -429,13 +429,13 @@ describe('DVCClient tests', () => {
             )
             expect(saveEntity_mock).toBeCalledWith(
                 expect.objectContaining(newUser),
-                'test_env_key',
+                'test_sdk_key',
                 expect.any(Object),
                 dvcOptions
             )
             expect(saveEntity_mock).toBeCalledWith(
                 expect.any(DVCPopulatedUser),
-                'test_env_key',
+                'test_sdk_key',
                 expect.any(Object),
                 dvcOptions
             )
@@ -446,7 +446,7 @@ describe('DVCClient tests', () => {
             getConfigJson_mock.mockResolvedValue(testConfig)
             saveEntity_mock.mockResolvedValue({})
 
-            const client = new DVCClient('test_env_key',
+            const client = new DVCClient('test_sdk_key',
                 new DVCPopulatedUser({ isAnonymous: true }),
                 { enableEdgeDB: true }
             )
@@ -492,7 +492,7 @@ describe('DVCClient tests', () => {
         it('should not clear existing anon user id if called with anon user', async () => {
             getConfigJson_mock.mockResolvedValue(testConfig)
 
-            const client = new DVCClient('test_env_key', { isAnonymous: true })
+            const client = new DVCClient('test_sdk_key', { isAnonymous: true })
 
             await client.onClientInitialized()
             const originalAnonUserId = client.user.user_id
@@ -551,7 +551,7 @@ describe('DVCClient tests', () => {
             const anonUser = getConfigJson.mock.calls[0][1]
 
             expect(getConfigJson).toBeCalledWith(
-                'test_env_key',
+                'test_sdk_key',
                 expect.objectContaining(anonUser),
                 expect.any(Object),
                 {},
@@ -567,14 +567,14 @@ describe('DVCClient tests', () => {
             })
             saveEntity_mock.mockResolvedValue({})
             const dvcOptions = { enableEdgeDB: true }
-            const client = new DVCClient('test_env_key', { user_id: 'user1' }, dvcOptions)
+            const client = new DVCClient('test_sdk_key', { user_id: 'user1' }, dvcOptions)
             await client.onClientInitialized()
             getConfigJson_mock.mockClear()
             saveEntity_mock.mockClear()
             await client.resetUser()
 
             expect(getConfigJson).toBeCalledWith(
-                'test_env_key',
+                'test_sdk_key',
                 expect.objectContaining({ user_id: expect.any(String) }),
                 expect.any(Object),
                 dvcOptions,
@@ -593,7 +593,7 @@ describe('DVCClient tests', () => {
         })
 
         it('should remove anonymous user id from local storage', async () => {
-            const client = new DVCClient('test_env_key', { isAnonymous: true })
+            const client = new DVCClient('test_sdk_key', { isAnonymous: true })
             await client.onClientInitialized()
             const oldAnonymousId = await client.store.store.load(StoreKey.AnonUserId)
             expect(oldAnonymousId).toBeTruthy()
@@ -670,7 +670,7 @@ describe('DVCClient tests', () => {
     describe('track', () => {
         let client
         beforeEach(async () => {
-            client = new DVCClient('test_env_key', { user_id: 'user1' })
+            client = new DVCClient('test_sdk_key', { user_id: 'user1' })
             await client.onClientInitialized()
             jest.spyOn(client.eventQueue, 'queueEvent')
         })
@@ -728,7 +728,7 @@ describe('DVCClient tests', () => {
             getConfigJson_mock.mockImplementation(() => {
                 return Promise.resolve({ ...testConfig, sse: { url: 'example.com' } })
             })
-            client = new DVCClient('test_env_key', { user_id: 'user1' })
+            client = new DVCClient('test_sdk_key', { user_id: 'user1' })
             await client.onClientInitialized()
             jest.spyOn(client.eventQueue, 'close')
         })

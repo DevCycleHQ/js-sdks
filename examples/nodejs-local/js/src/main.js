@@ -2,6 +2,8 @@ const DVC = require('@devcycle/nodejs-server-sdk')
 const express = require('express')
 const bodyParser = require('body-parser')
 
+const DVC_SERVER_SDK_KEY = process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
+
 const app = express()
 const port = 5000
 const defaultHeaders = {
@@ -17,7 +19,7 @@ app.use(bodyParser.json())
 let dvcClient
 
 async function startDVC() {
-    dvcClient = await DVC.initialize('<DVC_SERVER_SDK_KEY>', { logLevel: 'info' }).onClientInitialized()
+    dvcClient = await DVC.initialize(DVC_SERVER_SDK_KEY, { logLevel: 'info' }).onClientInitialized()
     console.log('DVC Local Bucketing JS Client Initialized')
 
     const user = {

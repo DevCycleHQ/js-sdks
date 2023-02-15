@@ -10,7 +10,7 @@ pod install
 
 ## Running the example
 
-* In `App.tsx`, set `ENV_KEY` to the Environment Key.
+* In `App.tsx`, set `SDK_KEY` to the Environment Key.
 You can find this under Settings / Environments on the DevCycle dashboard.
 * Create a new feature on the dashboard. Update the `VARIABLE_KEY` in `App.tsx` to this value.
 * If you added user targeting to your feature, update the `user_id` field in `App.tsx` based on your targeting rules.
@@ -28,3 +28,4 @@ If you want to run the react native dev server separately, you can first run:
 yarn nx serve example-react-native-app
 ```
 before the above commands.
+

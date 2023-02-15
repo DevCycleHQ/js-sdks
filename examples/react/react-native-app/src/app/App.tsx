@@ -21,7 +21,7 @@ import Heart from './icons/heart.svg'
 
 global.DeviceInfo = DeviceInfo
 
-const ENV_KEY = process.env['NX_CLIENT_KEY'] || 'test_token'
+const SDK_KEY = process.env['DVC_CLIENT_SDK_KEY'] || '<YOUR_DVC_CLIENT_SDK_KEY>'
 const VARIABLE_KEY = 'test_variable_key'
 const DEFAULT_VALUE = false
 
@@ -71,7 +71,7 @@ export const App = (): JSX.Element => {
     }
 
     if (!dvcReady) return <SafeAreaView><Text style={styles.textXL}>DVC is not ready!</Text></SafeAreaView>
-    
+
     return (
         <>
             <StatusBar barStyle="dark-content" />
@@ -91,11 +91,11 @@ export const App = (): JSX.Element => {
                     </View>
                     <View style={styles.section}>
                         <Text style={styles.textMd}>
-              Update the ENV_KEY and VARIABLE_KEY values in App.tsx and reload. {'\n\n'}
+              Update the SDK_KEY and VARIABLE_KEY values in App.tsx and reload. {'\n\n'}
                         </Text>
                         <Text style={styles.textLg}>
               My device: <Text style={styles.textBold}>{DeviceInfo.getModel()}</Text> {'\n'}
-              The value for <Text style={styles.textBold}>{VARIABLE_KEY}</Text> is 
+              The value for <Text style={styles.textBold}>{VARIABLE_KEY}</Text> is
                             <Text style={styles.textBold}>{JSON.stringify(variable.value)}</Text>
                         </Text>
                         <TouchableOpacity
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
 })
 
 export default withDVCProvider({
-    envKey: ENV_KEY,
+    sdkKey: SDK_KEY,
     user,
     options: {
         reactNative: true
