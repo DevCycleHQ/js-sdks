@@ -108,3 +108,21 @@ Push up the new tags and version changes, then run:
 
 This will publish all the new versions to npm. You must provide the one-time password associated with the NPM account
 in order to run this command.
+
+#### js.devcycle.com/devcycle.min.js
+
+The last step is to upload the umd version of the SDK to our S3 bucket.
+
+To build it, run:
+
+`nx build:cdn js`
+
+This will create three files in the `dist/sdk/js` folder:
+
+```
+- devcycle.min.js
+- devcycle.min.js.map
+- devcycle.min.js.LICENSE.txt
+```
+
+Upload them all to S3.
