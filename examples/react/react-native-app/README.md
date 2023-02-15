@@ -28,3 +28,4 @@ If you want to run the react native dev server separately, you can first run:
 yarn nx serve example-react-native-app
 ```
 before the above commands.
+
