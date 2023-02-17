@@ -16,13 +16,13 @@ describe('NodeJS SDK Initialize', () => {
     it('fails to initialize in Local Bucketing mode when no token is provided', () => {
         expect(() =>
             initialize(undefined as unknown as string)
-        ).toThrow('Missing environment key! Call initialize with a valid environment key')
+        ).toThrow('Missing SDK key! Call initialize with a valid SDK key')
     })
 
     it('fails to initialize in Local Bucketing mode when client token is provided', () => {
         expect(() =>
             initialize('dvc_client_token')
-        ).toThrow('Invalid environment key provided. Please call initialize with a valid server environment key')
+        ).toThrow('Invalid SDK key provided. Please call initialize with a valid server SDK key')
     })
 
     it('sucessfully calls initialize with enableCloudBucketing set to true', () => {
@@ -33,6 +33,6 @@ describe('NodeJS SDK Initialize', () => {
     it('fails to initialize in Cloud Bucketing mode when no token is provided', () => {
         expect(() =>
             initialize(undefined as unknown as string, { enableCloudBucketing: true })
-        ).toThrow('Missing environment key! Call initialize with a valid environment key')
+        ).toThrow('Missing SDK key! Call initialize with a valid SDK key')
     })
 })

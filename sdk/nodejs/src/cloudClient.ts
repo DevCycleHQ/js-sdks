@@ -52,12 +52,12 @@ const throwIfUserError = (err: unknown) => {
 }
 
 export class DVCCloudClient {
-    private environmentKey: string
+    private sdkKey: string
     private logger: DVCLogger
     private options: DVCOptions
 
-    constructor(environmentKey: string, options: DVCOptions) {
-        this.environmentKey = environmentKey
+    constructor(sdkKey: string, options: DVCOptions) {
+        this.sdkKey = sdkKey
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.options = options
         this.logger.info('Running DevCycle NodeJS SDK in Cloud Bucketing mode')
@@ -72,7 +72,7 @@ export class DVCCloudClient {
         checkParamDefined('defaultValue', defaultValue)
         const type = getVariableTypeFromValue(defaultValue, key, this.logger, true)
 
-        return getVariable(populatedUser, this.environmentKey, key, this.options)
+        return getVariable(populatedUser, this.sdkKey, key, this.options)
             .then(async (res: Response) => {
                 const variableResponse = await res.json()
                 if (variableResponse.type !== type) {
@@ -108,7 +108,7 @@ export class DVCCloudClient {
 
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
 
-        return getAllVariables(populatedUser, this.environmentKey, this.options)
+        return getAllVariables(populatedUser, this.sdkKey, this.options)
             .then(async (res: Response) => {
                 const variablesResponse = await res.json()
 
@@ -128,7 +128,7 @@ export class DVCCloudClient {
 
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
 
-        return getAllFeatures(populatedUser, this.environmentKey, this.options)
+        return getAllFeatures(populatedUser, this.sdkKey, this.options)
             .then(async (res: Response) => {
                 const featuresResponse = await res.json()
 
@@ -149,7 +149,7 @@ export class DVCCloudClient {
         }
         checkParamDefined('type', event.type)
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
-        return postTrack(populatedUser, event, this.environmentKey, this.options)
+        return postTrack(populatedUser, event, this.sdkKey, this.options)
             .then(() => {
                 this.logger.debug('DVC Event Tracked')
             }).catch((err: unknown) => {

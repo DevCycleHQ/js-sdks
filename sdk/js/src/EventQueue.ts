@@ -13,15 +13,15 @@ type AggregateEvent = DVCEvent & {
 }
 
 export class EventQueue {
-    private readonly environmentKey: string
+    private readonly sdkKey: string
     client: DVCClient
     eventQueue: DVCEvent[]
     aggregateEventMap: Record<string, Record<string, AggregateEvent>>
     eventFlushIntervalMS: number
     flushInterval: ReturnType<typeof setInterval>
 
-    constructor(environmentKey: string, dvcClient: DVCClient, eventFlushIntervalMS?: number) {
-        this.environmentKey = environmentKey
+    constructor(sdkKey: string, dvcClient: DVCClient, eventFlushIntervalMS?: number) {
+        this.sdkKey = sdkKey
         this.client = dvcClient
         this.eventQueue = []
         this.aggregateEventMap = {}
@@ -46,7 +46,7 @@ export class EventQueue {
 
         try {
             const res = await publishEvents(
-                this.environmentKey,
+                this.sdkKey,
                 this.client.config || null,
                 this.client.user,
                 eventsToFlush,

@@ -6,7 +6,7 @@ Install all packages using `yarn` in the root directory.
 
 ## Running the example
 
-* In `App.tsx`, set `SDK_KEY` to the Environment Key. 
+* In `App.tsx`, set `SDK_KEY` to the SDK Key for your environment. 
 You can find this under Settings / Environments on the DevCycle dashboard.
 * Create a new feature on the dashboard. Update the `variableKey` in `DevCycleExample.tsx` to this value.
 * If you added user targeting to your feature, update the `user_id` field in `App.tsx` based on your targeting rules.

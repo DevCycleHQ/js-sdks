@@ -35,15 +35,15 @@ const castIncomingUser = (user: DVCUser) => {
 }
 
 export class DVCClient {
-    private environmentKey: string
+    private sdkKey: string
     private configHelper: EnvironmentConfigManager
     private eventQueue: EventQueue
     private onInitialized: Promise<DVCClient>
     private logger: DVCLogger
     private initialized = false
 
-    constructor(environmentKey: string, options?: DVCOptions) {
-        this.environmentKey = environmentKey
+    constructor(sdkKey: string, options?: DVCOptions) {
+        this.sdkKey = sdkKey
         this.logger = options?.logger || dvcDefaultLogger({ level: options?.logLevel })
 
         if (options?.enableEdgeDB) {
@@ -55,9 +55,9 @@ export class DVCClient {
                 throw new UserError(bucketingErr)
             })
             .then(() => {
-                this.configHelper = new EnvironmentConfigManager(this.logger, environmentKey, options || {})
+                this.configHelper = new EnvironmentConfigManager(this.logger, sdkKey, options || {})
                 this.eventQueue = new EventQueue(
-                    environmentKey,
+                    sdkKey,
                     {
                         ...options,
                         logger: this.logger
@@ -126,7 +126,7 @@ export class DVCClient {
         }
 
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
-        const bucketedConfig = bucketUserForConfig(populatedUser, this.environmentKey)
+        const bucketedConfig = bucketUserForConfig(populatedUser, this.sdkKey)
 
         const options: VariableParam<T> = {
             key,
@@ -169,7 +169,7 @@ export class DVCClient {
         }
 
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
-        const bucketedConfig = bucketUserForConfig(populatedUser, this.environmentKey)
+        const bucketedConfig = bucketUserForConfig(populatedUser, this.sdkKey)
         return bucketedConfig?.variables || {}
     }
 
@@ -182,7 +182,7 @@ export class DVCClient {
         }
 
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
-        const bucketedConfig = bucketUserForConfig(populatedUser, this.environmentKey)
+        const bucketedConfig = bucketUserForConfig(populatedUser, this.sdkKey)
         return bucketedConfig?.features || {}
     }
 
