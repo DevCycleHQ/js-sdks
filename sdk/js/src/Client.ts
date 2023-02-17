@@ -25,13 +25,12 @@ import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
-import DefaultCacheStore from './DefaultCacheStore'
 
 export class DVCClient implements Client {
     private options: DVCOptions
     private onInitialized: Promise<DVCClient>
     private variableDefaultMap: { [key: string]: { [key: string]: DVCVariable<any> } }
-    private environmentKey: string
+    private sdkKey: string
     private userSaved = false
     private _closing = false
     private isConfigCached = false
@@ -48,7 +47,7 @@ export class DVCClient implements Client {
     private inactivityHandlerId?: number
     private windowMessageHandler?: (event: MessageEvent) => void
 
-    constructor(environmentKey: string, user: DVCUser, options: DVCOptions = {}) {
+    constructor(sdkKey: string, user: DVCUser, options: DVCOptions = {}) {
         this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.store = new CacheStore(
             options.storage || new DefaultStorage(), this.logger
@@ -56,9 +55,9 @@ export class DVCClient implements Client {
 
         this.options = options
 
-        this.environmentKey = environmentKey
+        this.sdkKey = sdkKey
         this.variableDefaultMap = {}
-        this.eventQueue = new EventQueue(environmentKey, this, options?.eventFlushIntervalMS)
+        this.eventQueue = new EventQueue(sdkKey, this, options?.eventFlushIntervalMS)
 
         this.eventEmitter = new EventEmitter()
         this.registerVisibilityChangeHandler()
@@ -67,7 +66,7 @@ export class DVCClient implements Client {
             this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId)
             this.requestConsolidator = new ConfigRequestConsolidator(
                 (user: DVCPopulatedUser, extraParams) => getConfigJson(
-                    this.environmentKey, user, this.logger, this.options, extraParams
+                    this.sdkKey, user, this.logger, this.options, extraParams
                 ),
                 (config: BucketedUserConfig, user: DVCPopulatedUser) =>
                     this.handleConfigReceived(config, user, Date.now()),
@@ -320,7 +319,7 @@ export class DVCClient implements Client {
             this.store.saveUser(user)
 
             if (!this.user.isAnonymous && checkIfEdgeEnabled(config, this.logger, this.options?.enableEdgeDB, true)) {
-                saveEntity(this.user, this.environmentKey, this.logger, this.options)
+                saveEntity(this.user, this.sdkKey, this.logger, this.options)
                     .then((res) => this.logger.info(`Saved response entity! ${res}`))
             }
 

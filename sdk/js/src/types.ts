@@ -39,12 +39,12 @@ export type DVCFeatureSet = {
 
 /**
  * Initialize the SDK
- * @param environmentKey
+ * @param sdkKey
  * @param user
  * @param options
  */
 export type initialize = (
-    environmentKey: string,
+    sdkKey: string,
     user: DVCUser,
     options?: DVCOptions
 ) => DVCClient

@@ -13,7 +13,7 @@ import { jsonArrFromValueArray } from '../helpers/jsonHelpers'
 import { _getClientCustomData } from './clientCustomDataManager'
 
 /**
- * Map<environmentKey, EventQueue>
+ * Map<sdkKey, EventQueue>
  */
 const _eventQueueMap = new Map<string, EventQueue>()
 

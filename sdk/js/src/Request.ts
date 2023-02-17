@@ -27,10 +27,10 @@ export const CONFIG_PATH = '/v1/sdkConfig'
 export const EVENTS_PATH = '/v1/events'
 export const SAVE_ENTITY_PATH = '/v1/edgedb'
 
-export const baseRequestHeaders = (environmentKey?: string): AxiosRequestHeaders => {
+export const baseRequestHeaders = (sdkKey?: string): AxiosRequestHeaders => {
     return {
         'Content-Type': 'application/json',
-        ...(environmentKey ? { 'Authorization': environmentKey } : {})
+        ...(sdkKey ? { 'Authorization': sdkKey } : {})
     }
 }
 
@@ -47,27 +47,27 @@ export const get = async (url: string): Promise<AxiosResponse> => {
 
 export const post = async (
     url: string,
-    environmentKey: string,
+    sdkKey: string,
     body: Record<string, unknown>
 ): Promise<AxiosResponse> => {
     return await axiosClient.request({
         method: 'POST',
         url,
         data: body,
-        headers: baseRequestHeaders(environmentKey)
+        headers: baseRequestHeaders(sdkKey)
     })
 }
 
 export const patch = async (
     url: string,
-    environmentKey: string,
+    sdkKey: string,
     body: Record<string, unknown>
 ): Promise<AxiosResponse> => {
     return await axiosClient.request({
         method: 'PATCH',
         url,
         data: body,
-        headers: baseRequestHeaders(environmentKey)
+        headers: baseRequestHeaders(sdkKey)
     })
 }
 
@@ -75,7 +75,7 @@ export const patch = async (
  * Endpoints
  */
 export const getConfigJson = async (
-    environmentKey: string,
+    sdkKey: string,
     user: DVCPopulatedUser,
     logger: DVCLogger,
     options?: DVCOptions,
@@ -86,7 +86,7 @@ export const getConfigJson = async (
     const lastModified = extraParams?.lastModified ? `&sseLastModified=${extraParams.lastModified}` : ''
     const queryParams = `${serializeUser(user)}${edgeDBParam}${sseParam}${lastModified}`
     const url = `${options?.apiProxyURL || CLIENT_SDK_URL}${CONFIG_PATH}` +
-                `?sdkKey=${environmentKey}${queryParams && '&' + queryParams}`
+                `?sdkKey=${sdkKey}${queryParams && '&' + queryParams}`
 
     try {
         const res = await get(url)

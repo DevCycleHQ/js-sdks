@@ -6,7 +6,7 @@ import { DVCClient } from './Client'
 
 export * from './types'
 
-export const initialize = (environmentKey: string, user: DVCUser, options: DVCOptions = {}): DVCClient => {
+export const initialize = (sdkKey: string, user: DVCUser, options: DVCOptions = {}): DVCClient => {
     // TODO: implement logger
     if (typeof window === 'undefined') {
         console.warn('Window is not defined, try initializing in a browser context')
@@ -22,8 +22,8 @@ export const initialize = (environmentKey: string, user: DVCUser, options: DVCOp
             'Import react-native-device-info and set global.DeviceInfo when running on React Native')
     }
 
-    if (!environmentKey) {
-        throw new Error('Missing environment key! Call initialize with a valid environment key')
+    if (!sdkKey) {
+        throw new Error('Missing SDK key! Call initialize with a valid SDK key')
     }
 
     if (!user) {
@@ -34,7 +34,7 @@ export const initialize = (environmentKey: string, user: DVCUser, options: DVCOp
         throw new Error('Invalid options! Call initialize with valid options')
     }
 
-    const client = new DVCClient(environmentKey, user, options)
+    const client = new DVCClient(sdkKey, user, options)
 
     client.onClientInitialized()
         .then(() => client.logger.info('Successfully initialized DevCycle!'))

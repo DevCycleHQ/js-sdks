@@ -30,13 +30,13 @@ describe('Request tests', () => {
 
     describe('baseRequestParams', () => {
         const { baseRequestHeaders } = Request
-        it('should add environmentKey header if passed in', () => {
+        it('should add sdkKey header if passed in', () => {
             const params = baseRequestHeaders('my_sdk_key')
             expect(params['Content-Type']).toBe('application/json')
             expect(params['Authorization']).toBe('my_sdk_key')
         })
 
-        it('should not add header if no environmentKey passed in', () => {
+        it('should not add header if no sdkKey passed in', () => {
             const params = baseRequestHeaders()
             expect(params['Content-Type']).toBe('application/json')
             expect(params['Authorization']).toBeUndefined()
@@ -44,12 +44,12 @@ describe('Request tests', () => {
     })
 
     describe('getConfigJson', () => {
-        it('should call get with serialized user and environment key in params', async () => {
+        it('should call get with serialized user and SDK key in params', async () => {
             const user = { user_id: 'my_user', isAnonymous: false }
-            const environmentKey = 'my_sdk_key'
+            const sdkKey = 'my_sdk_key'
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
-            await Request.getConfigJson(environmentKey, user as DVCPopulatedUser, defaultLogger, {}, {
+            await Request.getConfigJson(sdkKey, user as DVCPopulatedUser, defaultLogger, {}, {
                 sse: true,
                 lastModified: 1234
             })
@@ -58,37 +58,37 @@ describe('Request tests', () => {
                 headers: { 'Content-Type': 'application/json' },
                 method: 'GET',
                 url: 'https://sdk-api.devcycle.com/v1/sdkConfig?sdkKey=' +
-                     `${environmentKey}&user_id=${user.user_id}&isAnonymous=false&sse=1&sseLastModified=1234`
+                     `${sdkKey}&user_id=${user.user_id}&isAnonymous=false&sse=1&sseLastModified=1234`
             })
         })
 
         it('should call local proxy for apiProxyURL option', async () => {
             const user = { user_id: 'my_user', isAnonymous: false }
-            const environmentKey = 'my_sdk_key'
+            const sdkKey = 'my_sdk_key'
             const dvcOptions = { apiProxyURL: 'http://localhost:4000' }
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
-            await Request.getConfigJson(environmentKey, user as DVCPopulatedUser, defaultLogger, dvcOptions)
+            await Request.getConfigJson(sdkKey, user as DVCPopulatedUser, defaultLogger, dvcOptions)
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: { 'Content-Type': 'application/json' },
                 method: 'GET',
                 url: `${dvcOptions.apiProxyURL}/v1/sdkConfig?sdkKey=` +
-                     `${environmentKey}&user_id=${user.user_id}&isAnonymous=false`
+                     `${sdkKey}&user_id=${user.user_id}&isAnonymous=false`
             })
         })
     })
 
     describe('publishEvents', () => {
 
-        it('should call get with serialized user and environment key in params', async () => {
+        it('should call get with serialized user and SDK key in params', async () => {
             const user = { user_id: 'my_user' } as DVCPopulatedUser
             const config = {} as BucketedUserConfig
-            const environmentKey = 'my_sdk_key'
+            const sdkKey = 'my_sdk_key'
             const events = [{ type: 'event_1_type' }, { type: 'event_2_type' }]
             axiosRequestMock.mockResolvedValue({ status: 200, data: 'messages' })
 
-            await Request.publishEvents(environmentKey, config, user, events, defaultLogger)
+            await Request.publishEvents(sdkKey, config, user, events, defaultLogger)
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: {
@@ -121,10 +121,10 @@ describe('Request tests', () => {
     describe('saveEntity', () => {
         it('should send user data to edgedb api with url-encoded id', async () => {
             const user = { user_id: 'user@example.com', isAnonymous: false }
-            const environmentKey = 'my_sdk_key'
+            const sdkKey = 'my_sdk_key'
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
-            await Request.saveEntity(user as DVCPopulatedUser, environmentKey, defaultLogger)
+            await Request.saveEntity(user as DVCPopulatedUser, sdkKey, defaultLogger)
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: {

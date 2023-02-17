@@ -16,9 +16,9 @@ export function initialize(sdkKey: string, options: DVCOptionsCloudEnabled): DVC
 export function initialize(sdkKey: string, options?: DVCOptions): DVCClient | DVCCloudClient
 export function initialize(sdkKey: string, options: DVCOptions = {}): DVCClient | DVCCloudClient {
     if (!sdkKey) {
-        throw new Error('Missing environment key! Call initialize with a valid environment key')
+        throw new Error('Missing SDK key! Call initialize with a valid SDK key')
     } else if (!isValidServerSDKKey(sdkKey)) {
-        throw new Error('Invalid environment key provided. Please call initialize with a valid server environment key')
+        throw new Error('Invalid SDK key provided. Please call initialize with a valid server SDK key')
     }
 
     if (options.enableCloudBucketing) {
