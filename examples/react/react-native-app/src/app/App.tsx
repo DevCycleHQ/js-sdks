@@ -21,7 +21,7 @@ import Heart from './icons/heart.svg'
 
 global.DeviceInfo = DeviceInfo
 
-const SDK_KEY = process.env['DVC_CLIENT_SDK_KEY'] || '<YOUR_DVC_CLIENT_SDK_KEY>'
+const SDK_KEY = process.env.NX_DVC_CLIENT_SDK_KEY || '<YOUR_DVC_CLIENT_SDK_KEY>'
 const VARIABLE_KEY = 'test_variable_key'
 const DEFAULT_VALUE = false
 
