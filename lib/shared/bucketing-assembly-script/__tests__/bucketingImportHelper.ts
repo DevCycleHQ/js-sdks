@@ -1,7 +1,7 @@
 import { instantiate, Exports } from '../index'
 
 async function initialize() {
-    const methods = await instantiate()
+    const methods = await instantiate(true)
     Object.assign(bucketingExports, methods)
 }
 
