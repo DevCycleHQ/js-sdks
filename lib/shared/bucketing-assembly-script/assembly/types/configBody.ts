@@ -8,7 +8,7 @@ import {
     isValidString, getJSONObjFromJSONOptional
 } from '../helpers/jsonHelpers'
 import { Feature,  } from './feature'
-import { Audience, NoIdAudience } from './target'
+import { NoIdAudience } from './target'
 
 export class PublicProject extends JSON.Value {
     _id: string
@@ -95,24 +95,26 @@ export class ConfigBody {
 
         this.environment = new PublicEnvironment(getJSONObjFromJSON(configJSONObj, 'environment'))
 
-        const features = getJSONArrayFromJSON(configJSONObj, 'features')
-        this.features = features.valueOf().map<Feature>((feature) => {
+        const featuresJSON = getJSONArrayFromJSON(configJSONObj, 'features')
+        this.features = featuresJSON.valueOf().map<Feature>((feature) => {
             return new Feature(feature as JSON.Obj)
         })
-        const audiences = getJSONObjFromJSONOptional(configJSONObj, 'audiences')
+        const audiencesJSON = getJSONObjFromJSONOptional(configJSONObj, 'audiences')
 
-        this.audiences = new Map<string, NoIdAudience>()
+        const audiences = new Map<string, NoIdAudience>()
 
-        if (audiences) {
-            const audienceKeys = audiences.keys
+        if (audiencesJSON) {
+            const audienceKeys = audiencesJSON.keys
             for (let i=0; i < audienceKeys.length; i++) {
                 const audience_id = audienceKeys[i]
-                const aud = audiences.get(audience_id)
-                this.audiences.set(audience_id, new NoIdAudience(aud as JSON.Obj))
+                const aud = audiencesJSON.get(audience_id)
+                audiences.set(audience_id, new NoIdAudience(aud as JSON.Obj))
             }
         }
-        const variables = getJSONArrayFromJSON(configJSONObj, 'variables')
-        this.variables = variables.valueOf().map<Variable>((variable) => {
+        this.audiences = audiences
+
+        const variablesJSON = getJSONArrayFromJSON(configJSONObj, 'variables')
+        this.variables = variablesJSON.valueOf().map<Variable>((variable) => {
             return new Variable(variable as JSON.Obj)
         })
 

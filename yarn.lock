@@ -3011,7 +3011,7 @@ __metadata:
     "@devcycle/bucketing-assembly-script": ^1.3.3
     "@devcycle/bucketing-test-data": ^1.1.0
     assemblyscript-json: "*"
-    assemblyscript-regex: "*"
+    assemblyscript-regex: ^1.6.4
   languageName: unknown
   linkType: soft
 
@@ -8213,30 +8213,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"assemblyscript-regex@https://github.com/DevCycleHQ/assemblyscript-regex.git#fix-null-type-errors":
+"assemblyscript-regex@https://github.com/DevCycleHQ/assemblyscript-regex.git#8ff33297841880c16e38bd67a84df4cbdb8e887f":
   version: 0.1.0
-  resolution: "assemblyscript-regex@https://github.com/DevCycleHQ/assemblyscript-regex.git#commit=ba92c8262ffef368bd8307fd70b3cf9967a529b4"
-  checksum: de890e464b0373cbf2332275204f2ebbe5d103299343ad84435a2970a620ac851776f014c18c6cfdc8a648ab5602befd489ef0feaf13d6a46560416d014bfc4a
+  resolution: "assemblyscript-regex@https://github.com/DevCycleHQ/assemblyscript-regex.git#commit=8ff33297841880c16e38bd67a84df4cbdb8e887f"
+  checksum: 0fcb8203239a32b4749541592b1eb9895907521674559770fe9792ac9cebd3b41d2f53609e1b585b63f62af4f794f3263b5fc486c5d6689b679251680700e211
   languageName: node
   linkType: hard
 
-"assemblyscript-regex@npm:*":
+"assemblyscript-regex@npm:^1.6.4":
   version: 1.6.4
   resolution: "assemblyscript-regex@npm:1.6.4"
   checksum: 04e5058cf5182cf13673c69b6fe23fa28129b99923d30de54c55d4b7872ed9f906eb63f800e660b848235b204bb21dd308b726b1e2e07974288c01c619c27ae8
   languageName: node
   linkType: hard
 
-"assemblyscript@npm:~0.21.3":
-  version: 0.21.3
-  resolution: "assemblyscript@npm:0.21.3"
+"assemblyscript@npm:~0.27.0":
+  version: 0.27.0
+  resolution: "assemblyscript@npm:0.27.0"
   dependencies:
-    binaryen: 109.0.0-nightly.20220831
+    binaryen: 111.0.0-nightly.20230111
     long: ^5.2.0
   bin:
     asc: bin/asc.js
     asinit: bin/asinit.js
-  checksum: 31747c901c709db6fc5b0279d51f64b7d9d9d38acd1c175aabb2066dc2ed375ba91f81a0c01efddf4e8441481f5bbdd4063f455645aa92c7e8bc1fbe5eaeb343
+  checksum: f5e641de723a4774e695f696427b412adbadd04f493aeb4ab814e78f193791546a9d372c1b675a04e1c9a8cd9ddb54527c37d03aec404b025b40e491764f2705
   languageName: node
   linkType: hard
 
@@ -8792,13 +8792,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"binaryen@npm:109.0.0-nightly.20220831":
-  version: 109.0.0-nightly.20220831
-  resolution: "binaryen@npm:109.0.0-nightly.20220831"
+"binaryen@npm:111.0.0-nightly.20230111":
+  version: 111.0.0-nightly.20230111
+  resolution: "binaryen@npm:111.0.0-nightly.20230111"
   bin:
     wasm-opt: bin/wasm-opt
     wasm2js: bin/wasm2js
-  checksum: da037846c7417f0666ced817382cb06bb16481ae2d87b883f2f65fff5c1b6f8d4159239962cd12f6d4e6d60d2fa40823eab886f90d51eca9121201748555a78d
+  checksum: b361f946d91c82b8dbebca81cfb85feebac02995707bb0def66e8d78b22ea6a666a892d7acbd5efa19b4c54cbe53f2e2e10bd17302a7321c236293a20fc52193
   languageName: node
   linkType: hard
 
@@ -11093,9 +11093,9 @@ __metadata:
     "@typescript-eslint/parser": 5.33.1
     as-uuid: ^0.0.4
     as-wasi: ^0.4.6
-    assemblyscript: ~0.21.3
+    assemblyscript: ~0.27.0
     assemblyscript-json: "https://github.com/DevCycleHQ/assemblyscript-json"
-    assemblyscript-regex: "https://github.com/DevCycleHQ/assemblyscript-regex.git#fix-null-type-errors"
+    assemblyscript-regex: "https://github.com/DevCycleHQ/assemblyscript-regex.git#8ff33297841880c16e38bd67a84df4cbdb8e887f"
     async: ^3.2.1
     axios: ^0.27.2
     axios-retry: ^3.3.1

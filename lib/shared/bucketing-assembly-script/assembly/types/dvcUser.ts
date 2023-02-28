@@ -111,23 +111,24 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         this.privateCustomData = user.privateCustomData
         this.deviceModel = user.deviceModel
 
-        this.combinedCustomData = new JSON.Obj()
+        const combinedCustomData = new JSON.Obj()
 
-        const customData = this.customData
+        const customData = user.customData
         if (customData) {
             for (let i = 0; i < customData.keys.length; i++) {
                 const key = customData.keys[i]
-                this.combinedCustomData.set(key, customData.get(key))
+                combinedCustomData.set(key, customData.get(key))
             }
         }
 
-        const privateCustomData = this.privateCustomData
+        const privateCustomData = user.privateCustomData
         if (privateCustomData) {
             for (let i = 0; i < privateCustomData.keys.length; i++) {
                 const key = privateCustomData.keys[i]
-                this.combinedCustomData.set(key, privateCustomData.get(key))
+                combinedCustomData.set(key, privateCustomData.get(key))
             }
         }
+        this.combinedCustomData = combinedCustomData
 
         this.createdDate = new Date(Date.now())
         this.lastSeenDate = new Date(Date.now())
@@ -137,6 +138,8 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         this.platformVersion = platformData.platformVersion
         this.sdkType = platformData.sdkType
         this.sdkVersion = platformData.sdkVersion
+
+        return this
     }
 
     static fromJSONString(userStr: string): DVCPopulatedUser {
