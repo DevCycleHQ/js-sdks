@@ -115,9 +115,16 @@ export class DVCClient {
         const incomingUser = castIncomingUser(user)
         // this will throw if type is invalid
         const type = getVariableTypeFromValue(defaultValue, key, this.logger, true)
+        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
 
         if (!this.initialized) {
             this.logger.warn('variable called before DVCClient initialized, returning default value')
+
+            this.eventQueue?.queueAggregateEvent(populatedUser, {
+                type: EventTypes.aggVariableDefaulted,
+                target: key
+            })
+
             return new DVCVariable({
                 defaultValue,
                 type,
@@ -125,7 +132,6 @@ export class DVCClient {
             })
         }
 
-        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
         const bucketedConfig = bucketUserForConfig(populatedUser, this.sdkKey)
 
         const options: VariableParam<T> = {
