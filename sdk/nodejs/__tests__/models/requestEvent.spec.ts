@@ -12,17 +12,16 @@ describe('DVCRequestEvent Unit Tests', () => {
             metaData: { meta: 'data' }
         }, 'user_id', { 'feature': 'vars' })
 
-        expect(requestEvent).toEqual(expect.objectContaining({
+        expect(requestEvent).toEqual({
             type: 'customEvent',
             customType: 'type',
             user_id: 'user_id',
-            date: expect.any(Number),
             clientDate: date,
             target: 'target',
             value: 610,
             featureVars: { 'feature': 'vars' },
             metaData: { meta: 'data' }
-        }))
+        })
     })
 
     it('should construct an event for an internal DVC Event', () => {
@@ -32,7 +31,6 @@ describe('DVCRequestEvent Unit Tests', () => {
         expect(requestEvent).toEqual(expect.objectContaining({
             type: EventTypes.variableEvaluated,
             user_id: 'user_id',
-            date: expect.any(Number),
             clientDate: expect.any(Number)
         }))
     })
