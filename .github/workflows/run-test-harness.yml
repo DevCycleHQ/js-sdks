@@ -20,16 +20,9 @@ jobs:
           if yarn nx print-affected --base=origin/main --select=projects | grep -E '(^nodejs|[^-]nodejs)'; then
             echo "TRIGGER_NODEJS_TEST_HARNESS=true" >> $GITHUB_ENV
           fi
-      - uses: convictional/trigger-workflow-and-wait@v1.6.1
+      - uses: DevCycleHQ/test-harness@main
         if: contains(env.TRIGGER_NODEJS_TEST_HARNESS, 'true')
         with:
-          owner: DevCycleHQ
-          repo: test-harness
-          github_token: ${{ secrets.TEST_HARNESS_GH_SECRET }}
-          workflow_file_name: config.yml
-          ref: main
-          propagate_failure: true
-          trigger_workflow: true
-          wait_workflow: true
-          client_payload: '{ "sha": "${{ github.event.pull_request.head.sha }}", "sdk": "nodejs", "title": "NodeJS PR: ${{ github.event.pull_request.title }}" }'
-          comment_downstream_url: ${{ github.event.pull_request.comments_url }}
+          sdks-to-test: nodejs
+          sdk-github-sha: ${{github.event.pull_request.head.sha}}
+          github-token: ${{ secrets.TEST_HARNESS_GH_SECRET }}
