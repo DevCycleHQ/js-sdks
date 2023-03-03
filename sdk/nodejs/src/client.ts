@@ -6,7 +6,7 @@ import {
     DVCEvent
 } from './types'
 import { EnvironmentConfigManager } from './environmentConfigManager'
-import { bucketUserForConfig, variableForUser } from './utils/userBucketingHelper'
+import { bucketUserForConfig } from './utils/userBucketingHelper'
 import { DVCVariable, VariableParam } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
 import { EventQueue, EventTypes } from './eventQueue'
@@ -132,25 +132,38 @@ export class DVCClient {
             })
         }
 
-        const configVariable = variableForUser(this.sdkKey, populatedUser, key)
+        const bucketedConfig = bucketUserForConfig(populatedUser, this.sdkKey)
 
         const options: VariableParam<T> = {
             key,
             type,
             defaultValue
         }
+        const configVariable = bucketedConfig?.variables?.[key]
+        let eventType = EventTypes.aggVariableEvaluated
         if (configVariable) {
             if (type === configVariable.type) {
                 options.value = configVariable.value as VariableTypeAlias<T>
                 options.evalReason = configVariable.evalReason
             } else {
+                eventType = EventTypes.aggVariableDefaulted
                 this.logger.error(
                     `Type mismatch for variable ${key}. Expected ${type}, got ${configVariable.type}`
                 )
             }
+        } else {
+            eventType = EventTypes.aggVariableDefaulted
         }
 
-        return new DVCVariable(options)
+        const variable = new DVCVariable(options)
+
+        const variableEvent = {
+            type: eventType,
+            target: variable.key
+        }
+        this.eventQueue.queueAggregateEvent(populatedUser, variableEvent, bucketedConfig)
+
+        return variable
     }
 
     allVariables(user: DVCUser): DVCVariableSet {
