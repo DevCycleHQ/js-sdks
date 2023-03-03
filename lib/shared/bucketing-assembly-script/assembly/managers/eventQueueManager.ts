@@ -145,7 +145,8 @@ export function queueVariableEvaluatedEvent(
     )
 
     const eventQueue = getEventQueue(sdkKey)
-    eventQueue.queueAggregateEvent(event, bucketedConfig.variableVariationMap, true)
+    const aggByVariation = (eventType === 'aggVariableEvaluated')
+    eventQueue.queueAggregateEvent(event, bucketedConfig.variableVariationMap, aggByVariation)
 }
 
 export function cleanupEventQueue(sdkKey: string): void {
