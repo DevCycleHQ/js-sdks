@@ -9,11 +9,11 @@ import { SDKVariable } from '../assembly/types'
 const { config } = testData
 
 const variableForUser = (
-    { config, user, variableKey }:
-    { config: unknown, user: unknown, variableKey: string }
+    { config, user, variableKey, variableType }:
+    { config: unknown, user: unknown, variableKey: string, variableType: string }
 ): SDKVariable | null => {
     setConfigData('sdkKey', JSON.stringify(config))
-    const variableJSON = variableForUser_AS('sdkKey', JSON.stringify(user), variableKey)
+    const variableJSON = variableForUser_AS('sdkKey', JSON.stringify(user), variableKey, variableType)
     return variableJSON ? JSON.parse(variableJSON) as SDKVariable : null
 }
 
@@ -39,7 +39,7 @@ describe('variableForUser tests', () => {
             user_id: 'asuh',
             email: 'test'
         }
-        const variable = variableForUser({ config, user, variableKey: 'swagTest' })
+        const variable = variableForUser({ config, user, variableKey: 'swagTest', variableType: 'String' })
         expect(variable).toEqual({
             _id: '615356f120ed334a6054564c',
             key: 'swagTest',
@@ -54,7 +54,7 @@ describe('variableForUser tests', () => {
             user_id: 'asuh',
             email: 'test'
         }
-        const variable = variableForUser({ config, user, variableKey: 'unknownKey' })
+        const variable = variableForUser({ config, user, variableKey: 'unknownKey', variableType: 'String' })
         expect(variable).toBeNull()
     })
 })
