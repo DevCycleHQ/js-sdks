@@ -7,7 +7,6 @@ export class DVCRequestEvent {
     target?: string
     customType?: string
     user_id: string
-    date: number
     clientDate: number
     value?: number
     featureVars?: Record<string, string>
@@ -25,7 +24,6 @@ export class DVCRequestEvent {
         this.target = target
         this.customType = isCustomEvent ? type : undefined
         this.user_id = user_id
-        this.date = Date.now()
         this.clientDate = date || Date.now()
         this.value = value
         this.featureVars = featureVars
