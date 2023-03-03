@@ -293,6 +293,45 @@ describe('EventQueue Unit Tests', () => {
         }
     )
 
+    it('should save aggVariableDefaulted event', async () => {
+        publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
+
+        const eventQueue = initEventQueue('sdkKey')
+        const user1 = new DVCPopulatedUser({ user_id: 'user1' })
+        eventQueue.queueAggregateEvent(
+            user1,
+            { type: EventTypes.aggVariableDefaulted, target: 'unknown_key' },
+            bucketedUserConfig
+        )
+        await eventQueue.flushEvents()
+        eventQueue.cleanup()
+
+        expect(publishEvents_mock).toBeCalledWith(defaultLogger, 'sdkKey', [
+            {
+                'events':  [
+                    {
+                        'clientDate': expect.any(String),
+                        'date': expect.any(String),
+                        'featureVars':  {},
+                        'target': 'unknown_key',
+                        'type': 'aggVariableDefaulted',
+                        'user_id': 'host.name',
+                        'value': 1,
+                    },
+                ],
+                'user': {
+                    'createdDate': expect.any(String),
+                    'lastSeenDate': expect.any(String),
+                    'platform': 'NodeJS',
+                    'platformVersion': '16.10.0',
+                    'sdkType': 'server',
+                    'sdkVersion': '1.0.0',
+                    'user_id': 'host.name',
+                },
+            },
+        ], undefined)
+    })
+
     it('should save multiple events from multiple users with aggregated values', async () => {
         publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
