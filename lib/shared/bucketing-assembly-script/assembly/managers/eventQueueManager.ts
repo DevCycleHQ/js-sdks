@@ -114,6 +114,8 @@ export function queueEvent(sdkKey: string, userStr: string, eventStr: string): v
 
 export function queueAggregateEvent(sdkKey: string, eventStr: string, variableVariationMapStr: string): void {
     const eventQueue = getEventQueue(sdkKey)
+    if (eventQueue.options.disableAutomaticEventLogging) return
+
     const event = DVCEvent.fromJSONString(eventStr)
 
     const variableVariationMapJSON = JSON.parse(variableVariationMapStr)
@@ -132,6 +134,9 @@ export function queueVariableEvaluatedEvent(
     variable: SDKVariable | null,
     variableKey: string
 ): void {
+    const eventQueue = getEventQueue(sdkKey)
+    if (eventQueue.options.disableAutomaticEventLogging) return
+
     const eventType = (variable !== null)
         ? 'aggVariableEvaluated'
         : 'aggVariableDefaulted'
@@ -144,7 +149,6 @@ export function queueVariableEvaluatedEvent(
         null
     )
 
-    const eventQueue = getEventQueue(sdkKey)
     const aggByVariation = (eventType === 'aggVariableEvaluated')
     eventQueue.queueAggregateEvent(event, bucketedConfig.variableVariationMap, aggByVariation)
 }

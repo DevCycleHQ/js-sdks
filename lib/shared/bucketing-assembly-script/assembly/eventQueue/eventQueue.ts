@@ -26,7 +26,7 @@ EventTypesSet.add('aggVariableDefaulted')
 
 export class EventQueue {
     private sdkKey: string
-    private options: EventQueueOptions
+    options: EventQueueOptions
 
     /**
      * Map<user_id, UserEventsBatchRecord>
@@ -71,7 +71,7 @@ export class EventQueue {
         return { userEventQueue, aggEventQueue }
     }
 
-    private checkIfEventLoggingDisabled(event: DVCEvent): bool {
+    checkIfEventLoggingDisabled(event: DVCEvent): bool {
         if (!EventTypesSet.has(event.type)) {
             return this.options.disableCustomEventLogging
         } else {
