@@ -1,4 +1,4 @@
-import {BucketedUserConfig, SDKVariable} from '@devcycle/types'
+import { BucketedUserConfig, SDKVariable } from '@devcycle/types'
 import { DVCPopulatedUser } from '../models/populatedUser'
 import { getBucketingLib } from '../bucketing'
 
