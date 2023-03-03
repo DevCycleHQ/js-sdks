@@ -35,11 +35,11 @@ export function variableForUser(
     const user = DVCPopulatedUser.fromJSONString(userStr)
 
     const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
-    const variable = bucketedConfig.variables.has(variableKey)
+    let variable = bucketedConfig.variables.has(variableKey)
         ? bucketedConfig.variables.get(variableKey)
         : null
     if (variable && variable.type !== variableType) {
-        return null
+        variable = null
     }
 
     queueVariableEvaluatedEvent(sdkKey, bucketedConfig, variable, variableKey)
