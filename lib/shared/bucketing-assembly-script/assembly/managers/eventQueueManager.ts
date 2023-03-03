@@ -3,7 +3,9 @@ import {
     EventQueueOptions,
     DVCPopulatedUser,
     DVCEvent,
-    FeatureVariation
+    FeatureVariation,
+    BucketedUserConfig,
+    SDKVariable
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { _getConfigData } from './configDataManager'
@@ -122,6 +124,28 @@ export function queueAggregateEvent(sdkKey: string, eventStr: string, variableVa
 
     const aggByVariation = (event.type === 'aggVariableEvaluated')
     eventQueue.queueAggregateEvent(event, variableVariationMap, aggByVariation)
+}
+
+export function queueVariableEvaluatedEvent(
+    sdkKey: string,
+    bucketedConfig: BucketedUserConfig,
+    variable: SDKVariable | null,
+    variableKey: string
+): void {
+    const eventType = (variable !== null)
+        ? 'aggVariableEvaluated'
+        : 'aggVariableDefaulted'
+
+    const event = new DVCEvent(
+        eventType,
+        variableKey,
+        null,
+        NaN,
+        null
+    )
+
+    const eventQueue = getEventQueue(sdkKey)
+    eventQueue.queueAggregateEvent(event, bucketedConfig.variableVariationMap, true)
 }
 
 export function cleanupEventQueue(sdkKey: string): void {
