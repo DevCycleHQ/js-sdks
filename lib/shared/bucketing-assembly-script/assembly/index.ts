@@ -34,8 +34,6 @@ export function variableForUser(sdkKey: string, userStr: string, variableKey: st
         ? bucketedConfig.variables.get(variableKey)
         : null
 
-    queueVariableEvaluatedEvent(sdkKey, bucketedConfig, variable, variableKey)
-
     return variable ? variable.stringify() : null
 }
 
