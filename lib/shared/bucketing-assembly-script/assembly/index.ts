@@ -42,6 +42,8 @@ export function variableForUser(
         return null
     }
 
+    queueVariableEvaluatedEvent(sdkKey, bucketedConfig, variable, variableKey)
+
     return variable ? variable.stringify() : null
 }
 
