@@ -25,7 +25,12 @@ export function generateBucketedConfigForUser(sdkKey: string, userStr: string): 
     return bucketedConfig.stringify()
 }
 
-export function variableForUser(sdkKey: string, userStr: string, variableKey: string): string | null {
+export function variableForUser(
+    sdkKey: string,
+    userStr: string,
+    variableKey: string,
+    variableType: string
+): string | null {
     const config = _getConfigData(sdkKey)
     const user = DVCPopulatedUser.fromJSONString(userStr)
 
@@ -33,6 +38,9 @@ export function variableForUser(sdkKey: string, userStr: string, variableKey: st
     const variable = bucketedConfig.variables.has(variableKey)
         ? bucketedConfig.variables.get(variableKey)
         : null
+    if (variable && variable.type !== variableType) {
+        return null
+    }
 
     return variable ? variable.stringify() : null
 }
