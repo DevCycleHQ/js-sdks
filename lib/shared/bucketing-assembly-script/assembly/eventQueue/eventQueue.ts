@@ -6,7 +6,6 @@ import {
     UserEventsBatchRecord,
     FeatureVariation
 } from '../types'
-import {jsonObjFromMap} from "../helpers/jsonHelpers";
 
 export type VariationAggMap = Map<string, i64>
 export type FeatureAggMap = Map<string, VariationAggMap>

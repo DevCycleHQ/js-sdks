@@ -130,20 +130,31 @@ export function queueAggregateEvent(sdkKey: string, eventStr: string, variableVa
 
 export function queueVariableEvaluatedEvent_JSON(
     sdkKey: string,
-    bucketedConfig: string,
+    varVariationMapString: string,
     variable: string | null,
     variableKey: string
 ): void {
+    const varVariationMapJSON = JSON.parse(varVariationMapString)
+    if (!varVariationMapJSON.isObj) throw new Error('varVariationMap is not a JSON Object')
+    const varVariationObj = varVariationMapJSON as JSON.Obj
+    const varVariationMap = new Map<string, FeatureVariation>()
+    for (let i= 0; i < varVariationObj.keys.length; i++) {
+        const key = varVariationObj.keys[i]
+        const value = varVariationObj.get(key)
+        if (!value || !value.isObj) throw new Error('FeatureVariation value is not a JSON Object')
+        varVariationMap.set(key, FeatureVariation.fromJSONObj(value as JSON.Obj))
+    }
+
     return queueVariableEvaluatedEvent(
         sdkKey,
-        BucketedUserConfig.fromJSONString(bucketedConfig),
+        varVariationMap,
         (variable !== null) ? SDKVariable.fromJSONString(variable) : null,
         variableKey
     )
 }
 export function queueVariableEvaluatedEvent(
     sdkKey: string,
-    bucketedConfig: BucketedUserConfig,
+    variableVariationMap: Map<string, FeatureVariation>,
     variable: SDKVariable | null,
     variableKey: string
 ): void {
@@ -163,7 +174,7 @@ export function queueVariableEvaluatedEvent(
     )
 
     const aggByVariation = (eventType === 'aggVariableEvaluated')
-    eventQueue.queueAggregateEvent(event, bucketedConfig.variableVariationMap, aggByVariation)
+    eventQueue.queueAggregateEvent(event, variableVariationMap, aggByVariation)
 }
 
 export function cleanupEventQueue(sdkKey: string): void {

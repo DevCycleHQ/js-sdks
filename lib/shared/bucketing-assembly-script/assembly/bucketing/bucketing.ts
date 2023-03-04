@@ -325,12 +325,20 @@ export function _generateBucketedConfig(
     )
 }
 
+class BucketedVariableResponse {
+    public variable: SDKVariable
+
+    public variation: Variation
+
+    public feature: Feature
+}
+
 export function _generateBucketedVariableForUser(
     config: ConfigBody,
     user: DVCPopulatedUser,
     key: string,
     clientCustomData: JSON.Obj,
-): SDKVariable | null {
+): BucketedVariableResponse | null {
     const variable = config.getVariableForKey(key)
     if (!variable) {
         return null
@@ -351,13 +359,14 @@ export function _generateBucketedVariableForUser(
     for (let i = 0; i < variation.variables.length; i++) {
         const variationVar = variation.variables[i]
         if (variationVar._var === variable._id) {
-            return new SDKVariable(
+            const sdkVar = new SDKVariable(
                 variable._id,
                 variable.type,
                 variable.key,
                 variationVar.value,
                 null
             )
+            return { variable: sdkVar, variation, feature: featureForVariable }
         }
     }
 

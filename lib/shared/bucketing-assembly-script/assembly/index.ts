@@ -3,7 +3,7 @@ import {
 } from './bucketing'
 
 import { JSON } from 'assemblyscript-json/assembly'
-import { ConfigBody, DVCPopulatedUser, PlatformData } from './types'
+import {ConfigBody, DVCPopulatedUser, FeatureVariation, PlatformData} from './types'
 import { _clearPlatformData, _setPlatformData } from './managers/platformDataManager'
 import { _getConfigData, _setConfigData } from './managers/configDataManager'
 import { _getClientCustomData, _setClientCustomData } from './managers/clientCustomDataManager'
@@ -34,14 +34,20 @@ export function variableForUser(
     const config = _getConfigData(sdkKey)
     const user = DVCPopulatedUser.fromJSONString(userStr)
 
-    let variable = _generateBucketedVariableForUser(config, user, variableKey, _getClientCustomData(sdkKey))
+    const response = _generateBucketedVariableForUser(config, user, variableKey, _getClientCustomData(sdkKey))
+    let variable = (response && response.variable) ? response.variable : null
     if (variable && variable.type !== variableType) {
         variable = null
     }
 
-    // TODO rewrite this method to accept the feature variation that we should know from above call led to this
-    // variable value
-    // queueVariableEvaluatedEvent(sdkKey, bucketedConfig, variable, variableKey)
+    const variableVariationMap = new Map<string, FeatureVariation>()
+    if (response) {
+        variableVariationMap.set(variableKey, new FeatureVariation(
+            response.feature._id,
+            response.variation._id
+        ))
+    }
+    queueVariableEvaluatedEvent(sdkKey, variableVariationMap, variable, variableKey)
 
     return variable ? variable.stringify() : null
 }
