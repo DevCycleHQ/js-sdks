@@ -128,6 +128,19 @@ export function queueAggregateEvent(sdkKey: string, eventStr: string, variableVa
     eventQueue.queueAggregateEvent(event, variableVariationMap, aggByVariation)
 }
 
+export function queueVariableEvaluatedEvent_JSON(
+    sdkKey: string,
+    bucketedConfig: string,
+    variable: string | null,
+    variableKey: string
+): void {
+    return queueVariableEvaluatedEvent(
+        sdkKey,
+        BucketedUserConfig.fromJSONString(bucketedConfig),
+        (variable !== null) ? SDKVariable.fromJSONString(variable) : null,
+        variableKey
+    )
+}
 export function queueVariableEvaluatedEvent(
     sdkKey: string,
     bucketedConfig: BucketedUserConfig,

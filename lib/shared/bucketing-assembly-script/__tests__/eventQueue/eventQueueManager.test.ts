@@ -10,12 +10,14 @@ import {
     queueAggregateEvent as queueAggregateEvent_AS,
     cleanupEventQueue,
     eventQueueSize as eventQueueSize_AS,
-    setClientCustomData
+    setClientCustomData,
+    queueVariableEvaluatedEvent_JSON
 } from '../bucketingImportHelper'
 import { FlushPayload } from '../../assembly/types'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
 import random_JSON from './random_json_2kb.json'
+import { FeatureType } from '@devcycle/types'
 
 let currentSDKKey: string | null = null
 const initEventQueue = (sdkKey: unknown, options: unknown) => {
@@ -34,6 +36,15 @@ const queueEvent = (sdkKey: string, user: unknown, event: unknown) => {
 
 const queueAggregateEvent = (sdkKey: string, event: unknown, variableVariationMap: unknown) => {
     return queueAggregateEvent_AS(sdkKey, JSON.stringify(event), JSON.stringify(variableVariationMap))
+}
+
+const queueVariableEvaluatedEvent = (sdkKey: string, config: unknown, variable: unknown, variableKey: string) => {
+    return queueVariableEvaluatedEvent_JSON(
+        sdkKey,
+        JSON.stringify(config),
+        variable ? JSON.stringify(variable) : null,
+        variableKey
+    )
 }
 
 const eventQueueSize = (sdkKey: string): number => {
@@ -490,6 +501,75 @@ describe('EventQueueManager Tests', () => {
                 sdkVersion: '1.0.0'
             }))
             expect(() => queueEvent(sdkKey, dvcUser, event)).toThrow('Config data is not set.')
+        })
+    })
+
+    describe('queueVariableEvaluatedEvent', () => {
+        const bucketedConfig = {
+            'environment': {
+                '_id': '6153553b8cf4e45e0464268d',
+                'key': 'test-environment'
+            },
+            'knownVariableKeys': [],
+            'project': {
+                '_id': '61535533396f00bab586cb17',
+                'a0_organization': 'org_12345612345',
+                'key': 'test-project',
+                'settings': {
+                    'edgeDB': {
+                        enabled: false
+                    }
+                }
+            },
+            'features': {
+                'feature1': {
+                    '_id': '614ef6aa473928459060721a',
+                    'key': 'feature1',
+                    'type': FeatureType.release,
+                    '_variation': '615357cf7e9ebdca58446ed0',
+                    'variationName': 'variation 2',
+                    'variationKey': 'variation-2-key',
+                },
+            },
+            'featureVariationMap': {
+                '614ef6aa473928459060721a': '615357cf7e9ebdca58446ed0',
+            },
+            'variableVariationMap': {
+                'swagTest': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '615357cf7e9ebdca58446ed0'
+                }
+            },
+            'variables': {
+                'swagTest': {
+                    '_id': '615356f120ed334a6054564c',
+                    'key': 'swagTest',
+                    'type': 'String',
+                    'value': 'YEEEEOWZA',
+                }
+            }
+        }
+
+        it('should log aggVariableEvaluated event', () => {
+            const variable = {
+                '_id': '615356f120ed334a6054564c',
+                'key': 'swagTest',
+                'type': 'String',
+                'value': 'YEEEEOWZA',
+            }
+            const sdkKey = 'sdk_key_queueVariableEvaluatedEvent_test'
+            initSDK(sdkKey)
+
+            queueVariableEvaluatedEvent(sdkKey, bucketedConfig, variable, 'swagTest')
+            expect(eventQueueSize(sdkKey)).toEqual(1)
+        })
+
+        it('should log aggVariableDefaulted event', () => {
+            const sdkKey = 'sdk_key_queueVariableEvaluatedEvent_test'
+            initSDK(sdkKey)
+
+            queueVariableEvaluatedEvent(sdkKey, bucketedConfig, null, 'unknownVariable')
+            expect(eventQueueSize(sdkKey)).toEqual(1)
         })
     })
 
