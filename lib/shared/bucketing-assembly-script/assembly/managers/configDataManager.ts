@@ -2,7 +2,7 @@ import { ConfigBody, Feature } from '../types'
 
 const _configData: Map<string, ConfigBody> = new Map()
 
-const _varKeyToFeatureMap: Map<string, Feature> = new Map()
+const _varIdToFeatureMap: Map<string, Feature> = new Map()
 
 export function _setConfigData(sdkKey: string, configData: ConfigBody): void {
     _configData.set(sdkKey, configData)
@@ -10,8 +10,8 @@ export function _setConfigData(sdkKey: string, configData: ConfigBody): void {
         const feature = configData.features[i]
         for (let j = 0; j < feature.variations.length; j++) {
             for (let k = 0; k < feature.variations[j].variables.length; k++) {
-                if (!_varKeyToFeatureMap.has(feature.variations[j].variables[k]._var)) {
-                    _varKeyToFeatureMap.set(feature.variations[j].variables[k]._var, feature)
+                if (!_varIdToFeatureMap.has(feature.variations[j].variables[k]._var)) {
+                    _varIdToFeatureMap.set(feature.variations[j].variables[k]._var, feature)
                 }
             }
         }
@@ -26,10 +26,10 @@ export function _getConfigData(sdkKey: string): ConfigBody {
     }
 }
 
-export function _getFeatureForVarKey(varKey: string): Feature | null {
-    if (!_varKeyToFeatureMap.has(varKey)) {
+export function _getFeatureForVarId(varKey: string): Feature | null {
+    if (!_varIdToFeatureMap.has(varKey)) {
         return null
     } else {
-        return _varKeyToFeatureMap.get(varKey)
+        return _varIdToFeatureMap.get(varKey)
     }
 }

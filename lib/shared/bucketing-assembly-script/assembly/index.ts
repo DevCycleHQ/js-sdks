@@ -1,5 +1,5 @@
 import {
-    _generateBoundedHashes, _generateBucketedConfig,
+    _generateBoundedHashes, _generateBucketedConfig, _generateBucketedVariableForUser,
 } from './bucketing'
 
 import { JSON } from 'assemblyscript-json/assembly'
@@ -34,15 +34,14 @@ export function variableForUser(
     const config = _getConfigData(sdkKey)
     const user = DVCPopulatedUser.fromJSONString(userStr)
 
-    const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
-    let variable = bucketedConfig.variables.has(variableKey)
-        ? bucketedConfig.variables.get(variableKey)
-        : null
+    let variable = _generateBucketedVariableForUser(config, user, variableKey, _getClientCustomData(sdkKey))
     if (variable && variable.type !== variableType) {
         variable = null
     }
 
-    queueVariableEvaluatedEvent(sdkKey, bucketedConfig, variable, variableKey)
+    // TODO rewrite this method to accept the feature variation that we should know from above call led to this
+    // variable value
+    // queueVariableEvaluatedEvent(sdkKey, bucketedConfig, variable, variableKey)
 
     return variable ? variable.stringify() : null
 }
