@@ -6,6 +6,7 @@ import {
     UserEventsBatchRecord,
     FeatureVariation
 } from '../types'
+import {jsonObjFromMap} from "../helpers/jsonHelpers";
 
 export type VariationAggMap = Map<string, i64>
 export type FeatureAggMap = Map<string, VariationAggMap>
@@ -129,6 +130,9 @@ export class EventQueue {
             featureVarAggMap = new Map<string, VariationAggMap>()
             variableFeatureVarAggMap.set(target, featureVarAggMap)
         }
+
+        console.log(`queueAggregateEvent, type: ${type}, target: ${target ? target : 'null'}, aggByVariation: ${aggByVariation}`)
+        console.log(`variableVariationMap: ${jsonObjFromMap(variableVariationMap).stringify()}`)
 
         if (aggByVariation) {
             if (!variableVariationMap.has(target)) {

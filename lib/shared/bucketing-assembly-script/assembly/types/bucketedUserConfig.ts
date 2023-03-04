@@ -186,6 +186,15 @@ export class SDKVariable extends JSON.Obj {
         super()
     }
 
+    static fromJSONString(userConfigStr: string): SDKVariable {
+        const configJSON = JSON.parse(userConfigStr)
+        if (!configJSON.isObj) {
+            throw new Error('SDKVariable not a JSON Object')
+        }
+        const configJSONObj = configJSON as JSON.Obj
+        return SDKVariable.fromJSONObj(configJSONObj)
+    }
+
     static fromJSONObj(variableObj: JSON.Obj): SDKVariable {
         return new SDKVariable(
             getStringFromJSON(variableObj, '_id'),
