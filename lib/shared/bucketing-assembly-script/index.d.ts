@@ -1,4 +1,4 @@
-import { __AdaptedExports } from './build/bucketing-lib.release'
+import { __AdaptedExports } from './build/bucketing-lib.debug'
 
 export const instantiate: (debug: boolean = false) => Promise<typeof __AdaptedExports>
 

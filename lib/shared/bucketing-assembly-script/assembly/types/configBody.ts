@@ -86,6 +86,11 @@ export class ConfigBody {
     variables: Variable[]
     variableHashes: Map<string, i64>
 
+    private _variableKeyMap: Map<string, Variable>
+
+    private _varIdToFeatureMap: Map<string, Feature>
+
+
     constructor(configStr: string) {
         const configJSON = JSON.parse(configStr)
         if (!configJSON.isObj) throw new Error('generateBucketedConfig config param not a JSON Object')
@@ -95,14 +100,27 @@ export class ConfigBody {
 
         this.environment = new PublicEnvironment(getJSONObjFromJSON(configJSONObj, 'environment'))
 
-        const featuresJSON = getJSONArrayFromJSON(configJSONObj, 'features')
-        this.features = featuresJSON.valueOf().map<Feature>((feature) => {
-            return new Feature(feature as JSON.Obj)
-        })
+        const featuresJSON = getJSONArrayFromJSON(configJSONObj, 'features').valueOf()
+        const features = new Array<Feature>()
+        const _varIdToFeatureMap = new Map<string, Feature>()
+
+        for (let i=0; i < featuresJSON.length; i++) {
+            const feature = new Feature(featuresJSON[i] as JSON.Obj)
+            features.push(feature)
+
+            for (let j = 0; j < feature.variations.length; j++) {
+                for (let k = 0; k < feature.variations[j].variables.length; k++) {
+                    if (!_varIdToFeatureMap.has(feature.variations[j].variables[k]._var)) {
+                        _varIdToFeatureMap.set(feature.variations[j].variables[k]._var, feature)
+                    }
+                }
+            }
+        }
+        this.features = features
+        this._varIdToFeatureMap = _varIdToFeatureMap
+
         const audiencesJSON = getJSONObjFromJSONOptional(configJSONObj, 'audiences')
-
         const audiences = new Map<string, NoIdAudience>()
-
         if (audiencesJSON) {
             const audienceKeys = audiencesJSON.keys
             for (let i=0; i < audienceKeys.length; i++) {
@@ -113,10 +131,16 @@ export class ConfigBody {
         }
         this.audiences = audiences
 
-        const variablesJSON = getJSONArrayFromJSON(configJSONObj, 'variables')
-        this.variables = variablesJSON.valueOf().map<Variable>((variable) => {
-            return new Variable(variable as JSON.Obj)
-        })
+        const variablesJSON = getJSONArrayFromJSON(configJSONObj, 'variables').valueOf()
+        const variables = new Array<Variable>()
+        const _variableKeyMap = new Map<string, Variable>()
+        for (let i=0; i < variablesJSON.length; i++) {
+            const variable = new Variable(variablesJSON[i] as JSON.Obj)
+            variables.push(variable)
+            _variableKeyMap.set(variable.key, variable)
+        }
+        this.variables = variables
+        this._variableKeyMap = _variableKeyMap
 
         const variableHashes = getJSONObjFromJSON(configJSONObj, 'variableHashes')
         const variableHashesMap = new Map<string, i64>()
@@ -139,5 +163,19 @@ export class ConfigBody {
         json.set('variables', jsonArrFromValueArray(this.variables))
         json.set('variableHashes', jsonObjFromMap(this.variableHashes))
         return json.stringify()
+    }
+
+    getVariableForKey(variableKey: string): Variable | null {
+        if (this._variableKeyMap.has(variableKey)) {
+            return this._variableKeyMap.get(variableKey)
+        }
+        return null
+    }
+
+    getFeatureForVarId(varId: string): Feature | null {
+        if (this._varIdToFeatureMap.has(varId)) {
+            return this._varIdToFeatureMap.get(varId)
+        }
+        return null
     }
 }

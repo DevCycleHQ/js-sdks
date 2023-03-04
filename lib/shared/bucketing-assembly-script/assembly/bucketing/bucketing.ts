@@ -9,7 +9,6 @@ import {
 import { murmurhashV3 } from '../helpers/murmurhash'
 import { SortingArray, sortObjectsByString } from '../helpers/arrayHelpers'
 import { _evaluateOperator } from './segmentation'
-import { _getFeatureForVarId } from '../managers/configDataManager'
 
 // Max value of an unsigned 32-bit integer, which is what murmurhash returns
 const MAX_HASH_VALUE: f64 = 4294967295
@@ -197,7 +196,6 @@ function doesUserQualifyForFeature(
         user,
         clientCustomData
     )
-
     if (!target) return null
 
     const boundedHashData = _generateBoundedHashes(user.user_id, target._id)
@@ -248,20 +246,6 @@ export function bucketUserForVariation(
     }
 
     return variation
-}
-
-function getConfigVariableForKey(
-    config: ConfigBody,
-    variableKey: string
-): Variable | null {
-    for (let u = 0; u < config.variables.length; u++) {
-        const configVar = config.variables[u]
-        if (configVar.key === variableKey) {
-            return configVar
-        }
-    }
-
-    return null
 }
 
 export function _generateBucketedConfig(
@@ -347,15 +331,12 @@ export function _generateBucketedVariableForUser(
     key: string,
     clientCustomData: JSON.Obj,
 ): SDKVariable | null {
-    const variable = getConfigVariableForKey(config, key)
+    const variable = config.getVariableForKey(key)
     if (!variable) {
         return null
     }
-    const featureForVariable = _getFeatureForVarId(variable._id)
-    if (!featureForVariable) {
-        console.log('NO FEATURE FOR VARIABLE!')
-        return null
-    }
+    const featureForVariable = config.getFeatureForVarId(variable._id)
+    if (!featureForVariable) return null
 
     const target = doesUserQualifyForFeature(
         config,
@@ -363,29 +344,22 @@ export function _generateBucketedVariableForUser(
         user,
         clientCustomData
     )
+    if (!target) return null
 
-    if (target) {
-        const variation = bucketUserForVariation(featureForVariable, target, user)
-        const variable = getConfigVariableForKey(config, key)
-        if (!variable) {
-            return null
+    const variation = bucketUserForVariation(featureForVariable, target, user)
+
+    for (let i = 0; i < variation.variables.length; i++) {
+        const variationVar = variation.variables[i]
+        if (variationVar._var === variable._id) {
+            return new SDKVariable(
+                variable._id,
+                variable.type,
+                variable.key,
+                variationVar.value,
+                null
+            )
         }
-
-        for (let i = 0; i < variation.variables.length; i++) {
-            const variationVar = variation.variables[i]
-            if (variationVar._var === variable._id) {
-                return new SDKVariable(
-                    variable._id,
-                    variable.type,
-                    variable.key,
-                    variationVar.value,
-                    null
-                )
-            }
-        }
-
-        throw new Error('Internal error processing configuration')
-    } else {
-        return null
     }
+
+    throw new Error('Internal error processing configuration')
 }
