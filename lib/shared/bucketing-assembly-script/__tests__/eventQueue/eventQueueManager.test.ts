@@ -160,7 +160,8 @@ describe('EventQueueManager Tests', () => {
                                 'appVersion': '6.1.0',
                                 'appBuild': 188,
                                 'deviceModel': 'dvcServer',
-                                'customData': { 'custom': 'data' }
+                                'customData': { 'custom': 'data' },
+                                'hostname': 'host.name',
                             }
                         },
                         {
@@ -180,7 +181,8 @@ describe('EventQueueManager Tests', () => {
                                 'platformVersion': '16.0',
                                 'sdkType': 'server',
                                 'sdkVersion': '1.0.0',
-                                'user_id': 'host.name'
+                                'user_id': 'host.name',
+                                'hostname': 'host.name',
                             }
                         }
                     ]
@@ -233,7 +235,8 @@ describe('EventQueueManager Tests', () => {
                                 'appVersion': '6.1.0',
                                 'appBuild': 188,
                                 'deviceModel': 'dvcServer',
-                                'customData': { 'custom': 'data', 'clientCustom': 'data' }
+                                'customData': { 'custom': 'data', 'clientCustom': 'data' },
+                                'hostname': 'host.name',
                             }
                         }
                     ]
@@ -273,7 +276,8 @@ describe('EventQueueManager Tests', () => {
                 'appVersion': '6.1.0',
                 'appBuild': 188,
                 'deviceModel': 'dvcServer',
-                'customData': { 'custom': 'data' }
+                'customData': { 'custom': 'data' },
+                'hostname': 'host.name',
             })
             expect(payloads[0].records[0].user.privateCustomData).not.toBeDefined()
 
