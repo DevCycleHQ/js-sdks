@@ -8227,16 +8227,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"assemblyscript@npm:~0.27.0":
-  version: 0.27.0
-  resolution: "assemblyscript@npm:0.27.0"
+"assemblyscript@npm:~0.27.1":
+  version: 0.27.1
+  resolution: "assemblyscript@npm:0.27.1"
   dependencies:
-    binaryen: 111.0.0-nightly.20230111
-    long: ^5.2.0
+    binaryen: 111.0.0-nightly.20230202
+    long: ^5.2.1
   bin:
     asc: bin/asc.js
     asinit: bin/asinit.js
-  checksum: f5e641de723a4774e695f696427b412adbadd04f493aeb4ab814e78f193791546a9d372c1b675a04e1c9a8cd9ddb54527c37d03aec404b025b40e491764f2705
+  checksum: dde1ceb1e17638daacf78aac5bb75595b1ddaba666b8b4f6aa0c683e27994c14af03aed3a0b882f7e9f80d8f57db6f17c685d5007ad76d5b47b704c1fc815eb3
   languageName: node
   linkType: hard
 
@@ -8792,13 +8792,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"binaryen@npm:111.0.0-nightly.20230111":
-  version: 111.0.0-nightly.20230111
-  resolution: "binaryen@npm:111.0.0-nightly.20230111"
+"binaryen@npm:111.0.0-nightly.20230202":
+  version: 111.0.0-nightly.20230202
+  resolution: "binaryen@npm:111.0.0-nightly.20230202"
   bin:
     wasm-opt: bin/wasm-opt
     wasm2js: bin/wasm2js
-  checksum: b361f946d91c82b8dbebca81cfb85feebac02995707bb0def66e8d78b22ea6a666a892d7acbd5efa19b4c54cbe53f2e2e10bd17302a7321c236293a20fc52193
+  checksum: e57afd2c18e3498a25546dd093a100e5d12ac1bc57c6ef40cb2b8777baf2b31b9f6c2dd4be93296127b42bd8b064a86bba01db5b3ca737087b14668ff66a3c88
   languageName: node
   linkType: hard
 
@@ -11093,7 +11093,7 @@ __metadata:
     "@typescript-eslint/parser": 5.33.1
     as-uuid: ^0.0.4
     as-wasi: ^0.4.6
-    assemblyscript: ~0.27.0
+    assemblyscript: ~0.27.1
     assemblyscript-json: "https://github.com/DevCycleHQ/assemblyscript-json"
     assemblyscript-regex: "https://github.com/DevCycleHQ/assemblyscript-regex.git#8ff33297841880c16e38bd67a84df4cbdb8e887f"
     async: ^3.2.1
@@ -17418,10 +17418,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"long@npm:^5.2.0":
-  version: 5.2.0
-  resolution: "long@npm:5.2.0"
-  checksum: 37aa4e67b9c3eebc6d9d675adcc9d06f06059ca268922a71273de389746bf07f0ff282f9e604d17fdf84c4149099b44e936ea2b621a6c4759a216621afa97efd
+"long@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "long@npm:5.2.1"
+  checksum: 9264da12d1b7df67e5aa6da4498144293caf1ad12e7f092efe4e9a2d32c53f0bbf7334f7cef997080a2a3af061142558ab366efa71698d98b1cdb883477445a7
   languageName: node
   linkType: hard
 

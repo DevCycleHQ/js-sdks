@@ -25,7 +25,7 @@
     "@nestjs/class-validator": "^0.13.4",
     "as-uuid": "^0.0.4",
     "as-wasi": "^0.4.6",
-    "assemblyscript": "~0.27.0",
+    "assemblyscript": "~0.27.1",
     "assemblyscript-json": "https://github.com/DevCycleHQ/assemblyscript-json",
     "assemblyscript-regex": "https://github.com/DevCycleHQ/assemblyscript-regex.git#8ff33297841880c16e38bd67a84df4cbdb8e887f",
     "async": "^3.2.1",
