@@ -1,13 +1,15 @@
 import { JSON } from 'assemblyscript-json/assembly'
 import {
-    getArrayFromJSONOptional,
     getDateFromJSON,
-    getF64FromJSONObj, getF64FromJSONOptional,
+    getF64FromJSONObj,
+    getF64FromJSONOptional,
     getJSONArrayFromJSON,
     getJSONObjFromJSON,
-    getStringFromJSON, getStringFromJSONOptional,
+    getStringFromJSON,
+    getStringFromJSONOptional,
     isValidString,
-    isValidStringOptional, jsonArrFromValueArray
+    isValidStringOptional,
+    jsonArrFromValueArray
 } from '../helpers/jsonHelpers'
 
 export class Target extends JSON.Value {

@@ -17,7 +17,6 @@ import { FlushPayload } from '../../assembly/types'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
 import random_JSON from './random_json_2kb.json'
-import { FeatureType } from '@devcycle/types'
 
 let currentSDKKey: string | null = null
 const initEventQueue = (sdkKey: unknown, options: unknown) => {
@@ -65,7 +64,7 @@ const initSDK = (sdkKey: string, eventOptions: unknown = {}) => {
 
 describe('EventQueueManager Tests', () => {
     afterEach(() => {
-        clearPlatformData('')
+        clearPlatformData()
         if (currentSDKKey) {
             cleanupEventQueue(currentSDKKey)
             setClientCustomData(currentSDKKey, '{}')

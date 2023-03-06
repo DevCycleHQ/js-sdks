@@ -1,4 +1,4 @@
-import { ConfigBody, Feature } from '../types'
+import { ConfigBody } from '../types'
 
 const _configData: Map<string, ConfigBody> = new Map()
 

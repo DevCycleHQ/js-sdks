@@ -3,7 +3,7 @@ import {
 } from './bucketing'
 
 import { JSON } from 'assemblyscript-json/assembly'
-import {ConfigBody, DVCPopulatedUser, FeatureVariation, PlatformData} from './types'
+import { ConfigBody, DVCPopulatedUser, FeatureVariation, PlatformData } from './types'
 import { _clearPlatformData, _setPlatformData } from './managers/platformDataManager'
 import { _getConfigData, _setConfigData } from './managers/configDataManager'
 import { _getClientCustomData, _setClientCustomData } from './managers/clientCustomDataManager'
@@ -58,7 +58,7 @@ export function setPlatformData(platformDataStr: string): void {
 }
 
 // Add empty input string to make AS compiler work
-export function clearPlatformData(empty: string): void {
+export function clearPlatformData(empty: string | null = null): void {
     _clearPlatformData()
 }
 

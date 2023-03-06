@@ -4,7 +4,6 @@ import {
     DVCPopulatedUser,
     DVCEvent,
     FeatureVariation,
-    BucketedUserConfig,
     SDKVariable
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
