@@ -458,15 +458,17 @@ describe('SegmentationManager Unit Test', () => {
                 operator: 'and'
             }
             it('should pass seg for an AND operator', () => {
-
                 const audiences = {
                     'test': {
                         _id: 'test',
                         filters: operator
                     }
                 }
-                assert.strictEqual(true, evaluateOperator(
-                    { data, operator: audienceMatchOperator, audiences }))
+                assert.strictEqual(true, evaluateOperator({
+                    data,
+                    operator: audienceMatchOperator,
+                    audiences
+                }))
             })
 
             it('should pass seg for a nested audiencematch filter', () => {
