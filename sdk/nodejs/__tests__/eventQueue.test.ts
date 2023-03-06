@@ -327,6 +327,7 @@ describe('EventQueue Unit Tests', () => {
                     'sdkType': 'server',
                     'sdkVersion': '1.0.0',
                     'user_id': 'host.name',
+                    'hostname': 'host.name'
                 },
             },
         ], undefined)
