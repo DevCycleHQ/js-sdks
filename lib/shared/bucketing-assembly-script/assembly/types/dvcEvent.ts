@@ -84,35 +84,35 @@ export class DVCRequestEvent extends JSON.Value {
     /**
      * type of the event
      */
-    type: string
+    readonly type: string
 
     /**
      * target / subject of event. Contextual to event type
      */
-    target: string | null
+    readonly target: string | null
 
-    customType: string | null
+    readonly customType: string | null
 
-    user_id: string
+    readonly user_id: string
 
     /**
      * date event occurred according to client stored as time since epoch
      */
-    date: Date
+    readonly date: Date
 
-    clientDate: Date
+    readonly clientDate: Date
 
     /**
      * value for numerical events. Contextual to event type
      */
-    value: f64
+    readonly value: f64
 
-    featureVars: Map<string, string>
+    readonly featureVars: Map<string, string>
 
     /**
      * extra metadata for event. Contextual to event type
      */
-    metaData: JSON.Obj | null
+    readonly metaData: JSON.Obj | null
 
     constructor(event: DVCEvent, user_id: string, featureVars: Map<string, string>) {
         super()

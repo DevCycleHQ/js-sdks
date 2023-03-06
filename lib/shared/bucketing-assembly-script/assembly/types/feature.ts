@@ -105,8 +105,8 @@ export class Variation extends JSON.Value {
 }
 
 export class VariationVariable extends JSON.Value {
-    _var: string
-    value: JSON.Value
+    readonly _var: string
+    readonly value: JSON.Value
 
     constructor(variable: JSON.Obj) {
         super()

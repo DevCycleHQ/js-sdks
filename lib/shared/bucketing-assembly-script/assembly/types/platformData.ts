@@ -5,11 +5,11 @@ import {
 } from '../helpers/jsonHelpers'
 
 export class PlatformData extends JSON.Obj {
-    platform: string
-    platformVersion: string
-    sdkType: string
-    sdkVersion: string
-    hostname: string | null
+    readonly platform: string
+    readonly platformVersion: string
+    readonly sdkType: string
+    readonly sdkVersion: string
+    readonly hostname: string | null
 
     constructor(str: string) {
         super()

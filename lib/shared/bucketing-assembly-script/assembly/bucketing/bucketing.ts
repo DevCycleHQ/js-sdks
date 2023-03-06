@@ -58,7 +58,7 @@ export function _decideTargetVariation(target: PublicTarget, boundedHash: f64): 
             return variation._variation
         }
     }
-    throw new Error('Failed to decide target variation')
+    throw new Error(`Failed to decide target variation: ${target._id}`)
 }
 
 export function getCurrentRolloutPercentage(rollout: PublicRollout, currentDate: Date): f64 {

@@ -4,15 +4,16 @@ import {
     generateBucketedConfigForUser,
     doesUserPassRolloutFromJSON,
     setPlatformData,
-    setConfigData,
-    setClientCustomData
+    setClientCustomData,
+    variableForUser as variableForUser_AS
 } from '../bucketingImportHelper'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config, barrenConfig } = testData
 
 import moment from 'moment'
 import * as uuid from 'uuid'
-import { BucketedUserConfig } from '../../assembly/types'
+import { BucketedUserConfig, SDKVariable } from '../../assembly/types'
+import { cleanupSDK, initSDK } from '../setPlatformData'
 
 type BoundedHash = { rolloutHash: number, bucketingHash: number }
 
@@ -23,6 +24,7 @@ const defaultPlatformData = {
     sdkVersion: '',
     deviceModel: ''
 }
+const sdkKey = 'sdkKey'
 
 const setPlatformDataJSON = (data: unknown) => {
     setPlatformData(JSON.stringify(data))
@@ -31,7 +33,7 @@ const setPlatformDataJSON = (data: unknown) => {
 setPlatformDataJSON(defaultPlatformData)
 
 const setClientCustomDataJSON = (data: unknown) => {
-    setClientCustomData('sdkKey', JSON.stringify(data))
+    setClientCustomData(sdkKey, JSON.stringify(data))
 }
 
 const generateBoundedHashes = (user_id: string, target_id: string): BoundedHash => {
@@ -46,13 +48,17 @@ const decideTargetVariation = (
     return decideTargetVariationFromJSON(JSON.stringify(target), boundedHash)
 }
 
-const generateBucketedConfig = (
-    { config, user }:
-    { config: unknown, user: unknown }
-): BucketedUserConfig => {
-    setConfigData('sdkKey', JSON.stringify(config))
-    const bucketedConfig = generateBucketedConfigForUser('sdkKey', JSON.stringify(user))
+const generateBucketedConfig = (user: unknown): BucketedUserConfig => {
+    const bucketedConfig = generateBucketedConfigForUser(sdkKey, JSON.stringify(user))
     return JSON.parse(bucketedConfig) as BucketedUserConfig
+}
+
+const variableForUser = (
+    { user, variableKey, variableType }:
+    { user: unknown, variableKey: string, variableType: string }
+): SDKVariable | null => {
+    const variableJSON = variableForUser_AS(sdkKey, JSON.stringify(user), variableKey, variableType)
+    return variableJSON ? (JSON.parse(variableJSON) as SDKVariable) : null
 }
 
 const doesUserPassRollout = (
@@ -133,6 +139,8 @@ describe('User Hashing and Bucketing', () => {
 })
 
 describe('Config Parsing and Generating', () => {
+    afterEach(() => cleanupSDK(sdkKey))
+
     it('generates the correctly modified config from the example config', () => {
         const user = {
             country: 'canada',
@@ -183,8 +191,12 @@ describe('Config Parsing and Generating', () => {
                 }
             }
         }
-        const c = generateBucketedConfig({ config, user })
+        initSDK(sdkKey, config)
+        const c = generateBucketedConfig(user)
         expect(c).toEqual(expected)
+
+        expect(variableForUser({ user, variableKey: 'swagTest', variableType: 'String' }))
+            .toEqual(expected.variables.swagTest)
     })
 
     it('puts the user in the target for the first audience they match', () => {
@@ -302,8 +314,20 @@ describe('Config Parsing and Generating', () => {
                 }
             }
         }
-        const c = generateBucketedConfig({ config, user })
+        initSDK(sdkKey, config)
+        const c = generateBucketedConfig(user)
         expect(c).toEqual(expected)
+
+        expect(variableForUser({ user, variableKey: 'audience-match', variableType: 'String' }))
+            .toEqual(expected.variables['audience-match'])
+        expect(variableForUser({ user, variableKey: 'feature2.cool', variableType: 'String' }))
+            .toEqual(expected.variables['feature2.cool'])
+        expect(variableForUser({ user, variableKey: 'feature2.hello', variableType: 'String' }))
+            .toEqual(expected.variables['feature2.hello'])
+        expect(variableForUser({ user, variableKey: 'swagTest', variableType: 'String' }))
+            .toEqual(expected.variables['swagTest'])
+        expect(variableForUser({ user, variableKey: 'test', variableType: 'String' }))
+            .toEqual(expected.variables['test'])
     })
 
     it('holds user back if not in rollout', () => {
@@ -366,8 +390,12 @@ describe('Config Parsing and Generating', () => {
                 }
             }
         }
-        const c = generateBucketedConfig({ config, user })
+        initSDK(sdkKey, config)
+        const c = generateBucketedConfig(user)
         expect(c).toEqual(expected)
+
+        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: 'String' }))
+            .toEqual(expected.variables['feature2Var'])
     })
 
     it('puts user through if in rollout', () => {
@@ -446,8 +474,14 @@ describe('Config Parsing and Generating', () => {
                 }
             }
         }
-        const c = generateBucketedConfig({ config, user })
+        initSDK(sdkKey, config)
+        const c = generateBucketedConfig(user)
         expect(c).toEqual(expected)
+
+        expect(variableForUser({ user, variableKey: 'swagTest', variableType: 'String' }))
+            .toEqual(expected.variables['swagTest'])
+        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: 'String' }))
+            .toEqual(expected.variables['feature2Var'])
     })
 
     it('errors when feature missing distribution', () => {
@@ -456,8 +490,12 @@ describe('Config Parsing and Generating', () => {
             user_id: 'asuh',
             email: 'test@email.com'
         }
-        expect(() => generateBucketedConfig({ config: barrenConfig, user }))
-            .toThrow('Failed to decide target variation')
+        initSDK(sdkKey, barrenConfig)
+        expect(() => generateBucketedConfig(user))
+            .toThrow('Failed to decide target variation: 61536f3bc838a705c105eb62')
+
+        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: 'String' }))
+            .toBeNull()
     })
 
     it('errors when config missing variations', () => {
@@ -476,8 +514,12 @@ describe('Config Parsing and Generating', () => {
             os: 'Android',
             email: 'test@notemail.com'
         }
-        expect(() => generateBucketedConfig({ config: barrenConfig, user }))
+        initSDK(sdkKey, barrenConfig)
+        expect(() => generateBucketedConfig(user))
             .toThrow('Config missing variation: 615382338424cb11646d7667')
+
+        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: 'String' }))
+            .toBeNull()
     })
 
     it('errors when config missing variables', () => {
@@ -486,8 +528,12 @@ describe('Config Parsing and Generating', () => {
             user_id: 'asuh',
             email: 'test@notemail.com'
         }
-        expect(() => generateBucketedConfig({ config: barrenConfig, user }))
+        initSDK(sdkKey, barrenConfig)
+        expect(() => generateBucketedConfig(user))
             .toThrow('Config missing variable: 61538237b0a70b58ae6af71g')
+
+        expect(variableForUser({ user, variableKey: 'feature2.cool', variableType: 'String' }))
+            .toBeNull()
     })
 })
 
@@ -651,6 +697,8 @@ describe('Rollout Logic', () => {
 })
 
 describe('Client Data', () => {
+    afterEach(() => cleanupSDK(sdkKey))
+
     it('uses client data to allow a user into a feature', () => {
         const user = {
             user_id: 'client-test',
@@ -664,7 +712,8 @@ describe('Client Data', () => {
             favouriteDrink: 'coffee'
         }
 
-        const c1 = generateBucketedConfig({ config, user })
+        initSDK(sdkKey, config)
+        const c1 = generateBucketedConfig(user)
         expect(c1).toEqual(expect.objectContaining({
             'featureVariationMap': {}
         }))
@@ -677,14 +726,13 @@ describe('Client Data', () => {
                 '614ef6aa475928459060721a': '615382338424cb11646d7667'
             }
         }
-        const c2 = generateBucketedConfig({ config, user })
+        const c2 = generateBucketedConfig(user)
         expect(c2).toEqual(expect.objectContaining(expected))
 
         setClientCustomDataJSON({
-            'favouriteFood': 'pizza',
+            favouriteFood: 'pizza',
             favouriteDrink: 'coffee'
-        }
-        )
+        })
 
         const user2 = {
             user_id: 'hates-pizza',
@@ -694,7 +742,7 @@ describe('Client Data', () => {
             platformVersion: '1.1.2'
         }
 
-        const c3 = generateBucketedConfig({ config, user: user2 })
+        const c3 = generateBucketedConfig(user2)
         expect(c3).toEqual(expect.objectContaining({
             'featureVariationMap': {}
         }))
