@@ -25,18 +25,26 @@ export function generateBucketedConfigForUser(sdkKey: string, userStr: string): 
     return bucketedConfig.stringify()
 }
 
+export enum VariableType {
+    Boolean,
+    Number,
+    String,
+    JSON
+}
+const VariableTypeStrings = ['Boolean', 'Number', 'String', 'JSON']
+
 export function variableForUser(
     sdkKey: string,
     userStr: string,
     variableKey: string,
-    variableType: string
+    variableType: VariableType
 ): string | null {
     const config = _getConfigData(sdkKey)
     const user = DVCPopulatedUser.fromJSONString(userStr)
 
     const response = _generateBucketedVariableForUser(config, user, variableKey, _getClientCustomData(sdkKey))
     let variable = (response && response.variable) ? response.variable : null
-    if (variable && variable.type !== variableType) {
+    if (variable && variable.type !== VariableTypeStrings[variableType]) {
         variable = null
     }
 

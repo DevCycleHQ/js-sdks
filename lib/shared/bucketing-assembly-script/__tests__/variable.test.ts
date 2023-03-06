@@ -2,7 +2,8 @@ import {
     setPlatformData,
     setConfigData,
     variableForUser as variableForUser_AS,
-    initEventQueue
+    initEventQueue,
+    VariableType
 } from './bucketingImportHelper'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 import { SDKVariable } from '../assembly/types'
@@ -10,7 +11,7 @@ const { config } = testData
 
 const variableForUser = (
     { config, user, variableKey, variableType }:
-    { config: unknown, user: unknown, variableKey: string, variableType: string }
+    { config: unknown, user: unknown, variableKey: string, variableType: VariableType }
 ): SDKVariable | null => {
     setConfigData('sdkKey', JSON.stringify(config))
     const variableJSON = variableForUser_AS('sdkKey', JSON.stringify(user), variableKey, variableType)
@@ -39,7 +40,7 @@ describe('variableForUser tests', () => {
             user_id: 'asuh',
             email: 'test'
         }
-        const variable = variableForUser({ config, user, variableKey: 'swagTest', variableType: 'String' })
+        const variable = variableForUser({ config, user, variableKey: 'swagTest', variableType: VariableType.String })
         expect(variable).toEqual({
             _id: '615356f120ed334a6054564c',
             key: 'swagTest',
@@ -48,13 +49,23 @@ describe('variableForUser tests', () => {
         })
     })
 
+    it('returns null if variable type isn\'t correct', () => {
+        const user = {
+            country: 'canada',
+            user_id: 'asuh',
+            email: 'test'
+        }
+        const variable = variableForUser({ config, user, variableKey: 'swagTest', variableType: VariableType.Number })
+        expect(variable).toBeNull()
+    })
+
     it('returns null if variable does not exist', () => {
         const user = {
             country: 'canada',
             user_id: 'asuh',
             email: 'test'
         }
-        const variable = variableForUser({ config, user, variableKey: 'unknownKey', variableType: 'String' })
+        const variable = variableForUser({ config, user, variableKey: 'unknownKey', variableType: VariableType.String })
         expect(variable).toBeNull()
     })
 })
