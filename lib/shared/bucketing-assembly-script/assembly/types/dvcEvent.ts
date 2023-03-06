@@ -26,27 +26,27 @@ export class DVCEvent extends JSON.Value {
         /**
          * type of the event
          */
-        public type: string,
+        public readonly type: string,
 
         /**
          * target / subject of event. Contextual to event type
          */
-        public target: string | null,
+        public readonly target: string | null,
 
         /**
          * date event occurred according to client stored as time since epoch
          */
-        public date: Date | null,
+        public readonly date: Date | null,
 
         /**
          * value for numerical events. Contextual to event type
          */
-        public value: f64,
+        public readonly value: f64,
 
         /**
          * extra metadata for event. Contextual to event type
          */
-        public metaData: JSON.Obj | null
+        public readonly metaData: JSON.Obj | null
     ) {
         super()
     }
@@ -84,35 +84,35 @@ export class DVCRequestEvent extends JSON.Value {
     /**
      * type of the event
      */
-    type: string
+    readonly type: string
 
     /**
      * target / subject of event. Contextual to event type
      */
-    target: string | null
+    readonly target: string | null
 
-    customType: string | null
+    readonly customType: string | null
 
-    user_id: string
+    readonly user_id: string
 
     /**
      * date event occurred according to client stored as time since epoch
      */
-    date: Date
+    readonly date: Date
 
-    clientDate: Date
+    readonly clientDate: Date
 
     /**
      * value for numerical events. Contextual to event type
      */
-    value: f64
+    readonly value: f64
 
-    featureVars: Map<string, string>
+    readonly featureVars: Map<string, string>
 
     /**
      * extra metadata for event. Contextual to event type
      */
-    metaData: JSON.Obj | null
+    readonly metaData: JSON.Obj | null
 
     constructor(event: DVCEvent, user_id: string, featureVars: Map<string, string>) {
         super()
@@ -167,7 +167,7 @@ export class UserEventsBatchRecord extends JSON.Value {
 }
 
 export class FlushPayload extends JSON.Value {
-    public payloadId: string
+    public readonly payloadId: string
     public status: string
 
     constructor(

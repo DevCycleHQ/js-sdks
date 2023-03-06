@@ -10,11 +10,11 @@ import {
 import { Target } from './target'
 
 export class FeatureConfiguration extends JSON.Value {
-    _id: string
-    prerequisites: FeaturePrerequisites[] | null
-    winningVariation: FeatureWinningVariation | null
-    forcedUsers: Map<string, string> | null
-    targets: Target[]
+    readonly _id: string
+    readonly prerequisites: FeaturePrerequisites[] | null
+    readonly winningVariation: FeatureWinningVariation | null
+    readonly forcedUsers: Map<string, string> | null
+    readonly targets: Target[]
 
     constructor(featureConfig: JSON.Obj) {
         super()
@@ -55,8 +55,8 @@ export class FeatureConfiguration extends JSON.Value {
 const comparatorValues = ['=', '!=']
 
 export class FeaturePrerequisites extends JSON.Value {
-    _feature: string
-    comparator: string
+    readonly _feature: string
+    readonly comparator: string
 
     constructor(featurePrerequisites: JSON.Obj) {
         super()
@@ -75,8 +75,8 @@ export class FeaturePrerequisites extends JSON.Value {
 }
 
 export class FeatureWinningVariation extends JSON.Value {
-    _variation: string
-    updatedAt: Date
+    readonly _variation: string
+    readonly updatedAt: Date
 
     constructor(winningVar: JSON.Obj) {
         super()

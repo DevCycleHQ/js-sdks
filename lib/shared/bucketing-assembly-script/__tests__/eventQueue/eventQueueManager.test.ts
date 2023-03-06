@@ -10,7 +10,8 @@ import {
     queueAggregateEvent as queueAggregateEvent_AS,
     cleanupEventQueue,
     eventQueueSize as eventQueueSize_AS,
-    setClientCustomData
+    setClientCustomData,
+    queueVariableEvaluatedEvent_JSON
 } from '../bucketingImportHelper'
 import { FlushPayload } from '../../assembly/types'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
@@ -36,6 +37,15 @@ const queueAggregateEvent = (sdkKey: string, event: unknown, variableVariationMa
     return queueAggregateEvent_AS(sdkKey, JSON.stringify(event), JSON.stringify(variableVariationMap))
 }
 
+const queueVariableEvaluatedEvent = (sdkKey: string, config: unknown, variable: unknown, variableKey: string) => {
+    return queueVariableEvaluatedEvent_JSON(
+        sdkKey,
+        JSON.stringify(config),
+        variable ? JSON.stringify(variable) : null,
+        variableKey
+    )
+}
+
 const eventQueueSize = (sdkKey: string): number => {
     return eventQueueSize_AS(sdkKey)
 }
@@ -54,7 +64,7 @@ const initSDK = (sdkKey: string, eventOptions: unknown = {}) => {
 
 describe('EventQueueManager Tests', () => {
     afterEach(() => {
-        clearPlatformData('')
+        clearPlatformData()
         if (currentSDKKey) {
             cleanupEventQueue(currentSDKKey)
             setClientCustomData(currentSDKKey, '{}')
@@ -494,6 +504,37 @@ describe('EventQueueManager Tests', () => {
                 sdkVersion: '1.0.0'
             }))
             expect(() => queueEvent(sdkKey, dvcUser, event)).toThrow('Config data is not set.')
+        })
+    })
+
+    describe('queueVariableEvaluatedEvent', () => {
+        const varVariationMap = {
+            swagTest: {
+                _feature: '614ef6aa473928459060721a',
+                _variation: '615357cf7e9ebdca58446ed0'
+            }
+        }
+
+        it('should log aggVariableEvaluated event', () => {
+            const variable = {
+                '_id': '615356f120ed334a6054564c',
+                'key': 'swagTest',
+                'type': 'String',
+                'value': 'YEEEEOWZA',
+            }
+            const sdkKey = 'sdk_key_queueVariableEvaluatedEvent_test'
+            initSDK(sdkKey)
+
+            queueVariableEvaluatedEvent(sdkKey, varVariationMap, variable, 'swagTest')
+            expect(eventQueueSize(sdkKey)).toEqual(1)
+        })
+
+        it('should log aggVariableDefaulted event', () => {
+            const sdkKey = 'sdk_key_queueVariableEvaluatedEvent_test'
+            initSDK(sdkKey)
+
+            queueVariableEvaluatedEvent(sdkKey, varVariationMap, null, 'unknownVariable')
+            expect(eventQueueSize(sdkKey)).toEqual(1)
         })
     })
 

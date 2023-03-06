@@ -251,7 +251,7 @@ describe('Config Parsing and Generating', () => {
                 'feature1': {
                     '_id': '614ef6aa473928459060721a',
                     'key': 'feature1',
-                    "settings": undefined,
+                    'settings': undefined,
                     'type': FeatureType.release,
                     '_variation': '615357cf7e9ebdca58446ed0',
                     'variationName': 'variation 2',

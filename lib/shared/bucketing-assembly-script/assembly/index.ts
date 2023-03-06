@@ -1,12 +1,13 @@
 import {
-    _generateBoundedHashes, _generateBucketedConfig,
+    _generateBoundedHashes, _generateBucketedConfig, _generateBucketedVariableForUser,
 } from './bucketing'
 
 import { JSON } from 'assemblyscript-json/assembly'
-import { ConfigBody, DVCPopulatedUser, PlatformData } from './types'
+import { ConfigBody, DVCPopulatedUser, FeatureVariation, PlatformData } from './types'
 import { _clearPlatformData, _setPlatformData } from './managers/platformDataManager'
 import { _getConfigData, _setConfigData } from './managers/configDataManager'
 import { _getClientCustomData, _setClientCustomData } from './managers/clientCustomDataManager'
+import { queueVariableEvaluatedEvent } from './managers/eventQueueManager'
 
 export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
     const boundedHash = _generateBoundedHashes(user_id, target_id)
@@ -24,13 +25,40 @@ export function generateBucketedConfigForUser(sdkKey: string, userStr: string): 
     return bucketedConfig.stringify()
 }
 
+export function variableForUser(
+    sdkKey: string,
+    userStr: string,
+    variableKey: string,
+    variableType: string
+): string | null {
+    const config = _getConfigData(sdkKey)
+    const user = DVCPopulatedUser.fromJSONString(userStr)
+
+    const response = _generateBucketedVariableForUser(config, user, variableKey, _getClientCustomData(sdkKey))
+    let variable = (response && response.variable) ? response.variable : null
+    if (variable && variable.type !== variableType) {
+        variable = null
+    }
+
+    const variableVariationMap = new Map<string, FeatureVariation>()
+    if (response) {
+        variableVariationMap.set(variableKey, new FeatureVariation(
+            response.feature._id,
+            response.variation._id
+        ))
+    }
+    queueVariableEvaluatedEvent(sdkKey, variableVariationMap, variable, variableKey)
+
+    return variable ? variable.stringify() : null
+}
+
 export function setPlatformData(platformDataStr: string): void {
     const platformData = new PlatformData(platformDataStr)
     _setPlatformData(platformData)
 }
 
 // Add empty input string to make AS compiler work
-export function clearPlatformData(empty: string): void {
+export function clearPlatformData(empty: string | null = null): void {
     _clearPlatformData()
 }
 

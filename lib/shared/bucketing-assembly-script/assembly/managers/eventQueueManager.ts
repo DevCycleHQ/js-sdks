@@ -3,7 +3,8 @@ import {
     EventQueueOptions,
     DVCPopulatedUser,
     DVCEvent,
-    FeatureVariation
+    FeatureVariation,
+    SDKVariable
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { _getConfigData } from './configDataManager'
@@ -112,6 +113,8 @@ export function queueEvent(sdkKey: string, userStr: string, eventStr: string): v
 
 export function queueAggregateEvent(sdkKey: string, eventStr: string, variableVariationMapStr: string): void {
     const eventQueue = getEventQueue(sdkKey)
+    if (eventQueue.options.disableAutomaticEventLogging) return
+
     const event = DVCEvent.fromJSONString(eventStr)
 
     const variableVariationMapJSON = JSON.parse(variableVariationMapStr)
@@ -121,6 +124,60 @@ export function queueAggregateEvent(sdkKey: string, eventStr: string, variableVa
     )
 
     const aggByVariation = (event.type === 'aggVariableEvaluated')
+    eventQueue.queueAggregateEvent(event, variableVariationMap, aggByVariation)
+}
+
+/**
+ * Use for testing to pass in JSON strings to be parsed and call queueVariableEvaluatedEvent() with.
+ */
+export function queueVariableEvaluatedEvent_JSON(
+    sdkKey: string,
+    varVariationMapString: string,
+    variable: string | null,
+    variableKey: string
+): void {
+    const varVariationMapJSON = JSON.parse(varVariationMapString)
+    if (!varVariationMapJSON.isObj) throw new Error('varVariationMap is not a JSON Object')
+    const varVariationObj = varVariationMapJSON as JSON.Obj
+
+    const varVariationMap = new Map<string, FeatureVariation>()
+    for (let i = 0; i < varVariationObj.keys.length; i++) {
+        const key = varVariationObj.keys[i]
+        const value = varVariationObj.get(key)
+        if (!value || !value.isObj) throw new Error('FeatureVariation value is not a JSON Object')
+        varVariationMap.set(key, FeatureVariation.fromJSONObj(value as JSON.Obj))
+    }
+
+    return queueVariableEvaluatedEvent(
+        sdkKey,
+        varVariationMap,
+        (variable !== null) ? SDKVariable.fromJSONString(variable) : null,
+        variableKey
+    )
+}
+
+export function queueVariableEvaluatedEvent(
+    sdkKey: string,
+    variableVariationMap: Map<string, FeatureVariation>,
+    variable: SDKVariable | null,
+    variableKey: string
+): void {
+    const eventQueue = getEventQueue(sdkKey)
+    if (eventQueue.options.disableAutomaticEventLogging) return
+
+    const eventType = (variable !== null)
+        ? 'aggVariableEvaluated'
+        : 'aggVariableDefaulted'
+
+    const event = new DVCEvent(
+        eventType,
+        variableKey,
+        null,
+        NaN,
+        null
+    )
+
+    const aggByVariation = (eventType === 'aggVariableEvaluated')
     eventQueue.queueAggregateEvent(event, variableVariationMap, aggByVariation)
 }
 

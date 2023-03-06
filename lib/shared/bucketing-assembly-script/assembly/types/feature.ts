@@ -11,12 +11,14 @@ import { FeatureConfiguration } from './featureConfiguration'
 const validTypes = ['release', 'experiment', 'permission', 'ops']
 
 export class Feature extends JSON.Value {
-    _id: string
-    type: string
-    key: string
-    variations: Variation[]
-    configuration: FeatureConfiguration
-    settings: JSON.Obj | null
+    readonly _id: string
+    readonly type: string
+    readonly key: string
+    readonly variations: Variation[]
+    readonly configuration: FeatureConfiguration
+    readonly settings: JSON.Obj | null
+
+    private readonly _variationsById: Map<string, Variation>
 
     constructor(feature: JSON.Obj) {
         super()
@@ -26,14 +28,25 @@ export class Feature extends JSON.Value {
 
         this.key = getStringFromJSON(feature, 'key')
 
-        const variations = getJSONArrayFromJSON(feature, 'variations')
-        this.variations = variations.valueOf().map<Variation>((variation) => {
-            return new Variation(variation as JSON.Obj)
-        })
+        const variationsJSON = getJSONArrayFromJSON(feature, 'variations').valueOf()
+        const variations = new Array<Variation>()
+        const variationsById = new Map<string, Variation>()
+        for (let i = 0; i < variationsJSON.length; i++) {
+            const variation = new Variation(variationsJSON[i] as JSON.Obj)
+            variations.push(variation)
+            variationsById.set(variation._id, variation)
+        }
+        this.variations = variations
+        this._variationsById = variationsById
 
         this.configuration = new FeatureConfiguration(getJSONObjFromJSON(feature, 'configuration'))
 
         this.settings = getJSONObjFromJSONOptional(feature, 'settings')
+    }
+
+    getVariationById(variationId: string): Variation | null {
+        if (!this._variationsById.has(variationId)) return null
+        return this._variationsById.get(variationId)
     }
 
     stringify(): string {
@@ -48,10 +61,12 @@ export class Feature extends JSON.Value {
 }
 
 export class Variation extends JSON.Value {
-    _id: string
-    name: string
-    key: string
-    variables: Array<VariationVariable>
+    readonly _id: string
+    readonly name: string
+    readonly key: string
+    readonly variables: Array<VariationVariable>
+
+    private readonly _variablesById: Map<string, VariationVariable>
 
     constructor(variation: JSON.Obj) {
         super()
@@ -60,10 +75,22 @@ export class Variation extends JSON.Value {
         this.name = getStringFromJSON(variation, 'name')
         this.key = getStringFromJSON(variation, 'key')
 
-        const variables = getJSONArrayFromJSON(variation, 'variables')
-        this.variables = variables.valueOf().map<VariationVariable>((variable) => {
-            return new VariationVariable(variable as JSON.Obj)
-        })
+        const variablesJSON = getJSONArrayFromJSON(variation, 'variables').valueOf()
+        const variables = new Array<VariationVariable>()
+        const variablesById = new Map<string, VariationVariable>()
+        for (let i = 0; i < variablesJSON.length; i++) {
+            const variable = new VariationVariable(variablesJSON[i] as JSON.Obj)
+            variables.push(variable)
+            variablesById.set(variable._var, variable)
+        }
+        this.variables = variables
+        this._variablesById = variablesById
+    }
+
+    getVariableById(variableId: string): VariationVariable | null {
+        return this._variablesById.has(variableId)
+            ? this._variablesById.get(variableId)
+            : null
     }
 
     stringify(): string {
@@ -78,8 +105,8 @@ export class Variation extends JSON.Value {
 }
 
 export class VariationVariable extends JSON.Value {
-    _var: string
-    value: JSON.Value
+    readonly _var: string
+    readonly value: JSON.Value
 
     constructor(variable: JSON.Obj) {
         super()

@@ -1,20 +1,22 @@
 import { JSON } from 'assemblyscript-json/assembly'
 import {
-    getArrayFromJSONOptional,
     getDateFromJSON,
-    getF64FromJSONObj, getF64FromJSONOptional,
+    getF64FromJSONObj,
+    getF64FromJSONOptional,
     getJSONArrayFromJSON,
     getJSONObjFromJSON,
-    getStringFromJSON, getStringFromJSONOptional,
+    getStringFromJSON,
+    getStringFromJSONOptional,
     isValidString,
-    isValidStringOptional, jsonArrFromValueArray
+    isValidStringOptional,
+    jsonArrFromValueArray
 } from '../helpers/jsonHelpers'
 
 export class Target extends JSON.Value {
-    _id: string
-    _audience: Audience
-    rollout: Rollout | null
-    distribution: TargetDistribution[]
+    readonly _id: string
+    readonly _audience: Audience
+    readonly rollout: Rollout | null
+    readonly distribution: TargetDistribution[]
 
     constructor(target: JSON.Obj) {
         super()
@@ -48,7 +50,6 @@ export class AudienceFilter extends JSON.Value {
     constructor(filter: JSON.Obj) {
         super()
         this.type = isValidString(filter, 'type', validTypes, false)
-
     }
 
     stringify(): string {
@@ -64,8 +65,8 @@ export class AudienceFilter extends JSON.Value {
 // or a base level filter. This is used to support the recursive nature of nested filters.
 // The config is returned to its original form when stringified.
 export class AudienceFilterOrOperator extends JSON.Value {
-    operatorClass: AudienceOperator | null
-    filterClass: AudienceFilter | null
+    readonly operatorClass: AudienceOperator | null
+    readonly filterClass: AudienceFilter | null
 
     constructor(filter: JSON.Obj) {
         super()
@@ -86,8 +87,8 @@ export class AudienceFilterOrOperator extends JSON.Value {
 }
 
 export class AudienceOperator extends JSON.Value {
-    operator: string
-    filters: AudienceFilterOrOperator[]
+    readonly operator: string
+    readonly filters: AudienceFilterOrOperator[]
 
     constructor(filter: JSON.Obj) {
         super()
@@ -116,7 +117,7 @@ export class AudienceOperator extends JSON.Value {
 }
 
 export class NoIdAudience extends JSON.Value {
-    filters: AudienceOperator
+    readonly filters: AudienceOperator
 
     constructor(audience: JSON.Obj) {
         super()
@@ -132,7 +133,7 @@ export class NoIdAudience extends JSON.Value {
 }
 
 export class Audience extends NoIdAudience {
-    _id: string
+    readonly _id: string
 
     constructor(audience: JSON.Obj) {
         super(audience)
@@ -166,8 +167,8 @@ const validDataKeyTypes = [
 ]
 
 export class AudienceMatchFilter extends AudienceFilter {
-    _audiences: JSON.Arr
-    comparator: string
+    readonly _audiences: JSON.Arr
+    readonly comparator: string
     readonly isValid: bool
 
     constructor(filter: JSON.Obj) {
@@ -194,9 +195,9 @@ export class AudienceMatchFilter extends AudienceFilter {
 }
 
 export class UserFilter extends AudienceFilter {
-    subType: string
-    values: JSON.Arr
-    comparator: string
+    readonly subType: string
+    readonly values: JSON.Arr
+    readonly comparator: string
     readonly isValid: bool
 
     constructor(filter: JSON.Obj) {
@@ -225,8 +226,8 @@ export class UserFilter extends AudienceFilter {
 }
 
 export class CustomDataFilter extends UserFilter {
-    dataKeyType: string
-    dataKey: string
+    readonly dataKeyType: string
+    readonly dataKey: string
 
     constructor(filter: JSON.Obj) {
         super(filter)
@@ -273,10 +274,10 @@ function initializeFilterClass(filter: JSON.Obj): AudienceFilter {
 const validRolloutTypes = ['schedule', 'gradual', 'stepped']
 
 export class Rollout extends JSON.Value {
-    type: string
-    startPercentage: f64
-    startDate: Date
-    stages: RolloutStage[] | null
+    readonly type: string
+    readonly startPercentage: f64
+    readonly startDate: Date
+    readonly stages: RolloutStage[] | null
 
     constructor(rollout: JSON.Obj) {
         super()
@@ -308,9 +309,9 @@ export class Rollout extends JSON.Value {
 const validRolloutStages = ['linear', 'discrete']
 
 export class RolloutStage extends JSON.Value {
-    type: string
-    date: Date
-    percentage: f64
+    readonly type: string
+    readonly date: Date
+    readonly percentage: f64
 
     constructor(stage: JSON.Obj) {
         super()
@@ -329,8 +330,8 @@ export class RolloutStage extends JSON.Value {
 }
 
 export class TargetDistribution extends JSON.Value {
-    _variation: string
-    percentage: f64
+    readonly _variation: string
+    readonly percentage: f64
 
     constructor(distribution: JSON.Obj) {
         super()
