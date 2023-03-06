@@ -127,6 +127,9 @@ export function queueAggregateEvent(sdkKey: string, eventStr: string, variableVa
     eventQueue.queueAggregateEvent(event, variableVariationMap, aggByVariation)
 }
 
+/**
+ * Use for testing to pass in JSON strings to be parsed and call queueVariableEvaluatedEvent() with.
+ */
 export function queueVariableEvaluatedEvent_JSON(
     sdkKey: string,
     varVariationMapString: string,
@@ -136,8 +139,9 @@ export function queueVariableEvaluatedEvent_JSON(
     const varVariationMapJSON = JSON.parse(varVariationMapString)
     if (!varVariationMapJSON.isObj) throw new Error('varVariationMap is not a JSON Object')
     const varVariationObj = varVariationMapJSON as JSON.Obj
+
     const varVariationMap = new Map<string, FeatureVariation>()
-    for (let i= 0; i < varVariationObj.keys.length; i++) {
+    for (let i = 0; i < varVariationObj.keys.length; i++) {
         const key = varVariationObj.keys[i]
         const value = varVariationObj.get(key)
         if (!value || !value.isObj) throw new Error('FeatureVariation value is not a JSON Object')
@@ -151,6 +155,7 @@ export function queueVariableEvaluatedEvent_JSON(
         variableKey
     )
 }
+
 export function queueVariableEvaluatedEvent(
     sdkKey: string,
     variableVariationMap: Map<string, FeatureVariation>,
