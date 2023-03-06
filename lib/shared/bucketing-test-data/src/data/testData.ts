@@ -221,7 +221,7 @@ export const variations: PublicVariation[] = [
         ]
     },
     {
-        _id: '615382338424cb11646d7668',
+        _id: '615382338424cb11646d7669',
         name: 'feature 2 never used variation',
         key: 'variation-never-used-key',
         variables: [
@@ -414,7 +414,7 @@ export const barrenConfig: ConfigBody = {
                     _audience: audiences[0],
                     distribution: []
                 },{
-                    _id: '61536f3bc838a705c105eb62',
+                    _id: '61536f3bc838a705c105eb63',
                     _audience: audiences[2],
                     distribution: [{
                         _variation: variations[2]._id,

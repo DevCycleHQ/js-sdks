@@ -19,16 +19,16 @@ interface DVCUserInterface {
 
 export class DVCUser extends JSON.Obj implements DVCUserInterface {
     constructor(
-        public user_id: string,
-        public email: string | null,
-        public name: string | null,
-        public language: string | null,
-        public country: string | null,
-        public appBuild: f64,
-        public appVersion: string | null,
-        public deviceModel: string | null,
-        public customData: JSON.Obj | null,
-        public privateCustomData: JSON.Obj | null
+        public readonly user_id: string,
+        public readonly email: string | null,
+        public readonly name: string | null,
+        public readonly language: string | null,
+        public readonly country: string | null,
+        public readonly appBuild: f64,
+        public readonly appVersion: string | null,
+        public readonly deviceModel: string | null,
+        public readonly customData: JSON.Obj | null,
+        public readonly privateCustomData: JSON.Obj | null
     ) {
         super()
     }
@@ -79,25 +79,25 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
 }
 
 export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
-    user_id: string
-    email: string | null
-    name: string | null
-    language: string | null
-    country: string | null
-    appVersion: string | null
-    appBuild: f64
+    readonly user_id: string
+    readonly email: string | null
+    readonly name: string | null
+    readonly language: string | null
+    readonly country: string | null
+    readonly appVersion: string | null
+    readonly appBuild: f64
     customData: JSON.Obj | null
     privateCustomData: JSON.Obj | null
-    private combinedCustomData: JSON.Obj
-    deviceModel: string | null
+    private _combinedCustomData: JSON.Obj
+    readonly deviceModel: string | null
 
-    createdDate: Date
-    lastSeenDate: Date
-    platform: string
-    platformVersion: string
-    sdkType: string
-    sdkVersion: string
-    hostname: string | null
+    readonly createdDate: Date
+    readonly lastSeenDate: Date
+    readonly platform: string
+    readonly platformVersion: string
+    readonly sdkType: string
+    readonly sdkVersion: string
+    readonly hostname: string | null
 
     constructor(user: DVCUser) {
         super()
@@ -129,7 +129,7 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
                 combinedCustomData.set(key, privateCustomData.get(key))
             }
         }
-        this.combinedCustomData = combinedCustomData
+        this._combinedCustomData = combinedCustomData
 
         this.createdDate = new Date(Date.now())
         this.lastSeenDate = new Date(Date.now())
@@ -148,7 +148,7 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
     }
 
     getCombinedCustomData(): JSON.Obj {
-        return this.combinedCustomData
+        return this._combinedCustomData
     }
 
     mergeClientCustomData(clientCustomData: JSON.Obj): void {

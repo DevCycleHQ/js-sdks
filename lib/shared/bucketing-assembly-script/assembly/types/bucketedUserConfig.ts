@@ -12,8 +12,8 @@ import { PublicProject, PublicEnvironment } from './configBody'
 
 export class FeatureVariation extends JSON.Obj {
     constructor(
-        public _feature: string,
-        public _variation: string
+        public readonly _feature: string,
+        public readonly _variation: string
     ) {
         super()
     }
@@ -50,13 +50,13 @@ export class FeatureVariation extends JSON.Obj {
 
 export class BucketedUserConfig extends JSON.Obj {
     constructor(
-        public project: PublicProject,
-        public environment: PublicEnvironment,
-        public features: Map<string, SDKFeature>,
-        public featureVariationMap: Map<string, string>,
-        public variableVariationMap: Map<string, FeatureVariation>,
-        public variables: Map<string, SDKVariable>,
-        public knownVariableKeys: i64[]
+        public readonly project: PublicProject,
+        public readonly environment: PublicEnvironment,
+        public readonly features: Map<string, SDKFeature>,
+        public readonly featureVariationMap: Map<string, string>,
+        public readonly variableVariationMap: Map<string, FeatureVariation>,
+        public readonly variables: Map<string, SDKVariable>,
+        public readonly knownVariableKeys: i64[]
     ) {
         super()
     }
@@ -137,13 +137,13 @@ export class BucketedUserConfig extends JSON.Obj {
 
 export class SDKFeature extends JSON.Obj {
     constructor(
-        public _id: string,
-        public type: string,
-        public key: string,
-        public _variation: string,
-        public variationName: string,
-        public variationKey: string,
-        public evalReason: string | null
+        public readonly _id: string,
+        public readonly type: string,
+        public readonly key: string,
+        public readonly _variation: string,
+        public readonly variationName: string,
+        public readonly variationKey: string,
+        public readonly evalReason: string | null
     ) {
         super()
     }
@@ -177,11 +177,11 @@ export class SDKFeature extends JSON.Obj {
 
 export class SDKVariable extends JSON.Obj {
     constructor(
-        public _id: string,
-        public type: string,
-        public key: string,
-        public value: JSON.Value,
-        public evalReason: string | null,
+        public readonly _id: string,
+        public readonly type: string,
+        public readonly key: string,
+        public readonly value: JSON.Value,
+        public readonly evalReason: string | null,
     ) {
         super()
     }

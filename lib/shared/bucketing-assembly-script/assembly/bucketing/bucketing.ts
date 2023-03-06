@@ -3,7 +3,7 @@ import { first, last } from '../helpers/lodashHelpers'
 import {
     ConfigBody, Target as PublicTarget, Feature as PublicFeature, BucketedUserConfig,
     Rollout as PublicRollout, DVCPopulatedUser, SDKVariable, SDKFeature, RolloutStage,
-    Target, Variation, Variable, TargetDistribution, FeatureVariation
+    Target, Variation, TargetDistribution, FeatureVariation, Feature
 } from '../types'
 
 import { murmurhashV3 } from '../helpers/murmurhash'
@@ -24,11 +24,10 @@ export function _generateBoundedHashes(user_id: string, target_id: string): Boun
     // So we first hash the target_id with a constant seed
 
     const targetHash = murmurhashV3(target_id, baseSeed)
-    const boundedHash: BoundedHash = {
+    return {
         rolloutHash: generateBoundedHash(user_id + '_rollout', targetHash),
         bucketingHash: generateBoundedHash(user_id, targetHash)
     }
-    return boundedHash
 }
 
 export function generateBoundedHash(input: string, hashSeed: i32): f64 {
@@ -40,6 +39,7 @@ export function generateBoundedHash(input: string, hashSeed: i32): f64 {
  * Given the feature and a hash of the user_id, bucket the user according to the variation distribution percentages
  */
 export function _decideTargetVariation(target: PublicTarget, boundedHash: f64): string {
+    // TODO: can this be done in the constructor of the Target class?
     const sortingArray: SortingArray<TargetDistribution> = []
     for (let i = 0; i < target.distribution.length; i++) {
         sortingArray.push({
@@ -58,7 +58,7 @@ export function _decideTargetVariation(target: PublicTarget, boundedHash: f64): 
             return variation._variation
         }
     }
-    throw new Error('Failed to decide target variation')
+    throw new Error(`Failed to decide target variation: ${target._id}`)
 }
 
 export function getCurrentRolloutPercentage(rollout: PublicRollout, currentDate: Date): f64 {
@@ -71,7 +71,6 @@ export function getCurrentRolloutPercentage(rollout: PublicRollout, currentDate:
     }
 
     const stages = rollout.stages
-
     const currentStages: RolloutStage[] = []
     const nextStages: RolloutStage[] = []
 
@@ -136,6 +135,22 @@ class SegmentedFeatureData {
     public target: PublicTarget
 }
 
+function evaluateSegmentationForFeature(
+    config: ConfigBody,
+    feature: Feature,
+    user: DVCPopulatedUser,
+    clientCustomData: JSON.Obj
+): Target | null {
+    // Returns the first target for which the user passes segmentation
+    for (let i = 0; i < feature.configuration.targets.length; i++) {
+        const target = feature.configuration.targets[i]
+        if (_evaluateOperator(target._audience.filters, config.audiences, user, clientCustomData)) {
+            return target
+        }
+    }
+    return null
+}
+
 export function getSegmentedFeatureDataFromConfig(
     config: ConfigBody,
     user: DVCPopulatedUser,
@@ -147,14 +162,12 @@ export function getSegmentedFeatureDataFromConfig(
         const feature = config.features[y]
 
         // Returns the first target for which the user passes segmentation
-        let segmentedFeatureTarget: Target | null = null
-        for (let i = 0; i < feature.configuration.targets.length; i++) {
-            const target = feature.configuration.targets[i]
-            if (_evaluateOperator(target._audience.filters, config.audiences, user, clientCustomData)) {
-                segmentedFeatureTarget = target
-                break
-            }
-        }
+        const segmentedFeatureTarget: Target | null = evaluateSegmentationForFeature(
+            config,
+            feature,
+            user,
+            clientCustomData
+        )
 
         if (segmentedFeatureTarget) {
             const featureData: SegmentedFeatureData = {
@@ -167,6 +180,31 @@ export function getSegmentedFeatureDataFromConfig(
     return accumulator
 }
 
+function doesUserQualifyForFeature(
+    config: ConfigBody,
+    feature: Feature,
+    user: DVCPopulatedUser,
+    clientCustomData: JSON.Obj
+): Target | null {
+    const target = evaluateSegmentationForFeature(
+        config,
+        feature,
+        user,
+        clientCustomData
+    )
+    if (!target) return null
+
+    const boundedHashData = _generateBoundedHashes(user.user_id, target._id)
+    const rolloutHash = boundedHashData.rolloutHash
+
+    if (target.rollout && !_doesUserPassRollout(target.rollout, rolloutHash)) {
+        return null
+    }
+
+    return target
+}
+
+// TODO: can we safely remove this?
 export function generateKnownVariableKeys(
     variableHashes: Map<string, i64>,
     variableMap: Map<string, SDKVariable>
@@ -183,6 +221,23 @@ export function generateKnownVariableKeys(
     return knownVariableKeys
 }
 
+export function bucketUserForVariation(
+    feature: Feature,
+    target: Target,
+    user: DVCPopulatedUser
+): Variation {
+    const boundedHashData = _generateBoundedHashes(user.user_id, target._id)
+    const bucketingHash = boundedHashData.bucketingHash
+
+    const variation_id = bucketForSegmentedFeature(bucketingHash, target)
+    const variation = feature.getVariationById(variation_id)
+    if (variation) {
+        return variation
+    } else {
+        throw new Error(`Config missing variation: ${variation_id}`)
+    }
+}
+
 export function _generateBucketedConfig(
     config: ConfigBody,
     user: DVCPopulatedUser,
@@ -192,62 +247,43 @@ export function _generateBucketedConfig(
     const featureKeyMap = new Map<string, SDKFeature>()
     const featureVariationMap = new Map<string, string>()
     const variableVariationMap = new Map<string, FeatureVariation>()
-    const segmentedFeatures = getSegmentedFeatureDataFromConfig(config, user, clientCustomData)
 
-    for (let i = 0; i < segmentedFeatures.length; i++) {
-        const segmentedFeaturesData = segmentedFeatures[i]
-        const feature = segmentedFeaturesData.feature
-        const target = segmentedFeaturesData.target
+    for (let i = 0; i < config.features.length; i++) {
+        const feature = config.features[i]
+        const target = doesUserQualifyForFeature(
+            config,
+            feature,
+            user,
+            clientCustomData
+        )
 
-        const boundedHashData = _generateBoundedHashes(user.user_id, target._id)
-        const rolloutHash = boundedHashData.rolloutHash
-        const bucketingHash = boundedHashData.bucketingHash
-        if (target.rollout && !_doesUserPassRollout(target.rollout, rolloutHash)) {
-            continue
-        }
+        if (!target) continue
 
-        const variation_id = bucketForSegmentedFeature(bucketingHash, target)
-        let variation: Variation | null = null
-        for (let t = 0; t < feature.variations.length; t++) {
-            const featVariation = feature.variations[t]
-            if (featVariation._id === variation_id) {
-                variation = featVariation
-                break
-            }
-        }
-        if (!variation) {
-            throw new Error(`Config missing variation: ${variation_id}`)
-        }
+        const variation = bucketUserForVariation(feature, target, user)
+
         featureKeyMap.set(feature.key, new SDKFeature(
             feature._id,
             feature.type,
             feature.key,
-            variation_id,
+            variation._id,
             variation.name,
             variation.key,
             null
         ))
-        featureVariationMap.set(feature._id, variation_id)
+        featureVariationMap.set(feature._id, variation._id)
 
         for (let y = 0; y < variation.variables.length; y++) {
             const variationVar = variation.variables[y]
 
             // Find variable
-            let variable: Variable | null = null
-            for (let u = 0; u < config.variables.length; u++) {
-                const configVar = config.variables[u]
-                if (configVar._id === variationVar._var) {
-                    variable = configVar
-                    break
-                }
-            }
+            const variable = config.getVariableForId(variationVar._var)
             if (!variable) {
                 throw new Error(`Config missing variable: ${variationVar._var}`)
             }
 
             variableVariationMap.set(
                 variable.key,
-                new FeatureVariation(feature._id, variation_id)
+                new FeatureVariation(feature._id, variation._id)
             )
 
             const newVar = new SDKVariable(
@@ -270,4 +306,49 @@ export function _generateBucketedConfig(
         variableMap,
         generateKnownVariableKeys(config.variableHashes, variableMap)
     )
+}
+
+class BucketedVariableResponse {
+    public variable: SDKVariable
+
+    public variation: Variation
+
+    public feature: Feature
+}
+
+export function _generateBucketedVariableForUser(
+    config: ConfigBody,
+    user: DVCPopulatedUser,
+    key: string,
+    clientCustomData: JSON.Obj,
+): BucketedVariableResponse | null {
+    const variable = config.getVariableForKey(key)
+    if (!variable) {
+        return null
+    }
+    const featureForVariable = config.getFeatureForVariableId(variable._id)
+    if (!featureForVariable) return null
+
+    const target = doesUserQualifyForFeature(
+        config,
+        featureForVariable,
+        user,
+        clientCustomData
+    )
+    if (!target) return null
+
+    const variation = bucketUserForVariation(featureForVariable, target, user)
+    const variationVar = variation.getVariableById(variable._id)
+    if (!variationVar) {
+        throw new Error('Internal error processing configuration')
+    }
+
+    const sdkVar = new SDKVariable(
+        variable._id,
+        variable.type,
+        variable.key,
+        variationVar.value,
+        null
+    )
+    return { variable: sdkVar, variation, feature: featureForVariable }
 }
