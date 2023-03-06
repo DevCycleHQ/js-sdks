@@ -3,7 +3,7 @@ import { first, last } from '../helpers/lodashHelpers'
 import {
     ConfigBody, Target as PublicTarget, Feature as PublicFeature, BucketedUserConfig,
     Rollout as PublicRollout, DVCPopulatedUser, SDKVariable, SDKFeature, RolloutStage,
-    Target, Variation, Variable, TargetDistribution, FeatureVariation, Feature
+    Target, Variation, TargetDistribution, FeatureVariation, Feature
 } from '../types'
 
 import { murmurhashV3 } from '../helpers/murmurhash'
@@ -39,6 +39,7 @@ export function generateBoundedHash(input: string, hashSeed: i32): f64 {
  * Given the feature and a hash of the user_id, bucket the user according to the variation distribution percentages
  */
 export function _decideTargetVariation(target: PublicTarget, boundedHash: f64): string {
+    // TODO: can this be done in the constructor of the Target class?
     const sortingArray: SortingArray<TargetDistribution> = []
     for (let i = 0; i < target.distribution.length; i++) {
         sortingArray.push({
@@ -70,7 +71,6 @@ export function getCurrentRolloutPercentage(rollout: PublicRollout, currentDate:
     }
 
     const stages = rollout.stages
-
     const currentStages: RolloutStage[] = []
     const nextStages: RolloutStage[] = []
 
@@ -204,6 +204,7 @@ function doesUserQualifyForFeature(
     return target
 }
 
+// TODO: can we safely remove this?
 export function generateKnownVariableKeys(
     variableHashes: Map<string, i64>,
     variableMap: Map<string, SDKVariable>
@@ -275,14 +276,7 @@ export function _generateBucketedConfig(
             const variationVar = variation.variables[y]
 
             // Find variable
-            let variable: Variable | null = null
-            for (let u = 0; u < config.variables.length; u++) {
-                const configVar = config.variables[u]
-                if (configVar._id === variationVar._var) {
-                    variable = configVar
-                    break
-                }
-            }
+            const variable = config.getVariableForId(variationVar._var)
             if (!variable) {
                 throw new Error(`Config missing variable: ${variationVar._var}`)
             }

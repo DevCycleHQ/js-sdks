@@ -11,13 +11,14 @@ import { FeatureConfiguration } from './featureConfiguration'
 const validTypes = ['release', 'experiment', 'permission', 'ops']
 
 export class Feature extends JSON.Value {
-    _id: string
-    type: string
-    key: string
-    variations: Variation[]
-    private variationsById: Map<string, Variation>
-    configuration: FeatureConfiguration
-    settings: JSON.Obj | null
+    readonly _id: string
+    readonly type: string
+    readonly key: string
+    readonly variations: Variation[]
+    readonly configuration: FeatureConfiguration
+    readonly settings: JSON.Obj | null
+
+    private readonly _variationsById: Map<string, Variation>
 
     constructor(feature: JSON.Obj) {
         super()
@@ -36,7 +37,7 @@ export class Feature extends JSON.Value {
             variationsById.set(variation._id, variation)
         }
         this.variations = variations
-        this.variationsById = variationsById
+        this._variationsById = variationsById
 
         this.configuration = new FeatureConfiguration(getJSONObjFromJSON(feature, 'configuration'))
 
@@ -44,8 +45,8 @@ export class Feature extends JSON.Value {
     }
 
     getVariationById(variationId: string): Variation | null {
-        if (!this.variationsById.has(variationId)) return null
-        return this.variationsById.get(variationId)
+        if (!this._variationsById.has(variationId)) return null
+        return this._variationsById.get(variationId)
     }
 
     stringify(): string {
@@ -60,12 +61,12 @@ export class Feature extends JSON.Value {
 }
 
 export class Variation extends JSON.Value {
-    _id: string
-    name: string
-    key: string
-    variables: Array<VariationVariable>
+    readonly _id: string
+    readonly name: string
+    readonly key: string
+    readonly variables: Array<VariationVariable>
 
-    private variablesById: Map<string, VariationVariable>
+    private readonly _variablesById: Map<string, VariationVariable>
 
     constructor(variation: JSON.Obj) {
         super()
@@ -83,12 +84,12 @@ export class Variation extends JSON.Value {
             variablesById.set(variable._var, variable)
         }
         this.variables = variables
-        this.variablesById = variablesById
+        this._variablesById = variablesById
     }
 
     getVariableById(variableId: string): VariationVariable | null {
-        return this.variablesById.has(variableId)
-            ? this.variablesById.get(variableId)
+        return this._variablesById.has(variableId)
+            ? this._variablesById.get(variableId)
             : null
     }
 

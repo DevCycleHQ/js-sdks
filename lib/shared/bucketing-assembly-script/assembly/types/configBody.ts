@@ -7,14 +7,14 @@ import {
     jsonObjFromMap,
     isValidString, getJSONObjFromJSONOptional
 } from '../helpers/jsonHelpers'
-import { Feature,  } from './feature'
+import { Feature } from './feature'
 import { NoIdAudience } from './target'
 
 export class PublicProject extends JSON.Value {
-    _id: string
-    key: string
-    a0_organization: string
-    settings: JSON.Obj
+    readonly _id: string
+    readonly key: string
+    readonly a0_organization: string
+    readonly settings: JSON.Obj
 
     constructor(project: JSON.Obj) {
         super()
@@ -36,8 +36,8 @@ export class PublicProject extends JSON.Value {
 }
 
 export class PublicEnvironment extends JSON.Value {
-    _id: string
-    key: string
+    readonly _id: string
+    readonly key: string
 
     constructor(environment: JSON.Obj) {
         super()
@@ -58,9 +58,9 @@ const validVariableTypes = [
 ]
 
 export class Variable extends JSON.Value {
-    _id: string
-    type: string
-    key: string
+    readonly  _id: string
+    readonly type: string
+    readonly key: string
 
     constructor(variable: JSON.Obj) {
         super()
@@ -79,16 +79,16 @@ export class Variable extends JSON.Value {
 }
 
 export class ConfigBody {
-    project: PublicProject
-    audiences: Map<string, NoIdAudience>
-    environment: PublicEnvironment
-    features: Feature[]
-    variables: Variable[]
-    variableHashes: Map<string, i64>
+    readonly project: PublicProject
+    readonly audiences: Map<string, NoIdAudience>
+    readonly environment: PublicEnvironment
+    readonly features: Feature[]
+    readonly variables: Variable[]
+    readonly variableHashes: Map<string, i64>
 
-    private _variableKeyMap: Map<string, Variable>
-
-    private _variableIdToFeatureMap: Map<string, Feature>
+    private readonly _variableKeyMap: Map<string, Variable>
+    private readonly _variableIdMap: Map<string, Variable>
+    private readonly _variableIdToFeatureMap: Map<string, Feature>
 
 
     constructor(configStr: string) {
@@ -134,13 +134,16 @@ export class ConfigBody {
         const variablesJSON = getJSONArrayFromJSON(configJSONObj, 'variables').valueOf()
         const variables = new Array<Variable>()
         const _variableKeyMap = new Map<string, Variable>()
+        const _variableIdMap = new Map<string, Variable>()
         for (let i=0; i < variablesJSON.length; i++) {
             const variable = new Variable(variablesJSON[i] as JSON.Obj)
             variables.push(variable)
             _variableKeyMap.set(variable.key, variable)
+            _variableIdMap.set(variable._id, variable)
         }
         this.variables = variables
         this._variableKeyMap = _variableKeyMap
+        this._variableIdMap = _variableIdMap
 
         const variableHashes = getJSONObjFromJSON(configJSONObj, 'variableHashes')
         const variableHashesMap = new Map<string, i64>()
@@ -165,11 +168,16 @@ export class ConfigBody {
         return json.stringify()
     }
 
+    getVariableForId(variable_id: string): Variable | null {
+        return this._variableIdMap.has(variable_id)
+            ? this._variableIdMap.get(variable_id)
+            : null
+    }
+
     getVariableForKey(variableKey: string): Variable | null {
-        if (this._variableKeyMap.has(variableKey)) {
-            return this._variableKeyMap.get(variableKey)
-        }
-        return null
+        return this._variableKeyMap.has(variableKey)
+            ? this._variableKeyMap.get(variableKey)
+            : null
     }
 
     getFeatureForVariableId(variable_id: string): Feature | null {
