@@ -188,7 +188,7 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         json.set('platformVersion', this.platformVersion)
         json.set('sdkType', this.sdkType)
         json.set('sdkVersion', this.sdkVersion)
-        json.set('hostname', this.hostname)
+        if (this.hostname) json.set('hostname', this.hostname)
         return json.stringify()
     }
 }
