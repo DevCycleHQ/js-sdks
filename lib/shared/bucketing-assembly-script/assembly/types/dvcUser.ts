@@ -97,6 +97,7 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
     platformVersion: string
     sdkType: string
     sdkVersion: string
+    hostname: string | null
 
     constructor(user: DVCUser) {
         super()
@@ -138,7 +139,7 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         this.platformVersion = platformData.platformVersion
         this.sdkType = platformData.sdkType
         this.sdkVersion = platformData.sdkVersion
-
+        this.hostname = platformData.hostname
         return this
     }
 
@@ -187,6 +188,7 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         json.set('platformVersion', this.platformVersion)
         json.set('sdkType', this.sdkType)
         json.set('sdkVersion', this.sdkVersion)
+        json.set('hostname', this.hostname)
         return json.stringify()
     }
 }

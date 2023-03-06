@@ -1,6 +1,7 @@
 import { DVCJSON } from '../types'
 import * as packageJson from '../../package.json'
 import { DVCUser } from './user'
+import os from 'os'
 
 export class DVCPopulatedUser implements DVCUser {
     user_id: string
@@ -18,6 +19,7 @@ export class DVCPopulatedUser implements DVCUser {
     readonly platformVersion: string
     readonly sdkType: 'server'
     readonly sdkVersion: string
+    readonly hostname: string
 
     constructor(user: DVCUser) {
         this.user_id = user.user_id
@@ -39,6 +41,7 @@ export class DVCPopulatedUser implements DVCUser {
         this.platformVersion = process.version
         this.sdkType = 'server'
         this.sdkVersion = packageJson.version
+        this.hostname = os.hostname()
     }
 
     static fromDVCUser(user: DVCUser): DVCPopulatedUser {
