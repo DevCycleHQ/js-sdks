@@ -1,9 +1,10 @@
-import {
-    _generateBoundedHashes, _generateBucketedConfig, _generateBucketedVariableForUser,
-} from './bucketing'
-
 import { JSON } from 'assemblyscript-json/assembly'
 import { ConfigBody, DVCPopulatedUser, FeatureVariation, PlatformData } from './types'
+import {
+    _generateBoundedHashes,
+    _generateBucketedConfig,
+    _generateBucketedVariableForUser
+} from './bucketing'
 import { _clearPlatformData, _setPlatformData } from './managers/platformDataManager'
 import { _getConfigData, _setConfigData } from './managers/configDataManager'
 import { _getClientCustomData, _setClientCustomData } from './managers/clientCustomDataManager'
@@ -62,9 +63,14 @@ export function clearPlatformData(empty: string | null = null): void {
     _clearPlatformData()
 }
 
-export function setConfigData(sdkKey: string, configDataStr: string): void {
-    const configData = new ConfigBody(configDataStr)
+export function setConfigData(sdkKey: string, configDataStr: string, etag: string): void {
+    const configData = new ConfigBody(configDataStr, etag)
     _setConfigData(sdkKey, configData)
+}
+
+export function hasConfigDataForEtag(sdkKey: string, etag: string): bool {
+    const configData = _getConfigData(sdkKey)
+    return configData && configData.etag === etag
 }
 
 export function setClientCustomData(sdkKey: string, data: string): void {

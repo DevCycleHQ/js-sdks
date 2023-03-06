@@ -85,15 +85,18 @@ export class ConfigBody {
     readonly features: Feature[]
     readonly variables: Variable[]
     readonly variableHashes: Map<string, i64>
+    readonly etag: string
 
     private readonly _variableKeyMap: Map<string, Variable>
     private readonly _variableIdMap: Map<string, Variable>
     private readonly _variableIdToFeatureMap: Map<string, Feature>
 
-    constructor(configStr: string) {
+    constructor(configStr: string, etag: string) {
         const configJSON = JSON.parse(configStr)
         if (!configJSON.isObj) throw new Error('generateBucketedConfig config param not a JSON Object')
         const configJSONObj = configJSON as JSON.Obj
+
+        this.etag = etag
 
         this.project = new PublicProject(getJSONObjFromJSON(configJSONObj, 'project'))
 
