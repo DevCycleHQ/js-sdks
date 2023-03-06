@@ -88,7 +88,7 @@ export class ConfigBody {
 
     private _variableKeyMap: Map<string, Variable>
 
-    private _varIdToFeatureMap: Map<string, Feature>
+    private _variableIdToFeatureMap: Map<string, Feature>
 
 
     constructor(configStr: string) {
@@ -117,7 +117,7 @@ export class ConfigBody {
             }
         }
         this.features = features
-        this._varIdToFeatureMap = _varIdToFeatureMap
+        this._variableIdToFeatureMap = _varIdToFeatureMap
 
         const audiencesJSON = getJSONObjFromJSONOptional(configJSONObj, 'audiences')
         const audiences = new Map<string, NoIdAudience>()
@@ -172,10 +172,9 @@ export class ConfigBody {
         return null
     }
 
-    getFeatureForVarId(varId: string): Feature | null {
-        if (this._varIdToFeatureMap.has(varId)) {
-            return this._varIdToFeatureMap.get(varId)
-        }
-        return null
+    getFeatureForVariableId(variable_id: string): Feature | null {
+        return this._variableIdToFeatureMap.has(variable_id)
+            ? this._variableIdToFeatureMap.get(variable_id)
+            : null
     }
 }

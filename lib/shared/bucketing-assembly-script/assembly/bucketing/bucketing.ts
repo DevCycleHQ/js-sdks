@@ -24,11 +24,10 @@ export function _generateBoundedHashes(user_id: string, target_id: string): Boun
     // So we first hash the target_id with a constant seed
 
     const targetHash = murmurhashV3(target_id, baseSeed)
-    const boundedHash: BoundedHash = {
+    return {
         rolloutHash: generateBoundedHash(user_id + '_rollout', targetHash),
         bucketingHash: generateBoundedHash(user_id, targetHash)
     }
-    return boundedHash
 }
 
 export function generateBoundedHash(input: string, hashSeed: i32): f64 {
@@ -143,16 +142,13 @@ function evaluateSegmentationForFeature(
     clientCustomData: JSON.Obj
 ): Target | null {
     // Returns the first target for which the user passes segmentation
-    let segmentedFeatureTarget: Target | null = null
     for (let i = 0; i < feature.configuration.targets.length; i++) {
         const target = feature.configuration.targets[i]
         if (_evaluateOperator(target._audience.filters, config.audiences, user, clientCustomData)) {
-            segmentedFeatureTarget = target
-            break
+            return target
         }
     }
-
-    return segmentedFeatureTarget
+    return null
 }
 
 export function getSegmentedFeatureDataFromConfig(
@@ -233,19 +229,12 @@ export function bucketUserForVariation(
     const bucketingHash = boundedHashData.bucketingHash
 
     const variation_id = bucketForSegmentedFeature(bucketingHash, target)
-    let variation: Variation | null = null
-    for (let t = 0; t < feature.variations.length; t++) {
-        const featVariation = feature.variations[t]
-        if (featVariation._id === variation_id) {
-            variation = featVariation
-            break
-        }
-    }
-    if (!variation) {
+    const variation = feature.getVariationById(variation_id)
+    if (variation) {
+        return variation
+    } else {
         throw new Error(`Config missing variation: ${variation_id}`)
     }
-
-    return variation
 }
 
 export function _generateBucketedConfig(
@@ -343,7 +332,7 @@ export function _generateBucketedVariableForUser(
     if (!variable) {
         return null
     }
-    const featureForVariable = config.getFeatureForVarId(variable._id)
+    const featureForVariable = config.getFeatureForVariableId(variable._id)
     if (!featureForVariable) return null
 
     const target = doesUserQualifyForFeature(
@@ -355,20 +344,17 @@ export function _generateBucketedVariableForUser(
     if (!target) return null
 
     const variation = bucketUserForVariation(featureForVariable, target, user)
-
-    for (let i = 0; i < variation.variables.length; i++) {
-        const variationVar = variation.variables[i]
-        if (variationVar._var === variable._id) {
-            const sdkVar = new SDKVariable(
-                variable._id,
-                variable.type,
-                variable.key,
-                variationVar.value,
-                null
-            )
-            return { variable: sdkVar, variation, feature: featureForVariable }
-        }
+    const variationVar = variation.getVariableById(variable._id)
+    if (!variationVar) {
+        throw new Error('Internal error processing configuration')
     }
 
-    throw new Error('Internal error processing configuration')
+    const sdkVar = new SDKVariable(
+        variable._id,
+        variable.type,
+        variable.key,
+        variationVar.value,
+        null
+    )
+    return { variable: sdkVar, variation, feature: featureForVariable }
 }

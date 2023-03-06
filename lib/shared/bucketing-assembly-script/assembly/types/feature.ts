@@ -15,6 +15,7 @@ export class Feature extends JSON.Value {
     type: string
     key: string
     variations: Variation[]
+    private variationsById: Map<string, Variation>
     configuration: FeatureConfiguration
     settings: JSON.Obj | null
 
@@ -26,14 +27,25 @@ export class Feature extends JSON.Value {
 
         this.key = getStringFromJSON(feature, 'key')
 
-        const variations = getJSONArrayFromJSON(feature, 'variations')
-        this.variations = variations.valueOf().map<Variation>((variation) => {
-            return new Variation(variation as JSON.Obj)
-        })
+        const variationsJSON = getJSONArrayFromJSON(feature, 'variations').valueOf()
+        const variations = new Array<Variation>()
+        const variationsById = new Map<string, Variation>()
+        for (let i = 0; i < variationsJSON.length; i++) {
+            const variation = new Variation(variationsJSON[i] as JSON.Obj)
+            variations.push(variation)
+            variationsById.set(variation._id, variation)
+        }
+        this.variations = variations
+        this.variationsById = variationsById
 
         this.configuration = new FeatureConfiguration(getJSONObjFromJSON(feature, 'configuration'))
 
         this.settings = getJSONObjFromJSONOptional(feature, 'settings')
+    }
+
+    getVariationById(variationId: string): Variation | null {
+        if (!this.variationsById.has(variationId)) return null
+        return this.variationsById.get(variationId)
     }
 
     stringify(): string {
@@ -53,6 +65,8 @@ export class Variation extends JSON.Value {
     key: string
     variables: Array<VariationVariable>
 
+    private variablesById: Map<string, VariationVariable>
+
     constructor(variation: JSON.Obj) {
         super()
         this._id = getStringFromJSON(variation, '_id')
@@ -60,10 +74,22 @@ export class Variation extends JSON.Value {
         this.name = getStringFromJSON(variation, 'name')
         this.key = getStringFromJSON(variation, 'key')
 
-        const variables = getJSONArrayFromJSON(variation, 'variables')
-        this.variables = variables.valueOf().map<VariationVariable>((variable) => {
-            return new VariationVariable(variable as JSON.Obj)
-        })
+        const variablesJSON = getJSONArrayFromJSON(variation, 'variables').valueOf()
+        const variables = new Array<VariationVariable>()
+        const variablesById = new Map<string, VariationVariable>()
+        for (let i = 0; i < variablesJSON.length; i++) {
+            const variable = new VariationVariable(variablesJSON[i] as JSON.Obj)
+            variables.push(variable)
+            variablesById.set(variable._var, variable)
+        }
+        this.variables = variables
+        this.variablesById = variablesById
+    }
+
+    getVariableById(variableId: string): VariationVariable | null {
+        return this.variablesById.has(variableId)
+            ? this.variablesById.get(variableId)
+            : null
     }
 
     stringify(): string {
