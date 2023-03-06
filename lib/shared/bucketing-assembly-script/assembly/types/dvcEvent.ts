@@ -26,27 +26,27 @@ export class DVCEvent extends JSON.Value {
         /**
          * type of the event
          */
-        public type: string,
+        public readonly type: string,
 
         /**
          * target / subject of event. Contextual to event type
          */
-        public target: string | null,
+        public readonly target: string | null,
 
         /**
          * date event occurred according to client stored as time since epoch
          */
-        public date: Date | null,
+        public readonly date: Date | null,
 
         /**
          * value for numerical events. Contextual to event type
          */
-        public value: f64,
+        public readonly value: f64,
 
         /**
          * extra metadata for event. Contextual to event type
          */
-        public metaData: JSON.Obj | null
+        public readonly metaData: JSON.Obj | null
     ) {
         super()
     }
@@ -167,7 +167,7 @@ export class UserEventsBatchRecord extends JSON.Value {
 }
 
 export class FlushPayload extends JSON.Value {
-    public payloadId: string
+    public readonly payloadId: string
     public status: string
 
     constructor(

@@ -90,7 +90,6 @@ export class ConfigBody {
     private readonly _variableIdMap: Map<string, Variable>
     private readonly _variableIdToFeatureMap: Map<string, Feature>
 
-
     constructor(configStr: string) {
         const configJSON = JSON.parse(configStr)
         if (!configJSON.isObj) throw new Error('generateBucketedConfig config param not a JSON Object')
