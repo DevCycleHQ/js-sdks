@@ -131,9 +131,6 @@ export class EventQueue {
             variableFeatureVarAggMap.set(target, featureVarAggMap)
         }
 
-        console.log(`queueAggregateEvent, type: ${type}, target: ${target ? target : 'null'}, aggByVariation: ${aggByVariation}`)
-        console.log(`variableVariationMap: ${jsonObjFromMap(variableVariationMap).stringify()}`)
-
         if (aggByVariation) {
             if (!variableVariationMap.has(target)) {
                 throw new Error(`Missing variableVariationMap mapping for target: ${target} to aggregate by variation`)
