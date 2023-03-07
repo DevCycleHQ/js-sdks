@@ -119,8 +119,12 @@ function filterForAudienceMatch(
     // The user is not in any of the audiences.
     return comparator === '!='
 }
-function filterFunctionsBySubtype(subType: string, user: DVCPopulatedUser,
-    filter: UserFilter, clientCustomData: JSON.Obj): bool {
+function filterFunctionsBySubtype(
+    subType: string,
+    user: DVCPopulatedUser,
+    filter: UserFilter,
+    clientCustomData: JSON.Obj
+): bool {
     if (subType === 'country') {
         return _checkStringsFilter(user.country, filter)
     } else if (subType === 'email') {
@@ -277,13 +281,13 @@ export function checkNumbersFilterJSONValue(jsonValue: JSON.Value, filter: UserF
 
 function _checkNumbersFilter(number: f64, filter: UserFilter): bool {
     const operator = filter.comparator
-    const values = getFilterValuesAsF64(filter)
+    const values = filter.getNumberValues()
     return _checkNumberFilter(number, values, operator)
 }
 
 export function _checkStringsFilter(string: string | null, filter: UserFilter): bool {
     const operator = filter.comparator
-    const values = getFilterValuesAsStrings(filter)
+    const values = filter.getStringValues()
 
     if (operator === '=') {
         return string !== null && values.includes(string)
@@ -304,7 +308,7 @@ export function _checkStringsFilter(string: string | null, filter: UserFilter): 
 
 export function _checkBooleanFilter(bool: bool, filter: UserFilter): bool {
     const operator = filter.comparator
-    const values = getFilterValuesAsBoolean(filter)
+    const values = filter.getBooleanValues()
 
     if (operator === 'contain' || operator === '=') {
         return isBoolean(bool) && values.includes(bool)
@@ -321,7 +325,7 @@ export function _checkBooleanFilter(bool: bool, filter: UserFilter): bool {
 
 export function _checkVersionFilters(appVersion: string | null, filter: UserFilter): bool {
     const operator = filter.comparator
-    const values = getFilterValuesAsStrings(filter)
+    const values = filter.getStringValues()
     // dont need to do semver if they're looking for an exact match. Adds support for non semver versions.
     if (operator === '=') {
         return _checkStringsFilter(appVersion, filter)
@@ -354,8 +358,7 @@ export function _checkCustomData(data: JSON.Obj | null, clientCustomData: JSON.O
         return checkNumbersFilterJSONValue(dataValue, filter)
     } else if (filter.dataKeyType === 'Boolean' && dataValue && dataValue.isBool) {
         const boolValue = dataValue as JSON.Bool
-        const result = _checkBooleanFilter(boolValue.valueOf(), filter)
-        return result
+        return _checkBooleanFilter(boolValue.valueOf(), filter)
     } else if (!dataValue && operator === '!=') {
         return true
     } else {
@@ -397,42 +400,6 @@ export function getFilterValues(filter: UserFilter): JSON.Value[] {
     }, [] as JSON.Value[])
 }
 
-export function getFilterValuesAsStrings(filter: UserFilter): string[] {
-    const jsonValues = getFilterValues(filter)
-
-    return jsonValues.reduce((accumulator, value) => {
-        const str = value.isString ? value as JSON.Str : null
-        if (str) {
-            accumulator.push(str.valueOf())
-        }
-        return accumulator
-    }, [] as string[])
-}
-
-export function getFilterValuesAsF64(filter: UserFilter): f64[] {
-    const jsonValues = getFilterValues(filter)
-
-    return jsonValues.reduce((accumulator, value) => {
-        const num = getF64FromJSONValue(value)
-        if (!isNaN(num)) {
-            accumulator.push(num)
-        }
-        return accumulator
-    }, [] as f64[])
-}
-
-export function getFilterValuesAsBoolean(filter: UserFilter): bool[] {
-    const jsonValues = getFilterValues(filter)
-
-    return jsonValues.reduce((accumulator, value) => {
-        const boolVal = value.isBool ? value as JSON.Bool : null
-        if (boolVal !== null) {
-            accumulator.push(boolVal.valueOf())
-        }
-        return accumulator
-    }, [] as bool[])
-}
-
 /**
  * Returns true if the given value is not a type we define as "nonexistent" (NaN, empty string etc.)
  * Used only for values we don't have a specific datatype for (eg. customData values)
@@ -446,7 +413,6 @@ function checkValueExists(value: JSON.Value | null): bool {
     const intValue = value.isInteger ? value as JSON.Integer : null
     const boolValue = value.isBool ? value as JSON.Bool : null
 
-    // TODO: test these changes
     return value !== null
         && !!(stringValue || floatValue || intValue || boolValue)
         && (!stringValue || stringValue.valueOf() !== '')
