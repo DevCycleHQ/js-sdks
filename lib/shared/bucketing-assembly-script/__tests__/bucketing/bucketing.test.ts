@@ -181,6 +181,18 @@ describe('Config Parsing and Generating', () => {
                 'swagTest': {
                     _feature: '614ef6aa473928459060721a',
                     _variation: '615357cf7e9ebdca58446ed0'
+                },
+                'bool-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '615357cf7e9ebdca58446ed0',
+                },
+                'json-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '615357cf7e9ebdca58446ed0',
+                },
+                'num-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '615357cf7e9ebdca58446ed0',
                 }
             },
             'variables': {
@@ -189,6 +201,24 @@ describe('Config Parsing and Generating', () => {
                     'key': 'swagTest',
                     'type': 'String',
                     'value': 'YEEEEOWZA',
+                },
+                'bool-var': {
+                    '_id': '61538237b0a70b58ae6af71y',
+                    'key': 'bool-var',
+                    'type': 'Boolean',
+                    'value': false,
+                },
+                'json-var': {
+                    '_id': '61538237b0a70b58ae6af71q',
+                    'key': 'json-var',
+                    'type': 'JSON',
+                    'value': '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var': {
+                    '_id': '61538237b0a70b58ae6af71s',
+                    'key': 'num-var',
+                    'type': 'Number',
+                    'value': 610.61,
                 }
             }
         }
@@ -280,7 +310,19 @@ describe('Config Parsing and Generating', () => {
                 'test': {
                     _feature: '614ef6aa473928459060721a',
                     _variation: '6153553b8cf4e45e0464268d'
-                }
+                },
+                'bool-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '6153553b8cf4e45e0464268d',
+                },
+                'json-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '6153553b8cf4e45e0464268d',
+                },
+                'num-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '6153553b8cf4e45e0464268d',
+                },
             },
             'variables': {
                 'audience-match': {
@@ -312,6 +354,24 @@ describe('Config Parsing and Generating', () => {
                     'key': 'test',
                     'type': 'String',
                     'value': 'scat',
+                },
+                'bool-var':  {
+                    '_id': '61538237b0a70b58ae6af71y',
+                    'key': 'bool-var',
+                    'type': 'Boolean',
+                    'value': false,
+                },
+                'json-var': {
+                    '_id': '61538237b0a70b58ae6af71q',
+                    'key': 'json-var',
+                    'type': 'JSON',
+                    'value': '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var':  {
+                    '_id': '61538237b0a70b58ae6af71s',
+                    'key': 'num-var',
+                    'type': 'Number',
+                    'value': 610.61,
                 }
             }
         }
@@ -451,9 +511,21 @@ describe('Config Parsing and Generating', () => {
                 '614ef6aa475928459060721a': '615382338424cb11646d7667'
             },
             'variableVariationMap': {
+                'bool-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '615357cf7e9ebdca58446ed0',
+                },
                 'feature2Var': {
                     '_feature': '614ef6aa475928459060721a',
                     '_variation': '615382338424cb11646d7667'
+                },
+                'json-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '615357cf7e9ebdca58446ed0',
+                },
+                'num-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '615357cf7e9ebdca58446ed0',
                 },
                 'swagTest': {
                     '_feature': '614ef6aa473928459060721a',
@@ -461,6 +533,12 @@ describe('Config Parsing and Generating', () => {
                 }
             },
             'variables': {
+                'bool-var': {
+                    '_id': '61538237b0a70b58ae6af71y',
+                    'key': 'bool-var',
+                    'type': 'Boolean',
+                    'value': false,
+                },
                 'swagTest': {
                     '_id': '615356f120ed334a6054564c',
                     'key': 'swagTest',
@@ -472,6 +550,18 @@ describe('Config Parsing and Generating', () => {
                     'key': 'feature2Var',
                     'type': 'String',
                     'value': 'Var 1 aud 2'
+                },
+                'json-var': {
+                    '_id': '61538237b0a70b58ae6af71q',
+                    'key': 'json-var',
+                    'type': 'JSON',
+                    'value': '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var': {
+                    '_id': '61538237b0a70b58ae6af71s',
+                    'key': 'num-var',
+                    'type': 'Number',
+                    'value': 610.61,
                 }
             }
         }
