@@ -180,12 +180,17 @@ export function getSegmentedFeatureDataFromConfig(
     return accumulator
 }
 
+class TargetAndHashes {
+    public target: Target
+    public boundedHashData: BoundedHash
+}
+
 function doesUserQualifyForFeature(
     config: ConfigBody,
     feature: Feature,
     user: DVCPopulatedUser,
     clientCustomData: JSON.Obj
-): Target | null {
+): TargetAndHashes | null {
     const target = evaluateSegmentationForFeature(
         config,
         feature,
@@ -201,7 +206,10 @@ function doesUserQualifyForFeature(
         return null
     }
 
-    return target
+    return {
+        target,
+        boundedHashData
+    }
 }
 
 // TODO: can we safely remove this?
@@ -223,13 +231,12 @@ export function generateKnownVariableKeys(
 
 export function bucketUserForVariation(
     feature: Feature,
-    target: Target,
-    user: DVCPopulatedUser
+    targetAndHashes: TargetAndHashes,
 ): Variation {
-    const boundedHashData = _generateBoundedHashes(user.user_id, target._id)
-    const bucketingHash = boundedHashData.bucketingHash
-
-    const variation_id = bucketForSegmentedFeature(bucketingHash, target)
+    const variation_id = bucketForSegmentedFeature(
+        targetAndHashes.boundedHashData.bucketingHash,
+        targetAndHashes.target
+    )
     const variation = feature.getVariationById(variation_id)
     if (variation) {
         return variation
@@ -250,16 +257,16 @@ export function _generateBucketedConfig(
 
     for (let i = 0; i < config.features.length; i++) {
         const feature = config.features[i]
-        const target = doesUserQualifyForFeature(
+        const targetAndHashes = doesUserQualifyForFeature(
             config,
             feature,
             user,
             clientCustomData
         )
 
-        if (!target) continue
+        if (!targetAndHashes) continue
 
-        const variation = bucketUserForVariation(feature, target, user)
+        const variation = bucketUserForVariation(feature, targetAndHashes)
 
         featureKeyMap.set(feature.key, new SDKFeature(
             feature._id,
@@ -329,15 +336,15 @@ export function _generateBucketedVariableForUser(
     const featureForVariable = config.getFeatureForVariableId(variable._id)
     if (!featureForVariable) return null
 
-    const target = doesUserQualifyForFeature(
+    const targetAndHashes = doesUserQualifyForFeature(
         config,
         featureForVariable,
         user,
         clientCustomData
     )
-    if (!target) return null
+    if (!targetAndHashes) return null
 
-    const variation = bucketUserForVariation(featureForVariable, target, user)
+    const variation = bucketUserForVariation(featureForVariable, targetAndHashes)
     const variationVar = variation.getVariableById(variable._id)
     if (!variationVar) {
         throw new Error('Internal error processing configuration')
