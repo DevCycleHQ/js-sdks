@@ -103,9 +103,10 @@ export class EnvironmentConfigManager {
             return
         } else if (res?.status === 200 && projectConfig) {
             try {
+                const etag = res?.headers.get('etag') || ''
                 getBucketingLib().setConfigData(this.sdkKey, projectConfig)
                 this.hasConfig = true
-                this.configEtag = res?.headers.get('etag') || ''
+                this.configEtag = etag
                 return
             } catch (e) {
                 logError(new Error('Invalid config JSON.'))

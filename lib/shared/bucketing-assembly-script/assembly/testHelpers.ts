@@ -97,8 +97,8 @@ export function doesUserPassRolloutFromJSON(rolloutStr: string | null, boundedHa
     return _doesUserPassRollout(rollout, boundedHash)
 }
 
-export function testConfigBodyClass(configStr: string): string {
-    const config = new ConfigBody(configStr)
+export function testConfigBodyClass(configStr: string, etag: string | null = null): string {
+    const config = new ConfigBody(configStr, etag)
     return config.stringify()
 }
 

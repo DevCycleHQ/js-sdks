@@ -1,11 +1,12 @@
-import {
-    _generateBoundedHashes, _generateBucketedConfig, _generateBucketedVariableForUser,
-} from './bucketing'
-
 import { JSON } from 'assemblyscript-json/assembly'
 import { ConfigBody, DVCPopulatedUser, FeatureVariation, PlatformData } from './types'
+import {
+    _generateBoundedHashes,
+    _generateBucketedConfig,
+    _generateBucketedVariableForUser
+} from './bucketing'
 import { _clearPlatformData, _setPlatformData } from './managers/platformDataManager'
-import { _getConfigData, _setConfigData } from './managers/configDataManager'
+import { _getConfigData, _hasConfigData, _setConfigData } from './managers/configDataManager'
 import { _getClientCustomData, _setClientCustomData } from './managers/clientCustomDataManager'
 import { queueVariableEvaluatedEvent } from './managers/eventQueueManager'
 
@@ -73,6 +74,17 @@ export function clearPlatformData(empty: string | null = null): void {
 export function setConfigData(sdkKey: string, configDataStr: string): void {
     const configData = new ConfigBody(configDataStr)
     _setConfigData(sdkKey, configData)
+}
+
+export function setConfigDataWithEtag(sdkKey: string, configDataStr: string, etag: string): void {
+    const configData = new ConfigBody(configDataStr, etag)
+    _setConfigData(sdkKey, configData)
+}
+
+export function hasConfigDataForEtag(sdkKey: string, etag: string): bool {
+    if (!_hasConfigData(sdkKey)) return false
+    const configData = _getConfigData(sdkKey)
+    return configData && configData.etag !== null && configData.etag === etag
 }
 
 export function setClientCustomData(sdkKey: string, data: string): void {
