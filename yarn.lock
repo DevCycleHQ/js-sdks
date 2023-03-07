@@ -8167,10 +8167,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"as-bignum@npm:^0.2.23":
+  version: 0.2.30
+  resolution: "as-bignum@npm:0.2.30"
+  checksum: 77870aa79264d9d3a8a97f7f8eaccf5caf393e6520f47800b9b40988ba2de124a73dea314dcacb9cdff41df33bfd3365d77a89ae76702b2e212129923e31dbb1
+  languageName: node
+  linkType: hard
+
+"as-string-sink@npm:^0.5.3":
+  version: 0.5.3
+  resolution: "as-string-sink@npm:0.5.3"
+  checksum: 2be4abae15bcbcb30a22c7e58b330cf1c5ff99f9272b42b152216be8384cc3dc9b41cb91b8fe1f04e4f911b086e6d380f53192af47ac7c1c8cb9128ef3488235
+  languageName: node
+  linkType: hard
+
 "as-uuid@npm:^0.0.4":
   version: 0.0.4
   resolution: "as-uuid@npm:0.0.4"
   checksum: c77685355b949e6efde6bff441bde0c4906ffae22f2d1dc0ac0cbae1b81a518dd77d48568951c81179d4d5ad670581015102eca3c9a7f4453d1c457e6558b784
+  languageName: node
+  linkType: hard
+
+"as-variant@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "as-variant@npm:0.4.1"
+  checksum: 2108a632a697a2174d61172bfbfd3e2323f8aa18f395c8668193688707bb828bee966eb9e09bc8aa0d38649caaa747f9a3dcdf8fc5fae28257c0488ac9fc9ba9
   languageName: node
   linkType: hard
 
@@ -11121,6 +11142,7 @@ __metadata:
     jest-junit: ~6.4.0
     jest-react-native: 18.0.0
     jira-prepare-commit-msg: ^1.6.2
+    json-as: ^0.5.32
     lerna: ^5.5.2
     lint-staged: ^11.2.3
     lodash: ^4.17.21
@@ -11162,6 +11184,7 @@ __metadata:
     ua-parser-js: ^1.0.2
     uuid: ^8.3.2
     verdaccio: ^5.15.4
+    visitor-as: ^0.11.4
     winston: ^3.3.3
   languageName: unknown
   linkType: soft
@@ -16527,6 +16550,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-as@npm:^0.5.32":
+  version: 0.5.32
+  resolution: "json-as@npm:0.5.32"
+  dependencies:
+    as-bignum: ^0.2.23
+    as-string-sink: ^0.5.3
+    as-variant: ^0.4.1
+  checksum: a61d66867b5c493de9582080b86d08e78f7a3e9cb45a603eccc2b95ce73064e9db23285e02bd60e339d56b9c497bacbf02364c89d86c4e0327738c1688a27a0a
+  languageName: node
+  linkType: hard
+
 "json-parse-better-errors@npm:^1.0.1":
   version: 1.0.2
   resolution: "json-parse-better-errors@npm:1.0.2"
@@ -17180,6 +17214,13 @@ __metadata:
   version: 4.3.0
   resolution: "lodash.camelcase@npm:4.3.0"
   checksum: cb9227612f71b83e42de93eccf1232feeb25e705bdb19ba26c04f91e885bfd3dd5c517c4a97137658190581d3493ea3973072ca010aab7e301046d90740393d1
+  languageName: node
+  linkType: hard
+
+"lodash.clonedeep@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "lodash.clonedeep@npm:4.5.0"
+  checksum: 92c46f094b064e876a23c97f57f81fbffd5d760bf2d8a1c61d85db6d1e488c66b0384c943abee4f6af7debf5ad4e4282e74ff83177c9e63d8ff081a4837c3489
   languageName: node
   linkType: hard
 
@@ -24303,6 +24344,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ts-mixer@npm:^6.0.2":
+  version: 6.0.3
+  resolution: "ts-mixer@npm:6.0.3"
+  checksum: 7fbaba0a413bf817835a6a23d46bccf4192dd4d7345b6bae9d594c88acffac35bf4995ef3cce753090c8abcdf2afd16dba8899365584a1f960ccc2a15bf2e2d6
+  languageName: node
+  linkType: hard
+
 "ts-node@npm:10.9.1, ts-node@npm:~10.9.1":
   version: 10.9.1
   resolution: "ts-node@npm:10.9.1"
@@ -25167,6 +25215,18 @@ __metadata:
     core-util-is: 1.0.2
     extsprintf: ^1.2.0
   checksum: c431df0bedf2088b227a4e051e0ff4ca54df2c114096b0c01e1cbaadb021c30a04d7dd5b41ab277bcd51246ca135bf931d4c4c796ecae7a4fef6d744ecef36ea
+  languageName: node
+  linkType: hard
+
+"visitor-as@npm:^0.11.4":
+  version: 0.11.4
+  resolution: "visitor-as@npm:0.11.4"
+  dependencies:
+    lodash.clonedeep: ^4.5.0
+    ts-mixer: ^6.0.2
+  peerDependencies:
+    assemblyscript: ^0.25.0
+  checksum: f4ed84909ebe8212a444efb27621d14217cb9fe15ed94b9e922a8432f8e7a2c21de22c3a6e10dbfe98336ea52f0132e76f41c53f8d7995305c1b46544ee3c994
   languageName: node
   linkType: hard
 

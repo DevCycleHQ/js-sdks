@@ -1,5 +1,12 @@
-import { JSON } from 'assemblyscript-json/assembly'
-import { ConfigBody, DVCPopulatedUser, FeatureVariation, PlatformData } from './types'
+import { JSON as JSON_AS } from 'assemblyscript-json/assembly'
+import { JSON } from 'json-as/assembly'
+import {
+    ConfigBody,
+    DVCPopulatedUser,
+    DVCPopulatedUser_AS,
+    FeatureVariation,
+    PlatformData
+} from './types'
 import {
     _generateBoundedHashes,
     _generateBucketedConfig,
@@ -12,7 +19,7 @@ import { queueVariableEvaluatedEvent } from './managers/eventQueueManager'
 
 export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
     const boundedHash = _generateBoundedHashes(user_id, target_id)
-    const json = new JSON.Obj()
+    const json = new JSON_AS.Obj()
     json.set('rolloutHash', boundedHash.rolloutHash)
     json.set('bucketingHash', boundedHash.bucketingHash)
     return json.stringify()
@@ -42,6 +49,8 @@ export function variableForUser(
 ): string | null {
     const config = _getConfigData(sdkKey)
     const user = DVCPopulatedUser.fromJSONString(userStr)
+    const user_as = JSON.parse<DVCPopulatedUser_AS>(userStr)
+    console.log(`user_as: ${JSON.stringify<DVCPopulatedUser_AS>(user_as)}`)
 
     const response = _generateBucketedVariableForUser(config, user, variableKey, _getClientCustomData(sdkKey))
     let variable = (response && response.variable) ? response.variable : null
@@ -88,12 +97,12 @@ export function hasConfigDataForEtag(sdkKey: string, etag: string): bool {
 }
 
 export function setClientCustomData(sdkKey: string, data: string): void {
-    const parsed = JSON.parse(data)
+    const parsed = JSON_AS.parse(data)
     if (!parsed.isObj) {
         throw new Error('invalid global data')
     }
 
-    _setClientCustomData(sdkKey, parsed as JSON.Obj)
+    _setClientCustomData(sdkKey, parsed as JSON_AS.Obj)
 }
 
 export * from './managers/eventQueueManager'

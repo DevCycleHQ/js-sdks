@@ -9,7 +9,7 @@
     "check-types": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "asc assembly/index.ts --target debug",
+        "command": "asc assembly/index.ts --target debug --transform json-as/transform",
         "cwd": "lib/shared/bucketing-assembly-script"
       }
     },
@@ -53,13 +53,13 @@
       "options": {
         "commands": [
           {
-            "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 1000 --maximumMemory 10000 --bindings raw"
+            "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 1000 --maximumMemory 10000 --bindings raw --transform json-as/transform"
           },
           {
-            "command": "asc assembly/index.ts --target release --exportRuntime --initialMemory 1000 --maximumMemory 10000 --bindings raw"
+            "command": "asc assembly/index.ts --target release --exportRuntime --initialMemory 1000 --maximumMemory 10000 --bindings raw --transform json-as/transform"
           },
           {
-            "command": "asc assembly/index.ts --target worker --exportRuntime --initialMemory 100 --maximumMemory 1000 --bindings raw"
+            "command": "asc assembly/index.ts --target worker --exportRuntime --initialMemory 100 --maximumMemory 1000 --bindings raw --transform json-as/transform"
           },
           {
             "command": "sed -i.bu 's/export async function instantiate/exports.instantiate = async function instantiate/g' build/bucketing-lib.release.js"
