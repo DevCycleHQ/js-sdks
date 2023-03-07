@@ -119,6 +119,24 @@ describe('Config Parsing and Generating', () => {
                     'key': 'swagTest',
                     'type': 'String',
                     'value': 'YEEEEOWZA',
+                },
+                'bool-var': {
+                    '_id': '61538237b0a70b58ae6af71y',
+                    'key': 'bool-var',
+                    'type': 'Boolean',
+                    'value': false,
+                },
+                'json-var': {
+                    '_id': '61538237b0a70b58ae6af71q',
+                    'key': 'json-var',
+                    'type': 'JSON',
+                    'value': '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var': {
+                    '_id': '61538237b0a70b58ae6af71s',
+                    'key': 'num-var',
+                    'type': 'Number',
+                    'value': 610.61,
                 }
             }
         }
@@ -217,6 +235,24 @@ describe('Config Parsing and Generating', () => {
                     'key': 'test',
                     'type': 'String',
                     'value': 'scat',
+                },
+                'bool-var': {
+                    '_id': '61538237b0a70b58ae6af71y',
+                    'key': 'bool-var',
+                    'type': 'Boolean',
+                    'value': false,
+                },
+                'json-var': {
+                    '_id': '61538237b0a70b58ae6af71q',
+                    'key': 'json-var',
+                    'type': 'JSON',
+                    'value': '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var': {
+                    '_id': '61538237b0a70b58ae6af71s',
+                    'key': 'num-var',
+                    'type': 'Number',
+                    'value': 610.61,
                 }
             }
         }
@@ -268,6 +304,24 @@ describe('Config Parsing and Generating', () => {
                     'key': 'swagTest',
                     'type': 'String',
                     'value': 'YEEEEOWZA',
+                },
+                'bool-var': {
+                    '_id': '61538237b0a70b58ae6af71y',
+                    'key': 'bool-var',
+                    'type': 'Boolean',
+                    'value': false,
+                },
+                'json-var': {
+                    '_id': '61538237b0a70b58ae6af71q',
+                    'key': 'json-var',
+                    'type': 'JSON',
+                    'value': '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var': {
+                    '_id': '61538237b0a70b58ae6af71s',
+                    'key': 'num-var',
+                    'type': 'Number',
+                    'value': 610.61,
                 }
             }
         }
@@ -431,6 +485,24 @@ describe('Config Parsing and Generating', () => {
                     'key': 'feature2Var',
                     'type': 'String',
                     'value': 'Var 1 aud 2',
+                },
+                'bool-var':  {
+                    '_id': '61538237b0a70b58ae6af71y',
+                    'key': 'bool-var',
+                    'type': 'Boolean',
+                    'value': false,
+                },
+                'json-var':  {
+                    '_id': '61538237b0a70b58ae6af71q',
+                    'key': 'json-var',
+                    'type': 'JSON',
+                    'value': '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var':  {
+                    '_id': '61538237b0a70b58ae6af71s',
+                    'key': 'num-var',
+                    'type': 'Number',
+                    'value': 610.61,
                 }
             }
         }

@@ -33,7 +33,7 @@ export enum VariableType {
     string = 'String',
     boolean = 'Boolean',
     number = 'Number',
-    object = 'JSON'
+    json = 'JSON'
 }
 
 /**
