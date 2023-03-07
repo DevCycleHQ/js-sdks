@@ -202,9 +202,8 @@ export function bucketUserForVariation(
     feature: Feature,
     targetAndHashes: TargetAndHashes,
 ): Variation {
-    const { target, boundedHashData } = targetAndHashes
-    const variation_id = target.decideTargetVariation(
-        boundedHashData.bucketingHash
+    const variation_id = targetAndHashes.target.decideTargetVariation(
+        targetAndHashes.boundedHashData.bucketingHash
     )
     const variation = feature.getVariationById(variation_id)
     if (variation) {
