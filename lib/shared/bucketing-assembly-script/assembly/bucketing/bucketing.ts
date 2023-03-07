@@ -3,11 +3,10 @@ import { first, last } from '../helpers/lodashHelpers'
 import {
     ConfigBody, Target as PublicTarget, Feature as PublicFeature, BucketedUserConfig,
     Rollout as PublicRollout, DVCPopulatedUser, SDKVariable, SDKFeature, RolloutStage,
-    Target, Variation, TargetDistribution, FeatureVariation, Feature
+    Target, Variation, FeatureVariation, Feature
 } from '../types'
 
 import { murmurhashV3 } from '../helpers/murmurhash'
-import { SortingArray, sortObjectsByString } from '../helpers/arrayHelpers'
 import { _evaluateOperator } from './segmentation'
 
 // Max value of an unsigned 32-bit integer, which is what murmurhash returns
@@ -33,32 +32,6 @@ export function _generateBoundedHashes(user_id: string, target_id: string): Boun
 export function generateBoundedHash(input: string, hashSeed: i32): f64 {
     const hash = murmurhashV3(input, hashSeed) as f64
     return hash / MAX_HASH_VALUE
-}
-
-/**
- * Given the feature and a hash of the user_id, bucket the user according to the variation distribution percentages
- */
-export function _decideTargetVariation(target: PublicTarget, boundedHash: f64): string {
-    // TODO: can this be done in the constructor of the Target class?
-    const sortingArray: SortingArray<TargetDistribution> = []
-    for (let i = 0; i < target.distribution.length; i++) {
-        sortingArray.push({
-            entry: target.distribution[i],
-            value: target.distribution[i]._variation
-        })
-    }
-    const variations = sortObjectsByString<TargetDistribution>(sortingArray, 'desc')
-
-    let distributionIndex: f64 = 0
-    const previousDistributionIndex: f64 = 0
-    for (let i = 0; i < variations.length; i++) {
-        const variation = variations[i]
-        distributionIndex += variation.percentage
-        if (boundedHash >= previousDistributionIndex && boundedHash < distributionIndex) {
-            return variation._variation
-        }
-    }
-    throw new Error(`Failed to decide target variation: ${target._id}`)
 }
 
 export function getCurrentRolloutPercentage(rollout: PublicRollout, currentDate: Date): f64 {
@@ -124,10 +97,6 @@ export function _doesUserPassRollout(rollout: PublicRollout | null, boundedHash:
 
     const rolloutPercentage = getCurrentRolloutPercentage(rollout, new Date(Date.now()))
     return !!rolloutPercentage && (boundedHash <= rolloutPercentage)
-}
-
-export function bucketForSegmentedFeature(boundedHash: f64, target: PublicTarget): string {
-    return _decideTargetVariation(target, boundedHash)
 }
 
 class SegmentedFeatureData {
@@ -233,9 +202,8 @@ export function bucketUserForVariation(
     feature: Feature,
     targetAndHashes: TargetAndHashes,
 ): Variation {
-    const variation_id = bucketForSegmentedFeature(
-        targetAndHashes.boundedHashData.bucketingHash,
-        targetAndHashes.target
+    const variation_id = targetAndHashes.target.decideTargetVariation(
+        targetAndHashes.boundedHashData.bucketingHash
     )
     const variation = feature.getVariationById(variation_id)
     if (variation) {
