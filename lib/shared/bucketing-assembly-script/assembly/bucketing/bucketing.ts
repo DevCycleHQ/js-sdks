@@ -181,23 +181,6 @@ function doesUserQualifyForFeature(
     }
 }
 
-// TODO: can we safely remove this?
-export function generateKnownVariableKeys(
-    variableHashes: Map<string, i64>,
-    variableMap: Map<string, SDKVariable>
-): i64[] {
-    const knownVariableKeys: i64[] = []
-    const hashKeys = variableHashes.keys()
-    for (let i = 0; i < hashKeys.length; i++) {
-        const key = hashKeys[i]
-        const hash = variableHashes.get(key)
-        if (!variableMap.has(key)) {
-            knownVariableKeys.push(hash)
-        }
-    }
-    return knownVariableKeys
-}
-
 export function bucketUserForVariation(
     feature: Feature,
     targetAndHashes: TargetAndHashes,
@@ -278,8 +261,7 @@ export function _generateBucketedConfig(
         featureKeyMap,
         featureVariationMap,
         variableVariationMap,
-        variableMap,
-        generateKnownVariableKeys(config.variableHashes, variableMap)
+        variableMap
     )
 }
 

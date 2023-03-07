@@ -25,7 +25,6 @@ describe('EventQueue Unit Tests', () => {
     const bucketedUserConfig: BucketedUserConfig = {
         environment: { _id: '', key: '' },
         features: {},
-        knownVariableKeys: [],
         project: {
             _id: '',
             key: '',

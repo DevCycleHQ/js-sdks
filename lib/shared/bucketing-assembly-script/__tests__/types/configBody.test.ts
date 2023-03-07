@@ -10,7 +10,10 @@ import cloneDeep from 'lodash/cloneDeep'
 describe('Config Body', () => {
     it('should parse valid JSON into ConfigBody class', () => {
         const result = JSON.parse(testConfigBodyClass(JSON.stringify(testData.config)))
-        expect(result).toEqual(JSON.parse(JSON.stringify(testData.config)))
+        expect(result).toEqual(JSON.parse(JSON.stringify({
+            ...testData.config,
+            variableHashes: undefined
+        })))
     })
 
     it('should throw if target.rollout is missing type', () => {

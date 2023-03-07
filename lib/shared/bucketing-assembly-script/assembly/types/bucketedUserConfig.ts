@@ -1,6 +1,5 @@
 import { JSON } from 'assemblyscript-json/assembly'
 import {
-    getJSONArrayFromJSON,
     getJSONObjFromJSON,
     getJSONValueFromJSON,
     getStringFromJSON,
@@ -56,7 +55,6 @@ export class BucketedUserConfig extends JSON.Obj {
         public readonly featureVariationMap: Map<string, string>,
         public readonly variableVariationMap: Map<string, FeatureVariation>,
         public readonly variables: Map<string, SDKVariable>,
-        public readonly knownVariableKeys: i64[]
     ) {
         super()
     }
@@ -100,17 +98,6 @@ export class BucketedUserConfig extends JSON.Obj {
             variablesMap.set(key, SDKVariable.fromJSONObj(variables.get(key) as JSON.Obj))
         }
 
-        const knownVariableKeys = getJSONArrayFromJSON(userConfigJSONObj, 'knownVariableKeys')
-        const knownVariableKeysArray = new Array<i64>()
-        for (let i = 0; i < knownVariableKeys.valueOf().length; i++) {
-            const num = knownVariableKeys.valueOf()[i]
-            if (num && num.isFloat) {
-                knownVariableKeysArray.push(i64((num as JSON.Float).valueOf()))
-            } else if (num && num.isInteger) {
-                knownVariableKeysArray.push((num as JSON.Integer).valueOf())
-            }
-        }
-
         return new BucketedUserConfig(
             project,
             environment,
@@ -118,7 +105,6 @@ export class BucketedUserConfig extends JSON.Obj {
             featureVarMap,
             variableVariationMap,
             variablesMap,
-            knownVariableKeysArray
         )
     }
 
@@ -130,7 +116,6 @@ export class BucketedUserConfig extends JSON.Obj {
         json.set('featureVariationMap', jsonObjFromMap(this.featureVariationMap))
         json.set('variableVariationMap', jsonObjFromMap(this.variableVariationMap))
         json.set('variables', jsonObjFromMap(this.variables))
-        json.set('knownVariableKeys', this.knownVariableKeys)
         return json.stringify()
     }
 }

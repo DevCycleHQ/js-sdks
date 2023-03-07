@@ -151,19 +151,6 @@ export const getSegmentedFeatureDataFromConfig = (
     }, initialValue)
 }
 
-export const generateKnownVariableKeys = (
-    { variableHashes, variableMap }:
-    { variableHashes: ConfigBody['variableHashes'], variableMap: BucketedUserConfig['variables']}
-): BucketedUserConfig['knownVariableKeys'] => {
-    const knownVariableKeys: number[] = []
-    for (const [key, hash] of Object.entries(variableHashes)) {
-        if (!variableMap?.[key]) {
-            knownVariableKeys.push(hash)
-        }
-    }
-    return knownVariableKeys
-}
-
 export const generateBucketedConfig = (
     { config, user }:
     { config: ConfigBody, user: DVCBucketingUser }
@@ -215,10 +202,6 @@ export const generateBucketedConfig = (
         featureVariationMap,
         // Return empty object for now, until we switch to WASM bucketing logic
         variableVariationMap: {},
-        knownVariableKeys: generateKnownVariableKeys({
-            variableHashes: config.variableHashes,
-            variableMap
-        }),
         variables: variableMap
     }
 }

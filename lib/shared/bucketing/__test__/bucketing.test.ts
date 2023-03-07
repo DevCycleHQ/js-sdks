@@ -88,12 +88,6 @@ describe('Config Parsing and Generating', () => {
                 '_id': '6153553b8cf4e45e0464268d',
                 'key': 'test-environment'
             },
-            'knownVariableKeys': [
-                3126796075,
-                1879689550,
-                2621975932,
-                4138596111
-            ],
             'project': expect.objectContaining({
                 '_id': '61535533396f00bab586cb17',
                 'a0_organization': 'org_12345612345',
@@ -165,9 +159,6 @@ describe('Config Parsing and Generating', () => {
                 '_id': '6153553b8cf4e45e0464268d',
                 'key': 'test-environment'
             },
-            'knownVariableKeys': [
-                1879689550
-            ],
             'project': expect.objectContaining({
                 '_id': '61535533396f00bab586cb17',
                 'a0_organization': 'org_12345612345',
@@ -272,12 +263,6 @@ describe('Config Parsing and Generating', () => {
                 '_id': '6153553b8cf4e45e0464268d',
                 'key': 'test-environment'
             },
-            'knownVariableKeys': [
-                3126796075,
-                1879689550,
-                2621975932,
-                4138596111,
-            ],
             'project': expect.objectContaining({
                 '_id': '61535533396f00bab586cb17',
                 'a0_organization': 'org_12345612345',
@@ -341,13 +326,6 @@ describe('Config Parsing and Generating', () => {
                 '_id': '6153553b8cf4e45e0464268d',
                 'key': 'test-environment'
             },
-            'knownVariableKeys': [
-                3126796075,
-                2547774734,
-                1879689550,
-                2621975932,
-                4138596111,
-            ],
             'project': expect.objectContaining({
                 '_id': '61535533396f00bab586cb17',
                 'a0_organization': 'org_12345612345',
@@ -383,12 +361,6 @@ describe('Config Parsing and Generating', () => {
                 '_id': '6153553b8cf4e45e0464268d',
                 'key': 'test-environment'
             },
-            'knownVariableKeys': [
-                3126796075,
-                2547774734,
-                2621975932,
-                4138596111
-            ],
             'project': expect.objectContaining({
                 '_id': '61535533396f00bab586cb17',
                 'a0_organization': 'org_12345612345',
@@ -440,11 +412,6 @@ describe('Config Parsing and Generating', () => {
                 '_id': '6153553b8cf4e45e0464268d',
                 'key': 'test-environment'
             },
-            'knownVariableKeys': [
-                3126796075,
-                2621975932,
-                4138596111
-            ],
             'project': expect.objectContaining({
                 '_id': '61535533396f00bab586cb17',
                 'a0_organization': 'org_12345612345',

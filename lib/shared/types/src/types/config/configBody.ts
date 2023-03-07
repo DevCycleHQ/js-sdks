@@ -54,7 +54,7 @@ export class ConfigBody<IdType = string> {
      */
      variableHashes: {
         [key: string]: number
-    }
+     }
 
      /**
      * **Implement Later**
