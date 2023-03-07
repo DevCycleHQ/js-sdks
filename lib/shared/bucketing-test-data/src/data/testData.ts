@@ -168,6 +168,21 @@ export const variables: PublicVariable[] = [
         _id: '61538237b0a70b58ae6af71z',
         type: VariableType.string,
         key: 'audience-match'
+    },
+    {
+        _id: '61538237b0a70b58ae6af71y',
+        type: VariableType.boolean,
+        key: 'bool-var'
+    },
+    {
+        _id: '61538237b0a70b58ae6af71s',
+        type: VariableType.number,
+        key: 'num-var'
+    },
+    {
+        _id: '61538237b0a70b58ae6af71q',
+        type: VariableType.json,
+        key: 'json-var'
     }
 ]
 
@@ -176,14 +191,28 @@ export const variations: PublicVariation[] = [
         _id: '6153553b8cf4e45e0464268d',
         name: 'variation 1',
         key: 'variation-1-key',
-        variables: [{
-            _var: variables[0]._id,
-            value: 'scat'
-        },
-        {
-            _var: variables[1]._id,
-            value: 'man'
-        }]
+        variables: [
+            {
+                _var: variables[0]._id,
+                value: 'scat'
+            },
+            {
+                _var: variables[1]._id,
+                value: 'man'
+            },
+            {
+                _var: variables[6]._id,
+                value: false
+            },
+            {
+                _var: variables[7]._id,
+                value: 610.610
+            },
+            {
+                _var: variables[8]._id,
+                value: '{"hello":"world","num":610,"bool":true}'
+            }
+        ]
     },
     {
         _id: '615357cf7e9ebdca58446ed0',
@@ -193,7 +222,20 @@ export const variations: PublicVariation[] = [
             {
                 _var: variables[1]._id,
                 value: 'YEEEEOWZA'
-            }]
+            },
+            {
+                _var: variables[6]._id,
+                value: false
+            },
+            {
+                _var: variables[7]._id,
+                value: 610.610
+            },
+            {
+                _var: variables[8]._id,
+                value: '{"hello":"world","num":610,"bool":true}'
+            }
+        ]
     },
     {
         _id: '615382338424cb11646d7667',

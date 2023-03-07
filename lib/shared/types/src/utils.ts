@@ -19,7 +19,7 @@ export function getVariableTypeFromValue(value: VariableValue, key: string,
     } else if (typeof value === 'string') {
         return VariableType.string
     } else if (typeof value === 'object') {
-        return VariableType.object
+        return VariableType.json
     } else {
         if (shouldThrow) {
             throw new Error(`The default value for variable ${key} is not of type Boolean, Number, String, or JSON`)

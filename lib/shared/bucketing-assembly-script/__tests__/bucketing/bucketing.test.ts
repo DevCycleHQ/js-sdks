@@ -5,7 +5,8 @@ import {
     doesUserPassRolloutFromJSON,
     setPlatformData,
     setClientCustomData,
-    variableForUser as variableForUser_AS
+    variableForUser as variableForUser_AS,
+    VariableType
 } from '../bucketingImportHelper'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config, barrenConfig } = testData
@@ -55,7 +56,7 @@ const generateBucketedConfig = (user: unknown): BucketedUserConfig => {
 
 const variableForUser = (
     { user, variableKey, variableType }:
-    { user: unknown, variableKey: string, variableType: string }
+    { user: unknown, variableKey: string, variableType: VariableType }
 ): SDKVariable | null => {
     const variableJSON = variableForUser_AS(sdkKey, JSON.stringify(user), variableKey, variableType)
     return variableJSON ? (JSON.parse(variableJSON) as SDKVariable) : null
@@ -180,6 +181,18 @@ describe('Config Parsing and Generating', () => {
                 'swagTest': {
                     _feature: '614ef6aa473928459060721a',
                     _variation: '615357cf7e9ebdca58446ed0'
+                },
+                'bool-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '615357cf7e9ebdca58446ed0',
+                },
+                'json-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '615357cf7e9ebdca58446ed0',
+                },
+                'num-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '615357cf7e9ebdca58446ed0',
                 }
             },
             'variables': {
@@ -188,6 +201,24 @@ describe('Config Parsing and Generating', () => {
                     'key': 'swagTest',
                     'type': 'String',
                     'value': 'YEEEEOWZA',
+                },
+                'bool-var': {
+                    '_id': '61538237b0a70b58ae6af71y',
+                    'key': 'bool-var',
+                    'type': 'Boolean',
+                    'value': false,
+                },
+                'json-var': {
+                    '_id': '61538237b0a70b58ae6af71q',
+                    'key': 'json-var',
+                    'type': 'JSON',
+                    'value': '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var': {
+                    '_id': '61538237b0a70b58ae6af71s',
+                    'key': 'num-var',
+                    'type': 'Number',
+                    'value': 610.61,
                 }
             }
         }
@@ -195,7 +226,7 @@ describe('Config Parsing and Generating', () => {
         const c = generateBucketedConfig(user)
         expect(c).toEqual(expected)
 
-        expect(variableForUser({ user, variableKey: 'swagTest', variableType: 'String' }))
+        expect(variableForUser({ user, variableKey: 'swagTest', variableType: VariableType.String }))
             .toEqual(expected.variables.swagTest)
     })
 
@@ -279,7 +310,19 @@ describe('Config Parsing and Generating', () => {
                 'test': {
                     _feature: '614ef6aa473928459060721a',
                     _variation: '6153553b8cf4e45e0464268d'
-                }
+                },
+                'bool-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '6153553b8cf4e45e0464268d',
+                },
+                'json-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '6153553b8cf4e45e0464268d',
+                },
+                'num-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '6153553b8cf4e45e0464268d',
+                },
             },
             'variables': {
                 'audience-match': {
@@ -311,6 +354,24 @@ describe('Config Parsing and Generating', () => {
                     'key': 'test',
                     'type': 'String',
                     'value': 'scat',
+                },
+                'bool-var':  {
+                    '_id': '61538237b0a70b58ae6af71y',
+                    'key': 'bool-var',
+                    'type': 'Boolean',
+                    'value': false,
+                },
+                'json-var': {
+                    '_id': '61538237b0a70b58ae6af71q',
+                    'key': 'json-var',
+                    'type': 'JSON',
+                    'value': '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var':  {
+                    '_id': '61538237b0a70b58ae6af71s',
+                    'key': 'num-var',
+                    'type': 'Number',
+                    'value': 610.61,
                 }
             }
         }
@@ -318,15 +379,15 @@ describe('Config Parsing and Generating', () => {
         const c = generateBucketedConfig(user)
         expect(c).toEqual(expected)
 
-        expect(variableForUser({ user, variableKey: 'audience-match', variableType: 'String' }))
+        expect(variableForUser({ user, variableKey: 'audience-match', variableType: VariableType.String }))
             .toEqual(expected.variables['audience-match'])
-        expect(variableForUser({ user, variableKey: 'feature2.cool', variableType: 'String' }))
+        expect(variableForUser({ user, variableKey: 'feature2.cool', variableType: VariableType.String }))
             .toEqual(expected.variables['feature2.cool'])
-        expect(variableForUser({ user, variableKey: 'feature2.hello', variableType: 'String' }))
+        expect(variableForUser({ user, variableKey: 'feature2.hello', variableType: VariableType.String }))
             .toEqual(expected.variables['feature2.hello'])
-        expect(variableForUser({ user, variableKey: 'swagTest', variableType: 'String' }))
+        expect(variableForUser({ user, variableKey: 'swagTest', variableType: VariableType.String }))
             .toEqual(expected.variables['swagTest'])
-        expect(variableForUser({ user, variableKey: 'test', variableType: 'String' }))
+        expect(variableForUser({ user, variableKey: 'test', variableType: VariableType.String }))
             .toEqual(expected.variables['test'])
     })
 
@@ -394,7 +455,7 @@ describe('Config Parsing and Generating', () => {
         const c = generateBucketedConfig(user)
         expect(c).toEqual(expected)
 
-        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: 'String' }))
+        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: VariableType.String }))
             .toEqual(expected.variables['feature2Var'])
     })
 
@@ -450,9 +511,21 @@ describe('Config Parsing and Generating', () => {
                 '614ef6aa475928459060721a': '615382338424cb11646d7667'
             },
             'variableVariationMap': {
+                'bool-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '615357cf7e9ebdca58446ed0',
+                },
                 'feature2Var': {
                     '_feature': '614ef6aa475928459060721a',
                     '_variation': '615382338424cb11646d7667'
+                },
+                'json-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '615357cf7e9ebdca58446ed0',
+                },
+                'num-var': {
+                    '_feature': '614ef6aa473928459060721a',
+                    '_variation': '615357cf7e9ebdca58446ed0',
                 },
                 'swagTest': {
                     '_feature': '614ef6aa473928459060721a',
@@ -460,6 +533,12 @@ describe('Config Parsing and Generating', () => {
                 }
             },
             'variables': {
+                'bool-var': {
+                    '_id': '61538237b0a70b58ae6af71y',
+                    'key': 'bool-var',
+                    'type': 'Boolean',
+                    'value': false,
+                },
                 'swagTest': {
                     '_id': '615356f120ed334a6054564c',
                     'key': 'swagTest',
@@ -471,6 +550,18 @@ describe('Config Parsing and Generating', () => {
                     'key': 'feature2Var',
                     'type': 'String',
                     'value': 'Var 1 aud 2'
+                },
+                'json-var': {
+                    '_id': '61538237b0a70b58ae6af71q',
+                    'key': 'json-var',
+                    'type': 'JSON',
+                    'value': '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var': {
+                    '_id': '61538237b0a70b58ae6af71s',
+                    'key': 'num-var',
+                    'type': 'Number',
+                    'value': 610.61,
                 }
             }
         }
@@ -478,9 +569,9 @@ describe('Config Parsing and Generating', () => {
         const c = generateBucketedConfig(user)
         expect(c).toEqual(expected)
 
-        expect(variableForUser({ user, variableKey: 'swagTest', variableType: 'String' }))
+        expect(variableForUser({ user, variableKey: 'swagTest', variableType: VariableType.String }))
             .toEqual(expected.variables['swagTest'])
-        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: 'String' }))
+        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: VariableType.String }))
             .toEqual(expected.variables['feature2Var'])
     })
 
@@ -494,7 +585,7 @@ describe('Config Parsing and Generating', () => {
         expect(() => generateBucketedConfig(user))
             .toThrow('Failed to decide target variation: 61536f3bc838a705c105eb62')
 
-        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: 'String' }))
+        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: VariableType.String }))
             .toBeNull()
     })
 
@@ -518,7 +609,7 @@ describe('Config Parsing and Generating', () => {
         expect(() => generateBucketedConfig(user))
             .toThrow('Config missing variation: 615382338424cb11646d7667')
 
-        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: 'String' }))
+        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: VariableType.String }))
             .toBeNull()
     })
 
@@ -532,7 +623,7 @@ describe('Config Parsing and Generating', () => {
         expect(() => generateBucketedConfig(user))
             .toThrow('Config missing variable: 61538237b0a70b58ae6af71g')
 
-        expect(variableForUser({ user, variableKey: 'feature2.cool', variableType: 'String' }))
+        expect(variableForUser({ user, variableKey: 'feature2.cool', variableType: VariableType.String }))
             .toBeNull()
     })
 })

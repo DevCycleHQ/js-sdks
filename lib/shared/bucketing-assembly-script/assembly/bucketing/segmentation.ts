@@ -65,41 +65,33 @@ function doesUserPassFilter(
     user: DVCPopulatedUser,
     clientCustomData: JSON.Obj
 ): bool {
-    const invalidFilterLog = `
-            [DevCycle] Warning: Invalid filter data ${filter}.
-            To leverage this new filter definition, please update to the latest version of the DevCycle SDK.
-        `
+    let isValid = true
 
     if (filter.type === 'all') return true
     else if (filter.type === 'optIn') return false
     else if (filter.type === 'audienceMatch') {
         if (!(filter as AudienceMatchFilter).isValid) {
-            console.log(invalidFilterLog)
-            return false
+            isValid = false
+        } else {
+            return filterForAudienceMatch(filter as AudienceMatchFilter, audiences, user, clientCustomData)
         }
-        return filterForAudienceMatch(filter as AudienceMatchFilter, audiences, user, clientCustomData)
     } else if (!(filter instanceof UserFilter)) {
-        console.log(invalidFilterLog)
-        return false
+        isValid = false
     }
 
-    const userFilter = filter as UserFilter
-
-    if (!userFilter.isValid) {
-        console.log(invalidFilterLog)
-        return false
+    if (isValid) {
+        const userFilter = filter as UserFilter
+        if (userFilter.isValid) {
+            const subType = userFilter.subType
+            if (validSubTypes.includes(subType)) {
+                return filterFunctionsBySubtype(subType, user, userFilter, clientCustomData)
+            }
+        }
     }
 
-    const subType = userFilter.subType
-    if (!validSubTypes.includes(subType)) {
-        console.log(`
-            [DevCycle] Warning: Invalid filter subType: ${subType}.
-            To leverage this new filter definition, please update to the latest version of the DevCycle SDK.
-        `)
-        return false
-    }
-
-    return filterFunctionsBySubtype(subType, user, userFilter, clientCustomData)
+    console.log(`[DevCycle] Warning: Invalid filter data ${filter}.
+        To leverage this new filter definition, please update to the latest version of the DevCycle SDK.`)
+    return false
 }
 
 function filterForAudienceMatch(
