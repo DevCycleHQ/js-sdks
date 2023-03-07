@@ -381,13 +381,6 @@ export interface BucketedUserConfig {
     }
 
     /**
-     * Hashes `murmurhash.v3(variable.key + environment.apiKey)` of all known variable keys
-     * not contained in the `variables` object. This is so the SDK doesn't make
-     * requests for new Variables for known variables.
-     */
-    knownVariableKeys: number[]
-
-    /**
      * Information about how to establish a streaming connection to receive config updates
      */
     sse?: {

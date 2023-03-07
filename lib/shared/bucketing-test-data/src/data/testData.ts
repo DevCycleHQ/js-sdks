@@ -435,7 +435,6 @@ export const config: ConfigBody = {
             },
             variations: [variations[5]]
         }],
-
     variables,
     variableHashes
 }

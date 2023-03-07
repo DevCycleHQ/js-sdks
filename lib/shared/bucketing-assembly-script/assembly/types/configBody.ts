@@ -84,7 +84,6 @@ export class ConfigBody {
     readonly environment: PublicEnvironment
     readonly features: Feature[]
     readonly variables: Variable[]
-    readonly variableHashes: Map<string, i64>
     readonly etag: string | null
 
     private readonly _variableKeyMap: Map<string, Variable>
@@ -146,17 +145,6 @@ export class ConfigBody {
         this.variables = variables
         this._variableKeyMap = _variableKeyMap
         this._variableIdMap = _variableIdMap
-
-        const variableHashes = getJSONObjFromJSON(configJSONObj, 'variableHashes')
-        const variableHashesMap = new Map<string, i64>()
-        const keys = variableHashes.keys
-        for (let i=0; i < keys.length; i++) {
-            const key = keys[i]
-            const value = variableHashes.getInteger(key)
-            if (!value) throw new Error(`Unable to get variableHashes value for key: ${key}`)
-            variableHashesMap.set(key, value.valueOf())
-        }
-        this.variableHashes = variableHashesMap
     }
 
     stringify(): string {
@@ -166,7 +154,6 @@ export class ConfigBody {
         json.set('audiences', jsonObjFromMap(this.audiences))
         json.set('features', jsonArrFromValueArray(this.features))
         json.set('variables', jsonArrFromValueArray(this.variables))
-        json.set('variableHashes', jsonObjFromMap(this.variableHashes))
         return json.stringify()
     }
 
