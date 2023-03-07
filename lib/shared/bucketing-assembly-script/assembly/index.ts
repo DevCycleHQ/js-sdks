@@ -6,7 +6,7 @@ import {
     _generateBucketedVariableForUser
 } from './bucketing'
 import { _clearPlatformData, _setPlatformData } from './managers/platformDataManager'
-import { _getConfigData, _setConfigData } from './managers/configDataManager'
+import { _getConfigData, _hasConfigData, _setConfigData } from './managers/configDataManager'
 import { _getClientCustomData, _setClientCustomData } from './managers/clientCustomDataManager'
 import { queueVariableEvaluatedEvent } from './managers/eventQueueManager'
 
@@ -74,6 +74,7 @@ export function setConfigDataWithEtag(sdkKey: string, configDataStr: string, eta
 }
 
 export function hasConfigDataForEtag(sdkKey: string, etag: string): bool {
+    if (!_hasConfigData(sdkKey)) return false
     const configData = _getConfigData(sdkKey)
     return configData && configData.etag !== null && configData.etag === etag
 }

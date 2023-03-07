@@ -13,3 +13,7 @@ export function _getConfigData(sdkKey: string): ConfigBody {
         return _configData.get(sdkKey)
     }
 }
+
+export function _hasConfigData(sdkKey: string): bool {
+    return _configData.has(sdkKey)
+}
