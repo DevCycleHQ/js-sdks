@@ -2,6 +2,7 @@ import testData from '../../../bucketing-test-data/json-data/testData.json'
 import {
     testConfigBodyClass,
     setConfigData,
+    setConfigDataWithEtag,
     hasConfigDataForEtag
 } from '../bucketingImportHelper'
 import cloneDeep from 'lodash/cloneDeep'
@@ -125,7 +126,7 @@ describe('hasConfigDataForEtag', () => {
     it('should return true if config has data', () => {
         const sdkKey = 'sdkKey'
         const etag = 'etag'
-        setConfigData(sdkKey, JSON.stringify(testData.config), etag)
+        setConfigDataWithEtag(sdkKey, JSON.stringify(testData.config), etag)
         expect(hasConfigDataForEtag(sdkKey, etag)).toBe(true)
         expect(hasConfigDataForEtag(sdkKey, 'not-etag')).toBe(false)
         expect(hasConfigDataForEtag('not-sdk-key', etag)).toBe(false)

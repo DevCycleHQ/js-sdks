@@ -104,7 +104,7 @@ export class EnvironmentConfigManager {
         } else if (res?.status === 200 && projectConfig) {
             try {
                 const etag = res?.headers.get('etag') || ''
-                getBucketingLib().setConfigData(this.sdkKey, projectConfig, etag)
+                getBucketingLib().setConfigData(this.sdkKey, projectConfig)
                 this.hasConfig = true
                 this.configEtag = etag
                 return
