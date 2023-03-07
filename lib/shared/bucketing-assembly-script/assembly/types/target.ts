@@ -282,7 +282,7 @@ export class UserFilter extends AudienceFilter {
                 const value = values[i]
                 const float = value.isFloat ? value as JSON.Float : null
                 const int = value.isInteger ? value as JSON.Integer : null
-                if (!float && !int) {
+                if (float === null && int === null) {
                     console.log('[DevCycle] Warning: Filter values must be all of the same type. ' +
                         `Expected: number, got: ${value}`)
                     continue

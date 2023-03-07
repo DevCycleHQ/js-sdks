@@ -993,7 +993,7 @@ describe('SegmentationManager Unit Test', () => {
     })
 
     describe('checkStringsFilter', () => {
-        it('should return false if filter and no value', () => {
+        it('should return false if filter and no valid value', () => {
             const filter = { type: 'user', comparator: '=', values: [1, 2] }
             assert.strictEqual(false, checkStringsFilter(null, filter))
         })
@@ -1021,6 +1021,10 @@ describe('SegmentationManager Unit Test', () => {
         })
         it('should return true if browser filter works', () => {
             const filter = { type: 'user', comparator: '=', values: ['Chrome'] }
+            assert.strictEqual(true, checkStringsFilter('Chrome', filter))
+        })
+        it('should return true if string filter works with non string value in values', () => {
+            const filter = { type: 'user', comparator: '=', values: ['Chrome', 0] }
             assert.strictEqual(true, checkStringsFilter('Chrome', filter))
         })
         it('should return true if browser device type filter works', () => {
@@ -1128,6 +1132,10 @@ describe('SegmentationManager Unit Test', () => {
             const filter = { type: 'user', comparator: '=', values: [true] }
             assert.strictEqual(true, checkBooleanFilter(true, filter))
         })
+        it('should return true if filters values contains boolean value and non boolean value', () => {
+            const filter = { type: 'user', comparator: '=', values: [true, 'test'] }
+            assert.strictEqual(true, checkBooleanFilter(true, filter))
+        })
         it('should return false if filers value does not equals boolean', () => {
             const filter = { type: 'user', comparator: '=', values: [true] }
             assert.strictEqual(false, checkBooleanFilter(false, filter))
@@ -1180,6 +1188,11 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should return true if number is equal', () => {
             const filter = { type: 'user', comparator: '=', values: [10] }
+            assert.strictEqual(true, checkNumbersFilter(10, filter))
+        })
+
+        it('should return true if number is in values array with non-number values', () => {
+            const filter = { type: 'user', comparator: '=', values: [10, 'test'] }
             assert.strictEqual(true, checkNumbersFilter(10, filter))
         })
 
