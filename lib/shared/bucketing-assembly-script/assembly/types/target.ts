@@ -229,13 +229,96 @@ export class UserFilter extends AudienceFilter {
     readonly comparator: string
     readonly isValid: bool
 
+    private _compiledStringValues: string[] | null = null
+    private _compiledBoolValues:  bool[] | null = null
+    private _compiledNumValues: number[] | null = null
+
     constructor(filter: JSON.Obj) {
         super(filter)
         this.values = getJSONArrayFromJSON(filter, 'values')
         this.subType = isValidString(filter, 'subType', validSubTypes, false)
         this.comparator = isValidString(filter, 'comparator', validComparators, false)
         this.isValid = validComparators.includes(this.comparator)
+
+        this.compileValues(this.values.valueOf())
     }
+
+    compileValues(values: JSON.Value[]): void {
+        if (!values || values.length === 0) return
+        const firstValue = values[0]
+
+        if (firstValue.isBool) {
+            const boolValues = new Array<bool>()
+
+            for (let i=0; i < values.length; i++) {
+                const value = values[i]
+                if (!value.isBool) {
+                    console.log('[DevCycle] Warning: Filter values must be all of the same type. ' +
+                        `Expected: bool, got: ${value}`)
+                    continue
+                }
+
+                boolValues.push((value as JSON.Bool).valueOf())
+            }
+            this._compiledBoolValues = boolValues
+        } else if (firstValue.isString) {
+            const stringValues = new Array<string>()
+
+            for (let i=0; i < values.length; i++) {
+                const value = values[i]
+                if (!value.isString) {
+                    console.log('[DevCycle] Warning: Filter values must be all of the same type. ' +
+                        `Expected: string, got: ${value}`)
+                    continue
+                }
+
+                stringValues.push((value as JSON.Str).valueOf())
+            }
+            this._compiledStringValues = stringValues
+        } else if (firstValue.isFloat || firstValue.isInteger) {
+            const numValues = new Array<number>()
+
+            for (let i=0; i < values.length; i++) {
+                const value = values[i]
+                const float = value.isFloat ? value as JSON.Float : null
+                const int = value.isInteger ? value as JSON.Integer : null
+                if (float === null && int === null) {
+                    console.log('[DevCycle] Warning: Filter values must be all of the same type. ' +
+                        `Expected: number, got: ${value}`)
+                    continue
+                }
+
+                const numValue = float !== null
+                    ? (float as JSON.Float).valueOf()
+                    : (int !== null ? f64((int as JSON.Integer).valueOf()) : NaN)
+                if (!isNaN(numValue)) {
+                    numValues.push(numValue)
+                }
+            }
+            this._compiledNumValues = numValues
+        } else {
+            throw new Error(`Filter values of unknown type. ${firstValue}`)
+        }
+    }
+
+    getStringValues(): string[] {
+        return this._compiledStringValues !== null
+            ? this._compiledStringValues as string[]
+            : []
+    }
+
+    getBooleanValues(): bool[] {
+        return this._compiledBoolValues !== null
+            ? this._compiledBoolValues as bool[]
+            : []
+    }
+
+    getNumberValues(): number[] {
+        return this._compiledNumValues !== null
+            ? this._compiledNumValues as number[]
+            : []
+    }
+
     stringify(): string {
         const json = new JSON.Obj()
         if (this.type) {
