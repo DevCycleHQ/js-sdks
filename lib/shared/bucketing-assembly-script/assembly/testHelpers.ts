@@ -14,7 +14,10 @@ import {
 } from './types'
 import {
     _checkCustomData,
-    _checkVersionFilters, _decideTargetVariation, _doesUserPassRollout, _evaluateOperator, checkNumbersFilterJSONValue
+    _checkVersionFilters,
+    _doesUserPassRollout,
+    _evaluateOperator,
+    checkNumbersFilterJSONValue
 } from './bucketing'
 import { SortingArray, sortObjectsByString } from './helpers/arrayHelpers'
 
@@ -85,7 +88,7 @@ export function decideTargetVariationFromJSON(targetStr: string, boundedHash: f6
     const targetJSON = JSON.parse(targetStr)
     if (!targetJSON.isObj) throw new Error('decideTargetVariationFromJSON targetStr param not a JSON Object')
     const target = new PublicTarget(targetJSON as JSON.Obj)
-    return _decideTargetVariation(target, boundedHash)
+    return target.decideTargetVariation(boundedHash)
 }
 
 export function doesUserPassRolloutFromJSON(rolloutStr: string | null, boundedHash: f64): bool {

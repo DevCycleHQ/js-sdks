@@ -11,12 +11,15 @@ import {
     isValidStringOptional,
     jsonArrFromValueArray
 } from '../helpers/jsonHelpers'
+import { SortingArray, sortObjectsByString } from '../helpers/arrayHelpers'
 
 export class Target extends JSON.Value {
     readonly _id: string
     readonly _audience: Audience
     readonly rollout: Rollout | null
     readonly distribution: TargetDistribution[]
+
+    private readonly _sortedDistribution: TargetDistribution[]
 
     constructor(target: JSON.Obj) {
         super()
@@ -27,10 +30,36 @@ export class Target extends JSON.Value {
         const rollout = target.getObj('rollout')
         this.rollout = rollout ? new Rollout(rollout) : null
 
-        const distribution = getJSONArrayFromJSON(target, 'distribution')
-        this.distribution = distribution.valueOf().map<TargetDistribution>((dist) => {
+        const distributionJSON = getJSONArrayFromJSON(target, 'distribution')
+        const distribution = distributionJSON.valueOf().map<TargetDistribution>((dist) => {
             return new TargetDistribution(dist as JSON.Obj)
         })
+        this.distribution = distribution
+
+        const sortingArray: SortingArray<TargetDistribution> = []
+        for (let i = 0; i < distribution.length; i++) {
+            sortingArray.push({
+                entry: distribution[i],
+                value: distribution[i]._variation
+            })
+        }
+        this._sortedDistribution = sortObjectsByString<TargetDistribution>(sortingArray, 'desc')
+    }
+
+    /**
+     * Given the feature and a hash of the user_id, bucket the user according to the variation distribution percentages
+     */
+    decideTargetVariation(boundedHash: f64): string {
+        let distributionIndex: f64 = 0
+        const previousDistributionIndex: f64 = 0
+        for (let i = 0; i < this._sortedDistribution.length; i++) {
+            const distribution = this._sortedDistribution[i]
+            distributionIndex += distribution.percentage
+            if (boundedHash >= previousDistributionIndex && boundedHash < distributionIndex) {
+                return distribution._variation
+            }
+        }
+        throw new Error(`Failed to decide target variation: ${this._id}`)
     }
 
     stringify(): string {
