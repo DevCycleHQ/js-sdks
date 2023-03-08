@@ -59,7 +59,7 @@ export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
     if (!user) throw new Error('Missing user from variableForUser_PB protobuf')
     const dvcUser = new DVCPopulatedUser(DVCUser.fromPB(user))
 
-    const variable = variableForDVCUser(
+    const variable = _variableForDVCUser(
         params.sdkKey,
         dvcUser,
         params.variableKey,
@@ -70,7 +70,7 @@ export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
     return variable ? variable.toProtobuf() : null
 }
 
-function variableForDVCUser(
+function _variableForDVCUser(
     sdkKey: string,
     dvcUser: DVCPopulatedUser,
     variableKey: string,
@@ -107,7 +107,7 @@ export function variableForUser(
     shouldTrackEvent: boolean,
 ): string | null {
     const user = DVCPopulatedUser.fromJSONString(userStr)
-    const variable = variableForDVCUser(sdkKey, user, variableKey, variableType, shouldTrackEvent)
+    const variable = _variableForDVCUser(sdkKey, user, variableKey, variableType, shouldTrackEvent)
     return variable ? variable.stringify() : null
 }
 
