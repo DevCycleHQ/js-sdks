@@ -13,7 +13,7 @@ export const importBucketingLib = async (
         await InstantiatePromise
         return
     }
-    InstantiatePromise = instantiate().then((exports) => {
+    InstantiatePromise = instantiate(true).then((exports) => {
         Bucketing = exports
         return Bucketing
     })

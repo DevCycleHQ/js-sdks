@@ -1,4 +1,5 @@
 let Bucketing: unknown
+
 export const importBucketingLib = async (): Promise<void> => {
     Bucketing = await new Promise((resolve) => resolve({
         setConfigData: jest.fn(),
@@ -8,6 +9,13 @@ export const importBucketingLib = async (): Promise<void> => {
                 value: true,
                 type: 'Boolean'
             } }
+        })),
+        variableForUser: jest.fn().mockReturnValue(JSON.stringify({
+            _id: 'test-id',
+            value: true,
+            type: 'Boolean',
+            key: 'test-key',
+            evalReason: null
         }))
     }))
 }

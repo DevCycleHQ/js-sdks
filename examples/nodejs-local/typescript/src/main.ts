@@ -4,6 +4,7 @@ import { plainToInstance } from 'class-transformer'
 import { Query } from 'express-serve-static-core'
 import express from 'express'
 import bodyParser from 'body-parser'
+import { promisify } from 'util'
 
 const DVC_SERVER_SDK_KEY = process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
 
@@ -73,7 +74,36 @@ async function startDVC() {
     console.dir(features)
 }
 
-startDVC()
+async function benchDVC() {
+    console.log('start bench')
+    dvcClient = await initialize(DVC_SERVER_SDK_KEY, {
+        logLevel: 'info',
+        enableCloudBucketing: false
+    }).onClientInitialized()
+
+    console.log('wait 3 seconds')
+    await promisify(setTimeout)(3000)
+    console.log('finished waiting 3 seconds')
+
+    const user = { user_id: 'node_sdk_test' }
+    let variable
+
+    for (let i = 0; i < 1000; i++) {
+        variable = dvcClient.variable(user, 'v-key-25', false)
+    }
+
+    if (variable?.isDefaulted) {
+        throw new Error('Variable should not be defaulted')
+    } else {
+        console.log(`Variable 'v-key-25' value is ${variable?.value}`)
+    }
+}
+
+if (process.env.DVC_BENCHMARK) {
+    benchDVC()
+} else {
+    startDVC()
+}
 
 app.get('/variables', (req: express.Request, res: express.Response) => {
     const user = validateUserFromQueryParams(req.query)

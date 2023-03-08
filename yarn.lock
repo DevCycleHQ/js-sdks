@@ -2954,7 +2954,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@devcycle/bucketing-assembly-script@^1.3.3, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
+"@devcycle/bucketing-assembly-script@*, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script"
   dependencies:
@@ -3008,7 +3008,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
-    "@devcycle/bucketing-assembly-script": ^1.3.3
+    "@devcycle/bucketing-assembly-script": "*"
     "@devcycle/bucketing-test-data": ^1.1.0
   languageName: unknown
   linkType: soft
@@ -8857,6 +8857,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"benchmark@npm:^2.1.4":
+  version: 2.1.4
+  resolution: "benchmark@npm:2.1.4"
+  dependencies:
+    lodash: ^4.17.4
+    platform: ^1.3.3
+  checksum: aa466561d4f2b0a2419a3069b8f90fd35ffacf26849697eea9de525ecfbd10b44da11070cc51c88d772076db8cb2415641b493de7d6c024fdf8551019c6fcf1c
+  languageName: node
+  linkType: hard
+
 "big.js@npm:^5.2.2":
   version: 5.2.2
   resolution: "big.js@npm:5.2.2"
@@ -11225,6 +11235,7 @@ __metadata:
     husky: ^7.0.0
     iso-639-1: ^2.1.13
     jest: ~28.1.3
+    jest-bench: ~28.1.3
     jest-circus: ~27.2.3
     jest-cli: ~28.1.3
     jest-environment-jsdom: ~28.1.3
@@ -15585,6 +15596,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jest-bench@npm:~28.1.3":
+  version: 28.1.3
+  resolution: "jest-bench@npm:28.1.3"
+  dependencies:
+    "@jest/globals": ^28.1.3
+    "@jest/reporters": ^28.1.3
+    benchmark: ^2.1.4
+    chalk: ^4.1.0
+    lodash: ^4.17.20
+    ndjson: ^2.0.0
+  peerDependencies:
+    jest: ^28.1.3
+  checksum: 464ddcc71d807e6ec584a6964078200b007839e8b83b985d053a899d0695feb8e17b4546fe1a38a869eba710ee110401dbf2c5aeb0574224684c124e1f08e92a
+  languageName: node
+  linkType: hard
+
 "jest-changed-files@npm:^28.1.3":
   version: 28.1.3
   resolution: "jest-changed-files@npm:28.1.3"
@@ -19163,6 +19190,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ndjson@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "ndjson@npm:2.0.0"
+  dependencies:
+    json-stringify-safe: ^5.0.1
+    minimist: ^1.2.5
+    readable-stream: ^3.6.0
+    split2: ^3.0.0
+    through2: ^4.0.0
+  bin:
+    ndjson: cli.js
+  checksum: f847a51a2275b8a6a1bfdb24095183836b71c3085670161678c9922bc59644f04e53ced385e549a5565fdc44c28e206bd3f2199d12525028f843a86b680c4446
+  languageName: node
+  linkType: hard
+
 "negotiator@npm:0.6.3, negotiator@npm:^0.6.3":
   version: 0.6.3
   resolution: "negotiator@npm:0.6.3"
@@ -20548,6 +20590,13 @@ __metadata:
   version: 0.4.1
   resolution: "pkginfo@npm:0.4.1"
   checksum: 0f13694f3682345647b7cb887fb6fe258df51b635f252324cd75eeb8181b4381cb8b9d91dc2d869849e857192b403bea65038d2f7c05b524eeae69ece5048209
+  languageName: node
+  linkType: hard
+
+"platform@npm:^1.3.3":
+  version: 1.3.6
+  resolution: "platform@npm:1.3.6"
+  checksum: 6f472a09c61d418c7e26c1c16d0bdc029549d512dbec6526216a1e59ec68100d07007d0097dcba69dddad883d6f2a83361b4bdfe0094a3d9a2af24158643d85e
   languageName: node
   linkType: hard
 

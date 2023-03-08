@@ -45,6 +45,25 @@
           }
       ]
     },
+    "benchmark": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+          "coverage/sdk/nodejs"
+      ],
+      "options": {
+          "jestConfig": "sdk/nodejs/jest-bench.config.ts"
+      },
+      "dependsOn": [
+          {
+              "target": "build",
+              "projects": "self"
+          },
+          {
+              "target": "build:json",
+              "projects": "dependencies"
+          }
+      ]
+    },
     "build": {
       "executor": "@nrwl/js:tsc",
       "outputs": [

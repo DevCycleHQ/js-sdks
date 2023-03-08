@@ -11,22 +11,20 @@ export function bucketUserForConfig(user: DVCPopulatedUser, token: string): Buck
 export function getVariableTypeCode(type: VariableType): number {
     switch (type) {
         case VariableType.boolean:
-            return getBucketingLib().VariableType.Boolean
+            return 0 //getBucketingLib().VariableType.Boolean
         case VariableType.number:
-            return getBucketingLib().VariableType.Number
+            return 1 //getBucketingLib().VariableType.Number
         case VariableType.string:
-            return getBucketingLib().VariableType.String
+            return 2 //getBucketingLib().VariableType.String
         case VariableType.json:
-            return getBucketingLib().VariableType.JSON
+            return 3 //getBucketingLib().VariableType.JSON
         default:
             return 0
     }
 }
 
-export function variableForUser( token: string, usr: DVCPopulatedUser, key: string, type: number): SDKVariable | null {
+export function variableForUser(token: string, usr: DVCPopulatedUser, key: string, type: number): SDKVariable | null {
     const bucketedVariable = getBucketingLib().variableForUser(token, JSON.stringify(usr), key, type)
     if (!bucketedVariable) return null
-    return JSON.parse(
-        bucketedVariable
-    ) as SDKVariable
+    return JSON.parse(bucketedVariable) as SDKVariable
 }
