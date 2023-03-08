@@ -1,5 +1,4 @@
 syntax = "proto3";
-//import "google/protobuf/any.proto";
 
 enum VariableType_PB {
     Boolean = 0;
@@ -18,10 +17,22 @@ message NullableDouble {
   bool isNull = 2;
 }
 
-//message NullableCustomData {
-//  map<string, google.protobuf.Any> value = 1;
-//  bool isNull = 2;
-//}
+message CustomDataValue {
+  /*
+  Reusing this because if you create a new enum with the same names it has a conflict.
+  Enums use C++ scoping rules making them all global
+  TODO revisit
+  */
+  VariableType_PB type = 1;
+  bool boolValue = 2;
+  double doubleValue = 3;
+  string stringValue = 4;
+}
+
+message NullableCustomData {
+  map<string, CustomDataValue> value = 1;
+  bool isNull = 2;
+}
 
 message VariableForUserParams_PB {
     string sdkKey = 1;
@@ -40,8 +51,8 @@ message DVCUser_PB {
   NullableDouble appBuild = 6;
   NullableString appVersion = 7;
   NullableString deviceModel = 8;
-//  NullableCustomData customData = 9;
-//  NullableCustomData privateCustomData = 10;
+  NullableCustomData customData = 9;
+  NullableCustomData privateCustomData = 10;
 }
 
 message SDKVariable_PB {

@@ -6,6 +6,7 @@
 import { Writer, Reader, Protobuf } from "as-proto/assembly";
 import { NullableString } from "./NullableString";
 import { NullableDouble } from "./NullableDouble";
+import { NullableCustomData } from "./NullableCustomData";
 
 export class DVCUser_PB {
   static encode(message: DVCUser_PB, writer: Writer): void {
@@ -67,6 +68,22 @@ export class DVCUser_PB {
       NullableString.encode(deviceModel, writer);
       writer.ldelim();
     }
+
+    const customData = message.customData;
+    if (customData !== null) {
+      writer.uint32(74);
+      writer.fork();
+      NullableCustomData.encode(customData, writer);
+      writer.ldelim();
+    }
+
+    const privateCustomData = message.privateCustomData;
+    if (privateCustomData !== null) {
+      writer.uint32(82);
+      writer.fork();
+      NullableCustomData.encode(privateCustomData, writer);
+      writer.ldelim();
+    }
   }
 
   static decode(reader: Reader, length: i32): DVCUser_PB {
@@ -108,6 +125,20 @@ export class DVCUser_PB {
           message.deviceModel = NullableString.decode(reader, reader.uint32());
           break;
 
+        case 9:
+          message.customData = NullableCustomData.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+
+        case 10:
+          message.privateCustomData = NullableCustomData.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -125,6 +156,8 @@ export class DVCUser_PB {
   appBuild: NullableDouble | null;
   appVersion: NullableString | null;
   deviceModel: NullableString | null;
+  customData: NullableCustomData | null;
+  privateCustomData: NullableCustomData | null;
 
   constructor(
     userId: string = "",
@@ -134,7 +167,9 @@ export class DVCUser_PB {
     country: NullableString | null = null,
     appBuild: NullableDouble | null = null,
     appVersion: NullableString | null = null,
-    deviceModel: NullableString | null = null
+    deviceModel: NullableString | null = null,
+    customData: NullableCustomData | null = null,
+    privateCustomData: NullableCustomData | null = null
   ) {
     this.userId = userId;
     this.email = email;
@@ -144,6 +179,8 @@ export class DVCUser_PB {
     this.appBuild = appBuild;
     this.appVersion = appVersion;
     this.deviceModel = deviceModel;
+    this.customData = customData;
+    this.privateCustomData = privateCustomData;
   }
 }
 

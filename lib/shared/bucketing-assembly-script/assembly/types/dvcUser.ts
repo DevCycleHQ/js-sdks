@@ -3,7 +3,15 @@ import {
     getF64FromJSONOptional, getStringFromJSON, getStringFromJSONOptional, isFlatJSONObj
 } from '../helpers/jsonHelpers'
 import { _getPlatformData } from '../managers/platformDataManager'
-import { DVCUser_PB, NullableString, NullableDouble, encodeDVCUser_PB } from './'
+import {
+    DVCUser_PB,
+    encodeDVCUser_PB,
+    NullableString,
+    NullableDouble,
+    NullableCustomData,
+    CustomDataValue,
+    VariableType_PB
+} from './'
 
 interface DVCUserInterface {
     user_id: string
@@ -16,6 +24,29 @@ interface DVCUserInterface {
     deviceModel: string | null
     customData: JSON.Obj | null
     privateCustomData: JSON.Obj | null
+}
+
+function getJSONObjFromPBCustomData(nullableCustomData: NullableCustomData | null): JSON.Obj | null  {
+    if (!nullableCustomData || nullableCustomData.isNull) return null
+
+    const customDataObj = new JSON.Obj()
+    const keys = nullableCustomData.value.keys()
+
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i]
+        const value: CustomDataValue = nullableCustomData.value.get(key)
+        if (value && value.type === VariableType_PB.Boolean) {
+            customDataObj.set(key, value.boolValue)
+        } else if (value && value.type === VariableType_PB.Number) {
+            customDataObj.set(key, value.doubleValue)
+        } else if (value && value.type === VariableType_PB.String) {
+            customDataObj.set(key, value.stringValue)
+        } else {
+            throw new Error('DVCUser customData can\'t contain nested objects or arrays')
+        }
+    }
+
+    return customDataObj
 }
 
 export class DVCUser extends JSON.Obj implements DVCUserInterface {
@@ -42,6 +73,8 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
         const nullableAppBuild = userPB.appBuild
         const nullableAppVersion = userPB.appVersion
         const nullableDeviceModel = userPB.deviceModel
+        const nullableCustomData = userPB.customData
+        const nullablePrivateCustomData = userPB.privateCustomData
 
         return new DVCUser(
             userPB.userId,
@@ -52,8 +85,8 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
             (nullableAppBuild && !nullableAppBuild.isNull) ? nullableAppBuild.value : NaN,
             (nullableAppVersion && !nullableAppVersion.isNull) ? nullableAppVersion.value : null,
             (nullableDeviceModel && !nullableDeviceModel.isNull) ? nullableDeviceModel.value : null,
-            null,
-            null
+            getJSONObjFromPBCustomData(nullableCustomData),
+            getJSONObjFromPBCustomData(nullablePrivateCustomData),
         )
     }
 
