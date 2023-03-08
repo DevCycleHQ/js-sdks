@@ -38,7 +38,8 @@ export function variableForUser(
     sdkKey: string,
     userStr: string,
     variableKey: string,
-    variableType: VariableType
+    variableType: VariableType,
+    shouldTrackEvent: boolean
 ): string | null {
     const config = _getConfigData(sdkKey)
     const user = DVCPopulatedUser.fromJSONString(userStr)
@@ -56,7 +57,10 @@ export function variableForUser(
             response.variation._id
         ))
     }
-    queueVariableEvaluatedEvent(sdkKey, variableVariationMap, variable, variableKey)
+
+    if (shouldTrackEvent) {
+        queueVariableEvaluatedEvent(sdkKey, variableVariationMap, variable, variableKey)
+    }
 
     return variable ? variable.stringify() : null
 }
