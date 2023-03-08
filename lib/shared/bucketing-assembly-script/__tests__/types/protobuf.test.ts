@@ -17,6 +17,15 @@ describe('protobuf variable tests', () => {
     let DVCUser_PB: Type
     let SDKVariable_PB: Type
 
+    const callVariableForUser_PB = (params: any): Uint8Array | null => {
+        const err = VariableForUserParams_PB.verify(params)
+        if (err) throw new Error(err)
+
+        const pbMsg = VariableForUserParams_PB.create(params)
+        const buffer = VariableForUserParams_PB.encode(pbMsg).finish()
+        return variableForUser_PB(buffer)
+    }
+
     const callTestVariableForUserParams_PB = (params: any): Uint8Array | null => {
         const err = VariableForUserParams_PB.verify(params)
         if (err) throw new Error(err)
@@ -72,12 +81,7 @@ describe('protobuf variable tests', () => {
                 email: { value: 'test', isNull: false }
             }
         }
-        const err = VariableForUserParams_PB.verify(params)
-        if (err) throw new Error(err)
-
-        const pbMsg = VariableForUserParams_PB.create(params)
-        const buffer = VariableForUserParams_PB.encode(pbMsg).finish()
-        const resultBuffer = variableForUser_PB(buffer)
+        const resultBuffer = callVariableForUser_PB(params)
         expect(resultBuffer).not.toBeNull()
         expect(SDKVariable_PB.decode(resultBuffer!)).toEqual({
             '_id': '615356f120ed334a6054564c',
