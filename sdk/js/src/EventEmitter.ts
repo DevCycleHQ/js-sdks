@@ -84,17 +84,21 @@ export class EventEmitter {
             const newVariableValue = newVariable && newVariableSet[key].value
 
             if (JSON.stringify(oldVariableValue) !== JSON.stringify(newVariableValue)) {
-                const variables = variableDefaultMap[key] && Object.values(variableDefaultMap[key])
-                if (variables) {
+                const defaultVariables = variableDefaultMap[key] && Object.values(variableDefaultMap[key])
+                if (defaultVariables) {
                     newVariables = true
-                    variables.forEach((variable) => {
+                    defaultVariables.forEach((variable) => {
                         variable.value = newVariableValue ?? variable.defaultValue
                         variable.isDefaulted = newVariableValue === undefined || newVariableValue === null
                         variable.callback?.call(variable, variable.value)
                     })
                 }
-                this.emit(`${EventNames.VARIABLE_UPDATED}:*`, key, newVariable)
-                this.emit(`${EventNames.VARIABLE_UPDATED}:${key}`, key, newVariable)
+                const finalVariable = newVariable || new DVCVariable({
+                    key: key,
+                    defaultValue: defaultVariables?.[0].value || {}
+                })
+                this.emit(`${EventNames.VARIABLE_UPDATED}:*`, key, finalVariable)
+                this.emit(`${EventNames.VARIABLE_UPDATED}:${key}`, key, finalVariable)
             }
         })
         if (newVariables) {

@@ -149,8 +149,9 @@ describe('EventEmitter tests', () => {
             eventEmitter.subscribe('variableUpdated:*', allUpdatesHandler)
             eventEmitter.subscribe(`variableUpdated:my-variable-key`, variableKeyHandler)
             eventEmitter.emitVariableUpdates(oldVariableSet, newVariableSet, {})
-            expect(allUpdatesHandler).toBeCalledWith('my-variable-key', undefined)
-            expect(variableKeyHandler).toBeCalledWith('my-variable-key', undefined)
+            const emptyDefaultVar = new DVCVariable({key: 'my-variable-key', defaultValue:{} }) 
+            expect(allUpdatesHandler).toBeCalledWith('my-variable-key', emptyDefaultVar)
+            expect(variableKeyHandler).toBeCalledWith('my-variable-key', emptyDefaultVar)
         })
 
         it('should emit variable updated event if variable added', () => {
