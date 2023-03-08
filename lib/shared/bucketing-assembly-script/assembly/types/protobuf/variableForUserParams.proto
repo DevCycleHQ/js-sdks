@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+enum VariableType_PB {
+    Boolean = 0;
+    Number = 1;
+    String = 2;
+    JSON = 3;
+}
+
+message VariableForUserParams_PB {
+    string sdkKey = 1;
+    string variableKey = 2;
+    VariableType_PB variableType = 3;
+    DVCUser_PB user = 4;
+}
+
+message DVCUser_PB {
+  string user_id = 1;
+  string email = 2;
+  string name = 3;
+  string language = 4;
+  string country = 5;
+  double appBuild = 6;
+  string appVersion = 7;
+  string deviceModel = 8;
+  string customData = 9;
+  string privateCustomData = 10;
+
+  // TODO: figure out Maps
+//  map<string, string | bool | double> customData = 9;
+//  Any privateCustomData = 10;
+}

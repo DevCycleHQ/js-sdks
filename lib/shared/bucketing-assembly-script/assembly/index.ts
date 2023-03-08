@@ -9,6 +9,10 @@ import { _clearPlatformData, _setPlatformData } from './managers/platformDataMan
 import { _getConfigData, _hasConfigData, _setConfigData } from './managers/configDataManager'
 import { _getClientCustomData, _setClientCustomData } from './managers/clientCustomDataManager'
 import { queueVariableEvaluatedEvent } from './managers/eventQueueManager'
+import {
+    decodeVariableForUserParams_PB, encodeVariableForUserParams_PB,
+    VariableForUserParams_PB
+} from "./types/protobuf/as-generated/VariableForUserParams_PB";
 
 export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
     const boundedHash = _generateBoundedHashes(user_id, target_id)
@@ -33,6 +37,15 @@ export enum VariableType {
     JSON
 }
 const VariableTypeStrings = ['Boolean', 'Number', 'String', 'JSON']
+
+export function variableForUser_PB(protobuf: Uint8Array): Uint8Array {
+    const params: VariableForUserParams_PB = decodeVariableForUserParams_PB(protobuf)
+    const user = params.user
+    if (!user) throw new Error('missing user')
+    console.log(`variableForUser_PB, sdkKey: ${params.sdkKey}, user: ${user.userId}, ` +
+        `variableKey: ${params.variableKey}, variableType: ${params.variableType}`)
+    return encodeVariableForUserParams_PB(params)
+}
 
 export function variableForUser(
     sdkKey: string,

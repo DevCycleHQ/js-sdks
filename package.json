@@ -23,6 +23,7 @@
   ],
   "dependencies": {
     "@nestjs/class-validator": "^0.13.4",
+    "as-proto": "^1.2.0",
     "as-uuid": "^0.0.4",
     "as-wasi": "^0.4.6",
     "async": "^3.2.1",
@@ -97,6 +98,7 @@
     "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "5.33.1",
     "@typescript-eslint/parser": "5.33.1",
+    "as-proto-gen": "^1.2.0",
     "assemblyscript": "~0.27.1",
     "assemblyscript-json": "https://github.com/DevCycleHQ/assemblyscript-json",
     "assemblyscript-regex": "https://github.com/DevCycleHQ/assemblyscript-regex.git#8ff33297841880c16e38bd67a84df4cbdb8e887f",
@@ -141,6 +143,7 @@
     "prettier": "^2.7.1",
     "prettier-eslint": "~12.0.0",
     "prettier-eslint-cli": "~5.0.1",
+    "protobufjs": "^7.2.2",
     "react": "~18.2.0",
     "react-native-config": "^1.4.6",
     "react-native-svg": "^13.0.0",
