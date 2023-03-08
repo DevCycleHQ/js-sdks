@@ -129,7 +129,7 @@
     "jest-fetch-mock": "^3.0.3",
     "jest-junit": "~6.4.0",
     "jest-react-native": "18.0.0",
-    "json-as": "^0.5.32",
+    "json-as": "0.5.34",
     "lerna": "^5.5.2",
     "metro": "^0.72.1",
     "metro-babel-register": "^0.72.1",

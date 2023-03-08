@@ -3,7 +3,7 @@ import { JSON } from 'json-as/assembly'
 import {
     ConfigBody,
     DVCPopulatedUser,
-    DVCPopulatedUser_AS,
+    DVCPopulatedUser_JSON,
     FeatureVariation,
     PlatformData
 } from './types'
@@ -49,8 +49,9 @@ export function variableForUser(
 ): string | null {
     const config = _getConfigData(sdkKey)
     const user = DVCPopulatedUser.fromJSONString(userStr)
-    const user_as = JSON.parse<DVCPopulatedUser_AS>(userStr)
-    console.log(`user_as: ${JSON.stringify<DVCPopulatedUser_AS>(user_as)}`)
+    console.log(`userStr: ${userStr}`)
+    const user_as = JSON.parse<DVCPopulatedUser_JSON>(userStr)
+    console.log(`user_as: ${JSON.stringify<DVCPopulatedUser_JSON>(user_as)}`)
 
     const response = _generateBucketedVariableForUser(config, user, variableKey, _getClientCustomData(sdkKey))
     let variable = (response && response.variable) ? response.variable : null

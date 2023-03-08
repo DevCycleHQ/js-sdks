@@ -11142,7 +11142,7 @@ __metadata:
     jest-junit: ~6.4.0
     jest-react-native: 18.0.0
     jira-prepare-commit-msg: ^1.6.2
-    json-as: ^0.5.32
+    json-as: 0.5.34
     lerna: ^5.5.2
     lint-staged: ^11.2.3
     lodash: ^4.17.21
@@ -16550,14 +16550,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-as@npm:^0.5.32":
-  version: 0.5.32
-  resolution: "json-as@npm:0.5.32"
+"json-as@npm:0.5.34":
+  version: 0.5.34
+  resolution: "json-as@npm:0.5.34"
   dependencies:
     as-bignum: ^0.2.23
     as-string-sink: ^0.5.3
     as-variant: ^0.4.1
-  checksum: a61d66867b5c493de9582080b86d08e78f7a3e9cb45a603eccc2b95ce73064e9db23285e02bd60e339d56b9c497bacbf02364c89d86c4e0327738c1688a27a0a
+  checksum: c27c370b8c1b8e8823515b6caa82936819fd1cb52e76b12607a756e6dabebf9b04d8c3951499d0107d44f7edd3916928b8607eee928b2d14a814cda7ad89699f
   languageName: node
   linkType: hard
 
