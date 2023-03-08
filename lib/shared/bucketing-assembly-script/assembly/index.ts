@@ -65,6 +65,38 @@ export function variableForUser(
     return variable ? variable.stringify() : null
 }
 
+/**
+ * A version of the variableForUser function that takes a preallocated string for the user and variable keys.
+ * The allocated string may be larger than the real set of bytes we are about reading, so it takes a size to read until
+ * @param sdkKey
+ * @param userStr
+ * @param userStrLength
+ * @param variableKey
+ * @param variableKeyLength
+ * @param variableType
+ */
+export function variableForUserPreallocated(
+    sdkKey: string,
+    userStr: string,
+    // pass in length of actual underlying string
+    // (the userStr starts with that and may contain extra preallocated bytes)
+    userStrLength: i32,
+    variableKey: string,
+    // ditto
+    variableKeyLength: i32,
+    variableType: VariableType,
+    shouldTrackEvent: boolean
+
+): string | null {
+    return variableForUser(
+        sdkKey,
+        userStr.substr(0, userStrLength),
+        variableKey.substr(0, variableKeyLength),
+        variableType,
+        shouldTrackEvent
+    )
+}
+
 export function setPlatformData(platformDataStr: string): void {
     const platformData = new PlatformData(platformDataStr)
     _setPlatformData(platformData)

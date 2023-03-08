@@ -2,6 +2,7 @@ import {
     setPlatformData,
     setConfigData,
     variableForUser as variableForUser_AS,
+    variableForUserPreallocated as variableForUserPreallocated_AS,
     initEventQueue,
     VariableType
 } from './bucketingImportHelper'
@@ -14,7 +15,24 @@ const variableForUser = (
     { config: unknown, user: unknown, variableKey: string, variableType: VariableType }
 ): SDKVariable | null => {
     setConfigData('sdkKey', JSON.stringify(config))
-    const variableJSON = variableForUser_AS('sdkKey', JSON.stringify(user), variableKey, variableType, true)
+    const userJSON = JSON.stringify(user)
+    const variableJSON = variableForUser_AS(
+        'sdkKey', userJSON, variableKey, variableType, true
+    )
+    return variableJSON ? JSON.parse(variableJSON) as SDKVariable : null
+}
+
+const variableForUserPreallocated = (
+    { config, user, variableKey, variableType }:
+        { config: unknown, user: unknown, variableKey: string, variableType: VariableType }
+): SDKVariable | null => {
+    setConfigData('sdkKey', JSON.stringify(config))
+    const userRaw = JSON.stringify(user)
+    const userJSON = userRaw + 'blahblahblah'
+    const variableKeyPreallocated = variableKey + 'blahblahblahasdasd'
+    const variableJSON = variableForUserPreallocated_AS(
+        'sdkKey', userJSON, userRaw.length, variableKeyPreallocated, variableKey.length, variableType, true
+    )
     return variableJSON ? JSON.parse(variableJSON) as SDKVariable : null
 }
 
@@ -67,6 +85,23 @@ describe('variableForUser tests', () => {
             key: 'json-var',
             type: 'JSON',
             value: '{"hello":"world","num":610,"bool":true}',
+        })
+    })
+
+    it('generates variable object for user using preallocated memory', () => {
+        const user = {
+            country: 'canada',
+            user_id: 'asuh',
+            email: 'test'
+        }
+        const variable1 = variableForUserPreallocated(
+            { config, user, variableKey: 'swagTest', variableType: VariableType.String }
+        )
+        expect(variable1).toEqual({
+            _id: '615356f120ed334a6054564c',
+            key: 'swagTest',
+            type: 'String',
+            value: 'YEEEEOWZA',
         })
     })
 
