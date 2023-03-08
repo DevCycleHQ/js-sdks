@@ -3,7 +3,7 @@ import {
     VariableType,
     testVariableForUserParams_PB,
     testDVCUser_PB,
-    testSDKVariable_PB
+    testSDKVariable_PB,
 } from '../bucketingImportHelper'
 import protobuf, { Type } from 'protobufjs'
 import path from 'path'
@@ -79,7 +79,9 @@ describe('protobuf variable tests', () => {
             user: {
                 userId: 'asuh',
                 country: { value: 'canada', isNull: false },
-                email: { value: 'test', isNull: false }
+                email: { value: 'test', isNull: false },
+                customData: { value: { 'isBatman': { type: VariableType_PB.Boolean, boolValue:true }, 'frequency' : { type: VariableType_PB.Number, doubleValue: 103.1 } }, isNull:false },
+                privateCustomData: { value: { 'autoBotsMessage': { type: VariableType_PB.String, stringValue: 'roll out!' } }, isNull:false }
             }
         }
         const resultBuffer = callVariableForUser_PB(params)

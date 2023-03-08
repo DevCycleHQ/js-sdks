@@ -18,6 +18,32 @@ interface DVCUserInterface {
     privateCustomData: JSON.Obj | null
 }
 
+function getJSONObjFromPBCustomData(nullableCustomData: NullableCustomData | null): JSON.Obj | null  {
+    if (nullableCustomData && !nullableCustomData.isNull) {
+        const customDataObj = new JSON.Obj()
+        const keys = nullableCustomData.value.keys()
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i]
+            const value: CustomDataValue = nullableCustomData.value.get(key)
+            if (value && value.type == VariableType_PB.Boolean) {
+                customDataObj.set(key, value.boolValue)
+            } else if (value && value.type == VariableType_PB.Number) {
+                customDataObj.set(key, value.doubleValue)
+            } else if (value && value.type == VariableType_PB.String) {
+                customDataObj.set(key, value.stringValue)
+            } else {
+                throw new Error('DVCUser_PB customData can\'t contain JSON data values')
+            }
+        }
+
+        if (!isFlatJSONObj(customDataObj)) {
+            throw new Error('DVCUser customData can\'t contain nested objects or arrays')
+        }
+        return customDataObj
+    }
+    return null
+}
+
 export class DVCUser extends JSON.Obj implements DVCUserInterface {
     constructor(
         public readonly user_id: string,
@@ -42,6 +68,8 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
         const nullableAppBuild = userPB.appBuild
         const nullableAppVersion = userPB.appVersion
         const nullableDeviceModel = userPB.deviceModel
+        const nullableCustomData = userPB.customData
+        const nullablePrivateCustomData = userPB.privateCustomData
 
         return new DVCUser(
             userPB.userId,
@@ -52,8 +80,8 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
             (nullableAppBuild && !nullableAppBuild.isNull) ? nullableAppBuild.value : NaN,
             (nullableAppVersion && !nullableAppVersion.isNull) ? nullableAppVersion.value : null,
             (nullableDeviceModel && !nullableDeviceModel.isNull) ? nullableDeviceModel.value : null,
-            null,
-            null
+            getJSONObjFromPBCustomData(nullableCustomData),
+            getJSONObjFromPBCustomData(nullablePrivateCustomData),
         )
     }
 
