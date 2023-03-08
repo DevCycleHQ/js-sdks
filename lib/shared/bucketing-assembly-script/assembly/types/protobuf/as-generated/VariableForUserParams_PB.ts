@@ -25,6 +25,9 @@ export class VariableForUserParams_PB {
       DVCUser_PB.encode(user, writer);
       writer.ldelim();
     }
+
+    writer.uint32(40);
+    writer.bool(message.shouldTrackEvent);
   }
 
   static decode(reader: Reader, length: i32): VariableForUserParams_PB {
@@ -50,6 +53,10 @@ export class VariableForUserParams_PB {
           message.user = DVCUser_PB.decode(reader, reader.uint32());
           break;
 
+        case 5:
+          message.shouldTrackEvent = reader.bool();
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -63,17 +70,20 @@ export class VariableForUserParams_PB {
   variableKey: string;
   variableType: VariableType_PB;
   user: DVCUser_PB | null;
+  shouldTrackEvent: bool;
 
   constructor(
     sdkKey: string = "",
     variableKey: string = "",
     variableType: VariableType_PB = 0,
-    user: DVCUser_PB | null = null
+    user: DVCUser_PB | null = null,
+    shouldTrackEvent: bool = false
   ) {
     this.sdkKey = sdkKey;
     this.variableKey = variableKey;
     this.variableType = variableType;
     this.user = user;
+    this.shouldTrackEvent = shouldTrackEvent;
   }
 }
 

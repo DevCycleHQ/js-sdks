@@ -61,10 +61,10 @@ export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
 
     const variable = variableForDVCUser(
         params.sdkKey,
+        dvcUser,
         params.variableKey,
         variableTypeFromPB(params.variableType),
-        true,
-        dvcUser
+        params.shouldTrackEvent
     )
 
     return variable ? variable.toProtobuf() : null
@@ -72,10 +72,10 @@ export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
 
 function variableForDVCUser(
     sdkKey: string,
+    dvcUser: DVCPopulatedUser,
     variableKey: string,
     variableType: VariableType,
-    shouldTrackEvent: boolean,
-    dvcUser: DVCPopulatedUser,
+    shouldTrackEvent: boolean
 ): SDKVariable | null {
     const config = _getConfigData(sdkKey)
     const response = _generateBucketedVariableForUser(config, dvcUser, variableKey, _getClientCustomData(sdkKey))
@@ -103,10 +103,11 @@ export function variableForUser(
     sdkKey: string,
     userStr: string,
     variableKey: string,
-    variableType: VariableType
+    variableType: VariableType,
+    shouldTrackEvent: boolean,
 ): string | null {
     const user = DVCPopulatedUser.fromJSONString(userStr)
-    const variable = variableForDVCUser(sdkKey, variableKey, variableType, user)
+    const variable = variableForDVCUser(sdkKey, user, variableKey, variableType, shouldTrackEvent)
     return variable ? variable.stringify() : null
 }
 
@@ -132,12 +133,12 @@ export function variableForUserPreallocated(
     variableType: VariableType,
     shouldTrackEvent: boolean
 ): string | null {
-    return variableForDVCUser(
+    return variableForUser(
         sdkKey,
+        userStr.substr(0, userStrLength),
         variableKey.substr(0, variableKeyLength),
         variableType,
         shouldTrackEvent,
-        userStr.substr(0, userStrLength)
     )
 }
 

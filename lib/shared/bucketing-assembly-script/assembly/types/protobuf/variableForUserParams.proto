@@ -28,6 +28,7 @@ message VariableForUserParams_PB {
     string variableKey = 2;
     VariableType_PB variableType = 3;
     DVCUser_PB user = 4;
+    bool shouldTrackEvent = 5;
 }
 
 message DVCUser_PB {

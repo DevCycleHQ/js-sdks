@@ -75,6 +75,7 @@ describe('protobuf variable tests', () => {
             sdkKey: sdkKey,
             variableKey: 'swagTest',
             variableType: 2,
+            shouldTrackEvent: true,
             user: {
                 userId: 'asuh',
                 country: { value: 'canada', isNull: false },
@@ -104,6 +105,7 @@ describe('protobuf variable tests', () => {
                     sdkKey: sdkKey,
                     variableKey: 'swagTest',
                     variableType: 0,
+                    shouldTrackEvent: true,
                     user: {
                         userId: 'asuh',
                         email: { value: 'test@devcycle.com', isNull: false },
@@ -125,6 +127,7 @@ describe('protobuf variable tests', () => {
                     sdkKey: sdkKey,
                     variableKey: 'swagTest',
                     variableType: 0,
+                    shouldTrackEvent: false,
                     user: { userId: 'asuh' }
                 }
                 const resultBuffer = callTestVariableForUserParams_PB(params)
