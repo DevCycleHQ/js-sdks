@@ -58,7 +58,7 @@ const variableForUser = (
     { user, variableKey, variableType }:
     { user: unknown, variableKey: string, variableType: VariableType }
 ): SDKVariable | null => {
-    const variableJSON = variableForUser_AS(sdkKey, JSON.stringify(user), variableKey, variableType)
+    const variableJSON = variableForUser_AS(sdkKey, JSON.stringify(user), variableKey, variableType, true)
     return variableJSON ? (JSON.parse(variableJSON) as SDKVariable) : null
 }
 
