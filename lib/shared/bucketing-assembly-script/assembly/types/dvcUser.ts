@@ -3,6 +3,9 @@ import {
     getF64FromJSONOptional, getStringFromJSON, getStringFromJSONOptional, isFlatJSONObj
 } from '../helpers/jsonHelpers'
 import { _getPlatformData } from '../managers/platformDataManager'
+import {
+    DVCUser_PB
+} from './protobuf/as-generated/DVCUser_PB'
 
 interface DVCUserInterface {
     user_id: string
@@ -31,6 +34,29 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
         public readonly privateCustomData: JSON.Obj | null
     ) {
         super()
+    }
+
+    static fromPB(userPB: DVCUser_PB): DVCUser {
+        const nullableEmail = userPB.email
+        const nullableName = userPB.name
+        const nullableLanguage = userPB.language
+        const nullableCountry = userPB.country
+        const nullableAppBuild = userPB.appBuild
+        const nullableAppVersion = userPB.appVersion
+        const nullableDeviceModel = userPB.deviceModel
+
+        return new DVCUser(
+            userPB.userId,
+            (nullableEmail && !nullableEmail.isNull) ? nullableEmail.value : null,
+            (nullableName && !nullableName.isNull) ? nullableName.value : null,
+            (nullableLanguage && !nullableLanguage.isNull) ? nullableLanguage.value : null,
+            (nullableCountry && !nullableCountry.isNull) ? nullableCountry.value : null,
+            (nullableAppBuild && !nullableAppBuild.isNull) ? nullableAppBuild.value : NaN,
+            (nullableAppVersion && !nullableAppVersion.isNull) ? nullableAppVersion.value : null,
+            (nullableDeviceModel && !nullableDeviceModel.isNull) ? nullableDeviceModel.value : null,
+            null,
+            null
+        )
     }
 
     static fromJSONString(userStr: string): DVCUser {

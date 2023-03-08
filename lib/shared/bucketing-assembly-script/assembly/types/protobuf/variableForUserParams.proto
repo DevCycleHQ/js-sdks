@@ -1,4 +1,5 @@
 syntax = "proto3";
+//import "google/protobuf/any.proto";
 
 enum VariableType_PB {
     Boolean = 0;
@@ -6,6 +7,21 @@ enum VariableType_PB {
     String = 2;
     JSON = 3;
 }
+
+message NullableString {
+  string value = 1;
+  bool isNull = 2;
+}
+
+message NullableDouble {
+  double value = 1;
+  bool isNull = 2;
+}
+
+//message NullableCustomData {
+//  map<string, google.protobuf.Any> value = 1;
+//  bool isNull = 2;
+//}
 
 message VariableForUserParams_PB {
     string sdkKey = 1;
@@ -16,17 +32,23 @@ message VariableForUserParams_PB {
 
 message DVCUser_PB {
   string user_id = 1;
-  string email = 2;
-  string name = 3;
-  string language = 4;
-  string country = 5;
-  double appBuild = 6;
-  string appVersion = 7;
-  string deviceModel = 8;
-  string customData = 9;
-  string privateCustomData = 10;
+  NullableString email = 2;
+  NullableString name = 3;
+  NullableString language = 4;
+  NullableString country = 5;
+  NullableDouble appBuild = 6;
+  NullableString appVersion = 7;
+  NullableString deviceModel = 8;
+//  NullableCustomData customData = 9;
+//  NullableCustomData privateCustomData = 10;
+}
 
-  // TODO: figure out Maps
-//  map<string, string | bool | double> customData = 9;
-//  Any privateCustomData = 10;
+message SDKVariable_PB {
+    string _id = 1;
+    VariableType_PB type = 2;
+    string key = 3;
+    bool boolValue = 4;
+    double doubleValue = 5;
+    string stringValue = 6;
+    NullableString evalReason = 7;
 }

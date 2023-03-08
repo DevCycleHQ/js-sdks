@@ -4,38 +4,69 @@
 //   protoc        v3.21.12
 
 import { Writer, Reader, Protobuf } from "as-proto/assembly";
+import { NullableString } from "./NullableString";
+import { NullableDouble } from "./NullableDouble";
 
 export class DVCUser_PB {
   static encode(message: DVCUser_PB, writer: Writer): void {
     writer.uint32(10);
     writer.string(message.userId);
 
-    writer.uint32(18);
-    writer.string(message.email);
+    const email = message.email;
+    if (email !== null) {
+      writer.uint32(18);
+      writer.fork();
+      NullableString.encode(email, writer);
+      writer.ldelim();
+    }
 
-    writer.uint32(26);
-    writer.string(message.name);
+    const name = message.name;
+    if (name !== null) {
+      writer.uint32(26);
+      writer.fork();
+      NullableString.encode(name, writer);
+      writer.ldelim();
+    }
 
-    writer.uint32(34);
-    writer.string(message.language);
+    const language = message.language;
+    if (language !== null) {
+      writer.uint32(34);
+      writer.fork();
+      NullableString.encode(language, writer);
+      writer.ldelim();
+    }
 
-    writer.uint32(42);
-    writer.string(message.country);
+    const country = message.country;
+    if (country !== null) {
+      writer.uint32(42);
+      writer.fork();
+      NullableString.encode(country, writer);
+      writer.ldelim();
+    }
 
-    writer.uint32(49);
-    writer.double(message.appBuild);
+    const appBuild = message.appBuild;
+    if (appBuild !== null) {
+      writer.uint32(50);
+      writer.fork();
+      NullableDouble.encode(appBuild, writer);
+      writer.ldelim();
+    }
 
-    writer.uint32(58);
-    writer.string(message.appVersion);
+    const appVersion = message.appVersion;
+    if (appVersion !== null) {
+      writer.uint32(58);
+      writer.fork();
+      NullableString.encode(appVersion, writer);
+      writer.ldelim();
+    }
 
-    writer.uint32(66);
-    writer.string(message.deviceModel);
-
-    writer.uint32(74);
-    writer.string(message.customData);
-
-    writer.uint32(82);
-    writer.string(message.privateCustomData);
+    const deviceModel = message.deviceModel;
+    if (deviceModel !== null) {
+      writer.uint32(66);
+      writer.fork();
+      NullableString.encode(deviceModel, writer);
+      writer.ldelim();
+    }
   }
 
   static decode(reader: Reader, length: i32): DVCUser_PB {
@@ -50,39 +81,31 @@ export class DVCUser_PB {
           break;
 
         case 2:
-          message.email = reader.string();
+          message.email = NullableString.decode(reader, reader.uint32());
           break;
 
         case 3:
-          message.name = reader.string();
+          message.name = NullableString.decode(reader, reader.uint32());
           break;
 
         case 4:
-          message.language = reader.string();
+          message.language = NullableString.decode(reader, reader.uint32());
           break;
 
         case 5:
-          message.country = reader.string();
+          message.country = NullableString.decode(reader, reader.uint32());
           break;
 
         case 6:
-          message.appBuild = reader.double();
+          message.appBuild = NullableDouble.decode(reader, reader.uint32());
           break;
 
         case 7:
-          message.appVersion = reader.string();
+          message.appVersion = NullableString.decode(reader, reader.uint32());
           break;
 
         case 8:
-          message.deviceModel = reader.string();
-          break;
-
-        case 9:
-          message.customData = reader.string();
-          break;
-
-        case 10:
-          message.privateCustomData = reader.string();
+          message.deviceModel = NullableString.decode(reader, reader.uint32());
           break;
 
         default:
@@ -95,27 +118,23 @@ export class DVCUser_PB {
   }
 
   userId: string;
-  email: string;
-  name: string;
-  language: string;
-  country: string;
-  appBuild: f64;
-  appVersion: string;
-  deviceModel: string;
-  customData: string;
-  privateCustomData: string;
+  email: NullableString | null;
+  name: NullableString | null;
+  language: NullableString | null;
+  country: NullableString | null;
+  appBuild: NullableDouble | null;
+  appVersion: NullableString | null;
+  deviceModel: NullableString | null;
 
   constructor(
     userId: string = "",
-    email: string = "",
-    name: string = "",
-    language: string = "",
-    country: string = "",
-    appBuild: f64 = 0.0,
-    appVersion: string = "",
-    deviceModel: string = "",
-    customData: string = "",
-    privateCustomData: string = ""
+    email: NullableString | null = null,
+    name: NullableString | null = null,
+    language: NullableString | null = null,
+    country: NullableString | null = null,
+    appBuild: NullableDouble | null = null,
+    appVersion: NullableString | null = null,
+    deviceModel: NullableString | null = null
   ) {
     this.userId = userId;
     this.email = email;
@@ -125,8 +144,6 @@ export class DVCUser_PB {
     this.appBuild = appBuild;
     this.appVersion = appVersion;
     this.deviceModel = deviceModel;
-    this.customData = customData;
-    this.privateCustomData = privateCustomData;
   }
 }
 

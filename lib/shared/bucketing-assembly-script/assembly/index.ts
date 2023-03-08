@@ -1,5 +1,7 @@
 import { JSON } from 'assemblyscript-json/assembly'
-import { ConfigBody, DVCPopulatedUser, FeatureVariation, PlatformData } from './types'
+import {
+    ConfigBody, DVCPopulatedUser, FeatureVariation, PlatformData, DVCUser, SDKVariable
+} from './types'
 import {
     _generateBoundedHashes,
     _generateBucketedConfig,
@@ -12,7 +14,7 @@ import { queueVariableEvaluatedEvent } from './managers/eventQueueManager'
 import {
     decodeVariableForUserParams_PB, encodeVariableForUserParams_PB,
     VariableForUserParams_PB
-} from "./types/protobuf/as-generated/VariableForUserParams_PB";
+} from './types/protobuf/as-generated/VariableForUserParams_PB'
 
 export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
     const boundedHash = _generateBoundedHashes(user_id, target_id)
@@ -36,29 +38,48 @@ export enum VariableType {
     String,
     JSON
 }
-const VariableTypeStrings = ['Boolean', 'Number', 'String', 'JSON']
+export const VariableTypeStrings = ['Boolean', 'Number', 'String', 'JSON']
 
-export function variableForUser_PB(protobuf: Uint8Array): Uint8Array {
+function variableTypeFromPB(pb: u32): VariableType {
+    switch (pb) {
+        case 0: return VariableType.Boolean
+        case 1: return VariableType.Number
+        case 2: return VariableType.String
+        case 3: return VariableType.JSON
+        default: throw new Error(`Unknown variable type: ${pb}`)
+    }
+}
+
+export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
     const params: VariableForUserParams_PB = decodeVariableForUserParams_PB(protobuf)
     const user = params.user
     if (!user) throw new Error('missing user')
-    console.log(`variableForUser_PB, sdkKey: ${params.sdkKey}, user: ${user.userId}, ` +
-        `variableKey: ${params.variableKey}, variableType: ${params.variableType}`)
-    return encodeVariableForUserParams_PB(params)
+
+    const dvcUser = new DVCPopulatedUser(DVCUser.fromPB(user))
+
+    const variableType = variableTypeFromPB(params.variableType)
+    const variable = variableForDVCUser(
+        params.sdkKey,
+        params.variableKey,
+        variableType,
+        true,
+        dvcUser
+    )
+
+    return variable ? variable.toProtoBuf() : null
 }
 
-export function variableForUser(
+function variableForDVCUser(
     sdkKey: string,
-    userStr: string,
     variableKey: string,
     variableType: VariableType,
-    shouldTrackEvent: boolean
-): string | null {
+    shouldTrackEvent: boolean,
+    dvcUser: DVCPopulatedUser,
+): SDKVariable | null {
     const config = _getConfigData(sdkKey)
-    const user = DVCPopulatedUser.fromJSONString(userStr)
+    const response = _generateBucketedVariableForUser(config, dvcUser, variableKey, _getClientCustomData(sdkKey))
 
-    const response = _generateBucketedVariableForUser(config, user, variableKey, _getClientCustomData(sdkKey))
-    let variable = (response && response.variable) ? response.variable : null
+    let variable: SDKVariable | null = (response && response.variable) ? response.variable : null
     if (variable && variable.type !== VariableTypeStrings[variableType]) {
         variable = null
     }
@@ -74,7 +95,17 @@ export function variableForUser(
     if (shouldTrackEvent) {
         queueVariableEvaluatedEvent(sdkKey, variableVariationMap, variable, variableKey)
     }
+    return variable
+}
 
+export function variableForUser(
+    sdkKey: string,
+    userStr: string,
+    variableKey: string,
+    variableType: VariableType
+): string | null {
+    const user = DVCPopulatedUser.fromJSONString(userStr)
+    const variable = variableForDVCUser(sdkKey, variableKey, variableType, user)
     return variable ? variable.stringify() : null
 }
 
@@ -99,14 +130,13 @@ export function variableForUserPreallocated(
     variableKeyLength: i32,
     variableType: VariableType,
     shouldTrackEvent: boolean
-
 ): string | null {
-    return variableForUser(
+    return variableForDVCUser(
         sdkKey,
-        userStr.substr(0, userStrLength),
         variableKey.substr(0, variableKeyLength),
         variableType,
-        shouldTrackEvent
+        shouldTrackEvent,
+        userStr.substr(0, userStrLength)
     )
 }
 

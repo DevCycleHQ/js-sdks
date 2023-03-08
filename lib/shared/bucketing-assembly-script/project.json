@@ -45,6 +45,19 @@
         }
       ]
     },
+    "compile-pb": {
+        "executor": "@nrwl/workspace:run-commands",
+        "outputs": [
+            "lib/shared/bucketing-assembly-script"
+        ],
+        "options": {
+            "commands": [{
+                "command": "protoc --plugin=protoc-gen-ts=../../../../../../node_modules/.bin/protoc-gen-ts --as_opt=gen-helper-methods --as_out=./assembly/types/protobuf/as-generated ./assembly/types/protobuf/*.proto"
+            }],
+            "cwd": "lib/shared/bucketing-assembly-script/assembly/types/protobuf",
+            "parallel": false
+        }
+    },
     "build": {
       "executor": "@nrwl/workspace:run-commands",
       "outputs": [
