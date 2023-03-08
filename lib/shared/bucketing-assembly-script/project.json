@@ -52,7 +52,7 @@
         ],
         "options": {
             "commands": [{
-                "command": "protoc --plugin=protoc-gen-ts=../../../../../../node_modules/.bin/protoc-gen-ts --as_opt=gen-helper-methods --as_out=./assembly/types/protobuf/as-generated ./assembly/types/protobuf/*.proto"
+              "command": "rm -rf as-generated/*.ts && protoc --plugin=protoc-gen-as=../../../../../../node_modules/.bin/as-proto-gen --as_opt=gen-helper-methods --as_out=./as-generated ./*.proto"
             }],
             "cwd": "lib/shared/bucketing-assembly-script/assembly/types/protobuf",
             "parallel": false
@@ -89,7 +89,13 @@
         ],
         "cwd": "lib/shared/bucketing-assembly-script",
         "parallel": false
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "compile-pb",
+          "projects": "self"
+        }
+      ]
     },
     "npm-publish": {
       "executor": "@nrwl/workspace:run-commands",
