@@ -3,9 +3,7 @@ import {
     getF64FromJSONOptional, getStringFromJSON, getStringFromJSONOptional, isFlatJSONObj
 } from '../helpers/jsonHelpers'
 import { _getPlatformData } from '../managers/platformDataManager'
-import {
-    DVCUser_PB
-} from './protobuf/as-generated/DVCUser_PB'
+import { DVCUser_PB } from './'
 
 interface DVCUserInterface {
     user_id: string

@@ -9,10 +9,11 @@ import {
 } from '../helpers/jsonHelpers'
 import { PublicProject, PublicEnvironment } from './configBody'
 import {
-    SDKVariable_PB, encodeSDKVariable_PB
-} from './protobuf/as-generated/SDKVariable_PB'
-import { NullableString } from './protobuf/as-generated/NullableString'
-import { VariableType_PB } from './protobuf/as-generated/VariableType_PB'
+    NullableString,
+    SDKVariable_PB,
+    VariableType_PB,
+    encodeSDKVariable_PB,
+} from './'
 
 export class FeatureVariation extends JSON.Obj {
     constructor(
@@ -196,11 +197,17 @@ export class SDKVariable extends JSON.Obj {
     }
 
     static variableTypeFromString(str: string): VariableType_PB {
-        if (str === 'Boolean') return VariableType_PB.Boolean
-        else if (str === 'Number') return VariableType_PB.Number
-        else if (str === 'String') return VariableType_PB.String
-        else if (str === 'JSON') return VariableType_PB.JSON
-        else throw new Error(`Unknown VariableType: ${str}`)
+        if (str === 'Boolean') {
+            return VariableType_PB.Boolean
+        } else if (str === 'Number') {
+            return VariableType_PB.Number
+        } else if (str === 'String') {
+            return VariableType_PB.String
+        } else if (str === 'JSON') {
+            return VariableType_PB.JSON
+        } else {
+            throw new Error(`Unknown VariableType: ${str}`)
+        }
     }
 
     toProtoBuf(): Uint8Array {

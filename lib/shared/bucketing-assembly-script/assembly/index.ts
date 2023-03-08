@@ -1,6 +1,13 @@
 import { JSON } from 'assemblyscript-json/assembly'
 import {
-    ConfigBody, DVCPopulatedUser, FeatureVariation, PlatformData, DVCUser, SDKVariable
+    ConfigBody,
+    DVCPopulatedUser,
+    FeatureVariation,
+    PlatformData,
+    DVCUser,
+    SDKVariable,
+    VariableForUserParams_PB,
+    decodeVariableForUserParams_PB, VariableType_PB
 } from './types'
 import {
     _generateBoundedHashes,
@@ -11,10 +18,6 @@ import { _clearPlatformData, _setPlatformData } from './managers/platformDataMan
 import { _getConfigData, _hasConfigData, _setConfigData } from './managers/configDataManager'
 import { _getClientCustomData, _setClientCustomData } from './managers/clientCustomDataManager'
 import { queueVariableEvaluatedEvent } from './managers/eventQueueManager'
-import {
-    decodeVariableForUserParams_PB, encodeVariableForUserParams_PB,
-    VariableForUserParams_PB
-} from './types/protobuf/as-generated/VariableForUserParams_PB'
 
 export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
     const boundedHash = _generateBoundedHashes(user_id, target_id)
@@ -40,12 +43,12 @@ export enum VariableType {
 }
 export const VariableTypeStrings = ['Boolean', 'Number', 'String', 'JSON']
 
-function variableTypeFromPB(pb: u32): VariableType {
+function variableTypeFromPB(pb: VariableType_PB): VariableType {
     switch (pb) {
-        case 0: return VariableType.Boolean
-        case 1: return VariableType.Number
-        case 2: return VariableType.String
-        case 3: return VariableType.JSON
+        case VariableType_PB.Boolean: return VariableType.Boolean
+        case VariableType_PB.Number: return VariableType.Number
+        case VariableType_PB.String: return VariableType.String
+        case VariableType_PB.JSON: return VariableType.JSON
         default: throw new Error(`Unknown variable type: ${pb}`)
     }
 }
@@ -53,15 +56,13 @@ function variableTypeFromPB(pb: u32): VariableType {
 export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
     const params: VariableForUserParams_PB = decodeVariableForUserParams_PB(protobuf)
     const user = params.user
-    if (!user) throw new Error('missing user')
-
+    if (!user) throw new Error('Missing user from variableForUser_PB protobuf')
     const dvcUser = new DVCPopulatedUser(DVCUser.fromPB(user))
 
-    const variableType = variableTypeFromPB(params.variableType)
     const variable = variableForDVCUser(
         params.sdkKey,
         params.variableKey,
-        variableType,
+        variableTypeFromPB(params.variableType),
         true,
         dvcUser
     )
