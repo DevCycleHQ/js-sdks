@@ -27,29 +27,26 @@ interface DVCUserInterface {
 }
 
 function getJSONObjFromPBCustomData(nullableCustomData: NullableCustomData | null): JSON.Obj | null  {
-    if (nullableCustomData && !nullableCustomData.isNull) {
-        const customDataObj = new JSON.Obj()
-        const keys = nullableCustomData.value.keys()
-        for (let i = 0; i < keys.length; i++) {
-            const key = keys[i]
-            const value: CustomDataValue = nullableCustomData.value.get(key)
-            if (value && value.type == VariableType_PB.Boolean) {
-                customDataObj.set(key, value.boolValue)
-            } else if (value && value.type == VariableType_PB.Number) {
-                customDataObj.set(key, value.doubleValue)
-            } else if (value && value.type == VariableType_PB.String) {
-                customDataObj.set(key, value.stringValue)
-            } else {
-                throw new Error('DVCUser_PB customData can\'t contain JSON data values')
-            }
-        }
+    if (!nullableCustomData || nullableCustomData.isNull) return null
 
-        if (!isFlatJSONObj(customDataObj)) {
+    const customDataObj = new JSON.Obj()
+    const keys = nullableCustomData.value.keys()
+
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i]
+        const value: CustomDataValue = nullableCustomData.value.get(key)
+        if (value && value.type === VariableType_PB.Boolean) {
+            customDataObj.set(key, value.boolValue)
+        } else if (value && value.type === VariableType_PB.Number) {
+            customDataObj.set(key, value.doubleValue)
+        } else if (value && value.type === VariableType_PB.String) {
+            customDataObj.set(key, value.stringValue)
+        } else {
             throw new Error('DVCUser customData can\'t contain nested objects or arrays')
         }
-        return customDataObj
     }
-    return null
+
+    return customDataObj
 }
 
 export class DVCUser extends JSON.Obj implements DVCUserInterface {
