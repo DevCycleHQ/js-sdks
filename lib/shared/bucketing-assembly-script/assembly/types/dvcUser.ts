@@ -3,7 +3,7 @@ import {
     getF64FromJSONOptional, getStringFromJSON, getStringFromJSONOptional, isFlatJSONObj
 } from '../helpers/jsonHelpers'
 import { _getPlatformData } from '../managers/platformDataManager'
-import {DVCUser_PB, NullableString, NullableDouble, encodeDVCUser_PB} from './'
+import { DVCUser_PB, NullableString, NullableDouble, encodeDVCUser_PB } from './'
 
 interface DVCUserInterface {
     user_id: string
@@ -60,13 +60,13 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
     toProtoBuf(): Uint8Array {
         return encodeDVCUser_PB(new DVCUser_PB(
             this.user_id,
-            new NullableString(this.email || '', !this.email),
-            new NullableString(this.name || '', !this.name),
-            new NullableString(this.language || '', !this.language),
-            new NullableString(this.country || '', !this.country),
+            new NullableString(this.email || '', this.email === null),
+            new NullableString(this.name || '', this.name === null),
+            new NullableString(this.language || '', this.language === null),
+            new NullableString(this.country || '', this.country === null),
             new NullableDouble(this.appBuild || 0.0, isNaN(this.appBuild)),
-            new NullableString(this.appVersion || '', !this.appVersion),
-            new NullableString(this.deviceModel || '', !this.deviceModel)
+            new NullableString(this.appVersion || '', this.appVersion === null),
+            new NullableString(this.deviceModel || '', this.deviceModel === null)
         ))
     }
 
