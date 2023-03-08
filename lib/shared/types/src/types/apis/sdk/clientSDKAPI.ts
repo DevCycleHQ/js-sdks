@@ -2,14 +2,14 @@ import isString from 'lodash/isString'
 import {
     PublicEnvironment, PublicFeature, PublicProject, PublicVariable
 } from '../../config/configBody'
-import type { DVCJSON, VariableValue } from '../../config/models'
+import type { VariableValue } from '../../config/models'
 import {
     IsDate, IsOptional, IsNumber, IsBoolean,
     IsString, IsIn, IsNotEmpty, IsISO31661Alpha2
 } from '@nestjs/class-validator'
 import { Transform, Type } from 'class-transformer'
 import 'reflect-metadata'
-import { IsDVCJSONObject } from '../../validators/dvcJSON'
+import { IsDVCCustomDataJSONObject } from '../../validators/dvcCustomDataJSON'
 import { IsNotBlank } from '../../validators/isNotBlank'
 import { IsISO6391 } from '../../validators/isIso6391'
 
@@ -35,6 +35,10 @@ const dateTransform = ({ value }: { value:  string | number }) => {
     } else { // value is a date-time string
         return new Date(value)
     }
+}
+
+export type DVCCustomDataJSON = {
+    [key: string]: string | number | boolean | null
 }
 
 /**
@@ -101,20 +105,20 @@ export class DVCAPIUser {
      * Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will be logged to DevCycle's servers and available in the dashboard to view.
      */
-    @IsDVCJSONObject()
+    @IsDVCCustomDataJSONObject()
     @IsOptional()
     @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-        customData?: DVCJSON
+        customData?: DVCCustomDataJSON
 
     /**
      * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will not be logged to DevCycle's servers and
      * will not be available in the dashboard.
      */
-    @IsDVCJSONObject()
+    @IsDVCCustomDataJSONObject()
     @IsOptional()
     @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-        privateCustomData?: DVCJSON
+        privateCustomData?: DVCCustomDataJSON
 
     /**
      * Set by SDK automatically
@@ -249,20 +253,20 @@ export class DVCClientAPIUser implements DVCAPIUser {
      * Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will be logged to DevCycle's servers and available in the dashboard to view.
      */
-    @IsDVCJSONObject()
+    @IsDVCCustomDataJSONObject()
     @IsOptional()
     @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-        customData?: DVCJSON
+        customData?: DVCCustomDataJSON
 
     /**
      * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will not be logged to DevCycle's servers and
      * will not be available in the dashboard.
      */
-    @IsDVCJSONObject()
+    @IsDVCCustomDataJSONObject()
     @IsOptional()
     @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-        privateCustomData?: DVCJSON
+        privateCustomData?: DVCCustomDataJSON
 
     /**
      * Set by SDK automatically

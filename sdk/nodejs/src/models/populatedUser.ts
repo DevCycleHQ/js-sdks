@@ -1,4 +1,4 @@
-import { DVCJSON } from '../types'
+import { DVCCustomDataJSON } from '../types'
 import * as packageJson from '../../package.json'
 import { DVCUser } from './user'
 import os from 'os'
@@ -12,8 +12,8 @@ export class DVCPopulatedUser implements DVCUser {
     country?: string
     appVersion?: string
     appBuild?: number
-    customData?: DVCJSON
-    privateCustomData?: DVCJSON
+    customData?: DVCCustomDataJSON
+    privateCustomData?: DVCCustomDataJSON
     readonly lastSeenDate: Date
     readonly createdDate: Date
     readonly platform: string

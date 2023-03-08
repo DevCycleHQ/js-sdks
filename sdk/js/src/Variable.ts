@@ -1,4 +1,4 @@
-import { DVCVariable as Variable, DVCVariableValue, DVCJSON } from './types'
+import { DVCVariable as Variable, DVCVariableValue } from './types'
 import { checkParamDefined, checkParamType } from './utils'
 import { VariableTypeAlias } from '@devcycle/types'
 

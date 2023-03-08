@@ -3,16 +3,17 @@ import { DVCRequestEvent } from './RequestEvent'
 import { DVCPopulatedUser } from './User'
 import { BucketedUserConfig, SDKEventRequestBody, DVCClientAPIUser } from '@devcycle/types'
 
-export const serializeUser = (user: DVCClientAPIUser): string => {
-    const convertToQueryFriendlyFormat = (property?: any): any => {
-        if (property instanceof Date) {
-            return property.getTime()
-        }
-        if (typeof property === 'object') {
-            return JSON.stringify(property)
-        }
-        return property
+const convertToQueryFriendlyFormat = (property?: any): any => {
+    if (property instanceof Date) {
+        return property.getTime()
     }
+    if (typeof property === 'object') {
+        return JSON.stringify(property)
+    }
+    return property
+}
+
+export const serializeUser = (user: DVCClientAPIUser): string => {
     return Object.keys(user)
         .reduce((prev: string, curr: string, _: number): string => {
             const userProperty = convertToQueryFriendlyFormat(user[curr as keyof DVCClientAPIUser])

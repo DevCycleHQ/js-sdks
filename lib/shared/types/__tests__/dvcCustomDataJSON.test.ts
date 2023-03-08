@@ -1,6 +1,6 @@
-import { validate } from '../src/types/validators/dvcJSON'
+import { validate } from '../src/types/validators/dvcCustomDataJSON'
 
-describe('IsDVCJSONObject validator', () => {
+describe('IsDVCCustomDataJSONObject validator', () => {
     it('should not validate if input is not an object', () => {
         expect(validate('{}')).toEqual(false)
         expect(validate(null)).toEqual(false)
@@ -9,6 +9,10 @@ describe('IsDVCJSONObject validator', () => {
 
     it('should validate if input is a valid json object', () => {
         expect(validate({ string: 'string', bool: false, num: 610 })).toEqual(true)
+    })
+
+    it('should validate if input is a valid json object with null value', () => {
+        expect(validate({ string: 'string', bool: false, num: 610, test: null })).toEqual(true)
     })
 
     it('should not validate if json object has array values', () => {
