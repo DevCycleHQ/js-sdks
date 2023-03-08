@@ -67,7 +67,7 @@ export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
         dvcUser
     )
 
-    return variable ? variable.toProtoBuf() : null
+    return variable ? variable.toProtobuf() : null
 }
 
 function variableForDVCUser(

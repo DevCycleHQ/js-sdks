@@ -210,7 +210,7 @@ export class SDKVariable extends JSON.Obj {
         }
     }
 
-    toProtoBuf(): Uint8Array {
+    toProtobuf(): Uint8Array {
         const boolValue = (this.type === 'Boolean' && this.value.isBool)
             ? (this.value as JSON.Bool).valueOf()
             : false

@@ -10,7 +10,11 @@ import {
     Rollout as PublicRollout,
     Target as PublicTarget,
     AudienceOperator, UserFilter,
-    NoIdAudience
+    NoIdAudience,
+    decodeVariableForUserParams_PB,
+    encodeVariableForUserParams_PB,
+    decodeDVCUser_PB,
+    SDKVariable_PB, decodeSDKVariable_PB, encodeSDKVariable_PB
 } from './types'
 import {
     _checkCustomData,
@@ -27,6 +31,21 @@ export {
     testDVCRequestEventClass,
     testPlatformDataClass,
 } from './types'
+
+export function testVariableForUserParams_PB(buffer: Uint8Array): Uint8Array {
+    const params = decodeVariableForUserParams_PB(buffer)
+    return encodeVariableForUserParams_PB(params)
+}
+
+export function testDVCUser_PB(buffer: Uint8Array): Uint8Array {
+    const user = DVCUser.fromPB(decodeDVCUser_PB(buffer))
+    return user.toProtoBuf()
+}
+
+export function testSDKVariable_PB(buffer: Uint8Array): Uint8Array {
+    const variable = decodeSDKVariable_PB(buffer)
+    return encodeSDKVariable_PB(variable)
+}
 
 export function checkNumbersFilterFromJSON(number: string, filterStr: string): bool {
     const filterJSON = JSON.parse(filterStr)
