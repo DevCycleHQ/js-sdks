@@ -8,9 +8,9 @@ import { registerDecorator, ValidationOptions } from '@nestjs/class-validator'
 
 /**
  * Validates that JSON Object is a valid JSON Object with only
- * top-level string / number / boolean values.
+ * top-level string / number / boolean / null values.
  */
-export function IsDVCJSONObject(validationOptions?: ValidationOptions) {
+export function IsDVCCustomDataJSONObject(validationOptions?: ValidationOptions) {
     // eslint-disable-next-line @typescript-eslint/ban-types
     return function(object: Object, propertyName: string): void {
         registerDecorator({
@@ -21,7 +21,7 @@ export function IsDVCJSONObject(validationOptions?: ValidationOptions) {
             validator: {
                 validate,
                 defaultMessage() {
-                    return '$property must be a JSON Object with only string / number / boolean types'
+                    return '$property must be a JSON Object with only string / number / boolean / null types'
                 }
             }
         })
@@ -36,7 +36,7 @@ export function validate(json: any): boolean {
         if (!isString(key)) return false
 
         const value = json[key]
-        if (isUndefined(value) || isNull(value) || !(isString(value) || isNumber(value) || isBoolean(value))) {
+        if (isUndefined(value) || !(isString(value) || isNumber(value) || isBoolean(value) || isNull(value))) {
             return false
         }
     }

@@ -1,4 +1,4 @@
-import { DVCJSON } from '@devcycle/types'
+import { DVCCustomDataJSON } from '@devcycle/types'
 import { checkParamType, typeEnum } from '../utils/paramUtils'
 
 type DVCUserData = {
@@ -9,8 +9,8 @@ type DVCUserData = {
     country?: string
     appVersion?: string
     appBuild?: number
-    customData?: DVCJSON
-    privateCustomData?: DVCJSON
+    customData?: DVCCustomDataJSON
+    privateCustomData?: DVCCustomDataJSON
 }
 
 export class DVCUser {
@@ -55,14 +55,14 @@ export class DVCUser {
      * Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will be logged to DevCycle's servers and available in the dashboard to view.
      */
-    customData?: DVCJSON
+    customData?: DVCCustomDataJSON
 
     /**
      * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will not be logged to DevCycle's servers and
      * will not be available in the dashboard.
      */
-    privateCustomData?: DVCJSON
+    privateCustomData?: DVCCustomDataJSON
 
     constructor(data: DVCUserData) {
         if (!data.user_id) {
