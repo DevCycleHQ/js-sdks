@@ -14,7 +14,8 @@ import {
     decodeVariableForUserParams_PB,
     encodeVariableForUserParams_PB,
     decodeDVCUser_PB,
-    SDKVariable_PB, decodeSDKVariable_PB, encodeSDKVariable_PB
+    decodeSDKVariable_PB,
+    encodeSDKVariable_PB
 } from './types'
 import {
     _checkCustomData,
@@ -38,7 +39,7 @@ export function testVariableForUserParams_PB(buffer: Uint8Array): Uint8Array {
 }
 
 export function testDVCUser_PB(buffer: Uint8Array): Uint8Array {
-    const user = DVCUser.fromPB(decodeDVCUser_PB(buffer))
+    const user = DVCUser.fromPBUser(decodeDVCUser_PB(buffer))
     return user.toProtoBuf()
 }
 

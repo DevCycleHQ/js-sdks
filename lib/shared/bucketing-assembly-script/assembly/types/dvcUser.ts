@@ -65,7 +65,7 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
         super()
     }
 
-    static fromPB(userPB: DVCUser_PB): DVCUser {
+    static fromPBUser(userPB: DVCUser_PB): DVCUser {
         const nullableEmail = userPB.email
         const nullableName = userPB.name
         const nullableLanguage = userPB.language

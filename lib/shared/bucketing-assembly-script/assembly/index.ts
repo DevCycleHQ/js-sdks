@@ -57,7 +57,7 @@ export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
     const params: VariableForUserParams_PB = decodeVariableForUserParams_PB(protobuf)
     const user = params.user
     if (!user) throw new Error('Missing user from variableForUser_PB protobuf')
-    const dvcUser = new DVCPopulatedUser(DVCUser.fromPB(user))
+    const dvcUser = new DVCPopulatedUser(DVCUser.fromPBUser(user))
 
     const variable = _variableForDVCUser(
         params.sdkKey,
