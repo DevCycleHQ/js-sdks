@@ -80,8 +80,19 @@ describe('protobuf variable tests', () => {
                 userId: 'asuh',
                 country: { value: 'canada', isNull: false },
                 email: { value: 'test', isNull: false },
-                customData: { value: { 'isBatman': { type: VariableType_PB.Boolean, boolValue:true }, 'frequency' : { type: VariableType_PB.Number, doubleValue: 103.1 } }, isNull:false },
-                privateCustomData: { value: { 'autoBotsMessage': { type: VariableType_PB.String, stringValue: 'roll out!' } }, isNull:false }
+                customData: {
+                    value: {
+                        'isBatman': { type: VariableType.Boolean, boolValue:true },
+                        'frequency' : { type: VariableType.Number, doubleValue: 103.1 }
+                    },
+                    isNull: false
+                },
+                privateCustomData: {
+                    value: {
+                        'autoBotsMessage': { type: VariableType.String, stringValue: 'roll out!' }
+                    },
+                    isNull: false
+                }
             }
         }
         const resultBuffer = callVariableForUser_PB(params)
