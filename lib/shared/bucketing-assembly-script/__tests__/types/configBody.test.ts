@@ -1,7 +1,6 @@
 import testData from '../../../bucketing-test-data/json-data/testData.json'
 import {
     testConfigBodyClass,
-    setConfigData,
     setConfigDataWithEtag,
     hasConfigDataForEtag
 } from '../bucketingImportHelper'

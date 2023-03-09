@@ -45,6 +45,27 @@
         }
       ]
     },
+    "compile-pb": {
+        "executor": "@nrwl/workspace:run-commands",
+        "outputs": [
+            "lib/shared/bucketing-assembly-script"
+        ],
+        "options": {
+            "commands": [
+                {
+                  "command": "rm -rf ./assembly/types/protobuf-generated"
+                },
+                {
+                  "command": "mkdir ./assembly/types/protobuf-generated"
+                },
+                {
+                  "command": "protoc --plugin=protoc-gen-as=../../../node_modules/.bin/as-proto-gen --as_opt=gen-helper-methods --as_out=./assembly/types/protobuf-generated ./protobuf/*.proto"
+                }
+            ],
+            "cwd": "lib/shared/bucketing-assembly-script",
+            "parallel": false
+        }
+    },
     "build": {
       "executor": "@nrwl/workspace:run-commands",
       "outputs": [
@@ -76,7 +97,13 @@
         ],
         "cwd": "lib/shared/bucketing-assembly-script",
         "parallel": false
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "compile-pb",
+          "projects": "self"
+        }
+      ]
     },
     "npm-publish": {
       "executor": "@nrwl/workspace:run-commands",

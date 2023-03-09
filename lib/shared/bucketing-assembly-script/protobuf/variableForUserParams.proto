@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+enum VariableType_PB {
+    Boolean = 0;
+    Number = 1;
+    String = 2;
+    JSON = 3;
+}
+
+message NullableString {
+  string value = 1;
+  bool isNull = 2;
+}
+
+message NullableDouble {
+  double value = 1;
+  bool isNull = 2;
+}
+
+enum CustomDataType {
+  Bool = 0;
+  Num = 1;
+  Str = 2;
+  Null = 3;
+}
+
+message CustomDataValue {
+  CustomDataType type = 1;
+  bool boolValue = 2;
+  double doubleValue = 3;
+  string stringValue = 4;
+}
+
+message NullableCustomData {
+  map<string, CustomDataValue> value = 1;
+  bool isNull = 2;
+}
+
+message VariableForUserParams_PB {
+    string sdkKey = 1;
+    string variableKey = 2;
+    VariableType_PB variableType = 3;
+    DVCUser_PB user = 4;
+    bool shouldTrackEvent = 5;
+}
+
+message DVCUser_PB {
+  string user_id = 1;
+  NullableString email = 2;
+  NullableString name = 3;
+  NullableString language = 4;
+  NullableString country = 5;
+  NullableDouble appBuild = 6;
+  NullableString appVersion = 7;
+  NullableString deviceModel = 8;
+  NullableCustomData customData = 9;
+  NullableCustomData privateCustomData = 10;
+}
+
+message SDKVariable_PB {
+    string _id = 1;
+    VariableType_PB type = 2;
+    string key = 3;
+    bool boolValue = 4;
+    double doubleValue = 5;
+    string stringValue = 6;
+    NullableString evalReason = 7;
+}

@@ -5,7 +5,8 @@
   "ignorePatterns": [
     "!**/*",
     "node_modules/*",
-    "build/*"
+    "build/*",
+    "assembly/types/protobuf-generated/*"
   ],
   "overrides": [
     {

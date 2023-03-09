@@ -1,5 +1,14 @@
 import { JSON } from 'assemblyscript-json/assembly'
-import { ConfigBody, DVCPopulatedUser, FeatureVariation, PlatformData } from './types'
+import {
+    ConfigBody,
+    DVCPopulatedUser,
+    FeatureVariation,
+    PlatformData,
+    DVCUser,
+    SDKVariable,
+    VariableForUserParams_PB,
+    decodeVariableForUserParams_PB, VariableType_PB
+} from './types'
 import {
     _generateBoundedHashes,
     _generateBucketedConfig,
@@ -32,20 +41,46 @@ export enum VariableType {
     String,
     JSON
 }
-const VariableTypeStrings = ['Boolean', 'Number', 'String', 'JSON']
+export const VariableTypeStrings = ['Boolean', 'Number', 'String', 'JSON']
 
-export function variableForUser(
+function variableTypeFromPB(pb: VariableType_PB): VariableType {
+    switch (pb) {
+        case VariableType_PB.Boolean: return VariableType.Boolean
+        case VariableType_PB.Number: return VariableType.Number
+        case VariableType_PB.String: return VariableType.String
+        case VariableType_PB.JSON: return VariableType.JSON
+        default: throw new Error(`Unknown variable type: ${pb}`)
+    }
+}
+
+export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
+    const params: VariableForUserParams_PB = decodeVariableForUserParams_PB(protobuf)
+    const user = params.user
+    if (!user) throw new Error('Missing user from variableForUser_PB protobuf')
+    const dvcUser = new DVCPopulatedUser(DVCUser.fromPBUser(user))
+
+    const variable = _variableForDVCUser(
+        params.sdkKey,
+        dvcUser,
+        params.variableKey,
+        variableTypeFromPB(params.variableType),
+        params.shouldTrackEvent
+    )
+
+    return variable ? variable.toProtobuf() : null
+}
+
+function _variableForDVCUser(
     sdkKey: string,
-    userStr: string,
+    dvcUser: DVCPopulatedUser,
     variableKey: string,
     variableType: VariableType,
     shouldTrackEvent: boolean
-): string | null {
+): SDKVariable | null {
     const config = _getConfigData(sdkKey)
-    const user = DVCPopulatedUser.fromJSONString(userStr)
+    const response = _generateBucketedVariableForUser(config, dvcUser, variableKey, _getClientCustomData(sdkKey))
 
-    const response = _generateBucketedVariableForUser(config, user, variableKey, _getClientCustomData(sdkKey))
-    let variable = (response && response.variable) ? response.variable : null
+    let variable: SDKVariable | null = (response && response.variable) ? response.variable : null
     if (variable && variable.type !== VariableTypeStrings[variableType]) {
         variable = null
     }
@@ -61,7 +96,18 @@ export function variableForUser(
     if (shouldTrackEvent) {
         queueVariableEvaluatedEvent(sdkKey, variableVariationMap, variable, variableKey)
     }
+    return variable
+}
 
+export function variableForUser(
+    sdkKey: string,
+    userStr: string,
+    variableKey: string,
+    variableType: VariableType,
+    shouldTrackEvent: boolean,
+): string | null {
+    const user = DVCPopulatedUser.fromJSONString(userStr)
+    const variable = _variableForDVCUser(sdkKey, user, variableKey, variableType, shouldTrackEvent)
     return variable ? variable.stringify() : null
 }
 
@@ -86,14 +132,13 @@ export function variableForUserPreallocated(
     variableKeyLength: i32,
     variableType: VariableType,
     shouldTrackEvent: boolean
-
 ): string | null {
     return variableForUser(
         sdkKey,
         userStr.substr(0, userStrLength),
         variableKey.substr(0, variableKeyLength),
         variableType,
-        shouldTrackEvent
+        shouldTrackEvent,
     )
 }
 

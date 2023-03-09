@@ -8,6 +8,12 @@ import {
     jsonObjFromMap
 } from '../helpers/jsonHelpers'
 import { PublicProject, PublicEnvironment } from './configBody'
+import {
+    NullableString,
+    SDKVariable_PB,
+    VariableType_PB,
+    encodeSDKVariable_PB,
+} from './'
 
 export class FeatureVariation extends JSON.Obj {
     constructor(
@@ -188,6 +194,46 @@ export class SDKVariable extends JSON.Obj {
             getJSONValueFromJSON(variableObj, 'value'),
             getStringFromJSONOptional(variableObj, 'evalReason')
         )
+    }
+
+    static variableTypeFromString(str: string): VariableType_PB {
+        if (str === 'Boolean') {
+            return VariableType_PB.Boolean
+        } else if (str === 'Number') {
+            return VariableType_PB.Number
+        } else if (str === 'String') {
+            return VariableType_PB.String
+        } else if (str === 'JSON') {
+            return VariableType_PB.JSON
+        } else {
+            throw new Error(`Unknown VariableType: ${str}`)
+        }
+    }
+
+    toProtobuf(): Uint8Array {
+        const boolValue = (this.type === 'Boolean' && this.value.isBool)
+            ? (this.value as JSON.Bool).valueOf()
+            : false
+        const numValue = (this.type === 'Number' && this.value.isNum)
+            ? (this.value as JSON.Num).valueOf()
+            : 0
+        const stringValue = (this.type === 'String' && this.value.isString)
+            ? (this.value as JSON.Str).valueOf()
+            : null
+        const jsonValue = (this.type === 'JSON' && this.value.isObj)
+            ? this.value.stringify()
+            : null
+
+        const pbVariable = new SDKVariable_PB(
+            this._id,
+            SDKVariable.variableTypeFromString(this.type),
+            this.key,
+            boolValue,
+            numValue,
+            stringValue || jsonValue || '',
+            new NullableString('', true)
+        )
+        return encodeSDKVariable_PB(pbVariable)
     }
 
     stringify(): string {
