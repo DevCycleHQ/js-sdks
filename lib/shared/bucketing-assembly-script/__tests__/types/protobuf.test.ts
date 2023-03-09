@@ -1,5 +1,6 @@
 import {
     variableForUser_PB,
+    variableForUser_PB_Preallocated,
     VariableType,
     testVariableForUserParams_PB,
     testDVCUser_PB,
@@ -24,6 +25,16 @@ describe('protobuf variable tests', () => {
         const pbMsg = VariableForUserParams_PB.create(params)
         const buffer = VariableForUserParams_PB.encode(pbMsg).finish()
         return variableForUser_PB(buffer)
+    }
+
+    const callVariableForUser_PB_Preallocated = (params: any): Uint8Array | null => {
+        const err = VariableForUserParams_PB.verify(params)
+        if (err) throw new Error(err)
+
+        const pbMsg = VariableForUserParams_PB.create(params)
+        const buffer = VariableForUserParams_PB.encode(pbMsg).finish()
+        const combinedBuffer = Buffer.concat([buffer, new Uint8Array(100)])
+        return variableForUser_PB_Preallocated(combinedBuffer, buffer.length)
     }
 
     const callTestVariableForUserParams_PB = (params: any): Uint8Array | null => {
@@ -70,32 +81,40 @@ describe('protobuf variable tests', () => {
         initSDK(sdkKey, config)
     })
 
-    it('should write protobuf message', () => {
-        const params = {
-            sdkKey: sdkKey,
-            variableKey: 'swagTest',
-            variableType: 2,
-            shouldTrackEvent: true,
-            user: {
-                userId: 'asuh',
-                country: { value: 'canada', isNull: false },
-                email: { value: 'test', isNull: false },
-            }
+    const varForUserParams = {
+        sdkKey: sdkKey,
+        variableKey: 'swagTest',
+        variableType: 2,
+        shouldTrackEvent: true,
+        user: {
+            userId: 'asuh',
+            country: { value: 'canada', isNull: false },
+            email: { value: 'test', isNull: false },
         }
-        const resultBuffer = callVariableForUser_PB(params)
+    }
+    const varForUserExpected = {
+        '_id': '615356f120ed334a6054564c',
+        'boolValue': false,
+        'doubleValue': 0,
+        'evalReason': {
+            'isNull': true,
+            'value': '',
+        },
+        'key': 'swagTest',
+        'stringValue': 'YEEEEOWZA',
+        'type': VariableType.String,
+    }
+
+    it('should write protobuf message to variableForUser_PB', () => {
+        const resultBuffer = callVariableForUser_PB(varForUserParams)
         expect(resultBuffer).not.toBeNull()
-        expect(SDKVariable_PB.decode(resultBuffer!)).toEqual({
-            '_id': '615356f120ed334a6054564c',
-            'boolValue': false,
-            'doubleValue': 0,
-            'evalReason': {
-                'isNull': true,
-                'value': '',
-            },
-            'key': 'swagTest',
-            'stringValue': 'YEEEEOWZA',
-            'type': VariableType.String,
-        })
+        expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(varForUserExpected)
+    })
+
+    it('should write preallocated protobuf message to variableForUser_PB_Preallocated', () => {
+        const resultBuffer = callVariableForUser_PB_Preallocated(varForUserParams)
+        expect(resultBuffer).not.toBeNull()
+        expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(varForUserExpected)
     })
 
     describe('protobuf type tests', () => {
