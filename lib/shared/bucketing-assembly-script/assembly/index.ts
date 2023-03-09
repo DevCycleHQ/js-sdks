@@ -53,6 +53,10 @@ function variableTypeFromPB(pb: VariableType_PB): VariableType {
     }
 }
 
+export function variableForUser_PB_Preallocated(protobuf: Uint8Array, length: i32): Uint8Array | null {
+    return variableForUser_PB(protobuf.slice(0, length))
+}
+
 export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
     const params: VariableForUserParams_PB = decodeVariableForUserParams_PB(protobuf)
     const user = params.user
