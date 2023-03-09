@@ -40,7 +40,13 @@
       "options": {
         "buildTarget": "shared-bucketing-test-data:build",
         "watch": false
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "dependencies"
+        }
+      ]
     }
   },
   "tags": []
