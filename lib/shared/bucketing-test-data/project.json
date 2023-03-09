@@ -2,6 +2,9 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "lib/shared/bucketing-test-data/src",
   "projectType": "library",
+  "implicitDependencies": [
+    "shared-types"
+  ],
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
@@ -24,7 +27,13 @@
         "main": "lib/shared/bucketing-test-data/src/index.ts",
         "tsConfig": "lib/shared/bucketing-test-data/tsconfig.lib.json",
         "buildableProjectDepsInPackageJsonType": "dependencies"
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "dependencies"
+        }
+      ]
     },
     "build:json": {
       "executor": "@nrwl/node:node",
