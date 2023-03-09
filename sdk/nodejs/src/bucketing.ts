@@ -1,9 +1,13 @@
 import { instantiate, Exports } from '@devcycle/bucketing-assembly-script'
 import { DVCLogger, DVCReporter } from '@devcycle/types'
 import { DVCOptions } from './types'
+import protobuf, { Type } from 'protobufjs'
+import path from 'path'
 
 let Bucketing: Exports | null
 let InstantiatePromise: Promise<Exports> | null
+export let VariableForUserParams_PB: Type
+export let SDKVariable_PB: Type
 
 export const importBucketingLib = async (
     { logger, options }:
@@ -48,7 +52,21 @@ export const getBucketingLib = (): Exports => {
     if (!Bucketing) {
         throw new Error('Bucketing library not loaded')
     }
+    loadProtobufTypes()
     return Bucketing
+}
+
+function loadProtobufTypes() {
+    if (VariableForUserParams_PB) return
+    const protoFile = '../../../../lib/shared/bucketing-assembly-script/protobuf/variableForUserParams.proto'
+    const filePath = path.resolve(__dirname, protoFile)
+    console.log(`Loading protobuf types from ${filePath}`)
+    const root = protobuf.loadSync(filePath)
+    VariableForUserParams_PB = root.lookupType('VariableForUserParams_PB')
+    if (!VariableForUserParams_PB) throw new Error('Protobuf type VariableForUserParams_PB not found')
+
+    SDKVariable_PB = root.lookupType('SDKVariable_PB')
+    if (!SDKVariable_PB) throw new Error('Protobuf type SDKVariable_PB not found')
 }
 
 export const cleanupBucketingLib = (): void => {

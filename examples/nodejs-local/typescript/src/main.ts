@@ -88,7 +88,7 @@ async function benchDVC() {
     const user = { user_id: 'node_sdk_test' }
     let variable
 
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 50000; i++) {
         variable = dvcClient.variable(user, 'v-key-25', false)
     }
 
