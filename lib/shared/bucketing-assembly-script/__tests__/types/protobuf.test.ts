@@ -117,15 +117,26 @@ describe('protobuf variable tests', () => {
                         deviceModel: { value: 'NodeJS', isNull: false },
                         customData: {
                             value: {
-                                'isBatman': { type: VariableType.Boolean, boolValue: true, doubleValue: 0, stringValue: '' },
-                                'frequency': { type: VariableType.Number, boolValue: false, doubleValue: 103.1, stringValue: '' }
+                                'isBatman': {
+                                    type: VariableType.Boolean, boolValue: true, doubleValue: 0, stringValue: ''
+                                },
+                                'frequency': {
+                                    type: VariableType.Number, boolValue: false, doubleValue: 103.1, stringValue: ''
+                                }
                             },
                             isNull: false
                         },
                         privateCustomData: {
                             value: {
-                                'autoBotsMessage': { type: VariableType.String, boolValue: false, doubleValue: 0, stringValue: 'roll out!' },
-                                'isNull': { type: 3, boolValue: false, doubleValue: 0, stringValue: '' }
+                                'autoBotsMessage': {
+                                    type: VariableType.String,
+                                    boolValue: false,
+                                    doubleValue: 0,
+                                    stringValue: 'roll out!'
+                                },
+                                'isNull': {
+                                    type: 3, boolValue: false, doubleValue: 0, stringValue: ''
+                                }
                             },
                             isNull: false
                         }
@@ -167,15 +178,23 @@ describe('protobuf variable tests', () => {
                     deviceModel: { value: 'NodeJS', isNull: false },
                     customData: {
                         value: {
-                            'isBatman': { type: VariableType.Boolean, boolValue: true, doubleValue: 0, stringValue: '' },
-                            'frequency': { type: VariableType.Number, boolValue: false, doubleValue: 103.1, stringValue: '' }
+                            'isBatman': {
+                                type: VariableType.Boolean, boolValue: true, doubleValue: 0, stringValue: ''
+                            },
+                            'frequency': {
+                                type: VariableType.Number, boolValue: false, doubleValue: 103.1, stringValue: ''
+                            }
                         },
                         isNull: false
                     },
                     privateCustomData: {
                         value: {
-                            'autoBotsMessage': { type: VariableType.String, boolValue: false, doubleValue: 0, stringValue: 'roll out!' },
-                            'isNull': { type: 3, boolValue: false, doubleValue: 0, stringValue: '' }
+                            'autoBotsMessage': {
+                                type: VariableType.String, boolValue: false, doubleValue: 0, stringValue: 'roll out!'
+                            },
+                            'isNull': {
+                                type: 3, boolValue: false, doubleValue: 0, stringValue: ''
+                            }
                         },
                         isNull: false
                     }

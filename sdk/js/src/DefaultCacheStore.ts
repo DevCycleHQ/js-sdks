@@ -4,7 +4,7 @@ export class DefaultCacheStore {
     constructor() {
         this.store = typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage
     }
-    
+
     save(storeKey: string, data: unknown): void {
         this.store?.setItem(storeKey, JSON.stringify(data))
     }
@@ -20,8 +20,6 @@ export class DefaultCacheStore {
         this.store?.removeItem(storeKey)
     }
 }
-
-
 
 const stubbedLocalStorage = {
     getItem: () => null,
