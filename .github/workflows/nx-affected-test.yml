@@ -16,6 +16,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Install protoc for protobuf compilation
+        run: sudo apt-get install -y protobuf-compiler
       - run: git fetch origin main
       - name: Cache node modules
         uses: actions/cache@v2
@@ -36,4 +38,3 @@ jobs:
       - name: Run Affected Tests
         shell: bash
         run: yarn affected:test
-        
