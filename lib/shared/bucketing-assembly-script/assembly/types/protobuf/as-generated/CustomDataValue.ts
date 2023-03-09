@@ -4,7 +4,7 @@
 //   protoc        v3.21.12
 
 import { Writer, Reader, Protobuf } from "as-proto/assembly";
-import { VariableType_PB } from "./VariableType_PB";
+import { CustomDataType } from "./CustomDataType";
 
 export class CustomDataValue {
   static encode(message: CustomDataValue, writer: Writer): void {
@@ -53,13 +53,13 @@ export class CustomDataValue {
     return message;
   }
 
-  type: VariableType_PB;
+  type: CustomDataType;
   boolValue: bool;
   doubleValue: f64;
   stringValue: string;
 
   constructor(
-    type: VariableType_PB = 0,
+    type: CustomDataType = 0,
     boolValue: bool = false,
     doubleValue: f64 = 0.0,
     stringValue: string = ""

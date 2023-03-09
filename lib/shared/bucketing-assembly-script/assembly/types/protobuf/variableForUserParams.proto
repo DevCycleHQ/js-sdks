@@ -17,13 +17,15 @@ message NullableDouble {
   bool isNull = 2;
 }
 
+enum CustomDataType {
+  Bool = 0;
+  Num = 1;
+  Str = 2;
+  Null = 3;
+}
+
 message CustomDataValue {
-  /*
-  Reusing this because if you create a new enum with the same names it has a conflict.
-  Enums use C++ scoping rules making them all global
-  TODO revisit
-  */
-  VariableType_PB type = 1;
+  CustomDataType type = 1;
   bool boolValue = 2;
   double doubleValue = 3;
   string stringValue = 4;

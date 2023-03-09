@@ -80,19 +80,6 @@ describe('protobuf variable tests', () => {
                 userId: 'asuh',
                 country: { value: 'canada', isNull: false },
                 email: { value: 'test', isNull: false },
-                customData: {
-                    value: {
-                        'isBatman': { type: VariableType.Boolean, boolValue:true },
-                        'frequency' : { type: VariableType.Number, doubleValue: 103.1 }
-                    },
-                    isNull: false
-                },
-                privateCustomData: {
-                    value: {
-                        'autoBotsMessage': { type: VariableType.String, stringValue: 'roll out!' }
-                    },
-                    isNull: false
-                }
             }
         }
         const resultBuffer = callVariableForUser_PB(params)
@@ -128,6 +115,20 @@ describe('protobuf variable tests', () => {
                         appBuild: { value: 610.0, isNull: false },
                         appVersion: { value: '1.0.0', isNull: false },
                         deviceModel: { value: 'NodeJS', isNull: false },
+                        customData: {
+                            value: {
+                                'isBatman': { type: VariableType.Boolean, boolValue: true, doubleValue: 0, stringValue: '' },
+                                'frequency': { type: VariableType.Number, boolValue: false, doubleValue: 103.1, stringValue: '' }
+                            },
+                            isNull: false
+                        },
+                        privateCustomData: {
+                            value: {
+                                'autoBotsMessage': { type: VariableType.String, boolValue: false, doubleValue: 0, stringValue: 'roll out!' },
+                                'isNull': { type: 3, boolValue: false, doubleValue: 0, stringValue: '' }
+                            },
+                            isNull: false
+                        }
                     }
                 }
                 const resultBuffer = callTestVariableForUserParams_PB(params)
@@ -141,7 +142,11 @@ describe('protobuf variable tests', () => {
                     variableKey: 'swagTest',
                     variableType: 0,
                     shouldTrackEvent: false,
-                    user: { userId: 'asuh' }
+                    user: {
+                        userId: 'asuh',
+                        customData: { value: {}, isNull: true },
+                        privateCustomData: { value: {}, isNull: true },
+                    }
                 }
                 const resultBuffer = callTestVariableForUserParams_PB(params)
                 expect(resultBuffer).not.toBeNull()
@@ -159,7 +164,21 @@ describe('protobuf variable tests', () => {
                     country: { value: 'CA', isNull: false },
                     appBuild: { value: 610.0, isNull: false },
                     appVersion: { value: '1.0.0', isNull: false },
-                    deviceModel: { value: 'NodeJS', isNull: false }
+                    deviceModel: { value: 'NodeJS', isNull: false },
+                    customData: {
+                        value: {
+                            'isBatman': { type: VariableType.Boolean, boolValue: true, doubleValue: 0, stringValue: '' },
+                            'frequency': { type: VariableType.Number, boolValue: false, doubleValue: 103.1, stringValue: '' }
+                        },
+                        isNull: false
+                    },
+                    privateCustomData: {
+                        value: {
+                            'autoBotsMessage': { type: VariableType.String, boolValue: false, doubleValue: 0, stringValue: 'roll out!' },
+                            'isNull': { type: 3, boolValue: false, doubleValue: 0, stringValue: '' }
+                        },
+                        isNull: false
+                    }
                 }
                 const resultBuffer = callTestDVCUser_PB(user)
                 expect(resultBuffer).not.toBeNull()
@@ -180,7 +199,9 @@ describe('protobuf variable tests', () => {
                     country: { value: '', isNull: true },
                     appBuild: { value: 0, isNull: true },
                     appVersion: { value: '', isNull: true },
-                    deviceModel: { value: '', isNull: true }
+                    deviceModel: { value: '', isNull: true },
+                    customData: { value: {}, isNull: true },
+                    privateCustomData: { value: {}, isNull: true },
                 })
             })
         })

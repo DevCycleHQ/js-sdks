@@ -10,7 +10,7 @@ import {
     NullableDouble,
     NullableCustomData,
     CustomDataValue,
-    VariableType_PB
+    CustomDataType
 } from './'
 
 interface DVCUserInterface {
@@ -35,18 +35,43 @@ function getJSONObjFromPBCustomData(nullableCustomData: NullableCustomData | nul
     for (let i = 0; i < keys.length; i++) {
         const key = keys[i]
         const value: CustomDataValue = nullableCustomData.value.get(key)
-        if (value && value.type === VariableType_PB.Boolean) {
+        if (value && value.type === CustomDataType.Bool) {
             customDataObj.set(key, value.boolValue)
-        } else if (value && value.type === VariableType_PB.Number) {
+        } else if (value && value.type === CustomDataType.Num) {
             customDataObj.set(key, value.doubleValue)
-        } else if (value && value.type === VariableType_PB.String) {
+        } else if (value && value.type === CustomDataType.Str) {
             customDataObj.set(key, value.stringValue)
+        } else if (value && value.type === CustomDataType.Null) {
+            customDataObj.set(key, new JSON.Null())
         } else {
             throw new Error('DVCUser customData can\'t contain nested objects or arrays')
         }
     }
 
     return customDataObj
+}
+
+function nullableCustomDataFromJSONObj(jsonObj: JSON.Obj | null): NullableCustomData {
+    if (!jsonObj) return new NullableCustomData(new Map(), true)
+
+    const keys = jsonObj.keys
+    const customDataMap = new Map<string, CustomDataValue>()
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i]
+        const value = jsonObj.get(key)
+        if (!value) continue
+
+        if (value.isBool) {
+            customDataMap.set(key, new CustomDataValue(CustomDataType.Bool, (value as JSON.Bool).valueOf()))
+        } else if (value.isNum) {
+            customDataMap.set(key, new CustomDataValue(CustomDataType.Num, false, (value as JSON.Num).valueOf()))
+        } else if (value.isString) {
+            customDataMap.set(key, new CustomDataValue(CustomDataType.Str, false, 0, (value as JSON.Str).valueOf()))
+        } else if (value.isNull) {
+            customDataMap.set(key, new CustomDataValue(CustomDataType.Null))
+        }
+    }
+    return new NullableCustomData(customDataMap, false)
 }
 
 export class DVCUser extends JSON.Obj implements DVCUserInterface {
@@ -91,15 +116,18 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
     }
 
     toProtoBuf(): Uint8Array {
+        const emptyString = ''
         return encodeDVCUser_PB(new DVCUser_PB(
             this.user_id,
-            new NullableString(this.email || '', this.email === null),
-            new NullableString(this.name || '', this.name === null),
-            new NullableString(this.language || '', this.language === null),
-            new NullableString(this.country || '', this.country === null),
+            new NullableString(this.email || emptyString, this.email === null),
+            new NullableString(this.name || emptyString, this.name === null),
+            new NullableString(this.language || emptyString, this.language === null),
+            new NullableString(this.country || emptyString, this.country === null),
             new NullableDouble(this.appBuild || 0.0, isNaN(this.appBuild)),
-            new NullableString(this.appVersion || '', this.appVersion === null),
-            new NullableString(this.deviceModel || '', this.deviceModel === null)
+            new NullableString(this.appVersion || emptyString, this.appVersion === null),
+            new NullableString(this.deviceModel || emptyString, this.deviceModel === null),
+            nullableCustomDataFromJSONObj(this.customData),
+            nullableCustomDataFromJSONObj(this.privateCustomData)
         ))
     }
 

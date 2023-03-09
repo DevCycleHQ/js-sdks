@@ -8,6 +8,7 @@ export * from './featureConfiguration'
 export * from './platformData'
 export * from './target'
 
+export * from './protobuf/as-generated/CustomDataType'
 export * from './protobuf/as-generated/CustomDataValue'
 export * from './protobuf/as-generated/DVCUser_PB'
 export * from './protobuf/as-generated/NullableCustomData'
