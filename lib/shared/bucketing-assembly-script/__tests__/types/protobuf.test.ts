@@ -54,7 +54,7 @@ describe('protobuf variable tests', () => {
     }
 
     beforeAll(() => {
-        const protoFile = '../../assembly/types/protobuf/variableForUserParams.proto'
+        const protoFile = '../../protobuf/variableForUserParams.proto'
         const filePath = path.resolve(__dirname, protoFile)
         const root = protobuf.loadSync(filePath)
 

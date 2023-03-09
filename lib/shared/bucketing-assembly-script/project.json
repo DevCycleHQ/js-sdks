@@ -51,10 +51,18 @@
             "lib/shared/bucketing-assembly-script"
         ],
         "options": {
-            "commands": [{
-              "command": "rm -rf as-generated/*.ts && protoc --plugin=protoc-gen-as=../../../../../../node_modules/.bin/as-proto-gen --as_opt=gen-helper-methods --as_out=./as-generated ./*.proto"
-            }],
-            "cwd": "lib/shared/bucketing-assembly-script/assembly/types/protobuf",
+            "commands": [
+                {
+                  "command": "rm -rf ./assembly/types/as-generated"
+                },
+                {
+                  "command": "mkdir ./assembly/types/as-generated"
+                },
+                {
+                  "command": "protoc --plugin=protoc-gen-as=../../../node_modules/.bin/as-proto-gen --as_opt=gen-helper-methods --as_out=./assembly/types/as-generated ./protobuf/*.proto"
+                }
+            ],
+            "cwd": "lib/shared/bucketing-assembly-script",
             "parallel": false
         }
     },
