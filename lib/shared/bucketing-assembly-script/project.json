@@ -53,13 +53,13 @@
         "options": {
             "commands": [
                 {
-                  "command": "rm -rf ./assembly/types/as-generated"
+                  "command": "rm -rf ./assembly/types/protobuf-generated"
                 },
                 {
-                  "command": "mkdir ./assembly/types/as-generated"
+                  "command": "mkdir ./assembly/types/protobuf-generated"
                 },
                 {
-                  "command": "protoc --plugin=protoc-gen-as=../../../node_modules/.bin/as-proto-gen --as_opt=gen-helper-methods --as_out=./assembly/types/as-generated ./protobuf/*.proto"
+                  "command": "protoc --plugin=protoc-gen-as=../../../node_modules/.bin/as-proto-gen --as_opt=gen-helper-methods --as_out=./assembly/types/protobuf-generated ./protobuf/*.proto"
                 }
             ],
             "cwd": "lib/shared/bucketing-assembly-script",
