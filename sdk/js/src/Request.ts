@@ -152,7 +152,7 @@ export const saveEntity = async (
     if (res.status === 403) {
         logger.warn('Warning: EdgeDB feature is not enabled for this project')
     } else if (res.status >= 400) {
-        logger.error(`Error saving user entity, status: ${res.status}, body: ${res.data}`)
+        logger.warn(`Error saving user entity, status: ${res.status}, body: ${res.data}`)
     } else {
         logger.info(`Saved user entity, status: ${res.status}, body: ${res.data}`)
     }

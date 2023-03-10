@@ -2,6 +2,7 @@ import { DVCLogger } from '@devcycle/types'
 
 export class StreamingConnection {
     private connection: EventSource
+    private hasSuccessfullyConnected: boolean = false
 
     constructor(
         private url: string,
@@ -17,9 +18,14 @@ export class StreamingConnection {
             this.onMessage(event.data)
         }
         this.connection.onerror = (err) => {
-            this.logger.error('StreamingConnection error', err)
+            if (this.hasSuccessfullyConnected) {
+                this.logger.warn(`StreamingConnection error ${err}`)
+            } else {
+                this.logger.error('StreamingConnection error', err)
+            }
         }
         this.connection.onopen = () => {
+            this.hasSuccessfullyConnected = true
             this.logger.debug('StreamingConnection opened')
         }
     }
