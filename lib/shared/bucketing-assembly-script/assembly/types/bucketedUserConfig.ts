@@ -214,9 +214,9 @@ export class SDKVariable extends JSON.Obj {
         const boolValue = (this.type === 'Boolean' && this.value.isBool)
             ? (this.value as JSON.Bool).valueOf()
             : false
-        const numValue = (this.type === 'Number' && this.value.isNum)
-            ? (this.value as JSON.Num).valueOf()
-            : 0
+        const numValue = (this.type === 'Number' && this.value.isInteger)
+            ? f64((this.value as JSON.Integer).valueOf())
+            : (this.type === 'Number' && this.value.isFloat) ? (this.value as JSON.Float).valueOf() : 0.0
         const stringValue = (this.type === 'String' && this.value.isString)
             ? (this.value as JSON.Str).valueOf()
             : null
