@@ -135,7 +135,7 @@ export class DVCClient implements Client {
                     data.value = configVariable.value as VariableTypeAlias<T>
                     data.evalReason = configVariable.evalReason
                 } else {
-                    this.logger.error(
+                    this.logger.warn(
                         `Type mismatch for variable ${key}. Expected ${type}, got ${configVariable.type}`
                     )
                 }
@@ -165,7 +165,7 @@ export class DVCClient implements Client {
             })
         } catch (e) {
             this.eventEmitter.emitError(e)
-            this.logger.error(`Error with queueing aggregate events ${e}`)
+            this.logger.warn(`Error with queueing aggregate events ${e}`)
         }
 
         return variable
@@ -343,12 +343,12 @@ export class DVCClient implements Client {
             if (!messageData.type || messageData.type === 'refetchConfig') {
                 if (!this.config?.etag || messageData.etag !== this.config?.etag) {
                     this.refetchConfig(true, messageData.lastModified).catch((e) => {
-                        this.logger.error('Failed to refetch config', e)
+                        this.logger.warn(`Failed to refetch config ${e}`)
                     })
                 }
             }
         } catch (e) {
-            this.logger.error('Streaming Connection: Unparseable message', e)
+            this.logger.warn(`Streaming Connection: Unparseable message ${e}`)
         }
     }
 
@@ -365,7 +365,7 @@ export class DVCClient implements Client {
                 if (!this.streamingConnection?.isConnected()) {
                     this.logger.debug('Page became visible, refetching config')
                     this.refetchConfig(false).catch((e) => {
-                        this.logger.error('Failed to refetch config', e)
+                        this.logger.warn(`Failed to refetch config ${e}`)
                     })
                     this.streamingConnection?.reopen()
                 }
