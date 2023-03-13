@@ -210,40 +210,6 @@ export class SDKVariable extends JSON.Obj {
         }
     }
 
-    static fromPBSDKVariable(sdkVariable: SDKVariable_PB): SDKVariable {
-        if (sdkVariable.type === 0) {
-            // console.log('sdkVariable.booleanValue: ' + sdkVariable.boolValue)
-            return {
-                _id: sdkVariable._id,
-                key: sdkVariable.key,
-                value: sdkVariable.boolValue,
-                type: VariableType.boolean
-            }
-        } else if (sdkVariable.type === 1) {
-            return {
-                _id: sdkVariable._id,
-                key: sdkVariable.key,
-                value: sdkVariable.doubleValue,
-                type: VariableType.number
-            }
-        } else if (sdkVariable.type === 2) {
-            return {
-                _id: sdkVariable._id,
-                key: sdkVariable.key,
-                value: sdkVariable.stringValue,
-                type: VariableType.string
-            }
-        } else if (sdkVariable.type === 3) {
-            return {
-                _id: sdkVariable._id,
-                key: sdkVariable.key,
-                value: JSON.parse(sdkVariable.stringValue),
-                type: VariableType.json
-            }
-        }
-        throw new Error(`Unknown VariableType: ${sdkVariable.type}`)
-    }
-
     toProtobuf(): Uint8Array {
         const boolValue = (this.type === 'Boolean' && this.value.isBool)
             ? (this.value as JSON.Bool).valueOf()
