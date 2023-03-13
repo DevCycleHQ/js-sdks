@@ -82,7 +82,7 @@ describe('protobuf variable tests', () => {
     })
 
     const varForUserParams = {
-        sdkKey: sdkKey,
+        sdkKey,
         variableKey: 'swagTest',
         variableType: 2,
         shouldTrackEvent: true,
