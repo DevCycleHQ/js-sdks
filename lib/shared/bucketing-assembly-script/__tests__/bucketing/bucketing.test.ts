@@ -13,8 +13,12 @@ const { config, barrenConfig } = testData
 
 import moment from 'moment'
 import * as uuid from 'uuid'
-import { BucketedUserConfig, SDKVariable } from '../../assembly/types'
+import {
+    BucketedUserConfig,
+    SDKVariable,
+} from '@devcycle/types'
 import { cleanupSDK, initSDK } from '../setPlatformData'
+import { variableForUserPB, VariableForUserArgs } from '../protobufVariableHelper'
 
 type BoundedHash = { rolloutHash: number, bucketingHash: number }
 
@@ -54,10 +58,25 @@ const generateBucketedConfig = (user: unknown): BucketedUserConfig => {
     return JSON.parse(bucketedConfig) as BucketedUserConfig
 }
 
-const variableForUser = (
-    { user, variableKey, variableType }:
-    { user: unknown, variableKey: string, variableType: VariableType }
-): SDKVariable | null => {
+const expectVariableForUser = (
+    args: { user: any, variableKey: string, variableType: VariableType },
+    expectedValue: unknown
+) => {
+    const variable = variableForUser({ ...args, sdkKey })
+    const pbVariable = variableForUserPB({ ...args, sdkKey })
+
+    if (expectedValue === null) {
+        expect(variable).toBeNull()
+        expect(pbVariable).toBeNull()
+    } else {
+        expect(variable).not.toBeNull()
+        expect(variable).toEqual(expectedValue)
+        expect(pbVariable).not.toBeNull()
+        expect(pbVariable).toEqual(expectedValue)
+    }
+}
+
+const variableForUser = ({ user, variableKey, variableType }: VariableForUserArgs): SDKVariable | null => {
     const variableJSON = variableForUser_AS(
         sdkKey, JSON.stringify(user), variableKey, variableType, true
     )
@@ -222,8 +241,10 @@ describe('Config Parsing and Generating', () => {
         const c = generateBucketedConfig(user)
         expect(c).toEqual(expected)
 
-        expect(variableForUser({ user, variableKey: 'swagTest', variableType: VariableType.String }))
-            .toEqual(expected.variables.swagTest)
+        expectVariableForUser(
+            { user, variableKey: 'swagTest', variableType: VariableType.String },
+            expected.variables.swagTest
+        )
     })
 
     it('puts the user in the target for the first audience they match', () => {
@@ -372,16 +393,26 @@ describe('Config Parsing and Generating', () => {
         const c = generateBucketedConfig(user)
         expect(c).toEqual(expected)
 
-        expect(variableForUser({ user, variableKey: 'audience-match', variableType: VariableType.String }))
-            .toEqual(expected.variables['audience-match'])
-        expect(variableForUser({ user, variableKey: 'feature2.cool', variableType: VariableType.String }))
-            .toEqual(expected.variables['feature2.cool'])
-        expect(variableForUser({ user, variableKey: 'feature2.hello', variableType: VariableType.String }))
-            .toEqual(expected.variables['feature2.hello'])
-        expect(variableForUser({ user, variableKey: 'swagTest', variableType: VariableType.String }))
-            .toEqual(expected.variables['swagTest'])
-        expect(variableForUser({ user, variableKey: 'test', variableType: VariableType.String }))
-            .toEqual(expected.variables['test'])
+        expectVariableForUser(
+            { user, variableKey: 'audience-match', variableType: VariableType.String },
+            expected.variables['audience-match']
+        )
+        expectVariableForUser(
+            { user, variableKey: 'feature2.cool', variableType: VariableType.String },
+            expected.variables['feature2.cool']
+        )
+        expectVariableForUser(
+            { user, variableKey: 'feature2.hello', variableType: VariableType.String },
+            expected.variables['feature2.hello']
+        )
+        expectVariableForUser(
+            { user, variableKey: 'swagTest', variableType: VariableType.String },
+            expected.variables['swagTest']
+        )
+        expectVariableForUser(
+            { user, variableKey: 'test', variableType: VariableType.String },
+            expected.variables['test']
+        )
     })
 
     it('holds user back if not in rollout', () => {
@@ -439,11 +470,14 @@ describe('Config Parsing and Generating', () => {
             }
         }
         initSDK(sdkKey, config)
+
         const c = generateBucketedConfig(user)
         expect(c).toEqual(expected)
 
-        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: VariableType.String }))
-            .toEqual(expected.variables['feature2Var'])
+        expectVariableForUser(
+            { user, variableKey: 'feature2Var', variableType: VariableType.String },
+            expected.variables['feature2Var']
+        )
     })
 
     it('puts user through if in rollout', () => {
@@ -551,10 +585,14 @@ describe('Config Parsing and Generating', () => {
         const c = generateBucketedConfig(user)
         expect(c).toEqual(expected)
 
-        expect(variableForUser({ user, variableKey: 'swagTest', variableType: VariableType.String }))
-            .toEqual(expected.variables['swagTest'])
-        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: VariableType.String }))
-            .toEqual(expected.variables['feature2Var'])
+        expectVariableForUser(
+            { user, variableKey: 'swagTest', variableType: VariableType.String },
+            expected.variables['swagTest']
+        )
+        expectVariableForUser(
+            { user, variableKey: 'feature2Var', variableType: VariableType.String },
+            expected.variables['feature2Var']
+        )
     })
 
     it('errors when feature missing distribution', () => {
@@ -567,8 +605,7 @@ describe('Config Parsing and Generating', () => {
         expect(() => generateBucketedConfig(user))
             .toThrow('Failed to decide target variation: 61536f3bc838a705c105eb62')
 
-        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: VariableType.String }))
-            .toBeNull()
+        expectVariableForUser({ user, variableKey: 'feature2Var', variableType: VariableType.String }, null)
     })
 
     it('errors when config missing variations', () => {
@@ -591,8 +628,7 @@ describe('Config Parsing and Generating', () => {
         expect(() => generateBucketedConfig(user))
             .toThrow('Config missing variation: 615382338424cb11646d7667')
 
-        expect(variableForUser({ user, variableKey: 'feature2Var', variableType: VariableType.String }))
-            .toBeNull()
+        expectVariableForUser({ user, variableKey: 'feature2Var', variableType: VariableType.String }, null)
     })
 
     it('errors when config missing variables', () => {
@@ -605,8 +641,7 @@ describe('Config Parsing and Generating', () => {
         expect(() => generateBucketedConfig(user))
             .toThrow('Config missing variable: 61538237b0a70b58ae6af71g')
 
-        expect(variableForUser({ user, variableKey: 'feature2.cool', variableType: VariableType.String }))
-            .toBeNull()
+        expectVariableForUser({ user, variableKey: 'feature2.cool', variableType: VariableType.String }, null)
     })
 })
 

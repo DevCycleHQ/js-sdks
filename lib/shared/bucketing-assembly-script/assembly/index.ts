@@ -70,7 +70,6 @@ export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
         variableTypeFromPB(params.variableType),
         params.shouldTrackEvent
     )
-
     return variable ? variable.toProtobuf() : null
 }
 
