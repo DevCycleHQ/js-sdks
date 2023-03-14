@@ -171,8 +171,8 @@ describe('EventEmitter tests', () => {
             eventEmitter.subscribe('variableUpdated:*', allUpdatesHandler)
             eventEmitter.subscribe(`variableUpdated:my-variable-key`, variableKeyHandler)
             eventEmitter.emitVariableUpdates(oldVariableSet, newVariableSet, {})
-            expect(allUpdatesHandler).toBeCalledWith('my-variable-key', undefined)
-            expect(variableKeyHandler).toBeCalledWith('my-variable-key', undefined)
+            expect(allUpdatesHandler).toBeCalledWith('my-variable-key', null)
+            expect(variableKeyHandler).toBeCalledWith('my-variable-key', null)
         })
 
         it('should emit variable updated event if variable added', () => {
@@ -284,8 +284,8 @@ describe('EventEmitter tests', () => {
             eventEmitter.subscribe('featureUpdated:*', allUpdatesHandler)
             eventEmitter.subscribe(`featureUpdated:my-feature-key`, featureKeyHandler)
             eventEmitter.emitFeatureUpdates(oldFeatureSet, newFeatureSet)
-            expect(allUpdatesHandler).toBeCalledWith('my-feature-key', undefined)
-            expect(featureKeyHandler).toBeCalledWith('my-feature-key', undefined)
+            expect(allUpdatesHandler).toBeCalledWith('my-feature-key', null)
+            expect(featureKeyHandler).toBeCalledWith('my-feature-key', null)
         })
 
         it('should emit feature updated event with new feature if added', () => {
