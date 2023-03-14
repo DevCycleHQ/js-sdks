@@ -89,7 +89,7 @@
       "options": {
         "commands": [
           {
-            "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 1000 --maximumMemory 10000 --bindings raw"
+            "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 1000 --maximumMemory 10000 --bindings raw --transform as-heap-analyzer/transform/addHeapAnalyzerInfo.mjs"
           },
           {
             "command": "asc assembly/index.ts --target release --exportRuntime --initialMemory 1000 --maximumMemory 10000 --bindings raw"
