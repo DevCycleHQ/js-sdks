@@ -1,6 +1,8 @@
 import { BucketedUserConfig, SDKVariable, VariableType } from '@devcycle/types'
 import { DVCPopulatedUser } from '../models/populatedUser'
 import { getBucketingLib } from '../bucketing'
+import { VariableForUserParams_PB, SDKVariable_PB } from '../pb-types/compiled'
+import { pbSDKVariableTransform } from '../pb-types/pbTypeHelpers'
 
 export function bucketUserForConfig(user: DVCPopulatedUser, token: string): BucketedUserConfig {
     return JSON.parse(
@@ -24,8 +26,28 @@ export function getVariableTypeCode(type: VariableType): number {
     }
 }
 
-export function variableForUser(token: string, usr: DVCPopulatedUser, key: string, type: number): SDKVariable | null {
-    const bucketedVariable = getBucketingLib().variableForUser(token, JSON.stringify(usr), key, type, true)
+export function variableForUser(sdkKey: string, usr: DVCPopulatedUser, key: string, type: number): SDKVariable | null {
+    const bucketedVariable = getBucketingLib().variableForUser(sdkKey, JSON.stringify(usr), key, type, true)
     if (!bucketedVariable) return null
     return JSON.parse(bucketedVariable) as SDKVariable
+}
+
+export function variableForUser_PB(
+    sdkKey: string, usr: DVCPopulatedUser, key: string, type: number
+): SDKVariable | null {
+    const params = {
+        sdkKey,
+        user: usr.toPBUser(),
+        variableKey: key,
+        variableType: type,
+        shouldTrackEvent: true
+    }
+    const err = VariableForUserParams_PB.verify(params)
+    if (err) throw new Error(`Invalid VariableForUserParams_PB protobuf params: ${err}`)
+
+    const buffer = VariableForUserParams_PB.encode(params).finish()
+
+    const bucketedVariable = getBucketingLib().variableForUser_PB(buffer)
+    if (!bucketedVariable) return null
+    return pbSDKVariableTransform(SDKVariable_PB.decode(bucketedVariable))
 }

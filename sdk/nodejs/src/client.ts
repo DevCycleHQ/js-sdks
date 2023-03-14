@@ -6,7 +6,11 @@ import {
     DVCEvent
 } from './types'
 import { EnvironmentConfigManager } from './environmentConfigManager'
-import { bucketUserForConfig, getVariableTypeCode, variableForUser } from './utils/userBucketingHelper'
+import {
+    bucketUserForConfig,
+    getVariableTypeCode,
+    variableForUser_PB
+} from './utils/userBucketingHelper'
 import { DVCVariable, VariableParam } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
 import { EventQueue, EventTypes } from './eventQueue'
@@ -132,7 +136,7 @@ export class DVCClient {
             })
         }
 
-        const configVariable = variableForUser(this.sdkKey, populatedUser, key, getVariableTypeCode(type))
+        const configVariable = variableForUser_PB(this.sdkKey, populatedUser, key, getVariableTypeCode(type))
 
         const options: VariableParam<T> = {
             key,

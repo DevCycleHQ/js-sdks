@@ -4,7 +4,8 @@
   ],
   "ignorePatterns": [
     "!**/*",
-    "node_modules/*"
+    "node_modules/*",
+    "src/pb-types/compiled*"
   ],
   "overrides": [
     {

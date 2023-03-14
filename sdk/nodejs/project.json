@@ -45,6 +45,24 @@
           }
       ]
     },
+    "compile-pb": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+          "commands": [
+              {
+                  "command": "rm -rf compiled.js compiled.d.ts"
+              },
+              {
+                  "command": "pbjs -t static-module --keep-case -w commonjs -o compiled.js ../../../../lib/shared/bucketing-assembly-script/protobuf/*.proto"
+              },
+              {
+                  "command": "pbts -o compiled.d.ts compiled.js"
+              }
+          ],
+          "cwd": "sdk/nodejs/src/pb-types",
+          "parallel": false
+      }
+    },
     "build": {
       "executor": "@nrwl/js:tsc",
       "outputs": [
@@ -60,12 +78,16 @@
           "sdk/nodejs/*.md"
         ]
       },
-        "dependsOn": [
-            {
-                "target": "build",
-                "projects": "dependencies"
-            }
-        ]
+      "dependsOn": [
+        {
+            "target": "compile-pb",
+            "projects": "self"
+        },
+        {
+            "target": "build",
+            "projects": "dependencies"
+        }
+      ]
     },
     "npm-publish": {
       "executor": "@nrwl/workspace:run-commands",

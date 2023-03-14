@@ -61,7 +61,7 @@ describe('variable', () => {
 
     it('returns a valid variable object for a variable that is not in the config', () => {
         // @ts-ignore
-        getBucketingLib().variableForUser.mockReturnValueOnce(null)
+        getBucketingLib().variableForUser_PB.mockReturnValueOnce(null)
         const variable = client.variable(user, 'test-key2', false)
         expect(variable.value).toEqual(false)
         expect(variable.isDefaulted).toEqual(true)
