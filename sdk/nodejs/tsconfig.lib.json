@@ -4,7 +4,8 @@
     "module": "commonjs",
     "outDir": "../../dist/out-tsc",
     "declaration": true,
-    "types": [
+      "allowJs": true,
+      "types": [
       "node"
     ]
   },
@@ -15,6 +16,8 @@
     "jest.config.ts"
   ],
   "include": [
-    "**/*.ts"
+    "**/*.ts",
+    "src/pb-types/compiled.js",
+    "src/pb-types/compiled.d.ts"
   ]
 }
