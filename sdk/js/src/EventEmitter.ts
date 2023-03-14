@@ -100,8 +100,9 @@ export class EventEmitter {
                         variable.callback?.call(variable, variable.value)
                     })
                 }
-                this.emit(`${EventNames.VARIABLE_UPDATED}:*`, key, newVariable)
-                this.emit(`${EventNames.VARIABLE_UPDATED}:${key}`, key, newVariable)
+                const finalVariable = newVariable || null 
+                this.emit(`${EventNames.VARIABLE_UPDATED}:*`, key, finalVariable)
+                this.emit(`${EventNames.VARIABLE_UPDATED}:${key}`, key, finalVariable)
             }
         })
         if (newVariables) {
@@ -116,9 +117,10 @@ export class EventEmitter {
             const newFeature = newFeatureSet[key]
             const newFeatureVariation = newFeature && newFeatureSet[key]._variation
 
+            const finalFeature = newFeature || null 
             if (oldFeatureVariation !== newFeatureVariation) {
-                this.emit(`${EventNames.FEATURE_UPDATED}:*`, key, newFeature)
-                this.emit(`${EventNames.FEATURE_UPDATED}:${key}`, key, newFeature)
+                this.emit(`${EventNames.FEATURE_UPDATED}:*`, key, finalFeature)
+                this.emit(`${EventNames.FEATURE_UPDATED}:${key}`, key, finalFeature)
             }
         })
     }

@@ -7,6 +7,7 @@ import {
     DVCEvent as ClientEvent,
     DVCUser,
     ErrorCallback,
+    DVCFeature,
 } from './types'
 import { DVCVariable, DVCVariableOptions } from './Variable'
 import { getConfigJson, saveEntity } from './Request'
@@ -25,6 +26,12 @@ import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
+
+type variableUpdatedHandler = (key: string, variable: DVCVariable<DVCVariableValue> | null) => void
+type featureUpdatedHandler = (key: string, feature: DVCFeature | null) => void
+type newVariablesHandler = () => void
+type errorHandler = (error: unknown) => void
+type initializedHandler = (success: boolean) => void
 
 export class DVCClient implements Client {
     private options: DVCOptions
@@ -257,6 +264,11 @@ export class DVCClient implements Client {
         return this.config?.variables || {}
     }
 
+    subscribe(key: `variableUpdated:${string}`, handler: variableUpdatedHandler): void;
+    subscribe(key: `newVariables:${string}`, handler: newVariablesHandler): void;
+    subscribe(key: `featureUpdated:${string}` , handler: featureUpdatedHandler): void;
+    subscribe(key: 'error' , handler: errorHandler): void;
+    subscribe(key: 'initialized' , handler: initializedHandler): void;
     subscribe(key: string, handler: (...args: any[]) => void): void {
         this.eventEmitter.subscribe(key, handler)
     }
