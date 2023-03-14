@@ -1,14 +1,21 @@
 let Bucketing: unknown
+
+const testVariable = {
+    _id: 'test-id',
+    value: true,
+    type: 'Boolean',
+    key: 'test-key',
+    evalReason: null
+}
+
 export const importBucketingLib = async (): Promise<void> => {
     Bucketing = await new Promise((resolve) => resolve({
         setConfigData: jest.fn(),
         setPlatformData: jest.fn(),
         generateBucketedConfigForUser: jest.fn().mockReturnValue(JSON.stringify({
-            variables: { ['test-key']: {
-                value: true,
-                type: 'Boolean'
-            } }
-        }))
+            variables: { 'test-key': testVariable }
+        })),
+        variableForUser: jest.fn().mockReturnValue(JSON.stringify(testVariable))
     }))
 }
 
