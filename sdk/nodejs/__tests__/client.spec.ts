@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { getBucketingLib } from '../src/bucketing'
 import { DVCClient } from '../src/client'
 import { DVCUser } from '../src/models/user'
