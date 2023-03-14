@@ -51,10 +51,16 @@ const diffMaps = (map1: Map<string, number>, map2: Map<string, number>) => {
     }
 
     const keys = Object.keys(diff).sort((a, b) => diff[b] - diff[a])
+
+    let sum = 0
+    map2.forEach((v) => sum += v)
+    console.log(`Total use ${sum/ 1e6} MB`)
+
     keys.filter((key) => diff[key] !== 0).forEach((key) => {
         const value = diff[key]
         console.log(`${key} use ${value} bytes`)
     })
+
 
     // console.log('Diff from first memory usage:')
     // console.log(diff)
