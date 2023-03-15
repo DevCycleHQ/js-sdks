@@ -8,6 +8,13 @@ const testVariable = {
     evalReason: null
 }
 
+enum VariableType {
+    Boolean,
+    Number,
+    String,
+    JSON,
+}
+
 export const importBucketingLib = async (): Promise<void> => {
     Bucketing = await new Promise((resolve) => resolve({
         setConfigData: jest.fn(),
@@ -15,7 +22,8 @@ export const importBucketingLib = async (): Promise<void> => {
         generateBucketedConfigForUser: jest.fn().mockReturnValue(JSON.stringify({
             variables: { 'test-key': testVariable }
         })),
-        variableForUser: jest.fn().mockReturnValue(JSON.stringify(testVariable))
+        variableForUser: jest.fn().mockReturnValue(JSON.stringify(testVariable)),
+        VariableType
     }))
 }
 

@@ -9,17 +9,16 @@ export function bucketUserForConfig(user: DVCPopulatedUser, token: string): Buck
 }
 
 export function getVariableTypeCode(type: VariableType): number {
-    // TODO: can't figure out how to get the enum values from the bucketing lib as its dynamically imported
-    // const Bucketing = getBucketingLib()
+    const Bucketing = getBucketingLib()
     switch (type) {
         case VariableType.boolean:
-            return 0 //Bucketing.VariableType.Boolean
+            return Bucketing.VariableType.Boolean
         case VariableType.number:
-            return 1 //Bucketing.VariableType.Number
+            return Bucketing.VariableType.Number
         case VariableType.string:
-            return 2 //Bucketing.VariableType.String
+            return Bucketing.VariableType.String
         case VariableType.json:
-            return 3 //Bucketing.VariableType.JSON
+            return Bucketing.VariableType.JSON
         default:
             throw new Error(`Unknown variable type: ${type}`)
     }
