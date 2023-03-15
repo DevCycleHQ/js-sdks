@@ -1,7 +1,9 @@
 import { BucketedUserConfig, SDKVariable, VariableType } from '@devcycle/types'
 import { DVCPopulatedUser } from '../models/populatedUser'
 import { getBucketingLib } from '../bucketing'
-import { VariableForUserParams_PB, SDKVariable_PB } from '../pb-types/compiled'
+import {
+    VariableForUserParams_PB, SDKVariable_PB
+} from '@devcycle/bucketing-assembly-script/protobuf/compiled'
 import { pbSDKVariableTransform } from '../pb-types/pbTypeHelpers'
 
 export function bucketUserForConfig(user: DVCPopulatedUser, token: string): BucketedUserConfig {

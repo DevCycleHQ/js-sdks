@@ -1,4 +1,4 @@
-import { SDKVariable_PB } from '../pb-types/compiled'
+import { SDKVariable_PB } from '@devcycle/bucketing-assembly-script/protobuf/compiled'
 
 let Bucketing: unknown
 

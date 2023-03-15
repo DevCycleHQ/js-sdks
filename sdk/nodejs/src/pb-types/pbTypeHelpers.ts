@@ -1,28 +1,28 @@
-import { SDKVariable_PB, VariableType_PB } from './compiled'
 import { SDKVariable, VariableType, VariableValue } from '@devcycle/types'
+import { ProtobufTypes } from '@devcycle/bucketing-assembly-script'
 
 type GetVariableType = {
     type: VariableType,
     value: VariableValue
 }
-function getVariableTypeFromPB(variable: SDKVariable_PB): GetVariableType {
+function getVariableTypeFromPB(variable: ProtobufTypes.SDKVariable_PB): GetVariableType {
     switch (variable.type) {
-        case VariableType_PB.Boolean:
+        case ProtobufTypes.VariableType_PB.Boolean:
             return {
                 type: VariableType.boolean,
                 value: variable.boolValue
             }
-        case VariableType_PB.Number:
+        case ProtobufTypes.VariableType_PB.Number:
             return {
                 type: VariableType.number,
                 value: variable.doubleValue
             }
-        case VariableType_PB.String:
+        case ProtobufTypes.VariableType_PB.String:
             return {
                 type: VariableType.string,
                 value: variable.stringValue
             }
-        case VariableType_PB.JSON:
+        case ProtobufTypes.VariableType_PB.JSON:
             return {
                 type: VariableType.json,
                 value: JSON.stringify(variable.stringValue)
@@ -32,7 +32,7 @@ function getVariableTypeFromPB(variable: SDKVariable_PB): GetVariableType {
     }
 }
 
-export function pbSDKVariableTransform(variable: SDKVariable_PB): SDKVariable {
+export function pbSDKVariableTransform(variable: ProtobufTypes.SDKVariable_PB): SDKVariable {
     const { type, value } = getVariableTypeFromPB(variable)
 
     return {

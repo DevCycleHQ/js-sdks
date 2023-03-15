@@ -116,6 +116,9 @@ export class NullableDouble implements INullableDouble {
     /** NullableDouble isNull. */
     public isNull: boolean;
 
+    /** NullableDouble dummy. */
+    public dummy: string;
+
     /**
      * Creates a new NullableDouble instance using the specified properties.
      * @param [properties] Properties to set
