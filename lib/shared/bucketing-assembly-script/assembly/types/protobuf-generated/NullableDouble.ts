@@ -5,7 +5,6 @@
 
 import { Writer, Reader, Protobuf } from "as-proto/assembly";
 
-@unmanaged
 export class NullableDouble {
   static encode(message: NullableDouble, writer: Writer): void {
     writer.uint32(9);
@@ -13,6 +12,9 @@ export class NullableDouble {
 
     writer.uint32(16);
     writer.bool(message.isNull);
+
+    writer.uint32(26);
+    writer.string(message.dummy);
   }
 
   static decode(reader: Reader, length: i32): NullableDouble {
@@ -30,6 +32,10 @@ export class NullableDouble {
           message.isNull = reader.bool();
           break;
 
+        case 3:
+          message.dummy = reader.string();
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -41,10 +47,12 @@ export class NullableDouble {
 
   value: f64;
   isNull: bool;
+  dummy: string;
 
-  constructor(value: f64 = 0.0, isNull: bool = false) {
+  constructor(value: f64 = 0.0, isNull: bool = false, dummy: string = "") {
     this.value = value;
     this.isNull = isNull;
+    this.dummy = dummy;
   }
 }
 

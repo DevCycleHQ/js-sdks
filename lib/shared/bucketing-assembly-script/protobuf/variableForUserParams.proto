@@ -15,6 +15,7 @@ message NullableString {
 message NullableDouble {
   double value = 1;
   bool isNull = 2;
+  string dummy = 3;
 }
 
 enum CustomDataType {

@@ -131,7 +131,7 @@ describe('protobuf variable tests', () => {
                         name: { value: 'name', isNull: false },
                         language: { value: 'en', isNull: false },
                         country: { value: 'CA', isNull: false },
-                        appBuild: { value: 610.0, isNull: false },
+                        appBuild: { value: 610.0, isNull: false, dummy: '' },
                         appVersion: { value: '1.0.0', isNull: false },
                         deviceModel: { value: 'NodeJS', isNull: false },
                         customData: {
@@ -192,7 +192,7 @@ describe('protobuf variable tests', () => {
                     name: { value: 'name', isNull: false },
                     language: { value: 'en', isNull: false },
                     country: { value: 'CA', isNull: false },
-                    appBuild: { value: 610.0, isNull: false },
+                    appBuild: { value: 610.0, isNull: false, dummy: '' },
                     appVersion: { value: '1.0.0', isNull: false },
                     deviceModel: { value: 'NodeJS', isNull: false },
                     customData: {
@@ -235,7 +235,7 @@ describe('protobuf variable tests', () => {
                     name: { value: '', isNull: true },
                     language: { value: '', isNull: true },
                     country: { value: '', isNull: true },
-                    appBuild: { value: 0, isNull: true },
+                    appBuild: { value: 0, isNull: true, dummy: '' },
                     appVersion: { value: '', isNull: true },
                     deviceModel: { value: '', isNull: true },
                     customData: { value: {}, isNull: true },
