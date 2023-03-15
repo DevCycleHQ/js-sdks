@@ -54,19 +54,24 @@ export class ConfigRequestConsolidator {
         }
 
         const resolvers = this.resolvers.splice(0)
-        await this.performRequest(this.nextUser).then((result) => {
+
+        let result: BucketedUserConfig | undefined = undefined
+        try {
+            result = await this.performRequest(this.nextUser)
             if (this.resolvers.length) {
                 // if more resolvers have been registered since this request was made, don't resolve anything and just
                 // make another request while keeping all the previous resolvers
                 this.resolvers.push(...resolvers)
             } else {
-                resolvers.forEach(({ resolve }) => resolve(result))
-                this.handleConfigReceivedFunction(result, this.nextUser)
+                resolvers.forEach(({ resolve }) => resolve(result as BucketedUserConfig))
             }
-        }).catch((err) => {
+        } catch (err) {
             resolvers.forEach(({ reject }) => reject(err))
-        })
-
+        }
+        
+        if (result) {
+            this.handleConfigReceivedFunction(result, this.nextUser)
+        }
         if (this.resolvers.length) {
             this.processQueue()
         }
