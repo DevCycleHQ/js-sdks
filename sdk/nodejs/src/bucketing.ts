@@ -25,7 +25,7 @@ export const importBucketingLib = async (
 export const startTrackingMemoryUsage = (
     logger?: DVCLogger,
     reporter?: DVCReporter,
-    interval: number = 10 * 1000
+    interval: number = 30 * 1000
 ): void => {
     if (!reporter) return
     setTimeout(() => {
