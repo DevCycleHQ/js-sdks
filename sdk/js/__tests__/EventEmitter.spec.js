@@ -1,6 +1,28 @@
 import { EventEmitter } from '../src/EventEmitter'
-import { DVCVariable } from '../src/Variable'
+import { DVCClient } from '../src/Client'
+import { DVCPopulatedUser } from '../src/User'
 
+const testConfig = {
+    project: {
+        settings: {
+            edgeDB: {
+                enabled: true
+            }
+        }
+    },
+    environment: {},
+    features: {},
+    featureVariationMap: {},
+    variables: {
+        key: {
+            _id: 'id',
+            value: 'value1',
+            type: 'String',
+            default_value: 'default_value'
+        }
+    },
+    etag: '123'
+}
 describe('EventEmitter tests', () => {
     const eventEmitter = new EventEmitter()
 
@@ -290,6 +312,80 @@ describe('EventEmitter tests', () => {
             eventEmitter.emitFeatureUpdates(oldFeatureSet, newFeatureSet)
             expect(allUpdatesHandler).toBeCalledWith('my-feature-key', newFeatureSet['my-feature-key'])
             expect(featureKeyHandler).toBeCalledWith('my-feature-key', newFeatureSet['my-feature-key'])
+        })
+    })
+
+    describe('emit configUpdates', () => {
+        it('should emit config updated event', () => {
+            const configHandler = jest.fn()
+            const variableSet = {
+                'my-variable-key': {
+                    _id: 'variable_id',
+                    key: 'my-variable-key',
+                    value: 'my-new-value',
+                    type: 'my-type'
+                }
+            }
+            eventEmitter.subscribe('configUpdated', configHandler)
+            eventEmitter.emitConfigUpdate(variableSet)
+            expect(configHandler).toBeCalledWith(variableSet)
+        })
+
+        it('should unsubscribe from config updated event', () => {
+            const configHandler = jest.fn()
+            const variableSet = {
+                'my-variable-key': {
+                    _id: 'variable_id',
+                    key: 'my-variable-key',
+                    value: 'my-new-value',
+                    type: 'my-type'
+                }
+            }
+            eventEmitter.subscribe('configUpdated', configHandler)
+            eventEmitter.unsubscribe('configUpdated')
+            eventEmitter.emitConfigUpdate(variableSet)
+            expect(configHandler).not.toHaveBeenCalled()
+        })
+
+        it('fires when first config recieved', () => {
+            const configHandler = jest.fn()
+            const client = new DVCClient('test_sdk_key', { user_id: 'user1' })
+            client.eventEmitter = eventEmitter
+            eventEmitter.subscribe('configUpdated', configHandler)
+            client.handleConfigReceived(
+                testConfig, 
+                new DVCPopulatedUser({ user_id: 'user1' }, null), 
+                123
+            )
+            expect(configHandler).toHaveBeenCalledWith(testConfig.variables)
+        })
+
+        it('doesnt fire when config recieved with same etag', () => {
+            const configHandler = jest.fn()
+            const client = new DVCClient('test_sdk_key', { user_id: 'user1' })
+            client.eventEmitter = eventEmitter
+            client.config = testConfig
+            eventEmitter.subscribe('configUpdated', configHandler)
+            client.handleConfigReceived(
+                testConfig, 
+                new DVCPopulatedUser({ user_id: 'user1' }, null), 
+                123
+            )
+            expect(configHandler).not.toHaveBeenCalled()
+        })
+
+        it('fires when config recieved with different etag', () => {
+            const configHandler = jest.fn()
+            const client = new DVCClient('test_sdk_key', { user_id: 'user1' })
+            client.eventEmitter = eventEmitter
+            client.config = {...testConfig, etag: '567'}
+            eventEmitter.subscribe('configUpdated', configHandler)
+            client.handleConfigReceived(
+                testConfig, 
+                new DVCPopulatedUser({ user_id: 'user1' }, null), 
+                123
+            )
+            expect(configHandler).toHaveBeenCalledWith(testConfig.variables)
         })
     })
 })
