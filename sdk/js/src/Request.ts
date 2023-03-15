@@ -92,9 +92,10 @@ export const getConfigJson = async (
         const res = await get(url)
         return res.data
     } catch (ex: any) {
+        const errorString = JSON.stringify(ex?.response?.data.data.errors)
         logger.error(`Request to get config failed for url: ${url}, ` +
-            `response message: ${ex.message}, response data: ${ex?.response?.data}`)
-        throw new Error('Failed to download DevCycle config.')
+            `response message: ${ex.message}, response data: ${errorString}`)
+        throw new Error(`Failed to download DevCycle config. Error details: ${errorString}`)
     }
 }
 
