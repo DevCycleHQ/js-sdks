@@ -8,9 +8,17 @@ const EventNames = {
     ERROR: 'error',
     VARIABLE_UPDATED: 'variableUpdated',
     FEATURE_UPDATED: 'featureUpdated',
+    CONFIG_UPDATED: 'configUpdated',
 }
 
 type eventHandler = (...args: any[]) => void
+
+const isInvalidEventKey = (key: string): boolean => {
+    return !Object.values(EventNames).includes(key) &&
+    !key.startsWith(EventNames.VARIABLE_UPDATED) &&
+    !key.startsWith(EventNames.FEATURE_UPDATED) &&
+    !key.startsWith(EventNames.NEW_VARIABLES)
+}
 
 export class EventEmitter {
     events: Record<string, eventHandler[]>
@@ -23,11 +31,7 @@ export class EventEmitter {
         checkParamType('key', key, 'string')
         checkParamType('handler', handler, 'function')
 
-        const eventNames = Object.keys(EventNames).map((e) => e.toLowerCase())
-        if (!eventNames.includes(key) &&
-            !key.startsWith(EventNames.VARIABLE_UPDATED) &&
-            !key.startsWith(EventNames.FEATURE_UPDATED) &&
-            !key.startsWith(EventNames.NEW_VARIABLES)) {
+        if (isInvalidEventKey(key)) {
             throw new Error('Not a valid event to subscribe to')
         } else if (!this.events[key]) {
             this.events[key] = [ handler ]
@@ -39,8 +43,7 @@ export class EventEmitter {
     unsubscribe(key: string, handler?: eventHandler): void {
         checkParamType('key', key, 'string')
 
-        const eventNames = Object.keys(EventNames).map((e) => e.toLowerCase())
-        if (!eventNames.includes(key)) {
+        if (isInvalidEventKey(key)) {
             return
         } else if (!handler) {
             this.events[key] = []
@@ -69,6 +72,10 @@ export class EventEmitter {
 
     emitError(error: unknown): void {
         this.emit(EventNames.ERROR, error)
+    }
+
+    emitConfigUpdate(newVariableSet: DVCVariableSet): void {
+        this.emit(EventNames.CONFIG_UPDATED, newVariableSet)
     }
 
     emitVariableUpdates(

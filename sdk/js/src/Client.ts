@@ -330,6 +330,10 @@ export class DVCClient implements Client {
         const oldVariables = oldConfig?.variables || {}
         this.eventEmitter.emitFeatureUpdates(oldFeatures, config.features)
         this.eventEmitter.emitVariableUpdates(oldVariables, config.variables, this.variableDefaultMap)
+
+        if (!oldConfig || (oldConfig.etag !== this.config.etag)) {
+            this.eventEmitter.emitConfigUpdate(config.variables)
+        }
     }
 
     private onSSEMessage(message: unknown) {
