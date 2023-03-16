@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option go_package = "./proto";
+
 enum VariableType_PB {
     Boolean = 0;
     Number = 1;
