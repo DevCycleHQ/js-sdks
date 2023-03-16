@@ -252,12 +252,16 @@ describe('Config Parsing and Generating', () => {
             country: 'U S AND A',
             user_id: 'asuh',
             customData: {
-                favouriteFood: 'pizza'
+                favouriteFood: 'pizza',
+                publicNull: null,
+                publicUndefined: undefined
             },
             privateCustomData: {
                 favouriteDrink: 'coffee',
                 favouriteNumber: 610,
-                favouriteBoolean: true
+                favouriteBoolean: true,
+                privateNull: null,
+                privateUndefined: undefined
             },
             platformVersion: '1.1.2',
             os: 'Android',
@@ -420,12 +424,16 @@ describe('Config Parsing and Generating', () => {
             country: 'U S AND A',
             user_id: 'asuh',
             customData: {
-                favouriteFood: 'pizza'
+                favouriteFood: 'pizza',
+                publicNull: null,
+                publicUndefined: undefined
             },
             privateCustomData: {
                 favouriteDrink: 'coffee',
                 favouriteNumber: 610,
-                favouriteBoolean: true
+                favouriteBoolean: true,
+                privateNull: null,
+                privateUndefined: undefined
             },
             platformVersion: '1.1.2',
             os: 'Android',
@@ -485,10 +493,14 @@ describe('Config Parsing and Generating', () => {
             country: 'U S AND A',
             user_id: 'pass_rollout',
             customData: {
-                favouriteFood: 'pizza'
+                favouriteFood: 'pizza',
+                publicNull: null,
+                publicUndefined: undefined
             },
             privateCustomData: {
-                favouriteDrink: 'coffee'
+                favouriteDrink: 'coffee',
+                privateNull: null,
+                privateUndefined: undefined
             },
             platformVersion: '1.1.2',
             os: 'Android',
@@ -613,12 +625,16 @@ describe('Config Parsing and Generating', () => {
             country: 'U S AND A',
             user_id: 'pass_rollout',
             customData: {
-                favouriteFood: 'pizza'
+                favouriteFood: 'pizza',
+                publicNull: null,
+                publicUndefined: undefined
             },
             privateCustomData: {
                 favouriteDrink: 'coffee',
                 favouriteNumber: 610,
-                favouriteBoolean: true
+                favouriteBoolean: true,
+                privateNull: null,
+                privateUndefined: undefined
             },
             platformVersion: '1.1.2',
             os: 'Android',
@@ -812,6 +828,8 @@ describe('Client Data', () => {
             user_id: 'client-test',
             customData: {
                 favouriteFood: 'pizza',
+                publicNull: null,
+                publicUndefined: undefined
             },
             platformVersion: '1.1.2'
         }
@@ -846,6 +864,8 @@ describe('Client Data', () => {
             user_id: 'hates-pizza',
             customData: {
                 favouriteFood: 'NOT PIZZA!!',
+                publicNull: null,
+                publicUndefined: undefined
             },
             platformVersion: '1.1.2'
         }
