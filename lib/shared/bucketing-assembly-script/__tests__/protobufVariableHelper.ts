@@ -71,7 +71,7 @@ const customDataToPB = (customData: any): Record<string, CustomDataValuePB> | un
             customDataPB[key] = { type: CustomDataTypePB.Num, doubleValue: value }
         } else if (typeof value === 'string') {
             customDataPB[key] = { type: CustomDataTypePB.Str, stringValue: value }
-        } else if (value === null) {
+        } else if (value === null || value === undefined) {
             customDataPB[key] = { type: CustomDataTypePB.Null }
         } else {
             throw new Error(`Unknown custom data type: ${typeof value}`)

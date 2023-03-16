@@ -27,7 +27,17 @@ describe('DVCClient', () => {
 describe('variable', () => {
     const user = {
         user_id: 'node_sdk_test',
-        country: 'CA'
+        country: 'CA',
+        customData: {
+            test: 'test',
+            publicNull: null,
+            publicUndefined: undefined
+        },
+        privateCustomData: {
+            private: 'private',
+            privateNull: null,
+            privateUndefined: undefined
+        }
     }
     const expectedUser = expect.objectContaining({
         user_id: 'node_sdk_test',
