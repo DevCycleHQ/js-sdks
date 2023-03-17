@@ -45,11 +45,26 @@
         }
       ]
     },
-    "compile-pb": {
+    "compile-pb-js": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+          "commands": [
+              {
+                  "command": "rm -rf compiled.js compiled.d.ts"
+              },
+              {
+                  "command": "pbjs -t static-module --keep-case -w commonjs -o compiled.js ./*.proto"
+              },
+              {
+                  "command": "pbts -o compiled.d.ts compiled.js"
+              }
+          ],
+          "cwd": "lib/shared/bucketing-assembly-script/protobuf",
+          "parallel": false
+      }
+    },
+    "compile-pb-as": {
         "executor": "@nrwl/workspace:run-commands",
-        "outputs": [
-            "lib/shared/bucketing-assembly-script"
-        ],
         "options": {
             "commands": [
                 {
@@ -100,7 +115,11 @@
       },
       "dependsOn": [
         {
-          "target": "compile-pb",
+          "target": "compile-pb-js",
+          "projects": "self"
+        },
+        {
+          "target": "compile-pb-as",
           "projects": "self"
         }
       ]

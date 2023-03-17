@@ -1,20 +1,8 @@
-import path from 'path'
-import protobuf from 'protobufjs'
 import { SDKVariable, VariableType as VariableTypeStr } from '@devcycle/types'
 import {
     variableForUser_PB, VariableType
 } from './bucketingImportHelper'
-
-// TODO replace all this PB importing + types once we import the pb file directly into static JS Classes
-const protoFile = '../protobuf/variableForUserParams.proto'
-const filePath = path.resolve(__dirname, protoFile)
-const root = protobuf.loadSync(filePath)
-
-const VariableForUserParams_PB = root.lookupType('VariableForUserParams_PB')
-if (!VariableForUserParams_PB) throw new Error('VariableForUserParams_PB not found')
-
-const SDKVariable_PB = root.lookupType('SDKVariable_PB')
-if (!SDKVariable_PB) throw new Error('SDKVariable_PB not found')
+import { VariableForUserParams_PB, SDKVariable_PB } from '../protobuf/compiled'
 
 type SDKVariable_PB_Type = {
     _id: string
@@ -104,7 +92,7 @@ export const variableForUserPB = (
         variableKey,
         variableType,
         user: {
-            userId: user.user_id,
+            user_id: user.user_id,
             email: user.email ? { value: user.email, isNull: false } : undefined,
             name: user.name ? { value: user.name, isNull: false } : undefined,
             language: user.language ? { value: user.language, isNull: false } : undefined,
@@ -123,7 +111,6 @@ export const variableForUserPB = (
     const pbMsg = VariableForUserParams_PB.create(params)
     const buffer = VariableForUserParams_PB.encode(pbMsg).finish()
     const resultBuffer = variableForUser_PB(buffer)
-    if (!resultBuffer) return null
-    const pbSDKVariable = SDKVariable_PB.decode(resultBuffer!) as unknown as SDKVariable_PB_Type
-    return pbSDKVariableToJS(pbSDKVariable)
+
+    return !resultBuffer ? null : pbSDKVariableToJS(SDKVariable_PB.decode(resultBuffer))
 }

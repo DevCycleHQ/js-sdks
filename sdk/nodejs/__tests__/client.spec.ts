@@ -61,7 +61,7 @@ describe('variable', () => {
 
     it('returns a valid variable object for a variable that is not in the config', () => {
         // @ts-ignore
-        getBucketingLib().variableForUser.mockReturnValueOnce(null)
+        getBucketingLib().variableForUser_PB.mockReturnValueOnce(null)
         const variable = client.variable(user, 'test-key2', false)
         expect(variable.value).toEqual(false)
         expect(variable.isDefaulted).toEqual(true)
@@ -77,6 +77,8 @@ describe('variable', () => {
 
     it('returns a variable with the correct type for string', () => {
         const variable = client.variable(user, 'test-key', 'test')
+        expect(typeof variable.value).toEqual('string')
+        expect(variable.type).toBe('String')
         // this will be a type error for non-strings
         variable.value.concat()
         // should allow assignment to different string
@@ -86,13 +88,16 @@ describe('variable', () => {
 
     it('returns a variable with the correct type for number', () => {
         const variable = client.variable(user, 'test-key', 1)
+        expect(typeof variable.value).toEqual('number')
+        expect(variable.type).toBe('Number')
         // this will be a type error for non-numbers
         variable.value.toFixed()
     })
 
     it('returns a variable with the correct type for JSON', () => {
         const variable = client.variable(user, 'test-key', { key: 'test' })
-        // this will be a type error for non-JSON
-        console.log(variable.value.asdasdas)
+        expect(variable.value).toBeInstanceOf(Object)
+        expect(variable.type).toBe('JSON')
+        expect(variable.value).toEqual({ key: 'test' })
     })
 })

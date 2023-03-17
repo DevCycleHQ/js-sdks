@@ -1,3 +1,5 @@
+import { ProtobufTypes } from '@devcycle/bucketing-assembly-script'
+
 let Bucketing: unknown
 
 const testVariable = {
@@ -7,6 +9,14 @@ const testVariable = {
     key: 'test-key',
     evalReason: null
 }
+const buffer = ProtobufTypes.SDKVariable_PB.encode({
+    _id: testVariable._id,
+    type: 0,
+    key: testVariable.key,
+    boolValue: testVariable.value,
+    doubleValue: 0,
+    stringValue: ''
+}).finish()
 
 enum VariableType {
     Boolean,
@@ -23,6 +33,7 @@ export const importBucketingLib = async (): Promise<void> => {
             variables: { 'test-key': testVariable }
         })),
         variableForUser: jest.fn().mockReturnValue(JSON.stringify(testVariable)),
+        variableForUser_PB: jest.fn().mockReturnValue(buffer),
         VariableType
     }))
 }

@@ -60,12 +60,12 @@
           "sdk/nodejs/*.md"
         ]
       },
-        "dependsOn": [
-            {
-                "target": "build",
-                "projects": "dependencies"
-            }
-        ]
+      "dependsOn": [
+        {
+            "target": "build",
+            "projects": "dependencies"
+        }
+      ]
     },
     "npm-publish": {
       "executor": "@nrwl/workspace:run-commands",
