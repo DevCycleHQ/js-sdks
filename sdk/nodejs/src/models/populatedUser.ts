@@ -77,29 +77,25 @@ export function getNullableCustomDataValue(customData?: DVCJSON): ProtobufTypes.
         return ProtobufTypes.NullableCustomData.create({ value: {}, isNull: true })
     }
 
-    const valuesMap = new Map<string, ProtobufTypes.CustomDataValue>()
+    const valuesMap: Record<string, ProtobufTypes.CustomDataValue> = {}
     for (const key in customData) {
         const value = customData[key]
         if (typeof value === 'boolean') {
-            valuesMap.set(
-                key,
-                ProtobufTypes.CustomDataValue.create({ type: ProtobufTypes.CustomDataType.Bool, boolValue: value })
-            )
+            valuesMap[key] = ProtobufTypes.CustomDataValue.create({
+                type: ProtobufTypes.CustomDataType.Bool, boolValue: value
+            })
         } else if (typeof value === 'number') {
-            valuesMap.set(
-                key,
-                ProtobufTypes.CustomDataValue.create({ type: ProtobufTypes.CustomDataType.Num, doubleValue: value })
-            )
+            valuesMap[key] = ProtobufTypes.CustomDataValue.create({
+                type: ProtobufTypes.CustomDataType.Num, doubleValue: value
+            })
         } else if (typeof value === 'string') {
-            valuesMap.set(
-                key,
-                ProtobufTypes.CustomDataValue.create({ type: ProtobufTypes.CustomDataType.Str, stringValue: value })
-            )
+            valuesMap[key] = ProtobufTypes.CustomDataValue.create({
+                type: ProtobufTypes.CustomDataType.Str, stringValue: value
+            })
         } else if (value === null || value === undefined) {
-            valuesMap.set(
-                key,
-                ProtobufTypes.CustomDataValue.create({ type: ProtobufTypes.CustomDataType.Null })
-            )
+            valuesMap[key] = ProtobufTypes.CustomDataValue.create({
+                type: ProtobufTypes.CustomDataType.Null
+            })
         } else {
             throw new Error(`Unknown custom data type for ProtobufTypes.NullableCustomData: ${typeof value}`)
         }

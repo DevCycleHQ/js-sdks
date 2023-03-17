@@ -21,6 +21,7 @@ describe('DVCUser', () => {
 
     describe('protobuf tests', () => {
         it('should format a protobuf user correctly', () => {
+            const customData = { strKey: 'string', numKey: 2056, boolKey: false, nullKey: null }
             const dvcUser = new DVCPopulatedUser(new DVCUser({
                 user_id: 'user_id',
                 email: 'email',
@@ -30,10 +31,31 @@ describe('DVCUser', () => {
                 appVersion: '1.0.0',
                 appBuild: 111,
                 // @ts-ignore
-                customData: { strKey: 'string', numKey: 2056, boolKey: false, nullKey: null },
+                customData,
                 // @ts-ignore
-                privateCustomData: { strKey: 'string', numKey: 2056, boolKey: false, nullKey: null }
+                privateCustomData: customData
             }))
+            const expectedCustomData = {
+                'isNull': false,
+                'value':  {
+                    'boolKey':  {
+                        'boolValue': false,
+                        'type': 'Bool',
+                    },
+                    'nullKey':  {
+                        'type': 'Null',
+                    },
+                    'numKey':  {
+                        'doubleValue': 2056,
+                        'type': 'Num',
+                    },
+                    'strKey':  {
+                        'stringValue': 'string',
+                        'type': 'Str',
+                    }
+                }
+            }
+
             const pbUser = dvcUser.toPBUser()
             const buffer = ProtobufTypes.DVCUser_PB.encode(pbUser).finish()
             expect(buffer).not.toBeNull()
@@ -69,13 +91,51 @@ describe('DVCUser', () => {
                     'value': 'name',
                 },
             }))
-            expect(decodedUser.customData.toJSON()).toEqual({})
-            expect(decodedUser.privateCustomData.toJSON()).toEqual({})
+            expect(decodedUser.customData.toJSON()).toEqual(expectedCustomData)
+            expect(decodedUser.privateCustomData.toJSON()).toEqual(expectedCustomData)
         })
 
         it('should format customData protobuf correctly', () => {
             const customData = { strKey: 'string', numKey: 2056, boolKey: false, nullKey: null }
+            // @ts-ignore
             const pbCustomData = getNullableCustomDataValue(customData)
+            const buffer = ProtobufTypes.NullableCustomData.encode(pbCustomData).finish()
+            expect(buffer).not.toBeNull()
+            const decodedCustomData = ProtobufTypes.NullableCustomData.decode(buffer)
+            expect(decodedCustomData.toJSON()).toEqual({
+                'isNull': false,
+                'value':  {
+                    'boolKey':  {
+                        'boolValue': false,
+                        'type': 'Bool',
+                    },
+                    'nullKey':  {
+                        'type': 'Null',
+                    },
+                    'numKey':  {
+                        'doubleValue': 2056,
+                        'type': 'Num',
+                    },
+                    'strKey':  {
+                        'stringValue': 'string',
+                        'type': 'Str',
+                    }
+                }
+            })
+        })
+
+        it('should format customDataValue protobuf correctly', () => {
+            const stringCDValue = ProtobufTypes.CustomDataValue.create({
+                type: ProtobufTypes.CustomDataType.Str,
+                stringValue: 'string-value'
+            })
+            const buffer = ProtobufTypes.CustomDataValue.encode(stringCDValue).finish()
+            expect(buffer).not.toBeNull()
+            const decodedCustomDataValue = ProtobufTypes.CustomDataValue.decode(buffer)
+            expect(decodedCustomDataValue.toJSON()).toEqual({
+                stringValue: 'string-value',
+                type: 'Str'
+            })
         })
     })
 })
