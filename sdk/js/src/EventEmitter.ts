@@ -20,10 +20,20 @@ const isInvalidEventKey = (key: string): boolean => {
     !key.startsWith(EventNames.NEW_VARIABLES)
 }
 
-export class EventEmitter {
-    events: Record<string, eventHandler[]>
+
+const callHandler = (event: Event, handler: eventHandler): void  => {
+    const args = (<CustomEvent<any[]>>event).detail
+    handler(...args)
+}
+
+export class EventEmitter extends EventTarget {
+    events: Record<string, {
+        handler: eventHandler,
+        handlerWrapper: eventHandler
+    }[]>
 
     constructor() {
+        super()
         this.events = {}
     }
 
@@ -33,10 +43,14 @@ export class EventEmitter {
 
         if (isInvalidEventKey(key)) {
             throw new Error('Not a valid event to subscribe to')
-        } else if (!this.events[key]) {
-            this.events[key] = [ handler ]
+        }  
+        
+        const handlerWrapper = (event: Event) => callHandler(event, handler)
+        this.addEventListener(key, handlerWrapper)
+        if (!this.events[key]) {
+            this.events[key] = [ { handler, handlerWrapper } ]
         } else {
-            this.events[key].push(handler)
+            this.events[key].push({ handler, handlerWrapper })
         }
     }
 
@@ -45,25 +59,29 @@ export class EventEmitter {
 
         if (isInvalidEventKey(key)) {
             return
-        } else if (!handler) {
-            this.events[key] = []
+        }
+
+        if (handler) {
+            // find the handler wrapper (the actual event listener) for this handler
+            const handlerIndex = this.events[key]
+                .findIndex((handlerPair) => handlerPair.handler == handler)
+            const handlerWrapper = handlerIndex > -1 ? this.events[key][handlerIndex]?.handlerWrapper : undefined 
+
+            // remove listener and reference to wrapper
+            handlerWrapper && this.removeEventListener(key, handlerWrapper)
+            this.events[key].splice(handlerIndex, 1)
         } else {
-            this.events[key] = this.events[key].filter((eventHandler) => eventHandler !== handler)
+            // remove all listeners
+            this.events[key].map(({ handlerWrapper }) => {
+                this.removeEventListener(key, handlerWrapper)
+            })
+            this.events[key] = []
         }
     }
 
     emit(key: string, ...args: any[]): void {
         checkParamType('key', key, 'string')
-
-        const handlers = this.events[key]
-        if (!handlers) {
-            this.events[key] = []
-            return
-        }
-
-        handlers.forEach((handler) => {
-            handler(...args)
-        })
+        this.dispatchEvent(new CustomEvent(key, { detail: args }))
     }
 
     emitInitialized(success: boolean): void {

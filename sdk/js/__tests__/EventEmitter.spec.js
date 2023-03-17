@@ -48,7 +48,7 @@ describe('EventEmitter tests', () => {
         it('should subscribe to event', () => {
             const handler = jest.fn()
             eventEmitter.subscribe('initialized', handler)
-            expect(eventEmitter.events['initialized'][0]).toEqual(handler)
+            expect(eventEmitter.events['initialized'][0].handler).toEqual(handler)
         })
 
         it('should subscribe with more than one event', () => {
@@ -56,8 +56,8 @@ describe('EventEmitter tests', () => {
             const handler2 = jest.fn()
             eventEmitter.subscribe('initialized', handler1)
             eventEmitter.subscribe('initialized', handler2)
-            expect(eventEmitter.events['initialized'][0]).toEqual(handler1)
-            expect(eventEmitter.events['initialized'][1]).toEqual(handler2)
+            expect(eventEmitter.events['initialized'][0].handler).toEqual(handler1)
+            expect(eventEmitter.events['initialized'][1].handler).toEqual(handler2)
         })
     })
 
