@@ -6,7 +6,8 @@
     "!**/*",
     "node_modules/*",
     "build/*",
-    "assembly/types/protobuf-generated/*"
+    "assembly/types/protobuf-generated/*",
+    "protobuf/compiled*"
   ],
   "overrides": [
     {
