@@ -45,6 +45,24 @@
         }
       ]
     },
+    "benchmark": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+          "jestConfig": "lib/shared/bucketing-assembly-script/jest-bench.config.ts",
+          "passWithNoTests": false,
+          "codeCoverage": false
+      },
+      "dependsOn": [
+          {
+              "target": "build",
+              "projects": "self"
+          },
+          {
+              "target": "build:json",
+              "projects": "dependencies"
+          }
+      ]
+    },
     "compile-pb-js": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
