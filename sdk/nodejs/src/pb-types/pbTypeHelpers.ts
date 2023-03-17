@@ -25,7 +25,7 @@ function getVariableTypeFromPB(variable: ProtobufTypes.SDKVariable_PB): GetVaria
         case ProtobufTypes.VariableType_PB.JSON:
             return {
                 type: VariableType.json,
-                value: JSON.stringify(variable.stringValue)
+                value: JSON.parse(variable.stringValue)
             }
         default:
             throw new Error(`Unknown variable type: ${variable.type}`)
