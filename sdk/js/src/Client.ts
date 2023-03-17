@@ -32,6 +32,7 @@ type featureUpdatedHandler = (key: string, feature: DVCFeature | null) => void
 type newVariablesHandler = () => void
 type errorHandler = (error: unknown) => void
 type initializedHandler = (success: boolean) => void
+type configUpdatedHandler = (newVars: DVCVariableSet) => void
 
 export class DVCClient implements Client {
     private options: DVCOptions
@@ -269,6 +270,7 @@ export class DVCClient implements Client {
     subscribe(key: `featureUpdated:${string}` , handler: featureUpdatedHandler): void;
     subscribe(key: 'error' , handler: errorHandler): void;
     subscribe(key: 'initialized' , handler: initializedHandler): void;
+    subscribe(key: 'configUpdated' , handler: configUpdatedHandler): void;
     subscribe(key: string, handler: (...args: any[]) => void): void {
         this.eventEmitter.subscribe(key, handler)
     }
