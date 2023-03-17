@@ -6,7 +6,7 @@ import {
     variableForUserPreallocated,
     variableForUser_PB
 } from '../__tests__/variableSetupHelper'
-import { VariableType } from '../__tests__/bucketingImportHelper'
+import { initialize, VariableType } from '../__tests__/bucketingImportHelper'
 
 const user = {
     country: 'canada',
@@ -15,7 +15,8 @@ const user = {
 }
 
 benchmarkSuite('variableForUser', {
-    setupSuite() {
+    async setupSuite() {
+        await initialize(true)
         initSDK()
     },
     teardownSuite() {
