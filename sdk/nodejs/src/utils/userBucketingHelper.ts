@@ -6,9 +6,9 @@ import {
 } from '@devcycle/bucketing-assembly-script/protobuf/compiled'
 import { pbSDKVariableTransform } from '../pb-types/pbTypeHelpers'
 
-export function bucketUserForConfig(user: DVCPopulatedUser, token: string): BucketedUserConfig {
+export function bucketUserForConfig(user: DVCPopulatedUser, sdkKey: string): BucketedUserConfig {
     return JSON.parse(
-        getBucketingLib().generateBucketedConfigForUser(token, JSON.stringify(user))
+        getBucketingLib().generateBucketedConfigForUser(sdkKey, JSON.stringify(user))
     ) as BucketedUserConfig
 }
 

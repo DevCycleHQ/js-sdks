@@ -1,4 +1,4 @@
-import { SDKVariable_PB } from '@devcycle/bucketing-assembly-script/protobuf/compiled'
+import { ProtobufTypes } from '@devcycle/bucketing-assembly-script'
 
 let Bucketing: unknown
 
@@ -9,7 +9,7 @@ const testVariable = {
     key: 'test-key',
     evalReason: null
 }
-const buffer = SDKVariable_PB.encode({
+const buffer = ProtobufTypes.SDKVariable_PB.encode({
     _id: testVariable._id,
     type: 0,
     key: testVariable.key,

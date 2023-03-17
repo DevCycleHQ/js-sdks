@@ -111,7 +111,6 @@ export const variableForUserPB = (
     const pbMsg = VariableForUserParams_PB.create(params)
     const buffer = VariableForUserParams_PB.encode(pbMsg).finish()
     const resultBuffer = variableForUser_PB(buffer)
-    if (!resultBuffer) return null
-    const pbSDKVariable = SDKVariable_PB.decode(resultBuffer!) as unknown as SDKVariable_PB_Type
-    return pbSDKVariableToJS(pbSDKVariable)
+
+    return !resultBuffer ? null : pbSDKVariableToJS(SDKVariable_PB.decode(resultBuffer))
 }
