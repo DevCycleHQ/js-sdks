@@ -8,6 +8,7 @@ import { NullableString } from "./NullableString";
 import { NullableDouble } from "./NullableDouble";
 import { NullableCustomData } from "./NullableCustomData";
 
+@unmanaged
 export class DVCUser_PB {
   static encode(message: DVCUser_PB, writer: Writer): void {
     writer.uint32(10);
@@ -181,6 +182,18 @@ export class DVCUser_PB {
     this.deviceModel = deviceModel;
     this.customData = customData;
     this.privateCustomData = privateCustomData;
+  }
+
+  free(): void {
+      heap.free(changetype<usize>(this.userId))
+      if (this.email) this.email.free()
+      if (this.name) this.name.free()
+      if (this.language) this.language.free()
+      if (this.appBuild) this.appBuild.free()
+      if (this.deviceModel) this.deviceModel.free()
+      if (this.customData) this.customData.free()
+      if (this.privateCustomData) this.privateCustomData.free()
+      heap.free(changetype<usize>(this))
   }
 }
 

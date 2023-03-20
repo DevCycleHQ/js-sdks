@@ -6,6 +6,7 @@
 import { Writer, Reader, Protobuf } from "as-proto/assembly";
 import { CustomDataValue } from "./CustomDataValue";
 
+@unmanaged
 export class NullableCustomData {
   static encode(message: NullableCustomData, writer: Writer): void {
     const value = message.value;
@@ -99,6 +100,15 @@ export class NullableCustomData {
   ) {
     this.value = value;
     this.isNull = isNull;
+  }
+
+  free(): void {
+      for (let i: i32 = 0; i < this.value.size; ++i) {
+          this.value.values()[i].free()
+      }
+      heap.free(changetype<usize>(this.value))
+      heap.free(changetype<usize>(this.isNull))
+      heap.free(changetype<usize>(this))
   }
 }
 
