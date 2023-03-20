@@ -19,7 +19,8 @@ export function murmurhashV3(key: string, seed: u32): u32 {
         currentBuffer = new StaticArray<i32>(asciiKey.length)
     }
     for (let i = 0; i < asciiKey.length; i++) {
-        currentBuffer[i] = asciiKey.charCodeAt(i);
+        // using unchecked here provides faster access to the array (no bounds checking)
+        unchecked(currentBuffer[i] = asciiKey.charCodeAt(i));
     }
 
     const length = asciiKey.length;
@@ -35,10 +36,10 @@ export function murmurhashV3(key: string, seed: u32): u32 {
 
     while (i < bytes) {
         k1 =
-            ((currentBuffer[i] & 0xff)) |
-            ((currentBuffer[++i] & 0xff) << 8) |
-            ((currentBuffer[++i] & 0xff) << 16) |
-            ((currentBuffer[++i] & 0xff) << 24);
+            ((unchecked(currentBuffer[i]) & 0xff)) |
+            ((unchecked(currentBuffer[++i]) & 0xff) << 8) |
+            ((unchecked(currentBuffer[++i]) & 0xff) << 16) |
+            ((unchecked(currentBuffer[++i]) & 0xff) << 24);
         ++i;
 
 
@@ -56,11 +57,11 @@ export function murmurhashV3(key: string, seed: u32): u32 {
 
     switch (remainder) {
         case 3:
-            k1 ^= (currentBuffer[i + 2] & 0xff) << 16;
+            k1 ^= (unchecked(currentBuffer[i + 2]) & 0xff) << 16;
         case 2:
-            k1 ^= (currentBuffer[i + 1] & 0xff) << 8;
+            k1 ^= (unchecked(currentBuffer[i + 1]) & 0xff) << 8;
         case 1:
-            k1 ^= (currentBuffer[i] & 0xff);
+            k1 ^= (unchecked(currentBuffer[i]) & 0xff);
             k1 = (((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16)) & 0xffffffff;
             k1 = (k1 << 15) | (k1 >>> 17);
             k1 = (((k1 & 0xffff) * c2) + ((((k1 >>> 16) * c2) & 0xffff) << 16)) & 0xffffffff;
