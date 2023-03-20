@@ -10,6 +10,7 @@ export function _getClientCustomData(sdkKey: string): JSON.Obj {
     if (_clientCustomData.has(sdkKey)) {
         return _clientCustomData.get(sdkKey)
     }
-    _setClientCustomData(sdkKey, new JSON.Obj())
-    return _clientCustomData.get(sdkKey)
+    const clientCustomData = new JSON.Obj()
+    _setClientCustomData(sdkKey, clientCustomData)
+    return clientCustomData
 }

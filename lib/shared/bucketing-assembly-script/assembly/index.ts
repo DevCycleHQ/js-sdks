@@ -88,15 +88,15 @@ function _variableForDVCUser(
         variable = null
     }
 
-    const variableVariationMap = new Map<string, FeatureVariation>()
-    if (response) {
-        variableVariationMap.set(variableKey, new FeatureVariation(
-            response.feature._id,
-            response.variation._id
-        ))
-    }
-
     if (shouldTrackEvent) {
+        const variableVariationMap = new Map<string, FeatureVariation>()
+        if (response) {
+            variableVariationMap.set(variableKey, new FeatureVariation(
+                response.feature._id,
+                response.variation._id
+            ))
+        }
+
         queueVariableEvaluatedEvent(sdkKey, variableVariationMap, variable, variableKey)
     }
     return variable
