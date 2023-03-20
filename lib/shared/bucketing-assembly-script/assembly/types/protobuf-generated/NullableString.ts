@@ -5,6 +5,7 @@
 
 import { Writer, Reader, Protobuf } from "as-proto/assembly";
 
+@unmanaged
 export class NullableString {
   static encode(message: NullableString, writer: Writer): void {
     writer.uint32(10);
@@ -44,6 +45,12 @@ export class NullableString {
   constructor(value: string = "", isNull: bool = false) {
     this.value = value;
     this.isNull = isNull;
+  }
+
+  free(): void {
+      heap.free(changetype<usize>(this.value))
+      heap.free(changetype<usize>(this.isNull))
+      heap.free(changetype<usize>(this))
   }
 }
 

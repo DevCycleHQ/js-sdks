@@ -7,6 +7,7 @@ import { Writer, Reader, Protobuf } from "as-proto/assembly";
 import { DVCUser_PB } from "./DVCUser_PB";
 import { VariableType_PB } from "./VariableType_PB";
 
+@unmanaged
 export class VariableForUserParams_PB {
   static encode(message: VariableForUserParams_PB, writer: Writer): void {
     writer.uint32(10);
@@ -84,6 +85,15 @@ export class VariableForUserParams_PB {
     this.variableType = variableType;
     this.user = user;
     this.shouldTrackEvent = shouldTrackEvent;
+  }
+
+  free(): void {
+      heap.free(changetype<usize>(this.sdkKey))
+      heap.free(changetype<usize>(this.variableKey))
+      heap.free(changetype<usize>(this.variableType))
+      if (this.user) this.user.free()
+      heap.free(changetype<usize>(this.shouldTrackEvent))
+      heap.free(changetype<usize>(this))
   }
 }
 

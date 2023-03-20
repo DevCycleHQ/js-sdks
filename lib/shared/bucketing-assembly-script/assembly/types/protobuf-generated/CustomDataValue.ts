@@ -6,6 +6,7 @@
 import { Writer, Reader, Protobuf } from "as-proto/assembly";
 import { CustomDataType } from "./CustomDataType";
 
+@unmanaged
 export class CustomDataValue {
   static encode(message: CustomDataValue, writer: Writer): void {
     writer.uint32(8);
@@ -68,6 +69,14 @@ export class CustomDataValue {
     this.boolValue = boolValue;
     this.doubleValue = doubleValue;
     this.stringValue = stringValue;
+  }
+
+  free(): void {
+      heap.free(changetype<usize>(this.type))
+      heap.free(changetype<usize>(this.boolValue))
+      heap.free(changetype<usize>(this.doubleValue))
+      heap.free(changetype<usize>(this.stringValue))
+      heap.free(changetype<usize>(this))
   }
 }
 
