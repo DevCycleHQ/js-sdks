@@ -107,7 +107,6 @@ export class NullableCustomData {
           this.value.values()[i].free()
       }
       heap.free(changetype<usize>(this.value))
-      heap.free(changetype<usize>(this.isNull))
       heap.free(changetype<usize>(this))
   }
 }

@@ -70,7 +70,10 @@ export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
         variableTypeFromPB(params.variableType),
         params.shouldTrackEvent
     )
-    return variable ? variable.toProtobuf() : null
+    const result = variable ? variable.toProtobuf() : null
+    params.free()
+
+    return result
 }
 
 function _variableForDVCUser(

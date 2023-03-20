@@ -73,8 +73,6 @@ export class CustomDataValue {
 
   free(): void {
       heap.free(changetype<usize>(this.type))
-      heap.free(changetype<usize>(this.boolValue))
-      heap.free(changetype<usize>(this.doubleValue))
       heap.free(changetype<usize>(this.stringValue))
       heap.free(changetype<usize>(this))
   }

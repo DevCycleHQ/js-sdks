@@ -233,7 +233,9 @@ export class SDKVariable extends JSON.Obj {
             stringValue || jsonValue || '',
             new NullableString('', true)
         )
-        return encodeSDKVariable_PB(pbVariable)
+        const buff = encodeSDKVariable_PB(pbVariable)
+        pbVariable.free()
+        return buff
     }
 
     stringify(): string {
