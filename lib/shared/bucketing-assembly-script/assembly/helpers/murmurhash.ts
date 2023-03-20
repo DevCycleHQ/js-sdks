@@ -9,14 +9,14 @@ export function murmurhashV3_js(key: string, seed: u32): string {
 // NOTE: update the test in murmurhash.test.ts if this value is changed (or figure out how to import it in the test)
 export const murmurhashBufferSize = 2000
 
-const keyBuffer = new Int32Array(murmurhashBufferSize)
+const keyBuffer = new StaticArray<i32>(murmurhashBufferSize)
 
 export function murmurhashV3(key: string, seed: u32): u32 {
     const asciiKey = unicodeEscape(key)
     let currentBuffer = keyBuffer
     if (asciiKey.length > keyBuffer.length) {
         console.log("Warning: exceeded maximum size of murmurhash buffer.")
-        currentBuffer = new Int32Array(asciiKey.length)
+        currentBuffer = new StaticArray<i32>(asciiKey.length)
     }
     for (let i = 0; i < asciiKey.length; i++) {
         currentBuffer[i] = asciiKey.charCodeAt(i);
