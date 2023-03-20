@@ -72,7 +72,7 @@ export class DVCPopulatedUser implements DVCUser {
     }
 }
 
-export function getNullableCustomDataValue(customData?: DVCJSON): ProtobufTypes.NullableCustomData {
+export function getNullableCustomDataValue(customData?: DVCCustomDataJSON): ProtobufTypes.NullableCustomData {
     if (!customData) {
         return ProtobufTypes.NullableCustomData.create({ value: {}, isNull: true })
     }

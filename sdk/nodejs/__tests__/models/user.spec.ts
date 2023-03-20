@@ -26,7 +26,7 @@ describe('DVCUser', () => {
                 user_id: 'user_id',
                 email: 'email',
                 name: 'name',
-                languagen: 'en',
+                language: 'en',
                 country: 'US',
                 appVersion: '1.0.0',
                 appBuild: 111,
