@@ -184,4 +184,4 @@ export * from './managers/eventQueueManager'
 
 export * from './testHelpers'
 
-export { murmurhashV3, murmurhashV3_js } from './helpers/murmurhash'
+export { murmurhashV3, murmurhashV3_js, murmurhashBufferSize } from './helpers/murmurhash'

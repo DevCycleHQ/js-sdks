@@ -6,7 +6,10 @@ export function murmurhashV3_js(key: string, seed: u32): string {
     return `${murmurhashV3(key, seed)}`
 }
 
-const keyBuffer = new Int32Array(2000)
+// NOTE: update the test in murmurhash.test.ts if this value is changed (or figure out how to import it in the test)
+export const murmurhashBufferSize = 2000
+
+const keyBuffer = new Int32Array(murmurhashBufferSize)
 
 export function murmurhashV3(key: string, seed: u32): u32 {
     const asciiKey = unicodeEscape(key)
