@@ -23,12 +23,12 @@ const largeConfig = largeTestData.largeConfig as unknown as ConfigBody
 
 const user = {
     user_id: 'asuh',
-    email: 'test',
+    email: 'test@email.com',
     country: 'CA'
 }
 const largeUser = {
     user_id: 'asuh',
-    email: 'test_email_long_name@devcycle.com',
+    email: 'test@email.com',
     name: 'very long name that is longer than 50 characters long',
     language: 'en',
     country: 'CA',
@@ -44,6 +44,7 @@ const largeConfigUser = {
 
 benchmarkSuite('variableForUser', {
     async setupSuite() {
+        console.log('setup variableForUser tests')
         await initialize(true)
         initSDK()
     },
@@ -51,33 +52,58 @@ benchmarkSuite('variableForUser', {
         cleanupSDK()
     },
     ['variableForUser']: () => {
-        variableForUser({ user, variableKey: 'swagTest', variableType: VariableType.String })
+        const variable = variableForUser({
+            user, variableKey: 'swagTest', variableType: VariableType.String
+        })
+        if (!variable) throw new Error('variable should not be defaulted')
     },
     ['variableForUser_PB']: () => {
-        variableForUser_PB({ user, variableKey: 'swagTest', variableType: VariableType.String })
+        const variable = variableForUser_PB({
+            user, variableKey: 'swagTest', variableType: VariableType.String
+        })
+        if (!variable) throw new Error('variable should not be defaulted')
     },
     ['variableForUser - large user']: () => {
-        variableForUser({ user: largeUser, variableKey: 'swagTest', variableType: VariableType.String })
+        const variable = variableForUser({
+            user: largeUser, variableKey: 'swagTest', variableType: VariableType.String
+        })
+        if (!variable) throw new Error('variable should not be defaulted')
     },
     ['variableForUser_PB - large user']: () => {
-        variableForUser_PB({ user: largeUser, variableKey: 'swagTest', variableType: VariableType.String })
+        const variable = variableForUser_PB({
+            user: largeUser, variableKey: 'swagTest', variableType: VariableType.String
+        })
+        if (!variable) throw new Error('variable should not be defaulted')
     },
     ['variableForUser - defaulted']: () => {
-        variableForUser({ user: defaultUser, variableKey: 'swagTest', variableType: VariableType.String })
+        const variable = variableForUser({
+            user: defaultUser, variableKey: 'swagTest', variableType: VariableType.String
+        })
+        if (variable) throw new Error('variable should be defaulted')
     },
     ['variableForUser_PB - defaulted']: () => {
-        variableForUser_PB({ user: defaultUser, variableKey: 'swagTest', variableType: VariableType.String })
+        const variable = variableForUser_PB({
+            user: defaultUser, variableKey: 'swagTest', variableType: VariableType.String
+        })
+        if (variable) throw new Error('variable should be defaulted')
     },
     ['variableForUser - unknown key']: () => {
-        variableForUser({ user: defaultUser, variableKey: 'unknown key', variableType: VariableType.String })
+        const variable = variableForUser({
+            user: defaultUser, variableKey: 'unknown key', variableType: VariableType.String
+        })
+        if (variable) throw new Error('variable should be defaulted')
     },
     ['variableForUser_PB - unknown key']: () => {
-        variableForUser_PB({ user: defaultUser, variableKey: 'unknown key', variableType: VariableType.String })
+        const variable = variableForUser_PB({
+            user: defaultUser, variableKey: 'unknown key', variableType: VariableType.String
+        })
+        if (variable) throw new Error('variable should be defaulted')
     },
 })
 
 benchmarkSuite('variableForUser - Large Config', {
     async setupSuite() {
+        console.log('setup variableForUser - Large Config tests')
         await initialize(true)
         // @ts-ignore
         initSDK('sdkKey', largeConfig)
@@ -86,32 +112,22 @@ benchmarkSuite('variableForUser - Large Config', {
         cleanupSDK()
     },
     ['variableForUser']: () => {
-        variableForUser({ user: largeConfigUser, variableKey: 'v-key-50', variableType: VariableType.Boolean })
+        const variable = variableForUser({
+            user: largeConfigUser, variableKey: 'v-key-50', variableType: VariableType.Boolean
+        })
+        if (!variable) throw new Error('variable should not be defaulted')
     },
     ['variableForUser_PB']: () => {
-        variableForUser_PB({ user: largeConfigUser, variableKey: 'v-key-50', variableType: VariableType.Boolean })
+        const variable = variableForUser_PB({
+            user: largeConfigUser, variableKey: 'v-key-50', variableType: VariableType.Boolean
+        })
+        if (!variable) throw new Error('variable should not be defaulted')
     }
 })
 
 benchmarkSuite('generateBucketedConfigForUser', {
     async setupSuite() {
-        await initialize(true)
-        // @ts-ignore
-        initSDK('sdkKey', largeConfig)
-    },
-    teardownSuite() {
-        cleanupSDK()
-    },
-    ['generateBucketedConfigForUser']: () => {
-        generateBucketedConfigForUser('sdkKey', JSON.stringify(user))
-    },
-    ['variableForUser - large user']: () => {
-        generateBucketedConfigForUser('sdkKey', JSON.stringify(largeConfigUser))
-    },
-})
-
-benchmarkSuite('generateBucketedConfigForUser - large config', {
-    async setupSuite() {
+        console.log('setup generateBucketedConfigForUser tests')
         await initialize(true)
         initSDK()
     },
@@ -121,7 +137,25 @@ benchmarkSuite('generateBucketedConfigForUser - large config', {
     ['generateBucketedConfigForUser']: () => {
         generateBucketedConfigForUser('sdkKey', JSON.stringify(user))
     },
-    ['variableForUser - large user']: () => {
+    ['generateBucketedConfigForUser - large user']: () => {
+        generateBucketedConfigForUser('sdkKey', JSON.stringify(largeConfigUser))
+    },
+})
+
+benchmarkSuite('generateBucketedConfigForUser - Large Config', {
+    async setupSuite() {
+        console.log('setup generateBucketedConfigForUser - Large Config tests')
+        await initialize(true)
+        // @ts-ignore
+        initSDK('sdkKey', largeConfig)
+    },
+    teardownSuite() {
+        cleanupSDK()
+    },
+    ['generateBucketedConfigForUser']: () => {
+        generateBucketedConfigForUser('sdkKey', JSON.stringify(user))
+    },
+    ['generateBucketedConfigForUser - large user']: () => {
         generateBucketedConfigForUser('sdkKey', JSON.stringify(largeConfigUser))
     },
 })
@@ -130,6 +164,7 @@ let i = 0
 
 benchmarkSuite('initEventQueue', {
     async setupSuite() {
+        console.log('setup initEventQueue tests')
         await initialize(true)
         initSDK('sdkKey')
         i = 0
@@ -145,6 +180,7 @@ benchmarkSuite('initEventQueue', {
 
 benchmarkSuite('setPlatformData', {
     async setupSuite() {
+        console.log('setup setPlatformData tests')
         await initialize(true)
         initSDK('sdkKey')
         i = 0
@@ -166,6 +202,7 @@ benchmarkSuite('setPlatformData', {
 
 benchmarkSuite('setConfigData', {
     async setupSuite() {
+        console.log('setup setConfigData tests')
         await initialize(true)
         initSDK('sdkKey')
         i = 0
@@ -185,6 +222,7 @@ benchmarkSuite('setConfigData', {
 
 benchmarkSuite('setClientCustomData', {
     async setupSuite() {
+        console.log('setup setClientCustomData tests')
         await initialize(true)
         initSDK('sdkKey')
     },

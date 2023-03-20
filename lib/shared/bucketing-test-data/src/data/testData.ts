@@ -270,11 +270,10 @@ export const variations: PublicVariation[] = [
         _id: '615382338424cb11646d7667',
         name: 'variation 1 aud 2',
         key: 'variation-1-aud-2-key',
-        variables: [
-            {
-                _var: variables[2]._id,
-                value: 'Var 1 aud 2'
-            }]
+        variables: [{
+            _var: variables[2]._id,
+            value: 'Var 1 aud 2'
+        }]
     },
     {
         _id: '615382338424cb11646d7668',
@@ -521,7 +520,8 @@ export const barrenConfig: ConfigBody = {
                 }]
             },
             variations: [variations[0], variations[1], variations[2], variations[3], variations[4]]
-        }],
+        }
+    ],
     variables: [],
     variableHashes: {}
 }
