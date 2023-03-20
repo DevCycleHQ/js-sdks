@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { benchmarkSuite } from 'jest-bench'
 import {
     cleanupSDK,
@@ -34,8 +35,16 @@ const largeUser = {
     country: 'CA',
     appVersion: '122222222.10.23423423',
     appBuild: 987654321,
-    customData: { 'very long key that is longer than 50 characters long': 'very long value that is longer than 50 characters long', 'longKey2': 123421423 },
-    privateCustomData: { 'very long key that is longer than 50 characters long': 'very long value that is longer than 50 characters long', 'longKey2': 123421423 },
+    customData: {
+        'very long key that is longer than 50 characters long':
+            'very long value that is longer than 50 characters long',
+        'longKey2': 123421423
+    },
+    privateCustomData: {
+        'very long key that is longer than 50 characters long':
+            'very long value that is longer than 50 characters long',
+        'longKey2': 123421423
+    },
 }
 const defaultUser = { user_id: 'default' }
 const largeConfigUser = {
@@ -53,37 +62,37 @@ benchmarkSuite('variableForUser', {
     },
     ['variableForUser']: () => {
         const variable = variableForUser({
-            user, variableKey: 'swagTest', variableType: VariableType.String
+            user, variableKey: 'feature4Var', variableType: VariableType.String
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
     ['variableForUser_PB']: () => {
         const variable = variableForUser_PB({
-            user, variableKey: 'swagTest', variableType: VariableType.String
+            user, variableKey: 'feature4Var', variableType: VariableType.String
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
     ['variableForUser - large user']: () => {
         const variable = variableForUser({
-            user: largeUser, variableKey: 'swagTest', variableType: VariableType.String
+            user: largeUser, variableKey: 'feature4Var', variableType: VariableType.String
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
     ['variableForUser_PB - large user']: () => {
         const variable = variableForUser_PB({
-            user: largeUser, variableKey: 'swagTest', variableType: VariableType.String
+            user: largeUser, variableKey: 'feature4Var', variableType: VariableType.String
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
     ['variableForUser - defaulted']: () => {
         const variable = variableForUser({
-            user: defaultUser, variableKey: 'swagTest', variableType: VariableType.String
+            user: defaultUser, variableKey: 'feature4Var', variableType: VariableType.String
         })
         if (variable) throw new Error('variable should be defaulted')
     },
     ['variableForUser_PB - defaulted']: () => {
         const variable = variableForUser_PB({
-            user: defaultUser, variableKey: 'swagTest', variableType: VariableType.String
+            user: defaultUser, variableKey: 'feature4Var', variableType: VariableType.String
         })
         if (variable) throw new Error('variable should be defaulted')
     },
