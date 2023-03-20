@@ -91,8 +91,7 @@ export class VariableForUserParams_PB {
       heap.free(changetype<usize>(this.sdkKey))
       heap.free(changetype<usize>(this.variableKey))
       heap.free(changetype<usize>(this.variableType))
-      if (this.user) this.user.free()
-      heap.free(changetype<usize>(this.shouldTrackEvent))
+      if (this.user) (this.user as DVCUser_PB).free()
       heap.free(changetype<usize>(this))
   }
 }

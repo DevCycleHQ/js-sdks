@@ -7,6 +7,7 @@ import { Writer, Reader, Protobuf } from "as-proto/assembly";
 import { NullableString } from "./NullableString";
 import { VariableType_PB } from "./VariableType_PB";
 
+@unmanaged
 export class SDKVariable_PB {
   static encode(message: SDKVariable_PB, writer: Writer): void {
     writer.uint32(10);
@@ -104,6 +105,15 @@ export class SDKVariable_PB {
     this.doubleValue = doubleValue;
     this.stringValue = stringValue;
     this.evalReason = evalReason;
+  }
+
+  free(): void {
+    heap.free(changetype<usize>(this.id))
+    heap.free(changetype<usize>(this.type))
+    heap.free(changetype<usize>(this.key))
+    heap.free(changetype<usize>(this.stringValue))
+    if (this.evalReason) heap.free(changetype<usize>(this.evalReason))
+    heap.free(changetype<usize>(this))
   }
 }
 

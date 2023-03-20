@@ -186,13 +186,13 @@ export class DVCUser_PB {
 
   free(): void {
       heap.free(changetype<usize>(this.userId))
-      if (this.email) this.email.free()
-      if (this.name) this.name.free()
-      if (this.language) this.language.free()
-      if (this.appBuild) this.appBuild.free()
-      if (this.deviceModel) this.deviceModel.free()
-      if (this.customData) this.customData.free()
-      if (this.privateCustomData) this.privateCustomData.free()
+      if (this.email) (this.email as NullableString).free()
+      if (this.name) (this.name as NullableString).free()
+      if (this.language) (this.language as NullableString).free()
+      if (this.appBuild) (this.appBuild as NullableDouble).free()
+      if (this.deviceModel) (this.deviceModel as NullableString).free()
+      if (this.customData) (this.customData as NullableCustomData).free()
+      if (this.privateCustomData) (this.privateCustomData as NullableCustomData).free()
       heap.free(changetype<usize>(this))
   }
 }
