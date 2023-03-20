@@ -133,6 +133,10 @@
       },
       "dependsOn": [
         {
+          "target": "build:json",
+          "projects": "dependencies"
+        },
+        {
           "target": "compile-pb-js",
           "projects": "self"
         },

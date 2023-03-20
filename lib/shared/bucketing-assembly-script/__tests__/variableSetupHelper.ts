@@ -10,8 +10,8 @@ import {
     VariableType
 } from './bucketingImportHelper'
 import { variableForUserPB } from './protobufVariableHelper'
-import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 import { SDKVariable } from '@devcycle/types'
+import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
 
 type VariableForUserOptions = {
@@ -59,7 +59,7 @@ export const variableForUserPreallocated = (
     return variableJSON ? JSON.parse(variableJSON) as SDKVariable : null
 }
 
-export const initSDK = (sdkKey = 'sdkKey'): void => {
+export const initSDK = (sdkKey = 'sdkKey', projectConfig = config): void => {
     initEventQueue(sdkKey as string, JSON.stringify({}))
     setPlatformData(JSON.stringify({
         platform: 'NodeJS',
@@ -68,7 +68,7 @@ export const initSDK = (sdkKey = 'sdkKey'): void => {
         sdkVersion: '1.0.0',
         hostname: 'host.name'
     }))
-    setConfigData(sdkKey, JSON.stringify(config))
+    setConfigData(sdkKey, JSON.stringify(projectConfig))
 }
 
 export const cleanupSDK = (sdkKey = 'sdkKey'): void => {
