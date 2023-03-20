@@ -6,7 +6,7 @@ import {
     generateBucketedConfig,
     doesUserPassRollout
 } from '../src/bucketing'
-import { config, barrenConfig } from '@devcycle/bucketing-test-data/src/data/testData'
+import { config, barrenConfig, configWithNullCustomData } from '@devcycle/bucketing-test-data/src/data/testData'
 
 import moment from 'moment'
 import times from 'lodash/times'
@@ -144,15 +144,13 @@ describe('Config Parsing and Generating', () => {
             user_id: 'asuh',
             customData: {
                 favouriteFood: 'pizza',
-                publicNull: null,
-                publicUndefined: undefined
+                favouriteNull: null,
             },
             privateCustomData: {
                 favouriteDrink: 'coffee',
                 favouriteNumber: 610,
                 favouriteBoolean: true,
-                privateNull: null,
-                privateUndefined: undefined
+                privateNull: null
             },
             platformVersion: '1.1.2',
             os: 'Android',
@@ -350,15 +348,13 @@ describe('Config Parsing and Generating', () => {
             user_id: 'asuh',
             customData: {
                 favouriteFood: 'pizza',
-                publicNull: null,
-                publicUndefined: undefined
+                favouriteNull: null,
             },
             privateCustomData: {
                 favouriteDrink: 'coffee',
                 favouriteNumber: 610,
                 favouriteBoolean: true,
-                privateNull: null,
-                privateUndefined: undefined
+                privateNull: null
             },
             platformVersion: '1.1.2',
             os: 'Android',
@@ -524,6 +520,124 @@ describe('Config Parsing and Generating', () => {
         }
         expect(() => generateBucketedConfig({ config: barrenConfig, user }))
             .toThrow('Config missing variable: 61538237b0a70b58ae6af71g')
+    })
+
+    it('puts the user in the target (customData !exists) with null Custom Data', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'asuh',
+            customData: {
+                favouriteFood: 'pizza',
+                favouriteNull: null
+            },
+            privateCustomData: {
+                favouriteDrink: 'coffee',
+                favouriteNumber: 610,
+                favouriteBoolean: true
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'test@email.com'
+        }
+        const expected = {
+            'environment': {
+                '_id': '6153553b8cf4e45e0464268d',
+                'key': 'test-environment'
+            },
+            'project': expect.objectContaining({
+                '_id': '61535533396f00bab586cb17',
+                'a0_organization': 'org_12345612345',
+                'key': 'test-project'
+            }),
+            'features': {
+                'feature5': {
+                    '_id': '614ef6aa475928459060721d',
+                    '_variation': '615382338424cb11646d7662',
+                    'key': 'feature5',
+                    'type': 'ops',
+                    'variationKey': 'audience-match-variation',
+                    'variationName': 'audience match variation',
+                    'settings': undefined
+                }
+            },
+            'featureVariationMap': {
+                "614ef6aa475928459060721d": "615382338424cb11646d7662"
+            },
+            'variableVariationMap': {},
+            'variables': {
+                'audience-match': {
+                    '_id': '61538237b0a70b58ae6af71z',
+                    'key': 'audience-match',
+                    'type': 'String',
+                    'value': 'audience_match',
+                },
+            }
+        }
+
+        // Targeting Rule expects the Custom Data property of "favouriteNull" to exist
+        // However, since the User has a null value for this property, 
+        // the Variable for User method should not return any variables
+        const c = generateBucketedConfig({ config: configWithNullCustomData, user })
+        expect(c).toEqual(expected)
+    })
+
+    it('puts the user in the target (customData exists) for the first audience they match', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'asuh',
+            customData: {
+                favouriteFood: 'pizza',
+                favouriteNull: 'null'
+            },
+            privateCustomData: {
+                favouriteDrink: 'coffee',
+                favouriteNumber: 610,
+                favouriteBoolean: true
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'test@email.com'
+        }
+        const expected = {
+            'environment': {
+                '_id': '6153553b8cf4e45e0464268d',
+                'key': 'test-environment'
+            },
+            'project': expect.objectContaining({
+                '_id': '61535533396f00bab586cb17',
+                'a0_organization': 'org_12345612345',
+                'key': 'test-project'
+            }),
+            'features': {
+                'feature4': {
+                    '_id': '614ef6aa475928459060721d',
+                    '_variation': '615382338424cb11646d7662',
+                    'key': 'feature4',
+                    'type': 'permission',
+                    'variationKey': 'audience-match-variation',
+                    'variationName': 'audience match variation',
+                    'setting': undefined
+                }
+            },
+            'featureVariationMap': {
+                "614ef6aa475928459060721d": "615382338424cb11646d7662"
+            },
+            'variableVariationMap': {},
+            'variables': {
+                'audience-match': {
+                    '_id': '61538237b0a70b58ae6af71z',
+                    'key': 'audience-match',
+                    'type': 'String',
+                    'value': 'audience_match',
+                },
+            }
+        }
+
+        // Targeting Rule expects the Custom Data property of "favouriteNull" to exist
+        // However, since the User has a null value for this property, 
+        // the Variable for User method should not return any variables
+        const c = generateBucketedConfig({ config: configWithNullCustomData, user })
+        expect(c).toEqual(expected)
     })
 })
 

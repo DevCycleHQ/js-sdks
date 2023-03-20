@@ -3,11 +3,12 @@ import {
     DVCDefaultLogLevel,
     VariableTypeAlias,
     VariableValue,
+    DVCJSON,
     DVCCustomDataJSON
 } from '@devcycle/types'
 
 export type DVCVariableValue = VariableValue
-export type { DVCCustomDataJSON }
+export type { DVCJSON, DVCCustomDataJSON }
 
 export interface ErrorCallback<T> {
     (err: Error, result?: null | undefined): void

@@ -30,13 +30,10 @@ describe('variable', () => {
         country: 'CA',
         customData: {
             test: 'test',
-            publicNull: null,
-            publicUndefined: undefined
+            canBeNull: null
         },
         privateCustomData: {
-            private: 'private',
-            privateNull: null,
-            privateUndefined: undefined
+            private: 'private'
         }
     }
     const expectedUser = expect.objectContaining({
