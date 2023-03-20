@@ -12,7 +12,8 @@ import {
     initEventQueue,
     setPlatformData,
     setConfigData,
-    generateBucketedConfigForUser
+    generateBucketedConfigForUser,
+    setClientCustomData
 } from '../__tests__/bucketingImportHelper'
 import largeTestData from '@devcycle/bucketing-test-data/json-data/largeConfig.json'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
@@ -163,27 +164,6 @@ benchmarkSuite('setPlatformData', {
     }
 })
 
-benchmarkSuite('setPlatformData', {
-    async setupSuite() {
-        await initialize(true)
-        initSDK('sdkKey')
-        i = 0
-    },
-    teardownSuite() {
-        cleanupSDK()
-    },
-    ['setPlatformData']: () => {
-        setPlatformData(JSON.stringify({
-            platform: 'NodeJS',
-            platformVersion: '16.0',
-            sdkType: 'server',
-            sdkVersion: '1.0.' + i,
-            hostname: 'host.name'
-        }))
-        i++
-    }
-})
-
 benchmarkSuite('setConfigData', {
     async setupSuite() {
         await initialize(true)
@@ -200,5 +180,18 @@ benchmarkSuite('setConfigData', {
     ['setConfigData - large']: () => {
         setConfigData('sdkKey_' + i, JSON.stringify(largeConfig))
         i++
+    }
+})
+
+benchmarkSuite('setClientCustomData', {
+    async setupSuite() {
+        await initialize(true)
+        initSDK('sdkKey')
+    },
+    teardownSuite() {
+        cleanupSDK()
+    },
+    ['setClientCustomData - small']: () => {
+        setClientCustomData('sdkKey', JSON.stringify(largeUser.customData))
     }
 })
