@@ -83,8 +83,8 @@ describe('DVCUser', () => {
                     'value': 'email',
                 },
                 'language':  {
-                    'isNull': true,
-                    'value': '',
+                    'isNull': false,
+                    'value': 'en',
                 },
                 'name':  {
                     'isNull': false,
