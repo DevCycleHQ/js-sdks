@@ -125,13 +125,42 @@ export const audiences: PublicAudience[] = [
             }],
             operator: AudienceOperator.and
         }
-    },{
+    },
+    {
         _id: '6153557f1ed7bac7268ea074',
         filters: {
             filters: [{
                 type: FilterType.audienceMatch,
                 comparator: FilterComparator['='],
                 _audiences: ['614ef6ea475929459060721a']
+            }],
+            operator: AudienceOperator.and
+        }
+    },
+    {
+        _id: '6153557f1ed7bac7268ea0d7',
+        filters: {
+            filters: [{
+                type: FilterType.user,
+                subType: UserSubType.customData,
+                dataKey: 'favouriteNull',
+                dataKeyType: DataKeyType.string,
+                comparator: FilterComparator['exist'],
+                values: []
+            }],
+            operator: AudienceOperator.and
+        }
+    },
+    {
+        _id: '6153557f1ed7bac7268ea0d8',
+        filters: {
+            filters: [{
+                type: FilterType.user,
+                subType: UserSubType.customData,
+                dataKey: 'favouriteNull',
+                dataKeyType: DataKeyType.string,
+                comparator: FilterComparator['!exist'],
+                values: []
             }],
             operator: AudienceOperator.and
         }
@@ -328,8 +357,8 @@ export const variableHashes: ConfigBody['variableHashes'] = {
     'feature2.hello': 4138596111
 }
 
-function configBodyAudiences(audiences: PublicAudience[]): { [id: string]: Omit<PublicAudience<string>, '_id'> }{
-    const auds: {[id: string]: Omit<PublicAudience<string>, '_id'>} = {}
+function configBodyAudiences(audiences: PublicAudience[]): { [id: string]: Omit<PublicAudience<string>, '_id'> } {
+    const auds: { [id: string]: Omit<PublicAudience<string>, '_id'> } = {}
     audiences.forEach((aud: PublicAudience) => {
         const { _id, ...rest } = aud
         auds[aud._id] = {
@@ -454,7 +483,7 @@ export const barrenConfig: ConfigBody = {
                     _id: '61536f3bc838a705c105eb62',
                     _audience: audiences[0],
                     distribution: []
-                },{
+                }, {
                     _id: '61536f3bc838a705c105eb63',
                     _audience: audiences[2],
                     distribution: [{
@@ -495,5 +524,47 @@ export const barrenConfig: ConfigBody = {
         }],
     variables: [],
     variableHashes: {}
+}
 
+export const configWithNullCustomData: ConfigBody = {
+    project,
+    environment,
+    audiences: configBodyAudiences(audiences),
+    features: [{
+        _id: '614ef6aa475928459060721d',
+        type: FeatureType.permission,
+        key: 'feature4',
+        configuration: {
+            _id: '61536f62502d80fff97ed641',
+            targets: [{
+                _id: '61536f468fd67f0091982532',
+                _audience: audiences[5],
+                distribution: [{
+                    _variation: variations[5]._id,
+                    percentage: 1
+                }]
+            }]
+
+        },
+        variations: [variations[5]]
+    }, {
+        _id: '614ef6aa475928459060721d',
+        type: FeatureType.ops,
+        key: 'feature5',
+        configuration: {
+            _id: '61536f62502d80fff97ed642',
+            targets: [{
+                _id: '61536f468fd67f0091982533',
+                _audience: audiences[6],
+                distribution: [{
+                    _variation: variations[5]._id,
+                    percentage: 1
+                }]
+            }]
+
+        },
+        variations: [variations[5]]
+    }],
+    variables,
+    variableHashes
 }

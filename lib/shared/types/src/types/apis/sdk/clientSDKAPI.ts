@@ -38,7 +38,7 @@ const dateTransform = ({ value }: { value:  string | number }) => {
 }
 
 export type DVCCustomDataJSON = {
-    [key: string]: string | number | boolean | null | undefined
+    [key: string]: string | number | boolean | null
 }
 
 /**

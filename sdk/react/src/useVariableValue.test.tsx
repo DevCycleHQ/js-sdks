@@ -1,7 +1,7 @@
 import { useVariableValue } from './useVariableValue'
-import { render, renderHook } from '@testing-library/react'
+import { renderHook } from '@testing-library/react'
 import DVCProvider from './DVCProvider'
-import type { DVCCustomDataJSON } from '@devcycle/devcycle-js-sdk'
+import type { DVCJSON } from '@devcycle/devcycle-js-sdk'
 import { ReactElement } from 'react'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -56,7 +56,7 @@ describe('useVariableValue', () => {
         const _testString: string = result.current
         // @ts-expect-error this indicates wrong type
         const _testNumber: number = result.current
-        const _testJSON: DVCCustomDataJSON = result.current
+        const _testJSON: DVCJSON = result.current
     })
 
     it('calls the variable method on the SDK once per hook instance, not per invocation', () => {
