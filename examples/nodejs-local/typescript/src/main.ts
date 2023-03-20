@@ -99,20 +99,20 @@ async function benchDVC() {
     const user = {
         user_id: '4807c61a2a922081',
         country: 'CA',
-        customData: { 'customDataKey': 'customDataValue', num: 610, bool: false },
-        privateCustomData: { 'customDataKey': 'customDataValue', num: 610, bool: false }
+        // customData: { 'customDataKey': 'customDataValue', num: 610, bool: false },
+        // privateCustomData: { 'customDataKey': 'customDataValue', num: 610, bool: false }
     }
     let variable
     const time = performance.now()
     const count = 50000
 
     for (let i = 0; i < count; i++) {
-        variable = dvcClient.variable(user, 'changing-theme-allowed', false)
+        variable = dvcClient.variable(user, 'v-key-50', false)
     }
 
     const endTime = performance.now() - time
     console.log(
-        `Variable 'v-key-25' value is ${variable?.value}, defaulted: ${variable?.isDefaulted}, ` +
+        `Variable 'v-key-50' value is ${variable?.value}, is defaulted: ${variable?.isDefaulted}, ` +
         `total: ${endTime}ms, per call: ${endTime / count}ms`
     )
 
