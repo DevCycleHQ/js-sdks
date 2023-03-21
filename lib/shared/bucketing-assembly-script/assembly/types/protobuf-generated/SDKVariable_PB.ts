@@ -108,12 +108,13 @@ export class SDKVariable_PB {
   }
 
   free(): void {
-    heap.free(changetype<usize>(this.id))
-    heap.free(changetype<usize>(this.type))
-    heap.free(changetype<usize>(this.key))
-    heap.free(changetype<usize>(this.stringValue))
-    if (this.evalReason) heap.free(changetype<usize>(this.evalReason))
-    heap.free(changetype<usize>(this))
+    // heap.free(changetype<usize>(this.id))
+    // heap.free(changetype<usize>(this.type))
+    // heap.free(changetype<usize>(this.key))
+    // heap.free(changetype<usize>(this.stringValue))
+    //   heap.free(changetype<usize>(this.doubleValue))
+      if (this.evalReason) heap.free(changetype<usize>(this.evalReason))
+    // heap.free(changetype<usize>(this))
   }
 }
 

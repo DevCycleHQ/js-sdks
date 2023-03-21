@@ -48,10 +48,7 @@ export class NullableString {
   }
 
   free(): void {
-      const ptr = changetype<usize>(this.value)
-      console.log(`freeing ${ptr}`)
-      heap.free(ptr)
-      heap.free(changetype<usize>(this))
+      // heap.free(changetype<usize>(this))
   }
 }
 
