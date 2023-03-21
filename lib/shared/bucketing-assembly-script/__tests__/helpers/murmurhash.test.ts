@@ -16,12 +16,12 @@ describe('murmurhash V3 Assembly Script implementation', () => {
         for (let i = 0; i < 2000; i++) {
             expect(murmurhashV3_js('some-long-ascii-string', i))
                 .toContain(`${murmurhash.v3('some-long-ascii-string', i)}`)
-            expect(murmurhashV3_js('some-long-ascii-string?', i))
-                .toContain(`${murmurhash.v3('some-long-ascii-string?', i)}`)
+            expect(murmurhashV3_js('some-long-ascii-string???', i))
+                .toContain(`${murmurhash.v3('some-long-ascii-string???', i)}`)
             expect(murmurhashV3_js('some-long-ascii-string!', i))
                 .toContain(`${murmurhash.v3('some-long-ascii-string!', i)}`)
-            expect(murmurhashV3_js('some-long-ascii-string*', i))
-                .toContain(`${murmurhash.v3('some-long-ascii-string*', i)}`)
+            expect(murmurhashV3_js('some-long-ascii-string**********', i))
+                .toContain(`${murmurhash.v3('some-long-ascii-string**********', i)}`)
         }
     })
 
@@ -30,6 +30,11 @@ describe('murmurhash V3 Assembly Script implementation', () => {
             const testString = randString(100)
             expect(murmurhashV3_js(testString, i)).toContain(`${murmurhash.v3(testString, i)}`)
         }
+    })
+
+    it('should return the correct result for a string that exceeds the maximum buffer size', () => {
+        const testString = randString(10000)
+        expect(murmurhashV3_js(testString, 0)).toContain(`${murmurhash.v3(testString, 0)}`)
     })
 
     it('should not fail for a non-ascii key', () => {
