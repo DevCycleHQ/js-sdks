@@ -234,7 +234,10 @@ export class SDKVariable extends JSON.Obj {
             new NullableString('', true)
         )
         const buff = encodeSDKVariable_PB(pbVariable)
+
         pbVariable.free()
+        heap.free(changetype<usize>(pbVariable))
+
         return buff
     }
 
