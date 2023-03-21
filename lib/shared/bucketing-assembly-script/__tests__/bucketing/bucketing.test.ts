@@ -298,12 +298,22 @@ describe('Config Parsing and Generating', () => {
                     'type': 'release',
                     'variationKey': 'audience-match-variation',
                     'variationName': 'audience match variation'
+                },
+                'feature4':  {
+                    '_id': '614ef8aa475928459060721c',
+                    '_variation': '615382338424cb11646d9668',
+                    'key': 'feature4',
+                    'settings': undefined,
+                    'type': 'release',
+                    'variationKey': 'variation-feature-2-key',
+                    'variationName': 'feature 4 variation',
                 }
             },
             'featureVariationMap': {
                 '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
                 '614ef6aa475928459060721a': '615382338424cb11646d7668',
-                '614ef6aa475928459060721c': '615382338424cb11646d7662'
+                '614ef6aa475928459060721c': '615382338424cb11646d7662',
+                '614ef8aa475928459060721c': '615382338424cb11646d9668'
             },
             'variableVariationMap': {
                 'audience-match': {
@@ -337,6 +347,10 @@ describe('Config Parsing and Generating', () => {
                 'num-var': {
                     '_feature': '614ef6aa473928459060721a',
                     '_variation': '6153553b8cf4e45e0464268d',
+                },
+                'feature4Var': {
+                    '_feature': '614ef8aa475928459060721c',
+                    '_variation': '615382338424cb11646d9668',
                 },
             },
             'variables': {
@@ -387,6 +401,12 @@ describe('Config Parsing and Generating', () => {
                     'key': 'num-var',
                     'type': 'Number',
                     'value': 610.61,
+                },
+                'feature4Var': {
+                    '_id': '61538937b0a70b58ae6af71f',
+                    'key': 'feature4Var',
+                    'type': 'String',
+                    'value': 'feature 4 value',
                 }
             }
         }

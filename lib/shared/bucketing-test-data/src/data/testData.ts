@@ -212,7 +212,12 @@ export const variables: PublicVariable[] = [
         _id: '61538237b0a70b58ae6af71q',
         type: VariableType.json,
         key: 'json-var'
-    }
+    },
+    {
+        _id: '61538937b0a70b58ae6af71f',
+        type: VariableType.string,
+        key: 'feature4Var'
+    },
 ]
 
 export const variations: PublicVariation[] = [
@@ -270,11 +275,10 @@ export const variations: PublicVariation[] = [
         _id: '615382338424cb11646d7667',
         name: 'variation 1 aud 2',
         key: 'variation-1-aud-2-key',
-        variables: [
-            {
-                _var: variables[2]._id,
-                value: 'Var 1 aud 2'
-            }]
+        variables: [{
+            _var: variables[2]._id,
+            value: 'Var 1 aud 2'
+        }]
     },
     {
         _id: '615382338424cb11646d7668',
@@ -346,7 +350,18 @@ export const variations: PublicVariation[] = [
                 value: 1114
             }
         ]
-    }
+    },
+    {
+        _id: '615382338424cb11646d9668',
+        name: 'feature 4 variation',
+        key: 'variation-feature-2-key',
+        variables: [
+            {
+                _var: variables[9]._id,
+                value: 'feature 4 value'
+            },
+        ]
+    },
 ]
 
 export const variableHashes: ConfigBody['variableHashes'] = {
@@ -463,7 +478,26 @@ export const config: ConfigBody = {
 
             },
             variations: [variations[5]]
-        }],
+        },
+        {
+            _id: '614ef8aa475928459060721c',
+            type: FeatureType.release,
+            key: 'feature4',
+            configuration: {
+                _id: '61536f62502d80fff97ed640',
+                targets: [{
+                    _id: '61536f468fd67f0091982531',
+                    _audience: audiences[0],
+                    distribution: [{
+                        _variation: variations[8]._id,
+                        percentage: 1
+                    }]
+                }]
+
+            },
+            variations: [variations[8]]
+        }
+    ],
     variables,
     variableHashes
 }
@@ -521,7 +555,8 @@ export const barrenConfig: ConfigBody = {
                 }]
             },
             variations: [variations[0], variations[1], variations[2], variations[3], variations[4]]
-        }],
+        }
+    ],
     variables: [],
     variableHashes: {}
 }

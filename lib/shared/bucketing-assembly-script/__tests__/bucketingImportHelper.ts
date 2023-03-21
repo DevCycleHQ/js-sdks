@@ -1,12 +1,12 @@
 import { instantiate, Exports } from '../index'
 
-async function initialize() {
-    const methods = await instantiate(true)
+async function initialize(debug = true) {
+    const methods = await instantiate(debug)
     Object.assign(bucketingExports, methods)
 }
 
 type BucketingExports = Exports & {
-    initialize: () => Promise<void>
+    initialize: (debug?: boolean) => Promise<void>
 }
 
 const bucketingExports: BucketingExports = {
