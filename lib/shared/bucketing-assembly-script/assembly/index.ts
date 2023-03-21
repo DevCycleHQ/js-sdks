@@ -18,7 +18,6 @@ import { _clearPlatformData, _setPlatformData } from './managers/platformDataMan
 import { _getConfigData, _hasConfigData, _setConfigData } from './managers/configDataManager'
 import { _getClientCustomData, _setClientCustomData } from './managers/clientCustomDataManager'
 import { queueVariableEvaluatedEvent } from './managers/eventQueueManager'
-import Config from "react-native-config";
 
 export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
     const boundedHash = _generateBoundedHashes(user_id, target_id)
