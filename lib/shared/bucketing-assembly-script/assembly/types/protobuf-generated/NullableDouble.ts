@@ -57,7 +57,7 @@ export class NullableDouble {
   }
 
   free(): void {
-      heap.free(changetype<usize>(this.value))
+      heap.free(changetype<usize>(this))
   }
 }
 
