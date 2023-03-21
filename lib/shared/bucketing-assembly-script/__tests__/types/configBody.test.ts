@@ -1,18 +1,28 @@
 import testData from '../../../bucketing-test-data/json-data/testData.json'
 import {
     testConfigBodyClass,
+    testConfigBodyClassFromUTF8,
     setConfigDataWithEtag,
     hasConfigDataForEtag
 } from '../bucketingImportHelper'
 import cloneDeep from 'lodash/cloneDeep'
 
-describe('Config Body', () => {
+const testConfigBody = (str: string, utf8: boolean): any => {
+    if (utf8) {
+        const buff = Buffer.from(str, 'utf8')
+        return JSON.parse(testConfigBodyClassFromUTF8(buff))
+    } else {
+        return JSON.parse(testConfigBodyClass(str))
+    }
+}
+
+describe.each([true, false])('Config Body', (utf8) => {
     it('should parse valid JSON into ConfigBody class', () => {
-        const result = JSON.parse(testConfigBodyClass(JSON.stringify(testData.config)))
-        expect(result).toEqual(JSON.parse(JSON.stringify({
-            ...testData.config,
-            variableHashes: undefined
-        })))
+        expect(testConfigBody(JSON.stringify(testData.config), utf8))
+            .toEqual(JSON.parse(JSON.stringify({
+                ...testData.config,
+                variableHashes: undefined
+            })))
     })
 
     it('should throw if target.rollout is missing type', () => {
@@ -21,7 +31,7 @@ describe('Config Body', () => {
         target.rollout = {
             startDate: new Date()
         }
-        expect(() => testConfigBodyClass(JSON.stringify(config)))
+        expect(() => testConfigBody(JSON.stringify(config), utf8))
             .toThrow('Missing string value for key: "type"')
     })
 
@@ -29,7 +39,7 @@ describe('Config Body', () => {
         const config = cloneDeep(testData.config)
         const feature: any = config.features[0]
         feature.type = 'invalid'
-        expect(() => testConfigBodyClass(JSON.stringify(config)))
+        expect(() => testConfigBody(JSON.stringify(config), utf8))
             .toThrow('Invalid string value: invalid, for key: type, ' +
                 'must be one of: release, experiment, permission, ops')
     })
@@ -41,7 +51,7 @@ describe('Config Body', () => {
             type: 'user',
             comparator: '='
         } as typeof filters.filters[0]
-        expect(() => testConfigBodyClass(JSON.stringify(config)))
+        expect(() => testConfigBody(JSON.stringify(config), utf8))
             .toThrow('Array not found for key: "values"')
     })
 
@@ -49,7 +59,7 @@ describe('Config Body', () => {
         const config = cloneDeep(testData.config)
         const filters = config.features[0].configuration.targets[0]._audience.filters
         filters.operator = 'xylophone'
-        expect(() => testConfigBodyClass(JSON.stringify(config)))
+        expect(() => testConfigBody(JSON.stringify(config), utf8))
             .not.toThrow()
     })
 
@@ -61,7 +71,7 @@ describe('Config Body', () => {
             values: [],
             subType: 'subtype'
         } as unknown as typeof filters.filters[0]
-        expect(() => testConfigBodyClass(JSON.stringify(config)))
+        expect(() => testConfigBody(JSON.stringify(config), utf8))
             .toThrow('Missing string value for key: "comparator", obj: {"type":"user","values":[],"subType":"subtype"')
     })
 
@@ -75,7 +85,7 @@ describe('Config Body', () => {
             dataKeyType: 'String',
             subType: 'customData'
         } as unknown as typeof filters.filters[0]
-        expect(() => testConfigBodyClass(JSON.stringify(config)))
+        expect(() => testConfigBody(JSON.stringify(config), utf8))
             .toThrow('Missing string value for key: "dataKey"')
     })
 
@@ -89,7 +99,7 @@ describe('Config Body', () => {
             dataKey: 'datakey',
             subType: 'customData'
         } as unknown as typeof filters.filters[0]
-        expect(() => testConfigBodyClass(JSON.stringify(config)))
+        expect(() => testConfigBody(JSON.stringify(config), utf8))
             .toThrow('Missing string value for key: "dataKeyType"')
     })
 
@@ -104,7 +114,7 @@ describe('Config Body', () => {
             dataKeyType: 'invalid',
             subType: 'customData'
         } as unknown as typeof filters.filters[0]
-        expect(() => testConfigBodyClass(JSON.stringify(config)))
+        expect(() => testConfigBody(JSON.stringify(config), utf8))
             .toThrow('Invalid string value: invalid, for key: dataKeyType')
     })
 
@@ -114,12 +124,12 @@ describe('Config Body', () => {
         filters.filters[0] = {
             type: 'all'
         } as typeof filters.filters[0]
-        expect(() => testConfigBodyClass(JSON.stringify(config))).not.toThrow()
+        expect(() => testConfigBody(JSON.stringify(config), utf8)).not.toThrow()
     })
 
     it('does not fail on multiple iterations of testConfigBodyClass', () => {
         for (let i = 0; i < 1000; i++) {
-            testConfigBodyClass(JSON.stringify(testData.config))
+            testConfigBody(JSON.stringify(testData.config), utf8)
         }
     })
 })
