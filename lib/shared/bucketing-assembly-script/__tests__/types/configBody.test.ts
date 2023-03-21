@@ -35,6 +35,8 @@ describe.each([true, false])('Config Body', (utf8) => {
             .toThrow('Missing string value for key: "type"')
     })
 
+    it('should handle ')
+
     it('should throw if feature.type is missing not a valid type', () => {
         const config = cloneDeep(testData.config)
         const feature: any = config.features[0]

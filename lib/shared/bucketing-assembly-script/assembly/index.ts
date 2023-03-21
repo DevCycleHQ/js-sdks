@@ -155,6 +155,10 @@ export function clearPlatformData(empty: string | null = null): void {
     _clearPlatformData()
 }
 
+export function setConfigDataUTF8Preallocated(sdkKey: string, configDataStr: Uint8Array, length: i32): void {
+    setConfigDataUTF8(sdkKey, configDataStr.slice(0, length))
+}
+
 export function setConfigDataUTF8(sdkKey: string, configDataStr: Uint8Array): void {
     const configData = ConfigBody.fromUTF8(configDataStr)
     _setConfigData(sdkKey, configData)
