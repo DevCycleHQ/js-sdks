@@ -1,6 +1,6 @@
 /* eslint-disable */
 // Linter disabled due to this code depending on semicolons etc.
-import { unicodeEscape } from './stringHelpers'
+import { unicodeCharEscape } from './stringHelpers'
 
 export function murmurhashV3_js(key: string, seed: u32): string {
     return `${murmurhashV3(key, seed)}`
@@ -12,22 +12,26 @@ export const murmurhashBufferSize = 2000
 const keyBuffer = new StaticArray<i32>(murmurhashBufferSize)
 
 export function murmurhashV3(key: string, seed: u32): u32 {
-    const asciiKey = unicodeEscape(key)
     let currentBuffer = keyBuffer
-    if (asciiKey.length > keyBuffer.length) {
+    if (key.length > keyBuffer.length) {
         console.log("Warning: exceeded maximum size of murmurhash buffer.")
-        currentBuffer = new StaticArray<i32>(asciiKey.length)
-    }
-    for (let i = 0; i < asciiKey.length; i++) {
-        // using unchecked here provides faster access to the array (no bounds checking)
-        unchecked(currentBuffer[i] = asciiKey.charCodeAt(i));
+        currentBuffer = new StaticArray<i32>(key.length)
     }
 
-    const length = asciiKey.length;
+    for (let i = 0; i < key.length; i++) {
+        const charCode: i32 = key.charCodeAt(i)
+        if (charCode > 127) {
+            unchecked(currentBuffer[i] = unicodeCharEscape(charCode).charCodeAt(0))
+        } else {
+            unchecked(currentBuffer[i] = charCode)
+        }
+    }
+
+    const length = key.length;
 
     let remainder: i32, bytes: i32, h1b: i32, c1: i32, c2: i32, k1: i32, i: i32, h1: i32;
 
-    remainder = asciiKey.length & 3;
+    remainder = key.length & 3;
     bytes = length - remainder;
     h1 = seed;
     c1 = 0xcc9e2d51;
