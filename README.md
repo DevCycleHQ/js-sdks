@@ -125,4 +125,4 @@ This will create three files in the `dist/sdk/js` folder:
 - devcycle.min.js.LICENSE.txt
 ```
 
-Upload them all to S3.
+Upload them all to S3. Ensure that their access controls allow public access.
