@@ -33,35 +33,34 @@ Current benchmark results on M1 Pro Macbook Pro:
 ```
 Benchmarks:
   variableForUser
-    variableForUser                   0.046 ms ±  0.95 %  (79 runs sampled)
-    variableForUser_PB                0.024 ms ±  2.47 %  (91 runs sampled)
-    variableForUser - large user      0.124 ms ±  6.59 %  (87 runs sampled)
-    variableForUser_PB - large user   0.049 ms ±  0.38 %  (95 runs sampled)
-    variableForUser - defaulted       0.011 ms ±  0.50 %  (97 runs sampled)
-    variableForUser_PB - defaulted    0.009 ms ±  0.37 %  (95 runs sampled)
-    variableForUser - unknown key     0.011 ms ±  0.32 %  (97 runs sampled)
-    variableForUser_PB - unknown key  0.009 ms ±  2.37 %  (93 runs sampled)
+    variableForUser                   0.043 ms ±  0.84 %  (81 runs sampled)
+    variableForUser_PB                0.020 ms ±  2.56 %  (93 runs sampled)
+    variableForUser - large user      0.106 ms ±  0.21 %  (90 runs sampled)
+    variableForUser_PB - large user   0.045 ms ±  1.07 %  (95 runs sampled)
+    variableForUser - defaulted       0.011 ms ±  0.36 %  (98 runs sampled)
+    variableForUser_PB - defaulted    0.008 ms ±  0.65 %  (95 runs sampled)
+    variableForUser - unknown key     0.010 ms ±  0.45 %  (95 runs sampled)
+    variableForUser_PB - unknown key  0.008 ms ±  1.92 %  (94 runs sampled)
   variableForUser - Large Config
-    variableForUser     0.042 ms ±  1.08 %  (79 runs sampled)
-    variableForUser_PB  0.022 ms ±  1.20 %  (93 runs sampled)
+    variableForUser     0.037 ms ±  0.79 %  (79 runs sampled)
+    variableForUser_PB  0.017 ms ±  0.48 %  (91 runs sampled)
   generateBucketedConfigForUser
-    generateBucketedConfigForUser               0.701 ms ±  1.66 %  (67 runs sampled)
-    generateBucketedConfigForUser - large user  0.343 ms ±  0.58 %  (96 runs sampled)
+    generateBucketedConfigForUser               0.643 ms ±  0.73 %  (70 runs sampled)
+    generateBucketedConfigForUser - large user  0.323 ms ±  0.18 %  (99 runs sampled)
   generateBucketedConfigForUser - Large Config
-    generateBucketedConfigForUser               7.67 ms ±  1.10 %  (63 runs sampled)
-    generateBucketedConfigForUser - large user  7.78 ms ±  0.41 %  (84 runs sampled)
+    generateBucketedConfigForUser               7.37 ms ±  0.79 %  (61 runs sampled)
+    generateBucketedConfigForUser - large user  7.36 ms ±  0.36 %  (88 runs sampled)
   initEventQueue
-    initEventQueue  0.009 ms ±  40.68 %  (50 runs sampled)
+    initEventQueue  0.009 ms ±  40.90 %  (46 runs sampled)
   setPlatformData
-    setPlatformData  0.021 ms ±  0.78 %  (80 runs sampled)
+    setPlatformData  0.020 ms ±  0.79 %  (82 runs sampled)
   setConfigData
-    setConfigData - small   2.24 ms ±  21.92 %  (61 runs sampled)
-    setConfigData - large  22.65 ms ±  34.44 %  (43 runs sampled)
+    setConfigData - small   2.15 ms ±  21.54 %  (61 runs sampled)
+    setConfigData - large  25.16 ms ±  38.69 %  (42 runs sampled)
   setClientCustomData
-    setClientCustomData - small  0.019 ms ±  1.72 %  (82 runs sampled)
+    setClientCustomData - small  0.019 ms ±  0.96 %  (87 runs sampled)
 Test Suites: 1 passed, 1 total
 Tests:       19 passed, 19 total
 Snapshots:   0 total
-Time:        114.675 s, estimated 115 s
-Ran all test suites.
+Time:        114.611 s, estimated 115 s
 ```
