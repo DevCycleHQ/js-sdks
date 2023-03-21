@@ -18,6 +18,7 @@ import { _clearPlatformData, _setPlatformData } from './managers/platformDataMan
 import { _getConfigData, _hasConfigData, _setConfigData } from './managers/configDataManager'
 import { _getClientCustomData, _setClientCustomData } from './managers/clientCustomDataManager'
 import { queueVariableEvaluatedEvent } from './managers/eventQueueManager'
+import Config from "react-native-config";
 
 export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
     const boundedHash = _generateBoundedHashes(user_id, target_id)
@@ -155,13 +156,18 @@ export function clearPlatformData(empty: string | null = null): void {
     _clearPlatformData()
 }
 
+export function setConfigDataUTF8(sdkKey: string, configDataStr: Uint8Array): void {
+    const configData = ConfigBody.fromUTF8(configDataStr)
+    _setConfigData(sdkKey, configData)
+}
+
 export function setConfigData(sdkKey: string, configDataStr: string): void {
-    const configData = new ConfigBody(configDataStr)
+    const configData = ConfigBody.fromString(configDataStr)
     _setConfigData(sdkKey, configData)
 }
 
 export function setConfigDataWithEtag(sdkKey: string, configDataStr: string, etag: string): void {
-    const configData = new ConfigBody(configDataStr, etag)
+    const configData = ConfigBody.fromString(configDataStr, etag)
     _setConfigData(sdkKey, configData)
 }
 
