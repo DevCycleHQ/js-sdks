@@ -103,12 +103,11 @@ export class NullableCustomData {
   }
 
   free(): void {
-      for (let i: i32 = 0; i < this.value.size; ++i) {
-          heap.free(changetype<usize>(this.value.values()[i]))
+      const values = this.value.values()
+      for (let i: i32 = 0; i < values.length; ++i) {
+          heap.free(changetype<usize>(values[i]))
       }
-      // heap.free(changetype<usize>(this.value))
-      // heap.free(changetype<usize>(this.isNull))
-      // heap.free(changetype<usize>(this))
+      heap.free(changetype<usize>(this))
   }
 }
 

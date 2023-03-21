@@ -48,7 +48,7 @@ export class NullableString {
   }
 
   free(): void {
-      // heap.free(changetype<usize>(this))
+      heap.free(changetype<usize>(this))
   }
 }
 
