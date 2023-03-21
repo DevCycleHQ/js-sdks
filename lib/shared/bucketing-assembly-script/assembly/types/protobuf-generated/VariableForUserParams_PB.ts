@@ -35,6 +35,7 @@ export class VariableForUserParams_PB {
     const end: usize = length < 0 ? reader.end : reader.ptr + length;
     const message = new VariableForUserParams_PB();
 
+    let sdkKey: string
     while (reader.ptr < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -88,15 +89,10 @@ export class VariableForUserParams_PB {
   }
 
   free(): void {
-      // heap.free(changetype<usize>(this.sdkKey))
-      // heap.free(changetype<usize>(this.variableKey))
-      // heap.free(changetype<usize>(this.variableType))
       if (this.user) {
           (this.user as DVCUser_PB).free()
-          heap.free(changetype<usize>(this.user))
       }
-      // heap.free(changetype<usize>(this.shouldTrackEvent))
-      // heap.free(changetype<usize>(this))
+      heap.free(changetype<usize>(this))
   }
 }
 

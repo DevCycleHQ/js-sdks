@@ -90,10 +90,7 @@ export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
         params.shouldTrackEvent
     )
     const result = variable ? variable.toProtobuf() : null
-
     params.free()
-    heap.free(changetype<usize>(params))
-
     return result
 }
 
