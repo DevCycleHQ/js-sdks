@@ -35,7 +35,17 @@ describe.each([true, false])('Config Body', (utf8) => {
             .toThrow('Missing string value for key: "type"')
     })
 
-    it('should handle ')
+    it('should handle extended UTF8 characters, from UTF8: ' + utf8, () => {
+        const config = {
+            ...testData.config,
+            project: { ...testData.config.project, key: '👍 ö' }
+        }
+        expect(testConfigBody(JSON.stringify(config), utf8))
+            .toEqual(JSON.parse(JSON.stringify({
+                ...config,
+                variableHashes: undefined
+            })))
+    })
 
     it('should throw if feature.type is missing not a valid type', () => {
         const config = cloneDeep(testData.config)
