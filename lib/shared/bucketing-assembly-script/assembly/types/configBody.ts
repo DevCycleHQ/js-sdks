@@ -90,11 +90,21 @@ export class ConfigBody {
     private readonly _variableIdMap: Map<string, Variable>
     private readonly _variableIdToFeatureMap: Map<string, Feature>
 
-    constructor(configStr: string, etag: string | null = null) {
+    static fromUTF8(configUTF8: Uint8Array, etag: string | null = null): ConfigBody {
+        const configJSON = JSON.parse(configUTF8)
+        if (!configJSON.isObj) throw new Error('generateBucketedConfig config param not a JSON Object')
+        const configJSONObj = configJSON as JSON.Obj
+        return new ConfigBody(configJSONObj, etag)
+    }
+
+    static fromString(configStr: string, etag: string | null = null): ConfigBody {
         const configJSON = JSON.parse(configStr)
         if (!configJSON.isObj) throw new Error('generateBucketedConfig config param not a JSON Object')
         const configJSONObj = configJSON as JSON.Obj
+        return new ConfigBody(configJSONObj, etag)
+    }
 
+    constructor(configJSONObj: JSON.Obj, etag: string | null = null) {
         this.etag = etag
 
         this.project = new PublicProject(getJSONObjFromJSON(configJSONObj, 'project'))

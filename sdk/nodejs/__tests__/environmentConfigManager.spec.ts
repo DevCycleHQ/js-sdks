@@ -49,7 +49,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
 
         await envConfig._fetchConfig()
-        expect(getBucketingLib().setConfigData).toHaveBeenCalledWith('sdkKey', '{}')
+        expect(getBucketingLib().setConfigDataUTF8).toHaveBeenCalledWith('sdkKey', Buffer.from('{}', 'utf8'))
 
         expect(envConfig).toEqual(expect.objectContaining({
             sdkKey: 'sdkKey',

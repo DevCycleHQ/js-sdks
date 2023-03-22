@@ -121,7 +121,12 @@ export function doesUserPassRolloutFromJSON(rolloutStr: string | null, boundedHa
 }
 
 export function testConfigBodyClass(configStr: string, etag: string | null = null): string {
-    const config = new ConfigBody(configStr, etag)
+    const config = ConfigBody.fromString(configStr, etag)
+    return config.stringify()
+}
+
+export function testConfigBodyClassFromUTF8(configStr: Uint8Array, etag: string | null = null): string {
+    const config = ConfigBody.fromUTF8(configStr, etag)
     return config.stringify()
 }
 
