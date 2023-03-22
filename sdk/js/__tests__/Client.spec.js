@@ -28,6 +28,7 @@ describe('DVCClient tests', () => {
         environment: {},
         features: {},
         featureVariationMap: {},
+        variableVariationMap: {},
         variables: {
             key: {
                 _id: 'id',

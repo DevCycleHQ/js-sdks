@@ -44,6 +44,16 @@ export class CacheStore {
         this.logger?.info('Successfully saved config to local storage')
     }
 
+    private isBucketedUserConfig(object: unknown): object is BucketedUserConfig {
+        if (!object || typeof object !== 'object') return false 
+        return 'features' in object
+            && 'project' in object
+            && 'environment' in object
+            && 'featureVariationMap' in object
+            && 'variableVariationMap' in object
+            && 'variables' in object
+    }
+
     async loadConfig(user: DVCPopulatedUser, configCacheTTL= 604800000): Promise<BucketedUserConfig | null> {
         const userId = await this.loadConfigUserId(user)
         if (user.user_id !== userId) {
@@ -59,9 +69,13 @@ export class CacheStore {
         }
 
         const configKey = await this.getConfigKey(user)
-        const config = await this.store.load<BucketedUserConfig>(configKey)
+        const config = await this.store.load<unknown>(configKey)
         if (config === null || config === undefined) {
             this.logger?.debug('Skipping cached config: no config found')
+            return null
+        }
+        if (!this.isBucketedUserConfig(config)) {
+            this.logger?.debug(`Skipping cached config: invalid config found: ${JSON.stringify(config)}`)
             return null
         }
 
