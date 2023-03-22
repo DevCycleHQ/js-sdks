@@ -186,9 +186,20 @@ export function variableForUserPreallocated(
  * @param platformDataJSONStr
  */
 export function setPlatformData(platformDataJSONStr: string): void {
-    const platformData = new PlatformData(platformDataJSONStr)
+    const platformData = PlatformData.fromString(platformDataJSONStr)
     _setPlatformData(platformData)
 }
+
+/**
+ * Same interfaces as `setPlatformData()` but with a UTF8 buffer instead of a string.
+ * This is to avoid issues encoding / decoding between UTF8 and UTF16.
+ * @param platformDataJSONStr
+ */
+export function setPlatformDataUTF8(platformDataJSONStr: Uint8Array): void {
+    const platformData = PlatformData.fromUTF8(platformDataJSONStr)
+    _setPlatformData(platformData)
+}
+
 
 /**
  * Clear the platform data for the given SDK key.
@@ -259,6 +270,22 @@ export function hasConfigDataForEtag(sdkKey: string, etag: string): bool {
  */
 export function setClientCustomData(sdkKey: string, clientCustomDataJSONStr: string): void {
     const parsed = JSON.parse(clientCustomDataJSONStr)
+    if (!parsed.isObj) {
+        throw new Error('invalid global clientCustomDataJSONStr')
+    }
+
+    _setClientCustomData(sdkKey, parsed as JSON.Obj)
+}
+
+/**
+ * Set the client custom data for the given SDK key and JSON String custom data.
+ * Same interfaces as `setClientCustomData()` but with a UTF8 buffer instead of a string.
+ * This is to avoid issues encoding / decoding between UTF8 and UTF16.
+ * @param sdkKey
+ * @param clientCustomDataUTF8
+ */
+export function setClientCustomDataUTF8(sdkKey: string, clientCustomDataUTF8: Uint8Array): void {
+    const parsed = JSON.parse(clientCustomDataUTF8)
     if (!parsed.isObj) {
         throw new Error('invalid global clientCustomDataJSONStr')
     }
