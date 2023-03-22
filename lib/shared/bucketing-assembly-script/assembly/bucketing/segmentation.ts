@@ -12,6 +12,8 @@ import {
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { getF64FromJSONValue } from '../helpers/jsonHelpers'
+import { CustomDataValuePB, DVCPopulatedUserPB } from '../types/dvcUserPB'
+import { CustomDataValue } from '../../protobuf/compiled'
 
 // TODO add support for OR/XOR as well as recursive filters
 /**
@@ -25,8 +27,8 @@ import { getF64FromJSONValue } from '../helpers/jsonHelpers'
 export function _evaluateOperator(
     operator: AudienceOperator,
     audiences: Map<string, NoIdAudience>,
-    user: DVCPopulatedUser,
-    clientCustomData: JSON.Obj
+    user: DVCPopulatedUserPB,
+    clientCustomData: Map<string, CustomDataValuePB>
 ): bool {
     if (!operator.filters.length) return false
 
@@ -62,8 +64,8 @@ export function _evaluateOperator(
 function doesUserPassFilter(
     filter: AudienceFilter,
     audiences: Map<string, NoIdAudience>,
-    user: DVCPopulatedUser,
-    clientCustomData: JSON.Obj
+    user: DVCPopulatedUserPB,
+    clientCustomData: Map<string, CustomDataValuePB>
 ): bool {
     let isValid = true
 
@@ -97,8 +99,8 @@ function doesUserPassFilter(
 function filterForAudienceMatch(
     filter: AudienceMatchFilter,
     configAudiences: Map<string, NoIdAudience>,
-    user: DVCPopulatedUser,
-    clientCustomData: JSON.Obj
+    user: DVCPopulatedUserPB,
+    clientCustomData: Map<string, CustomDataValuePB>
 ): bool {
     const audiences = getFilterAudiencesAsStrings(filter)
     const comparator = filter.comparator
@@ -121,9 +123,9 @@ function filterForAudienceMatch(
 }
 function filterFunctionsBySubtype(
     subType: string,
-    user: DVCPopulatedUser,
+    user: DVCPopulatedUserPB,
     filter: UserFilter,
-    clientCustomData: JSON.Obj
+    clientCustomData: Map<string, CustomDataValuePB>
 ): bool {
     if (subType === 'country') {
         return _checkStringsFilter(user.country, filter)
@@ -334,7 +336,7 @@ export function _checkVersionFilters(appVersion: string | null, filter: UserFilt
     }
 }
 
-export function _checkCustomData(data: JSON.Obj | null, clientCustomData: JSON.Obj, filter: CustomDataFilter): bool {
+export function _checkCustomData(data: Map<string, CustomDataValuePB>, clientCustomData: Map<string, CustomDataValuePB>, filter: CustomDataFilter): bool {
     const operator = filter.comparator
 
     let dataValue = data ? data.get(filter.dataKey) : null
@@ -350,15 +352,13 @@ export function _checkCustomData(data: JSON.Obj | null, clientCustomData: JSON.O
         if (dataValue.isNull) {
             return _checkStringsFilter(null, filter)
         } else {
-            const jsonStr = dataValue as JSON.Str
-            return _checkStringsFilter(jsonStr.valueOf(), filter)
+            return _checkStringsFilter(dataValue.asString(), filter)
         }
     } else if (filter.dataKeyType === 'Number'
-        && dataValue && (dataValue.isFloat || dataValue.isInteger)) {
-        return checkNumbersFilterJSONValue(dataValue, filter)
+        && dataValue && dataValue.isFloat) {
+        return _checkNumbersFilter(dataValue.asNumber(), filter)
     } else if (filter.dataKeyType === 'Boolean' && dataValue && dataValue.isBool) {
-        const boolValue = dataValue as JSON.Bool
-        return _checkBooleanFilter(boolValue.valueOf(), filter)
+        return _checkBooleanFilter(dataValue.asBool(), filter)
     } else if (!dataValue && operator === '!=') {
         return true
     } else {
@@ -406,16 +406,14 @@ export function getFilterValues(filter: UserFilter): JSON.Value[] {
  * If value has a datatype, use one of the type checkers above (eg. checkStringFilter)
  * NOTE: The use of Number.isNaN is required over the global isNaN as the check it performs is more specific
  */
-function checkValueExists(value: JSON.Value | null): bool {
+function checkValueExists(value: CustomDataValuePB | null): bool {
     if (!value) return false
-    const stringValue = value.isString ? value as JSON.Str : null
-    const floatValue = value.isFloat ? value as JSON.Float : null
-    const intValue = value.isInteger ? value as JSON.Integer : null
-    const boolValue = value.isBool ? value as JSON.Bool : null
+    const stringValue = value.isString ? value.asString() : null
+    const floatValue = value.isFloat ? value.asNumber() : null
+    const boolValue = value.isBool ? value.asBool() : null
 
     return value !== null
-        && !!(stringValue || floatValue || intValue || boolValue)
-        && (!stringValue || stringValue.valueOf() !== '')
-        && (!floatValue || !isNaN(floatValue.valueOf()))
-        && (!intValue || !isNaN(intValue.valueOf()))
+        && !!(stringValue || floatValue || boolValue)
+        && (!stringValue || stringValue !== '')
+        && (!floatValue || !isNaN(floatValue))
 }

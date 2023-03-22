@@ -2,12 +2,13 @@ import { JSON } from 'assemblyscript-json/assembly'
 import { first, last } from '../helpers/lodashHelpers'
 import {
     ConfigBody, Target as PublicTarget, Feature as PublicFeature, BucketedUserConfig,
-    Rollout as PublicRollout, DVCPopulatedUser, SDKVariable, SDKFeature, RolloutStage,
+    Rollout as PublicRollout, SDKVariable, SDKFeature, RolloutStage,
     Target, Variation, FeatureVariation, Feature
 } from '../types'
 
 import { murmurhashV3 } from '../helpers/murmurhash'
 import { _evaluateOperator } from './segmentation'
+import { CustomDataValuePB, DVCPopulatedUserPB } from '../types/dvcUserPB'
 
 // Max value of an unsigned 32-bit integer, which is what murmurhash returns
 const MAX_HASH_VALUE: f64 = 4294967295
@@ -107,8 +108,8 @@ class SegmentedFeatureData {
 function evaluateSegmentationForFeature(
     config: ConfigBody,
     feature: Feature,
-    user: DVCPopulatedUser,
-    clientCustomData: JSON.Obj
+    user: DVCPopulatedUserPB,
+    clientCustomData: Map<string, CustomDataValuePB>
 ): Target | null {
     // Returns the first target for which the user passes segmentation
     for (let i = 0; i < feature.configuration.targets.length; i++) {
@@ -122,8 +123,8 @@ function evaluateSegmentationForFeature(
 
 export function getSegmentedFeatureDataFromConfig(
     config: ConfigBody,
-    user: DVCPopulatedUser,
-    clientCustomData: JSON.Obj
+    user: DVCPopulatedUserPB,
+    clientCustomData: Map<string, CustomDataValuePB>
 ): SegmentedFeatureData[] {
     const accumulator: SegmentedFeatureData[] = []
 
@@ -157,8 +158,8 @@ class TargetAndHashes {
 function doesUserQualifyForFeature(
     config: ConfigBody,
     feature: Feature,
-    user: DVCPopulatedUser,
-    clientCustomData: JSON.Obj
+    user: DVCPopulatedUserPB,
+    clientCustomData: Map<string, CustomDataValuePB>
 ): TargetAndHashes | null {
     const target = evaluateSegmentationForFeature(
         config,
@@ -198,8 +199,8 @@ export function bucketUserForVariation(
 
 export function _generateBucketedConfig(
     config: ConfigBody,
-    user: DVCPopulatedUser,
-    clientCustomData: JSON.Obj
+    user: DVCPopulatedUserPB,
+    clientCustomData: Map<string, CustomDataValuePB>
 ): BucketedUserConfig {
     const variableMap = new Map<string, SDKVariable>()
     const featureKeyMap = new Map<string, SDKFeature>()
@@ -275,9 +276,9 @@ class BucketedVariableResponse {
 
 export function _generateBucketedVariableForUser(
     config: ConfigBody,
-    user: DVCPopulatedUser,
+    user: DVCPopulatedUserPB,
     key: string,
-    clientCustomData: JSON.Obj,
+    clientCustomData: Map<string, CustomDataValuePB>,
 ): BucketedVariableResponse | null {
     const variable = config.getVariableForKey(key)
     if (!variable) {

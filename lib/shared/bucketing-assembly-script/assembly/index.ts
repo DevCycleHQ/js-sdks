@@ -7,7 +7,7 @@ import {
     DVCUser,
     SDKVariable,
     VariableForUserParams_PB,
-    decodeVariableForUserParams_PB, VariableType_PB
+    decodeVariableForUserParams_PB, VariableType_PB, DVCUser_PB
 } from './types'
 import {
     _generateBoundedHashes,
@@ -18,6 +18,7 @@ import { _clearPlatformData, _setPlatformData } from './managers/platformDataMan
 import { _getConfigData, _hasConfigData, _setConfigData } from './managers/configDataManager'
 import { _getClientCustomData, _setClientCustomData } from './managers/clientCustomDataManager'
 import { queueVariableEvaluatedEvent } from './managers/eventQueueManager'
+import { DVCPopulatedUserPB, DVCUserPB } from './types/dvcUserPB'
 
 export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
     const boundedHash = _generateBoundedHashes(user_id, target_id)
@@ -87,9 +88,9 @@ export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
     const params: VariableForUserParams_PB = decodeVariableForUserParams_PB(protobuf)
     const user = params.user
     if (!user) throw new Error('Missing user from variableForUser_PB protobuf')
-    const dvcUser = new DVCPopulatedUser(DVCUser.fromPBUser(user))
+    const dvcUser = new DVCPopulatedUserPB(DVCUserPB.fromPBUser(user))
 
-    const variable = _variableForDVCUser(
+    const variable = _variableForDVCUserPB(
         params.sdkKey,
         dvcUser,
         params.variableKey,
@@ -99,18 +100,9 @@ export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
     return variable ? variable.toProtobuf() : null
 }
 
-/**
- * Internal method that returns the variable value for the given DVCPopulatedUser and variable key and variable type.
- * Returns a SDKVariable object.
- * @param sdkKey
- * @param dvcUser
- * @param variableKey
- * @param variableType
- * @param shouldTrackEvent
- */
-function _variableForDVCUser(
+function _variableForDVCUserPB(
     sdkKey: string,
-    dvcUser: DVCPopulatedUser,
+    dvcUser: DVCPopulatedUserPB,
     variableKey: string,
     variableType: VariableType,
     shouldTrackEvent: boolean
@@ -137,25 +129,46 @@ function _variableForDVCUser(
     return variable
 }
 
-/**
- * Returns the variable value for the given user and variable key and variable type.
- * @param sdkKey
- * @param userJSONStr
- * @param variableKey
- * @param variableType
- * @param shouldTrackEvent should we track an event for this variable evaluation
- */
-export function variableForUser(
+function _variableForDVCUser(
     sdkKey: string,
-    userJSONStr: string,
+    dvcUser: DVCPopulatedUserPB,
     variableKey: string,
     variableType: VariableType,
-    shouldTrackEvent: boolean,
-): string | null {
-    const user = DVCPopulatedUser.fromJSONString(userJSONStr)
-    const variable = _variableForDVCUser(sdkKey, user, variableKey, variableType, shouldTrackEvent)
-    return variable ? variable.stringify() : null
+    shouldTrackEvent: boolean
+): SDKVariable | null {
+    const config = _getConfigData(sdkKey)
+    const response = _generateBucketedVariableForUser(config, dvcUser, variableKey, _getClientCustomData(sdkKey))
+
+    let variable: SDKVariable | null = (response && response.variable) ? response.variable : null
+    if (variable && variable.type !== VariableTypeStrings[variableType]) {
+        variable = null
+    }
+
+    const variableVariationMap = new Map<string, FeatureVariation>()
+    if (response) {
+        variableVariationMap.set(variableKey, new FeatureVariation(
+            response.feature._id,
+            response.variation._id
+        ))
+    }
+
+    if (shouldTrackEvent) {
+        queueVariableEvaluatedEvent(sdkKey, variableVariationMap, variable, variableKey)
+    }
+    return variable
 }
+
+// export function variableForUser(
+//     sdkKey: string,
+//     userStr: string,
+//     variableKey: string,
+//     variableType: VariableType,
+//     shouldTrackEvent: boolean,
+// ): string | null {
+//     const user = DVCPopulatedUser.fromJSONString(userStr)
+//     const variable = _variableForDVCUser(sdkKey, user, variableKey, variableType, shouldTrackEvent)
+//     return variable ? variable.stringify() : null
+// }
 
 /**
  * A version of the variableForUser function that takes a preallocated string for the user and variable keys.
@@ -167,26 +180,26 @@ export function variableForUser(
  * @param variableKeyLength
  * @param variableType
  */
-export function variableForUserPreallocated(
-    sdkKey: string,
-    userStr: string,
-    // pass in length of actual underlying string
-    // (the userStr starts with that and may contain extra preallocated bytes)
-    userStrLength: i32,
-    variableKey: string,
-    // ditto
-    variableKeyLength: i32,
-    variableType: VariableType,
-    shouldTrackEvent: boolean
-): string | null {
-    return variableForUser(
-        sdkKey,
-        userStr.substr(0, userStrLength),
-        variableKey.substr(0, variableKeyLength),
-        variableType,
-        shouldTrackEvent,
-    )
-}
+// export function variableForUserPreallocated(
+//     sdkKey: string,
+//     userStr: string,
+//     // pass in length of actual underlying string
+//     // (the userStr starts with that and may contain extra preallocated bytes)
+//     userStrLength: i32,
+//     variableKey: string,
+//     // ditto
+//     variableKeyLength: i32,
+//     variableType: VariableType,
+//     shouldTrackEvent: boolean
+// ): string | null {
+//     return variableForUser(
+//         sdkKey,
+//         userStr.substr(0, userStrLength),
+//         variableKey.substr(0, variableKeyLength),
+//         variableType,
+//         shouldTrackEvent,
+//     )
+// }
 
 /**
  * Set the platform data for the given SDK key.
@@ -270,19 +283,15 @@ export function hasConfigDataForEtag(sdkKey: string, etag: string): bool {
     return configData && configData.etag !== null && configData.etag === etag
 }
 
-/**
- * Set the client custom data for the given SDK key and JSON String custom data.
- * @param sdkKey
- * @param clientCustomDataJSONStr
- */
-export function setClientCustomData(sdkKey: string, clientCustomDataJSONStr: string): void {
-    const parsed = JSON.parse(clientCustomDataJSONStr)
-    if (!parsed.isObj) {
-        throw new Error('invalid global clientCustomDataJSONStr')
-    }
-
-    _setClientCustomData(sdkKey, parsed as JSON.Obj)
-}
+// TODO switch this to protobuf
+// export function setClientCustomData(sdkKey: string, data: string): void {
+//     const parsed = JSON.parse(data)
+//     if (!parsed.isObj) {
+//         throw new Error('invalid global data')
+//     }
+//
+//     _setClientCustomData(sdkKey, parsed as JSON.Obj)
+// }
 
 /**
  * Set the client custom data for the given SDK key and JSON String custom data.
