@@ -27,9 +27,15 @@ export function generateBoundedHashesFromJSON(user_id: string, target_id: string
     return json.stringify()
 }
 
-export function generateBucketedConfigForUser(sdkKey: string, userStr: string): string  {
+/**
+ * Generate a full bucketed config for a user JSON string.
+ * This is not performant, and most SDKs should use variableForUser instead for `dvcClient.variable()` calls.
+ * @param sdkKey
+ * @param userJSONStr
+ */
+export function generateBucketedConfigForUser(sdkKey: string, userJSONStr: string): string  {
     const config = _getConfigData(sdkKey)
-    const user = DVCPopulatedUser.fromJSONString(userStr)
+    const user = DVCPopulatedUser.fromJSONString(userJSONStr)
 
     const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
     return bucketedConfig.stringify()
@@ -43,20 +49,33 @@ export enum VariableType {
 }
 export const VariableTypeStrings = ['Boolean', 'Number', 'String', 'JSON']
 
-function variableTypeFromPB(pb: VariableType_PB): VariableType {
-    switch (pb) {
+/**
+ * Convert PB VariableType to SDK VariableType
+ * @param pbVariableType
+ */
+function variableTypeFromPB(pbVariableType: VariableType_PB): VariableType {
+    switch (pbVariableType) {
         case VariableType_PB.Boolean: return VariableType.Boolean
         case VariableType_PB.Number: return VariableType.Number
         case VariableType_PB.String: return VariableType.String
         case VariableType_PB.JSON: return VariableType.JSON
-        default: throw new Error(`Unknown variable type: ${pb}`)
+        default: throw new Error(`Unknown variable type: ${pbVariableType}`)
     }
 }
 
+/**
+ * Preallocated memory version of variableForUser_PB. Returns a protobuf encoded SDKVariable object.
+ * @param protobuf
+ * @param length
+ */
 export function variableForUser_PB_Preallocated(protobuf: Uint8Array, length: i32): Uint8Array | null {
     return variableForUser_PB(protobuf.slice(0, length))
 }
 
+/**
+ * Protobuf version of variableForUser. Returns a protobuf encoded SDKVariable object.
+ * @param protobuf Protobuf encoded VariableForUserParams_PB object
+ */
 export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
     const params: VariableForUserParams_PB = decodeVariableForUserParams_PB(protobuf)
     const user = params.user
@@ -73,6 +92,15 @@ export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
     return variable ? variable.toProtobuf() : null
 }
 
+/**
+ * Internal method that returns the variable value for the given DVCPopulatedUser and variable key and variable type.
+ * Returns a SDKVariable object.
+ * @param sdkKey
+ * @param dvcUser
+ * @param variableKey
+ * @param variableType
+ * @param shouldTrackEvent
+ */
 function _variableForDVCUser(
     sdkKey: string,
     dvcUser: DVCPopulatedUser,
@@ -102,14 +130,22 @@ function _variableForDVCUser(
     return variable
 }
 
+/**
+ * Returns the variable value for the given user and variable key and variable type.
+ * @param sdkKey
+ * @param userJSONStr
+ * @param variableKey
+ * @param variableType
+ * @param shouldTrackEvent should we track an event for this variable evaluation
+ */
 export function variableForUser(
     sdkKey: string,
-    userStr: string,
+    userJSONStr: string,
     variableKey: string,
     variableType: VariableType,
     shouldTrackEvent: boolean,
 ): string | null {
-    const user = DVCPopulatedUser.fromJSONString(userStr)
+    const user = DVCPopulatedUser.fromJSONString(userJSONStr)
     const variable = _variableForDVCUser(sdkKey, user, variableKey, variableType, shouldTrackEvent)
     return variable ? variable.stringify() : null
 }
@@ -145,45 +181,86 @@ export function variableForUserPreallocated(
     )
 }
 
-export function setPlatformData(platformDataStr: string): void {
-    const platformData = new PlatformData(platformDataStr)
+/**
+ * Set the platform data for the given SDK key.
+ * @param platformDataJSONStr
+ */
+export function setPlatformData(platformDataJSONStr: string): void {
+    const platformData = new PlatformData(platformDataJSONStr)
     _setPlatformData(platformData)
 }
 
-// Add empty input string to make AS compiler work
+/**
+ * Clear the platform data for the given SDK key.
+ * @param empty Add empty input string to make AS compiler work
+ */
 export function clearPlatformData(empty: string | null = null): void {
     _clearPlatformData()
 }
 
-export function setConfigDataUTF8Preallocated(sdkKey: string, configDataStr: Uint8Array, length: i32): void {
-    setConfigDataUTF8(sdkKey, configDataStr.slice(0, length))
+/**
+ * Same interfaces as `setConfigDataUTF8()` but with a preallocated buffer.
+ * @param sdkKey
+ * @param configDataJSONStr
+ * @param length
+ */
+export function setConfigDataUTF8Preallocated(sdkKey: string, configDataJSONStr: Uint8Array, length: i32): void {
+    setConfigDataUTF8(sdkKey, configDataJSONStr.slice(0, length))
 }
 
-export function setConfigDataUTF8(sdkKey: string, configDataStr: Uint8Array): void {
-    const configData = ConfigBody.fromUTF8(configDataStr)
+/**
+ * Same interfaces as `setConfigData()` but with a UTF8 buffer instead of a string.
+ * This is to avoid issues encoding / decoding between UTF8 and UTF16.
+ * @param sdkKey
+ * @param configDataJSONStr
+ */
+export function setConfigDataUTF8(sdkKey: string, configDataJSONStr: Uint8Array): void {
+    const configData = ConfigBody.fromUTF8(configDataJSONStr)
     _setConfigData(sdkKey, configData)
 }
 
-export function setConfigData(sdkKey: string, configDataStr: string): void {
-    const configData = ConfigBody.fromString(configDataStr)
+/**
+ * Set the config data for the given SDK key and JSON String config data.
+ * @param sdkKey
+ * @param configDataJSONStr
+ */
+export function setConfigData(sdkKey: string, configDataJSONStr: string): void {
+    const configData = ConfigBody.fromString(configDataJSONStr)
     _setConfigData(sdkKey, configData)
 }
 
-export function setConfigDataWithEtag(sdkKey: string, configDataStr: string, etag: string): void {
-    const configData = ConfigBody.fromString(configDataStr, etag)
+/**
+ * Set the config data for the given SDK key and JSON String config data and etag.
+ * To be used in CF workers along with `hasConfigDataForEtag()` to avoid unnecessary re-setting of config data.
+ * @param sdkKey
+ * @param configDataJSONStr
+ * @param etag
+ */
+export function setConfigDataWithEtag(sdkKey: string, configDataJSONStr: string, etag: string): void {
+    const configData = ConfigBody.fromString(configDataJSONStr, etag)
     _setConfigData(sdkKey, configData)
 }
 
+/**
+ * Returns true if the config data for the given SDK key and the given etag.
+ * @param sdkKey
+ * @param etag
+ */
 export function hasConfigDataForEtag(sdkKey: string, etag: string): bool {
     if (!_hasConfigData(sdkKey)) return false
     const configData = _getConfigData(sdkKey)
     return configData && configData.etag !== null && configData.etag === etag
 }
 
-export function setClientCustomData(sdkKey: string, data: string): void {
-    const parsed = JSON.parse(data)
+/**
+ * Set the client custom data for the given SDK key and JSON String custom data.
+ * @param sdkKey
+ * @param clientCustomDataJSONStr
+ */
+export function setClientCustomData(sdkKey: string, clientCustomDataJSONStr: string): void {
+    const parsed = JSON.parse(clientCustomDataJSONStr)
     if (!parsed.isObj) {
-        throw new Error('invalid global data')
+        throw new Error('invalid global clientCustomDataJSONStr')
     }
 
     _setClientCustomData(sdkKey, parsed as JSON.Obj)
