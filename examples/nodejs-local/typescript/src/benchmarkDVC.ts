@@ -23,27 +23,24 @@ export async function benchDVC(): Promise<void> {
         }).onClientInitialized()
     }
 
-    // console.log('wait 3 seconds')
     await promisify(setTimeout)(500)
-    // console.log('finished waiting 0.5 seconds')
 
     const user = {
         user_id: '4807c61a2a922081',
-        country: 'CA',
-        // customData: { 'customDataKey': 'customDataValue', num: 610, bool: false },
-        // privateCustomData: { 'customDataKey': 'customDataValue', num: 610, bool: false }
+        country: 'CA'
     }
     let variable
     const time = performance.now()
     const count = 50000
+    const variableKey = 'v-key-50'
 
     for (let i = 0; i < count; i++) {
-        variable = dvcClient.variable(user, 'v-key-50', false)
+        variable = dvcClient.variable(user, variableKey, false)
     }
 
     const endTime = performance.now() - time
     console.log(
-        `Variable 'v-key-50' value is ${variable?.value}, is defaulted: ${variable?.isDefaulted}, ` +
+        `Variable '${variableKey}' value is ${variable?.value}, is defaulted: ${variable?.isDefaulted}, ` +
         `total: ${endTime}ms, per call: ${endTime / count}ms`
     )
 

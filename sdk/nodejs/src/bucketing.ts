@@ -1,7 +1,6 @@
 import { instantiate, Exports } from '@devcycle/bucketing-assembly-script'
 import { DVCLogger, DVCReporter } from '@devcycle/types'
 import { DVCOptions } from './types'
-import murmurhash  from "murmurhash";
 
 let Bucketing: Exports | null
 let InstantiatePromise: Promise<Exports> | null
@@ -15,7 +14,7 @@ export const importBucketingLib = async (
         return
     }
     const debugWASM = options?.logLevel === 'debug'
-    InstantiatePromise = instantiate(debugWASM, { murmurhash }).then((exports) => {
+    InstantiatePromise = instantiate(debugWASM).then((exports) => {
         Bucketing = exports
         return Bucketing
     })
