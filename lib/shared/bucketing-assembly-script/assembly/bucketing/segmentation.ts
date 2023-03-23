@@ -13,7 +13,6 @@ import {
 import { JSON } from 'assemblyscript-json/assembly'
 import { getF64FromJSONValue } from '../helpers/jsonHelpers'
 import { CustomDataValuePB, DVCPopulatedUserPB } from '../types/dvcUserPB'
-import { CustomDataValue } from '../../protobuf/compiled'
 
 // TODO add support for OR/XOR as well as recursive filters
 /**

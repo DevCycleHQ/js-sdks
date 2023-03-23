@@ -102,14 +102,14 @@ export function onPayloadFailure(sdkKey: string, payloadId: string, retryable: b
     requestPayloadManager.markPayloadFailure(payloadId, retryable)
 }
 
-export function queueEvent(sdkKey: string, userStr: string, eventStr: string): void {
-    const eventQueue = getEventQueue(sdkKey)
-    const dvcUser = DVCPopulatedUser.fromJSONString(userStr)
-    const event = DVCEvent.fromJSONString(eventStr)
-    dvcUser.mergeClientCustomData(_getClientCustomData(sdkKey))
-    const bucketedConfig = _generateBucketedConfig(_getConfigData(sdkKey), dvcUser, _getClientCustomData(sdkKey))
-    eventQueue.queueEvent(dvcUser, event, bucketedConfig.featureVariationMap)
-}
+// export function queueEvent(sdkKey: string, userStr: string, eventStr: string): void {
+//     const eventQueue = getEventQueue(sdkKey)
+//     const dvcUser = DVCPopulatedUser.fromJSONString(userStr)
+//     const event = DVCEvent.fromJSONString(eventStr)
+//     dvcUser.mergeClientCustomData(_getClientCustomData(sdkKey))
+//     const bucketedConfig = _generateBucketedConfig(_getConfigData(sdkKey), dvcUser, _getClientCustomData(sdkKey))
+//     eventQueue.queueEvent(dvcUser, event, bucketedConfig.featureVariationMap)
+// }
 
 export function queueAggregateEvent(sdkKey: string, eventStr: string, variableVariationMapStr: string): void {
     const eventQueue = getEventQueue(sdkKey)
