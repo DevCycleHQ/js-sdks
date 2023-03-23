@@ -31,6 +31,7 @@ export {
     testDVCEventClass,
     testDVCRequestEventClass,
     testPlatformDataClass,
+    testPlatformDataClassFromUTF8,
 } from './types'
 
 export function testVariableForUserParams_PB(buffer: Uint8Array): Uint8Array {

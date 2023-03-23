@@ -11,17 +11,28 @@ export class PlatformData extends JSON.Obj {
     readonly sdkVersion: string
     readonly hostname: string | null
 
-    constructor(str: string) {
-        super()
-        const json = JSON.parse(str)
-        if (!json.isObj) throw new Error('Platform data not a JSON Object')
-        const jsonObj = json as JSON.Obj
+    static fromUTF8(platformDataUTF8: Uint8Array): PlatformData {
+        const platformJSON = JSON.parse(platformDataUTF8)
+        if (!platformJSON.isObj) throw new Error('platformData param not a JSON Object')
+        const platformJSONObj = platformJSON as JSON.Obj
+        return new PlatformData(platformJSONObj)
+    }
 
-        this.platform = getStringFromJSON(jsonObj, 'platform')
-        this.platformVersion = getStringFromJSON(jsonObj, 'platformVersion')
-        this.sdkType = getStringFromJSON(jsonObj, 'sdkType')
-        this.sdkVersion = getStringFromJSON(jsonObj, 'sdkVersion')
-        this.hostname = getStringFromJSONOptional(jsonObj, 'hostname')
+    static fromString(platformDataStr: string): PlatformData {
+        const platformJSON = JSON.parse(platformDataStr)
+        if (!platformJSON.isObj) throw new Error('platformData config param not a JSON Object')
+        const platformJSONObj = platformJSON as JSON.Obj
+        return new PlatformData(platformJSONObj)
+    }
+
+    constructor(platformJSONObj: JSON.Obj) {
+        super()
+
+        this.platform = getStringFromJSON(platformJSONObj, 'platform')
+        this.platformVersion = getStringFromJSON(platformJSONObj, 'platformVersion')
+        this.sdkType = getStringFromJSON(platformJSONObj, 'sdkType')
+        this.sdkVersion = getStringFromJSON(platformJSONObj, 'sdkVersion')
+        this.hostname = getStringFromJSONOptional(platformJSONObj, 'hostname')
     }
 
     stringify(): string {
@@ -36,7 +47,11 @@ export class PlatformData extends JSON.Obj {
 }
 
 export function testPlatformDataClass(dataStr: string): string {
-    const platformData = new PlatformData(dataStr)
+    const platformData = PlatformData.fromString(dataStr)
     return platformData.stringify()
 }
 
+export function testPlatformDataClassFromUTF8(dataStr: Uint8Array): string {
+    const platformData = PlatformData.fromUTF8(dataStr)
+    return platformData.stringify()
+}
