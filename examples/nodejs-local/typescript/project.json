@@ -22,14 +22,9 @@
       "dependsOn": ["^build"]
     },
     "benchmark": {
-      "executor": "@nrwl/node:node",
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-          "buildTarget": "example-nodejs-local-typescript:build"
-      },
-      "dependsOn": ["^build"],
-      "env": {
-        "DVC_BENCHMARK=": "1",
-        "DVC_BENCH_LOOP": "1"
+          "command": "DVC_BENCHMARK=1 DVC_BENCH_LOOP=1 yarn nx serve example-nodejs-local-typescript"
       }
     },
     "lint": {
