@@ -184,7 +184,6 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
     }
 }
 
-
 export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
     readonly user_id: string
     readonly email: string | null

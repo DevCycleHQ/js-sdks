@@ -28,19 +28,13 @@ export function generateBoundedHashesFromJSON(user_id: string, target_id: string
     return json.stringify()
 }
 
-/**
- * Generate a full bucketed config for a user JSON string.
- * This is not performant, and most SDKs should use variableForUser instead for `dvcClient.variable()` calls.
- * @param sdkKey
- * @param userJSONStr
- */
-export function generateBucketedConfigForUser(sdkKey: string, userJSONStr: string): string  {
-    const config = _getConfigData(sdkKey)
-    const user = DVCPopulatedUser.fromJSONString(userJSONStr)
-
-    const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
-    return bucketedConfig.stringify()
-}
+// export function generateBucketedConfigForUser(sdkKey: string, userStr: string): string  {
+//     const config = _getConfigData(sdkKey)
+//     const user = DVCPopulatedUser.fromJSONString(userStr)
+//
+//     const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
+//     return bucketedConfig.stringify()
+// }
 
 export function generateBucketedConfigForUserUTF8(sdkKey: string, userJSONStr: Uint8Array): Uint8Array  {
     const config = _getConfigData(sdkKey)
