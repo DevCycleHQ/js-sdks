@@ -706,11 +706,11 @@ describe('Config Parsing and Generating', () => {
                 }
             },
             'featureVariationMap': {
-                "614ef6aa475928459060721d": "615382338424cb11646d7662"
+                '614ef6aa475928459060721d': '615382338424cb11646d7662'
             },
             'variableVariationMap': {
                 'audience-match': {
-                    "_feature": "614ef6aa475928459060721d",
+                    '_feature': '614ef6aa475928459060721d',
                     '_variation': '615382338424cb11646d7662'
                 }
             },
@@ -774,11 +774,11 @@ describe('Config Parsing and Generating', () => {
                 }
             },
             'featureVariationMap': {
-                "614ef6aa475928459060721d": "615382338424cb11646d7662"
+                '614ef6aa475928459060721d': '615382338424cb11646d7662'
             },
             'variableVariationMap': {
                 'audience-match': {
-                    "_feature": "614ef6aa475928459060721d",
+                    '_feature': '614ef6aa475928459060721d',
                     '_variation': '615382338424cb11646d7662'
                 }
             },

@@ -89,7 +89,6 @@ export class DVCUserPB {
     }
 }
 
-
 export class DVCPopulatedUserPB {
     readonly user_id: string
     readonly email: string | null
