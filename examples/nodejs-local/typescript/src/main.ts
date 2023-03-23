@@ -4,6 +4,7 @@ import { plainToInstance } from 'class-transformer'
 import { Query } from 'express-serve-static-core'
 import express from 'express'
 import bodyParser from 'body-parser'
+import { benchDVC } from './benchmarkDVC'
 
 const DVC_SERVER_SDK_KEY = process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
 
@@ -73,7 +74,11 @@ async function startDVC() {
     console.dir(features)
 }
 
-startDVC()
+if (process.env.DVC_BENCHMARK) {
+    benchDVC()
+} else {
+    startDVC()
+}
 
 app.get('/variables', (req: express.Request, res: express.Response) => {
     const user = validateUserFromQueryParams(req.query)

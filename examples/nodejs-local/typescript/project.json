@@ -21,6 +21,12 @@
       },
       "dependsOn": ["^build"]
     },
+    "benchmark": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+          "command": "DVC_BENCHMARK=1 DVC_BENCH_LOOP=1 yarn nx serve example-nodejs-local-typescript"
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": [

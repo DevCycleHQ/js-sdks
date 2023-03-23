@@ -13,7 +13,8 @@ export const importBucketingLib = async (
         await InstantiatePromise
         return
     }
-    InstantiatePromise = instantiate().then((exports) => {
+    const debugWASM = options?.logLevel === 'debug'
+    InstantiatePromise = instantiate(debugWASM).then((exports) => {
         Bucketing = exports
         return Bucketing
     })
