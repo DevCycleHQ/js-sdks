@@ -21,6 +21,17 @@
       },
       "dependsOn": ["^build"]
     },
+    "benchmark": {
+      "executor": "@nrwl/node:node",
+      "options": {
+          "buildTarget": "example-nodejs-local-typescript:build"
+      },
+      "dependsOn": ["^build"],
+      "env": {
+        "DVC_BENCHMARK=": "1",
+        "DVC_BENCH_LOOP": "1"
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": [
