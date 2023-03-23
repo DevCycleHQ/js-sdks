@@ -51,3 +51,7 @@ export function testPlatformDataClass(dataStr: string): string {
     return platformData.stringify()
 }
 
+export function testPlatformDataClassFromUTF8(dataStr: Uint8Array): string {
+    const platformData = PlatformData.fromUTF8(dataStr)
+    return platformData.stringify()
+}
