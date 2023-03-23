@@ -57,6 +57,24 @@ export class DVCUserPB {
         const nullableCustomData = userPB.customData
         const nullablePrivateCustomData = userPB.privateCustomData
 
+        let customDataValue: Map<string, CustomDataValuePB> | null = null
+        let privateCustomDataValue: Map<string, CustomDataValuePB> | null = null
+        if (nullableCustomData && !nullableCustomData.isNull) {
+            customDataValue = new Map<string, CustomDataValuePB>()
+            const keys = nullableCustomData.value.keys()
+            for (let i = 0; i < keys.length; i++) {
+                customDataValue.set(keys[i], nullableCustomData.value.get(keys[i]) as CustomDataValuePB)
+            }
+        }
+        if (nullablePrivateCustomData && !nullablePrivateCustomData.isNull) {
+            privateCustomDataValue = new Map<string, CustomDataValuePB>()
+            const keys = nullablePrivateCustomData.value.keys()
+            for (let i = 0; i < keys.length; i++) {
+                privateCustomDataValue.set(keys[i], nullablePrivateCustomData.value.get(keys[i]) as CustomDataValuePB)
+            }
+        }
+
+
         return new DVCUserPB(
             userPB.userId,
             (nullableEmail && !nullableEmail.isNull) ? nullableEmail.value : null,
@@ -66,8 +84,8 @@ export class DVCUserPB {
             (nullableAppBuild && !nullableAppBuild.isNull) ? nullableAppBuild.value : NaN,
             (nullableAppVersion && !nullableAppVersion.isNull) ? nullableAppVersion.value : null,
             (nullableDeviceModel && !nullableDeviceModel.isNull) ? nullableDeviceModel.value : null,
-            (nullableCustomData && !nullableCustomData.isNull) ? nullableCustomData.value : null,
-            (nullablePrivateCustomData && !nullablePrivateCustomData.isNull) ? nullablePrivateCustomData.value : null,
+            (nullableCustomData && !nullableCustomData.isNull) ? customDataValue : null,
+            (nullablePrivateCustomData && !nullablePrivateCustomData.isNull) ? privateCustomDataValue : null,
         )
     }
 
