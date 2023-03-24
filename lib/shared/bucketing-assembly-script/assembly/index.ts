@@ -41,6 +41,13 @@ export function generateBucketedConfigForUser(sdkKey: string, userJSONStr: strin
     return bucketedConfig.stringify()
 }
 
+export function generateBucketedConfigForUserUTF8(sdkKey: string, userJSONStr: Uint8Array): Uint8Array  {
+    const config = _getConfigData(sdkKey)
+    const user = DVCPopulatedUser.fromUTF8(userJSONStr)
+    const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
+    return Uint8Array.wrap(String.UTF8.encode(bucketedConfig.stringify()))
+}
+
 export enum VariableType {
     Boolean,
     Number,
