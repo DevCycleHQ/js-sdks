@@ -1,13 +1,19 @@
-import { testDVCUserClass } from '../bucketingImportHelper'
+import { testDVCUserClass, testDVCUserClassFromUTF8 } from '../bucketingImportHelper'
 import { setPlatformDataJSON } from '../setPlatformData'
 
 setPlatformDataJSON()
 
-function testDVCUser(userObj: unknown): unknown {
-    return JSON.parse(testDVCUserClass(JSON.stringify(userObj)))
+function testDVCUser(obj: any, utf8: boolean): any {
+    const str = JSON.stringify(obj)
+    if (utf8) {
+        const buff = Buffer.from(str, 'utf8')
+        return JSON.parse(testDVCUserClassFromUTF8(buff))
+    } else {
+        return JSON.parse(testDVCUserClass(str))
+    }
 }
 
-describe('dvcUser Tests', () => {
+describe.each([true, false])('dvcUser Tests', (utf8) => {
     it('should test DVCUser class JSON parsing', () => {
         const userObj = {
             user_id: '24601',
@@ -28,7 +34,7 @@ describe('dvcUser Tests', () => {
             }
         }
 
-        expect(testDVCUser(userObj)).toEqual(expect.objectContaining({
+        expect(testDVCUser(userObj, utf8)).toEqual(expect.objectContaining({
             ...userObj,
             deviceModel: 'iPhone',
             platform: 'NodeJS',
@@ -49,7 +55,7 @@ describe('dvcUser Tests', () => {
             }
         }
 
-        expect(() => testDVCUser(userObj))
+        expect(() => testDVCUser(userObj, utf8))
             .toThrow('DVCUser customData can\'t contain nested objects or arrays')
     })
 
@@ -62,7 +68,7 @@ describe('dvcUser Tests', () => {
             }
         }
 
-        expect(() => testDVCUser(userObj))
+        expect(() => testDVCUser(userObj, utf8))
             .toThrow('DVCUser privateCustomData can\'t contain nested objects or arrays')
     })
 
@@ -71,7 +77,7 @@ describe('dvcUser Tests', () => {
             user_id: 'test@devcycle.com'
         }
 
-        expect(testDVCUser(userObj)).toEqual(expect.objectContaining({
+        expect(testDVCUser(userObj, utf8)).toEqual(expect.objectContaining({
             ...userObj,
             platform: 'NodeJS',
             platformVersion: '',
@@ -88,14 +94,14 @@ describe('dvcUser Tests', () => {
             appBuild: 'not a number'
         }
 
-        expect(() => testDVCUser(userObj))
+        expect(() => testDVCUser(userObj, utf8))
             .toThrow('Invalid number value: not a number, for key: "appBuild"')
     })
 
     it('should throw is string key is not a string', () => {
         const userObj = { user_id: true }
 
-        expect(() => testDVCUser(userObj))
+        expect(() => testDVCUser(userObj, utf8))
             .toThrow('Missing string value for key: "user_id",')
     })
 })

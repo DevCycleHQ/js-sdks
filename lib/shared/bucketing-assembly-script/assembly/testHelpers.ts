@@ -137,6 +137,12 @@ export function testDVCUserClass(userStr: string): string {
     return populatedUser.stringify()
 }
 
+export function testDVCUserClassFromUTF8(userStr: Uint8Array): string {
+    const user = DVCUser.fromUTF8(userStr)
+    const populatedUser = new DVCPopulatedUser(user)
+    return populatedUser.stringify()
+}
+
 export function testBucketedUserConfigClass(userConfigStr: string): string {
     const userConfig = BucketedUserConfig.fromJSONString(userConfigStr)
     return userConfig.stringify()
