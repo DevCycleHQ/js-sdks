@@ -17,6 +17,9 @@ Ensure you have Node 16.x installed.
 
 1. Clone this repo
 2. Run `yarn` from the root directory. SDKs and examples should now be set up to run via Nx.
+3. Run `aws configure sso`
+4. Run `aws sso login`
+
 
 ## Directory Structure
 ```
@@ -99,15 +102,22 @@ You can run commands in every javascript project using Nx: `nx run-many --target
 This allows you to lint and/or test all projects at once.
 
 ### Publishing a Release
-To publish a release, use lerna to create new versions of all changed packages (ensure you do this on the main branch)
+Setup:
+- run `aws sso login`
+- run `./scripts/brew-install.sh`
+- ensure you're on the main branch with the latest code 
+ 
+Then use lerna to create new versions of all changed packages (ensure you do this on the main branch)
 `yarn lerna:version`
 
-Push up the new tags and version changes, then run:
+This will automatically push the latest tags and version updates to github. 
 
+To publish the versions to npm, you need a one-time password from our NPM account.
+
+To publish, run:
 `yarn npm-publish --otp=<one-time password>`
 
-This will publish all the new versions to npm. You must provide the one-time password associated with the NPM account
-in order to run this command.
+This will publish all the new versions to npm. 
 
 #### js.devcycle.com/devcycle.min.js
 
