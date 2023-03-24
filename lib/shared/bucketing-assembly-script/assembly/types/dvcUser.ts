@@ -134,8 +134,16 @@ export class DVCUser extends JSON.Obj implements DVCUserInterface {
     static fromJSONString(userStr: string): DVCUser {
         const userJSON = JSON.parse(userStr)
         if (!userJSON.isObj) throw new Error('dvcUserFromJSONString not a JSON Object')
-        const user = userJSON as JSON.Obj
+        return this.fromJSONObj(userJSON as JSON.Obj)
+    }
 
+    static fromUTF8(userStr: Uint8Array): DVCUser {
+        const userJSON = JSON.parse(userStr)
+        if (!userJSON.isObj) throw new Error('dvcUserFromUTF8 not a JSON Object')
+        return this.fromJSONObj(userJSON as JSON.Obj)
+    }
+
+    static fromJSONObj(user: JSON.Obj): DVCUser {
         const customData = user.getObj('customData')
         if (!isFlatJSONObj(customData)) {
             throw new Error('DVCUser customData can\'t contain nested objects or arrays')
@@ -243,6 +251,10 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
 
     static fromJSONString(userStr: string): DVCPopulatedUser {
         return new DVCPopulatedUser(DVCUser.fromJSONString(userStr))
+    }
+
+    static fromUTF8(userBytes: Uint8Array): DVCPopulatedUser {
+        return new DVCPopulatedUser(DVCUser.fromUTF8(userBytes))
     }
 
     getCombinedCustomData(): JSON.Obj {
