@@ -8522,9 +8522,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"as-proto-gen@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "as-proto-gen@npm:1.2.0"
+"as-proto-gen@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "as-proto-gen@npm:1.3.0"
   dependencies:
     "@types/humps": ^2.0.2
     fs-extra: ^10.1.0
@@ -8533,14 +8533,14 @@ __metadata:
     prettier: ^2.5.0
   bin:
     as-proto-gen: bin/as-proto-gen
-  checksum: 26c09674364c52f8f9fe244695a3542c938fc448efe830e2d0c6467cac2507f6b39c7ab78fe53865728d00391d6057113a581a30d8e1f5d7b3087151608c1a05
+  checksum: cfcc374baf8033d61f059cbe5b436c41915e50678fadc4cd89d1a7cb9984a744b8451cdfc232f20775faab4df5b228ab18a830313586a6840b8dbdd1755c78b0
   languageName: node
   linkType: hard
 
-"as-proto@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "as-proto@npm:1.2.0"
-  checksum: 75d3f3dbab6c5c91b25d072239c262c87815c576808235a57fa71ac29bcd8ad3b1d21444208b42f7ee23115031ad195adc1081c9361066a98ab8d881aea78e2a
+"as-proto@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "as-proto@npm:1.3.0"
+  checksum: a26921db8e68337db9487f620178a32f778e886347a52d21f221757672fb2d20b0241a282ce4409df96edfd4e13a511f40e5d729414e6f4ccdbc2a46571f1a82
   languageName: node
   linkType: hard
 
@@ -11478,8 +11478,8 @@ __metadata:
     "@types/uuid": ^8.3.1
     "@typescript-eslint/eslint-plugin": 5.33.1
     "@typescript-eslint/parser": 5.33.1
-    as-proto: ^1.2.0
-    as-proto-gen: ^1.2.0
+    as-proto: ^1.3.0
+    as-proto-gen: ^1.3.0
     as-uuid: ^0.0.4
     as-wasi: ^0.4.6
     assemblyscript: ~0.27.1
