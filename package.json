@@ -22,6 +22,7 @@
     "<rootDir>/build"
   ],
   "dependencies": {
+    "@assemblyscript/rtrace": "0.19.22",
     "@nestjs/class-validator": "^0.13.4",
     "async": "^3.2.1",
     "axios": "^0.27.2",
