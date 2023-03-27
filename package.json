@@ -59,6 +59,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@assemblyscript/rtrace": "~0.27.1",
     "@babel/core": "^7.17.7",
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
