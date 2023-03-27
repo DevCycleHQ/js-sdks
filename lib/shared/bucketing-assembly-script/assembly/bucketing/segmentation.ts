@@ -335,7 +335,7 @@ export function _checkVersionFilters(appVersion: string | null, filter: UserFilt
     }
 }
 
-export function _checkCustomData(data: Map<string, CustomDataValuePB>, clientCustomData: Map<string, CustomDataValuePB>, filter: CustomDataFilter): bool {
+export function _checkCustomData(data: Map<string, CustomDataValuePB> | null, clientCustomData: Map<string, CustomDataValuePB>, filter: CustomDataFilter): bool {
     const operator = filter.comparator
 
     let dataValue = data ? data.get(filter.dataKey) : null

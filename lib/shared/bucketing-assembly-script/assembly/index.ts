@@ -35,13 +35,13 @@ export function generateBoundedHashesFromJSON(user_id: string, target_id: string
 //     const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
 //     return bucketedConfig.stringify()
 // }
-
-export function generateBucketedConfigForUserUTF8(sdkKey: string, userJSONStr: Uint8Array): Uint8Array  {
-    const config = _getConfigData(sdkKey)
-    const user = DVCPopulatedUser.fromUTF8(userJSONStr)
-    const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
-    return Uint8Array.wrap(String.UTF8.encode(bucketedConfig.stringify()))
-}
+//
+// export function generateBucketedConfigForUserUTF8(sdkKey: string, userJSONStr: Uint8Array): Uint8Array  {
+//     const config = _getConfigData(sdkKey)
+//     const user = DVCPopulatedUser.fromUTF8(userJSONStr)
+//     const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
+//     return Uint8Array.wrap(String.UTF8.encode(bucketedConfig.stringify()))
+// }
 
 export enum VariableType {
     Boolean,
@@ -294,14 +294,16 @@ export function hasConfigDataForEtag(sdkKey: string, etag: string): bool {
  * @param sdkKey
  * @param clientCustomDataUTF8
  */
-export function setClientCustomDataUTF8(sdkKey: string, clientCustomDataUTF8: Uint8Array): void {
-    const parsed = JSON.parse(clientCustomDataUTF8)
-    if (!parsed.isObj) {
-        throw new Error('invalid global clientCustomDataJSONStr')
-    }
+// export function setClientCustomDataUTF8(sdkKey: string, clientCustomDataUTF8: Uint8Array): void {
+//     const parsed = JSON.parse(clientCustomDataUTF8)
+//     if (!parsed.isObj) {
+//         throw new Error('invalid global clientCustomDataJSONStr')
+//     }
+//
+//     _setClientCustomData(sdkKey, parsed as JSON.Obj)
+// }
 
-    _setClientCustomData(sdkKey, parsed as JSON.Obj)
-}
+export function noop(): void {}
 
 export * from './managers/eventQueueManager'
 

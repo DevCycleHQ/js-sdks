@@ -30,6 +30,10 @@ export class CustomDataValuePB extends CustomDataValue {
     asBool(): bool {
         return this.boolValue
     }
+
+    static fromCustomDataValue(customDataValue: CustomDataValue): CustomDataValuePB {
+        return new CustomDataValuePB(customDataValue.type, customDataValue.boolValue, customDataValue.doubleValue, customDataValue.stringValue)
+    }
 }
 
 export class DVCUserPB {
@@ -63,14 +67,14 @@ export class DVCUserPB {
             customDataValue = new Map<string, CustomDataValuePB>()
             const keys = nullableCustomData.value.keys()
             for (let i = 0; i < keys.length; i++) {
-                customDataValue.set(keys[i], nullableCustomData.value.get(keys[i]) as CustomDataValuePB)
+                customDataValue.set(keys[i], CustomDataValuePB.fromCustomDataValue(nullableCustomData.value.get(keys[i])))
             }
         }
         if (nullablePrivateCustomData && !nullablePrivateCustomData.isNull) {
             privateCustomDataValue = new Map<string, CustomDataValuePB>()
             const keys = nullablePrivateCustomData.value.keys()
             for (let i = 0; i < keys.length; i++) {
-                privateCustomDataValue.set(keys[i], nullablePrivateCustomData.value.get(keys[i]) as CustomDataValuePB)
+                privateCustomDataValue.set(keys[i], CustomDataValuePB.fromCustomDataValue(nullablePrivateCustomData.value.get(keys[i])))
             }
         }
 
@@ -117,7 +121,7 @@ export class DVCPopulatedUserPB {
     readonly appBuild: f64
     customData: Map<string, CustomDataValuePB> | null
     privateCustomData: Map<string, CustomDataValuePB> | null
-    private _combinedCustomData: Map<string, CustomDataValuePB>
+    private _combinedCustomData: Map<string, CustomDataValuePB> | null
     readonly deviceModel: string | null
 
     readonly createdDate: Date
@@ -140,14 +144,17 @@ export class DVCPopulatedUserPB {
         this.privateCustomData = user.privateCustomData
         this.deviceModel = user.deviceModel
 
-        const combinedCustomData = new Map<string, CustomDataValuePB>()
+        let combinedCustomData: Map<string, CustomDataValuePB> | null = null
+        if (user.customData || user.privateCustomData) {
+            combinedCustomData = new Map<string, CustomDataValuePB>()
+        }
 
         const customData = user.customData
         if (customData) {
             const keys = customData.keys()
             for (let i = 0; i < keys.length; i++) {
                 const key = keys[i]
-                combinedCustomData.set(key, customData.get(key))
+                combinedCustomData!.set(key, customData.get(key))
             }
         }
 
@@ -156,10 +163,13 @@ export class DVCPopulatedUserPB {
             const keys = privateCustomData.keys()
             for (let i = 0; i < keys.length; i++) {
                 const key = keys[i]
-                combinedCustomData.set(key, privateCustomData.get(key))
+                combinedCustomData!.set(key, privateCustomData.get(key))
             }
         }
-        this._combinedCustomData = combinedCustomData
+
+        if (combinedCustomData) {
+            this._combinedCustomData = combinedCustomData
+        }
 
         this.createdDate = new Date(Date.now())
         this.lastSeenDate = new Date(Date.now())
@@ -173,7 +183,7 @@ export class DVCPopulatedUserPB {
         return this
     }
 
-    getCombinedCustomData(): Map<string, CustomDataValuePB> {
+    getCombinedCustomData(): Map<string, CustomDataValuePB> | null{
         return this._combinedCustomData
     }
 
