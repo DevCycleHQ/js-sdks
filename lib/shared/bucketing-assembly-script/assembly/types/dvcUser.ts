@@ -261,15 +261,16 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         return this._combinedCustomData
     }
 
-    mergeClientCustomData(clientCustomData: JSON.Obj): void {
-        if (!this.customData && clientCustomData.keys.length > 0) {
+    mergeClientCustomData(clientCustomData: Map<string, CustomDataValue>): void {
+        const clientCustomDataKeys = clientCustomData.keys()
+        if (!this.customData && clientCustomDataKeys.length > 0) {
             this.customData = new JSON.Obj()
         }
 
-        for (let i = 0; i < clientCustomData.keys.length; i++) {
-            if (!this.customData!.has(clientCustomData.keys[i])
-                    && (this.privateCustomData && !this.privateCustomData!.has(clientCustomData.keys[i]))) {
-                this.customData!.set(clientCustomData.keys[i], clientCustomData.get(clientCustomData.keys[i]))
+        for (let i = 0; i < clientCustomDataKeys.length; i++) {
+            if (!this.customData!.has(clientCustomDataKeys[i])
+                    && (this.privateCustomData && !this.privateCustomData!.has(clientCustomDataKeys[i]))) {
+                this.customData!.set(clientCustomDataKeys[i], clientCustomData.get(clientCustomDataKeys[i]))
             }
         }
     }

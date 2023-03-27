@@ -6,6 +6,7 @@ import {
     UserEventsBatchRecord,
     FeatureVariation
 } from '../types'
+import { DVCPopulatedUserPB } from '../types/dvcUserPB'
 
 export type VariationAggMap = Map<string, i64>
 export type FeatureAggMap = Map<string, VariationAggMap>
@@ -79,7 +80,7 @@ export class EventQueue {
         }
     }
 
-    queueEvent(user: DVCPopulatedUser, event: DVCEvent, featureVariationMap: Map<string, string>): void {
+    queueEvent(user: DVCPopulatedUserPB, event: DVCEvent, featureVariationMap: Map<string, string>): void {
         if (this.checkIfEventLoggingDisabled(event)) {
             return
         }
