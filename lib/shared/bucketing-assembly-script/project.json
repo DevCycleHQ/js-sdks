@@ -107,13 +107,13 @@
       "options": {
         "commands": [
           {
-            "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 100 --maximumMemory 10000 --use ASC_RTRACE=1 --exportStart _initialize --bindings raw"
+            "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 100 --maximumMemory 10000 --bindings raw"
           },
           {
-            "command": "asc assembly/index.ts --target release --exportRuntime --initialMemory 100 --maximumMemory 10000 --use ASC_RTRACE=1 --exportStart _initialize --bindings raw"
+            "command": "asc assembly/index.ts --target release --exportRuntime --initialMemory 100 --maximumMemory 10000 --bindings raw"
           },
           {
-            "command": "asc assembly/index.ts --target worker --exportRuntime --initialMemory 100 --maximumMemory 1000 --use ASC_RTRACE=1 --exportStart _initialize --bindings raw"
+            "command": "asc assembly/index.ts --target worker --exportRuntime --initialMemory 100 --maximumMemory 1000 --bindings raw"
           },
           {
             "command": "sed -i.bu 's/export async function instantiate/exports.instantiate = async function instantiate/g' build/bucketing-lib.release.js"
