@@ -6,8 +6,8 @@
 import { Writer, Reader, Protobuf } from "as-proto/assembly";
 import { CustomDataValue } from "./CustomDataValue";
 
-export class NullableCustomData {
-  static encode(message: NullableCustomData, writer: Writer): void {
+export class ClientCustomData_PB {
+  static encode(message: ClientCustomData_PB, writer: Writer): void {
     const value = message.value;
     if (value !== null) {
       const valueKeys = value.keys();
@@ -24,14 +24,11 @@ export class NullableCustomData {
         writer.ldelim();
       }
     }
-
-    writer.uint32(16);
-    writer.bool(message.isNull);
   }
 
-  static decode(reader: Reader, length: i32): NullableCustomData {
+  static decode(reader: Reader, length: i32): ClientCustomData_PB {
     const end: usize = length < 0 ? reader.end : reader.ptr + length;
-    const message = new NullableCustomData();
+    const message = new ClientCustomData_PB();
 
     while (reader.ptr < end) {
       const tag = reader.uint32();
@@ -77,10 +74,6 @@ export class NullableCustomData {
           }
           break;
 
-        case 2:
-          message.isNull = reader.bool();
-          break;
-
         default:
           reader.skipType(tag & 7);
           break;
@@ -91,25 +84,23 @@ export class NullableCustomData {
   }
 
   value: Map<string, CustomDataValue>;
-  isNull: bool;
 
-  constructor(
-    value: Map<string, CustomDataValue> = new Map(),
-    isNull: bool = false
-  ) {
+  constructor(value: Map<string, CustomDataValue> = new Map()) {
     this.value = value;
-    this.isNull = isNull;
   }
 }
 
-export function encodeNullableCustomData(
-  message: NullableCustomData
+export function encodeClientCustomData_PB(
+  message: ClientCustomData_PB
 ): Uint8Array {
-  return Protobuf.encode(message, NullableCustomData.encode);
+  return Protobuf.encode(message, ClientCustomData_PB.encode);
 }
 
-export function decodeNullableCustomData(
+export function decodeClientCustomData_PB(
   buffer: Uint8Array
-): NullableCustomData {
-  return Protobuf.decode<NullableCustomData>(buffer, NullableCustomData.decode);
+): ClientCustomData_PB {
+  return Protobuf.decode<ClientCustomData_PB>(
+    buffer,
+    ClientCustomData_PB.decode
+  );
 }

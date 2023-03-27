@@ -7,7 +7,7 @@ import {
     DVCUser,
     SDKVariable,
     VariableForUserParams_PB,
-    decodeVariableForUserParams_PB, VariableType_PB, DVCUser_PB
+    decodeVariableForUserParams_PB, VariableType_PB, DVCUser_PB, decodeDVCUser_PB
 } from './types'
 import {
     _generateBoundedHashes,
@@ -18,7 +18,8 @@ import { _clearPlatformData, _setPlatformData } from './managers/platformDataMan
 import { _getConfigData, _hasConfigData, _setConfigData } from './managers/configDataManager'
 import { _getClientCustomData, _setClientCustomData } from './managers/clientCustomDataManager'
 import { queueVariableEvaluatedEvent } from './managers/eventQueueManager'
-import { DVCPopulatedUserPB, DVCUserPB } from './types/dvcUserPB'
+import { DVCPopulatedUserPB } from './types/dvcUserPB'
+import { decodeClientCustomData_PB } from './types/protobuf-generated/ClientCustomData_PB'
 
 export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
     const boundedHash = _generateBoundedHashes(user_id, target_id)
@@ -28,20 +29,14 @@ export function generateBoundedHashesFromJSON(user_id: string, target_id: string
     return json.stringify()
 }
 
-// export function generateBucketedConfigForUser(sdkKey: string, userStr: string): string  {
-//     const config = _getConfigData(sdkKey)
-//     const user = DVCPopulatedUser.fromJSONString(userStr)
-//
-//     const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
-//     return bucketedConfig.stringify()
-// }
-//
-// export function generateBucketedConfigForUserUTF8(sdkKey: string, userJSONStr: Uint8Array): Uint8Array  {
-//     const config = _getConfigData(sdkKey)
-//     const user = DVCPopulatedUser.fromUTF8(userJSONStr)
-//     const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
-//     return Uint8Array.wrap(String.UTF8.encode(bucketedConfig.stringify()))
-// }
+export function generateBucketedConfigForUser(sdkKey: string, buffer: Uint8Array): string  {
+    const user_pb = decodeDVCUser_PB(buffer)
+    const config = _getConfigData(sdkKey)
+    const user = new DVCPopulatedUserPB(user_pb)
+
+    const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
+    return bucketedConfig.stringify()
+}
 
 export enum VariableType {
     Boolean,
@@ -82,7 +77,7 @@ export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
     const params: VariableForUserParams_PB = decodeVariableForUserParams_PB(protobuf)
     const user = params.user
     if (!user) throw new Error('Missing user from variableForUser_PB protobuf')
-    const dvcUser = new DVCPopulatedUserPB(DVCUserPB.fromPBUser(user))
+    const dvcUser = new DVCPopulatedUserPB(user)
 
     const variable = _variableForDVCUserPB(
         params.sdkKey,
@@ -99,7 +94,7 @@ function _variableForDVCUserPB(
     dvcUser: DVCPopulatedUserPB,
     variableKey: string,
     variableType: VariableType,
-    shouldTrackEvent: boolean
+    shouldTrackEvent: bool
 ): SDKVariable | null {
     const config = _getConfigData(sdkKey)
     const response = _generateBucketedVariableForUser(config, dvcUser, variableKey, _getClientCustomData(sdkKey))
@@ -151,49 +146,6 @@ function _variableForDVCUser(
     }
     return variable
 }
-
-// export function variableForUser(
-//     sdkKey: string,
-//     userStr: string,
-//     variableKey: string,
-//     variableType: VariableType,
-//     shouldTrackEvent: boolean,
-// ): string | null {
-//     const user = DVCPopulatedUser.fromJSONString(userStr)
-//     const variable = _variableForDVCUser(sdkKey, user, variableKey, variableType, shouldTrackEvent)
-//     return variable ? variable.stringify() : null
-// }
-
-/**
- * A version of the variableForUser function that takes a preallocated string for the user and variable keys.
- * The allocated string may be larger than the real set of bytes we are about reading, so it takes a size to read until
- * @param sdkKey
- * @param userStr
- * @param userStrLength
- * @param variableKey
- * @param variableKeyLength
- * @param variableType
- */
-// export function variableForUserPreallocated(
-//     sdkKey: string,
-//     userStr: string,
-//     // pass in length of actual underlying string
-//     // (the userStr starts with that and may contain extra preallocated bytes)
-//     userStrLength: i32,
-//     variableKey: string,
-//     // ditto
-//     variableKeyLength: i32,
-//     variableType: VariableType,
-//     shouldTrackEvent: boolean
-// ): string | null {
-//     return variableForUser(
-//         sdkKey,
-//         userStr.substr(0, userStrLength),
-//         variableKey.substr(0, variableKeyLength),
-//         variableType,
-//         shouldTrackEvent,
-//     )
-// }
 
 /**
  * Set the platform data for the given SDK key.
@@ -277,31 +229,10 @@ export function hasConfigDataForEtag(sdkKey: string, etag: string): bool {
     return configData && configData.etag !== null && configData.etag === etag
 }
 
-// TODO switch this to protobuf
-// export function setClientCustomData(sdkKey: string, data: string): void {
-//     const parsed = JSON.parse(data)
-//     if (!parsed.isObj) {
-//         throw new Error('invalid global data')
-//     }
-//
-//     _setClientCustomData(sdkKey, parsed as JSON.Obj)
-// }
-
-/**
- * Set the client custom data for the given SDK key and JSON String custom data.
- * Same interfaces as `setClientCustomData()` but with a UTF8 buffer instead of a string.
- * This is to avoid issues encoding / decoding between UTF8 and UTF16.
- * @param sdkKey
- * @param clientCustomDataUTF8
- */
-// export function setClientCustomDataUTF8(sdkKey: string, clientCustomDataUTF8: Uint8Array): void {
-//     const parsed = JSON.parse(clientCustomDataUTF8)
-//     if (!parsed.isObj) {
-//         throw new Error('invalid global clientCustomDataJSONStr')
-//     }
-//
-//     _setClientCustomData(sdkKey, parsed as JSON.Obj)
-// }
+export function setClientCustomData(sdkKey: string, data: Uint8Array): void {
+    const params = decodeClientCustomData_PB(data)
+    _setClientCustomData(sdkKey, params.value)
+}
 
 export function noop(): void {}
 

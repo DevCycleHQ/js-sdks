@@ -2,13 +2,17 @@ import { BucketedUserConfig, SDKVariable, VariableType } from '@devcycle/types'
 import { DVCPopulatedUser } from '../models/populatedUser'
 import { getBucketingLib } from '../bucketing'
 import {
-    VariableForUserParams_PB, SDKVariable_PB
+    VariableForUserParams_PB, SDKVariable_PB, DVCUser_PB
 } from '@devcycle/bucketing-assembly-script/protobuf/compiled'
 import { pbSDKVariableTransform } from '../pb-types/pbTypeHelpers'
 
 export function bucketUserForConfig(user: DVCPopulatedUser, sdkKey: string): BucketedUserConfig {
+    const pbUser = user.toPBUser()
+    const err = DVCUser_PB.verify(pbUser)
+    if (err) throw new Error(`Invalid DVCUser_PB protobuf params: ${err}`)
+    const buffer = DVCUser_PB.encode(pbUser).finish()
     return JSON.parse(
-        getBucketingLib().generateBucketedConfigForUser(sdkKey, JSON.stringify(user))
+        getBucketingLib().generateBucketedConfigForUser(sdkKey, buffer)
     ) as BucketedUserConfig
 }
 
@@ -26,12 +30,6 @@ export function getVariableTypeCode(type: VariableType): number {
         default:
             throw new Error(`Unknown variable type: ${type}`)
     }
-}
-
-export function variableForUser(sdkKey: string, usr: DVCPopulatedUser, key: string, type: number): SDKVariable | null {
-    const bucketedVariable = getBucketingLib().variableForUser(sdkKey, JSON.stringify(usr), key, type, true)
-    if (!bucketedVariable) return null
-    return JSON.parse(bucketedVariable) as SDKVariable
 }
 
 export function variableForUser_PB(

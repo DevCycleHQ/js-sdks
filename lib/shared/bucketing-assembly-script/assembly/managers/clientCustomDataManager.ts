@@ -1,15 +1,15 @@
-import { CustomDataValuePB } from '../types/dvcUserPB'
+import { CustomDataValue } from '../types'
 
-const _clientCustomData: Map<string, Map<string, CustomDataValuePB>> = new Map()
+const _clientCustomData: Map<string, Map<string, CustomDataValue>> = new Map()
 
-export function _setClientCustomData(sdkKey: string, clientCustomData: Map<string, CustomDataValuePB>): void {
+export function _setClientCustomData(sdkKey: string, clientCustomData: Map<string, CustomDataValue>): void {
     _clientCustomData.set(sdkKey, clientCustomData)
 }
 
-export function _getClientCustomData(sdkKey: string): Map<string, CustomDataValuePB> {
+export function _getClientCustomData(sdkKey: string): Map<string, CustomDataValue> {
     if (_clientCustomData.has(sdkKey)) {
         return _clientCustomData.get(sdkKey)
     }
-    _setClientCustomData(sdkKey, new Map<string, CustomDataValuePB>())
+    _setClientCustomData(sdkKey, new Map<string, CustomDataValue>())
     return _clientCustomData.get(sdkKey)
 }

@@ -1,10 +1,9 @@
 import { EventQueue } from '../eventQueue/eventQueue'
 import {
     EventQueueOptions,
-    DVCPopulatedUser,
     DVCEvent,
     FeatureVariation,
-    SDKVariable
+    SDKVariable, decodeDVCUser_PB
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { _getConfigData } from './configDataManager'
@@ -12,6 +11,7 @@ import { _generateBucketedConfig } from '../bucketing'
 import { RequestPayloadManager } from '../eventQueue/requestPayloadManager'
 import { jsonArrFromValueArray } from '../helpers/jsonHelpers'
 import { _getClientCustomData } from './clientCustomDataManager'
+import { DVCPopulatedUserPB } from '../types/dvcUserPB'
 
 /**
  * Map<sdkKey, EventQueue>
@@ -102,14 +102,15 @@ export function onPayloadFailure(sdkKey: string, payloadId: string, retryable: b
     requestPayloadManager.markPayloadFailure(payloadId, retryable)
 }
 
-// export function queueEvent(sdkKey: string, userStr: string, eventStr: string): void {
-//     const eventQueue = getEventQueue(sdkKey)
-//     const dvcUser = DVCPopulatedUser.fromJSONString(userStr)
-//     const event = DVCEvent.fromJSONString(eventStr)
-//     dvcUser.mergeClientCustomData(_getClientCustomData(sdkKey))
-//     const bucketedConfig = _generateBucketedConfig(_getConfigData(sdkKey), dvcUser, _getClientCustomData(sdkKey))
-//     eventQueue.queueEvent(dvcUser, event, bucketedConfig.featureVariationMap)
-// }
+export function queueEvent(sdkKey: string, userStr: Uint8Array, eventStr: string): void {
+    const eventQueue = getEventQueue(sdkKey)
+    const user_pb = decodeDVCUser_PB(userStr)
+    const dvcUser = new DVCPopulatedUserPB(user_pb)
+    const event = DVCEvent.fromJSONString(eventStr)
+    dvcUser.mergeClientCustomData(_getClientCustomData(sdkKey))
+    const bucketedConfig = _generateBucketedConfig(_getConfigData(sdkKey), dvcUser, _getClientCustomData(sdkKey))
+    eventQueue.queueEvent(dvcUser, event, bucketedConfig.featureVariationMap)
+}
 
 export function queueAggregateEvent(sdkKey: string, eventStr: string, variableVariationMapStr: string): void {
     const eventQueue = getEventQueue(sdkKey)

@@ -1,4 +1,6 @@
 import { JSON } from 'assemblyscript-json/assembly'
+import { CustomDataValue } from '../types'
+import { CustomDataValueInterpreter } from '../types/dvcUserPB'
 
 export function getJSONObjFromJSON(jsonObj: JSON.Obj, key: string): JSON.Obj {
     const obj = jsonObj.getObj(key)
@@ -209,4 +211,21 @@ export function isFlatJSONObj(json: JSON.Obj | null): bool {
         }
     }
     return true
+}
+
+export function getJSONObjFromCustomDataMap(customData: Map<string, CustomDataValue>): JSON.Obj {
+    const jsonObj = new JSON.Obj()
+    const keys = customData.keys()
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i]
+        const value = customData.get(key)
+        if (CustomDataValueInterpreter.isString(value)) {
+            jsonObj.set(key, new JSON.Str(CustomDataValueInterpreter.asString(value)))
+        } else if (CustomDataValueInterpreter.isFloat(value)) {
+            jsonObj.set(key, new JSON.Float(CustomDataValueInterpreter.asNumber(value)))
+        } else if (CustomDataValueInterpreter.isBool(value)) {
+            jsonObj.set(key, new JSON.Bool(CustomDataValueInterpreter.asBool(value)))
+        }
+    }
+    return jsonObj
 }

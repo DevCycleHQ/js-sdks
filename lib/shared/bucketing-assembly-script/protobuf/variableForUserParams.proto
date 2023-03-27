@@ -38,6 +38,10 @@ message NullableCustomData {
   bool isNull = 2;
 }
 
+message ClientCustomData_PB {
+  map<string, CustomDataValue> value = 1;
+}
+
 message VariableForUserParams_PB {
     string sdkKey = 1;
     string variableKey = 2;

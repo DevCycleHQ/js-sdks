@@ -4,15 +4,14 @@ import { OptionsType, versionCompare } from './versionCompare'
 import {
     AudienceOperator,
     AudienceFilter,
-    DVCPopulatedUser,
     validSubTypes,
     CustomDataFilter,
     UserFilter,
-    NoIdAudience, AudienceMatchFilter
+    NoIdAudience, AudienceMatchFilter, CustomDataValue
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { getF64FromJSONValue } from '../helpers/jsonHelpers'
-import { CustomDataValuePB, DVCPopulatedUserPB } from '../types/dvcUserPB'
+import { CustomDataValueInterpreter, DVCPopulatedUserPB } from '../types/dvcUserPB'
 
 // TODO add support for OR/XOR as well as recursive filters
 /**
@@ -27,7 +26,7 @@ export function _evaluateOperator(
     operator: AudienceOperator,
     audiences: Map<string, NoIdAudience>,
     user: DVCPopulatedUserPB,
-    clientCustomData: Map<string, CustomDataValuePB>
+    clientCustomData: Map<string, CustomDataValue>
 ): bool {
     if (!operator.filters.length) return false
 
@@ -64,7 +63,7 @@ function doesUserPassFilter(
     filter: AudienceFilter,
     audiences: Map<string, NoIdAudience>,
     user: DVCPopulatedUserPB,
-    clientCustomData: Map<string, CustomDataValuePB>
+    clientCustomData: Map<string, CustomDataValue>
 ): bool {
     let isValid = true
 
@@ -99,7 +98,7 @@ function filterForAudienceMatch(
     filter: AudienceMatchFilter,
     configAudiences: Map<string, NoIdAudience>,
     user: DVCPopulatedUserPB,
-    clientCustomData: Map<string, CustomDataValuePB>
+    clientCustomData: Map<string, CustomDataValue>
 ): bool {
     const audiences = getFilterAudiencesAsStrings(filter)
     const comparator = filter.comparator
@@ -124,7 +123,7 @@ function filterFunctionsBySubtype(
     subType: string,
     user: DVCPopulatedUserPB,
     filter: UserFilter,
-    clientCustomData: Map<string, CustomDataValuePB>
+    clientCustomData: Map<string, CustomDataValue>
 ): bool {
     if (subType === 'country') {
         return _checkStringsFilter(user.country, filter)
@@ -144,7 +143,7 @@ function filterFunctionsBySubtype(
         if (!(filter instanceof CustomDataFilter)) {
             throw new Error('Invalid filter data')
         }
-        return _checkCustomData(user.getCombinedCustomData(), clientCustomData, filter as CustomDataFilter)
+        return _checkCustomData(user, clientCustomData, filter as CustomDataFilter)
     } else {
         return false
     }
@@ -335,10 +334,13 @@ export function _checkVersionFilters(appVersion: string | null, filter: UserFilt
     }
 }
 
-export function _checkCustomData(data: Map<string, CustomDataValuePB> | null, clientCustomData: Map<string, CustomDataValuePB>, filter: CustomDataFilter): bool {
+export function _checkCustomData(user: DVCPopulatedUserPB, clientCustomData: Map<string, CustomDataValue>, filter: CustomDataFilter): bool {
     const operator = filter.comparator
 
-    let dataValue = data ? data.get(filter.dataKey) : null
+    let dataValue: CustomDataValue | null = user.customData ? user.customData!.get(filter.dataKey) : null
+    if (dataValue === null) {
+        dataValue = user.privateCustomData ? user.privateCustomData!.get(filter.dataKey) : null
+    }
     if (dataValue === null) {
         dataValue = clientCustomData.get(filter.dataKey)
     }
@@ -347,17 +349,17 @@ export function _checkCustomData(data: Map<string, CustomDataValuePB> | null, cl
         return checkValueExists(dataValue)
     } else if (operator === '!exist') {
         return !checkValueExists(dataValue)
-    } else if (filter.dataKeyType === 'String' && dataValue && (dataValue.isString || dataValue.isNull)) {
-        if (dataValue.isNull) {
+    } else if (filter.dataKeyType === 'String' && dataValue && (CustomDataValueInterpreter.isString(dataValue) || CustomDataValueInterpreter.isNull(dataValue))) {
+        if (CustomDataValueInterpreter.isNull(dataValue)) {
             return _checkStringsFilter(null, filter)
         } else {
-            return _checkStringsFilter(dataValue.asString(), filter)
+            return _checkStringsFilter(CustomDataValueInterpreter.asString(dataValue), filter)
         }
     } else if (filter.dataKeyType === 'Number'
-        && dataValue && dataValue.isFloat) {
-        return _checkNumbersFilter(dataValue.asNumber(), filter)
-    } else if (filter.dataKeyType === 'Boolean' && dataValue && dataValue.isBool) {
-        return _checkBooleanFilter(dataValue.asBool(), filter)
+        && dataValue && CustomDataValueInterpreter.isFloat(dataValue)) {
+        return _checkNumbersFilter(CustomDataValueInterpreter.asNumber(dataValue), filter)
+    } else if (filter.dataKeyType === 'Boolean' && dataValue && CustomDataValueInterpreter.isBool(dataValue)) {
+        return _checkBooleanFilter(CustomDataValueInterpreter.asBool(dataValue), filter)
     } else if (!dataValue && operator === '!=') {
         return true
     } else {
@@ -405,11 +407,11 @@ export function getFilterValues(filter: UserFilter): JSON.Value[] {
  * If value has a datatype, use one of the type checkers above (eg. checkStringFilter)
  * NOTE: The use of Number.isNaN is required over the global isNaN as the check it performs is more specific
  */
-function checkValueExists(value: CustomDataValuePB | null): bool {
+function checkValueExists(value: CustomDataValue | null): bool {
     if (!value) return false
-    const stringValue = value.isString ? value.asString() : null
-    const floatValue = value.isFloat ? value.asNumber() : null
-    const boolValue = value.isBool ? value.asBool() : null
+    const stringValue = CustomDataValueInterpreter.isString(value) ? CustomDataValueInterpreter.asString(value) : null
+    const floatValue = CustomDataValueInterpreter.isFloat(value) ? CustomDataValueInterpreter.asNumber(value) : null
+    const boolValue = CustomDataValueInterpreter.isBool(value) ? CustomDataValueInterpreter.asBool(value) : null
 
     return value !== null
         && !!(stringValue || floatValue || boolValue)

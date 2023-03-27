@@ -3,6 +3,7 @@ import {
     evaluateOperatorFromJSON,
     setPlatformData
 } from '../bucketingImportHelper'
+import { encodeDVCUser_PB } from '../../assembly/types'
 
 const defaultPlatformData = {
     platform: '',
@@ -24,7 +25,7 @@ const evaluateOperator = (
     data.user_id ||= 'some_user'
     return evaluateOperatorFromJSON(
         JSON.stringify(operator),
-        JSON.stringify(data),
+        encodeDVCUser_PB(data),
         JSON.stringify(audiences)
     )
 }
