@@ -22,7 +22,6 @@
     "<rootDir>/build"
   ],
   "dependencies": {
-    "@assemblyscript/rtrace": "0.19.22",
     "@nestjs/class-validator": "^0.13.4",
     "async": "^3.2.1",
     "axios": "^0.27.2",
@@ -60,6 +59,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@assemblyscript/rtrace": "~0.27.1",
     "@babel/core": "^7.17.7",
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",

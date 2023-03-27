@@ -15,15 +15,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@assemblyscript/rtrace@npm:0.19.22":
-  version: 0.19.22
-  resolution: "@assemblyscript/rtrace@npm:0.19.22"
+"@assemblyscript/rtrace@npm:~0.27.1":
+  version: 0.27.1
+  resolution: "@assemblyscript/rtrace@npm:0.27.1"
   dependencies:
     d3: ^6.3.1
     jsdom: ^16.4.0
   bin:
     rtplot: bin/rtplot.js
-  checksum: 3c26e983cb04a8578a79277b7a5336d06332d2bc7a75dd4da33fd563b8ffa03a7904219709ada24a8c42ab85efc9cdc42930d8f48e8f3e744ec9011d0ec43c17
+  checksum: a441ddd9e4ce935c88fb24616e31ea6507440d0953168fd2e57df06a8c2ca2890ae1e4ebad0e2369a38253c504676939671a321edae5b801646d75fc4b90fe2f
   languageName: node
   linkType: hard
 
@@ -11777,7 +11777,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "devcycle-js-sdks@workspace:."
   dependencies:
-    "@assemblyscript/rtrace": 0.19.22
+    "@assemblyscript/rtrace": ~0.27.1
     "@babel/core": ^7.17.7
     "@commitlint/cli": ^16.2.3
     "@commitlint/config-conventional": ^16.2.1
