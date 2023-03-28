@@ -107,10 +107,10 @@
       "options": {
         "commands": [
           {
-            "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 100 --maximumMemory 10000 --bindings raw"
+            "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 100 --use ASC_GC_SWEEPFACTOR=20 --maximumMemory 10000 --bindings raw"
           },
           {
-            "command": "asc assembly/index.ts --target release --exportRuntime --initialMemory 100 --maximumMemory 10000 --bindings raw"
+            "command": "asc assembly/index.ts --target release --exportRuntime --initialMemory 100 --use ASC_GC_SWEEPFACTOR=20 --maximumMemory 10000 --bindings raw"
           },
           {
             "command": "asc assembly/index.ts --target worker --exportRuntime --initialMemory 100 --maximumMemory 1000 --bindings raw"
