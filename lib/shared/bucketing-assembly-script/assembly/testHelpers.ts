@@ -155,3 +155,4 @@ export function testSortObjectsByString(arr: SortingArray<TestData>, direction: 
     return sortObjectsByString<TestData>(arr, direction)
 }
 
+export function noop(): void {}
