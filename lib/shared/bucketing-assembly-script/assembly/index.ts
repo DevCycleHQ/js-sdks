@@ -166,7 +166,6 @@ export function setPlatformDataUTF8(platformDataJSONStr: Uint8Array): void {
     _setPlatformData(platformData)
 }
 
-
 /**
  * Clear the platform data for the given SDK key.
  * @param empty Add empty input string to make AS compiler work
@@ -234,7 +233,9 @@ export function setClientCustomData(sdkKey: string, data: Uint8Array): void {
     _setClientCustomData(sdkKey, params.value)
 }
 
-export function noop(): void {}
+export function noop(): void {
+    // no-op
+}
 
 export * from './managers/eventQueueManager'
 

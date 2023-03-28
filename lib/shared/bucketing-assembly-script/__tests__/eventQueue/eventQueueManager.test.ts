@@ -17,6 +17,8 @@ import { FlushPayload } from '../../assembly/types'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
 import random_JSON from './random_json_2kb.json'
+import { customDataToPB, userToPB } from '../protobufVariableHelper'
+import { ClientCustomData_PB, DVCUser_PB } from '../../protobuf/compiled'
 
 let currentSDKKey: string | null = null
 const initEventQueue = (sdkKey: unknown, options: unknown) => {
@@ -29,8 +31,9 @@ const flushEventQueue = (sdkKey: string): FlushPayload[] => {
     return JSON.parse(flushPayloadsStr) as FlushPayload[]
 }
 
-const queueEvent = (sdkKey: string, user: unknown, event: unknown) => {
-    return queueEvent_AS(sdkKey, JSON.stringify(user), JSON.stringify(event))
+const queueEvent = (sdkKey: string, user: Record<string, unknown>, event: unknown) => {
+    const userPB = userToPB(user)
+    return queueEvent_AS(sdkKey, DVCUser_PB.encode(userPB).finish(), JSON.stringify(event))
 }
 
 const queueAggregateEvent = (sdkKey: string, event: unknown, variableVariationMap: unknown) => {
@@ -67,7 +70,7 @@ describe('EventQueueManager Tests', () => {
         clearPlatformData()
         if (currentSDKKey) {
             cleanupEventQueue(currentSDKKey)
-            setClientCustomData(currentSDKKey, '{}')
+            setClientCustomData(currentSDKKey, ClientCustomData_PB.encode({}).finish())
             currentSDKKey = null
         }
     })
@@ -210,7 +213,9 @@ describe('EventQueueManager Tests', () => {
             }
 
             initSDK(sdkKey)
-            setClientCustomData(sdkKey, JSON.stringify({ clientCustom: 'data', private: 'field' }))
+            setClientCustomData(sdkKey, ClientCustomData_PB.encode(
+                ClientCustomData_PB.create({ value: customDataToPB({ clientCustom: 'data', private: 'field' }) })
+            ).finish())
 
             queueEvent(sdkKey, dvcUser, event)
 

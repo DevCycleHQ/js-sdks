@@ -80,7 +80,7 @@ export class EventQueue {
         }
     }
 
-    queueEvent(user: DVCPopulatedUserPB, event: DVCEvent, featureVariationMap: Map<string, string>): void {
+    queueEvent(user: DVCPopulatedUser, event: DVCEvent, featureVariationMap: Map<string, string>): void {
         if (this.checkIfEventLoggingDisabled(event)) {
             return
         }

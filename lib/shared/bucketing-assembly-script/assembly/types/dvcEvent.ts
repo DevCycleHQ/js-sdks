@@ -150,7 +150,7 @@ export class DVCRequestEvent extends JSON.Value {
 
 export class UserEventsBatchRecord extends JSON.Value {
     constructor(
-        public user: DVCPopulatedUserPB,
+        public user: DVCPopulatedUser,
         public events: DVCRequestEvent[]
     ) {
         super()

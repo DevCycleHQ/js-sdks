@@ -1,16 +1,17 @@
 import { EventQueue } from '../eventQueue/eventQueue'
 import {
     EventQueueOptions,
+    DVCPopulatedUser,
     DVCEvent,
     FeatureVariation,
-    SDKVariable, decodeDVCUser_PB
+    SDKVariable, decodeDVCUser_PB, DVCUser
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { _getConfigData } from './configDataManager'
 import { _generateBucketedConfig } from '../bucketing'
 import { RequestPayloadManager } from '../eventQueue/requestPayloadManager'
 import { jsonArrFromValueArray } from '../helpers/jsonHelpers'
-import { _getClientCustomData } from './clientCustomDataManager'
+import { _getClientCustomData, _getClientCustomDataJSON } from './clientCustomDataManager'
 import { DVCPopulatedUserPB } from '../types/dvcUserPB'
 
 /**
@@ -104,12 +105,13 @@ export function onPayloadFailure(sdkKey: string, payloadId: string, retryable: b
 
 export function queueEvent(sdkKey: string, userStr: Uint8Array, eventStr: string): void {
     const eventQueue = getEventQueue(sdkKey)
-    const user_pb = decodeDVCUser_PB(userStr)
-    const dvcUser = new DVCPopulatedUserPB(user_pb)
+    const data = decodeDVCUser_PB(userStr)
+    const dvcUser = new DVCPopulatedUserPB(data)
+    const jsonUser = new DVCPopulatedUser(DVCUser.fromPBUser(data))
     const event = DVCEvent.fromJSONString(eventStr)
-    dvcUser.mergeClientCustomData(_getClientCustomData(sdkKey))
     const bucketedConfig = _generateBucketedConfig(_getConfigData(sdkKey), dvcUser, _getClientCustomData(sdkKey))
-    eventQueue.queueEvent(dvcUser, event, bucketedConfig.featureVariationMap)
+    jsonUser.mergeClientCustomData(_getClientCustomDataJSON(sdkKey))
+    eventQueue.queueEvent(jsonUser, event, bucketedConfig.featureVariationMap)
 }
 
 export function queueAggregateEvent(sdkKey: string, eventStr: string, variableVariationMapStr: string): void {

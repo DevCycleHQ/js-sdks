@@ -1,17 +1,18 @@
 import {
     setPlatformData,
     setConfigData,
-    variableForUser as variableForUser_AS,
-    variableForUserPreallocated as variableForUserPreallocated_AS,
+    variableForUser_PB as variableForUser_AS,
+    variableForUser_PB_Preallocated as variableForUserPreallocated_AS,
     initEventQueue,
     clearPlatformData,
     cleanupEventQueue,
     setClientCustomData,
     VariableType
 } from './bucketingImportHelper'
-import { variableForUserPB } from './protobufVariableHelper'
+import { userToPB, variableForUserPB, variableForUserPBPreallocated } from './protobufVariableHelper'
 import { SDKVariable } from '@devcycle/types'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
+import { ClientCustomData_PB } from '../protobuf/compiled'
 const { config } = testData
 
 type VariableForUserOptions = {
@@ -37,11 +38,7 @@ export const variableForUser = (
     if (config) {
         setConfigData(sdkKey, JSON.stringify(config))
     }
-    const userJSON = JSON.stringify(user)
-    const variableJSON = variableForUser_AS(
-        sdkKey, userJSON, variableKey, variableType, true
-    )
-    return variableJSON ? JSON.parse(variableJSON) as SDKVariable : null
+    return variableForUserPB({ sdkKey, user, variableKey, variableType })
 }
 
 export const variableForUserPreallocated = (
@@ -50,13 +47,7 @@ export const variableForUserPreallocated = (
     if (config) {
         setConfigData(sdkKey, JSON.stringify(config))
     }
-    const userRaw = JSON.stringify(user)
-    const userJSON = userRaw + 'blahblahblah'
-    const variableKeyPreallocated = variableKey + 'blahblahblahasdasd'
-    const variableJSON = variableForUserPreallocated_AS(
-        sdkKey, userJSON, userRaw.length, variableKeyPreallocated, variableKey.length, variableType, true
-    )
-    return variableJSON ? JSON.parse(variableJSON) as SDKVariable : null
+    return variableForUserPBPreallocated({ sdkKey, user, variableKey, variableType })
 }
 
 export const initSDK = (sdkKey = 'sdkKey', projectConfig = config): void => {
@@ -74,5 +65,5 @@ export const initSDK = (sdkKey = 'sdkKey', projectConfig = config): void => {
 export const cleanupSDK = (sdkKey = 'sdkKey'): void => {
     clearPlatformData()
     cleanupEventQueue(sdkKey)
-    setClientCustomData(sdkKey, '{}')
+    setClientCustomData(sdkKey, ClientCustomData_PB.encode({}).finish())
 }

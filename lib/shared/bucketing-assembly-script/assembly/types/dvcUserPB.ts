@@ -23,6 +23,7 @@ export class CustomDataValueInterpreter {
     static asString(val: CustomDataValue): string {
         return val.stringValue
     }
+
     static asNumber(val: CustomDataValue): f64 {
         return val.doubleValue
     }
@@ -74,20 +75,6 @@ export class DVCPopulatedUserPB {
         this.sdkVersion = platformData.sdkVersion
         this.hostname = platformData.hostname
         return this
-    }
-
-    mergeClientCustomData(clientCustomData: Map<string, CustomDataValue>): void {
-        const keys = clientCustomData.keys()
-        if (!this.customData && keys.length > 0) {
-            this.customData = new Map<string, CustomDataValue>
-        }
-
-        for (let i = 0; i < keys.length; i++) {
-            if (!this.customData!.has(keys[i])
-                && (this.privateCustomData && !this.privateCustomData!.has(keys[i]))) {
-                this.customData!.set(keys[i], clientCustomData.get(keys[i]))
-            }
-        }
     }
 }
 

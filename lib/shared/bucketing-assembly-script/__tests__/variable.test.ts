@@ -40,7 +40,7 @@ describe('variableForUser tests', () => {
             _id: '61538237b0a70b58ae6af71q',
             key: 'json-var',
             type: 'JSON',
-            value: '{"hello":"world","num":610,"bool":true}',
+            value: { 'hello':'world','num':610,'bool':true },
         })
     })
 
