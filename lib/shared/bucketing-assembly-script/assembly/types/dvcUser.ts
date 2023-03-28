@@ -194,7 +194,6 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
     readonly appBuild: f64
     customData: JSON.Obj | null
     privateCustomData: JSON.Obj | null
-    private _combinedCustomData: JSON.Obj
     readonly deviceModel: string | null
 
     readonly createdDate: Date
@@ -218,25 +217,6 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         this.privateCustomData = user.privateCustomData
         this.deviceModel = user.deviceModel
 
-        const combinedCustomData = new JSON.Obj()
-
-        const customData = user.customData
-        if (customData) {
-            for (let i = 0; i < customData.keys.length; i++) {
-                const key = customData.keys[i]
-                combinedCustomData.set(key, customData.get(key))
-            }
-        }
-
-        const privateCustomData = user.privateCustomData
-        if (privateCustomData) {
-            for (let i = 0; i < privateCustomData.keys.length; i++) {
-                const key = privateCustomData.keys[i]
-                combinedCustomData.set(key, privateCustomData.get(key))
-            }
-        }
-        this._combinedCustomData = combinedCustomData
-
         this.createdDate = new Date(Date.now())
         this.lastSeenDate = new Date(Date.now())
 
@@ -257,20 +237,15 @@ export class DVCPopulatedUser extends JSON.Value implements DVCUserInterface {
         return new DVCPopulatedUser(DVCUser.fromUTF8(userBytes))
     }
 
-    getCombinedCustomData(): JSON.Obj {
-        return this._combinedCustomData
-    }
-
-    mergeClientCustomData(clientCustomData: Map<string, CustomDataValue>): void {
-        const clientCustomDataKeys = clientCustomData.keys()
-        if (!this.customData && clientCustomDataKeys.length > 0) {
+    mergeClientCustomData(clientCustomData: JSON.Obj): void {
+        if (!this.customData && clientCustomData.keys.length > 0) {
             this.customData = new JSON.Obj()
         }
 
-        for (let i = 0; i < clientCustomDataKeys.length; i++) {
-            if (!this.customData!.has(clientCustomDataKeys[i])
-                    && (this.privateCustomData && !this.privateCustomData!.has(clientCustomDataKeys[i]))) {
-                this.customData!.set(clientCustomDataKeys[i], clientCustomData.get(clientCustomDataKeys[i]))
+        for (let i = 0; i < clientCustomData.keys.length; i++) {
+            if (!this.customData!.has(clientCustomData.keys[i])
+                && (this.privateCustomData && !this.privateCustomData!.has(clientCustomData.keys[i]))) {
+                this.customData!.set(clientCustomData.keys[i], clientCustomData.get(clientCustomData.keys[i]))
             }
         }
     }

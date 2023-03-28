@@ -3,7 +3,15 @@ import {
     evaluateOperatorFromJSON,
     setPlatformData
 } from '../bucketingImportHelper'
-import { encodeDVCUser_PB } from '../../assembly/types'
+import { DVCCustomDataJSON } from '@devcycle/types'
+import {
+    CustomDataType,
+    CustomDataValue, DVCUser_PB,
+    NullableCustomData,
+    NullableDouble,
+    NullableString
+} from '../../protobuf/compiled'
+import { userToPB } from '../protobufVariableHelper'
 
 const defaultPlatformData = {
     platform: '',
@@ -23,9 +31,11 @@ const evaluateOperator = (
 ) => {
     // set required field to make class constructors happy
     data.user_id ||= 'some_user'
+    const user = userToPB(data)
+    const encoded = DVCUser_PB.encode(user).finish()
     return evaluateOperatorFromJSON(
         JSON.stringify(operator),
-        encodeDVCUser_PB(data),
+        encoded,
         JSON.stringify(audiences)
     )
 }
@@ -33,7 +43,9 @@ const evaluateOperator = (
 const checkStringsFilter = (string: unknown, filter: { values?: unknown[], comparator: string }) => {
     const emailFilter = {
         type: 'user',
-        subType: 'email',
+        dataKey: 'key',
+        subType: 'customData',
+        dataKeyType: 'String',
         values: [],
         ...filter
     }
@@ -43,9 +55,9 @@ const checkStringsFilter = (string: unknown, filter: { values?: unknown[], compa
         'operator': 'and'
     }
 
-    const data = { email: string, user_id: 'some_user' }
+    const data = { customData: { key: string }, user_id: 'some_user' }
 
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
+    return evaluateOperator({ operator, data })
 }
 const checkBooleanFilter = (bool: unknown, filter: { values?: unknown[], comparator: string }) => {
     const customDataFilter = {
@@ -64,7 +76,7 @@ const checkBooleanFilter = (bool: unknown, filter: { values?: unknown[], compara
 
     const data = { customData: { key: bool }, user_id: 'some_user' }
 
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
+    return evaluateOperator({ operator, data })
 }
 
 const checkNumbersFilter = (number: unknown, filter: { values?: unknown[], comparator: string }): boolean => {
@@ -83,7 +95,7 @@ const checkNumbersFilter = (number: unknown, filter: { values?: unknown[], compa
     }
 
     const data = { customData: { key: number }, user_id: 'some_user' }
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
+    return evaluateOperator({ operator, data })
 }
 const checkVersionFilters = (appVersion: string, filter: { values?: unknown[], comparator: string }): boolean => {
     const appVersionFilter = {
@@ -99,7 +111,7 @@ const checkVersionFilters = (appVersion: string, filter: { values?: unknown[], c
     }
 
     const data = { appVersion: appVersion, user_id: 'some_user' }
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
+    return evaluateOperator({ operator, data })
 }
 
 const checkVersionFilter = (appVersion: string, values: string[], comparator: string): boolean => {
@@ -113,7 +125,7 @@ const checkCustomData = (data: Record<string, unknown> | null, filter: unknown):
     }
 
     const user = { customData: data, user_id: 'some_user' }
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(user))
+    return evaluateOperator({ operator, data: user })
 }
 
 describe('SegmentationManager Unit Test', () => {
@@ -136,7 +148,7 @@ describe('SegmentationManager Unit Test', () => {
     //             listAudienceSegmentation: [
     //                 {
     //                     _listAudience: 'test1',
-    //                     version: '1'
+    //                     version: '1'git
     //                 }, {
     //                     _listAudience: 'test1',
     //                     version: '2'
@@ -1056,6 +1068,7 @@ describe('SegmentationManager Unit Test', () => {
         it('should return false if string is not a string', () => {
             assert.strictEqual(false, checkStringsFilter(1, { comparator: '=' }))
         })
+
         it('should return false if filter value is not a string', () => {
             const filter = { type: 'user', comparator: '=', values: [1, 2] }
             assert.strictEqual(false, checkStringsFilter('Male', filter))

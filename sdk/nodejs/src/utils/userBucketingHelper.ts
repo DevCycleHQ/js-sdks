@@ -6,11 +6,15 @@ import {
 } from '@devcycle/bucketing-assembly-script/protobuf/compiled'
 import { pbSDKVariableTransform } from '../pb-types/pbTypeHelpers'
 
-export function bucketUserForConfig(user: DVCPopulatedUser, sdkKey: string): BucketedUserConfig {
+export function userToPB(user: DVCPopulatedUser): Uint8Array {
     const pbUser = user.toPBUser()
     const err = DVCUser_PB.verify(pbUser)
     if (err) throw new Error(`Invalid DVCUser_PB protobuf params: ${err}`)
-    const buffer = DVCUser_PB.encode(pbUser).finish()
+    return DVCUser_PB.encode(pbUser).finish()
+}
+
+export function bucketUserForConfig(user: DVCPopulatedUser, sdkKey: string): BucketedUserConfig {
+    const buffer = userToPB(user)
     return JSON.parse(
         getBucketingLib().generateBucketedConfigForUser(sdkKey, buffer)
     ) as BucketedUserConfig

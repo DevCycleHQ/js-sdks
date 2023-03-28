@@ -1,8 +1,14 @@
-import { SDKVariable, VariableType as VariableTypeStr } from '@devcycle/types'
+import { DVCCustomDataJSON, SDKVariable, VariableType as VariableTypeStr } from '@devcycle/types'
 import {
     variableForUser_PB, VariableType
 } from './bucketingImportHelper'
-import { VariableForUserParams_PB, SDKVariable_PB } from '../protobuf/compiled'
+import {
+    VariableForUserParams_PB,
+    SDKVariable_PB,
+    DVCUser_PB,
+    NullableString,
+    NullableDouble, NullableCustomData
+} from '../protobuf/compiled'
 
 type SDKVariable_PB_Type = {
     _id: string
@@ -60,7 +66,7 @@ type CustomDataValuePB = {
     stringValue?: string
 }
 
-const customDataToPB = (customData: any): Record<string, CustomDataValuePB> | undefined => {
+export const customDataToPB = (customData: Record<string, unknown>): Record<string, CustomDataValuePB> | undefined => {
     if (!customData) return undefined
 
     const customDataPB: Record<string, CustomDataValuePB> = {}
@@ -82,9 +88,35 @@ const customDataToPB = (customData: any): Record<string, CustomDataValuePB> | un
 
 export type VariableForUserArgs = { sdkKey: string, user: any, variableKey: string, variableType: VariableType }
 
-export const variableForUserPB = (
-    { sdkKey, user, variableKey, variableType }: VariableForUserArgs
-): SDKVariable | null => {
+export const userToPB = (user: Record<string, unknown>): DVCUser_PB => {
+    const params = {
+        user_id: user.user_id,
+        email: NullableString.create({ value: user.email || '', isNull: !user.email }),
+        name: NullableString.create({ value: user.name || '', isNull: !user.name }),
+        language: NullableString.create({ value: user.language || '', isNull: !user.language }),
+        country: NullableString.create({ value: user.country || '', isNull: !user.country }),
+        appBuild: NullableDouble.create({
+            value: user.appBuild || 0,
+            isNull: user.appBuild === null || user.appBuild === undefined
+        }),
+        appVersion: NullableString.create({ value: user.appVersion || '', isNull: !user.appVersion }),
+        deviceModel: NullableString.create({ value: user.deviceModel, isNull: !user.deviceModel }),
+        customData: NullableCustomData.create({
+            value: customDataToPB(user.customData as DVCCustomDataJSON),
+            isNull: !user.customData
+        }),
+        privateCustomData: NullableCustomData.create({
+            value: customDataToPB(user.privateCustomData as DVCCustomDataJSON),
+            isNull: !user.privateCustomData
+        }),
+    }
+    const err = DVCUser_PB.verify(params)
+    if (err) throw new Error(`DVCUser protobuf verification error: ${err}`)
+
+    return DVCUser_PB.create(params)
+}
+
+const getVariableForUserParams = ({ sdkKey, user, variableKey, variableType }: VariableForUserArgs) => {
     const customData = customDataToPB(user.customData)
     const privateCustomData = customDataToPB(user.privateCustomData)
     const params = {
@@ -109,8 +141,25 @@ export const variableForUserPB = (
     if (err) throw new Error(err)
 
     const pbMsg = VariableForUserParams_PB.create(params)
-    const buffer = VariableForUserParams_PB.encode(pbMsg).finish()
-    const resultBuffer = variableForUser_PB(buffer)
+    return VariableForUserParams_PB.encode(pbMsg).finish()
+}
 
+export const variableForUserPB = (
+    { sdkKey, user, variableKey, variableType }: VariableForUserArgs
+): SDKVariable | null => {
+    const buffer = getVariableForUserParams({ sdkKey, user, variableKey, variableType })
+    const resultBuffer = variableForUser_PB(buffer)
+    return !resultBuffer ? null : pbSDKVariableToJS(SDKVariable_PB.decode(resultBuffer))
+}
+
+export const variableForUserPBPreallocated = (
+    { sdkKey, user, variableKey, variableType }: VariableForUserArgs
+): SDKVariable | null => {
+    const buffer = getVariableForUserParams({ sdkKey, user, variableKey, variableType })
+    const preallocationJunk = new Uint8Array([1,2,3,4,45,6,7,43,3])
+    const preallocated = new Uint8Array(preallocationJunk.length + buffer.length)
+    preallocated.set(buffer)
+    preallocated.set(preallocationJunk, buffer.length)
+    const resultBuffer = variableForUser_PB(preallocated)
     return !resultBuffer ? null : pbSDKVariableToJS(SDKVariable_PB.decode(resultBuffer))
 }

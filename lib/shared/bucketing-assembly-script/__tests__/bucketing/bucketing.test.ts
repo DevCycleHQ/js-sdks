@@ -5,7 +5,6 @@ import {
     doesUserPassRolloutFromJSON,
     setPlatformData,
     setClientCustomData,
-    variableForUser as variableForUser_AS,
     VariableType
 } from '../bucketingImportHelper'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
@@ -18,7 +17,8 @@ import {
     SDKVariable,
 } from '@devcycle/types'
 import { cleanupSDK, initSDK } from '../setPlatformData'
-import { variableForUserPB, VariableForUserArgs } from '../protobufVariableHelper'
+import { variableForUserPB, VariableForUserArgs, customDataToPB, userToPB } from '../protobufVariableHelper'
+import { ClientCustomData_PB, DVCUser_PB } from '../../protobuf/compiled'
 
 type BoundedHash = { rolloutHash: number, bucketingHash: number }
 
@@ -37,8 +37,12 @@ const setPlatformDataJSON = (data: unknown) => {
 
 setPlatformDataJSON(defaultPlatformData)
 
-const setClientCustomDataJSON = (data: unknown) => {
-    setClientCustomData(sdkKey, JSON.stringify(data))
+const setClientCustomDataJSON = (data: Record<string, unknown>) => {
+    const customDataPB = customDataToPB(data)
+    setClientCustomData(
+        sdkKey,
+        ClientCustomData_PB.encode(ClientCustomData_PB.create({ value: customDataPB })).finish()
+    )
 }
 
 const generateBoundedHashes = (user_id: string, target_id: string): BoundedHash => {
@@ -53,8 +57,9 @@ const decideTargetVariation = (
     return decideTargetVariationFromJSON(JSON.stringify(target), boundedHash)
 }
 
-const generateBucketedConfig = (user: unknown): BucketedUserConfig => {
-    const bucketedConfig = generateBucketedConfigForUser(sdkKey, JSON.stringify(user))
+const generateBucketedConfig = (user: Record<string, unknown>): BucketedUserConfig => {
+    const userPB = userToPB(user)
+    const bucketedConfig = generateBucketedConfigForUser(sdkKey, DVCUser_PB.encode(userPB).finish())
     return JSON.parse(bucketedConfig) as BucketedUserConfig
 }
 
@@ -77,10 +82,10 @@ const expectVariableForUser = (
 }
 
 const variableForUser = ({ user, variableKey, variableType }: VariableForUserArgs): SDKVariable | null => {
-    const variableJSON = variableForUser_AS(
-        sdkKey, JSON.stringify(user), variableKey, variableType, true
+    const sdkVariable = variableForUserPB(
+        { sdkKey, user, variableKey, variableType }
     )
-    return variableJSON ? (JSON.parse(variableJSON) as SDKVariable) : null
+    return sdkVariable ? sdkVariable : null
 }
 
 const doesUserPassRollout = (
@@ -728,7 +733,7 @@ describe('Config Parsing and Generating', () => {
         expect(c).toEqual(expected)
 
         // Targeting Rule expects the Custom Data property of "favouriteNull" to exist
-        // However, since the User has a null value for this property, 
+        // However, since the User has a null value for this property,
         // the Variable for User method should not return any variables
         expectVariableForUser(
             { user, variableKey: 'audience-match', variableType: VariableType.String },
@@ -796,7 +801,7 @@ describe('Config Parsing and Generating', () => {
         expect(c).toEqual(expected)
 
         // Targeting Rule expects the Custom Data property of "favouriteNull" to exist
-        // However, since the User has a null value for this property, 
+        // However, since the User has a null value for this property,
         // the Variable for User method should not return any variables
         expectVariableForUser(
             { user, variableKey: 'audience-match', variableType: VariableType.String },

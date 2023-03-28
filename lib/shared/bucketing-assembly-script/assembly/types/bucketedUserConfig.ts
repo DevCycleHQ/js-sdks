@@ -220,9 +220,13 @@ export class SDKVariable extends JSON.Obj {
         const stringValue = (this.type === 'String' && this.value.isString)
             ? (this.value as JSON.Str).valueOf()
             : null
-        const jsonValue = (this.type === 'JSON' && this.value.isObj)
+        let jsonValue = (this.type === 'JSON' && this.value.isObj)
             ? this.value.stringify()
             : null
+
+        if (this.type === 'JSON' && jsonValue == null && this.value.isString) {
+            jsonValue = (this.value as JSON.Str).valueOf()
+        }
 
         const pbVariable = new SDKVariable_PB(
             this._id,

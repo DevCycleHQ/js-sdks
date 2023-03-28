@@ -6,6 +6,7 @@ import {
     clearPlatformData,
     setClientCustomData
 } from './bucketingImportHelper'
+import { ClientCustomData_PB } from '../protobuf/compiled'
 
 const defaultPlatformData = {
     platform: 'NodeJS',
@@ -35,5 +36,5 @@ export const initSDK = (sdkKey: string, config: unknown = {}, eventOptions: unkn
 export const cleanupSDK = (sdkKey: string): void => {
     clearPlatformData()
     cleanupEventQueue(sdkKey)
-    setClientCustomData(sdkKey, '{}')
+    setClientCustomData(sdkKey, ClientCustomData_PB.encode({}).finish())
 }

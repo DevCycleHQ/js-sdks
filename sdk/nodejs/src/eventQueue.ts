@@ -5,6 +5,7 @@ import { BucketedUserConfig, DVCLogger, DVCReporter, FlushResults } from '@devcy
 
 import { getBucketingLib } from './bucketing'
 import { publishEvents } from './request'
+import { userToPB } from './utils/userBucketingHelper'
 
 export const AggregateEventTypes: Record<string, string> = {
     variableEvaluated: 'variableEvaluated',
@@ -188,7 +189,7 @@ export class EventQueue {
 
         getBucketingLib().queueEvent(
             this.sdkKey,
-            JSON.stringify(user),
+            userToPB(user),
             JSON.stringify(event)
         )
     }
