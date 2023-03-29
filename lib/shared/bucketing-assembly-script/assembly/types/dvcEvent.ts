@@ -11,7 +11,6 @@ import {
 } from '../helpers/jsonHelpers'
 import { DVCPopulatedUser } from './dvcUser'
 import uuid from 'as-uuid/assembly'
-import { DVCPopulatedUserPB } from './dvcUserPB'
 
 export const EventTypes = new Set<string>()
 EventTypes.add('variableEvaluated')

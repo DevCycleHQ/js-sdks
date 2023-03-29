@@ -1,13 +1,11 @@
 import { JSON } from 'assemblyscript-json/assembly'
 import {
     ConfigBody,
-    DVCPopulatedUser,
     FeatureVariation,
     PlatformData,
-    DVCUser,
     SDKVariable,
     VariableForUserParams_PB,
-    decodeVariableForUserParams_PB, VariableType_PB, DVCUser_PB, decodeDVCUser_PB
+    decodeVariableForUserParams_PB, VariableType_PB, decodeDVCUser_PB
 } from './types'
 import {
     _generateBoundedHashes,

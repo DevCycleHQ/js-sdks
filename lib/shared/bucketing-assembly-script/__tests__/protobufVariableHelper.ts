@@ -1,13 +1,13 @@
 import { DVCCustomDataJSON, SDKVariable, VariableType as VariableTypeStr } from '@devcycle/types'
 import {
-    variableForUser_PB, VariableType
+    variableForUser_PB, VariableType, variableForUser_PB_Preallocated
 } from './bucketingImportHelper'
 import {
     VariableForUserParams_PB,
     SDKVariable_PB,
     DVCUser_PB,
     NullableString,
-    NullableDouble, NullableCustomData
+    NullableDouble, NullableCustomData, CustomDataValue
 } from '../protobuf/compiled'
 
 type SDKVariable_PB_Type = {
@@ -102,11 +102,11 @@ export const userToPB = (user: Record<string, unknown>): DVCUser_PB => {
         appVersion: NullableString.create({ value: user.appVersion || '', isNull: !user.appVersion }),
         deviceModel: NullableString.create({ value: user.deviceModel, isNull: !user.deviceModel }),
         customData: NullableCustomData.create({
-            value: customDataToPB(user.customData as DVCCustomDataJSON),
+            value: CustomDataValue.create(customDataToPB(user.customData as DVCCustomDataJSON)),
             isNull: !user.customData
         }),
         privateCustomData: NullableCustomData.create({
-            value: customDataToPB(user.privateCustomData as DVCCustomDataJSON),
+            value: CustomDataValue.create(customDataToPB(user.privateCustomData as DVCCustomDataJSON)),
             isNull: !user.privateCustomData
         }),
     }
@@ -160,6 +160,6 @@ export const variableForUserPBPreallocated = (
     const preallocated = new Uint8Array(preallocationJunk.length + buffer.length)
     preallocated.set(buffer)
     preallocated.set(preallocationJunk, buffer.length)
-    const resultBuffer = variableForUser_PB(preallocated)
+    const resultBuffer = variableForUser_PB_Preallocated(preallocated, buffer.length)
     return !resultBuffer ? null : pbSDKVariableToJS(SDKVariable_PB.decode(resultBuffer))
 }
