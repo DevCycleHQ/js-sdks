@@ -3,13 +3,8 @@ import {
     evaluateOperatorFromJSON,
     setPlatformData
 } from '../bucketingImportHelper'
-import { DVCCustomDataJSON } from '@devcycle/types'
 import {
-    CustomDataType,
-    CustomDataValue, DVCUser_PB,
-    NullableCustomData,
-    NullableDouble,
-    NullableString
+    DVCUser_PB,
 } from '../../protobuf/compiled'
 import { userToPB } from '../protobufVariableHelper'
 
@@ -148,7 +143,7 @@ describe('SegmentationManager Unit Test', () => {
     //             listAudienceSegmentation: [
     //                 {
     //                     _listAudience: 'test1',
-    //                     version: '1'git
+    //                     version: '1'
     //                 }, {
     //                     _listAudience: 'test1',
     //                     version: '2'
