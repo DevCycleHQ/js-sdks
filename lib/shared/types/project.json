@@ -16,7 +16,7 @@
         "cwd": "dist/lib/shared/types",
         "forwardAllArgs": true
       },
-      "dependsOn": [{ "projects": "self", "target": "build:emit-legacy-types" }]
+      "dependsOn": ["build:emit-legacy-types"]
     },
     "build": {
       "executor": "@nrwl/web:rollup",
@@ -44,7 +44,8 @@
         "command": "npx --yes downlevel-dts . ts3.5 --to=3.5",
         "cwd": "dist/lib/shared/types",
         "forwardAllArgs": true
-      }
+      },
+      "dependsOn": ["build"]
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
