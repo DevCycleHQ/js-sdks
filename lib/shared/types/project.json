@@ -15,13 +15,12 @@
         "command": "../../../../scripts/npm-safe-publish.sh \"@devcycle/types\"",
         "cwd": "dist/lib/shared/types",
         "forwardAllArgs": true
-      }
+      },
+      "dependsOn": [{ "projects": "self", "target": "build:emit-legacy-types" }]
     },
     "build": {
       "executor": "@nrwl/web:rollup",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "format": ["esm", "cjs"],
         "project": "lib/shared/types/package.json",
@@ -39,22 +38,24 @@
         "skipTypeField": true
       }
     },
+    "build:emit-legacy-types": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npx --yes downlevel-dts . ts3.5 --to=3.5",
+        "cwd": "dist/lib/shared/types",
+        "forwardAllArgs": true
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "lib/shared/types/**/*.ts"
-        ]
+        "lintFilePatterns": ["lib/shared/types/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/lib/shared/types"
-      ],
+      "outputs": ["coverage/lib/shared/types"],
       "options": {
         "jestConfig": "lib/shared/types/jest.config.ts",
         "passWithNoTests": true,

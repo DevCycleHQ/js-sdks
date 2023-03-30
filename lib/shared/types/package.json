@@ -4,5 +4,12 @@
   "license": "MIT",
   "dependencies": {
     "@types/validator": "13.7.6"
+  },
+  "typesVersions": {
+    "<4.0": {
+      "*": [
+        "./ts3.5/*"
+      ]
+    }
   }
 }

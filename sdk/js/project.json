@@ -9,7 +9,8 @@
         "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/devcycle-js-sdk\"",
         "cwd": "dist/sdk/js",
         "forwardAllArgs": true
-      }
+      },
+      "dependsOn": [{ "projects": "self", "target": "build:emit-legacy-types" }]
     },
     "check-types": {
       "executor": "@nrwl/workspace:run-commands",
@@ -20,20 +21,14 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "sdk/js/**/*.ts"
-        ]
+        "lintFilePatterns": ["sdk/js/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/sdk/js"
-      ],
+      "outputs": ["coverage/sdk/js"],
       "options": {
         "jestConfig": "sdk/js/jest.config.ts",
         "passWithNoTests": false,
@@ -42,25 +37,27 @@
     },
     "build": {
       "executor": "@nrwl/js:tsc",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/sdk/js",
         "tsConfig": "sdk/js/tsconfig.lib.json",
         "packageJson": "sdk/js/package.json",
         "buildableProjectDepsInPackageJsonType": "dependencies",
         "main": "sdk/js/src/index.ts",
-        "assets": [
-          "sdk/js/*.md"
-        ]
+        "assets": ["sdk/js/*.md"]
+      }
+    },
+    "build:emit-legacy-types": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npx --yes downlevel-dts . ts3.5 --to=3.5",
+        "cwd": "dist/sdk/js",
+        "forwardAllArgs": true
       }
     },
     "build:cdn": {
       "executor": "@nrwl/webpack:webpack",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "libraryName": "DevCycle",
         "libraryTarget": "umd",

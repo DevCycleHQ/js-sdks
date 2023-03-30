@@ -3,5 +3,12 @@
   "version": "1.9.1",
   "description": "The DevCycle JS SDK used for feature management.",
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "typesVersions": {
+    "<4.0": {
+      "*": [
+        "./ts3.5/*"
+      ]
+    }
+  }
 }
