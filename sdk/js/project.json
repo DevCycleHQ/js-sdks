@@ -10,7 +10,7 @@
         "cwd": "dist/sdk/js",
         "forwardAllArgs": true
       },
-      "dependsOn": [{ "projects": "self", "target": "build:emit-legacy-types" }]
+      "dependsOn": ["build:emit-legacy-types"]
     },
     "check-types": {
       "executor": "@nrwl/workspace:run-commands",
@@ -53,7 +53,8 @@
         "command": "npx --yes downlevel-dts . ts3.5 --to=3.5",
         "cwd": "dist/sdk/js",
         "forwardAllArgs": true
-      }
+      },
+      "dependsOn": ["build"]
     },
     "build:cdn": {
       "executor": "@nrwl/webpack:webpack",
