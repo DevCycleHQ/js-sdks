@@ -86,102 +86,76 @@ export class DVCUser_PB {
     }
   }
 
-  static decode(reader: Reader, length: i32): DVCUser_PB {
-    const end: usize = length < 0 ? reader.end : reader.ptr + length;
-    const message = new DVCUser_PB();
-
-    while (reader.ptr < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.userId = reader.string();
-          break;
-
-        case 2:
-          message.email = NullableString.decode(reader, reader.uint32());
-          break;
-
-        case 3:
-          message.name = NullableString.decode(reader, reader.uint32());
-          break;
-
-        case 4:
-          message.language = NullableString.decode(reader, reader.uint32());
-          break;
-
-        case 5:
-          message.country = NullableString.decode(reader, reader.uint32());
-          break;
-
-        case 6:
-          message.appBuild = NullableDouble.decode(reader, reader.uint32());
-          break;
-
-        case 7:
-          message.appVersion = NullableString.decode(reader, reader.uint32());
-          break;
-
-        case 8:
-          message.deviceModel = NullableString.decode(reader, reader.uint32());
-          break;
-
-        case 9:
-          message.customData = NullableCustomData.decode(
-            reader,
-            reader.uint32()
-          );
-          break;
-
-        case 10:
-          message.privateCustomData = NullableCustomData.decode(
-            reader,
-            reader.uint32()
-          );
-          break;
-
-        default:
-          reader.skipType(tag & 7);
-          break;
+  readField(index: i32): Reader {
+      this.reader.reset(this.buffer)
+      const end: usize = this.length < 0 ? this.reader.end : this.reader.ptr + this.length;
+      while (this.reader.ptr < end) {
+          const tag = this.reader.uint32();
+          if (tag >>> 3 === index) {
+              return this.reader
+          } else {
+              this.reader.skipType(tag & 7);
+          }
       }
-    }
-
-    return message;
+      throw new Error(`DVCUser_PB field ${index} not found`);
   }
 
-  userId: string;
-  email: NullableString | null;
-  name: NullableString | null;
-  language: NullableString | null;
-  country: NullableString | null;
-  appBuild: NullableDouble | null;
-  appVersion: NullableString | null;
-  deviceModel: NullableString | null;
-  customData: NullableCustomData | null;
-  privateCustomData: NullableCustomData | null;
+  // Updated the Protobuf.decode library method to pass buffer to this decude method
+  static decode(reader: Reader, length: i32, buffer?: Uint8Array): DVCUser_PB {
+    if (!buffer) throw new Error("DVCUser_PB.decode: buffer is null")
+    return new DVCUser_PB(reader, length, buffer);
+  }
+
+  private reader: Reader;
+
+  private length: i32;
+
+  private buffer: Uint8Array;
+
+  // userId: string;
+  // email: NullableString | null;
+  // name: NullableString | null;
+  // language: NullableString | null;
+  // country: NullableString | null;
+  // appBuild: NullableDouble | null;
+  // appVersion: NullableString | null;
+  // deviceModel: NullableString | null;
+  // customData: NullableCustomData | null;
+  // privateCustomData: NullableCustomData | null;
 
   constructor(
-    userId: string = "",
-    email: NullableString | null = null,
-    name: NullableString | null = null,
-    language: NullableString | null = null,
-    country: NullableString | null = null,
-    appBuild: NullableDouble | null = null,
-    appVersion: NullableString | null = null,
-    deviceModel: NullableString | null = null,
-    customData: NullableCustomData | null = null,
-    privateCustomData: NullableCustomData | null = null
+      reader: Reader,
+      length: i32,
+      buffer: Uint8Array
   ) {
-    this.userId = userId;
-    this.email = email;
-    this.name = name;
-    this.language = language;
-    this.country = country;
-    this.appBuild = appBuild;
-    this.appVersion = appVersion;
-    this.deviceModel = deviceModel;
-    this.customData = customData;
-    this.privateCustomData = privateCustomData;
+      this.reader = reader
+      this.length = length
+      this.buffer = buffer
   }
+
+  private _userId: string | null = null
+  private _gotUserId: boolean = false
+  get userId(): string {
+      if (this._gotUserId) {
+          return this._userId!
+      }
+      this.readField(1)
+      this._userId = this.reader.string()
+      this._gotUserId = true
+      return this._userId
+  }
+
+  private _email: NullableString | null = null
+    private _gotEmail: boolean = false
+    get email(): NullableString | null {
+        if (this._gotEmail) {
+          return this._email
+        }
+        this.readField(2)
+        this._email = NullableString.decode(this.reader, this.reader.uint32())
+        this._gotEmail = true
+        return this._email
+    }
 }
 
 export function encodeDVCUser_PB(message: DVCUser_PB): Uint8Array {

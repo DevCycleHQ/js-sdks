@@ -85,15 +85,15 @@
         "executor": "@nrwl/workspace:run-commands",
         "options": {
             "commands": [
-                {
-                  "command": "rm -rf ./assembly/types/protobuf-generated"
-                },
-                {
-                  "command": "mkdir ./assembly/types/protobuf-generated"
-                },
-                {
-                  "command": "protoc --plugin=protoc-gen-as=../../../node_modules/.bin/as-proto-gen --as_opt=gen-helper-methods --as_out=./assembly/types/protobuf-generated ./protobuf/*.proto"
-                }
+//                {
+//                  "command": "rm -rf ./assembly/types/protobuf-generated"
+//                },
+//                {
+//                  "command": "mkdir ./assembly/types/protobuf-generated"
+//                },
+//                {
+//                  "command": "protoc --plugin=protoc-gen-as=../../../node_modules/.bin/as-proto-gen --as_opt=gen-helper-methods --as_out=./assembly/types/protobuf-generated ./protobuf/*.proto"
+//                }
             ],
             "cwd": "lib/shared/bucketing-assembly-script",
             "parallel": false
