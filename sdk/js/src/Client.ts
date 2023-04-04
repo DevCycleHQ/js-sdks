@@ -267,10 +267,10 @@ export class DVCClient implements Client {
 
     subscribe(key: `variableUpdated:${string}`, handler: variableUpdatedHandler): void;
     subscribe(key: `newVariables:${string}`, handler: newVariablesHandler): void;
-    subscribe(key: `featureUpdated:${string}` , handler: featureUpdatedHandler): void;
-    subscribe(key: 'error' , handler: errorHandler): void;
-    subscribe(key: 'initialized' , handler: initializedHandler): void;
-    subscribe(key: 'configUpdated' , handler: configUpdatedHandler): void;
+    subscribe(key: `featureUpdated:${string}`, handler: featureUpdatedHandler): void;
+    subscribe(key: 'error', handler: errorHandler): void;
+    subscribe(key: 'initialized', handler: initializedHandler): void;
+    subscribe(key: 'configUpdated', handler: configUpdatedHandler): void;
     subscribe(key: string, handler: (...args: any[]) => void): void {
         this.eventEmitter.subscribe(key, handler)
     }
@@ -423,11 +423,15 @@ export class DVCClient implements Client {
                 }
 
                 if (this.config?.sse?.url) {
-                    this.streamingConnection = new StreamingConnection(
-                        this.config.sse.url,
-                        this.onSSEMessage.bind(this),
-                        this.logger
-                    )
+                    if (!this.options.disableRealtimeUpdates) {
+                        this.streamingConnection = new StreamingConnection(
+                            this.config.sse.url,
+                            this.onSSEMessage.bind(this),
+                            this.logger
+                        )
+                    } else {
+                        this.logger.info('Disabling Realtime Updates based on Initialization parameter')
+                    }
                 }
 
                 return this
