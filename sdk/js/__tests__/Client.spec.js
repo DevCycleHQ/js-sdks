@@ -288,7 +288,6 @@ describe('DVCClient tests', () => {
             const numVariable = client.variable('key', 12.4)
             const jsonVariable = client.variable('key', { key: 'value' })
             const variableMap = client.variableDefaultMap['key']
-            console.log('variableMap', variableMap)
             expect(variableMap['default_value']).toEqual(stringVariable)
             expect(variableMap['true']).toEqual(boolVariable)
             expect(variableMap['12.4']).toEqual(numVariable)

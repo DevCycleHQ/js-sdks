@@ -58,6 +58,7 @@ export interface DVCOptions {
     disableConfigCache?: boolean
     configCacheTTL?: number
     storage?: DVCStorage
+    disableRealtimeUpdates?: boolean
 }
 
 export interface DVCUser {
