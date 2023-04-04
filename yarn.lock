@@ -2974,7 +2974,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@devcycle/bucketing-assembly-script@^1.6.2, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
+"@devcycle/bucketing-assembly-script@^1.6.3, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script"
   dependencies:
@@ -3028,7 +3028,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
-    "@devcycle/bucketing-assembly-script": ^1.6.2
+    "@devcycle/bucketing-assembly-script": ^1.6.3
     "@devcycle/bucketing-test-data": ^1.2.3
   languageName: unknown
   linkType: soft
@@ -8577,7 +8577,7 @@ __metadata:
 "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json":
   version: 1.1.0
   resolution: "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json.git#commit=d2ce65ec18b305e1f3db8a4fe4394b417631b024"
-  checksum: 510fc8e0828011e2257c1d4dc7fd236a8428f7f0869f59aaa0e74d8a27f9bbbc665ba74399faf466c87bcfe6fd694cd714cb130646476062bcee19c12cfc3243
+  checksum: 045c8dc54cb8ee61d022c017e483f6c8729347a2e30167a4e3227b9d4d80293b032a8cff7fcaf83040b23eacc23bf62188ebb9f2091df85ef2ee21425f8957f7
   languageName: node
   linkType: hard
 
