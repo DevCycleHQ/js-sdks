@@ -224,7 +224,7 @@ export class SDKVariable extends JSON.Obj {
             ? this.value.stringify()
             : null
 
-        if (this.type === 'JSON' && jsonValue == null && this.value.isString) {
+        if (jsonValue == null && this.type === 'JSON' && this.value.isString) {
             jsonValue = (this.value as JSON.Str).valueOf()
         }
 
