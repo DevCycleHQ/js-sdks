@@ -5,7 +5,10 @@ import {
     PlatformData,
     SDKVariable,
     VariableForUserParams_PB,
-    decodeVariableForUserParams_PB, VariableType_PB, decodeDVCUser_PB
+    decodeVariableForUserParams_PB,
+    VariableType_PB,
+    decodeDVCUser_PB,
+    DVCPopulatedUserPB
 } from './types'
 import {
     _generateBoundedHashes,
@@ -16,7 +19,6 @@ import { _clearPlatformData, _setPlatformData } from './managers/platformDataMan
 import { _getConfigData, _hasConfigData, _setConfigData } from './managers/configDataManager'
 import { _getClientCustomData, _setClientCustomData } from './managers/clientCustomDataManager'
 import { queueVariableEvaluatedEvent } from './managers/eventQueueManager'
-import { DVCPopulatedUserPB } from './types/dvcUserPB'
 import { decodeClientCustomData_PB } from './types/protobuf-generated/ClientCustomData_PB'
 
 export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {

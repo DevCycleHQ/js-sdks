@@ -4,7 +4,10 @@ import {
     DVCPopulatedUser,
     DVCEvent,
     FeatureVariation,
-    SDKVariable, decodeDVCUser_PB, DVCUser
+    SDKVariable,
+    decodeDVCUser_PB,
+    DVCUser,
+    DVCPopulatedUserPB
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { _getConfigData } from './configDataManager'
@@ -12,7 +15,6 @@ import { _generateBucketedConfig } from '../bucketing'
 import { RequestPayloadManager } from '../eventQueue/requestPayloadManager'
 import { jsonArrFromValueArray } from '../helpers/jsonHelpers'
 import { _getClientCustomData, _getClientCustomDataJSON } from './clientCustomDataManager'
-import { DVCPopulatedUserPB } from '../types/dvcUserPB'
 
 /**
  * Map<sdkKey, EventQueue>

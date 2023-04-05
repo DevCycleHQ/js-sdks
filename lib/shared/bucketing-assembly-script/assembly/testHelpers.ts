@@ -17,7 +17,8 @@ import {
     decodeSDKVariable_PB,
     encodeSDKVariable_PB,
     DVCUser_PB,
-    CustomDataValue
+    CustomDataValue,
+    DVCPopulatedUserPB
 } from './types'
 import {
     _checkCustomData,
@@ -27,7 +28,6 @@ import {
     checkNumbersFilterJSONValue
 } from './bucketing'
 import { SortingArray, sortObjectsByString } from './helpers/arrayHelpers'
-import { DVCPopulatedUserPB } from './types/dvcUserPB'
 import { decodeClientCustomData_PB } from './types/protobuf-generated/ClientCustomData_PB'
 
 export {
@@ -35,7 +35,7 @@ export {
     testDVCEventClass,
     testDVCRequestEventClass,
     testPlatformDataClass,
-    testPlatformDataClassFromUTF8,
+    testPlatformDataClassFromUTF8
 } from './types'
 
 export function testVariableForUserParams_PB(buffer: Uint8Array): Uint8Array {

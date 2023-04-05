@@ -1,6 +1,5 @@
 import { JSON } from 'assemblyscript-json/assembly'
-import { CustomDataValue } from '../types'
-import { CustomDataValueInterpreter } from '../types/dvcUserPB'
+import { CustomDataValue, CustomDataValueInterpreter } from '../types'
 
 export function getJSONObjFromJSON(jsonObj: JSON.Obj, key: string): JSON.Obj {
     const obj = jsonObj.getObj(key)

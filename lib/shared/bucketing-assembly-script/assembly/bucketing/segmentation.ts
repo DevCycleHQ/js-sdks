@@ -7,11 +7,14 @@ import {
     validSubTypes,
     CustomDataFilter,
     UserFilter,
-    NoIdAudience, AudienceMatchFilter, CustomDataValue
+    NoIdAudience,
+    AudienceMatchFilter,
+    CustomDataValue,
+    CustomDataValueInterpreter,
+    DVCPopulatedUserPB
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { getF64FromJSONValue } from '../helpers/jsonHelpers'
-import { CustomDataValueInterpreter, DVCPopulatedUserPB } from '../types/dvcUserPB'
 
 // TODO add support for OR/XOR as well as recursive filters
 /**
@@ -418,16 +421,14 @@ export function getFilterValues(filter: UserFilter): JSON.Value[] {
  */
 function checkValueExists(value: CustomDataValue | null): bool {
     if (!value) return false
+
     if (CustomDataValueInterpreter.isString(value)) {
         const stringValue = CustomDataValueInterpreter.asString(value)
         return stringValue !== null && stringValue !== ''
-    }
-    if (CustomDataValueInterpreter.isFloat(value)) {
+    } else if (CustomDataValueInterpreter.isFloat(value)) {
         const floatValue = CustomDataValueInterpreter.asNumber(value)
         return floatValue !== null && !isNaN(floatValue)
-    }
-
-    if (CustomDataValueInterpreter.isBool(value)) {
+    } else if (CustomDataValueInterpreter.isBool(value)) {
         return true
     }
 

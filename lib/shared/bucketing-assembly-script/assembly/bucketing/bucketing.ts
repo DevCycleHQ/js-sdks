@@ -3,12 +3,10 @@ import { first, last } from '../helpers/lodashHelpers'
 import {
     ConfigBody, Target as PublicTarget, Feature as PublicFeature, BucketedUserConfig,
     Rollout as PublicRollout, SDKVariable, SDKFeature, RolloutStage,
-    Target, Variation, FeatureVariation, Feature, CustomDataValue
+    Target, Variation, FeatureVariation, Feature, CustomDataValue, DVCPopulatedUserPB
 } from '../types'
-
 import { murmurhashV3 } from '../helpers/murmurhash'
 import { _evaluateOperator } from './segmentation'
-import { DVCPopulatedUserPB } from '../types/dvcUserPB'
 
 // Max value of an unsigned 32-bit integer, which is what murmurhash returns
 const MAX_HASH_VALUE: f64 = 4294967295
