@@ -422,7 +422,7 @@ function checkValueExists(value: CustomDataValue | null): bool {
         return stringValue !== null && stringValue !== ''
     } else if (CustomDataValueInterpreter.isFloat(value)) {
         const floatValue = CustomDataValueInterpreter.asNumber(value)
-        return floatValue !== null && !isNaN(floatValue)
+        return !isNaN(floatValue)
     } else if (CustomDataValueInterpreter.isBool(value)) {
         return true
     }
