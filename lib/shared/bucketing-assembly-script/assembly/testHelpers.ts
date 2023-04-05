@@ -25,6 +25,7 @@ import {
     _checkVersionFilters,
     _doesUserPassRollout,
     _evaluateOperator,
+    _generateBoundedHashes,
     checkNumbersFilterJSONValue
 } from './bucketing'
 import { SortingArray, sortObjectsByString } from './helpers/arrayHelpers'
@@ -162,4 +163,12 @@ class TestData {
 }
 export function testSortObjectsByString(arr: SortingArray<TestData>, direction: string): TestData[] {
     return sortObjectsByString<TestData>(arr, direction)
+}
+
+export function testGenerateBoundedHashesFromJSON(user_id: string, target_id: string): string {
+    const boundedHash = _generateBoundedHashes(user_id, target_id)
+    const json = new JSON.Obj()
+    json.set('rolloutHash', boundedHash.rolloutHash)
+    json.set('bucketingHash', boundedHash.bucketingHash)
+    return json.stringify()
 }

@@ -1,4 +1,3 @@
-import { JSON } from 'assemblyscript-json/assembly'
 import {
     ConfigBody,
     FeatureVariation,
@@ -6,12 +5,13 @@ import {
     SDKVariable,
     VariableForUserParams_PB,
     decodeVariableForUserParams_PB,
-    VariableType_PB,
     decodeDVCUser_PB,
-    DVCPopulatedUserPB
+    DVCPopulatedUserPB,
+    variableTypeFromPB,
+    VariableType,
+    VariableTypeStrings
 } from './types'
 import {
-    _generateBoundedHashes,
     _generateBucketedConfig,
     _generateBucketedVariableForUser
 } from './bucketing'
@@ -21,43 +21,21 @@ import { _getClientCustomData, _setClientCustomData } from './managers/clientCus
 import { queueVariableEvaluatedEvent } from './managers/eventQueueManager'
 import { decodeClientCustomData_PB } from './types/protobuf-generated/ClientCustomData_PB'
 
-export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
-    const boundedHash = _generateBoundedHashes(user_id, target_id)
-    const json = new JSON.Obj()
-    json.set('rolloutHash', boundedHash.rolloutHash)
-    json.set('bucketingHash', boundedHash.bucketingHash)
-    return json.stringify()
-}
+export { VariableType, VariableTypeStrings }
 
-export function generateBucketedConfigForUser(sdkKey: string, buffer: Uint8Array): string  {
-    const user_pb = decodeDVCUser_PB(buffer)
+/**
+ * Generate a full bucketed config for a user Protobuf.
+ * This is not performant, and most SDKs should use variableForUser instead for `dvcClient.variable()` calls.
+ * @param sdkKey
+ * @param userBuf
+ */
+export function generateBucketedConfigForUser(sdkKey: string, userBuf: Uint8Array): string  {
+    const user_pb = decodeDVCUser_PB(userBuf)
     const config = _getConfigData(sdkKey)
     const user = new DVCPopulatedUserPB(user_pb)
 
     const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
     return bucketedConfig.stringify()
-}
-
-export enum VariableType {
-    Boolean,
-    Number,
-    String,
-    JSON
-}
-export const VariableTypeStrings = ['Boolean', 'Number', 'String', 'JSON']
-
-/**
- * Convert PB VariableType to SDK VariableType
- * @param pbVariableType
- */
-function variableTypeFromPB(pbVariableType: VariableType_PB): VariableType {
-    switch (pbVariableType) {
-        case VariableType_PB.Boolean: return VariableType.Boolean
-        case VariableType_PB.Number: return VariableType.Number
-        case VariableType_PB.String: return VariableType.String
-        case VariableType_PB.JSON: return VariableType.JSON
-        default: throw new Error(`Unknown variable type: ${pbVariableType}`)
-    }
 }
 
 /**
@@ -70,7 +48,7 @@ export function variableForUser_PB_Preallocated(protobuf: Uint8Array, length: i3
 }
 
 /**
- * Protobuf version of variableForUser. Returns a protobuf encoded SDKVariable object.
+ * Returns the variable value for the given VariableForUserParams_PB protobuf.
  * @param protobuf Protobuf encoded VariableForUserParams_PB object
  */
 export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
@@ -89,6 +67,15 @@ export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
     return variable ? variable.toProtobuf() : null
 }
 
+/**
+ * Internal method that returns the variable value for the given DVCPopulatedUserPB and variable key and variable type.
+ * Returns a SDKVariable object.
+ * @param sdkKey
+ * @param dvcUser
+ * @param variableKey
+ * @param variableType
+ * @param shouldTrackEvent
+ */
 function _variableForDVCUserPB(
     sdkKey: string,
     dvcUser: DVCPopulatedUserPB,
@@ -113,35 +100,6 @@ function _variableForDVCUserPB(
             ))
         }
 
-        queueVariableEvaluatedEvent(sdkKey, variableVariationMap, variable, variableKey)
-    }
-    return variable
-}
-
-function _variableForDVCUser(
-    sdkKey: string,
-    dvcUser: DVCPopulatedUserPB,
-    variableKey: string,
-    variableType: VariableType,
-    shouldTrackEvent: boolean
-): SDKVariable | null {
-    const config = _getConfigData(sdkKey)
-    const response = _generateBucketedVariableForUser(config, dvcUser, variableKey, _getClientCustomData(sdkKey))
-
-    let variable: SDKVariable | null = (response && response.variable) ? response.variable : null
-    if (variable && variable.type !== VariableTypeStrings[variableType]) {
-        variable = null
-    }
-
-    const variableVariationMap = new Map<string, FeatureVariation>()
-    if (response) {
-        variableVariationMap.set(variableKey, new FeatureVariation(
-            response.feature._id,
-            response.variation._id
-        ))
-    }
-
-    if (shouldTrackEvent) {
         queueVariableEvaluatedEvent(sdkKey, variableVariationMap, variable, variableKey)
     }
     return variable

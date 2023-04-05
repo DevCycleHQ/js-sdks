@@ -8,6 +8,7 @@ export * from './feature'
 export * from './featureConfiguration'
 export * from './platformData'
 export * from './target'
+export * from './pbHelpers'
 
 export * from './protobuf-generated/CustomDataType'
 export * from './protobuf-generated/CustomDataValue'

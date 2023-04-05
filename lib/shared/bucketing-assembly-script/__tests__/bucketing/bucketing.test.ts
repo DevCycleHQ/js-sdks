@@ -1,5 +1,5 @@
 import {
-    generateBoundedHashesFromJSON,
+    testGenerateBoundedHashesFromJSON,
     decideTargetVariationFromJSON,
     generateBucketedConfigForUser,
     doesUserPassRolloutFromJSON,
@@ -46,7 +46,7 @@ const setClientCustomDataJSON = (data: Record<string, unknown>) => {
 }
 
 const generateBoundedHashes = (user_id: string, target_id: string): BoundedHash => {
-    const boundedHashes = generateBoundedHashesFromJSON(user_id, target_id)
+    const boundedHashes = testGenerateBoundedHashesFromJSON(user_id, target_id)
     return JSON.parse(boundedHashes) as BoundedHash
 }
 
