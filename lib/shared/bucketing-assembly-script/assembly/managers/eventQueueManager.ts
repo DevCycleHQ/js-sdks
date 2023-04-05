@@ -108,6 +108,8 @@ export function onPayloadFailure(sdkKey: string, payloadId: string, retryable: b
 export function queueEvent(sdkKey: string, userStr: Uint8Array, eventStr: string): void {
     const eventQueue = getEventQueue(sdkKey)
     const data = decodeDVCUser_PB(userStr)
+    // We need a Protobuf User object to generate the bucketed config, and a JSON User object to queue the event
+    // for the JSON events payload. We are solving this by creating a JSON User object from the Protobuf User object.
     const dvcUser = new DVCPopulatedUserPB(data)
     const jsonUser = new DVCPopulatedUser(DVCUser.fromPBUser(data))
     const event = DVCEvent.fromJSONString(eventStr)

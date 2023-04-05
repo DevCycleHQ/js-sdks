@@ -21,15 +21,11 @@ import {
     DVCPopulatedUserPB
 } from './types'
 import {
-    _checkCustomData,
-    _checkVersionFilters,
     _doesUserPassRollout,
     _evaluateOperator,
     _generateBoundedHashes,
-    checkNumbersFilterJSONValue
 } from './bucketing'
 import { SortingArray, sortObjectsByString } from './helpers/arrayHelpers'
-import { decodeClientCustomData_PB } from './types/protobuf-generated/ClientCustomData_PB'
 
 export {
     testEventQueueOptionsClass,
@@ -52,39 +48,6 @@ export function testDVCUser_PB(buffer: Uint8Array): Uint8Array {
 export function testSDKVariable_PB(buffer: Uint8Array): Uint8Array {
     const variable = decodeSDKVariable_PB(buffer)
     return encodeSDKVariable_PB(variable)
-}
-
-export function checkNumbersFilterFromJSON(number: string, filterStr: string): bool {
-    const filterJSON = JSON.parse(filterStr)
-    const parsedNumber = JSON.parse(number)
-    if (!filterJSON.isObj) throw new Error('checkNumbersFilterFromJSON filterStr param not a JSON Object')
-    const filter = new UserFilter(filterJSON as JSON.Obj)
-    return checkNumbersFilterJSONValue(parsedNumber, filter)
-}
-
-export function checkVersionFiltersFromJSON(appVersion: string | null, filterStr: string): bool {
-    const filterJSON = JSON.parse(filterStr)
-    if (!filterJSON.isObj) throw new Error('checkVersionFiltersFromJSON filterStr param not a JSON Object')
-    const filter = new UserFilter(filterJSON as JSON.Obj)
-    return _checkVersionFilters(appVersion, filter)
-}
-
-export function checkCustomDataFromJSON(data: Uint8Array | null, filterStr: string): bool {
-    const filterJSON = JSON.parse(filterStr)
-    let customData: Map<string, CustomDataValue> | null = null
-    if (data) {
-        const data_pb = decodeClientCustomData_PB(data)
-        customData = data_pb.value
-    }
-    const user = new DVCPopulatedUserPB(new DVCUser_PB())
-    if (customData != null) {
-        user.customData = customData
-    }
-
-    if (!filterJSON.isObj) throw new Error('checkCustomDataFromJSON filterStr param not a JSON Object')
-
-    const filter = new CustomDataFilter(filterJSON as JSON.Obj)
-    return _checkCustomData(user, new Map<string, CustomDataValue>(), filter)
 }
 
 export function evaluateOperatorFromJSON(
