@@ -338,18 +338,13 @@ export function _checkVersionFilters(appVersion: string | null, filter: UserFilt
 }
 
 export function _checkCustomData(
-    user: DVCPopulatedUserPB, clientCustomData: Map<string, CustomDataValue>, filter: CustomDataFilter
+    user: DVCPopulatedUserPB,
+    clientCustomData: Map<string, CustomDataValue>,
+    filter: CustomDataFilter
 ): bool {
     const operator = filter.comparator
 
-    let dataValue: CustomDataValue | null = user.customData && user.customData!.has(filter.dataKey)
-        ? user.customData!.get(filter.dataKey)
-        : null
-    if (dataValue === null) {
-        dataValue = user.privateCustomData && user.privateCustomData!.has(filter.dataKey)
-            ? user.privateCustomData!.get(filter.dataKey)
-            : null
-    }
+    let dataValue = user.getCustomDataValue(filter.dataKey)
     if (dataValue === null && clientCustomData.has(filter.dataKey)) {
         dataValue = clientCustomData.get(filter.dataKey)
     }

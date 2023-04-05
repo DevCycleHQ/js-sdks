@@ -76,6 +76,14 @@ export class DVCPopulatedUserPB {
         this.hostname = platformData.hostname
         return this
     }
+
+    getCustomDataValue(key: string): CustomDataValue | null {
+        return this.privateCustomData && this.privateCustomData!.has(key)
+            ? this.privateCustomData!.get(key)
+            : (this.customData && this.customData!.has(key)
+                ? this.customData!.get(key)
+                : null)
+    }
 }
 
 function deNullString(nullableString: NullableString | null): string | null {
