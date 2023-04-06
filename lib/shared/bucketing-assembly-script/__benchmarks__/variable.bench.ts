@@ -16,8 +16,10 @@ import {
     generateBucketedConfigForUser,
     setClientCustomData
 } from '../__tests__/bucketingImportHelper'
+import { customDataToPB, userToPB } from '../__tests__/protobufVariableHelper'
 import largeTestData from '@devcycle/bucketing-test-data/json-data/largeConfig.json'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
+import {ClientCustomData_PB, DVCUser_PB} from '../protobuf/compiled'
 const { config } = testData
 
 const largeConfig = largeTestData.largeConfig as unknown as ConfigBody
@@ -144,10 +146,12 @@ benchmarkSuite('generateBucketedConfigForUser', {
         cleanupSDK()
     },
     ['generateBucketedConfigForUser']: () => {
-        generateBucketedConfigForUser('sdkKey', JSON.stringify(user))
+        const userPB = userToPB(user)
+        generateBucketedConfigForUser('sdkKey', DVCUser_PB.encode(userPB).finish())
     },
     ['generateBucketedConfigForUser - large user']: () => {
-        generateBucketedConfigForUser('sdkKey', JSON.stringify(largeConfigUser))
+        const userPB = userToPB(largeConfigUser)
+        generateBucketedConfigForUser('sdkKey', DVCUser_PB.encode(userPB).finish())
     },
 })
 
@@ -162,10 +166,12 @@ benchmarkSuite('generateBucketedConfigForUser - Large Config', {
         cleanupSDK()
     },
     ['generateBucketedConfigForUser']: () => {
-        generateBucketedConfigForUser('sdkKey', JSON.stringify(user))
+        const userPB = userToPB(user)
+        generateBucketedConfigForUser('sdkKey', DVCUser_PB.encode(userPB).finish())
     },
     ['generateBucketedConfigForUser - large user']: () => {
-        generateBucketedConfigForUser('sdkKey', JSON.stringify(largeConfigUser))
+        const userPB = userToPB(largeConfigUser)
+        generateBucketedConfigForUser('sdkKey', DVCUser_PB.encode(userPB).finish())
     },
 })
 
@@ -239,6 +245,10 @@ benchmarkSuite('setClientCustomData', {
         cleanupSDK()
     },
     ['setClientCustomData - small']: () => {
-        setClientCustomData('sdkKey', JSON.stringify(largeUser.customData))
+        const customDataPB = customDataToPB(largeUser.customData)
+        setClientCustomData(
+            'sdkKey',
+            ClientCustomData_PB.encode(ClientCustomData_PB.create({ value: customDataPB })).finish()
+        )
     }
 })
