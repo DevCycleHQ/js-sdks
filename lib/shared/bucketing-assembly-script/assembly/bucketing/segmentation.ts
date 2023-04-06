@@ -417,14 +417,14 @@ export function getFilterValues(filter: UserFilter): JSON.Value[] {
 function checkValueExists(value: CustomDataValue | null): bool {
     if (!value) return false
 
-    if (CustomDataValueInterpreter.isString(value)) {
+    if (CustomDataValueInterpreter.isBool(value)) {
+        return true
+    } else if (CustomDataValueInterpreter.isString(value)) {
         const stringValue = CustomDataValueInterpreter.asString(value)
         return stringValue !== null && stringValue !== ''
     } else if (CustomDataValueInterpreter.isFloat(value)) {
         const floatValue = CustomDataValueInterpreter.asNumber(value)
         return !isNaN(floatValue)
-    } else if (CustomDataValueInterpreter.isBool(value)) {
-        return true
     }
 
     return false

@@ -19,6 +19,7 @@ const { config } = testData
 import random_JSON from './random_json_2kb.json'
 import { customDataToPB, userToPB } from '../protobufVariableHelper'
 import { ClientCustomData_PB, DVCUser_PB } from '../../protobuf/compiled'
+import { promisify } from 'util'
 
 let currentSDKKey: string | null = null
 const initEventQueue = (sdkKey: unknown, options: unknown) => {
@@ -679,15 +680,17 @@ describe('EventQueueManager Tests', () => {
     describe('memory usage test', () => {
         it('should save a large number of events to AS Event Queue', () => {
             const sdkKey = 'sdk_key_memory_test'
+            const user_id = 'user_id_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test'
+            const target = 'testTarget_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test'
             const event = {
                 type: 'testType_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test_long_name',
-                target: 'testTarget_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
+                target,
                 date: new Date(),
                 value: 10000,
                 metaData: random_JSON
             }
             const dvcUser = {
-                user_id: 'user_id_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
+                user_id,
                 email: '_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
                 language: 'en',
                 country: 'CA',
@@ -699,14 +702,15 @@ describe('EventQueueManager Tests', () => {
             }
 
             initSDK(sdkKey)
-            for (let i = 0; i < 2000; i++) {
-                event.target += i
-                dvcUser.user_id += i
+            const length = 2000
+            for (let i = 0; i < length; i++) {
+                event.target = target + i
+                dvcUser.user_id = user_id + i
                 queueEvent(sdkKey, dvcUser, event)
             }
 
             const payloads = flushEventQueue(sdkKey)
-            expect(eventQueueSize(sdkKey)).toEqual(2000)
+            expect(eventQueueSize(sdkKey)).toEqual(length)
             expect(payloads.length).toEqual(20)
         })
     })

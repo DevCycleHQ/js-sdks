@@ -62,13 +62,16 @@ export class EventQueue {
         this.eventQueueCount = 0
     }
 
+    private tmpUserEventQueue: UserEventQueue | null = null
+    private tmpAggEventQueue: AggEventQueue | null = null
+
     flushAndResetEventQueue(): FlushEventQueues {
-        const userEventQueue = this.userEventQueue
-        const aggEventQueue = this.aggEventQueue
+        this.tmpUserEventQueue = this.userEventQueue
+        this.tmpAggEventQueue = this.aggEventQueue
         this.userEventQueue = new Map<string, UserEventsBatchRecord>()
         this.aggEventQueue = new Map<string, VariableAggMap>()
         this.eventQueueCount = 0
-        return { userEventQueue, aggEventQueue }
+        return { userEventQueue: this.tmpUserEventQueue!, aggEventQueue: this.tmpAggEventQueue! }
     }
 
     checkIfEventLoggingDisabled(event: DVCEvent): bool {
