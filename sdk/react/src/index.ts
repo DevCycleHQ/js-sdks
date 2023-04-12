@@ -6,6 +6,7 @@ import withDVCProvider from './withDVCProvider'
 import DVCProvider from './DVCProvider'
 import useDVCVariable  from './useDVCVariable'
 import useIsDVCInitialized from './useIsDVCInitialized'
+export type { DVCClient, DVCUser, DVCVariableValue } from '@devcycle/devcycle-js-sdk'
 
 export { 
     DVCProvider, 
