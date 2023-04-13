@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 option go_package = "./proto";
+option csharp_namespace = "DevCycle.SDK.Server.Local.Protobuf";
 
 enum VariableType_PB {
     Boolean = 0;
