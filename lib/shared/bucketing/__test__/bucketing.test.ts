@@ -577,7 +577,7 @@ describe('Config Parsing and Generating', () => {
                 }
             },
             'featureVariationMap': {
-                "614ef6aa475928459060721d": "615382338424cb11646d7662"
+                '614ef6aa475928459060721d': '615382338424cb11646d7662'
             },
             'variableVariationMap': {},
             'variables': {
@@ -636,7 +636,7 @@ describe('Config Parsing and Generating', () => {
                 }
             },
             'featureVariationMap': {
-                "614ef6aa475928459060721d": "615382338424cb11646d7662"
+                '614ef6aa475928459060721d': '615382338424cb11646d7662'
             },
             'variableVariationMap': {},
             'variables': {

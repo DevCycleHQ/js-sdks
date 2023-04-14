@@ -51,14 +51,15 @@ describe('Request tests', () => {
 
             await Request.getConfigJson(sdkKey, user as DVCPopulatedUser, defaultLogger, {}, {
                 sse: true,
-                lastModified: 1234
+                lastModified: 1234,
+                etag: 'etag'
             })
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: { 'Content-Type': 'application/json' },
                 method: 'GET',
                 url: 'https://sdk-api.devcycle.com/v1/sdkConfig?sdkKey=' +
-                     `${sdkKey}&user_id=${user.user_id}&isAnonymous=false&sse=1&sseLastModified=1234`
+                     `${sdkKey}&user_id=${user.user_id}&isAnonymous=false&sse=1&sseLastModified=1234&sseEtag=etag`
             })
         })
 
