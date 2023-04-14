@@ -13,15 +13,13 @@ const convertToQueryFriendlyFormat = (property?: any): any => {
     return property
 }
 
-export const serializeUser = (user: DVCClientAPIUser): string => {
-    return Object.keys(user)
-        .reduce((prev: string, curr: string, _: number): string => {
-            const userProperty = convertToQueryFriendlyFormat(user[curr as keyof DVCClientAPIUser])
-            const nextQueryParam = userProperty !== null && userProperty !== undefined
-                ? `${prev && '&'}${curr}=${encodeURIComponent(userProperty)}`
-                : ''
-            return `${prev}${nextQueryParam}`
-        }, '')
+export const serializeUserSearchParams = (user: DVCClientAPIUser, queryParams: URLSearchParams): void => {
+    Object.keys(user).forEach((key) => {
+        const userProperty = convertToQueryFriendlyFormat(user[key as keyof DVCClientAPIUser])
+        if (userProperty !== null && userProperty !== undefined) {
+            queryParams.append(key, userProperty)
+        }
+    })
 }
 
 export const checkParamDefined = (name: string, param: unknown): void => {
@@ -60,7 +58,7 @@ export function generateEventPayload(
 }
 
 export default {
-    serializeUser,
+    serializeUserSearchParams,
     checkParamDefined,
     generateEventPayload
 }
