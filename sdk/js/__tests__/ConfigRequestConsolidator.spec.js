@@ -46,26 +46,26 @@ describe('ConfigRequestConsolidator Tests', () => {
     it('queues extra operations with extraParams set', async () => {
         requestFn.mockResolvedValueOnce('test1')
         requestFn.mockResolvedValueOnce('test2')
-        const promise1 = requestConsolidator.queue({user_id: 'user1'}, {sse: true, lastModified: 2345})
+        const promise1 = requestConsolidator.queue({user_id: 'user1'}, { sse: true, lastModified: 2345, etag: 'etag' })
         const promise2 = requestConsolidator.queue({user_id: 'user2'})
-        const promise3 = requestConsolidator.queue({user_id: 'user3'}, {sse: true, lastModified: 5678})
+        const promise3 = requestConsolidator.queue({user_id: 'user3'}, { sse: true, lastModified: 5678, etag: 'etag' })
 
         await Promise.all([promise1, promise2, promise3])
         expect(requestFn).toHaveBeenCalledTimes(2)
-        expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'},  {sse: true, lastModified: 2345})
-        expect(requestFn).toHaveBeenCalledWith({user_id: 'user3'}, {sse: true, lastModified: 5678})
+        expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'}, { sse: true, lastModified: 2345, etag: 'etag' })
+        expect(requestFn).toHaveBeenCalledWith({user_id: 'user3'}, { sse: true, lastModified: 5678, etag: 'etag' })
     })
 
     it('queues extra operations with extraParams set and clears them after', async () => {
         requestFn.mockResolvedValueOnce('test1')
         requestFn.mockResolvedValueOnce('test2')
-        const promise1 = requestConsolidator.queue({user_id: 'user1'}, {sse: true, lastModified: 2345})
+        const promise1 = requestConsolidator.queue({user_id: 'user1'}, { sse: true, lastModified: 2345, etag: 'etag' })
         const promise2 = requestConsolidator.queue({user_id: 'user2'})
         const promise3 = requestConsolidator.queue({user_id: 'user3'})
 
         await Promise.all([promise1, promise2, promise3])
         expect(requestFn).toHaveBeenCalledTimes(2)
-        expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'},  {sse: true, lastModified: 2345})
+        expect(requestFn).toHaveBeenCalledWith({user_id: 'user1'},  { sse: true, lastModified: 2345, etag: 'etag' })
         expect(requestFn).toHaveBeenCalledWith({user_id: 'user3'}, undefined)
     })
 

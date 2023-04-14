@@ -1,6 +1,6 @@
 import { DVCEvent, DVCOptions } from './types'
 import { DVCPopulatedUser } from './User'
-import { serializeUser, generateEventPayload } from './utils'
+import { serializeUserSearchParams, generateEventPayload } from './utils'
 import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios'
 import axiosRetry from 'axios-retry'
 import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
@@ -79,14 +79,23 @@ export const getConfigJson = async (
     user: DVCPopulatedUser,
     logger: DVCLogger,
     options?: DVCOptions,
-    extraParams?: {sse: boolean, lastModified?: number}
+    extraParams?: { sse: boolean, lastModified?: number, etag?: string }
 ): Promise<BucketedUserConfig> => {
-    const edgeDBParam = options?.enableEdgeDB ? ('&enableEdgeDB=' + options.enableEdgeDB): ''
-    const sseParam = extraParams?.sse ? '&sse=1' : ''
-    const lastModified = extraParams?.lastModified ? `&sseLastModified=${extraParams.lastModified}` : ''
-    const queryParams = `${serializeUser(user)}${edgeDBParam}${sseParam}${lastModified}`
-    const url = `${options?.apiProxyURL || CLIENT_SDK_URL}${CONFIG_PATH}` +
-                `?sdkKey=${sdkKey}${queryParams && '&' + queryParams}`
+    const queryParams = new URLSearchParams({ sdkKey })
+    serializeUserSearchParams(user, queryParams)
+    if (options?.enableEdgeDB) {
+        queryParams.append('enableEdgeDB', options.enableEdgeDB.toString())
+    }
+    if (extraParams?.sse) {
+        queryParams.append('sse', '1')
+        if (extraParams.lastModified) {
+            queryParams.append('sseLastModified', extraParams.lastModified.toString())
+        }
+        if (extraParams.etag) {
+            queryParams.append('sseEtag', extraParams.etag)
+        }
+    }
+    const url = `${options?.apiProxyURL || CLIENT_SDK_URL}${CONFIG_PATH}?` + queryParams.toString()
 
     try {
         const res = await get(url)

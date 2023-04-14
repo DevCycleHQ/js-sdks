@@ -6,7 +6,7 @@ type PromiseResolver = {
     reject: (err?: any) => void
 }
 
-type RequestParams = {sse: boolean, lastModified?: number}
+type RequestParams = { sse: boolean, lastModified?: number, etag?: string }
 
 /**
  * Ensures we only have one active config request at a time

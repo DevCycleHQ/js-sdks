@@ -20,7 +20,6 @@ const isInvalidEventKey = (key: string): boolean => {
     !key.startsWith(EventNames.NEW_VARIABLES)
 }
 
-
 const callHandler = (event: Event, handler: eventHandler): void  => {
     const args = (<CustomEvent<any[]>>event).detail
     handler(...args)

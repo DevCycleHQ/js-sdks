@@ -207,7 +207,6 @@ export function setPlatformDataUTF8(platformDataJSONStr: Uint8Array): void {
     _setPlatformData(platformData)
 }
 
-
 /**
  * Clear the platform data for the given SDK key.
  * @param empty Add empty input string to make AS compiler work

@@ -192,7 +192,7 @@ describe('protobuf variable tests', () => {
                     name: { value: 'name', isNull: false },
                     language: { value: 'en', isNull: false },
                     country: { value: 'CA', isNull: false },
-                    appBuild: { value: 610.0, isNull: false},
+                    appBuild: { value: 610.0, isNull: false },
                     appVersion: { value: '1.0.0', isNull: false },
                     deviceModel: { value: 'NodeJS', isNull: false },
                     customData: {

@@ -76,8 +76,9 @@ export class DVCClient implements Client {
                 (user: DVCPopulatedUser, extraParams) => getConfigJson(
                     this.sdkKey, user, this.logger, this.options, extraParams
                 ),
-                (config: BucketedUserConfig, user: DVCPopulatedUser) =>
-                    this.handleConfigReceived(config, user, Date.now()),
+                (config: BucketedUserConfig, user: DVCPopulatedUser) => this.handleConfigReceived(
+                    config, user, Date.now()
+                ),
                 this.user
             )
 
@@ -316,9 +317,9 @@ export class DVCClient implements Client {
         return this._closing
     }
 
-    private async refetchConfig(sse: boolean, lastModified?: number) {
+    private async refetchConfig(sse: boolean, lastModified?: number, etag?: string) {
         await this.onInitialized
-        await this.requestConsolidator.queue(null, { sse, lastModified })
+        await this.requestConsolidator.queue(null, { sse, lastModified, etag })
     }
 
     private handleConfigReceived(config: BucketedUserConfig, user: DVCPopulatedUser, dateFetched: number) {
@@ -360,7 +361,7 @@ export class DVCClient implements Client {
             }
             if (!messageData.type || messageData.type === 'refetchConfig') {
                 if (!this.config?.etag || messageData.etag !== this.config?.etag) {
-                    this.refetchConfig(true, messageData.lastModified).catch((e) => {
+                    this.refetchConfig(true, messageData.lastModified, messageData.etag).catch((e) => {
                         this.logger.warn(`Failed to refetch config ${e}`)
                     })
                 }
