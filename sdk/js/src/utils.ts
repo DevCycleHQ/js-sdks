@@ -14,12 +14,12 @@ const convertToQueryFriendlyFormat = (property?: any): any => {
 }
 
 export const serializeUserSearchParams = (user: DVCClientAPIUser, queryParams: URLSearchParams): void => {
-    Object.keys(user).forEach((key) => {
+    for (const key in user) {
         const userProperty = convertToQueryFriendlyFormat(user[key as keyof DVCClientAPIUser])
         if (userProperty !== null && userProperty !== undefined) {
             queryParams.append(key, userProperty)
         }
-    })
+    }
 }
 
 export const checkParamDefined = (name: string, param: unknown): void => {
