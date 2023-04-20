@@ -152,7 +152,7 @@
     "react-native-svg-transformer": "^1.0.0",
     "react-test-renderer": "^18.2.0",
     "service-worker-mock": "^2.0.5",
-    "ts-jest": "~28.0.8",
+    "ts-jest": "~29.1.0",
     "ts-node": "~10.9.1",
     "tslib": "^2.0.0",
     "typescript": "^5.0.4",
