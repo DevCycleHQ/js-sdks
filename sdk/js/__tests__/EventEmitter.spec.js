@@ -27,7 +27,7 @@ describe('EventEmitter tests', () => {
     const eventEmitter = new EventEmitter()
 
     beforeEach(() => {
-        eventEmitter.events = {}
+        eventEmitter.handlers = {}
     })
 
     it('should throw if key type is not a string', () => {
@@ -48,7 +48,7 @@ describe('EventEmitter tests', () => {
         it('should subscribe to event', () => {
             const handler = jest.fn()
             eventEmitter.subscribe('initialized', handler)
-            expect(eventEmitter.events['initialized'][0].handler).toEqual(handler)
+            expect(eventEmitter.handlers['initialized'][0]).toEqual(handler)
         })
 
         it('should subscribe with more than one event', () => {
@@ -56,8 +56,8 @@ describe('EventEmitter tests', () => {
             const handler2 = jest.fn()
             eventEmitter.subscribe('initialized', handler1)
             eventEmitter.subscribe('initialized', handler2)
-            expect(eventEmitter.events['initialized'][0].handler).toEqual(handler1)
-            expect(eventEmitter.events['initialized'][1].handler).toEqual(handler2)
+            expect(eventEmitter.handlers['initialized'][0]).toEqual(handler1)
+            expect(eventEmitter.handlers['initialized'][1]).toEqual(handler2)
         })
     })
 
@@ -66,7 +66,7 @@ describe('EventEmitter tests', () => {
             const handler = jest.fn()
             eventEmitter.subscribe('initialized', handler)
             eventEmitter.unsubscribe('initialized', handler)
-            expect(eventEmitter.events['initialized'].length).toBe(0)
+            expect(eventEmitter.handlers['initialized'].length).toBe(0)
         })
 
         it('should subscribe with more than one event', () => {
@@ -76,7 +76,7 @@ describe('EventEmitter tests', () => {
             eventEmitter.unsubscribe('initialized', handler1)
             eventEmitter.subscribe('initialized', handler2)
             eventEmitter.unsubscribe('initialized', handler2)
-            expect(eventEmitter.events['initialized'].length).toBe(0)
+            expect(eventEmitter.handlers['initialized'].length).toBe(0)
         })
     })
 

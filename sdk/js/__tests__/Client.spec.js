@@ -366,7 +366,9 @@ describe('DVCClient tests', () => {
             localStorage.getItem.mockReset()
             localStorage.setItem.mockReset()
             localStorage.removeItem.mockReset()
-            window.localStorage = localStorage
+            Object.setPrototypeOf(window, {
+                localStorage: localStorage
+            })
             client = createClientWithConfigImplementation(() => {
                 return Promise.resolve(testConfig)
             })
@@ -516,7 +518,9 @@ describe('DVCClient tests', () => {
         beforeEach(() => {
             localStorage.getItem.mockReset()
             localStorage.setItem.mockReset()
-            window.localStorage = localStorage
+            Object.setPrototypeOf(window, {
+                localStorage: localStorage
+            })
 
             client = createClientWithConfigImplementation(() => {
                 return Promise.resolve(testConfig)
