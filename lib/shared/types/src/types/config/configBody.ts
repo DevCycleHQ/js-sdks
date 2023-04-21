@@ -32,42 +32,42 @@ export class ConfigBody<IdType = string> {
     /**
      * Fully populated Feature model containing FeatureConfigurations / Variations / Audiences
      */
-     @Type(() => Feature)
-         features: Feature<IdType>[]
+    @Type(() => Feature)
+        features: Feature<IdType>[]
 
-     /**
+    /**
      * All dynamic variables in a project
      */
-     variables: Variable<IdType>[]
+    variables: Variable<IdType>[]
 
-     /**
+    /**
      * Map of audience id to audience document, used to populate the _audience field for audienceMatch filters
      */
-     audiences?: {
+    audiences?: {
         [id: string]: Omit<Audience<IdType>, '_id'>
     }
 
-     /**
+    /**
      * Map of `variable.key` to `hash(variable.key + environment.apiKey)`
      * of all known variable keys. This is used to generate the `knownVariableKeys`
      * in the BucketingAPI response.
      */
-     variableHashes: {
+    variableHashes: {
         [key: string]: number
      }
 
-     /**
+    /**
      * **Implement Later**
      *
      * All List Audiences in the project
      * TODO make required when implemented
      */
-     listAudiences?: ListAudience<IdType>[]
+    listAudiences?: ListAudience<IdType>[]
 
-     /**
+    /**
      * Ably information used for establishing connections
      */
-     ably?: {
+    ably?: {
         apiKey: string
     }
 }
