@@ -72,9 +72,14 @@ export class Feature<IdType = string> {
 
     @Type(() => FeatureConfiguration)
         configuration: FeatureConfiguration<IdType>
-    
+
     /**
-     * Defines feature-level settings 
+     * Defines feature-level settings
      */
     settings?: FeatureSettings
+
+    /**
+     * List of tags for feature
+     */
+    tags?: string[]
 }
