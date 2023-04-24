@@ -1,9 +1,11 @@
 import { useVariable } from './'
-import type { DVCVariableValue } from '@devcycle/devcycle-js-sdk'
-import { VariableTypeAlias } from '@devcycle/types'
+import type { DVCVariable, DVCVariableValue, VariableDefinitions } from '@devcycle/devcycle-js-sdk'
 
-export const useVariableValue = <T extends DVCVariableValue>(key: string, defaultValue: T): VariableTypeAlias<T> => {
-    return useVariable(key, defaultValue).value
+export const useVariableValue = <Variables extends VariableDefinitions = VariableDefinitions,
+    K extends string & keyof Variables = string & keyof Variables,
+    T extends DVCVariableValue & Variables[K] = DVCVariableValue & Variables[K]
+>(key: K, defaultValue: T): DVCVariable<T>['value'] => {
+    return useVariable<Variables, K, T>(key, defaultValue).value
 }
 
 export default useVariableValue
