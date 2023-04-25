@@ -29,7 +29,7 @@ import { StreamingConnection } from './StreamingConnection'
 
 type variableUpdatedHandler = (
     key: string,
-    variable: DVCVariable<DVCVariableValue> | null
+    variable: DVCVariable<DVCVariableValue>
 ) => void
 type featureUpdatedHandler = (key: string, feature: DVCFeature | null) => void
 type newVariablesHandler = () => void
@@ -38,7 +38,7 @@ type initializedHandler = (success: boolean) => void
 type configUpdatedHandler = (newVars: DVCVariableSet) => void
 type variableEvaluatedHandler = (
     key: string,
-    variable: DVCVariable<DVCVariableValue> | null
+    variable: DVCVariable<DVCVariableValue>
 ) => void
 
 export class DVCClient implements Client {
