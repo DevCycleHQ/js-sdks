@@ -36,6 +36,10 @@ type newVariablesHandler = () => void
 type errorHandler = (error: unknown) => void
 type initializedHandler = (success: boolean) => void
 type configUpdatedHandler = (newVars: DVCVariableSet) => void
+type variableEvaluatedHandler = (
+    key: string,
+    variable: DVCVariable<DVCVariableValue> | null
+) => void
 
 export class DVCClient implements Client {
     private options: DVCOptions
@@ -337,6 +341,10 @@ export class DVCClient implements Client {
     subscribe(
         key: `featureUpdated:${string}`,
         handler: featureUpdatedHandler
+    ): void
+    subscribe(
+        key: `variableEvaluated:${string}`,
+        handler: variableEvaluatedHandler
     ): void
     subscribe(key: 'error', handler: errorHandler): void
     subscribe(key: 'initialized', handler: initializedHandler): void

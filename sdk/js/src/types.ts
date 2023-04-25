@@ -4,7 +4,7 @@ import {
     VariableTypeAlias,
     VariableValue,
     DVCJSON,
-    DVCCustomDataJSON
+    DVCCustomDataJSON,
 } from '@devcycle/types'
 
 export type DVCVariableValue = VariableValue
@@ -16,9 +16,12 @@ export interface ErrorCallback<T> {
 }
 
 export type DVCVariableSet = {
-    [key: string]: Pick<DVCVariable<DVCVariableValue>, 'key' | 'value' | 'evalReason'> & {
-        '_id': string,
-        'type': string
+    [key: string]: Pick<
+        DVCVariable<DVCVariableValue>,
+        'key' | 'value' | 'evalReason'
+    > & {
+        _id: string
+        type: string
     }
 }
 
@@ -158,13 +161,8 @@ export interface DVCClient {
      * @param user
      * @param callback
      */
-    identifyUser(
-        user: DVCUser
-    ): Promise<DVCVariableSet>
-    identifyUser(
-        user: DVCUser,
-        callback: ErrorCallback<DVCVariableSet>
-    ): void
+    identifyUser(user: DVCUser): Promise<DVCVariableSet>
+    identifyUser(user: DVCUser, callback: ErrorCallback<DVCVariableSet>): void
 
     /**
      * Resets the user to an Anonymous user. `callback` or `Promise` can be used to return the
@@ -172,11 +170,8 @@ export interface DVCClient {
      *
      * @param callback
      */
-    resetUser(
-    ): Promise<DVCVariableSet>
-    resetUser(
-        callback: ErrorCallback<DVCVariableSet>
-    ): void
+    resetUser(): Promise<DVCVariableSet>
+    resetUser(callback: ErrorCallback<DVCVariableSet>): void
 
     /**
      * Retrieve all data on all Features, Object mapped by feature `key`.
@@ -201,6 +196,8 @@ export interface DVCClient {
      *  - `variableUpdated:<variable.key>` -> (key: string, variable: DVCVariable)
      *  - `featureUpdated:*` -> (key: string, feature: DVCFeature)
      *  - `featureUpdated:<feature.key>` -> (key: string, feature: DVCFeature)
+     *  - `variableEvaluated:*` -> (key: string, variable: DVCVariable)
+     *  - `variableEvaluated:<varable.key>` -> (key: string, variable: DVCVariable)
      *
      * @param key
      * @param onUpdate
@@ -316,7 +313,7 @@ export interface DVCStorage {
     /**
      * Get a value from the cache store
      * @param key
-    */
+     */
     load<T>(key: string): Promise<T | undefined>
 
     /**
@@ -337,6 +334,6 @@ type DeviceInfo = {
     getModel: () => string
 }
 declare global {
-   // eslint-disable-next-line no-var
-  var DeviceInfo: DeviceInfo | undefined
+    // eslint-disable-next-line no-var
+    var DeviceInfo: DeviceInfo | undefined
 }
