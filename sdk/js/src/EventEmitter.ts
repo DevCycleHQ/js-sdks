@@ -88,7 +88,8 @@ export class EventEmitter {
     }
 
     emitVariableEvaluated(variable: DVCVariable<any>): void {
-        this.emit(EventNames.VARIABLE_EVALUATED, variable)
+        this.emit(`${EventNames.VARIABLE_EVALUATED}:*`, variable)
+        this.emit(`${EventNames.VARIABLE_EVALUATED}:${variable.key}`, variable)
     }
 
     emitVariableUpdates(
