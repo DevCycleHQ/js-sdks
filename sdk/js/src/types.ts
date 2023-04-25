@@ -197,7 +197,7 @@ export interface DVCClient {
      *  - `featureUpdated:*` -> (key: string, feature: DVCFeature)
      *  - `featureUpdated:<feature.key>` -> (key: string, feature: DVCFeature)
      *  - `variableEvaluated:*` -> (key: string, variable: DVCVariable)
-     *  - `variableEvaluated:<varable.key>` -> (key: string, variable: DVCVariable)
+     *  - `variableEvaluated:<variable.key>` -> (key: string, variable: DVCVariable)
      *
      * @param key
      * @param onUpdate
