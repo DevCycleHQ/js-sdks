@@ -113,24 +113,28 @@ describe('Config Parsing and Generating', () => {
                     'key': 'swagTest',
                     'type': 'String',
                     'value': 'YEEEEOWZA',
+                    'evalReason': expect.any(Object)
                 },
                 'bool-var': {
                     '_id': '61538237b0a70b58ae6af71y',
                     'key': 'bool-var',
                     'type': 'Boolean',
                     'value': false,
+                    'evalReason': expect.any(Object)
                 },
                 'json-var': {
                     '_id': '61538237b0a70b58ae6af71q',
                     'key': 'json-var',
                     'type': 'JSON',
                     'value': '{"hello":"world","num":610,"bool":true}',
+                    'evalReason': expect.any(Object)
                 },
                 'num-var': {
                     '_id': '61538237b0a70b58ae6af71s',
                     'key': 'num-var',
                     'type': 'Number',
                     'value': 610.61,
+                    'evalReason': expect.any(Object)
                 }
             }
         }
@@ -213,55 +217,64 @@ describe('Config Parsing and Generating', () => {
                     '_id': '61538237b0a70b58ae6af71z',
                     'key': 'audience-match',
                     'type': 'String',
-                    'value': 'audience_match'
+                    'value': 'audience_match',
+                    'evalReason': expect.any(Object)
                 },
                 'feature2.cool': {
                     '_id': '61538237b0a70b58ae6af71g',
                     'key': 'feature2.cool',
                     'type': 'String',
                     'value': 'multivar first',
+                    'evalReason': expect.any(Object)
                 },
                 'feature2.hello': {
                     '_id': '61538237b0a70b58ae6af71h',
                     'key': 'feature2.hello',
                     'type': 'String',
                     'value': 'multivar last',
+                    'evalReason': expect.any(Object)
                 },
                 'swagTest': {
                     '_id': '615356f120ed334a6054564c',
                     'key': 'swagTest',
                     'type': 'String',
                     'value': 'man',
+                    'evalReason': expect.any(Object)
                 },
                 'test': {
                     '_id': '614ef6ea475129459160721a',
                     'key': 'test',
                     'type': 'String',
                     'value': 'scat',
+                    'evalReason': expect.any(Object)
                 },
                 'bool-var': {
                     '_id': '61538237b0a70b58ae6af71y',
                     'key': 'bool-var',
                     'type': 'Boolean',
                     'value': false,
+                    'evalReason': expect.any(Object)
                 },
                 'json-var': {
                     '_id': '61538237b0a70b58ae6af71q',
                     'key': 'json-var',
                     'type': 'JSON',
                     'value': '{"hello":"world","num":610,"bool":true}',
+                    'evalReason': expect.any(Object)
                 },
                 'num-var': {
                     '_id': '61538237b0a70b58ae6af71s',
                     'key': 'num-var',
                     'type': 'Number',
                     'value': 610.61,
+                    'evalReason': expect.any(Object)
                 },
                 'feature4Var': {
                     '_id': '61538937b0a70b58ae6af71f',
                     'key': 'feature4Var',
                     'type': 'String',
                     'value': 'feature 4 value',
+                    'evalReason': expect.any(Object)
                 }
             }
         }
@@ -307,24 +320,28 @@ describe('Config Parsing and Generating', () => {
                     'key': 'swagTest',
                     'type': 'String',
                     'value': 'YEEEEOWZA',
+                    'evalReason': expect.any(Object)
                 },
                 'bool-var': {
                     '_id': '61538237b0a70b58ae6af71y',
                     'key': 'bool-var',
                     'type': 'Boolean',
                     'value': false,
+                    'evalReason': expect.any(Object)
                 },
                 'json-var': {
                     '_id': '61538237b0a70b58ae6af71q',
                     'key': 'json-var',
                     'type': 'JSON',
                     'value': '{"hello":"world","num":610,"bool":true}',
+                    'evalReason': expect.any(Object)
                 },
                 'num-var': {
                     '_id': '61538237b0a70b58ae6af71s',
                     'key': 'num-var',
                     'type': 'Number',
                     'value': 610.61,
+                    'evalReason': expect.any(Object)
                 }
             }
         }
@@ -406,6 +423,7 @@ describe('Config Parsing and Generating', () => {
                     'key': 'feature2Var',
                     'type': 'String',
                     'value': 'Var 1 aud 2',
+                    'evalReason': expect.any(Object)
                 }
             }
         }
@@ -466,30 +484,35 @@ describe('Config Parsing and Generating', () => {
                     'key': 'swagTest',
                     'type': 'String',
                     'value': 'YEEEEOWZA',
+                    'evalReason': expect.any(Object)
                 },
                 'feature2Var': {
                     '_id': '61538237b0a70b58ae6af71f',
                     'key': 'feature2Var',
                     'type': 'String',
                     'value': 'Var 1 aud 2',
+                    'evalReason': expect.any(Object)
                 },
                 'bool-var':  {
                     '_id': '61538237b0a70b58ae6af71y',
                     'key': 'bool-var',
                     'type': 'Boolean',
                     'value': false,
+                    'evalReason': expect.any(Object)
                 },
                 'json-var':  {
                     '_id': '61538237b0a70b58ae6af71q',
                     'key': 'json-var',
                     'type': 'JSON',
                     'value': '{"hello":"world","num":610,"bool":true}',
+                    'evalReason': expect.any(Object)
                 },
                 'num-var':  {
                     '_id': '61538237b0a70b58ae6af71s',
                     'key': 'num-var',
                     'type': 'Number',
                     'value': 610.61,
+                    'evalReason': expect.any(Object)
                 }
             }
         }
@@ -586,12 +609,13 @@ describe('Config Parsing and Generating', () => {
                     'key': 'audience-match',
                     'type': 'String',
                     'value': 'audience_match',
+                    'evalReason': expect.any(Object)
                 },
             }
         }
 
         // Targeting Rule expects the Custom Data property of "favouriteNull" to exist
-        // However, since the User has a null value for this property, 
+        // However, since the User has a null value for this property,
         // the Variable for User method should not return any variables
         const c = generateBucketedConfig({ config: configWithNullCustomData, user })
         expect(c).toEqual(expected)
@@ -645,12 +669,13 @@ describe('Config Parsing and Generating', () => {
                     'key': 'audience-match',
                     'type': 'String',
                     'value': 'audience_match',
+                    'evalReason': expect.any(Object)
                 },
             }
         }
 
         // Targeting Rule expects the Custom Data property of "favouriteNull" to exist
-        // However, since the User has a null value for this property, 
+        // However, since the User has a null value for this property,
         // the Variable for User method should not return any variables
         const c = generateBucketedConfig({ config: configWithNullCustomData, user })
         expect(c).toEqual(expected)

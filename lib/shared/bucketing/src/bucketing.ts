@@ -124,8 +124,8 @@ type SegmentedFeatureData = {
 }
 
 export const getSegmentedFeatureDataFromConfig = (
-    { config, user }:
-    { config: ConfigBody, user: DVCBucketingUser}
+    { config, user, explanations }:
+    { config: ConfigBody, user: DVCBucketingUser, explanations?: Record<string, unknown>}
 ): SegmentedFeatureData[] => {
     const initialValue: SegmentedFeatureData[] = []
     return config.features.reduce((accumulator, feature) => {
@@ -133,13 +133,20 @@ export const getSegmentedFeatureDataFromConfig = (
         const isOptInEnabled = feature.settings?.['optInEnabled'] && config.project.settings?.['optIn']?.['enabled']
 
         const segmentedFeatureTarget = feature.configuration.targets.find((target) => {
-            return evaluateOperator({
+            const targetMatch = evaluateOperator({
                 operator: target._audience.filters,
                 data: user,
                 featureId: feature._id,
                 isOptInEnabled: !!isOptInEnabled,
                 audiences: config.audiences
             })
+            if (targetMatch && explanations) {
+                explanations[feature.key] = {
+                    matchedOperator: target._audience.filters,
+                    featureKey: feature.key
+                }
+            }
+            return targetMatch
         })
         if (segmentedFeatureTarget) {
             accumulator.push({
@@ -158,8 +165,8 @@ export const generateBucketedConfig = (
     const variableMap: BucketedUserConfig['variables'] = {}
     const featureKeyMap: BucketedUserConfig['features'] = {}
     const featureVariationMap: BucketedUserConfig['featureVariationMap'] = {}
-    const segmentedFeatures = getSegmentedFeatureDataFromConfig({ config, user })
-
+    const explanations: Record<string, { [key: string]: unknown }> = {}
+    const segmentedFeatures = getSegmentedFeatureDataFromConfig({ config, user, explanations })
     segmentedFeatures.forEach(({ feature, target }) => {
         const { _id, key, type, variations, settings } = feature
         const { rolloutHash, bucketingHash } = generateBoundedHashes(user.user_id, target._id)
@@ -172,7 +179,11 @@ export const generateBucketedConfig = (
         if (!variation) {
             throw new Error(`Config missing variation: ${variation_id}`)
         }
-
+        const variableExplanation = {
+            ...explanations[feature.key],
+            variationName: variation.name,
+            variationKey: variation.key
+        }
         featureKeyMap[key] = {
             _id,
             key,
@@ -191,6 +202,9 @@ export const generateBucketedConfig = (
             variableMap[variable.key] = {
                 ...variable,
                 value,
+                evalReason: {
+                    ...variableExplanation
+                }
             }
         })
     })
