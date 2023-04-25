@@ -102,7 +102,10 @@ describe('EventEmitter tests', () => {
             }
             eventEmitter.subscribe('variableEvaluated:*', allUpdatesHandler)
             eventEmitter.emitVariableEvaluated(evaluatedVariable)
-            expect(allUpdatesHandler).toBeCalledWith(evaluatedVariable)
+            expect(allUpdatesHandler).toBeCalledWith(
+                evaluatedVariable.key,
+                evaluatedVariable
+            )
         })
         it('should emit variable evaluated event if subscribed to specific variable evaluations', () => {
             const allUpdatesHandler = jest.fn()
@@ -117,7 +120,10 @@ describe('EventEmitter tests', () => {
                 allUpdatesHandler
             )
             eventEmitter.emitVariableEvaluated(evaluatedVariable)
-            expect(allUpdatesHandler).toBeCalledWith(evaluatedVariable)
+            expect(allUpdatesHandler).toBeCalledWith(
+                evaluatedVariable.key,
+                evaluatedVariable
+            )
         })
         it('should not emit variable evaluated event if not subscribed to specific variable key', () => {
             const allUpdatesHandler = jest.fn()
@@ -132,7 +138,10 @@ describe('EventEmitter tests', () => {
                 allUpdatesHandler
             )
             eventEmitter.emitVariableEvaluated(evaluatedVariable)
-            expect(allUpdatesHandler).not.toBeCalledWith(evaluatedVariable)
+            expect(allUpdatesHandler).not.toBeCalledWith(
+                evaluatedVariable.key,
+                evaluatedVariable
+            )
         })
         it('should not emit variable evaluated events if not subscribed to variable evaluations', () => {
             const allUpdatesHandler = jest.fn()
@@ -143,7 +152,10 @@ describe('EventEmitter tests', () => {
                 type: 'my-type',
             }
             eventEmitter.emitVariableEvaluated(evaluatedVariable)
-            expect(allUpdatesHandler).not.toBeCalledWith(evaluatedVariable)
+            expect(allUpdatesHandler).not.toBeCalledWith(
+                evaluatedVariable.key,
+                evaluatedVariable
+            )
         })
     })
 
