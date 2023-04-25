@@ -9,6 +9,7 @@ const EventNames = {
     VARIABLE_UPDATED: 'variableUpdated',
     FEATURE_UPDATED: 'featureUpdated',
     CONFIG_UPDATED: 'configUpdated',
+    VARIABLE_EVALUATED: 'variableEvaluated',
 }
 
 type EventHandler = (...args: any[]) => void
@@ -18,7 +19,8 @@ const isInvalidEventKey = (key: string): boolean => {
         !Object.values(EventNames).includes(key) &&
         !key.startsWith(EventNames.VARIABLE_UPDATED) &&
         !key.startsWith(EventNames.FEATURE_UPDATED) &&
-        !key.startsWith(EventNames.NEW_VARIABLES)
+        !key.startsWith(EventNames.NEW_VARIABLES) &&
+        !key.startsWith(EventNames.VARIABLE_EVALUATED)
     )
 }
 
@@ -83,6 +85,10 @@ export class EventEmitter {
 
     emitConfigUpdate(newVariableSet: DVCVariableSet): void {
         this.emit(EventNames.CONFIG_UPDATED, newVariableSet)
+    }
+
+    emitVariableEvaluated(variable: DVCVariable<any>): void {
+        this.emit(EventNames.VARIABLE_EVALUATED, variable)
     }
 
     emitVariableUpdates(

@@ -91,6 +91,33 @@ describe('EventEmitter tests', () => {
         })
     })
 
+    describe('emitVariableEvaluated', () => {
+        it('should emit variable evaluated event if subscribed to variable evaluations', () => {
+            const allUpdatesHandler = jest.fn()
+            const variableKeyHandler = jest.fn()
+            const evaluatedVariable = {
+                _id: 'variable_id',
+                key: 'my-variable-key',
+                value: 'my-new-value',
+                type: 'my-type',
+            }
+            eventEmitter.subscribe('variableEvaluated', allUpdatesHandler)
+            eventEmitter.emitVariableEvaluated(evaluatedVariable)
+            expect(allUpdatesHandler).toBeCalledWith(evaluatedVariable)
+        })
+        it('should not emit variable evaluated events if not subscribed to variable evaluations', () => {
+            const allUpdatesHandler = jest.fn()
+            const evaluatedVariable = {
+                _id: 'variable_id',
+                key: 'my-variable-key',
+                value: 'my-new-value',
+                type: 'my-type',
+            }
+            eventEmitter.emitVariableEvaluated(evaluatedVariable)
+            expect(allUpdatesHandler).not.toBeCalledWith(evaluatedVariable)
+        })
+    })
+
     describe('emitVariableUpdates', () => {
         it('should emit variable updated event if subscribed to all variable updates, and specific key', () => {
             const allUpdatesHandler = jest.fn()
@@ -265,7 +292,7 @@ describe('EventEmitter tests', () => {
             )
         })
 
-        it('should not mit feature updated event if no updates', () => {
+        it('should not emit feature updated event if no updates', () => {
             const allUpdatesHandler = jest.fn()
             const featureKeyHandler = jest.fn()
             const oldFeatureSet = {
