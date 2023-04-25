@@ -223,6 +223,7 @@ export class DVCClient implements Client {
             this.logger.warn(`Error with queueing aggregate events ${e}`)
         }
 
+        this.eventEmitter.emitVariableEvaluated(variable)
         return variable
     }
 
