@@ -6,9 +6,9 @@ const testConfig = {
     project: {
         settings: {
             edgeDB: {
-                enabled: true
-            }
-        }
+                enabled: true,
+            },
+        },
     },
     environment: {},
     features: {},
@@ -18,10 +18,10 @@ const testConfig = {
             _id: 'id',
             value: 'value1',
             type: 'String',
-            default_value: 'default_value'
-        }
+            default_value: 'default_value',
+        },
     },
-    etag: '123'
+    etag: '123',
 }
 describe('EventEmitter tests', () => {
     const eventEmitter = new EventEmitter()
@@ -42,7 +42,9 @@ describe('EventEmitter tests', () => {
     describe('subscribe', () => {
         it('should throw error if event is not a predefined event', () => {
             const handler = jest.fn()
-            expect(() => eventEmitter.subscribe('not_an_event', handler)).toThrow(expect.any(Error))
+            expect(() =>
+                eventEmitter.subscribe('not_an_event', handler)
+            ).toThrow(expect.any(Error))
         })
 
         it('should subscribe to event', () => {
@@ -98,22 +100,31 @@ describe('EventEmitter tests', () => {
                     _id: 'variable_id',
                     key: 'my-variable-key',
                     value: 'my-value',
-                    type: 'my-type'
-                }
+                    type: 'my-type',
+                },
             }
             const variableSet = {
                 'my-variable-key': {
                     _id: 'variable_id',
                     key: 'my-variable-key',
                     value: 'my-new-value',
-                    type: 'my-type'
-                }
+                    type: 'my-type',
+                },
             }
             eventEmitter.subscribe('variableUpdated:*', allUpdatesHandler)
-            eventEmitter.subscribe(`variableUpdated:my-variable-key`, variableKeyHandler)
+            eventEmitter.subscribe(
+                `variableUpdated:my-variable-key`,
+                variableKeyHandler
+            )
             eventEmitter.emitVariableUpdates(oldVariableSet, variableSet, {})
-            expect(allUpdatesHandler).toBeCalledWith('my-variable-key', variableSet['my-variable-key'])
-            expect(variableKeyHandler).toBeCalledWith('my-variable-key', variableSet['my-variable-key'])
+            expect(allUpdatesHandler).toBeCalledWith(
+                'my-variable-key',
+                variableSet['my-variable-key']
+            )
+            expect(variableKeyHandler).toBeCalledWith(
+                'my-variable-key',
+                variableSet['my-variable-key']
+            )
         })
 
         it('should not emit variable updated event if no updates', () => {
@@ -124,19 +135,22 @@ describe('EventEmitter tests', () => {
                     _id: 'variable_id',
                     key: 'my-variable-key',
                     value: 'my-value',
-                    type: 'my-type'
-                }
+                    type: 'my-type',
+                },
             }
             const variableSet = {
                 'my-variable-key': {
                     _id: 'variable_id',
                     key: 'my-variable-key',
                     value: 'my-value',
-                    type: 'my-type'
-                }
+                    type: 'my-type',
+                },
             }
             eventEmitter.subscribe('variableUpdated:*', allUpdatesHandler)
-            eventEmitter.subscribe(`variableUpdated:my-variable-key`, variableKeyHandler)
+            eventEmitter.subscribe(
+                `variableUpdated:my-variable-key`,
+                variableKeyHandler
+            )
             eventEmitter.emitVariableUpdates(oldVariableSet, variableSet, {})
             expect(allUpdatesHandler).not.toBeCalled()
             expect(variableKeyHandler).not.toBeCalled()
@@ -156,20 +170,23 @@ describe('EventEmitter tests', () => {
                     _id: 'variable_id',
                     key: 'my-variable-key',
                     value: 'my-value',
-                    type: 'my-type'
-                }
+                    type: 'my-type',
+                },
             }
             const newVariableSet = {
                 'different-variable-key': {
                     _id: 'variable_id_2',
                     key: 'different-variable-key',
                     value: 'different-value',
-                    type: 'string'
-                }
+                    type: 'string',
+                },
             }
 
             eventEmitter.subscribe('variableUpdated:*', allUpdatesHandler)
-            eventEmitter.subscribe(`variableUpdated:my-variable-key`, variableKeyHandler)
+            eventEmitter.subscribe(
+                `variableUpdated:my-variable-key`,
+                variableKeyHandler
+            )
             eventEmitter.emitVariableUpdates(oldVariableSet, newVariableSet, {})
             expect(allUpdatesHandler).toBeCalledWith('my-variable-key', null)
             expect(variableKeyHandler).toBeCalledWith('my-variable-key', null)
@@ -183,23 +200,32 @@ describe('EventEmitter tests', () => {
                     _id: 'variable_id_2',
                     key: 'different-variable-key',
                     value: 'different-value',
-                    type: 'string'
-                }
+                    type: 'string',
+                },
             }
             const newVariableSet = {
                 'my-variable-key': {
                     _id: 'variable_id',
                     key: 'my-variable-key',
                     value: 'my-value',
-                    type: 'my-type'
-                }
+                    type: 'my-type',
+                },
             }
 
             eventEmitter.subscribe('variableUpdated:*', allUpdatesHandler)
-            eventEmitter.subscribe(`variableUpdated:my-variable-key`, variableKeyHandler)
+            eventEmitter.subscribe(
+                `variableUpdated:my-variable-key`,
+                variableKeyHandler
+            )
             eventEmitter.emitVariableUpdates(oldVariableSet, newVariableSet, {})
-            expect(allUpdatesHandler).toBeCalledWith('my-variable-key', newVariableSet['my-variable-key'])
-            expect(variableKeyHandler).toBeCalledWith('my-variable-key', newVariableSet['my-variable-key'])
+            expect(allUpdatesHandler).toBeCalledWith(
+                'my-variable-key',
+                newVariableSet['my-variable-key']
+            )
+            expect(variableKeyHandler).toBeCalledWith(
+                'my-variable-key',
+                newVariableSet['my-variable-key']
+            )
         })
     })
 
@@ -212,22 +238,31 @@ describe('EventEmitter tests', () => {
                     _id: 'feature_id',
                     _variation: 'variation1',
                     key: 'my-feature-key',
-                    type: 'experiment'
-                }
+                    type: 'experiment',
+                },
             }
             const featureSet = {
                 'my-feature-key': {
                     _id: 'feature_id',
                     _variation: 'variation2',
                     key: 'my-feature-key',
-                    type: 'experiment'
-                }
+                    type: 'experiment',
+                },
             }
             eventEmitter.subscribe('featureUpdated:*', allUpdatesHandler)
-            eventEmitter.subscribe(`featureUpdated:my-feature-key`, featureKeyHandler)
+            eventEmitter.subscribe(
+                `featureUpdated:my-feature-key`,
+                featureKeyHandler
+            )
             eventEmitter.emitFeatureUpdates(oldFeatureSet, featureSet)
-            expect(allUpdatesHandler).toBeCalledWith('my-feature-key', featureSet['my-feature-key'])
-            expect(featureKeyHandler).toBeCalledWith('my-feature-key', featureSet['my-feature-key'])
+            expect(allUpdatesHandler).toBeCalledWith(
+                'my-feature-key',
+                featureSet['my-feature-key']
+            )
+            expect(featureKeyHandler).toBeCalledWith(
+                'my-feature-key',
+                featureSet['my-feature-key']
+            )
         })
 
         it('should not mit feature updated event if no updates', () => {
@@ -238,19 +273,22 @@ describe('EventEmitter tests', () => {
                     _id: 'feature_id',
                     _variation: 'variation1',
                     key: 'my-feature-key',
-                    type: 'experiment'
-                }
+                    type: 'experiment',
+                },
             }
             const featureSet = {
                 'my-feature-key': {
                     _id: 'feature_id',
                     _variation: 'variation1',
                     key: 'my-feature-key',
-                    type: 'experiment'
-                }
+                    type: 'experiment',
+                },
             }
             eventEmitter.subscribe('featureUpdated:*', allUpdatesHandler)
-            eventEmitter.subscribe(`featureUpdated:my-feature-key`, featureKeyHandler)
+            eventEmitter.subscribe(
+                `featureUpdated:my-feature-key`,
+                featureKeyHandler
+            )
             eventEmitter.emitFeatureUpdates(oldFeatureSet, featureSet)
             expect(allUpdatesHandler).not.toBeCalled()
             expect(featureKeyHandler).not.toBeCalled()
@@ -270,19 +308,22 @@ describe('EventEmitter tests', () => {
                     _id: 'feature_id',
                     _variation: 'variation1',
                     key: 'my-feature-key',
-                    type: 'experiment'
-                }
+                    type: 'experiment',
+                },
             }
             const newFeatureSet = {
                 'different-feature-key': {
                     _id: 'different_feature_id',
                     _variation: 'different-variation1',
                     key: 'different-feature-key',
-                    type: 'experiment'
-                }
+                    type: 'experiment',
+                },
             }
             eventEmitter.subscribe('featureUpdated:*', allUpdatesHandler)
-            eventEmitter.subscribe(`featureUpdated:my-feature-key`, featureKeyHandler)
+            eventEmitter.subscribe(
+                `featureUpdated:my-feature-key`,
+                featureKeyHandler
+            )
             eventEmitter.emitFeatureUpdates(oldFeatureSet, newFeatureSet)
             expect(allUpdatesHandler).toBeCalledWith('my-feature-key', null)
             expect(featureKeyHandler).toBeCalledWith('my-feature-key', null)
@@ -296,22 +337,31 @@ describe('EventEmitter tests', () => {
                     _id: 'different_feature_id',
                     _variation: 'different-variation1',
                     key: 'different-feature-key',
-                    type: 'experiment'
-                }
+                    type: 'experiment',
+                },
             }
             const newFeatureSet = {
                 'my-feature-key': {
                     _id: 'feature_id',
                     _variation: 'variation1',
                     key: 'my-feature-key',
-                    type: 'experiment'
-                }
+                    type: 'experiment',
+                },
             }
             eventEmitter.subscribe('featureUpdated:*', allUpdatesHandler)
-            eventEmitter.subscribe(`featureUpdated:my-feature-key`, featureKeyHandler)
+            eventEmitter.subscribe(
+                `featureUpdated:my-feature-key`,
+                featureKeyHandler
+            )
             eventEmitter.emitFeatureUpdates(oldFeatureSet, newFeatureSet)
-            expect(allUpdatesHandler).toBeCalledWith('my-feature-key', newFeatureSet['my-feature-key'])
-            expect(featureKeyHandler).toBeCalledWith('my-feature-key', newFeatureSet['my-feature-key'])
+            expect(allUpdatesHandler).toBeCalledWith(
+                'my-feature-key',
+                newFeatureSet['my-feature-key']
+            )
+            expect(featureKeyHandler).toBeCalledWith(
+                'my-feature-key',
+                newFeatureSet['my-feature-key']
+            )
         })
     })
 
@@ -323,8 +373,8 @@ describe('EventEmitter tests', () => {
                     _id: 'variable_id',
                     key: 'my-variable-key',
                     value: 'my-new-value',
-                    type: 'my-type'
-                }
+                    type: 'my-type',
+                },
             }
             eventEmitter.subscribe('configUpdated', configHandler)
             eventEmitter.emitConfigUpdate(variableSet)
@@ -338,8 +388,8 @@ describe('EventEmitter tests', () => {
                     _id: 'variable_id',
                     key: 'my-variable-key',
                     value: 'my-new-value',
-                    type: 'my-type'
-                }
+                    type: 'my-type',
+                },
             }
             eventEmitter.subscribe('configUpdated', configHandler)
             eventEmitter.unsubscribe('configUpdated')
@@ -353,8 +403,8 @@ describe('EventEmitter tests', () => {
             client.eventEmitter = eventEmitter
             eventEmitter.subscribe('configUpdated', configHandler)
             client.handleConfigReceived(
-                testConfig, 
-                new DVCPopulatedUser({ user_id: 'user1' }, null), 
+                testConfig,
+                new DVCPopulatedUser({ user_id: 'user1' }, null),
                 123
             )
             expect(configHandler).toHaveBeenCalledWith(testConfig.variables)
@@ -367,8 +417,8 @@ describe('EventEmitter tests', () => {
             client.config = testConfig
             eventEmitter.subscribe('configUpdated', configHandler)
             client.handleConfigReceived(
-                testConfig, 
-                new DVCPopulatedUser({ user_id: 'user1' }, null), 
+                testConfig,
+                new DVCPopulatedUser({ user_id: 'user1' }, null),
                 123
             )
             expect(configHandler).not.toHaveBeenCalled()
@@ -378,11 +428,11 @@ describe('EventEmitter tests', () => {
             const configHandler = jest.fn()
             const client = new DVCClient('test_sdk_key', { user_id: 'user1' })
             client.eventEmitter = eventEmitter
-            client.config = {...testConfig, etag: '567'}
+            client.config = { ...testConfig, etag: '567' }
             eventEmitter.subscribe('configUpdated', configHandler)
             client.handleConfigReceived(
-                testConfig, 
-                new DVCPopulatedUser({ user_id: 'user1' }, null), 
+                testConfig,
+                new DVCPopulatedUser({ user_id: 'user1' }, null),
                 123
             )
             expect(configHandler).toHaveBeenCalledWith(testConfig.variables)

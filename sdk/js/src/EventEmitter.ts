@@ -14,10 +14,12 @@ const EventNames = {
 type EventHandler = (...args: any[]) => void
 
 const isInvalidEventKey = (key: string): boolean => {
-    return !Object.values(EventNames).includes(key) &&
-    !key.startsWith(EventNames.VARIABLE_UPDATED) &&
-    !key.startsWith(EventNames.FEATURE_UPDATED) &&
-    !key.startsWith(EventNames.NEW_VARIABLES)
+    return (
+        !Object.values(EventNames).includes(key) &&
+        !key.startsWith(EventNames.VARIABLE_UPDATED) &&
+        !key.startsWith(EventNames.FEATURE_UPDATED) &&
+        !key.startsWith(EventNames.NEW_VARIABLES)
+    )
 }
 
 export class EventEmitter {
@@ -33,10 +35,10 @@ export class EventEmitter {
 
         if (isInvalidEventKey(key)) {
             throw new Error('Not a valid event to subscribe to')
-        }  
-        
+        }
+
         if (!this.handlers[key]) {
-            this.handlers[key] = [ handler ]
+            this.handlers[key] = [handler]
         } else {
             this.handlers[key].push(handler)
         }
@@ -50,8 +52,9 @@ export class EventEmitter {
         }
 
         if (handler) {
-            const handlerIndex = this.handlers[key]
-                .findIndex((h) => h === handler)
+            const handlerIndex = this.handlers[key].findIndex(
+                (h) => h === handler
+            )
 
             this.handlers[key].splice(handlerIndex, 1)
         } else {
@@ -85,28 +88,49 @@ export class EventEmitter {
     emitVariableUpdates(
         oldVariableSet: DVCVariableSet,
         newVariableSet: DVCVariableSet,
-        variableDefaultMap: { [key: string]: { [defaultValue: string]: DVCVariable<any> } }
+        variableDefaultMap: {
+            [key: string]: { [defaultValue: string]: DVCVariable<any> }
+        }
     ): void {
-        const keys = new Set(Object.keys(oldVariableSet).concat(Object.keys(newVariableSet)))
+        const keys = new Set(
+            Object.keys(oldVariableSet).concat(Object.keys(newVariableSet))
+        )
         let newVariables = false
         keys.forEach((key) => {
-            const oldVariableValue = oldVariableSet[key] && oldVariableSet[key].value
+            const oldVariableValue =
+                oldVariableSet[key] && oldVariableSet[key].value
             const newVariable = newVariableSet[key]
             const newVariableValue = newVariable && newVariableSet[key].value
 
-            if (JSON.stringify(oldVariableValue) !== JSON.stringify(newVariableValue)) {
-                const variables = variableDefaultMap[key] && Object.values(variableDefaultMap[key])
+            if (
+                JSON.stringify(oldVariableValue) !==
+                JSON.stringify(newVariableValue)
+            ) {
+                const variables =
+                    variableDefaultMap[key] &&
+                    Object.values(variableDefaultMap[key])
                 if (variables) {
                     newVariables = true
                     variables.forEach((variable) => {
-                        variable.value = newVariableValue ?? variable.defaultValue
-                        variable.isDefaulted = newVariableValue === undefined || newVariableValue === null
+                        variable.value =
+                            newVariableValue ?? variable.defaultValue
+                        variable.isDefaulted =
+                            newVariableValue === undefined ||
+                            newVariableValue === null
                         variable.callback?.call(variable, variable.value)
                     })
                 }
-                const finalVariable = newVariable || null 
-                this.emit(`${EventNames.VARIABLE_UPDATED}:*`, key, finalVariable)
-                this.emit(`${EventNames.VARIABLE_UPDATED}:${key}`, key, finalVariable)
+                const finalVariable = newVariable || null
+                this.emit(
+                    `${EventNames.VARIABLE_UPDATED}:*`,
+                    key,
+                    finalVariable
+                )
+                this.emit(
+                    `${EventNames.VARIABLE_UPDATED}:${key}`,
+                    key,
+                    finalVariable
+                )
             }
         })
         if (newVariables) {
@@ -114,17 +138,28 @@ export class EventEmitter {
         }
     }
 
-    emitFeatureUpdates(oldFeatureSet: DVCFeatureSet, newFeatureSet: DVCFeatureSet): void {
-        const keys = Object.keys(oldFeatureSet).concat(Object.keys(newFeatureSet))
+    emitFeatureUpdates(
+        oldFeatureSet: DVCFeatureSet,
+        newFeatureSet: DVCFeatureSet
+    ): void {
+        const keys = Object.keys(oldFeatureSet).concat(
+            Object.keys(newFeatureSet)
+        )
         keys.forEach((key) => {
-            const oldFeatureVariation = oldFeatureSet[key] && oldFeatureSet[key]._variation
+            const oldFeatureVariation =
+                oldFeatureSet[key] && oldFeatureSet[key]._variation
             const newFeature = newFeatureSet[key]
-            const newFeatureVariation = newFeature && newFeatureSet[key]._variation
+            const newFeatureVariation =
+                newFeature && newFeatureSet[key]._variation
 
-            const finalFeature = newFeature || null 
+            const finalFeature = newFeature || null
             if (oldFeatureVariation !== newFeatureVariation) {
                 this.emit(`${EventNames.FEATURE_UPDATED}:*`, key, finalFeature)
-                this.emit(`${EventNames.FEATURE_UPDATED}:${key}`, key, finalFeature)
+                this.emit(
+                    `${EventNames.FEATURE_UPDATED}:${key}`,
+                    key,
+                    finalFeature
+                )
             }
         })
     }
