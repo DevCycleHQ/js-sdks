@@ -27,7 +27,10 @@ import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
 
-type variableUpdatedHandler = (key: string, variable: DVCVariable<DVCVariableValue> | null) => void
+type variableUpdatedHandler = (
+    key: string,
+    variable: DVCVariable<DVCVariableValue> | null
+) => void
 type featureUpdatedHandler = (key: string, feature: DVCFeature | null) => void
 type newVariablesHandler = () => void
 type errorHandler = (error: unknown) => void
@@ -37,7 +40,9 @@ type configUpdatedHandler = (newVars: DVCVariableSet) => void
 export class DVCClient implements Client {
     private options: DVCOptions
     private onInitialized: Promise<DVCClient>
-    private variableDefaultMap: { [key: string]: { [key: string]: DVCVariable<any> } }
+    private variableDefaultMap: {
+        [key: string]: { [key: string]: DVCVariable<any> }
+    }
     private sdkKey: string
     private userSaved = false
     private _closing = false
@@ -56,44 +61,63 @@ export class DVCClient implements Client {
     private windowMessageHandler?: (event: MessageEvent) => void
 
     constructor(sdkKey: string, user: DVCUser, options: DVCOptions = {}) {
-        this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
+        this.logger =
+            options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.store = new CacheStore(
-            options.storage || new DefaultStorage(), this.logger
+            options.storage || new DefaultStorage(),
+            this.logger
         )
 
         this.options = options
 
         this.sdkKey = sdkKey
         this.variableDefaultMap = {}
-        this.eventQueue = new EventQueue(sdkKey, this, options?.eventFlushIntervalMS)
+        this.eventQueue = new EventQueue(
+            sdkKey,
+            this,
+            options?.eventFlushIntervalMS
+        )
 
         this.eventEmitter = new EventEmitter()
         this.registerVisibilityChangeHandler()
 
-        this.onInitialized = this.store.loadAnonUserId().then((storedAnonymousId) => {
-            this.user = new DVCPopulatedUser(user, options, undefined, storedAnonymousId)
-            this.requestConsolidator = new ConfigRequestConsolidator(
-                (user: DVCPopulatedUser, extraParams) => getConfigJson(
-                    this.sdkKey, user, this.logger, this.options, extraParams
-                ),
-                (config: BucketedUserConfig, user: DVCPopulatedUser) => this.handleConfigReceived(
-                    config, user, Date.now()
-                ),
-                this.user
-            )
+        this.onInitialized = this.store
+            .loadAnonUserId()
+            .then((storedAnonymousId) => {
+                this.user = new DVCPopulatedUser(
+                    user,
+                    options,
+                    undefined,
+                    storedAnonymousId
+                )
+                this.requestConsolidator = new ConfigRequestConsolidator(
+                    (user: DVCPopulatedUser, extraParams) =>
+                        getConfigJson(
+                            this.sdkKey,
+                            user,
+                            this.logger,
+                            this.options,
+                            extraParams
+                        ),
+                    (config: BucketedUserConfig, user: DVCPopulatedUser) =>
+                        this.handleConfigReceived(config, user, Date.now()),
+                    this.user
+                )
 
-            if (!this.options.disableConfigCache) {
-                return this.getConfigCache()
-            } else {
-                this.logger.info('Skipping config cache')
-                return
-            }
-        }).then(() => {
-            return this.initializeClient()
-        }).then(() => {
-            this.logger.info('Client initialized')
-            return this
-        })
+                if (!this.options.disableConfigCache) {
+                    return this.getConfigCache()
+                } else {
+                    this.logger.info('Skipping config cache')
+                    return
+                }
+            })
+            .then(() => {
+                return this.initializeClient()
+            })
+            .then(() => {
+                this.logger.info('Client initialized')
+                return this
+            })
 
         if (!options?.reactNative && typeof window !== 'undefined') {
             this.windowMessageHandler = (event: MessageEvent) => {
@@ -108,7 +132,9 @@ export class DVCClient implements Client {
 
     onClientInitialized(): Promise<DVCClient>
     onClientInitialized(onInitialized: ErrorCallback<DVCClient>): void
-    onClientInitialized(onInitialized?: ErrorCallback<DVCClient>): Promise<DVCClient> | void {
+    onClientInitialized(
+        onInitialized?: ErrorCallback<DVCClient>
+    ): Promise<DVCClient> | void {
         if (onInitialized && typeof onInitialized === 'function') {
             this.onInitialized
                 .then(() => onInitialized(null, this))
@@ -118,19 +144,35 @@ export class DVCClient implements Client {
         return this.onInitialized
     }
 
-    variable<T extends DVCVariableValue>(key: string, defaultValue: T): DVCVariable<T> {
+    variable<T extends DVCVariableValue>(
+        key: string,
+        defaultValue: T
+    ): DVCVariable<T> {
         if (defaultValue === undefined || defaultValue === null) {
             throw new Error('Default value is a required param')
         }
 
         // this will throw if type is invalid
-        const type = getVariableTypeFromValue(defaultValue, key, this.logger, true)
+        const type = getVariableTypeFromValue(
+            defaultValue,
+            key,
+            this.logger,
+            true
+        )
 
-        const defaultValueKey = typeof defaultValue === 'string' ? defaultValue : JSON.stringify(defaultValue)
+        const defaultValueKey =
+            typeof defaultValue === 'string'
+                ? defaultValue
+                : JSON.stringify(defaultValue)
 
         let variable
-        if (this.variableDefaultMap[key] && this.variableDefaultMap[key][defaultValueKey]) {
-            variable = this.variableDefaultMap[key][defaultValueKey] as DVCVariable<T>
+        if (
+            this.variableDefaultMap[key] &&
+            this.variableDefaultMap[key][defaultValueKey]
+        ) {
+            variable = this.variableDefaultMap[key][
+                defaultValueKey
+            ] as DVCVariable<T>
         } else {
             const configVariable = this.config?.variables?.[key]
 
@@ -154,7 +196,7 @@ export class DVCClient implements Client {
 
             this.variableDefaultMap[key] = {
                 [defaultValueKey]: variable,
-                ...this.variableDefaultMap[key]
+                ...this.variableDefaultMap[key],
             }
         }
 
@@ -168,9 +210,13 @@ export class DVCClient implements Client {
                 target: variable.key,
                 metaData: {
                     value: variable.value,
-                    type: getVariableTypeFromValue(variable.defaultValue, variable.key, this.logger),
-                    _variable: variableFromConfig?._id
-                }
+                    type: getVariableTypeFromValue(
+                        variable.defaultValue,
+                        variable.key,
+                        this.logger
+                    ),
+                    _variable: variableFromConfig?._id,
+                },
             })
         } catch (e) {
             this.eventEmitter.emitError(e)
@@ -181,41 +227,49 @@ export class DVCClient implements Client {
     }
 
     identifyUser(user: DVCUser): Promise<DVCVariableSet>
-    identifyUser(user: DVCUser,
-        callback?: ErrorCallback<DVCVariableSet>): void
+    identifyUser(user: DVCUser, callback?: ErrorCallback<DVCVariableSet>): void
     identifyUser(
         user: DVCUser,
         callback?: ErrorCallback<DVCVariableSet>
     ): Promise<DVCVariableSet> | void {
-
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
             this.eventQueue.flushEvents()
 
             let updatedUser: DVCPopulatedUser
 
-            this.onInitialized.then(() => {
-                return this.store.loadAnonUserId()
-            }).then((storedAnonymousId) => {
-                if (user.user_id === this.user.user_id) {
-                    updatedUser = this.user.updateUser(user, this.options)
-                } else {
-                    updatedUser = new DVCPopulatedUser(user, this.options, undefined, storedAnonymousId)
-                }
+            this.onInitialized
+                .then(() => {
+                    return this.store.loadAnonUserId()
+                })
+                .then((storedAnonymousId) => {
+                    if (user.user_id === this.user.user_id) {
+                        updatedUser = this.user.updateUser(user, this.options)
+                    } else {
+                        updatedUser = new DVCPopulatedUser(
+                            user,
+                            this.options,
+                            undefined,
+                            storedAnonymousId
+                        )
+                    }
 
-                return this.requestConsolidator.queue(updatedUser)
-            }).then((config) => {
-                if (user.isAnonymous || !user.user_id) {
-                    this.store.saveAnonUserId(updatedUser.user_id)
-                }
-                resolve(config.variables || {})
-            }).catch((err) => {
-                this.eventEmitter.emitError(err)
-                reject(err)
-            })
+                    return this.requestConsolidator.queue(updatedUser)
+                })
+                .then((config) => {
+                    if (user.isAnonymous || !user.user_id) {
+                        this.store.saveAnonUserId(updatedUser.user_id)
+                    }
+                    resolve(config.variables || {})
+                })
+                .catch((err) => {
+                    this.eventEmitter.emitError(err)
+                    reject(err)
+                })
         })
 
         if (callback && typeof callback == 'function') {
-            promise.then((variables) => callback(null, variables))
+            promise
+                .then((variables) => callback(null, variables))
                 .catch((err) => callback(err, null))
             return
         }
@@ -225,13 +279,19 @@ export class DVCClient implements Client {
 
     resetUser(): Promise<DVCVariableSet>
     resetUser(callback: ErrorCallback<DVCVariableSet>): void
-    resetUser(callback?: ErrorCallback<DVCVariableSet>): Promise<DVCVariableSet> | void {
+    resetUser(
+        callback?: ErrorCallback<DVCVariableSet>
+    ): Promise<DVCVariableSet> | void {
         let oldAnonymousId: string | null | undefined
-        const anonUser = new DVCPopulatedUser({ isAnonymous: true }, this.options)
+        const anonUser = new DVCPopulatedUser(
+            { isAnonymous: true },
+            this.options
+        )
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
             this.eventQueue.flushEvents()
 
-            this.onInitialized.then(() => this.store.loadAnonUserId())
+            this.onInitialized
+                .then(() => this.store.loadAnonUserId())
                 .then((cachedAnonId) => {
                     this.store.removeAnonUserId()
                     oldAnonymousId = cachedAnonId
@@ -241,7 +301,8 @@ export class DVCClient implements Client {
                 .then((config) => {
                     this.store.saveAnonUserId(anonUser.user_id)
                     resolve(config.variables || {})
-                }).catch((e) => {
+                })
+                .catch((e) => {
                     this.eventEmitter.emitError(e)
                     if (oldAnonymousId) {
                         this.store.saveAnonUserId(oldAnonymousId)
@@ -251,7 +312,8 @@ export class DVCClient implements Client {
         })
 
         if (callback && typeof callback == 'function') {
-            promise.then((variables) => callback(null, variables))
+            promise
+                .then((variables) => callback(null, variables))
                 .catch((err) => callback(err, null))
             return
         }
@@ -266,12 +328,18 @@ export class DVCClient implements Client {
         return this.config?.variables || {}
     }
 
-    subscribe(key: `variableUpdated:${string}`, handler: variableUpdatedHandler): void;
-    subscribe(key: `newVariables:${string}`, handler: newVariablesHandler): void;
-    subscribe(key: `featureUpdated:${string}`, handler: featureUpdatedHandler): void;
-    subscribe(key: 'error', handler: errorHandler): void;
-    subscribe(key: 'initialized', handler: initializedHandler): void;
-    subscribe(key: 'configUpdated', handler: configUpdatedHandler): void;
+    subscribe(
+        key: `variableUpdated:${string}`,
+        handler: variableUpdatedHandler
+    ): void
+    subscribe(key: `newVariables:${string}`, handler: newVariablesHandler): void
+    subscribe(
+        key: `featureUpdated:${string}`,
+        handler: featureUpdatedHandler
+    ): void
+    subscribe(key: 'error', handler: errorHandler): void
+    subscribe(key: 'initialized', handler: initializedHandler): void
+    subscribe(key: 'configUpdated', handler: configUpdatedHandler): void
     subscribe(key: string, handler: (...args: any[]) => void): void {
         this.eventEmitter.subscribe(key, handler)
     }
@@ -301,7 +369,10 @@ export class DVCClient implements Client {
         this._closing = true
 
         if (document && this.pageVisibilityHandler) {
-            document.removeEventListener('visibilitychange', this.pageVisibilityHandler)
+            document.removeEventListener(
+                'visibilitychange',
+                this.pageVisibilityHandler
+            )
         }
 
         if (this.windowMessageHandler) {
@@ -317,12 +388,20 @@ export class DVCClient implements Client {
         return this._closing
     }
 
-    private async refetchConfig(sse: boolean, lastModified?: number, etag?: string) {
+    private async refetchConfig(
+        sse: boolean,
+        lastModified?: number,
+        etag?: string
+    ) {
         await this.onInitialized
         await this.requestConsolidator.queue(null, { sse, lastModified, etag })
     }
 
-    private handleConfigReceived(config: BucketedUserConfig, user: DVCPopulatedUser, dateFetched: number) {
+    private handleConfigReceived(
+        config: BucketedUserConfig,
+        user: DVCPopulatedUser,
+        dateFetched: number
+    ) {
         const oldConfig = this.config
         this.config = config
         this.store.saveConfig(config, user, dateFetched)
@@ -333,9 +412,23 @@ export class DVCClient implements Client {
 
             this.store.saveUser(user)
 
-            if (!this.user.isAnonymous && checkIfEdgeEnabled(config, this.logger, this.options?.enableEdgeDB, true)) {
-                saveEntity(this.user, this.sdkKey, this.logger, this.options)
-                    .then((res) => this.logger.info(`Saved response entity! ${res}`))
+            if (
+                !this.user.isAnonymous &&
+                checkIfEdgeEnabled(
+                    config,
+                    this.logger,
+                    this.options?.enableEdgeDB,
+                    true
+                )
+            ) {
+                saveEntity(
+                    this.user,
+                    this.sdkKey,
+                    this.logger,
+                    this.options
+                ).then((res) =>
+                    this.logger.info(`Saved response entity! ${res}`)
+                )
             }
 
             this.userSaved = true
@@ -344,9 +437,13 @@ export class DVCClient implements Client {
         const oldFeatures = oldConfig?.features || {}
         const oldVariables = oldConfig?.variables || {}
         this.eventEmitter.emitFeatureUpdates(oldFeatures, config.features)
-        this.eventEmitter.emitVariableUpdates(oldVariables, config.variables, this.variableDefaultMap)
+        this.eventEmitter.emitVariableUpdates(
+            oldVariables,
+            config.variables,
+            this.variableDefaultMap
+        )
 
-        if (!oldConfig || (oldConfig.etag !== this.config.etag)) {
+        if (!oldConfig || oldConfig.etag !== this.config.etag) {
             this.eventEmitter.emitConfigUpdate(config.variables)
         }
     }
@@ -360,8 +457,15 @@ export class DVCClient implements Client {
                 return
             }
             if (!messageData.type || messageData.type === 'refetchConfig') {
-                if (!this.config?.etag || messageData.etag !== this.config?.etag) {
-                    this.refetchConfig(true, messageData.lastModified, messageData.etag).catch((e) => {
+                if (
+                    !this.config?.etag ||
+                    messageData.etag !== this.config?.etag
+                ) {
+                    this.refetchConfig(
+                        true,
+                        messageData.lastModified,
+                        messageData.etag
+                    ).catch((e) => {
                         this.logger.warn(`Failed to refetch config ${e}`)
                     })
                 }
@@ -392,28 +496,41 @@ export class DVCClient implements Client {
             } else {
                 window?.clearTimeout(this.inactivityHandlerId)
                 this.inactivityHandlerId = window?.setTimeout(() => {
-                    this.logger.debug('Page is not visible, closing streaming connection')
+                    this.logger.debug(
+                        'Page is not visible, closing streaming connection'
+                    )
                     this.streamingConnection?.close()
                 }, inactivityDelay)
             }
         }
 
-        document.addEventListener?.('visibilitychange', this.pageVisibilityHandler)
+        document.addEventListener?.(
+            'visibilitychange',
+            this.pageVisibilityHandler
+        )
     }
 
     private async getConfigCache() {
-        const cachedConfig = await this.store.loadConfig(this.user, this.options.configCacheTTL)
+        const cachedConfig = await this.store.loadConfig(
+            this.user,
+            this.options.configCacheTTL
+        )
         if (cachedConfig) {
             this.config = cachedConfig
             this.isConfigCached = true
             this.eventEmitter.emitFeatureUpdates({}, cachedConfig.features)
-            this.eventEmitter.emitVariableUpdates({}, cachedConfig.variables, this.variableDefaultMap)
+            this.eventEmitter.emitVariableUpdates(
+                {},
+                cachedConfig.variables,
+                this.variableDefaultMap
+            )
             this.logger.debug('Initialized with a cached config')
         }
     }
 
     private async initializeClient() {
-        return this.requestConsolidator.queue(this.user)
+        return this.requestConsolidator
+            .queue(this.user)
             .then(() => {
                 this.eventEmitter.emitInitialized(true)
 
@@ -431,7 +548,9 @@ export class DVCClient implements Client {
                             this.logger
                         )
                     } else {
-                        this.logger.info('Disabling Realtime Updates based on Initialization parameter')
+                        this.logger.info(
+                            'Disabling Realtime Updates based on Initialization parameter'
+                        )
                     }
                 }
 
@@ -446,13 +565,18 @@ export class DVCClient implements Client {
 }
 
 const checkIfEdgeEnabled = (
-    config: BucketedUserConfig, logger: DVCLogger, enableEdgeDB?: boolean, logWarning = false
+    config: BucketedUserConfig,
+    logger: DVCLogger,
+    enableEdgeDB?: boolean,
+    logWarning = false
 ) => {
     if (config.project.settings?.edgeDB?.enabled) {
         return !!enableEdgeDB
     } else {
         if (enableEdgeDB && logWarning) {
-            logger.warn('EdgeDB is not enabled for this project. Only using local user data.')
+            logger.warn(
+                'EdgeDB is not enabled for this project. Only using local user data.'
+            )
         }
         return false
     }
