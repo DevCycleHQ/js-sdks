@@ -92,18 +92,47 @@ describe('EventEmitter tests', () => {
     })
 
     describe('emitVariableEvaluated', () => {
-        it('should emit variable evaluated event if subscribed to variable evaluations', () => {
+        it('should emit variable evaluated event if subscribed to all variable evaluations', () => {
             const allUpdatesHandler = jest.fn()
-            const variableKeyHandler = jest.fn()
             const evaluatedVariable = {
                 _id: 'variable_id',
                 key: 'my-variable-key',
                 value: 'my-new-value',
                 type: 'my-type',
             }
-            eventEmitter.subscribe('variableEvaluated', allUpdatesHandler)
+            eventEmitter.subscribe('variableEvaluated:*', allUpdatesHandler)
             eventEmitter.emitVariableEvaluated(evaluatedVariable)
             expect(allUpdatesHandler).toBeCalledWith(evaluatedVariable)
+        })
+        it('should emit variable evaluated event if subscribed to specific variable evaluations', () => {
+            const allUpdatesHandler = jest.fn()
+            const evaluatedVariable = {
+                _id: 'variable_id',
+                key: 'my-variable-key',
+                value: 'my-new-value',
+                type: 'my-type',
+            }
+            eventEmitter.subscribe(
+                'variableEvaluated:my-variable-key',
+                allUpdatesHandler
+            )
+            eventEmitter.emitVariableEvaluated(evaluatedVariable)
+            expect(allUpdatesHandler).toBeCalledWith(evaluatedVariable)
+        })
+        it('should not emit variable evaluated event if not subscribed to specific variable key', () => {
+            const allUpdatesHandler = jest.fn()
+            const evaluatedVariable = {
+                _id: 'variable_id',
+                key: 'my-variable-key',
+                value: 'my-new-value',
+                type: 'my-type',
+            }
+            eventEmitter.subscribe(
+                'variableEvaluated:not-my-variable-key',
+                allUpdatesHandler
+            )
+            eventEmitter.emitVariableEvaluated(evaluatedVariable)
+            expect(allUpdatesHandler).not.toBeCalledWith(evaluatedVariable)
         })
         it('should not emit variable evaluated events if not subscribed to variable evaluations', () => {
             const allUpdatesHandler = jest.fn()
