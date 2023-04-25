@@ -332,14 +332,14 @@ export class DVCOptInUser {
 
 export type SDKVariable = PublicVariable & {
     value: VariableValue
-    evalReason?: unknown
+    evalReason?: { [key: string]: unknown }
 }
 
 export type SDKFeature = Pick<PublicFeature, '_id' | 'key' | 'type' | 'settings' > & {
     _variation: string,
     variationName: string,
     variationKey: string
-    evalReason?: unknown
+    evalReason?: Record<string, { [key: string]: unknown }>
 }
 
 type FeatureVariation = {
