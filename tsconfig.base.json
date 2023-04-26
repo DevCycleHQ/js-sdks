@@ -41,6 +41,9 @@
       "@devcycle/nodejs-server-sdk": [
         "sdk/nodejs/src/index.ts"
       ],
+      "@devcycle/sdk/openfeature-nodejs-provider": [
+        "sdk/openfeature-nodejs-provider/src/index.ts"
+      ],
       "@devcycle/types": [
         "lib/shared/types/src/index.ts"
       ]
