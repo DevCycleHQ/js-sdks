@@ -16,6 +16,7 @@
     "openfeature-nodejs-provider": "sdk/openfeature-nodejs-provider",
     "react": "sdk/react",
     "react-native": "sdk/react-native",
+    "sdk-openfeature-nodejs-provider": "sdk/openfeature-nodejs-provider",
     "shared-bucketing": "lib/shared/bucketing",
     "shared-bucketing-as": "lib/shared/bucketing-assembly-script",
     "shared-bucketing-test-data": "lib/shared/bucketing-test-data",

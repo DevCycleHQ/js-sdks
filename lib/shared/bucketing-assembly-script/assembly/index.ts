@@ -269,6 +269,10 @@ export function hasConfigDataForEtag(sdkKey: string, etag: string): bool {
     return configData && configData.etag !== null && configData.etag === etag
 }
 
+export function getEtagForSDKKey(sdkKey: string): string {
+
+}
+
 /**
  * Set the client custom data for the given SDK key and JSON String custom data.
  * @param sdkKey
