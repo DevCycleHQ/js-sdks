@@ -160,7 +160,7 @@ export const getSegmentedFeatureDataFromConfig = (
 
 export const generateBucketedConfig = (
     { config, user }:
-    { config: ConfigBody, user: DVCBucketingUser }
+    { config: ConfigBody, user: DVCBucketingUser}
 ): BucketedUserConfig => {
     const variableMap: BucketedUserConfig['variables'] = {}
     const featureKeyMap: BucketedUserConfig['features'] = {}
@@ -218,4 +218,57 @@ export const generateBucketedConfig = (
         variableVariationMap: {},
         variables: variableMap
     }
+}
+
+export const generateBucketingExplanations = (
+    { config, user }:
+        { config: ConfigBody, user: DVCBucketingUser }
+): Record<string, { [key: string]: unknown }> => {
+    const segmentationExplanations: Record<string, { [key: string]: unknown }> = {}
+    const variableExplanations: Record<string, { [key: string]: unknown }> = {}
+    const segmentedFeatures = getSegmentedFeatureDataFromConfig({
+        config, user, explanations: segmentationExplanations
+    })
+    segmentedFeatures.forEach(({ feature, target }) => {
+        const { variations } = feature
+        const { rolloutHash, bucketingHash } = generateBoundedHashes(user.user_id, target._id)
+        const passedRollout = !(target.rollout
+            && !doesUserPassRollout({ boundedHash: rolloutHash, rollout: target.rollout }))
+        segmentationExplanations[feature.key].passedRollout = passedRollout
+
+        const variation_id = bucketForSegmentedFeature({ boundedHash: bucketingHash, target })
+        const variation = variations.find((v) => v._id === variation_id)
+        if (!variation) {
+            throw new Error(`Config missing variation: ${variation_id}`)
+        }
+        variation.variables.forEach(({ _var, value }) => {
+            const variable = config.variables.find((v) => v._id === _var)
+            if (!variable) {
+                throw new Error(`Config missing variable: ${_var}`)
+            }
+            variableExplanations[variable.key] ||= {
+                ...segmentationExplanations[feature.key],
+                variationName: variation.name,
+                variationKey: variation.key,
+                value: passedRollout ? value : null
+            }
+        })
+    })
+    config.features.forEach((feature) => {
+        if (!segmentationExplanations[feature.key]) {
+            feature.variations[0].variables.forEach((variationVariable) => {
+                const variable = config.variables.find((v) => v._id === variationVariable._var)
+                if (!variable) {
+                    throw new Error(`Config missing variable: ${variationVariable._var}`)
+                }
+                variableExplanations[variable.key] ||= {
+                    matchedOperator: null,
+                    featureKey: feature.key,
+                    value: null
+                }
+            })
+        }
+    })
+
+    return variableExplanations
 }
