@@ -1,1 +1,1 @@
-export * from './lib/sdk-openfeature-nodejs-provider';
+export * from './DevCycleProvider'
