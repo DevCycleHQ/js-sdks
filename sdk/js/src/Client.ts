@@ -7,7 +7,8 @@ import {
     DVCEvent as ClientEvent,
     DVCUser,
     ErrorCallback,
-    DVCFeature, VariableDefinitions,
+    DVCFeature,
+    VariableDefinitions,
 } from './types'
 import { DVCVariable, DVCVariableOptions } from './Variable'
 import { getConfigJson, saveEntity } from './Request'
@@ -41,12 +42,14 @@ type variableEvaluatedHandler = (
     variable: DVCVariable<DVCVariableValue>
 ) => void
 
-export class DVCClient<Variables extends VariableDefinitions = VariableDefinitions> implements Client<Variables> {
+export class DVCClient<
+  Variables extends VariableDefinitions = VariableDefinitions
+> implements Client<Variables> {
     private options: DVCOptions
-    private onInitialized: Promise<DVCClient>
+    private onInitialized: Promise<DVCClient<Variables>>
     private variableDefaultMap: {
-        [key: string]: { [key: string]: DVCVariable<any> }
-    }
+    [key: string]: { [key: string]: DVCVariable<any> };
+  }
     private sdkKey: string
     private userSaved = false
     private _closing = false
@@ -66,7 +69,7 @@ export class DVCClient<Variables extends VariableDefinitions = VariableDefinitio
 
     constructor(sdkKey: string, user: DVCUser, options: DVCOptions = {}) {
         this.logger =
-            options.logger || dvcDefaultLogger({ level: options.logLevel })
+      options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.store = new CacheStore(
             options.storage || new DefaultStorage(),
             this.logger
@@ -134,9 +137,11 @@ export class DVCClient<Variables extends VariableDefinitions = VariableDefinitio
         }
     }
 
-    onClientInitialized(): Promise<DVCClient<Variables>>
-    onClientInitialized(onInitialized: ErrorCallback<DVCClient<Variables>>): void
-    onClientInitialized(onInitialized?: ErrorCallback<DVCClient<Variables>>): Promise<DVCClient<Variables>> | void {
+    onClientInitialized(): Promise<DVCClient<Variables>>;
+    onClientInitialized(onInitialized: ErrorCallback<DVCClient<Variables>>): void;
+    onClientInitialized(
+        onInitialized?: ErrorCallback<DVCClient<Variables>>
+    ): Promise<DVCClient<Variables>> | void {
         if (onInitialized && typeof onInitialized === 'function') {
             this.onInitialized
                 .then(() => onInitialized(null, this))
@@ -147,9 +152,9 @@ export class DVCClient<Variables extends VariableDefinitions = VariableDefinitio
     }
 
     variable<
-        K extends string & keyof Variables,
-        T extends DVCVariableValue & Variables[K]
-    >(key: K, defaultValue: T): DVCVariable<T> {
+    K extends string & keyof Variables,
+    T extends DVCVariableValue & Variables[K]
+  >(key: K, defaultValue: T): DVCVariable<T> {
         if (defaultValue === undefined || defaultValue === null) {
             throw new Error('Default value is a required param')
         }
@@ -163,14 +168,14 @@ export class DVCClient<Variables extends VariableDefinitions = VariableDefinitio
         )
 
         const defaultValueKey =
-            typeof defaultValue === 'string'
-                ? defaultValue
-                : JSON.stringify(defaultValue)
+      typeof defaultValue === 'string'
+          ? defaultValue
+          : JSON.stringify(defaultValue)
 
         let variable
         if (
             this.variableDefaultMap[key] &&
-            this.variableDefaultMap[key][defaultValueKey]
+      this.variableDefaultMap[key][defaultValueKey]
         ) {
             variable = this.variableDefaultMap[key][
                 defaultValueKey
