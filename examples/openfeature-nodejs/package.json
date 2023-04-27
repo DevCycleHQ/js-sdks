@@ -3,9 +3,5 @@
   "version": "1.0.0",
   "description": "DevCycle OpenFeature NodeJS  Example App",
   "keywords": [],
-  "license": "MIT",
-  "dependencies": {
-    "@openfeature/js-sdk": "^1.1.1",
-    "@devcycle/openfeature-nodejs": "^1.0.0"
-  }
+  "license": "MIT"
 }

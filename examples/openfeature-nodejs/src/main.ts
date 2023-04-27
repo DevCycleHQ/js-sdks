@@ -1,5 +1,5 @@
-import { DevCycleProvider } from '@devcycle/sdk/openfeature-nodejs-provider'
 import { OpenFeature, Client } from '@openfeature/js-sdk'
+import { DevCycleProvider } from '@devcycle/openfeature-nodejs-provider'
 import { initialize } from '@devcycle/nodejs-server-sdk'
 
 const DVC_SERVER_SDK_KEY = process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
@@ -29,7 +29,7 @@ async function startDVC() {
             'My birthday has been cancelled this year'
         )
 
-        console.log('Hi there, we\'ve been friends for a long time so I thought I would tell you personally: \n')
+        console.log('Hi there, we\'ve been friends for a long time so I thought I would tell you personally:')
         console.log(invitationFlag.value)
 
         const jsonFlag = await openFeatureClient.getObjectValue('json-flag', { 'type': 'customType' })
