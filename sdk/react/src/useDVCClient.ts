@@ -1,8 +1,8 @@
 import { useContext } from 'react'
 import context from './context'
-import { DVCClient } from '@devcycle/devcycle-js-sdk'
+import { DVCClient, VariableDefinitions } from '@devcycle/devcycle-js-sdk'
 
-export const useDVCClient = (): DVCClient => {
+export const useDVCClient = <Variables extends VariableDefinitions = VariableDefinitions>(): DVCClient<Variables> => {
     const dvcContext = useContext(context)
 
     if (dvcContext === undefined) throw new Error('useDVCClient must be used within DVCProvider')

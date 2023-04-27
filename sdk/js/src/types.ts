@@ -45,11 +45,11 @@ export type DVCFeatureSet = {
  * @param user
  * @param options
  */
-export type initialize = (
+export type initialize = <Variables extends VariableDefinitions = VariableDefinitions>(
     sdkKey: string,
     user: DVCUser,
     options?: DVCOptions
-) => DVCClient
+) => DVCClient<Variables>
 
 export interface DVCOptions {
     eventFlushIntervalMS?: number
@@ -123,7 +123,11 @@ export interface DVCUser {
     privateCustomData?: DVCCustomDataJSON
 }
 
-export interface DVCClient {
+export interface VariableDefinitions {
+    [key: string]: VariableValue,
+}
+
+export interface DVCClient<Variables extends VariableDefinitions = VariableDefinitions> {
     /**
      * User document describing
      */
@@ -136,8 +140,8 @@ export interface DVCClient {
      *
      * @param onInitialized
      */
-    onClientInitialized(): Promise<DVCClient>
-    onClientInitialized(onInitialized: ErrorCallback<DVCClient>): void
+    onClientInitialized(): Promise<DVCClient<Variables>>
+    onClientInitialized(onInitialized: ErrorCallback<DVCClient<Variables>>): void
 
     /**
      * Grab variable values associated with Features. Use the key created in the dashboard to fetch
@@ -148,8 +152,8 @@ export interface DVCClient {
      * @param key
      * @param defaultValue
      */
-    variable<T extends DVCVariableValue>(
-        key: string,
+    variable<K extends string & keyof Variables, T extends DVCVariableValue & Variables[K]>(
+        key: K,
         defaultValue: T
     ): DVCVariable<T>
 
