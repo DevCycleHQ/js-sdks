@@ -3,13 +3,13 @@ import {
     DVCVariableValue,
     DVCVariableSet,
     DVCFeatureSet,
-    DVCEvent
+    DVCEvent,
 } from './types'
 import { EnvironmentConfigManager } from './environmentConfigManager'
 import {
     bucketUserForConfig,
     getVariableTypeCode,
-    variableForUser_PB
+    variableForUser_PB,
 } from './utils/userBucketingHelper'
 import { DVCVariable, VariableParam } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
@@ -18,17 +18,23 @@ import { dvcDefaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
 import * as packageJson from '../package.json'
 import { importBucketingLib, getBucketingLib } from './bucketing'
-import { DVCLogger, getVariableTypeFromValue, VariableTypeAlias } from '@devcycle/types'
+import {
+    DVCLogger,
+    getVariableTypeFromValue,
+    VariableTypeAlias,
+} from '@devcycle/types'
 import os from 'os'
 import { DVCUser } from './models/user'
 import { UserError } from './utils/userError'
 
+// DUMMY CHANGE
+
 interface IPlatformData {
-    platform: string
-    platformVersion: string
-    sdkType: string
-    sdkVersion: string,
-    hostname?: string
+  platform: string;
+  platformVersion: string;
+  sdkType: string;
+  sdkVersion: string;
+  hostname?: string;
 }
 
 const castIncomingUser = (user: DVCUser) => {
@@ -48,32 +54,37 @@ export class DVCClient {
 
     constructor(sdkKey: string, options?: DVCOptions) {
         this.sdkKey = sdkKey
-        this.logger = options?.logger || dvcDefaultLogger({ level: options?.logLevel })
+        this.logger =
+      options?.logger || dvcDefaultLogger({ level: options?.logLevel })
 
         if (options?.enableEdgeDB) {
             this.logger.info('EdgeDB can only be enabled for the DVC Cloud Client.')
         }
 
-        const initializePromise = importBucketingLib({ options, logger: this.logger })
+        const initializePromise = importBucketingLib({
+            options,
+            logger: this.logger,
+        })
             .catch((bucketingErr) => {
                 throw new UserError(bucketingErr)
             })
             .then(() => {
-                this.configHelper = new EnvironmentConfigManager(this.logger, sdkKey, options || {})
-                this.eventQueue = new EventQueue(
+                this.configHelper = new EnvironmentConfigManager(
+                    this.logger,
                     sdkKey,
-                    {
-                        ...options,
-                        logger: this.logger
-                    },
+                    options || {}
                 )
+                this.eventQueue = new EventQueue(sdkKey, {
+                    ...options,
+                    logger: this.logger,
+                })
 
                 const platformData: IPlatformData = {
                     platform: 'NodeJS',
                     platformVersion: process.version,
                     sdkType: 'server',
                     sdkVersion: packageJson.version,
-                    hostname: os.hostname()
+                    hostname: os.hostname(),
                 }
 
                 getBucketingLib().setPlatformData(JSON.stringify(platformData))
@@ -101,12 +112,14 @@ export class DVCClient {
     }
 
     /**
-     * Notify the user when Features have been loaded from the server.
-     * An optional callback can be passed in, and will return a promise if no callback has been passed in.
-     *
-     * @param onInitialized
-     */
-    async onClientInitialized(onInitialized?: (err?: Error) => void): Promise<DVCClient> {
+   * Notify the user when Features have been loaded from the server.
+   * An optional callback can be passed in, and will return a promise if no callback has been passed in.
+   *
+   * @param onInitialized
+   */
+    async onClientInitialized(
+        onInitialized?: (err?: Error) => void
+    ): Promise<DVCClient> {
         if (onInitialized && typeof onInitialized === 'function') {
             this.onInitialized
                 .then(() => onInitialized())
@@ -115,33 +128,44 @@ export class DVCClient {
         return this.onInitialized
     }
 
-    variable<T extends DVCVariableValue>(user: DVCUser, key: string, defaultValue: T): DVCVariable<T> {
+    variable<T extends DVCVariableValue>(
+        user: DVCUser,
+        key: string,
+        defaultValue: T
+    ): DVCVariable<T> {
         const incomingUser = castIncomingUser(user)
         // this will throw if type is invalid
         const type = getVariableTypeFromValue(defaultValue, key, this.logger, true)
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
 
         if (!this.initialized) {
-            this.logger.warn('variable called before DVCClient initialized, returning default value')
+            this.logger.warn(
+                'variable called before DVCClient initialized, returning default value'
+            )
 
             this.eventQueue?.queueAggregateEvent(populatedUser, {
                 type: EventTypes.aggVariableDefaulted,
-                target: key
+                target: key,
             })
 
             return new DVCVariable({
                 defaultValue,
                 type,
-                key
+                key,
             })
         }
 
-        const configVariable = variableForUser_PB(this.sdkKey, populatedUser, key, getVariableTypeCode(type))
+        const configVariable = variableForUser_PB(
+            this.sdkKey,
+            populatedUser,
+            key,
+            getVariableTypeCode(type)
+        )
 
         const options: VariableParam<T> = {
             key,
             type,
-            defaultValue
+            defaultValue,
         }
         if (configVariable) {
             if (type === configVariable.type) {
@@ -191,7 +215,9 @@ export class DVCClient {
         const incomingUser = castIncomingUser(user)
 
         if (!this.initialized) {
-            this.logger.warn('track called before DVCClient initialized, event will not be tracked')
+            this.logger.warn(
+                'track called before DVCClient initialized, event will not be tracked'
+            )
             return
         }
 
