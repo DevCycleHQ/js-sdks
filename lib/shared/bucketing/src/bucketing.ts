@@ -140,9 +140,10 @@ export const getSegmentedFeatureDataFromConfig = (
                 isOptInEnabled: !!isOptInEnabled,
                 audiences: config.audiences
             })
-            if (targetMatch && explanations) {
+            if (explanations) {
                 explanations[feature.key] = {
-                    matchedOperator: target._audience.filters,
+                    matchedOperator: targetMatch ? target._audience.filters : undefined,
+                    unmatchedOperator: !targetMatch ? target._audience.filters : undefined,
                     featureKey: feature.key
                 }
             }
@@ -255,15 +256,14 @@ export const generateBucketingExplanations = (
         })
     })
     config.features.forEach((feature) => {
-        if (!segmentationExplanations[feature.key]) {
+        if (!segmentationExplanations[feature.key].matchedOperator) {
             feature.variations[0].variables.forEach((variationVariable) => {
                 const variable = config.variables.find((v) => v._id === variationVariable._var)
                 if (!variable) {
                     throw new Error(`Config missing variable: ${variationVariable._var}`)
                 }
                 variableExplanations[variable.key] ||= {
-                    matchedOperator: null,
-                    featureKey: feature.key,
+                    ...segmentationExplanations[feature.key],
                     value: null
                 }
             })
