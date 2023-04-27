@@ -1,6 +1,7 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "sdk/openfeature-nodejs-provider/src",
+  "implicitDependencies": ["nodejs"],
   "targets": {
     "build": {
       "executor": "@nrwl/js:tsc",

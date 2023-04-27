@@ -2,9 +2,5 @@
   "name": "@devcycle/openfeature-nodejs-provider",
   "version": "1.0.0",
   "description": "OpenFeature Node Provider for DevCycle NodeJS SDK",
-  "license": "MIT",
-  "dependencies": {
-    "@devcycle/nodejs-server-sdk": "^1.9.6",
-    "@openfeature/js-sdk": "^1.1.1"
-  }
+  "license": "MIT"
 }
