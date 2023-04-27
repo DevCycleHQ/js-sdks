@@ -19,9 +19,10 @@ import UAParser from 'ua-parser-js'
  * @returns {*|boolean|boolean}
  */
 export const evaluateOperator = (
-    { operator, data, featureId, isOptInEnabled, audiences = {} }:
+    { operator, data, featureId, isOptInEnabled, audiences = {}, explanations, featureKey }:
     {
-        operator: AudienceFilterOrOperator, data: any, featureId: string, isOptInEnabled: boolean
+        operator: AudienceFilterOrOperator, data: any, featureId: string, featureKey: string, isOptInEnabled: boolean,
+        explanations?: Record<string, unknown>
         audiences?: { [id: string]: Omit<PublicAudience<string>, '_id'> }
     }
 ): boolean => {
@@ -29,7 +30,7 @@ export const evaluateOperator = (
 
     const doesUserPassFilter = (filter: AudienceFilterOrOperator) => {
         if (filter.operator) {
-            return evaluateOperator({ operator: filter, data, featureId, isOptInEnabled, audiences })
+            return evaluateOperator({ operator: filter, data, featureId, isOptInEnabled, audiences, featureKey, explanations })
         }
         if (filter.type === 'all') return true
         if (filter.type === 'optIn') {
@@ -37,7 +38,7 @@ export const evaluateOperator = (
             return isOptInEnabled && !!optIns?.[featureId]
         }
         if (filter.type === 'audienceMatch') {
-            return filterForAudienceMatch({ operator: filter, data, featureId, isOptInEnabled, audiences })
+            return filterForAudienceMatch({ operator: filter, data, featureId, isOptInEnabled, audiences, featureKey, explanations })
         }
         if (filter.type !== 'user') {
             console.error(`Invalid filter type: ${filter.type}`)
@@ -57,9 +58,29 @@ export const evaluateOperator = (
     }
 
     if (operator.operator === 'or') {
-        return operator.filters.some(doesUserPassFilter)
+        return operator.filters.some((filter) => {
+            const pass = doesUserPassFilter(filter)
+            if (!pass && explanations) {
+                explanations[featureKey] = {
+                    unmatchedFilter: filter,
+                    featureKey
+                }
+            } else if (explanations && explanations[featureKey]) {
+                delete explanations[featureKey]
+            }
+            return pass
+        })
     } else {
-        return operator.filters.every(doesUserPassFilter)
+        return operator.filters.every((filter) => {
+            const pass = doesUserPassFilter(filter)
+            if (!pass && explanations) {
+                explanations[featureKey] = {
+                    unmatchedFilter: filter,
+                    featureKey
+                }
+            }
+            return pass
+        })
     }
 }
 type FilterFunctionsBySubtype = {
@@ -67,9 +88,11 @@ type FilterFunctionsBySubtype = {
 }
 
 function filterForAudienceMatch({
-    operator, data, featureId, isOptInEnabled, audiences = {}
+    operator, data, featureId, isOptInEnabled, audiences = {}, featureKey, explanations
 }: {
-    operator: AudienceFilterOrOperator, data: any, featureId: string, isOptInEnabled: boolean
+    operator: AudienceFilterOrOperator, data: any, featureId: string, isOptInEnabled: boolean,
+    explanations?: Record<string, unknown>,
+    featureKey: string,
     audiences?: { [id: string]: Omit<PublicAudience<string>, '_id'> }
 }): boolean {
     if (!operator?._audiences) return false
@@ -87,7 +110,8 @@ function filterForAudienceMatch({
             data,
             featureId,
             isOptInEnabled,
-            audiences
+            audiences,
+            featureKey
         })) {
             return comparator === '='
         }

@@ -138,12 +138,13 @@ export const getSegmentedFeatureDataFromConfig = (
                 data: user,
                 featureId: feature._id,
                 isOptInEnabled: !!isOptInEnabled,
-                audiences: config.audiences
+                audiences: config.audiences,
+                featureKey: feature.key,
+                explanations
             })
-            if (explanations) {
+            if (targetMatch && explanations) {
                 explanations[feature.key] = {
-                    matchedOperator: targetMatch ? target._audience.filters : undefined,
-                    unmatchedOperator: !targetMatch ? target._audience.filters : undefined,
+                    matchedOperator: target._audience.filters,
                     featureKey: feature.key
                 }
             }
