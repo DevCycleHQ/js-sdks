@@ -15,12 +15,12 @@ export class AppElement extends HTMLElement {
     ]
 
     updateInnerHTML(): void {
-        const titleVariable = client.variable('titlevariable', 'Welcome 👋')
-        const variableKey = client.variable('feature-release', true)
-        const variableKeyString = client.variable('variable-key-string', 'default')
-        const variableKeyNumber = client.variable('variable-key-number', 100)
-        const variableKeyBoolean = client.variable('variable-key-boolean', true)
-        const variableKeyJsonString = client.variable('variable-json-key-string', { 'jsonStringKeyDefault': 'json default' })
+        const titleVariable = client.variableValue('titlevariable', 'Welcome 👋')
+        const variableKey = client.variableValue('feature-release', true)
+        const variableKeyString = client.variableValue('variable-key-string', 'default')
+        const variableKeyNumber = client.variableValue('variable-key-number', 100)
+        const variableKeyBoolean = client.variableValue('variable-key-boolean', true)
+        const variableKeyJsonString = client.variableValue('variable-json-key-string', { 'jsonStringKeyDefault': 'json default' })
 
         this.innerHTML =  `
           <div class="wrapper">
@@ -29,7 +29,7 @@ export class AppElement extends HTMLElement {
               <div id="welcome">
                 <h1>
                   <span> Hello there, </span>
-                  ${titleVariable.value}
+                  ${titleVariable}
                 </h1>
               </div>
               <div id="variableKey">
@@ -40,31 +40,31 @@ export class AppElement extends HTMLElement {
               <div id="variableKey">
               <h1>
                 <span>variable feature-release = </span>
-                ${JSON.stringify(variableKey.value)}
+                ${JSON.stringify(variableKey)}
               </h1>
             </div>
               <div id="variableKeyString">
                 <h1>
                   <span>variable variable-key-string = </span>
-                  ${JSON.stringify(variableKeyString.value)}
+                  ${JSON.stringify(variableKeyString)}
                 </h1>
               </div>
               <div id="variableKeyNumber">
                 <h1>
                   <span>variable variable-key-number = </span>
-                  ${JSON.stringify(variableKeyNumber.value)}
+                  ${JSON.stringify(variableKeyNumber)}
                 </h1>
               </div>
               <div id="variableKeyBoolean">
                 <h1>
                   <span>variable variable-key-boolean = </span>
-                  ${JSON.stringify(variableKeyBoolean.value)}
+                  ${JSON.stringify(variableKeyBoolean)}
                 </h1>
               </div>
               <div id="variableKeyJsonString">
               <h1>
               <span>variable variable-json-key-string = </span>
-                ${JSON.stringify(variableKeyJsonString.value)}
+                ${JSON.stringify(variableKeyJsonString)}
               </h1>
             </div>
 
