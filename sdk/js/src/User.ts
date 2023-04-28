@@ -4,7 +4,7 @@ import packageJson from '../package.json'
 import UAParser from 'ua-parser-js'
 
 type StaticData = Pick<DVCPopulatedUser, 'createdDate' | 'platform' |
-    'platformVersion' | 'deviceModel' | 'sdkType' | 'sdkVersion'>
+'platformVersion' | 'deviceModel' | 'sdkType' | 'sdkVersion'>
 
 export class DVCPopulatedUser implements DVCUser {
     readonly isAnonymous: boolean

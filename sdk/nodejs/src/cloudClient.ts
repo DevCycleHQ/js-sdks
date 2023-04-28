@@ -1,7 +1,6 @@
 import {
     DVCOptions,
     DVCVariableValue,
-    DVCVariable as DVCVariableInterface,
     DVCVariableSet,
     DVCFeatureSet,
     DVCEvent
@@ -10,7 +9,7 @@ import { DVCVariable } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
 import { dvcDefaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
-import { DVCLogger, getVariableTypeFromValue } from '@devcycle/types'
+import { DVCLogger, getVariableTypeFromValue, VariableTypeAlias } from '@devcycle/types'
 import { getAllFeatures, getAllVariables, getVariable, postTrack, ResponseError } from './request'
 import { DVCUser } from './models/user'
 
@@ -63,9 +62,12 @@ export class DVCCloudClient {
         this.logger.info('Running DevCycle NodeJS SDK in Cloud Bucketing mode')
     }
 
-    variable(user: DVCUser, key: string, defaultValue: DVCVariableValue): Promise<DVCVariableInterface> {
+    variable<T extends DVCVariableValue>(
+        user: DVCUser,
+        key: string,
+        defaultValue: T
+    ): Promise<DVCVariable<T>> {
         const incomingUser = castIncomingUser(user)
-
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
 
         checkParamDefined('key', key)
@@ -79,15 +81,15 @@ export class DVCCloudClient {
                     this.logger.error(
                         `Type mismatch for variable ${key}. Expected ${type}, got ${variableResponse.type}`
                     )
-                    return new DVCVariable({
-                        defaultValue,
-                        type,
-                        key
-                    })
+                    // Default Variable
+                    return new DVCVariable({ key, type, defaultValue })
                 }
+
                 return new DVCVariable({
-                    ...variableResponse,
-                    defaultValue
+                    key,
+                    type,
+                    defaultValue,
+                    value: variableResponse.value as VariableTypeAlias<T>,
                 })
             })
             .catch((err: unknown) => {
@@ -95,12 +97,17 @@ export class DVCCloudClient {
                 this.logger.error(
                     `Request to get variable: ${key} failed with response message: ${(err as any).message}`
                 )
-                return new DVCVariable({
-                    defaultValue,
-                    type,
-                    key
-                })
+                // Default Variable
+                return new DVCVariable({ key, type, defaultValue })
             })
+    }
+
+    variableValue<T extends DVCVariableValue>(
+        user: DVCUser,
+        key: string,
+        defaultValue: T
+    ): Promise<VariableTypeAlias<T>> {
+        return this.variable(user, key, defaultValue).then((variable) => variable.value)
     }
 
     allVariables(user: DVCUser): Promise<DVCVariableSet> {

@@ -17,8 +17,8 @@ export interface ErrorCallback<T> {
 
 export type DVCVariableSet = {
     [key: string]: Pick<
-        DVCVariable<DVCVariableValue>,
-        'key' | 'value' | 'evalReason'
+    DVCVariable<DVCVariableValue>,
+    'key' | 'value' | 'evalReason'
     > & {
         _id: string
         type: string

@@ -108,3 +108,77 @@ describe('variable', () => {
         expect(variable.value).toEqual({ key: 'test' })
     })
 })
+
+describe('variableValue', () => {
+    const user = {
+        user_id: 'node_sdk_test',
+        country: 'CA',
+        customData: {
+            test: 'test',
+            canBeNull: null
+        },
+        privateCustomData: {
+            private: 'private'
+        }
+    }
+    const expectedUser = expect.objectContaining({
+        user_id: 'node_sdk_test',
+        country: 'CA'
+    })
+
+    let client: DVCClient
+
+    beforeAll(async () => {
+        client = new DVCClient('token')
+        await client.onClientInitialized()
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        client.eventQueue.queueAggregateEvent = jest.fn()
+    })
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
+
+    it('returns a valid variable object for a variable that is in the config', () => {
+        expect(client.variableValue(user, 'test-key', false)).toEqual(true)
+    })
+
+    it('returns a valid variable object for a variable that is in the config with a DVCUser instance', () => {
+        const dvcUser = new DVCUser(user)
+        expect(client.variableValue(dvcUser, 'test-key', false)).toEqual(true)
+    })
+
+    it('returns a valid variable object for a variable that is not in the config', () => {
+        // @ts-ignore
+        getBucketingLib().variableForUser_PB.mockReturnValueOnce(null)
+        expect(client.variableValue(user, 'test-key2', false)).toEqual(false)
+    })
+
+    it('returns a defaulted variable object for a variable that is in the config but the wrong type', () => {
+        // @ts-ignore
+        getBucketingLib().variableForUser.mockReturnValueOnce(null)
+        expect(client.variableValue(user, 'test-key', 'test')).toEqual('test')
+    })
+
+    it('returns a variable with the correct type for string', () => {
+        let value = client.variableValue(user, 'test-key', 'test')
+        expect(typeof value).toEqual('string')
+        // this will be a type error for non-strings
+        value.concat()
+        // should allow assignment to different string
+        value = 'test2'
+    })
+
+    it('returns a variable with the correct type for number', () => {
+        const value = client.variableValue(user, 'test-key', 1)
+        expect(typeof value).toEqual('number')
+        // this will be a type error for non-numbers
+        value.toFixed()
+    })
+
+    it('returns a variable with the correct type for JSON', () => {
+        const value = client.variableValue(user, 'test-key', { key: 'test' })
+        expect(value).toBeInstanceOf(Object)
+        expect(value).toEqual({ key: 'test' })
+    })
+})
