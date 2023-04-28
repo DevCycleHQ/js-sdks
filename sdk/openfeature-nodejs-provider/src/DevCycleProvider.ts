@@ -9,6 +9,7 @@ import {
 } from '@openfeature/js-sdk'
 import {
     DVCClient,
+    DVCCloudClient,
     DVCOptions,
     DVCVariable,
     DVCUser,
@@ -16,7 +17,7 @@ import {
     DVCCustomDataJSON,
     dvcDefaultLogger
 } from '@devcycle/nodejs-server-sdk'
-import { DVCLogger } from '@devcycle/types'
+import { DVCLogger, VariableValue } from '@devcycle/types'
 
 const DVCKnownPropertyKeyTypes: Record<string, string> = {
     email: 'string',
@@ -33,15 +34,32 @@ type EvaluationContextObject = {
     [key: string]: EvaluationContextValue
 }
 
-export class DevCycleProvider implements Provider {
+export default class DevCycleProvider implements Provider {
     readonly metadata: ProviderMetadata = {
         name: 'devcycle-nodejs-provider',
     } as const
 
     private readonly logger: DVCLogger
 
-    constructor(private readonly dvcClient: DVCClient, options: DVCOptions = {}) {
+    constructor(private readonly dvcClient: DVCClient | DVCCloudClient, options: DVCOptions = {}) {
         this.logger = options.logger ?? dvcDefaultLogger({ level: options.logLevel })
+    }
+
+    private async getDVCVariable<I extends VariableValue, O>(
+        flagKey: string,
+        defaultValue: I,
+        context: EvaluationContext
+    ): Promise<ResolutionDetails<O>> {
+        const dvcVariable = this.dvcClient.variable(
+            this.dvcUserFromContext(context),
+            flagKey,
+            defaultValue
+        )
+        return this.resultFromDVCVariable<O>(
+            dvcVariable instanceof Promise
+                ? await dvcVariable
+                : dvcVariable
+        )
     }
 
     async resolveBooleanEvaluation(
@@ -49,12 +67,7 @@ export class DevCycleProvider implements Provider {
         defaultValue: boolean,
         context: EvaluationContext
     ): Promise<ResolutionDetails<boolean>> {
-        const dvcVariable = this.dvcClient.variable<boolean>(
-            this.dvcUserFromContext(context),
-            flagKey,
-            defaultValue
-        )
-        return this.resultFromDVCVariable<boolean>(dvcVariable)
+        return this.getDVCVariable(flagKey, defaultValue, context)
     }
 
     /**
@@ -65,12 +78,7 @@ export class DevCycleProvider implements Provider {
         defaultValue: string,
         context: EvaluationContext
     ): Promise<ResolutionDetails<string>> {
-        const dvcVariable = this.dvcClient.variable<string>(
-            this.dvcUserFromContext(context),
-            flagKey,
-            defaultValue
-        )
-        return this.resultFromDVCVariable<string>(dvcVariable)
+        return this.getDVCVariable(flagKey, defaultValue, context)
     }
 
     /**
@@ -81,12 +89,7 @@ export class DevCycleProvider implements Provider {
         defaultValue: number,
         context: EvaluationContext
     ): Promise<ResolutionDetails<number>> {
-        const dvcVariable = this.dvcClient.variable<number>(
-            this.dvcUserFromContext(context),
-            flagKey,
-            defaultValue
-        )
-        return this.resultFromDVCVariable<number>(dvcVariable)
+        return this.getDVCVariable(flagKey, defaultValue, context)
     }
 
     /**
@@ -97,16 +100,11 @@ export class DevCycleProvider implements Provider {
         defaultValue: T,
         context: EvaluationContext
     ): Promise<ResolutionDetails<T>> {
-        const dvcVariable = this.dvcClient.variable<DVCJSON>(
-            this.dvcUserFromContext(context),
-            flagKey,
-            this.defaultValueFromJsonValue(defaultValue)
-        )
-        return this.resultFromDVCVariable<T>(dvcVariable)
+        return this.getDVCVariable(flagKey, this.defaultValueFromJsonValue(defaultValue), context)
     }
 
     private defaultValueFromJsonValue(jsonValue: JsonValue): DVCJSON {
-        if (typeof jsonValue !== 'object') {
+        if (typeof jsonValue !== 'object' || Array.isArray(jsonValue)) {
             throw new Error('DevCycle only supports object values for JSON flags')
         }
         if (!jsonValue) {
@@ -143,7 +141,7 @@ export class DevCycleProvider implements Provider {
             if (knownValueType) {
                 if (typeof value !== knownValueType) {
                     this.logger.warn(
-                        `Expected DVCUser property "${key}" to be ${knownValueType} but got ${typeof value} in ` +
+                        `Expected DVCUser property "${key}" to be "${knownValueType}" but got "${typeof value}" in ` +
                         'EvaluationContext. Ignoring value.'
                     )
                     continue
@@ -180,12 +178,13 @@ export class DevCycleProvider implements Provider {
                     case 'boolean':
                         customData[key] = value
                         break
-                    case 'undefined':
-                        customData[key] = null
-                        break
                     case 'object':
+                        if (value === null) {
+                            customData[key] = null
+                            break
+                        }
                         this.logger.warn(
-                            `EvaluationContext property "${key}" is an object. ` +
+                            `EvaluationContext property "${key}" is an ${Array.isArray(value) ? 'Array' : 'Object'}. ` +
                             'DVCUser only supports flat customData properties of type string / number / boolean / null'
                         )
                         break
@@ -198,7 +197,12 @@ export class DevCycleProvider implements Provider {
                 }
             }
         }
-        return new DVCUser({ user_id, customData, privateCustomData, ...dvcUserData })
+        return new DVCUser({
+            user_id,
+            customData: Object.keys(customData).length ? customData : undefined,
+            privateCustomData: Object.keys(privateCustomData).length ? privateCustomData : undefined,
+            ...dvcUserData
+        })
     }
 
     private convertToDVCCustomDataJSON(evaluationData: EvaluationContextObject): DVCCustomDataJSON {

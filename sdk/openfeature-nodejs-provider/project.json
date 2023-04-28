@@ -36,8 +36,7 @@
         "coverage/sdk/openfeature-nodejs-provider"
       ],
       "options": {
-        "jestConfig": "sdk/openfeature-nodejs-provider/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "sdk/openfeature-nodejs-provider/jest.config.ts"
       }
     },
     "npm-publish": {
