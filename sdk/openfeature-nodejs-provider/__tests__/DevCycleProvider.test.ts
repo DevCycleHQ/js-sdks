@@ -292,6 +292,13 @@ describe('DevCycleProvider Unit Tests', () => {
                 errorCode: 'GENERAL',
                 errorMessage: 'DevCycle only supports object values for JSON flags'
             })
+            expect(ofClient.getObjectDetails('json-flag', false)).resolves.toEqual({
+                flagKey: 'json-flag',
+                value: false,
+                reason: 'ERROR',
+                errorCode: 'GENERAL',
+                errorMessage: 'DevCycle only supports object values for JSON flags'
+            })
             expect(ofClient.getObjectDetails('json-flag', null)).resolves.toEqual({
                 flagKey: 'json-flag',
                 value: null,
