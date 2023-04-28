@@ -57,6 +57,7 @@ This is used to identify the user as the `user_id` for a `DVCUser` in DevCycle.
 #### Context properties to DVCUser
 
 The provider will automatically translate known `DVCUser` properties from the OpenFeature context to the `DVCUser` object.
+[DVCUser TypeScript Interface](https://github.com/DevCycleHQ/js-sdks/blob/main/sdk/nodejs/src/models/user.ts#L16)
 
 For example all these properties will be set on the `DVCUser`:
 ```typescript

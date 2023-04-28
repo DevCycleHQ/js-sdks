@@ -12,7 +12,7 @@ let dvcClient: DVCClient
 
 async function startDVC() {
     dvcClient = await initialize(DVC_SERVER_SDK_KEY, { logLevel: 'info' }).onClientInitialized()
-    console.log('DevCycle local bucketing typeScript client initialized')
+    console.log('DevCycle local bucketing typescript client initialized')
 
     const user = {
         user_id: 'node_sdk_test',
@@ -56,6 +56,7 @@ if (process.env.DVC_BENCHMARK) {
     startDVC()
 }
 
+// Start express example server
 const app = express()
 const port = 5001
 const defaultHeaders = {
