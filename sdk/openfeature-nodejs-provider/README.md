@@ -10,6 +10,10 @@ Run `nx build sdk-openfeature-nodejs-provider` to build the library.
 
 Run `nx test sdk-openfeature-nodejs-provider` to execute the unit tests via [Jest](https://jestjs.io).
 
+## Example App
+
+See the [example app](/examples/openfeature-nodejs) for a working example of the OpenFeature DevCycle NodeJS Provider.
+
 ## Usage
 
 See our [documentation](https://docs.devcycle.com/sdk/server-side-sdks/node/) for more information.
