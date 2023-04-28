@@ -1,5 +1,5 @@
 import { OpenFeature, Client } from '@openfeature/js-sdk'
-import { DevCycleProvider } from '@devcycle/openfeature-nodejs-provider'
+import DevCycleProvider from '@devcycle/openfeature-nodejs-provider'
 import { initialize } from '@devcycle/nodejs-server-sdk'
 
 const DVC_SERVER_SDK_KEY = process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'

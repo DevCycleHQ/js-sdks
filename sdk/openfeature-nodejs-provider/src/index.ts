@@ -1,1 +1,2 @@
-export * from './DevCycleProvider'
+import DevCycleProvider from './DevCycleProvider'
+export default DevCycleProvider
