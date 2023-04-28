@@ -45,6 +45,13 @@ export default class DevCycleProvider implements Provider {
         this.logger = options.logger ?? dvcDefaultLogger({ level: options.logLevel })
     }
 
+    /**
+     * Generic function to retrieve a DVC variable and convert it to a ResolutionDetails.
+     * @param flagKey
+     * @param defaultValue
+     * @param context
+     * @private
+     */
     private async getDVCVariable<I extends VariableValue, O>(
         flagKey: string,
         defaultValue: I,
@@ -62,6 +69,12 @@ export default class DevCycleProvider implements Provider {
         )
     }
 
+    /**
+     * Resolve a boolean OpenFeature flag and its evaluation details.
+     * @param flagKey
+     * @param defaultValue
+     * @param context
+     */
     async resolveBooleanEvaluation(
         flagKey: string,
         defaultValue: boolean,
@@ -71,7 +84,10 @@ export default class DevCycleProvider implements Provider {
     }
 
     /**
-     * Resolve a string flag and its evaluation details.
+     * Resolve a string OpenFeature flag and its evaluation details.
+     * @param flagKey
+     * @param defaultValue
+     * @param context
      */
     async resolveStringEvaluation(
         flagKey: string,
@@ -82,7 +98,10 @@ export default class DevCycleProvider implements Provider {
     }
 
     /**
-     * Resolve a numeric flag and its evaluation details.
+     * Resolve a number OpenFeature flag and its evaluation details.
+     * @param flagKey
+     * @param defaultValue
+     * @param context
      */
     async resolveNumberEvaluation(
         flagKey: string,
@@ -93,7 +112,10 @@ export default class DevCycleProvider implements Provider {
     }
 
     /**
-     * Resolve and parse an object flag and its evaluation details.
+     * Resolve a object OpenFeature flag and its evaluation details.
+     * @param flagKey
+     * @param defaultValue
+     * @param context
      */
     async resolveObjectEvaluation<T extends JsonValue>(
         flagKey: string,
@@ -103,6 +125,11 @@ export default class DevCycleProvider implements Provider {
         return this.getDVCVariable(flagKey, this.defaultValueFromJsonValue(defaultValue), context)
     }
 
+    /**
+     * Convert a OpenFeature JsonValue default value into DVCJSON default value for evaluation.
+     * @param jsonValue
+     * @private
+     */
     private defaultValueFromJsonValue(jsonValue: JsonValue): DVCJSON {
         if (typeof jsonValue !== 'object' || Array.isArray(jsonValue)) {
             throw new Error('DevCycle only supports object values for JSON flags')
@@ -116,6 +143,12 @@ export default class DevCycleProvider implements Provider {
         return jsonValue as DVCJSON
     }
 
+    /**
+     * Convert a DVCVariable result into a OpenFeature ResolutionDetails.
+     * TODO: add support for variant / reason / and more error codes from DVC.
+     * @param variable
+     * @private
+     */
     private resultFromDVCVariable<T>(variable: DVCVariable): ResolutionDetails<T> {
         return {
             value: variable.value as T,
@@ -125,6 +158,11 @@ export default class DevCycleProvider implements Provider {
         }
     }
 
+    /**
+     * Convert an OpenFeature EvaluationContext into a DVCUser.
+     * @param context
+     * @private
+     */
     private dvcUserFromContext(context: EvaluationContext): DVCUser {
         const user_id = context.targetingKey ?? context.user_id
         if (!user_id) throw new Error('Missing targetingKey or user_id in context')
@@ -205,6 +243,11 @@ export default class DevCycleProvider implements Provider {
         })
     }
 
+    /**
+     * Convert customData from an OpenFeature EvaluationContextObject into a DVCUser customData.
+     * @param evaluationData
+     * @private
+     */
     private convertToDVCCustomDataJSON(evaluationData: EvaluationContextObject): DVCCustomDataJSON {
         const customData: DVCCustomDataJSON = {}
         for (const [key, value] of Object.entries(evaluationData)) {
