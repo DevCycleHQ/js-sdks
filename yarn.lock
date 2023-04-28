@@ -3036,6 +3036,8 @@ __metadata:
 "@devcycle/openfeature-nodejs-provider@workspace:sdk/openfeature-nodejs-provider":
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-nodejs-provider@workspace:sdk/openfeature-nodejs-provider"
+  dependencies:
+    "@devcycle/bucketing-test-data": ^1.2.6
   languageName: unknown
   linkType: soft
 
