@@ -1,6 +1,6 @@
 # OpenFeature DevCycle NodeJS Provider
 
-This library provides a NodeJS implementation of the OpenFeature Provider interface for DevCycle.
+This library provides a NodeJS implementation of the [OpenFeature](https://openfeature.dev/) Provider interface for DevCycle.
 
 ## Building
 
