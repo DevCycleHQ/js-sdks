@@ -8,42 +8,18 @@ import { benchDVC } from './benchmarkDVC'
 
 const DVC_SERVER_SDK_KEY = process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
 
-const app = express()
-const port = 5001
-const defaultHeaders = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Access-Control-Allow-Origin, Content-Type',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS'
-}
-
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-
 let dvcClient: DVCClient
-
-function validateUserFromQueryParams(queryParams: Query): DVCClientAPIUser {
-    if (!queryParams) {
-        throw new Error('Invalid query parameters')
-    }
-
-    const user = plainToInstance(DVCClientAPIUser, queryParams || {})
-    if (!user.user_id) {
-        throw new Error('user_id must be defined')
-    }
-    return user
-}
 
 async function startDVC() {
     dvcClient = await initialize(DVC_SERVER_SDK_KEY, { logLevel: 'info' }).onClientInitialized()
-    console.log('DVC Local Bucketing TypeScript Client Initialized')
+    console.log('DevCycle local bucketing typescript client initialized')
 
     const user = {
         user_id: 'node_sdk_test',
         country: 'CA'
     }
 
-    const partyTime = dvcClient.variable(user, 'elliot-test', false)
+    const partyTime = dvcClient.variable(user, 'party-time', false)
     if (partyTime.value) {
         const invitation = dvcClient.variable(
             user,
@@ -80,6 +56,19 @@ if (process.env.DVC_BENCHMARK) {
     startDVC()
 }
 
+// Start express example server
+const app = express()
+const port = 5001
+const defaultHeaders = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Access-Control-Allow-Origin, Content-Type',
+    'Access-Control-Allow-Methods': 'GET, OPTIONS'
+}
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 app.get('/variables', (req: express.Request, res: express.Response) => {
     const user = validateUserFromQueryParams(req.query)
 
@@ -97,3 +86,15 @@ app.get('/features', (req: express.Request, res: express.Response) => {
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
+
+function validateUserFromQueryParams(queryParams: Query): DVCClientAPIUser {
+    if (!queryParams) {
+        throw new Error('Invalid query parameters')
+    }
+
+    const user = plainToInstance(DVCClientAPIUser, queryParams || {})
+    if (!user.user_id) {
+        throw new Error('user_id must be defined')
+    }
+    return user
+}

@@ -5,6 +5,7 @@ import { isValidServerSDKKey } from './utils/paramUtils'
 
 export { DVCClient, DVCCloudClient }
 export * from './types'
+export { dvcDefaultLogger } from './utils/logger'
 
 export { DVCUser } from './models/user'
 

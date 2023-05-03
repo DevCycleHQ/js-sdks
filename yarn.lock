@@ -3033,6 +3033,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@devcycle/openfeature-nodejs-provider@workspace:sdk/openfeature-nodejs-provider":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/openfeature-nodejs-provider@workspace:sdk/openfeature-nodejs-provider"
+  dependencies:
+    "@devcycle/bucketing-test-data": ^1.2.6
+  languageName: unknown
+  linkType: soft
+
 "@devcycle/types@workspace:lib/shared/types":
   version: 0.0.0-use.local
   resolution: "@devcycle/types@workspace:lib/shared/types"
@@ -5582,6 +5590,13 @@ __metadata:
   version: 1.0.3
   resolution: "@open-draft/until@npm:1.0.3"
   checksum: 323e92ebef0150ed0f8caedc7d219b68cdc50784fa4eba0377eef93533d3f46514eb2400ced83dda8c51bddc3d2c7b8e9cf95e5ec85ab7f62dfc015d174f62f2
+  languageName: node
+  linkType: hard
+
+"@openfeature/js-sdk@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@openfeature/js-sdk@npm:1.1.1"
+  checksum: 43faf7da462b82513638e2fec8baf7beabc2c0048c89b956e1c66d5e0313a870d1b7931a83cde16fcfa0fc5cea2d563a45131d08236ebaae4ff59ead91c5bd71
   languageName: node
   linkType: hard
 
@@ -8577,7 +8592,7 @@ __metadata:
 "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json":
   version: 1.1.0
   resolution: "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json.git#commit=d2ce65ec18b305e1f3db8a4fe4394b417631b024"
-  checksum: 045c8dc54cb8ee61d022c017e483f6c8729347a2e30167a4e3227b9d4d80293b032a8cff7fcaf83040b23eacc23bf62188ebb9f2091df85ef2ee21425f8957f7
+  checksum: 480283ed02d57eacb400facc060f293b7dcb773a90dc5b7c80eae86b0007e3a748b2cb6c298a1a32010cba41e48686fcd0078c02c6db1d917fda85bb7c08ded1
   languageName: node
   linkType: hard
 
@@ -11459,6 +11474,7 @@ __metadata:
     "@nrwl/web": 14.7.11
     "@nrwl/webpack": 14.7.11
     "@nrwl/workspace": 14.7.11
+    "@openfeature/js-sdk": ^1.1.1
     "@react-native-async-storage/async-storage": ^1.17.11
     "@react-native-community/cli": ^9.0.0
     "@react-native-community/cli-platform-android": ^9.0.0
