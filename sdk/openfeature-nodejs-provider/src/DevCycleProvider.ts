@@ -5,7 +5,10 @@ import {
     JsonValue,
     EvaluationContextValue,
     ProviderMetadata,
-    StandardResolutionReasons
+    StandardResolutionReasons,
+    ParseError,
+    TargetingKeyMissingError,
+    InvalidContextError
 } from '@openfeature/js-sdk'
 import {
     DVCClient,
@@ -132,10 +135,10 @@ export default class DevCycleProvider implements Provider {
      */
     private defaultValueFromJsonValue(jsonValue: JsonValue): DVCJSON {
         if (typeof jsonValue !== 'object' || Array.isArray(jsonValue)) {
-            throw new Error('DevCycle only supports object values for JSON flags')
+            throw new ParseError('DevCycle only supports object values for JSON flags')
         }
         if (!jsonValue) {
-            throw new Error('DevCycle does not support null default values for JSON flags')
+            throw new ParseError('DevCycle does not support null default values for JSON flags')
         }
 
         // Hard casting here because our DVCJSON typing enforces a flat object when we actually support
@@ -165,8 +168,12 @@ export default class DevCycleProvider implements Provider {
      */
     private dvcUserFromContext(context: EvaluationContext): DVCUser {
         const user_id = context.targetingKey ?? context.user_id
-        if (!user_id) throw new Error('Missing targetingKey or user_id in context')
-        if (typeof user_id !== 'string') throw new Error('targetingKey or user_id must be a string')
+        if (!user_id) {
+            throw new TargetingKeyMissingError('Missing targetingKey or user_id in context')
+        }
+        if (typeof user_id !== 'string') {
+            throw new InvalidContextError('targetingKey or user_id must be a string')
+        }
 
         const dvcUserData: Record<string, string | number | DVCCustomDataJSON> = {}
         let customData: DVCCustomDataJSON = {}

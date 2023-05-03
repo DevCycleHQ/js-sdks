@@ -61,7 +61,7 @@ The provider will automatically translate known `DVCUser` properties from the Op
 
 For example all these properties will be set on the `DVCUser`:
 ```typescript
-ofClient.setContext({
+openFeatureClient.setContext({
     user_id: 'user_id',
     email: 'email@devcycle.com',
     name: 'name',
@@ -79,11 +79,11 @@ added to the `customData` property of the `DVCUser`.
 
 #### Context Limitations
 
-DevCycle only supports flat JSON Object properties used in the Context. Non flat properties will be ignored.
+DevCycle only supports flat JSON Object properties used in the Context. Non-flat properties will be ignored.
 
 For example `obj` will be ignored: 
 ```typescript
-ofClient.setContext({
+openFeatureClient.setContext({
     user_id: 'user_id',
     obj: { key: 'value' }
 })

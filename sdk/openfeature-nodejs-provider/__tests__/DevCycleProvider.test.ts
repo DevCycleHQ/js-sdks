@@ -49,7 +49,7 @@ describe('DevCycleProvider Unit Tests', () => {
             expect(ofClient.getBooleanDetails('boolean-flag', false)).resolves.toEqual({
                 flagKey: 'boolean-flag',
                 value: false,
-                errorCode: 'GENERAL',
+                errorCode: 'TARGETING_KEY_MISSING',
                 errorMessage: 'Missing targetingKey or user_id in context',
                 reason: 'ERROR'
             })
@@ -61,7 +61,7 @@ describe('DevCycleProvider Unit Tests', () => {
             expect(ofClient.getBooleanDetails('boolean-flag', false)).resolves.toEqual({
                 flagKey: 'boolean-flag',
                 value: false,
-                errorCode: 'GENERAL',
+                errorCode: 'INVALID_CONTEXT',
                 errorMessage: 'targetingKey or user_id must be a string',
                 reason: 'ERROR'
             })
@@ -275,35 +275,35 @@ describe('DevCycleProvider Unit Tests', () => {
                 flagKey: 'json-flag',
                 value: ['arry'],
                 reason: 'ERROR',
-                errorCode: 'GENERAL',
+                errorCode: 'PARSE_ERROR',
                 errorMessage: 'DevCycle only supports object values for JSON flags'
             })
             expect(ofClient.getObjectDetails('json-flag', 610)).resolves.toEqual({
                 flagKey: 'json-flag',
                 value: 610,
                 reason: 'ERROR',
-                errorCode: 'GENERAL',
+                errorCode: 'PARSE_ERROR',
                 errorMessage: 'DevCycle only supports object values for JSON flags'
             })
             expect(ofClient.getObjectDetails('json-flag', 'string')).resolves.toEqual({
                 flagKey: 'json-flag',
                 value: 'string',
                 reason: 'ERROR',
-                errorCode: 'GENERAL',
+                errorCode: 'PARSE_ERROR',
                 errorMessage: 'DevCycle only supports object values for JSON flags'
             })
             expect(ofClient.getObjectDetails('json-flag', false)).resolves.toEqual({
                 flagKey: 'json-flag',
                 value: false,
                 reason: 'ERROR',
-                errorCode: 'GENERAL',
+                errorCode: 'PARSE_ERROR',
                 errorMessage: 'DevCycle only supports object values for JSON flags'
             })
             expect(ofClient.getObjectDetails('json-flag', null)).resolves.toEqual({
                 flagKey: 'json-flag',
                 value: null,
                 reason: 'ERROR',
-                errorCode: 'GENERAL',
+                errorCode: 'PARSE_ERROR',
                 errorMessage: 'DevCycle does not support null default values for JSON flags'
             })
         })
