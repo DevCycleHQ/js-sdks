@@ -7,19 +7,23 @@ module.exports = (config) => {
     main: path.join(__dirname, "./src/index.ts"),
   };
   config.resolve.extensions.push(".ts", ".js");
-
   // Add a new rule for TypeScript files
   config.module.rules[0] = {
     test: /\.(js|ts)$/,
-    use: {
-      loader: "babel-loader",
-      options: {
-        configFile: path.resolve(__dirname, "babel.config.js"),
-      },
+    loader: "babel-loader",
+    // exclude: /node_modules/,
+    options: {
+      configFile: path.resolve(__dirname, "babel.config.js"),
     },
   };
 
-  console.log(config.module.rules);
+  config.output.environment = {
+    arrowFunction: false,
+    const: false,
+    destructuring: false,
+    forOf: false,
+    module: false,
+  };
 
   return config;
 };

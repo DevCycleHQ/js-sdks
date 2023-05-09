@@ -1,5 +1,6 @@
 console.log("BABEL RUNNING!");
 module.exports = {
+  sourceType: "unambiguous",
   presets: [
     [
       "@babel/preset-env",
@@ -17,6 +18,8 @@ module.exports = {
     "@babel/plugin-transform-runtime",
     ["@babel/plugin-proposal-decorators", { version: "legacy" }],
     ["@babel/plugin-proposal-class-properties", { loose: true }],
+    ["@babel/plugin-proposal-private-property-in-object", { loose: true }],
+    ["@babel/plugin-proposal-private-methods", { loose: true }],
     "@babel/plugin-proposal-object-rest-spread",
   ],
 };
