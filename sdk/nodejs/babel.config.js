@@ -16,10 +16,10 @@ module.exports = {
   ],
   plugins: [
     "@babel/plugin-transform-runtime",
-    ["@babel/plugin-proposal-decorators", { version: "legacy" }],
-    ["@babel/plugin-proposal-class-properties", { loose: true }],
-    ["@babel/plugin-proposal-private-property-in-object", { loose: true }],
-    ["@babel/plugin-proposal-private-methods", { loose: true }],
+    ["@babel/plugin-proposal-decorators", { legacy: true }],
+    ["@babel/plugin-proposal-class-properties"],
+    ["@babel/plugin-proposal-private-property-in-object"],
+    ["@babel/plugin-proposal-private-methods"],
     "@babel/plugin-proposal-object-rest-spread",
   ],
 };

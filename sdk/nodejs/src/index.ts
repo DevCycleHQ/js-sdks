@@ -1,3 +1,4 @@
+import "core-js/features/map";
 import { DVCOptions } from "./types";
 import { DVCClient } from "./client";
 

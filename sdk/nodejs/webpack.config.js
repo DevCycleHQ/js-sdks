@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require("webpack");
 
 module.exports = (config) => {
   // Modify the existing configuration
@@ -7,16 +8,45 @@ module.exports = (config) => {
     main: path.join(__dirname, "./src/index.ts"),
   };
   config.resolve.extensions.push(".ts", ".js");
+  // remove es2015 from list of fields to resolve by in package.json to ignore class-validator es2015 build
+  config.resolve.mainFields = ["module", "main"];
   // Add a new rule for TypeScript files
   config.module.rules[0] = {
     test: /\.(js|ts)$/,
     loader: "babel-loader",
     // exclude: /node_modules/,
-    exclude: /node_modules\/(core-js|@babel)/,
+    exclude: /node_modules\/(core-js|@babel|class-validator|class-transformer)/,
+    // exclude: {
+    //   and: [/node_modules\/(core-jsZ)/],
+    //   not: [
+    //     /class-validator\/esm2015/,
+    //     /class-transformer/,
+    //     /debug/,
+    //     /has-flag/,
+    //     /iso-639-1/,
+    //     /supports-color/,
+    //   ],
+    // },
     options: {
       configFile: path.resolve(__dirname, "babel.config.js"),
     },
   };
+
+  // config.plugins.push(
+  //   new webpack.NormalModuleReplacementPlugin(/class-validator/, function (
+  //     resource
+  //   ) {
+  //     resource.request = require.resolve("./empty.js");
+  //   })
+  // );
+  //
+  // config.plugins.push(
+  //   new webpack.NormalModuleReplacementPlugin(/class-transformer/, function (
+  //     resource
+  //   ) {
+  //     resource.request = require.resolve("./empty.js");
+  //   })
+  // );
 
   config.output.environment = {
     arrowFunction: false,
