@@ -31,20 +31,16 @@
       }
     },
     "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": [
-        "{options.outputPath}"
-      ],
-      "options": {
-        "outputPath": "dist/sdk/nodejs",
-        "tsConfig": "sdk/nodejs/tsconfig.lib.json",
-        "packageJson": "sdk/nodejs/package.json",
-        "buildableProjectDepsInPackageJsonType": "dependencies",
-        "main": "sdk/nodejs/src/index.ts",
-        "assets": [
-          "sdk/nodejs/*.md"
-        ]
-      }
+        "executor": "@nrwl/node:webpack",
+        "outputs": ["{options.outputPath}"],
+        "options": {
+            "outputPath": "dist/sdk/nodejs",
+            "tsConfig": "sdk/nodejs/tsconfig.lib.json",
+            "packageJson": "sdk/nodejs/package.json",
+            "main": "sdk/nodejs/src/index.ts",
+            "webpackConfig": "sdk/nodejs/webpack.config.js",
+            "babelConfig": "sdk/nodejs/babel.config.js"
+        }
     },
     "npm-publish": {
       "executor": "@nrwl/workspace:run-commands",

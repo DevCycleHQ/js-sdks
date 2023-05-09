@@ -1,101 +1,45 @@
-# DevCycle NodeJS Server SDK
+# DevCycle NodeJS Server SDK (Local bucketing pre WASM for SFCC)
 
-The NodeJS Server SDK for DevCycle.
+## How to build
 
-This SDK uses local bucketing to perform all user segmentation and bucketing locally in the SDK, 
-providing immediate responses to variable and feature requests for a user. 
-The SDK will download the latest version of your DevCycle environments configuration from a CDN on initialization,
-and will periodically poll the CDN for configuration changes.
+`nx build nodejs` 
 
-### Installation
+Builds a "rhino compatible" bundle into dist/sdk/nodejs/main.js. Rhino compatible suggests that the code has been fully transpiled to es5. This isn't the case since nodejs depends on other internal libs that continue to have es6 code in them (for example, murmurhash, search for this line in the compiled code for confirmation `const createBuffer = (val) => new TextEncoder().encode(val)`.)
 
-Our library can be found on npm and installed by the following:
+### Validating with Rhino
 
-```
-npm install @devcycle/nodejs-server-sdk
-```
+To validate this file, install `rhino` on your machine (`brew install rhino`), and run `rhino dist/sdk/nodejs/main.js`.
 
-### Usage
+You'll see it log various syntax errors, including the far arrow function line mentioned above.
 
-To use the DVC Server SDK in your project, import the `@devcycle/nodejs-server-sdk` package and 
-call `initialize` with your DVC environment server key. You may optionally `await` for the client
-to be initialized.
+## Remove leftover es6
 
-JS Example:
-```javascript
-const DVC = require('@devcycle/nodejs-server-sdk')
+To try to get around this, I have a second babel config that I use on top of the bundled file. To use it:
 
-const dvcClient = await DVC.initialize('<DVC_ENVIRONMENT_SERVER_KEY>').onClientInitialized()
-```
+`npx babel ./dist/sdk/nodejs/main.js --out-dir ./dist/sdk/nodejs2 --config-file ./sdk/nodejs/babel.config2.js`
 
-Typescript Example:
-```typescript
-import { initialize } from '@devcycle/nodejs-server-sdk'
+This further transpiles the file into a separate dist folder, dist/sdk/nodejs2.
 
-const dvcClient = await initialize('<DVC_ENVIRONMENT_SERVER_KEY>').onClientInitialized()
-```
+### Validating with Rhino
 
-### Initialization Options
+Running `rhino dist/sdk/nodejs2/main.js` will produce no errors. Great!
 
-The SDK exposes various initialization options which can be set on the `initialization()` method:
+## Try it in a java program
 
-```javascript
-const dvcClient = await DVC.initialize('<DVC_ENVIRONMENT_SERVER_KEY>', {
-        configPollingIntervalMS: 60 * 1000 
-    }).onClientInitialized()
-```
+Within this repo, there's a file called `RhinoTest.java`. It's a simple wrapper that loads the rhino compatible code and outputs any stack traces. The repo also contains a version of the rhino runtime to compile and run the program.
 
-| DVC Option | Description |
-| --- | ----------- |
-| configPollingIntervalMS | Controls the polling interval in milliseconds to fetch new environment config changes, defaults to 10 seconds, minimum value is 1 second. |
-| configPollingTimeoutMS | Controls the request timeout to fetch new environment config changes, defaults to 5 seconds, must be less than the configPollingIntervalMS value, minimum value is 1 second. |
-| flushEventsMS | Controls the interval between flushing events to the DevCycle servers, defaults to 30 seconds. |
-| disableEventLogging | Disables logging of any events or user data to DevCycle. |
+### Compile the java program
 
-### User Object
+`javac -classpath rhino-1.7.14.jar RhinoTest.java`
 
-The full user data must be passed into every method. The only required field is the `user_id`. 
-The rest are optional and are used by the system for user segmentation into variables and features.
+### Run the java program
 
-```javascript
-const user = {
-    user_id: 'user1@devcycle.com',
-    name: 'user 1 name',
-    customData: {
-        customKey: 'customValue'
-    }
-}
-const variable = dvcClient.variable(user, 'test-feature', false)
-```
+`java -classpath .:rhino-1.7.14.jar RhinoTest`
 
-### Using Variables
+At this point you're likely to see an exception, in my case, 
 
-To get values from your Variables, `dvcClient.variable()` is used to fetch variable values using the user data, 
-variable `key`, coupled with a default value for the variable. The default variable will be used in cases where
-the user is not segmented into a feature using that variable, or the project configuration is unavailable 
-to be fetched from DevCycle's CDN. 
+`Exception in thread "main" org.mozilla.javascript.JavaScriptException: TypeError: Incompatible receiver, Symbol required (JavaScript#766)`
 
-The default value can be of type string, boolean, number, or object.
+This becomes the new rabbit hole. I've ended here a few times in the last couple days. Some results related to it include:
 
-```javascript
-const variable = dvcClient.variable(user, 'YOUR_VARIABLE_KEY', false)
-if (variable.value) {
-    // Feature Flag on
-}
-```
-
-### Grabbing All Variables
-
-To grab all the segmented variables for a user:
-
-```javascript
-const variables = dvcClient.allVariables(user)
-```
-
-### Getting All Features
-
-You can fetch all segmented features for a user:
-
-```javascript
-const features = dvcClient.allFeatures(user)
-```
+https://www.google.com/search?q=%22Incompatible+receiver,+Symbol+required%22+es5+rhino&ei=W1JaZNXpD52mptQP8teLyAs&ved=0ahUKEwiVg6SZs-j-AhUdk4kEHfLrArkQ4dUDCA8&uact=5&oq=%22Incompatible+receiver,+Symbol+required%22+es5+rhino&gs_lcp=Cgxnd3Mtd2l6LXNlcnAQA0oECEEYAVDVBFjcCGC2CmgBcAB4AIABlwGIAewBkgEDMS4xmAEAoAEBwAEB&sclient=gws-wiz-serp

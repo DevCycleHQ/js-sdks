@@ -19,6 +19,11 @@
   },
   "dependencies": {
     "@assemblyscript/loader": "^0.20.1",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
+    "@babel/plugin-transform-runtime": "^7.21.4",
+    "@babel/preset-env": "^7.21.5",
+    "@babel/preset-typescript": "^7.21.5",
     "@nrwl/next": "13.8.5",
     "as-wasi": "^0.4.6",
     "assemblyscript": "^0.20.1",
@@ -27,10 +32,11 @@
     "async": "^3.2.1",
     "axios": "^0.24.0",
     "axios-retry": "^3.2.4",
+    "babel-loader": "^9.1.2",
     "bootstrap": "5.1.3",
     "class-transformer": "0.5.1",
     "class-validator": "^0.13.1",
-    "core-js": "^3.6.5",
+    "core-js": "^3.30.2",
     "iso-639-1": "^2.1.13",
     "jira-prepare-commit-msg": "^1.6.2",
     "lint-staged": "^11.2.3",
@@ -55,6 +61,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@babel/cli": "^7.17.7",
     "@babel/core": "^7.17.7",
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
