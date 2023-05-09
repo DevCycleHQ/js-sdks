@@ -9,7 +9,7 @@ module.exports = {
           rhino: "1.7",
         },
         useBuiltIns: "usage",
-        corejs: 3,
+        corejs: "3.30",
       },
     ],
     "@babel/preset-typescript",

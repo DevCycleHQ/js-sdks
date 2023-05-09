@@ -20,12 +20,13 @@ module.exports = (config) => {
     exclude: {
       and: [/node_modules/],
       not: [
-        /class-validator\/esm2015/,
+        /class-validator/,
         /class-transformer/,
         /debug/,
         /has-flag/,
         /iso-639-1/,
         /supports-color/,
+        // /axios/,
       ],
     },
     options: {
@@ -56,6 +57,8 @@ module.exports = (config) => {
     forOf: false,
     module: false,
   };
+
+  config.output.libraryTarget = "window";
 
   console.log(config);
 

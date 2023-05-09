@@ -9,8 +9,8 @@ import { asyncWithDVCProvider } from '@devcycle/devcycle-react-sdk';
     const user = { 
         user_id: 'userId1',
         isAnonymous: false
-     }
-      const DVCProvider = await asyncWithDVCProvider({ envKey: ENV_KEY, user: user  })
+    }
+    const DVCProvider = await asyncWithDVCProvider({ envKey: ENV_KEY, user: user  })
 
     ReactDOM.render(
         <React.StrictMode>

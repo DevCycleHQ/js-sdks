@@ -1,129 +1,129 @@
-import { isString } from "lodash";
+import { isString } from 'lodash'
 import {
-  PublicEnvironment,
-  PublicFeature,
-  PublicProject,
-  PublicVariable,
-} from "../../config/configBody";
-import { VariableValue } from "../../config/models";
+    PublicEnvironment,
+    PublicFeature,
+    PublicProject,
+    PublicVariable,
+} from '../../config/configBody'
+import { VariableValue } from '../../config/models'
 import {
-  IsEmail,
-  IsDate,
-  IsOptional,
-  IsNumber,
-  IsBoolean,
-  IsString,
-  IsIn,
-  IsNotEmpty,
-  IsISO31661Alpha2,
-} from "class-validator";
-import { Transform, Type } from "class-transformer";
-import "reflect-metadata";
-import { DVCJSON, IsDVCJSONObject } from "../../validators/dvcJSON";
-import { IsNotBlank } from "../../validators/isNotBlank";
-import { IsISO6391 } from "../../validators/isIso6391";
+    IsEmail,
+    IsDate,
+    IsOptional,
+    IsNumber,
+    IsBoolean,
+    IsString,
+    IsIn,
+    IsNotEmpty,
+    IsISO31661Alpha2,
+} from 'class-validator'
+import { Transform, Type } from 'class-transformer'
+import 'reflect-metadata'
+import { DVCJSON, IsDVCJSONObject } from '../../validators/dvcJSON'
+import { IsNotBlank } from '../../validators/isNotBlank'
+import { IsISO6391 } from '../../validators/isIso6391'
 
-export const SDKTypeValues = ["client", "server", "mobile", "api"];
+export const SDKTypeValues = ['client', 'server', 'mobile', 'api']
 export type SDKTypes = typeof SDKTypeValues[number];
 
 export type QueryParams = { [key: string]: string };
 
 const boolTransform = ({ value }: { value: unknown }) => {
-  if (value === "true") {
-    return true;
-  } else if (value === "false") {
-    return false;
-  }
-  return value;
-};
+    if (value === 'true') {
+        return true
+    } else if (value === 'false') {
+        return false
+    }
+    return value
+}
 
 /**
  * Base API User Schema used by the Bucketing API where the only required field is user_id.
  */
 export class DVCAPIUser {
-  isAnonymous?: boolean;
+    isAnonymous?: boolean
 
-  user_id: string;
+    user_id: string
 
-  /**
+    /**
    * Email used for identifying a device user in the dashboard,
    * or used for audience segmentation.
    */
-  email?: string;
+    email?: string
 
-  /**
+    /**
    * Name of the user which can be used for identifying a device user,
    * or used for audience segmentation.
    */
-  name?: string;
+    name?: string
 
-  /**
+    /**
    * ISO 639-1 two-letter codes
    */
-  language?: string;
+    language?: string
 
-  /**
+    /**
    * ISO 3166 alpha-2
    */
-  country?: string;
+    country?: string
 
-  /**
+    /**
    * Application Version, can be used for audience segmentation.
    */
-  appVersion?: string;
+    appVersion?: string
 
-  /**
+    /**
    * Application Build, can be used for audience segmentation.
    */
-  appBuild?: number;
+    appBuild?: number
 
-  /**
+    /**
    * Custom JSON data used for audience segmentation, must be limited to __kb in size.
    * Values will be logged to DevCycle's servers and available in the dashboard to view.
    */
-  customData?: DVCJSON;
+    customData?: DVCJSON
 
-  /**
+    /**
    * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
    * Values will not be logged to DevCycle's servers and
    * will not be available in the dashboard.
    */
-  privateCustomData?: DVCJSON;
+    privateCustomData?: DVCJSON
 
-  /**
+    /**
    * Set by SDK automatically
    */
-  createdDate?: Date;
+    createdDate?: Date
 
-  /**
+    /**
    * Set by SDK automatically
    */
-  lastSeenDate?: Date;
+    lastSeenDate?: Date
 
-  /**
+    /**
    * Set by SDK to 'web'
    */
-  platform?: string;
+    platform?: string
 
-  /**
+    /**
    * Set by SDK to ??
    */
-  platformVersion?: string;
+    platformVersion?: string
 
-  /**
+    /**
    * Set by SDK to User-Agent
    */
-  deviceModel?: string;
+    deviceModel?: string
 
-  /**
+    /**
    * SDK type
    */
-  sdkType?: SDKTypes = "api";
+    sdkType?: SDKTypes = 'api'
 
-  /**
+    /**
    * SDK Version
    */
-  sdkVersion?: string;
+    sdkVersion?: string
 }
 
 /**
@@ -132,96 +132,96 @@ export class DVCAPIUser {
  * Also changes certain fields to be required from the Client SDKs.
  */
 export class DVCClientAPIUser implements DVCAPIUser {
-  /**
+    /**
    * Users must be explicitly defined as anonymous, where the SDK will
    * generate a random `user_id` for them. If they are `isAnonymous = false`
    * a `user_id` value must be provided.
    */
-  isAnonymous: boolean;
+    isAnonymous: boolean
 
-  user_id: string;
+    user_id: string
 
-  /**
+    /**
    * Email used for identifying a device user in the dashboard,
    * or used for audience segmentation.
    */
-  email?: string;
+    email?: string
 
-  /**
+    /**
    * Name of the user which can be used for identifying a device user,
    * or used for audience segmentation.
    */
-  name?: string;
+    name?: string
 
-  /**
+    /**
    * ISO 639-1 two-letter codes
    */
-  language?: string;
+    language?: string
 
-  /**
+    /**
    * ISO 3166 alpha-2
    */
-  country?: string;
+    country?: string
 
-  /**
+    /**
    * Application Version, can be used for audience segmentation.
    */
-  appVersion?: string;
+    appVersion?: string
 
-  /**
+    /**
    * Application Build, can be used for audience segmentation.
    */
-  appBuild?: number;
+    appBuild?: number
 
-  /**
+    /**
    * Custom JSON data used for audience segmentation, must be limited to __kb in size.
    * Values will be logged to DevCycle's servers and available in the dashboard to view.
    */
-  customData?: DVCJSON;
+    customData?: DVCJSON
 
-  /**
+    /**
    * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
    * Values will not be logged to DevCycle's servers and
    * will not be available in the dashboard.
    */
-  privateCustomData?: DVCJSON;
+    privateCustomData?: DVCJSON
 
-  /**
+    /**
    * Set by SDK automatically
    */
-  createdDate: Date;
+    createdDate: Date
 
-  /**
+    /**
    * Set by SDK automatically
    */
-  lastSeenDate: Date;
+    lastSeenDate: Date
 
-  /**
+    /**
    * Set by SDK to 'web'
    */
-  platform: string;
+    platform: string
 
-  /**
+    /**
    * Set by SDK to ??
    */
-  platformVersion: string;
+    platformVersion: string
 
-  /**
+    /**
    * Set by SDK to User-Agent
    */
-  deviceModel: string;
+    deviceModel: string
 
-  /**
+    /**
    * SDK type
    */
-  sdkType: SDKTypes;
+    sdkType: SDKTypes
 
-  /**
+    /**
    * SDK Version
    */
-  sdkVersion: string;
+    sdkVersion: string
 
-  isDebug?: boolean;
+    isDebug?: boolean
 }
 
 export type SDKVariable = PublicVariable & {
@@ -229,7 +229,7 @@ export type SDKVariable = PublicVariable & {
   evalReason?: unknown;
 };
 
-export type SDKFeature = Pick<PublicFeature, "_id" | "key" | "type"> & {
+export type SDKFeature = Pick<PublicFeature, '_id' | 'key' | 'type'> & {
   _variation: string;
   evalReason?: unknown;
 };

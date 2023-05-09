@@ -15,7 +15,7 @@ const Home: NextPage = () => {
     const variableString = useVariable( variableKeyString, 'pink')
     const variableNumber = useVariable( variableKeyNumber, 100)
     const variableBoolean = useVariable( variableKeyBoolean, false)
-    const variableJson = useVariable( 'json-key-string', {'jsonStringKey1':'json string value 1'})
+    const variableJson = useVariable( 'json-key-string', { 'jsonStringKey1':'json string value 1' })
 
     return (
         <div className={styles.container}>
@@ -37,36 +37,36 @@ const Home: NextPage = () => {
                     <code className={styles.code}>_app.tsx</code>
                 </p>
 
-    <div className={styles.description}>
-    <div>
-        <div>
-            <span> 
+                <div className={styles.description}>
+                    <div>
+                        <div>
+                            <span> 
                 Your default feature-release variable and selected Variation  =  {variable?.value ? 'ON' : 'OFF'} 
-            </span>
-        </div>
-        <div>
-            <span> Your feature-release variable value = {JSON.stringify(variable.value)} </span>
-        </div>
-        <div>
-            <span> Your variableString variable = {variableString.value} </span>
-        </div>
-        <div>
-            <span> Your variableNumber variable = {variableNumber.value} </span>
-        </div>
-        <div>
-            <span> 
+                            </span>
+                        </div>
+                        <div>
+                            <span> Your feature-release variable value = {JSON.stringify(variable.value)} </span>
+                        </div>
+                        <div>
+                            <span> Your variableString variable = {variableString.value} </span>
+                        </div>
+                        <div>
+                            <span> Your variableNumber variable = {variableNumber.value} </span>
+                        </div>
+                        <div>
+                            <span> 
                 Your variableBoolean variable and selected Variation = {variableBoolean.value ? 'OFF' : 'ON'} 
-            </span>
-        </div>
-        <div>
-            <span> Your variableBoolean variable value = {JSON.stringify(variableBoolean.value)} 
-            </span>
-        </div>
-        <div>   
-            <span> Your variableJson variable = {JSON.stringify(variableJson.value)} </span>
-        </div>
-    </div>
-    </div>
+                            </span>
+                        </div>
+                        <div>
+                            <span> Your variableBoolean variable value = {JSON.stringify(variableBoolean.value)} 
+                            </span>
+                        </div>
+                        <div>   
+                            <span> Your variableJson variable = {JSON.stringify(variableJson.value)} </span>
+                        </div>
+                    </div>
+                </div>
 
                 <div className={styles.grid}>
                     <a href="https://nextjs.org/docs" className={styles.card}>
