@@ -12,6 +12,7 @@ module.exports = (config) => {
     test: /\.(js|ts)$/,
     loader: "babel-loader",
     // exclude: /node_modules/,
+    exclude: /node_modules\/(core-js|@babel)/,
     options: {
       configFile: path.resolve(__dirname, "babel.config.js"),
     },
@@ -24,6 +25,8 @@ module.exports = (config) => {
     forOf: false,
     module: false,
   };
+
+  console.log(config);
 
   return config;
 };
