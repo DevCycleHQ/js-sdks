@@ -15,18 +15,19 @@ module.exports = (config) => {
     test: /\.(js|ts)$/,
     loader: "babel-loader",
     // exclude: /node_modules/,
-    exclude: /node_modules\/(core-js|@babel|class-validator|class-transformer)/,
-    // exclude: {
-    //   and: [/node_modules\/(core-jsZ)/],
-    //   not: [
-    //     /class-validator\/esm2015/,
-    //     /class-transformer/,
-    //     /debug/,
-    //     /has-flag/,
-    //     /iso-639-1/,
-    //     /supports-color/,
-    //   ],
-    // },
+    // exclude:
+    // /node_modules\/(core-js|@babel|class-validator|class-transformer|reflect-metadata)/,
+    exclude: {
+      and: [/node_modules/],
+      not: [
+        /class-validator\/esm2015/,
+        /class-transformer/,
+        /debug/,
+        /has-flag/,
+        /iso-639-1/,
+        /supports-color/,
+      ],
+    },
     options: {
       configFile: path.resolve(__dirname, "babel.config.js"),
     },

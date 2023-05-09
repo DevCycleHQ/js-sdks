@@ -1,163 +1,129 @@
-import { isString } from 'lodash'
+import { isString } from "lodash";
 import {
-    PublicEnvironment, PublicFeature, PublicProject, PublicVariable
-} from '../../config/configBody'
-import { VariableValue } from '../../config/models'
+  PublicEnvironment,
+  PublicFeature,
+  PublicProject,
+  PublicVariable,
+} from "../../config/configBody";
+import { VariableValue } from "../../config/models";
 import {
-    IsEmail, IsDate, IsOptional, IsNumber, IsBoolean,
-    IsString, IsIn, IsNotEmpty, IsISO31661Alpha2
-} from 'class-validator'
-import { Transform, Type } from 'class-transformer'
-import 'reflect-metadata'
-import { DVCJSON, IsDVCJSONObject } from '../../validators/dvcJSON'
-import { IsNotBlank } from '../../validators/isNotBlank'
-import { IsISO6391 } from '../../validators/isIso6391'
+  IsEmail,
+  IsDate,
+  IsOptional,
+  IsNumber,
+  IsBoolean,
+  IsString,
+  IsIn,
+  IsNotEmpty,
+  IsISO31661Alpha2,
+} from "class-validator";
+import { Transform, Type } from "class-transformer";
+import "reflect-metadata";
+import { DVCJSON, IsDVCJSONObject } from "../../validators/dvcJSON";
+import { IsNotBlank } from "../../validators/isNotBlank";
+import { IsISO6391 } from "../../validators/isIso6391";
 
-export const SDKTypeValues = ['client', 'server', 'mobile', 'api']
-export type SDKTypes = typeof SDKTypeValues[number]
+export const SDKTypeValues = ["client", "server", "mobile", "api"];
+export type SDKTypes = typeof SDKTypeValues[number];
 
-export type QueryParams = { [key: string]: string }
+export type QueryParams = { [key: string]: string };
 
-const boolTransform = ({ value }: { value:  unknown }) => {
-    if (value === 'true') {
-        return true
-    } else if (value === 'false'){
-        return false
-    }
-    return value
-}
+const boolTransform = ({ value }: { value: unknown }) => {
+  if (value === "true") {
+    return true;
+  } else if (value === "false") {
+    return false;
+  }
+  return value;
+};
 
 /**
  * Base API User Schema used by the Bucketing API where the only required field is user_id.
  */
 export class DVCAPIUser {
-    @IsBoolean()
-    @IsOptional()
-    @Transform(boolTransform)
-        isAnonymous?: boolean
+  isAnonymous?: boolean;
 
-    @IsString()
-    @IsNotBlank()
-    @IsNotEmpty()
-        user_id: string
+  user_id: string;
 
-    /**
-     * Email used for identifying a device user in the dashboard,
-     * or used for audience segmentation.
-     */
-    @IsEmail()
-    @IsOptional()
-        email?: string
+  /**
+   * Email used for identifying a device user in the dashboard,
+   * or used for audience segmentation.
+   */
+  email?: string;
 
-    /**
-     * Name of the user which can be used for identifying a device user,
-     * or used for audience segmentation.
-     */
-    @IsString()
-    @IsOptional()
-        name?: string
+  /**
+   * Name of the user which can be used for identifying a device user,
+   * or used for audience segmentation.
+   */
+  name?: string;
 
-    /**
-     * ISO 639-1 two-letter codes
-     */
-    @IsISO6391()
-    @IsString()
-    @IsOptional()
-        language?: string
+  /**
+   * ISO 639-1 two-letter codes
+   */
+  language?: string;
 
-    /**
-     * ISO 3166 alpha-2
-     */
-    @IsISO31661Alpha2()
-    @IsOptional()
-        country?: string
+  /**
+   * ISO 3166 alpha-2
+   */
+  country?: string;
 
-    /**
-     * Application Version, can be used for audience segmentation.
-     */
-    @IsString()
-    @IsOptional()
-        appVersion?: string
+  /**
+   * Application Version, can be used for audience segmentation.
+   */
+  appVersion?: string;
 
-    /**
-     * Application Build, can be used for audience segmentation.
-     */
-    @IsNumber()
-    @IsOptional()
-    @Type(() => Number)
-        appBuild?: number
+  /**
+   * Application Build, can be used for audience segmentation.
+   */
+  appBuild?: number;
 
-    /**
-     * Custom JSON data used for audience segmentation, must be limited to __kb in size.
-     * Values will be logged to DevCycle's servers and available in the dashboard to view.
-     */
-    @IsDVCJSONObject()
-    @IsOptional()
-    @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-        customData?: DVCJSON
+  /**
+   * Custom JSON data used for audience segmentation, must be limited to __kb in size.
+   * Values will be logged to DevCycle's servers and available in the dashboard to view.
+   */
+  customData?: DVCJSON;
 
-    /**
-     * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
-     * Values will not be logged to DevCycle's servers and
-     * will not be available in the dashboard.
-     */
-    @IsDVCJSONObject()
-    @IsOptional()
-    @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-        privateCustomData?: DVCJSON
+  /**
+   * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
+   * Values will not be logged to DevCycle's servers and
+   * will not be available in the dashboard.
+   */
+  privateCustomData?: DVCJSON;
 
-    /**
-     * Set by SDK automatically
-     */
-    @IsDate()
-    @IsOptional()
-    @Transform(({ value }) => value ? new Date(Number(value)) : undefined)
-        createdDate?: Date
+  /**
+   * Set by SDK automatically
+   */
+  createdDate?: Date;
 
-    /**
-     * Set by SDK automatically
-     */
-    @IsDate()
-    @IsOptional()
-    @Transform(({ value }) => value ? new Date(Number(value)) : undefined)
-        lastSeenDate?: Date
+  /**
+   * Set by SDK automatically
+   */
+  lastSeenDate?: Date;
 
-    /**
-     * Set by SDK to 'web'
-     */
-    @IsString()
-    @IsOptional()
-        platform?: string
+  /**
+   * Set by SDK to 'web'
+   */
+  platform?: string;
 
-    /**
-     * Set by SDK to ??
-     */
-    @IsString()
-    @IsOptional()
-        platformVersion?: string
+  /**
+   * Set by SDK to ??
+   */
+  platformVersion?: string;
 
-    /**
-     * Set by SDK to User-Agent
-     */
-    @IsString()
-    @IsOptional()
-        deviceModel?: string
+  /**
+   * Set by SDK to User-Agent
+   */
+  deviceModel?: string;
 
-    /**
-     * SDK type
-     */
-    @IsString()
-    @IsOptional()
-    @IsIn(['client', 'server', 'mobile', 'api'])
-    @Transform(({ value }) => value)
-        sdkType?: SDKTypes = 'api'
+  /**
+   * SDK type
+   */
+  sdkType?: SDKTypes = "api";
 
-    /**
-     * SDK Version
-     */
-    @IsString()
-    @IsOptional()
-        sdkVersion?: string
+  /**
+   * SDK Version
+   */
+  sdkVersion?: string;
 }
 
 /**
@@ -166,186 +132,144 @@ export class DVCAPIUser {
  * Also changes certain fields to be required from the Client SDKs.
  */
 export class DVCClientAPIUser implements DVCAPIUser {
-    /**
-     * Users must be explicitly defined as anonymous, where the SDK will
-     * generate a random `user_id` for them. If they are `isAnonymous = false`
-     * a `user_id` value must be provided.
-     */
-    @IsBoolean()
-    @Transform(boolTransform)
-        isAnonymous: boolean
-    
-    @IsString()
-    @IsNotBlank()
-    @IsNotEmpty()
-        user_id: string
+  /**
+   * Users must be explicitly defined as anonymous, where the SDK will
+   * generate a random `user_id` for them. If they are `isAnonymous = false`
+   * a `user_id` value must be provided.
+   */
+  isAnonymous: boolean;
 
-    /**
-     * Email used for identifying a device user in the dashboard,
-     * or used for audience segmentation.
-     */
-    @IsEmail()
-    @IsOptional()
-        email?: string
+  user_id: string;
 
-    /**
-     * Name of the user which can be used for identifying a device user,
-     * or used for audience segmentation.
-     */
-    @IsString()
-    @IsOptional()
-        name?: string
+  /**
+   * Email used for identifying a device user in the dashboard,
+   * or used for audience segmentation.
+   */
+  email?: string;
 
-    /**
-     * ISO 639-1 two-letter codes
-     */
-    @IsISO6391()
-    @IsString()
-    @IsOptional()
-        language?: string
+  /**
+   * Name of the user which can be used for identifying a device user,
+   * or used for audience segmentation.
+   */
+  name?: string;
 
-    /**
-     * ISO 3166 alpha-2
-     */
-    @IsISO31661Alpha2()
-    @IsOptional()
-        country?: string
+  /**
+   * ISO 639-1 two-letter codes
+   */
+  language?: string;
 
-    /**
-     * Application Version, can be used for audience segmentation.
-     */
-    @IsString()
-    @IsOptional()
-        appVersion?: string
+  /**
+   * ISO 3166 alpha-2
+   */
+  country?: string;
 
-    /**
-     * Application Build, can be used for audience segmentation.
-     */
-    @IsNumber()
-    @IsOptional()
-    @Type(() => Number)
-        appBuild?: number
+  /**
+   * Application Version, can be used for audience segmentation.
+   */
+  appVersion?: string;
 
-    /**
-     * Custom JSON data used for audience segmentation, must be limited to __kb in size.
-     * Values will be logged to DevCycle's servers and available in the dashboard to view.
-     */
-    @IsDVCJSONObject()
-    @IsOptional()
-    @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-        customData?: DVCJSON
+  /**
+   * Application Build, can be used for audience segmentation.
+   */
+  appBuild?: number;
 
-    /**
-     * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
-     * Values will not be logged to DevCycle's servers and
-     * will not be available in the dashboard.
-     */
-    @IsDVCJSONObject()
-    @IsOptional()
-    @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-        privateCustomData?: DVCJSON
+  /**
+   * Custom JSON data used for audience segmentation, must be limited to __kb in size.
+   * Values will be logged to DevCycle's servers and available in the dashboard to view.
+   */
+  customData?: DVCJSON;
 
-    /**
-     * Set by SDK automatically
-     */
-    @IsDate()
-    @Transform(({ value }) => value ? new Date(Number(value)) : undefined)
-        createdDate: Date
+  /**
+   * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
+   * Values will not be logged to DevCycle's servers and
+   * will not be available in the dashboard.
+   */
+  privateCustomData?: DVCJSON;
 
-    /**
-     * Set by SDK automatically
-     */
-    @IsDate()
-    @Transform(({ value }) => value ? new Date(Number(value)) : undefined)
-        lastSeenDate: Date
+  /**
+   * Set by SDK automatically
+   */
+  createdDate: Date;
 
-    /**
-     * Set by SDK to 'web'
-     */
-    @IsString()
-    @IsNotEmpty()
-        platform: string
+  /**
+   * Set by SDK automatically
+   */
+  lastSeenDate: Date;
 
-    /**
-     * Set by SDK to ??
-     */
-    @IsString()
-    @IsNotEmpty()
-        platformVersion: string
+  /**
+   * Set by SDK to 'web'
+   */
+  platform: string;
 
-    /**
-     * Set by SDK to User-Agent
-     */
-    @IsString()
-    @IsNotEmpty()
-        deviceModel: string
+  /**
+   * Set by SDK to ??
+   */
+  platformVersion: string;
 
-    /**
-     * SDK type
-     */
-    @IsString()
-    @IsIn(['client', 'mobile'])
-        sdkType: SDKTypes
+  /**
+   * Set by SDK to User-Agent
+   */
+  deviceModel: string;
 
-    /**
-     * SDK Version
-     */
-    @IsString()
-    @IsNotEmpty()
-        sdkVersion: string
+  /**
+   * SDK type
+   */
+  sdkType: SDKTypes;
 
-    @IsBoolean()
-    @IsOptional()
-    @Transform(({ value }) => isString(value) ? value === 'true' : value)
-        isDebug?: boolean
+  /**
+   * SDK Version
+   */
+  sdkVersion: string;
+
+  isDebug?: boolean;
 }
 
 export type SDKVariable = PublicVariable & {
-    value: VariableValue
-    evalReason?: unknown
-}
+  value: VariableValue;
+  evalReason?: unknown;
+};
 
-export type SDKFeature = Pick<PublicFeature, '_id' | 'key' | 'type'> & {
-    _variation: string
-    evalReason?: unknown
-}
+export type SDKFeature = Pick<PublicFeature, "_id" | "key" | "type"> & {
+  _variation: string;
+  evalReason?: unknown;
+};
 
 export interface BucketedUserConfig {
-    /**
-     * Project data used for logging
-     */
-    project: PublicProject
+  /**
+   * Project data used for logging
+   */
+  project: PublicProject;
 
-    /**
-     * Environment data used for logging
-     */
-    environment: PublicEnvironment
+  /**
+   * Environment data used for logging
+   */
+  environment: PublicEnvironment;
 
-    /**
-     * Mapping of `ClientSDKFeature.key` to `ClientSDKFeature` values.
-     * SDK uses this object to log `allBucketedFeatures()`
-     */
-    features: {
-        [key: string]: SDKFeature
-    }
+  /**
+   * Mapping of `ClientSDKFeature.key` to `ClientSDKFeature` values.
+   * SDK uses this object to log `allBucketedFeatures()`
+   */
+  features: {
+    [key: string]: SDKFeature;
+  };
 
-    /**
-     * Map of `feature._id` to `variation._id` used for event logging.
-     */
-    featureVariationMap: Record<string, string>
+  /**
+   * Map of `feature._id` to `variation._id` used for event logging.
+   */
+  featureVariationMap: Record<string, string>;
 
-    /**
-     * Mapping of `ClientSDKDynamicVariable.key` to `ClientSDKDynamicVariable` values.
-     * SDK uses this object to retrieve bucketed values for variables.
-     */
-    variables: {
-        [key: string]: SDKVariable
-    }
+  /**
+   * Mapping of `ClientSDKDynamicVariable.key` to `ClientSDKDynamicVariable` values.
+   * SDK uses this object to retrieve bucketed values for variables.
+   */
+  variables: {
+    [key: string]: SDKVariable;
+  };
 
-    /**
-     * Hashes `murmurhash.v3(variable.key + environment.apiKey)` of all known variable keys
-     * not contained in the `variables` object. This is so the SDK doesn't make
-     * requests for new Variables for known variables.
-     */
-    knownVariableKeys: number[]
+  /**
+   * Hashes `murmurhash.v3(variable.key + environment.apiKey)` of all known variable keys
+   * not contained in the `variables` object. This is so the SDK doesn't make
+   * requests for new Variables for known variables.
+   */
+  knownVariableKeys: number[];
 }
