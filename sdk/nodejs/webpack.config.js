@@ -7,6 +7,7 @@ module.exports = (config) => {
         main: path.join(__dirname, './src/index.ts'),
     }
     config.output = {
+        ...config.output,
         libraryTarget: 'umd',
     }
     config.resolve.extensions.push('.ts', '.js')
