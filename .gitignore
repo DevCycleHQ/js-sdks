@@ -32,7 +32,7 @@ junit.xml
 globalConfig.json
 **/environment.json
 **/collection.json
-
+examples/react/next-js-app/.next
 // ignore env files in examples
 examples/**/.env
 

@@ -9,7 +9,7 @@ public class RhinoTest {
         Context context = Context.enter();
         try {
             Scriptable scope = context.initStandardObjects();
-            FileReader scriptFile = new FileReader("dist/sdk/nodejs2/main.js");
+            FileReader scriptFile = new FileReader("dist/sdk/nodejs/main.js");
             context.evaluateReader(scope, scriptFile, "JavaScript", 1, null);
         } catch (IOException e) {
             e.printStackTrace();
