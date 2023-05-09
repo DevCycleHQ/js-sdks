@@ -29,7 +29,8 @@
         "buildableProjectDepsInPackageJsonType": "dependencies",
         "assets": [
           "lib/shared/bucketing/*.md"
-        ]
+        ],
+        "externalDependencies": "none"
       }
     },
     "lint": {

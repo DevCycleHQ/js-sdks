@@ -2,7 +2,22 @@
 
 ## How to build
 
-`nx build nodejs` 
+`./build.sh` 
+
+This will run all of the build steps and get you java exceptions from the java program.
+
+### Debugging the java program (kind of)
+
+Apply autoformatting to `dist/nodejs2/main.js` via your IDE, then rerun the last two steps of the process encapsulated by the shell script:
+
+`javac -classpath rhino-1.7.14.jar RhinoTest.java`
+`java -classpath .:rhino-1.7.14.jar RhinoTest`
+
+This will give you a more accurate line number and show your where the error is coming from.
+
+### Deprecated
+
+`nx build nodejs`
 
 Builds a "rhino compatible" bundle into dist/sdk/nodejs/main.js. Rhino compatible suggests that the code has been fully transpiled to es5. This isn't the case since nodejs depends on other internal libs that continue to have es6 code in them (for example, murmurhash, search for this line in the compiled code for confirmation `const createBuffer = (val) => new TextEncoder().encode(val)`.)
 

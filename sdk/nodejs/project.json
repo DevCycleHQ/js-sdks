@@ -1,54 +1,49 @@
 {
-  "root": "sdk/nodejs",
-  "sourceRoot": "sdk/nodejs/src",
-  "targets": {
-    "check-types": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "yarn run -T tsc -b --incremental",
-        "cwd": "sdk/nodejs"
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
-      "options": {
-        "lintFilePatterns": [
-          "sdk/nodejs/**/*.ts"
-        ]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/sdk/nodejs"
-      ],
-      "options": {
-        "jestConfig": "sdk/nodejs/jest.config.js",
-        "passWithNoTests": true
-      }
-    },
-    "build": {
-        "executor": "@nrwl/node:webpack",
-        "outputs": ["{options.outputPath}"],
-        "options": {
-            "outputPath": "dist/sdk/nodejs",
-            "tsConfig": "sdk/nodejs/tsconfig.lib.json",
-            "packageJson": "sdk/nodejs/package.json",
-            "main": "sdk/nodejs/src/index.ts",
-            "webpackConfig": "sdk/nodejs/webpack.config.js",
-            "babelConfig": "sdk/nodejs/babel.config.js"
+    "root": "sdk/nodejs",
+    "sourceRoot": "sdk/nodejs/src",
+    "targets": {
+        "check-types": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "command": "yarn run -T tsc -b --incremental",
+                "cwd": "sdk/nodejs"
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["sdk/nodejs/**/*.ts"]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["coverage/sdk/nodejs"],
+            "options": {
+                "jestConfig": "sdk/nodejs/jest.config.js",
+                "passWithNoTests": true
+            }
+        },
+        "build": {
+            "executor": "@nrwl/node:webpack",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/sdk/nodejs",
+                "tsConfig": "sdk/nodejs/tsconfig.lib.json",
+                "packageJson": "sdk/nodejs/package.json",
+                "main": "sdk/nodejs/src/index.ts",
+                "webpackConfig": "sdk/nodejs/webpack.config.js",
+                "babelConfig": "sdk/nodejs/babel.config.js",
+                "externalDependencies": "none"
+            }
+        },
+        "npm-publish": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/nodejs-server-sdk\"",
+                "cwd": "dist/sdk/nodejs"
+            }
         }
     },
-    "npm-publish": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/nodejs-server-sdk\"",
-        "cwd": "dist/sdk/nodejs"
-      }
-    }
-  },
-  "tags": []
+    "tags": []
 }
