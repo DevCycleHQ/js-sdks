@@ -240,6 +240,7 @@ describe('DVCClient tests', () => {
             client = createClientWithDelay(0)
             await client.onClientInitialized()
             const variable = client.variable('key', 'default_value')
+            expect(client.variableValue('key', 'default_value')).toBe('value1')
             expect(variable.value).toBe('value1')
             expect(variable.defaultValue).toBe('default_value')
         })
@@ -248,6 +249,7 @@ describe('DVCClient tests', () => {
             client = createClientWithDelay(0)
             await client.onClientInitialized()
             const variable = client.variable('key', false)
+            expect(client.variableValue('key', false)).toBe(false)
             expect(variable.value).toBe(false)
             expect(variable.defaultValue).toBe(false)
         })
@@ -258,6 +260,7 @@ describe('DVCClient tests', () => {
             })
             await client.onClientInitialized()
             const variable = client.variable('key', 'default_value')
+            expect(client.variableValue('key', 'default_value')).toBe('default_value')
             expect(variable.value).toBe('default_value')
             expect(variable.defaultValue).toBe('default_value')
         })
@@ -272,11 +275,15 @@ describe('DVCClient tests', () => {
             client.variable('key', 'default_value')
             expect(Object.values(client.variableDefaultMap['key']).length).toBe(1)
             expect(client.variableDefaultMap['key']['default_value']).toEqual(variable)
+            client.variableValue('key', 'default_value')
+            expect(Object.values(client.variableDefaultMap['key']).length).toBe(1)
+            expect(client.variableDefaultMap['key']['default_value']).toEqual(variable)
         })
 
         it('should have no value and default value if config not done fetching', () => {
             client = createClientWithDelay(500)
             const variable = client.variable('key', 'default_value')
+            expect(client.variableValue('key', 'default_value')).toBe('default_value')
             expect(variable.value).toBe('default_value')
             expect(variable.defaultValue).toBe('default_value')
         })
@@ -350,7 +357,6 @@ describe('DVCClient tests', () => {
             expect(variable.value).toEqual(cachedConfig.variables.key.value)
             expect(onUpdate).toBeCalledTimes(1)
         })
-
     })
 
     describe('identifyUser', () => {

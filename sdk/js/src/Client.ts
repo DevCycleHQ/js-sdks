@@ -43,13 +43,13 @@ type variableEvaluatedHandler = (
 ) => void
 
 export class DVCClient<
-  Variables extends VariableDefinitions = VariableDefinitions
+    Variables extends VariableDefinitions = VariableDefinitions
 > implements Client<Variables> {
     private options: DVCOptions
     private onInitialized: Promise<DVCClient<Variables>>
     private variableDefaultMap: {
-    [key: string]: { [key: string]: DVCVariable<any> };
-  }
+        [key: string]: { [key: string]: DVCVariable<any> };
+    }
     private sdkKey: string
     private userSaved = false
     private _closing = false
@@ -69,7 +69,7 @@ export class DVCClient<
 
     constructor(sdkKey: string, user: DVCUser, options: DVCOptions = {}) {
         this.logger =
-      options.logger || dvcDefaultLogger({ level: options.logLevel })
+            options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.store = new CacheStore(
             options.storage || new DefaultStorage(),
             this.logger
@@ -152,9 +152,9 @@ export class DVCClient<
     }
 
     variable<
-    K extends string & keyof Variables,
-    T extends DVCVariableValue & Variables[K]
-  >(key: K, defaultValue: T): DVCVariable<T> {
+        K extends string & keyof Variables,
+        T extends DVCVariableValue & Variables[K]
+    >(key: K, defaultValue: T): DVCVariable<T> {
         if (defaultValue === undefined || defaultValue === null) {
             throw new Error('Default value is a required param')
         }
@@ -167,19 +167,16 @@ export class DVCClient<
             true
         )
 
-        const defaultValueKey =
-      typeof defaultValue === 'string'
-          ? defaultValue
-          : JSON.stringify(defaultValue)
+        const defaultValueKey = typeof defaultValue === 'string'
+            ? defaultValue
+            : JSON.stringify(defaultValue)
 
         let variable
         if (
             this.variableDefaultMap[key] &&
-      this.variableDefaultMap[key][defaultValueKey]
+            this.variableDefaultMap[key][defaultValueKey]
         ) {
-            variable = this.variableDefaultMap[key][
-                defaultValueKey
-            ] as DVCVariable<T>
+            variable = this.variableDefaultMap[key][defaultValueKey] as DVCVariable<T>
         } else {
             const configVariable = this.config?.variables?.[key]
 
@@ -232,6 +229,13 @@ export class DVCClient<
 
         this.eventEmitter.emitVariableEvaluated(variable)
         return variable
+    }
+
+    variableValue<
+        K extends string & keyof Variables,
+        T extends DVCVariableValue & Variables[K]
+    >(key: K, defaultValue: T): VariableTypeAlias<T> {
+        return this.variable(key, defaultValue).value
     }
 
     identifyUser(user: DVCUser): Promise<DVCVariableSet>

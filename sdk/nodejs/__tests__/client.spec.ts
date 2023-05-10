@@ -36,10 +36,6 @@ describe('variable', () => {
             private: 'private'
         }
     }
-    const expectedUser = expect.objectContaining({
-        user_id: 'node_sdk_test',
-        country: 'CA'
-    })
 
     let client: DVCClient
 
@@ -58,12 +54,16 @@ describe('variable', () => {
         const variable = client.variable(user, 'test-key', false)
         expect(variable.value).toEqual(true)
         expect(variable.type).toEqual('Boolean')
+
+        expect(client.variableValue(user, 'test-key', false)).toEqual(true)
     })
 
     it('returns a valid variable object for a variable that is in the config with a DVCUser instance', () => {
         const dvcUser = new DVCUser(user)
         const variable = client.variable(dvcUser, 'test-key', false)
         expect(variable.value).toEqual(true)
+
+        expect(client.variableValue(dvcUser, 'test-key', false)).toEqual(true)
     })
 
     it('returns a valid variable object for a variable that is not in the config', () => {
@@ -72,6 +72,10 @@ describe('variable', () => {
         const variable = client.variable(user, 'test-key2', false)
         expect(variable.value).toEqual(false)
         expect(variable.isDefaulted).toEqual(true)
+
+        // @ts-ignore
+        getBucketingLib().variableForUser_PB.mockReturnValueOnce(null)
+        expect(client.variableValue(user, 'test-key2', false)).toEqual(false)
     })
 
     it('returns a defaulted variable object for a variable that is in the config but the wrong type', () => {
@@ -80,6 +84,8 @@ describe('variable', () => {
         const variable = client.variable(user, 'test-key', 'test')
         expect(variable.value).toEqual('test')
         expect(variable.isDefaulted).toEqual(true)
+
+        expect(client.variableValue(user, 'test-key', 'test')).toEqual('test')
     })
 
     it('returns a variable with the correct type for string', () => {
@@ -91,6 +97,8 @@ describe('variable', () => {
         // should allow assignment to different string
         variable.value = 'test2'
         expect(variable.type).toEqual('String')
+
+        expect(client.variableValue(user, 'test-key', 'test')).toEqual('test')
     })
 
     it('returns a variable with the correct type for number', () => {
@@ -99,6 +107,8 @@ describe('variable', () => {
         expect(variable.type).toBe('Number')
         // this will be a type error for non-numbers
         variable.value.toFixed()
+
+        expect(client.variableValue(user, 'test-key', 1)).toEqual(1)
     })
 
     it('returns a variable with the correct type for JSON', () => {
@@ -106,5 +116,7 @@ describe('variable', () => {
         expect(variable.value).toBeInstanceOf(Object)
         expect(variable.type).toBe('JSON')
         expect(variable.value).toEqual({ key: 'test' })
+
+        expect(client.variableValue(user, 'test-key', { key: 'test' })).toEqual({ key: 'test' })
     })
 })

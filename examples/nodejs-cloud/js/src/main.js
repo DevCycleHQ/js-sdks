@@ -2,22 +2,11 @@ const DVC = require('@devcycle/nodejs-server-sdk')
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const app = express()
-const port = 5000
-const defaultHeaders = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Access-Control-Allow-Origin, Content-Type',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS'
-}
-
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-
+const DVC_SERVER_SDK_KEY = process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
 let dvcClient
 
 async function startDVC() {
-    dvcClient = DVC.initialize('<DVC_SERVER_SDK_KEY>', { logLevel: 'info', enableCloudBucketing: true })
+    dvcClient = DVC.initialize(DVC_SERVER_SDK_KEY, { logLevel: 'info', enableCloudBucketing: true })
     console.log('DVC Cloud Bucketing JS Client Ready')
 
     const user = {
@@ -25,8 +14,8 @@ async function startDVC() {
         country: 'CA'
     }
 
-    const partyTime = await dvcClient.variable(user, 'elliot-test', false)
-    if (partyTime.value) {
+    const partyTime = await dvcClient.variableValue(user, 'elliot-test', false)
+    if (partyTime) {
         const invitation = dvcClient.variable(
             user,
             'invitation-message',
@@ -46,8 +35,8 @@ async function startDVC() {
         }
     }
 
-    const defaultVariable = dvcClient.variable(user, 'noWay-thisisA-realKEY', true)
-    console.log(`Value of the variable is ${defaultVariable.value} \n`)
+    const defaultVariable = dvcClient.variableValue(user, 'noWay-thisisA-realKEY', true)
+    console.log(`Value of the variable is ${defaultVariable} \n`)
     const variables = await dvcClient.allVariables(user)
     console.log('Variables: ')
     console.dir(variables)
@@ -57,6 +46,18 @@ async function startDVC() {
 }
 
 startDVC()
+
+const app = express()
+const port = 5000
+const defaultHeaders = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Access-Control-Allow-Origin, Content-Type',
+    'Access-Control-Allow-Methods': 'GET, OPTIONS'
+}
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 function createUserFromQueryParams(queryParams) {
     let user = {}

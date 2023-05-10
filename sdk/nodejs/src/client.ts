@@ -157,6 +157,10 @@ export class DVCClient {
         return new DVCVariable(options)
     }
 
+    variableValue<T extends DVCVariableValue>(user: DVCUser, key: string, defaultValue: T): VariableTypeAlias<T> {
+        return this.variable(user, key, defaultValue).value
+    }
+
     allVariables(user: DVCUser): DVCVariableSet {
         const incomingUser = castIncomingUser(user)
 

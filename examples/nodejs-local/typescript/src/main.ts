@@ -7,7 +7,6 @@ import bodyParser from 'body-parser'
 import { benchDVC } from './benchmarkDVC'
 
 const DVC_SERVER_SDK_KEY = process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
-
 let dvcClient: DVCClient
 
 async function startDVC() {
@@ -19,8 +18,8 @@ async function startDVC() {
         country: 'CA'
     }
 
-    const partyTime = dvcClient.variable(user, 'party-time', false)
-    if (partyTime.value) {
+    const partyTime = dvcClient.variableValue(user, 'party-time', false)
+    if (partyTime) {
         const invitation = dvcClient.variable(
             user,
             'invitation-message',
@@ -40,8 +39,8 @@ async function startDVC() {
         }
     }
 
-    const defaultVariable = dvcClient.variable(user, 'not-real', true)
-    console.log(`Value of the variable is ${defaultVariable.value} \n`)
+    const defaultVariable = dvcClient.variableValue(user, 'not-real', true)
+    console.log(`Value of the variable is ${defaultVariable} \n`)
     const variables = dvcClient.allVariables(user)
     console.log('Variables: ')
     console.dir(variables)
