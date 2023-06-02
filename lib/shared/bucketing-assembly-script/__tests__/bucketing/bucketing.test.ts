@@ -91,7 +91,7 @@ const doesUserPassRollout = (
 }
 
 describe('User Hashing and Bucketing', () => {
-    it('generates buckets approximately in the same distribution as the variation distributions', () => {
+    it('generates buckets approximately in the same distribution as the variation distributions', () => { // GO: YES
         const buckets = {
             var1: 0,
             var2: 0,
@@ -132,28 +132,28 @@ describe('User Hashing and Bucketing', () => {
         expect(buckets.var3 / buckets.total).toBeLessThan(0.11)
     })
 
-    it('that bucketing hash yields the same hash for user_id', () => {
+    it('that bucketing hash yields the same hash for user_id', () => { // GO: YES
         const user_id = uuid.v4()
         const { bucketingHash } = generateBoundedHashes(user_id, 'fake')
         const { bucketingHash: bucketingHash2 } = generateBoundedHashes(user_id, 'fake')
         expect(bucketingHash).toBe(bucketingHash2)
     })
 
-    it('generates different hashes for different target_id seeds', () => {
+    it('generates different hashes for different target_id seeds', () => { // GO: YES
         const user_id = uuid.v4()
         const { bucketingHash } = generateBoundedHashes(user_id, 'fake')
         const { bucketingHash: bucketingHash2 } = generateBoundedHashes(user_id, 'fake2')
         expect(bucketingHash).not.toBe(bucketingHash2)
     })
 
-    it('should generate rollout hash deterministically', () => {
+    it('should generate rollout hash deterministically', () => { // GO: YES
         const user_id = uuid.v4()
         const { rolloutHash } = generateBoundedHashes(user_id, 'fake')
         const { rolloutHash: rolloutHash2 } = generateBoundedHashes(user_id, 'fake')
         expect(rolloutHash).toBe(rolloutHash2)
     })
 
-    it('generates different hashes for different rollout and bucketing', () => {
+    it('generates different hashes for different rollout and bucketing', () => { // GO: YES
         const user_id = uuid.v4()
         const { rolloutHash, bucketingHash } = generateBoundedHashes(user_id, 'fake')
         expect(bucketingHash).not.toBe(rolloutHash)
@@ -163,7 +163,7 @@ describe('User Hashing and Bucketing', () => {
 describe('Config Parsing and Generating', () => {
     afterEach(() => cleanupSDK(sdkKey))
 
-    it('generates the correctly modified config from the example config', () => {
+    it('generates the correctly modified config from the example config', () => { // GO: YES
         const user = {
             country: 'canada',
             user_id: 'asuh',
@@ -247,7 +247,7 @@ describe('Config Parsing and Generating', () => {
         )
     })
 
-    it('puts the user in the target for the first audience they match', () => {
+    it('puts the user in the target for the first audience they match', () => { // GO: NO
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -436,7 +436,7 @@ describe('Config Parsing and Generating', () => {
         )
     })
 
-    it('holds user back if not in rollout', () => {
+    it('holds user back if not in rollout', () => { // GO: NO
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -502,7 +502,7 @@ describe('Config Parsing and Generating', () => {
         )
     })
 
-    it('puts user through if in rollout', () => {
+    it('puts user through if in rollout', () => { // GO: NO
         const user = {
             country: 'U S AND A',
             user_id: 'pass_rollout',
@@ -618,7 +618,7 @@ describe('Config Parsing and Generating', () => {
         )
     })
 
-    it('errors when feature missing distribution', () => {
+    it('errors when feature missing distribution', () => { // GO: NO
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -631,7 +631,7 @@ describe('Config Parsing and Generating', () => {
         expectVariableForUser({ user, variableKey: 'feature2Var', variableType: VariableType.String }, null)
     })
 
-    it('errors when config missing variations', () => {
+    it('errors when config missing variations', () => { // GO: NO
         const user = {
             country: 'U S AND A',
             user_id: 'pass_rollout',
@@ -655,7 +655,7 @@ describe('Config Parsing and Generating', () => {
         expectVariableForUser({ user, variableKey: 'feature2Var', variableType: VariableType.String }, null)
     })
 
-    it('errors when config missing variables', () => {
+    it('errors when config missing variables', () => { // GO: NO
         const user = {
             country: 'canada',
             user_id: 'asuh',
@@ -668,7 +668,7 @@ describe('Config Parsing and Generating', () => {
         expectVariableForUser({ user, variableKey: 'feature2.cool', variableType: VariableType.String }, null)
     })
 
-    it('puts the user in the target (customData !exists) with null Custom Data', () => {
+    it('puts the user in the target (customData !exists) with null Custom Data', () => { // GO: NO
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -728,7 +728,7 @@ describe('Config Parsing and Generating', () => {
         expect(c).toEqual(expected)
 
         // Targeting Rule expects the Custom Data property of "favouriteNull" to exist
-        // However, since the User has a null value for this property, 
+        // However, since the User has a null value for this property,
         // the Variable for User method should not return any variables
         expectVariableForUser(
             { user, variableKey: 'audience-match', variableType: VariableType.String },
@@ -736,7 +736,7 @@ describe('Config Parsing and Generating', () => {
         )
     })
 
-    it('puts the user in the target (customData exists) for the first audience they match', () => {
+    it('puts the user in the target (customData exists) for the first audience they match', () => { // GO: NO
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -796,7 +796,7 @@ describe('Config Parsing and Generating', () => {
         expect(c).toEqual(expected)
 
         // Targeting Rule expects the Custom Data property of "favouriteNull" to exist
-        // However, since the User has a null value for this property, 
+        // However, since the User has a null value for this property,
         // the Variable for User method should not return any variables
         expectVariableForUser(
             { user, variableKey: 'audience-match', variableType: VariableType.String },
@@ -807,7 +807,7 @@ describe('Config Parsing and Generating', () => {
 
 describe('Rollout Logic', () => {
     describe('gradual', () => {
-        it('it should evaluate correctly given various hashes', () => {
+        it('it should evaluate correctly given various hashes', () => { // GO: YES
             const rollout = {
                 startDate: moment().subtract(1, 'days').toDate(),
                 startPercentage: 0,
@@ -829,7 +829,7 @@ describe('Rollout Logic', () => {
             expect(doesUserPassRollout({ rollout, boundedHash: 0.35 })).toBeTruthy()
         })
 
-        it('should not pass rollout for startDates in the future', () => {
+        it('should not pass rollout for startDates in the future', () => { // GO: YES
             const rollout = {
                 startDate: moment().add(1, 'days').toDate(),
                 startPercentage: 0,
@@ -846,7 +846,8 @@ describe('Rollout Logic', () => {
             expect(doesUserPassRollout({ rollout, boundedHash: 0.75 })).toBeFalsy()
             expect(doesUserPassRollout({ rollout, boundedHash: 1 })).toBeFalsy()
         })
-        it('should pass rollout for endDates in the past', () => {
+
+        it('should pass rollout for endDates in the past', () => { // GO: YES
             const rollout = {
                 startDate: moment().subtract(2, 'days').toDate(),
                 startPercentage: 0,
@@ -864,7 +865,7 @@ describe('Rollout Logic', () => {
             expect(doesUserPassRollout({ rollout, boundedHash: 1 })).toBeTruthy()
         })
 
-        it('returns start value when end date not set', () => {
+        it('returns start value when end date not set', () => { // GO: YES
             const rollout = {
                 startDate: moment().subtract(30, 'seconds').toDate(),
                 startPercentage: 1,
@@ -877,7 +878,7 @@ describe('Rollout Logic', () => {
             expect(doesUserPassRollout({ rollout, boundedHash: 0.9 })).toBeTruthy()
         })
 
-        it('returns 0 when end date not set and start in future', () => {
+        it('returns 0 when end date not set and start in future', () => { // GO: YES
             const rollout = {
                 startDate: moment().add(1, 'minute').toDate(),
                 startPercentage: 1,
@@ -892,7 +893,7 @@ describe('Rollout Logic', () => {
     })
 
     describe('schedule', () => {
-        it('lets user through when schedule has passed', () => {
+        it('lets user through when schedule has passed', () => { // GO: YES
             const rollout = {
                 startDate: moment().subtract(1, 'minute').toDate(),
                 type: 'schedule'
@@ -904,7 +905,7 @@ describe('Rollout Logic', () => {
             expect(doesUserPassRollout({ rollout, boundedHash: 0.9 })).toBeTruthy()
         })
 
-        it('blocks user when schedule is in the future', () => {
+        it('blocks user when schedule is in the future', () => { // GO: YES
             const rollout = {
                 startDate: moment().add(1, 'minute').toDate(),
                 type: 'schedule'
@@ -918,7 +919,7 @@ describe('Rollout Logic', () => {
     })
 
     describe('stepped', () => {
-        it('uses the exact percentage of the correct step in the rollout', () => {
+        it('uses the exact percentage of the correct step in the rollout', () => { // GO: YES
             const rollout = {
                 startDate: moment().subtract(3, 'days').toDate(),
                 startPercentage: 0,
@@ -950,12 +951,12 @@ describe('Rollout Logic', () => {
         })
     })
 
-    it('throws when given an empty rollout object', () => {
+    it('throws when given an empty rollout object', () => { // GO: YES
         const rollout = {}
         expect(() => doesUserPassRollout({ rollout, boundedHash: 0 })).toThrow()
     })
 
-    it('lets user through with undefined', () => {
+    it('lets user through with undefined', () => { // GO: YES
         expect(doesUserPassRollout({ boundedHash: 0 })).toBeTruthy()
         expect(doesUserPassRollout({ boundedHash: 0.25 })).toBeTruthy()
         expect(doesUserPassRollout({ boundedHash: 0.4 })).toBeTruthy()
@@ -967,7 +968,7 @@ describe('Rollout Logic', () => {
 describe('Client Data', () => {
     afterEach(() => cleanupSDK(sdkKey))
 
-    it('uses client data to allow a user into a feature', () => {
+    it('uses client data to allow a user into a feature', () => { // GO: YES
         const user = {
             user_id: 'client-test',
             customData: {
