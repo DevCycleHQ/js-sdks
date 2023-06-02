@@ -301,7 +301,7 @@ describe('SegmentationManager Unit Test', () => {
     // })
 
     describe('evaluateOperator', () => {
-        it('should fail for empty filters', () => {
+        it('should fail for empty filters', () => { // GO: YES
             const filters: Record<string, unknown>[] = []
 
             const operator = {
@@ -323,7 +323,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false, evaluateOperator({ data: {}, operator: orOp }))
         })
 
-        it('should pass for all filter', () => {
+        it('should pass for all filter', () => { // GO: YES
             const filters = [{
                 type: 'all',
                 comparator: '=',
@@ -344,7 +344,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
-        describe('evaluateOperator should handle optIn filter', () => {
+        describe('evaluateOperator should handle optIn filter', () => { // GO: NO
             const filters = [{
                 type: 'optIn',
                 comparator: '=',
@@ -372,7 +372,7 @@ describe('SegmentationManager Unit Test', () => {
             })
         })
 
-        describe('evaluateOperator should handle a new filter (myNewFilter) type', () => {
+        describe('evaluateOperator should handle a new filter (myNewFilter) type', () => { // GO: YES
             const filters = [{
                 type: 'myNewFilter',
                 comparator: '=',
@@ -395,7 +395,7 @@ describe('SegmentationManager Unit Test', () => {
             })
         })
 
-        describe('evaluateOperator should handle a new operator (xylophone) type', () => {
+        describe('evaluateOperator should handle a new operator (xylophone) type', () => { // GO: YES
             const filters = [{
                 type: 'user',
                 subType: 'email',
@@ -446,7 +446,6 @@ describe('SegmentationManager Unit Test', () => {
                 ],
                 operator: 'and'
             }
-
             const audienceMatchOperatorNotEqual = {
                 filters: [
                     {
@@ -457,7 +456,8 @@ describe('SegmentationManager Unit Test', () => {
                 ],
                 operator: 'and'
             }
-            it('should pass seg for an AND operator', () => {
+
+            it('should pass seg for an AND operator', () => { // GO: YES
                 const audiences = {
                     'test': {
                         _id: 'test',
@@ -471,8 +471,7 @@ describe('SegmentationManager Unit Test', () => {
                 }))
             })
 
-            it('should pass seg for a nested audiencematch filter', () => {
-
+            it('should pass seg for a nested audience match filter', () => { // GO: NO?
                 const audiences = {
                     'test': {
                         _id: 'test',
@@ -483,17 +482,22 @@ describe('SegmentationManager Unit Test', () => {
                     operator: 'and',
                     filters: [audienceMatchOperator, operator]
                 }
-                assert.strictEqual(true, evaluateOperator(
-                    { data, operator: parentOperator, audiences }))
+                assert.strictEqual(true, evaluateOperator({
+                    data,
+                    operator: parentOperator,
+                    audiences
+                }))
             })
 
-            it('should not pass seg when referenced audience does not exist', () => {
-                assert.strictEqual(false, evaluateOperator(
-                    { data, operator: audienceMatchOperator, audiences: {} }))
+            it('should not pass seg when referenced audience does not exist', () => { // GO: YES
+                assert.strictEqual(false, evaluateOperator({
+                    data,
+                    operator: audienceMatchOperator,
+                    audiences: {}
+                }))
             })
 
             it('should not pass seg when not in audience for an AND operator', () => {
-
                 const audiences = {
                     'test': {
                         _id: 'test',
@@ -501,10 +505,13 @@ describe('SegmentationManager Unit Test', () => {
                     }
                 }
 
-                assert.strictEqual(false, evaluateOperator(
-                    { data, operator: audienceMatchOperatorNotEqual, audiences }))
+                assert.strictEqual(false, evaluateOperator({
+                    data,
+                    operator: audienceMatchOperatorNotEqual,
+                    audiences
+                }))
             })
-            it('should pass seg for nested audiences', () => {
+            it('should pass seg for nested audiences', () => { // GO: NO?
                 const nestedAudienceMatchOperator = {
                     filters: [
                         {
@@ -526,10 +533,14 @@ describe('SegmentationManager Unit Test', () => {
                         filters: audienceMatchOperator
                     }
                 }
-                assert.strictEqual(true, evaluateOperator(
-                    { data, operator: nestedAudienceMatchOperator, audiences }))
+
+                assert.strictEqual(true, evaluateOperator({
+                    data,
+                    operator: nestedAudienceMatchOperator,
+                    audiences
+                }))
             })
-            it('should not pass seg for nested audiences with !=', () => {
+            it('should not pass seg for nested audiences with !=', () => { // GO: NO?
                 const nestedAudienceMatchOperator = {
                     filters: [
                         {
@@ -540,7 +551,6 @@ describe('SegmentationManager Unit Test', () => {
                     ],
                     operator: 'and'
                 }
-
                 const audiences = {
                     'test': {
                         _id: 'test',
@@ -551,15 +561,17 @@ describe('SegmentationManager Unit Test', () => {
                         filters: audienceMatchOperator
                     }
                 }
-                assert.strictEqual(false, evaluateOperator(
-                    { data, operator: nestedAudienceMatchOperator, audiences }))
-            })
-            it('should pass seg for an AND operator with multiple values', () => {
 
+                assert.strictEqual(false, evaluateOperator({
+                    data,
+                    operator: nestedAudienceMatchOperator,
+                    audiences
+                }))
+            })
+            it('should pass seg for an AND operator with multiple values', () => { // GO: NO?
                 const filters = [
                     { type: 'user', subType: 'country', comparator: '=', values: ['USA'] },
                 ]
-
                 const audiences = {
                     'test': {
                         _id: 'test',
@@ -583,15 +595,18 @@ describe('SegmentationManager Unit Test', () => {
                     ],
                     operator: 'and'
                 }
-                assert.strictEqual(true, evaluateOperator(
-                    { data, operator: audienceMatchOperatorMultiple, audiences }))
-            })
-            it('should not pass seg for an AND operator with multiple values', () => {
 
+                assert.strictEqual(true, evaluateOperator({
+                    data,
+                    operator: audienceMatchOperatorMultiple,
+                    audiences
+                }))
+            })
+
+            it('should not pass seg for an AND operator with multiple values', () => { // GO: NO?
                 const filters = [
                     { type: 'user', subType: 'country', comparator: '=', values: ['USA'] },
                 ]
-
                 const audiences = {
                     'test': {
                         _id: 'test',
@@ -615,53 +630,52 @@ describe('SegmentationManager Unit Test', () => {
                     ],
                     operator: 'and'
                 }
-                assert.strictEqual(false, evaluateOperator(
-                    { data, operator: audienceMatchOperatorMultiple, audiences }))
+                assert.strictEqual(false, evaluateOperator({
+                    data,
+                    operator: audienceMatchOperatorMultiple,
+                    audiences
+                }))
             })
-
         })
 
-        describe('evaluateOperator should handle a new user sub-filter (myNewFilter) type', () => {
+        describe('evaluateOperator should handle a new user sub-filter (myNewFilter) type', () => { // GO: YES
             const filters = [{
                 type: 'user',
                 subType: 'myNewFilter',
                 comparator: '=',
                 values: []
             }]
-
             const operator = {
                 filters,
                 operator: 'and'
             }
-
             const data = {
                 country: 'Canada',
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
                 platform: 'iOS'
             }
+
             it('should fail for user filter with subType of myNewFilter', () => {
                 assert.strictEqual(false, evaluateOperator({ data, operator }))
             })
         })
 
-        describe('evaluateOperator should handle a new comparator type', () => {
+        describe('evaluateOperator should handle a new comparator type', () => { // GO: Partial
             const filters = [{
                 type: 'user',
                 subType: 'email',
                 comparator: 'wowNewComparator',
                 values: []
-            }, {
+            }, { // GO Missing this check
                 type: 'audienceMatch',
                 _audiences: [],
                 comparator: 'wowNewComparator'
             }]
-
             const operator = {
                 filters,
                 operator: 'and'
             }
-
             const data = {
                 country: 'Canada',
                 email: 'brooks@big.lunch',
@@ -674,7 +688,7 @@ describe('SegmentationManager Unit Test', () => {
             })
         })
 
-        it('should work for an AND operator', () => {
+        it('should work for an AND operator', () => { // GO: YES
             const filters = [
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
                 { type: 'user', subType: 'email', comparator: '=', values: ['dexter@smells.nice', 'brooks@big.lunch'] },
@@ -696,7 +710,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
-        it('should work for a top level AND with nested AND operator', () => {
+        it('should work for a top level AND with nested AND operator', () => { // GO: YES
             const filters = [
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
                 { type: 'user', subType: 'email', comparator: '=', values: ['dexter@smells.nice', 'brooks@big.lunch'] },
@@ -723,7 +737,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
-        it('should work for an OR operator', () => {
+        it('should work for an OR operator', () => { // GO: YES
             const filters = [
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
                 { type: 'user', subType: 'email', comparator: '=', values: ['dexter@smells.nice', 'brooks@big.lunch'] },
@@ -745,7 +759,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
-        it('should work for a nested OR operator', () => {
+        it('should work for a nested OR operator', () => { // GO: YES
             const filters = [
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
                 { type: 'user', subType: 'email', comparator: '=', values: ['dexter@smells.nice', 'brooks@big.lunch'] },
@@ -771,7 +785,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
-        it('should work for an AND operator containing a custom data filter', () => {
+        it('should work for an AND operator containing a custom data filter', () => { // GO: YES
             const filters = [
                 { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
                 {
@@ -798,7 +812,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
-        it('should pass for customData filter != multiple values', () => {
+        it('should pass for customData filter != multiple values', () => { // GO: YES
             const operator = {
                 filters: [{
                     type: 'user',
@@ -815,7 +829,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false, evaluateOperator({ data, operator }))
         })
 
-        it('should pass for private customData filter != multiple values', () => {
+        it('should pass for private customData filter != multiple values', () => { // GO: YES
             const operator = {
                 filters: [{
                     type: 'user',
@@ -832,7 +846,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false, evaluateOperator({ data, operator }))
         })
 
-        it('should pass for customData filter does not contain multiple values', () => {
+        it('should pass for customData filter does not contain multiple values', () => { // GO: NO
             const operator = {
                 filters: [{
                     type: 'user',
@@ -849,7 +863,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false, evaluateOperator({ data, operator }))
         })
 
-        it('should pass for user_id filter', () => {
+        it('should pass for user_id filter', () => { // GO: NO
             const operator = {
                 filters: [{
                     type: 'user',
@@ -864,7 +878,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
-        it('should pass for email filter', () => {
+        it('should pass for email filter', () => { // GO: NO
             const operator = {
                 filters: [{
                     type: 'user',
@@ -879,7 +893,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
-        it('should pass for country filter', () => {
+        it('should pass for country filter', () => { // GO: NO
             const operator = {
                 filters: [{
                     type: 'user',
@@ -894,7 +908,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
-        it('should pass for appVersion filter', () => {
+        it('should pass for appVersion filter', () => { // GO: NO
             const operator = {
                 filters: [{
                     type: 'user',
@@ -909,7 +923,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
-        it('should pass for platformVersion filter', () => {
+        it('should pass for platformVersion filter', () => { // GO: NO
             const operator = {
                 filters: [{
                     type: 'user',
@@ -925,7 +939,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
-        it('should pass for platform filter', () => {
+        it('should pass for platform filter', () => { // GO: NO
             const operator = {
                 filters: [{
                     type: 'user',
@@ -941,7 +955,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
-        it('should pass for deviceModel filter', () => {
+        it('should pass for deviceModel filter', () => { // GO: NO
             const operator = {
                 filters: [{
                     type: 'user',
@@ -957,7 +971,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
-        it('should pass for customData filter', () => {
+        it('should pass for customData filter', () => { // GO: NO
             const operator = {
                 filters: [{
                     type: 'user',
@@ -974,7 +988,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
-        it('should pass for customData filter != multiple values', () => {
+        it('should pass for customData filter != multiple values', () => { // GO: NO
             const operator = {
                 filters: [{
                     type: 'user',
@@ -992,7 +1006,7 @@ describe('SegmentationManager Unit Test', () => {
         })
     })
 
-    describe('checkStringsFilter', () => {
+    describe('checkStringsFilter', () => { // GO: NO
         it('should return false if filter and no valid value', () => {
             const filter = { type: 'user', comparator: '=', values: [1, 2] }
             assert.strictEqual(false, checkStringsFilter(null, filter))
@@ -1104,7 +1118,7 @@ describe('SegmentationManager Unit Test', () => {
         })
     })
 
-    describe('checkBooleanFilter', () => {
+    describe('checkBooleanFilter', () => { // GO: NO
         it('should return false if exists filter and no value', () => {
             const filter = { type: 'user', comparator: 'exist' }
             assert.strictEqual(false, checkBooleanFilter(null, filter))
@@ -1150,7 +1164,7 @@ describe('SegmentationManager Unit Test', () => {
         })
     })
 
-    describe('checkNumbersFilter', () => {
+    describe('checkNumbersFilter', () => { // GO: YES
         it('should return false if exists filter and no number', () => {
             const filter = { type: 'user', comparator: 'exist' }
             assert.strictEqual(false, checkNumbersFilter(null as unknown as number, filter))
@@ -1304,73 +1318,7 @@ describe('SegmentationManager Unit Test', () => {
         })
     })
 
-    // TODO update and uncomment these tests when we incorporate list audiences
-    // describe('checkListAudienceFilters', () => {
-    //     const data = [
-    //         {
-    //             _listAudience: 'test1',
-    //             version: '1'
-    //         }, {
-    //             _listAudience: 'test1',
-    //             version: '2'
-    //         }, {
-    //             _listAudience: 'test2',
-    //             version: '1'
-    //         }]
-    //     it('should return true if user in listAudience for equality', () => {
-    //         const comparator = '='
-    //         const values = [{
-    //             _listAudience: 'test1',
-    //             version: '2'
-    //         }]
-    //
-    //         assert.strictEqual(true, segmentation.checkListAudienceFilter({ data, values, comparator }))
-    //     })
-    //     it('should return false if user not in listAudience for equality', () => {
-    //         const comparator = '='
-    //         const values = [{
-    //             _listAudience: 'test1',
-    //             version: '3'
-    //         }]
-    //
-    //         assert.strictEqual(false, segmentation.checkListAudienceFilter({ data, values, comparator }))
-    //     })
-    //
-    //     it('should return true if user not in listAudience for inequality', () => {
-    //         const comparator = '!='
-    //         const values = [{
-    //             _listAudience: 'test1',
-    //             version: '3'
-    //         }]
-    //
-    //         assert.strictEqual(true, segmentation.checkListAudienceFilter({ data, values, comparator }))
-    //     })
-    //
-    //     it('should return false if user in listAudience for inequality', () => {
-    //         const comparator = '!='
-    //         const values = [{
-    //             _listAudience: 'test1',
-    //             version: '2'
-    //         }]
-    //
-    //         assert.strictEqual(false, segmentation.checkListAudienceFilter({ data, values, comparator }))
-    //     })
-    //
-    //     it('should throw error if filter not prepared for segmentation', () => {
-    //         const comparator = '='
-    //         const values = ['test1']
-    //         try {
-    //             segmentation.checkListAudienceFilter({ data, values, comparator })
-    //         } catch (e) {
-    //             assert.strictEqual(e.message,
-    //              'ListAudience filter must be an object, has not been prepared for segmentation')
-    //             return
-    //         }
-    //         throw new Error()
-    //     })
-    // })
-
-    describe('checkVersionFilters', () => {
+    describe('checkVersionFilters', () => { // GO: YES
         it('should return false if filter and version is null', () => {
             const filter = { type: 'user', comparator: '=', values: ['1.1.2', '1.1.3'] }
             const filter1 = { type: 'user', comparator: '>=', values: ['1.1.2', '1.1.3'] }
@@ -1399,7 +1347,7 @@ describe('SegmentationManager Unit Test', () => {
         })
     })
 
-    describe('checkVersionFilter', () => {
+    describe('checkVersionFilter', () => { // GO: NO
         it('should return true if string versions equal', () => {
             assert.strictEqual(true, checkVersionFilter('1', ['1'], '='))
             assert.strictEqual(true, checkVersionFilter('1.1', ['1.1'], '='))
@@ -1631,7 +1579,7 @@ describe('SegmentationManager Unit Test', () => {
         })
     })
 
-    describe('checkCustomData', () => {
+    describe('checkCustomData', () => { // GO: NO
         const filterStr = {
             comparator: '=',
             dataKey: 'strKey',
@@ -1804,7 +1752,7 @@ describe('SegmentationManager Unit Test', () => {
         })
     })
 
-    describe('filterAudiencesFromSubtypes', () => {
+    describe('filterAudiencesFromSubtypes', () => { // GO: NO
         const audiences = [
             {
                 '_id': '60cca1d8230f17002542b909',
