@@ -3,6 +3,6 @@ workflows:
   bucketing-lib-unit-test:
     jobs:
       - common-nx-unit-test:
-          name: "Unit Test bucketing Lib"
+          name: 'Unit Test bucketing Lib'
           directory: lib/bucketing
           project_name: bucketing

@@ -2,26 +2,18 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "lib/shared/bucketing-test-data/src",
   "projectType": "library",
-  "implicitDependencies": [
-    "shared-types"
-  ],
+  "implicitDependencies": ["shared-types"],
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "lib/shared/bucketing-test-data/**/*.ts"
-        ]
+        "lintFilePatterns": ["lib/shared/bucketing-test-data/**/*.ts"]
       }
     },
     "build": {
       "executor": "@nrwl/js:tsc",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/lib/shared/bucketing-test-data",
         "main": "lib/shared/bucketing-test-data/src/index.ts",

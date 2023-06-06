@@ -6,9 +6,7 @@
   "targets": {
     "build": {
       "executor": "@nrwl/web:webpack",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/examples/js/web-elements-app",
@@ -22,9 +20,7 @@
           "examples/js/web-elements-app/src/favicon.ico",
           "examples/js/web-elements-app/src/assets"
         ],
-        "styles": [
-          "examples/js/web-elements-app/src/styles.css"
-        ],
+        "styles": ["examples/js/web-elements-app/src/styles.css"],
         "scripts": []
       },
       "configurations": {
@@ -67,13 +63,9 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "examples/js/web-elements-app/**/*.ts"
-        ]
+        "lintFilePatterns": ["examples/js/web-elements-app/**/*.ts"]
       }
     }
   }

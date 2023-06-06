@@ -1,10 +1,7 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "sdk/nodejs/src",
-  "implicitDependencies": [
-    "shared-bucketing-as",
-    "shared-bucketing-test-data"
-  ],
+  "implicitDependencies": ["shared-bucketing-as", "shared-bucketing-test-data"],
   "targets": {
     "check-types": {
       "executor": "@nrwl/workspace:run-commands",
@@ -15,55 +12,45 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "sdk/nodejs/**/*.ts"
-        ]
+        "lintFilePatterns": ["sdk/nodejs/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-          "coverage/sdk/nodejs"
-      ],
+      "outputs": ["coverage/sdk/nodejs"],
       "options": {
-          "jestConfig": "sdk/nodejs/jest.config.ts",
-          "passWithNoTests": false,
-          "codeCoverage": true
+        "jestConfig": "sdk/nodejs/jest.config.ts",
+        "passWithNoTests": false,
+        "codeCoverage": true
       },
       "dependsOn": [
-          {
-              "target": "build",
-              "projects": "self"
-          },
-          {
-              "target": "build:json",
-              "projects": "dependencies"
-          }
+        {
+          "target": "build",
+          "projects": "self"
+        },
+        {
+          "target": "build:json",
+          "projects": "dependencies"
+        }
       ]
     },
     "build": {
       "executor": "@nrwl/js:tsc",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/sdk/nodejs",
         "tsConfig": "sdk/nodejs/tsconfig.lib.json",
         "packageJson": "sdk/nodejs/package.json",
         "buildableProjectDepsInPackageJsonType": "dependencies",
         "main": "sdk/nodejs/src/index.ts",
-        "assets": [
-          "sdk/nodejs/*.md"
-        ]
+        "assets": ["sdk/nodejs/*.md"]
       },
       "dependsOn": [
         {
-            "target": "build",
-            "projects": "dependencies"
+          "target": "build",
+          "projects": "dependencies"
         }
       ]
     },

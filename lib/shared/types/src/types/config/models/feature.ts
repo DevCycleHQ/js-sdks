@@ -3,83 +3,83 @@ import { Type } from 'class-transformer'
 import { FeatureConfiguration } from './featureConfiguration'
 
 export enum FeatureSource {
-    api = 'api',
-    dashboard = 'dashboard'
+  api = 'api',
+  dashboard = 'dashboard',
 }
 
 export class Variation<IdType = string> {
+  /**
+   * Mongo primary _id.
+   */
+  _id: IdType
+
+  name: string
+  key: string
+
+  /**
+   * Defining variable values.
+   */
+  variables: {
     /**
-     * Mongo primary _id.
+     * Variable model mongo _id.
      */
-    _id: IdType
-
-    name: string
-    key: string
+    _var: IdType
 
     /**
-     * Defining variable values.
+     * Variable value to set for Variation.
      */
-    variables: {
-        /**
-         * Variable model mongo _id.
-         */
-        _var: IdType
-
-        /**
-         * Variable value to set for Variation.
-         */
-        value: VariableValue
-    }[]
+    value: VariableValue
+  }[]
 }
 
 export enum FeatureType {
-    release = 'release',
-    experiment = 'experiment',
-    permission = 'permission',
-    ops = 'ops'
+  release = 'release',
+  experiment = 'experiment',
+  permission = 'permission',
+  ops = 'ops',
 }
 
 export type FeatureSettings = {
-    optInEnabled: boolean
-    publicName: string
-    publicDescription: string
+  optInEnabled: boolean
+  publicName: string
+  publicDescription: string
 }
 
 /**
  * Feature Model. Defines the project-level "container" for a given feature
  */
 export class Feature<IdType = string> {
-    /**
-     * Mongo primary _id.
-     */
-    _id: IdType
+  /**
+   * Mongo primary _id.
+   */
+  _id: IdType
 
-    /**
-     * Define the feature type.
-     */
-    type: FeatureType
+  /**
+   * Define the feature type.
+   */
+  type: FeatureType
 
-    /**
-     * Unique key by Project, can be used in the SDK / API to reference by 'key' rather than _id.
-     * Must only contain lower-case characters and `_` or `-`.
-     */
-    key: string
+  /**
+   * Unique key by Project, can be used in the SDK / API to reference by 'key' rather than _id.
+   * Must only contain lower-case characters and `_` or `-`.
+   */
+  key: string
 
-    /**
-     * Variation configurations to be used by feature configurations.
-     */
-    variations: Variation<IdType>[]
+  /**
+   * Variation configurations to be used by feature configurations.
+   */
+  variations: Variation<IdType>[]
 
-    @Type(() => FeatureConfiguration)
-        configuration: FeatureConfiguration<IdType>
+  @Type(() => FeatureConfiguration)
+  configuration: FeatureConfiguration<IdType>
 
-    /**
-     * Defines feature-level settings
-     */
-    settings?: FeatureSettings
+  /**
+   * Defines feature-level settings
+   */
+  settings?: FeatureSettings
 
-    /**
-     * List of tags for feature
-     */
-    tags?: string[]
+  /**
+   * List of tags for feature
+   */
+  tags?: string[]
 }

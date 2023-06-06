@@ -2,7 +2,6 @@
   "root": true,
   "ignorePatterns": ["**/*"],
   "plugins": ["@nrwl/nx", "lodash"],
-  "extends": ["prettier"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -26,9 +25,9 @@
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nrwl/nx/typescript", "./eslint-common.js"],
-        "rules": {
-            "@typescript-eslint/explicit-module-boundary-types": ["error"]
-        }
+      "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": ["error"]
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

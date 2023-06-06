@@ -20,35 +20,25 @@
     },
     "build": {
       "executor": "@nrwl/js:tsc",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/lib/shared/bucketing",
         "main": "lib/shared/bucketing/src/index.ts",
         "tsConfig": "lib/shared/bucketing/tsconfig.lib.json",
         "buildableProjectDepsInPackageJsonType": "dependencies",
-        "assets": [
-          "lib/shared/bucketing/*.md"
-        ]
+        "assets": ["lib/shared/bucketing/*.md"]
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "lib/shared/bucketing/**/*.ts"
-        ]
+        "lintFilePatterns": ["lib/shared/bucketing/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/lib/shared/bucketing"
-      ],
+      "outputs": ["coverage/lib/shared/bucketing"],
       "options": {
         "jestConfig": "lib/shared/bucketing/jest.config.ts",
         "passWithNoTests": true

@@ -5,9 +5,7 @@
   "targets": {
     "build": {
       "executor": "@nrwl/web:webpack",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "configurations": {
         "production": {},
         "development": {
@@ -25,9 +23,7 @@
         "baseHref": "/",
         "main": "examples/react/with-provider/src/index.tsx",
         "tsConfig": "examples/react/with-provider/tsconfig.app.json",
-        "assets": [
-          "examples/react/with-provider/src/public"
-        ],
+        "assets": ["examples/react/with-provider/src/public"],
         "scripts": [],
         "webpackConfig": "@nrwl/react/plugins/webpack"
       },
@@ -52,9 +48,7 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
           "examples/react/with-provider/**/*.{ts,tsx,js,jsx}"

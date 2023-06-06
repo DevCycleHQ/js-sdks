@@ -13,19 +13,14 @@
     },
     "build": {
       "executor": "@nrwl/web:rollup",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/sdk/react-native",
         "tsConfig": "sdk/react-native/tsconfig.lib.json",
         "project": "sdk/react-native/package.json",
         "entryFile": "sdk/react-native/src/index.ts",
         "format": ["esm", "cjs"],
-        "external": [
-          "react/jsx-runtime",
-          "react-native"
-        ],
+        "external": ["react/jsx-runtime", "react-native"],
         "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
         "buildableProjectDepsInPackageJsonType": "dependencies",
         "compiler": "babel",
@@ -40,20 +35,14 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "sdk/react-native/**/*.{ts,tsx,js,jsx}"
-        ]
+        "lintFilePatterns": ["sdk/react-native/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/sdk/react-native"
-      ],
+      "outputs": ["coverage/sdk/react-native"],
       "options": {
         "jestConfig": "sdk/react-native/jest.config.ts",
         "passWithNoTests": true,
