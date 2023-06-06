@@ -102,11 +102,13 @@ You can run commands in every javascript project using Nx: `nx run-many --target
 This allows you to lint and/or test all projects at once.
 
 ### Publishing a Release
+**Note:** You need admin privileges to publish a release. If you don't have them, ask someone who does to do the release for you.
+
 Setup:
 - run `aws sso login`
 - run `./scripts/brew-install.sh`
-- ensure you're on the main branch with the latest code 
- 
+- ensure you're on the main branch with the latest code
+
 Then use lerna to create new versions of all changed packages (ensure you do this on the main branch)
 `yarn lerna:version`
 
