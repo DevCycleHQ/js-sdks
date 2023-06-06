@@ -42,12 +42,23 @@ type variableEvaluatedHandler = (
     variable: DVCVariable<DVCVariableValue>,
 ) => void
 
+export type DVCOptionsWithDeferredInitialization = DVCOptions & {
+    deferInitialization: true
+}
+
+export const isDeferredOptions = (
+    arg: DVCUser | DVCOptionsWithDeferredInitialization,
+): arg is DVCOptionsWithDeferredInitialization => {
+    return 'deferInitialization' in arg
+}
+
 export class DVCClient<
     Variables extends VariableDefinitions = VariableDefinitions,
 > implements Client<Variables>
 {
-    private options: DVCOptions
+    private readonly options: DVCOptions
     private onInitialized: Promise<DVCClient<Variables>>
+    private resolveOnInitialized: (client: DVCClient<Variables>) => void
     private variableDefaultMap: {
         [key: string]: { [key: string]: DVCVariable<any> }
     }
@@ -55,10 +66,11 @@ export class DVCClient<
     private userSaved = false
     private _closing = false
     private isConfigCached = false
+    private initializeTriggered = false
 
     logger: DVCLogger
     config?: BucketedUserConfig
-    user: DVCPopulatedUser
+    user?: DVCPopulatedUser
     private store: CacheStore
     private eventQueue: EventQueue
     private requestConsolidator: ConfigRequestConsolidator
@@ -68,7 +80,21 @@ export class DVCClient<
     private inactivityHandlerId?: number
     private windowMessageHandler?: (event: MessageEvent) => void
 
-    constructor(sdkKey: string, user: DVCUser, options: DVCOptions = {}) {
+    constructor(sdkKey: string, options: DVCOptionsWithDeferredInitialization)
+    constructor(sdkKey: string, user: DVCUser, options?: DVCOptions)
+    constructor(
+        sdkKey: string,
+        userOrOptions: DVCUser | DVCOptionsWithDeferredInitialization,
+        optionsArg: DVCOptions = {},
+    ) {
+        let user: DVCUser | undefined
+        let options = optionsArg
+        if (isDeferredOptions(userOrOptions)) {
+            options = userOrOptions
+        } else {
+            user = userOrOptions
+        }
+
         this.logger =
             options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.store = new CacheStore(
@@ -89,43 +115,16 @@ export class DVCClient<
         this.eventEmitter = new EventEmitter()
         this.registerVisibilityChangeHandler()
 
-        this.onInitialized = this.store
-            .loadAnonUserId()
-            .then((storedAnonymousId) => {
-                this.user = new DVCPopulatedUser(
-                    user,
-                    options,
-                    undefined,
-                    storedAnonymousId,
-                )
-                this.requestConsolidator = new ConfigRequestConsolidator(
-                    (user: DVCPopulatedUser, extraParams) =>
-                        getConfigJson(
-                            this.sdkKey,
-                            user,
-                            this.logger,
-                            this.options,
-                            extraParams,
-                        ),
-                    (config: BucketedUserConfig, user: DVCPopulatedUser) =>
-                        this.handleConfigReceived(config, user, Date.now()),
-                    this.user,
-                )
+        this.onInitialized = new Promise((resolve, reject) => {
+            this.resolveOnInitialized = resolve
+        })
 
-                if (!this.options.disableConfigCache) {
-                    return this.getConfigCache()
-                } else {
-                    this.logger.info('Skipping config cache')
-                    return
-                }
-            })
-            .then(() => {
-                return this.initializeClient()
-            })
-            .then(() => {
-                this.logger.info('Client initialized')
-                return this
-            })
+        if (!this.options.deferInitialization) {
+            if (!user) {
+                throw new Error('User must be provided to initialize SDK')
+            }
+            this.clientInitialization(user)
+        }
 
         if (!options?.reactNative && typeof window !== 'undefined') {
             this.windowMessageHandler = (event: MessageEvent) => {
@@ -136,6 +135,42 @@ export class DVCClient<
             }
             window.addEventListener('message', this.windowMessageHandler)
         }
+    }
+
+    private clientInitialization = async (initialUser: DVCUser) => {
+        const storedAnonymousId = await this.store.loadAnonUserId()
+
+        this.user = new DVCPopulatedUser(
+            initialUser,
+            this.options,
+            undefined,
+            storedAnonymousId,
+        )
+
+        if (!this.options.disableConfigCache) {
+            await this.getConfigCache(this.user)
+        } else {
+            this.logger.info('Skipping config cache')
+        }
+
+        this.requestConsolidator = new ConfigRequestConsolidator(
+            (user: DVCPopulatedUser, extraParams) =>
+                getConfigJson(
+                    this.sdkKey,
+                    user,
+                    this.logger,
+                    this.options,
+                    extraParams,
+                ),
+            (config: BucketedUserConfig, user: DVCPopulatedUser) =>
+                this.handleConfigReceived(config, user, Date.now()),
+            this.user,
+        )
+
+        await this.initialConfigRequest()
+        this.logger.info('Client initialized')
+
+        return this
     }
 
     onClientInitialized(): Promise<DVCClient<Variables>>
@@ -250,40 +285,7 @@ export class DVCClient<
         user: DVCUser,
         callback?: ErrorCallback<DVCVariableSet>,
     ): Promise<DVCVariableSet> | void {
-        const promise = new Promise<DVCVariableSet>((resolve, reject) => {
-            this.eventQueue.flushEvents()
-
-            let updatedUser: DVCPopulatedUser
-
-            this.onInitialized
-                .then(() => {
-                    return this.store.loadAnonUserId()
-                })
-                .then((storedAnonymousId) => {
-                    if (user.user_id === this.user.user_id) {
-                        updatedUser = this.user.updateUser(user, this.options)
-                    } else {
-                        updatedUser = new DVCPopulatedUser(
-                            user,
-                            this.options,
-                            undefined,
-                            storedAnonymousId,
-                        )
-                    }
-
-                    return this.requestConsolidator.queue(updatedUser)
-                })
-                .then((config) => {
-                    if (user.isAnonymous || !user.user_id) {
-                        this.store.saveAnonUserId(updatedUser.user_id)
-                    }
-                    resolve(config.variables || {})
-                })
-                .catch((err) => {
-                    this.eventEmitter.emitError(err)
-                    reject(err)
-                })
-        })
+        const promise = this._identifyUser(user)
 
         if (callback && typeof callback == 'function') {
             promise
@@ -293,6 +295,39 @@ export class DVCClient<
         }
 
         return promise
+    }
+
+    private async _identifyUser(user: DVCUser): Promise<DVCVariableSet> {
+        let updatedUser: DVCPopulatedUser
+
+        if (this.options.deferInitialization && !this.initializeTriggered) {
+            await this.clientInitialization(user)
+        }
+
+        this.eventQueue.flushEvents()
+
+        try {
+            await this.onInitialized
+            const storedAnonymousId = await this.store.loadAnonUserId()
+            if (this.user && user.user_id === this.user.user_id) {
+                updatedUser = this.user.updateUser(user, this.options)
+            } else {
+                updatedUser = new DVCPopulatedUser(
+                    user,
+                    this.options,
+                    undefined,
+                    storedAnonymousId,
+                )
+            }
+            const config = await this.requestConsolidator.queue(updatedUser)
+            if (user.isAnonymous || !user.user_id) {
+                this.store.saveAnonUserId(updatedUser.user_id)
+            }
+            return config.variables || {}
+        } catch (err) {
+            this.eventEmitter.emitError(err)
+            throw err
+        }
     }
 
     resetUser(): Promise<DVCVariableSet>
@@ -532,9 +567,9 @@ export class DVCClient<
         )
     }
 
-    private async getConfigCache() {
+    private async getConfigCache(user: DVCPopulatedUser) {
         const cachedConfig = await this.store.loadConfig(
-            this.user,
+            user,
             this.options.configCacheTTL,
         )
         if (cachedConfig) {
@@ -550,14 +585,26 @@ export class DVCClient<
         }
     }
 
-    private async initializeClient() {
-        return this.requestConsolidator
-            .queue(this.user)
+    private async initialConfigRequest() {
+        if (this.initializeTriggered || this._closing) {
+            return
+        }
+
+        const initialUser = this.user
+
+        if (!initialUser) {
+            throw new Error('User not defined for initial config request')
+        }
+
+        this.initializeTriggered = true
+
+        const result = await this.requestConsolidator
+            .queue(initialUser)
             .then(() => {
                 this.eventEmitter.emitInitialized(true)
 
-                if (this.user.isAnonymous) {
-                    this.store.saveAnonUserId(this.user.user_id)
+                if (initialUser.isAnonymous) {
+                    this.store.saveAnonUserId(initialUser.user_id)
                 } else {
                     this.store.removeAnonUserId()
                 }
@@ -583,6 +630,9 @@ export class DVCClient<
                 this.eventEmitter.emitError(err)
                 return this
             })
+
+        this.resolveOnInitialized(result)
+        return result
     }
 }
 

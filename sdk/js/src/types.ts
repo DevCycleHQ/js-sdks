@@ -6,6 +6,7 @@ import {
     DVCJSON,
     DVCCustomDataJSON,
 } from '@devcycle/types'
+import { DVCPopulatedUser } from './User'
 
 export type DVCVariableValue = VariableValue
 export type { DVCJSON, DVCCustomDataJSON }
@@ -64,6 +65,7 @@ export interface DVCOptions {
     configCacheTTL?: number
     storage?: DVCStorage
     disableRealtimeUpdates?: boolean
+    deferInitialization?: boolean
 }
 
 export interface DVCUser {
@@ -135,7 +137,7 @@ export interface DVCClient<
     /**
      * User document describing
      */
-    user: DVCUser
+    user?: DVCPopulatedUser
 
     /**
      * Notify the user when Features have been loaded from the server.
