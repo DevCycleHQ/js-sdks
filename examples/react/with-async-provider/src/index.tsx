@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 import { asyncWithDVCProvider } from '@devcycle/devcycle-react-sdk'
-
 ;(async () => {
   const SDK_KEY = process.env.NX_CLIENT_KEY || '<YOUR_DVC_CLIENT_SDK_KEY>'
   const user = {

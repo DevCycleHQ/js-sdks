@@ -44,7 +44,8 @@ type variableEvaluatedHandler = (
 
 export class DVCClient<
   Variables extends VariableDefinitions = VariableDefinitions,
-> implements Client<Variables> {
+> implements Client<Variables>
+{
   private options: DVCOptions
   private onInitialized: Promise<DVCClient<Variables>>
   private variableDefaultMap: {

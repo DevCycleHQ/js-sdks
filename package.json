@@ -14,6 +14,7 @@
     "affected:lint": "nx affected --base=origin/main --head=HEAD --target=lint --fix",
     "affected:test": "nx affected --base=origin/main --head=HEAD --target=test",
     "npm-publish": "nx affected --base=origin/main~1 --target=npm-publish",
+    "prettier:format": "yarn prettier --write .",
     "start": "nx serve",
     "lerna:version": "scripts/lerna-version.sh",
     "local-registry": "./scripts/local-registry.sh"

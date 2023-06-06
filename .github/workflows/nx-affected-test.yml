@@ -35,6 +35,8 @@ jobs:
             ${{ runner.os }}-
       - run: yarn --immutable
       - run: yarn affected:lint
+      - run: yarn prettier --check .
+        name: Prettier
       - name: Run Affected Tests
         shell: bash
         run: yarn affected:test

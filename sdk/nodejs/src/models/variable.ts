@@ -15,7 +15,8 @@ export type VariableParam<T extends DVCVariableValue> = {
 }
 
 export class DVCVariable<T extends DVCVariableValue>
-  implements DVCVariableInterface {
+  implements DVCVariableInterface
+{
   key: string
   value: VariableTypeAlias<T>
   readonly defaultValue: T
