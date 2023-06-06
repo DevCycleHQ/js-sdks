@@ -3,22 +3,22 @@ import context from './context'
 import type { DVCVariable, DVCVariableValue } from '@devcycle/devcycle-js-sdk'
 
 export const useVariable = <T extends DVCVariableValue>(
-  key: string,
-  defaultValue: T,
+    key: string,
+    defaultValue: T,
 ): DVCVariable<T> => {
-  const dvcContext = useContext(context)
-  const [_, forceRerender] = useState({})
-  const ref = useRef<DVCVariable<T>>()
+    const dvcContext = useContext(context)
+    const [_, forceRerender] = useState({})
+    const ref = useRef<DVCVariable<T>>()
 
-  if (dvcContext === undefined)
-    throw new Error('useVariable must be used within DVCProvider')
+    if (dvcContext === undefined)
+        throw new Error('useVariable must be used within DVCProvider')
 
-  if (!ref.current) {
-    ref.current = dvcContext?.client.variable(key, defaultValue)
-    ref.current.onUpdate(() => forceRerender({}))
-  }
+    if (!ref.current) {
+        ref.current = dvcContext?.client.variable(key, defaultValue)
+        ref.current.onUpdate(() => forceRerender({}))
+    }
 
-  return ref.current
+    return ref.current
 }
 
 export default useVariable

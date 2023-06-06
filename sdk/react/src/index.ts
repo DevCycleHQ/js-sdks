@@ -7,19 +7,19 @@ import DVCProvider from './DVCProvider'
 import useDVCVariable from './useDVCVariable'
 import useIsDVCInitialized from './useIsDVCInitialized'
 export type {
-  DVCClient,
-  DVCUser,
-  DVCVariableValue,
-  DVCVariable,
+    DVCClient,
+    DVCUser,
+    DVCVariableValue,
+    DVCVariable,
 } from '@devcycle/devcycle-js-sdk'
 
 export {
-  DVCProvider,
-  useDVCClient,
-  useVariable,
-  useVariableValue,
-  useDVCVariable,
-  asyncWithDVCProvider,
-  withDVCProvider,
-  useIsDVCInitialized,
+    DVCProvider,
+    useDVCClient,
+    useVariable,
+    useVariableValue,
+    useDVCVariable,
+    asyncWithDVCProvider,
+    withDVCProvider,
+    useIsDVCInitialized,
 }

@@ -13,31 +13,31 @@ type DVCOptionsCloudEnabled = DVCOptions & { enableCloudBucketing: true }
 type DVCOptionsLocalEnabled = DVCOptions & { enableCloudBucketing?: false }
 
 export function initialize(
-  sdkKey: string,
-  options?: DVCOptionsLocalEnabled,
+    sdkKey: string,
+    options?: DVCOptionsLocalEnabled,
 ): DVCClient
 export function initialize(
-  sdkKey: string,
-  options: DVCOptionsCloudEnabled,
+    sdkKey: string,
+    options: DVCOptionsCloudEnabled,
 ): DVCCloudClient
 export function initialize(
-  sdkKey: string,
-  options?: DVCOptions,
+    sdkKey: string,
+    options?: DVCOptions,
 ): DVCClient | DVCCloudClient
 export function initialize(
-  sdkKey: string,
-  options: DVCOptions = {},
+    sdkKey: string,
+    options: DVCOptions = {},
 ): DVCClient | DVCCloudClient {
-  if (!sdkKey) {
-    throw new Error('Missing SDK key! Call initialize with a valid SDK key')
-  } else if (!isValidServerSDKKey(sdkKey)) {
-    throw new Error(
-      'Invalid SDK key provided. Please call initialize with a valid server SDK key',
-    )
-  }
+    if (!sdkKey) {
+        throw new Error('Missing SDK key! Call initialize with a valid SDK key')
+    } else if (!isValidServerSDKKey(sdkKey)) {
+        throw new Error(
+            'Invalid SDK key provided. Please call initialize with a valid server SDK key',
+        )
+    }
 
-  if (options.enableCloudBucketing) {
-    return new DVCCloudClient(sdkKey, options)
-  }
-  return new DVCClient(sdkKey, options)
+    if (options.enableCloudBucketing) {
+        return new DVCCloudClient(sdkKey, options)
+    }
+    return new DVCClient(sdkKey, options)
 }

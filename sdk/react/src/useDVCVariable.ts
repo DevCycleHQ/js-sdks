@@ -7,10 +7,10 @@ import useVariable from './useVariable'
  *
  */
 export const useDVCVariable = <T extends DVCVariableValue>(
-  key: string,
-  defaultValue: T,
+    key: string,
+    defaultValue: T,
 ): DVCVariable<T> => {
-  return useVariable(key, defaultValue)
+    return useVariable(key, defaultValue)
 }
 
 export default useDVCVariable

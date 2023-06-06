@@ -1,8 +1,8 @@
 import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
+    IsNotEmpty,
+    IsNumber,
+    IsOptional,
+    IsString,
 } from '@nestjs/class-validator'
 import { DVCAPIUser } from '../sdk/clientSDKAPI'
 import 'reflect-metadata'
@@ -12,67 +12,67 @@ import 'reflect-metadata'
  * ready to be sent to the Events API.
  */
 export class DVCPopulatedRequestEventDto {
-  /**
-   * type of the event
-   */
-  @IsString()
-  type: string
+    /**
+     * type of the event
+     */
+    @IsString()
+    type: string
 
-  /**
-   * target / subject of event. Contextual to event type
-   */
-  @IsOptional()
-  @IsString()
-  target?: string
+    /**
+     * target / subject of event. Contextual to event type
+     */
+    @IsOptional()
+    @IsString()
+    target?: string
 
-  /**
-   * type of custom event when type == 'customEvent'
-   */
-  @IsOptional()
-  @IsString()
-  customType?: string
+    /**
+     * type of custom event when type == 'customEvent'
+     */
+    @IsOptional()
+    @IsString()
+    customType?: string
 
-  /**
-   * custom user id of user that triggered event
-   */
-  @IsString()
-  @IsNotEmpty()
-  user_id: string
+    /**
+     * custom user id of user that triggered event
+     */
+    @IsString()
+    @IsNotEmpty()
+    user_id: string
 
-  /**
-   * date event occurred according to server
-   */
-  @IsNumber()
-  date: number
+    /**
+     * date event occurred according to server
+     */
+    @IsNumber()
+    date: number
 
-  /**
-   * date event occurred according to client
-   */
-  @IsNumber()
-  clientDate: number
+    /**
+     * date event occurred according to client
+     */
+    @IsNumber()
+    clientDate: number
 
-  /**
-   * value for numerical events. Contextual to event type
-   */
-  @IsOptional()
-  @IsNumber()
-  value?: number
+    /**
+     * value for numerical events. Contextual to event type
+     */
+    @IsOptional()
+    @IsNumber()
+    value?: number
 
-  /**
-   * map of feature ids to variation ids
-   */
-  @IsNotEmpty()
-  featureVars: Record<string, string>
+    /**
+     * map of feature ids to variation ids
+     */
+    @IsNotEmpty()
+    featureVars: Record<string, string>
 
-  /**
-   * extra metadata for event. Contextual to event type
-   */
-  @IsOptional()
-  metaData?: Record<string, unknown>
+    /**
+     * extra metadata for event. Contextual to event type
+     */
+    @IsOptional()
+    metaData?: Record<string, unknown>
 }
 
 export type DVCSubmitRequestEvents = {
-  events: DVCPopulatedRequestEventDto[]
+    events: DVCPopulatedRequestEventDto[]
 
-  user: DVCAPIUser
+    user: DVCAPIUser
 }
