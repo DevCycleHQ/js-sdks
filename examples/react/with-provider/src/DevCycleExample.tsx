@@ -1,20 +1,35 @@
 import { useVariable } from '@devcycle/devcycle-react-sdk'
+import { VariableValue } from '@devcycle/types'
 import React from 'react'
 
 export default function DevCycleExample(): React.ReactElement {
+    const useVariableWithTracking = (key: string, defaultValue: VariableValue) => {
+        const variable = useVariable(key, defaultValue)
+
+        if (variable.isDefaulted) {
+            console.log(`variable ${variable.key} defaulted`)
+            // defaulted variable, track event
+        } else {
+            console.log(`variable ${variable.key} evaluated`)
+            // evaluated variable, track event
+        }
+        return variable
+    }
+
+
     const variableKey = 'feature-release'
     const variableKeyString = 'variable-key-string'
     const variableKeyNumber = 'variable-key-number'
     const variableKeyBoolean = 'variable-key-boolean'
     const variableKeyJsonString = 'variable-json-key-string'
 
-    const variable = useVariable( variableKey, true)
-    const variableString = useVariable( variableKeyString, 'default')
-    const variableNumber = useVariable( variableKeyNumber, 100)
-    const variableBoolean = useVariable( variableKeyBoolean, true)
-    const variableJsonString = useVariable(
+    const variable = useVariableWithTracking(variableKey, true)
+    const variableString = useVariableWithTracking(variableKeyString, 'default')
+    const variableNumber = useVariableWithTracking(variableKeyNumber, 100)
+    const variableBoolean = useVariableWithTracking(variableKeyBoolean, true)
+    const variableJsonString = useVariableWithTracking(
         variableKeyJsonString,
-        { 'jsonStringKeyDefault':'json string default' }
+        { 'jsonStringKeyDefault': 'json string default' }
     )
 
     return (
