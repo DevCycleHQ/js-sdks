@@ -63,8 +63,15 @@ export interface DVCOptions {
     apiProxyURL?: string
     disableConfigCache?: boolean
     configCacheTTL?: number
+    /**
+     * overridable storage implementation for caching config and storing anonymous user id
+     */
     storage?: DVCStorage
     disableRealtimeUpdates?: boolean
+    /**
+     * Defer fetching configuration from DevCycle until `client.identifyUser` is called. Useful when user data is not
+     * available yet at time of client instantiation.
+     **/
     deferInitialization?: boolean
 }
 
