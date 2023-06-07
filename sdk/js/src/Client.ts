@@ -137,7 +137,18 @@ export class DVCClient<
         }
     }
 
+    /**
+     * Logic to initialize the client with the appropriate user and configuration data by making requests to DevCycle
+     * and loading from local storage. This either happens immediately on client initialization, or when the user is
+     * first identified (in deferred mode)
+     * @param initialUser
+     */
     private clientInitialization = async (initialUser: DVCUser) => {
+        if (this.initializeTriggered || this._closing) {
+            return this
+        }
+        this.initializeTriggered = true
+
         const storedAnonymousId = await this.store.loadAnonUserId()
 
         this.user = new DVCPopulatedUser(
@@ -153,6 +164,7 @@ export class DVCClient<
             this.logger.info('Skipping config cache')
         }
 
+        // set up requestConsolidator and hook up callback methods
         this.requestConsolidator = new ConfigRequestConsolidator(
             (user: DVCPopulatedUser, extraParams) =>
                 getConfigJson(
@@ -167,8 +179,38 @@ export class DVCClient<
             this.user,
         )
 
-        await this.initialConfigRequest()
-        this.logger.info('Client initialized')
+        try {
+            await this.requestConsolidator.queue(this.user)
+        } catch (err) {
+            this.eventEmitter.emitInitialized(false)
+            this.eventEmitter.emitError(err)
+            return this
+        } finally {
+            this.resolveOnInitialized(this)
+            this.logger.info('Client initialized')
+        }
+
+        this.eventEmitter.emitInitialized(true)
+
+        if (initialUser.isAnonymous) {
+            this.store.saveAnonUserId(this.user.user_id)
+        } else {
+            this.store.removeAnonUserId()
+        }
+
+        if (this.config?.sse?.url) {
+            if (!this.options.disableRealtimeUpdates) {
+                this.streamingConnection = new StreamingConnection(
+                    this.config.sse.url,
+                    this.onSSEMessage.bind(this),
+                    this.logger,
+                )
+            } else {
+                this.logger.info(
+                    'Disabling Realtime Updates based on Initialization parameter',
+                )
+            }
+        }
 
         return this
     }
@@ -583,56 +625,6 @@ export class DVCClient<
             )
             this.logger.debug('Initialized with a cached config')
         }
-    }
-
-    private async initialConfigRequest() {
-        if (this.initializeTriggered || this._closing) {
-            return
-        }
-
-        const initialUser = this.user
-
-        if (!initialUser) {
-            throw new Error('User not defined for initial config request')
-        }
-
-        this.initializeTriggered = true
-
-        const result = await this.requestConsolidator
-            .queue(initialUser)
-            .then(() => {
-                this.eventEmitter.emitInitialized(true)
-
-                if (initialUser.isAnonymous) {
-                    this.store.saveAnonUserId(initialUser.user_id)
-                } else {
-                    this.store.removeAnonUserId()
-                }
-
-                if (this.config?.sse?.url) {
-                    if (!this.options.disableRealtimeUpdates) {
-                        this.streamingConnection = new StreamingConnection(
-                            this.config.sse.url,
-                            this.onSSEMessage.bind(this),
-                            this.logger,
-                        )
-                    } else {
-                        this.logger.info(
-                            'Disabling Realtime Updates based on Initialization parameter',
-                        )
-                    }
-                }
-
-                return this
-            })
-            .catch((err) => {
-                this.eventEmitter.emitInitialized(false)
-                this.eventEmitter.emitError(err)
-                return this
-            })
-
-        this.resolveOnInitialized(result)
-        return result
     }
 }
 
