@@ -1,4 +1,11 @@
-import { DVCLogger, DVCDefaultLogLevel, DVCReporter, DVCCustomDataJSON, VariableValue, DVCJSON } from '@devcycle/types'
+import {
+    DVCLogger,
+    DVCDefaultLogLevel,
+    DVCReporter,
+    DVCCustomDataJSON,
+    VariableValue,
+    DVCJSON,
+} from '@devcycle/types'
 
 /**
  * Options to control the setup of the DevCycle NodeJS Server SDK.
@@ -88,7 +95,8 @@ export type DVCVariableValue = VariableValue
 export type JSON = DVCJSON
 export type { DVCJSON, DVCCustomDataJSON }
 
-export type DVCVariableSet = Record<string,
+export type DVCVariableSet = Record<
+    string,
     Omit<DVCVariable, 'defaultValue' | 'isDefaulted'> & { _id: string }
 >
 

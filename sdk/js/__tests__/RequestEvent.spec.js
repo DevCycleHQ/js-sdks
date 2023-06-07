@@ -14,7 +14,10 @@ describe('RequestEvent tests', () => {
     })
 
     it('should not assign type as custom event if in EventTypes', () => {
-        const evaluatedEvent = { type: EventTypes.variableEvaluated, target: 'variable_key' }
+        const evaluatedEvent = {
+            type: EventTypes.variableEvaluated,
+            target: 'variable_key',
+        }
         const requestEvent = new DVCRequestEvent(evaluatedEvent)
         expect(requestEvent.type).toBe(EventTypes.variableEvaluated)
     })

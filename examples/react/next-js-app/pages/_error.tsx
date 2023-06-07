@@ -1,7 +1,7 @@
 import { NextPageContext } from 'next'
 
 interface ErrorComponentProps {
-	statusCode?: number;
+    statusCode?: number
 }
 
 function ErrorComponent({ statusCode }: ErrorComponentProps): JSX.Element {

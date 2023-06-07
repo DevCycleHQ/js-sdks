@@ -2,9 +2,12 @@ export class DefaultStorage {
     private store: Storage
 
     constructor() {
-        this.store = typeof window !== 'undefined' ? window.localStorage : stubbedLocalStorage
+        this.store =
+            typeof window !== 'undefined'
+                ? window.localStorage
+                : stubbedLocalStorage
     }
-    
+
     save(storeKey: string, data: unknown): void {
         this.store.setItem(storeKey, JSON.stringify(data))
     }
@@ -27,7 +30,7 @@ const stubbedLocalStorage = {
     removeItem: () => undefined,
     clear: () => undefined,
     key: () => null,
-    length: 0
+    length: 0,
 }
 
 export default DefaultStorage

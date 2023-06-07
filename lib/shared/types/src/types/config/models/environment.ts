@@ -10,4 +10,3 @@ export class Environment<IdType = string> {
      */
     key: string
 }
-

@@ -9,8 +9,8 @@ function App(): React.ReactElement {
             <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo" />
                 <p>
-          Update the <code>SDK_KEY</code> and <code>user_id</code> fields
-          inside <code>src/index.tsx</code> and save to reload.
+                    Update the <code>SDK_KEY</code> and <code>user_id</code>{' '}
+                    fields inside <code>src/index.tsx</code> and save to reload.
                 </p>
                 <a
                     className="App-link"
@@ -18,7 +18,7 @@ function App(): React.ReactElement {
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-          Learn React
+                    Learn React
                 </a>
                 <DevCycleExample />
             </header>

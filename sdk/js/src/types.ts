@@ -16,7 +16,10 @@ export interface ErrorCallback<T> {
 }
 
 export type DVCVariableSet = {
-    [key: string]: Pick<DVCVariable<DVCVariableValue>, 'key' | 'value' | 'evalReason'> & {
+    [key: string]: Pick<
+        DVCVariable<DVCVariableValue>,
+        'key' | 'value' | 'evalReason'
+    > & {
         _id: string
         type: string
     }
@@ -42,10 +45,12 @@ export type DVCFeatureSet = {
  * @param user
  * @param options
  */
-export type initialize = <Variables extends VariableDefinitions = VariableDefinitions>(
+export type initialize = <
+    Variables extends VariableDefinitions = VariableDefinitions,
+>(
     sdkKey: string,
     user: DVCUser,
-    options?: DVCOptions
+    options?: DVCOptions,
 ) => DVCClient<Variables>
 
 export interface DVCOptions {
@@ -121,10 +126,12 @@ export interface DVCUser {
 }
 
 export interface VariableDefinitions {
-    [key: string]: VariableValue,
+    [key: string]: VariableValue
 }
 
-export interface DVCClient<Variables extends VariableDefinitions = VariableDefinitions> {
+export interface DVCClient<
+    Variables extends VariableDefinitions = VariableDefinitions,
+> {
     /**
      * User document describing
      */
@@ -138,7 +145,9 @@ export interface DVCClient<Variables extends VariableDefinitions = VariableDefin
      * @param onInitialized
      */
     onClientInitialized(): Promise<DVCClient<Variables>>
-    onClientInitialized(onInitialized: ErrorCallback<DVCClient<Variables>>): void
+    onClientInitialized(
+        onInitialized: ErrorCallback<DVCClient<Variables>>,
+    ): void
 
     /**
      * Grab variable values associated with Features. Use the key created in the dashboard to fetch
@@ -149,9 +158,12 @@ export interface DVCClient<Variables extends VariableDefinitions = VariableDefin
      * @param key
      * @param defaultValue
      */
-    variable<K extends string & keyof Variables, T extends DVCVariableValue & Variables[K]>(
+    variable<
+        K extends string & keyof Variables,
+        T extends DVCVariableValue & Variables[K],
+    >(
         key: K,
-        defaultValue: T
+        defaultValue: T,
     ): DVCVariable<T>
 
     /**

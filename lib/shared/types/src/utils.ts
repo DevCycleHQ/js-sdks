@@ -4,27 +4,27 @@ import { VariableType, VariableValue } from './types/config/models'
 import { DVCLogger } from './logger'
 
 export type ArrayElement<ArrayType extends readonly unknown[]> =
-    ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
+    ArrayType extends readonly (infer ElementType)[] ? ElementType : never
 
 export function getVariableTypeFromValue(
     value: VariableValue,
     key: string,
     logger: DVCLogger,
-    shouldThrow?: false
+    shouldThrow?: false,
 ): VariableType | null
 
 export function getVariableTypeFromValue(
     value: VariableValue,
     key: string,
     logger: DVCLogger,
-    shouldThrow: true
+    shouldThrow: true,
 ): VariableType
 
 export function getVariableTypeFromValue(
     value: VariableValue,
     key: string,
     logger: DVCLogger,
-    shouldThrow?: boolean
+    shouldThrow?: boolean,
 ): VariableType | null {
     if (typeof value === 'boolean') {
         return VariableType.boolean
@@ -36,9 +36,13 @@ export function getVariableTypeFromValue(
         return VariableType.json
     } else {
         if (shouldThrow) {
-            throw new Error(`The default value for variable ${key} is not of type Boolean, Number, String, or JSON`)
+            throw new Error(
+                `The default value for variable ${key} is not of type Boolean, Number, String, or JSON`,
+            )
         } else {
-            logger.warn(`The default value for variable ${key} is not of type Boolean, Number, String, or JSON`)
+            logger.warn(
+                `The default value for variable ${key} is not of type Boolean, Number, String, or JSON`,
+            )
             return null
         }
     }

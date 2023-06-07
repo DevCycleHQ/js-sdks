@@ -3,14 +3,24 @@ import {
     DVCVariableValue,
     DVCVariableSet,
     DVCFeatureSet,
-    DVCEvent
+    DVCEvent,
 } from './types'
 import { DVCVariable } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
 import { dvcDefaultLogger } from './utils/logger'
 import { DVCPopulatedUser } from './models/populatedUser'
-import { DVCLogger, getVariableTypeFromValue, VariableTypeAlias } from '@devcycle/types'
-import { getAllFeatures, getAllVariables, getVariable, postTrack, ResponseError } from './request'
+import {
+    DVCLogger,
+    getVariableTypeFromValue,
+    VariableTypeAlias,
+} from '@devcycle/types'
+import {
+    getAllFeatures,
+    getAllVariables,
+    getVariable,
+    postTrack,
+    ResponseError,
+} from './request'
 import { DVCUser } from './models/user'
 
 const castIncomingUser = (user: DVCUser) => {
@@ -34,7 +44,11 @@ const throwIfUserError = (err: unknown) => {
         // throw the error if it indicates there was user error in this call
         // (e.g. invalid auth credentials or bad user data)
         if (code !== 404 && code < 500) {
-            throw new Error(`DevCycle request failed with status ${code}. ${err.message || ''}`)
+            throw new Error(
+                `DevCycle request failed with status ${code}. ${
+                    err.message || ''
+                }`,
+            )
         }
 
         // Catch non-4xx errors so we can log them instead
@@ -57,7 +71,8 @@ export class DVCCloudClient {
 
     constructor(sdkKey: string, options: DVCOptions) {
         this.sdkKey = sdkKey
-        this.logger = options.logger || dvcDefaultLogger({ level: options.logLevel })
+        this.logger =
+            options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.options = options
         this.logger.info('Running DevCycle NodeJS SDK in Cloud Bucketing mode')
     }
@@ -65,21 +80,26 @@ export class DVCCloudClient {
     variable<T extends DVCVariableValue>(
         user: DVCUser,
         key: string,
-        defaultValue: T
+        defaultValue: T,
     ): Promise<DVCVariable<T>> {
         const incomingUser = castIncomingUser(user)
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
 
         checkParamDefined('key', key)
         checkParamDefined('defaultValue', defaultValue)
-        const type = getVariableTypeFromValue(defaultValue, key, this.logger, true)
+        const type = getVariableTypeFromValue(
+            defaultValue,
+            key,
+            this.logger,
+            true,
+        )
 
         return getVariable(populatedUser, this.sdkKey, key, this.options)
             .then(async (res: Response) => {
                 const variableResponse = await res.json()
                 if (variableResponse.type !== type) {
                     this.logger.error(
-                        `Type mismatch for variable ${key}. Expected ${type}, got ${variableResponse.type}`
+                        `Type mismatch for variable ${key}. Expected ${type}, got ${variableResponse.type}`,
                     )
                     // Default Variable
                     return new DVCVariable({ key, type, defaultValue })
@@ -95,7 +115,9 @@ export class DVCCloudClient {
             .catch((err: unknown) => {
                 throwIfUserError(err)
                 this.logger.error(
-                    `Request to get variable: ${key} failed with response message: ${(err as any).message}`
+                    `Request to get variable: ${key} failed with response message: ${
+                        (err as any).message
+                    }`,
                 )
                 // Default Variable
                 return new DVCVariable({ key, type, defaultValue })
@@ -105,9 +127,11 @@ export class DVCCloudClient {
     variableValue<T extends DVCVariableValue>(
         user: DVCUser,
         key: string,
-        defaultValue: T
+        defaultValue: T,
     ): Promise<VariableTypeAlias<T>> {
-        return this.variable(user, key, defaultValue).then((variable) => variable.value)
+        return this.variable(user, key, defaultValue).then(
+            (variable) => variable.value,
+        )
     }
 
     allVariables(user: DVCUser): Promise<DVCVariableSet> {
@@ -124,7 +148,9 @@ export class DVCCloudClient {
             .catch((err: unknown) => {
                 throwIfUserError(err)
                 this.logger.error(
-                    `Request to get all variable failed with response message: ${(err as any).message}`
+                    `Request to get all variable failed with response message: ${
+                        (err as any).message
+                    }`,
                 )
                 return {}
             })
@@ -143,7 +169,11 @@ export class DVCCloudClient {
             })
             .catch((err: unknown) => {
                 throwIfUserError(err)
-                this.logger.error(`Request to get all features failed with response message: ${(err as any).message}`)
+                this.logger.error(
+                    `Request to get all features failed with response message: ${
+                        (err as any).message
+                    }`,
+                )
                 return {}
             })
     }
@@ -151,7 +181,12 @@ export class DVCCloudClient {
     track(user: DVCUser, event: DVCEvent): Promise<void> {
         const incomingUser = castIncomingUser(user)
 
-        if (event === undefined || event === null || typeof event.type !== 'string' || event.type.length === 0) {
+        if (
+            event === undefined ||
+            event === null ||
+            typeof event.type !== 'string' ||
+            event.type.length === 0
+        ) {
             throw new Error('Invalid Event')
         }
         checkParamDefined('type', event.type)
@@ -159,9 +194,14 @@ export class DVCCloudClient {
         return postTrack(populatedUser, event, this.sdkKey, this.options)
             .then(() => {
                 this.logger.debug('DVC Event Tracked')
-            }).catch((err: unknown) => {
+            })
+            .catch((err: unknown) => {
                 throwIfUserError(err)
-                this.logger.error(`DVC Error Tracking Event. Response message: ${(err as any).message}`)
+                this.logger.error(
+                    `DVC Error Tracking Event. Response message: ${
+                        (err as any).message
+                    }`,
+                )
             })
     }
 }

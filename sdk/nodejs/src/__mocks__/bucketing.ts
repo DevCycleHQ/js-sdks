@@ -7,7 +7,7 @@ const testVariable = {
     value: true,
     type: 'Boolean',
     key: 'test-key',
-    evalReason: null
+    evalReason: null,
 }
 const buffer = ProtobufTypes.SDKVariable_PB.encode({
     _id: testVariable._id,
@@ -15,7 +15,7 @@ const buffer = ProtobufTypes.SDKVariable_PB.encode({
     key: testVariable.key,
     boolValue: testVariable.value,
     doubleValue: 0,
-    stringValue: ''
+    stringValue: '',
 }).finish()
 
 enum VariableType {
@@ -26,17 +26,23 @@ enum VariableType {
 }
 
 export const importBucketingLib = async (): Promise<void> => {
-    Bucketing = await new Promise((resolve) => resolve({
-        setConfigData: jest.fn(),
-        setConfigDataUTF8: jest.fn(),
-        setPlatformData: jest.fn(),
-        generateBucketedConfigForUser: jest.fn().mockReturnValue(JSON.stringify({
-            variables: { 'test-key': testVariable }
-        })),
-        variableForUser: jest.fn().mockReturnValue(JSON.stringify(testVariable)),
-        variableForUser_PB: jest.fn().mockReturnValue(buffer),
-        VariableType
-    }))
+    Bucketing = await new Promise((resolve) =>
+        resolve({
+            setConfigData: jest.fn(),
+            setConfigDataUTF8: jest.fn(),
+            setPlatformData: jest.fn(),
+            generateBucketedConfigForUser: jest.fn().mockReturnValue(
+                JSON.stringify({
+                    variables: { 'test-key': testVariable },
+                }),
+            ),
+            variableForUser: jest
+                .fn()
+                .mockReturnValue(JSON.stringify(testVariable)),
+            variableForUser_PB: jest.fn().mockReturnValue(buffer),
+            VariableType,
+        }),
+    )
 }
 
 export const getBucketingLib = (): unknown => {

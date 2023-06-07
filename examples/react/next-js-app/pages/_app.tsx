@@ -10,13 +10,15 @@ const user = {
     customData: {
         cps: 'Matthew',
         cpn: 777,
-        cpb: true
+        cpb: true,
     },
-    isAnonymous: false
+    isAnonymous: false,
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
     return <Component {...pageProps} />
 }
 
-export default withDVCProvider({ sdkKey: SDK_KEY, user: user })(MyApp as React.FC)
+export default withDVCProvider({ sdkKey: SDK_KEY, user: user })(
+    MyApp as React.FC,
+)

@@ -4,7 +4,7 @@ import { VariableTypeAlias } from '@devcycle/types'
 
 export const useVariableValue = <T extends DVCVariableValue>(
     key: string,
-    defaultValue: T
+    defaultValue: T,
 ): VariableTypeAlias<T> => {
     return useVariable(key, defaultValue).value
 }

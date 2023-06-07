@@ -5,9 +5,7 @@
   "targets": {
     "build": {
       "executor": "@nrwl/web:webpack",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "configurations": {
         "production": {},
         "development": {
@@ -24,9 +22,7 @@
         "baseHref": "/",
         "main": "examples/react/with-async-provider/src/index.tsx",
         "tsConfig": "examples/react/with-async-provider/tsconfig.app.json",
-        "assets": [
-          "examples/react/with-async-provider/src/public"
-        ],
+        "assets": ["examples/react/with-async-provider/src/public"],
         "scripts": [],
         "webpackConfig": "@nrwl/react/plugins/webpack"
       },
@@ -51,9 +47,7 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
           "examples/react/with-async-provider/**/*.{ts,tsx,js,jsx}"

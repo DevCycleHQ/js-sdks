@@ -1,25 +1,36 @@
-import {
-    DVCOptions,
-    DVCUser
-} from './types'
+import { DVCOptions, DVCUser } from './types'
 import { DVCClient } from './Client'
 
 export * from './types'
 
-export const initialize = (sdkKey: string, user: DVCUser, options: DVCOptions = {}): DVCClient => {
+export const initialize = (
+    sdkKey: string,
+    user: DVCUser,
+    options: DVCOptions = {},
+): DVCClient => {
     // TODO: implement logger
     if (typeof window === 'undefined') {
-        console.warn('Window is not defined, try initializing in a browser context')
+        console.warn(
+            'Window is not defined, try initializing in a browser context',
+        )
     }
 
-    if (typeof window !== 'undefined' && !window.addEventListener && !options?.reactNative) {
-        throw new Error('Window is not defined, try initializing in a browser context.' +
-            ' If running on React Native, initialize with the option reactNative: true')
+    if (
+        typeof window !== 'undefined' &&
+        !window.addEventListener &&
+        !options?.reactNative
+    ) {
+        throw new Error(
+            'Window is not defined, try initializing in a browser context.' +
+                ' If running on React Native, initialize with the option reactNative: true',
+        )
     }
 
     if (options?.reactNative && !globalThis.DeviceInfo) {
-        throw new Error('DeviceInfo is not defined. ' +
-            'Import react-native-device-info and set global.DeviceInfo when running on React Native')
+        throw new Error(
+            'DeviceInfo is not defined. ' +
+                'Import react-native-device-info and set global.DeviceInfo when running on React Native',
+        )
     }
 
     if (!sdkKey) {
@@ -36,9 +47,12 @@ export const initialize = (sdkKey: string, user: DVCUser, options: DVCOptions = 
 
     const client = new DVCClient(sdkKey, user, options)
 
-    client.onClientInitialized()
+    client
+        .onClientInitialized()
         .then(() => client.logger.info('Successfully initialized DevCycle!'))
-        .catch((err) => client.logger.error(`Error initializing DevCycle: ${err}`))
+        .catch((err) =>
+            client.logger.error(`Error initializing DevCycle: ${err}`),
+        )
 
     if (!options?.reactNative && typeof window !== 'undefined') {
         window.addEventListener('pagehide', () => {

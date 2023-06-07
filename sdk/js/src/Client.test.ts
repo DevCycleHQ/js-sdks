@@ -3,10 +3,10 @@ jest.mock('../src/Request')
 jest.mock('../src/StreamingConnection')
 
 type Variables = {
-    'enum_var': 'value1' | 'value2'
-    'bool': boolean,
-    'string': string,
-    'number': number,
+    enum_var: 'value1' | 'value2'
+    bool: boolean
+    string: string
+    number: number
 }
 
 describe('Client', () => {

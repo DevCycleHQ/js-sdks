@@ -2,13 +2,20 @@ import { BucketedUserConfig, SDKVariable, VariableType } from '@devcycle/types'
 import { DVCPopulatedUser } from '../models/populatedUser'
 import { getBucketingLib } from '../bucketing'
 import {
-    VariableForUserParams_PB, SDKVariable_PB
+    VariableForUserParams_PB,
+    SDKVariable_PB,
 } from '@devcycle/bucketing-assembly-script/protobuf/compiled'
 import { pbSDKVariableTransform } from '../pb-types/pbTypeHelpers'
 
-export function bucketUserForConfig(user: DVCPopulatedUser, sdkKey: string): BucketedUserConfig {
+export function bucketUserForConfig(
+    user: DVCPopulatedUser,
+    sdkKey: string,
+): BucketedUserConfig {
     return JSON.parse(
-        getBucketingLib().generateBucketedConfigForUser(sdkKey, JSON.stringify(user))
+        getBucketingLib().generateBucketedConfigForUser(
+            sdkKey,
+            JSON.stringify(user),
+        ),
     ) as BucketedUserConfig
 }
 
@@ -28,24 +35,41 @@ export function getVariableTypeCode(type: VariableType): number {
     }
 }
 
-export function variableForUser(sdkKey: string, usr: DVCPopulatedUser, key: string, type: number): SDKVariable | null {
-    const bucketedVariable = getBucketingLib().variableForUser(sdkKey, JSON.stringify(usr), key, type, true)
+export function variableForUser(
+    sdkKey: string,
+    usr: DVCPopulatedUser,
+    key: string,
+    type: number,
+): SDKVariable | null {
+    const bucketedVariable = getBucketingLib().variableForUser(
+        sdkKey,
+        JSON.stringify(usr),
+        key,
+        type,
+        true,
+    )
     if (!bucketedVariable) return null
     return JSON.parse(bucketedVariable) as SDKVariable
 }
 
 export function variableForUser_PB(
-    sdkKey: string, usr: DVCPopulatedUser, key: string, type: number
+    sdkKey: string,
+    usr: DVCPopulatedUser,
+    key: string,
+    type: number,
 ): SDKVariable | null {
     const params = {
         sdkKey,
         user: usr.toPBUser(),
         variableKey: key,
         variableType: type,
-        shouldTrackEvent: true
+        shouldTrackEvent: true,
     }
     const err = VariableForUserParams_PB.verify(params)
-    if (err) throw new Error(`Invalid VariableForUserParams_PB protobuf params: ${err}`)
+    if (err)
+        throw new Error(
+            `Invalid VariableForUserParams_PB protobuf params: ${err}`,
+        )
 
     const buffer = VariableForUserParams_PB.encode(params).finish()
 

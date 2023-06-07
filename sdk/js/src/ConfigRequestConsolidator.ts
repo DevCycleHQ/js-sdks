@@ -6,7 +6,7 @@ type PromiseResolver = {
     reject: (err?: any) => void
 }
 
-type RequestParams = { sse: boolean, lastModified?: number, etag?: string }
+type RequestParams = { sse: boolean; lastModified?: number; etag?: string }
 
 /**
  * Ensures we only have one active config request at a time
@@ -18,14 +18,20 @@ export class ConfigRequestConsolidator {
     requestParams: RequestParams | null = null
 
     constructor(
-        private requestConfigFunction: (user: DVCPopulatedUser, params?: RequestParams) => Promise<BucketedUserConfig>,
-        private handleConfigReceivedFunction: (config: BucketedUserConfig, user: DVCPopulatedUser) => void,
-        private nextUser: DVCPopulatedUser
+        private requestConfigFunction: (
+            user: DVCPopulatedUser,
+            params?: RequestParams,
+        ) => Promise<BucketedUserConfig>,
+        private handleConfigReceivedFunction: (
+            config: BucketedUserConfig,
+            user: DVCPopulatedUser,
+        ) => void,
+        private nextUser: DVCPopulatedUser,
     ) {}
 
     async queue(
         user: DVCPopulatedUser | null,
-        requestParams?: RequestParams
+        requestParams?: RequestParams,
     ): Promise<BucketedUserConfig> {
         if (user) {
             this.nextUser = user
@@ -37,7 +43,8 @@ export class ConfigRequestConsolidator {
 
         const resolver = new Promise<BucketedUserConfig>((resolve, reject) => {
             this.resolvers.push({
-                resolve, reject
+                resolve,
+                reject,
             })
         })
 
@@ -54,26 +61,33 @@ export class ConfigRequestConsolidator {
         }
 
         const resolvers = this.resolvers.splice(0)
-        await this.performRequest(this.nextUser).then((result) => {
-            if (this.resolvers.length) {
-                // if more resolvers have been registered since this request was made, don't resolve anything and just
-                // make another request while keeping all the previous resolvers
-                this.resolvers.push(...resolvers)
-            } else {
-                resolvers.forEach(({ resolve }) => resolve(result))
-                this.handleConfigReceivedFunction(result, this.nextUser)
-            }
-        }).catch((err) => {
-            resolvers.forEach(({ reject }) => reject(err))
-        })
+        await this.performRequest(this.nextUser)
+            .then((result) => {
+                if (this.resolvers.length) {
+                    // if more resolvers have been registered since this request was made,
+                    // don't resolve anything and just make another request while keeping all the previous resolvers
+                    this.resolvers.push(...resolvers)
+                } else {
+                    resolvers.forEach(({ resolve }) => resolve(result))
+                    this.handleConfigReceivedFunction(result, this.nextUser)
+                }
+            })
+            .catch((err) => {
+                resolvers.forEach(({ reject }) => reject(err))
+            })
 
         if (this.resolvers.length) {
             this.processQueue()
         }
     }
 
-    private async performRequest(user: DVCPopulatedUser): Promise<BucketedUserConfig> {
-        this.currentPromise = this.requestConfigFunction(user, this.requestParams ? this.requestParams : undefined)
+    private async performRequest(
+        user: DVCPopulatedUser,
+    ): Promise<BucketedUserConfig> {
+        this.currentPromise = this.requestConfigFunction(
+            user,
+            this.requestParams ? this.requestParams : undefined,
+        )
         this.requestParams = null
         const bucketedConfig = await this.currentPromise
         this.currentPromise = null

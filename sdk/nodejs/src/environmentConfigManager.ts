@@ -27,33 +27,35 @@ export class EnvironmentConfigManager {
             configPollingIntervalMS = 10000,
             configPollingTimeoutMS = 5000,
             configCDNURI,
-            cdnURI = 'https://config-cdn.devcycle.com'
-        }: ConfigPollingOptions
+            cdnURI = 'https://config-cdn.devcycle.com',
+        }: ConfigPollingOptions,
     ) {
         this.logger = logger
         this.sdkKey = sdkKey
-        this.pollingIntervalMS = configPollingIntervalMS >= 1000
-            ? configPollingIntervalMS
-            : 1000
-        this.requestTimeoutMS = configPollingTimeoutMS >= this.pollingIntervalMS
-            ? this.pollingIntervalMS
-            : configPollingTimeoutMS
+        this.pollingIntervalMS =
+            configPollingIntervalMS >= 1000 ? configPollingIntervalMS : 1000
+        this.requestTimeoutMS =
+            configPollingTimeoutMS >= this.pollingIntervalMS
+                ? this.pollingIntervalMS
+                : configPollingTimeoutMS
         this.cdnURI = configCDNURI || cdnURI
 
-        this.fetchConfigPromise = this._fetchConfig().then(() => {
-            this.logger.debug('DevCycle initial config loaded')
-        }).finally(() => {
-            if (this.disablePolling) {
-                return
-            }
-            this.intervalTimeout = setInterval(async () => {
-                try {
-                    await this._fetchConfig()
-                } catch (ex) {
-                    this.logger.error(ex.message)
+        this.fetchConfigPromise = this._fetchConfig()
+            .then(() => {
+                this.logger.debug('DevCycle initial config loaded')
+            })
+            .finally(() => {
+                if (this.disablePolling) {
+                    return
                 }
-            }, this.pollingIntervalMS)
-        })
+                this.intervalTimeout = setInterval(async () => {
+                    try {
+                        await this._fetchConfig()
+                    } catch (ex) {
+                        this.logger.error(ex.message)
+                    }
+                }, this.pollingIntervalMS)
+            })
     }
 
     stopPolling(): void {
@@ -76,7 +78,8 @@ export class EnvironmentConfigManager {
         let responseError: ResponseError | null = null
 
         const logError = (error: any) => {
-            const errMsg = `Request to get config failed for url: ${url}, ` +
+            const errMsg =
+                `Request to get config failed for url: ${url}, ` +
                 `response message: ${error.message}, response data: ${projectConfig}`
             if (this.hasConfig) {
                 this.logger.debug(errMsg)
@@ -86,10 +89,20 @@ export class EnvironmentConfigManager {
         }
 
         try {
-            this.logger.debug(`Requesting new config for ${url}, etag: ${this.configEtag}`)
-            res = await getEnvironmentConfig(url, this.requestTimeoutMS, this.configEtag)
+            this.logger.debug(
+                `Requesting new config for ${url}, etag: ${this.configEtag}`,
+            )
+            res = await getEnvironmentConfig(
+                url,
+                this.requestTimeoutMS,
+                this.configEtag,
+            )
             projectConfig = await res.text()
-            this.logger.debug(`Downloaded config, status: ${res?.status}, etag: ${res?.headers.get('etag')}`)
+            this.logger.debug(
+                `Downloaded config, status: ${
+                    res?.status
+                }, etag: ${res?.headers.get('etag')}`,
+            )
         } catch (ex) {
             logError(ex)
             res = null
@@ -99,7 +112,9 @@ export class EnvironmentConfigManager {
         }
 
         if (res?.status === 304) {
-            this.logger.debug(`Config not modified, using cache, etag: ${this.configEtag}`)
+            this.logger.debug(
+                `Config not modified, using cache, etag: ${this.configEtag}`,
+            )
             return
         } else if (res?.status === 200 && projectConfig) {
             try {
@@ -116,7 +131,9 @@ export class EnvironmentConfigManager {
         }
 
         if (this.hasConfig) {
-            this.logger.debug(`Failed to download config, using cached version. url: ${url}.`)
+            this.logger.debug(
+                `Failed to download config, using cached version. url: ${url}.`,
+            )
         } else if (responseError?.status === 403) {
             this.stopPolling()
             throw new UserError(`Invalid SDK key provided: ${this.sdkKey}`)

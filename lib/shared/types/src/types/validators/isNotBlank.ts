@@ -5,15 +5,15 @@ import { registerDecorator, ValidationOptions } from '@nestjs/class-validator'
  */
 export function IsNotBlank(validationOptions?: ValidationOptions) {
     // eslint-disable-next-line @typescript-eslint/ban-types
-    return function(object: Object, propertyName: string): void {
+    return function (object: Object, propertyName: string): void {
         registerDecorator({
             name: 'isNotBlank',
             target: object.constructor,
             propertyName: propertyName,
             options: validationOptions,
             validator: {
-                validate
-            }
+                validate,
+            },
         })
     }
 }

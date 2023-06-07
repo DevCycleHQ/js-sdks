@@ -55,7 +55,7 @@ export class EventEmitter {
 
         if (handler) {
             const handlerIndex = this.handlers[key].findIndex(
-                (h) => h === handler
+                (h) => h === handler,
             )
 
             this.handlers[key].splice(handlerIndex, 1)
@@ -92,7 +92,7 @@ export class EventEmitter {
         this.emit(
             `${EventNames.VARIABLE_EVALUATED}:${variable.key}`,
             variable.key,
-            variable
+            variable,
         )
     }
 
@@ -101,10 +101,10 @@ export class EventEmitter {
         newVariableSet: DVCVariableSet,
         variableDefaultMap: {
             [key: string]: { [defaultValue: string]: DVCVariable<any> }
-        }
+        },
     ): void {
         const keys = new Set(
-            Object.keys(oldVariableSet).concat(Object.keys(newVariableSet))
+            Object.keys(oldVariableSet).concat(Object.keys(newVariableSet)),
         )
         let newVariables = false
         keys.forEach((key) => {
@@ -135,12 +135,12 @@ export class EventEmitter {
                 this.emit(
                     `${EventNames.VARIABLE_UPDATED}:*`,
                     key,
-                    finalVariable
+                    finalVariable,
                 )
                 this.emit(
                     `${EventNames.VARIABLE_UPDATED}:${key}`,
                     key,
-                    finalVariable
+                    finalVariable,
                 )
             }
         })
@@ -151,10 +151,10 @@ export class EventEmitter {
 
     emitFeatureUpdates(
         oldFeatureSet: DVCFeatureSet,
-        newFeatureSet: DVCFeatureSet
+        newFeatureSet: DVCFeatureSet,
     ): void {
         const keys = Object.keys(oldFeatureSet).concat(
-            Object.keys(newFeatureSet)
+            Object.keys(newFeatureSet),
         )
         keys.forEach((key) => {
             const oldFeatureVariation =
@@ -169,7 +169,7 @@ export class EventEmitter {
                 this.emit(
                     `${EventNames.FEATURE_UPDATED}:${key}`,
                     key,
-                    finalFeature
+                    finalFeature,
                 )
             }
         })

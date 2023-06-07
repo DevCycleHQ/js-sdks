@@ -2,37 +2,41 @@ import { SDKVariable, VariableType, VariableValue } from '@devcycle/types'
 import { ProtobufTypes } from '@devcycle/bucketing-assembly-script'
 
 type GetVariableType = {
-    type: VariableType,
+    type: VariableType
     value: VariableValue
 }
-function getVariableTypeFromPB(variable: ProtobufTypes.SDKVariable_PB): GetVariableType {
+function getVariableTypeFromPB(
+    variable: ProtobufTypes.SDKVariable_PB,
+): GetVariableType {
     switch (variable.type) {
         case ProtobufTypes.VariableType_PB.Boolean:
             return {
                 type: VariableType.boolean,
-                value: variable.boolValue
+                value: variable.boolValue,
             }
         case ProtobufTypes.VariableType_PB.Number:
             return {
                 type: VariableType.number,
-                value: variable.doubleValue
+                value: variable.doubleValue,
             }
         case ProtobufTypes.VariableType_PB.String:
             return {
                 type: VariableType.string,
-                value: variable.stringValue
+                value: variable.stringValue,
             }
         case ProtobufTypes.VariableType_PB.JSON:
             return {
                 type: VariableType.json,
-                value: JSON.parse(variable.stringValue)
+                value: JSON.parse(variable.stringValue),
             }
         default:
             throw new Error(`Unknown variable type: ${variable.type}`)
     }
 }
 
-export function pbSDKVariableTransform(variable: ProtobufTypes.SDKVariable_PB): SDKVariable {
+export function pbSDKVariableTransform(
+    variable: ProtobufTypes.SDKVariable_PB,
+): SDKVariable {
     const { type, value } = getVariableTypeFromPB(variable)
 
     return {
@@ -40,8 +44,9 @@ export function pbSDKVariableTransform(variable: ProtobufTypes.SDKVariable_PB): 
         type,
         key: variable.key,
         value,
-        evalReason: (!variable.evalReason || variable.evalReason.isNull)
-            ? null
-            : variable.evalReason,
+        evalReason:
+            !variable.evalReason || variable.evalReason.isNull
+                ? null
+                : variable.evalReason,
     }
 }

@@ -12,7 +12,11 @@ export class DVCRequestEvent implements DVCEvent {
     featureVars?: Record<string, string>
     metaData?: Record<string, unknown>
 
-    constructor(event: DVCEvent, user_id: string, featureVars?: Record<string, string>) {
+    constructor(
+        event: DVCEvent,
+        user_id: string,
+        featureVars?: Record<string, string>,
+    ) {
         const { type, target, date, value, metaData } = event
         checkParamDefined('type', type)
         const isCustomEvent = !(type in EventTypes)

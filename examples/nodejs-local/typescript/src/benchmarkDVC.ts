@@ -1,7 +1,8 @@
 import { DVCClient, initialize } from '@devcycle/nodejs-server-sdk'
 import { promisify } from 'util'
 
-const DVC_SERVER_SDK_KEY = process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
+const DVC_SERVER_SDK_KEY =
+    process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
 
 let dvcClient: DVCClient
 
@@ -18,8 +19,8 @@ export async function benchDVC(): Promise<void> {
                 },
                 reportFlushResults: (report) => {
                     console.log(report)
-                }
-            }
+                },
+            },
         }).onClientInitialized()
     }
 
@@ -27,7 +28,7 @@ export async function benchDVC(): Promise<void> {
 
     const user = {
         user_id: '4807c61a2a922081',
-        country: 'CA'
+        country: 'CA',
     }
     let variable
     const time = performance.now()
@@ -41,7 +42,7 @@ export async function benchDVC(): Promise<void> {
     const endTime = performance.now() - time
     console.log(
         `Variable '${variableKey}' value is ${variable?.value}, is defaulted: ${variable?.isDefaulted}, ` +
-        `total: ${endTime}ms, per call: ${endTime / count}ms`
+            `total: ${endTime}ms, per call: ${endTime / count}ms`,
     )
 
     if (process.env.DVC_BENCH_LOOP) {

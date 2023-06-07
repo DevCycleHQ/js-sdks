@@ -6,9 +6,11 @@ const defaultPlatformData = {
     sdkType: 'server',
     sdkVersion: '1.0.0',
     deviceModel: '',
-    hostname: 'host.name'
+    hostname: 'host.name',
 }
 
-export const setPlatformDataJSON = (data: unknown = defaultPlatformData): void => {
+export const setPlatformDataJSON = (
+    data: unknown = defaultPlatformData,
+): void => {
     getBucketingLib().setPlatformData(JSON.stringify(data))
 }

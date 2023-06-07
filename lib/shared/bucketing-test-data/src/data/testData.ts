@@ -11,7 +11,7 @@ import {
     PublicVariable,
     PublicVariation,
     UserSubType,
-    VariableType
+    VariableType,
 } from '@devcycle/types'
 
 import moment from 'moment'
@@ -22,201 +22,219 @@ export const project: PublicProject = {
     a0_organization: 'org_12345612345',
     settings: {
         edgeDB: {
-            enabled: false
-        }
-    }
+            enabled: false,
+        },
+    },
 }
 
 export const environment: PublicEnvironment = {
     _id: '6153553b8cf4e45e0464268d',
-    key: 'test-environment'
+    key: 'test-environment',
 }
 
 export const audiences: PublicAudience[] = [
     {
         _id: '614ef6ea475929459060721a',
         filters: {
-            filters: [{
-                type: FilterType.user,
-                subType: UserSubType.email,
-                comparator: FilterComparator['='],
-                values: ['test@email.com', 'test2@email.com']
-            }],
-            operator: AudienceOperator.and
-        }
+            filters: [
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.email,
+                    comparator: FilterComparator['='],
+                    values: ['test@email.com', 'test2@email.com'],
+                },
+            ],
+            operator: AudienceOperator.and,
+        },
     },
     {
         _id: '6153557f1ed7bac7268ea0d9',
         filters: {
-            filters: [{
-                filters: [{
+            filters: [
+                {
+                    filters: [
+                        {
+                            type: FilterType.user,
+                            subType: UserSubType.user_id,
+                            comparator: FilterComparator['='],
+                            values: ['asuh'],
+                        },
+                        {
+                            type: FilterType.user,
+                            subType: UserSubType.country,
+                            comparator: FilterComparator['!='],
+                            values: ['U S AND A'],
+                        },
+                    ],
+                    operator: AudienceOperator.and,
+                },
+                {
                     type: FilterType.user,
                     subType: UserSubType.user_id,
                     comparator: FilterComparator['='],
-                    values: ['asuh']
+                    values: ['asuh'],
                 },
                 {
                     type: FilterType.user,
                     subType: UserSubType.country,
                     comparator: FilterComparator['!='],
-                    values: ['U S AND A']
-                }],
-                operator: AudienceOperator.and
-            }, {
-                type: FilterType.user,
-                subType: UserSubType.user_id,
-                comparator: FilterComparator['='],
-                values: ['asuh']
-            },
-            {
-                type: FilterType.user,
-                subType: UserSubType.country,
-                comparator: FilterComparator['!='],
-                values: ['U S AND A']
-            }],
-            operator: AudienceOperator.and
-        }
+                    values: ['U S AND A'],
+                },
+            ],
+            operator: AudienceOperator.and,
+        },
     },
     {
         _id: '6153557f1ed7bac7268ea0d5',
         filters: {
-            filters: [{
-                type: FilterType.user,
-                subType: UserSubType.platformVersion,
-                comparator: FilterComparator['>'],
-                values: ['1.1.1']
-            },
-            {
-                type: FilterType.user,
-                subType: UserSubType.customData,
-                dataKey: 'favouriteFood',
-                dataKeyType: DataKeyType.string,
-                comparator: FilterComparator['='],
-                values: ['pizza']
-            },
-            {
-                type: FilterType.user,
-                subType: UserSubType.customData,
-                dataKey: 'favouriteDrink',
-                dataKeyType: DataKeyType.string,
-                comparator: FilterComparator['='],
-                values: ['coffee']
-            }],
-            operator: AudienceOperator.and
-        }
+            filters: [
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.platformVersion,
+                    comparator: FilterComparator['>'],
+                    values: ['1.1.1'],
+                },
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.customData,
+                    dataKey: 'favouriteFood',
+                    dataKeyType: DataKeyType.string,
+                    comparator: FilterComparator['='],
+                    values: ['pizza'],
+                },
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.customData,
+                    dataKey: 'favouriteDrink',
+                    dataKeyType: DataKeyType.string,
+                    comparator: FilterComparator['='],
+                    values: ['coffee'],
+                },
+            ],
+            operator: AudienceOperator.and,
+        },
     },
     {
         _id: '6153557f1ed7bac7268ea0d6',
         filters: {
-            filters: [{
-                type: FilterType.user,
-                subType: UserSubType.customData,
-                dataKey: 'favouriteNumber',
-                dataKeyType: DataKeyType.number,
-                comparator: FilterComparator['='],
-                values: [610]
-            }, {
-                type: FilterType.user,
-                subType: UserSubType.customData,
-                dataKey: 'favouriteBoolean',
-                dataKeyType: DataKeyType.boolean,
-                comparator: FilterComparator['='],
-                values: [true, false]
-            }],
-            operator: AudienceOperator.and
-        }
+            filters: [
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.customData,
+                    dataKey: 'favouriteNumber',
+                    dataKeyType: DataKeyType.number,
+                    comparator: FilterComparator['='],
+                    values: [610],
+                },
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.customData,
+                    dataKey: 'favouriteBoolean',
+                    dataKeyType: DataKeyType.boolean,
+                    comparator: FilterComparator['='],
+                    values: [true, false],
+                },
+            ],
+            operator: AudienceOperator.and,
+        },
     },
     {
         _id: '6153557f1ed7bac7268ea074',
         filters: {
-            filters: [{
-                type: FilterType.audienceMatch,
-                comparator: FilterComparator['='],
-                _audiences: ['614ef6ea475929459060721a']
-            }],
-            operator: AudienceOperator.and
-        }
+            filters: [
+                {
+                    type: FilterType.audienceMatch,
+                    comparator: FilterComparator['='],
+                    _audiences: ['614ef6ea475929459060721a'],
+                },
+            ],
+            operator: AudienceOperator.and,
+        },
     },
     {
         _id: '6153557f1ed7bac7268ea0d7',
         filters: {
-            filters: [{
-                type: FilterType.user,
-                subType: UserSubType.customData,
-                dataKey: 'favouriteNull',
-                dataKeyType: DataKeyType.string,
-                comparator: FilterComparator['exist'],
-                values: []
-            }],
-            operator: AudienceOperator.and
-        }
+            filters: [
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.customData,
+                    dataKey: 'favouriteNull',
+                    dataKeyType: DataKeyType.string,
+                    comparator: FilterComparator['exist'],
+                    values: [],
+                },
+            ],
+            operator: AudienceOperator.and,
+        },
     },
     {
         _id: '6153557f1ed7bac7268ea0d8',
         filters: {
-            filters: [{
-                type: FilterType.user,
-                subType: UserSubType.customData,
-                dataKey: 'favouriteNull',
-                dataKeyType: DataKeyType.string,
-                comparator: FilterComparator['!exist'],
-                values: []
-            }],
-            operator: AudienceOperator.and
-        }
-    }
+            filters: [
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.customData,
+                    dataKey: 'favouriteNull',
+                    dataKeyType: DataKeyType.string,
+                    comparator: FilterComparator['!exist'],
+                    values: [],
+                },
+            ],
+            operator: AudienceOperator.and,
+        },
+    },
 ]
 
 export const variables: PublicVariable[] = [
     {
         _id: '614ef6ea475129459160721a',
         type: VariableType.string,
-        key: 'test'
+        key: 'test',
     },
     {
         _id: '615356f120ed334a6054564c',
         type: VariableType.string,
-        key: 'swagTest'
+        key: 'swagTest',
     },
     {
         _id: '61538237b0a70b58ae6af71f',
         type: VariableType.string,
-        key: 'feature2Var'
+        key: 'feature2Var',
     },
     {
         _id: '61538237b0a70b58ae6af71g',
         type: VariableType.string,
-        key: 'feature2.cool'
+        key: 'feature2.cool',
     },
     {
         _id: '61538237b0a70b58ae6af71h',
         type: VariableType.string,
-        key: 'feature2.hello'
+        key: 'feature2.hello',
     },
     {
         _id: '61538237b0a70b58ae6af71z',
         type: VariableType.string,
-        key: 'audience-match'
+        key: 'audience-match',
     },
     {
         _id: '61538237b0a70b58ae6af71y',
         type: VariableType.boolean,
-        key: 'bool-var'
+        key: 'bool-var',
     },
     {
         _id: '61538237b0a70b58ae6af71s',
         type: VariableType.number,
-        key: 'num-var'
+        key: 'num-var',
     },
     {
         _id: '61538237b0a70b58ae6af71q',
         type: VariableType.json,
-        key: 'json-var'
+        key: 'json-var',
     },
     {
         _id: '61538937b0a70b58ae6af71f',
         type: VariableType.string,
-        key: 'feature4Var'
+        key: 'feature4Var',
     },
 ]
 
@@ -228,25 +246,25 @@ export const variations: PublicVariation[] = [
         variables: [
             {
                 _var: variables[0]._id,
-                value: 'scat'
+                value: 'scat',
             },
             {
                 _var: variables[1]._id,
-                value: 'man'
+                value: 'man',
             },
             {
                 _var: variables[6]._id,
-                value: false
+                value: false,
             },
             {
                 _var: variables[7]._id,
-                value: 610.610
+                value: 610.61,
             },
             {
                 _var: variables[8]._id,
-                value: '{"hello":"world","num":610,"bool":true}'
-            }
-        ]
+                value: '{"hello":"world","num":610,"bool":true}',
+            },
+        ],
     },
     {
         _id: '615357cf7e9ebdca58446ed0',
@@ -255,30 +273,32 @@ export const variations: PublicVariation[] = [
         variables: [
             {
                 _var: variables[1]._id,
-                value: 'YEEEEOWZA'
+                value: 'YEEEEOWZA',
             },
             {
                 _var: variables[6]._id,
-                value: false
+                value: false,
             },
             {
                 _var: variables[7]._id,
-                value: 610.610
+                value: 610.61,
             },
             {
                 _var: variables[8]._id,
-                value: '{"hello":"world","num":610,"bool":true}'
-            }
-        ]
+                value: '{"hello":"world","num":610,"bool":true}',
+            },
+        ],
     },
     {
         _id: '615382338424cb11646d7667',
         name: 'variation 1 aud 2',
         key: 'variation-1-aud-2-key',
-        variables: [{
-            _var: variables[2]._id,
-            value: 'Var 1 aud 2'
-        }]
+        variables: [
+            {
+                _var: variables[2]._id,
+                value: 'Var 1 aud 2',
+            },
+        ],
     },
     {
         _id: '615382338424cb11646d7668',
@@ -287,13 +307,13 @@ export const variations: PublicVariation[] = [
         variables: [
             {
                 _var: variables[3]._id,
-                value: 'multivar first'
+                value: 'multivar first',
             },
             {
                 _var: variables[4]._id,
-                value: 'multivar last'
-            }
-        ]
+                value: 'multivar last',
+            },
+        ],
     },
     {
         _id: '615382338424cb11646d7669',
@@ -302,13 +322,13 @@ export const variations: PublicVariation[] = [
         variables: [
             {
                 _var: variables[3]._id,
-                value: 'multivar first unused'
+                value: 'multivar first unused',
             },
             {
                 _var: variables[4]._id,
-                value: 'multivar last unused'
-            }
-        ]
+                value: 'multivar last unused',
+            },
+        ],
     },
     {
         _id: '615382338424cb11646d7662',
@@ -317,9 +337,9 @@ export const variations: PublicVariation[] = [
         variables: [
             {
                 _var: variables[5]._id,
-                value: 'audience_match'
-            }
-        ]
+                value: 'audience_match',
+            },
+        ],
     },
     {
         _id: '615382338424cb11646d7660',
@@ -328,13 +348,13 @@ export const variations: PublicVariation[] = [
         variables: [
             {
                 _var: variables[3]._id,
-                value: true
+                value: true,
             },
             {
                 _var: variables[4]._id,
-                value: false
-            }
-        ]
+                value: false,
+            },
+        ],
     },
     {
         _id: '615382338424cb11646d7661',
@@ -343,13 +363,13 @@ export const variations: PublicVariation[] = [
         variables: [
             {
                 _var: variables[3]._id,
-                value: 610
+                value: 610,
             },
             {
                 _var: variables[4]._id,
-                value: 1114
-            }
-        ]
+                value: 1114,
+            },
+        ],
     },
     {
         _id: '615382338424cb11646d9668',
@@ -358,26 +378,28 @@ export const variations: PublicVariation[] = [
         variables: [
             {
                 _var: variables[9]._id,
-                value: 'feature 4 value'
+                value: 'feature 4 value',
             },
-        ]
+        ],
     },
 ]
 
 export const variableHashes: ConfigBody['variableHashes'] = {
-    'test': 3126796075,
-    'swagTest': 2547774734,
-    'feature2Var': 1879689550,
+    test: 3126796075,
+    swagTest: 2547774734,
+    feature2Var: 1879689550,
     'feature2.cool': 2621975932,
-    'feature2.hello': 4138596111
+    'feature2.hello': 4138596111,
 }
 
-function configBodyAudiences(audiences: PublicAudience[]): { [id: string]: Omit<PublicAudience<string>, '_id'> } {
+function configBodyAudiences(audiences: PublicAudience[]): {
+    [id: string]: Omit<PublicAudience<string>, '_id'>
+} {
     const auds: { [id: string]: Omit<PublicAudience<string>, '_id'> } = {}
     audiences.forEach((aud: PublicAudience) => {
         const { _id, ...rest } = aud
         auds[aud._id] = {
-            ...rest
+            ...rest,
         }
     })
     return auds
@@ -393,45 +415,56 @@ export const config: ConfigBody = {
             key: 'feature1',
             configuration: {
                 _id: '614ef6ea475328459060721a',
-                targets: [{
-                    _id: '61536f3bc838a705c105eb62',
-                    _audience: audiences[0],
-                    distribution: [{
-                        _variation: variations[0]._id,
-                        percentage: 0.5
-                    }, {
-                        _variation: variations[1]._id,
-                        percentage: 0.5
-                    }]
-                }, {
-                    _id: '61536f468fd67f0091982533',
-                    _audience: audiences[1],
-                    distribution: [{
-                        _variation: variations[1]._id,
-                        percentage: 1
-                    }]
-                }, {
-                    _id: '61536f468fd67f0091982534',
-                    _audience: audiences[2],
-                    rollout: {
-                        type: 'gradual',
-                        startPercentage: 0,
-                        startDate: moment().subtract(1, 'days').toDate(),
-                        stages: [
+                targets: [
+                    {
+                        _id: '61536f3bc838a705c105eb62',
+                        _audience: audiences[0],
+                        distribution: [
                             {
-                                type: 'linear',
-                                percentage: 1,
-                                date: moment().add(1, 'days').toDate()
-                            }
-                        ]
+                                _variation: variations[0]._id,
+                                percentage: 0.5,
+                            },
+                            {
+                                _variation: variations[1]._id,
+                                percentage: 0.5,
+                            },
+                        ],
                     },
-                    distribution: [{
-                        _variation: variations[1]._id,
-                        percentage: 1
-                    }]
-                }]
+                    {
+                        _id: '61536f468fd67f0091982533',
+                        _audience: audiences[1],
+                        distribution: [
+                            {
+                                _variation: variations[1]._id,
+                                percentage: 1,
+                            },
+                        ],
+                    },
+                    {
+                        _id: '61536f468fd67f0091982534',
+                        _audience: audiences[2],
+                        rollout: {
+                            type: 'gradual',
+                            startPercentage: 0,
+                            startDate: moment().subtract(1, 'days').toDate(),
+                            stages: [
+                                {
+                                    type: 'linear',
+                                    percentage: 1,
+                                    date: moment().add(1, 'days').toDate(),
+                                },
+                            ],
+                        },
+                        distribution: [
+                            {
+                                _variation: variations[1]._id,
+                                percentage: 1,
+                            },
+                        ],
+                    },
+                ],
             },
-            variations: [variations[0], variations[1]]
+            variations: [variations[0], variations[1]],
         },
         {
             _id: '614ef6aa475928459060721a',
@@ -439,27 +472,40 @@ export const config: ConfigBody = {
             key: 'feature2',
             configuration: {
                 _id: '61536f62502d80fff97ed649',
-                targets: [{
-                    _id: '61536f468fd67f0091982533',
-                    _audience: audiences[0],
-                    distribution: [{
-                        _variation: variations[3]._id,
-                        percentage: 1
+                targets: [
+                    {
+                        _id: '61536f468fd67f0091982533',
+                        _audience: audiences[0],
+                        distribution: [
+                            {
+                                _variation: variations[3]._id,
+                                percentage: 1,
+                            },
+                            {
+                                _variation: variations[4]._id,
+                                percentage: 0,
+                            },
+                        ],
                     },
                     {
-                        _variation: variations[4]._id,
-                        percentage: 0
-                    }]
-                }, {
-                    _id: '61536f669c69b86cccc5f15e',
-                    _audience: audiences[2],
-                    distribution: [{
-                        _variation: variations[2]._id,
-                        percentage: 1
-                    }]
-                }]
+                        _id: '61536f669c69b86cccc5f15e',
+                        _audience: audiences[2],
+                        distribution: [
+                            {
+                                _variation: variations[2]._id,
+                                percentage: 1,
+                            },
+                        ],
+                    },
+                ],
             },
-            variations: [variations[0], variations[1], variations[2], variations[3], variations[4]]
+            variations: [
+                variations[0],
+                variations[1],
+                variations[2],
+                variations[3],
+                variations[4],
+            ],
         },
         {
             _id: '614ef6aa475928459060721c',
@@ -467,17 +513,20 @@ export const config: ConfigBody = {
             key: 'feature3',
             configuration: {
                 _id: '61536f62502d80fff97ed640',
-                targets: [{
-                    _id: '61536f468fd67f0091982531',
-                    _audience: audiences[4],
-                    distribution: [{
-                        _variation: variations[5]._id,
-                        percentage: 1
-                    }]
-                }]
-
+                targets: [
+                    {
+                        _id: '61536f468fd67f0091982531',
+                        _audience: audiences[4],
+                        distribution: [
+                            {
+                                _variation: variations[5]._id,
+                                percentage: 1,
+                            },
+                        ],
+                    },
+                ],
             },
-            variations: [variations[5]]
+            variations: [variations[5]],
         },
         {
             _id: '614ef8aa475928459060721c',
@@ -485,21 +534,24 @@ export const config: ConfigBody = {
             key: 'feature4',
             configuration: {
                 _id: '61536f62502d80fff97ed640',
-                targets: [{
-                    _id: '61536f468fd67f0091982531',
-                    _audience: audiences[0],
-                    distribution: [{
-                        _variation: variations[8]._id,
-                        percentage: 1
-                    }]
-                }]
-
+                targets: [
+                    {
+                        _id: '61536f468fd67f0091982531',
+                        _audience: audiences[0],
+                        distribution: [
+                            {
+                                _variation: variations[8]._id,
+                                percentage: 1,
+                            },
+                        ],
+                    },
+                ],
             },
-            variations: [variations[8]]
-        }
+            variations: [variations[8]],
+        },
     ],
     variables,
-    variableHashes
+    variableHashes,
 }
 
 export const barrenConfig: ConfigBody = {
@@ -513,20 +565,25 @@ export const barrenConfig: ConfigBody = {
             key: 'feature1',
             configuration: {
                 _id: '614ef6ea475328459060721a',
-                targets: [{
-                    _id: '61536f3bc838a705c105eb62',
-                    _audience: audiences[0],
-                    distribution: []
-                }, {
-                    _id: '61536f3bc838a705c105eb63',
-                    _audience: audiences[2],
-                    distribution: [{
-                        _variation: variations[2]._id,
-                        percentage: 1
-                    }]
-                }]
+                targets: [
+                    {
+                        _id: '61536f3bc838a705c105eb62',
+                        _audience: audiences[0],
+                        distribution: [],
+                    },
+                    {
+                        _id: '61536f3bc838a705c105eb63',
+                        _audience: audiences[2],
+                        distribution: [
+                            {
+                                _variation: variations[2]._id,
+                                percentage: 1,
+                            },
+                        ],
+                    },
+                ],
             },
-            variations: [variations[0], variations[1]]
+            variations: [variations[0], variations[1]],
         },
         {
             _id: '614ef6aa475928459060721a',
@@ -534,72 +591,94 @@ export const barrenConfig: ConfigBody = {
             key: 'feature2',
             configuration: {
                 _id: '61536f62502d80fff97ed649',
-                targets: [{
-                    _id: '61536f468fd67f0091982533',
-                    _audience: audiences[1],
-                    distribution: [{
-                        _variation: variations[3]._id,
-                        percentage: 1
+                targets: [
+                    {
+                        _id: '61536f468fd67f0091982533',
+                        _audience: audiences[1],
+                        distribution: [
+                            {
+                                _variation: variations[3]._id,
+                                percentage: 1,
+                            },
+                            {
+                                _variation: variations[4]._id,
+                                percentage: 0,
+                            },
+                        ],
                     },
                     {
-                        _variation: variations[4]._id,
-                        percentage: 0
-                    }]
-                }, {
-                    _id: '61536f669c69b86cccc5f15e',
-                    _audience: audiences[2],
-                    distribution: [{
-                        _variation: variations[2]._id,
-                        percentage: 1
-                    }]
-                }]
+                        _id: '61536f669c69b86cccc5f15e',
+                        _audience: audiences[2],
+                        distribution: [
+                            {
+                                _variation: variations[2]._id,
+                                percentage: 1,
+                            },
+                        ],
+                    },
+                ],
             },
-            variations: [variations[0], variations[1], variations[2], variations[3], variations[4]]
-        }
+            variations: [
+                variations[0],
+                variations[1],
+                variations[2],
+                variations[3],
+                variations[4],
+            ],
+        },
     ],
     variables: [],
-    variableHashes: {}
+    variableHashes: {},
 }
 
 export const configWithNullCustomData: ConfigBody = {
     project,
     environment,
     audiences: configBodyAudiences(audiences),
-    features: [{
-        _id: '614ef6aa475928459060721d',
-        type: FeatureType.permission,
-        key: 'feature4',
-        configuration: {
-            _id: '61536f62502d80fff97ed641',
-            targets: [{
-                _id: '61536f468fd67f0091982532',
-                _audience: audiences[5],
-                distribution: [{
-                    _variation: variations[5]._id,
-                    percentage: 1
-                }]
-            }]
-
+    features: [
+        {
+            _id: '614ef6aa475928459060721d',
+            type: FeatureType.permission,
+            key: 'feature4',
+            configuration: {
+                _id: '61536f62502d80fff97ed641',
+                targets: [
+                    {
+                        _id: '61536f468fd67f0091982532',
+                        _audience: audiences[5],
+                        distribution: [
+                            {
+                                _variation: variations[5]._id,
+                                percentage: 1,
+                            },
+                        ],
+                    },
+                ],
+            },
+            variations: [variations[5]],
         },
-        variations: [variations[5]]
-    }, {
-        _id: '614ef6aa475928459060721d',
-        type: FeatureType.ops,
-        key: 'feature5',
-        configuration: {
-            _id: '61536f62502d80fff97ed642',
-            targets: [{
-                _id: '61536f468fd67f0091982533',
-                _audience: audiences[6],
-                distribution: [{
-                    _variation: variations[5]._id,
-                    percentage: 1
-                }]
-            }]
-
+        {
+            _id: '614ef6aa475928459060721d',
+            type: FeatureType.ops,
+            key: 'feature5',
+            configuration: {
+                _id: '61536f62502d80fff97ed642',
+                targets: [
+                    {
+                        _id: '61536f468fd67f0091982533',
+                        _audience: audiences[6],
+                        distribution: [
+                            {
+                                _variation: variations[5]._id,
+                                percentage: 1,
+                            },
+                        ],
+                    },
+                ],
+            },
+            variations: [variations[5]],
         },
-        variations: [variations[5]]
-    }],
+    ],
     variables,
-    variableHashes
+    variableHashes,
 }

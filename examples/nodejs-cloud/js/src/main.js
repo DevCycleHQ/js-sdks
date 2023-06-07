@@ -2,16 +2,20 @@ const DVC = require('@devcycle/nodejs-server-sdk')
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const DVC_SERVER_SDK_KEY = process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
+const DVC_SERVER_SDK_KEY =
+    process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
 let dvcClient
 
 async function startDVC() {
-    dvcClient = DVC.initialize(DVC_SERVER_SDK_KEY, { logLevel: 'info', enableCloudBucketing: true })
+    dvcClient = DVC.initialize(DVC_SERVER_SDK_KEY, {
+        logLevel: 'info',
+        enableCloudBucketing: true,
+    })
     console.log('DVC Cloud Bucketing JS Client Ready')
 
     const user = {
         user_id: 'node_sdk_test',
-        country: 'CA'
+        country: 'CA',
     }
 
     const partyTime = await dvcClient.variableValue(user, 'elliot-test', false)
@@ -19,14 +23,16 @@ async function startDVC() {
         const invitation = dvcClient.variable(
             user,
             'invitation-message',
-            'My birthday has been cancelled this year'
+            'My birthday has been cancelled this year',
         )
-        console.log('Hi there, we\'ve been friends for a long time so I thought I would tell you personally: \n')
+        console.log(
+            "Hi there, we've been friends for a long time so I thought I would tell you personally: \n",
+        )
         console.log(invitation.value)
         const event = {
-            'type': 'customType',
-            'target': invitation.key,
-            'date': Date.now()
+            type: 'customType',
+            target: invitation.key,
+            date: Date.now(),
         }
         try {
             dvcClient.track(user, event)
@@ -35,7 +41,11 @@ async function startDVC() {
         }
     }
 
-    const defaultVariable = dvcClient.variableValue(user, 'noWay-thisisA-realKEY', true)
+    const defaultVariable = dvcClient.variableValue(
+        user,
+        'noWay-thisisA-realKEY',
+        true,
+    )
     console.log(`Value of the variable is ${defaultVariable} \n`)
     const variables = await dvcClient.allVariables(user)
     console.log('Variables: ')
@@ -53,7 +63,7 @@ const defaultHeaders = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Access-Control-Allow-Origin, Content-Type',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS'
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
 }
 
 app.use(bodyParser.urlencoded({ extended: false }))

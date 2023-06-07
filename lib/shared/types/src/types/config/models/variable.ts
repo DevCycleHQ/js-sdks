@@ -2,7 +2,7 @@ export enum VariableSource {
     api = 'api',
     dashboard = 'dashboard',
     clientSDK = 'clientSDK',
-    serverSDK = 'serverSDK'
+    serverSDK = 'serverSDK',
 }
 
 /**
@@ -33,7 +33,7 @@ export enum VariableType {
     string = 'String',
     boolean = 'Boolean',
     number = 'Number',
-    json = 'JSON'
+    json = 'JSON',
 }
 
 /**
@@ -42,15 +42,22 @@ export enum VariableType {
 export type DVCJSON = { [key: string]: string | boolean | number }
 export type VariableValue = string | boolean | number | DVCJSON
 
-type UnionToIntersection<U> =
-    (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
+    k: infer I,
+) => void
+    ? I
+    : never
 type IsUnion<T> = [T] extends [UnionToIntersection<T>] ? false : true
 
 // alias to resolve a generic type constrained by `VariableValue` back into its original type
-export type VariableTypeAlias<T> = IsUnion<T> extends true ? T : (T extends boolean ? boolean : (
-        T extends number ? number : (
-            T extends string ? string : (
-                T extends DVCJSON ? DVCJSON : never
-                )
-            )
-        ))
+export type VariableTypeAlias<T> = IsUnion<T> extends true
+    ? T
+    : T extends boolean
+    ? boolean
+    : T extends number
+    ? number
+    : T extends string
+    ? string
+    : T extends DVCJSON
+    ? DVCJSON
+    : never

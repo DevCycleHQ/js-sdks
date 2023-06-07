@@ -15,7 +15,7 @@ describe('AppElement', () => {
         app.connectedCallback()
 
         expect(app.querySelector('h1').innerHTML).toContain(
-            'Welcome example-js-web-elements-app'
+            'Welcome example-js-web-elements-app',
         )
     })
 })

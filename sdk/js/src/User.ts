@@ -3,8 +3,15 @@ import { v4 as uuidv4 } from 'uuid'
 import packageJson from '../package.json'
 import UAParser from 'ua-parser-js'
 
-type StaticData = Pick<DVCPopulatedUser, 'createdDate' | 'platform' |
-    'platformVersion' | 'deviceModel' | 'sdkType' | 'sdkVersion'>
+type StaticData = Pick<
+    DVCPopulatedUser,
+    | 'createdDate'
+    | 'platform'
+    | 'platformVersion'
+    | 'deviceModel'
+    | 'sdkType'
+    | 'sdkVersion'
+>
 
 export class DVCPopulatedUser implements DVCUser {
     readonly isAnonymous: boolean
@@ -26,15 +33,23 @@ export class DVCPopulatedUser implements DVCUser {
     readonly sdkType: 'client'
     readonly sdkVersion: string
 
-    constructor(user: DVCUser, options: DVCOptions, staticData?: StaticData, anonymousUserId?: string) {
+    constructor(
+        user: DVCUser,
+        options: DVCOptions,
+        staticData?: StaticData,
+        anonymousUserId?: string,
+    ) {
         if (user.user_id?.trim() === '') {
-            throw new Error('A User cannot be created with a user_id that is an empty string')
+            throw new Error(
+                'A User cannot be created with a user_id that is an empty string',
+            )
         }
 
-        this.user_id = (user.isAnonymous || !user.user_id) ?
-            (user.user_id || anonymousUserId || uuidv4()) :
-            user.user_id
-        this.isAnonymous = (user.isAnonymous || !user.user_id)
+        this.user_id =
+            user.isAnonymous || !user.user_id
+                ? user.user_id || anonymousUserId || uuidv4()
+                : user.user_id
+        this.isAnonymous = user.isAnonymous || !user.user_id
         this.email = user.email
         this.name = user.name
         this.language = user.language
@@ -52,16 +67,26 @@ export class DVCPopulatedUser implements DVCUser {
         if (staticData) {
             Object.assign(this, staticData)
         } else {
-            const userAgent = new UAParser(typeof window !== 'undefined' ? window.navigator.userAgent : undefined)
-            const platformVersion = userAgent.getBrowser().name &&
-                `${userAgent.getBrowser().name} ${userAgent.getBrowser().version}`
+            const userAgent = new UAParser(
+                typeof window !== 'undefined'
+                    ? window.navigator.userAgent
+                    : undefined,
+            )
+            const platformVersion =
+                userAgent.getBrowser().name &&
+                `${userAgent.getBrowser().name} ${
+                    userAgent.getBrowser().version
+                }`
 
             this.createdDate = new Date()
             this.platform = options?.reactNative ? 'ReactNative' : 'web'
             this.platformVersion = platformVersion ?? 'unknown'
-            this.deviceModel = options?.reactNative && globalThis.DeviceInfo
-                ? globalThis.DeviceInfo.getModel() : typeof window !== 'undefined'
-                    ? window.navigator.userAgent : 'SSR - unknown'
+            this.deviceModel =
+                options?.reactNative && globalThis.DeviceInfo
+                    ? globalThis.DeviceInfo.getModel()
+                    : typeof window !== 'undefined'
+                    ? window.navigator.userAgent
+                    : 'SSR - unknown'
             this.sdkType = 'client'
             this.sdkVersion = packageJson.version
         }
@@ -86,4 +111,3 @@ export class DVCPopulatedUser implements DVCUser {
         return new DVCPopulatedUser(user, options, this.getStaticData())
     }
 }
-

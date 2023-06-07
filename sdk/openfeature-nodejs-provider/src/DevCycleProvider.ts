@@ -8,7 +8,7 @@ import {
     StandardResolutionReasons,
     ParseError,
     TargetingKeyMissingError,
-    InvalidContextError
+    InvalidContextError,
 } from '@openfeature/js-sdk'
 import {
     DVCClient,
@@ -18,7 +18,7 @@ import {
     DVCUser,
     DVCJSON,
     DVCCustomDataJSON,
-    dvcDefaultLogger
+    dvcDefaultLogger,
 } from '@devcycle/nodejs-server-sdk'
 import { DVCLogger, VariableValue } from '@devcycle/types'
 
@@ -30,7 +30,7 @@ const DVCKnownPropertyKeyTypes: Record<string, string> = {
     appVersion: 'string',
     appBuild: 'number',
     customData: 'object',
-    privateCustomData: 'object'
+    privateCustomData: 'object',
 }
 
 type EvaluationContextObject = {
@@ -44,8 +44,12 @@ export default class DevCycleProvider implements Provider {
 
     private readonly logger: DVCLogger
 
-    constructor(private readonly dvcClient: DVCClient | DVCCloudClient, options: DVCOptions = {}) {
-        this.logger = options.logger ?? dvcDefaultLogger({ level: options.logLevel })
+    constructor(
+        private readonly dvcClient: DVCClient | DVCCloudClient,
+        options: DVCOptions = {},
+    ) {
+        this.logger =
+            options.logger ?? dvcDefaultLogger({ level: options.logLevel })
     }
 
     /**
@@ -58,17 +62,15 @@ export default class DevCycleProvider implements Provider {
     private async getDVCVariable<I extends VariableValue, O>(
         flagKey: string,
         defaultValue: I,
-        context: EvaluationContext
+        context: EvaluationContext,
     ): Promise<ResolutionDetails<O>> {
         const dvcVariable = this.dvcClient.variable(
             this.dvcUserFromContext(context),
             flagKey,
-            defaultValue
+            defaultValue,
         )
         return this.resultFromDVCVariable<O>(
-            dvcVariable instanceof Promise
-                ? await dvcVariable
-                : dvcVariable
+            dvcVariable instanceof Promise ? await dvcVariable : dvcVariable,
         )
     }
 
@@ -81,7 +83,7 @@ export default class DevCycleProvider implements Provider {
     async resolveBooleanEvaluation(
         flagKey: string,
         defaultValue: boolean,
-        context: EvaluationContext
+        context: EvaluationContext,
     ): Promise<ResolutionDetails<boolean>> {
         return this.getDVCVariable(flagKey, defaultValue, context)
     }
@@ -95,7 +97,7 @@ export default class DevCycleProvider implements Provider {
     async resolveStringEvaluation(
         flagKey: string,
         defaultValue: string,
-        context: EvaluationContext
+        context: EvaluationContext,
     ): Promise<ResolutionDetails<string>> {
         return this.getDVCVariable(flagKey, defaultValue, context)
     }
@@ -109,7 +111,7 @@ export default class DevCycleProvider implements Provider {
     async resolveNumberEvaluation(
         flagKey: string,
         defaultValue: number,
-        context: EvaluationContext
+        context: EvaluationContext,
     ): Promise<ResolutionDetails<number>> {
         return this.getDVCVariable(flagKey, defaultValue, context)
     }
@@ -123,9 +125,13 @@ export default class DevCycleProvider implements Provider {
     async resolveObjectEvaluation<T extends JsonValue>(
         flagKey: string,
         defaultValue: T,
-        context: EvaluationContext
+        context: EvaluationContext,
     ): Promise<ResolutionDetails<T>> {
-        return this.getDVCVariable(flagKey, this.defaultValueFromJsonValue(defaultValue), context)
+        return this.getDVCVariable(
+            flagKey,
+            this.defaultValueFromJsonValue(defaultValue),
+            context,
+        )
     }
 
     /**
@@ -135,10 +141,14 @@ export default class DevCycleProvider implements Provider {
      */
     private defaultValueFromJsonValue(jsonValue: JsonValue): DVCJSON {
         if (typeof jsonValue !== 'object' || Array.isArray(jsonValue)) {
-            throw new ParseError('DevCycle only supports object values for JSON flags')
+            throw new ParseError(
+                'DevCycle only supports object values for JSON flags',
+            )
         }
         if (!jsonValue) {
-            throw new ParseError('DevCycle does not support null default values for JSON flags')
+            throw new ParseError(
+                'DevCycle does not support null default values for JSON flags',
+            )
         }
 
         // Hard casting here because our DVCJSON typing enforces a flat object when we actually support
@@ -152,7 +162,9 @@ export default class DevCycleProvider implements Provider {
      * @param variable
      * @private
      */
-    private resultFromDVCVariable<T>(variable: DVCVariable): ResolutionDetails<T> {
+    private resultFromDVCVariable<T>(
+        variable: DVCVariable,
+    ): ResolutionDetails<T> {
         return {
             value: variable.value as T,
             reason: variable.isDefaulted
@@ -169,13 +181,18 @@ export default class DevCycleProvider implements Provider {
     private dvcUserFromContext(context: EvaluationContext): DVCUser {
         const user_id = context.targetingKey ?? context.user_id
         if (!user_id) {
-            throw new TargetingKeyMissingError('Missing targetingKey or user_id in context')
+            throw new TargetingKeyMissingError(
+                'Missing targetingKey or user_id in context',
+            )
         }
         if (typeof user_id !== 'string') {
-            throw new InvalidContextError('targetingKey or user_id must be a string')
+            throw new InvalidContextError(
+                'targetingKey or user_id must be a string',
+            )
         }
 
-        const dvcUserData: Record<string, string | number | DVCCustomDataJSON> = {}
+        const dvcUserData: Record<string, string | number | DVCCustomDataJSON> =
+            {}
         let customData: DVCCustomDataJSON = {}
         let privateCustomData: DVCCustomDataJSON = {}
 
@@ -187,7 +204,7 @@ export default class DevCycleProvider implements Provider {
                 if (typeof value !== knownValueType) {
                     this.logger.warn(
                         `Expected DVCUser property "${key}" to be "${knownValueType}" but got "${typeof value}" in ` +
-                        'EvaluationContext. Ignoring value.'
+                            'EvaluationContext. Ignoring value.',
                     )
                     continue
                 }
@@ -200,12 +217,16 @@ export default class DevCycleProvider implements Provider {
                         dvcUserData[key] = value as number
                         break
                     case 'object':
-                        if (key === 'privateCustomData')  {
-                            privateCustomData = this.convertToDVCCustomDataJSON(value as EvaluationContextObject)
+                        if (key === 'privateCustomData') {
+                            privateCustomData = this.convertToDVCCustomDataJSON(
+                                value as EvaluationContextObject,
+                            )
                         } else if (key === 'customData') {
                             customData = {
                                 ...customData,
-                                ...this.convertToDVCCustomDataJSON(value as EvaluationContextObject)
+                                ...this.convertToDVCCustomDataJSON(
+                                    value as EvaluationContextObject,
+                                ),
                             }
                         }
                         break
@@ -229,14 +250,18 @@ export default class DevCycleProvider implements Provider {
                             break
                         }
                         this.logger.warn(
-                            `EvaluationContext property "${key}" is an ${Array.isArray(value) ? 'Array' : 'Object'}. ` +
-                            'DVCUser only supports flat customData properties of type string / number / boolean / null'
+                            `EvaluationContext property "${key}" is an ${
+                                Array.isArray(value) ? 'Array' : 'Object'
+                            }. ` +
+                                'DVCUser only supports flat customData properties of type ' +
+                                'string / number / boolean / null',
                         )
                         break
                     default:
                         this.logger.warn(
                             `Unknown EvaluationContext property "${key}" type. ` +
-                            'DVCUser only supports flat customData properties of type string / number / boolean / null'
+                                'DVCUser only supports flat customData properties of type ' +
+                                'string / number / boolean / null',
                         )
                         break
                 }
@@ -245,8 +270,10 @@ export default class DevCycleProvider implements Provider {
         return new DVCUser({
             user_id,
             customData: Object.keys(customData).length ? customData : undefined,
-            privateCustomData: Object.keys(privateCustomData).length ? privateCustomData : undefined,
-            ...dvcUserData
+            privateCustomData: Object.keys(privateCustomData).length
+                ? privateCustomData
+                : undefined,
+            ...dvcUserData,
         })
     }
 
@@ -255,7 +282,9 @@ export default class DevCycleProvider implements Provider {
      * @param evaluationData
      * @private
      */
-    private convertToDVCCustomDataJSON(evaluationData: EvaluationContextObject): DVCCustomDataJSON {
+    private convertToDVCCustomDataJSON(
+        evaluationData: EvaluationContextObject,
+    ): DVCCustomDataJSON {
         const customData: DVCCustomDataJSON = {}
         for (const [key, value] of Object.entries(evaluationData)) {
             switch (typeof value) {
@@ -274,7 +303,7 @@ export default class DevCycleProvider implements Provider {
                 default:
                     this.logger.warn(
                         `EvaluationContext property "customData" contains "${key}" property of type ${typeof value}.` +
-                        'DVCUser only supports flat customData properties of type string / number / boolean / null'
+                            'DVCUser only supports flat customData properties of type string / number / boolean / null',
                     )
                     break
             }

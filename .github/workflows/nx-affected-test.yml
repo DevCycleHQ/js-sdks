@@ -1,40 +1,42 @@
 name: Nx Affected CI
 on:
-  pull_request:
-    branches: [main]
+    pull_request:
+        branches: [main]
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x]
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install protoc for protobuf compilation
-        run: sudo apt-get install -y protobuf-compiler
-      - run: git fetch origin main
-      - name: Cache node modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-yarn-cache
-        with:
-          path: |
-            .yarn/cache
-            .yarn/unplugged
-            node_modules/.cache
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - run: yarn --immutable
-      - run: yarn affected:lint
-      - name: Run Affected Tests
-        shell: bash
-        run: yarn affected:test
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [18.x]
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node-version }}
+            - name: Install protoc for protobuf compilation
+              run: sudo apt-get install -y protobuf-compiler
+            - run: git fetch origin main
+            - name: Cache node modules
+              uses: actions/cache@v2
+              env:
+                  cache-name: cache-yarn-cache
+              with:
+                  path: |
+                      .yarn/cache
+                      .yarn/unplugged
+                      node_modules/.cache
+                  key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-build-${{ env.cache-name }}-
+                      ${{ runner.os }}-build-
+                      ${{ runner.os }}-
+            - run: yarn --immutable
+            - run: yarn affected:lint
+            - run: yarn prettier --check .
+              name: Prettier
+            - name: Run Affected Tests
+              shell: bash
+              run: yarn affected:test

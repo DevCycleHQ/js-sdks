@@ -13,10 +13,9 @@ export class ReactNativeStore implements DVCStorage {
     }
 
     load<T>(storeKey: string): Promise<T | undefined> {
-        return this.store.getItem(storeKey)
-            .then((item) => {
-                return (item ? JSON.parse(item) : undefined)
-            })
+        return this.store.getItem(storeKey).then((item) => {
+            return item ? JSON.parse(item) : undefined
+        })
     }
 
     remove(storeKey: string): void {

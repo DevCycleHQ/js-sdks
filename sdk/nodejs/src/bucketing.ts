@@ -5,10 +5,10 @@ import { DVCOptions } from './types'
 let Bucketing: Exports | null
 let InstantiatePromise: Promise<Exports> | null
 
-export const importBucketingLib = async (
-    { logger, options }:
-    { logger?: DVCLogger, options?: DVCOptions } = {}
-): Promise<void> => {
+export const importBucketingLib = async ({
+    logger,
+    options,
+}: { logger?: DVCLogger; options?: DVCOptions } = {}): Promise<void> => {
     if (InstantiatePromise) {
         await InstantiatePromise
         return
@@ -25,7 +25,7 @@ export const importBucketingLib = async (
 export const startTrackingMemoryUsage = (
     logger?: DVCLogger,
     reporter?: DVCReporter,
-    interval: number = 30 * 1000
+    interval: number = 30 * 1000,
 ): void => {
     if (!reporter) return
     trackMemoryUsage(reporter, logger)

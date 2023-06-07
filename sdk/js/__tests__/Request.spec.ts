@@ -12,8 +12,8 @@ createMock.mockImplementation((): AxiosInstance => {
         request: axiosRequestMock,
         interceptors: {
             request: { use: jest.fn() },
-            response: { use: jest.fn() }
-        }
+            response: { use: jest.fn() },
+        },
     } as unknown as AxiosInstance
 })
 
@@ -49,17 +49,24 @@ describe('Request tests', () => {
             const sdkKey = 'my_sdk_key'
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
-            await Request.getConfigJson(sdkKey, user as DVCPopulatedUser, defaultLogger, {}, {
-                sse: true,
-                lastModified: 1234,
-                etag: 'etag'
-            })
+            await Request.getConfigJson(
+                sdkKey,
+                user as DVCPopulatedUser,
+                defaultLogger,
+                {},
+                {
+                    sse: true,
+                    lastModified: 1234,
+                    etag: 'etag',
+                },
+            )
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: { 'Content-Type': 'application/json' },
                 method: 'GET',
-                url: 'https://sdk-api.devcycle.com/v1/sdkConfig?sdkKey=' +
-                     `${sdkKey}&user_id=${user.user_id}&isAnonymous=false&sse=1&sseLastModified=1234&sseEtag=etag`
+                url:
+                    'https://sdk-api.devcycle.com/v1/sdkConfig?sdkKey=' +
+                    `${sdkKey}&user_id=${user.user_id}&isAnonymous=false&sse=1&sseLastModified=1234&sseEtag=etag`,
             })
         })
 
@@ -69,31 +76,45 @@ describe('Request tests', () => {
             const dvcOptions = { apiProxyURL: 'http://localhost:4000' }
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
-            await Request.getConfigJson(sdkKey, user as DVCPopulatedUser, defaultLogger, dvcOptions)
+            await Request.getConfigJson(
+                sdkKey,
+                user as DVCPopulatedUser,
+                defaultLogger,
+                dvcOptions,
+            )
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: { 'Content-Type': 'application/json' },
                 method: 'GET',
-                url: `${dvcOptions.apiProxyURL}/v1/sdkConfig?sdkKey=` +
-                     `${sdkKey}&user_id=${user.user_id}&isAnonymous=false`
+                url:
+                    `${dvcOptions.apiProxyURL}/v1/sdkConfig?sdkKey=` +
+                    `${sdkKey}&user_id=${user.user_id}&isAnonymous=false`,
             })
         })
     })
 
     describe('publishEvents', () => {
-
         it('should call get with serialized user and SDK key in params', async () => {
             const user = { user_id: 'my_user' } as DVCPopulatedUser
             const config = {} as BucketedUserConfig
             const sdkKey = 'my_sdk_key'
             const events = [{ type: 'event_1_type' }, { type: 'event_2_type' }]
-            axiosRequestMock.mockResolvedValue({ status: 200, data: 'messages' })
+            axiosRequestMock.mockResolvedValue({
+                status: 200,
+                data: 'messages',
+            })
 
-            await Request.publishEvents(sdkKey, config, user, events, defaultLogger)
+            await Request.publishEvents(
+                sdkKey,
+                config,
+                user,
+                events,
+                defaultLogger,
+            )
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: {
-                    'Authorization': 'my_sdk_key',
+                    Authorization: 'my_sdk_key',
                     'Content-Type': 'application/json',
                 },
                 method: 'POST',
@@ -104,17 +125,17 @@ describe('Request tests', () => {
                             customType: 'event_1_type',
                             type: 'customEvent',
                             user_id: 'my_user',
-                            clientDate: expect.any(Number)
+                            clientDate: expect.any(Number),
                         }),
                         expect.objectContaining({
                             customType: 'event_2_type',
                             type: 'customEvent',
                             user_id: 'my_user',
-                            clientDate: expect.any(Number)
-                        })
+                            clientDate: expect.any(Number),
+                        }),
                     ],
-                    user
-                }
+                    user,
+                },
             })
         })
     })
@@ -125,19 +146,23 @@ describe('Request tests', () => {
             const sdkKey = 'my_sdk_key'
             axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
 
-            await Request.saveEntity(user as DVCPopulatedUser, sdkKey, defaultLogger)
+            await Request.saveEntity(
+                user as DVCPopulatedUser,
+                sdkKey,
+                defaultLogger,
+            )
 
             expect(axiosRequestMock).toBeCalledWith({
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'my_sdk_key'
+                    Authorization: 'my_sdk_key',
                 },
                 data: {
                     user_id: 'user@example.com',
-                    isAnonymous: false
+                    isAnonymous: false,
                 },
                 method: 'PATCH',
-                url: 'https://sdk-api.devcycle.com/v1/edgedb/user%40example.com'
+                url: 'https://sdk-api.devcycle.com/v1/edgedb/user%40example.com',
             })
         })
     })

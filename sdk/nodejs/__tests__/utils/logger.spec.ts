@@ -17,7 +17,10 @@ describe('logger unit tests', () => {
         logger.debug('debug message')
 
         expect(consoleLogSpy).toHaveBeenCalledTimes(1)
-        expect(consoleLogSpy).toHaveBeenNthCalledWith(1, '[DevCycle]: error message')
+        expect(consoleLogSpy).toHaveBeenNthCalledWith(
+            1,
+            '[DevCycle]: error message',
+        )
     })
 
     it('should create default logger with debug log level', () => {
@@ -26,8 +29,14 @@ describe('logger unit tests', () => {
         logger.debug('debug message')
 
         expect(consoleLogSpy).toHaveBeenCalledTimes(2)
-        expect(consoleLogSpy).toHaveBeenNthCalledWith(1, '[DevCycle]: error message')
-        expect(consoleLogSpy).toHaveBeenNthCalledWith(2, '[DevCycle]: debug message')
+        expect(consoleLogSpy).toHaveBeenNthCalledWith(
+            1,
+            '[DevCycle]: error message',
+        )
+        expect(consoleLogSpy).toHaveBeenNthCalledWith(
+            2,
+            '[DevCycle]: debug message',
+        )
     })
 
     it('should create logger using logWriter', () => {

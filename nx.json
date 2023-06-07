@@ -77,19 +77,13 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "prepare": {
-      "dependsOn": [
-        "^prepare"
-      ]
+      "dependsOn": ["^prepare"]
     },
     "package": {
-      "dependsOn": [
-        "^package"
-      ]
+      "dependsOn": ["^package"]
     },
     "npm-publish": {
       "dependsOn": [

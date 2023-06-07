@@ -4,7 +4,7 @@ import { FeatureConfiguration } from './featureConfiguration'
 
 export enum FeatureSource {
     api = 'api',
-    dashboard = 'dashboard'
+    dashboard = 'dashboard',
 }
 
 export class Variation<IdType = string> {
@@ -36,7 +36,7 @@ export enum FeatureType {
     release = 'release',
     experiment = 'experiment',
     permission = 'permission',
-    ops = 'ops'
+    ops = 'ops',
 }
 
 export type FeatureSettings = {
@@ -71,7 +71,7 @@ export class Feature<IdType = string> {
     variations: Variation<IdType>[]
 
     @Type(() => FeatureConfiguration)
-        configuration: FeatureConfiguration<IdType>
+    configuration: FeatureConfiguration<IdType>
 
     /**
      * Defines feature-level settings

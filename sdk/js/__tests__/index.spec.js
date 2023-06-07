@@ -8,8 +8,10 @@ jest.spyOn(Request, 'getConfigJson').mockImplementation(() => {
 
 const missingKeyError = 'Missing SDK key! Call initialize with a valid SDK key'
 const missingUserError = 'Missing user! Call initialize with a valid user'
-const invalidUserError = 'Must have a user_id, or have "isAnonymous" set on the user'
-const invalidOptionsError = 'Invalid options! Call initialize with valid options'
+const invalidUserError =
+    'Must have a user_id, or have "isAnonymous" set on the user'
+const invalidOptionsError =
+    'Invalid options! Call initialize with valid options'
 
 describe('initialize tests', () => {
     it('should return client when calling initialize', () => {
@@ -24,19 +26,25 @@ describe('initialize tests', () => {
     })
 
     it('should throw an error if user is not passed in initialize', () => {
-        expect(() => DVCClient.initialize('YOUR_CLIENT_SIDE_ID')).toThrow(missingUserError)
+        expect(() => DVCClient.initialize('YOUR_CLIENT_SIDE_ID')).toThrow(
+            missingUserError,
+        )
     })
 
     it('should NOT throw an error if invalid user is passed in initialize', () => {
-        const badUser = { 'who': 'me' }
+        const badUser = { who: 'me' }
         const client = DVCClient.initialize('YOUR_CLIENT_SIDE_ID', badUser)
         expect(client).not.toBeNull()
     })
 
     it('should throw an error if invalid options are passed in initialize', () => {
         const user = { user_id: 'user1' }
-        expect(() => DVCClient.initialize('YOUR_CLIENT_SIDE_ID', user, null)).toThrow(invalidOptionsError)
-        expect(() => DVCClient.initialize('YOUR_CLIENT_SIDE_ID', user, false)).toThrow(invalidOptionsError)
+        expect(() =>
+            DVCClient.initialize('YOUR_CLIENT_SIDE_ID', user, null),
+        ).toThrow(invalidOptionsError)
+        expect(() =>
+            DVCClient.initialize('YOUR_CLIENT_SIDE_ID', user, false),
+        ).toThrow(invalidOptionsError)
     })
 
     it('should flush when pagehide is triggered', () => {

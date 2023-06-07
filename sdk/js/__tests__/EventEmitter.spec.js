@@ -43,7 +43,7 @@ describe('EventEmitter tests', () => {
         it('should throw error if event is not a predefined event', () => {
             const handler = jest.fn()
             expect(() =>
-                eventEmitter.subscribe('not_an_event', handler)
+                eventEmitter.subscribe('not_an_event', handler),
             ).toThrow(expect.any(Error))
         })
 
@@ -104,7 +104,7 @@ describe('EventEmitter tests', () => {
             eventEmitter.emitVariableEvaluated(evaluatedVariable)
             expect(allUpdatesHandler).toBeCalledWith(
                 evaluatedVariable.key,
-                evaluatedVariable
+                evaluatedVariable,
             )
         })
         it('should emit variable evaluated event if subscribed to specific variable evaluations', () => {
@@ -117,12 +117,12 @@ describe('EventEmitter tests', () => {
             }
             eventEmitter.subscribe(
                 'variableEvaluated:my-variable-key',
-                allUpdatesHandler
+                allUpdatesHandler,
             )
             eventEmitter.emitVariableEvaluated(evaluatedVariable)
             expect(allUpdatesHandler).toBeCalledWith(
                 evaluatedVariable.key,
-                evaluatedVariable
+                evaluatedVariable,
             )
         })
         it('should not emit variable evaluated event if not subscribed to specific variable key', () => {
@@ -135,12 +135,12 @@ describe('EventEmitter tests', () => {
             }
             eventEmitter.subscribe(
                 'variableEvaluated:not-my-variable-key',
-                allUpdatesHandler
+                allUpdatesHandler,
             )
             eventEmitter.emitVariableEvaluated(evaluatedVariable)
             expect(allUpdatesHandler).not.toBeCalledWith(
                 evaluatedVariable.key,
-                evaluatedVariable
+                evaluatedVariable,
             )
         })
         it('should not emit variable evaluated events if not subscribed to variable evaluations', () => {
@@ -154,7 +154,7 @@ describe('EventEmitter tests', () => {
             eventEmitter.emitVariableEvaluated(evaluatedVariable)
             expect(allUpdatesHandler).not.toBeCalledWith(
                 evaluatedVariable.key,
-                evaluatedVariable
+                evaluatedVariable,
             )
         })
     })
@@ -182,16 +182,16 @@ describe('EventEmitter tests', () => {
             eventEmitter.subscribe('variableUpdated:*', allUpdatesHandler)
             eventEmitter.subscribe(
                 `variableUpdated:my-variable-key`,
-                variableKeyHandler
+                variableKeyHandler,
             )
             eventEmitter.emitVariableUpdates(oldVariableSet, variableSet, {})
             expect(allUpdatesHandler).toBeCalledWith(
                 'my-variable-key',
-                variableSet['my-variable-key']
+                variableSet['my-variable-key'],
             )
             expect(variableKeyHandler).toBeCalledWith(
                 'my-variable-key',
-                variableSet['my-variable-key']
+                variableSet['my-variable-key'],
             )
         })
 
@@ -217,7 +217,7 @@ describe('EventEmitter tests', () => {
             eventEmitter.subscribe('variableUpdated:*', allUpdatesHandler)
             eventEmitter.subscribe(
                 `variableUpdated:my-variable-key`,
-                variableKeyHandler
+                variableKeyHandler,
             )
             eventEmitter.emitVariableUpdates(oldVariableSet, variableSet, {})
             expect(allUpdatesHandler).not.toBeCalled()
@@ -253,7 +253,7 @@ describe('EventEmitter tests', () => {
             eventEmitter.subscribe('variableUpdated:*', allUpdatesHandler)
             eventEmitter.subscribe(
                 `variableUpdated:my-variable-key`,
-                variableKeyHandler
+                variableKeyHandler,
             )
             eventEmitter.emitVariableUpdates(oldVariableSet, newVariableSet, {})
             expect(allUpdatesHandler).toBeCalledWith('my-variable-key', null)
@@ -283,16 +283,16 @@ describe('EventEmitter tests', () => {
             eventEmitter.subscribe('variableUpdated:*', allUpdatesHandler)
             eventEmitter.subscribe(
                 `variableUpdated:my-variable-key`,
-                variableKeyHandler
+                variableKeyHandler,
             )
             eventEmitter.emitVariableUpdates(oldVariableSet, newVariableSet, {})
             expect(allUpdatesHandler).toBeCalledWith(
                 'my-variable-key',
-                newVariableSet['my-variable-key']
+                newVariableSet['my-variable-key'],
             )
             expect(variableKeyHandler).toBeCalledWith(
                 'my-variable-key',
-                newVariableSet['my-variable-key']
+                newVariableSet['my-variable-key'],
             )
         })
     })
@@ -320,16 +320,16 @@ describe('EventEmitter tests', () => {
             eventEmitter.subscribe('featureUpdated:*', allUpdatesHandler)
             eventEmitter.subscribe(
                 `featureUpdated:my-feature-key`,
-                featureKeyHandler
+                featureKeyHandler,
             )
             eventEmitter.emitFeatureUpdates(oldFeatureSet, featureSet)
             expect(allUpdatesHandler).toBeCalledWith(
                 'my-feature-key',
-                featureSet['my-feature-key']
+                featureSet['my-feature-key'],
             )
             expect(featureKeyHandler).toBeCalledWith(
                 'my-feature-key',
-                featureSet['my-feature-key']
+                featureSet['my-feature-key'],
             )
         })
 
@@ -355,7 +355,7 @@ describe('EventEmitter tests', () => {
             eventEmitter.subscribe('featureUpdated:*', allUpdatesHandler)
             eventEmitter.subscribe(
                 `featureUpdated:my-feature-key`,
-                featureKeyHandler
+                featureKeyHandler,
             )
             eventEmitter.emitFeatureUpdates(oldFeatureSet, featureSet)
             expect(allUpdatesHandler).not.toBeCalled()
@@ -390,7 +390,7 @@ describe('EventEmitter tests', () => {
             eventEmitter.subscribe('featureUpdated:*', allUpdatesHandler)
             eventEmitter.subscribe(
                 `featureUpdated:my-feature-key`,
-                featureKeyHandler
+                featureKeyHandler,
             )
             eventEmitter.emitFeatureUpdates(oldFeatureSet, newFeatureSet)
             expect(allUpdatesHandler).toBeCalledWith('my-feature-key', null)
@@ -419,16 +419,16 @@ describe('EventEmitter tests', () => {
             eventEmitter.subscribe('featureUpdated:*', allUpdatesHandler)
             eventEmitter.subscribe(
                 `featureUpdated:my-feature-key`,
-                featureKeyHandler
+                featureKeyHandler,
             )
             eventEmitter.emitFeatureUpdates(oldFeatureSet, newFeatureSet)
             expect(allUpdatesHandler).toBeCalledWith(
                 'my-feature-key',
-                newFeatureSet['my-feature-key']
+                newFeatureSet['my-feature-key'],
             )
             expect(featureKeyHandler).toBeCalledWith(
                 'my-feature-key',
-                newFeatureSet['my-feature-key']
+                newFeatureSet['my-feature-key'],
             )
         })
     })
@@ -473,7 +473,7 @@ describe('EventEmitter tests', () => {
             client.handleConfigReceived(
                 testConfig,
                 new DVCPopulatedUser({ user_id: 'user1' }, null),
-                123
+                123,
             )
             expect(configHandler).toHaveBeenCalledWith(testConfig.variables)
         })
@@ -487,7 +487,7 @@ describe('EventEmitter tests', () => {
             client.handleConfigReceived(
                 testConfig,
                 new DVCPopulatedUser({ user_id: 'user1' }, null),
-                123
+                123,
             )
             expect(configHandler).not.toHaveBeenCalled()
         })
@@ -501,7 +501,7 @@ describe('EventEmitter tests', () => {
             client.handleConfigReceived(
                 testConfig,
                 new DVCPopulatedUser({ user_id: 'user1' }, null),
-                123
+                123,
             )
             expect(configHandler).toHaveBeenCalledWith(testConfig.variables)
         })

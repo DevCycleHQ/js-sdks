@@ -25,26 +25,9 @@
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nrwl/nx/typescript", "./eslint-common.js"],
-        "rules": {
-            "@typescript-eslint/type-annotation-spacing": ["error", {
-                "before": true,
-                "after": true,
-                "overrides": { "colon": { "before": false }}
-            }],
-            "@typescript-eslint/explicit-module-boundary-types": ["error"],
-            "@typescript-eslint/indent": [
-                "error",
-                4,
-                {
-                    "ignoredNodes": [
-                        "FunctionExpression > .params[decorators.length > 0]",
-                        "FunctionExpression > .params > :matches(Decorator, :not(:first-child))",
-                        "ClassBody.body > PropertyDefinition[decorators.length > 0] > .key"
-                    ],
-                    "SwitchCase": 1
-                }
-            ]
-        }
+      "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": ["error"]
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

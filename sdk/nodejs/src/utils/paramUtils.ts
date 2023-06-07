@@ -8,11 +8,15 @@ export const checkParamDefined = (name: string, param: unknown): unknown => {
 export enum typeEnum {
     string = 'string',
     number = 'number',
-    boolean = 'boolean'
+    boolean = 'boolean',
 }
 const typeEnumValues = Object.values(typeEnum)
 
-export const checkParamType = (name: string, param: unknown, type: typeEnum): void => {
+export const checkParamType = (
+    name: string,
+    param: unknown,
+    type: typeEnum,
+): void => {
     if (param === undefined || param === null) {
         throw new Error(`${name} is invalid!`)
     }
@@ -28,7 +32,6 @@ export const checkParamType = (name: string, param: unknown, type: typeEnum): vo
     if (type === typeEnum.number && isNaN(param as number)) {
         throw new Error(`${name} is invalid number!`)
     }
-
 }
 
 export function checkParamString(name: string, param: unknown): string {

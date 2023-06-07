@@ -11,13 +11,13 @@ export enum FilterComparator {
     'exist' = 'exist',
     '!exist' = '!exist',
     'contain' = 'contain',
-    '!contain'= '!contain'
+    '!contain' = '!contain',
 }
 
 export enum BooleanFilterComparator {
     '=' = '=',
     'exist' = 'exist',
-    '!exist' = '!exist'
+    '!exist' = '!exist',
 }
 
 export enum StringFilterComparator {
@@ -26,7 +26,7 @@ export enum StringFilterComparator {
     'exist' = 'exist',
     '!exist' = '!exist',
     'contain' = 'contain',
-    '!contain'= '!contain'
+    '!contain' = '!contain',
 }
 
 export enum NumberFilterComparator {
@@ -75,7 +75,7 @@ export enum UserSubType {
     platformVersion = 'platformVersion',
     appVersion = 'appVersion',
     deviceModel = 'deviceModel',
-    customData = 'customData'
+    customData = 'customData',
 }
 
 /**
@@ -84,7 +84,7 @@ export enum UserSubType {
  */
 export enum ListAudienceSubType {
     mixpanel = 'mixpanel',
-    csv = 'csv'
+    csv = 'csv',
 }
 
 /**
@@ -94,12 +94,12 @@ export enum DataKeyType {
     string = 'String',
     boolean = 'Boolean',
     number = 'Number',
-    semver = 'Semver'
+    semver = 'Semver',
 }
 
 export enum AudienceOperator {
     and = 'and',
-    or = 'or'
+    or = 'or',
 }
 
 /**
@@ -157,7 +157,7 @@ export class AudienceFilterOrOperator<IdType = string> {
  * Special filter used to establish a boolean operator. Can be used for top-level OR, etc.
  */
 export class TopLevelOperator<IdType = string> {
-    filters: (AudienceFilterOrOperator<IdType>)[]
+    filters: AudienceFilterOrOperator<IdType>[]
 
     operator: AudienceOperator
 }

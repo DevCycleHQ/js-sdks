@@ -1,0 +1,14 @@
+dist/
+coverage/
+test-results/
+*.json
+eslint-common.js
+prettier.config.js
+jest.config.ts
+jest.preset.js
+*.MD
+lib/shared/bucketing-assembly-script/
+.yarn
+.husky
+.verdaccio
+node_modules

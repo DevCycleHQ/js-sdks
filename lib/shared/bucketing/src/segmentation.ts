@@ -6,7 +6,9 @@ import includes from 'lodash/includes'
 import find from 'lodash/find'
 import { versionCompare } from './versionCompare'
 import {
-    PublicAudience, AudienceFilterOrOperator, UserSubType
+    PublicAudience,
+    AudienceFilterOrOperator,
+    UserSubType,
 } from '@devcycle/types'
 import UAParser from 'ua-parser-js'
 
@@ -18,18 +20,30 @@ import UAParser from 'ua-parser-js'
  * @param data - The incoming user, device, and user agent data
  * @returns {*|boolean|boolean}
  */
-export const evaluateOperator = (
-    { operator, data, featureId, isOptInEnabled, audiences = {} }:
-    {
-        operator: AudienceFilterOrOperator, data: any, featureId: string, isOptInEnabled: boolean
-        audiences?: { [id: string]: Omit<PublicAudience<string>, '_id'> }
-    }
-): boolean => {
+export const evaluateOperator = ({
+    operator,
+    data,
+    featureId,
+    isOptInEnabled,
+    audiences = {},
+}: {
+    operator: AudienceFilterOrOperator
+    data: any
+    featureId: string
+    isOptInEnabled: boolean
+    audiences?: { [id: string]: Omit<PublicAudience<string>, '_id'> }
+}): boolean => {
     if (!operator?.filters?.length) return false
 
     const doesUserPassFilter = (filter: AudienceFilterOrOperator) => {
         if (filter.operator) {
-            return evaluateOperator({ operator: filter, data, featureId, isOptInEnabled, audiences })
+            return evaluateOperator({
+                operator: filter,
+                data,
+                featureId,
+                isOptInEnabled,
+                audiences,
+            })
         }
         if (filter.type === 'all') return true
         if (filter.type === 'optIn') {
@@ -37,7 +51,13 @@ export const evaluateOperator = (
             return isOptInEnabled && !!optIns?.[featureId]
         }
         if (filter.type === 'audienceMatch') {
-            return filterForAudienceMatch({ operator: filter, data, featureId, isOptInEnabled, audiences })
+            return filterForAudienceMatch({
+                operator: filter,
+                data,
+                featureId,
+                isOptInEnabled,
+                audiences,
+            })
         }
         if (filter.type !== 'user') {
             console.error(`Invalid filter type: ${filter.type}`)
@@ -63,13 +83,23 @@ export const evaluateOperator = (
     }
 }
 type FilterFunctionsBySubtype = {
-    [key in UserSubType]: (data: any, filter: AudienceFilterOrOperator) => boolean
+    [key in UserSubType]: (
+        data: any,
+        filter: AudienceFilterOrOperator,
+    ) => boolean
 }
 
 function filterForAudienceMatch({
-    operator, data, featureId, isOptInEnabled, audiences = {}
+    operator,
+    data,
+    featureId,
+    isOptInEnabled,
+    audiences = {},
 }: {
-    operator: AudienceFilterOrOperator, data: any, featureId: string, isOptInEnabled: boolean
+    operator: AudienceFilterOrOperator
+    data: any
+    featureId: string
+    isOptInEnabled: boolean
     audiences?: { [id: string]: Omit<PublicAudience<string>, '_id'> }
 }): boolean {
     if (!operator?._audiences) return false
@@ -79,16 +109,20 @@ function filterForAudienceMatch({
         // grab actual audience from the provided config data
         const audience = audiences[_audience]
         if (!audience) {
-            console.error('Invalid audience referenced by audienceMatch filter.')
+            console.error(
+                'Invalid audience referenced by audienceMatch filter.',
+            )
             return false
         }
-        if (evaluateOperator({
-            operator: audience.filters,
-            data,
-            featureId,
-            isOptInEnabled,
-            audiences
-        })) {
+        if (
+            evaluateOperator({
+                operator: audience.filters,
+                data,
+                featureId,
+                isOptInEnabled,
+                audiences,
+            })
+        ) {
             return comparator === '='
         }
     }
@@ -101,32 +135,45 @@ const filterFunctionsBySubtype: FilterFunctionsBySubtype = {
     ip: (data, filter) => checkStringsFilter(data.ip, filter),
     user_id: (data, filter) => checkStringsFilter(data.user_id, filter),
     appVersion: (data, filter) => checkVersionFilters(data.appVersion, filter),
-    platformVersion: (data, filter) => checkVersionFilters(data.platformVersion, filter),
+    platformVersion: (data, filter) =>
+        checkVersionFilters(data.platformVersion, filter),
     deviceModel: (data, filter) => checkStringsFilter(data.deviceModel, filter),
     platform: (data, filter) => checkStringsFilter(data.platform, filter),
     customData: (data, filter) => {
         const combinedCustomData = {
             ...data.customData,
-            ...data.privateCustomData
+            ...data.privateCustomData,
         }
         return checkCustomData(combinedCustomData, filter)
-    }
+    },
 }
 
 export const convertToSemanticVersion = (version: string): string => {
     const splitVersion = version.split('.')
-    if (splitVersion.length < 2) { splitVersion.push('0') }
-    if (splitVersion.length < 3) { splitVersion.push('0') }
+    if (splitVersion.length < 2) {
+        splitVersion.push('0')
+    }
+    if (splitVersion.length < 3) {
+        splitVersion.push('0')
+    }
 
     splitVersion.forEach((value, index) => {
-        if (value === '') { splitVersion[index] = '0' }
+        if (value === '') {
+            splitVersion[index] = '0'
+        }
     })
     return splitVersion.join('.')
 }
 
-export const checkVersionValue = (filterVersion: string, version: string, operator?: string): boolean => {
+export const checkVersionValue = (
+    filterVersion: string,
+    version: string,
+    operator?: string,
+): boolean => {
     if (filterVersion?.length > 0) {
-        const result = versionCompare(version, filterVersion, { zeroExtend: true })
+        const result = versionCompare(version, filterVersion, {
+            zeroExtend: true,
+        })
         if (isNaN(result)) {
             return false
         } else if (result === 0 && includes(operator, '=')) {
@@ -140,7 +187,11 @@ export const checkVersionValue = (filterVersion: string, version: string, operat
     return false
 }
 
-export const checkVersionFilter = (version: string, filterVersions: unknown[] | null, operator?: string): boolean => {
+export const checkVersionFilter = (
+    version: string,
+    filterVersions: unknown[] | null,
+    operator?: string,
+): boolean => {
     let parsedOperator = operator
     let parsedVersion = version
 
@@ -152,7 +203,9 @@ export const checkVersionFilter = (version: string, filterVersions: unknown[] | 
         return false
     }
 
-    let filterVersionsTemp: string[] = filterVersions.filter((val) => typeof val === 'string') as string[]
+    let filterVersionsTemp: string[] = filterVersions.filter(
+        (val) => typeof val === 'string',
+    ) as string[]
 
     let not = false
     if (parsedOperator === '!=') {
@@ -172,16 +225,22 @@ export const checkVersionFilter = (version: string, filterVersions: unknown[] | 
         const regex1 = new RegExp(/[^(\d|.|\-)]/g)
         const regex2 = new RegExp(/-.*/g)
         parsedVersion = parsedVersion.replace(regex1, '').replace(regex2, '')
-        filterVersionsTemp = filterVersionsTemp.map(
-            (filterVersion) => filterVersion.replace(regex1, '').replace(regex2, '')
+        filterVersionsTemp = filterVersionsTemp.map((filterVersion) =>
+            filterVersion.replace(regex1, '').replace(regex2, ''),
         )
     }
     parsedVersion = convertToSemanticVersion(parsedVersion)
-    const passed = filterVersionsTemp.some((v) => checkVersionValue(v, parsedVersion, operator))
-    return (!not) ? passed : !passed
+    const passed = filterVersionsTemp.some((v) =>
+        checkVersionValue(v, parsedVersion, operator),
+    )
+    return !not ? passed : !passed
 }
 
-export const checkNumberFilter = (num: unknown, filterNums: unknown[] | null, operator?: string): boolean => {
+export const checkNumberFilter = (
+    num: unknown,
+    filterNums: unknown[] | null,
+    operator?: string,
+): boolean => {
     if (isString(operator)) {
         switch (operator) {
             case 'exist':
@@ -203,17 +262,17 @@ export const checkNumberFilter = (num: unknown, filterNums: unknown[] | null, op
 
             switch (operator) {
                 case '=':
-                    return (num === filterNum)
+                    return num === filterNum
                 case '!=':
-                    return (num !== filterNum)
+                    return num !== filterNum
                 case '>':
-                    return (num > filterNum)
+                    return num > filterNum
                 case '>=':
-                    return (num >= filterNum)
+                    return num >= filterNum
                 case '<':
-                    return (num < filterNum)
+                    return num < filterNum
                 case '<=':
-                    return (num <= filterNum)
+                    return num <= filterNum
             }
             return false
         })
@@ -221,14 +280,20 @@ export const checkNumberFilter = (num: unknown, filterNums: unknown[] | null, op
     return false
 }
 
-export const checkNumbersFilter = (number: unknown, filter: AudienceFilterOrOperator): boolean => {
+export const checkNumbersFilter = (
+    number: unknown,
+    filter: AudienceFilterOrOperator,
+): boolean => {
     const parsedNumber = isString(number) ? Number(number) : number
     const operator = filter.comparator
     const values = getFilterValues(filter)
     return checkNumberFilter(parsedNumber, values, operator)
 }
 
-export const checkStringsFilter = (string: unknown, filter: AudienceFilterOrOperator): boolean => {
+export const checkStringsFilter = (
+    string: unknown,
+    filter: AudienceFilterOrOperator,
+): boolean => {
     const operator = filter.comparator
     const values = getFilterValues(filter)
 
@@ -242,14 +307,25 @@ export const checkStringsFilter = (string: unknown, filter: AudienceFilterOrOper
         case '!exist':
             return !isString(string) || string === ''
         case 'contain':
-            return (!!values && isString(string) && !!find(values, (value) => includes(string, value)))
+            return (
+                !!values &&
+                isString(string) &&
+                !!find(values, (value) => includes(string, value))
+            )
         case '!contain':
-            return (!!values && (!isString(string) || !find(values, (value) => includes(string, value))))
+            return (
+                !!values &&
+                (!isString(string) ||
+                    !find(values, (value) => includes(string, value)))
+            )
     }
     return isString(string)
 }
 
-export const checkBooleanFilter = (bool: unknown, filter: AudienceFilterOrOperator): boolean => {
+export const checkBooleanFilter = (
+    bool: unknown,
+    filter: AudienceFilterOrOperator,
+): boolean => {
     const operator = filter.comparator
     const values = getFilterValues(filter)
     switch (operator) {
@@ -268,7 +344,10 @@ export const checkBooleanFilter = (bool: unknown, filter: AudienceFilterOrOperat
     return false
 }
 
-export const checkVersionFilters = (appVersion: string, filter: AudienceFilterOrOperator): boolean => {
+export const checkVersionFilters = (
+    appVersion: string,
+    filter: AudienceFilterOrOperator,
+): boolean => {
     const parsedAppVersion = appVersion
     const operator = filter.comparator
     const values = getFilterValues(filter)
@@ -280,7 +359,10 @@ export const checkVersionFilters = (appVersion: string, filter: AudienceFilterOr
     }
 }
 
-export const checkCustomData = (data: Record<string, unknown>, filter: AudienceFilterOrOperator): boolean => {
+export const checkCustomData = (
+    data: Record<string, unknown>,
+    filter: AudienceFilterOrOperator,
+): boolean => {
     const values = getFilterValues(filter)
     const operator = filter.comparator
 
@@ -293,7 +375,7 @@ export const checkCustomData = (data: Record<string, unknown>, filter: AudienceF
             return checkValueExists(dataValue)
         } else if (operator === '!exist') {
             return !checkValueExists(dataValue)
-        } else if ((isString(firstValue) && isString(dataValue))) {
+        } else if (isString(firstValue) && isString(dataValue)) {
             return checkStringsFilter(dataValue, filter)
         } else if (isNumber(firstValue) && isNumber(dataValue)) {
             return checkNumbersFilter(dataValue, filter)
@@ -332,9 +414,13 @@ export const checkCustomData = (data: Record<string, unknown>, filter: AudienceF
 // }
 // exports.checkListAudienceFields = checkListAudienceFields
 
-export const getFilterValues = (filter: AudienceFilterOrOperator): unknown[] | null => {
+export const getFilterValues = (
+    filter: AudienceFilterOrOperator,
+): unknown[] | null => {
     const values = isArray(filter.values)
-        ? (filter.values as unknown[]).filter((val: unknown) => !(val === null || val === undefined))
+        ? (filter.values as unknown[]).filter(
+              (val: unknown) => !(val === null || val === undefined),
+          )
         : null
     if (values && values.length > 0) {
         return values
@@ -343,31 +429,33 @@ export const getFilterValues = (filter: AudienceFilterOrOperator): unknown[] | n
     }
 }
 
-export const parseUserAgent = (uaString?: string): {
-    browser?: string,
+export const parseUserAgent = (
+    uaString?: string,
+): {
+    browser?: string
     browserDeviceType?: string
 } => {
     // Note: Anything that is not in this map will return Desktop
     const DEVICES_MAP: Record<string, string> = {
-        'mobile': 'Mobile',
-        'tablet': 'Tablet'
+        mobile: 'Mobile',
+        tablet: 'Tablet',
     }
 
     // Note: Anything that is not in this map will return Other
     const BROWSER_MAP: Record<string, string> = {
-        'Chrome': 'Chrome',
+        Chrome: 'Chrome',
         'Chrome Headless': 'Chrome',
         'Chrome WebView': 'Chrome',
-        'Chromium': 'Chrome',
-        'Firefox': 'Firefox',
-        'Safari': 'Safari',
-        'Mobile Safari': 'Safari'
+        Chromium: 'Chrome',
+        Firefox: 'Firefox',
+        Safari: 'Safari',
+        'Mobile Safari': 'Safari',
     }
 
     if (!uaString) {
         return {
             browser: undefined,
-            browserDeviceType: undefined
+            browserDeviceType: undefined,
         }
     }
 
@@ -375,7 +463,8 @@ export const parseUserAgent = (uaString?: string): {
 
     return {
         browser: BROWSER_MAP[parser.getBrowser().name || ''] || 'Other',
-        browserDeviceType: DEVICES_MAP[parser.getDevice().type || ''] || 'Desktop'
+        browserDeviceType:
+            DEVICES_MAP[parser.getDevice().type || ''] || 'Desktop',
     }
 }
 
@@ -388,5 +477,10 @@ export const parseUserAgent = (uaString?: string): {
  * @returns {boolean}
  */
 function checkValueExists(value: unknown): boolean {
-    return value !== undefined && value !== null && value !== '' && !Number.isNaN(value)
+    return (
+        value !== undefined &&
+        value !== null &&
+        value !== '' &&
+        !Number.isNaN(value)
+    )
 }

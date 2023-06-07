@@ -16,7 +16,7 @@ axiosRetry(axiosClient, {
     shouldResetTimeout: true,
     retryCondition: (error) => {
         return !error.response || (error.response.status || 0) >= 500
-    }
+    },
 })
 
 export const HOST = '.devcycle.com'
@@ -30,7 +30,7 @@ export const SAVE_ENTITY_PATH = '/v1/edgedb'
 export const baseRequestHeaders = (sdkKey?: string): AxiosRequestHeaders => {
     return {
         'Content-Type': 'application/json',
-        ...(sdkKey ? { 'Authorization': sdkKey } : {})
+        ...(sdkKey ? { Authorization: sdkKey } : {}),
     }
 }
 
@@ -41,33 +41,33 @@ export const get = async (url: string): Promise<AxiosResponse> => {
     return await axiosClient.request({
         method: 'GET',
         url: `${url}`,
-        headers: baseRequestHeaders()
+        headers: baseRequestHeaders(),
     })
 }
 
 export const post = async (
     url: string,
     sdkKey: string,
-    body: Record<string, unknown>
+    body: Record<string, unknown>,
 ): Promise<AxiosResponse> => {
     return await axiosClient.request({
         method: 'POST',
         url,
         data: body,
-        headers: baseRequestHeaders(sdkKey)
+        headers: baseRequestHeaders(sdkKey),
     })
 }
 
 export const patch = async (
     url: string,
     sdkKey: string,
-    body: Record<string, unknown>
+    body: Record<string, unknown>,
 ): Promise<AxiosResponse> => {
     return await axiosClient.request({
         method: 'PATCH',
         url,
         data: body,
-        headers: baseRequestHeaders(sdkKey)
+        headers: baseRequestHeaders(sdkKey),
     })
 }
 
@@ -79,7 +79,7 @@ export const getConfigJson = async (
     user: DVCPopulatedUser,
     logger: DVCLogger,
     options?: DVCOptions,
-    extraParams?: { sse: boolean, lastModified?: number, etag?: string }
+    extraParams?: { sse: boolean; lastModified?: number; etag?: string },
 ): Promise<BucketedUserConfig> => {
     const queryParams = new URLSearchParams({ sdkKey })
     serializeUserSearchParams(user, queryParams)
@@ -89,22 +89,31 @@ export const getConfigJson = async (
     if (extraParams?.sse) {
         queryParams.append('sse', '1')
         if (extraParams.lastModified) {
-            queryParams.append('sseLastModified', extraParams.lastModified.toString())
+            queryParams.append(
+                'sseLastModified',
+                extraParams.lastModified.toString(),
+            )
         }
         if (extraParams.etag) {
             queryParams.append('sseEtag', extraParams.etag)
         }
     }
-    const url = `${options?.apiProxyURL || CLIENT_SDK_URL}${CONFIG_PATH}?` + queryParams.toString()
+    const url =
+        `${options?.apiProxyURL || CLIENT_SDK_URL}${CONFIG_PATH}?` +
+        queryParams.toString()
 
     try {
         const res = await get(url)
         return res.data
     } catch (ex: any) {
         const errorString = JSON.stringify(ex?.response?.data.data.errors)
-        logger.error(`Request to get config failed for url: ${url}, ` +
-            `response message: ${ex.message}, response data: ${errorString}`)
-        throw new Error(`Failed to download DevCycle config. Error details: ${errorString}`)
+        logger.error(
+            `Request to get config failed for url: ${url}, ` +
+                `response message: ${ex.message}, response data: ${errorString}`,
+        )
+        throw new Error(
+            `Failed to download DevCycle config. Error details: ${errorString}`,
+        )
     }
 }
 
@@ -114,7 +123,7 @@ export const publishEvents = async (
     user: DVCPopulatedUser,
     events: DVCEvent[],
     logger: DVCLogger,
-    options?: DVCOptions
+    options?: DVCOptions,
 ): Promise<AxiosResponse> => {
     if (!sdkKey) {
         throw new Error('Missing sdkKey to publish events to Events API')
@@ -126,10 +135,12 @@ export const publishEvents = async (
     const res = await post(
         `${options?.apiProxyURL || EVENT_URL}${EVENTS_PATH}`,
         sdkKey,
-        payload as unknown as Record<string, unknown>
+        payload as unknown as Record<string, unknown>,
     )
     if (res.status >= 400) {
-        logger.error(`Error posting events, status: ${res.status}, body: ${res.data}`)
+        logger.error(
+            `Error posting events, status: ${res.status}, body: ${res.data}`,
+        )
     } else {
         logger.info(`Posted Events, status: ${res.status}, body: ${res.data}`)
     }
@@ -141,7 +152,7 @@ export const saveEntity = async (
     user: DVCPopulatedUser,
     sdkKey: string,
     logger: DVCLogger,
-    options?: DVCOptions
+    options?: DVCOptions,
 ): Promise<AxiosResponse> => {
     if (!sdkKey) {
         throw new Error('Missing sdkKey to save to Edge DB!')
@@ -154,17 +165,23 @@ export const saveEntity = async (
     }
 
     const res = await patch(
-        `${options?.apiProxyURL || CLIENT_SDK_URL}${SAVE_ENTITY_PATH}/${encodeURIComponent(user.user_id)}`,
+        `${
+            options?.apiProxyURL || CLIENT_SDK_URL
+        }${SAVE_ENTITY_PATH}/${encodeURIComponent(user.user_id)}`,
         sdkKey,
-        user as unknown as Record<string, unknown>
+        user as unknown as Record<string, unknown>,
     )
 
     if (res.status === 403) {
         logger.warn('Warning: EdgeDB feature is not enabled for this project')
     } else if (res.status >= 400) {
-        logger.warn(`Error saving user entity, status: ${res.status}, body: ${res.data}`)
+        logger.warn(
+            `Error saving user entity, status: ${res.status}, body: ${res.data}`,
+        )
     } else {
-        logger.info(`Saved user entity, status: ${res.status}, body: ${res.data}`)
+        logger.info(
+            `Saved user entity, status: ${res.status}, body: ${res.data}`,
+        )
     }
     return res
 }
@@ -173,5 +190,5 @@ export default {
     get,
     post,
     getConfigJson,
-    publishEvents
+    publishEvents,
 }

@@ -21,11 +21,10 @@ const testUserData = {
     platformVersion: '10.0',
     deviceModel: 'web device',
     sdkType: 'client',
-    sdkVersion: '1.0.0'
+    sdkVersion: '1.0.0',
 }
 
 describe('clientSDKAPI types', () => {
-
     describe('date transformation', () => {
         it('should accept dates as date objects', async () => {
             const userObj = plainToInstance(DVCAPIUser, testUserData)
@@ -36,7 +35,7 @@ describe('clientSDKAPI types', () => {
             const userObj = plainToInstance(DVCAPIUser, {
                 ...testUserData,
                 createdDate: date.toLocaleDateString(),
-                lastSeenDate: date.toLocaleDateString()
+                lastSeenDate: date.toLocaleDateString(),
             })
             expect(await validate(userObj)).toHaveLength(0)
         })
@@ -45,7 +44,7 @@ describe('clientSDKAPI types', () => {
             const userObj = plainToInstance(DVCAPIUser, {
                 ...testUserData,
                 createdDate: date.getTime(),
-                lastSeenDate: date.getTime()
+                lastSeenDate: date.getTime(),
             })
             expect(await validate(userObj)).toHaveLength(0)
         })
@@ -54,7 +53,7 @@ describe('clientSDKAPI types', () => {
             const userObj = plainToInstance(DVCAPIUser, {
                 ...testUserData,
                 createdDate: `${date.getTime()}`,
-                lastSeenDate: `${date.getTime()}`
+                lastSeenDate: `${date.getTime()}`,
             })
             expect(await validate(userObj)).toHaveLength(0)
         })

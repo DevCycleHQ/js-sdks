@@ -5,7 +5,7 @@ import { checkParamDefined } from './utils'
 
 export const EventTypes = {
     variableEvaluated: 'variableEvaluated',
-    variableDefaulted: 'variableDefaulted'
+    variableDefaulted: 'variableDefaulted',
 }
 
 type AggregateEvent = DVCEvent & {
@@ -20,18 +20,25 @@ export class EventQueue {
     eventFlushIntervalMS: number
     flushInterval: ReturnType<typeof setInterval>
 
-    constructor(sdkKey: string, dvcClient: DVCClient, eventFlushIntervalMS?: number) {
+    constructor(
+        sdkKey: string,
+        dvcClient: DVCClient,
+        eventFlushIntervalMS?: number,
+    ) {
         this.sdkKey = sdkKey
         this.client = dvcClient
         this.eventQueue = []
         this.aggregateEventMap = {}
         this.eventFlushIntervalMS = eventFlushIntervalMS || 10 * 1000
 
-        this.flushInterval = setInterval(this.flushEvents.bind(this), this.eventFlushIntervalMS)
+        this.flushInterval = setInterval(
+            this.flushEvents.bind(this),
+            this.eventFlushIntervalMS,
+        )
     }
 
     async flushEvents(): Promise<void> {
-        const eventsToFlush = [ ...this.eventQueue ]
+        const eventsToFlush = [...this.eventQueue]
         const aggregateEventsToFlush = this.eventsFromAggregateEventMap()
         eventsToFlush.push(...aggregateEventsToFlush)
 
@@ -50,12 +57,14 @@ export class EventQueue {
                 this.client.config || null,
                 this.client.user,
                 eventsToFlush,
-                this.client.logger
+                this.client.logger,
             )
             if (res.status !== 201) {
                 this.eventQueue.push(...eventsToFlush)
             } else {
-                this.client.logger.info(`DVC Flushed ${eventsToFlush.length} Events.`)
+                this.client.logger.info(
+                    `DVC Flushed ${eventsToFlush.length} Events.`,
+                )
             }
         } catch (ex) {
             this.client.eventEmitter.emitError(ex)
@@ -94,7 +103,9 @@ export class EventQueue {
      * Turn the Aggregate Event Map into an Array of DVCAPIEvent objects for publishing.
      */
     private eventsFromAggregateEventMap(): DVCEvent[] {
-        return Object.values(this.aggregateEventMap).map((typeMap) => Object.values(typeMap)).flat()
+        return Object.values(this.aggregateEventMap)
+            .map((typeMap) => Object.values(typeMap))
+            .flat()
     }
 
     async close(): Promise<void> {

@@ -5,8 +5,8 @@ import { Provider } from './context'
 import { DVCClient } from '@devcycle/devcycle-js-sdk'
 
 type Props = {
-  config: ProviderConfig
-  children: ReactNode
+    config: ProviderConfig
+    children: ReactNode
 }
 
 let client: DVCClient | undefined
@@ -35,7 +35,5 @@ export default function DVCProvider(props: Props): React.ReactElement {
         }
     }, [])
 
-    return (
-        <Provider value={{ client }}>{props.children}</Provider>
-    )
+    return <Provider value={{ client }}>{props.children}</Provider>
 }

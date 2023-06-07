@@ -23,15 +23,15 @@ export class ResponseError extends Error {
     status: number
 }
 
-const exponentialBackoff: RequestInitWithRetry['retryDelay'] = (
-    attempt
-) => {
+const exponentialBackoff: RequestInitWithRetry['retryDelay'] = (attempt) => {
     const delay = Math.pow(2, attempt) * 100
     const randomSum = delay * 0.2 * Math.random()
     return delay + randomSum
 }
 
-type retryOnRequestErrorFunc = (retries: number) => RequestInitWithRetry['retryOn']
+type retryOnRequestErrorFunc = (
+    retries: number,
+) => RequestInitWithRetry['retryOn']
 
 const retryOnRequestError: retryOnRequestErrorFunc = (retries) => {
     return (attempt, error, response) => {
@@ -51,7 +51,9 @@ const handleResponse = async (res: Response) => {
     if (!res.ok) {
         let error
         try {
-            error = new ResponseError((await res.clone().json()).message || 'Something went wrong')
+            error = new ResponseError(
+                (await res.clone().json()).message || 'Something went wrong',
+            )
         } catch (e) {
             error = new ResponseError('Something went wrong')
         }
@@ -66,99 +68,145 @@ export async function publishEvents(
     logger: DVCLogger,
     sdkKey: string | null,
     eventsBatch: SDKEventBatchRequestBody,
-    eventsBaseURLOverride?: string
+    eventsBaseURLOverride?: string,
 ): Promise<Response> {
     if (!sdkKey) {
         throw new Error('DevCycle is not yet initialized to publish events.')
     }
-    const url = eventsBaseURLOverride ? `${eventsBaseURLOverride}${EVENTS_PATH}` : `${EVENT_URL}${HOST}${EVENTS_PATH}`
-    return await post(url, {
-        body: JSON.stringify({ batch: eventsBatch })
-    }, sdkKey)
+    const url = eventsBaseURLOverride
+        ? `${eventsBaseURLOverride}${EVENTS_PATH}`
+        : `${EVENT_URL}${HOST}${EVENTS_PATH}`
+    return await post(
+        url,
+        {
+            body: JSON.stringify({ batch: eventsBatch }),
+        },
+        sdkKey,
+    )
 }
 
 export async function getEnvironmentConfig(
     url: string,
     requestTimeout: number,
-    etag?: string
+    etag?: string,
 ): Promise<Response> {
-    const headers: Record<string, string> = etag ? { 'If-None-Match': etag } : {}
+    const headers: Record<string, string> = etag
+        ? { 'If-None-Match': etag }
+        : {}
 
-    return await getWithTimeout(url, {
-        headers: headers,
-        retries: 1
-    }, requestTimeout)
+    return await getWithTimeout(
+        url,
+        {
+            headers: headers,
+            retries: 1,
+        },
+        requestTimeout,
+    )
 }
 
 export async function getAllFeatures(
     user: DVCPopulatedUser,
     sdkKey: string,
-    options: DVCOptions
+    options: DVCOptions,
 ): Promise<Response> {
-    const baseUrl = `${options.bucketingAPIURI || BUCKETING_URL}${FEATURES_PATH}`
-    const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
-    return await post(postUrl, {
-        body: JSON.stringify(user),
-        retries: 5
-    }, sdkKey)
+    const baseUrl = `${
+        options.bucketingAPIURI || BUCKETING_URL
+    }${FEATURES_PATH}`
+    const postUrl = baseUrl.concat(
+        options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '',
+    )
+    return await post(
+        postUrl,
+        {
+            body: JSON.stringify(user),
+            retries: 5,
+        },
+        sdkKey,
+    )
 }
 
 export async function getAllVariables(
     user: DVCPopulatedUser,
     sdkKey: string,
-    options: DVCOptions
+    options: DVCOptions,
 ): Promise<Response> {
-    const baseUrl = `${options.bucketingAPIURI || BUCKETING_URL}${VARIABLES_PATH}`
-    const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
-    return await post(postUrl, {
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user),
-        retries: 5
-    }, sdkKey)
+    const baseUrl = `${
+        options.bucketingAPIURI || BUCKETING_URL
+    }${VARIABLES_PATH}`
+    const postUrl = baseUrl.concat(
+        options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '',
+    )
+    return await post(
+        postUrl,
+        {
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user),
+            retries: 5,
+        },
+        sdkKey,
+    )
 }
 
 export async function getVariable(
     user: DVCPopulatedUser,
     sdkKey: string,
     variableKey: string,
-    options: DVCOptions
+    options: DVCOptions,
 ): Promise<Response> {
-    const baseUrl = `${options.bucketingAPIURI || BUCKETING_URL}${VARIABLES_PATH}/${variableKey}`
-    const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
-    return await post(postUrl, {
-        body: JSON.stringify(user),
-        retries: 5
-    }, sdkKey)
+    const baseUrl = `${
+        options.bucketingAPIURI || BUCKETING_URL
+    }${VARIABLES_PATH}/${variableKey}`
+    const postUrl = baseUrl.concat(
+        options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '',
+    )
+    return await post(
+        postUrl,
+        {
+            body: JSON.stringify(user),
+            retries: 5,
+        },
+        sdkKey,
+    )
 }
 
 export async function postTrack(
     user: DVCPopulatedUser,
     event: DVCEvent,
     sdkKey: string,
-    options: DVCOptions
+    options: DVCOptions,
 ): Promise<void> {
     const baseUrl = `${options.bucketingAPIURI || BUCKETING_URL}${TRACK_PATH}`
-    const postUrl = baseUrl.concat(options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '')
-    await post(postUrl, {
-        body: JSON.stringify({
-            user,
-            events: [event]
-        }),
-        retries: 5
-    }, sdkKey)
+    const postUrl = baseUrl.concat(
+        options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '',
+    )
+    await post(
+        postUrl,
+        {
+            body: JSON.stringify({
+                user,
+                events: [event],
+            }),
+            retries: 5,
+        },
+        sdkKey,
+    )
 }
 
 export async function post(
     url: string,
     requestConfig: RequestInit | RequestInitWithRetry,
-    sdkKey: string
+    sdkKey: string,
 ): Promise<Response> {
     const [_fetch, config] = await getFetchAndConfig(requestConfig)
-    const postHeaders = { ...config.headers, 'Authorization': sdkKey, 'Content-Type': 'application/json' }
+    const postHeaders = {
+        ...config.headers,
+        Authorization: sdkKey,
+        'Content-Type': 'application/json',
+    }
     const res = await _fetch(url, {
         ...config,
         headers: postHeaders,
-        method: 'POST'
+        method: 'POST',
     })
 
     return handleResponse(res)
@@ -166,7 +214,7 @@ export async function post(
 
 export async function get(
     url: string,
-    requestConfig: RequestInit | RequestInitWithRetry
+    requestConfig: RequestInit | RequestInitWithRetry,
 ): Promise<Response> {
     const [_fetch, config] = await getFetchAndConfig(requestConfig)
     const headers = { ...config.headers, 'Content-Type': 'application/json' }
@@ -174,7 +222,7 @@ export async function get(
     const res = await _fetch(url, {
         ...config,
         headers,
-        method: 'GET'
+        method: 'GET',
     })
 
     return handleResponse(res)
@@ -183,7 +231,7 @@ export async function get(
 async function getWithTimeout(
     url: string,
     requestConfig: RequestInit | RequestInitWithRetry,
-    timeout: number
+    timeout: number,
 ): Promise<Response> {
     const controller = new AbortController()
     const id = setTimeout(() => {
@@ -191,7 +239,7 @@ async function getWithTimeout(
     }, timeout)
     const response = await get(url, {
         ...requestConfig,
-        signal: controller.signal
+        signal: controller.signal,
     })
     clearTimeout(id)
     return response
@@ -213,7 +261,9 @@ async function getFetchWithRetry() {
 type FetchClient = Awaited<ReturnType<typeof getFetch>>
 type FetchAndConfig = [FetchClient, RequestInit]
 
-async function getFetchAndConfig(requestConfig: RequestInit | RequestInitWithRetry): Promise<FetchAndConfig> {
+async function getFetchAndConfig(
+    requestConfig: RequestInit | RequestInitWithRetry,
+): Promise<FetchAndConfig> {
     const useRetries = 'retries' in requestConfig
     if (useRetries && requestConfig.retries) {
         const newConfig: RequestInitWithRetry = { ...requestConfig }

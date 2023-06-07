@@ -9,8 +9,14 @@ if (!fs.existsSync(folderPath)) {
     fs.mkdirSync(folderPath)
 }
 
-fs.writeFileSync(path.resolve(__dirname, `${folderName}/testData.json`), JSON.stringify(testData))
-fs.writeFileSync(path.resolve(__dirname, `${folderName}/largeConfig.json`), JSON.stringify(largeTestData))
+fs.writeFileSync(
+    path.resolve(__dirname, `${folderName}/testData.json`),
+    JSON.stringify(testData),
+)
+fs.writeFileSync(
+    path.resolve(__dirname, `${folderName}/largeConfig.json`),
+    JSON.stringify(largeTestData),
+)
 console.log(`Wrote test data to ${folderPath}`)
 
 export * from './data/testData'

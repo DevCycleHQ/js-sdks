@@ -1,11 +1,20 @@
 import isString from 'lodash/isString'
 import {
-    PublicEnvironment, PublicFeature, PublicProject, PublicVariable
+    PublicEnvironment,
+    PublicFeature,
+    PublicProject,
+    PublicVariable,
 } from '../../config/configBody'
 import type { VariableValue } from '../../config/models'
 import {
-    IsDate, IsOptional, IsNumber, IsBoolean,
-    IsString, IsIn, IsNotEmpty, IsISO31661Alpha2
+    IsDate,
+    IsOptional,
+    IsNumber,
+    IsBoolean,
+    IsString,
+    IsIn,
+    IsNotEmpty,
+    IsISO31661Alpha2,
 } from '@nestjs/class-validator'
 import { Transform, Type } from 'class-transformer'
 import 'reflect-metadata'
@@ -14,25 +23,27 @@ import { IsNotBlank } from '../../validators/isNotBlank'
 import { IsISO6391 } from '../../validators/isIso6391'
 
 export const SDKTypeValues = ['client', 'server', 'mobile', 'api']
-export type SDKTypes = typeof SDKTypeValues[number]
+export type SDKTypes = (typeof SDKTypeValues)[number]
 
 export type QueryParams = { [key: string]: string }
 
-const boolTransform = ({ value }: { value:  unknown }) => {
+const boolTransform = ({ value }: { value: unknown }) => {
     if (value === 'true') {
         return true
-    } else if (value === 'false'){
+    } else if (value === 'false') {
         return false
     }
     return value
 }
 
-const dateTransform = ({ value }: { value:  string | number }) => {
+const dateTransform = ({ value }: { value: string | number }) => {
     if (!value) return undefined
     const numberValue = Number(value)
-    if (!isNaN(numberValue)) { // value is a time string
+    if (!isNaN(numberValue)) {
+        // value is a time string
         return new Date(numberValue)
-    } else { // value is a date-time string
+    } else {
+        // value is a date-time string
         return new Date(value)
     }
 }
@@ -48,12 +59,12 @@ export class DVCAPIUser {
     @IsBoolean()
     @IsOptional()
     @Transform(boolTransform)
-        isAnonymous?: boolean
+    isAnonymous?: boolean
 
     @IsString()
     @IsNotBlank()
     @IsNotEmpty()
-        user_id: string
+    user_id: string
 
     /**
      * Email used for identifying a device user in the dashboard,
@@ -61,7 +72,7 @@ export class DVCAPIUser {
      */
     @IsString()
     @IsOptional()
-        email?: string
+    email?: string
 
     /**
      * Name of the user which can be used for identifying a device user,
@@ -69,7 +80,7 @@ export class DVCAPIUser {
      */
     @IsString()
     @IsOptional()
-        name?: string
+    name?: string
 
     /**
      * ISO 639-1 two-letter codes
@@ -77,21 +88,21 @@ export class DVCAPIUser {
     @IsISO6391()
     @IsString()
     @IsOptional()
-        language?: string
+    language?: string
 
     /**
      * ISO 3166 alpha-2
      */
     @IsISO31661Alpha2()
     @IsOptional()
-        country?: string
+    country?: string
 
     /**
      * Application Version, can be used for audience segmentation.
      */
     @IsString()
     @IsOptional()
-        appVersion?: string
+    appVersion?: string
 
     /**
      * Application Build, can be used for audience segmentation.
@@ -99,7 +110,7 @@ export class DVCAPIUser {
     @IsNumber()
     @IsOptional()
     @Type(() => Number)
-        appBuild?: number
+    appBuild?: number
 
     /**
      * Custom JSON data used for audience segmentation, must be limited to __kb in size.
@@ -107,8 +118,8 @@ export class DVCAPIUser {
      */
     @IsDVCCustomDataJSONObject()
     @IsOptional()
-    @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-        customData?: DVCCustomDataJSON
+    @Transform(({ value }) => (isString(value) ? JSON.parse(value) : value))
+    customData?: DVCCustomDataJSON
 
     /**
      * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
@@ -117,8 +128,8 @@ export class DVCAPIUser {
      */
     @IsDVCCustomDataJSONObject()
     @IsOptional()
-    @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-        privateCustomData?: DVCCustomDataJSON
+    @Transform(({ value }) => (isString(value) ? JSON.parse(value) : value))
+    privateCustomData?: DVCCustomDataJSON
 
     /**
      * Set by SDK automatically
@@ -126,7 +137,7 @@ export class DVCAPIUser {
     @IsDate()
     @IsOptional()
     @Transform(dateTransform)
-        createdDate?: Date
+    createdDate?: Date
 
     /**
      * Set by SDK automatically
@@ -134,28 +145,28 @@ export class DVCAPIUser {
     @IsDate()
     @IsOptional()
     @Transform(dateTransform)
-        lastSeenDate?: Date
+    lastSeenDate?: Date
 
     /**
      * Set by SDK to 'web'
      */
     @IsString()
     @IsOptional()
-        platform?: string
+    platform?: string
 
     /**
      * Set by SDK to ??
      */
     @IsString()
     @IsOptional()
-        platformVersion?: string
+    platformVersion?: string
 
     /**
      * Set by SDK to User-Agent
      */
     @IsString()
     @IsOptional()
-        deviceModel?: string
+    deviceModel?: string
 
     /**
      * SDK type
@@ -164,23 +175,23 @@ export class DVCAPIUser {
     @IsOptional()
     @IsIn(['client', 'server', 'mobile', 'api'])
     @Transform(({ value }) => value)
-        sdkType?: SDKTypes = 'api'
+    sdkType?: SDKTypes = 'api'
 
     /**
      * SDK Version
      */
     @IsString()
     @IsOptional()
-        sdkVersion?: string
+    sdkVersion?: string
 }
 
 export class DVCBucketingUser extends DVCAPIUser {
     /**
-    * JSON data recording user opt-in features.
+     * JSON data recording user opt-in features.
      */
     @IsOptional()
-    @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-        optIns?: Record<string, boolean>
+    @Transform(({ value }) => (isString(value) ? JSON.parse(value) : value))
+    optIns?: Record<string, boolean>
 }
 
 /**
@@ -196,12 +207,12 @@ export class DVCClientAPIUser implements DVCAPIUser {
      */
     @IsBoolean()
     @Transform(boolTransform)
-        isAnonymous: boolean
+    isAnonymous: boolean
 
     @IsString()
     @IsNotBlank()
     @IsNotEmpty()
-        user_id: string
+    user_id: string
 
     /**
      * Email used for identifying a device user in the dashboard,
@@ -209,7 +220,7 @@ export class DVCClientAPIUser implements DVCAPIUser {
      */
     @IsString()
     @IsOptional()
-        email?: string
+    email?: string
 
     /**
      * Name of the user which can be used for identifying a device user,
@@ -217,7 +228,7 @@ export class DVCClientAPIUser implements DVCAPIUser {
      */
     @IsString()
     @IsOptional()
-        name?: string
+    name?: string
 
     /**
      * ISO 639-1 two-letter codes
@@ -225,21 +236,21 @@ export class DVCClientAPIUser implements DVCAPIUser {
     @IsISO6391()
     @IsString()
     @IsOptional()
-        language?: string
+    language?: string
 
     /**
      * ISO 3166 alpha-2
      */
     @IsISO31661Alpha2()
     @IsOptional()
-        country?: string
+    country?: string
 
     /**
      * Application Version, can be used for audience segmentation.
      */
     @IsString()
     @IsOptional()
-        appVersion?: string
+    appVersion?: string
 
     /**
      * Application Build, can be used for audience segmentation.
@@ -247,7 +258,7 @@ export class DVCClientAPIUser implements DVCAPIUser {
     @IsNumber()
     @IsOptional()
     @Type(() => Number)
-        appBuild?: number
+    appBuild?: number
 
     /**
      * Custom JSON data used for audience segmentation, must be limited to __kb in size.
@@ -255,8 +266,8 @@ export class DVCClientAPIUser implements DVCAPIUser {
      */
     @IsDVCCustomDataJSONObject()
     @IsOptional()
-    @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-        customData?: DVCCustomDataJSON
+    @Transform(({ value }) => (isString(value) ? JSON.parse(value) : value))
+    customData?: DVCCustomDataJSON
 
     /**
      * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
@@ -265,69 +276,69 @@ export class DVCClientAPIUser implements DVCAPIUser {
      */
     @IsDVCCustomDataJSONObject()
     @IsOptional()
-    @Transform(({ value }) => isString(value) ? JSON.parse(value) : value)
-        privateCustomData?: DVCCustomDataJSON
+    @Transform(({ value }) => (isString(value) ? JSON.parse(value) : value))
+    privateCustomData?: DVCCustomDataJSON
 
     /**
      * Set by SDK automatically
      */
     @IsDate()
     @Transform(dateTransform)
-        createdDate: Date
+    createdDate: Date
 
     /**
      * Set by SDK automatically
      */
     @IsDate()
     @Transform(dateTransform)
-        lastSeenDate: Date
+    lastSeenDate: Date
 
     /**
      * Set by SDK to 'web'
      */
     @IsString()
     @IsNotEmpty()
-        platform: string
+    platform: string
 
     /**
      * Set by SDK to ??
      */
     @IsString()
     @IsNotEmpty()
-        platformVersion: string
+    platformVersion: string
 
     /**
      * Set by SDK to User-Agent
      */
     @IsString()
     @IsNotEmpty()
-        deviceModel: string
+    deviceModel: string
 
     /**
      * SDK type
      */
     @IsString()
     @IsIn(['client', 'mobile'])
-        sdkType: SDKTypes
+    sdkType: SDKTypes
 
     /**
      * SDK Version
      */
     @IsString()
     @IsNotEmpty()
-        sdkVersion: string
+    sdkVersion: string
 
     @IsBoolean()
     @IsOptional()
-    @Transform(({ value }) => isString(value) ? value === 'true' : value)
-        isDebug?: boolean
+    @Transform(({ value }) => (isString(value) ? value === 'true' : value))
+    isDebug?: boolean
 }
 
 export class DVCOptInUser {
     @IsString()
     @IsNotBlank()
     @IsNotEmpty()
-        user_id: string
+    user_id: string
 }
 
 export type SDKVariable = PublicVariable & {
@@ -335,15 +346,18 @@ export type SDKVariable = PublicVariable & {
     evalReason?: unknown
 }
 
-export type SDKFeature = Pick<PublicFeature, '_id' | 'key' | 'type' | 'settings' > & {
-    _variation: string,
-    variationName: string,
+export type SDKFeature = Pick<
+    PublicFeature,
+    '_id' | 'key' | 'type' | 'settings'
+> & {
+    _variation: string
+    variationName: string
     variationKey: string
     evalReason?: unknown
 }
 
 type FeatureVariation = {
-    _feature: string,
+    _feature: string
     _variation: string
 }
 
@@ -388,7 +402,7 @@ export interface BucketedUserConfig {
      * Information about how to establish a streaming connection to receive config updates
      */
     sse?: {
-        url?: string,
+        url?: string
         // The number in milliseconds that the sdk should wait after the page is backgrounded
         // before it closes the streaming connection
         inactivityDelay?: number

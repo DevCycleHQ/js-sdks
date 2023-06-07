@@ -1,12 +1,32 @@
 import {
-    Project, Environment, Variable, Variation,
-    ListAudience, Audience, FeatureConfiguration, Rollout, RolloutStage, Feature, Target
+    Project,
+    Environment,
+    Variable,
+    Variation,
+    ListAudience,
+    Audience,
+    FeatureConfiguration,
+    Rollout,
+    RolloutStage,
+    Feature,
+    Target,
 } from './models'
 import { Type } from 'class-transformer'
 
-export { Rollout, RolloutStage, FeatureConfiguration, Feature, Variation, Audience, Variable, Project, Environment }
+export {
+    Rollout,
+    RolloutStage,
+    FeatureConfiguration,
+    Feature,
+    Variation,
+    Audience,
+    Variable,
+    Project,
+    Environment,
+}
 
-export { Rollout as PublicRollout,
+export {
+    Rollout as PublicRollout,
     RolloutStage as PublicRolloutStage,
     FeatureConfiguration as PublicFeatureConfiguration,
     Feature as PublicFeature,
@@ -15,7 +35,7 @@ export { Rollout as PublicRollout,
     Variable as PublicVariable,
     Target as PublicTarget,
     Project as PublicProject,
-    Environment as PublicEnvironment
+    Environment as PublicEnvironment,
 }
 
 export class ConfigBody<IdType = string> {
@@ -33,7 +53,7 @@ export class ConfigBody<IdType = string> {
      * Fully populated Feature model containing FeatureConfigurations / Variations / Audiences
      */
     @Type(() => Feature)
-        features: Feature<IdType>[]
+    features: Feature<IdType>[]
 
     /**
      * All dynamic variables in a project
@@ -54,7 +74,7 @@ export class ConfigBody<IdType = string> {
      */
     variableHashes: {
         [key: string]: number
-     }
+    }
 
     /**
      * **Implement Later**

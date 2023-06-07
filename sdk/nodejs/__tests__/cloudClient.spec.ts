@@ -9,7 +9,7 @@ let client: DVC.DVCCloudClient
 
 const user = {
     user_id: 'node_sdk_test',
-    country: 'CA'
+    country: 'CA',
 }
 const badUser = { user_id: 'bad' }
 const emptyUser = { user_id: 'empty' }
@@ -19,7 +19,10 @@ jest.mock('fetch-retry')
 
 describe('DVCCloudClient without EdgeDB', () => {
     beforeAll(async () => {
-        client = DVC.initialize('dvc_server_token', { logLevel: 'error', enableCloudBucketing: true })
+        client = DVC.initialize('dvc_server_token', {
+            logLevel: 'error',
+            enableCloudBucketing: true,
+        })
         server.listen()
     })
     afterEach(() => server.resetHandlers())
@@ -33,7 +36,9 @@ describe('DVCCloudClient without EdgeDB', () => {
             expect(res.key).not.toContain('edgedb')
             expect(res.type).toEqual('Boolean')
 
-            await expect(client.variableValue(user, 'test-key', false)).resolves.toBe(true)
+            await expect(
+                client.variableValue(user, 'test-key', false),
+            ).resolves.toBe(true)
         })
 
         it('to return default if type doesnt align with the type of defaultValue', async () => {
@@ -43,27 +48,43 @@ describe('DVCCloudClient without EdgeDB', () => {
             expect(res.key).not.toContain('edgedb')
             expect(res.type).toEqual('String')
 
-            await expect(client.variableValue(user, 'test-key', 'string')).resolves.toBe('string')
+            await expect(
+                client.variableValue(user, 'test-key', 'string'),
+            ).resolves.toBe('string')
         })
 
         it('to return the Default Value and be defaulted', async () => {
-            const res = await client.variable(user, 'test-key-not-in-config', false)
+            const res = await client.variable(
+                user,
+                'test-key-not-in-config',
+                false,
+            )
             expect(res.value).toBe(false)
             expect(res.isDefaulted).toBe(true)
             expect(res.type).toEqual('Boolean')
 
-            await expect(client.variableValue(user, 'test-key-not-in-config', false)).resolves.toBe(false)
+            await expect(
+                client.variableValue(user, 'test-key-not-in-config', false),
+            ).resolves.toBe(false)
         })
 
         it('to throw an error if key is not defined', async () => {
             try {
-                await client.variable(user, undefined as unknown as string, false)
+                await client.variable(
+                    user,
+                    undefined as unknown as string,
+                    false,
+                )
             } catch (ex) {
                 expect(ex.message).toBe('Missing parameter: key')
             }
 
             try {
-                await client.variableValue(user, undefined as unknown as string, false)
+                await client.variableValue(
+                    user,
+                    undefined as unknown as string,
+                    false,
+                )
             } catch (ex) {
                 expect(ex.message).toBe('Missing parameter: key')
             }
@@ -71,13 +92,21 @@ describe('DVCCloudClient without EdgeDB', () => {
 
         it('to throw an error if defaultValue is not defined', async () => {
             try {
-                await client.variable(user, 'test-key', undefined as unknown as string)
+                await client.variable(
+                    user,
+                    'test-key',
+                    undefined as unknown as string,
+                )
             } catch (ex) {
                 expect(ex.message).toBe('Missing parameter: defaultValue')
             }
 
             try {
-                await client.variableValue(user, 'test-key', undefined as unknown as string)
+                await client.variableValue(
+                    user,
+                    'test-key',
+                    undefined as unknown as string,
+                )
             } catch (ex) {
                 expect(ex.message).toBe('Missing parameter: defaultValue')
             }
@@ -88,7 +117,9 @@ describe('DVCCloudClient without EdgeDB', () => {
             expect(res.value).toBe(false)
             expect(res.isDefaulted).toBe(true)
 
-            await expect(client.variableValue(respond500User, 'test-key', false)).resolves.toBe(false)
+            await expect(
+                client.variableValue(respond500User, 'test-key', false),
+            ).resolves.toBe(false)
         })
     })
 
@@ -100,8 +131,8 @@ describe('DVCCloudClient without EdgeDB', () => {
                     key: 'test-key',
                     value: true,
                     type: 'Boolean',
-                    defaultValue: false
-                }
+                    defaultValue: false,
+                },
             })
         })
 
@@ -133,7 +164,7 @@ describe('DVCCloudClient without EdgeDB', () => {
                     variationName: 'Variation Name',
                     key: 'test-feature',
                     type: 'release',
-                }
+                },
             })
         })
 
@@ -164,38 +195,41 @@ describe('DVCCloudClient without EdgeDB', () => {
 
         it('throws an error for a null event', () => {
             const badEvent = null
-            expect(async () => await client.track(user, badEvent as unknown as DVCEvent))
-                .rejects
-                .toThrow('Invalid Event')
+            expect(
+                async () =>
+                    await client.track(user, badEvent as unknown as DVCEvent),
+            ).rejects.toThrow('Invalid Event')
         })
 
         it('throws an error for a undefined event', () => {
             const badEvent = undefined
-            expect(async () => await client.track(user, badEvent as unknown as DVCEvent))
-                .rejects
-                .toThrow('Invalid Event')
+            expect(
+                async () =>
+                    await client.track(user, badEvent as unknown as DVCEvent),
+            ).rejects.toThrow('Invalid Event')
         })
 
         it('throws an error for an event with no type', () => {
             const badEvent = { target: 'test' }
-            expect(async () => await client.track(user, badEvent as unknown as DVCEvent))
-                .rejects
-                .toThrow('Invalid Event')
+            expect(
+                async () =>
+                    await client.track(user, badEvent as unknown as DVCEvent),
+            ).rejects.toThrow('Invalid Event')
         })
 
-        test.each([
-            '',
-            7,
-            false,
-            { test: 'test' },
-            null,
-            undefined
-        ])('Invalid Track (Invalid Event Type: %s)', async (type) => {
-            const badEvent = { type }
-            expect(async () => await client.track(user, badEvent as unknown as DVCEvent))
-                .rejects
-                .toThrow('Invalid Event')
-        })
+        test.each(['', 7, false, { test: 'test' }, null, undefined])(
+            'Invalid Track (Invalid Event Type: %s)',
+            async (type) => {
+                const badEvent = { type }
+                expect(
+                    async () =>
+                        await client.track(
+                            user,
+                            badEvent as unknown as DVCEvent,
+                        ),
+                ).rejects.toThrow('Invalid Event')
+            },
+        )
     })
 })
 
@@ -204,7 +238,7 @@ describe('DVCCloudClient with EdgeDB Enabled', () => {
         client = DVC.initialize('dvc_server_token', {
             logLevel: 'error',
             enableCloudBucketing: true,
-            enableEdgeDB: true
+            enableEdgeDB: true,
         })
         server.listen()
     })
@@ -218,27 +252,43 @@ describe('DVCCloudClient with EdgeDB Enabled', () => {
             expect(res.value).toBe(true)
             expect(res.isDefaulted).toBe(false)
 
-            await expect(client.variableValue(user, 'test-key', false)).resolves.toBe(true)
+            await expect(
+                client.variableValue(user, 'test-key', false),
+            ).resolves.toBe(true)
         })
 
         it('to return the Default Value and be defaulted', async () => {
-            const res = await client.variable(user, 'test-key-not-in-config', false)
+            const res = await client.variable(
+                user,
+                'test-key-not-in-config',
+                false,
+            )
             expect(res.key).not.toContain('edgedb')
             expect(res.value).toBe(false)
             expect(res.isDefaulted).toBe(true)
 
-            await expect(client.variableValue(user, 'test-key-not-in-config', false)).resolves.toBe(false)
+            await expect(
+                client.variableValue(user, 'test-key-not-in-config', false),
+            ).resolves.toBe(false)
         })
 
         it('to throw an error if key is not defined', async () => {
             try {
-                await client.variable(user, undefined as unknown as string, false)
+                await client.variable(
+                    user,
+                    undefined as unknown as string,
+                    false,
+                )
             } catch (ex) {
                 expect(ex.message).toBe('Missing parameter: key')
             }
 
             try {
-                await client.variableValue(user, undefined as unknown as string, false)
+                await client.variableValue(
+                    user,
+                    undefined as unknown as string,
+                    false,
+                )
             } catch (ex) {
                 expect(ex.message).toBe('Missing parameter: key')
             }
@@ -246,13 +296,21 @@ describe('DVCCloudClient with EdgeDB Enabled', () => {
 
         it('to throw an error if defaultValue is not defined', async () => {
             try {
-                await client.variable(user, 'test-key', undefined as unknown as string)
+                await client.variable(
+                    user,
+                    'test-key',
+                    undefined as unknown as string,
+                )
             } catch (ex) {
                 expect(ex.message).toBe('Missing parameter: defaultValue')
             }
 
             try {
-                await client.variableValue(user, 'test-key', undefined as unknown as string)
+                await client.variableValue(
+                    user,
+                    'test-key',
+                    undefined as unknown as string,
+                )
             } catch (ex) {
                 expect(ex.message).toBe('Missing parameter: defaultValue')
             }
@@ -263,7 +321,9 @@ describe('DVCCloudClient with EdgeDB Enabled', () => {
             expect(res.value).toBe(false)
             expect(res.isDefaulted).toBe(true)
 
-            await expect(client.variableValue(respond500User, 'test-key', false)).resolves.toBe(false)
+            await expect(
+                client.variableValue(respond500User, 'test-key', false),
+            ).resolves.toBe(false)
         })
     })
 
@@ -275,8 +335,8 @@ describe('DVCCloudClient with EdgeDB Enabled', () => {
                     key: 'test-key-edgedb',
                     value: true,
                     type: 'Boolean',
-                    defaultValue: false
-                }
+                    defaultValue: false,
+                },
             })
         })
 
@@ -308,7 +368,7 @@ describe('DVCCloudClient with EdgeDB Enabled', () => {
                     variationName: 'Variation Name',
                     key: 'test-feature-edgedb',
                     type: 'release',
-                }
+                },
             })
         })
 

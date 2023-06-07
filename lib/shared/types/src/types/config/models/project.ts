@@ -12,10 +12,10 @@ export class Project<IdType = string> {
     settings: {
         edgeDB: {
             enabled: boolean
-        },
+        }
         sdkSettings?: {
             eventQueueLimit: 1000
-        },
+        }
         optIn?: {
             enabled: boolean
             title?: string

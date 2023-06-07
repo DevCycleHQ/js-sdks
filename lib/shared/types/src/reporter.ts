@@ -1,8 +1,7 @@
-
 export type FlushResults = {
-    successes: number,
-    failures: number,
-    retries: number,
+    successes: number
+    failures: number
+    retries: number
 }
 
 export type Tags = Record<string, string>

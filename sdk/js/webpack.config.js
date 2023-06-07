@@ -9,14 +9,14 @@ module.exports = (config, { options }) => {
     } catch (error) {
         console.warn(`Could not delete entry.main: ${error}`)
     }
-    
+
     config.entry[libraryName] = {
         import: options.main,
         library: {
             name: libraryName,
             type: libraryTarget,
             umdNamedDefine: true,
-        }
+        },
     }
 
     config.output = {

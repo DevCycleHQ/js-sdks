@@ -12,25 +12,27 @@ describe('DVCPopulatedUser Unit Tests', () => {
             appVersion: 'appVersion',
             appBuild: 1,
             customData: { custom: 'data' },
-            privateCustomData: { private: 'customData' }
-        })
-        expect(requestUser).toEqual(expect.objectContaining({
-            user_id: 'user_id',
-            email: 'email',
-            name: 'name',
-            language: 'en',
-            country: 'ca',
-            appVersion: 'appVersion',
-            appBuild: 1,
-            customData: { custom: 'data' },
             privateCustomData: { private: 'customData' },
-            lastSeenDate: expect.any(Date),
-            createdDate: expect.any(Date),
-            platform: 'NodeJS',
-            platformVersion: expect.any(String),
-            sdkType: 'server',
-            sdkVersion: expect.any(String)
-        }))
+        })
+        expect(requestUser).toEqual(
+            expect.objectContaining({
+                user_id: 'user_id',
+                email: 'email',
+                name: 'name',
+                language: 'en',
+                country: 'ca',
+                appVersion: 'appVersion',
+                appBuild: 1,
+                customData: { custom: 'data' },
+                privateCustomData: { private: 'customData' },
+                lastSeenDate: expect.any(Date),
+                createdDate: expect.any(Date),
+                platform: 'NodeJS',
+                platformVersion: expect.any(String),
+                sdkType: 'server',
+                sdkVersion: expect.any(String),
+            }),
+        )
     })
 
     it('should construct DVCPopulatedUser from DVCUser', () => {
@@ -43,25 +45,27 @@ describe('DVCPopulatedUser Unit Tests', () => {
             appVersion: 'appVersion',
             appBuild: 1,
             customData: { custom: 'data' },
-            privateCustomData: { private: 'customData' }
+            privateCustomData: { private: 'customData' },
         })
         const populatedUser = DVCPopulatedUser.fromDVCUser(requestUser)
-        expect(populatedUser).toEqual(expect.objectContaining({
-            user_id: 'user_id',
-            email: 'email',
-            name: 'name',
-            language: 'en',
-            country: 'ca',
-            appVersion: 'appVersion',
-            appBuild: 1,
-            customData: { custom: 'data' },
-            privateCustomData: { private: 'customData' },
-            lastSeenDate: expect.any(Date),
-            createdDate: expect.any(Date),
-            platform: 'NodeJS',
-            platformVersion: expect.any(String),
-            sdkType: 'server',
-            sdkVersion: expect.any(String)
-        }))
+        expect(populatedUser).toEqual(
+            expect.objectContaining({
+                user_id: 'user_id',
+                email: 'email',
+                name: 'name',
+                language: 'en',
+                country: 'ca',
+                appVersion: 'appVersion',
+                appBuild: 1,
+                customData: { custom: 'data' },
+                privateCustomData: { private: 'customData' },
+                lastSeenDate: expect.any(Date),
+                createdDate: expect.any(Date),
+                platform: 'NodeJS',
+                platformVersion: expect.any(String),
+                sdkType: 'server',
+                sdkVersion: expect.any(String),
+            }),
+        )
     })
 })

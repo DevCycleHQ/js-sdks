@@ -6,7 +6,7 @@ export class StreamingConnection {
     constructor(
         private url: string,
         private onMessage: (message: unknown) => void,
-        private logger: DVCLogger
+        private logger: DVCLogger,
     ) {
         this.openConnection()
     }
@@ -17,7 +17,9 @@ export class StreamingConnection {
             this.onMessage(event.data)
         }
         this.connection.onerror = () => {
-            this.logger.warn('StreamingConnection warning. Connection failed to establish.')
+            this.logger.warn(
+                'StreamingConnection warning. Connection failed to establish.',
+            )
         }
         this.connection.onopen = () => {
             this.logger.debug('StreamingConnection opened')

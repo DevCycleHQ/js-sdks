@@ -8,9 +8,9 @@
   },
   "include": ["**/*.ts"],
   "exclude": [
-      "jest.config.ts",
-      "**/*.spec.ts",
-      "**/*.test.ts",
-      "**/__mocks__/**/*.ts"
+    "jest.config.ts",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/__mocks__/**/*.ts"
   ]
 }

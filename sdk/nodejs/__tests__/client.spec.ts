@@ -12,14 +12,15 @@ describe('DVCClient', () => {
         const client = new DVCClient('token')
         expect(() => getBucketingLib()).toThrow()
         await client.onClientInitialized()
-        const platformData = (getBucketingLib().setPlatformData as any).mock.calls[0][0]
+        const platformData = (getBucketingLib().setPlatformData as any).mock
+            .calls[0][0]
 
         expect(JSON.parse(platformData)).toEqual({
             platform: 'NodeJS',
             platformVersion: expect.any(String),
             sdkVersion: expect.any(String),
             sdkType: 'server',
-            hostname: expect.any(String)
+            hostname: expect.any(String),
         })
     })
 })
@@ -30,11 +31,11 @@ describe('variable', () => {
         country: 'CA',
         customData: {
             test: 'test',
-            canBeNull: null
+            canBeNull: null,
         },
         privateCustomData: {
-            private: 'private'
-        }
+            private: 'private',
+        },
     }
 
     let client: DVCClient
@@ -117,6 +118,10 @@ describe('variable', () => {
         expect(variable.type).toBe('JSON')
         expect(variable.value).toEqual({ key: 'test' })
 
-        expect(client.variableValue(user, 'test-key', { key: 'test' })).toEqual({ key: 'test' })
+        expect(client.variableValue(user, 'test-key', { key: 'test' })).toEqual(
+            {
+                key: 'test',
+            },
+        )
     })
 })

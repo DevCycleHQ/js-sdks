@@ -1,9 +1,12 @@
-
 type optionsType = {
-    lexicographical?: boolean,
+    lexicographical?: boolean
     zeroExtend?: boolean
 }
-export const versionCompare = (v1: string, v2: string, options?: optionsType): number => {
+export const versionCompare = (
+    v1: string,
+    v2: string,
+    options?: optionsType,
+): number => {
     const lexicographical = options?.lexicographical,
         zeroExtend = options?.zeroExtend
 

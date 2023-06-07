@@ -7,8 +7,10 @@ describe('DVCPopulatedUser tests', () => {
     }
 
     beforeEach(() => {
-        setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ' +
-            'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36')
+        setUserAgent(
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ' +
+                'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36',
+        )
     })
 
     it('should make a new user from an object', () => {
@@ -22,7 +24,7 @@ describe('DVCPopulatedUser tests', () => {
             appVersion: '3.6.1',
             appBuild: 1911,
             customData: {},
-            privateCustomData: {}
+            privateCustomData: {},
         }
         const user = new DVCPopulatedUser(userObj)
         const validate = (key) => {

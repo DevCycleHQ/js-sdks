@@ -1,8 +1,8 @@
 version: 2.1
 workflows:
-  bucketing-lib-unit-test:
-    jobs:
-      - common-nx-unit-test:
-          name: "Unit Test bucketing Lib"
-          directory: lib/bucketing
-          project_name: bucketing
+    bucketing-lib-unit-test:
+        jobs:
+            - common-nx-unit-test:
+                  name: 'Unit Test bucketing Lib'
+                  directory: lib/bucketing
+                  project_name: bucketing

@@ -10,19 +10,34 @@ export class AppElement extends HTMLElement {
         super()
     }
 
-    public static observedAttributes = [
-
-    ]
+    public static observedAttributes = []
 
     updateInnerHTML(): void {
-        const titleVariable = client.variableValue('titlevariable', 'Welcome 👋')
+        const titleVariable = client.variableValue(
+            'titlevariable',
+            'Welcome 👋',
+        )
         const variableKey = client.variableValue('feature-release', true)
-        const variableKeyString = client.variableValue('variable-key-string', 'default')
-        const variableKeyNumber = client.variableValue('variable-key-number', 100)
-        const variableKeyBoolean = client.variableValue('variable-key-boolean', true)
-        const variableKeyJsonString = client.variableValue('variable-json-key-string', { 'jsonStringKeyDefault': 'json default' })
+        const variableKeyString = client.variableValue(
+            'variable-key-string',
+            'default',
+        )
+        const variableKeyNumber = client.variableValue(
+            'variable-key-number',
+            100,
+        )
+        const variableKeyBoolean = client.variableValue(
+            'variable-key-boolean',
+            true,
+        )
+        const variableKeyJsonString = client.variableValue(
+            'variable-json-key-string',
+            {
+                jsonStringKeyDefault: 'json default',
+            },
+        )
 
-        this.innerHTML =  `
+        this.innerHTML = `
           <div class="wrapper">
             <div class="container">
               <!--  WELCOME  -->
@@ -431,7 +446,6 @@ export class AppElement extends HTMLElement {
             </div>
           </div>
     `
-
     }
 
     connectedCallback(): void {
@@ -439,7 +453,6 @@ export class AppElement extends HTMLElement {
         client.subscribe('configUpdated', () => {
             this.updateInnerHTML()
         })
-
     }
 }
 
@@ -449,13 +462,15 @@ const user = {
     customData: {
         cps: 'Matthew',
         cpn: 777,
-        cpb: true
+        cpb: true,
     },
-    isAnonymous: false
+    isAnonymous: false,
 }
 
 const client = initialize(SDK_KEY, user, {
     enableEdgeDB: false,
-    logLevel: 'error'
+    logLevel: 'error',
 })
-client.onClientInitialized(() => customElements.define('devcycle-root', AppElement))
+client.onClientInitialized(() =>
+    customElements.define('devcycle-root', AppElement),
+)

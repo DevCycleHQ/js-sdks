@@ -15,7 +15,9 @@ module.exports = (async () => {
                         inlineRequires: true,
                     },
                 }),
-                babelTransformerPath: require.resolve('react-native-svg-transformer'),
+                babelTransformerPath: require.resolve(
+                    'react-native-svg-transformer',
+                ),
             },
             resolver: {
                 assetExts: assetExts.filter((ext) => ext !== 'svg'),
@@ -25,16 +27,18 @@ module.exports = (async () => {
                     /^(?!.*node_modules).*\/dist\/.*/,
                     /examples\/nodejs-cloud\/.*/,
                     /examples\/nodejs-local\/.*/,
-                    /examples\/js\/.*/
+                    /examples\/js\/.*/,
                 ]),
             },
         },
         {
             // Change this to true to see debugging info.
             // Useful if you have issues resolving modules
-            projectRoot: __dirname, watchFolders: [], debug: false,
+            projectRoot: __dirname,
+            watchFolders: [],
+            debug: false,
             // all the file extensions used for imports other than 'ts', 'tsx', 'js', 'jsx'
             extensions: [],
-        }
+        },
     )
 })()

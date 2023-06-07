@@ -10,17 +10,18 @@ export const DVCProvider: typeof ReactDVCProvider = (props) => {
     return <ReactDVCProvider config={config}>{props.children}</ReactDVCProvider>
 }
 
-export const getReactNativeConfig = (config: PropsType['config']): PropsType['config'] => {
+export const getReactNativeConfig = (
+    config: PropsType['config'],
+): PropsType['config'] => {
     const rnConfig = {
         ...config,
         options: {
             ...config.options,
-            reactNative: true
-        }
+            reactNative: true,
+        },
     }
     if (!config.options?.storage) {
         rnConfig.options.storage = new ReactNativeStore()
     }
     return rnConfig
 }
-

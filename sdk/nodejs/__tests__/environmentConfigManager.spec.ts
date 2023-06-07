@@ -34,91 +34,116 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             statusText: '',
             headers: {},
             config: {},
-            ...obj
+            ...obj,
         })
     }
 
     it('should build manager from constructor', async () => {
-        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 200 }))
+        getEnvironmentConfig_mock.mockImplementation(async () =>
+            mockFetchResponse({ status: 200 }),
+        )
 
         const envConfig = new EnvironmentConfigManager(logger, 'sdkKey', {
             configPollingIntervalMS: 1000,
-            configPollingTimeoutMS: 1000
+            configPollingTimeoutMS: 1000,
         })
         await envConfig.fetchConfigPromise
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
 
         await envConfig._fetchConfig()
-        expect(getBucketingLib().setConfigDataUTF8).toHaveBeenCalledWith('sdkKey', Buffer.from('{}', 'utf8'))
+        expect(getBucketingLib().setConfigDataUTF8).toHaveBeenCalledWith(
+            'sdkKey',
+            Buffer.from('{}', 'utf8'),
+        )
 
-        expect(envConfig).toEqual(expect.objectContaining({
-            sdkKey: 'sdkKey',
-            fetchConfigPromise: expect.any(Promise),
-            pollingIntervalMS: 1000,
-            requestTimeoutMS: 1000
-        }))
+        expect(envConfig).toEqual(
+            expect.objectContaining({
+                sdkKey: 'sdkKey',
+                fetchConfigPromise: expect.any(Promise),
+                pollingIntervalMS: 1000,
+                requestTimeoutMS: 1000,
+            }),
+        )
         envConfig.cleanup()
     })
 
     it('should override the configPollingIntervalMS and configPollingTimeoutMS settings', async () => {
-        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 200 }))
+        getEnvironmentConfig_mock.mockImplementation(async () =>
+            mockFetchResponse({ status: 200 }),
+        )
 
         const envConfig = new EnvironmentConfigManager(logger, 'sdkKey', {
             configPollingIntervalMS: 10,
-            configPollingTimeoutMS: 10000
+            configPollingTimeoutMS: 10000,
         })
         await envConfig.fetchConfigPromise
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
 
         await envConfig._fetchConfig()
 
-        expect(envConfig).toEqual(expect.objectContaining({
-            sdkKey: 'sdkKey',
-            fetchConfigPromise: expect.any(Promise),
-            pollingIntervalMS: 1000,
-            requestTimeoutMS: 1000
-        }))
+        expect(envConfig).toEqual(
+            expect.objectContaining({
+                sdkKey: 'sdkKey',
+                fetchConfigPromise: expect.any(Promise),
+                pollingIntervalMS: 1000,
+                requestTimeoutMS: 1000,
+            }),
+        )
         envConfig.cleanup()
     })
 
     it('should call fetch config on the interval period time', async () => {
-        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 200 }))
+        getEnvironmentConfig_mock.mockImplementation(async () =>
+            mockFetchResponse({ status: 200 }),
+        )
 
         const envConfig = new EnvironmentConfigManager(logger, 'sdkKey', {
             configPollingIntervalMS: 1000,
-            configPollingTimeoutMS: 1000
+            configPollingTimeoutMS: 1000,
         })
         await envConfig.fetchConfigPromise
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
 
         await envConfig._fetchConfig()
 
-        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 304 }))
+        getEnvironmentConfig_mock.mockImplementation(async () =>
+            mockFetchResponse({ status: 304 }),
+        )
 
         await envConfig._fetchConfig()
 
         envConfig.cleanup()
-        expect(envConfig).toEqual(expect.objectContaining({
-            sdkKey: 'sdkKey',
-            fetchConfigPromise: expect.any(Promise),
-            pollingIntervalMS: 1000,
-            requestTimeoutMS: 1000
-        }))
+        expect(envConfig).toEqual(
+            expect.objectContaining({
+                sdkKey: 'sdkKey',
+                fetchConfigPromise: expect.any(Promise),
+                pollingIntervalMS: 1000,
+                requestTimeoutMS: 1000,
+            }),
+        )
         expect(getEnvironmentConfig_mock).toBeCalledTimes(3)
     })
 
     it('should throw error fetching config fails with 500 error', () => {
-        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 500 }))
+        getEnvironmentConfig_mock.mockImplementation(async () =>
+            mockFetchResponse({ status: 500 }),
+        )
 
         const envConfig = new EnvironmentConfigManager(logger, 'sdkKey', {})
-        expect(envConfig.fetchConfigPromise).rejects.toThrow('Failed to download DevCycle config.')
+        expect(envConfig.fetchConfigPromise).rejects.toThrow(
+            'Failed to download DevCycle config.',
+        )
     })
 
     it('should throw invalid sdk key fetching config fails with 403 error', () => {
-        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 403 }))
+        getEnvironmentConfig_mock.mockImplementation(async () =>
+            mockFetchResponse({ status: 403 }),
+        )
 
         const envConfig = new EnvironmentConfigManager(logger, 'sdkKey', {})
-        expect(envConfig.fetchConfigPromise).rejects.toThrow('Invalid SDK key provided:')
+        expect(envConfig.fetchConfigPromise).rejects.toThrow(
+            'Invalid SDK key provided:',
+        )
         expect(setInterval_mock).toHaveBeenCalledTimes(0)
     })
 
@@ -126,22 +151,28 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         getEnvironmentConfig_mock.mockRejectedValue(new Error('Error'))
 
         const envConfig = new EnvironmentConfigManager(logger, 'sdkKey', {})
-        expect(envConfig.fetchConfigPromise).rejects.toThrow('Failed to download DevCycle config.')
+        expect(envConfig.fetchConfigPromise).rejects.toThrow(
+            'Failed to download DevCycle config.',
+        )
     })
 
     it('should use cached config if fetching config fails', async () => {
         const config = { config: {} }
-        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 200, data: config }))
+        getEnvironmentConfig_mock.mockImplementation(async () =>
+            mockFetchResponse({ status: 200, data: config }),
+        )
 
         const envConfig = new EnvironmentConfigManager(logger, 'sdkKey', {
             configPollingIntervalMS: 1000,
-            configPollingTimeoutMS: 1000
+            configPollingTimeoutMS: 1000,
         })
         await envConfig.fetchConfigPromise
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
         await envConfig._fetchConfig()
 
-        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 500 }))
+        getEnvironmentConfig_mock.mockImplementation(async () =>
+            mockFetchResponse({ status: 500 }),
+        )
         await envConfig._fetchConfig()
 
         envConfig.cleanup()
@@ -149,7 +180,9 @@ describe('EnvironmentConfigManager Unit Tests', () => {
     })
 
     it('should start interval if initial config fails', async () => {
-        getEnvironmentConfig_mock.mockImplementation(async () => mockFetchResponse({ status: 500 }))
+        getEnvironmentConfig_mock.mockImplementation(async () =>
+            mockFetchResponse({ status: 500 }),
+        )
 
         const envConfig = new EnvironmentConfigManager(logger, 'sdkKey', {})
         await expect(envConfig.fetchConfigPromise).rejects.toThrow()

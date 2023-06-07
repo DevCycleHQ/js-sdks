@@ -8,7 +8,7 @@ describe('IsISO6391 validator', () => {
         expect(isISO6391('E')).toEqual(false)
     })
 
-    it ('should not validate if input is invalid two letters', () => {
+    it('should not validate if input is invalid two letters', () => {
         expect(isISO6391('xx')).toEqual(false)
         expect(isISO6391('XX')).toEqual(false)
     })

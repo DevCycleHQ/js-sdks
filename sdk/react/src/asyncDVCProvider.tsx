@@ -13,7 +13,9 @@ type Props = {
  *             until SDK initialization is complete
  *
  */
-export default async function asyncWithDVCProvider(config: ProviderConfig): Promise<React.FC<Props>> {
+export default async function asyncWithDVCProvider(
+    config: ProviderConfig,
+): Promise<React.FC<Props>> {
     const { user, options } = config
     let sdkKey: string
     if ('sdkKey' in config) {

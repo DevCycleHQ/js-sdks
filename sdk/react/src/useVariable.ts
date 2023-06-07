@@ -4,7 +4,7 @@ import type { DVCVariable, DVCVariableValue } from '@devcycle/devcycle-js-sdk'
 
 export const useVariable = <T extends DVCVariableValue>(
     key: string,
-    defaultValue: T
+    defaultValue: T,
 ): DVCVariable<T> => {
     const dvcContext = useContext(context)
     const [_, forceRerender] = useState({})

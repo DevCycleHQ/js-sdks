@@ -2,9 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
-import { asyncWithDVCProvider } from '@devcycle/devcycle-react-sdk';
-
-(async () => {
+import { asyncWithDVCProvider } from '@devcycle/devcycle-react-sdk'
+;(async () => {
     const SDK_KEY = process.env.NX_CLIENT_KEY || '<YOUR_DVC_CLIENT_SDK_KEY>'
     const user = {
         user_id: 'userId1',
@@ -12,11 +11,14 @@ import { asyncWithDVCProvider } from '@devcycle/devcycle-react-sdk';
         customData: {
             cps: 'Matthew',
             cpn: 777,
-            cpb: true
+            cpb: true,
         },
-        isAnonymous: false
+        isAnonymous: false,
     }
-    const DVCProvider = await asyncWithDVCProvider({ sdkKey: SDK_KEY, user: user  })
+    const DVCProvider = await asyncWithDVCProvider({
+        sdkKey: SDK_KEY,
+        user: user,
+    })
 
     ReactDOM.render(
         <React.StrictMode>
@@ -24,7 +26,6 @@ import { asyncWithDVCProvider } from '@devcycle/devcycle-react-sdk';
                 <App />
             </DVCProvider>
         </React.StrictMode>,
-        document.getElementById('root')
+        document.getElementById('root'),
     )
 })()
-

@@ -12,7 +12,9 @@ export class CacheStore {
     }
 
     private getConfigKey(user: DVCPopulatedUser) {
-        return user.isAnonymous ? StoreKey.AnonymousConfig : StoreKey.IdentifiedConfig
+        return user.isAnonymous
+            ? StoreKey.AnonymousConfig
+            : StoreKey.IdentifiedConfig
     }
 
     private getConfigUserIdKey(user: DVCPopulatedUser) {
@@ -23,18 +25,24 @@ export class CacheStore {
         return `${this.getConfigKey(user)}.fetch_date`
     }
 
-    private async loadConfigUserId(user: DVCPopulatedUser): Promise<string | undefined> {
+    private async loadConfigUserId(
+        user: DVCPopulatedUser,
+    ): Promise<string | undefined> {
         const userIdKey = this.getConfigUserIdKey(user)
         return this.store.load<string>(userIdKey)
     }
 
     private async loadConfigFetchDate(user: DVCPopulatedUser): Promise<number> {
         const fetchDateKey = this.getConfigFetchDateKey(user)
-        const fetchDate = await this.store.load<string>(fetchDateKey) || '0'
+        const fetchDate = (await this.store.load<string>(fetchDateKey)) || '0'
         return parseInt(fetchDate, 10)
     }
 
-    saveConfig(data: BucketedUserConfig, user: DVCPopulatedUser, dateFetched: number): void {
+    saveConfig(
+        data: BucketedUserConfig,
+        user: DVCPopulatedUser,
+        dateFetched: number,
+    ): void {
         const configKey = this.getConfigKey(user)
         const fetchDateKey = this.getConfigFetchDateKey(user)
         const userIdKey = this.getConfigUserIdKey(user)
@@ -44,27 +52,39 @@ export class CacheStore {
         this.logger?.info('Successfully saved config to local storage')
     }
 
-    private isBucketedUserConfig(object: unknown): object is BucketedUserConfig {
-        if (!object || typeof object !== 'object') return false 
-        return 'features' in object
-            && 'project' in object
-            && 'environment' in object
-            && 'featureVariationMap' in object
-            && 'variableVariationMap' in object
-            && 'variables' in object
+    private isBucketedUserConfig(
+        object: unknown,
+    ): object is BucketedUserConfig {
+        if (!object || typeof object !== 'object') return false
+        return (
+            'features' in object &&
+            'project' in object &&
+            'environment' in object &&
+            'featureVariationMap' in object &&
+            'variableVariationMap' in object &&
+            'variables' in object
+        )
     }
 
-    async loadConfig(user: DVCPopulatedUser, configCacheTTL= 604800000): Promise<BucketedUserConfig | null> {
+    async loadConfig(
+        user: DVCPopulatedUser,
+        configCacheTTL = 604800000,
+    ): Promise<BucketedUserConfig | null> {
         const userId = await this.loadConfigUserId(user)
         if (user.user_id !== userId) {
-            this.logger?.debug(`Skipping cached config: no config for user ID ${user.user_id}`)
+            this.logger?.debug(
+                `Skipping cached config: no config for user ID ${user.user_id}`,
+            )
             return null
         }
 
         const cachedFetchDate = await this.loadConfigFetchDate(user)
-        const isConfigCacheTTLExpired = Date.now() - cachedFetchDate > configCacheTTL
+        const isConfigCacheTTLExpired =
+            Date.now() - cachedFetchDate > configCacheTTL
         if (isConfigCacheTTLExpired) {
-            this.logger?.debug('Skipping cached config: last fetched date is too old')
+            this.logger?.debug(
+                'Skipping cached config: last fetched date is too old',
+            )
             return null
         }
 
@@ -75,7 +95,11 @@ export class CacheStore {
             return null
         }
         if (!this.isBucketedUserConfig(config)) {
-            this.logger?.debug(`Skipping cached config: invalid config found: ${JSON.stringify(config)}`)
+            this.logger?.debug(
+                `Skipping cached config: invalid config found: ${JSON.stringify(
+                    config,
+                )}`,
+            )
             return null
         }
 
@@ -96,7 +120,9 @@ export class CacheStore {
 
     saveAnonUserId(userId: string): void {
         this.store.save(StoreKey.AnonUserId, userId)
-        this.logger?.info('Successfully saved anonymous user id to local storage')
+        this.logger?.info(
+            'Successfully saved anonymous user id to local storage',
+        )
     }
 
     async loadAnonUserId(): Promise<string | undefined> {

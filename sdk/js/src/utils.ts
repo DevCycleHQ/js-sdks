@@ -1,7 +1,11 @@
 import { DVCEvent } from './types'
 import { DVCRequestEvent } from './RequestEvent'
 import { DVCPopulatedUser } from './User'
-import { BucketedUserConfig, SDKEventRequestBody, DVCClientAPIUser } from '@devcycle/types'
+import {
+    BucketedUserConfig,
+    SDKEventRequestBody,
+    DVCClientAPIUser,
+} from '@devcycle/types'
 
 const convertToQueryFriendlyFormat = (property?: any): any => {
     if (property instanceof Date) {
@@ -13,9 +17,14 @@ const convertToQueryFriendlyFormat = (property?: any): any => {
     return property
 }
 
-export const serializeUserSearchParams = (user: DVCClientAPIUser, queryParams: URLSearchParams): void => {
+export const serializeUserSearchParams = (
+    user: DVCClientAPIUser,
+    queryParams: URLSearchParams,
+): void => {
     for (const key in user) {
-        const userProperty = convertToQueryFriendlyFormat(user[key as keyof DVCClientAPIUser])
+        const userProperty = convertToQueryFriendlyFormat(
+            user[key as keyof DVCClientAPIUser],
+        )
         if (userProperty !== null && userProperty !== undefined) {
             queryParams.append(key, userProperty)
         }
@@ -35,7 +44,11 @@ export const checkIfDefined = (variable: unknown): boolean => {
     return true
 }
 
-export const checkParamType = (name: string, param: unknown, type: string): void => {
+export const checkParamType = (
+    name: string,
+    param: unknown,
+    type: string,
+): void => {
     if (!param) {
         throw new Error(`Missing parameter: ${name}`)
     }
@@ -47,18 +60,22 @@ export const checkParamType = (name: string, param: unknown, type: string): void
 export function generateEventPayload(
     config: BucketedUserConfig | null,
     user: DVCPopulatedUser,
-    events: DVCEvent[]
+    events: DVCEvent[],
 ): SDKEventRequestBody {
     return {
         events: events.map((event) => {
-            return new DVCRequestEvent(event, user.user_id, config?.featureVariationMap)
+            return new DVCRequestEvent(
+                event,
+                user.user_id,
+                config?.featureVariationMap,
+            )
         }),
-        user
+        user,
     }
 }
 
 export default {
     serializeUserSearchParams,
     checkParamDefined,
-    generateEventPayload
+    generateEventPayload,
 }

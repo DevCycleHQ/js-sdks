@@ -3,10 +3,10 @@ import { checkParamDefined, checkParamType } from './utils'
 import { VariableTypeAlias } from '@devcycle/types'
 
 export interface DVCVariableOptions<T> {
-    key: string,
-    defaultValue: T,
-    value?: VariableTypeAlias<T>,
-    evalReason?: any,
+    key: string
+    defaultValue: T
+    value?: VariableTypeAlias<T>
+    evalReason?: any
 }
 
 export class DVCVariable<T extends DVCVariableValue> implements Variable<T> {
