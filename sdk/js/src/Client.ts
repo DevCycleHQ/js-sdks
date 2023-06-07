@@ -49,7 +49,7 @@ export type DVCOptionsWithDeferredInitialization = DVCOptions & {
 export const isDeferredOptions = (
     arg: DVCUser | DVCOptionsWithDeferredInitialization,
 ): arg is DVCOptionsWithDeferredInitialization => {
-    return 'deferInitialization' in arg
+    return !!arg && 'deferInitialization' in arg
 }
 
 export class DVCClient<
@@ -247,7 +247,6 @@ export class DVCClient<
 
         try {
             const variableFromConfig = this.config?.variables?.[key]
-
             this.eventQueue.queueAggregateEvent({
                 type: variable.isDefaulted
                     ? EventTypes.variableDefaulted
@@ -302,6 +301,7 @@ export class DVCClient<
 
         if (this.options.deferInitialization && !this.initializeTriggered) {
             await this.clientInitialization(user)
+            return this.config?.variables || {}
         }
 
         this.eventQueue.flushEvents()
