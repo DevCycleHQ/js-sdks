@@ -158,11 +158,7 @@ export class DVCClient<
             storedAnonymousId,
         )
 
-        if (!this.options.disableConfigCache) {
-            await this.getConfigCache(this.user)
-        } else {
-            this.logger.info('Skipping config cache')
-        }
+        await this.getConfigCache(this.user)
 
         // set up requestConsolidator and hook up callback methods
         this.requestConsolidator = new ConfigRequestConsolidator(
@@ -610,6 +606,11 @@ export class DVCClient<
     }
 
     private async getConfigCache(user: DVCPopulatedUser) {
+        if (this.options.disableConfigCache) {
+            this.logger.info('Skipping config cache')
+            return
+        }
+
         const cachedConfig = await this.store.loadConfig(
             user,
             this.options.configCacheTTL,
