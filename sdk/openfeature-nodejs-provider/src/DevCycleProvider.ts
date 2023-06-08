@@ -9,6 +9,7 @@ import {
     ParseError,
     TargetingKeyMissingError,
     InvalidContextError,
+    FlagMetadata,
 } from '@openfeature/js-sdk'
 import {
     DVCClient,
@@ -50,6 +51,18 @@ export default class DevCycleProvider implements Provider {
     ) {
         this.logger =
             options.logger ?? dvcDefaultLogger({ level: options.logLevel })
+    }
+
+    async initialize(context?: EvaluationContext): Promise<void> {
+        if (this.dvcClient instanceof DVCCloudClient) return
+
+        await this.dvcClient.onClientInitialized()
+    }
+
+    async onClose(): Promise<void> {
+        if (this.dvcClient instanceof DVCCloudClient) return
+
+        await this.dvcClient.close()
     }
 
     /**
@@ -165,11 +178,22 @@ export default class DevCycleProvider implements Provider {
     private resultFromDVCVariable<T>(
         variable: DVCVariable,
     ): ResolutionDetails<T> {
+        const metaData: FlagMetadata = {
+            isDefaulted: variable.isDefaulted,
+            defaultValue: (typeof variable.defaultValue === 'object')
+                ? JSON.stringify(variable.defaultValue)
+                : variable.defaultValue
+        }
+        if (variable.type) {
+            metaData.type = variable.type
+        }
+
         return {
             value: variable.value as T,
             reason: variable.isDefaulted
                 ? StandardResolutionReasons.DEFAULT
                 : StandardResolutionReasons.TARGETING_MATCH,
+            flagMetadata: metaData
         }
     }
 
