@@ -180,9 +180,10 @@ export default class DevCycleProvider implements Provider {
     ): ResolutionDetails<T> {
         const flagMetadata: FlagMetadata = {
             isDefaulted: variable.isDefaulted,
-            defaultValue: (typeof variable.defaultValue === 'object')
-                ? JSON.stringify(variable.defaultValue)
-                : variable.defaultValue
+            defaultValue:
+                typeof variable.defaultValue === 'object'
+                    ? JSON.stringify(variable.defaultValue)
+                    : variable.defaultValue,
         }
         if (variable.type) {
             flagMetadata.type = variable.type
@@ -193,7 +194,7 @@ export default class DevCycleProvider implements Provider {
             reason: variable.isDefaulted
                 ? StandardResolutionReasons.DEFAULT
                 : StandardResolutionReasons.TARGETING_MATCH,
-            flagMetadata
+            flagMetadata,
         }
     }
 

@@ -53,7 +53,9 @@ describe('DevCycleProvider Unit Tests', () => {
         it('should throw error if targetingKey is missing', async () => {
             const { ofClient } = initOFClient()
             ofClient.setContext({})
-            expect(ofClient.getBooleanDetails('boolean-flag', false)).resolves.toEqual({
+            expect(
+                ofClient.getBooleanDetails('boolean-flag', false),
+            ).resolves.toEqual({
                 flagKey: 'boolean-flag',
                 value: false,
                 errorCode: 'TARGETING_KEY_MISSING',
@@ -66,7 +68,9 @@ describe('DevCycleProvider Unit Tests', () => {
         it('should throw error if targetingKey is not a string', async () => {
             const { ofClient } = initOFClient()
             ofClient.setContext({ user_id: 123 })
-            expect(ofClient.getBooleanDetails('boolean-flag', false)).resolves.toEqual({
+            expect(
+                ofClient.getBooleanDetails('boolean-flag', false),
+            ).resolves.toEqual({
                 flagKey: 'boolean-flag',
                 value: false,
                 errorCode: 'INVALID_CONTEXT',
@@ -91,7 +95,9 @@ describe('DevCycleProvider Unit Tests', () => {
             }
             ofClient.setContext(dvcUser)
 
-            await expect(ofClient.getBooleanValue('boolean-flag', false)).resolves.toEqual(true)
+            await expect(
+                ofClient.getBooleanValue('boolean-flag', false),
+            ).resolves.toEqual(true)
             expect(dvcClient.variable).toHaveBeenCalledWith(
                 new DVCUser(dvcUser),
                 'boolean-flag',
@@ -109,7 +115,9 @@ describe('DevCycleProvider Unit Tests', () => {
             }
             ofClient.setContext(dvcUser)
 
-            await expect(ofClient.getBooleanValue('boolean-flag', false)).resolves.toEqual(true)
+            await expect(
+                ofClient.getBooleanValue('boolean-flag', false),
+            ).resolves.toEqual(true)
 
             expect(dvcClient.variable).toHaveBeenCalledWith(
                 new DVCUser({ user_id: 'user_id' }),
@@ -139,7 +147,9 @@ describe('DevCycleProvider Unit Tests', () => {
             }
             ofClient.setContext(dvcUser)
 
-            await expect(ofClient.getBooleanValue('boolean-flag', false)).resolves.toEqual(true)
+            await expect(
+                ofClient.getBooleanValue('boolean-flag', false),
+            ).resolves.toEqual(true)
 
             expect(dvcClient.variable).toHaveBeenCalledWith(
                 new DVCUser({
@@ -190,20 +200,24 @@ describe('DevCycleProvider Unit Tests', () => {
 
         it('should resolve a boolean flag value', async () => {
             const { ofClient } = initOFClient()
-            expect(ofClient.getBooleanValue('boolean-flag', false)).resolves.toEqual(true)
+            expect(
+                ofClient.getBooleanValue('boolean-flag', false),
+            ).resolves.toEqual(true)
         })
 
         it('should resolve a boolean flag details', async () => {
             const { ofClient } = initOFClient()
-            expect(ofClient.getBooleanDetails('boolean-flag', false)).resolves.toEqual({
+            expect(
+                ofClient.getBooleanDetails('boolean-flag', false),
+            ).resolves.toEqual({
                 flagKey: 'boolean-flag',
                 value: true,
                 reason: StandardResolutionReasons.TARGETING_MATCH,
                 flagMetadata: {
                     defaultValue: false,
                     isDefaulted: false,
-                    type: "Boolean",
-                }
+                    type: 'Boolean',
+                },
             })
         })
 
@@ -216,15 +230,17 @@ describe('DevCycleProvider Unit Tests', () => {
                 type: 'Boolean',
             })
             const { ofClient } = initOFClient()
-            expect(ofClient.getBooleanDetails('boolean-flag', false)).resolves.toEqual({
+            expect(
+                ofClient.getBooleanDetails('boolean-flag', false),
+            ).resolves.toEqual({
                 flagKey: 'boolean-flag',
                 value: false,
                 reason: StandardResolutionReasons.DEFAULT,
                 flagMetadata: {
                     defaultValue: false,
                     isDefaulted: true,
-                    type: "Boolean",
-                }
+                    type: 'Boolean',
+                },
             })
         })
     })
@@ -242,13 +258,16 @@ describe('DevCycleProvider Unit Tests', () => {
 
         it('should resolve a string flag value', async () => {
             const { ofClient } = initOFClient()
-            expect(ofClient.getStringValue('string-flag', 'string-default'))
-                .resolves.toEqual('string-value')
+            expect(
+                ofClient.getStringValue('string-flag', 'string-default'),
+            ).resolves.toEqual('string-value')
         })
 
         it('should resolve a string flag details', async () => {
             const { ofClient } = initOFClient()
-            expect(ofClient.getStringDetails('string-flag', 'string-default')).resolves.toEqual({
+            expect(
+                ofClient.getStringDetails('string-flag', 'string-default'),
+            ).resolves.toEqual({
                 flagKey: 'string-flag',
                 value: 'string-value',
                 reason: StandardResolutionReasons.TARGETING_MATCH,
@@ -256,7 +275,7 @@ describe('DevCycleProvider Unit Tests', () => {
                     defaultValue: 'string-default',
                     isDefaulted: false,
                     type: 'String',
-                }
+                },
             })
         })
     })
@@ -274,12 +293,16 @@ describe('DevCycleProvider Unit Tests', () => {
 
         it('should resolve a number flag value', async () => {
             const { ofClient } = initOFClient()
-            expect(ofClient.getNumberValue('num-flag', 2056)).resolves.toEqual(610)
+            expect(ofClient.getNumberValue('num-flag', 2056)).resolves.toEqual(
+                610,
+            )
         })
 
         it('should resolve a number flag details', async () => {
             const { ofClient } = initOFClient()
-            expect(ofClient.getNumberDetails('num-flag', 2056)).resolves.toEqual({
+            expect(
+                ofClient.getNumberDetails('num-flag', 2056),
+            ).resolves.toEqual({
                 flagKey: 'num-flag',
                 value: 610,
                 reason: StandardResolutionReasons.TARGETING_MATCH,
@@ -287,7 +310,7 @@ describe('DevCycleProvider Unit Tests', () => {
                     defaultValue: 2056,
                     isDefaulted: false,
                     type: 'Number',
-                }
+                },
             })
         })
     })
@@ -305,13 +328,16 @@ describe('DevCycleProvider Unit Tests', () => {
 
         it('should resolve a string flag value', async () => {
             const { ofClient } = initOFClient()
-            expect(ofClient.getObjectValue('json-flag', { default: 'value' }))
-                .resolves.toEqual({ hello: 'world' })
+            expect(
+                ofClient.getObjectValue('json-flag', { default: 'value' }),
+            ).resolves.toEqual({ hello: 'world' })
         })
 
         it('should resolve a boolean flag details', async () => {
             const { ofClient } = initOFClient()
-            expect(ofClient.getObjectDetails('json-flag', { default: 'value' })).resolves.toEqual({
+            expect(
+                ofClient.getObjectDetails('json-flag', { default: 'value' }),
+            ).resolves.toEqual({
                 flagKey: 'json-flag',
                 value: { hello: 'world' },
                 reason: StandardResolutionReasons.TARGETING_MATCH,
@@ -319,50 +345,65 @@ describe('DevCycleProvider Unit Tests', () => {
                     defaultValue: JSON.stringify({ default: 'value' }),
                     isDefaulted: false,
                     type: 'JSON',
-                }
+                },
             })
         })
 
         it('should return default value if json default is not an object', async () => {
             const { ofClient } = initOFClient()
-            expect(ofClient.getObjectDetails('json-flag', ['arry'])).resolves.toEqual({
+            expect(
+                ofClient.getObjectDetails('json-flag', ['arry']),
+            ).resolves.toEqual({
                 flagKey: 'json-flag',
                 value: ['arry'],
                 reason: 'ERROR',
                 errorCode: 'PARSE_ERROR',
-                errorMessage: 'DevCycle only supports object values for JSON flags',
+                errorMessage:
+                    'DevCycle only supports object values for JSON flags',
                 flagMetadata: {},
             })
-            expect(ofClient.getObjectDetails('json-flag', 610)).resolves.toEqual({
+            expect(
+                ofClient.getObjectDetails('json-flag', 610),
+            ).resolves.toEqual({
                 flagKey: 'json-flag',
                 value: 610,
                 reason: 'ERROR',
                 errorCode: 'PARSE_ERROR',
-                errorMessage: 'DevCycle only supports object values for JSON flags',
+                errorMessage:
+                    'DevCycle only supports object values for JSON flags',
                 flagMetadata: {},
             })
-            expect(ofClient.getObjectDetails('json-flag', 'string')).resolves.toEqual({
+            expect(
+                ofClient.getObjectDetails('json-flag', 'string'),
+            ).resolves.toEqual({
                 flagKey: 'json-flag',
                 value: 'string',
                 reason: 'ERROR',
                 errorCode: 'PARSE_ERROR',
-                errorMessage: 'DevCycle only supports object values for JSON flags',
+                errorMessage:
+                    'DevCycle only supports object values for JSON flags',
                 flagMetadata: {},
             })
-            expect(ofClient.getObjectDetails('json-flag', false)).resolves.toEqual({
+            expect(
+                ofClient.getObjectDetails('json-flag', false),
+            ).resolves.toEqual({
                 flagKey: 'json-flag',
                 value: false,
                 reason: 'ERROR',
                 errorCode: 'PARSE_ERROR',
-                errorMessage: 'DevCycle only supports object values for JSON flags',
+                errorMessage:
+                    'DevCycle only supports object values for JSON flags',
                 flagMetadata: {},
             })
-            expect(ofClient.getObjectDetails('json-flag', null)).resolves.toEqual({
+            expect(
+                ofClient.getObjectDetails('json-flag', null),
+            ).resolves.toEqual({
                 flagKey: 'json-flag',
                 value: null,
                 reason: 'ERROR',
                 errorCode: 'PARSE_ERROR',
-                errorMessage: 'DevCycle does not support null default values for JSON flags',
+                errorMessage:
+                    'DevCycle does not support null default values for JSON flags',
                 flagMetadata: {},
             })
         })
