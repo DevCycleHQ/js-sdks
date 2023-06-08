@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # check if we're on main branch
 if [[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then
   echo "Not on main branch. Aborting."
