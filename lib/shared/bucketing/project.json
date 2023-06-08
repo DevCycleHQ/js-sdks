@@ -1,17 +1,18 @@
 {
+    "name": "shared-bucketing",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "lib/shared/bucketing/src",
     "projectType": "library",
     "targets": {
         "check-types": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "yarn run -T tsc -b --incremental",
                 "cwd": "lib/shared/bucketing"
             }
         },
         "npm-publish": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "../../../../scripts/npm-safe-publish.sh \"@devcycle/bucketing\"",
                 "cwd": "dist/lib/shared/bucketing",
@@ -19,7 +20,7 @@
             }
         },
         "build": {
-            "executor": "@nrwl/js:tsc",
+            "executor": "@nx/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/lib/shared/bucketing",
@@ -30,15 +31,15 @@
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["lib/shared/bucketing/**/*.ts"]
             }
         },
         "test": {
-            "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/lib/shared/bucketing"],
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/lib/shared/bucketing"],
             "options": {
                 "jestConfig": "lib/shared/bucketing/jest.config.ts",
                 "passWithNoTests": true
@@ -46,7 +47,7 @@
             "dependsOn": [
                 {
                     "target": "build",
-                    "projects": "dependencies"
+                    "dependencies": true
                 }
             ]
         }

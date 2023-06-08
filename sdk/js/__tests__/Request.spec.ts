@@ -5,7 +5,7 @@ import axios, { AxiosInstance } from 'axios'
 import { mocked } from 'jest-mock'
 
 const axiosRequestMock = jest.fn()
-const createMock = mocked(axios.create, true)
+const createMock = mocked(axios.create)
 
 createMock.mockImplementation((): AxiosInstance => {
     return {

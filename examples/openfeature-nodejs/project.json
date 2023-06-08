@@ -1,26 +1,29 @@
 {
+    "name": "example-openfeature-nodejs",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "examples/openfeature-nodejs/src",
     "projectType": "application",
     "targets": {
         "build": {
-            "executor": "@nrwl/node:webpack",
+            "executor": "@nx/webpack:webpack",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/examples/openfeature-nodejs",
                 "main": "examples/openfeature-nodejs/src/main.ts",
-                "tsConfig": "examples/openfeature-nodejs/tsconfig.app.json"
+                "tsConfig": "examples/openfeature-nodejs/tsconfig.app.json",
+                "compiler": "tsc",
+                "target": "node"
             }
         },
         "serve": {
-            "executor": "@nrwl/node:node",
+            "executor": "@nx/node:node",
             "options": {
                 "buildTarget": "example-openfeature-nodejs:build"
             },
             "dependsOn": ["^build"]
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["examples/openfeature-nodejs/**/*.ts"]

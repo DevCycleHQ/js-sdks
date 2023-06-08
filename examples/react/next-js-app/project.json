@@ -1,14 +1,14 @@
 {
+    "name": "example-react-next-js-app",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "examples/react/next-js-app",
     "projectType": "application",
     "targets": {
         "build": {
-            "executor": "@nrwl/next:build",
+            "executor": "@nx/next:build",
             "outputs": ["{options.outputPath}"],
             "defaultConfiguration": "production",
             "options": {
-                "root": "examples/react/next-js-app",
                 "outputPath": "dist/examples/react/next-js-app"
             },
             "configurations": {
@@ -19,7 +19,7 @@
             }
         },
         "serve": {
-            "executor": "@nrwl/next:server",
+            "executor": "@nx/next:server",
             "options": {
                 "buildTarget": "example-react-next-js-app:build",
                 "dev": true
@@ -37,13 +37,13 @@
             "defaultConfiguration": "development"
         },
         "export": {
-            "executor": "@nrwl/next:export",
+            "executor": "@nx/next:export",
             "options": {
                 "buildTarget": "example-react-next-js-app:build:production"
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [

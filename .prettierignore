@@ -1,7 +1,6 @@
 dist/
 coverage/
 test-results/
-*.json
 eslint-common.js
 prettier.config.js
 jest.config.ts

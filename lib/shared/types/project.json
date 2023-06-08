@@ -1,16 +1,17 @@
 {
+    "name": "shared-types",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "lib/shared/types/src",
     "targets": {
         "check-types": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "yarn run -T tsc -b --incremental",
                 "cwd": "lib/shared/types"
             }
         },
         "npm-publish": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "../../../../scripts/npm-safe-publish.sh \"@devcycle/types\"",
                 "cwd": "dist/lib/shared/types",
@@ -19,7 +20,7 @@
             "dependsOn": ["build:emit-legacy-types"]
         },
         "build": {
-            "executor": "@nrwl/web:rollup",
+            "executor": "@nrwl/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "format": ["esm", "cjs"],
@@ -39,7 +40,7 @@
             }
         },
         "build:emit-legacy-types": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "npx --yes downlevel-dts . ts3.5 --to=3.5",
                 "cwd": "dist/lib/shared/types",
@@ -48,15 +49,15 @@
             "dependsOn": ["build"]
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["lib/shared/types/**/*.ts"]
             }
         },
         "test": {
-            "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/lib/shared/types"],
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/lib/shared/types"],
             "options": {
                 "jestConfig": "lib/shared/types/jest.config.ts",
                 "passWithNoTests": true,

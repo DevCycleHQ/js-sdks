@@ -1,10 +1,11 @@
 {
+    "name": "openfeature-nodejs-provider",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "sdk/openfeature-nodejs-provider/src",
     "implicitDependencies": ["nodejs"],
     "targets": {
         "build": {
-            "executor": "@nrwl/js:tsc",
+            "executor": "@nx/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/openfeature-nodejs-provider",
@@ -16,21 +17,23 @@
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["sdk/openfeature-nodejs-provider/**/*.ts"]
             }
         },
         "test": {
-            "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/sdk/openfeature-nodejs-provider"],
+            "executor": "@nx/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/sdk/openfeature-nodejs-provider"
+            ],
             "options": {
                 "jestConfig": "sdk/openfeature-nodejs-provider/jest.config.ts"
             }
         },
         "npm-publish": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/openfeature-nodejs-provider\"",
                 "cwd": "dist/sdk/openfeature-nodejs-provider",

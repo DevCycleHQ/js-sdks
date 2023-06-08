@@ -5,11 +5,7 @@ const displayName = 'bucketing-lib-as-benchmark'
 export default {
     displayName,
     preset: '../../../jest.preset',
-    globals: {
-        'ts-jest': {
-            tsconfig: '<rootDir>/tsconfig.spec.json',
-        },
-    },
+    globals: {},
     testEnvironment: 'jest-bench/environment',
     testEnvironmentOptions: {
         // still Jest-bench environment will run your environment if you specify it here
@@ -20,7 +16,12 @@ export default {
     },
     transformIgnorePatterns: ['<rootDir>/node_modules/(?!@assemblyscript/.*)'],
     transform: {
-        '^.+\\.[tj]sx?$': 'ts-jest',
+        '^.+\\.[tj]sx?$': [
+            'ts-jest',
+            {
+                tsconfig: '<rootDir>/tsconfig.spec.json',
+            },
+        ],
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     reporters: ['default', 'jest-bench/reporter'],
