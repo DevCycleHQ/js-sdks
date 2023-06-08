@@ -28,7 +28,10 @@
           "lint",
           "check-types",
           "package",
-          "prepare"
+          "prepare",
+          "build:json",
+          "compile-pb-js",
+          "compile-pb-as"
         ],
         "parallel": 1
       }
