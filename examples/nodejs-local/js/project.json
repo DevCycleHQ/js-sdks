@@ -1,31 +1,31 @@
 {
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "examples/nodejs-local/js/src",
-  "projectType": "application",
-  "targets": {
-    "build": {
-      "executor": "@nrwl/node:webpack",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/examples/nodejs-local/js",
-        "main": "examples/nodejs-local/js/src/main.js",
-        "tsConfig": "examples/nodejs-local/js/tsconfig.app.json"
-      }
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "examples/nodejs-local/js/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/node:webpack",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/examples/nodejs-local/js",
+                "main": "examples/nodejs-local/js/src/main.js",
+                "tsConfig": "examples/nodejs-local/js/tsconfig.app.json"
+            }
+        },
+        "serve": {
+            "executor": "@nrwl/node:node",
+            "options": {
+                "buildTarget": "example-nodejs-local-js:build"
+            },
+            "dependsOn": ["^build"]
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["examples/nodejs-local/js/**/*.js"]
+            }
+        }
     },
-    "serve": {
-      "executor": "@nrwl/node:node",
-      "options": {
-        "buildTarget": "example-nodejs-local-js:build"
-      },
-      "dependsOn": ["^build"]
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["examples/nodejs-local/js/**/*.js"]
-      }
-    }
-  },
-  "tags": []
+    "tags": []
 }

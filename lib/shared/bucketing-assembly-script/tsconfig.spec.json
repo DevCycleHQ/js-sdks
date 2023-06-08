@@ -1,14 +1,15 @@
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "../../../dist/out-tsc",
-      "target": "ES2020",
-      "module": "ES2020",
-      "moduleResolution": "node",
-      "types": ["jest", "node"]
-  },
-  "include": [
-    "__tests__/**/*.test.js",
-    "__tests__/**/*.test.ts"
-  ]
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../../../dist/out-tsc",
+        "target": "ES2020",
+        "module": "ES2020",
+        "moduleResolution": "node",
+        "types": ["jest", "node"]
+    },
+    "include": [
+        "__tests__/**/*.test.js",
+        "__tests__/**/*.test.ts",
+        "jest.config.ts"
+    ]
 }

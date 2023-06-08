@@ -1,88 +1,88 @@
 {
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "sdk/js/src",
-  "implicitDependencies": [],
-  "targets": {
-    "npm-publish": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/devcycle-js-sdk\"",
-        "cwd": "dist/sdk/js",
-        "forwardAllArgs": true
-      },
-      "dependsOn": ["build:emit-legacy-types"]
-    },
-    "check-types": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "yarn run -T tsc -b --incremental",
-        "cwd": "sdk/js"
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["sdk/js/**/*.ts"]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/sdk/js"],
-      "options": {
-        "jestConfig": "sdk/js/jest.config.ts",
-        "passWithNoTests": false,
-        "codeCoverage": true
-      }
-    },
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/sdk/js",
-        "tsConfig": "sdk/js/tsconfig.lib.json",
-        "packageJson": "sdk/js/package.json",
-        "buildableProjectDepsInPackageJsonType": "dependencies",
-        "main": "sdk/js/src/index.ts",
-        "assets": ["sdk/js/*.md"]
-      }
-    },
-    "build:emit-legacy-types": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "npx --yes downlevel-dts . ts3.5 --to=3.5",
-        "cwd": "dist/sdk/js",
-        "forwardAllArgs": true
-      },
-      "dependsOn": ["build"]
-    },
-    "build:cdn": {
-      "executor": "@nrwl/webpack:webpack",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "libraryName": "DevCycle",
-        "libraryTarget": "umd",
-        "outputPath": "dist/sdk/js",
-        "tsConfig": "sdk/js/tsconfig.lib.json",
-        "packageJson": "sdk/js/package.json",
-        "buildableProjectDepsInPackageJsonType": "dependencies",
-        "main": "sdk/js/src/index.ts",
-        "index": "",
-        "optimization": true,
-        "assets": [
-          {
-            "input": "sdk/js",
-            "glob": "*.md",
-            "output": "assets"
-          }
-        ],
-        "extractLicenses": false,
-        "runtimeChunk": false,
-        "vendorChunk": false,
-        "commonChunk": false,
-        "namedChunks": false,
-        "webpackConfig": "sdk/js/webpack.config.js"
-      }
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "sdk/js/src",
+    "implicitDependencies": [],
+    "targets": {
+        "npm-publish": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/devcycle-js-sdk\"",
+                "cwd": "dist/sdk/js",
+                "forwardAllArgs": true
+            },
+            "dependsOn": ["build:emit-legacy-types"]
+        },
+        "check-types": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "command": "yarn run -T tsc -b --incremental",
+                "cwd": "sdk/js"
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["sdk/js/**/*.ts"]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["coverage/sdk/js"],
+            "options": {
+                "jestConfig": "sdk/js/jest.config.ts",
+                "passWithNoTests": false,
+                "codeCoverage": true
+            }
+        },
+        "build": {
+            "executor": "@nrwl/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/sdk/js",
+                "tsConfig": "sdk/js/tsconfig.lib.json",
+                "packageJson": "sdk/js/package.json",
+                "buildableProjectDepsInPackageJsonType": "dependencies",
+                "main": "sdk/js/src/index.ts",
+                "assets": ["sdk/js/*.md"]
+            }
+        },
+        "build:emit-legacy-types": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "command": "npx --yes downlevel-dts . ts3.5 --to=3.5",
+                "cwd": "dist/sdk/js",
+                "forwardAllArgs": true
+            },
+            "dependsOn": ["build"]
+        },
+        "build:cdn": {
+            "executor": "@nrwl/webpack:webpack",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "libraryName": "DevCycle",
+                "libraryTarget": "umd",
+                "outputPath": "dist/sdk/js",
+                "tsConfig": "sdk/js/tsconfig.lib.json",
+                "packageJson": "sdk/js/package.json",
+                "buildableProjectDepsInPackageJsonType": "dependencies",
+                "main": "sdk/js/src/index.ts",
+                "index": "",
+                "optimization": true,
+                "assets": [
+                    {
+                        "input": "sdk/js",
+                        "glob": "*.md",
+                        "output": "assets"
+                    }
+                ],
+                "extractLicenses": false,
+                "runtimeChunk": false,
+                "vendorChunk": false,
+                "commonChunk": false,
+                "namedChunks": false,
+                "webpackConfig": "sdk/js/webpack.config.js"
+            }
+        }
     }
-  }
 }

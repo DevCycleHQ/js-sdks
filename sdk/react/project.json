@@ -12,14 +12,21 @@
     },
     "build": {
       "executor": "@nrwl/web:rollup",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/sdk/react",
         "tsConfig": "sdk/react/tsconfig.lib.json",
         "project": "sdk/react/package.json",
         "entryFile": "sdk/react/src/index.ts",
-        "format": ["esm", "cjs"],
-        "external": ["react/jsx-runtime"],
+        "format": [
+          "esm",
+          "cjs"
+        ],
+        "external": [
+          "react/jsx-runtime"
+        ],
         "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
         "buildableProjectDepsInPackageJsonType": "dependencies",
         "compiler": "babel",
@@ -34,14 +41,20 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["sdk/react/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": [
+          "sdk/react/**/*.{ts,tsx,js,jsx}"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/sdk/react"],
+      "outputs": [
+        "coverage/sdk/react"
+      ],
       "options": {
         "jestConfig": "sdk/react/jest.config.ts",
         "passWithNoTests": true,

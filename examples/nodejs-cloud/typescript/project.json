@@ -1,31 +1,31 @@
 {
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "examples/nodejs-cloud/typescript/src",
-  "projectType": "application",
-  "targets": {
-    "build": {
-      "executor": "@nrwl/node:webpack",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/examples/nodejs-cloud/typescript",
-        "main": "examples/nodejs-cloud/typescript/src/main.ts",
-        "tsConfig": "examples/nodejs-cloud/typescript/tsconfig.app.json"
-      }
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "examples/nodejs-cloud/typescript/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/node:webpack",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/examples/nodejs-cloud/typescript",
+                "main": "examples/nodejs-cloud/typescript/src/main.ts",
+                "tsConfig": "examples/nodejs-cloud/typescript/tsconfig.app.json"
+            }
+        },
+        "serve": {
+            "executor": "@nrwl/node:node",
+            "options": {
+                "buildTarget": "example-nodejs-cloud-typescript:build"
+            },
+            "dependsOn": ["^build"]
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["examples/nodejs-cloud/typescript/**/*.ts"]
+            }
+        }
     },
-    "serve": {
-      "executor": "@nrwl/node:node",
-      "options": {
-        "buildTarget": "example-nodejs-cloud-typescript:build"
-      },
-      "dependsOn": ["^build"]
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["examples/nodejs-cloud/typescript/**/*.ts"]
-      }
-    }
-  },
-  "tags": []
+    "tags": []
 }
