@@ -178,14 +178,14 @@ export default class DevCycleProvider implements Provider {
     private resultFromDVCVariable<T>(
         variable: DVCVariable,
     ): ResolutionDetails<T> {
-        const metaData: FlagMetadata = {
+        const flagMetadata: FlagMetadata = {
             isDefaulted: variable.isDefaulted,
             defaultValue: (typeof variable.defaultValue === 'object')
                 ? JSON.stringify(variable.defaultValue)
                 : variable.defaultValue
         }
         if (variable.type) {
-            metaData.type = variable.type
+            flagMetadata.type = variable.type
         }
 
         return {
@@ -193,7 +193,7 @@ export default class DevCycleProvider implements Provider {
             reason: variable.isDefaulted
                 ? StandardResolutionReasons.DEFAULT
                 : StandardResolutionReasons.TARGETING_MATCH,
-            flagMetadata: metaData
+            flagMetadata
         }
     }
 
