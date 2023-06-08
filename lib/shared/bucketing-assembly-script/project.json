@@ -65,6 +65,8 @@
     },
     "compile-pb-js": {
       "executor": "@nrwl/workspace:run-commands",
+      "inputs": ["{projectRoot}/protobuf/*.proto"],
+      "outputs": ["lib/shared/bucketing-assembly-script/protobuf/compiled.js", "lib/shared/bucketing-assembly-script/protobuf/compiled.d.ts"],
       "options": {
           "commands": [
               {
@@ -82,7 +84,9 @@
       }
     },
     "compile-pb-as": {
-        "executor": "@nrwl/workspace:run-commands",
+      "executor": "@nrwl/workspace:run-commands",
+      "inputs": ["{projectRoot}/protobuf/*.proto"],
+      "outputs": ["lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated"],
         "options": {
             "commands": [
                 {
@@ -101,8 +105,11 @@
     },
     "build": {
       "executor": "@nrwl/workspace:run-commands",
+      "inputs": [
+        "!{projectRoot}/build/**/*"
+      ],
       "outputs": [
-        "lib/shared/bucketing-assembly-script"
+        "lib/shared/bucketing-assembly-script/build"
       ],
       "options": {
         "commands": [
