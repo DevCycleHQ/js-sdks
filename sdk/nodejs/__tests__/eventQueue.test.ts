@@ -18,7 +18,7 @@ import { Response } from 'cross-fetch'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
 
-const publishEvents_mock = mocked(publishEvents, true)
+const publishEvents_mock = mocked(publishEvents)
 const defaultLogger = dvcDefaultLogger()
 
 describe('EventQueue Unit Tests', () => {

@@ -10,8 +10,8 @@ import { mocked } from 'jest-mock'
 import { dvcDefaultLogger } from '../src/utils/logger'
 import { Response } from 'cross-fetch'
 
-const setInterval_mock = mocked(setInterval, true)
-const getEnvironmentConfig_mock = mocked(getEnvironmentConfig, true)
+const setInterval_mock = mocked(setInterval)
+const getEnvironmentConfig_mock = mocked(getEnvironmentConfig)
 const logger = dvcDefaultLogger()
 
 describe('EnvironmentConfigManager Unit Tests', () => {

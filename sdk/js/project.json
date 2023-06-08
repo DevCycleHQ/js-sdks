@@ -1,10 +1,11 @@
 {
+    "name": "js",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "sdk/js/src",
     "implicitDependencies": [],
     "targets": {
         "npm-publish": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/devcycle-js-sdk\"",
                 "cwd": "dist/sdk/js",
@@ -13,22 +14,22 @@
             "dependsOn": ["build:emit-legacy-types"]
         },
         "check-types": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "yarn run -T tsc -b --incremental",
                 "cwd": "sdk/js"
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["sdk/js/**/*.ts"]
             }
         },
         "test": {
-            "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/sdk/js"],
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/sdk/js"],
             "options": {
                 "jestConfig": "sdk/js/jest.config.ts",
                 "passWithNoTests": false,
@@ -36,7 +37,7 @@
             }
         },
         "build": {
-            "executor": "@nrwl/js:tsc",
+            "executor": "@nx/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/js",
@@ -48,7 +49,7 @@
             }
         },
         "build:emit-legacy-types": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "npx --yes downlevel-dts . ts3.5 --to=3.5",
                 "cwd": "dist/sdk/js",
@@ -57,7 +58,7 @@
             "dependsOn": ["build"]
         },
         "build:cdn": {
-            "executor": "@nrwl/webpack:webpack",
+            "executor": "@nx/webpack:webpack",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "libraryName": "DevCycle",

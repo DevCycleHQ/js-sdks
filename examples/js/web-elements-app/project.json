@@ -1,11 +1,12 @@
 {
+    "name": "example-js-web-elements-app",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "projectType": "application",
     "sourceRoot": "examples/js/web-elements-app/src",
     "tags": [],
     "targets": {
         "build": {
-            "executor": "@nrwl/web:webpack",
+            "executor": "@nx/web:webpack",
             "outputs": ["{options.outputPath}"],
             "defaultConfiguration": "production",
             "options": {
@@ -47,7 +48,7 @@
             }
         },
         "serve": {
-            "executor": "@nrwl/web:dev-server",
+            "executor": "@nx/web:dev-server",
             "options": {
                 "buildTarget": "example-js-web-elements-app:build"
             },
@@ -62,7 +63,7 @@
             "defaultConfiguration": "development"
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["examples/js/web-elements-app/**/*.ts"]

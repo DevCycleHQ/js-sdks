@@ -1,32 +1,35 @@
 {
+    "name": "example-nodejs-local-typescript",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "examples/nodejs-local/typescript/src",
     "projectType": "application",
     "targets": {
         "build": {
-            "executor": "@nrwl/node:webpack",
+            "executor": "@nx/webpack:webpack",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/examples/nodejs-local/typescript",
                 "main": "examples/nodejs-local/typescript/src/main.ts",
-                "tsConfig": "examples/nodejs-local/typescript/tsconfig.app.json"
+                "tsConfig": "examples/nodejs-local/typescript/tsconfig.app.json",
+                "compiler": "tsc",
+                "target": "node"
             }
         },
         "serve": {
-            "executor": "@nrwl/node:node",
+            "executor": "@nx/node:node",
             "options": {
                 "buildTarget": "example-nodejs-local-typescript:build"
             },
             "dependsOn": ["^build"]
         },
         "benchmark": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "DVC_BENCHMARK=1 DVC_BENCH_LOOP=1 yarn nx serve example-nodejs-local-typescript"
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["examples/nodejs-local/typescript/**/*.ts"]
