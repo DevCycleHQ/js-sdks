@@ -1,18 +1,38 @@
 import { DVCOptions, DVCUser } from './types'
-import { DVCClient } from './Client'
+import {
+    DVCClient,
+    DVCOptionsWithDeferredInitialization,
+    isDeferredOptions,
+} from './Client'
 
 export * from './types'
 
-export const initialize = (
+export function initialize(
+    sdkKey: string,
+    options: DVCOptionsWithDeferredInitialization,
+): DVCClient
+export function initialize(
     sdkKey: string,
     user: DVCUser,
-    options: DVCOptions = {},
-): DVCClient => {
+    options?: DVCOptions,
+): DVCClient
+export function initialize(
+    sdkKey: string,
+    userOrOptions: DVCUser | DVCOptionsWithDeferredInitialization,
+    optionsArg: DVCOptions = {},
+): DVCClient {
     // TODO: implement logger
     if (typeof window === 'undefined') {
         console.warn(
             'Window is not defined, try initializing in a browser context',
         )
+    }
+
+    let options = optionsArg
+    let isDeferred = false
+    if (isDeferredOptions(userOrOptions)) {
+        isDeferred = true
+        options = userOrOptions
     }
 
     if (
@@ -37,7 +57,7 @@ export const initialize = (
         throw new Error('Missing SDK key! Call initialize with a valid SDK key')
     }
 
-    if (!user) {
+    if (!isDeferred && !userOrOptions) {
         throw new Error('Missing user! Call initialize with a valid user')
     }
 
@@ -45,7 +65,13 @@ export const initialize = (
         throw new Error('Invalid options! Call initialize with valid options')
     }
 
-    const client = new DVCClient(sdkKey, user, options)
+    let client: DVCClient
+
+    if (isDeferredOptions(userOrOptions)) {
+        client = new DVCClient(sdkKey, userOrOptions)
+    } else {
+        client = new DVCClient(sdkKey, userOrOptions, options)
+    }
 
     client
         .onClientInitialized()

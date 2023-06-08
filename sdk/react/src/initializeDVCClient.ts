@@ -6,6 +6,12 @@ const initializeDVCClient = (
     user: DVCUser = { isAnonymous: true },
     options?: DVCOptions,
 ): DVCClient => {
+    if (options?.deferInitialization) {
+        return initialize(sdkKey, {
+            ...options,
+            deferInitialization: true, // make typescript happy
+        })
+    }
     return initialize(sdkKey, user, options)
 }
 

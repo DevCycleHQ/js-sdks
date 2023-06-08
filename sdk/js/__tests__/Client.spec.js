@@ -837,4 +837,100 @@ describe('DVCClient tests', () => {
             expect(removeListener).toHaveBeenCalled()
         })
     })
+
+    describe('deferred mode', () => {
+        it('does not send config or resolve initialization until identify', async () => {
+            getConfigJson_mock.mockImplementation(() => {
+                return Promise.resolve(testConfig)
+            })
+            const client = new DVCClient('test_sdk_key', {
+                deferInitialization: true,
+            })
+            await new Promise((resolve) => setTimeout(resolve, 10))
+            expect(getConfigJson_mock).not.toBeCalled()
+            expect(
+                await Promise.race([
+                    client.onInitialized,
+                    new Promise((resolve) =>
+                        setTimeout(() => resolve('timed out'), 10),
+                    ),
+                ]),
+            ).toEqual('timed out')
+            expect(client.user).toBeUndefined()
+            await client.identifyUser({ user_id: 'test' })
+            await client.onInitialized
+            expect(getConfigJson_mock).toBeCalledWith(
+                'test_sdk_key',
+                expect.objectContaining({ user_id: 'test' }),
+                expect.anything(),
+                expect.anything(),
+                undefined,
+            )
+            expect(getConfigJson_mock.mock.calls.length).toBe(1)
+            expect(client.config).toStrictEqual(testConfig)
+        })
+
+        it('identifies correctly after initial identify', async () => {
+            const configForUser2 = { ...testConfig, forUser2: true }
+            getConfigJson_mock.mockImplementation((key, user) => {
+                return Promise.resolve(
+                    user.user_id === 'test2' ? configForUser2 : testConfig,
+                )
+            })
+            const client = new DVCClient('test_sdk_key', {
+                deferInitialization: true,
+            })
+            await new Promise((resolve) => setTimeout(resolve, 10))
+            await client.identifyUser({ user_id: 'test' })
+            await client.onInitialized
+            await client.identifyUser({ user_id: 'test2' })
+            expect(getConfigJson_mock).toBeCalledWith(
+                'test_sdk_key',
+                expect.objectContaining({ user_id: 'test2' }),
+                expect.anything(),
+                expect.anything(),
+                undefined,
+            )
+            expect(getConfigJson_mock.mock.calls.length).toBe(2)
+            expect(client.config).toStrictEqual(configForUser2)
+        })
+
+        it('works in deferred mode before identify', async () => {
+            publishEvents.mockResolvedValue({ status: 201 })
+            const configForUser2 = { ...testConfig, forUser2: true }
+            getConfigJson_mock.mockImplementation((key, user) => {
+                return Promise.resolve(
+                    user.user_id === 'test2' ? configForUser2 : testConfig,
+                )
+            })
+            const client = new DVCClient('test_sdk_key', {
+                deferInitialization: true,
+            })
+
+            expect(client.variable('test', false)).toEqual(
+                expect.objectContaining({
+                    value: false,
+                    isDefaulted: true,
+                }),
+            )
+            expect(client.allVariables()).toEqual({})
+            expect(client.allFeatures()).toEqual({})
+            client.track({ type: 'test' })
+            await client.flushEvents()
+            // no events should be flushed until the user is identified
+            expect(publishEvents).not.toHaveBeenCalled()
+            await client.identifyUser({ user_id: 'test' })
+            await client.flushEvents()
+            expect(publishEvents).toHaveBeenCalledWith(
+                'test_sdk_key',
+                testConfig,
+                expect.objectContaining({ user_id: 'test' }),
+                [
+                    { type: 'test' },
+                    expect.objectContaining({ type: 'variableDefaulted' }),
+                ],
+                expect.anything(),
+            )
+        })
+    })
 })

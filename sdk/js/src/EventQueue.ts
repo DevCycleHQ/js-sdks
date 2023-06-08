@@ -38,6 +38,15 @@ export class EventQueue {
     }
 
     async flushEvents(): Promise<void> {
+        const user = this.client.user
+
+        if (!user) {
+            this.client.logger.warn(
+                'Skipping event flush, user has not been set yet.',
+            )
+            return
+        }
+
         const eventsToFlush = [...this.eventQueue]
         const aggregateEventsToFlush = this.eventsFromAggregateEventMap()
         eventsToFlush.push(...aggregateEventsToFlush)
@@ -55,7 +64,7 @@ export class EventQueue {
             const res = await publishEvents(
                 this.sdkKey,
                 this.client.config || null,
-                this.client.user,
+                user,
                 eventsToFlush,
                 this.client.logger,
             )
