@@ -12,3 +12,4 @@ lib/shared/bucketing-assembly-script/
 .husky
 .verdaccio
 node_modules
+**/.next/**
