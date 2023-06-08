@@ -1,68 +1,68 @@
 {
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "lib/shared/types/src",
-  "targets": {
-    "check-types": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "yarn run -T tsc -b --incremental",
-        "cwd": "lib/shared/types"
-      }
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "lib/shared/types/src",
+    "targets": {
+        "check-types": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "command": "yarn run -T tsc -b --incremental",
+                "cwd": "lib/shared/types"
+            }
+        },
+        "npm-publish": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "command": "../../../../scripts/npm-safe-publish.sh \"@devcycle/types\"",
+                "cwd": "dist/lib/shared/types",
+                "forwardAllArgs": true
+            },
+            "dependsOn": ["build:emit-legacy-types"]
+        },
+        "build": {
+            "executor": "@nrwl/web:rollup",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "format": ["esm", "cjs"],
+                "project": "lib/shared/types/package.json",
+                "outputPath": "dist/lib/shared/types",
+                "entryFile": "lib/shared/types/src/index.ts",
+                "tsConfig": "lib/shared/types/tsconfig.lib.json",
+                "buildableProjectDepsInPackageJsonType": "dependencies",
+                "assets": [
+                    {
+                        "glob": "*.md",
+                        "input": "lib/shared/types",
+                        "output": "."
+                    }
+                ],
+                "skipTypeField": true
+            }
+        },
+        "build:emit-legacy-types": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "command": "npx --yes downlevel-dts . ts3.5 --to=3.5",
+                "cwd": "dist/lib/shared/types",
+                "forwardAllArgs": true
+            },
+            "dependsOn": ["build"]
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["lib/shared/types/**/*.ts"]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["coverage/lib/shared/types"],
+            "options": {
+                "jestConfig": "lib/shared/types/jest.config.ts",
+                "passWithNoTests": true,
+                "codeCoverage": true
+            }
+        }
     },
-    "npm-publish": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "../../../../scripts/npm-safe-publish.sh \"@devcycle/types\"",
-        "cwd": "dist/lib/shared/types",
-        "forwardAllArgs": true
-      },
-      "dependsOn": ["build:emit-legacy-types"]
-    },
-    "build": {
-      "executor": "@nrwl/web:rollup",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "format": ["esm", "cjs"],
-        "project": "lib/shared/types/package.json",
-        "outputPath": "dist/lib/shared/types",
-        "entryFile": "lib/shared/types/src/index.ts",
-        "tsConfig": "lib/shared/types/tsconfig.lib.json",
-        "buildableProjectDepsInPackageJsonType": "dependencies",
-        "assets": [
-          {
-            "glob": "*.md",
-            "input": "lib/shared/types",
-            "output": "."
-          }
-        ],
-        "skipTypeField": true
-      }
-    },
-    "build:emit-legacy-types": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "npx --yes downlevel-dts . ts3.5 --to=3.5",
-        "cwd": "dist/lib/shared/types",
-        "forwardAllArgs": true
-      },
-      "dependsOn": ["build"]
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["lib/shared/types/**/*.ts"]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/lib/shared/types"],
-      "options": {
-        "jestConfig": "lib/shared/types/jest.config.ts",
-        "passWithNoTests": true,
-        "codeCoverage": true
-      }
-    }
-  },
-  "tags": []
+    "tags": []
 }

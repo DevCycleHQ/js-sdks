@@ -84,10 +84,11 @@
       }
     },
     "compile-pb-as": {
-      "executor": "@nrwl/workspace:run-commands",
+        "executor": "@nrwl/workspace:run-commands",
       "inputs": ["{projectRoot}/protobuf/*.proto"],
       "outputs": ["lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated"],
-        "options": {
+
+      "options": {
             "commands": [
                 {
                   "command": "rm -rf ./assembly/types/protobuf-generated"
