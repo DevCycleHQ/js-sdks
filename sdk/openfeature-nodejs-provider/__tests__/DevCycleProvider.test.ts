@@ -213,11 +213,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 flagKey: 'boolean-flag',
                 value: true,
                 reason: StandardResolutionReasons.TARGETING_MATCH,
-                flagMetadata: {
-                    defaultValue: false,
-                    isDefaulted: false,
-                    type: 'Boolean',
-                },
+                flagMetadata: {},
             })
         })
 
@@ -236,11 +232,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 flagKey: 'boolean-flag',
                 value: false,
                 reason: StandardResolutionReasons.DEFAULT,
-                flagMetadata: {
-                    defaultValue: false,
-                    isDefaulted: true,
-                    type: 'Boolean',
-                },
+                flagMetadata: {},
             })
         })
     })
@@ -271,11 +263,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 flagKey: 'string-flag',
                 value: 'string-value',
                 reason: StandardResolutionReasons.TARGETING_MATCH,
-                flagMetadata: {
-                    defaultValue: 'string-default',
-                    isDefaulted: false,
-                    type: 'String',
-                },
+                flagMetadata: {},
             })
         })
     })
@@ -306,11 +294,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 flagKey: 'num-flag',
                 value: 610,
                 reason: StandardResolutionReasons.TARGETING_MATCH,
-                flagMetadata: {
-                    defaultValue: 2056,
-                    isDefaulted: false,
-                    type: 'Number',
-                },
+                flagMetadata: {},
             })
         })
     })
@@ -341,11 +325,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 flagKey: 'json-flag',
                 value: { hello: 'world' },
                 reason: StandardResolutionReasons.TARGETING_MATCH,
-                flagMetadata: {
-                    defaultValue: JSON.stringify({ default: 'value' }),
-                    isDefaulted: false,
-                    type: 'JSON',
-                },
+                flagMetadata: {},
             })
         })
 
