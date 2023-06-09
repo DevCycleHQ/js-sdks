@@ -1,7 +1,7 @@
 import { DVCLogger } from '@devcycle/types'
 
 export class StreamingConnection {
-    private connection: EventSource
+    private connection?: EventSource
 
     constructor(
         private url: string,
@@ -12,6 +12,12 @@ export class StreamingConnection {
     }
 
     private openConnection() {
+        if (typeof EventSource === 'undefined') {
+            this.logger.warn(
+                'StreamingConnection not opened. EventSource is not available.',
+            )
+            return
+        }
         this.connection = new EventSource(this.url, { withCredentials: true })
         this.connection.onmessage = (event) => {
             this.onMessage(event.data)
@@ -27,7 +33,7 @@ export class StreamingConnection {
     }
 
     isConnected(): boolean {
-        return this.connection.readyState === this.connection.OPEN
+        return this.connection?.readyState === this.connection?.OPEN
     }
 
     reopen(): void {
@@ -38,6 +44,6 @@ export class StreamingConnection {
     }
 
     close(): void {
-        this.connection.close()
+        this.connection?.close()
     }
 }
