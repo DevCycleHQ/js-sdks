@@ -5,7 +5,7 @@
     "projectType": "application",
     "targets": {
         "build": {
-            "executor": "@nx/web:webpack",
+            "executor": "@nx/webpack:webpack",
             "outputs": ["{options.outputPath}"],
             "configurations": {
                 "production": {},
@@ -31,7 +31,7 @@
             "defaultConfiguration": "production"
         },
         "serve": {
-            "executor": "@nx/web:dev-server",
+            "executor": "@nx/webpack:dev-server",
             "options": {
                 "buildTarget": "example-react-with-provider:build",
                 "hmr": true

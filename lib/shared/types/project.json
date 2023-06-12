@@ -23,7 +23,7 @@
             "executor": "@nrwl/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "options": {
-                "format": ["esm", "cjs"],
+                "format": ["cjs"],
                 "project": "lib/shared/types/package.json",
                 "outputPath": "dist/lib/shared/types",
                 "entryFile": "lib/shared/types/src/index.ts",
@@ -35,8 +35,7 @@
                         "input": "lib/shared/types",
                         "output": "."
                     }
-                ],
-                "skipTypeField": true
+                ]
             }
         },
         "build:emit-legacy-types": {
