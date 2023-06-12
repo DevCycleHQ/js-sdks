@@ -30,10 +30,10 @@
         },
         "build:json": {
             "executor": "@nx/node:node",
-          "inputs": ["!{projectRoot}/json-data/**/*"],
-          "outputs": ["lib/shared/bucketing-test-data/json-data"],
+            "inputs": ["!{projectRoot}/json-data/**/*"],
+            "outputs": ["lib/shared/bucketing-test-data/json-data"],
 
-          "options": {
+            "options": {
                 "buildTarget": "shared-bucketing-test-data:build",
                 "watch": false
             },
