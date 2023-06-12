@@ -4586,8 +4586,6 @@ __metadata:
 "@devcycle/types@workspace:lib/shared/types":
   version: 0.0.0-use.local
   resolution: "@devcycle/types@workspace:lib/shared/types"
-  dependencies:
-    "@types/validator": 13.7.6
   languageName: unknown
   linkType: soft
 
@@ -9001,14 +8999,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.0.3":
-  version: 18.0.3
-  resolution: "@types/react@npm:18.0.3"
+"@types/react@npm:18.0.28":
+  version: 18.0.28
+  resolution: "@types/react@npm:18.0.28"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 4bd1f088b4650af95fa3c6f592221b5d151af96ea619d34536fdc4f8bbf7c0807a5154c4e75911ed851e654da3a99d7c138f5f14aa17e00d39d3258af89c0d98
+  checksum: e752df961105e5127652460504785897ca6e77259e0da8f233f694f9e8f451cde7fa0709d4456ade0ff600c8ce909cfe29f9b08b9c247fa9b734e126ec53edd7
   languageName: node
   linkType: hard
 
@@ -9128,13 +9126,6 @@ __metadata:
   version: 8.3.4
   resolution: "@types/uuid@npm:8.3.4"
   checksum: 6f11f3ff70f30210edaa8071422d405e9c1d4e53abbe50fdce365150d3c698fe7bbff65c1e71ae080cbfb8fded860dbb5e174da96fdbbdfcaa3fb3daa474d20f
-  languageName: node
-  linkType: hard
-
-"@types/validator@npm:13.7.6":
-  version: 13.7.6
-  resolution: "@types/validator@npm:13.7.6"
-  checksum: f860dd87bc5f90cc33d2802cf2a4da307ddac63c86d86b858a85dd62d457c8fa42fc8756e05b5d24e741376debc13d46ed14bc700006bf7d0cb910118022492b
   languageName: node
   linkType: hard
 
@@ -13681,6 +13672,7 @@ __metadata:
     jest-environment-jsdom: 29.4.3
     jest-fetch-mock: ^3.0.3
     jest-junit: ~6.4.0
+    jest-mock: ^29.4.3
     jest-react-native: 18.0.0
     jira-prepare-commit-msg: ^1.6.2
     lerna: ^5.5.2
