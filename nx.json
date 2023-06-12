@@ -10,9 +10,9 @@
                     "check-types",
                     "package",
                     "prepare",
-                  "build:json",
-                  "compile-pb-js",
-                  "compile-pb-as"
+                    "build:json",
+                    "compile-pb-js",
+                    "compile-pb-as"
                 ],
                 "parallel": 1
             }
