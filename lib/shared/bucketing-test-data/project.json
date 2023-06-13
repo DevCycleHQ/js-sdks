@@ -13,13 +13,22 @@
             }
         },
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
+                "platform": "node",
                 "outputPath": "dist/lib/shared/bucketing-test-data",
-                "main": "lib/shared/bucketing-test-data/src/index.ts",
+                "format": ["cjs"],
+                "bundle": false,
+                "main": "lib/shared/bucketing-test-data/src/main.ts",
                 "tsConfig": "lib/shared/bucketing-test-data/tsconfig.lib.json",
-                "buildableProjectDepsInPackageJsonType": "dependencies"
+                "buildableProjectDepsInPackageJsonType": "dependencies",
+                "esbuildOptions": {
+                    "sourcemap": false,
+                    "outExtension": {
+                        ".js": ".js"
+                    }
+                }
             },
             "dependsOn": [
                 {
@@ -29,10 +38,7 @@
             ]
         },
         "build:json": {
-            "executor": "@nx/node:node",
-            "inputs": ["!{projectRoot}/json-data/**/*"],
-            "outputs": ["lib/shared/bucketing-test-data/json-data"],
-
+            "executor": "@nx/js:node",
             "options": {
                 "buildTarget": "shared-bucketing-test-data:build",
                 "watch": false
