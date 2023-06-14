@@ -5,14 +5,14 @@
     "implicitDependencies": [],
     "targets": {
         "check-types": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "yarn run -T tsc -b --incremental",
                 "cwd": "sdk/react"
             }
         },
         "build": {
-            "executor": "@nrwl/web:rollup",
+            "executor": "@nx/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/react",
@@ -21,7 +21,7 @@
                 "entryFile": "sdk/react/src/index.ts",
                 "format": ["esm", "cjs"],
                 "external": ["react/jsx-runtime"],
-                "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+                "rollupConfig": "@nx/react/plugins/bundle-rollup",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
                 "compiler": "babel",
                 "assets": [
@@ -34,15 +34,15 @@
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["sdk/react/**/*.{ts,tsx,js,jsx}"]
             }
         },
         "test": {
-            "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/sdk/react"],
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/sdk/react"],
             "options": {
                 "jestConfig": "sdk/react/jest.config.ts",
                 "passWithNoTests": true,
@@ -50,7 +50,7 @@
             }
         },
         "npm-publish": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/devcycle-react-sdk\"",
                 "cwd": "dist/sdk/react",

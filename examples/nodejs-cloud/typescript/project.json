@@ -5,23 +5,25 @@
     "projectType": "application",
     "targets": {
         "build": {
-            "executor": "@nrwl/node:webpack",
+            "executor": "@nx/webpack:webpack",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/examples/nodejs-cloud/typescript",
                 "main": "examples/nodejs-cloud/typescript/src/main.ts",
-                "tsConfig": "examples/nodejs-cloud/typescript/tsconfig.app.json"
+                "tsConfig": "examples/nodejs-cloud/typescript/tsconfig.app.json",
+                "compiler": "tsc",
+                "target": "node"
             }
         },
         "serve": {
-            "executor": "@nrwl/node:node",
+            "executor": "@nx/node:node",
             "options": {
                 "buildTarget": "example-nodejs-cloud-typescript:build"
             },
             "dependsOn": ["^build"]
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["examples/nodejs-cloud/typescript/**/*.ts"]

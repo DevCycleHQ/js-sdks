@@ -6,14 +6,14 @@
     "implicitDependencies": ["shared-bucketing-test-data"],
     "targets": {
         "check-types": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "asc assembly/index.ts --target debug",
                 "cwd": "lib/shared/bucketing-assembly-script"
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
@@ -22,8 +22,10 @@
             }
         },
         "test": {
-            "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/lib/shared/bucketing-assembly-script"],
+            "executor": "@nx/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/lib/shared/bucketing-assembly-script"
+            ],
             "options": {
                 "jestConfig": "lib/shared/bucketing-assembly-script/jest.config.ts",
                 "passWithNoTests": false,
@@ -31,17 +33,16 @@
             },
             "dependsOn": [
                 {
-                    "target": "build",
-                    "projects": "self"
+                    "target": "build"
                 },
                 {
                     "target": "build:json",
-                    "projects": "dependencies"
+                    "dependencies": true
                 }
             ]
         },
         "benchmark": {
-            "executor": "@nrwl/jest:jest",
+            "executor": "@nx/jest:jest",
             "options": {
                 "jestConfig": "lib/shared/bucketing-assembly-script/jest-bench.config.ts",
                 "passWithNoTests": false,
@@ -49,17 +50,16 @@
             },
             "dependsOn": [
                 {
-                    "target": "build",
-                    "projects": "self"
+                    "target": "build"
                 },
                 {
                     "target": "build:json",
-                    "projects": "dependencies"
+                    "dependencies": true
                 }
             ]
         },
         "compile-pb-js": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "commands": [
                     {
@@ -77,7 +77,7 @@
             }
         },
         "compile-pb-as": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "commands": [
                     {
@@ -95,8 +95,8 @@
             }
         },
         "build": {
-            "executor": "@nrwl/workspace:run-commands",
-            "outputs": ["lib/shared/bucketing-assembly-script"],
+            "executor": "nx:run-commands",
+            "outputs": ["{projectRoot}"],
             "options": {
                 "commands": [
                     {
@@ -127,20 +127,18 @@
             "dependsOn": [
                 {
                     "target": "build:json",
-                    "projects": "dependencies"
+                    "dependencies": true
                 },
                 {
-                    "target": "compile-pb-js",
-                    "projects": "self"
+                    "target": "compile-pb-js"
                 },
                 {
-                    "target": "compile-pb-as",
-                    "projects": "self"
+                    "target": "compile-pb-as"
                 }
             ]
         },
         "npm-publish": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/bucketing-assembly-script\"",
                 "cwd": "lib/shared/bucketing-assembly-script",

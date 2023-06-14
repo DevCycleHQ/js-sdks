@@ -1,106 +1,109 @@
 {
-  "extends": "nx/presets/npm.json",
-  "npmScope": "devcycle",
-  "workspaceLayout": {
-    "libsDir": "",
-    "appsDir": ""
-  },
-  "implicitDependencies": {
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
+    "tasksRunnerOptions": {
+        "default": {
+            "runner": "nx-cloud",
+            "options": {
+                "cacheableOperations": [
+                    "build",
+                    "test",
+                    "lint",
+                    "check-types",
+                    "package",
+                    "prepare"
+                ],
+                "parallel": 1,
+                "accessToken": "Yjc5YzRjMmUtMWI4ZS00NWM3LWFhMDktNWM0ZTM0ZjdjMWFmfHJlYWQtd3JpdGU="
+            }
+        }
     },
-    ".eslintrc.json": "*",
-    ".circleci/config.yml": "*"
-  },
-  "pluginsConfig": {
-    "@nrwl/js": {
-      "analyzeSourceFiles": true
-    }
-  },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "@nrwl/nx-cloud",
-      "options": {
-        "cacheableOperations": [
-          "build",
-          "test",
-          "lint",
-          "check-types",
-          "package",
-          "prepare"
-        ],
-        "parallel": 1,
-        "accessToken": "Yjc5YzRjMmUtMWI4ZS00NWM3LWFhMDktNWM0ZTM0ZjdjMWFmfHJlYWQtd3JpdGU="
-      }
-    }
-  },
-  "affected": {
-    "defaultBase": "main"
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/js"
-  },
-  "generators": {
-    "@nrwl/web:application": {
-      "style": "css",
-      "linter": "eslint",
-      "unitTestRunner": "jest",
-      "e2eTestRunner": "cypress"
+    "pluginsConfig": {
+        "@nx/js": {
+            "analyzeSourceFiles": true
+        }
     },
-    "@nrwl/web:library": {
-      "style": "css",
-      "linter": "eslint",
-      "unitTestRunner": "jest"
+    "extends": "nx/presets/npm.json",
+    "npmScope": "devcycle",
+    "workspaceLayout": {
+        "libsDir": "",
+        "appsDir": ""
     },
-    "@nrwl/react": {
-      "application": {
-        "style": "css",
-        "linter": "eslint",
-        "babel": true
-      },
-      "component": {
-        "style": "css"
-      },
-      "library": {
-        "style": "css",
-        "linter": "eslint"
-      }
-    },
-    "@nrwl/next": {
-      "application": {
-        "style": "css",
-        "linter": "eslint"
-      }
-    }
-  },
-  "defaultProject": "react",
-  "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "targetDefaults": {
-    "build": {
-      "dependsOn": [
-        "^build"
-      ]
-    },
-    "prepare": {
-      "dependsOn": [
-        "^prepare"
-      ]
-    },
-    "package": {
-      "dependsOn": [
-        "^package"
-      ]
-    },
-    "npm-publish": {
-      "dependsOn": [
-        {
-          "projects": "dependencies",
-          "target": "npm-publish",
-          "params": "forward"
+    "implicitDependencies": {
+        "package.json": {
+            "dependencies": "*",
+            "devDependencies": "*"
         },
-        "build"
-      ]
+        ".eslintrc.json": "*",
+        ".circleci/config.yml": "*"
+    },
+    "affected": {
+        "defaultBase": "main"
+    },
+    "cli": {
+        "defaultCollection": "@nx/js"
+    },
+    "generators": {
+        "@nx/web:application": {
+            "style": "css",
+            "linter": "eslint",
+            "unitTestRunner": "jest",
+            "e2eTestRunner": "cypress"
+        },
+        "@nx/web:library": {
+            "style": "css",
+            "linter": "eslint",
+            "unitTestRunner": "jest"
+        },
+        "@nx/react": {
+            "application": {
+                "style": "css",
+                "linter": "eslint",
+                "babel": true
+            },
+            "component": {
+                "style": "css"
+            },
+            "library": {
+                "style": "css",
+                "linter": "eslint"
+            }
+        },
+        "@nx/next": {
+            "application": {
+                "style": "css",
+                "linter": "eslint"
+            }
+        }
+    },
+    "defaultProject": "react",
+    "$schema": "./node_modules/nx/schemas/nx-schema.json",
+    "targetDefaults": {
+        "build": {
+            "dependsOn": ["^build"]
+        },
+        "prepare": {
+            "dependsOn": ["^prepare"]
+        },
+        "package": {
+            "dependsOn": ["^package"]
+        },
+        "npm-publish": {
+            "dependsOn": [
+                {
+                    "target": "npm-publish",
+                    "params": "forward",
+                    "dependencies": true
+                },
+                "build"
+            ]
+        },
+        "lint": {
+            "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
+        },
+        "test": {
+            "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]
+        },
+        "benchmark": {
+            "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]
+        }
     }
-  }
 }

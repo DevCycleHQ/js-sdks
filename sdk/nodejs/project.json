@@ -8,22 +8,22 @@
     ],
     "targets": {
         "check-types": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "yarn run -T tsc -b --incremental",
                 "cwd": "sdk/nodejs"
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["sdk/nodejs/**/*.ts"]
             }
         },
         "test": {
-            "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/sdk/nodejs"],
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/sdk/nodejs"],
             "options": {
                 "jestConfig": "sdk/nodejs/jest.config.ts",
                 "passWithNoTests": false,
@@ -31,17 +31,16 @@
             },
             "dependsOn": [
                 {
-                    "target": "build",
-                    "projects": "self"
+                    "target": "build"
                 },
                 {
                     "target": "build:json",
-                    "projects": "dependencies"
+                    "dependencies": true
                 }
             ]
         },
         "build": {
-            "executor": "@nrwl/js:tsc",
+            "executor": "@nx/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/nodejs",
@@ -54,12 +53,12 @@
             "dependsOn": [
                 {
                     "target": "build",
-                    "projects": "dependencies"
+                    "dependencies": true
                 }
             ]
         },
         "npm-publish": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/nodejs-server-sdk\"",
                 "cwd": "dist/sdk/nodejs",

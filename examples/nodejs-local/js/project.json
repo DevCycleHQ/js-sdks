@@ -5,23 +5,25 @@
     "projectType": "application",
     "targets": {
         "build": {
-            "executor": "@nrwl/node:webpack",
+            "executor": "@nx/webpack:webpack",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/examples/nodejs-local/js",
                 "main": "examples/nodejs-local/js/src/main.js",
-                "tsConfig": "examples/nodejs-local/js/tsconfig.app.json"
+                "tsConfig": "examples/nodejs-local/js/tsconfig.app.json",
+                "compiler": "tsc",
+                "target": "node"
             }
         },
         "serve": {
-            "executor": "@nrwl/node:node",
+            "executor": "@nx/node:node",
             "options": {
                 "buildTarget": "example-nodejs-local-js:build"
             },
             "dependsOn": ["^build"]
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["examples/nodejs-local/js/**/*.js"]

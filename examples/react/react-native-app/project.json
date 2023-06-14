@@ -5,24 +5,24 @@
     "projectType": "application",
     "targets": {
         "start": {
-            "executor": "@nrwl/react-native:start",
+            "executor": "@nx/react-native:start",
             "options": {
                 "port": 8081
             }
         },
         "serve": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "nx start example-react-native-app"
             }
         },
         "run-ios": {
-            "executor": "@nrwl/react-native:run-ios",
+            "executor": "@nx/react-native:run-ios",
             "options": {}
         },
         "bundle-ios": {
-            "executor": "@nrwl/react-native:bundle",
-            "outputs": ["examples/react/react-native-app/build"],
+            "executor": "@nx/react-native:bundle",
+            "outputs": ["{projectRoot}/build"],
             "options": {
                 "entryFile": "src/main.tsx",
                 "platform": "ios",
@@ -30,19 +30,19 @@
             }
         },
         "run-android": {
-            "executor": "@nrwl/react-native:run-android",
+            "executor": "@nx/react-native:run-android",
             "options": {}
         },
         "build-android": {
-            "executor": "@nrwl/react-native:build-android",
+            "executor": "@nx/react-native:build-android",
             "outputs": [
-                "examples/react/react-native-app/android/app/build/outputs/bundle",
-                "examples/react/react-native-app/android/app/build/outputs/apk"
+                "{projectRoot}/android/app/build/outputs/bundle",
+                "{projectRoot}/android/app/build/outputs/apk"
             ],
             "options": {}
         },
         "bundle-android": {
-            "executor": "@nrwl/react-native:bundle",
+            "executor": "@nx/react-native:bundle",
             "options": {
                 "entryFile": "src/main.tsx",
                 "platform": "android",
@@ -50,15 +50,15 @@
             }
         },
         "sync-deps": {
-            "executor": "@nrwl/react-native:sync-deps",
+            "executor": "@nx/react-native:sync-deps",
             "options": {}
         },
         "ensure-symlink": {
-            "executor": "@nrwl/react-native:ensure-symlink",
+            "executor": "@nx/react-native:ensure-symlink",
             "options": {}
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
