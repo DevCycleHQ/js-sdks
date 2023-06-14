@@ -27,7 +27,7 @@ export const CONFIG_PATH = '/v1/sdkConfig'
 export const EVENTS_PATH = '/v1/events'
 export const SAVE_ENTITY_PATH = '/v1/edgedb'
 
-export const baseRequestHeaders = (sdkKey?: string): AxiosRequestHeaders => {
+export const baseRequestHeaders = (sdkKey?: string): Record<string, string> => {
     return {
         'Content-Type': 'application/json',
         ...(sdkKey ? { Authorization: sdkKey } : {}),

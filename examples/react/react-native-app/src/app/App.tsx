@@ -245,7 +245,7 @@ export const App = (): JSX.Element => {
                                         styles.marginBottomMd,
                                     ]}
                                 >
-                                    nx g @nrwl/react-native:lib ui
+                                    nx g @nx/react-native:lib ui
                                 </Text>
                                 <Text
                                     style={[
@@ -260,7 +260,7 @@ export const App = (): JSX.Element => {
                                     nx g \
                                 </Text>
                                 <Text style={[styles.textXS, styles.monospace]}>
-                                    @nrwl/react-native:component \
+                                    @nx/react-native:component \
                                 </Text>
                                 <Text style={[styles.textXS, styles.monospace]}>
                                     button --project ui

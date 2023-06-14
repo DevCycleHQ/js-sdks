@@ -3,20 +3,22 @@ import path from 'path'
 import * as testData from './data/testData'
 import * as largeTestData from './data/largeConfig'
 
-const folderName = '../../../../../lib/shared/bucketing-test-data/json-data/'
-const folderPath = path.resolve(__dirname, folderName)
+const folderName = 'lib/shared/bucketing-test-data/json-data/'
+const folderPath = path.resolve(process.env.NX_WORKSPACE_ROOT || '', folderName)
 if (!fs.existsSync(folderPath)) {
     fs.mkdirSync(folderPath)
 }
 
 fs.writeFileSync(
-    path.resolve(__dirname, `${folderName}/testData.json`),
+    path.resolve(folderPath, 'testData.json'),
     JSON.stringify(testData),
 )
+
 fs.writeFileSync(
-    path.resolve(__dirname, `${folderName}/largeConfig.json`),
+    path.resolve(folderPath, 'largeConfig.json'),
     JSON.stringify(largeTestData),
 )
+
 console.log(`Wrote test data to ${folderPath}`)
 
 export * from './data/testData'

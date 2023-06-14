@@ -1,166 +1,161 @@
 {
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "lib/shared/bucketing-assembly-script/assembly",
-  "projectType": "library",
-  "implicitDependencies": [
-    "shared-bucketing-test-data"
-  ],
-  "targets": {
-    "check-types": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "asc assembly/index.ts --target debug",
-        "cwd": "lib/shared/bucketing-assembly-script"
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
-      "options": {
-        "lintFilePatterns": [
-          "lib/shared/bucketing-assembly-script/**/*.ts"
-        ]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/lib/shared/bucketing-assembly-script"
-      ],
-      "options": {
-        "jestConfig": "lib/shared/bucketing-assembly-script/jest.config.ts",
-        "passWithNoTests": false,
-        "codeCoverage": false
-      },
-      "dependsOn": [
-        {
-          "target": "build",
-          "projects": "self"
+    "name": "shared-bucketing-as",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "lib/shared/bucketing-assembly-script/assembly",
+    "implicitDependencies": ["shared-bucketing-test-data"],
+    "projectType": "library",
+    "targets": {
+        "check-types": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "asc assembly/index.ts --target debug",
+                "cwd": "lib/shared/bucketing-assembly-script"
+            }
         },
-        {
-          "target": "build:json",
-          "projects": "dependencies"
-        }
-      ]
-    },
-    "benchmark": {
-      "executor": "@nrwl/jest:jest",
-      "options": {
-          "jestConfig": "lib/shared/bucketing-assembly-script/jest-bench.config.ts",
-          "passWithNoTests": false,
-          "codeCoverage": false
-      },
-      "dependsOn": [
-          {
-              "target": "build",
-              "projects": "self"
-          },
-          {
-              "target": "build:json",
-              "projects": "dependencies"
-          }
-      ]
-    },
-    "compile-pb-js": {
-      "executor": "@nrwl/workspace:run-commands",
-      "inputs": ["{projectRoot}/protobuf/*.proto"],
-      "outputs": ["lib/shared/bucketing-assembly-script/protobuf/compiled.js", "lib/shared/bucketing-assembly-script/protobuf/compiled.d.ts"],
-      "options": {
-          "commands": [
-              {
-                  "command": "rm -rf compiled.js compiled.d.ts"
-              },
-              {
-                  "command": "pbjs -t static-module --keep-case -w commonjs -o compiled.js ./*.proto"
-              },
-              {
-                  "command": "pbts -o compiled.d.ts compiled.js"
-              }
-          ],
-          "cwd": "lib/shared/bucketing-assembly-script/protobuf",
-          "parallel": false
-      }
-    },
-    "compile-pb-as": {
-      "executor": "@nrwl/workspace:run-commands",
-      "inputs": ["{projectRoot}/protobuf/*.proto"],
-      "outputs": ["lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated"],
-        "options": {
-            "commands": [
-                {
-                  "command": "rm -rf ./assembly/types/protobuf-generated"
-                },
-                {
-                  "command": "mkdir ./assembly/types/protobuf-generated"
-                },
-                {
-                  "command": "protoc --plugin=protoc-gen-as=../../../node_modules/.bin/as-proto-gen --as_opt=gen-helper-methods --as_out=./assembly/types/protobuf-generated ./protobuf/*.proto"
-                }
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": [
+                    "lib/shared/bucketing-assembly-script/**/*.ts"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/lib/shared/bucketing-assembly-script"
             ],
-            "cwd": "lib/shared/bucketing-assembly-script",
-            "parallel": false
+            "options": {
+                "jestConfig": "lib/shared/bucketing-assembly-script/jest.config.ts",
+                "passWithNoTests": false,
+                "codeCoverage": false
+            },
+            "dependsOn": [
+                {
+                    "target": "build"
+                },
+                {
+                    "target": "build:json",
+                    "dependencies": true
+                }
+            ]
+        },
+        "benchmark": {
+            "executor": "@nx/jest:jest",
+            "options": {
+                "jestConfig": "lib/shared/bucketing-assembly-script/jest-bench.config.ts",
+                "passWithNoTests": false,
+                "codeCoverage": false
+            },
+            "dependsOn": [
+                {
+                    "target": "build"
+                },
+                {
+                    "target": "build:json",
+                    "dependencies": true
+                }
+            ]
+        },
+        "compile-pb-js": {
+            "executor": "nx:run-commands",
+            "inputs": ["{projectRoot}/protobuf/*.proto"],
+            "outputs": [
+                "lib/shared/bucketing-assembly-script/protobuf/compiled.js",
+                "lib/shared/bucketing-assembly-script/protobuf/compiled.d.ts"
+            ],
+            "options": {
+                "commands": [
+                    {
+                        "command": "rm -rf compiled.js compiled.d.ts"
+                    },
+                    {
+                        "command": "pbjs -t static-module --keep-case -w commonjs -o compiled.js ./*.proto"
+                    },
+                    {
+                        "command": "pbts -o compiled.d.ts compiled.js"
+                    }
+                ],
+                "cwd": "lib/shared/bucketing-assembly-script/protobuf",
+                "parallel": false
+            }
+        },
+        "compile-pb-as": {
+            "executor": "nx:run-commands",
+            "inputs": ["{projectRoot}/protobuf/*.proto"],
+            "outputs": [
+                "lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated"
+            ],
+
+            "options": {
+                "commands": [
+                    {
+                        "command": "rm -rf ./assembly/types/protobuf-generated"
+                    },
+                    {
+                        "command": "mkdir ./assembly/types/protobuf-generated"
+                    },
+                    {
+                        "command": "protoc --plugin=protoc-gen-as=../../../node_modules/.bin/as-proto-gen --as_opt=gen-helper-methods --as_out=./assembly/types/protobuf-generated ./protobuf/*.proto"
+                    }
+                ],
+                "cwd": "lib/shared/bucketing-assembly-script",
+                "parallel": false
+            }
+        },
+        "build": {
+            "executor": "nx:run-commands",
+            "inputs": ["!{projectRoot}/build/**/*"],
+            "outputs": ["lib/shared/bucketing-assembly-script"],
+            "options": {
+                "commands": [
+                    {
+                        "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 100 --use ASC_GC_SWEEPFACTOR=20 --maximumMemory 10000 --bindings raw"
+                    },
+                    {
+                        "command": "asc assembly/index.ts --target release --exportRuntime --initialMemory 100 --use ASC_GC_SWEEPFACTOR=20 --maximumMemory 10000 --bindings raw"
+                    },
+                    {
+                        "command": "asc assembly/index.ts --target worker --exportRuntime --initialMemory 100 --maximumMemory 1000 --bindings raw"
+                    },
+                    {
+                        "command": "sed -i.bu 's/export async function instantiate/exports.instantiate = async function instantiate/g' build/bucketing-lib.release.js"
+                    },
+                    {
+                        "command": "sed -i.bu 's/export async function instantiate/exports.instantiate = async function instantiate/g' build/bucketing-lib.debug.js"
+                    },
+                    {
+                        "command": "sed -i.bu 's/export async function instantiate/exports.instantiate = async function instantiate/g' build/bucketing-lib.worker.js"
+                    },
+                    {
+                        "command": "rm build/bucketing-lib.release.js.bu && rm build/bucketing-lib.debug.js.bu && rm build/bucketing-lib.worker.js.bu"
+                    }
+                ],
+                "cwd": "lib/shared/bucketing-assembly-script",
+                "parallel": false
+            },
+            "dependsOn": [
+                {
+                    "target": "build:json",
+                    "dependencies": true
+                },
+                {
+                    "target": "compile-pb-js"
+                },
+                {
+                    "target": "compile-pb-as"
+                }
+            ]
+        },
+        "npm-publish": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/bucketing-assembly-script\"",
+                "cwd": "lib/shared/bucketing-assembly-script",
+                "forwardAllArgs": true
+            }
         }
     },
-    "build": {
-      "executor": "@nrwl/workspace:run-commands",
-      "inputs": [
-        "!{projectRoot}/build/**/*"
-      ],
-      "outputs": [
-        "lib/shared/bucketing-assembly-script/build"
-      ],
-      "options": {
-        "commands": [
-          {
-            "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 100 --use ASC_GC_SWEEPFACTOR=20 --maximumMemory 10000 --bindings raw"
-          },
-          {
-            "command": "asc assembly/index.ts --target release --exportRuntime --initialMemory 100 --use ASC_GC_SWEEPFACTOR=20 --maximumMemory 10000 --bindings raw"
-          },
-          {
-            "command": "asc assembly/index.ts --target worker --exportRuntime --initialMemory 100 --maximumMemory 1000 --bindings raw"
-          },
-          {
-            "command": "sed -i.bu 's/export async function instantiate/exports.instantiate = async function instantiate/g' build/bucketing-lib.release.js"
-          },
-          {
-            "command": "sed -i.bu 's/export async function instantiate/exports.instantiate = async function instantiate/g' build/bucketing-lib.debug.js"
-          },
-          {
-            "command": "sed -i.bu 's/export async function instantiate/exports.instantiate = async function instantiate/g' build/bucketing-lib.worker.js"
-          },
-          {
-            "command": "rm build/bucketing-lib.release.js.bu && rm build/bucketing-lib.debug.js.bu && rm build/bucketing-lib.worker.js.bu"
-          }
-        ],
-        "cwd": "lib/shared/bucketing-assembly-script",
-        "parallel": false
-      },
-      "dependsOn": [
-        {
-          "target": "build:json",
-          "projects": "dependencies"
-        },
-        {
-          "target": "compile-pb-js",
-          "projects": "self"
-        },
-        {
-          "target": "compile-pb-as",
-          "projects": "self"
-        }
-      ]
-    },
-    "npm-publish": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/bucketing-assembly-script\"",
-        "cwd": "lib/shared/bucketing-assembly-script",
-        "forwardAllArgs": true
-      }
-    }
-  },
-  "tags": []
+    "tags": []
 }

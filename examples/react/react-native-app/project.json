@@ -1,70 +1,71 @@
 {
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "examples/react/react-native-app/src",
-  "projectType": "application",
-  "targets": {
-    "start": {
-      "executor": "@nrwl/react-native:start",
-      "options": {
-        "port": 8081
-      }
+    "name": "example-react-native-app",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "examples/react/react-native-app/src",
+    "projectType": "application",
+    "targets": {
+        "start": {
+            "executor": "@nx/react-native:start",
+            "options": {
+                "port": 8081
+            }
+        },
+        "serve": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "nx start example-react-native-app"
+            }
+        },
+        "run-ios": {
+            "executor": "@nx/react-native:run-ios",
+            "options": {}
+        },
+        "bundle-ios": {
+            "executor": "@nx/react-native:bundle",
+            "outputs": ["{projectRoot}/build"],
+            "options": {
+                "entryFile": "src/main.tsx",
+                "platform": "ios",
+                "bundleOutput": "dist/examples/react/react-native-app/ios/main.jsbundle"
+            }
+        },
+        "run-android": {
+            "executor": "@nx/react-native:run-android",
+            "options": {}
+        },
+        "build-android": {
+            "executor": "@nx/react-native:build-android",
+            "outputs": [
+                "{projectRoot}/android/app/build/outputs/bundle",
+                "{projectRoot}/android/app/build/outputs/apk"
+            ],
+            "options": {}
+        },
+        "bundle-android": {
+            "executor": "@nx/react-native:bundle",
+            "options": {
+                "entryFile": "src/main.tsx",
+                "platform": "android",
+                "bundleOutput": "dist/examples/react/react-native-app/android/main.jsbundle"
+            }
+        },
+        "sync-deps": {
+            "executor": "@nx/react-native:sync-deps",
+            "options": {}
+        },
+        "ensure-symlink": {
+            "executor": "@nx/react-native:ensure-symlink",
+            "options": {}
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": [
+                    "examples/react/react-native-app/**/*.{ts,tsx,js,jsx}"
+                ]
+            }
+        }
     },
-    "serve": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "nx start example-react-native-app"
-      }
-    },
-    "run-ios": {
-      "executor": "@nrwl/react-native:run-ios",
-      "options": {}
-    },
-    "bundle-ios": {
-      "executor": "@nrwl/react-native:bundle",
-      "outputs": ["examples/react/react-native-app/build"],
-      "options": {
-        "entryFile": "src/main.tsx",
-        "platform": "ios",
-        "bundleOutput": "dist/examples/react/react-native-app/ios/main.jsbundle"
-      }
-    },
-    "run-android": {
-      "executor": "@nrwl/react-native:run-android",
-      "options": {}
-    },
-    "build-android": {
-      "executor": "@nrwl/react-native:build-android",
-      "outputs": [
-        "examples/react/react-native-app/android/app/build/outputs/bundle",
-        "examples/react/react-native-app/android/app/build/outputs/apk"
-      ],
-      "options": {}
-    },
-    "bundle-android": {
-      "executor": "@nrwl/react-native:bundle",
-      "options": {
-        "entryFile": "src/main.tsx",
-        "platform": "android",
-        "bundleOutput": "dist/examples/react/react-native-app/android/main.jsbundle"
-      }
-    },
-    "sync-deps": {
-      "executor": "@nrwl/react-native:sync-deps",
-      "options": {}
-    },
-    "ensure-symlink": {
-      "executor": "@nrwl/react-native:ensure-symlink",
-      "options": {}
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": [
-          "examples/react/react-native-app/**/*.{ts,tsx,js,jsx}"
-        ]
-      }
-    }
-  },
-  "tags": []
+    "tags": []
 }

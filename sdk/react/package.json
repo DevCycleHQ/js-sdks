@@ -1,21 +1,21 @@
 {
-  "name": "@devcycle/devcycle-react-sdk",
-  "version": "1.10.1",
-  "description": "The DevCycle React SDK used for feature management.",
-  "main": "dist/index.js",
-  "scripts": {
-    "clean": "rimraf dist",
-    "test": "jest",
-    "tsc": "tsc",
-    "build": "yarn clean && yarn tsc"
-  },
-  "types": "dist/index.d.ts",
-  "author": "",
-  "license": "MIT",
-  "peerDependencies": {
-    "react": ">=16.8.0"
-  },
-  "dependencies": {
-    "hoist-non-react-statics": "^3.3.2"
-  }
+    "name": "@devcycle/devcycle-react-sdk",
+    "version": "1.10.1",
+    "description": "The DevCycle React SDK used for feature management.",
+    "main": "dist/index.js",
+    "scripts": {
+        "clean": "rimraf dist",
+        "test": "jest",
+        "tsc": "tsc",
+        "build": "yarn clean && yarn tsc"
+    },
+    "types": "dist/index.d.ts",
+    "author": "",
+    "license": "MIT",
+    "peerDependencies": {
+        "react": ">=16.8.0"
+    },
+    "dependencies": {
+        "hoist-non-react-statics": "^3.3.2"
+    }
 }

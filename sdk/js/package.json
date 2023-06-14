@@ -1,14 +1,14 @@
 {
-  "name": "@devcycle/devcycle-js-sdk",
-  "version": "1.12.1",
-  "description": "The DevCycle JS SDK used for feature management.",
-  "author": "",
-  "license": "MIT",
-  "typesVersions": {
-    "<4.0": {
-      "*": [
-        "./ts3.5/*"
-      ]
+    "name": "@devcycle/devcycle-js-sdk",
+    "version": "1.12.1",
+    "description": "The DevCycle JS SDK used for feature management.",
+    "author": "",
+    "license": "MIT",
+    "typesVersions": {
+        "<4.0": {
+            "*": [
+                "./ts3.5/*"
+            ]
+        }
     }
-  }
 }

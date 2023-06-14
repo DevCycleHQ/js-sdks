@@ -16,7 +16,7 @@ describe('Store tests', () => {
     })
 
     it('should save config to local storage', async () => {
-        jest.useFakeTimers().setSystemTime(new Date('2022-01-01'))
+        jest.useFakeTimers()
         const store = new Store(localStorage)
         const config = {}
         const user = new DVCPopulatedUser({ user_id: 'test_user' })

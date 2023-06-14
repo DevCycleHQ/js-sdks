@@ -1,54 +1,56 @@
 {
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "examples/react/next-js-app",
-  "projectType": "application",
-  "targets": {
-    "build": {
-      "executor": "@nrwl/next:build",
-      "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
-      "options": {
-        "root": "examples/react/next-js-app",
-        "outputPath": "dist/examples/react/next-js-app"
-      },
-      "configurations": {
-        "production": {},
-        "development": {
-          "outputPath": "examples/react/next-js-app"
-        }
-      }
-    },
-    "serve": {
-      "executor": "@nrwl/next:server",
-      "options": {
-        "buildTarget": "example-react-next-js-app:build",
-        "dev": true
-      },
-      "configurations": {
-        "production": {
-          "buildTarget": "example-react-next-js-app:build:production",
-          "dev": false
+    "name": "example-react-next-js-app",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "examples/react/next-js-app",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nx/next:build",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "production",
+            "options": {
+                "outputPath": "dist/examples/react/next-js-app"
+            },
+            "configurations": {
+                "production": {},
+                "development": {
+                    "outputPath": "examples/react/next-js-app"
+                }
+            }
         },
-        "development": {
-          "buildTarget": "example-react-next-js-app:build:development",
-          "dev": true
+        "serve": {
+            "executor": "@nx/next:server",
+            "options": {
+                "buildTarget": "example-react-next-js-app:build",
+                "dev": true
+            },
+            "configurations": {
+                "production": {
+                    "buildTarget": "example-react-next-js-app:build:production",
+                    "dev": false
+                },
+                "development": {
+                    "buildTarget": "example-react-next-js-app:build:development",
+                    "dev": true
+                }
+            },
+            "defaultConfiguration": "development"
+        },
+        "export": {
+            "executor": "@nx/next:export",
+            "options": {
+                "buildTarget": "example-react-next-js-app:build:production"
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": [
+                    "examples/react/next-js-app/**/*.{ts,tsx,js,jsx}"
+                ]
+            }
         }
-      },
-      "defaultConfiguration": "development"
     },
-    "export": {
-      "executor": "@nrwl/next:export",
-      "options": {
-        "buildTarget": "example-react-next-js-app:build:production"
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["examples/react/next-js-app/**/*.{ts,tsx,js,jsx}"]
-      }
-    }
-  },
-  "tags": []
+    "tags": []
 }

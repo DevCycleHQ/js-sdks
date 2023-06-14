@@ -1,72 +1,73 @@
 {
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "projectType": "application",
-  "sourceRoot": "examples/js/web-elements-app/src",
-  "tags": [],
-  "targets": {
-    "build": {
-      "executor": "@nrwl/web:webpack",
-      "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
-      "options": {
-        "outputPath": "dist/examples/js/web-elements-app",
-        "compiler": "babel",
-        "index": "examples/js/web-elements-app/src/index.html",
-        "baseHref": "/",
-        "main": "examples/js/web-elements-app/src/main.ts",
-        "polyfills": "examples/js/web-elements-app/src/polyfills.ts",
-        "tsConfig": "examples/js/web-elements-app/tsconfig.app.json",
-        "assets": [
-          "examples/js/web-elements-app/src/favicon.ico",
-          "examples/js/web-elements-app/src/assets"
-        ],
-        "styles": ["examples/js/web-elements-app/src/styles.css"],
-        "scripts": []
-      },
-      "configurations": {
-        "production": {
-          "fileReplacements": [
-            {
-              "replace": "examples/js/web-elements-app/src/environments/environment.ts",
-              "with": "examples/js/web-elements-app/src/environments/environment.prod.ts"
+    "name": "example-js-web-elements-app",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "sourceRoot": "examples/js/web-elements-app/src",
+    "tags": [],
+    "targets": {
+        "build": {
+            "executor": "@nx/webpack:webpack",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "production",
+            "options": {
+                "outputPath": "dist/examples/js/web-elements-app",
+                "compiler": "babel",
+                "index": "examples/js/web-elements-app/src/index.html",
+                "baseHref": "/",
+                "main": "examples/js/web-elements-app/src/main.ts",
+                "polyfills": "examples/js/web-elements-app/src/polyfills.ts",
+                "tsConfig": "examples/js/web-elements-app/tsconfig.app.json",
+                "assets": [
+                    "examples/js/web-elements-app/src/favicon.ico",
+                    "examples/js/web-elements-app/src/assets"
+                ],
+                "styles": ["examples/js/web-elements-app/src/styles.css"],
+                "scripts": []
+            },
+            "configurations": {
+                "production": {
+                    "fileReplacements": [
+                        {
+                            "replace": "examples/js/web-elements-app/src/environments/environment.ts",
+                            "with": "examples/js/web-elements-app/src/environments/environment.prod.ts"
+                        }
+                    ],
+                    "optimization": true,
+                    "outputHashing": "all",
+                    "sourceMap": false,
+                    "namedChunks": false,
+                    "extractLicenses": true,
+                    "vendorChunk": false
+                },
+                "development": {
+                    "extractLicenses": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "vendorChunk": true
+                }
             }
-          ],
-          "optimization": true,
-          "outputHashing": "all",
-          "sourceMap": false,
-          "namedChunks": false,
-          "extractLicenses": true,
-          "vendorChunk": false
         },
-        "development": {
-          "extractLicenses": false,
-          "optimization": false,
-          "sourceMap": true,
-          "vendorChunk": true
-        }
-      }
-    },
-    "serve": {
-      "executor": "@nrwl/web:dev-server",
-      "options": {
-        "buildTarget": "example-js-web-elements-app:build"
-      },
-      "configurations": {
-        "production": {
-          "buildTarget": "example-js-web-elements-app:build:production"
+        "serve": {
+            "executor": "@nx/webpack:dev-server",
+            "options": {
+                "buildTarget": "example-js-web-elements-app:build"
+            },
+            "configurations": {
+                "production": {
+                    "buildTarget": "example-js-web-elements-app:build:production"
+                },
+                "development": {
+                    "buildTarget": "example-js-web-elements-app:build:development"
+                }
+            },
+            "defaultConfiguration": "development"
         },
-        "development": {
-          "buildTarget": "example-js-web-elements-app:build:development"
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["examples/js/web-elements-app/**/*.ts"]
+            }
         }
-      },
-      "defaultConfiguration": "development"
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["examples/js/web-elements-app/**/*.ts"]
-      }
     }
-  }
 }
