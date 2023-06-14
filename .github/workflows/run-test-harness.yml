@@ -23,9 +23,24 @@ jobs:
                   if yarn nx print-affected --base=origin/main --select=projects | grep -E '(^nodejs|[^-]nodejs)'; then
                     echo "TRIGGER_NODEJS_TEST_HARNESS=true" >> $GITHUB_ENV
                   fi
+                  if yarn nx print-affected --base=origin/main --select=projects | grep -E '(^openfeature-nodejs-provider)'; then
+                    echo "TRIGGER_NODEJS_OF_TEST_HARNESS=true" >> $GITHUB_ENV
+                  fi
             - uses: DevCycleHQ/test-harness@main
-              if: contains(env.TRIGGER_NODEJS_TEST_HARNESS, 'true')
+              if: contains(env.TRIGGER_NODEJS_TEST_HARNESS, 'true') && !contains(env.TRIGGER_NODEJS_OF_TEST_HARNESS, 'true')
               with:
                   sdks-to-test: nodejs
+                  sdk-github-sha: ${{github.event.pull_request.head.sha}}
+                  github-token: ${{ secrets.TEST_HARNESS_GH_SECRET }}
+            - uses: DevCycleHQ/test-harness@main
+              if: !contains(env.TRIGGER_NODEJS_TEST_HARNESS , 'true') && contains(env.TRIGGER_NODEJS_OF_TEST_HARNESS, 'true')
+              with:
+                  sdks-to-test: of-nodejs
+                  sdk-github-sha: ${{github.event.pull_request.head.sha}}
+                  github-token: ${{ secrets.TEST_HARNESS_GH_SECRET }}
+            - uses: DevCycleHQ/test-harness@main
+              if: contains(env.TRIGGER_NODEJS_TEST_HARNESS, 'true') && contains(env.TRIGGER_NODEJS_OF_TEST_HARNESS, 'true')
+              with:
+                  sdks-to-test: nodejs,of-nodejs
                   sdk-github-sha: ${{github.event.pull_request.head.sha}}
                   github-token: ${{ secrets.TEST_HARNESS_GH_SECRET }}
