@@ -29,6 +29,8 @@
     },
     "build:json": {
       "executor": "@nrwl/node:node",
+      "inputs": ["!{projectRoot}/json-data/**/*"],
+      "outputs": ["lib/shared/bucketing-test-data/json-data"],
       "options": {
         "buildTarget": "shared-bucketing-test-data:build",
         "watch": false
