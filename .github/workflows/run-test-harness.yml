@@ -23,6 +23,9 @@ jobs:
                   if yarn nx print-affected --base=origin/main --select=projects | grep -E '(^nodejs|[^-]nodejs)'; then
                     echo "TRIGGER_NODEJS_TEST_HARNESS=true" >> $GITHUB_ENV
                   fi
+                  if yarn nx print-affected --base=origin/main --select=projects | grep -E '(^openfeature-nodejs-provider)'; then
+                    echo "TRIGGER_NODEJS_OF_TEST_HARNESS=true" >> $GITHUB_ENV
+                  fi
             - uses: DevCycleHQ/test-harness@main
               if: contains(env.TRIGGER_NODEJS_TEST_HARNESS, 'true') && !contains(env.TRIGGER_NODEJS_OF_TEST_HARNESS, 'true')
               with:
