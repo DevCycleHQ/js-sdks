@@ -1,45 +1,46 @@
 {
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "lib/shared/bucketing-test-data/src",
-  "projectType": "library",
-  "implicitDependencies": ["shared-types"],
-  "targets": {
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["lib/shared/bucketing-test-data/**/*.ts"]
-      }
-    },
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/lib/shared/bucketing-test-data",
-        "main": "lib/shared/bucketing-test-data/src/index.ts",
-        "tsConfig": "lib/shared/bucketing-test-data/tsconfig.lib.json",
-        "buildableProjectDepsInPackageJsonType": "dependencies"
-      },
-      "dependsOn": [
-        {
-          "target": "build",
-          "projects": "dependencies"
+    "name": "shared-bucketing-test-data",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "lib/shared/bucketing-test-data/src",
+    "projectType": "library",
+    "implicitDependencies": ["shared-types"],
+    "targets": {
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["lib/shared/bucketing-test-data/**/*.ts"]
+            }
+        },
+        "build": {
+            "executor": "@nrwl/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/lib/shared/bucketing-test-data",
+                "main": "lib/shared/bucketing-test-data/src/index.ts",
+                "tsConfig": "lib/shared/bucketing-test-data/tsconfig.lib.json",
+                "buildableProjectDepsInPackageJsonType": "dependencies"
+            },
+            "dependsOn": [
+                {
+                    "target": "build",
+                    "projects": "dependencies"
+                }
+            ]
+        },
+        "build:json": {
+            "executor": "@nrwl/node:node",
+            "options": {
+                "buildTarget": "shared-bucketing-test-data:build",
+                "watch": false
+            },
+            "dependsOn": [
+                {
+                    "target": "build",
+                    "projects": "dependencies"
+                }
+            ]
         }
-      ]
     },
-    "build:json": {
-      "executor": "@nrwl/node:node",
-      "options": {
-        "buildTarget": "shared-bucketing-test-data:build",
-        "watch": false
-      },
-      "dependsOn": [
-        {
-          "target": "build",
-          "projects": "dependencies"
-        }
-      ]
-    }
-  },
-  "tags": []
+    "tags": []
 }

@@ -20,7 +20,7 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "nx/tasks-runners/default",
+      "runner": "@nrwl/nx-cloud",
       "options": {
         "cacheableOperations": [
           "build",
@@ -30,7 +30,8 @@
           "package",
           "prepare"
         ],
-        "parallel": 1
+        "parallel": 1,
+        "accessToken": "Yjc5YzRjMmUtMWI4ZS00NWM3LWFhMDktNWM0ZTM0ZjdjMWFmfHJlYWQtd3JpdGU="
       }
     }
   },
@@ -77,13 +78,19 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
     },
     "prepare": {
-      "dependsOn": ["^prepare"]
+      "dependsOn": [
+        "^prepare"
+      ]
     },
     "package": {
-      "dependsOn": ["^package"]
+      "dependsOn": [
+        "^package"
+      ]
     },
     "npm-publish": {
       "dependsOn": [

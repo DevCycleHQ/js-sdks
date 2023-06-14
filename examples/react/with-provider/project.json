@@ -1,60 +1,61 @@
 {
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "examples/react/with-provider/src",
-  "projectType": "application",
-  "targets": {
-    "build": {
-      "executor": "@nrwl/web:webpack",
-      "outputs": ["{options.outputPath}"],
-      "configurations": {
-        "production": {},
-        "development": {
-          "extractLicenses": false,
-          "optimization": false,
-          "sourceMap": true,
-          "vendorChunk": true
-        }
-      },
-      "options": {
-        "statsJson": true,
-        "compiler": "babel",
-        "outputPath": "dist/examples/react/with-provider",
-        "index": "examples/react/with-provider/src/index.html",
-        "baseHref": "/",
-        "main": "examples/react/with-provider/src/index.tsx",
-        "tsConfig": "examples/react/with-provider/tsconfig.app.json",
-        "assets": ["examples/react/with-provider/src/public"],
-        "scripts": [],
-        "webpackConfig": "@nrwl/react/plugins/webpack"
-      },
-      "defaultConfiguration": "production"
-    },
-    "serve": {
-      "executor": "@nrwl/web:dev-server",
-      "options": {
-        "buildTarget": "example-react-with-provider:build",
-        "hmr": true
-      },
-      "configurations": {
-        "production": {
-          "buildTarget": "example-react-with-provider:build:production",
-          "hmr": false
+    "name": "example-react-with-provider",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "examples/react/with-provider/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/web:webpack",
+            "outputs": ["{options.outputPath}"],
+            "configurations": {
+                "production": {},
+                "development": {
+                    "extractLicenses": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "vendorChunk": true
+                }
+            },
+            "options": {
+                "statsJson": true,
+                "compiler": "babel",
+                "outputPath": "dist/examples/react/with-provider",
+                "index": "examples/react/with-provider/src/index.html",
+                "baseHref": "/",
+                "main": "examples/react/with-provider/src/index.tsx",
+                "tsConfig": "examples/react/with-provider/tsconfig.app.json",
+                "assets": ["examples/react/with-provider/src/public"],
+                "scripts": [],
+                "webpackConfig": "@nrwl/react/plugins/webpack"
+            },
+            "defaultConfiguration": "production"
         },
-        "development": {
-          "buildTarget": "example-react-with-provider:build:development"
+        "serve": {
+            "executor": "@nrwl/web:dev-server",
+            "options": {
+                "buildTarget": "example-react-with-provider:build",
+                "hmr": true
+            },
+            "configurations": {
+                "production": {
+                    "buildTarget": "example-react-with-provider:build:production",
+                    "hmr": false
+                },
+                "development": {
+                    "buildTarget": "example-react-with-provider:build:development"
+                }
+            },
+            "defaultConfiguration": "development"
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": [
+                    "examples/react/with-provider/**/*.{ts,tsx,js,jsx}"
+                ]
+            }
         }
-      },
-      "defaultConfiguration": "development"
     },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": [
-          "examples/react/with-provider/**/*.{ts,tsx,js,jsx}"
-        ]
-      }
-    }
-  },
-  "tags": []
+    "tags": []
 }

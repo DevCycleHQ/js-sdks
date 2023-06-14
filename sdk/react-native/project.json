@@ -1,61 +1,62 @@
 {
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "sdk/react-native/src",
-  "projectType": "library",
-  "tags": [],
-  "targets": {
-    "check-types": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "yarn run -T tsc -b --incremental",
-        "cwd": "sdk/react-native"
-      }
-    },
-    "build": {
-      "executor": "@nrwl/web:rollup",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/sdk/react-native",
-        "tsConfig": "sdk/react-native/tsconfig.lib.json",
-        "project": "sdk/react-native/package.json",
-        "entryFile": "sdk/react-native/src/index.ts",
-        "format": ["esm", "cjs"],
-        "external": ["react/jsx-runtime", "react-native"],
-        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
-        "buildableProjectDepsInPackageJsonType": "dependencies",
-        "compiler": "babel",
-        "assets": [
-          {
-            "glob": "sdk/react-native/README.md",
-            "input": ".",
-            "output": "."
-          }
-        ]
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["sdk/react-native/**/*.{ts,tsx,js,jsx}"]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/sdk/react-native"],
-      "options": {
-        "jestConfig": "sdk/react-native/jest.config.ts",
-        "passWithNoTests": true,
-        "codeCoverage": true
-      }
-    },
-    "npm-publish": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/devcycle-react-native-sdk\"",
-        "cwd": "dist/sdk/react-native",
-        "forwardAllArgs": true
-      }
+    "name": "react-native",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "sdk/react-native/src",
+    "projectType": "library",
+    "tags": [],
+    "targets": {
+        "check-types": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "command": "yarn run -T tsc -b --incremental",
+                "cwd": "sdk/react-native"
+            }
+        },
+        "build": {
+            "executor": "@nrwl/web:rollup",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/sdk/react-native",
+                "tsConfig": "sdk/react-native/tsconfig.lib.json",
+                "project": "sdk/react-native/package.json",
+                "entryFile": "sdk/react-native/src/index.ts",
+                "format": ["esm", "cjs"],
+                "external": ["react/jsx-runtime", "react-native"],
+                "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+                "buildableProjectDepsInPackageJsonType": "dependencies",
+                "compiler": "babel",
+                "assets": [
+                    {
+                        "glob": "sdk/react-native/README.md",
+                        "input": ".",
+                        "output": "."
+                    }
+                ]
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["sdk/react-native/**/*.{ts,tsx,js,jsx}"]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["coverage/sdk/react-native"],
+            "options": {
+                "jestConfig": "sdk/react-native/jest.config.ts",
+                "passWithNoTests": true,
+                "codeCoverage": true
+            }
+        },
+        "npm-publish": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/devcycle-react-native-sdk\"",
+                "cwd": "dist/sdk/react-native",
+                "forwardAllArgs": true
+            }
+        }
     }
-  }
 }

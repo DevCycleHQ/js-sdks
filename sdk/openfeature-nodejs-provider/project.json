@@ -1,42 +1,43 @@
 {
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "sdk/openfeature-nodejs-provider/src",
-  "implicitDependencies": ["nodejs"],
-  "targets": {
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/sdk/openfeature-nodejs-provider",
-        "main": "sdk/openfeature-nodejs-provider/src/index.ts",
-        "tsConfig": "sdk/openfeature-nodejs-provider/tsconfig.lib.json",
-        "updateBuildableProjectDepsInPackageJson": true,
-        "buildableProjectDepsInPackageJsonType": "dependencies",
-        "assets": ["sdk/openfeature-nodejs-provider/*.md"]
-      }
+    "name": "openfeature-nodejs-provider",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "sdk/openfeature-nodejs-provider/src",
+    "implicitDependencies": ["nodejs"],
+    "targets": {
+        "build": {
+            "executor": "@nrwl/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/sdk/openfeature-nodejs-provider",
+                "main": "sdk/openfeature-nodejs-provider/src/index.ts",
+                "tsConfig": "sdk/openfeature-nodejs-provider/tsconfig.lib.json",
+                "updateBuildableProjectDepsInPackageJson": true,
+                "buildableProjectDepsInPackageJsonType": "dependencies",
+                "assets": ["sdk/openfeature-nodejs-provider/*.md"]
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["sdk/openfeature-nodejs-provider/**/*.ts"]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["coverage/sdk/openfeature-nodejs-provider"],
+            "options": {
+                "jestConfig": "sdk/openfeature-nodejs-provider/jest.config.ts"
+            }
+        },
+        "npm-publish": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/openfeature-nodejs-provider\"",
+                "cwd": "dist/sdk/openfeature-nodejs-provider",
+                "forwardAllArgs": true
+            }
+        }
     },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["sdk/openfeature-nodejs-provider/**/*.ts"]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/sdk/openfeature-nodejs-provider"],
-      "options": {
-        "jestConfig": "sdk/openfeature-nodejs-provider/jest.config.ts"
-      }
-    },
-    "npm-publish": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/openfeature-nodejs-provider\"",
-        "cwd": "dist/sdk/openfeature-nodejs-provider",
-        "forwardAllArgs": true
-      }
-    }
-  },
-  "tags": []
+    "tags": []
 }
