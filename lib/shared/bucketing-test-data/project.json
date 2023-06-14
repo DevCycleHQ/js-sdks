@@ -2,7 +2,6 @@
     "name": "shared-bucketing-test-data",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "lib/shared/bucketing-test-data/src",
-    "implicitDependencies": ["shared-types"],
     "projectType": "library",
     "targets": {
         "lint": {
