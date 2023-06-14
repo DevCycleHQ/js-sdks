@@ -5,8 +5,6 @@ import * as largeTestData from './data/largeConfig'
 
 const folderName = 'lib/shared/bucketing-test-data/json-data/'
 const folderPath = path.resolve(process.env.NX_WORKSPACE_ROOT || '', folderName)
-console.log(process.env.NX_WORKSPACE_ROOT)
-console.log('FOLDER PATH', folderPath)
 if (!fs.existsSync(folderPath)) {
     fs.mkdirSync(folderPath)
 }
