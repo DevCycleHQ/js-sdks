@@ -51,4 +51,4 @@ function isFile(s) {
 }
 
 // Call the user-defined main.
-require('./lib/shared/bucketing-test-data/src/main.js');
+require('./lib/shared/bucketing-test-data/src/index.js');

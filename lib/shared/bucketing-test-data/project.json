@@ -20,7 +20,7 @@
                 "outputPath": "dist/lib/shared/bucketing-test-data",
                 "format": ["cjs"],
                 "bundle": false,
-                "main": "lib/shared/bucketing-test-data/src/main.ts",
+                "main": "lib/shared/bucketing-test-data/src/index.ts",
                 "tsConfig": "lib/shared/bucketing-test-data/tsconfig.lib.json",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
                 "esbuildOptions": {

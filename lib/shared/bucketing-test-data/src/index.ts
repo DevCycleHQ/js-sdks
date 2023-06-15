@@ -23,5 +23,7 @@ fs.writeFileSync(
 
 console.log(`Wrote test data to ${folderPath}`)
 
+throw new Error('This is just a test error Katerina just added')
+
 export * from './data/testData'
 export * from './data/largeConfig'
