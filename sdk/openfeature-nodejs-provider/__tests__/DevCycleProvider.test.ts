@@ -61,6 +61,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 errorCode: 'TARGETING_KEY_MISSING',
                 errorMessage: 'Missing targetingKey or user_id in context',
                 reason: 'ERROR',
+                flagMetadata: {},
             })
         })
 
@@ -75,6 +76,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 errorCode: 'INVALID_CONTEXT',
                 errorMessage: 'targetingKey or user_id must be a string',
                 reason: 'ERROR',
+                flagMetadata: {},
             })
         })
 
@@ -92,6 +94,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 privateCustomData: { private: 'data' },
             }
             ofClient.setContext(dvcUser)
+
             await expect(
                 ofClient.getBooleanValue('boolean-flag', false),
             ).resolves.toEqual(true)
@@ -111,9 +114,11 @@ describe('DevCycleProvider Unit Tests', () => {
                 customData: 'data',
             }
             ofClient.setContext(dvcUser)
+
             await expect(
                 ofClient.getBooleanValue('boolean-flag', false),
             ).resolves.toEqual(true)
+
             expect(dvcClient.variable).toHaveBeenCalledWith(
                 new DVCUser({ user_id: 'user_id' }),
                 'boolean-flag',
@@ -141,9 +146,11 @@ describe('DevCycleProvider Unit Tests', () => {
                 obj: { key: 'value' },
             }
             ofClient.setContext(dvcUser)
+
             await expect(
                 ofClient.getBooleanValue('boolean-flag', false),
             ).resolves.toEqual(true)
+
             expect(dvcClient.variable).toHaveBeenCalledWith(
                 new DVCUser({
                     user_id: 'user_id',
@@ -206,6 +213,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 flagKey: 'boolean-flag',
                 value: true,
                 reason: StandardResolutionReasons.TARGETING_MATCH,
+                flagMetadata: {},
             })
         })
 
@@ -224,6 +232,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 flagKey: 'boolean-flag',
                 value: false,
                 reason: StandardResolutionReasons.DEFAULT,
+                flagMetadata: {},
             })
         })
     })
@@ -233,7 +242,7 @@ describe('DevCycleProvider Unit Tests', () => {
             variableMock.mockReturnValue({
                 key: 'string-flag',
                 value: 'string-value',
-                defaultValue: false,
+                defaultValue: 'string-default',
                 isDefaulted: false,
                 type: 'String',
             })
@@ -254,6 +263,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 flagKey: 'string-flag',
                 value: 'string-value',
                 reason: StandardResolutionReasons.TARGETING_MATCH,
+                flagMetadata: {},
             })
         })
     })
@@ -284,6 +294,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 flagKey: 'num-flag',
                 value: 610,
                 reason: StandardResolutionReasons.TARGETING_MATCH,
+                flagMetadata: {},
             })
         })
     })
@@ -314,6 +325,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 flagKey: 'json-flag',
                 value: { hello: 'world' },
                 reason: StandardResolutionReasons.TARGETING_MATCH,
+                flagMetadata: {},
             })
         })
 
@@ -328,6 +340,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 errorCode: 'PARSE_ERROR',
                 errorMessage:
                     'DevCycle only supports object values for JSON flags',
+                flagMetadata: {},
             })
             expect(
                 ofClient.getObjectDetails('json-flag', 610),
@@ -338,6 +351,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 errorCode: 'PARSE_ERROR',
                 errorMessage:
                     'DevCycle only supports object values for JSON flags',
+                flagMetadata: {},
             })
             expect(
                 ofClient.getObjectDetails('json-flag', 'string'),
@@ -348,6 +362,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 errorCode: 'PARSE_ERROR',
                 errorMessage:
                     'DevCycle only supports object values for JSON flags',
+                flagMetadata: {},
             })
             expect(
                 ofClient.getObjectDetails('json-flag', false),
@@ -358,6 +373,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 errorCode: 'PARSE_ERROR',
                 errorMessage:
                     'DevCycle only supports object values for JSON flags',
+                flagMetadata: {},
             })
             expect(
                 ofClient.getObjectDetails('json-flag', null),
@@ -368,6 +384,7 @@ describe('DevCycleProvider Unit Tests', () => {
                 errorCode: 'PARSE_ERROR',
                 errorMessage:
                     'DevCycle does not support null default values for JSON flags',
+                flagMetadata: {},
             })
         })
     })

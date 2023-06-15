@@ -9,6 +9,7 @@ import {
     ParseError,
     TargetingKeyMissingError,
     InvalidContextError,
+    FlagMetadata,
 } from '@openfeature/js-sdk'
 import {
     DVCClient,
@@ -50,6 +51,18 @@ export default class DevCycleProvider implements Provider {
     ) {
         this.logger =
             options.logger ?? dvcDefaultLogger({ level: options.logLevel })
+    }
+
+    async initialize(context?: EvaluationContext): Promise<void> {
+        if (this.dvcClient instanceof DVCCloudClient) return
+
+        await this.dvcClient.onClientInitialized()
+    }
+
+    async onClose(): Promise<void> {
+        if (this.dvcClient instanceof DVCCloudClient) return
+
+        await this.dvcClient.close()
     }
 
     /**
