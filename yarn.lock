@@ -7505,10 +7505,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openfeature/js-sdk@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@openfeature/js-sdk@npm:1.1.1"
-  checksum: 43faf7da462b82513638e2fec8baf7beabc2c0048c89b956e1c66d5e0313a870d1b7931a83cde16fcfa0fc5cea2d563a45131d08236ebaae4ff59ead91c5bd71
+"@openfeature/js-sdk@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "@openfeature/js-sdk@npm:1.3.1"
+  checksum: 98a6751e55d74aa70317198d62b748548f2b4b7190166ee6e2a3a385318f4740dcb63e3b340c3f35d875bf6c7f39b3e38e02619b3e5c97be3a3499175d162955
   languageName: node
   linkType: hard
 
@@ -10578,7 +10578,7 @@ __metadata:
 "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json":
   version: 1.1.0
   resolution: "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json.git#commit=d2ce65ec18b305e1f3db8a4fe4394b417631b024"
-  checksum: 045c8dc54cb8ee61d022c017e483f6c8729347a2e30167a4e3227b9d4d80293b032a8cff7fcaf83040b23eacc23bf62188ebb9f2091df85ef2ee21425f8957f7
+  checksum: 480283ed02d57eacb400facc060f293b7dcb773a90dc5b7c80eae86b0007e3a748b2cb6c298a1a32010cba41e48686fcd0078c02c6db1d917fda85bb7c08ded1
   languageName: node
   linkType: hard
 
@@ -13765,7 +13765,7 @@ __metadata:
     "@nx/web": 16.3.2
     "@nx/webpack": 16.3.2
     "@nx/workspace": 16.3.2
-    "@openfeature/js-sdk": ^1.1.1
+    "@openfeature/js-sdk": ^1.3.1
     "@pmmmwh/react-refresh-webpack-plugin": ^0.5.7
     "@react-native-async-storage/async-storage": 1.18.1
     "@react-native-community/cli": 10.2.2
