@@ -18,6 +18,7 @@
             "options": {
                 "platform": "node",
                 "outputPath": "dist/lib/shared/bucketing-test-data",
+                "outputFileName": "index.js",
                 "format": ["cjs"],
                 "bundle": false,
                 "main": "lib/shared/bucketing-test-data/src/index.ts",
