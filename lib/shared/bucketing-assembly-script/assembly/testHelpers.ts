@@ -148,6 +148,14 @@ export function testBucketedUserConfigClass(userConfigStr: string): string {
     return userConfig.stringify()
 }
 
+export function echoString(str: string): string {
+    return str
+}
+
+export function echoUint8Array(str: Uint8Array): Uint8Array {
+    return str
+}
+
 class TestData {
     key: string
 }
