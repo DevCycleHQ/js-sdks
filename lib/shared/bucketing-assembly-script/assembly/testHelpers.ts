@@ -156,6 +156,10 @@ export function echoUint8Array(str: Uint8Array): Uint8Array {
     return str
 }
 
+export function triggerAbort(): void {
+    throw new Error("Manual abort triggered")
+}
+
 class TestData {
     key: string
 }
