@@ -1,7 +1,7 @@
 import { DVCEvent, DVCOptions } from './types'
 import { DVCPopulatedUser } from './User'
 import { serializeUserSearchParams, generateEventPayload } from './utils'
-import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import axiosRetry from 'axios-retry'
 import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 
@@ -106,13 +106,15 @@ export const getConfigJson = async (
         const res = await get(url)
         return res.data
     } catch (ex: any) {
-        const errorString = JSON.stringify(ex?.response?.data.data.errors)
+        const errorString = JSON.stringify(ex?.response?.data?.data?.errors)
         logger.error(
             `Request to get config failed for url: ${url}, ` +
-                `response message: ${ex.message}, response data: ${errorString}`,
+                `response message: ${ex.message}` +
+                (errorString ? `, response data: ${errorString}` : ''),
         )
         throw new Error(
-            `Failed to download DevCycle config. Error details: ${errorString}`,
+            `Failed to download DevCycle config.` +
+                (errorString ? ` Error details: ${errorString}` : ''),
         )
     }
 }
