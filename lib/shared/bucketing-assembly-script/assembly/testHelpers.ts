@@ -152,8 +152,8 @@ export function echoString(str: string): string {
     return str
 }
 
-export function echoUint8Array(str: Uint8Array): Uint8Array {
-    return str
+export function echoUint8Array(data: Uint8Array): Uint8Array {
+    return data
 }
 
 export function triggerAbort(): void {
