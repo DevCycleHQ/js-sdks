@@ -148,6 +148,18 @@ export function testBucketedUserConfigClass(userConfigStr: string): string {
     return userConfig.stringify()
 }
 
+export function echoString(str: string): string {
+    return str
+}
+
+export function echoUint8Array(data: Uint8Array): Uint8Array {
+    return data
+}
+
+export function triggerAbort(): void {
+    throw new Error("Manual abort triggered")
+}
+
 class TestData {
     key: string
 }
