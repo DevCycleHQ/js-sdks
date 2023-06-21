@@ -1,17 +1,17 @@
 {
-  "name": "@devcycle/bucketing-assembly-script",
-  "version": "1.6.11",
-  "license": "MIT",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "files": [
-    "build/bucketing-lib.release*",
-    "build/bucketing-lib.worker*",
-    "protobuf/*",
-    "index*",
-    "README.md"
-  ],
-  "devDependencies": {
-    "@devcycle/bucketing-test-data": "^1.2.10"
-  }
+    "name": "@devcycle/bucketing-assembly-script",
+    "version": "1.7.0",
+    "license": "MIT",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "files": [
+        "build/bucketing-lib.release*",
+        "build/bucketing-lib.worker*",
+        "protobuf/*",
+        "index*",
+        "README.md"
+    ],
+    "devDependencies": {
+        "@devcycle/bucketing-test-data": "^1.2.11"
+    }
 }
