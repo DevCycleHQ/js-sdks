@@ -166,7 +166,7 @@ export default class DevCycleProvider implements Provider {
 
         // Hard casting here because our DVCJSON typing enforces a flat object when we actually support
         // a JSON Object of any depth. Will be fixed soon.
-        return jsonValue as DVCJSON
+        return jsonValue
     }
 
     /**
