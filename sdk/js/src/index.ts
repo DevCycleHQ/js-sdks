@@ -1,4 +1,4 @@
-import { DVCOptions, DVCUser } from './types'
+import { DVCOptions, DVCUser, VariableDefinitions } from './types'
 import {
     DVCClient,
     DVCOptionsWithDeferredInitialization,
@@ -7,20 +7,22 @@ import {
 
 export * from './types'
 
-export function initialize(
+export function initialize<
+    Variables extends VariableDefinitions = VariableDefinitions,
+>(
     sdkKey: string,
     options: DVCOptionsWithDeferredInitialization,
-): DVCClient
-export function initialize(
-    sdkKey: string,
-    user: DVCUser,
-    options?: DVCOptions,
-): DVCClient
-export function initialize(
+): DVCClient<Variables>
+export function initialize<
+    Variables extends VariableDefinitions = VariableDefinitions,
+>(sdkKey: string, user: DVCUser, options?: DVCOptions): DVCClient<Variables>
+export function initialize<
+    Variables extends VariableDefinitions = VariableDefinitions,
+>(
     sdkKey: string,
     userOrOptions: DVCUser | DVCOptionsWithDeferredInitialization,
     optionsArg: DVCOptions = {},
-): DVCClient {
+): DVCClient<Variables> {
     // TODO: implement logger
     if (typeof window === 'undefined') {
         console.warn(

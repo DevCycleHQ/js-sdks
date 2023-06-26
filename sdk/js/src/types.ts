@@ -39,20 +39,6 @@ export type DVCFeatureSet = {
     [key: string]: DVCFeature
 }
 
-/**
- * Initialize the SDK
- * @param sdkKey
- * @param user
- * @param options
- */
-export type initialize = <
-    Variables extends VariableDefinitions = VariableDefinitions,
->(
-    sdkKey: string,
-    user: DVCUser,
-    options?: DVCOptions,
-) => DVCClient<Variables>
-
 export interface DVCOptions {
     eventFlushIntervalMS?: number
     reactNative?: boolean
