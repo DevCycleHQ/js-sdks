@@ -8,7 +8,7 @@
         "check-types": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "asc assembly/index.ts --target debug",
+                "command": "yarn run -T asc assembly/index.ts --target debug",
                 "cwd": "lib/shared/bucketing-assembly-script"
             }
         },
@@ -71,10 +71,10 @@
                         "command": "rm -rf compiled.js compiled.d.ts"
                     },
                     {
-                        "command": "pbjs -t static-module --keep-case -w commonjs -o compiled.js ./*.proto"
+                        "command": "yarn run -T pbjs -t static-module --keep-case -w commonjs -o compiled.js ./*.proto"
                     },
                     {
-                        "command": "pbts -o compiled.d.ts compiled.js"
+                        "command": "yarn run -T pbts -o compiled.d.ts compiled.js"
                     }
                 ],
                 "cwd": "lib/shared/bucketing-assembly-script/protobuf",
@@ -97,7 +97,7 @@
                         "command": "mkdir ./assembly/types/protobuf-generated"
                     },
                     {
-                        "command": "protoc --plugin=protoc-gen-as=../../../node_modules/.bin/as-proto-gen --as_opt=gen-helper-methods --as_out=./assembly/types/protobuf-generated ./protobuf/*.proto"
+                        "command": "protoc --plugin=protoc-gen-as=../../../node_modules/as-proto-gen/bin/as-proto-gen --as_opt=gen-helper-methods --as_out=./assembly/types/protobuf-generated ./protobuf/*.proto"
                     }
                 ],
                 "cwd": "lib/shared/bucketing-assembly-script",
@@ -111,13 +111,13 @@
             "options": {
                 "commands": [
                     {
-                        "command": "asc assembly/index.ts --target debug --exportRuntime --initialMemory 100 --use ASC_GC_SWEEPFACTOR=20 --maximumMemory 10000 --bindings raw"
+                        "command": "yarn run -T asc assembly/index.ts --target debug --exportRuntime --initialMemory 100 --use ASC_GC_SWEEPFACTOR=20 --maximumMemory 10000 --bindings raw"
                     },
                     {
-                        "command": "asc assembly/index.ts --target release --exportRuntime --initialMemory 100 --use ASC_GC_SWEEPFACTOR=20 --maximumMemory 10000 --bindings raw"
+                        "command": "yarn run -T asc assembly/index.ts --target release --exportRuntime --initialMemory 100 --use ASC_GC_SWEEPFACTOR=20 --maximumMemory 10000 --bindings raw"
                     },
                     {
-                        "command": "asc assembly/index.ts --target worker --exportRuntime --initialMemory 100 --maximumMemory 1000 --bindings raw"
+                        "command": "yarn run -T asc assembly/index.ts --target worker --exportRuntime --initialMemory 100 --maximumMemory 1000 --bindings raw"
                     },
                     {
                         "command": "sed -i.bu 's/export async function instantiate/exports.instantiate = async function instantiate/g' build/bucketing-lib.release.js"
