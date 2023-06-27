@@ -14,7 +14,7 @@ JQ_PATH=".version"
 
 NPM_SHOW="$(npm show "$PACKAGE" version)"
 NPM_LS="$(cat package.json | jq -r $JQ_PATH)"
-NPM_REGISTRY="$(npm config get registry)"
+NPM_REGISTRY="$(yarn config get npmRegistryServer)"
 SHA="$(git rev-parse HEAD)"
 
 echo "$PACKAGE npm show: $NPM_SHOW, npm ls: $NPM_LS"
@@ -42,7 +42,7 @@ done
 if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
   echo "Versions are not the same, (Remote = $NPM_SHOW; Local = $NPM_LS). Checking for publish eligibility."
 
-  if [[ "$NPM_REGISTRY" = "https://registry.npmjs.org/" ]]; then
+  if [[ "$NPM_REGISTRY" = "https://registry.yarnpkg.com" ]]; then
     DEVCYCLE_PROD_SLEUTH_API_TOKEN="$(aws secretsmanager get-secret-value --secret-id=DEVCYCLE_PROD_SLEUTH_API_TOKEN | jq -r .SecretString )"
     # make sure we're able to track this deployment
     if [[ -z "$DEVCYCLE_PROD_SLEUTH_API_TOKEN" ]]; then
