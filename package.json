@@ -184,7 +184,8 @@
         "moment": "^2.29.4",
         "terser-webpack-plugin": "^5.3.6",
         "nx": "16.3.2",
-        "@nrwl/devkit": "16.3.2"
+        "@nrwl/devkit": "16.3.2",
+        "@nx/js@16.3.2": "patch:@nx/js@npm%3A16.3.2#./.yarn/patches/@nx-js-npm-16.3.2-a543eca792.patch"
     },
     "config": {
         "commitizen": {

@@ -1,0 +1,16 @@
+diff --git a/src/utils/package-json/update-package-json.js b/src/utils/package-json/update-package-json.js
+index 1190b046c4b3668afe1b824d48ee699689d2498e..9d26d8e5e789c9794e219d83d351e585b68ad19f 100644
+--- a/src/utils/package-json/update-package-json.js
++++ b/src/utils/package-json/update-package-json.js
+@@ -73,7 +73,11 @@ function addMissingDependencies(packageJson, { projectName, targetName, configur
+         else {
+             const packageName = entry.name;
+             if (!((_f = packageJson.dependencies) === null || _f === void 0 ? void 0 : _f[packageName]) &&
++                !((_f = packageJson.devDependencies) === null || _f === void 0 ? void 0 : _f[packageName]) &&
+                 !((_g = packageJson.peerDependencies) === null || _g === void 0 ? void 0 : _g[packageName])) {
++                if ((_d = workspacePackageJson.devDependencies) === null || _d === void 0 ? void 0 : _d[packageName]) {
++                    return;
++                }
+                 const outputs = (0, devkit_1.getOutputsForTargetAndConfiguration)({
+                     overrides: {},
+                     target: {
