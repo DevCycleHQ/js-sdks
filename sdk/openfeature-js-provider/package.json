@@ -1,0 +1,6 @@
+{
+    "name": "@devcycle/openfeature-js-provider",
+    "version": "0.1.0",
+    "description": "OpenFeature Web SDK Provider for DevCycle JS SDK",
+    "license": "MIT"
+}

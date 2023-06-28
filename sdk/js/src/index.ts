@@ -11,6 +11,7 @@ import {
 } from './Client'
 
 export * from './types'
+export { dvcDefaultLogger } from './logger'
 
 /**
  * @deprecated Use DevCycleClient instead

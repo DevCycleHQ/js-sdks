@@ -1,18 +1,19 @@
 # OpenFeature DevCycle NodeJS Provider
 
-This library provides a NodeJS implementation of the [OpenFeature](https://openfeature.dev/) Provider interface for DevCycle.
+This library provides a Javascript implementation of the [OpenFeature](https://openfeature.dev/) Web Provider interface 
+for [DevCycle Javascript Client SDK](https://docs.devcycle.com/sdk/client-side-sdks/javascript/).
 
 ## Building
 
-Run `nx build openfeature-nodejs-provider` to build the library.
+Run `nx build sdk-openfeature-js-provider` to build the library.
 
 ## Running Unit Tests
 
-Run `nx test openfeature-nodejs-provider` to execute the unit tests via [Jest](https://jestjs.io).
+Run `nx test sdk-openfeature-js-provider` to execute the unit tests via [Jest](https://jestjs.io).
 
 ## Example App
 
-See the [example app](/examples/openfeature-nodejs) for a working example of the OpenFeature DevCycle NodeJS Provider.
+See the [example app](/examples/openfeature-js) for a working example of the OpenFeature DevCycle NodeJS Provider.
 
 ## Usage
 
@@ -20,15 +21,15 @@ See our [documentation](https://docs.devcycle.com/sdk/server-side-sdks/node/) fo
 
 ```typescript
 import { OpenFeature, Client } from '@openfeature/js-sdk'
-import { DevCycleProvider } from '@devcycle/openfeature-nodejs-provider'
+import { DevCycleProvider } from '@devcycle/openfeature-js-provider'
 import { initialize } from '@devcycle/nodejs-server-sdk'
 
 ... 
 
 // Initialize the DevCycle SDK
-const devcycleClient = await initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY).onClientInitialized()
+const dvcClient = await initialize(DVC_SERVER_SDK_KEY).onClientInitialized()
 // Set the initialzed DevCycle client as the provider for OpenFeature
-OpenFeature.setProvider(new DevCycleProvider(devcycleClient))
+OpenFeature.setProvider(new DevCycleProvider(dvcClient))
 // Get the OpenFeature client
 openFeatureClient = OpenFeature.getClient()
 // Set the context for the OpenFeature client, you can use 'targetingKey' or 'user_id'
@@ -45,8 +46,8 @@ Ensure that you pass any custom DVCOptions to the DevCycleProvider constructor
 
 ```typescript
 const options = { logger: dvcDefaultLogger({ level: 'debug' }) }
-const devcycleClient = await initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY, options).onClientInitialized()
-OpenFeature.setProvider(new DevCycleProvider(devcycleClient, options))
+const dvcClient = await initialize(DVC_SERVER_SDK_KEY, options).onClientInitialized()
+OpenFeature.setProvider(new DevCycleProvider(dvcClient, options))
 ```
 
 #### Required TargetingKey
