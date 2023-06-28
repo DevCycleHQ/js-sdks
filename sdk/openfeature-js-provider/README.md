@@ -1,4 +1,4 @@
-# OpenFeature DevCycle NodeJS Provider
+# OpenFeature DevCycle Javascript Web Provider
 
 This library provides a Javascript implementation of the [OpenFeature](https://openfeature.dev/) Web Provider interface 
 for [DevCycle Javascript Client SDK](https://docs.devcycle.com/sdk/client-side-sdks/javascript/).
@@ -17,12 +17,14 @@ See the [example app](/examples/openfeature-js) for a working example of the Ope
 
 ## Usage
 
-See our [documentation](https://docs.devcycle.com/sdk/server-side-sdks/node/) for more information.
+See our [documentation](https://docs.devcycle.com/sdk/client-side-sdks/javascript/javascript-usage) for more information.
+
+// TODO: update
 
 ```typescript
 import { OpenFeature, Client } from '@openfeature/js-sdk'
 import { DevCycleProvider } from '@devcycle/openfeature-js-provider'
-import { initialize } from '@devcycle/nodejs-server-sdk'
+import { initialize } from '@devcycle/devcycle-js-sdk'
 
 ... 
 
@@ -33,7 +35,7 @@ OpenFeature.setProvider(new DevCycleProvider(dvcClient))
 // Get the OpenFeature client
 openFeatureClient = OpenFeature.getClient()
 // Set the context for the OpenFeature client, you can use 'targetingKey' or 'user_id'
-openFeatureClient.setContext({ targetingKey: 'node_sdk_test' })
+openFeatureClient.setContext({ targetingKey: 'js_sdk_test' })
 
 
 // Retrieve a boolean flag from the OpenFeature client
