@@ -161,6 +161,20 @@ export interface DVCClient<
     ): DVCVariable<T>
 
     /**
+     * Grab variable values associated with Features. Use the key created in the dashboard to fetch
+     * the variable value. If the user does not receive the feature, the default value is returned.
+     * @param key
+     * @param defaultValue
+     */
+    variableValue<
+        K extends string & keyof Variables,
+        T extends DVCVariableValue & Variables[K],
+    >(
+        key: K,
+        defaultValue: T,
+    ): VariableTypeAlias<T>
+
+    /**
      * Update user data after SDK initialization, this will trigger updates to Feature Flag /
      * Dynamic Variable Bucketing. The `callback` parameter or returned `Promise` can be used to
      * return the Variables for the new user.
