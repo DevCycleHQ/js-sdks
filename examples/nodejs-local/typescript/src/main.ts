@@ -1,17 +1,17 @@
-import { DVCClient, initialize } from '@devcycle/nodejs-server-sdk'
+import { DevCycleClient, initializeDevCycle } from '@devcycle/nodejs-server-sdk'
 import { DVCClientAPIUser } from '@devcycle/types'
 import { plainToInstance } from 'class-transformer'
 import { Query } from 'express-serve-static-core'
 import express from 'express'
 import bodyParser from 'body-parser'
-import { benchDVC } from './benchmarkDVC'
+import { benchmarkDevCycle } from './benchmarkDVC'
 
-const DVC_SERVER_SDK_KEY =
-    process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
-let dvcClient: DVCClient
+const DEVCYCLE_SERVER_SDK_KEY =
+    process.env['DEVCYCLE_SERVER_SDK_KEY'] || '<YOUR_DEVCYCLE_SERVER_SDK_KEY>'
+let devcycleClient: DevCycleClient
 
-async function startDVC() {
-    dvcClient = await initialize(DVC_SERVER_SDK_KEY, {
+async function startDevCycle() {
+    devcycleClient = await initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY, {
         logLevel: 'info',
     }).onClientInitialized()
     console.log('DevCycle local bucketing typescript client initialized')
@@ -21,9 +21,9 @@ async function startDVC() {
         country: 'CA',
     }
 
-    const partyTime = dvcClient.variableValue(user, 'party-time', false)
+    const partyTime = devcycleClient.variableValue(user, 'party-time', false)
     if (partyTime) {
-        const invitation = dvcClient.variable(
+        const invitation = devcycleClient.variable(
             user,
             'invitation-message',
             'My birthday has been cancelled this year',
@@ -38,26 +38,26 @@ async function startDVC() {
             date: Date.now(),
         }
         try {
-            dvcClient.track(user, event)
+            devcycleClient.track(user, event)
         } catch (e) {
             console.error(e)
         }
     }
 
-    const defaultVariable = dvcClient.variableValue(user, 'not-real', true)
+    const defaultVariable = devcycleClient.variableValue(user, 'not-real', true)
     console.log(`Value of the variable is ${defaultVariable} \n`)
-    const variables = dvcClient.allVariables(user)
+    const variables = devcycleClient.allVariables(user)
     console.log('Variables: ')
     console.dir(variables)
-    const features = dvcClient.allFeatures(user)
+    const features = devcycleClient.allFeatures(user)
     console.log('Features: ')
     console.dir(features)
 }
 
 if (process.env.DVC_BENCHMARK) {
-    benchDVC()
+    benchmarkDevCycle()
 } else {
-    startDVC()
+    startDevCycle()
 }
 
 // Start express example server
@@ -77,14 +77,14 @@ app.get('/variables', (req: express.Request, res: express.Response) => {
     const user = validateUserFromQueryParams(req.query)
 
     res.set(defaultHeaders)
-    res.send(JSON.stringify(dvcClient.allVariables(user)))
+    res.send(JSON.stringify(devcycleClient.allVariables(user)))
 })
 
 app.get('/features', (req: express.Request, res: express.Response) => {
     const user = validateUserFromQueryParams(req.query)
 
     res.set(defaultHeaders)
-    res.send(JSON.stringify(dvcClient.allFeatures(user)))
+    res.send(JSON.stringify(devcycleClient.allFeatures(user)))
 })
 
 app.listen(port, () => {

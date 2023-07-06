@@ -1,4 +1,4 @@
-import { DVCEvent } from '../types'
+import { DevCycleEvent } from '../types'
 import { checkParamDefined, checkParamString } from '../utils/paramUtils'
 import { EventTypes } from '../eventQueue'
 
@@ -13,7 +13,7 @@ export class DVCRequestEvent {
     metaData?: Record<string, unknown>
 
     constructor(
-        event: DVCEvent,
+        event: DevCycleEvent,
         user_id: string,
         featureVars?: Record<string, string>,
     ) {

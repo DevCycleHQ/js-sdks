@@ -1,10 +1,10 @@
 import { DVCCustomDataJSON } from '../types'
 import * as packageJson from '../../package.json'
-import { DVCUser } from './user'
+import { DevCycleUser } from './user'
 import os from 'os'
 import { ProtobufTypes } from '@devcycle/bucketing-assembly-script'
 
-export class DVCPopulatedUser implements DVCUser {
+export class DVCPopulatedUser implements DevCycleUser {
     user_id: string
     email?: string
     name?: string
@@ -22,7 +22,7 @@ export class DVCPopulatedUser implements DVCUser {
     readonly sdkVersion: string
     readonly hostname: string
 
-    constructor(user: DVCUser) {
+    constructor(user: DevCycleUser) {
         this.user_id = user.user_id
         this.email = user.email
         this.name = user.name
@@ -87,7 +87,7 @@ export class DVCPopulatedUser implements DVCUser {
         return ProtobufTypes.DVCUser_PB.create(params)
     }
 
-    static fromDVCUser(user: DVCUser): DVCPopulatedUser {
+    static fromDVCUser(user: DevCycleUser): DVCPopulatedUser {
         return new DVCPopulatedUser(user)
     }
 }

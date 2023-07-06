@@ -1,7 +1,7 @@
 import { DVCCustomDataJSON } from '@devcycle/types'
 import { checkParamType, typeEnum } from '../utils/paramUtils'
 
-type DVCUserData = {
+type DevCycleUserData = {
     user_id: string
     email?: string
     name?: string
@@ -13,7 +13,7 @@ type DVCUserData = {
     privateCustomData?: DVCCustomDataJSON
 }
 
-export class DVCUser {
+export class DevCycleUser {
     /**
      * Identifies the current user. Must be defined
      */
@@ -64,7 +64,7 @@ export class DVCUser {
      */
     privateCustomData?: DVCCustomDataJSON
 
-    constructor(data: DVCUserData) {
+    constructor(data: DevCycleUserData) {
         if (!data.user_id) {
             throw new Error('Must have a user_id set on the user')
         }

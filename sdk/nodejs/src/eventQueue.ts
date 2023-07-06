@@ -1,4 +1,4 @@
-import { DVCEvent } from './types'
+import { DevCycleEvent } from './types'
 import { DVCRequestEvent } from './models/requestEvent'
 import { DVCPopulatedUser } from './models/populatedUser'
 import {
@@ -253,7 +253,7 @@ export class EventQueue {
     /**
      * Queue DVCAPIEvent for publishing to DevCycle Events API.
      */
-    queueEvent(user: DVCPopulatedUser, event: DVCEvent): void {
+    queueEvent(user: DVCPopulatedUser, event: DevCycleEvent): void {
         if (this.checkEventQueueSize()) {
             this.logger.warn(
                 `Max event queue size reached, dropping event: ${event}`,
@@ -274,7 +274,7 @@ export class EventQueue {
      */
     queueAggregateEvent(
         user: DVCPopulatedUser,
-        event: DVCEvent,
+        event: DevCycleEvent,
         bucketedConfig?: BucketedUserConfig,
     ): void {
         if (this.checkEventQueueSize()) {

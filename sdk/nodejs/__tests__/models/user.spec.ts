@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { DVCUser } from '../../src/models/user'
+import { DevCycleUser } from '../../src/models/user'
 import {
     DVCPopulatedUser,
     getNullableCustomDataValue,
@@ -9,20 +9,20 @@ import { ProtobufTypes } from '@devcycle/bucketing-assembly-script'
 describe('DVCUser', () => {
     describe('validation tests', () => {
         it('should throw error if user_id is missing', () => {
-            expect(() => new (DVCUser as any)({})).toThrow(
+            expect(() => new (DevCycleUser as any)({})).toThrow(
                 'Must have a user_id set on the user',
             )
-            expect(() => new (DVCUser as any)({ user_id: '' })).toThrow(
+            expect(() => new (DevCycleUser as any)({ user_id: '' })).toThrow(
                 'Must have a user_id set on the user',
             )
-            expect(() => new (DVCUser as any)({ user_id: 8 })).toThrow(
+            expect(() => new (DevCycleUser as any)({ user_id: 8 })).toThrow(
                 'user_id is not of type: string',
             )
         })
         it('should throw an error if user_id is greater than 200 characters', () => {
             expect(
                 () =>
-                    new (DVCUser as any)({
+                    new (DevCycleUser as any)({
                         user_id:
                             'Oy0mkUHONE6Qg36DhrOrwbvkCaxiMQPClHsELgFdfdlYCcE0AGyJqgl2tnV6Ago2\
                         7uUXlXvChzLiLHPGRDavA9H82lM47B1pFOW51KQhT9kxLU1PgLfs2NOlekOWldtT9jh\
@@ -41,7 +41,7 @@ describe('DVCUser', () => {
                 nullKey: null,
             }
             const dvcUser = new DVCPopulatedUser(
-                new DVCUser({
+                new DevCycleUser({
                     user_id: 'user_id',
                     email: 'email',
                     name: 'name',

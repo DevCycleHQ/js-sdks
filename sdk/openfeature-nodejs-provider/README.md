@@ -26,9 +26,9 @@ import { initialize } from '@devcycle/nodejs-server-sdk'
 ... 
 
 // Initialize the DevCycle SDK
-const dvcClient = await initialize(DVC_SERVER_SDK_KEY).onClientInitialized()
+const devcycleClient = await initialize(DEVCYCLE_SERVER_SDK_KEY).onClientInitialized()
 // Set the initialzed DevCycle client as the provider for OpenFeature
-OpenFeature.setProvider(new DevCycleProvider(dvcClient))
+OpenFeature.setProvider(new DevCycleProvider(devcycleClient))
 // Get the OpenFeature client
 openFeatureClient = OpenFeature.getClient()
 // Set the context for the OpenFeature client, you can use 'targetingKey' or 'user_id'
@@ -45,8 +45,8 @@ Ensure that you pass any custom DVCOptions to the DevCycleProvider constructor
 
 ```typescript
 const options = { logger: dvcDefaultLogger({ level: 'debug' }) }
-const dvcClient = await initialize(DVC_SERVER_SDK_KEY, options).onClientInitialized()
-OpenFeature.setProvider(new DevCycleProvider(dvcClient, options))
+const devcycleClient = await initialize(DEVCYCLE_SERVER_SDK_KEY, options).onClientInitialized()
+OpenFeature.setProvider(new DevCycleProvider(devcycleClient, options))
 ```
 
 #### Required TargetingKey

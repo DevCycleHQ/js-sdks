@@ -1,26 +1,28 @@
 import { OpenFeature, Client } from '@openfeature/js-sdk'
 import DevCycleProvider from '@devcycle/openfeature-nodejs-provider'
-import { initialize } from '@devcycle/nodejs-server-sdk'
+import { initializeDevCycle } from '@devcycle/nodejs-server-sdk'
 
-const DVC_SERVER_SDK_KEY =
-    process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
+const DEVCYCLE_SERVER_SDK_KEY =
+    process.env['DEVCYCLE_SERVER_SDK_KEY'] || '<YOUR_DEVCYCLE_SERVER_SDK_KEY>'
 
 let openFeatureClient: Client
 
-async function startDVC() {
-    const dvcClient = await initialize(DVC_SERVER_SDK_KEY, {
+async function startDevCycle() {
+    const devcycleClient = await initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY, {
         logLevel: 'info',
     }).onClientInitialized()
-    OpenFeature.setProvider(new DevCycleProvider(dvcClient))
+    OpenFeature.setProvider(new DevCycleProvider(devcycleClient))
     openFeatureClient = OpenFeature.getClient()
+
     console.log('DevCycle OpenFeature client initialized')
 
     const context = {
         // Either 'targetingKey' or 'user_id` can be set here to identify the user
         targetingKey: 'node_sdk_test',
-        // Other supported DVCUser properties like country can be set here and will be used for targeting with a DVCUser
+        // Other supported DevCycleUser properties like country can be set here
+        // and will be used for targeting with a DevCycleUser
         country: 'CA',
-        // Any unknown properties will be added to the DVCUser as customData
+        // Any unknown properties will be added to the DevCycleUser as customData
         myCustomDataProperty: 'myCustomDataValue',
     }
     openFeatureClient.setContext(context)
@@ -53,4 +55,4 @@ async function startDVC() {
     console.log(`Value of the variable is ${defaultVariable} \n`)
 }
 
-startDVC()
+startDevCycle()

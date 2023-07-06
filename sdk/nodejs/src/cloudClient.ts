@@ -1,9 +1,9 @@
 import {
-    DVCOptions,
+    DevCycleOptions,
     DVCVariableValue,
     DVCVariableSet,
     DVCFeatureSet,
-    DVCEvent,
+    DevCycleEvent,
 } from './types'
 import { DVCVariable } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
@@ -21,11 +21,11 @@ import {
     postTrack,
     ResponseError,
 } from './request'
-import { DVCUser } from './models/user'
+import { DevCycleUser } from './models/user'
 
-const castIncomingUser = (user: DVCUser) => {
-    if (!(user instanceof DVCUser)) {
-        return new DVCUser(user)
+const castIncomingUser = (user: DevCycleUser) => {
+    if (!(user instanceof DevCycleUser)) {
+        return new DevCycleUser(user)
     }
     return user
 }
@@ -64,12 +64,12 @@ const throwIfUserError = (err: unknown) => {
     throw err
 }
 
-export class DVCCloudClient {
+export class DevCycleCloudClient {
     private sdkKey: string
     private logger: DVCLogger
-    private options: DVCOptions
+    private options: DevCycleOptions
 
-    constructor(sdkKey: string, options: DVCOptions) {
+    constructor(sdkKey: string, options: DevCycleOptions) {
         this.sdkKey = sdkKey
         this.logger =
             options.logger || dvcDefaultLogger({ level: options.logLevel })
@@ -78,7 +78,7 @@ export class DVCCloudClient {
     }
 
     variable<T extends DVCVariableValue>(
-        user: DVCUser,
+        user: DevCycleUser,
         key: string,
         defaultValue: T,
     ): Promise<DVCVariable<T>> {
@@ -125,7 +125,7 @@ export class DVCCloudClient {
     }
 
     variableValue<T extends DVCVariableValue>(
-        user: DVCUser,
+        user: DevCycleUser,
         key: string,
         defaultValue: T,
     ): Promise<VariableTypeAlias<T>> {
@@ -134,7 +134,7 @@ export class DVCCloudClient {
         )
     }
 
-    allVariables(user: DVCUser): Promise<DVCVariableSet> {
+    allVariables(user: DevCycleUser): Promise<DVCVariableSet> {
         const incomingUser = castIncomingUser(user)
 
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
@@ -156,7 +156,7 @@ export class DVCCloudClient {
             })
     }
 
-    allFeatures(user: DVCUser): Promise<DVCFeatureSet> {
+    allFeatures(user: DevCycleUser): Promise<DVCFeatureSet> {
         const incomingUser = castIncomingUser(user)
 
         const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
@@ -178,7 +178,7 @@ export class DVCCloudClient {
             })
     }
 
-    track(user: DVCUser, event: DVCEvent): Promise<void> {
+    track(user: DevCycleUser, event: DevCycleEvent): Promise<void> {
         const incomingUser = castIncomingUser(user)
 
         if (

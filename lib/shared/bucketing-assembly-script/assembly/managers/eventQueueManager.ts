@@ -4,7 +4,7 @@ import {
     DVCPopulatedUser,
     DVCEvent,
     FeatureVariation,
-    SDKVariable
+    SDKVariable,
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { _getConfigData } from './configDataManager'
@@ -29,7 +29,9 @@ const _requestPayloadMap = new Map<string, RequestPayloadManager>()
 
 function getRequestPayloadManager(sdkKey: string): RequestPayloadManager {
     if (!_requestPayloadMap.has(sdkKey)) {
-        throw new Error(`No Request Payload Manager found for sdkKey: ${sdkKey}`)
+        throw new Error(
+            `No Request Payload Manager found for sdkKey: ${sdkKey}`,
+        )
     }
     return _requestPayloadMap.get(sdkKey)
 }
@@ -37,7 +39,7 @@ function getRequestPayloadManager(sdkKey: string): RequestPayloadManager {
 /**
  * This should be called from the Native code where the existing EventQueue Class is setup.
  * This creates the WASM EventQueue class and stores it in a map by env sdkKey,
- * this is needed because our SDKs support creating multiple DVCClient objects by sdkKey.
+ * this is needed because our SDKs support creating multiple DevCycleClient objects by sdkKey.
  */
 export function initEventQueue(sdkKey: string, optionsStr: string): void {
     if (!sdkKey) {
@@ -46,7 +48,7 @@ export function initEventQueue(sdkKey: string, optionsStr: string): void {
     if (_eventQueueMap.has(sdkKey) || _requestPayloadMap.has(sdkKey)) {
         throw new Error(
             `Event Queue already exists for sdkKey: ${sdkKey}, ` +
-            'you can only initialize the DevCycle SDK once per sdkKey'
+                'you can only initialize the DevCycle SDK once per sdkKey',
         )
     }
 
@@ -87,7 +89,7 @@ export function flushEventQueue(sdkKey: string): string {
     const eventQueues = eventQueue.flushAndResetEventQueue()
     const payloads = requestPayloadManager.constructFlushPayloads(
         eventQueues.userEventQueue,
-        eventQueues.aggEventQueue
+        eventQueues.aggEventQueue,
     )
     return jsonArrFromValueArray(payloads).stringify()
 }
@@ -97,33 +99,51 @@ export function onPayloadSuccess(sdkKey: string, payloadId: string): void {
     requestPayloadManager.markPayloadSuccess(payloadId)
 }
 
-export function onPayloadFailure(sdkKey: string, payloadId: string, retryable: boolean): void {
+export function onPayloadFailure(
+    sdkKey: string,
+    payloadId: string,
+    retryable: boolean,
+): void {
     const requestPayloadManager = getRequestPayloadManager(sdkKey)
     requestPayloadManager.markPayloadFailure(payloadId, retryable)
 }
 
-export function queueEvent(sdkKey: string, userStr: string, eventStr: string): void {
+export function queueEvent(
+    sdkKey: string,
+    userStr: string,
+    eventStr: string,
+): void {
     const eventQueue = getEventQueue(sdkKey)
     const dvcUser = DVCPopulatedUser.fromJSONString(userStr)
     const event = DVCEvent.fromJSONString(eventStr)
     dvcUser.mergeClientCustomData(_getClientCustomData(sdkKey))
-    const bucketedConfig = _generateBucketedConfig(_getConfigData(sdkKey), dvcUser, _getClientCustomData(sdkKey))
+    const bucketedConfig = _generateBucketedConfig(
+        _getConfigData(sdkKey),
+        dvcUser,
+        _getClientCustomData(sdkKey),
+    )
     eventQueue.queueEvent(dvcUser, event, bucketedConfig.featureVariationMap)
 }
 
-export function queueAggregateEvent(sdkKey: string, eventStr: string, variableVariationMapStr: string): void {
+export function queueAggregateEvent(
+    sdkKey: string,
+    eventStr: string,
+    variableVariationMapStr: string,
+): void {
     const eventQueue = getEventQueue(sdkKey)
     if (eventQueue.options.disableAutomaticEventLogging) return
 
     const event = DVCEvent.fromJSONString(eventStr)
 
     const variableVariationMapJSON = JSON.parse(variableVariationMapStr)
-    if (!variableVariationMapJSON.isObj) throw new Error('variableVariationMap is not a JSON Object')
-    const variableVariationMap = FeatureVariation.getVariableVariationMapFromJSONObj(
-        variableVariationMapJSON as JSON.Obj
-    )
+    if (!variableVariationMapJSON.isObj)
+        throw new Error('variableVariationMap is not a JSON Object')
+    const variableVariationMap =
+        FeatureVariation.getVariableVariationMapFromJSONObj(
+            variableVariationMapJSON as JSON.Obj,
+        )
 
-    const aggByVariation = (event.type === 'aggVariableEvaluated')
+    const aggByVariation = event.type === 'aggVariableEvaluated'
     eventQueue.queueAggregateEvent(event, variableVariationMap, aggByVariation)
 }
 
@@ -134,25 +154,30 @@ export function queueVariableEvaluatedEvent_JSON(
     sdkKey: string,
     varVariationMapString: string,
     variable: string | null,
-    variableKey: string
+    variableKey: string,
 ): void {
     const varVariationMapJSON = JSON.parse(varVariationMapString)
-    if (!varVariationMapJSON.isObj) throw new Error('varVariationMap is not a JSON Object')
+    if (!varVariationMapJSON.isObj)
+        throw new Error('varVariationMap is not a JSON Object')
     const varVariationObj = varVariationMapJSON as JSON.Obj
 
     const varVariationMap = new Map<string, FeatureVariation>()
     for (let i = 0; i < varVariationObj.keys.length; i++) {
         const key = varVariationObj.keys[i]
         const value = varVariationObj.get(key)
-        if (!value || !value.isObj) throw new Error('FeatureVariation value is not a JSON Object')
-        varVariationMap.set(key, FeatureVariation.fromJSONObj(value as JSON.Obj))
+        if (!value || !value.isObj)
+            throw new Error('FeatureVariation value is not a JSON Object')
+        varVariationMap.set(
+            key,
+            FeatureVariation.fromJSONObj(value as JSON.Obj),
+        )
     }
 
     return queueVariableEvaluatedEvent(
         sdkKey,
         varVariationMap,
-        (variable !== null) ? SDKVariable.fromJSONString(variable) : null,
-        variableKey
+        variable !== null ? SDKVariable.fromJSONString(variable) : null,
+        variableKey,
     )
 }
 
@@ -160,24 +185,17 @@ export function queueVariableEvaluatedEvent(
     sdkKey: string,
     variableVariationMap: Map<string, FeatureVariation>,
     variable: SDKVariable | null,
-    variableKey: string
+    variableKey: string,
 ): void {
     const eventQueue = getEventQueue(sdkKey)
     if (eventQueue.options.disableAutomaticEventLogging) return
 
-    const eventType = (variable !== null)
-        ? 'aggVariableEvaluated'
-        : 'aggVariableDefaulted'
+    const eventType =
+        variable !== null ? 'aggVariableEvaluated' : 'aggVariableDefaulted'
 
-    const event = new DVCEvent(
-        eventType,
-        variableKey,
-        null,
-        NaN,
-        null
-    )
+    const event = new DVCEvent(eventType, variableKey, null, NaN, null)
 
-    const aggByVariation = (eventType === 'aggVariableEvaluated')
+    const aggByVariation = eventType === 'aggVariableEvaluated'
     eventQueue.queueAggregateEvent(event, variableVariationMap, aggByVariation)
 }
 
@@ -193,5 +211,7 @@ export function cleanupEventQueue(sdkKey: string): void {
 export function eventQueueSize(sdkKey: string): i32 {
     const eventQueue = getEventQueue(sdkKey)
     const requestPayloadManager = getRequestPayloadManager(sdkKey)
-    return eventQueue.eventQueueCount + requestPayloadManager.payloadEventCount()
+    return (
+        eventQueue.eventQueueCount + requestPayloadManager.payloadEventCount()
+    )
 }

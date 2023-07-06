@@ -1,15 +1,15 @@
-import { DVCClient, initialize } from '@devcycle/nodejs-server-sdk'
+import { DevCycleClient, initializeDevCycle } from '@devcycle/nodejs-server-sdk'
 import { promisify } from 'util'
 
-const DVC_SERVER_SDK_KEY =
-    process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
+const DEVCYCLE_SERVER_SDK_KEY =
+    process.env['DEVCYCLE_SERVER_SDK_KEY'] || '<YOUR_DEVCYCLE_SERVER_SDK_KEY>'
 
-let dvcClient: DVCClient
+let devcycleClient: DevCycleClient
 
-export async function benchDVC(): Promise<void> {
-    if (!dvcClient) {
+export async function benchmarkDevCycle(): Promise<void> {
+    if (!devcycleClient) {
         console.log('start bench')
-        dvcClient = await initialize(DVC_SERVER_SDK_KEY, {
+        devcycleClient = await initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY, {
             logLevel: 'debug',
             enableCloudBucketing: false,
             disableAutomaticEventLogging: true,
@@ -36,7 +36,7 @@ export async function benchDVC(): Promise<void> {
     const variableKey = 'v-key-50'
 
     for (let i = 0; i < count; i++) {
-        variable = dvcClient.variable(user, variableKey, false)
+        variable = devcycleClient.variable(user, variableKey, false)
     }
 
     const endTime = performance.now() - time
@@ -46,6 +46,6 @@ export async function benchDVC(): Promise<void> {
     )
 
     if (process.env.DVC_BENCH_LOOP) {
-        benchDVC()
+        benchmarkDevCycle()
     }
 }
