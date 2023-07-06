@@ -3,7 +3,7 @@ import React from 'react'
 import type { AppProps } from 'next/app'
 import { withDevCycleProvider } from '@devcycle/devcycle-react-sdk'
 
-const SDK_KEY = process.env.NX_CLIENT_KEY || '<YOUR_DVC_CLIENT_SDK_KEY>'
+const SDK_KEY = process.env.NX_CLIENT_KEY || '<YOUR_DEVCYCLE_CLIENT_SDK_KEY>'
 const user = {
     user_id: 'userId1',
     email: 'auto@taplytics.com',

@@ -3,7 +3,7 @@
 import './app.element.css'
 import { initializeDevCycle } from '@devcycle/devcycle-js-sdk'
 
-const SDK_KEY = process.env.NX_CLIENT_KEY || '<YOUR_DVC_CLIENT_SDK_KEY>'
+const SDK_KEY = process.env.NX_CLIENT_KEY || '<YOUR_DEVCYCLE_CLIENT_SDK_KEY>'
 
 export class AppElement extends HTMLElement {
     constructor() {
