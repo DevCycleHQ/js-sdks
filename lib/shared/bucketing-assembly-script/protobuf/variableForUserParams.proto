@@ -2,6 +2,8 @@ syntax = "proto3";
 
 option go_package = "./proto";
 option csharp_namespace = "DevCycle.SDK.Server.Local.Protobuf";
+option java_package = "com.devcycle.sdk.server.local.protobuf";
+option java_multiple_files = true;
 
 enum VariableType_PB {
     Boolean = 0;
