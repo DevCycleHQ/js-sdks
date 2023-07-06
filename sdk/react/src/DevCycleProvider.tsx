@@ -21,7 +21,7 @@ export function DevCycleProvider(props: Props): React.ReactElement {
         sdkKey = config.envKey
     }
     if (!sdkKey) {
-        throw new Error('You must provide a sdkKey to DVCProvider')
+        throw new Error('You must provide a sdkKey to DevCycleProvider')
     }
 
     if (!client) {

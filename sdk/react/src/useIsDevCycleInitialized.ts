@@ -6,7 +6,9 @@ export const useIsDevCycleInitialized = (): boolean => {
     const dvcContext = useContext(context)
 
     if (dvcContext === undefined)
-        throw new Error('useDVCInitialized must be used within DVCProvider')
+        throw new Error(
+            'useIsDevCycleInitialized must be used within DevCycleProvider',
+        )
 
     if (isDVCReady) return isDVCReady
 

@@ -8,7 +8,9 @@ export const useDevCycleClient = <
     const dvcContext = useContext(context)
 
     if (dvcContext === undefined)
-        throw new Error('useDVCClient must be used within DVCProvider')
+        throw new Error(
+            'useDevCycleClient must be used within DevCycleProvider',
+        )
 
     return dvcContext.client
 }
