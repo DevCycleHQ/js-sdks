@@ -1,5 +1,5 @@
 import { EventEmitter } from '../src/EventEmitter'
-import { DVCClient } from '../src/Client'
+import { DevCycleClient } from '../src/Client'
 import { DVCPopulatedUser } from '../src/User'
 
 const testConfig = {
@@ -467,7 +467,9 @@ describe('EventEmitter tests', () => {
 
         it('fires when first config recieved', () => {
             const configHandler = jest.fn()
-            const client = new DVCClient('test_sdk_key', { user_id: 'user1' })
+            const client = new DevCycleClient('test_sdk_key', {
+                user_id: 'user1',
+            })
             client.eventEmitter = eventEmitter
             eventEmitter.subscribe('configUpdated', configHandler)
             client.handleConfigReceived(
@@ -480,7 +482,9 @@ describe('EventEmitter tests', () => {
 
         it('doesnt fire when config recieved with same etag', () => {
             const configHandler = jest.fn()
-            const client = new DVCClient('test_sdk_key', { user_id: 'user1' })
+            const client = new DevCycleClient('test_sdk_key', {
+                user_id: 'user1',
+            })
             client.eventEmitter = eventEmitter
             client.config = testConfig
             eventEmitter.subscribe('configUpdated', configHandler)
@@ -494,7 +498,9 @@ describe('EventEmitter tests', () => {
 
         it('fires when config recieved with different etag', () => {
             const configHandler = jest.fn()
-            const client = new DVCClient('test_sdk_key', { user_id: 'user1' })
+            const client = new DevCycleClient('test_sdk_key', {
+                user_id: 'user1',
+            })
             client.eventEmitter = eventEmitter
             client.config = { ...testConfig, etag: '567' }
             eventEmitter.subscribe('configUpdated', configHandler)

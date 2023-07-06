@@ -1,4 +1,4 @@
-import { DVCEvent, DVCOptions } from './types'
+import { DevCycleClientEvent, DevCycleOptions } from './types'
 import { DVCPopulatedUser } from './User'
 import { serializeUserSearchParams, generateEventPayload } from './utils'
 import axios, { AxiosResponse } from 'axios'
@@ -78,7 +78,7 @@ export const getConfigJson = async (
     sdkKey: string,
     user: DVCPopulatedUser,
     logger: DVCLogger,
-    options?: DVCOptions,
+    options?: DevCycleOptions,
     extraParams?: { sse: boolean; lastModified?: number; etag?: string },
 ): Promise<BucketedUserConfig> => {
     const queryParams = new URLSearchParams({ sdkKey })
@@ -123,9 +123,9 @@ export const publishEvents = async (
     sdkKey: string | null,
     config: BucketedUserConfig | null,
     user: DVCPopulatedUser,
-    events: DVCEvent[],
+    events: DevCycleClientEvent[],
     logger: DVCLogger,
-    options?: DVCOptions,
+    options?: DevCycleOptions,
 ): Promise<AxiosResponse> => {
     if (!sdkKey) {
         throw new Error('Missing sdkKey to publish events to Events API')
@@ -154,7 +154,7 @@ export const saveEntity = async (
     user: DVCPopulatedUser,
     sdkKey: string,
     logger: DVCLogger,
-    options?: DVCOptions,
+    options?: DevCycleOptions,
 ): Promise<AxiosResponse> => {
     if (!sdkKey) {
         throw new Error('Missing sdkKey to save to Edge DB!')

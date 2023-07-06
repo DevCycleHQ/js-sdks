@@ -23,7 +23,6 @@ class Client {
 module.exports = {
     ...jsSDK,
     mockVariableFunction,
-    initialize: () => {
-        return new Client()
-    },
+    initializeDevCycle: () => new Client(),
+    initialize: () => new Client(),
 }

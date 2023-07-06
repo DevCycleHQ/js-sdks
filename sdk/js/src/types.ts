@@ -39,7 +39,7 @@ export type DVCFeatureSet = {
     [key: string]: DVCFeature
 }
 
-export interface DVCOptions {
+export interface DevCycleOptions {
     eventFlushIntervalMS?: number
     reactNative?: boolean
     enableEdgeDB?: boolean
@@ -60,7 +60,7 @@ export interface DVCOptions {
     deferInitialization?: boolean
 }
 
-export interface DVCUser {
+export interface DevCycleUser {
     /**
      * Users must be explicitly defined as anonymous, where the SDK will
      * generate a random `user_id` for them. If they are `isAnonymous = false`
@@ -160,7 +160,7 @@ export interface DVCVariable<T extends DVCVariableValue> {
     onUpdate(callback: (value: DVCVariableValue) => void): DVCVariable<T>
 }
 
-export interface DVCEvent {
+export interface DevCycleClientEvent {
     /**
      * type of the event
      */

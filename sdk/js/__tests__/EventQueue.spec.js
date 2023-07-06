@@ -1,11 +1,11 @@
 import * as Request from '../src/Request'
-import { DVCClient } from '../src/Client'
+import { DevCycleClient } from '../src/Client'
 import { EventQueue, EventTypes } from '../src/EventQueue'
 let eventQueue, dvcClient
 
 describe('EventQueue tests', () => {
     beforeAll(() => {
-        dvcClient = new DVCClient('test_sdk_key', { user_id: 'user1' })
+        dvcClient = new DevCycleClient('test_sdk_key', { user_id: 'user1' })
         dvcClient.config = { features: [] }
         eventQueue = new EventQueue('test_sdk_key', dvcClient)
     })

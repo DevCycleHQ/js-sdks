@@ -1,4 +1,4 @@
-import { withDVCProvider as ReactWithDVCProvider } from '@devcycle/devcycle-react-sdk'
+import { withDevCycleProvider as ReactWithDVCProvider } from '@devcycle/devcycle-react-sdk'
 import { getReactNativeConfig } from './DVCProvider'
 
 export const withDVCProvider: typeof ReactWithDVCProvider = (config) => {

@@ -1,6 +1,6 @@
 import { useVariableValue } from './useVariableValue'
 import { renderHook } from '@testing-library/react'
-import DVCProvider from './DVCProvider'
+import { DevCycleProvider } from './DevCycleProvider'
 import type { DVCJSON } from '@devcycle/devcycle-js-sdk'
 import { ReactElement } from 'react'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -11,14 +11,14 @@ jest.mock('@devcycle/devcycle-js-sdk')
 
 const ProviderWrapper = ({ children }: { children: ReactElement }) => {
     return (
-        <DVCProvider
+        <DevCycleProvider
             config={{
                 user: { user_id: 'test', isAnonymous: false },
                 sdkKey: 'test',
             }}
         >
             {children}
-        </DVCProvider>
+        </DevCycleProvider>
     )
 }
 

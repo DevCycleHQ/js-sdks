@@ -1,13 +1,13 @@
 import { createContext } from 'react'
-import type { DVCClient } from '@devcycle/devcycle-js-sdk'
+import type { DevCycleClient } from '@devcycle/devcycle-js-sdk'
 
-interface DVCContext {
-    client: DVCClient
+interface DevCycleContext {
+    client: DevCycleClient
 }
 
-const context = createContext<DVCContext | undefined>(undefined)
+const context = createContext<DevCycleContext | undefined>(undefined)
 const { Provider, Consumer } = context
 
 export { Provider, Consumer }
-export type { DVCContext }
+export type { DevCycleContext }
 export default context

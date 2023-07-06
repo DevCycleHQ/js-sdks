@@ -1,4 +1,4 @@
-import type { DVCOptions, DVCUser } from '@devcycle/devcycle-js-sdk'
+import type { DevCycleOptions, DevCycleUser } from '@devcycle/devcycle-js-sdk'
 
 type WithSDKKey = {
     sdkKey: string
@@ -9,6 +9,6 @@ type WithEnvironmentKey = {
 }
 
 export type ProviderConfig = (WithSDKKey | WithEnvironmentKey) & {
-    user?: DVCUser
-    options?: DVCOptions
+    user?: DevCycleUser
+    options?: DevCycleOptions
 }

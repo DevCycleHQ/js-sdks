@@ -2,8 +2,8 @@ import React from 'react'
 import logo from './logo.svg'
 import './App.css'
 import {
-    useIsDVCInitialized,
-    withDVCProvider,
+    useIsDevCycleInitialized,
+    withDevCycleProvider,
 } from '@devcycle/devcycle-react-sdk'
 import DevCycleExample from './DevCycleExample'
 
@@ -20,7 +20,7 @@ const user = {
 }
 
 function App() {
-    const dvcReady = useIsDVCInitialized()
+    const dvcReady = useIsDevCycleInitialized()
 
     if (!dvcReady)
         return (
@@ -51,7 +51,7 @@ function App() {
     )
 }
 
-export default withDVCProvider({
+export default withDevCycleProvider({
     sdkKey: SDK_KEY,
     user: user,
     options: { logLevel: 'debug' },

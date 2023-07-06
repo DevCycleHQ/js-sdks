@@ -1,22 +1,22 @@
 import {
-    useDVCClient,
+    useDevCycleClient,
     useVariable,
     useVariableValue,
-    useIsDVCInitialized,
+    useIsDevCycleInitialized,
 } from '@devcycle/devcycle-react-sdk'
 import { withDVCProvider } from './withDVCProvider'
 import { DVCProvider } from './DVCProvider'
 export type {
     DVCClient,
-    DVCUser,
+    DevCycleUser,
     DVCVariableValue,
 } from '@devcycle/devcycle-react-sdk'
 
 export {
     DVCProvider,
-    useDVCClient,
+    useDevCycleClient,
     useVariable,
     useVariableValue,
     withDVCProvider,
-    useIsDVCInitialized,
+    useIsDevCycleInitialized,
 }

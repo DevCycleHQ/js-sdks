@@ -8,10 +8,8 @@ type Props = {
 }
 
 /**
- *
- * @deprecated Use the `useIsDVCInitialized` hook to block rendering of your application
+ * @deprecated Use the `useIsDevCycleInitialized` hook to block rendering of your application
  *             until SDK initialization is complete
- *
  */
 export default async function asyncWithDVCProvider(
     config: ProviderConfig,

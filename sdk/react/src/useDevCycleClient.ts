@@ -1,10 +1,10 @@
 import { useContext } from 'react'
 import context from './context'
-import { DVCClient, VariableDefinitions } from '@devcycle/devcycle-js-sdk'
+import { DevCycleClient, VariableDefinitions } from '@devcycle/devcycle-js-sdk'
 
-export const useDVCClient = <
+export const useDevCycleClient = <
     Variables extends VariableDefinitions = VariableDefinitions,
->(): DVCClient<Variables> => {
+>(): DevCycleClient<Variables> => {
     const dvcContext = useContext(context)
 
     if (dvcContext === undefined)
@@ -13,4 +13,7 @@ export const useDVCClient = <
     return dvcContext.client
 }
 
-export default useDVCClient
+/**
+ * @deprecated use useDevCycleClient instead
+ */
+export const useDVCClient = useDevCycleClient
