@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from 'react'
 import context from './context'
-import type { DVCVariable, DVCVariableValue } from '@devcycle/devcycle-js-sdk'
+import type { DVCVariable, DVCVariableValue } from '@devcycle/js-client-sdk'
 
 export const useVariable = <T extends DVCVariableValue>(
     key: string,

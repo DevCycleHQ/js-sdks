@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import context from './context'
-import { DevCycleClient, VariableDefinitions } from '@devcycle/devcycle-js-sdk'
+import { DevCycleClient, VariableDefinitions } from '@devcycle/js-client-sdk'
 
 export const useDevCycleClient = <
     Variables extends VariableDefinitions = VariableDefinitions,

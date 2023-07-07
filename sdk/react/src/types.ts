@@ -1,4 +1,4 @@
-import type { DevCycleOptions, DevCycleUser } from '@devcycle/devcycle-js-sdk'
+import type { DevCycleOptions, DevCycleUser } from '@devcycle/js-client-sdk'
 
 type WithSDKKey = {
     sdkKey: string

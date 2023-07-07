@@ -1,7 +1,7 @@
 {
-    "name": "@devcycle/devcycle-js-sdk",
+    "name": "@devcycle/js-client-sdk",
     "version": "1.12.4",
-    "description": "The DevCycle JS SDK used for feature management.",
+    "description": "The Javascript Client SDK for DevCycle",
     "author": "",
     "license": "MIT",
     "typesVersions": {

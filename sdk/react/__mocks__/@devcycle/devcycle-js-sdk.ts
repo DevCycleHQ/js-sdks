@@ -1,4 +1,4 @@
-const jsSDK: any = jest.genMockFromModule('@devcycle/devcycle-js-sdk')
+const jsSDK: any = jest.genMockFromModule('@devcycle/js-client-sdk')
 
 const mockVariableFunction = jest
     .fn()

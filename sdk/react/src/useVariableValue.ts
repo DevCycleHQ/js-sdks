@@ -1,5 +1,5 @@
 import { useVariable } from './'
-import type { DVCVariableValue } from '@devcycle/devcycle-js-sdk'
+import type { DVCVariableValue } from '@devcycle/js-client-sdk'
 import { VariableTypeAlias } from '@devcycle/types'
 
 export const useVariableValue = <T extends DVCVariableValue>(

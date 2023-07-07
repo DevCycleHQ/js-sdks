@@ -1,13 +1,13 @@
 import { useVariableValue } from './useVariableValue'
 import { renderHook } from '@testing-library/react'
 import { DevCycleProvider } from './DevCycleProvider'
-import type { DVCJSON } from '@devcycle/devcycle-js-sdk'
+import type { DVCJSON } from '@devcycle/js-client-sdk'
 import { ReactElement } from 'react'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { mockVariableFunction } from '@devcycle/devcycle-js-sdk' // defined in the mock
+import { mockVariableFunction } from '@devcycle/js-client-sdk' // defined in the mock
 
-jest.mock('@devcycle/devcycle-js-sdk')
+jest.mock('@devcycle/js-client-sdk')
 
 const ProviderWrapper = ({ children }: { children: ReactElement }) => {
     return (
