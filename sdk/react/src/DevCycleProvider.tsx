@@ -1,6 +1,6 @@
 import { ProviderConfig } from './types'
 import React, { ReactNode, useEffect } from 'react'
-import initializeDVCClient from './initializeDVCClient'
+import initializeDevCycleClient from './initializeDevCycleClient'
 import { Provider } from './context'
 import { DevCycleClient } from '@devcycle/devcycle-js-sdk'
 
@@ -25,7 +25,7 @@ export function DevCycleProvider(props: Props): React.ReactElement {
     }
 
     if (!client) {
-        client = initializeDVCClient(sdkKey, user, options)
+        client = initializeDevCycleClient(sdkKey, user, options)
     }
 
     useEffect(() => {

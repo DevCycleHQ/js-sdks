@@ -1,7 +1,7 @@
 import { Provider } from './context'
 import React from 'react'
 import { ProviderConfig } from './types'
-import initializeDVCClient from './initializeDVCClient'
+import initializeDevCycleClient from './initializeDevCycleClient'
 
 type Props = {
     children?: React.ReactNode
@@ -25,7 +25,7 @@ export default async function asyncWithDVCProvider(
         throw new Error('You must provide a sdkKey to asyncWithDVCProvider')
     }
 
-    const client = initializeDVCClient(sdkKey, user, options)
+    const client = initializeDevCycleClient(sdkKey, user, options)
     await client.onClientInitialized()
 
     return ({ children }) => {

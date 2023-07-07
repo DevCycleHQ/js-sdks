@@ -1,7 +1,7 @@
 import { DevCycleOptions, initializeDevCycle } from '@devcycle/devcycle-js-sdk'
 import type { DevCycleUser, DevCycleClient } from '@devcycle/devcycle-js-sdk'
 
-const initializeDVCClient = (
+const initializeDevCycleClient = (
     sdkKey: string,
     user: DevCycleUser = { isAnonymous: true },
     options?: DevCycleOptions,
@@ -15,4 +15,4 @@ const initializeDVCClient = (
     return initializeDevCycle(sdkKey, user, options)
 }
 
-export default initializeDVCClient
+export default initializeDevCycleClient
