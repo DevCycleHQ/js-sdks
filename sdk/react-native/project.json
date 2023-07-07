@@ -53,7 +53,7 @@
         "npm-publish": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/devcycle-react-native-sdk\"",
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/react-native-client-sdk\" --deprecated-package=\"@devcycle/devcycle-react-native-sdk\"",
                 "cwd": "dist/sdk/react-native",
                 "forwardAllArgs": true
             }
