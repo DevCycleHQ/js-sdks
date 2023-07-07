@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import { useVariable } from '@devcycle/devcycle-react-sdk'
+import { useVariable } from '@devcycle/react-client-sdk'
 
 const Home: NextPage = () => {
     const variableKey = 'feature-release'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { DevCycleProvider as ReactDVCProvider } from '@devcycle/devcycle-react-sdk'
+import { DevCycleProvider as ReactDVCProvider } from '@devcycle/react-client-sdk'
 import ReactNativeStore from './ReactNativeCacheStore'
 
 type PropsType = Parameters<typeof ReactDVCProvider>[0]

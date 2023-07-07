@@ -4,7 +4,7 @@ import './App.css'
 import {
     useIsDevCycleInitialized,
     withDevCycleProvider,
-} from '@devcycle/devcycle-react-sdk'
+} from '@devcycle/react-client-sdk'
 import DevCycleExample from './DevCycleExample'
 
 const SDK_KEY = process.env.NX_CLIENT_KEY || '<DEVCYCLE_CLIENT_SDK_KEY>'

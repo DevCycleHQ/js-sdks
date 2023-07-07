@@ -1,4 +1,4 @@
-import { withDevCycleProvider as ReactWithDevCycleProvider } from '@devcycle/devcycle-react-sdk'
+import { withDevCycleProvider as ReactWithDevCycleProvider } from '@devcycle/react-client-sdk'
 import { getReactNativeConfig } from './DevCycleProvider'
 
 export const withDevCycleProvider: typeof ReactWithDevCycleProvider = (

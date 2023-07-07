@@ -29,7 +29,7 @@
             "@devcycle/devcycle-react-native-sdk": [
                 "sdk/react-native/src/index.ts"
             ],
-            "@devcycle/devcycle-react-sdk": ["sdk/react/src/index.ts"],
+            "@devcycle/react-client-sdk": ["sdk/react/src/index.ts"],
             "@devcycle/nodejs-server-sdk": ["sdk/nodejs/src/index.ts"],
             "@devcycle/openfeature-nodejs-provider": [
                 "sdk/openfeature-nodejs-provider/src/index.ts"
