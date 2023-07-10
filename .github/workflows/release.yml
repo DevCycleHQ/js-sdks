@@ -1,0 +1,41 @@
+name: Release JSSDKs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.AUTOMATION_USER_TOKEN }}
+      - name: Install Protobuf
+        run: apt install protobuf-compiler
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2.2.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_GHA }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_GHA }}
+          aws-region: us-east-1
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.12
+          cache: 'yarn'
+      - name: Yarn Install
+        run: yarn install
+      - name: Lerna Version
+        run: yarn lerna:version
+      - name: Publish to NPM
+        run: yarn npm-publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
+      - name: Build CDN Release
+        run: nx build:cdn js
+      - name: Upload CDN Release
+        run: aws s3 sync dist/sdk/js s3://js.devcycle.com/ --include "devcycle.min.js*" --acl public-read
+      - uses: DevCycleHQ/release-action@main
+        with:
+          create-tag: false
+          github-token: ${{ secrets.GITHUB_TOKEN }}
