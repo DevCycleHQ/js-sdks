@@ -3,13 +3,17 @@ name: Release JSSDKs
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   build-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.AUTOMATION_USER_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install Protobuf
         run: apt install protobuf-compiler
       - name: Configure AWS Credentials
