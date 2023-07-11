@@ -5,7 +5,6 @@ import {
     isDeferredOptions,
 } from './Client'
 
-export { DVCClient }
 export * from './types'
 
 export type { DevCycleClient, DevCycleOptionsWithDeferredInitialization }
