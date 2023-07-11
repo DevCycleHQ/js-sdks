@@ -1,4 +1,4 @@
-import { DevCycleClientEvent, DevCycleOptions } from './types'
+import { DevCycleEvent, DevCycleOptions } from './types'
 import { DVCPopulatedUser } from './User'
 import { serializeUserSearchParams, generateEventPayload } from './utils'
 import axios, { AxiosResponse } from 'axios'
@@ -123,7 +123,7 @@ export const publishEvents = async (
     sdkKey: string | null,
     config: BucketedUserConfig | null,
     user: DVCPopulatedUser,
-    events: DevCycleClientEvent[],
+    events: DevCycleEvent[],
     logger: DVCLogger,
     options?: DevCycleOptions,
 ): Promise<AxiosResponse> => {

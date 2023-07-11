@@ -160,7 +160,7 @@ export interface DVCVariable<T extends DVCVariableValue> {
     onUpdate(callback: (value: DVCVariableValue) => void): DVCVariable<T>
 }
 
-export interface DevCycleClientEvent {
+export interface DevCycleEvent {
     /**
      * type of the event
      */

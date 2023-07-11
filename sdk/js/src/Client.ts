@@ -3,7 +3,7 @@ import {
     DevCycleOptions,
     DVCVariableSet,
     DVCVariableValue,
-    DevCycleClientEvent,
+    DevCycleEvent,
     DevCycleUser,
     ErrorCallback,
     DVCFeature,
@@ -521,7 +521,7 @@ export class DevCycleClient<
      *
      * @param event
      */
-    track(event: DevCycleClientEvent): void {
+    track(event: DevCycleEvent): void {
         if (this._closing) {
             this.logger.error('Client is closing, cannot track new events.')
             return

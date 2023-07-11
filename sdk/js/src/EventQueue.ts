@@ -1,5 +1,5 @@
 import { DevCycleClient } from './Client'
-import { DevCycleClientEvent } from './types'
+import { DevCycleEvent } from './types'
 import { publishEvents } from './Request'
 import { checkParamDefined } from './utils'
 
@@ -8,14 +8,14 @@ export const EventTypes = {
     variableDefaulted: 'variableDefaulted',
 }
 
-type AggregateEvent = DevCycleClientEvent & {
+type AggregateEvent = DevCycleEvent & {
     target: string
 }
 
 export class EventQueue {
     private readonly sdkKey: string
     client: DevCycleClient
-    eventQueue: DevCycleClientEvent[]
+    eventQueue: DevCycleEvent[]
     aggregateEventMap: Record<string, Record<string, AggregateEvent>>
     eventFlushIntervalMS: number
     flushInterval: ReturnType<typeof setInterval>
@@ -84,7 +84,7 @@ export class EventQueue {
     /**
      * Queue DVCAPIEvent for producing
      */
-    queueEvent(event: DevCycleClientEvent): void {
+    queueEvent(event: DevCycleEvent): void {
         this.eventQueue.push(event)
     }
 
@@ -111,7 +111,7 @@ export class EventQueue {
     /**
      * Turn the Aggregate Event Map into an Array of DVCAPIEvent objects for publishing.
      */
-    private eventsFromAggregateEventMap(): DevCycleClientEvent[] {
+    private eventsFromAggregateEventMap(): DevCycleEvent[] {
         return Object.values(this.aggregateEventMap)
             .map((typeMap) => Object.values(typeMap))
             .flat()

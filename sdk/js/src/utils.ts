@@ -1,4 +1,4 @@
-import { DevCycleClientEvent } from './types'
+import { DevCycleEvent } from './types'
 import { DVCRequestEvent } from './RequestEvent'
 import { DVCPopulatedUser } from './User'
 import {
@@ -60,7 +60,7 @@ export const checkParamType = (
 export function generateEventPayload(
     config: BucketedUserConfig | null,
     user: DVCPopulatedUser,
-    events: DevCycleClientEvent[],
+    events: DevCycleEvent[],
 ): SDKEventRequestBody {
     return {
         events: events.map((event) => {
