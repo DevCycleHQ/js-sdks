@@ -41,5 +41,6 @@ jobs:
         run: aws s3 sync dist/sdk/js s3://js.devcycle.com/ --include "devcycle.min.js*" --acl public-read
       - uses: DevCycleHQ/release-action@main
         with:
-          create-tag: false
+          draft: true
+          prerelease: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
