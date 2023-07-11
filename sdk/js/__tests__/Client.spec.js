@@ -791,6 +791,20 @@ describe('DevCycleClient tests', () => {
             })
         })
 
+        it('should not queue event if disableCustomEventLogging is enabled', async () => {
+            client = new DevCycleClient(
+                'test_sdk_key',
+                { user_id: 'user1' },
+                { disableCustomEventLogging: true },
+            )
+            await client.onClientInitialized()
+            jest.spyOn(client.eventQueue, 'queueEvent')
+
+            client.track({ type: 'test' })
+            await new Promise((resolve) => setTimeout(resolve, 0))
+            expect(client.eventQueue.queueEvent).not.toHaveBeenCalled()
+        })
+
         it('should prevent tracking if close has been called', async () => {
             client.close()
             client.track({ type: 'test' })

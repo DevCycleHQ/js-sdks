@@ -110,11 +110,7 @@ export class DevCycleClient<
 
         this.sdkKey = sdkKey
         this.variableDefaultMap = {}
-        this.eventQueue = new EventQueue(
-            sdkKey,
-            this,
-            options?.eventFlushIntervalMS,
-        )
+        this.eventQueue = new EventQueue(sdkKey, this, options)
 
         this.eventEmitter = new EventEmitter()
         this.registerVisibilityChangeHandler()
@@ -526,6 +522,8 @@ export class DevCycleClient<
             this.logger.error('Client is closing, cannot track new events.')
             return
         }
+        if (this.options.disableCustomEventLogging) return
+
         checkParamDefined('type', event.type)
         this.onInitialized.then(() => {
             this.eventQueue.queueEvent(event)
