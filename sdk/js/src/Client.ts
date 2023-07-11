@@ -1,5 +1,4 @@
 import {
-    DVCClient as Client,
     DVCFeatureSet,
     DVCOptions,
     DVCVariableSet,
@@ -54,23 +53,25 @@ export const isDeferredOptions = (
 
 export class DVCClient<
     Variables extends VariableDefinitions = VariableDefinitions,
-> implements Client<Variables>
-{
+> {
+    logger: DVCLogger
+    config?: BucketedUserConfig
+    user?: DVCPopulatedUser
+
+    private sdkKey: string
     private readonly options: DVCOptions
+
     private onInitialized: Promise<DVCClient<Variables>>
     private resolveOnInitialized: (client: DVCClient<Variables>) => void
-    private variableDefaultMap: {
-        [key: string]: { [key: string]: DVCVariable<any> }
-    }
-    private sdkKey: string
+
     private userSaved = false
     private _closing = false
     private isConfigCached = false
     private initializeTriggered = false
 
-    logger: DVCLogger
-    config?: BucketedUserConfig
-    user?: DVCPopulatedUser
+    private variableDefaultMap: {
+        [key: string]: { [key: string]: DVCVariable<any> }
+    }
     private store: CacheStore
     private eventQueue: EventQueue
     private requestConsolidator: ConfigRequestConsolidator
@@ -211,6 +212,11 @@ export class DVCClient<
         return this
     }
 
+    /**
+     * Notify the user when configuration data has been loaded from the server.
+     * An optional callback can be passed in, and will return
+     * a promise if no callback has been passed in.
+     */
     onClientInitialized(): Promise<DVCClient<Variables>>
     onClientInitialized(
         onInitialized: ErrorCallback<DVCClient<Variables>>,
@@ -227,6 +233,15 @@ export class DVCClient<
         return this.onInitialized
     }
 
+    /**
+     * Get variable object associated with Features. Use the variable's key to fetch the DVCVariable object.
+     * If the user does not receive the feature, the default value is used in the returned DVCVariable object.
+     * DVCVariable is returned, which has a `value` property that is used to grab the variable value,
+     * and a convenience method to pass in a callback to notify the user when the value has changed from the server.
+     *
+     * @param key
+     * @param defaultValue
+     */
     variable<
         K extends string & keyof Variables,
         T extends DVCVariableValue & Variables[K],
@@ -309,6 +324,13 @@ export class DVCClient<
         return variable
     }
 
+    /**
+     * Get a variable's value associated with a Feature. Use the variable's key to fetch the variable's value.
+     * If the user is not segmented into the feature, the default value is returned.
+     *
+     * @param key
+     * @param defaultValue
+     */
     variableValue<
         K extends string & keyof Variables,
         T extends DVCVariableValue & Variables[K],
@@ -316,6 +338,14 @@ export class DVCClient<
         return this.variable(key, defaultValue).value
     }
 
+    /**
+     * Update user data after SDK initialization, this will trigger updates to variable values.
+     * The `callback` parameter or returned `promise` can be used to return the set of variables
+     * for the new user.
+     *
+     * @param user
+     * @param callback
+     */
     identifyUser(user: DVCUser): Promise<DVCVariableSet>
     identifyUser(user: DVCUser, callback?: ErrorCallback<DVCVariableSet>): void
     identifyUser(
@@ -368,6 +398,12 @@ export class DVCClient<
         }
     }
 
+    /**
+     * Resets the user to an Anonymous user. `callback` or `Promise` can be used to return
+     * the set of variables for the new user.
+     *
+     * @param callback
+     */
     resetUser(): Promise<DVCVariableSet>
     resetUser(callback: ErrorCallback<DVCVariableSet>): void
     resetUser(
@@ -411,14 +447,39 @@ export class DVCClient<
         return promise
     }
 
+    /**
+     * Retrieve data on all Features, Object mapped by feature `key`.
+     * Use the `DVCFeature.segmented` value to determine if the user was segmented into a
+     * feature's audience.
+     */
     allFeatures(): DVCFeatureSet {
         return this.config?.features || {}
     }
 
+    /**
+     * Retrieve data on all Variables, Object mapped by variable `key`.
+     */
     allVariables(): DVCVariableSet {
         return this.config?.variables || {}
     }
 
+    /**
+     * Subscribe to events emitted by the SDK, `onUpdate` will be called everytime an
+     * event is emitted by the SDK.
+     *
+     * Events:
+     *  - `initialized` -> (initialized: boolean)
+     *  - `error` -> (error: Error)
+     *  - `variableUpdated:*` -> (key: string, variable: DVCVariable)
+     *  - `variableUpdated:<variable.key>` -> (key: string, variable: DVCVariable)
+     *  - `featureUpdated:*` -> (key: string, feature: DVCFeature)
+     *  - `featureUpdated:<feature.key>` -> (key: string, feature: DVCFeature)
+     *  - `variableEvaluated:*` -> (key: string, variable: DVCVariable)
+     *  - `variableEvaluated:<variable.key>` -> (key: string, variable: DVCVariable)
+     *
+     * @param key
+     * @param handler
+     */
     subscribe(
         key: `variableUpdated:${string}`,
         handler: variableUpdatedHandler,
@@ -439,10 +500,21 @@ export class DVCClient<
         this.eventEmitter.subscribe(key, handler)
     }
 
+    /**
+     * Unsubscribe to remove existing event emitter subscription.
+     *
+     * @param key
+     * @param handler
+     */
     unsubscribe(key: string, handler?: (...args: any[]) => void): void {
         this.eventEmitter.unsubscribe(key, handler)
     }
 
+    /**
+     * Track Event to DevCycle
+     *
+     * @param event
+     */
     track(event: ClientEvent): void {
         if (this._closing) {
             this.logger.error('Client is closing, cannot track new events.')
@@ -454,10 +526,20 @@ export class DVCClient<
         })
     }
 
+    /**
+     * Flush all queued events to DevCycle
+     *
+     * @param callback
+     */
     flushEvents(callback?: () => void): Promise<void> {
         return this.eventQueue.flushEvents().then(() => callback?.())
     }
 
+    /**
+     * Close all open connections to DevCycle, flush any pending events and
+     * stop any running timers and event handlers. Use to clean up a client instance
+     * that is no longer needed.
+     */
     async close(): Promise<void> {
         this.logger.debug('Closing client')
 
@@ -479,6 +561,9 @@ export class DVCClient<
         await this.eventQueue.close()
     }
 
+    /**
+     * Reflects whether `close()` has been called on the client instance.
+     */
     get closing(): boolean {
         return this._closing
     }
