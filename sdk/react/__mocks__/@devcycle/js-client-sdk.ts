@@ -11,9 +11,28 @@ const mockVariableFunction = jest
 
         return variable
     })
+
+const mockSubscribeFunction = jest.
+    fn()
+    .mockImplementation((key: string, handler: () => void) => {
+       return
+    })
+
+const mockUnsubscribeFunction = jest
+    .fn()
+    .mockImplementation((key: string, handler: () => void) => {
+        return
+    })
+
 class Client {
     variable(key: string, defaultValue: unknown) {
         return mockVariableFunction(key, defaultValue)
+    }
+    subscribe(key: string, handler: () => void) {
+        return mockSubscribeFunction(key, handler)
+    }
+    unsubscribe(key: string, handler: () => void) {
+        return mockUnsubscribeFunction(key, handler)
     }
     close() {
         // no-op
@@ -23,6 +42,7 @@ class Client {
 module.exports = {
     ...jsSDK,
     mockVariableFunction,
+    mockSubscribeFunction,
     initializeDevCycle: () => new Client(),
     initialize: () => new Client(),
 }

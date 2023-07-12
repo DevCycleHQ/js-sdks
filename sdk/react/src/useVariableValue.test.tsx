@@ -1,13 +1,12 @@
 import { useVariableValue } from './useVariableValue'
 import { renderHook } from '@testing-library/react'
 import { DevCycleProvider } from './DevCycleProvider'
+import '@testing-library/jest-dom'
 import type { DVCJSON } from '@devcycle/js-client-sdk'
 import { ReactElement } from 'react'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { mockVariableFunction } from '@devcycle/js-client-sdk' // defined in the mock
-
-jest.mock('@devcycle/js-client-sdk')
+import { mockSubscribeFunction } from '@devcycle/js-client-sdk' // defined in the mock
 
 const ProviderWrapper = ({ children }: { children: ReactElement }) => {
     return (
@@ -26,6 +25,7 @@ describe('useVariableValue', () => {
     beforeEach(() => {
         jest.clearAllMocks()
     })
+
     it('uses the correct type for string', () => {
         const { result } = renderHook(
             () => useVariableValue('test', 'default'),
@@ -78,14 +78,16 @@ describe('useVariableValue', () => {
         const _testJSON: DVCJSON = result.current
     })
 
-    it('calls the variable method on the SDK once per hook instance, not per invocation', () => {
-        const { result, rerender } = renderHook(
-            () => useVariableValue('test', 'default'),
+    it("Should register a handler for each useVariableValue call with same variable key", () => {
+        renderHook(
+            () => useVariableValue('test', true),
             { wrapper: ProviderWrapper },
         )
-        expect(result.current).toEqual('default')
-        rerender()
-        expect(result.current).toEqual('default')
-        expect(mockVariableFunction).toHaveBeenCalledTimes(1)
+        renderHook(
+            () => useVariableValue('test', true),
+            { wrapper: ProviderWrapper },
+        )
+
+        expect(mockSubscribeFunction).toHaveBeenCalledTimes(2)
     })
 })

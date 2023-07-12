@@ -17,5 +17,8 @@
     },
     "dependencies": {
         "hoist-non-react-statics": "^3.3.2"
+    },
+    "devDependencies": {
+        "nock": "^13.3.1"
     }
 }
