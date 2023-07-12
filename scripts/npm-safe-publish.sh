@@ -12,13 +12,13 @@ if [[ $# -eq 0 ]]; then
 fi
 
 PACKAGE=$1
-DEP_PACKAGE=""
+DEPRECATED_PACKAGE=""
 JQ_PATH=".version"
 NPM_REGISTRY="$(yarn config get npmRegistryServer)"
 SHA="$(git rev-parse HEAD)"
 
 # Use bash function to parse arguments more efficiently
-parse_arguments() {
+function parse_arguments() {
   while (( "$#" )); do
     case "$1" in
       --otp=*)
@@ -26,7 +26,7 @@ parse_arguments() {
         shift
         ;;
       --deprecated-package=*)
-        DEP_PACKAGE="${1#*=}"
+        DEPRECATED_PACKAGE="${1#*=}"
         shift
         ;;
       *)
@@ -100,20 +100,20 @@ else
   echo "Versions are the same ($NPM_SHOW = $NPM_LS). Not pushing"
 fi
 
-# If DEP_PACKAGE is set, run the deploy logic for it
-if [[ "$DEP_PACKAGE" != "" ]]; then
-  echo "Deploy to Deprecated Package: $DEP_PACKAGE"
+# If DEPRECATED_PACKAGE is set, run the deploy logic for it
+if [[ "$DEPRECATED_PACKAGE" != "" ]]; then
+  echo "Deploy to Deprecated Package: $DEPRECATED_PACKAGE"
 
   # Backup the original package.json
   cp package.json package.json.bak
 
-  # Update the name field to DEP_PACKAGE
-  jq --arg DEP_PACKAGE "$DEP_PACKAGE" ".name = $DEP_PACKAGE" package.json > package.json.temp
+  # Update the name field to DEPRECATED_PACKAGE
+  jq --arg DEPRECATED_PACKAGE "$DEPRECATED_PACKAGE" ".name = $DEPRECATED_PACKAGE" package.json > package.json.temp
   mv package.json.temp package.json
 
   # Deploy logic
-  # Replace this with your actual npm publish command for DEP_PACKAGE
-  echo "Publishing $DEP_PACKAGE@$NPM_LS to NPM."
+  # Replace this with your actual npm publish command for DEPRECATED_PACKAGE
+  echo "Publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
   npm publish --otp=$OTP
 
   # Restore the original package.json
