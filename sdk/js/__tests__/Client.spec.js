@@ -16,7 +16,7 @@ const createClientWithConfigImplementation = (implementation) => {
     return new DevCycleClient('test_sdk_key', { user_id: 'user1' })
 }
 
-describe('DVCClient tests', () => {
+describe('DevCycleClient tests', () => {
     const testConfig = {
         project: {
             settings: {

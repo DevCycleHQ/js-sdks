@@ -13,7 +13,7 @@ const invalidUserError =
 const invalidOptionsError =
     'Invalid options! Call initialize with valid options'
 
-describe('initialize tests', () => {
+describe('initializeDevCycle tests', () => {
     it('should return client for initialize and initializeDevCycle', () => {
         const user = { user_id: 'user1' }
         let client = DVC.initializeDevCycle('YOUR_CLIENT_SIDE_ID', user)

@@ -9,7 +9,7 @@ type Variables = {
     number: number
 }
 
-describe('Client', () => {
+describe('DevCycleClient', () => {
     it('should prevent invalid variables', () => {
         const client = new DevCycleClient<Variables>('test', {
             user_id: 'test',
