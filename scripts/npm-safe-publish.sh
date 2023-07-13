@@ -107,15 +107,20 @@ if [[ "$DEPRECATED_PACKAGE" != "" ]]; then
   # Backup the original package.json
   cp package.json package.json.bak
 
+  # Ensure the original package.json is restored even if the script exits prematurely
+  trap 'mv package.json.bak package.json' EXIT
+
   # Update the name field to DEPRECATED_PACKAGE
   jq --arg DEPRECATED_PACKAGE "$DEPRECATED_PACKAGE" ".name = $DEPRECATED_PACKAGE" package.json > package.json.temp
   mv package.json.temp package.json
 
   # Deploy logic
-  # Replace this with your actual npm publish command for DEPRECATED_PACKAGE
   echo "Publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
   npm publish --otp=$OTP
 
-  # Restore the original package.json
+  # Restore the original package.json (trap will take care of this if the script exits prematurely)
   mv package.json.bak package.json
+
+  # Remove trap once the job is done
+  trap - EXIT
 fi
