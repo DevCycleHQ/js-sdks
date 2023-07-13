@@ -7,7 +7,7 @@ import {
 } from '@devcycle/devcycle-react-sdk'
 import DevCycleExample from './DevCycleExample'
 
-const SDK_KEY = process.env.NX_CLIENT_KEY || '<YOUR_DEVCYCLE_CLIENT_SDK_KEY>'
+const SDK_KEY = process.env.NX_CLIENT_KEY || '<DEVCYCLE_CLIENT_SDK_KEY>'
 const user = {
     user_id: 'userId1',
     email: 'auto@taplytics.com',
