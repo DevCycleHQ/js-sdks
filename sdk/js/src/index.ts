@@ -1,4 +1,9 @@
-import { DevCycleOptions, DevCycleUser, VariableDefinitions } from './types'
+import {
+    DevCycleEvent,
+    DevCycleOptions,
+    DevCycleUser,
+    VariableDefinitions,
+} from './types'
 import {
     DevCycleClient,
     DevCycleOptionsWithDeferredInitialization,
@@ -6,6 +11,24 @@ import {
 } from './Client'
 
 export * from './types'
+
+/**
+ * @deprecated Use DevCycleUser instead
+ */
+export type DVCUser = DevCycleUser
+/**
+ * @deprecated Use DevCycleEvent instead
+ */
+export type DVCEvent = DevCycleEvent
+/**
+ * @deprecated Use DevCycleOptions instead
+ */
+export type DVCOptions = DevCycleOptions
+/**
+ * @deprecated Use DevCycleOptionsWithDeferredInitialization instead
+ */
+export type DVCOptionsWithDeferredInitialization =
+    DevCycleOptionsWithDeferredInitialization
 
 export type { DevCycleClient, DevCycleOptionsWithDeferredInitialization }
 
