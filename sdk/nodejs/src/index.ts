@@ -1,24 +1,44 @@
-import { DevCycleOptions } from './types'
+import { DevCycleOptions, DevCycleEvent } from './types'
 import { DevCycleClient } from './client'
 import { DevCycleCloudClient } from './cloudClient'
 import { isValidServerSDKKey } from './utils/paramUtils'
+import { DevCycleUser } from './models/user'
 
-export { DevCycleClient, DevCycleCloudClient }
+export { DevCycleClient, DevCycleCloudClient, DevCycleUser }
 export * from './types'
 export { dvcDefaultLogger } from './utils/logger'
 
-export { DevCycleUser } from './models/user'
+/**
+ * @deprecated Use DevCycleClient instead
+ */
+export type DVCClient = DevCycleClient
+/**
+ * @deprecated Use DevCycleUser instead
+ */
+export type DVCUser = DevCycleUser
+/**
+ * @deprecated Use DevCycleEvent instead
+ */
+export type DVCEvent = DevCycleEvent
+/**
+ * @deprecated Use DevCycleOptions instead
+ */
+export type DVCOptions = DevCycleOptions
 
-type DVCOptionsCloudEnabled = DevCycleOptions & { enableCloudBucketing: true }
-type DVCOptionsLocalEnabled = DevCycleOptions & { enableCloudBucketing?: false }
+type DevCycleOptionsCloudEnabled = DevCycleOptions & {
+    enableCloudBucketing: true
+}
+type DevCycleOptionsLocalEnabled = DevCycleOptions & {
+    enableCloudBucketing?: false
+}
 
 export function initializeDevCycle(
     sdkKey: string,
-    options?: DVCOptionsLocalEnabled,
+    options?: DevCycleOptionsLocalEnabled,
 ): DevCycleClient
 export function initializeDevCycle(
     sdkKey: string,
-    options: DVCOptionsCloudEnabled,
+    options: DevCycleOptionsCloudEnabled,
 ): DevCycleCloudClient
 export function initializeDevCycle(
     sdkKey: string,
