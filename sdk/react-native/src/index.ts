@@ -10,8 +10,13 @@ import { withDevCycleProvider, withDVCProvider } from './withDevCycleProvider'
 import { DevCycleProvider, DVCProvider } from './DevCycleProvider'
 export type {
     DevCycleClient,
+    DVCClient,
     DevCycleUser,
+    DVCUser,
     DVCVariableValue,
+    DVCVariable,
+    DevCycleEvent,
+    DVCEvent,
 } from '@devcycle/devcycle-react-sdk'
 
 export {

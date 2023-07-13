@@ -13,6 +13,10 @@ import {
 export * from './types'
 
 /**
+ * @deprecated Use DevCycleClient instead
+ */
+export type DVCClient = DevCycleClient
+/**
  * @deprecated Use DevCycleUser instead
  */
 export type DVCUser = DevCycleUser

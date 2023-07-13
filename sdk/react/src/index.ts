@@ -11,9 +11,13 @@ import {
 } from './useIsDevCycleInitialized'
 export type {
     DevCycleClient,
+    DVCClient,
     DevCycleUser,
+    DVCUser,
     DVCVariableValue,
     DVCVariable,
+    DevCycleEvent,
+    DVCEvent,
 } from '@devcycle/devcycle-js-sdk'
 
 export {
