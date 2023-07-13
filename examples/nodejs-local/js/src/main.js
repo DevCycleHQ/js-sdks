@@ -3,7 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 
 const DEVCYCLE_SERVER_SDK_KEY =
-    process.env['DEVCYCLE_SERVER_SDK_KEY'] || '<YOUR_DEVCYCLE_SERVER_SDK_KEY>'
+    process.env['DEVCYCLE_SERVER_SDK_KEY'] || '<DEVCYCLE_SERVER_SDK_KEY>'
 let devcycleClient
 
 async function startDevCycle() {

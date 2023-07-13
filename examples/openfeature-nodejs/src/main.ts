@@ -3,7 +3,7 @@ import DevCycleProvider from '@devcycle/openfeature-nodejs-provider'
 import { initializeDevCycle } from '@devcycle/nodejs-server-sdk'
 
 const DEVCYCLE_SERVER_SDK_KEY =
-    process.env['DEVCYCLE_SERVER_SDK_KEY'] || '<YOUR_DEVCYCLE_SERVER_SDK_KEY>'
+    process.env['DEVCYCLE_SERVER_SDK_KEY'] || '<DEVCYCLE_SERVER_SDK_KEY>'
 
 let openFeatureClient: Client
 

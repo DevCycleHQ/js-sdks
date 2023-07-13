@@ -17,7 +17,7 @@ const respond500User = { user_id: '500' }
 
 jest.mock('fetch-retry')
 
-describe('DVCCloudClient without EdgeDB', () => {
+describe('DevCycleCloudClient without EdgeDB', () => {
     beforeAll(async () => {
         client = DVC.initializeDevCycle('dvc_server_token', {
             logLevel: 'error',
@@ -242,7 +242,7 @@ describe('DVCCloudClient without EdgeDB', () => {
     })
 })
 
-describe('DVCCloudClient with EdgeDB Enabled', () => {
+describe('DevCycleCloudClient with EdgeDB Enabled', () => {
     beforeAll(async () => {
         client = DVC.initializeDevCycle('dvc_server_token', {
             logLevel: 'error',

@@ -10,7 +10,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 
 const DEVCYCLE_SERVER_SDK_KEY =
-    process.env['DEVCYCLE_SERVER_SDK_KEY'] || '<YOUR_DEVCYCLE_SERVER_SDK_KEY>'
+    process.env['DEVCYCLE_SERVER_SDK_KEY'] || '<DEVCYCLE_SERVER_SDK_KEY>'
 let devcycleClient: DevCycleCloudClient
 
 async function startDevCycle() {
