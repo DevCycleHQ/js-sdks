@@ -38,50 +38,54 @@ describe('useVariableValue', () => {
         )
     }
 
-    it('should re-render all components that call useVariableValue with the same variable key when an update occurs', async () => {
-        const scope = nock('https://sdk-api.devcycle.com/v1')
-        scope
-            .defaultReplyHeaders({
-                'access-control-allow-origin': '*',
-            })
-            .get('/sdkConfig')
-            .query((query) => query.user_id === 'test_user')
-            .reply(200, mockConfig)
-            .persist()
+    it(
+        'should re-render all components that call useVariableValue with ' +
+            'the same variable key when an update occurs',
+        async () => {
+            const scope = nock('https://sdk-api.devcycle.com/v1')
+            scope
+                .defaultReplyHeaders({
+                    'access-control-allow-origin': '*',
+                })
+                .get('/sdkConfig')
+                .query((query) => query.user_id === 'test_user')
+                .reply(200, mockConfig)
+                .persist()
 
-        const updatedConfig = {
-            ...mockConfig,
-            variables: {
-                'string-var': {
-                    _id: '63633c566cf0fcb7e2123456',
-                    key: 'string-var',
-                    type: 'String',
-                    value: 'Hola',
+            const updatedConfig = {
+                ...mockConfig,
+                variables: {
+                    'string-var': {
+                        _id: '63633c566cf0fcb7e2123456',
+                        key: 'string-var',
+                        type: 'String',
+                        value: 'Hola',
+                    },
                 },
-            },
-        }
-        scope
-            .defaultReplyHeaders({
-                'access-control-allow-origin': '*',
-            })
-            .get('/sdkConfig')
-            .query((query) => query.user_id === 'identified_user')
-            .reply(200, updatedConfig)
-            .persist()
+            }
+            scope
+                .defaultReplyHeaders({
+                    'access-control-allow-origin': '*',
+                })
+                .get('/sdkConfig')
+                .query((query) => query.user_id === 'identified_user')
+                .reply(200, updatedConfig)
+                .persist()
 
-        const App = withDevCycleProvider({
-            user: { user_id: 'test_user' },
-            sdkKey: 'dvc_test_key',
-        })(TestApp)
+            const App = withDevCycleProvider({
+                user: { user_id: 'test_user' },
+                sdkKey: 'dvc_test_key',
+            })(TestApp)
 
-        render(<App />)
+            render(<App />)
 
-        expect(
-            await screen.findAllByText('Variable Value: Bonjour'),
-        ).toHaveLength(3)
-        screen.getByText('Identify User').click()
-        expect(await screen.findAllByText('Variable Value: Hola')).toHaveLength(
-            3,
-        )
-    })
+            expect(
+                await screen.findAllByText('Variable Value: Bonjour'),
+            ).toHaveLength(3)
+            screen.getByText('Identify User').click()
+            expect(
+                await screen.findAllByText('Variable Value: Hola'),
+            ).toHaveLength(3)
+        },
+    )
 })
