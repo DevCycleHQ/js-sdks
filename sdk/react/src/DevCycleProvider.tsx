@@ -1,17 +1,17 @@
 import { ProviderConfig } from './types'
 import React, { ReactNode, useEffect } from 'react'
-import initializeDVCClient from './initializeDVCClient'
+import initializeDevCycleClient from './initializeDevCycleClient'
 import { Provider } from './context'
-import { DVCClient } from '@devcycle/devcycle-js-sdk'
+import { DevCycleClient } from '@devcycle/devcycle-js-sdk'
 
 type Props = {
     config: ProviderConfig
     children: ReactNode
 }
 
-let client: DVCClient | undefined
+let client: DevCycleClient | undefined
 
-export default function DVCProvider(props: Props): React.ReactElement {
+export function DevCycleProvider(props: Props): React.ReactElement {
     const { config } = props
     const { user, options } = config
     let sdkKey: string
@@ -21,11 +21,11 @@ export default function DVCProvider(props: Props): React.ReactElement {
         sdkKey = config.envKey
     }
     if (!sdkKey) {
-        throw new Error('You must provide a sdkKey to DVCProvider')
+        throw new Error('You must provide a sdkKey to DevCycleProvider')
     }
 
     if (!client) {
-        client = initializeDVCClient(sdkKey, user, options)
+        client = initializeDevCycleClient(sdkKey, user, options)
     }
 
     useEffect(() => {
@@ -37,3 +37,8 @@ export default function DVCProvider(props: Props): React.ReactElement {
 
     return <Provider value={{ client }}>{props.children}</Provider>
 }
+
+/**
+ * @deprecated Use DevCycleProvider instead
+ */
+export const DVCProvider = DevCycleProvider

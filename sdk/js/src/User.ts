@@ -1,4 +1,4 @@
-import { DVCOptions, DVCUser, DVCCustomDataJSON } from './types'
+import { DevCycleOptions, DevCycleUser, DVCCustomDataJSON } from './types'
 import { v4 as uuidv4 } from 'uuid'
 import packageJson from '../package.json'
 import UAParser from 'ua-parser-js'
@@ -13,7 +13,7 @@ type StaticData = Pick<
     | 'sdkVersion'
 >
 
-export class DVCPopulatedUser implements DVCUser {
+export class DVCPopulatedUser implements DevCycleUser {
     readonly isAnonymous: boolean
     readonly user_id: string
     readonly email?: string
@@ -34,8 +34,8 @@ export class DVCPopulatedUser implements DVCUser {
     readonly sdkVersion: string
 
     constructor(
-        user: DVCUser,
-        options: DVCOptions,
+        user: DevCycleUser,
+        options: DevCycleOptions,
         staticData?: StaticData,
         anonymousUserId?: string,
     ) {
@@ -103,7 +103,7 @@ export class DVCPopulatedUser implements DVCUser {
         }
     }
 
-    updateUser(user: DVCUser, options: DVCOptions): DVCPopulatedUser {
+    updateUser(user: DevCycleUser, options: DevCycleOptions): DVCPopulatedUser {
         if (this.user_id !== user.user_id) {
             throw new Error('Cannot update a user with a different user_id')
         }

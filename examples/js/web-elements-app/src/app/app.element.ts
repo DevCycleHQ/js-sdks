@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
 
 import './app.element.css'
-import { initialize } from '@devcycle/devcycle-js-sdk'
+import { initializeDevCycle } from '@devcycle/devcycle-js-sdk'
 
-const SDK_KEY = process.env.NX_CLIENT_KEY || '<YOUR_DVC_CLIENT_SDK_KEY>'
+const SDK_KEY = process.env.NX_CLIENT_KEY || '<DEVCYCLE_CLIENT_SDK_KEY>'
 
 export class AppElement extends HTMLElement {
     constructor() {
@@ -13,24 +13,27 @@ export class AppElement extends HTMLElement {
     public static observedAttributes = []
 
     updateInnerHTML(): void {
-        const titleVariable = client.variableValue(
+        const titleVariable = devcycleClient.variableValue(
             'titlevariable',
             'Welcome 👋',
         )
-        const variableKey = client.variableValue('feature-release', true)
-        const variableKeyString = client.variableValue(
+        const variableKey = devcycleClient.variableValue(
+            'feature-release',
+            true,
+        )
+        const variableKeyString = devcycleClient.variableValue(
             'variable-key-string',
             'default',
         )
-        const variableKeyNumber = client.variableValue(
+        const variableKeyNumber = devcycleClient.variableValue(
             'variable-key-number',
             100,
         )
-        const variableKeyBoolean = client.variableValue(
+        const variableKeyBoolean = devcycleClient.variableValue(
             'variable-key-boolean',
             true,
         )
-        const variableKeyJsonString = client.variableValue(
+        const variableKeyJsonString = devcycleClient.variableValue(
             'variable-json-key-string',
             {
                 jsonStringKeyDefault: 'json default',
@@ -450,7 +453,7 @@ export class AppElement extends HTMLElement {
 
     connectedCallback(): void {
         this.updateInnerHTML()
-        client.subscribe('configUpdated', () => {
+        devcycleClient.subscribe('configUpdated', () => {
             this.updateInnerHTML()
         })
     }
@@ -467,10 +470,10 @@ const user = {
     isAnonymous: false,
 }
 
-const client = initialize(SDK_KEY, user, {
+const devcycleClient = initializeDevCycle(SDK_KEY, user, {
     enableEdgeDB: false,
     logLevel: 'error',
 })
-client.onClientInitialized(() =>
+devcycleClient.onClientInitialized(() =>
     customElements.define('devcycle-root', AppElement),
 )

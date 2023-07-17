@@ -1,18 +1,18 @@
 import { ProviderConfig } from './types'
 import React from 'react'
 import hoistNonReactStatics from 'hoist-non-react-statics'
-import DVCProvider from './DVCProvider'
+import { DevCycleProvider } from './DevCycleProvider'
 
-export default function withDVCProvider(
+export function withDevCycleProvider(
     config: ProviderConfig,
 ): (WrappedComponent: React.ComponentType) => React.ComponentType {
     return function withDVCProviderHOC(WrappedComponent) {
         class HoistedComponent extends React.Component {
             override render() {
                 return (
-                    <DVCProvider config={config}>
+                    <DevCycleProvider config={config}>
                         <WrappedComponent {...this.props} />
-                    </DVCProvider>
+                    </DevCycleProvider>
                 )
             }
         }
@@ -22,3 +22,8 @@ export default function withDVCProvider(
         return HoistedComponent
     }
 }
+
+/**
+ * @deprecated Use withDevCycleProvider instead
+ */
+export const withDVCProvider = withDevCycleProvider

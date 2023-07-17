@@ -2,12 +2,12 @@ import React from 'react'
 import logo from './logo.svg'
 import './App.css'
 import {
-    useIsDVCInitialized,
-    withDVCProvider,
+    useIsDevCycleInitialized,
+    withDevCycleProvider,
 } from '@devcycle/devcycle-react-sdk'
 import DevCycleExample from './DevCycleExample'
 
-const SDK_KEY = process.env.NX_CLIENT_KEY || '<YOUR_DVC_CLIENT_SDK_KEY>'
+const SDK_KEY = process.env.NX_CLIENT_KEY || '<DEVCYCLE_CLIENT_SDK_KEY>'
 const user = {
     user_id: 'userId1',
     email: 'auto@taplytics.com',
@@ -20,14 +20,15 @@ const user = {
 }
 
 function App() {
-    const dvcReady = useIsDVCInitialized()
+    const devcycleReady = useIsDevCycleInitialized()
 
-    if (!dvcReady)
+    if (!devcycleReady) {
         return (
             <div>
-                <h1>DVC is not ready!</h1>
+                <h1>DevCycle is not ready!</h1>
             </div>
         )
+    }
 
     return (
         <div className="App">
@@ -51,7 +52,7 @@ function App() {
     )
 }
 
-export default withDVCProvider({
+export default withDevCycleProvider({
     sdkKey: SDK_KEY,
     user: user,
     options: { logLevel: 'debug' },

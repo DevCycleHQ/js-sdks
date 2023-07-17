@@ -11,7 +11,7 @@ export const useVariable = <T extends DVCVariableValue>(
     const ref = useRef<DVCVariable<T>>()
 
     if (dvcContext === undefined)
-        throw new Error('useVariable must be used within DVCProvider')
+        throw new Error('useVariable must be used within DevCycleProvider')
 
     if (!ref.current) {
         ref.current = dvcContext?.client.variable(key, defaultValue)

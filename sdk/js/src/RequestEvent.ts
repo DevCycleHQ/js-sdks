@@ -1,8 +1,8 @@
-import { DVCEvent } from './types'
+import { DevCycleEvent } from './types'
 import { checkParamDefined } from './utils'
 import { EventTypes } from './EventQueue'
 
-export class DVCRequestEvent implements DVCEvent {
+export class DVCRequestEvent implements DevCycleEvent {
     type: string
     target?: string
     customType?: string
@@ -13,7 +13,7 @@ export class DVCRequestEvent implements DVCEvent {
     metaData?: Record<string, unknown>
 
     constructor(
-        event: DVCEvent,
+        event: DevCycleEvent,
         user_id: string,
         featureVars?: Record<string, string>,
     ) {

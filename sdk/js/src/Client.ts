@@ -1,10 +1,10 @@
 import {
     DVCFeatureSet,
-    DVCOptions,
+    DevCycleOptions,
     DVCVariableSet,
     DVCVariableValue,
-    DVCEvent as ClientEvent,
-    DVCUser,
+    DevCycleEvent,
+    DevCycleUser,
     ErrorCallback,
     DVCFeature,
     VariableDefinitions,
@@ -41,17 +41,17 @@ type variableEvaluatedHandler = (
     variable: DVCVariable<DVCVariableValue>,
 ) => void
 
-export type DVCOptionsWithDeferredInitialization = DVCOptions & {
+export type DevCycleOptionsWithDeferredInitialization = DevCycleOptions & {
     deferInitialization: true
 }
 
 export const isDeferredOptions = (
-    arg: DVCUser | DVCOptionsWithDeferredInitialization,
-): arg is DVCOptionsWithDeferredInitialization => {
+    arg: DevCycleUser | DevCycleOptionsWithDeferredInitialization,
+): arg is DevCycleOptionsWithDeferredInitialization => {
     return !!arg && 'deferInitialization' in arg
 }
 
-export class DVCClient<
+export class DevCycleClient<
     Variables extends VariableDefinitions = VariableDefinitions,
 > {
     logger: DVCLogger
@@ -59,10 +59,10 @@ export class DVCClient<
     user?: DVCPopulatedUser
 
     private sdkKey: string
-    private readonly options: DVCOptions
+    private readonly options: DevCycleOptions
 
-    private onInitialized: Promise<DVCClient<Variables>>
-    private resolveOnInitialized: (client: DVCClient<Variables>) => void
+    private onInitialized: Promise<DevCycleClient<Variables>>
+    private resolveOnInitialized: (client: DevCycleClient<Variables>) => void
 
     private userSaved = false
     private _closing = false
@@ -81,14 +81,17 @@ export class DVCClient<
     private inactivityHandlerId?: number
     private windowMessageHandler?: (event: MessageEvent) => void
 
-    constructor(sdkKey: string, options: DVCOptionsWithDeferredInitialization)
-    constructor(sdkKey: string, user: DVCUser, options?: DVCOptions)
     constructor(
         sdkKey: string,
-        userOrOptions: DVCUser | DVCOptionsWithDeferredInitialization,
-        optionsArg: DVCOptions = {},
+        options: DevCycleOptionsWithDeferredInitialization,
+    )
+    constructor(sdkKey: string, user: DevCycleUser, options?: DevCycleOptions)
+    constructor(
+        sdkKey: string,
+        userOrOptions: DevCycleUser | DevCycleOptionsWithDeferredInitialization,
+        optionsArg: DevCycleOptions = {},
     ) {
-        let user: DVCUser | undefined
+        let user: DevCycleUser | undefined
         let options = optionsArg
         if (isDeferredOptions(userOrOptions)) {
             options = userOrOptions
@@ -144,7 +147,7 @@ export class DVCClient<
      * first identified (in deferred mode)
      * @param initialUser
      */
-    private clientInitialization = async (initialUser: DVCUser) => {
+    private clientInitialization = async (initialUser: DevCycleUser) => {
         if (this.initializeTriggered || this._closing) {
             return this
         }
@@ -217,13 +220,13 @@ export class DVCClient<
      * An optional callback can be passed in, and will return
      * a promise if no callback has been passed in.
      */
-    onClientInitialized(): Promise<DVCClient<Variables>>
+    onClientInitialized(): Promise<DevCycleClient<Variables>>
     onClientInitialized(
-        onInitialized: ErrorCallback<DVCClient<Variables>>,
+        onInitialized: ErrorCallback<DevCycleClient<Variables>>,
     ): void
     onClientInitialized(
-        onInitialized?: ErrorCallback<DVCClient<Variables>>,
-    ): Promise<DVCClient<Variables>> | void {
+        onInitialized?: ErrorCallback<DevCycleClient<Variables>>,
+    ): Promise<DevCycleClient<Variables>> | void {
         if (onInitialized && typeof onInitialized === 'function') {
             this.onInitialized
                 .then(() => onInitialized(null, this))
@@ -346,10 +349,13 @@ export class DVCClient<
      * @param user
      * @param callback
      */
-    identifyUser(user: DVCUser): Promise<DVCVariableSet>
-    identifyUser(user: DVCUser, callback?: ErrorCallback<DVCVariableSet>): void
+    identifyUser(user: DevCycleUser): Promise<DVCVariableSet>
     identifyUser(
-        user: DVCUser,
+        user: DevCycleUser,
+        callback?: ErrorCallback<DVCVariableSet>,
+    ): void
+    identifyUser(
+        user: DevCycleUser,
         callback?: ErrorCallback<DVCVariableSet>,
     ): Promise<DVCVariableSet> | void {
         const promise = this._identifyUser(user)
@@ -364,7 +370,7 @@ export class DVCClient<
         return promise
     }
 
-    private async _identifyUser(user: DVCUser): Promise<DVCVariableSet> {
+    private async _identifyUser(user: DevCycleUser): Promise<DVCVariableSet> {
         let updatedUser: DVCPopulatedUser
 
         if (this.options.deferInitialization && !this.initializeTriggered) {
@@ -515,7 +521,7 @@ export class DVCClient<
      *
      * @param event
      */
-    track(event: ClientEvent): void {
+    track(event: DevCycleEvent): void {
         if (this._closing) {
             this.logger.error('Client is closing, cannot track new events.')
             return

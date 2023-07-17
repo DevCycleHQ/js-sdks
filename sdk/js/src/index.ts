@@ -1,29 +1,61 @@
-import { DVCOptions, DVCUser, VariableDefinitions } from './types'
 import {
-    DVCClient,
-    DVCOptionsWithDeferredInitialization,
+    DevCycleEvent,
+    DevCycleOptions,
+    DevCycleUser,
+    VariableDefinitions,
+} from './types'
+import {
+    DevCycleClient,
+    DevCycleOptionsWithDeferredInitialization,
     isDeferredOptions,
 } from './Client'
 
-export { DVCClient }
 export * from './types'
 
-export function initialize<
+/**
+ * @deprecated Use DevCycleClient instead
+ */
+export type DVCClient = DevCycleClient
+/**
+ * @deprecated Use DevCycleUser instead
+ */
+export type DVCUser = DevCycleUser
+/**
+ * @deprecated Use DevCycleEvent instead
+ */
+export type DVCEvent = DevCycleEvent
+/**
+ * @deprecated Use DevCycleOptions instead
+ */
+export type DVCOptions = DevCycleOptions
+/**
+ * @deprecated Use DevCycleOptionsWithDeferredInitialization instead
+ */
+export type DVCOptionsWithDeferredInitialization =
+    DevCycleOptionsWithDeferredInitialization
+
+export type { DevCycleClient, DevCycleOptionsWithDeferredInitialization }
+
+export function initializeDevCycle<
     Variables extends VariableDefinitions = VariableDefinitions,
 >(
     sdkKey: string,
-    options: DVCOptionsWithDeferredInitialization,
-): DVCClient<Variables>
-export function initialize<
-    Variables extends VariableDefinitions = VariableDefinitions,
->(sdkKey: string, user: DVCUser, options?: DVCOptions): DVCClient<Variables>
-export function initialize<
+    options: DevCycleOptionsWithDeferredInitialization,
+): DevCycleClient<Variables>
+export function initializeDevCycle<
     Variables extends VariableDefinitions = VariableDefinitions,
 >(
     sdkKey: string,
-    userOrOptions: DVCUser | DVCOptionsWithDeferredInitialization,
-    optionsArg: DVCOptions = {},
-): DVCClient<Variables> {
+    user: DevCycleUser,
+    options?: DevCycleOptions,
+): DevCycleClient<Variables>
+export function initializeDevCycle<
+    Variables extends VariableDefinitions = VariableDefinitions,
+>(
+    sdkKey: string,
+    userOrOptions: DevCycleUser | DevCycleOptionsWithDeferredInitialization,
+    optionsArg: DevCycleOptions = {},
+): DevCycleClient<Variables> {
     // TODO: implement logger
     if (typeof window === 'undefined') {
         console.warn(
@@ -68,12 +100,12 @@ export function initialize<
         throw new Error('Invalid options! Call initialize with valid options')
     }
 
-    let client: DVCClient
+    let client: DevCycleClient
 
     if (isDeferredOptions(userOrOptions)) {
-        client = new DVCClient(sdkKey, userOrOptions)
+        client = new DevCycleClient(sdkKey, userOrOptions)
     } else {
-        client = new DVCClient(sdkKey, userOrOptions, options)
+        client = new DevCycleClient(sdkKey, userOrOptions, options)
     }
 
     client
@@ -92,4 +124,12 @@ export function initialize<
     return client
 }
 
-export default { initialize }
+/**
+ * @deprecated Use initializeDevCycle instead
+ */
+export const initialize = initializeDevCycle
+
+export default {
+    initialize,
+    initializeDevCycle,
+}

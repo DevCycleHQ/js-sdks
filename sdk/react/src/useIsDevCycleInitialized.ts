@@ -1,12 +1,14 @@
 import { useContext, useState } from 'react'
 import context from './context'
 
-export const useIsDVCInitialized = (): boolean => {
+export const useIsDevCycleInitialized = (): boolean => {
     const [isDVCReady, setIsDVCReady] = useState(false)
     const dvcContext = useContext(context)
 
     if (dvcContext === undefined)
-        throw new Error('useDVCInitialized must be used within DVCProvider')
+        throw new Error(
+            'useIsDevCycleInitialized must be used within DevCycleProvider',
+        )
 
     if (isDVCReady) return isDVCReady
 
@@ -24,4 +26,7 @@ export const useIsDVCInitialized = (): boolean => {
     return isDVCReady
 }
 
-export default useIsDVCInitialized
+/**
+ * @deprecated use useIsDevCycleInitialized instead
+ */
+export const useIsDVCInitialized = useIsDevCycleInitialized

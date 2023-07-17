@@ -1,4 +1,4 @@
-import { DVCClient } from './Client'
+import { DevCycleClient } from '../src/Client'
 jest.mock('../src/Request')
 jest.mock('../src/StreamingConnection')
 
@@ -9,9 +9,11 @@ type Variables = {
     number: number
 }
 
-describe('Client', () => {
+describe('DevCycleClient', () => {
     it('should prevent invalid variables', () => {
-        const client = new DVCClient<Variables>('test', { user_id: 'test' })
+        const client = new DevCycleClient<Variables>('test', {
+            user_id: 'test',
+        })
 
         // @ts-expect-error - should not allow invalid variables
         client.variable('something', false)
