@@ -8,6 +8,8 @@ import { ReactElement } from 'react'
 // @ts-ignore
 import { mockSubscribeFunction } from '@devcycle/js-client-sdk' // defined in the mock
 
+jest.mock('@devcycle/js-client-sdk')
+
 const ProviderWrapper = ({ children }: { children: ReactElement }) => {
     return (
         <DevCycleProvider
@@ -78,15 +80,13 @@ describe('useVariableValue', () => {
         const _testJSON: DVCJSON = result.current
     })
 
-    it("Should register a handler for each useVariableValue call with same variable key", () => {
-        renderHook(
-            () => useVariableValue('test', true),
-            { wrapper: ProviderWrapper },
-        )
-        renderHook(
-            () => useVariableValue('test', true),
-            { wrapper: ProviderWrapper },
-        )
+    it('Should register a handler for each useVariableValue call with same variable key', () => {
+        renderHook(() => useVariableValue('test', true), {
+            wrapper: ProviderWrapper,
+        })
+        renderHook(() => useVariableValue('test', true), {
+            wrapper: ProviderWrapper,
+        })
 
         expect(mockSubscribeFunction).toHaveBeenCalledTimes(2)
     })
