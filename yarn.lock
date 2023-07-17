@@ -4554,32 +4554,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/devcycle-js-sdk@workspace:sdk/js":
+"@devcycle/js-client-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
-  resolution: "@devcycle/devcycle-js-sdk@workspace:sdk/js"
-  languageName: unknown
-  linkType: soft
-
-"@devcycle/devcycle-react-native-sdk@workspace:sdk/react-native":
-  version: 0.0.0-use.local
-  resolution: "@devcycle/devcycle-react-native-sdk@workspace:sdk/react-native"
-  dependencies:
-    "@react-native-async-storage/async-storage": ^1.17.11
-    react-native-device-info: ^8.7.0
-    react-native-get-random-values: ^1.7.2
-  peerDependencies:
-    react-native: ">=0.64.0"
-  languageName: unknown
-  linkType: soft
-
-"@devcycle/devcycle-react-sdk@workspace:sdk/react":
-  version: 0.0.0-use.local
-  resolution: "@devcycle/devcycle-react-sdk@workspace:sdk/react"
-  dependencies:
-    hoist-non-react-statics: ^3.3.2
-    nock: ^13.3.1
-  peerDependencies:
-    react: ">=16.8.0"
+  resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
   languageName: unknown
   linkType: soft
 
@@ -4597,6 +4574,29 @@ __metadata:
   resolution: "@devcycle/openfeature-nodejs-provider@workspace:sdk/openfeature-nodejs-provider"
   dependencies:
     "@devcycle/bucketing-test-data": ^1.2.12
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/react-client-sdk@workspace:sdk/react":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/react-client-sdk@workspace:sdk/react"
+  dependencies:
+    hoist-non-react-statics: ^3.3.2
+    nock: ^13.3.1
+  peerDependencies:
+    react: ">=16.8.0"
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/react-native-client-sdk@workspace:sdk/react-native":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/react-native-client-sdk@workspace:sdk/react-native"
+  dependencies:
+    "@react-native-async-storage/async-storage": ^1.17.11
+    react-native-device-info: ^8.7.0
+    react-native-get-random-values: ^1.7.2
+  peerDependencies:
+    react-native: ">=0.64.0"
   languageName: unknown
   linkType: soft
 
@@ -10667,7 +10667,7 @@ __metadata:
 "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json":
   version: 1.1.0
   resolution: "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json.git#commit=d2ce65ec18b305e1f3db8a4fe4394b417631b024"
-  checksum: 045c8dc54cb8ee61d022c017e483f6c8729347a2e30167a4e3227b9d4d80293b032a8cff7fcaf83040b23eacc23bf62188ebb9f2091df85ef2ee21425f8957f7
+  checksum: 480283ed02d57eacb400facc060f293b7dcb773a90dc5b7c80eae86b0007e3a748b2cb6c298a1a32010cba41e48686fcd0078c02c6db1d917fda85bb7c08ded1
   languageName: node
   linkType: hard
 
