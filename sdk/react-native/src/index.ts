@@ -5,7 +5,7 @@ import {
     useVariableValue,
     useIsDevCycleInitialized,
     useIsDVCInitialized,
-} from '@devcycle/devcycle-react-sdk'
+} from '@devcycle/react-client-sdk'
 import { withDevCycleProvider, withDVCProvider } from './withDevCycleProvider'
 import { DevCycleProvider, DVCProvider } from './DevCycleProvider'
 export type {
@@ -17,7 +17,7 @@ export type {
     DVCVariable,
     DevCycleEvent,
     DVCEvent,
-} from '@devcycle/devcycle-react-sdk'
+} from '@devcycle/react-client-sdk'
 
 export {
     DevCycleProvider,

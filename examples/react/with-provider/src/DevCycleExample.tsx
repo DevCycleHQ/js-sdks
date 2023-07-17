@@ -1,4 +1,4 @@
-import { useVariable } from '@devcycle/devcycle-react-sdk'
+import { useVariable } from '@devcycle/react-client-sdk'
 import React from 'react'
 
 export default function DevCycleExample(): React.ReactElement {

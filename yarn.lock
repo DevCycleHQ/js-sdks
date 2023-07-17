@@ -4550,16 +4550,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/devcycle-react-sdk@workspace:sdk/react":
-  version: 0.0.0-use.local
-  resolution: "@devcycle/devcycle-react-sdk@workspace:sdk/react"
-  dependencies:
-    hoist-non-react-statics: ^3.3.2
-  peerDependencies:
-    react: ">=16.8.0"
-  languageName: unknown
-  linkType: soft
-
 "@devcycle/js-client-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
@@ -4580,6 +4570,16 @@ __metadata:
   resolution: "@devcycle/openfeature-nodejs-provider@workspace:sdk/openfeature-nodejs-provider"
   dependencies:
     "@devcycle/bucketing-test-data": ^1.2.12
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/react-client-sdk@workspace:sdk/react":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/react-client-sdk@workspace:sdk/react"
+  dependencies:
+    hoist-non-react-statics: ^3.3.2
+  peerDependencies:
+    react: ">=16.8.0"
   languageName: unknown
   linkType: soft
 
