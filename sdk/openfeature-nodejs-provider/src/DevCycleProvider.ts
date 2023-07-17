@@ -215,8 +215,8 @@ export default class DevCycleProvider implements Provider {
             if (knownValueType) {
                 if (typeof value !== knownValueType) {
                     this.logger.warn(
-                        `Expected DevCycleUser property "${key}" to be "${knownValueType}" but got "${typeof value}" in ` +
-                            'EvaluationContext. Ignoring value.',
+                        `Expected DevCycleUser property "${key}" to be "${knownValueType}" ` +
+                            `but got "${typeof value}" in EvaluationContext. Ignoring value.`,
                     )
                     continue
                 }

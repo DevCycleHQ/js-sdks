@@ -142,32 +142,37 @@ describe('DevCycleProvider Unit Tests', () => {
             )
         })
 
-        it('should skip Context properties that are sub-objects as DevCycleUser only supports flat properties', async () => {
-            const { ofClient, dvcClient } = initOFClient()
-            const dvcUser = {
-                user_id: 'user_id',
-                nullKey: null,
-                obj: { key: 'value' },
-            }
-            ofClient.setContext(dvcUser)
-
-            await expect(
-                ofClient.getBooleanValue('boolean-flag', false),
-            ).resolves.toEqual(true)
-
-            expect(dvcClient.variable).toHaveBeenCalledWith(
-                new DevCycleUser({
+        it(
+            'should skip Context properties that are sub-objects as ' +
+                'DevCycleUser only supports flat properties',
+            async () => {
+                const { ofClient, dvcClient } = initOFClient()
+                const dvcUser = {
                     user_id: 'user_id',
-                    customData: { nullKey: null },
-                }),
-                'boolean-flag',
-                false,
-            )
-            expect(logger.warn).toHaveBeenCalledWith(
-                'EvaluationContext property "obj" is an Object. ' +
-                    'DevCycleUser only supports flat customData properties of type string / number / boolean / null',
-            )
-        })
+                    nullKey: null,
+                    obj: { key: 'value' },
+                }
+                ofClient.setContext(dvcUser)
+
+                await expect(
+                    ofClient.getBooleanValue('boolean-flag', false),
+                ).resolves.toEqual(true)
+
+                expect(dvcClient.variable).toHaveBeenCalledWith(
+                    new DevCycleUser({
+                        user_id: 'user_id',
+                        customData: { nullKey: null },
+                    }),
+                    'boolean-flag',
+                    false,
+                )
+                expect(logger.warn).toHaveBeenCalledWith(
+                    'EvaluationContext property "obj" is an Object. ' +
+                        'DevCycleUser only supports flat customData properties of type ' +
+                        'string / number / boolean / null',
+                )
+            },
+        )
 
         it('should skip customData key that is not a flat json property', async () => {
             const { ofClient, dvcClient } = initOFClient()
