@@ -4538,18 +4538,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/devcycle-react-native-sdk@workspace:sdk/react-native":
-  version: 0.0.0-use.local
-  resolution: "@devcycle/devcycle-react-native-sdk@workspace:sdk/react-native"
-  dependencies:
-    "@react-native-async-storage/async-storage": ^1.17.11
-    react-native-device-info: ^8.7.0
-    react-native-get-random-values: ^1.7.2
-  peerDependencies:
-    react-native: ">=0.64.0"
-  languageName: unknown
-  linkType: soft
-
 "@devcycle/js-client-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
@@ -4580,6 +4568,18 @@ __metadata:
     hoist-non-react-statics: ^3.3.2
   peerDependencies:
     react: ">=16.8.0"
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/react-native-client-sdk@workspace:sdk/react-native":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/react-native-client-sdk@workspace:sdk/react-native"
+  dependencies:
+    "@react-native-async-storage/async-storage": ^1.17.11
+    react-native-device-info: ^8.7.0
+    react-native-get-random-values: ^1.7.2
+  peerDependencies:
+    react-native: ">=0.64.0"
   languageName: unknown
   linkType: soft
 
