@@ -107,8 +107,6 @@ export class EventQueue {
      * by incrementing the 'value' field.
      */
     queueAggregateEvent(event: AggregateEvent): void {
-        if (this.options.disableAutomaticEventLogging) return
-
         checkParamDefined('type', event.type)
         checkParamDefined('target', event.target)
         event.date = Date.now()

@@ -825,11 +825,10 @@ describe('DevCycleClient tests', () => {
                 { disableAutomaticEventLogging: true },
             )
             await client.onClientInitialized()
-            jest.spyOn(client.eventQueue, 'queueEvent')
+            jest.spyOn(client.eventQueue, 'queueAggregateEvent')
 
             client.variableValue('key', 'default_value')
-            await new Promise((resolve) => setTimeout(resolve, 0))
-            expect(client.eventQueue.queueEvent).not.toHaveBeenCalled()
+            expect(client.eventQueue.queueAggregateEvent).not.toHaveBeenCalled()
         })
 
         it('should prevent tracking if close has been called', async () => {

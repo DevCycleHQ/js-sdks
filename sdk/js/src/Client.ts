@@ -297,8 +297,17 @@ export class DevCycleClient<
             }
         }
 
+        this.trackVariableEvaluated(variable)
+
+        this.eventEmitter.emitVariableEvaluated(variable)
+        return variable
+    }
+
+    private trackVariableEvaluated(variable: DVCVariable<any>) {
+        if (this.options.disableAutomaticEventLogging) return
+
         try {
-            const variableFromConfig = this.config?.variables?.[key]
+            const variableFromConfig = this.config?.variables?.[variable.key]
             this.eventQueue.queueAggregateEvent({
                 type: variable.isDefaulted
                     ? EventTypes.variableDefaulted
@@ -318,9 +327,6 @@ export class DevCycleClient<
             this.eventEmitter.emitError(e)
             this.logger.warn(`Error with queueing aggregate events ${e}`)
         }
-
-        this.eventEmitter.emitVariableEvaluated(variable)
-        return variable
     }
 
     /**
