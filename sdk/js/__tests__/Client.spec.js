@@ -4,6 +4,7 @@ import { mocked } from 'jest-mock'
 import { DVCVariable } from '../src/Variable'
 import { DVCPopulatedUser } from '../src/User'
 import { StoreKey } from '../src/types'
+import { EventTypes } from '../src/EventQueue'
 
 jest.mock('../src/Request')
 jest.mock('../src/StreamingConnection')
@@ -777,6 +778,7 @@ describe('DevCycleClient tests', () => {
             client = new DevCycleClient('test_sdk_key', { user_id: 'user1' })
             await client.onClientInitialized()
             jest.spyOn(client.eventQueue, 'queueEvent')
+            jest.spyOn(client.eventQueue, 'queueAggregateEvent')
         })
 
         it('should throw if no type given', async () => {
@@ -789,6 +791,44 @@ describe('DevCycleClient tests', () => {
             expect(client.eventQueue.queueEvent).toHaveBeenCalledWith({
                 type: 'test',
             })
+        })
+
+        it('should not queue event if disableCustomEventLogging is enabled', async () => {
+            client = new DevCycleClient(
+                'test_sdk_key',
+                { user_id: 'user1' },
+                { disableCustomEventLogging: true },
+            )
+            await client.onClientInitialized()
+            jest.spyOn(client.eventQueue, 'queueEvent')
+
+            client.track({ type: 'test' })
+            await new Promise((resolve) => setTimeout(resolve, 0))
+            expect(client.eventQueue.queueEvent).not.toHaveBeenCalled()
+        })
+
+        it('should track automatic event', async () => {
+            client.variableValue('key', 'default_value')
+            await new Promise((resolve) => setTimeout(resolve, 0))
+            expect(client.eventQueue.queueAggregateEvent).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: EventTypes.variableDefaulted,
+                    target: 'key',
+                }),
+            )
+        })
+
+        it('should not queue automatic event if disableAutomaticEventLogging is enabled', async () => {
+            client = new DevCycleClient(
+                'test_sdk_key',
+                { user_id: 'user1' },
+                { disableAutomaticEventLogging: true },
+            )
+            await client.onClientInitialized()
+            jest.spyOn(client.eventQueue, 'queueAggregateEvent')
+
+            client.variableValue('key', 'default_value')
+            expect(client.eventQueue.queueAggregateEvent).not.toHaveBeenCalled()
         })
 
         it('should prevent tracking if close has been called', async () => {

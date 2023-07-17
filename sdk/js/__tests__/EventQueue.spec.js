@@ -7,7 +7,7 @@ describe('EventQueue tests', () => {
     beforeAll(() => {
         dvcClient = new DevCycleClient('test_sdk_key', { user_id: 'user1' })
         dvcClient.config = { features: [] }
-        eventQueue = new EventQueue('test_sdk_key', dvcClient)
+        eventQueue = new EventQueue('test_sdk_key', dvcClient, {})
     })
 
     beforeEach(() => {
@@ -29,6 +29,29 @@ describe('EventQueue tests', () => {
                 dvcClient.user,
                 expect.any(Object),
                 expect.any(Object),
+            )
+        })
+
+        it('should throw error for low eventFlushIntervalMS', async () => {
+            expect(
+                () =>
+                    new EventQueue('test_sdk_key', dvcClient, {
+                        eventFlushIntervalMS: 0,
+                    }),
+            ).toThrow(`eventFlushIntervalMS: 0 must be larger than 500ms`)
+            expect(
+                () =>
+                    new EventQueue('test_sdk_key', dvcClient, {
+                        eventFlushIntervalMS: 100,
+                    }),
+            ).toThrow(`eventFlushIntervalMS: 100 must be larger than 500ms`)
+            expect(
+                () =>
+                    new EventQueue('test_sdk_key', dvcClient, {
+                        eventFlushIntervalMS: 500 * 1000,
+                    }),
+            ).toThrow(
+                `eventFlushIntervalMS: 500000 must be smaller than 1 minute`,
             )
         })
     })

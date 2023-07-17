@@ -1,5 +1,5 @@
 import { DevCycleClient } from './Client'
-import { DevCycleEvent } from './types'
+import { DevCycleEvent, DevCycleOptions } from './types'
 import { publishEvents } from './Request'
 import { checkParamDefined } from './utils'
 
@@ -14,26 +14,40 @@ type AggregateEvent = DevCycleEvent & {
 
 export class EventQueue {
     private readonly sdkKey: string
-    client: DevCycleClient
-    eventQueue: DevCycleEvent[]
-    aggregateEventMap: Record<string, Record<string, AggregateEvent>>
-    eventFlushIntervalMS: number
-    flushInterval: ReturnType<typeof setInterval>
+    private readonly options: DevCycleOptions
+    private readonly client: DevCycleClient
+    private eventQueue: DevCycleEvent[]
+    private aggregateEventMap: Record<string, Record<string, AggregateEvent>>
+    private flushInterval: ReturnType<typeof setInterval>
 
     constructor(
         sdkKey: string,
         dvcClient: DevCycleClient,
-        eventFlushIntervalMS?: number,
+        options: DevCycleOptions,
     ) {
         this.sdkKey = sdkKey
         this.client = dvcClient
         this.eventQueue = []
         this.aggregateEventMap = {}
-        this.eventFlushIntervalMS = eventFlushIntervalMS || 10 * 1000
+        this.options = options
+
+        const eventFlushIntervalMS =
+            typeof options.eventFlushIntervalMS === 'number'
+                ? options.eventFlushIntervalMS
+                : 10 * 1000
+        if (eventFlushIntervalMS < 500) {
+            throw new Error(
+                `eventFlushIntervalMS: ${eventFlushIntervalMS} must be larger than 500ms`,
+            )
+        } else if (eventFlushIntervalMS > 60 * 1000) {
+            throw new Error(
+                `eventFlushIntervalMS: ${eventFlushIntervalMS} must be smaller than 1 minute`,
+            )
+        }
 
         this.flushInterval = setInterval(
             this.flushEvents.bind(this),
-            this.eventFlushIntervalMS,
+            eventFlushIntervalMS,
         )
     }
 
