@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { DVCStorage } from '@devcycle/devcycle-js-sdk'
+import { DVCStorage } from '@devcycle/js-client-sdk'
 
 export class ReactNativeStore implements DVCStorage {
     store: typeof AsyncStorage

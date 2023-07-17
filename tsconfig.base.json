@@ -25,7 +25,7 @@
             "@devcycle/bucketing-test-data": [
                 "lib/shared/bucketing-test-data/src/index.ts"
             ],
-            "@devcycle/devcycle-js-sdk": ["sdk/js/src/index.ts"],
+            "@devcycle/js-client-sdk": ["sdk/js/src/index.ts"],
             "@devcycle/devcycle-react-native-sdk": [
                 "sdk/react-native/src/index.ts"
             ],

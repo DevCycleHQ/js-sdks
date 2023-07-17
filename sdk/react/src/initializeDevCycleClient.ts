@@ -1,5 +1,5 @@
-import { DevCycleOptions, initializeDevCycle } from '@devcycle/devcycle-js-sdk'
-import type { DevCycleUser, DevCycleClient } from '@devcycle/devcycle-js-sdk'
+import { DevCycleOptions, initializeDevCycle } from '@devcycle/js-client-sdk'
+import type { DevCycleUser, DevCycleClient } from '@devcycle/js-client-sdk'
 
 const initializeDevCycleClient = (
     sdkKey: string,

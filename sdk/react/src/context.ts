@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import type { DevCycleClient } from '@devcycle/devcycle-js-sdk'
+import type { DevCycleClient } from '@devcycle/js-client-sdk'
 
 interface DevCycleContext {
     client: DevCycleClient

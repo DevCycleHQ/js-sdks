@@ -18,7 +18,7 @@ export type {
     DVCVariable,
     DevCycleEvent,
     DVCEvent,
-} from '@devcycle/devcycle-js-sdk'
+} from '@devcycle/js-client-sdk'
 
 export {
     DevCycleProvider,

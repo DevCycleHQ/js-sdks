@@ -4,40 +4,46 @@
 # If it doesn't exist, check that we're on the main branch, the working directory is clean, and the current commit
 # is tagged with the requested version
 
+set -euo pipefail
+
 if [[ $# -eq 0 ]]; then
   echo "Must specify the package to push/check."
   exit 1
 fi
 
 PACKAGE=$1
+DEPRECATED_PACKAGE=""
 JQ_PATH=".version"
-
-NPM_SHOW="$(npm show "$PACKAGE" version)"
-NPM_LS="$(cat package.json | jq -r $JQ_PATH)"
 NPM_REGISTRY="$(yarn config get npmRegistryServer)"
 SHA="$(git rev-parse HEAD)"
 
+# Use bash function to parse arguments more efficiently
+function parse_arguments() {
+  while (( "$#" )); do
+    case "$1" in
+      --otp=*)
+        OTP="${1#*=}"
+        shift
+        ;;
+      --deprecated-package=*)
+        DEPRECATED_PACKAGE="${1#*=}"
+        shift
+        ;;
+      *)
+        shift
+        ;;
+    esac
+  done
+}
+
+# Initialize OTP variable to ensure it exists
+OTP=""
+parse_arguments "$@"
+
+NPM_SHOW="$(npm show "$PACKAGE" version)"
+NPM_LS="$(cat package.json | jq -r $JQ_PATH)"
+
 echo "$PACKAGE npm show: $NPM_SHOW, npm ls: $NPM_LS"
-
-while :; do
-  case "$2" in
-    --otp=*)
-      OTP="${2#*=}"
-      ;;
-    *) break
-  esac
-  shift
-done
-
-while :; do
-  case "$3" in
-    --otp=*)
-      OTP="${3#*=}"
-      ;;
-    *) break
-  esac
-  shift
-done
 
 if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
   echo "Versions are not the same, (Remote = $NPM_SHOW; Local = $NPM_LS). Checking for publish eligibility."
@@ -74,6 +80,7 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
       exit 1
     fi
 
+    echo "Publishing $PACKAGE@$NPM_LS to NPM."
     npm publish --otp=$OTP
 
     if [[ "$?" != 0 ]]; then
@@ -86,8 +93,34 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
       -d environment=production \
       -d sha=$SHA https://app.sleuth.io/api/1/deployments/taplytics/js-sdks-2/register_deploy
   else
+    echo "NPM Publish Local"
     npm publish --local
   fi
 else
   echo "Versions are the same ($NPM_SHOW = $NPM_LS). Not pushing"
+fi
+
+# If DEPRECATED_PACKAGE is set, run the deploy logic for it
+if [[ "$DEPRECATED_PACKAGE" != "" ]]; then
+  echo "Deploy to Deprecated Package: $DEPRECATED_PACKAGE"
+
+  # Backup the original package.json
+  cp package.json package.json.bak
+
+  # Ensure the original package.json is restored even if the script exits prematurely
+  trap 'mv package.json.bak package.json' EXIT
+
+  # Update the name field to DEPRECATED_PACKAGE
+  jq --arg DEPRECATED_PACKAGE "$DEPRECATED_PACKAGE" ".name = $DEPRECATED_PACKAGE" package.json > package.json.temp
+  mv package.json.temp package.json
+
+  # Deploy logic
+  echo "Publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
+  npm publish --otp=$OTP
+
+  # Restore the original package.json (trap will take care of this if the script exits prematurely)
+  mv package.json.bak package.json
+
+  # Remove trap once the job is done
+  trap - EXIT
 fi

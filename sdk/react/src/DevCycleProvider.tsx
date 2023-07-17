@@ -2,7 +2,7 @@ import { ProviderConfig } from './types'
 import React, { ReactNode, useEffect } from 'react'
 import initializeDevCycleClient from './initializeDevCycleClient'
 import { Provider } from './context'
-import { DevCycleClient } from '@devcycle/devcycle-js-sdk'
+import { DevCycleClient } from '@devcycle/js-client-sdk'
 
 type Props = {
     config: ProviderConfig

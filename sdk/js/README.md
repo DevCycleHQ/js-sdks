@@ -7,13 +7,13 @@ The JS SDK for DevCycle!
 Our library can be found on npm and installed by the following:
 
 ```
-npm install @devcycle/devcycle-js-sdk
+npm install @devcycle/js-client-sdk
 ```
 
 To use in your project, import the `initialize` function:
 
 ```javascript
-import { initialize } from '@devcycle/devcycle-js-sdk'
+import { initialize } from '@devcycle/js-client-sdk'
 ```
 
 # Usage

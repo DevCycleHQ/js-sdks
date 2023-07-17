@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 
 import './app.element.css'
-import { initializeDevCycle } from '@devcycle/devcycle-js-sdk'
+import { initializeDevCycle } from '@devcycle/js-client-sdk'
 
 const SDK_KEY = process.env.NX_CLIENT_KEY || '<DEVCYCLE_CLIENT_SDK_KEY>'
 
