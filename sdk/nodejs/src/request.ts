@@ -1,6 +1,6 @@
 import { SDKEventBatchRequestBody, DVCLogger } from '@devcycle/types'
 import { DVCPopulatedUser } from './models/populatedUser'
-import { DVCEvent, DVCOptions } from './types'
+import { DevCycleEvent, DevCycleOptions } from './types'
 import fetchWithRetry, { RequestInitWithRetry } from 'fetch-retry'
 
 export const HOST = '.devcycle.com'
@@ -107,7 +107,7 @@ export async function getEnvironmentConfig(
 export async function getAllFeatures(
     user: DVCPopulatedUser,
     sdkKey: string,
-    options: DVCOptions,
+    options: DevCycleOptions,
 ): Promise<Response> {
     const baseUrl = `${
         options.bucketingAPIURI || BUCKETING_URL
@@ -128,7 +128,7 @@ export async function getAllFeatures(
 export async function getAllVariables(
     user: DVCPopulatedUser,
     sdkKey: string,
-    options: DVCOptions,
+    options: DevCycleOptions,
 ): Promise<Response> {
     const baseUrl = `${
         options.bucketingAPIURI || BUCKETING_URL
@@ -151,7 +151,7 @@ export async function getVariable(
     user: DVCPopulatedUser,
     sdkKey: string,
     variableKey: string,
-    options: DVCOptions,
+    options: DevCycleOptions,
 ): Promise<Response> {
     const baseUrl = `${
         options.bucketingAPIURI || BUCKETING_URL
@@ -171,9 +171,9 @@ export async function getVariable(
 
 export async function postTrack(
     user: DVCPopulatedUser,
-    event: DVCEvent,
+    event: DevCycleEvent,
     sdkKey: string,
-    options: DVCOptions,
+    options: DevCycleOptions,
 ): Promise<void> {
     const baseUrl = `${options.bucketingAPIURI || BUCKETING_URL}${TRACK_PATH}`
     const postUrl = baseUrl.concat(

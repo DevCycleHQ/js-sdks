@@ -4,7 +4,8 @@ import {
     DVCPopulatedUser,
     DVCRequestEvent,
     FlushPayload,
-    UserEventsBatchRecord, EventQueueOptions
+    UserEventsBatchRecord,
+    EventQueueOptions,
 } from '../types'
 import { JSON } from 'assemblyscript-json/assembly'
 import { _getPlatformData } from '../managers/platformDataManager'
@@ -12,7 +13,7 @@ import {
     AggEventQueue,
     FeatureAggMap,
     VariableAggMap,
-    VariationAggMap
+    VariationAggMap,
 } from './eventQueue'
 
 /**
@@ -30,7 +31,7 @@ export class RequestPayloadManager {
 
     constructFlushPayloads(
         userEventQueue: Map<string, UserEventsBatchRecord>,
-        aggEventQueue: AggEventQueue
+        aggEventQueue: AggEventQueue,
     ): FlushPayload[] {
         this.checkForFailedPayloads()
 
@@ -46,7 +47,7 @@ export class RequestPayloadManager {
      * Generate UserEventsBatchRecord from User Event Queue
      */
     private constructBatchRecordsFromUserEvents(
-        userEventQueue: Map<string, UserEventsBatchRecord>
+        userEventQueue: Map<string, UserEventsBatchRecord>,
     ): UserEventsBatchRecord[] {
         const records = new Array<UserEventsBatchRecord>()
         const userEventQueueValues = userEventQueue.values()
@@ -61,13 +62,15 @@ export class RequestPayloadManager {
      * generate aggregated events by resolving aggregated event map into DVCEvents.
      */
     private constructBatchRecordsFromAggEvents(
-        aggEventQueue: AggEventQueue
+        aggEventQueue: AggEventQueue,
     ): UserEventsBatchRecord {
         const aggEventQueueKeys = aggEventQueue.keys()
         const aggEvents: DVCRequestEvent[] = []
 
         const platformData = _getPlatformData()
-        const user_id = platformData.hostname ? platformData.hostname as string : 'aggregate'
+        const user_id = platformData.hostname
+            ? (platformData.hostname as string)
+            : 'aggregate'
         const emptyFeatureVars = new Map<string, string>()
 
         for (let i = 0; i < aggEventQueueKeys.length; i++) {
@@ -77,7 +80,8 @@ export class RequestPayloadManager {
 
             for (let y = 0; y < variableFeatureVarAggMapKeys.length; y++) {
                 const variableKey = variableFeatureVarAggMapKeys[y]
-                const featureVarAggMap: FeatureAggMap = variableAggMap.get(variableKey)
+                const featureVarAggMap: FeatureAggMap =
+                    variableAggMap.get(variableKey)
 
                 let value: f64 = NaN
                 if (featureVarAggMap.has('value')) {
@@ -86,17 +90,32 @@ export class RequestPayloadManager {
                         value = f64(varAggMap.get('value'))
 
                         // Add aggVariableDefaulted Events
-                        const dvcEvent = new DVCEvent(type, variableKey, null, value, null)
-                        aggEvents.push(new DVCRequestEvent(dvcEvent, user_id, emptyFeatureVars))
+                        const dvcEvent = new DVCEvent(
+                            type,
+                            variableKey,
+                            null,
+                            value,
+                            null,
+                        )
+                        aggEvents.push(
+                            new DVCRequestEvent(
+                                dvcEvent,
+                                user_id,
+                                emptyFeatureVars,
+                            ),
+                        )
                     } else {
-                        throw new Error('Missing sub value map to write aggVariableDefaulted events')
+                        throw new Error(
+                            'Missing sub value map to write aggVariableDefaulted events',
+                        )
                     }
                 } else {
                     const featureVarAggMapKeys = featureVarAggMap.keys()
 
                     for (let x = 0; x < featureVarAggMapKeys.length; x++) {
                         const _feature = featureVarAggMapKeys[x]
-                        const variationAggMap: VariationAggMap = featureVarAggMap.get(_feature)
+                        const variationAggMap: VariationAggMap =
+                            featureVarAggMap.get(_feature)
                         const variationAggMapKeys = variationAggMap.keys()
 
                         for (let z = 0; z < variationAggMapKeys.length; z++) {
@@ -108,8 +127,20 @@ export class RequestPayloadManager {
                             metaData.set('_variation', _variation)
 
                             // Add aggVariableEvaluated Events
-                            const dvcEvent = new DVCEvent(type, variableKey, null, value, metaData)
-                            aggEvents.push(new DVCRequestEvent(dvcEvent, user_id, emptyFeatureVars))
+                            const dvcEvent = new DVCEvent(
+                                type,
+                                variableKey,
+                                null,
+                                value,
+                                metaData,
+                            )
+                            aggEvents.push(
+                                new DVCRequestEvent(
+                                    dvcEvent,
+                                    user_id,
+                                    emptyFeatureVars,
+                                ),
+                            )
                         }
                     }
                 }
@@ -117,9 +148,20 @@ export class RequestPayloadManager {
         }
 
         // Generate defaulted aggregate user as our events APIs require a user / user_id
-        const dvcUser = new DVCPopulatedUser(new DVCUser(
-            user_id, null, null, null, null, NaN, null, null, null, null
-        ))
+        const dvcUser = new DVCPopulatedUser(
+            new DVCUser(
+                user_id,
+                null,
+                null,
+                null,
+                null,
+                NaN,
+                null,
+                null,
+                null,
+                null,
+            ),
+        )
         return new UserEventsBatchRecord(dvcUser, aggEvents)
     }
 
@@ -129,7 +171,7 @@ export class RequestPayloadManager {
     private getFlushPayload(): FlushPayload {
         const payloads = this.pendingPayloads.values()
 
-        for (let i=0; i < payloads.length; i++) {
+        for (let i = 0; i < payloads.length; i++) {
             const payload = payloads[i]
             if (payload.status === 'failed') {
                 continue
@@ -145,7 +187,9 @@ export class RequestPayloadManager {
     /**
      * Chunk up UserEventsBatchRecord's into payloads of size: this.chunkSize
      */
-    private addEventRecordsToPendingPayloads(records: UserEventsBatchRecord[]): void {
+    private addEventRecordsToPendingPayloads(
+        records: UserEventsBatchRecord[],
+    ): void {
         for (let i = 0; i < records.length; i++) {
             const record: UserEventsBatchRecord = records[i]
 
@@ -153,7 +197,10 @@ export class RequestPayloadManager {
                 const flushPayload = this.getFlushPayload()
                 flushPayload.addBatchRecordForUser(record, this.chunkSize)
                 if (flushPayload.records.length > 0) {
-                    this.pendingPayloads.set(flushPayload.payloadId, flushPayload)
+                    this.pendingPayloads.set(
+                        flushPayload.payloadId,
+                        flushPayload,
+                    )
                 }
             }
         }
@@ -164,7 +211,9 @@ export class RequestPayloadManager {
      */
     markPayloadSuccess(payloadId: string): void {
         if (!this.pendingPayloads.has(payloadId)) {
-            throw new Error(`Could not find payloadId: ${payloadId} to mark as success`)
+            throw new Error(
+                `Could not find payloadId: ${payloadId} to mark as success`,
+            )
         }
 
         this.pendingPayloads.delete(payloadId)
@@ -173,7 +222,7 @@ export class RequestPayloadManager {
     markPayloadFailure(payloadId: string, retryable: boolean): void {
         if (!this.pendingPayloads.has(payloadId)) {
             throw new Error(
-                `Could not find payload: ${payloadId}, retryable: ${retryable} to mark as failure`
+                `Could not find payload: ${payloadId}, retryable: ${retryable} to mark as failure`,
             )
         }
 
@@ -192,7 +241,9 @@ export class RequestPayloadManager {
     checkForFailedPayloads(): void {
         this.pendingPayloads.values().forEach((payload) => {
             if (payload.status !== 'failed') {
-                throw new Error(`Request Payload: ${payload.payloadId} has not finished sending`)
+                throw new Error(
+                    `Request Payload: ${payload.payloadId} has not finished sending`,
+                )
             }
         })
     }

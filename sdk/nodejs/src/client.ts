@@ -1,9 +1,9 @@
 import {
-    DVCOptions,
+    DevCycleOptions,
     DVCVariableValue,
     DVCVariableSet,
     DVCFeatureSet,
-    DVCEvent,
+    DevCycleEvent,
 } from './types'
 import { EnvironmentConfigManager } from './environmentConfigManager'
 import {
@@ -24,7 +24,7 @@ import {
     VariableTypeAlias,
 } from '@devcycle/types'
 import os from 'os'
-import { DVCUser } from './models/user'
+import { DevCycleUser } from './models/user'
 import { UserError } from './utils/userError'
 
 interface IPlatformData {
@@ -35,22 +35,22 @@ interface IPlatformData {
     hostname?: string
 }
 
-const castIncomingUser = (user: DVCUser) => {
-    if (!(user instanceof DVCUser)) {
-        return new DVCUser(user)
+const castIncomingUser = (user: DevCycleUser) => {
+    if (!(user instanceof DevCycleUser)) {
+        return new DevCycleUser(user)
     }
     return user
 }
 
-export class DVCClient {
+export class DevCycleClient {
     private sdkKey: string
     private configHelper: EnvironmentConfigManager
     private eventQueue: EventQueue
-    private onInitialized: Promise<DVCClient>
+    private onInitialized: Promise<DevCycleClient>
     private logger: DVCLogger
     private initialized = false
 
-    constructor(sdkKey: string, options?: DVCOptions) {
+    constructor(sdkKey: string, options?: DevCycleOptions) {
         this.sdkKey = sdkKey
         this.logger =
             options?.logger || dvcDefaultLogger({ level: options?.logLevel })
@@ -119,7 +119,7 @@ export class DVCClient {
      */
     async onClientInitialized(
         onInitialized?: (err?: Error) => void,
-    ): Promise<DVCClient> {
+    ): Promise<DevCycleClient> {
         if (onInitialized && typeof onInitialized === 'function') {
             this.onInitialized
                 .then(() => onInitialized())
@@ -129,7 +129,7 @@ export class DVCClient {
     }
 
     variable<T extends DVCVariableValue>(
-        user: DVCUser,
+        user: DevCycleUser,
         key: string,
         defaultValue: T,
     ): DVCVariable<T> {
@@ -145,7 +145,7 @@ export class DVCClient {
 
         if (!this.initialized) {
             this.logger.warn(
-                'variable called before DVCClient initialized, returning default value',
+                'variable called before DevCycleClient initialized, returning default value',
             )
 
             this.eventQueue?.queueAggregateEvent(populatedUser, {
@@ -187,18 +187,20 @@ export class DVCClient {
     }
 
     variableValue<T extends DVCVariableValue>(
-        user: DVCUser,
+        user: DevCycleUser,
         key: string,
         defaultValue: T,
     ): VariableTypeAlias<T> {
         return this.variable(user, key, defaultValue).value
     }
 
-    allVariables(user: DVCUser): DVCVariableSet {
+    allVariables(user: DevCycleUser): DVCVariableSet {
         const incomingUser = castIncomingUser(user)
 
         if (!this.initialized) {
-            this.logger.warn('allVariables called before DVCClient initialized')
+            this.logger.warn(
+                'allVariables called before DevCycleClient initialized',
+            )
             return {}
         }
 
@@ -207,11 +209,13 @@ export class DVCClient {
         return bucketedConfig?.variables || {}
     }
 
-    allFeatures(user: DVCUser): DVCFeatureSet {
+    allFeatures(user: DevCycleUser): DVCFeatureSet {
         const incomingUser = castIncomingUser(user)
 
         if (!this.initialized) {
-            this.logger.warn('allFeatures called before DVCClient initialized')
+            this.logger.warn(
+                'allFeatures called before DevCycleClient initialized',
+            )
             return {}
         }
 
@@ -220,12 +224,12 @@ export class DVCClient {
         return bucketedConfig?.features || {}
     }
 
-    track(user: DVCUser, event: DVCEvent): void {
+    track(user: DevCycleUser, event: DevCycleEvent): void {
         const incomingUser = castIncomingUser(user)
 
         if (!this.initialized) {
             this.logger.warn(
-                'track called before DVCClient initialized, event will not be tracked',
+                'track called before DevCycleClient initialized, event will not be tracked',
             )
             return
         }

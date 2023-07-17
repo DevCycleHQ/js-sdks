@@ -10,7 +10,7 @@ import {
 /**
  * Options to control the setup of the DevCycle NodeJS Server SDK.
  */
-export interface DVCOptions {
+export interface DevCycleOptions {
     /**
      * Logger override to replace default logger
      */
@@ -135,7 +135,7 @@ export interface DVCVariable {
     readonly evalReason?: unknown
 }
 
-export interface DVCEvent {
+export interface DevCycleEvent {
     /**
      * type of the event
      */

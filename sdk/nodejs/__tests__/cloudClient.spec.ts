@@ -1,11 +1,11 @@
 jest.unmock('cross-fetch')
 import fetch from 'cross-fetch'
 global.fetch = fetch
-import { DVCEvent } from '../src/types'
+import { DevCycleEvent } from '../src/types'
 import * as DVC from '../src'
 import { server } from '../src/__mocks__/server'
 
-let client: DVC.DVCCloudClient
+let client: DVC.DevCycleCloudClient
 
 const user = {
     user_id: 'node_sdk_test',
@@ -17,9 +17,9 @@ const respond500User = { user_id: '500' }
 
 jest.mock('fetch-retry')
 
-describe('DVCCloudClient without EdgeDB', () => {
+describe('DevCycleCloudClient without EdgeDB', () => {
     beforeAll(async () => {
-        client = DVC.initialize('dvc_server_token', {
+        client = DVC.initializeDevCycle('dvc_server_token', {
             logLevel: 'error',
             enableCloudBucketing: true,
         })
@@ -197,7 +197,10 @@ describe('DVCCloudClient without EdgeDB', () => {
             const badEvent = null
             expect(
                 async () =>
-                    await client.track(user, badEvent as unknown as DVCEvent),
+                    await client.track(
+                        user,
+                        badEvent as unknown as DevCycleEvent,
+                    ),
             ).rejects.toThrow('Invalid Event')
         })
 
@@ -205,7 +208,10 @@ describe('DVCCloudClient without EdgeDB', () => {
             const badEvent = undefined
             expect(
                 async () =>
-                    await client.track(user, badEvent as unknown as DVCEvent),
+                    await client.track(
+                        user,
+                        badEvent as unknown as DevCycleEvent,
+                    ),
             ).rejects.toThrow('Invalid Event')
         })
 
@@ -213,7 +219,10 @@ describe('DVCCloudClient without EdgeDB', () => {
             const badEvent = { target: 'test' }
             expect(
                 async () =>
-                    await client.track(user, badEvent as unknown as DVCEvent),
+                    await client.track(
+                        user,
+                        badEvent as unknown as DevCycleEvent,
+                    ),
             ).rejects.toThrow('Invalid Event')
         })
 
@@ -225,7 +234,7 @@ describe('DVCCloudClient without EdgeDB', () => {
                     async () =>
                         await client.track(
                             user,
-                            badEvent as unknown as DVCEvent,
+                            badEvent as unknown as DevCycleEvent,
                         ),
                 ).rejects.toThrow('Invalid Event')
             },
@@ -233,9 +242,9 @@ describe('DVCCloudClient without EdgeDB', () => {
     })
 })
 
-describe('DVCCloudClient with EdgeDB Enabled', () => {
+describe('DevCycleCloudClient with EdgeDB Enabled', () => {
     beforeAll(async () => {
-        client = DVC.initialize('dvc_server_token', {
+        client = DVC.initializeDevCycle('dvc_server_token', {
             logLevel: 'error',
             enableCloudBucketing: true,
             enableEdgeDB: true,

@@ -4,11 +4,15 @@ import {
     Client,
     StandardResolutionReasons,
 } from '@openfeature/js-sdk'
-import { DVCClient, DVCCloudClient, DVCUser } from '@devcycle/nodejs-server-sdk'
+import {
+    DevCycleClient,
+    DevCycleCloudClient,
+    DevCycleUser,
+} from '@devcycle/nodejs-server-sdk'
 
 jest.mock('@devcycle/nodejs-server-sdk')
 
-const variableMock = jest.spyOn(DVCClient.prototype, 'variable')
+const variableMock = jest.spyOn(DevCycleClient.prototype, 'variable')
 const logger = {
     debug: jest.fn(),
     info: jest.fn(),
@@ -18,10 +22,10 @@ const logger = {
 
 function initOFClient(): {
     ofClient: Client
-    dvcClient: DVCClient | DVCCloudClient
+    dvcClient: DevCycleClient | DevCycleCloudClient
 } {
     const options = { logger }
-    const dvcClient = new DVCClient('DVC_SERVER_SDK_KEY', options)
+    const dvcClient = new DevCycleClient('DEVCYCLE_SERVER_SDK_KEY', options)
     OpenFeature.setProvider(new DevCycleProvider(dvcClient, options))
     const ofClient = OpenFeature.getClient()
     ofClient.setContext({ targetingKey: 'node_sdk_test' })
@@ -33,7 +37,7 @@ describe('DevCycleProvider Unit Tests', () => {
         variableMock.mockClear()
     })
 
-    it('should setup an OpenFeature provider with a DVCClient', async () => {
+    it('should setup an OpenFeature provider with a DVCUserClient', async () => {
         const { ofClient, dvcClient } = initOFClient()
         expect(ofClient).toBeDefined()
         expect(dvcClient).toBeDefined()
@@ -80,7 +84,7 @@ describe('DevCycleProvider Unit Tests', () => {
             })
         })
 
-        it('should convert Context properties to DVCUser properties', async () => {
+        it('should convert Context properties to DevCycleUser properties', async () => {
             const { ofClient, dvcClient } = initOFClient()
             const dvcUser = {
                 user_id: 'user_id',
@@ -99,13 +103,13 @@ describe('DevCycleProvider Unit Tests', () => {
                 ofClient.getBooleanValue('boolean-flag', false),
             ).resolves.toEqual(true)
             expect(dvcClient.variable).toHaveBeenCalledWith(
-                new DVCUser(dvcUser),
+                new DevCycleUser(dvcUser),
                 'boolean-flag',
                 false,
             )
         })
 
-        it('should skip DVCUser properties that are not the correct type', async () => {
+        it('should skip DevCycleUser properties that are not the correct type', async () => {
             const { ofClient, dvcClient } = initOFClient()
             const dvcUser = {
                 user_id: 'user_id',
@@ -120,50 +124,55 @@ describe('DevCycleProvider Unit Tests', () => {
             ).resolves.toEqual(true)
 
             expect(dvcClient.variable).toHaveBeenCalledWith(
-                new DVCUser({ user_id: 'user_id' }),
+                new DevCycleUser({ user_id: 'user_id' }),
                 'boolean-flag',
                 false,
             )
             expect(logger.warn).toHaveBeenCalledWith(
-                'Expected DVCUser property "appVersion" to be "string" but got "number" in EvaluationContext. ' +
+                'Expected DevCycleUser property "appVersion" to be "string" but got "number" in EvaluationContext. ' +
                     'Ignoring value.',
             )
             expect(logger.warn).toHaveBeenCalledWith(
-                'Expected DVCUser property "appBuild" to be "number" but got "string" in EvaluationContext. ' +
+                'Expected DevCycleUser property "appBuild" to be "number" but got "string" in EvaluationContext. ' +
                     'Ignoring value.',
             )
             expect(logger.warn).toHaveBeenCalledWith(
-                'Expected DVCUser property "customData" to be "object" but got "string" in EvaluationContext. ' +
+                'Expected DevCycleUser property "customData" to be "object" but got "string" in EvaluationContext. ' +
                     'Ignoring value.',
             )
         })
 
-        it('should skip Context properties that are sub-objects as DVCUser only supports flat properties', async () => {
-            const { ofClient, dvcClient } = initOFClient()
-            const dvcUser = {
-                user_id: 'user_id',
-                nullKey: null,
-                obj: { key: 'value' },
-            }
-            ofClient.setContext(dvcUser)
-
-            await expect(
-                ofClient.getBooleanValue('boolean-flag', false),
-            ).resolves.toEqual(true)
-
-            expect(dvcClient.variable).toHaveBeenCalledWith(
-                new DVCUser({
+        it(
+            'should skip Context properties that are sub-objects as ' +
+                'DevCycleUser only supports flat properties',
+            async () => {
+                const { ofClient, dvcClient } = initOFClient()
+                const dvcUser = {
                     user_id: 'user_id',
-                    customData: { nullKey: null },
-                }),
-                'boolean-flag',
-                false,
-            )
-            expect(logger.warn).toHaveBeenCalledWith(
-                'EvaluationContext property "obj" is an Object. ' +
-                    'DVCUser only supports flat customData properties of type string / number / boolean / null',
-            )
-        })
+                    nullKey: null,
+                    obj: { key: 'value' },
+                }
+                ofClient.setContext(dvcUser)
+
+                await expect(
+                    ofClient.getBooleanValue('boolean-flag', false),
+                ).resolves.toEqual(true)
+
+                expect(dvcClient.variable).toHaveBeenCalledWith(
+                    new DevCycleUser({
+                        user_id: 'user_id',
+                        customData: { nullKey: null },
+                    }),
+                    'boolean-flag',
+                    false,
+                )
+                expect(logger.warn).toHaveBeenCalledWith(
+                    'EvaluationContext property "obj" is an Object. ' +
+                        'DevCycleUser only supports flat customData properties of type ' +
+                        'string / number / boolean / null',
+                )
+            },
+        )
 
         it('should skip customData key that is not a flat json property', async () => {
             const { ofClient, dvcClient } = initOFClient()
@@ -176,13 +185,16 @@ describe('DevCycleProvider Unit Tests', () => {
                 ofClient.getBooleanValue('boolean-flag', false),
             ).resolves.toEqual(true)
             expect(dvcClient.variable).toHaveBeenCalledWith(
-                new DVCUser({ user_id: 'user_id', customData: { num: 610 } }),
+                new DevCycleUser({
+                    user_id: 'user_id',
+                    customData: { num: 610 },
+                }),
                 'boolean-flag',
                 false,
             )
             expect(logger.warn).toHaveBeenCalledWith(
                 'EvaluationContext property "customData" contains "obj" property of type object.' +
-                    'DVCUser only supports flat customData properties of type string / number / boolean / null',
+                    'DevCycleUser only supports flat customData properties of type string / number / boolean / null',
             )
         })
     })

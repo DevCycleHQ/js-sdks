@@ -1,29 +1,37 @@
-import { DVCCloudClient, initialize } from '@devcycle/nodejs-server-sdk'
+import {
+    DevCycleCloudClient,
+    initializeDevCycle,
+    DevCycleUser,
+} from '@devcycle/nodejs-server-sdk'
 import { DVCClientAPIUser } from '@devcycle/types'
 import { plainToInstance } from 'class-transformer'
 import { Query } from 'express-serve-static-core'
 import express from 'express'
 import bodyParser from 'body-parser'
 
-const DVC_SERVER_SDK_KEY =
-    process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
-let dvcClient: DVCCloudClient
+const DEVCYCLE_SERVER_SDK_KEY =
+    process.env['DEVCYCLE_SERVER_SDK_KEY'] || '<DEVCYCLE_SERVER_SDK_KEY>'
+let devcycleClient: DevCycleCloudClient
 
-async function startDVC() {
-    dvcClient = initialize(DVC_SERVER_SDK_KEY, {
+async function startDevCycle() {
+    devcycleClient = initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY, {
         logLevel: 'info',
         enableCloudBucketing: true,
     })
-    console.log('DVC Cloud Bucketing TypeScript Client Ready')
+    console.log('DevCycle Cloud Bucketing TypeScript Client Ready')
 
     const user = {
         user_id: 'node_sdk_test',
         country: 'CA',
     }
 
-    const partyTime = await dvcClient.variableValue(user, 'elliot-test', false)
+    const partyTime = await devcycleClient.variableValue(
+        user,
+        'elliot-test',
+        false,
+    )
     if (partyTime) {
-        const invitation = await dvcClient.variable(
+        const invitation = await devcycleClient.variable(
             user,
             'invitation-message',
             'My birthday has been cancelled this year',
@@ -38,27 +46,27 @@ async function startDVC() {
             date: Date.now(),
         }
         try {
-            dvcClient.track(user, event)
+            devcycleClient.track(user, event)
         } catch (e) {
             console.error(e)
         }
     }
 
-    const defaultVariable = await dvcClient.variableValue(
+    const defaultVariable = await devcycleClient.variableValue(
         user,
         'not-real',
         true,
     )
     console.log(`Value of the variable is ${defaultVariable} \n`)
-    const variables = await dvcClient.allVariables(user)
+    const variables = await devcycleClient.allVariables(user)
     console.log('Variables: ')
     console.dir(variables)
-    const features = await dvcClient.allFeatures(user)
+    const features = await devcycleClient.allFeatures(user)
     console.log('Features: ')
     console.dir(features)
 }
 
-startDVC()
+startDevCycle()
 
 const app = express()
 const port = 5001
@@ -74,7 +82,7 @@ app.use(bodyParser.json())
 
 async function validateUserFromQueryParams(
     queryParams: Query,
-): Promise<DVCClientAPIUser> {
+): Promise<DevCycleUser> {
     if (!queryParams) {
         throw new Error('Invalid query parameters')
     }
@@ -90,14 +98,14 @@ app.get('/variables', async (req: express.Request, res: express.Response) => {
     const user = await validateUserFromQueryParams(req.query)
 
     res.set(defaultHeaders)
-    res.send(JSON.stringify(await dvcClient.allVariables(user)))
+    res.send(JSON.stringify(await devcycleClient.allVariables(user)))
 })
 
 app.get('/features', async (req: express.Request, res: express.Response) => {
     const user = await validateUserFromQueryParams(req.query)
 
     res.set(defaultHeaders)
-    res.send(JSON.stringify(await dvcClient.allFeatures(user)))
+    res.send(JSON.stringify(await devcycleClient.allFeatures(user)))
 })
 
 app.listen(port, () => {

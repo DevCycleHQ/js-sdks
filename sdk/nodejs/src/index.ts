@@ -1,33 +1,53 @@
-import { DVCOptions } from './types'
-import { DVCClient } from './client'
-import { DVCCloudClient } from './cloudClient'
+import { DevCycleOptions, DevCycleEvent } from './types'
+import { DevCycleClient } from './client'
+import { DevCycleCloudClient } from './cloudClient'
 import { isValidServerSDKKey } from './utils/paramUtils'
+import { DevCycleUser } from './models/user'
 
-export { DVCClient, DVCCloudClient }
+export { DevCycleClient, DevCycleCloudClient, DevCycleUser }
 export * from './types'
 export { dvcDefaultLogger } from './utils/logger'
 
-export { DVCUser } from './models/user'
+/**
+ * @deprecated Use DevCycleClient instead
+ */
+export type DVCClient = DevCycleClient
+/**
+ * @deprecated Use DevCycleUser instead
+ */
+export type DVCUser = DevCycleUser
+/**
+ * @deprecated Use DevCycleEvent instead
+ */
+export type DVCEvent = DevCycleEvent
+/**
+ * @deprecated Use DevCycleOptions instead
+ */
+export type DVCOptions = DevCycleOptions
 
-type DVCOptionsCloudEnabled = DVCOptions & { enableCloudBucketing: true }
-type DVCOptionsLocalEnabled = DVCOptions & { enableCloudBucketing?: false }
+type DevCycleOptionsCloudEnabled = DevCycleOptions & {
+    enableCloudBucketing: true
+}
+type DevCycleOptionsLocalEnabled = DevCycleOptions & {
+    enableCloudBucketing?: false
+}
 
-export function initialize(
+export function initializeDevCycle(
     sdkKey: string,
-    options?: DVCOptionsLocalEnabled,
-): DVCClient
-export function initialize(
+    options?: DevCycleOptionsLocalEnabled,
+): DevCycleClient
+export function initializeDevCycle(
     sdkKey: string,
-    options: DVCOptionsCloudEnabled,
-): DVCCloudClient
-export function initialize(
+    options: DevCycleOptionsCloudEnabled,
+): DevCycleCloudClient
+export function initializeDevCycle(
     sdkKey: string,
-    options?: DVCOptions,
-): DVCClient | DVCCloudClient
-export function initialize(
+    options?: DevCycleOptions,
+): DevCycleClient | DevCycleCloudClient
+export function initializeDevCycle(
     sdkKey: string,
-    options: DVCOptions = {},
-): DVCClient | DVCCloudClient {
+    options: DevCycleOptions = {},
+): DevCycleClient | DevCycleCloudClient {
     if (!sdkKey) {
         throw new Error('Missing SDK key! Call initialize with a valid SDK key')
     } else if (!isValidServerSDKKey(sdkKey)) {
@@ -37,7 +57,12 @@ export function initialize(
     }
 
     if (options.enableCloudBucketing) {
-        return new DVCCloudClient(sdkKey, options)
+        return new DevCycleCloudClient(sdkKey, options)
     }
-    return new DVCClient(sdkKey, options)
+    return new DevCycleClient(sdkKey, options)
 }
+
+/**
+ * @deprecated Use initializeDevCycle instead
+ */
+export const initialize = initializeDevCycle

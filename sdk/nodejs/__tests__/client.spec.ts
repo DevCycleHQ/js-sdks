@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { getBucketingLib } from '../src/bucketing'
-import { DVCClient } from '../src/client'
-import { DVCUser } from '../src/models/user'
+import { DevCycleClient } from '../src/client'
+import { DevCycleUser } from '../src/models/user'
 
 jest.mock('../src/bucketing')
 jest.mock('../src/environmentConfigManager')
 jest.mock('../src/eventQueue')
 
-describe('DVCClient', () => {
+describe('DevCycleClient', () => {
     it('imports bucketing lib on initialize', async () => {
-        const client = new DVCClient('token')
+        const client = new DevCycleClient('token')
         expect(() => getBucketingLib()).toThrow()
         await client.onClientInitialized()
         const platformData = (getBucketingLib().setPlatformData as any).mock
@@ -38,10 +38,10 @@ describe('variable', () => {
         },
     }
 
-    let client: DVCClient
+    let client: DevCycleClient
 
     beforeAll(async () => {
-        client = new DVCClient('token')
+        client = new DevCycleClient('token')
         await client.onClientInitialized()
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -60,7 +60,7 @@ describe('variable', () => {
     })
 
     it('returns a valid variable object for a variable that is in the config with a DVCUser instance', () => {
-        const dvcUser = new DVCUser(user)
+        const dvcUser = new DevCycleUser(user)
         const variable = client.variable(dvcUser, 'test-key', false)
         expect(variable.value).toEqual(true)
 

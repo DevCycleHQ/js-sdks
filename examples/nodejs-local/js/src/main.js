@@ -1,25 +1,28 @@
-const DVC = require('@devcycle/nodejs-server-sdk')
+const DevCycle = require('@devcycle/nodejs-server-sdk')
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const DVC_SERVER_SDK_KEY =
-    process.env['DVC_SERVER_SDK_KEY'] || '<YOUR_DVC_SERVER_SDK_KEY>'
-let dvcClient
+const DEVCYCLE_SERVER_SDK_KEY =
+    process.env['DEVCYCLE_SERVER_SDK_KEY'] || '<DEVCYCLE_SERVER_SDK_KEY>'
+let devcycleClient
 
-async function startDVC() {
-    dvcClient = await DVC.initialize(DVC_SERVER_SDK_KEY, {
-        logLevel: 'info',
-    }).onClientInitialized()
-    console.log('DVC Local Bucketing JS Client Initialized')
+async function startDevCycle() {
+    devcycleClient = await DevCycle.initializeDevCycle(
+        DEVCYCLE_SERVER_SDK_KEY,
+        {
+            logLevel: 'info',
+        },
+    ).onClientInitialized()
+    console.log('DevCycle Local Bucketing JS Client Initialized')
 
     const user = {
         user_id: 'node_sdk_test',
         country: 'CA',
     }
 
-    const partyTime = dvcClient.variableValue(user, 'elliot-test', false)
+    const partyTime = devcycleClient.variableValue(user, 'elliot-test', false)
     if (partyTime) {
-        const invitation = dvcClient.variable(
+        const invitation = devcycleClient.variable(
             user,
             'invitation-message',
             'My birthday has been cancelled this year',
@@ -34,27 +37,27 @@ async function startDVC() {
             date: Date.now(),
         }
         try {
-            dvcClient.track(user, event)
+            devcycleClient.track(user, event)
         } catch (e) {
             console.error(e)
         }
     }
 
-    const defaultVariable = dvcClient.variableValue(
+    const defaultVariable = devcycleClient.variableValue(
         user,
         'noWay-thisisA-realKEY',
         true,
     )
     console.log(`Value of the variable is ${defaultVariable} \n`)
-    const variables = dvcClient.allVariables(user)
+    const variables = devcycleClient.allVariables(user)
     console.log('Variables: ')
     console.dir(variables)
-    const features = dvcClient.allFeatures(user)
+    const features = devcycleClient.allFeatures(user)
     console.log('Features: ')
     console.dir(features)
 }
 
-startDVC()
+startDevCycle()
 
 const app = express()
 const port = 5000
@@ -86,14 +89,14 @@ app.get('/variables', (req, res) => {
     let user = createUserFromQueryParams(req.query)
 
     res.set(defaultHeaders)
-    res.send(JSON.stringify(dvcClient.allVariables(user)))
+    res.send(JSON.stringify(devcycleClient.allVariables(user)))
 })
 
 app.get('/features', (req, res) => {
     let user = createUserFromQueryParams(req.query)
 
     res.set(defaultHeaders)
-    res.send(JSON.stringify(dvcClient.allFeatures(user)))
+    res.send(JSON.stringify(devcycleClient.allFeatures(user)))
 })
 
 app.listen(port, () => {

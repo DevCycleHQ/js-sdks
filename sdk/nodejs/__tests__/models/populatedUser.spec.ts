@@ -1,5 +1,5 @@
 import { DVCPopulatedUser } from '../../src/models/populatedUser'
-import { DVCUser } from '../../src/models/user'
+import { DevCycleUser } from '../../src/models/user'
 
 describe('DVCPopulatedUser Unit Tests', () => {
     it('should construct DVCPopulatedUser from UserParam', () => {
@@ -36,7 +36,7 @@ describe('DVCPopulatedUser Unit Tests', () => {
     })
 
     it('should construct DVCPopulatedUser from DVCUser', () => {
-        const requestUser = new DVCUser({
+        const requestUser = new DevCycleUser({
             user_id: 'user_id',
             email: 'email',
             name: 'name',
