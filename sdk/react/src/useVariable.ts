@@ -14,9 +14,15 @@ export const useVariable = <T extends DVCVariableValue>(
         throw new Error('useVariable must be used within DevCycleProvider')
 
     useEffect(() => {
-        dvcContext.client.subscribe(`variableUpdated:${key}`, forceRerenderCallback)
+        dvcContext.client.subscribe(
+            `variableUpdated:${key}`,
+            forceRerenderCallback,
+        )
         return () => {
-            dvcContext.client.unsubscribe(`variableUpdated:${key}`, forceRerenderCallback)
+            dvcContext.client.unsubscribe(
+                `variableUpdated:${key}`,
+                forceRerenderCallback,
+            )
         }
     }, [dvcContext, key, forceRerenderCallback])
 

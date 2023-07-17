@@ -12,10 +12,10 @@ const mockVariableFunction = jest
         return variable
     })
 
-const mockSubscribeFunction = jest.
-    fn()
+const mockSubscribeFunction = jest
+    .fn()
     .mockImplementation((key: string, handler: () => void) => {
-       return
+        return
     })
 
 const mockUnsubscribeFunction = jest
