@@ -4557,12 +4557,10 @@ __metadata:
 "@devcycle/js-client-sdk-web-example@workspace:examples/js/web-elements-app":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk-web-example@workspace:examples/js/web-elements-app"
-  dependencies:
-    "@devcycle/js-client-sdk": 1.13.0
   languageName: unknown
   linkType: soft
 
-"@devcycle/js-client-sdk@1.13.0, @devcycle/js-client-sdk@workspace:sdk/js":
+"@devcycle/js-client-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
   languageName: unknown
