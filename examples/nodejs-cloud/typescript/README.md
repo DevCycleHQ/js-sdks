@@ -1,6 +1,6 @@
-# DevCycle NodeJS Server SDK - Typescript Example App
+# DevCycle NodeJS Cloud Server SDK - Typescript Example App
 
-Example app for using the DevCycle NodeJS Server SDK with nodejs and typescript.
+Example app for using the DevCycle NodeJS Server SDK with nodeJS and typescript.
 
 ### Build and Run
 
@@ -9,4 +9,4 @@ You can find this under Settings / Environments on the DevCycle dashboard.
 
 run from the repo's root folder:
 
-```yarn nx serve example-nodejs-typescript```
+```yarn nx serve example-nodejs-cloud-typescript```

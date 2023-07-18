@@ -18,7 +18,7 @@
         "serve": {
             "executor": "@nx/node:node",
             "options": {
-                "buildTarget": "self:build"
+                "buildTarget": "example-nodejs-local-js:build"
             },
             "dependsOn": ["^build"]
         },
