@@ -18,8 +18,7 @@
         "serve": {
             "executor": "@nx/node:node",
             "options": {
-                "buildTarget": "self:build",
-                "watch": false
+                "buildTarget": "self:build"
             },
             "dependsOn": ["^build"]
         },
