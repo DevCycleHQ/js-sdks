@@ -8,7 +8,7 @@ jest.preset.js
 *.MD
 lib/shared/bucketing-assembly-script/
 .yarn
-.husky
+.huskyx
 .verdaccio
 node_modules
 **/.next/**
