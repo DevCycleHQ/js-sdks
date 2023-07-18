@@ -3,9 +3,9 @@
     "name": "devcycle-js-sdks",
     "version": "1.0.0",
     "workspaces": [
-        "sdk/*",
+        "sdk/**/*",
         "lib/**/*",
-        "example/**/*"
+        "examples/**/*"
     ],
     "packageManager": "yarn@3.6.0",
     "scripts": {

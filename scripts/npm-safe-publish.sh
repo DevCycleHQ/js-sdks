@@ -104,23 +104,34 @@ fi
 if [[ "$DEPRECATED_PACKAGE" != "" ]]; then
   echo "Deploy to Deprecated Package: $DEPRECATED_PACKAGE"
 
-  # Backup the original package.json
-  cp package.json package.json.bak
+  # Check version for DEPRECATED_PACKAGE
+  NPM_SHOW_DEPRECATED="$(npm show "$DEPRECATED_PACKAGE" version)"
 
-  # Ensure the original package.json is restored even if the script exits prematurely
-  trap 'mv package.json.bak package.json' EXIT
+  echo "$DEPRECATED_PACKAGE npm show: $NPM_SHOW_DEPRECATED, npm ls: $NPM_LS"
 
-  # Update the name field to DEPRECATED_PACKAGE
-  jq --arg DEPRECATED_PACKAGE "$DEPRECATED_PACKAGE" ".name = $DEPRECATED_PACKAGE" package.json > package.json.temp
-  mv package.json.temp package.json
+  if [[ "$NPM_SHOW_DEPRECATED" != "$NPM_LS" ]]; then
+    echo "Versions are not the same, (Remote = $NPM_SHOW_DEPRECATED; Local = $NPM_LS). Proceeding with deploy for deprecated package."
 
-  # Deploy logic
-  echo "Publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
-  npm publish --otp=$OTP
+    # Backup the original package.json
+    cp package.json package.json.bak
 
-  # Restore the original package.json (trap will take care of this if the script exits prematurely)
-  mv package.json.bak package.json
+    # Ensure the original package.json is restored even if the script exits prematurely
+    trap 'mv package.json.bak package.json' EXIT
 
-  # Remove trap once the job is done
-  trap - EXIT
+    # Update the name field to DEPRECATED_PACKAGE
+    jq --arg DEPRECATED_PACKAGE "$DEPRECATED_PACKAGE" '.name = $DEPRECATED_PACKAGE' package.json > package.json.temp
+    mv package.json.temp package.json
+
+    # Deploy logic
+    echo "Publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
+    npm publish --otp=$OTP
+
+    # Restore the original package.json (trap will take care of this if the script exits prematurely)
+    mv package.json.bak package.json
+
+    # Remove trap once the job is done
+    trap - EXIT
+  else
+    echo "Versions are the same ($NPM_SHOW_DEPRECATED = $NPM_LS). Not pushing deprecated package."
+  fi
 fi

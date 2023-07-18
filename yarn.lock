@@ -4554,18 +4554,60 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/js-client-sdk@workspace:sdk/js":
+"@devcycle/js-client-sdk-web-example@workspace:examples/js/web-elements-app":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/js-client-sdk-web-example@workspace:examples/js/web-elements-app"
+  dependencies:
+    "@devcycle/js-client-sdk": 1.13.0
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/js-client-sdk@1.13.0, @devcycle/js-client-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
   languageName: unknown
   linkType: soft
 
-"@devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
+"@devcycle/nodejs-server-sdk-cloud-js-example@workspace:examples/nodejs-cloud/js":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/nodejs-server-sdk-cloud-js-example@workspace:examples/nodejs-cloud/js"
+  dependencies:
+    "@devcycle/nodejs-server-sdk": "*"
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/nodejs-server-sdk-cloud-typescript-example@workspace:examples/nodejs-cloud/typescript":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/nodejs-server-sdk-cloud-typescript-example@workspace:examples/nodejs-cloud/typescript"
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/nodejs-server-sdk-local-js-example@workspace:examples/nodejs-local/js":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/nodejs-server-sdk-local-js-example@workspace:examples/nodejs-local/js"
+  dependencies:
+    "@devcycle/nodejs-server-sdk": "*"
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/nodejs-server-sdk-local-typescript-example@workspace:examples/nodejs-local/typescript":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/nodejs-server-sdk-local-typescript-example@workspace:examples/nodejs-local/typescript"
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/nodejs-server-sdk@*, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
     "@devcycle/bucketing-assembly-script": ^1.7.2
     "@devcycle/bucketing-test-data": ^1.2.13
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/openfeature-nodejs-example@workspace:examples/openfeature-nodejs":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/openfeature-nodejs-example@workspace:examples/openfeature-nodejs"
   languageName: unknown
   linkType: soft
 
@@ -23012,6 +23054,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"next-js-app@workspace:examples/react/next-js-app":
+  version: 0.0.0-use.local
+  resolution: "next-js-app@workspace:examples/react/next-js-app"
+  languageName: unknown
+  linkType: soft
+
 "next-tick@npm:1, next-tick@npm:^1.1.0":
   version: 1.1.0
   resolution: "next-tick@npm:1.1.0"
@@ -30370,6 +30418,12 @@ __metadata:
   checksum: f1f1a860d2fa228b50880b20aaa6cc121085907791fe0d814ff9c062640f6b65da321726322094e7667eb63088b3bb67e7b4e219d998f29efcc6f583185a1cd3
   languageName: node
   linkType: hard
+
+"with-provider@workspace:examples/react/with-provider":
+  version: 0.0.0-use.local
+  resolution: "with-provider@workspace:examples/react/with-provider"
+  languageName: unknown
+  linkType: soft
 
 "word-wrap@npm:^1.2.3, word-wrap@npm:~1.2.3":
   version: 1.2.3
