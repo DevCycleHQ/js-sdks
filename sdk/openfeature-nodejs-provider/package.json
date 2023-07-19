@@ -1,9 +1,9 @@
 {
     "name": "@devcycle/openfeature-nodejs-provider",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "OpenFeature Node Provider for DevCycle NodeJS SDK",
     "license": "MIT",
     "devDependencies": {
-        "@devcycle/bucketing-test-data": "^1.2.13"
+        "@devcycle/bucketing-test-data": "^1.2.14"
     }
 }
