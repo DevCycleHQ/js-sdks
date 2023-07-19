@@ -26,13 +26,13 @@
                 "lib/shared/bucketing-test-data/src/index.ts"
             ],
             "@devcycle/js-client-sdk": ["sdk/js/src/index.ts"],
-            "@devcycle/react-native-client-sdk": [
-                "sdk/react-native/src/index.ts"
-            ],
-            "@devcycle/react-client-sdk": ["sdk/react/src/index.ts"],
             "@devcycle/nodejs-server-sdk": ["sdk/nodejs/src/index.ts"],
             "@devcycle/openfeature-nodejs-provider": [
                 "sdk/openfeature-nodejs-provider/src/index.ts"
+            ],
+            "@devcycle/react-client-sdk": ["sdk/react/src/index.ts"],
+            "@devcycle/react-native-client-sdk": [
+                "sdk/react-native/src/index.ts"
             ],
             "@devcycle/types": ["lib/shared/types/src/index.ts"]
         }
