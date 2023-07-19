@@ -24,6 +24,7 @@
             "outputs": ["{options.outputPath}"],
             "options": {
                 "format": ["cjs"],
+                "external": "all",
                 "project": "lib/shared/types/package.json",
                 "outputPath": "dist/lib/shared/types",
                 "entryFile": "lib/shared/types/src/index.ts",
