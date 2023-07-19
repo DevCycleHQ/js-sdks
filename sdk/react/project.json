@@ -20,7 +20,7 @@
                 "project": "sdk/react/package.json",
                 "entryFile": "sdk/react/src/index.ts",
                 "format": ["esm", "cjs"],
-                "external": ["react/jsx-runtime"],
+                "external": "all",
                 "rollupConfig": "@nx/react/plugins/bundle-rollup",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
                 "compiler": "babel",

@@ -21,7 +21,7 @@
                 "project": "sdk/react-native/package.json",
                 "entryFile": "sdk/react-native/src/index.ts",
                 "format": ["esm", "cjs"],
-                "external": ["react/jsx-runtime", "react-native"],
+                "external": "all",
                 "rollupConfig": "@nx/react/plugins/bundle-rollup",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
                 "compiler": "babel",
