@@ -18,7 +18,7 @@
         "serve": {
             "executor": "@nx/node:node",
             "options": {
-                "buildTarget": "example-openfeature-nodejs:build"
+                "buildTarget": "self:build"
             },
             "dependsOn": ["^build"]
         },

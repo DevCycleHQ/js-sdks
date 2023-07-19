@@ -46,7 +46,7 @@ async function startDevCycle() {
             date: Date.now(),
         }
         try {
-            devcycleClient.track(user, event)
+            await devcycleClient.track(user, event)
         } catch (e) {
             console.error(e)
         }

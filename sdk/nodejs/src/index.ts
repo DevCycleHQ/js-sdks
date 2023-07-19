@@ -13,6 +13,10 @@ export { dvcDefaultLogger } from './utils/logger'
  */
 export type DVCClient = DevCycleClient
 /**
+ * @deprecated Use DevCycleCloudClient instead
+ */
+export type DVCCloudClient = DevCycleCloudClient
+/**
  * @deprecated Use DevCycleUser instead
  */
 export type DVCUser = DevCycleUser

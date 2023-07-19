@@ -24,7 +24,7 @@ async function startDevCycle() {
         false,
     )
     if (partyTime) {
-        const invitation = devcycleClient.variable(
+        const invitation = await devcycleClient.variable(
             user,
             'invitation-message',
             'My birthday has been cancelled this year',
@@ -39,15 +39,15 @@ async function startDevCycle() {
             date: Date.now(),
         }
         try {
-            devcycleClient.track(user, event)
+            await devcycleClient.track(user, event)
         } catch (e) {
             console.error(e)
         }
     }
 
-    const defaultVariable = devcycleClient.variableValue(
+    const defaultVariable = await devcycleClient.variableValue(
         user,
-        'noWay-thisisA-realKEY',
+        'not-a-real-key',
         true,
     )
     console.log(`Value of the variable is ${defaultVariable} \n`)
@@ -62,7 +62,7 @@ async function startDevCycle() {
 startDevCycle()
 
 const app = express()
-const port = 5000
+const port = 5002
 const defaultHeaders = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',

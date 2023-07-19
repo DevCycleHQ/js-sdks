@@ -60,7 +60,7 @@ async function startDevCycle() {
 startDevCycle()
 
 const app = express()
-const port = 5000
+const port = 5002
 const defaultHeaders = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
