@@ -1,7 +1,13 @@
 {
-    "packages": ["lib/*", "sdk/*"],
-    "npmClient": "yarn",
-    "useWorkspaces": true,
-    "version": "independent",
-    "ignoreChanges": ["**"]
+  "packages": [
+    "lib/*",
+    "sdk/*"
+  ],
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "version": "independent",
+  "ignoreChanges": [
+    "**"
+  ],
+  "useNx": true
 }

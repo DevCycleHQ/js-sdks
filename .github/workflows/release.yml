@@ -2,6 +2,24 @@ name: Release JSSDKs
 
 on:
   workflow_dispatch:
+    inputs:
+      prerelease:
+        description: "Prerelease"
+        required: true
+        type: boolean
+      draft:
+        description: "Draft"
+        required: true
+        type: boolean
+      version-increment-type:
+        description: 'Which part of the version to increment:'
+        required: true
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+        default: 'patch'
 
 permissions:
   contents: write
@@ -13,7 +31,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.AUTOMATION_USER_TOKEN }}
+          fetch-depth: 0
       - name: Install Protobuf
         run: apt install protobuf-compiler
       - name: Configure AWS Credentials
@@ -22,11 +41,19 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_GHA }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_GHA }}
           aws-region: us-east-1
+      - uses: DevCycleHQ/release-action/prepare-release@main
+        id: prepare-release
+        with:
+          github-token: ${{ secrets.AUTOMATION_USER_TOKEN }}
+          prerelease: ${{ github.event.inputs.prerelease }}
+          draft: ${{ github.event.inputs.draft }}
+          version-increment-type: ${{ github.event.inputs.version-increment-type }}
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18.12
           cache: 'yarn'
+          registry-url: 'https://registry.npmjs.org'
       - name: Yarn Install
         run: yarn install
       - name: Lerna Version
@@ -35,12 +62,18 @@ jobs:
         run: yarn npm-publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
+          VERSION_INCREMENT: ${{ github.event.inputs.version-increment-type }}
       - name: Build CDN Release
         run: nx build:cdn js
       - name: Upload CDN Release
         run: aws s3 sync dist/sdk/js s3://js.devcycle.com/ --include "devcycle.min.js*" --acl public-read
-      - uses: DevCycleHQ/release-action@main
+
+      - uses: DevCycleHQ/release-action/create-release@main
+        id: create-release
         with:
-          draft: true
-          prerelease: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.prepare-release.outputs.next-release-tag }}
+          target: main
+          prerelease: ${{ github.event.inputs.prerelease }}
+          draft: ${{ github.event.inputs.draft }}
+          changelog: ${{ steps.prepare-release.outputs.changelog }}

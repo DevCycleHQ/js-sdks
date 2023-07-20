@@ -15,23 +15,22 @@ PACKAGE=$1
 DEPRECATED_PACKAGE=""
 JQ_PATH=".version"
 NPM_REGISTRY="$(yarn config get npmRegistryServer)"
-SHA="$(git rev-parse HEAD)"
 
 # Use bash function to parse arguments more efficiently
 function parse_arguments() {
-  while (( "$#" )); do
+  while (("$#")); do
     case "$1" in
-      --otp=*)
-        OTP="${1#*=}"
-        shift
-        ;;
-      --deprecated-package=*)
-        DEPRECATED_PACKAGE="${1#*=}"
-        shift
-        ;;
-      *)
-        shift
-        ;;
+    --otp=*)
+      OTP="${1#*=}"
+      shift
+      ;;
+    --deprecated-package=*)
+      DEPRECATED_PACKAGE="${1#*=}"
+      shift
+      ;;
+    *)
+      shift
+      ;;
     esac
   done
 }
@@ -41,7 +40,7 @@ OTP=""
 parse_arguments "$@"
 
 NPM_SHOW="$(npm show "$PACKAGE" version)"
-NPM_LS="$(cat package.json | jq -r $JQ_PATH)"
+NPM_LS="$(jq -r "$JQ_PATH" package.json)"
 
 echo "$PACKAGE npm show: $NPM_SHOW, npm ls: $NPM_LS"
 
@@ -49,7 +48,6 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
   echo "Versions are not the same, (Remote = $NPM_SHOW; Local = $NPM_LS). Checking for publish eligibility."
 
   if [[ "$NPM_REGISTRY" = "https://registry.yarnpkg.com" ]]; then
-    DEVCYCLE_PROD_SLEUTH_API_TOKEN="$(aws secretsmanager get-secret-value --secret-id=DEVCYCLE_PROD_SLEUTH_API_TOKEN | jq -r .SecretString )"
     # make sure we're able to track this deployment
     if [[ -z "$DEVCYCLE_PROD_SLEUTH_API_TOKEN" ]]; then
       echo "Sleuth.io deployment tracking token not found. Aborting."
@@ -68,36 +66,32 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
       exit 1
     fi
 
-    # check if current commit is tagged with the requested version
-    if [[ -z "$(git tag --points-at HEAD "$PACKAGE@$NPM_LS")" ]]; then
-      echo "Current commit is not tagged with the requested version. Aborting."
-      exit 1
-    fi
-
     # check if otp is set
-    if [[ -z "$OTP" ]]; then
+    if [[ -z "$OTP" && -z "$NODE_AUTH_TOKEN" ]]; then
       echo "Must specify the NPM one-time password using the --otp option."
       exit 1
     fi
 
     echo "Publishing $PACKAGE@$NPM_LS to NPM."
-    npm publish --otp=$OTP
+    if [[ -z "$NODE_AUTH_TOKEN" ]]; then
+      npm publish --otp="$OTP"
+    else
+      npm publish --access=public
+    fi
 
+    # shellcheck disable=SC2181
     if [[ "$?" != 0 ]]; then
       echo "Publish failed. Aborting."
       exit 1
     fi
 
-    curl -X POST \
-      -d api_key=$DEVCYCLE_PROD_SLEUTH_API_TOKEN \
-      -d environment=production \
-      -d sha=$SHA https://app.sleuth.io/api/1/deployments/taplytics/js-sdks-2/register_deploy
   else
     echo "NPM Publish Local"
     npm publish --local
   fi
 else
   echo "Versions are the same ($NPM_SHOW = $NPM_LS). Not pushing"
+  exit 0
 fi
 
 # If DEPRECATED_PACKAGE is set, run the deploy logic for it
@@ -122,9 +116,13 @@ if [[ "$DEPRECATED_PACKAGE" != "" ]]; then
     jq --arg DEPRECATED_PACKAGE "$DEPRECATED_PACKAGE" '.name = $DEPRECATED_PACKAGE' package.json > package.json.temp
     mv package.json.temp package.json
 
-    # Deploy logic
-    echo "Publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
-    npm publish --otp=$OTP
+  # Deploy logic
+  echo "Publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
+  if [[ -z "$NODE_AUTH_TOKEN" ]]; then
+    npm publish --otp="$OTP"
+  else
+    npm publish --access=public
+  fi
 
     sleep 10
 
