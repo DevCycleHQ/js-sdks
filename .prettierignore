@@ -13,3 +13,5 @@ lib/shared/bucketing-assembly-script/
 node_modules
 **/.next/**
 .github/**
+nx.json
+lerna.json
