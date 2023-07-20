@@ -126,6 +126,8 @@ if [[ "$DEPRECATED_PACKAGE" != "" ]]; then
     echo "Publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
     npm publish --otp=$OTP
 
+    npm deprecate $DEPRECATED_PACKAGE@"*" "Package has been renamed to: $PACKAGE" --otp=$OTP
+
     # Restore the original package.json (trap will take care of this if the script exits prematurely)
     mv package.json.bak package.json
 
