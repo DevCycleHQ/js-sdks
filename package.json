@@ -161,6 +161,7 @@
         "react-native-svg": "13.9.0",
         "react-native-svg-transformer": "^1.0.0",
         "react-refresh": "^0.10.0",
+        "react-test-renderer": "18.2.0",
         "service-worker-mock": "^2.0.5",
         "style-loader": "^3.3.0",
         "stylus": "^0.55.0",

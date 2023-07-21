@@ -1,0 +1,33 @@
+{
+    "name": "example-react-native-app",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "@babel/plugin-proposal-decorators": "*",
+        "@nestjs/class-validator": "*",
+        "@react-native-async-storage/async-storage": "*",
+        "@testing-library/jest-dom": "*",
+        "@testing-library/jest-native": "*",
+        "@testing-library/react": "*",
+        "axios": "*",
+        "axios-retry": "*",
+        "class-transformer": "*",
+        "hoist-non-react-statics": "*",
+        "iso-639-1": "*",
+        "jest-mock": "*",
+        "lodash": "*",
+        "metro-config": "*",
+        "nock": "*",
+        "react": "*",
+        "react-native": "*",
+        "react-native-device-info": "*",
+        "react-native-get-random-values": "*",
+        "react-native-svg": "*",
+        "reflect-metadata": "*",
+        "ua-parser-js": "*",
+        "uuid": "*"
+    },
+    "devDependencies": {
+        "@babel/plugin-proposal-decorators": "*"
+    }
+}
