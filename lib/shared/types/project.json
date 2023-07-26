@@ -23,7 +23,7 @@
             "executor": "@nrwl/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "options": {
-                "format": ["cjs"],
+                "format": ["cjs", "esm"],
                 "external": "all",
                 "project": "lib/shared/types/package.json",
                 "outputPath": "dist/lib/shared/types",
