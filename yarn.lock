@@ -14633,7 +14633,7 @@ __metadata:
     react-native: 0.71.8
     react-native-config: 1.5.0
     react-native-device-info: ^8.7.0
-    react-native-get-random-values: ^1.7.2
+    react-native-get-random-values: ^1.9.0
     react-native-svg: 13.9.0
     react-native-svg-transformer: ^1.0.0
     react-refresh: ^0.10.0
@@ -27329,7 +27329,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-get-random-values@npm:*":
+"react-native-get-random-values@npm:*, react-native-get-random-values@npm:^1.9.0":
   version: 1.9.0
   resolution: "react-native-get-random-values@npm:1.9.0"
   dependencies:
