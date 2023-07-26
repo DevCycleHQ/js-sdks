@@ -122,6 +122,8 @@ export class EventQueue {
             })
             return
         }
+        this.flushInProgress = true
+
         const currentFlushCallbacks = this.flushCallbacks.splice(
             0,
             this.flushCallbacks.length,
@@ -178,7 +180,6 @@ export class EventQueue {
         this.logger.debug(
             `DVC Flush ${eventCount} Events, for ${flushPayloads.length} Users`,
         )
-        this.flushInProgress = true
 
         const startTimeRequests = Date.now()
         await Promise.all(
