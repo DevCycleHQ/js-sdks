@@ -112,23 +112,7 @@ export class EventQueue {
         clearInterval(this.flushInterval)
     }
 
-    /**
-     * Flush events in queue to DevCycle Events API. Requeue events if flush fails
-     */
-    async flushEvents(): Promise<void> {
-        if (this.flushInProgress) {
-            await new Promise((resolve) => {
-                this.flushCallbacks.push(resolve)
-            })
-            return
-        }
-        this.flushInProgress = true
-
-        const currentFlushCallbacks = this.flushCallbacks.splice(
-            0,
-            this.flushCallbacks.length,
-        )
-
+    private async _flushEvents() {
         const metricTags = {
             envKey: this.sdkKey,
             sdkKey: this.sdkKey,
@@ -168,9 +152,6 @@ export class EventQueue {
             metricTags,
         )
         if (flushPayloads.length === 0) {
-            if (currentFlushCallbacks.length > 0) {
-                currentFlushCallbacks.forEach((cb) => cb(null))
-            }
             return
         }
 
@@ -181,7 +162,6 @@ export class EventQueue {
             `DVC Flush ${eventCount} Events, for ${flushPayloads.length} Users`,
         )
 
-        const startTimeRequests = Date.now()
         await Promise.all(
             flushPayloads.map(async (flushPayload) => {
                 try {
@@ -235,15 +215,46 @@ export class EventQueue {
                 }
             }),
         )
+
+        return results
+    }
+
+    /**
+     * Flush events in queue to DevCycle Events API. Requeue events if flush fails
+     */
+    async flushEvents(): Promise<void> {
+        if (this.flushInProgress) {
+            await new Promise((resolve) => {
+                this.flushCallbacks.push(resolve)
+            })
+            return
+        }
+        this.flushInProgress = true
+        const startTimeRequests = Date.now()
+
+        const currentFlushCallbacks = this.flushCallbacks.splice(
+            0,
+            this.flushCallbacks.length,
+        )
+
+        const results = await this._flushEvents()
+
         this.flushInProgress = false
         const endTimeRequests = Date.now()
+
+        const metricTags = {
+            envKey: this.sdkKey,
+            sdkKey: this.sdkKey,
+        }
 
         this.reporter?.reportMetric(
             'flushRequestDuration',
             endTimeRequests - startTimeRequests,
             metricTags,
         )
-        this.reporter?.reportFlushResults(results, metricTags)
+        if (results) {
+            this.reporter?.reportFlushResults(results, metricTags)
+        }
 
         currentFlushCallbacks.forEach((cb) => cb(null))
         if (this.flushCallbacks.length > 0) {

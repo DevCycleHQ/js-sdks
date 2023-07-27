@@ -215,6 +215,116 @@ describe('EventQueue Unit Tests', () => {
         )
     })
 
+    it('should prevent multiple concurrent flushes and resolve all promises', async () => {
+        publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
+
+        const eventQueue = initEventQueue('sdkKey', {
+            eventsAPIURI: 'localhost:3000/client/1',
+        })
+        const user = new DVCPopulatedUser({ user_id: 'user_id' })
+        const event = { type: 'test_event' }
+        eventQueue.queueEvent(user, event)
+
+        const aggEvent = {
+            type: EventTypes.aggVariableEvaluated,
+            target: 'key',
+        }
+        eventQueue.queueAggregateEvent(user, aggEvent, bucketedUserConfig)
+
+        const promise1 = eventQueue.flushEvents()
+        const promise2 = eventQueue.flushEvents()
+        eventQueue.cleanup()
+
+        await Promise.all([promise1, promise2])
+        expect(publishEvents_mock).toHaveBeenCalledTimes(1)
+        expect(publishEvents_mock).toBeCalledWith(
+            defaultLogger,
+            'sdkKey',
+            [
+                {
+                    user: expect.objectContaining({
+                        user_id: 'user_id',
+                        createdDate: expect.any(String),
+                        lastSeenDate: expect.any(String),
+                        platform: 'NodeJS',
+                        platformVersion: expect.any(String),
+                        sdkType: 'server',
+                        sdkVersion: expect.any(String),
+                    }),
+                    events: [
+                        expect.objectContaining({
+                            clientDate: expect.any(String),
+                            customType: 'test_event',
+                            date: expect.any(String),
+                            featureVars: {},
+                            type: 'customEvent',
+                            user_id: 'user_id',
+                        }),
+                    ],
+                },
+                {
+                    user: expect.objectContaining({
+                        user_id: 'host.name',
+                        createdDate: expect.any(String),
+                        lastSeenDate: expect.any(String),
+                        platform: 'NodeJS',
+                        platformVersion: expect.any(String),
+                        sdkType: 'server',
+                        sdkVersion: expect.any(String),
+                    }),
+                    events: [
+                        expect.objectContaining({
+                            type: 'aggVariableEvaluated',
+                            target: 'key',
+                            clientDate: expect.any(String),
+                            date: expect.any(String),
+                            user_id: 'host.name',
+                            value: 1,
+                            metaData: {
+                                _feature: 'feature',
+                                _variation: 'variation',
+                            },
+                        }),
+                    ],
+                },
+            ],
+            'localhost:3000/client/1',
+        )
+
+        eventQueue.queueEvent(user, event)
+        await eventQueue.flushEvents()
+
+        expect(publishEvents_mock).toHaveBeenCalledTimes(2)
+        expect(publishEvents_mock).toBeCalledWith(
+            defaultLogger,
+            'sdkKey',
+            [
+                {
+                    user: expect.objectContaining({
+                        user_id: 'user_id',
+                        createdDate: expect.any(String),
+                        lastSeenDate: expect.any(String),
+                        platform: 'NodeJS',
+                        platformVersion: expect.any(String),
+                        sdkType: 'server',
+                        sdkVersion: expect.any(String),
+                    }),
+                    events: [
+                        expect.objectContaining({
+                            clientDate: expect.any(String),
+                            customType: 'test_event',
+                            date: expect.any(String),
+                            featureVars: {},
+                            type: 'customEvent',
+                            user_id: 'user_id',
+                        }),
+                    ],
+                },
+            ],
+            'localhost:3000/client/1',
+        )
+    })
+
     it(
         'should setup Event Queue and not process' +
             ' custom events if disableCustomEventLogging is true',
