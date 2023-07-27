@@ -112,21 +112,7 @@ export class EventQueue {
         clearInterval(this.flushInterval)
     }
 
-    /**
-     * Flush events in queue to DevCycle Events API. Requeue events if flush fails
-     */
-    async flushEvents(): Promise<void> {
-        if (this.flushInProgress) {
-            await new Promise((resolve) => {
-                this.flushCallbacks.push(resolve)
-            })
-            return
-        }
-        const currentFlushCallbacks = this.flushCallbacks.splice(
-            0,
-            this.flushCallbacks.length,
-        )
-
+    private async _flushEvents() {
         const metricTags = {
             envKey: this.sdkKey,
             sdkKey: this.sdkKey,
@@ -166,9 +152,6 @@ export class EventQueue {
             metricTags,
         )
         if (flushPayloads.length === 0) {
-            if (currentFlushCallbacks.length > 0) {
-                currentFlushCallbacks.forEach((cb) => cb(null))
-            }
             return
         }
 
@@ -178,9 +161,9 @@ export class EventQueue {
         this.logger.debug(
             `DVC Flush ${eventCount} Events, for ${flushPayloads.length} Users`,
         )
-        this.flushInProgress = true
 
         const startTimeRequests = Date.now()
+
         await Promise.all(
             flushPayloads.map(async (flushPayload) => {
                 try {
@@ -234,7 +217,7 @@ export class EventQueue {
                 }
             }),
         )
-        this.flushInProgress = false
+
         const endTimeRequests = Date.now()
 
         this.reporter?.reportMetric(
@@ -242,7 +225,35 @@ export class EventQueue {
             endTimeRequests - startTimeRequests,
             metricTags,
         )
-        this.reporter?.reportFlushResults(results, metricTags)
+        if (results) {
+            this.reporter?.reportFlushResults(results, metricTags)
+        }
+    }
+
+    /**
+     * Flush events in queue to DevCycle Events API. Requeue events if flush fails
+     */
+    async flushEvents(): Promise<void> {
+        if (this.flushInProgress) {
+            await new Promise((resolve) => {
+                this.flushCallbacks.push(resolve)
+            })
+            return
+        }
+        this.flushInProgress = true
+
+        const currentFlushCallbacks = this.flushCallbacks.splice(
+            0,
+            this.flushCallbacks.length,
+        )
+
+        try {
+            await this._flushEvents()
+        } catch (e) {
+            this.logger.error(`DVC Error Flushing Events`, e)
+        }
+
+        this.flushInProgress = false
 
         currentFlushCallbacks.forEach((cb) => cb(null))
         if (this.flushCallbacks.length > 0) {
