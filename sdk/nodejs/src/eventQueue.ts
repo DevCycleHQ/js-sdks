@@ -237,7 +237,12 @@ export class EventQueue {
             this.flushCallbacks.length,
         )
 
-        const results = await this._flushEvents()
+        let results: FlushResults | undefined
+        try {
+            results = await this._flushEvents()
+        } catch (e) {
+            this.logger.error(`DVC Error Flushing Events`, e)
+        }
 
         this.flushInProgress = false
         const endTimeRequests = Date.now()
