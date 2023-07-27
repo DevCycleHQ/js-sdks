@@ -162,6 +162,8 @@ export class EventQueue {
             `DVC Flush ${eventCount} Events, for ${flushPayloads.length} Users`,
         )
 
+        const startTimeRequests = Date.now()
+
         await Promise.all(
             flushPayloads.map(async (flushPayload) => {
                 try {
@@ -216,7 +218,16 @@ export class EventQueue {
             }),
         )
 
-        return results
+        const endTimeRequests = Date.now()
+
+        this.reporter?.reportMetric(
+            'flushRequestDuration',
+            endTimeRequests - startTimeRequests,
+            metricTags,
+        )
+        if (results) {
+            this.reporter?.reportFlushResults(results, metricTags)
+        }
     }
 
     /**
@@ -230,36 +241,19 @@ export class EventQueue {
             return
         }
         this.flushInProgress = true
-        const startTimeRequests = Date.now()
 
         const currentFlushCallbacks = this.flushCallbacks.splice(
             0,
             this.flushCallbacks.length,
         )
 
-        let results: FlushResults | undefined
         try {
-            results = await this._flushEvents()
+            await this._flushEvents()
         } catch (e) {
             this.logger.error(`DVC Error Flushing Events`, e)
         }
 
         this.flushInProgress = false
-        const endTimeRequests = Date.now()
-
-        const metricTags = {
-            envKey: this.sdkKey,
-            sdkKey: this.sdkKey,
-        }
-
-        this.reporter?.reportMetric(
-            'flushRequestDuration',
-            endTimeRequests - startTimeRequests,
-            metricTags,
-        )
-        if (results) {
-            this.reporter?.reportFlushResults(results, metricTags)
-        }
 
         currentFlushCallbacks.forEach((cb) => cb(null))
         if (this.flushCallbacks.length > 0) {
