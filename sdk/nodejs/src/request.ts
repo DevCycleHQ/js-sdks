@@ -48,7 +48,8 @@ const retryOnRequestError: retryOnRequestErrorFunc = (retries) => {
 }
 
 const handleResponse = async (res: Response) => {
-    if (!res.ok) {
+    // res.ok only checks for 200-299 status codes
+    if (!res.ok && res.status >= 400) {
         let error
         try {
             error = new ResponseError(
