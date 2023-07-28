@@ -107,7 +107,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         await envConfig._fetchConfig()
 
         getEnvironmentConfig_mock.mockImplementation(async () =>
-            mockFetchResponse({ status: 304 }),
+            mockFetchResponse({ status: 304, ok: false, data: null }),
         )
 
         await envConfig._fetchConfig()

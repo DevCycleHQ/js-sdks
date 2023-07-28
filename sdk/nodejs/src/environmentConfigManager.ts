@@ -82,7 +82,7 @@ export class EnvironmentConfigManager {
                 `Request to get config failed for url: ${url}, ` +
                 `response message: ${error.message}, response data: ${projectConfig}`
             if (this.hasConfig) {
-                this.logger.debug(errMsg)
+                this.logger.warn(errMsg)
             } else {
                 this.logger.error(errMsg)
             }
@@ -131,7 +131,7 @@ export class EnvironmentConfigManager {
         }
 
         if (this.hasConfig) {
-            this.logger.debug(
+            this.logger.warn(
                 `Failed to download config, using cached version. url: ${url}.`,
             )
         } else if (responseError?.status === 403) {

@@ -12,7 +12,7 @@ export async function benchmarkDevCycle(): Promise<void> {
         devcycleClient = await initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY, {
             logLevel: 'debug',
             enableCloudBucketing: false,
-            disableAutomaticEventLogging: true,
+            disableAutomaticEventLogging: false,
             reporter: {
                 reportMetric: (report) => {
                     console.log(report)
