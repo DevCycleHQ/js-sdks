@@ -1016,7 +1016,7 @@ describe('EventQueue Unit Tests', () => {
                         maxEventQueueSize: 2000,
                     }),
             ).toThrow(
-                'flushEventQueueSize: 2000 must be larger than maxEventQueueSize: 2000',
+                'flushEventQueueSize: 2000 must be smaller than maxEventQueueSize: 2000',
             )
 
             expect(
