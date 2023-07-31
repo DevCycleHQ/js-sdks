@@ -2,6 +2,7 @@ import { DevCycleClient } from './Client'
 import { DevCycleEvent, DevCycleOptions } from './types'
 import { publishEvents } from './Request'
 import { checkParamDefined } from './utils'
+import chunk from 'lodash/chunk'
 
 export const EventTypes = {
     variableEvaluated: 'variableEvaluated',
@@ -19,6 +20,9 @@ export class EventQueue {
     private eventQueue: DevCycleEvent[]
     private aggregateEventMap: Record<string, Record<string, AggregateEvent>>
     private flushInterval: ReturnType<typeof setInterval>
+    private flushEventQueueSize: number
+    private maxEventQueueSize: number
+    private eventQueueBatchSize = 100
 
     constructor(
         sdkKey: string,
@@ -49,6 +53,29 @@ export class EventQueue {
             this.flushEvents.bind(this),
             eventFlushIntervalMS,
         )
+
+        this.flushEventQueueSize = options?.flushEventQueueSize || 100
+        this.maxEventQueueSize = options?.maxEventQueueSize || 1000
+        if (this.flushEventQueueSize >= this.maxEventQueueSize) {
+            throw new Error(
+                `flushEventQueueSize: ${this.flushEventQueueSize} must be larger than ` +
+                    `maxEventQueueSize: ${this.maxEventQueueSize}`,
+            )
+        } else if (
+            this.flushEventQueueSize < 10 ||
+            this.flushEventQueueSize > 1000
+        ) {
+            throw new Error(
+                `flushEventQueueSize: ${this.flushEventQueueSize} must be between 10 and 1000`,
+            )
+        } else if (
+            this.maxEventQueueSize < 100 ||
+            this.maxEventQueueSize > 5000
+        ) {
+            throw new Error(
+                `maxEventQueueSize: ${this.maxEventQueueSize} must be between 100 and 5000`,
+            )
+        }
     }
 
     async flushEvents(): Promise<void> {
@@ -74,24 +101,27 @@ export class EventQueue {
         this.eventQueue = []
         this.aggregateEventMap = {}
 
-        try {
-            const res = await publishEvents(
-                this.sdkKey,
-                this.client.config || null,
-                user,
-                eventsToFlush,
-                this.client.logger,
-            )
-            if (res.status !== 201) {
-                this.eventQueue.push(...eventsToFlush)
-            } else {
-                this.client.logger.info(
-                    `DVC Flushed ${eventsToFlush.length} Events.`,
+        const eventRequests = chunk(eventsToFlush, this.eventQueueBatchSize)
+        for (const eventRequest of eventRequests) {
+            try {
+                const res = await publishEvents(
+                    this.sdkKey,
+                    this.client.config || null,
+                    user,
+                    eventRequest,
+                    this.client.logger,
                 )
+                if (res.status !== 201) {
+                    this.eventQueue.push(...eventRequest)
+                } else {
+                    this.client.logger.info(
+                        `DVC Flushed ${eventRequest.length} Events.`,
+                    )
+                }
+            } catch (ex) {
+                this.client.eventEmitter.emitError(ex)
+                this.eventQueue.push(...eventRequest)
             }
-        } catch (ex) {
-            this.client.eventEmitter.emitError(ex)
-            this.eventQueue.push(...eventsToFlush)
         }
     }
 
@@ -99,6 +129,12 @@ export class EventQueue {
      * Queue DVCAPIEvent for producing
      */
     queueEvent(event: DevCycleEvent): void {
+        if (this.checkEventQueueSize()) {
+            this.client.logger.warn(
+                `DevCycle: Max event queue size (${this.maxEventQueueSize}) reached, dropping event: ${event}`,
+            )
+            return
+        }
         this.eventQueue.push(event)
     }
 
@@ -107,6 +143,13 @@ export class EventQueue {
      * by incrementing the 'value' field.
      */
     queueAggregateEvent(event: AggregateEvent): void {
+        if (this.checkEventQueueSize()) {
+            this.client.logger.warn(
+                `DevCycle: Max event queue size (${this.maxEventQueueSize}) reached, dropping event: ${event}`,
+            )
+            return
+        }
+
         checkParamDefined('type', event.type)
         checkParamDefined('target', event.target)
         event.date = Date.now()
@@ -120,6 +163,18 @@ export class EventQueue {
         } else {
             aggEventType[event.target] = event
         }
+    }
+
+    private checkEventQueueSize(): boolean {
+        const aggCount = Object.values(this.aggregateEventMap).reduce(
+            (acc, v) => acc + Object.keys(v).length,
+            0,
+        )
+        const queueSize = this.eventQueue.length + aggCount
+        if (queueSize >= this.flushEventQueueSize) {
+            this.flushEvents()
+        }
+        return queueSize >= this.maxEventQueueSize
     }
 
     /**
