@@ -58,7 +58,7 @@ export class EventQueue {
         this.maxEventQueueSize = options?.maxEventQueueSize || 1000
         if (this.flushEventQueueSize >= this.maxEventQueueSize) {
             throw new Error(
-                `flushEventQueueSize: ${this.flushEventQueueSize} must be larger than ` +
+                `flushEventQueueSize: ${this.flushEventQueueSize} must be smaller than ` +
                     `maxEventQueueSize: ${this.maxEventQueueSize}`,
             )
         } else if (

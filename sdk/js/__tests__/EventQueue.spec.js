@@ -3,11 +3,25 @@ import { DevCycleClient } from '../src/Client'
 import { EventQueue, EventTypes } from '../src/EventQueue'
 let eventQueue, dvcClient
 
+const loggerMock = {
+    debug: jest.fn(),
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+}
+
 describe('EventQueue tests', () => {
     beforeAll(() => {
-        dvcClient = new DevCycleClient('test_sdk_key', { user_id: 'user1' })
+        dvcClient = new DevCycleClient(
+            'test_sdk_key',
+            { user_id: 'user1' },
+            { logger: loggerMock },
+        )
         dvcClient.config = { features: [] }
-        eventQueue = new EventQueue('test_sdk_key', dvcClient, {})
+        eventQueue = new EventQueue('test_sdk_key', dvcClient, {
+            flushEventQueueSize: 10,
+            maxEventQueueSize: 100,
+        })
     })
 
     beforeEach(() => {
@@ -16,22 +30,7 @@ describe('EventQueue tests', () => {
         eventQueue.aggregateEventMap = {}
     })
 
-    describe('queueEvent', () => {
-        it('should flush queued event', async () => {
-            Request.publishEvents.mockResolvedValue({ status: 201 })
-            const event = { type: 'test_type' }
-            eventQueue.queueEvent(event)
-            await eventQueue.flushEvents()
-
-            expect(Request.publishEvents).toBeCalledWith(
-                'test_sdk_key',
-                dvcClient.config,
-                dvcClient.user,
-                expect.any(Object),
-                expect.any(Object),
-            )
-        })
-
+    describe('initialization options', () => {
         it('should throw error for low eventFlushIntervalMS', async () => {
             expect(
                 () =>
@@ -52,6 +51,77 @@ describe('EventQueue tests', () => {
                     }),
             ).toThrow(
                 `eventFlushIntervalMS: 500000 must be smaller than 1 minute`,
+            )
+        })
+
+        it('should throw error for incorrect flushEventQueueSize or maxEventQueueSize', () => {
+            expect(
+                () =>
+                    new EventQueue('test_sdk_key', dvcClient, {
+                        flushEventQueueSize: 10000,
+                        maxEventQueueSize: 1000,
+                    }),
+            ).toThrow(
+                'flushEventQueueSize: 10000 must be smaller than maxEventQueueSize: 1000',
+            )
+            expect(
+                () =>
+                    new EventQueue('test_sdk_key', dvcClient, {
+                        flushEventQueueSize: 5,
+                    }),
+            ).toThrow('flushEventQueueSize: 5 must be between 10 and 1000')
+            expect(
+                () =>
+                    new EventQueue('test_sdk_key', dvcClient, {
+                        flushEventQueueSize: 5000,
+                        maxEventQueueSize: 10000,
+                    }),
+            ).toThrow('flushEventQueueSize: 5000 must be between 10 and 1000')
+            expect(
+                () =>
+                    new EventQueue('test_sdk_key', dvcClient, {
+                        flushEventQueueSize: 10,
+                        maxEventQueueSize: 50,
+                    }),
+            ).toThrow('maxEventQueueSize: 50 must be between 100 and 5000')
+            expect(
+                () =>
+                    new EventQueue('test_sdk_key', dvcClient, {
+                        maxEventQueueSize: 5500,
+                    }),
+            ).toThrow('maxEventQueueSize: 5500 must be between 100 and 5000')
+        })
+    })
+
+    describe('queueEvent', () => {
+        it('should flush queued event', async () => {
+            Request.publishEvents.mockResolvedValue({ status: 201 })
+            const event = { type: 'test_type' }
+            eventQueue.queueEvent(event)
+            await eventQueue.flushEvents()
+
+            expect(Request.publishEvents).toBeCalledWith(
+                'test_sdk_key',
+                dvcClient.config,
+                dvcClient.user,
+                expect.any(Object),
+                expect.any(Object),
+            )
+        })
+
+        it('should drop event if eventQueueSize is larger than maxEventQueueSize', async () => {
+            Request.publishEvents.mockResolvedValue({ status: 201 })
+
+            for (let i = 0; i < 100; i++) {
+                const event = { type: 'test_type_' + i }
+                eventQueue.eventQueue.push(event)
+            }
+            const event = { type: 'test_type' }
+            eventQueue.queueEvent(event)
+
+            expect(Request.publishEvents).toHaveBeenCalled()
+            expect(loggerMock.warn).toBeCalledWith(
+                `DevCycle: Max event queue size (100) reached, dropping event: ${event}`,
             )
         })
     })
@@ -133,6 +203,33 @@ describe('EventQueue tests', () => {
                     'dummy_key1'
                 ].value,
             ).toBe(1)
+        })
+
+        it('should drop event if eventQueueSize is larger than maxEventQueueSize', async () => {
+            Request.publishEvents.mockResolvedValue({ status: 201 })
+
+            eventQueue.aggregateEventMap[EventTypes.variableEvaluated] = {}
+            for (let i = 0; i < 100; i++) {
+                const event = {
+                    type: EventTypes.variableEvaluated,
+                    target: 'dummy_key_' + i,
+                    clientDate: Date.now(),
+                }
+                eventQueue.aggregateEventMap[EventTypes.variableEvaluated][
+                    event.target
+                ] = event
+            }
+            const event = {
+                type: EventTypes.variableEvaluated,
+                target: 'dummy_key',
+                clientDate: Date.now(),
+            }
+            eventQueue.queueAggregateEvent(event)
+
+            expect(Request.publishEvents).toHaveBeenCalled()
+            expect(loggerMock.warn).toBeCalledWith(
+                `DevCycle: Max event queue size (100) reached, dropping event: ${event}`,
+            )
         })
     })
 
