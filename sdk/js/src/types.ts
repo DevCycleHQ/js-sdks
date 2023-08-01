@@ -100,7 +100,7 @@ export interface DevCycleOptions {
     flushEventQueueSize?: number
 
     /**
-     * Controls the maximum size the event queue can grow to until events are dropped. Defaults to `2000`.
+     * Controls the maximum size the event queue can grow to until events are dropped. Defaults to `1000`.
      */
     maxEventQueueSize?: number
 }
