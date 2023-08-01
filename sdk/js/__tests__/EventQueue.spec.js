@@ -67,6 +67,12 @@ describe('EventQueue tests', () => {
             expect(
                 () =>
                     new EventQueue('test_sdk_key', dvcClient, {
+                        flushEventQueueSize: 0,
+                    }),
+            ).toThrow('flushEventQueueSize: 0 must be between 10 and 1000')
+            expect(
+                () =>
+                    new EventQueue('test_sdk_key', dvcClient, {
                         flushEventQueueSize: 5,
                     }),
             ).toThrow('flushEventQueueSize: 5 must be between 10 and 1000')

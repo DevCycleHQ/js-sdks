@@ -54,8 +54,8 @@ export class EventQueue {
             eventFlushIntervalMS,
         )
 
-        this.flushEventQueueSize = options?.flushEventQueueSize || 100
-        this.maxEventQueueSize = options?.maxEventQueueSize || 1000
+        this.flushEventQueueSize = options?.flushEventQueueSize ?? 100
+        this.maxEventQueueSize = options?.maxEventQueueSize ?? 1000
         if (this.flushEventQueueSize >= this.maxEventQueueSize) {
             throw new Error(
                 `flushEventQueueSize: ${this.flushEventQueueSize} must be smaller than ` +
@@ -115,7 +115,7 @@ export class EventQueue {
                     this.client.logger.info(
                         `DevCycle Flushed ${eventRequest.length} Events.`,
                     )
-                } else if (res.status >= 500) {
+                } else if (res.status >= 500 || res.status === 408) {
                     this.client.logger.warn(
                         'failed to flush events, retrying events. ' +
                             `Response status: ${res.status}, message: ${res.statusText}`,
