@@ -96,7 +96,7 @@ export class EventQueue {
             return
         }
 
-        this.client.logger.info(`DVC Flush ${eventsToFlush.length} Events`)
+        this.client.logger.info(`Flush ${eventsToFlush.length} Events`)
 
         this.eventQueue = []
         this.aggregateEventMap = {}
@@ -111,16 +111,28 @@ export class EventQueue {
                     eventRequest,
                     this.client.logger,
                 )
-                if (res.status !== 201) {
+                if (res.status === 201) {
+                    this.client.logger.info(
+                        `DevCycle Flushed ${eventRequest.length} Events.`,
+                    )
+                } else if (res.status >= 500) {
+                    this.client.logger.warn(
+                        'failed to flush events, retrying events. ' +
+                            `Response status: ${res.status}, message: ${res.statusText}`,
+                    )
                     this.eventQueue.push(...eventRequest)
                 } else {
-                    this.client.logger.info(
-                        `DVC Flushed ${eventRequest.length} Events.`,
+                    this.client.logger.error(
+                        'failed to flush events, dropping events. ' +
+                            `Response status: ${res.status}, message: ${res.statusText}`,
                     )
                 }
-            } catch (ex) {
+            } catch (ex: any) {
                 this.client.eventEmitter.emitError(ex)
-                this.eventQueue.push(...eventRequest)
+                this.client.logger.error(
+                    'failed to flush events due to error, dropping events. ' +
+                        `Error message: ${ex?.message}`,
+                )
             }
         }
     }

@@ -169,7 +169,7 @@ describe('EventQueue tests', () => {
             expect(Request.publishEvents).toHaveBeenCalledTimes(20)
         })
 
-        it('should handle retry publish request error', async () => {
+        it('should handle retry publish 5XX request error', async () => {
             Request.publishEvents.mockResolvedValue({ status: 201 })
             Request.publishEvents.mockResolvedValueOnce({ status: 500 })
             const events = []
@@ -187,6 +187,37 @@ describe('EventQueue tests', () => {
 
             await eventQueue.flushEvents()
             expect(Request.publishEvents).toHaveBeenCalledTimes(3)
+            expect(eventQueue.eventQueue).toEqual([])
+        })
+
+        it('should drop events from 4XX error responses', async () => {
+            Request.publishEvents.mockResolvedValue({ status: 201 })
+            Request.publishEvents.mockResolvedValueOnce({ status: 403 })
+            const events = []
+
+            for (let i = 0; i < 200; i++) {
+                const event = { type: 'test_type_' + i }
+                eventQueue.eventQueue.push(event)
+                events.push(event)
+            }
+
+            await eventQueue.flushEvents()
+
+            expect(Request.publishEvents).toHaveBeenCalledTimes(2)
+            expect(eventQueue.eventQueue).toEqual([])
+        })
+
+        it('should drop events if publishEvents throws an error', async () => {
+            Request.publishEvents.mockRejectedValue(new Error('test error'))
+
+            for (let i = 0; i < 10; i++) {
+                const event = { type: 'test_type_' + i }
+                eventQueue.eventQueue.push(event)
+            }
+
+            await eventQueue.flushEvents()
+
+            expect(Request.publishEvents).toHaveBeenCalledTimes(1)
             expect(eventQueue.eventQueue).toEqual([])
         })
     })
