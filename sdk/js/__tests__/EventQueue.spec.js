@@ -124,6 +124,71 @@ describe('EventQueue tests', () => {
                 `DevCycle: Max event queue size (100) reached, dropping event: ${event}`,
             )
         })
+
+        it('should make multiple batched requests', async () => {
+            Request.publishEvents.mockResolvedValue({ status: 201 })
+            const events = []
+
+            for (let i = 0; i < 200; i++) {
+                const event = { type: 'test_type_' + i }
+                eventQueue.eventQueue.push(event)
+                events.push(event)
+            }
+
+            await eventQueue.flushEvents()
+
+            expect(Request.publishEvents).toHaveBeenCalledTimes(2)
+            expect(Request.publishEvents).toHaveBeenNthCalledWith(
+                1,
+                'test_sdk_key',
+                dvcClient.config,
+                dvcClient.user,
+                events.slice(0, 100),
+                expect.any(Object),
+            )
+            expect(Request.publishEvents).toHaveBeenNthCalledWith(
+                2,
+                'test_sdk_key',
+                dvcClient.config,
+                dvcClient.user,
+                events.slice(100, 200),
+                expect.any(Object),
+            )
+        })
+
+        it('should flush multiple times calling queueEvent', async () => {
+            Request.publishEvents.mockResolvedValue({ status: 201 })
+
+            for (let i = 0; i < 200; i++) {
+                const event = { type: 'test_type_' + i }
+                eventQueue.queueEvent(event)
+            }
+
+            expect(Request.publishEvents).toHaveBeenCalledTimes(19)
+            await eventQueue.flushEvents()
+            expect(Request.publishEvents).toHaveBeenCalledTimes(20)
+        })
+
+        it('should handle retry publish request error', async () => {
+            Request.publishEvents.mockResolvedValue({ status: 201 })
+            Request.publishEvents.mockResolvedValueOnce({ status: 500 })
+            const events = []
+
+            for (let i = 0; i < 200; i++) {
+                const event = { type: 'test_type_' + i }
+                eventQueue.eventQueue.push(event)
+                events.push(event)
+            }
+
+            await eventQueue.flushEvents()
+
+            expect(Request.publishEvents).toHaveBeenCalledTimes(2)
+            expect(eventQueue.eventQueue).toEqual(events.slice(0, 100))
+
+            await eventQueue.flushEvents()
+            expect(Request.publishEvents).toHaveBeenCalledTimes(3)
+            expect(eventQueue.eventQueue).toEqual([])
+        })
     })
 
     describe('queueAggregateEvents', () => {
@@ -208,8 +273,13 @@ describe('EventQueue tests', () => {
         it('should drop event if eventQueueSize is larger than maxEventQueueSize', async () => {
             Request.publishEvents.mockResolvedValue({ status: 201 })
 
+            for (let i = 0; i < 50; i++) {
+                const event = { type: 'test_type_' + i }
+                eventQueue.eventQueue.push(event)
+            }
+
             eventQueue.aggregateEventMap[EventTypes.variableEvaluated] = {}
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 50; i++) {
                 const event = {
                     type: EventTypes.variableEvaluated,
                     target: 'dummy_key_' + i,
