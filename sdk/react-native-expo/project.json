@@ -19,6 +19,11 @@
             "outputs": ["{options.outputFile}"]
         },
         "build:es5": {
+            "dependsOn": [
+                "shared-types:build:es5",
+                "js:build:es5",
+                "react:build:es5"
+            ],
             "executor": "@nrwl/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "options": {
