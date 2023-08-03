@@ -48,6 +48,19 @@
                 "assets": ["sdk/js/*.md"]
             }
         },
+        "build:es5": {
+            "executor": "@nx/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/sdk/js",
+                "target": "es5",
+                "tsConfig": "sdk/js/tsconfig.lib.json",
+                "packageJson": "sdk/js/package.json",
+                "buildableProjectDepsInPackageJsonType": "dependencies",
+                "main": "sdk/js/src/index.ts",
+                "assets": ["sdk/js/*.md"]
+            }
+        },
         "build:emit-legacy-types": {
             "executor": "nx:run-commands",
             "options": {

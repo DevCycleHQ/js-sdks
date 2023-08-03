@@ -12,6 +12,12 @@
                 "cwd": "sdk/react-native"
             }
         },
+        "bundlefy": {
+            "executor": "@altack/nx-bundlefy:run",
+            "configurations": {},
+            "dependsOn": ["build"],
+            "outputs": ["{options.outputFile}"]
+        },
         "build": {
             "executor": "@nrwl/rollup:rollup",
             "outputs": ["{options.outputPath}"],
@@ -21,7 +27,7 @@
                 "project": "sdk/react-native/package.json",
                 "entryFile": "sdk/react-native/src/index.ts",
                 "format": ["esm", "cjs"],
-                "external": "all",
+                "external": "none",
                 "rollupConfig": "@nx/react/plugins/bundle-rollup",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
                 "compiler": "babel",

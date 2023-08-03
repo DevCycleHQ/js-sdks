@@ -61,12 +61,15 @@
         "winston": "^3.3.3"
     },
     "devDependencies": {
+        "@altack/nx-bundlefy": "^0.16.0",
         "@babel/core": "^7.17.7",
         "@babel/preset-react": "^7.14.5",
         "@commitlint/cli": "^16.2.3",
         "@commitlint/config-conventional": "^16.2.1",
-        "@nrwl/js": "16.3.2",
+        "@nrwl/devkit": "^16.6.0",
+        "@nrwl/js": "^16.6.0",
         "@nrwl/rollup": "16.3.2",
+        "@nrwl/workspace": "^16.6.0",
         "@nx/cypress": "16.3.2",
         "@nx/detox": "16.3.2",
         "@nx/devkit": "16.3.2",
@@ -171,6 +174,7 @@
         "tslib": "^2.3.0",
         "typescript": "5.0.4",
         "url-loader": "^4.1.1",
+        "validate-npm-package-name": "^5.0.0",
         "verdaccio": "^5.15.4",
         "webpack": "^5.75.0",
         "webpack-merge": "^5.8.0"
