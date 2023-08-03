@@ -85,6 +85,11 @@ export class ConfigBody<IdType = string> {
     listAudiences?: ListAudience<IdType>[]
 
     /**
+     * List of DevCycle user IDs that are associated to dashboard profiles, indicating their use in debugging features
+     */
+    debugUsers?: string[]
+
+    /**
      * Ably information used for establishing connections
      */
     ably?: {
