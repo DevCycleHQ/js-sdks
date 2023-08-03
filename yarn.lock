@@ -4914,6 +4914,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@devcycle/react-native-expo-client-sdk@workspace:sdk/react-native-expo":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/react-native-expo-client-sdk@workspace:sdk/react-native-expo"
+  dependencies:
+    "@react-native-async-storage/async-storage": ^1.17.11
+    react-native-device-info: ^8.7.0
+    react-native-get-random-values: ^1.7.2
+  peerDependencies:
+    react-native: ">=0.64.0"
+  languageName: unknown
+  linkType: soft
+
 "@devcycle/types@workspace:lib/shared/types":
   version: 0.0.0-use.local
   resolution: "@devcycle/types@workspace:lib/shared/types"
