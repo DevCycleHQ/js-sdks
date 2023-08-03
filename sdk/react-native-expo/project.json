@@ -27,7 +27,7 @@
                 "project": "sdk/react-native-expo/package.json",
                 "entryFile": "sdk/react-native-expo/src/index.ts",
                 "format": ["esm", "cjs"],
-                "external": "none",
+                "external": "all",
                 "rollupConfig": "@nx/react/plugins/bundle-rollup",
                 "compiler": "babel",
                 "assets": [
