@@ -48,6 +48,27 @@
                 "assets": ["sdk/js/*.md"]
             }
         },
+        "build:es5": {
+            "executor": "@nrwl/rollup:rollup",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/sdk/js",
+                "tsConfig": "sdk/js/tsconfig.lib.es5.json",
+                "project": "sdk/js/package.json",
+                "entryFile": "sdk/js/src/index.ts",
+                "format": ["esm", "cjs"],
+                "external": "none",
+                "rollupConfig": "@nx/react/plugins/bundle-rollup",
+                "compiler": "babel",
+                "assets": [
+                    {
+                        "glob": "sdk/js/README.md",
+                        "input": ".",
+                        "output": "."
+                    }
+                ]
+            }
+        },
         "build:emit-legacy-types": {
             "executor": "nx:run-commands",
             "options": {

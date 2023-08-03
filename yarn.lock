@@ -12,6 +12,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@altack/nx-bundlefy@npm:^0.16.0":
+  version: 0.16.0
+  resolution: "@altack/nx-bundlefy@npm:0.16.0"
+  dependencies:
+    tslib: ^2.5.0
+  peerDependencies:
+    "@nrwl/devkit": ">=16.5.5"
+    "@nrwl/js": ">=16.5.5"
+    "@nrwl/workspace": ">=16.5.5"
+    validate-npm-package-name: ">=5.0.0"
+  checksum: 94debc979520f1953c1f516a712fdbba2e28918cf46a11e8cacc97aec35095a90a6d6c27fb58774ac980d3b19bbaff967132fcf2a5420acf6c4db5fdeefcedd3
+  languageName: node
+  linkType: hard
+
 "@ampproject/remapping@npm:^2.1.0":
   version: 2.2.0
   resolution: "@ampproject/remapping@npm:2.2.0"
@@ -14654,6 +14668,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "devcycle-js-sdks@workspace:."
   dependencies:
+    "@altack/nx-bundlefy": ^0.16.0
     "@babel/core": ^7.17.7
     "@babel/preset-react": ^7.14.5
     "@commitlint/cli": ^16.2.3
