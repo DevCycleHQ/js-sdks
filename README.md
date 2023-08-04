@@ -16,7 +16,7 @@ There are several examples included in this repository for various SDKs. If you 
 Ensure you have Node 16.x installed.
 
 1. Clone this repo
-2. Run `yarn` from the root directory. SDKs and examples should now be set up to run via Nx.
+2. Run `pnpm` from the root directory. SDKs and examples should now be set up to run via Nx.
 3. Run `aws configure sso`
 4. Run `aws sso login`
 
@@ -34,8 +34,8 @@ sdk/
 ```
 
 ## Running an example
-To run an example, use the `yarn start` command with the name of the example you want to run:
-`yarn start example-react-with-provider`
+To run an example, use the `pnpm start` command with the name of the example you want to run:
+`pnpm start example-react-with-provider`
 
 The names of the examples are listed in the `workspace.json` file at the root of the repository. All examples are
 located in the root-level `examples/` directory.
@@ -60,21 +60,21 @@ lint  - run linting
 format:write - run prettier against the project and write all formatting changes
 ```
 
-There are also several root-level yarn commands for running services:
+There are also several root-level pnpm commands for running services:
 ```
-yarn start                - start all services in the repo
-yarn start:partial        - start the services you specify (eg. yarn start:partial api,config)
-yarn test                 - run all tests in the repo
-yarn lint                 - lint all projects in the repo
+pnpm start                - start all services in the repo
+pnpm start:partial        - start the services you specify (eg. pnpm start:partial api,config)
+pnpm test                 - run all tests in the repo
+pnpm lint                 - lint all projects in the repo
 ```
 
 ### Running a local npm server to publish to and pull from
 
-This will update your yarn and npm configs to point to the new registry, and start up the new registry locally.
+This will update your pnpm and npm configs to point to the new registry, and start up the new registry locally.
 
 ```
-yarn local-registry enable
-yarn local-registry start
+pnpm local-registry enable
+pnpm local-registry start
 ```
 
 The first time you run this, you'll need to add your user:
@@ -88,7 +88,7 @@ The username is test, and the password is test.
 To disable the server, just exit the process. Then run:
 
 ```
-yarn local-registry disable
+pnpm local-registry disable
 ```
 
 Keeping the server active may interfere with normal npm and npx activities, so if anything's acting strange, just kill the server and disable the registry updates.
@@ -110,14 +110,14 @@ Setup:
 - ensure you're on the main branch with the latest code
 
 Then use lerna to create new versions of all changed packages (ensure you do this on the main branch)
-`yarn lerna:version`
+`pnpm lerna:version`
 
 This will automatically push the latest tags and version updates to github. 
 
 To publish the versions to npm, you need a one-time password from our NPM account.
 
 To publish, run:
-`yarn npm-publish --otp=<one-time password>`
+`pnpm npm-publish --otp=<one-time password>`
 
 This will publish all the new versions to npm. 
 

@@ -13,6 +13,6 @@ You can find this under Settings / Environments on the DevCycle dashboard.
 
 You can now start the app by running:
 ```sh 
-yarn nx serve example-react-with-provider
+pnpm nx serve example-react-with-provider
 ```
 Open [http://localhost:4200](http://localhost:4200) to view it in the browser.

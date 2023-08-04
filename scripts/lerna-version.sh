@@ -25,7 +25,7 @@ fi
 
 echo "Last tagged sha: $LAST_TAGGED_SHA"
 
-AFFECTED_PROJECTS=$(yarn nx print-affected --base $LAST_TAGGED_SHA --select=projects)
+AFFECTED_PROJECTS=$(pnpm nx print-affected --base $LAST_TAGGED_SHA --select=projects)
 echo "Affected projects: $AFFECTED_PROJECTS"
 
 # exit if no affected projects
@@ -47,7 +47,7 @@ for PROJECT in "${AFFECTED_PROJECTS[@]}"; do
   echo "Getting package name for $PROJECT"
 
   # get filepath from project.json
-  FILEPATH=$(yarn nx show project $PROJECT | jq -r ".sourceRoot")
+  FILEPATH=$(pnpm nx show project $PROJECT | jq -r ".sourceRoot")
 
   # get package name from project.json
   PACKAGE=$(cat "$FILEPATH/../package.json" | jq -r '.name')
@@ -59,12 +59,12 @@ done
 # join packages with comma
 PACKAGES=$(IFS=','; echo "${PACKAGES[*]}")
 
-yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish" "$@" --no-push
+pnpm lerna version --force-publish=$PACKAGES --message "chore(release): publish" "$@" --no-push
 # store the tags created for this commit
 RELEASE_TAGS=$(git tag --points-at HEAD)
-#  run yarn and add any lockfile changes
-yarn
-git add yarn.lock
+#  run pnpm and add any lockfile changes
+pnpm
+git add pnpm-lock.yaml
 # amend the previous commit with the new lock file. Now the SHA is different and the tags are wrong
 git commit --amend --no-edit --no-verify
 

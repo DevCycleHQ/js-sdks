@@ -16,7 +16,7 @@
         "check-types": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "yarn run -T tsc -b --incremental",
+                "command": "pnpm tsc -b --incremental",
                 "cwd": "sdk/js"
             }
         },

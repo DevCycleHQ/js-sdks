@@ -3,4 +3,4 @@
 
 echo "Pre Commit Hook"
 
-yarn lint-staged --shell
+pnpm lint-staged --shell

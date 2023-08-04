@@ -16,7 +16,7 @@ See the AssemblyScript Documentation for further details: https://www.assemblysc
 
 ### Building WebAssembly
 
-```yarn nx build shared-bucketing-as```
+```pnpm nx build shared-bucketing-as```
 
 See WebAssembly output in `/build` folder.
 
@@ -28,11 +28,11 @@ When working on the Protobuf types you will need to compile those types into JS 
 
 ### Testing
 
-```yarn nx test shared-bucketing-as```
+```pnpm nx test shared-bucketing-as```
 
 ### Benchmarking
 
-```yarn nx run shared-bucketing-as:benchmark```
+```pnpm nx run shared-bucketing-as:benchmark```
 
 Current benchmark results on M1 Pro Macbook Pro:
 

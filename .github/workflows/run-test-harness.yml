@@ -16,11 +16,11 @@ jobs:
                   fetch-depth: 0
             - name: Install protoc for protobuf compilation
               run: sudo apt-get install -y protobuf-compiler
-            - name: Run Yarn
-              run: yarn --immutable
+            - name: Run PNPM
+              run: pnpm --frozen-lockfile
             - name: Check affected projects
               run: |
-                  if yarn nx print-affected --base=origin/main --select=projects | grep -E '(^nodejs|[^-]nodejs|^openfeature-nodejs-provider)'; then
+                  if pnpm nx print-affected --base=origin/main --select=projects | grep -E '(^nodejs|[^-]nodejs|^openfeature-nodejs-provider)'; then
                     echo "TRIGGER_NODEJS_TEST_HARNESS=true" >> $GITHUB_ENV
                   fi
             - uses: DevCycleHQ/test-harness@main
