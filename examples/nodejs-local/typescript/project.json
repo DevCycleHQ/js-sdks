@@ -25,7 +25,7 @@
         "benchmark": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "DVC_BENCHMARK=1 DVC_BENCH_LOOP=1 yarn nx serve example-nodejs-local-typescript"
+                "command": "DVC_BENCHMARK=1 DVC_BENCH_LOOP=1 pnpm nx serve example-nodejs-local-typescript"
             }
         },
         "lint": {

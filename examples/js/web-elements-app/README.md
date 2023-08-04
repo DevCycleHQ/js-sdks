@@ -9,4 +9,4 @@ You can find this under Settings / Environments on the DevCycle dashboard.
 
 run from the repo's root folder:
 
-```yarn nx serve example-js-web-elements-app```
+```pnpm nx serve example-js-web-elements-app```

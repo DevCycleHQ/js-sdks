@@ -2,6 +2,7 @@ import { SDKEventBatchRequestBody, DVCLogger } from '@devcycle/types'
 import { DVCPopulatedUser } from './models/populatedUser'
 import { DevCycleEvent, DevCycleOptions } from './types'
 import fetchWithRetry, { RequestInitWithRetry } from 'fetch-retry'
+import { base } from 'next/dist/build/webpack/config/blocks/base'
 
 export const HOST = '.devcycle.com'
 export const EVENT_URL = 'https://events'
@@ -157,6 +158,7 @@ export async function getVariable(
     const baseUrl = `${
         options.bucketingAPIURI || BUCKETING_URL
     }${VARIABLES_PATH}/${variableKey}`
+
     const postUrl = baseUrl.concat(
         options.enableEdgeDB ? EDGE_DB_QUERY_PARAM.concat('true') : '',
     )
@@ -204,6 +206,7 @@ export async function post(
         Authorization: sdkKey,
         'Content-Type': 'application/json',
     }
+    console.log('FETCHING', url)
     const res = await _fetch(url, {
         ...config,
         headers: postHeaders,

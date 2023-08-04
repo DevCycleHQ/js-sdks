@@ -1,12 +1,5 @@
 node_modules
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
 lerna-debug.log
-yarn-error.log
 .tmp/
 tmp/
 /.dockerignore
@@ -22,7 +15,6 @@ lib-cov
 .generated/
 /infra/local-environments
 *package-lock.json*
-*yarn-error.log*
 .vscode/*
 test-results
 buildlogs/

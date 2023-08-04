@@ -9,4 +9,4 @@ You can find this under Settings / Environments on the DevCycle dashboard.
 
 run from the repo's root folder: 
 
-```yarn nx serve example-nodejs-local-js```
+```pnpm nx serve example-nodejs-local-js```

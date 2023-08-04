@@ -7,7 +7,7 @@
         "clean": "rimraf dist",
         "test": "jest",
         "tsc": "tsc",
-        "build": "yarn clean && yarn tsc"
+        "build": "pnpm clean && pnpm tsc"
     },
     "types": "dist/index.d.ts",
     "author": "",

@@ -14,7 +14,7 @@ fi
 PACKAGE=$1
 DEPRECATED_PACKAGE=""
 JQ_PATH=".version"
-NPM_REGISTRY="$(yarn config get npmRegistryServer)"
+NPM_REGISTRY="$(pnpm config get registry)"
 SHA="$(git rev-parse HEAD)"
 
 # Use bash function to parse arguments more efficiently
@@ -48,7 +48,7 @@ echo "$PACKAGE npm show: $NPM_SHOW, npm ls: $NPM_LS"
 if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
   echo "Versions are not the same, (Remote = $NPM_SHOW; Local = $NPM_LS). Checking for publish eligibility."
 
-  if [[ "$NPM_REGISTRY" = "https://registry.yarnpkg.com" ]]; then
+  if [[ "$NPM_REGISTRY" = "https://registry.npmjs.com" ]]; then
     DEVCYCLE_PROD_SLEUTH_API_TOKEN="$(aws secretsmanager get-secret-value --secret-id=DEVCYCLE_PROD_SLEUTH_API_TOKEN | jq -r .SecretString )"
     # make sure we're able to track this deployment
     if [[ -z "$DEVCYCLE_PROD_SLEUTH_API_TOKEN" ]]; then

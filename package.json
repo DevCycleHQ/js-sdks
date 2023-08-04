@@ -2,19 +2,14 @@
     "private": true,
     "name": "devcycle-js-sdks",
     "version": "1.0.0",
-    "workspaces": [
-        "sdk/**/*",
-        "lib/**/*",
-        "examples/**/*"
-    ],
-    "packageManager": "yarn@3.6.0",
+    "packageManager": "pnpm@8.6.11",
     "scripts": {
         "lint": "nx run-many --parallel --target lint --all",
         "test": "nx run-many --parallel --target test --all",
         "affected:lint": "nx affected --base=origin/main --head=HEAD --target=lint --fix",
         "affected:test": "nx affected --base=origin/main --head=HEAD --target=test",
         "npm-publish": "nx affected --base=origin/main~1 --target=npm-publish",
-        "prettier:format": "yarn prettier --write .",
+        "prettier:format": "pnpm prettier --write .",
         "start": "nx serve",
         "lerna:version": "scripts/lerna-version.sh",
         "local-registry": "./scripts/local-registry.sh"
@@ -26,7 +21,7 @@
         "@nestjs/class-validator": "^0.13.4",
         "@openfeature/js-sdk": "^1.3.1",
         "async": "^3.2.1",
-        "axios": "^1.0.0",
+        "axios": "1.4.0",
         "axios-retry": "^3.3.1",
         "bootstrap": "5.1.3",
         "class-transformer": "0.5.1",
@@ -149,7 +144,8 @@
         "metro-react-native-babel-preset": "0.74.1",
         "metro-react-native-babel-transformer": "0.74.1",
         "metro-resolver": "0.74.1",
-        "msw": "^0.47.3",
+        "msw": "^1.2.3",
+        "nock": "^13.1.2",
         "npm-run-all": "^4.1.5",
         "nx": "16.3.2",
         "prettier": "^2.8.8",
@@ -186,12 +182,16 @@
         "moment": "^2.29.4",
         "terser-webpack-plugin": "^5.3.6",
         "nx": "16.3.2",
-        "@nrwl/devkit": "16.3.2",
-        "@nx/js@16.3.2": "patch:@nx/js@npm%3A16.3.2#./.yarn/patches/@nx-js-npm-16.3.2-a543eca792.patch"
+        "@nrwl/devkit": "16.3.2"
     },
     "config": {
         "commitizen": {
             "path": "./node_modules/cz-conventional-changelog"
+        }
+    },
+    "pnpm": {
+        "patchedDependencies": {
+            "@nx/js@16.3.2": "patches/@nx__js@16.3.2.patch"
         }
     }
 }

@@ -7,7 +7,6 @@ jest.config.ts
 jest.preset.js
 *.MD
 lib/shared/bucketing-assembly-script/
-.yarn
 .husky
 .verdaccio
 node_modules
