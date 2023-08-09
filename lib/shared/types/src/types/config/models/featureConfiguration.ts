@@ -81,6 +81,12 @@ export class Target<IdType = string> {
      * Specifies variation distribution percentages for features
      */
     distribution: TargetDistribution<IdType>[]
+
+    /**
+     * Field indicating a special kind of targeting rule. Normally blank.
+     * Currently indicates virtual targeting rules generated due to overrides.
+     */
+    type?: 'override'
 }
 
 export class FeaturePrerequisites<IdType = string> {
