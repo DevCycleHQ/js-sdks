@@ -1,6 +1,10 @@
 import { Audience } from './audience'
 import { Type } from 'class-transformer'
 
+export enum TargetingRuleTypes {
+    override = 'override',
+}
+
 export class RolloutStage {
     /**
      * Defines the transition into this percentage level.
@@ -86,7 +90,7 @@ export class Target<IdType = string> {
      * Field indicating a special kind of targeting rule. Normally blank.
      * Currently indicates virtual targeting rules generated due to overrides.
      */
-    type?: 'override'
+    type?: TargetingRuleTypes
 }
 
 export class FeaturePrerequisites<IdType = string> {
