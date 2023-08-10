@@ -466,12 +466,257 @@ importers:
         specifier: ^5.8.0
         version: 5.8.0
 
+  dist/lib/shared/bucketing:
+    dependencies:
+      '@devcycle/types':
+        specifier: 1.1.9
+        version: 1.1.9
+      '@nestjs/class-validator':
+        specifier: 0.13.4
+        version: 0.13.4
+      class-transformer:
+        specifier: 0.5.1
+        version: 0.5.1
+      iso-639-1:
+        specifier: 2.1.15
+        version: 2.1.15
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      moment:
+        specifier: ^2.29.4
+        version: 2.29.4
+      murmurhash:
+        specifier: ^2.0.0
+        version: 2.0.0
+      reflect-metadata:
+        specifier: 0.1.13
+        version: 0.1.13
+      ua-parser-js:
+        specifier: ^1.0.2
+        version: 1.0.2
+      uuid:
+        specifier: ^8.3.2
+        version: 8.3.2
+    devDependencies:
+      '@devcycle/bucketing-test-data':
+        specifier: ^1.2.15
+        version: link:../../../../lib/shared/bucketing-test-data
+
+  dist/lib/shared/bucketing-test-data: {}
+
+  dist/lib/shared/types:
+    dependencies:
+      '@nestjs/class-validator':
+        specifier: 0.13.4
+        version: 0.13.4
+      class-transformer:
+        specifier: 0.5.1
+        version: 0.5.1
+      iso-639-1:
+        specifier: 2.1.13
+        version: 2.1.13
+      lodash:
+        specifier: 4.17.21
+        version: 4.17.21
+      reflect-metadata:
+        specifier: 0.1.13
+        version: 0.1.13
+
+  dist/out-tsc/sdk/js: {}
+
+  dist/out-tsc/sdk/nodejs:
+    dependencies:
+      '@devcycle/bucketing-assembly-script':
+        specifier: ^1.7.5
+        version: link:../../../../lib/shared/bucketing-assembly-script
+    devDependencies:
+      '@devcycle/bucketing-test-data':
+        specifier: ^1.2.16
+        version: link:../../../../lib/shared/bucketing-test-data
+
+  dist/sdk/js:
+    dependencies:
+      '@devcycle/types':
+        specifier: 1.1.12
+        version: link:../../../lib/shared/types
+      '@nestjs/class-validator':
+        specifier: 0.13.4
+        version: 0.13.4
+      axios:
+        specifier: ^1.4.0
+        version: 1.4.0
+      axios-retry:
+        specifier: ^3.3.1
+        version: 3.3.1
+      class-transformer:
+        specifier: 0.5.1
+        version: 0.5.1
+      iso-639-1:
+        specifier: 2.1.13
+        version: 2.1.13
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      reflect-metadata:
+        specifier: 0.1.13
+        version: 0.1.13
+      ua-parser-js:
+        specifier: ^1.0.2
+        version: 1.0.2
+      uuid:
+        specifier: ^8.3.2
+        version: 8.3.2
+
+  dist/sdk/nodejs:
+    dependencies:
+      '@devcycle/bucketing-assembly-script':
+        specifier: ^1.7.7
+        version: link:../../../lib/shared/bucketing-assembly-script
+      '@devcycle/types':
+        specifier: 1.1.12
+        version: link:../../../lib/shared/types
+      '@nestjs/class-validator':
+        specifier: 0.13.4
+        version: 0.13.4
+      class-transformer:
+        specifier: 0.5.1
+        version: 0.5.1
+      cross-fetch:
+        specifier: ^3.1.5
+        version: 3.1.5
+      fetch-retry:
+        specifier: ^5.0.3
+        version: 5.0.3
+      iso-639-1:
+        specifier: 2.1.13
+        version: 2.1.13
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      long:
+        specifier: 5.2.3
+        version: 5.2.3
+      moment:
+        specifier: ^2.29.4
+        version: 2.29.4
+      murmurhash:
+        specifier: 2.0.0
+        version: 2.0.0
+      next:
+        specifier: 13.3.0
+        version: 13.3.0(@babel/core@7.17.7)(react-dom@18.2.0)(react@18.2.0)
+      protobufjs:
+        specifier: 7.2.2
+        version: 7.2.2
+      reflect-metadata:
+        specifier: 0.1.13
+        version: 0.1.13
+      uuid:
+        specifier: 8.3.2
+        version: 8.3.2
+    devDependencies:
+      '@devcycle/bucketing-test-data':
+        specifier: ^1.2.18
+        version: link:../../../lib/shared/bucketing-test-data
+
+  dist/sdk/openfeature-nodejs-provider:
+    dependencies:
+      '@devcycle/bucketing-assembly-script':
+        specifier: 1.7.4
+        version: 1.7.4
+      '@devcycle/nodejs-server-sdk':
+        specifier: 1.14.2
+        version: 1.14.2
+      '@devcycle/types':
+        specifier: 1.1.9
+        version: 1.1.9
+      '@nestjs/class-validator':
+        specifier: 0.13.4
+        version: 0.13.4
+      '@openfeature/js-sdk':
+        specifier: ^1.3.1
+        version: 1.3.1
+      class-transformer:
+        specifier: 0.5.1
+        version: 0.5.1
+      cross-fetch:
+        specifier: 3.1.5
+        version: 3.1.5
+      fetch-retry:
+        specifier: 5.0.3
+        version: 5.0.3
+      iso-639-1:
+        specifier: 2.1.15
+        version: 2.1.15
+      lodash:
+        specifier: 4.17.21
+        version: 4.17.21
+      long:
+        specifier: 5.2.1
+        version: 5.2.1
+      moment:
+        specifier: ^2.29.4
+        version: 2.29.4
+      murmurhash:
+        specifier: 2.0.0
+        version: 2.0.0
+      protobufjs:
+        specifier: 7.2.2
+        version: 7.2.2
+      reflect-metadata:
+        specifier: 0.1.13
+        version: 0.1.13
+      uuid:
+        specifier: 9.0.0
+        version: 9.0.0
+    devDependencies:
+      '@devcycle/bucketing-test-data':
+        specifier: ^1.2.15
+        version: link:../../../lib/shared/bucketing-test-data
+
+  dist/sdk/react:
+    dependencies:
+      '@devcycle/js-client-sdk':
+        specifier: 1.13.5
+        version: link:../../../sdk/js
+      '@devcycle/types':
+        specifier: 1.1.12
+        version: link:../../../lib/shared/types
+      hoist-non-react-statics:
+        specifier: ^3.3.2
+        version: 3.3.2
+      react:
+        specifier: '>=16.8.0'
+        version: 18.0.0
+
+  dist/sdk/react-native:
+    dependencies:
+      '@devcycle/js-client-sdk':
+        specifier: 1.13.2
+        version: 1.13.2
+      '@devcycle/react-client-sdk':
+        specifier: 1.11.2
+        version: 1.11.2(react@18.2.0)
+      '@react-native-async-storage/async-storage':
+        specifier: ^1.17.11
+        version: 1.18.1(react-native@0.71.8)
+      react-native:
+        specifier: '>=0.64.0'
+        version: 0.71.8(@babel/core@7.22.9)(@babel/preset-env@7.22.9)(react@18.2.0)
+      react-native-device-info:
+        specifier: ^8.7.0
+        version: 8.7.0(react-native@0.71.8)
+      react-native-get-random-values:
+        specifier: ^1.7.2
+        version: 1.7.2(react-native@0.71.8)
+
   examples/js/web-elements-app: {}
 
   examples/nodejs-cloud/js:
     dependencies:
       '@devcycle/nodejs-server-sdk':
-        specifier: ^1.14.3
+        specifier: ^1.14.5
         version: link:../../../sdk/nodejs
 
   examples/nodejs-cloud/typescript: {}
@@ -479,7 +724,7 @@ importers:
   examples/nodejs-local/js:
     dependencies:
       '@devcycle/nodejs-server-sdk':
-        specifier: ^1.14.3
+        specifier: ^1.14.5
         version: link:../../../sdk/nodejs
 
   examples/nodejs-local/typescript: {}
@@ -495,13 +740,13 @@ importers:
   lib/shared/bucketing:
     devDependencies:
       '@devcycle/bucketing-test-data':
-        specifier: ^1.2.16
+        specifier: ^1.2.18
         version: link:../bucketing-test-data
 
   lib/shared/bucketing-assembly-script:
     devDependencies:
       '@devcycle/bucketing-test-data':
-        specifier: ^1.2.16
+        specifier: ^1.2.18
         version: link:../bucketing-test-data
 
   lib/shared/bucketing-test-data: {}
@@ -513,17 +758,17 @@ importers:
   sdk/nodejs:
     dependencies:
       '@devcycle/bucketing-assembly-script':
-        specifier: ^1.7.5
-        version: 1.7.6
+        specifier: ^1.7.7
+        version: link:../../lib/shared/bucketing-assembly-script
     devDependencies:
       '@devcycle/bucketing-test-data':
-        specifier: ^1.2.16
+        specifier: ^1.2.18
         version: link:../../lib/shared/bucketing-test-data
 
   sdk/openfeature-nodejs-provider:
     devDependencies:
       '@devcycle/bucketing-test-data':
-        specifier: ^1.2.16
+        specifier: ^1.2.18
         version: link:../../lib/shared/bucketing-test-data
 
   sdk/react:
@@ -3372,8 +3617,74 @@ packages:
       kuler: 2.0.0
     dev: false
 
-  /@devcycle/bucketing-assembly-script@1.7.6:
-    resolution: {integrity: sha512-XJ6/2Ynwt0Bs+vkcjAr1qTqFPta2x81wQfXpPjNXkZSXxtpDpsnqLhvv1D8ZIUiIyZnd0FyRJJxI8sibV52uMA==}
+  /@devcycle/bucketing-assembly-script@1.7.4:
+    resolution: {integrity: sha512-Ce50KvTpclYd0GsY2/2XKDdMIPENORmlWf4PhSKoSy1XeL5/DwoEvKwSQaDdPaVDgbl0wqlpm1ZWAoYZwT0Tag==}
+    dev: false
+
+  /@devcycle/bucketing-assembly-script@1.7.7:
+    resolution: {integrity: sha512-Es/jGt85CRPcpoyplftr/+9PLqAowPNtXjJp7J24QXcIpzy9tHXN3LPWvHFAqYMVerr+j3lcQMSrM94pQxX+tA==}
+    dev: false
+
+  /@devcycle/js-client-sdk@1.13.2:
+    resolution: {integrity: sha512-ktn9Fq5CNOAXB+TMpVUNrLhVSnmknaUCbx3dJzC7jN2SIXilkQCQqqj67jAtGBtfcF65j2pofFpE2uiLyOkpBQ==}
+    dependencies:
+      '@devcycle/types': 1.1.9
+      '@nestjs/class-validator': 0.13.4
+      axios: 1.4.0
+      axios-retry: 3.3.1
+      class-transformer: 0.5.1
+      iso-639-1: 2.1.15
+      lodash: 4.17.21
+      reflect-metadata: 0.1.13
+      ua-parser-js: 1.0.2
+      uuid: 8.3.2
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /@devcycle/nodejs-server-sdk@1.14.2:
+    resolution: {integrity: sha512-o3ghmQXHgyDm9BikRDNLsoPLlAHvmLwmfJKhtN9dQxhn9gUIZxUurxosWHKzAoLIZ7AV6VpH5870zvsxgqPLoQ==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      '@devcycle/bucketing-assembly-script': 1.7.7
+      '@devcycle/types': 1.1.9
+      '@nestjs/class-validator': 0.13.4
+      class-transformer: 0.5.1
+      cross-fetch: 3.1.5
+      fetch-retry: 5.0.3
+      iso-639-1: 2.1.15
+      lodash: 4.17.21
+      long: 5.2.1
+      moment: 2.29.4
+      murmurhash: 2.0.0
+      protobufjs: 7.2.2
+      reflect-metadata: 0.1.13
+      uuid: 9.0.0
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
+  /@devcycle/react-client-sdk@1.11.2(react@18.2.0):
+    resolution: {integrity: sha512-eaD+e+ndwQTH7z7I2wzuNE9lNy4zmk07cu+MmE3d5SgoLgIMFTBqaW89OenQltHb04oI0N3MPWojILkfiwEUDw==}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      '@devcycle/js-client-sdk': 1.13.2
+      '@devcycle/types': 1.1.9
+      hoist-non-react-statics: 3.3.2
+      react: 18.2.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /@devcycle/types@1.1.9:
+    resolution: {integrity: sha512-UIalNff4yZHOOM7v4L/XaUYypxqU+mgMQcRqIz8hQ+ZhUnreR92ID7zTdytN6DTBYinDxJBfKaMIXZK275uQTA==}
+    dependencies:
+      '@nestjs/class-validator': 0.13.4
+      class-transformer: 0.5.1
+      iso-639-1: 2.1.15
+      lodash: 4.17.21
+      reflect-metadata: 0.1.13
     dev: false
 
   /@esbuild/android-arm64@0.17.17:
@@ -14460,6 +14771,11 @@ packages:
     engines: {node: '>=6.0'}
     dev: false
 
+  /iso-639-1@2.1.15:
+    resolution: {integrity: sha512-7c7mBznZu2ktfvyT582E2msM+Udc1EjOyhVRE/0ZsjD9LBtWSm23h3PtiRh2a35XoUsTQQjJXaJzuLjXsOdFDg==}
+    engines: {node: '>=6.0'}
+    dev: false
+
   /isobject@2.1.0:
     resolution: {integrity: sha512-+OUdGJlgjOBZDfxnDjYYG6zp487z0JGNQq3cYQYg5f5hKR+syHMsaztzGeml/4kGG55CSpKSpWTY+jYGgsHLgA==}
     engines: {node: '>=0.10.0'}
@@ -16512,6 +16828,10 @@ packages:
     engines: {node: '>= 0.6.0'}
     dev: true
 
+  /long@5.2.1:
+    resolution: {integrity: sha512-GKSNGeNAtw8IryjjkhZxuKB3JzlcLTwjtiQCHKvqQet81I93kXslhDQruGI/QsddO83mcDToBVy7GqGS/zYf/A==}
+    dev: false
+
   /long@5.2.3:
     resolution: {integrity: sha512-lcHwpNoggQTObv5apGNCTdJrO69eHOZMi4BNC+rTLER8iHAqGrUVeLh/irVIM7zTw2bOXA8T6uNPeujwOLg/2Q==}
 
@@ -18237,6 +18557,50 @@ packages:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+
+  /next@13.3.0(@babel/core@7.17.7)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-OVTw8MpIPa12+DCUkPqRGPS3thlJPcwae2ZL4xti3iBff27goH024xy4q2lhlsdoYiKOi8Kz6uJoLW/GXwgfOA==}
+    engines: {node: '>=14.6.0'}
+    hasBin: true
+    peerDependencies:
+      '@opentelemetry/api': ^1.1.0
+      fibers: '>= 3.1.0'
+      node-sass: ^6.0.0 || ^7.0.0
+      react: ^18.2.0
+      react-dom: ^18.2.0
+      sass: ^1.3.0
+    peerDependenciesMeta:
+      '@opentelemetry/api':
+        optional: true
+      fibers:
+        optional: true
+      node-sass:
+        optional: true
+      sass:
+        optional: true
+    dependencies:
+      '@next/env': 13.3.0
+      '@swc/helpers': 0.4.14
+      busboy: 1.6.0
+      caniuse-lite: 1.0.30001519
+      postcss: 8.4.14
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      styled-jsx: 5.1.1(@babel/core@7.17.7)(react@18.2.0)
+    optionalDependencies:
+      '@next/swc-darwin-arm64': 13.3.0
+      '@next/swc-darwin-x64': 13.3.0
+      '@next/swc-linux-arm64-gnu': 13.3.0
+      '@next/swc-linux-arm64-musl': 13.3.0
+      '@next/swc-linux-x64-gnu': 13.3.0
+      '@next/swc-linux-x64-musl': 13.3.0
+      '@next/swc-win32-arm64-msvc': 13.3.0
+      '@next/swc-win32-ia32-msvc': 13.3.0
+      '@next/swc-win32-x64-msvc': 13.3.0
+    transitivePeerDependencies:
+      - '@babel/core'
+      - babel-plugin-macros
+    dev: false
 
   /nice-try@1.0.5:
     resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}
@@ -20139,6 +20503,16 @@ packages:
       react: 18.0.0
       scheduler: 0.23.0
 
+  /react-dom@18.2.0(react@18.2.0):
+    resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
+    peerDependencies:
+      react: ^18.2.0
+    dependencies:
+      loose-envify: 1.4.0
+      react: 18.2.0
+      scheduler: 0.23.0
+    dev: false
+
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -21859,6 +22233,24 @@ packages:
       client-only: 0.0.1
       react: 18.0.0
 
+  /styled-jsx@5.1.1(@babel/core@7.17.7)(react@18.2.0):
+    resolution: {integrity: sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==}
+    engines: {node: '>= 12.0.0'}
+    peerDependencies:
+      '@babel/core': '*'
+      babel-plugin-macros: '*'
+      react: '>= 16.8.0 || 17.x.x || ^18.0.0-0'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      babel-plugin-macros:
+        optional: true
+    dependencies:
+      '@babel/core': 7.17.7
+      client-only: 0.0.1
+      react: 18.2.0
+    dev: false
+
   /stylehacks@5.1.1(postcss@8.4.14):
     resolution: {integrity: sha512-sBpcd5Hx7G6seo7b1LkpttvTz7ikD0LlH5RmdcBNb6fFR0Fl7LQwHDFr300q4cwUqi+IYrFGmsIHieMBfnN/Bw==}
     engines: {node: ^10 || ^12 || >=14.0}
@@ -22913,6 +23305,11 @@ packages:
   /uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
+
+  /uuid@9.0.0:
+    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+    hasBin: true
+    dev: false
 
   /v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}

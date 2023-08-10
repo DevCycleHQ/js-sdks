@@ -1,4 +1,3 @@
 packages:
-  - "sdk/**/*"
-  - "lib/**/*"
-  - "examples/**/*"
+#  - "sdk/**/*"
+#  - "lib/**/*"
