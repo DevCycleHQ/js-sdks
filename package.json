@@ -177,13 +177,6 @@
             "nx affected:lint --uncommitted --parallel --fix=true && :"
         ]
     },
-    "resolutions": {
-        "@types/react": "18.0.28",
-        "moment": "^2.29.4",
-        "terser-webpack-plugin": "^5.3.6",
-        "nx": "16.3.2",
-        "@nrwl/devkit": "16.3.2"
-    },
     "config": {
         "commitizen": {
             "path": "./node_modules/cz-conventional-changelog"

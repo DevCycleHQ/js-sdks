@@ -4,13 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  '@types/react': 18.0.28
-  moment: ^2.29.4
-  terser-webpack-plugin: ^5.3.6
-  nx: 16.3.2
-  '@nrwl/devkit': 16.3.2
-
 patchedDependencies:
   '@nx/js@16.3.2':
     hash: mkasc2nqreulcih6s4652soyuu
@@ -595,10 +588,10 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       long:
-        specifier: 5.2.3
-        version: 5.2.3
+        specifier: 5.2.1
+        version: 5.2.1
       moment:
-        specifier: ^2.29.4
+        specifier: 2.29.4
         version: 2.29.4
       murmurhash:
         specifier: 2.0.0
@@ -656,7 +649,7 @@ importers:
         specifier: 5.2.1
         version: 5.2.1
       moment:
-        specifier: ^2.29.4
+        specifier: 2.29.4
         version: 2.29.4
       murmurhash:
         specifier: 2.0.0
@@ -5579,6 +5572,16 @@ packages:
       - supports-color
     dev: true
 
+  /@nrwl/cli@15.9.4:
+    resolution: {integrity: sha512-FoiGFCLpb/r4HXCM3KYqT0xteP+MRV6bIHjz3bdPHIDLmBNQQnRRaV2K47jtJ6zjh1eOU5UHKyDtDDYf80Idpw==}
+    dependencies:
+      nx: 15.9.4
+    transitivePeerDependencies:
+      - '@swc-node/register'
+      - '@swc/core'
+      - debug
+    dev: true
+
   /@nrwl/cypress@16.3.2(cypress@12.2.0)(eslint@8.15.0)(nx@16.3.2)(typescript@5.0.4)(verdaccio@5.15.4):
     resolution: {integrity: sha512-f1RWC4jFe0KNDKRs8FY8gn2ik0+DOGsw/HG2oz5Ck/sT1yPwexLZ/+I854UuKs2Gtw5/B/l/7hcis+/MsgXe2Q==}
     dependencies:
@@ -5753,6 +5756,87 @@ packages:
       - verdaccio
     dev: true
 
+  /@nrwl/nx-darwin-arm64@15.9.4:
+    resolution: {integrity: sha512-XnvrnT9BJsgThY/4xUcYtE077ERq/img8CkRj7MOOBNOh0/nVcR4LGbBKDHtwE3HPk0ikyS/SxRyNa9msvi3QQ==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@nrwl/nx-darwin-x64@15.9.4:
+    resolution: {integrity: sha512-WKSfSlpVMLchpXkax0geeUNyhvNxwO7qUz/s0/HJWBekt8fizwKDwDj1gP7fOu+YWb/tHiSscbR1km8PtdjhQw==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@nrwl/nx-linux-arm-gnueabihf@15.9.4:
+    resolution: {integrity: sha512-a/b4PP7lP/Cgrh0LjC4O2YTt5pyf4DQTGtuE8qlo8o486UiofCtk4QGJX72q80s23L0ejCaKY2ULKx/3zMLjuA==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@nrwl/nx-linux-arm64-gnu@15.9.4:
+    resolution: {integrity: sha512-ibBV8fMhSfLVd/2WzcDuUm32BoZsattuKkvMmOoyU6Pzoznc3AqyDjJR4xCIoAn5Rf+Nu1oeQONr5FAtb1Ugow==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@nrwl/nx-linux-arm64-musl@15.9.4:
+    resolution: {integrity: sha512-iIjvVYd7+uM4jVD461+PvU5XTALgSvJOODUaMRGOoDl0KlMuTe6pQZlw0eXjl5rcTd6paKaVFWT5j6awr8kj7w==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@nrwl/nx-linux-x64-gnu@15.9.4:
+    resolution: {integrity: sha512-q4OyH72mdrE4KellBWtwpr5EwfxHKNoFP9//7FAILO68ROh0rpMd7YQMlTB7T04UEUHjKEEsFGTlVXIee3Viwg==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@nrwl/nx-linux-x64-musl@15.9.4:
+    resolution: {integrity: sha512-67+/XNMR1CgLPyeGX8jqSG6l8yYD0iiwUgcu1Vaxq6N05WwnqVisIW8XzLSRUtKt4WyVQgOWk3aspImpMVOG3Q==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@nrwl/nx-win32-arm64-msvc@15.9.4:
+    resolution: {integrity: sha512-2rEsq3eOGVCYpYJn2tTJkOGNJm/U8rP/FmqtZXYa6VJv/00XP3Gl00IXFEDaYV6rZo7SWqLxtEPUbjK5LwPzZA==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@nrwl/nx-win32-x64-msvc@15.9.4:
+    resolution: {integrity: sha512-bogVju4Z/hy1jbppqaTNbmV1R4Kg0R5fKxXAXC2LaL7FL0dup31wPumdV+mXttXBNOBDjV8V/Oz1ZqdmxpOJUw==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
   /@nrwl/react-native@16.3.2(@types/node@18.14.4)(detox@20.9.1)(eslint@8.15.0)(nx@16.3.2)(react-native@0.71.8)(ts-node@10.9.1)(typescript@5.0.4)(verdaccio@5.15.4)(webpack@5.75.0):
     resolution: {integrity: sha512-IEa49MS1b9PYHbCDpx1rIkPeBbt6e3l/zelvH+fJ45b8fM2rvgHSOoLxRkj9bbiNQwprP+cAcMDz9Q6J4LCGPQ==}
     dependencies:
@@ -5810,6 +5894,17 @@ packages:
       - ts-node
       - typescript
       - verdaccio
+    dev: true
+
+  /@nrwl/tao@15.9.4:
+    resolution: {integrity: sha512-m90iz8UsXx1rgPm1dxsBQjSrCViWYZIrp8bpwjSCW24j3kifyilYSXGuKaRwZwUn7eNmH/kZcI9/8qeGIPF4Sg==}
+    hasBin: true
+    dependencies:
+      nx: 15.9.4
+    transitivePeerDependencies:
+      - '@swc-node/register'
+      - '@swc/core'
+      - debug
     dev: true
 
   /@nrwl/tao@16.3.2:
@@ -16447,7 +16542,7 @@ packages:
       '@lerna/version': 5.5.2
       import-local: 3.1.0
       npmlog: 6.0.2
-      nx: 16.3.2
+      nx: 15.9.4
       typescript: 4.9.5
     transitivePeerDependencies:
       - '@swc-node/register'
@@ -18918,6 +19013,68 @@ packages:
 
   /nwsapi@2.2.7:
     resolution: {integrity: sha512-ub5E4+FBPKwAZx0UwIQOjYWGHTEq5sPqHQNRN8Z9e4A7u3Tj1weLJsL59yH9vmvqEtBHaOmT6cYQKIZOxp35FQ==}
+    dev: true
+
+  /nx@15.9.4:
+    resolution: {integrity: sha512-P1G4t59UvE/lkHyruLeSOB5ZuNyh01IwU0tTUOi8f9s/NbP7+OQ8MYVwDV74JHTr6mQgjlS+n+4Eox8tVm9itA==}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@swc-node/register': ^1.4.2
+      '@swc/core': ^1.2.173
+    peerDependenciesMeta:
+      '@swc-node/register':
+        optional: true
+      '@swc/core':
+        optional: true
+    dependencies:
+      '@nrwl/cli': 15.9.4
+      '@nrwl/tao': 15.9.4
+      '@parcel/watcher': 2.0.4
+      '@yarnpkg/lockfile': 1.1.0
+      '@yarnpkg/parsers': 3.0.0-rc.48.1
+      '@zkochan/js-yaml': 0.0.6
+      axios: 1.4.0
+      chalk: 4.1.2
+      cli-cursor: 3.1.0
+      cli-spinners: 2.6.1
+      cliui: 7.0.4
+      dotenv: 10.0.0
+      enquirer: 2.3.6
+      fast-glob: 3.2.7
+      figures: 3.2.0
+      flat: 5.0.2
+      fs-extra: 11.1.1
+      glob: 7.1.4
+      ignore: 5.2.4
+      js-yaml: 4.1.0
+      jsonc-parser: 3.2.0
+      lines-and-columns: 2.0.3
+      minimatch: 3.0.5
+      npm-run-path: 4.0.1
+      open: 8.4.2
+      semver: 7.3.4
+      string-width: 4.2.3
+      strong-log-transformer: 2.1.0
+      tar-stream: 2.2.0
+      tmp: 0.2.1
+      tsconfig-paths: 4.2.0
+      tslib: 2.6.1
+      v8-compile-cache: 2.3.0
+      yargs: 17.7.2
+      yargs-parser: 21.1.1
+    optionalDependencies:
+      '@nrwl/nx-darwin-arm64': 15.9.4
+      '@nrwl/nx-darwin-x64': 15.9.4
+      '@nrwl/nx-linux-arm-gnueabihf': 15.9.4
+      '@nrwl/nx-linux-arm64-gnu': 15.9.4
+      '@nrwl/nx-linux-arm64-musl': 15.9.4
+      '@nrwl/nx-linux-x64-gnu': 15.9.4
+      '@nrwl/nx-linux-x64-musl': 15.9.4
+      '@nrwl/nx-win32-arm64-msvc': 15.9.4
+      '@nrwl/nx-win32-x64-msvc': 15.9.4
+    transitivePeerDependencies:
+      - debug
     dev: true
 
   /nx@16.3.2:
@@ -22524,6 +22681,31 @@ packages:
       webpack: 5.88.2(esbuild@0.17.17)
     dev: true
 
+  /terser-webpack-plugin@5.3.9(esbuild@0.17.17)(webpack@5.88.2):
+    resolution: {integrity: sha512-ZuXsqE07EcggTWQjXUj+Aot/OMcD0bMKGgF63f7UxYcu5/AJF53aIpK1YoP5xR9l6s/Hy2b+t1AM0bLNPRuhwA==}
+    engines: {node: '>= 10.13.0'}
+    peerDependencies:
+      '@swc/core': '*'
+      esbuild: '*'
+      uglify-js: '*'
+      webpack: ^5.1.0
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      esbuild:
+        optional: true
+      uglify-js:
+        optional: true
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.18
+      esbuild: 0.17.17
+      jest-worker: 27.5.1
+      schema-utils: 3.3.0
+      serialize-javascript: 6.0.1
+      terser: 5.19.2
+      webpack: 5.88.2(esbuild@0.17.17)
+    dev: true
+
   /terser@5.19.2:
     resolution: {integrity: sha512-qC5+dmecKJA4cpYxRa5aVkKehYsQKc+AHeKl0Oe62aYjBL8ZA33tTljktDHJSaxxMnbI5ZYw+o/S2DxxLu8OfA==}
     engines: {node: '>=10'}
@@ -23733,7 +23915,7 @@ packages:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.6(esbuild@0.17.17)(webpack@5.88.2)
+      terser-webpack-plugin: 5.3.9(esbuild@0.17.17)(webpack@5.88.2)
       watchpack: 2.4.0
       webpack-sources: 3.2.3
     transitivePeerDependencies:
