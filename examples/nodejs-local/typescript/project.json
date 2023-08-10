@@ -12,6 +12,7 @@
                 "main": "examples/nodejs-local/typescript/src/main.ts",
                 "tsConfig": "examples/nodejs-local/typescript/tsconfig.app.json",
                 "compiler": "tsc",
+                "webpackConfig": "examples/nodejs-local/typescript/webpack.config.js",
                 "target": "node"
             }
         },

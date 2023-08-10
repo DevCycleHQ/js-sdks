@@ -1,9 +1,7 @@
 import { DevCycleClient, initializeDevCycle } from '@devcycle/nodejs-server-sdk'
 import { DVCClientAPIUser } from '@devcycle/types'
 import { plainToInstance } from 'class-transformer'
-import { Query } from 'express-serve-static-core'
 import express from 'express'
-import bodyParser from 'body-parser'
 import { benchmarkDevCycle } from './benchmarkDVC'
 
 const DEVCYCLE_SERVER_SDK_KEY =
@@ -70,8 +68,8 @@ const defaultHeaders = {
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
 }
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
 
 app.get('/variables', (req: express.Request, res: express.Response) => {
     const user = validateUserFromQueryParams(req.query)
@@ -91,7 +89,9 @@ app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
 
-function validateUserFromQueryParams(queryParams: Query): DVCClientAPIUser {
+function validateUserFromQueryParams(
+    queryParams: express.Request['query'],
+): DVCClientAPIUser {
     if (!queryParams) {
         throw new Error('Invalid query parameters')
     }
