@@ -23,18 +23,6 @@ jobs:
             - name: Install protoc for protobuf compilation
               run: sudo apt-get install -y protobuf-compiler
             - run: git fetch origin main
-            - name: Cache node modules
-              uses: actions/cache@v2
-              env:
-                  cache-name: cache-pnpm-cache
-              with:
-                  path: |
-                      node_modules/.cache
-                  key: ${{ runner.os }}-build-${{ env.cache-name }}
-                  restore-keys: |
-                      ${{ runner.os }}-build-${{ env.cache-name }}-
-                      ${{ runner.os }}-build-
-                      ${{ runner.os }}-
             - run: pnpm install --frozen-lockfile
             - run: pnpm affected:lint
             - run: pnpm prettier --check .
