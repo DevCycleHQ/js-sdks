@@ -16,6 +16,11 @@ jobs:
                   fetch-depth: 0
             - name: Install protoc for protobuf compilation
               run: sudo apt-get install -y protobuf-compiler
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'pnpm'
             - name: Run PNPM
               run: pnpm --frozen-lockfile
             - name: Check affected projects
