@@ -3,12 +3,6 @@
     "version": "1.11.6",
     "description": "The DevCycle React SDK used for feature management.",
     "main": "dist/index.js",
-    "scripts": {
-        "clean": "rimraf dist",
-        "test": "jest",
-        "tsc": "tsc",
-        "build": "pnpm clean && pnpm tsc"
-    },
     "types": "dist/index.d.ts",
     "author": "",
     "license": "MIT",
