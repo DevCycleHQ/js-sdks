@@ -11,3 +11,5 @@ lib/shared/bucketing-assembly-script/
 .verdaccio
 node_modules
 **/.next/**
+pnpm-*
+tmp/
