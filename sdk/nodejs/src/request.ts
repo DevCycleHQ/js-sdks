@@ -2,7 +2,6 @@ import { SDKEventBatchRequestBody, DVCLogger } from '@devcycle/types'
 import { DVCPopulatedUser } from './models/populatedUser'
 import { DevCycleEvent, DevCycleOptions } from './types'
 import fetchWithRetry, { RequestInitWithRetry } from 'fetch-retry'
-import { base } from 'next/dist/build/webpack/config/blocks/base'
 
 export const HOST = '.devcycle.com'
 export const EVENT_URL = 'https://events'
