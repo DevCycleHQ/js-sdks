@@ -45,11 +45,11 @@ async function startDevCycle() {
     const defaultVariable = devcycleClient.variableValue(user, 'not-real', true)
     console.log(`Value of the variable is ${defaultVariable} \n`)
     const variables = devcycleClient.allVariables(user)
-    // console.log('Variables: ')
-    // console.dir(variables)
-    // const features = devcycleClient.allFeatures(user)
-    // console.log('Features: ')
-    // console.dir(features)
+    console.log('Variables: ')
+    console.dir(variables)
+    const features = devcycleClient.allFeatures(user)
+    console.log('Features: ')
+    console.dir(features)
 }
 
 if (process.env.DVC_BENCHMARK) {
