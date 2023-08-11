@@ -205,7 +205,6 @@ export async function post(
         Authorization: sdkKey,
         'Content-Type': 'application/json',
     }
-    console.log('FETCHING', url)
     const res = await _fetch(url, {
         ...config,
         headers: postHeaders,
