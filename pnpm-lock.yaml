@@ -465,32 +465,6 @@ importers:
         specifier: ^5.8.0
         version: 5.8.0
 
-  examples/js/web-elements-app: {}
-
-  examples/nodejs-cloud/js:
-    dependencies:
-      '@devcycle/nodejs-server-sdk':
-        specifier: ^1.14.5
-        version: link:../../../sdk/nodejs
-
-  examples/nodejs-cloud/typescript: {}
-
-  examples/nodejs-local/js:
-    dependencies:
-      '@devcycle/nodejs-server-sdk':
-        specifier: ^1.14.5
-        version: link:../../../sdk/nodejs
-
-  examples/nodejs-local/typescript: {}
-
-  examples/openfeature-nodejs: {}
-
-  examples/react/next-js-app: {}
-
-  examples/react/react-native-app: {}
-
-  examples/react/with-provider: {}
-
   lib/shared/bucketing:
     devDependencies:
       '@devcycle/bucketing-test-data':
