@@ -25,7 +25,7 @@ jobs:
                   node-version: ${{ matrix.node-version }}
                   cache: 'pnpm'
             - name: Run PNPM
-              run: pnpm --frozen-lockfile
+              run: pnpm install --frozen-lockfile
             - name: Check affected projects
               run: |
                   if pnpm nx print-affected --base=origin/main --select=projects | grep -E '(^nodejs|[^-]nodejs|^openfeature-nodejs-provider)'; then
