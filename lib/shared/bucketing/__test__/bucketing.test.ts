@@ -931,4 +931,95 @@ describe('Rollout Logic', () => {
         expect(doesUserPassRollout({ boundedHash: 0.6 })).toBeTruthy()
         expect(doesUserPassRollout({ boundedHash: 0.9 })).toBeTruthy()
     })
+
+    describe('overrides', () => {
+        it('correctly overrides a bucketing decision and a feature that doesnt normally pass segmentation', () => {
+            const user = {
+                country: 'canada',
+                user_id: 'asuh',
+                email: 'test',
+                platform: 'android',
+            }
+            const overrides = {
+                '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
+                '614ef6aa475928459060721a': '615382338424cb11646d7667',
+                // should ignore this one
+                asdasdasdas: 'asdasdsaasddas',
+            }
+            const expected = {
+                environment: {
+                    _id: '6153553b8cf4e45e0464268d',
+                    key: 'test-environment',
+                },
+                project: expect.objectContaining({
+                    _id: '61535533396f00bab586cb17',
+                    a0_organization: 'org_12345612345',
+                    key: 'test-project',
+                }),
+                features: {
+                    feature1: {
+                        _id: '614ef6aa473928459060721a',
+                        key: 'feature1',
+                        type: FeatureType.release,
+                        _variation: '6153553b8cf4e45e0464268d',
+                        variationName: 'variation 1',
+                        variationKey: 'variation-1-key',
+                    },
+                    feature2: {
+                        _id: '614ef6aa475928459060721a',
+                        _variation: '615382338424cb11646d7667',
+                        key: 'feature2',
+                        type: 'release',
+                        variationKey: 'variation-1-aud-2-key',
+                        variationName: 'variation 1 aud 2',
+                    },
+                },
+                featureVariationMap: {
+                    '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
+                    '614ef6aa475928459060721a': '615382338424cb11646d7667',
+                },
+                variableVariationMap: {},
+                variables: {
+                    swagTest: {
+                        _id: '615356f120ed334a6054564c',
+                        key: 'swagTest',
+                        type: 'String',
+                        value: 'man',
+                    },
+                    'bool-var': {
+                        _id: '61538237b0a70b58ae6af71y',
+                        key: 'bool-var',
+                        type: 'Boolean',
+                        value: false,
+                    },
+                    feature2Var: {
+                        _id: '61538237b0a70b58ae6af71f',
+                        key: 'feature2Var',
+                        type: 'String',
+                        value: 'Var 1 aud 2',
+                    },
+                    'json-var': {
+                        _id: '61538237b0a70b58ae6af71q',
+                        key: 'json-var',
+                        type: 'JSON',
+                        value: '{"hello":"world","num":610,"bool":true}',
+                    },
+                    'num-var': {
+                        _id: '61538237b0a70b58ae6af71s',
+                        key: 'num-var',
+                        type: 'Number',
+                        value: 610.61,
+                    },
+                    test: {
+                        _id: '614ef6ea475129459160721a',
+                        key: 'test',
+                        type: 'String',
+                        value: 'scat',
+                    },
+                },
+            }
+            const c = generateBucketedConfig({ config, user, overrides })
+            expect(c).toEqual(expected)
+        })
+    })
 })
