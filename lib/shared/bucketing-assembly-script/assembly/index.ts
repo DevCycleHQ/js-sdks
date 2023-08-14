@@ -29,7 +29,6 @@ import {
     _setClientCustomData,
 } from './managers/clientCustomDataManager'
 import { queueVariableEvaluatedEvent } from './managers/eventQueueManager'
-import { Overrides } from './types/overrides'
 
 export function generateBoundedHashesFromJSON(
     user_id: string,
