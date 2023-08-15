@@ -88,7 +88,6 @@ export class ConfigBody {
     private readonly _variableKeyMap: Map<string, Variable>
     private readonly _variableIdMap: Map<string, Variable>
     private readonly _variableIdToFeatureMap: Map<string, Feature>
-    private readonly _featureIdMap: Map<string, Feature>
 
     static fromUTF8(
         configUTF8: Uint8Array,
@@ -164,7 +163,6 @@ export class ConfigBody {
         }
         this.features = features
         this._variableIdToFeatureMap = _varIdToFeatureMap
-        this._featureIdMap = _featureIdMap
 
         const audiencesJSON = getJSONObjFromJSONOptional(
             configJSONObj,
@@ -224,12 +222,6 @@ export class ConfigBody {
     getFeatureForVariableId(variable_id: string): Feature | null {
         return this._variableIdToFeatureMap.has(variable_id)
             ? this._variableIdToFeatureMap.get(variable_id)
-            : null
-    }
-
-    getFeatureForId(feature_id: string): Feature | null {
-        return this._featureIdMap.has(feature_id)
-            ? this._featureIdMap.get(feature_id)
             : null
     }
 }
