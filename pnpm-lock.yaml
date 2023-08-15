@@ -13,6 +13,9 @@ importers:
 
   .:
     dependencies:
+      '@devcycle/assemblyscript-json':
+        specifier: ^2.0.0
+        version: 2.0.0
       '@nestjs/class-validator':
         specifier: ^0.13.4
         version: 0.13.4
@@ -272,9 +275,6 @@ importers:
       assemblyscript:
         specifier: ~0.27.1
         version: 0.27.1
-      assemblyscript-json:
-        specifier: https://github.com/DevCycleHQ/assemblyscript-json
-        version: github.com/DevCycleHQ/assemblyscript-json/d2ce65ec18b305e1f3db8a4fe4394b417631b024
       assemblyscript-regex:
         specifier: https://github.com/DevCycleHQ/assemblyscript-regex.git#8ff33297841880c16e38bd67a84df4cbdb8e887f
         version: github.com/DevCycleHQ/assemblyscript-regex/8ff33297841880c16e38bd67a84df4cbdb8e887f
@@ -3363,6 +3363,10 @@ packages:
       colorspace: 1.1.4
       enabled: 2.0.0
       kuler: 2.0.0
+    dev: false
+
+  /@devcycle/assemblyscript-json@2.0.0:
+    resolution: {integrity: sha512-TCISIe5PAUX3JHRKN0qYix83D1ClvpqKSTNxThon0XEIKSnoFCIkrZkiciyEpMHB3qI//TBd7q1itxEC0Q9oZg==}
     dev: false
 
   /@esbuild/android-arm64@0.17.17:
@@ -23585,12 +23589,6 @@ packages:
   /yocto-queue@1.0.0:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
-    dev: true
-
-  github.com/DevCycleHQ/assemblyscript-json/d2ce65ec18b305e1f3db8a4fe4394b417631b024:
-    resolution: {tarball: https://codeload.github.com/DevCycleHQ/assemblyscript-json/tar.gz/d2ce65ec18b305e1f3db8a4fe4394b417631b024}
-    name: assemblyscript-json
-    version: 1.1.0
     dev: true
 
   github.com/DevCycleHQ/assemblyscript-regex/8ff33297841880c16e38bd67a84df4cbdb8e887f:
