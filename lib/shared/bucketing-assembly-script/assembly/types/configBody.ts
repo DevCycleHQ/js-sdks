@@ -94,10 +94,11 @@ export class ConfigBody {
         etag: string | null = null,
     ): ConfigBody {
         const configJSON = JSON.parse(configUTF8)
-        if (!configJSON.isObj)
+        if (!configJSON.isObj) {
             throw new Error(
                 'generateBucketedConfig config param not a JSON Object',
             )
+        }
         const configJSONObj = configJSON as JSON.Obj
         return new ConfigBody(configJSONObj, etag)
     }
@@ -107,10 +108,11 @@ export class ConfigBody {
         etag: string | null = null,
     ): ConfigBody {
         const configJSON = JSON.parse(configStr)
-        if (!configJSON.isObj)
+        if (!configJSON.isObj) {
             throw new Error(
                 'generateBucketedConfig config param not a JSON Object',
             )
+        }
         const configJSONObj = configJSON as JSON.Obj
         return new ConfigBody(configJSONObj, etag)
     }
