@@ -20,6 +20,12 @@ See the AssemblyScript Documentation for further details: https://www.assemblysc
 
 See WebAssembly output in `/build` folder.
 
+### Compile Protobuf Files
+
+When working on the Protobuf types you will need to compile those types into JS and AssemblyScript files. To do this:
+
+```yarn nx run shared-bucketing-as:compile-pb```
+
 ### Testing
 
 ```yarn nx test shared-bucketing-as```
