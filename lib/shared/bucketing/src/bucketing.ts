@@ -11,6 +11,8 @@ import {
     PublicRollout,
     PublicRolloutStage,
     DVCBucketingUser,
+    Variation,
+    Feature,
 } from '@devcycle/types'
 
 import murmurhash from 'murmurhash'
@@ -190,9 +192,11 @@ export const getSegmentedFeatureDataFromConfig = ({
 export const generateBucketedConfig = ({
     config,
     user,
+    overrides,
 }: {
     config: ConfigBody
     user: DVCBucketingUser
+    overrides?: Record<string, string>
 }): BucketedUserConfig => {
     const variableMap: BucketedUserConfig['variables'] = {}
     const featureKeyMap: BucketedUserConfig['features'] = {}
@@ -201,6 +205,37 @@ export const generateBucketedConfig = ({
         config,
         user,
     })
+
+    const updateMapsWithBucketedFeature = ({
+        feature,
+        variation,
+    }: {
+        feature: Feature
+        variation: Variation
+    }) => {
+        const { _id, key, type, settings } = feature
+
+        featureKeyMap[key] = {
+            _id,
+            key,
+            type,
+            _variation: variation._id,
+            variationName: variation.name,
+            variationKey: variation.key,
+            settings,
+        }
+        featureVariationMap[_id] = variation._id
+        variation.variables.forEach(({ _var, value }) => {
+            const variable = config.variables.find((v) => v._id === _var)
+            if (!variable) {
+                throw new Error(`Config missing variable: ${_var}`)
+            }
+            variableMap[variable.key] = {
+                ...variable,
+                value,
+            }
+        })
+    }
 
     segmentedFeatures.forEach(({ feature, target }) => {
         const { _id, key, type, variations, settings } = feature
@@ -227,27 +262,22 @@ export const generateBucketedConfig = ({
             throw new Error(`Config missing variation: ${variation_id}`)
         }
 
-        featureKeyMap[key] = {
-            _id,
-            key,
-            type,
-            _variation: variation_id,
-            variationName: variation.name,
-            variationKey: variation.key,
-            settings,
-        }
-        featureVariationMap[_id] = variation_id
-        variation.variables.forEach(({ _var, value }) => {
-            const variable = config.variables.find((v) => v._id === _var)
-            if (!variable) {
-                throw new Error(`Config missing variable: ${_var}`)
-            }
-            variableMap[variable.key] = {
-                ...variable,
-                value,
-            }
-        })
+        updateMapsWithBucketedFeature({ feature, variation })
     })
+
+    for (const [_feature, _variation] of Object.entries(overrides || {})) {
+        const feature = config.features.find((f) => f._id === _feature)
+        if (!feature) {
+            // ignore overrides that don't work with current config
+            continue
+        }
+        const variation = feature.variations.find((v) => v._id === _variation)
+        if (!variation) {
+            continue
+        }
+
+        updateMapsWithBucketedFeature({ feature, variation })
+    }
 
     return {
         project: pick(config.project, [

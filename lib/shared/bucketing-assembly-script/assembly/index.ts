@@ -7,19 +7,33 @@ import {
     DVCUser,
     SDKVariable,
     VariableForUserParams_PB,
-    decodeVariableForUserParams_PB, VariableType_PB
+    decodeVariableForUserParams_PB,
+    VariableType_PB,
 } from './types'
 import {
     _generateBoundedHashes,
     _generateBucketedConfig,
-    _generateBucketedVariableForUser
+    _generateBucketedVariableForUser,
 } from './bucketing'
-import { _clearPlatformData, _setPlatformData } from './managers/platformDataManager'
-import { _getConfigData, _hasConfigData, _setConfigData } from './managers/configDataManager'
-import { _getClientCustomData, _setClientCustomData } from './managers/clientCustomDataManager'
+import {
+    _clearPlatformData,
+    _setPlatformData,
+} from './managers/platformDataManager'
+import {
+    _getConfigData,
+    _hasConfigData,
+    _setConfigData,
+} from './managers/configDataManager'
+import {
+    _getClientCustomData,
+    _setClientCustomData,
+} from './managers/clientCustomDataManager'
 import { queueVariableEvaluatedEvent } from './managers/eventQueueManager'
 
-export function generateBoundedHashesFromJSON(user_id: string, target_id: string): string {
+export function generateBoundedHashesFromJSON(
+    user_id: string,
+    target_id: string,
+): string {
     const boundedHash = _generateBoundedHashes(user_id, target_id)
     const json = new JSON.Obj()
     json.set('rolloutHash', boundedHash.rolloutHash)
@@ -33,18 +47,54 @@ export function generateBoundedHashesFromJSON(user_id: string, target_id: string
  * @param sdkKey
  * @param userJSONStr
  */
-export function generateBucketedConfigForUser(sdkKey: string, userJSONStr: string): string  {
+export function generateBucketedConfigForUser(
+    sdkKey: string,
+    userJSONStr: string,
+): string {
     const config = _getConfigData(sdkKey)
     const user = DVCPopulatedUser.fromJSONString(userJSONStr)
 
-    const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
+    const bucketedConfig = _generateBucketedConfig(
+        config,
+        user,
+        _getClientCustomData(sdkKey),
+        null,
+    )
     return bucketedConfig.stringify()
 }
 
-export function generateBucketedConfigForUserUTF8(sdkKey: string, userJSONStr: Uint8Array): Uint8Array  {
+export function generateBucketedConfigForUserUTF8(
+    sdkKey: string,
+    userJSONStr: Uint8Array,
+): Uint8Array {
     const config = _getConfigData(sdkKey)
     const user = DVCPopulatedUser.fromUTF8(userJSONStr)
-    const bucketedConfig = _generateBucketedConfig(config, user, _getClientCustomData(sdkKey))
+    const bucketedConfig = _generateBucketedConfig(
+        config,
+        user,
+        _getClientCustomData(sdkKey),
+        null,
+    )
+    return Uint8Array.wrap(String.UTF8.encode(bucketedConfig.stringify()))
+}
+
+export function generateBucketedConfigForUserWithOverrides(
+    sdkKey: string,
+    userJSONStr: Uint8Array,
+    overridesJSONStr: Uint8Array,
+): Uint8Array {
+    const config = _getConfigData(sdkKey)
+    const user = DVCPopulatedUser.fromUTF8(userJSONStr)
+
+    const overridesJSON = JSON.parse(overridesJSONStr)
+    const overrides = overridesJSON.isObj ? (overridesJSON as JSON.Obj) : null
+
+    const bucketedConfig = _generateBucketedConfig(
+        config,
+        user,
+        _getClientCustomData(sdkKey),
+        overrides,
+    )
     return Uint8Array.wrap(String.UTF8.encode(bucketedConfig.stringify()))
 }
 
@@ -52,7 +102,7 @@ export enum VariableType {
     Boolean,
     Number,
     String,
-    JSON
+    JSON,
 }
 export const VariableTypeStrings = ['Boolean', 'Number', 'String', 'JSON']
 
@@ -62,11 +112,16 @@ export const VariableTypeStrings = ['Boolean', 'Number', 'String', 'JSON']
  */
 function variableTypeFromPB(pbVariableType: VariableType_PB): VariableType {
     switch (pbVariableType) {
-        case VariableType_PB.Boolean: return VariableType.Boolean
-        case VariableType_PB.Number: return VariableType.Number
-        case VariableType_PB.String: return VariableType.String
-        case VariableType_PB.JSON: return VariableType.JSON
-        default: throw new Error(`Unknown variable type: ${pbVariableType}`)
+        case VariableType_PB.Boolean:
+            return VariableType.Boolean
+        case VariableType_PB.Number:
+            return VariableType.Number
+        case VariableType_PB.String:
+            return VariableType.String
+        case VariableType_PB.JSON:
+            return VariableType.JSON
+        default:
+            throw new Error(`Unknown variable type: ${pbVariableType}`)
     }
 }
 
@@ -75,7 +130,10 @@ function variableTypeFromPB(pbVariableType: VariableType_PB): VariableType {
  * @param protobuf
  * @param length
  */
-export function variableForUser_PB_Preallocated(protobuf: Uint8Array, length: i32): Uint8Array | null {
+export function variableForUser_PB_Preallocated(
+    protobuf: Uint8Array,
+    length: i32,
+): Uint8Array | null {
     return variableForUser_PB(protobuf.slice(0, length))
 }
 
@@ -84,7 +142,8 @@ export function variableForUser_PB_Preallocated(protobuf: Uint8Array, length: i3
  * @param protobuf Protobuf encoded VariableForUserParams_PB object
  */
 export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
-    const params: VariableForUserParams_PB = decodeVariableForUserParams_PB(protobuf)
+    const params: VariableForUserParams_PB =
+        decodeVariableForUserParams_PB(protobuf)
     const user = params.user
     if (!user) throw new Error('Missing user from variableForUser_PB protobuf')
     const dvcUser = new DVCPopulatedUser(DVCUser.fromPBUser(user))
@@ -94,7 +153,7 @@ export function variableForUser_PB(protobuf: Uint8Array): Uint8Array | null {
         dvcUser,
         params.variableKey,
         variableTypeFromPB(params.variableType),
-        params.shouldTrackEvent
+        params.shouldTrackEvent,
     )
     return variable ? variable.toProtobuf() : null
 }
@@ -113,12 +172,18 @@ function _variableForDVCUser(
     dvcUser: DVCPopulatedUser,
     variableKey: string,
     variableType: VariableType,
-    shouldTrackEvent: boolean
+    shouldTrackEvent: boolean,
 ): SDKVariable | null {
     const config = _getConfigData(sdkKey)
-    const response = _generateBucketedVariableForUser(config, dvcUser, variableKey, _getClientCustomData(sdkKey))
+    const response = _generateBucketedVariableForUser(
+        config,
+        dvcUser,
+        variableKey,
+        _getClientCustomData(sdkKey),
+    )
 
-    let variable: SDKVariable | null = (response && response.variable) ? response.variable : null
+    let variable: SDKVariable | null =
+        response && response.variable ? response.variable : null
     if (variable && variable.type !== VariableTypeStrings[variableType]) {
         variable = null
     }
@@ -126,13 +191,21 @@ function _variableForDVCUser(
     if (shouldTrackEvent) {
         const variableVariationMap = new Map<string, FeatureVariation>()
         if (response) {
-            variableVariationMap.set(variableKey, new FeatureVariation(
-                response.feature._id,
-                response.variation._id
-            ))
+            variableVariationMap.set(
+                variableKey,
+                new FeatureVariation(
+                    response.feature._id,
+                    response.variation._id,
+                ),
+            )
         }
 
-        queueVariableEvaluatedEvent(sdkKey, variableVariationMap, variable, variableKey)
+        queueVariableEvaluatedEvent(
+            sdkKey,
+            variableVariationMap,
+            variable,
+            variableKey,
+        )
     }
     return variable
 }
@@ -153,7 +226,13 @@ export function variableForUser(
     shouldTrackEvent: boolean,
 ): string | null {
     const user = DVCPopulatedUser.fromJSONString(userJSONStr)
-    const variable = _variableForDVCUser(sdkKey, user, variableKey, variableType, shouldTrackEvent)
+    const variable = _variableForDVCUser(
+        sdkKey,
+        user,
+        variableKey,
+        variableType,
+        shouldTrackEvent,
+    )
     return variable ? variable.stringify() : null
 }
 
@@ -177,7 +256,7 @@ export function variableForUserPreallocated(
     // ditto
     variableKeyLength: i32,
     variableType: VariableType,
-    shouldTrackEvent: boolean
+    shouldTrackEvent: boolean,
 ): string | null {
     return variableForUser(
         sdkKey,
@@ -221,7 +300,11 @@ export function clearPlatformData(empty: string | null = null): void {
  * @param configDataJSONStr
  * @param length
  */
-export function setConfigDataUTF8Preallocated(sdkKey: string, configDataJSONStr: Uint8Array, length: i32): void {
+export function setConfigDataUTF8Preallocated(
+    sdkKey: string,
+    configDataJSONStr: Uint8Array,
+    length: i32,
+): void {
     setConfigDataUTF8(sdkKey, configDataJSONStr.slice(0, length))
 }
 
@@ -231,7 +314,10 @@ export function setConfigDataUTF8Preallocated(sdkKey: string, configDataJSONStr:
  * @param sdkKey
  * @param configDataJSONStr
  */
-export function setConfigDataUTF8(sdkKey: string, configDataJSONStr: Uint8Array): void {
+export function setConfigDataUTF8(
+    sdkKey: string,
+    configDataJSONStr: Uint8Array,
+): void {
     const configData = ConfigBody.fromUTF8(configDataJSONStr)
     _setConfigData(sdkKey, configData)
 }
@@ -253,7 +339,11 @@ export function setConfigData(sdkKey: string, configDataJSONStr: string): void {
  * @param configDataJSONStr
  * @param etag
  */
-export function setConfigDataWithEtag(sdkKey: string, configDataJSONStr: string, etag: string): void {
+export function setConfigDataWithEtag(
+    sdkKey: string,
+    configDataJSONStr: string,
+    etag: string,
+): void {
     const configData = ConfigBody.fromString(configDataJSONStr, etag)
     _setConfigData(sdkKey, configData)
 }
@@ -274,7 +364,10 @@ export function hasConfigDataForEtag(sdkKey: string, etag: string): bool {
  * @param sdkKey
  * @param clientCustomDataJSONStr
  */
-export function setClientCustomData(sdkKey: string, clientCustomDataJSONStr: string): void {
+export function setClientCustomData(
+    sdkKey: string,
+    clientCustomDataJSONStr: string,
+): void {
     const parsed = JSON.parse(clientCustomDataJSONStr)
     if (!parsed.isObj) {
         throw new Error('invalid global clientCustomDataJSONStr')
@@ -290,7 +383,10 @@ export function setClientCustomData(sdkKey: string, clientCustomDataJSONStr: str
  * @param sdkKey
  * @param clientCustomDataUTF8
  */
-export function setClientCustomDataUTF8(sdkKey: string, clientCustomDataUTF8: Uint8Array): void {
+export function setClientCustomDataUTF8(
+    sdkKey: string,
+    clientCustomDataUTF8: Uint8Array,
+): void {
     const parsed = JSON.parse(clientCustomDataUTF8)
     if (!parsed.isObj) {
         throw new Error('invalid global clientCustomDataJSONStr')
@@ -303,4 +399,8 @@ export * from './managers/eventQueueManager'
 
 export * from './testHelpers'
 
-export { murmurhashV3, murmurhashV3_js, murmurhashBufferSize } from './helpers/murmurhash'
+export {
+    murmurhashV3,
+    murmurhashV3_js,
+    murmurhashBufferSize,
+} from './helpers/murmurhash'
