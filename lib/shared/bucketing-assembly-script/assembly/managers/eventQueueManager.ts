@@ -121,6 +121,7 @@ export function queueEvent(
         _getConfigData(sdkKey),
         dvcUser,
         _getClientCustomData(sdkKey),
+        null,
     )
     eventQueue.queueEvent(dvcUser, event, bucketedConfig.featureVariationMap)
 }
