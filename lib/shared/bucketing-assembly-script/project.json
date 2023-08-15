@@ -58,6 +58,15 @@
                 }
             ]
         },
+        "compile-pb": {
+            "executor": "nx:run-commands",
+            "options": {
+                "commands": [
+                    "nx run shared-bucketing-as:compile-pb-js",
+                    "nx run shared-bucketing-as:compile-pb-as"
+                ]
+            }
+        },
         "compile-pb-js": {
             "executor": "nx:run-commands",
             "inputs": ["{projectRoot}/protobuf/*.proto"],
@@ -87,7 +96,6 @@
             "outputs": [
                 "lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated"
             ],
-
             "options": {
                 "commands": [
                     {
@@ -139,12 +147,6 @@
                 {
                     "target": "build:json",
                     "dependencies": true
-                },
-                {
-                    "target": "compile-pb-js"
-                },
-                {
-                    "target": "compile-pb-as"
                 }
             ]
         },
