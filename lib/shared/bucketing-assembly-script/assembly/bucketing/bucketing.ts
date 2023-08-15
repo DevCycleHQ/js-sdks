@@ -18,7 +18,10 @@ import {
 
 import { murmurhashV3 } from '../helpers/murmurhash'
 import { _evaluateOperator } from './segmentation'
-import { getStringFromJSON } from '../helpers/jsonHelpers'
+import {
+    getStringFromJSON,
+    getStringFromJSONOptional,
+} from '../helpers/jsonHelpers'
 
 // Max value of an unsigned 32-bit integer, which is what murmurhash returns
 const MAX_HASH_VALUE: f64 = 4294967295
@@ -245,8 +248,6 @@ export function _generateBucketedConfig(
     const featureVariationMap = new Map<string, string>()
     const variableVariationMap = new Map<string, FeatureVariation>()
 
-    const bucketedFeatureVariations: Array<BucketedFeature> = []
-
     for (let i = 0; i < config.features.length; i++) {
         const feature = config.features[i]
         const targetAndHashes = doesUserQualifyForFeature(
@@ -256,37 +257,27 @@ export function _generateBucketedConfig(
             clientCustomData,
         )
 
-        if (!targetAndHashes) continue
+        const featureOverride = overrides
+            ? getStringFromJSONOptional(overrides, feature._id)
+            : null
 
-        const variation = bucketUserForVariation(feature, targetAndHashes)
-
-        bucketedFeatureVariations.push({ feature, variation })
-    }
-
-    if (overrides != null) {
-        const overrideKeys = overrides.keys
-        for (let i = 0; i < overrideKeys.length; i++) {
-            const featureId = overrideKeys[i]
-            const feature = config.getFeatureForId(featureId)
-            if (feature == null) {
-                continue
-            }
-            const variationId = getStringFromJSON(overrides, featureId)
-
-            const variation = feature.getVariationById(variationId)
-
-            if (variation == null) {
-                continue
-            }
-
-            bucketedFeatureVariations.push({ feature, variation })
+        if (!targetAndHashes && !featureOverride) {
+            continue
         }
-    }
 
-    for (let i = 0; i < bucketedFeatureVariations.length; i++) {
-        const bucketedFeature = bucketedFeatureVariations[i]
-        const feature = bucketedFeature.feature
-        const variation = bucketedFeature.variation
+        const bucketedVariation = targetAndHashes
+            ? bucketUserForVariation(feature, targetAndHashes)
+            : null
+
+        const overrideVariation = featureOverride
+            ? feature.getVariationById(featureOverride)
+            : null
+
+        const variation = overrideVariation || bucketedVariation
+
+        if (!variation) {
+            continue
+        }
 
         featureKeyMap.set(
             feature.key,
