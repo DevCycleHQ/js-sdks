@@ -16,10 +16,9 @@ There are several examples included in this repository for various SDKs. If you 
 Ensure you have Node 16.x installed.
 
 1. Clone this repo
-2. Run `pnpm` from the root directory. SDKs and examples should now be set up to run via Nx.
-3. Run `aws configure sso`
-4. Run `aws sso login`
-
+2. Run `scripts/brew-install.sh` to install required system packages (on Mac OS). 
+   - if not on Mac OS, follow platform-specfic instructions for obtaining each package listed in the script.
+3. Run `pnpm install` from the root directory. SDKs and examples should now be set up to run via Nx.
 
 ## Directory Structure
 ```
@@ -106,7 +105,6 @@ This allows you to lint and/or test all projects at once.
 
 Setup:
 - run `aws sso login`
-- run `./scripts/brew-install.sh`
 - ensure you're on the main branch with the latest code
 
 Then use lerna to create new versions of all changed packages (ensure you do this on the main branch)

@@ -3,4 +3,4 @@ set -e
 
 echo "Brew Install All The Things!"
 
-brew install protobuf
+brew install protobuf pnpm
