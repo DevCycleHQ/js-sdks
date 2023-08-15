@@ -4784,6 +4784,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@devcycle/assemblyscript-json@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@devcycle/assemblyscript-json@npm:2.0.0"
+  checksum: 2c729e99db331629d94334c4325fa58a8d9e91fab090b2e0c6cce1ad996c94d556714e1b3d6ecb9fd674dab3deb9a5d25c013e443432efd19d6512efb4cd8556
+  languageName: node
+  linkType: hard
+
 "@devcycle/bucketing-assembly-script@^1.7.7, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script"
@@ -11265,13 +11272,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json":
-  version: 1.1.0
-  resolution: "assemblyscript-json@https://github.com/DevCycleHQ/assemblyscript-json.git#commit=d2ce65ec18b305e1f3db8a4fe4394b417631b024"
-  checksum: 480283ed02d57eacb400facc060f293b7dcb773a90dc5b7c80eae86b0007e3a748b2cb6c298a1a32010cba41e48686fcd0078c02c6db1d917fda85bb7c08ded1
-  languageName: node
-  linkType: hard
-
 "assemblyscript-regex@https://github.com/DevCycleHQ/assemblyscript-regex.git#8ff33297841880c16e38bd67a84df4cbdb8e887f":
   version: 0.1.0
   resolution: "assemblyscript-regex@https://github.com/DevCycleHQ/assemblyscript-regex.git#commit=8ff33297841880c16e38bd67a84df4cbdb8e887f"
@@ -14514,6 +14514,7 @@ __metadata:
     "@babel/preset-react": ^7.14.5
     "@commitlint/cli": ^16.2.3
     "@commitlint/config-conventional": ^16.2.1
+    "@devcycle/assemblyscript-json": ^2.0.0
     "@nestjs/class-validator": ^0.13.4
     "@nrwl/js": 16.3.2
     "@nrwl/rollup": 16.3.2
@@ -14560,7 +14561,6 @@ __metadata:
     as-uuid: ^0.0.4
     as-wasi: ^0.4.6
     assemblyscript: ~0.27.1
-    assemblyscript-json: "https://github.com/DevCycleHQ/assemblyscript-json"
     assemblyscript-regex: "https://github.com/DevCycleHQ/assemblyscript-regex.git#8ff33297841880c16e38bd67a84df4cbdb8e887f"
     async: ^3.2.1
     axios: ^1.0.0

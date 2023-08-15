@@ -7,7 +7,7 @@ import {
     UserEventsBatchRecord,
     EventQueueOptions,
 } from '../types'
-import { JSON } from 'assemblyscript-json/assembly'
+import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import { _getPlatformData } from '../managers/platformDataManager'
 import {
     AggEventQueue,

@@ -6,7 +6,7 @@ import {
     FeatureVariation,
     SDKVariable,
 } from '../types'
-import { JSON } from 'assemblyscript-json/assembly'
+import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import { _getConfigData } from './configDataManager'
 import { _generateBucketedConfig } from '../bucketing'
 import { RequestPayloadManager } from '../eventQueue/requestPayloadManager'

@@ -10,7 +10,7 @@ import {
     UserFilter,
     NoIdAudience, AudienceMatchFilter
 } from '../types'
-import { JSON } from 'assemblyscript-json/assembly'
+import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import { getF64FromJSONValue } from '../helpers/jsonHelpers'
 
 // TODO add support for OR/XOR as well as recursive filters
