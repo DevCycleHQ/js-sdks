@@ -1,4 +1,4 @@
-import { JSON } from 'assemblyscript-json/assembly'
+import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import { getI32FromJSONValue } from '../helpers/jsonHelpers'
 
 export class EventQueueOptions extends JSON.Obj {

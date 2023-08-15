@@ -2,7 +2,7 @@
  * Exposes methods to unit test different functionality by parsing string arguments into complex data structures
  */
 
-import { JSON } from 'assemblyscript-json/assembly'
+import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import {
     BucketedUserConfig, ConfigBody, CustomDataFilter,
     DVCPopulatedUser,

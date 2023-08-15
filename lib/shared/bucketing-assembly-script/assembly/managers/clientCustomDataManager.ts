@@ -1,4 +1,4 @@
-import { JSON } from 'assemblyscript-json/assembly'
+import { JSON } from '@devcycle/assemblyscript-json/assembly'
 
 const _clientCustomData: Map<string, JSON.Obj> = new Map()
 
