@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/react-client-sdk",
-    "version": "1.11.5",
+    "version": "1.11.6",
     "description": "The DevCycle React SDK used for feature management.",
     "main": "dist/index.js",
     "scripts": {
