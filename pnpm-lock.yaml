@@ -477,13 +477,13 @@ importers:
   lib/shared/bucketing:
     devDependencies:
       '@devcycle/bucketing-test-data':
-        specifier: ^1.2.18
+        specifier: ^1.2.19
         version: link:../bucketing-test-data
 
   lib/shared/bucketing-assembly-script:
     devDependencies:
       '@devcycle/bucketing-test-data':
-        specifier: ^1.2.18
+        specifier: ^1.2.19
         version: link:../bucketing-test-data
 
   lib/shared/bucketing-test-data: {}
@@ -495,17 +495,17 @@ importers:
   sdk/nodejs:
     dependencies:
       '@devcycle/bucketing-assembly-script':
-        specifier: ^1.7.7
+        specifier: ^1.8.0
         version: link:../../lib/shared/bucketing-assembly-script
     devDependencies:
       '@devcycle/bucketing-test-data':
-        specifier: ^1.2.18
+        specifier: ^1.2.19
         version: link:../../lib/shared/bucketing-test-data
 
   sdk/openfeature-nodejs-provider:
     devDependencies:
       '@devcycle/bucketing-test-data':
-        specifier: ^1.2.18
+        specifier: ^1.2.19
         version: link:../../lib/shared/bucketing-test-data
 
   sdk/react:
