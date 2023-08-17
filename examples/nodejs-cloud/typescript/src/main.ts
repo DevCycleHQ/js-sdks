@@ -5,9 +5,7 @@ import {
 } from '@devcycle/nodejs-server-sdk'
 import { DVCClientAPIUser } from '@devcycle/types'
 import { plainToInstance } from 'class-transformer'
-import { Query } from 'express-serve-static-core'
 import express from 'express'
-import bodyParser from 'body-parser'
 
 const DEVCYCLE_SERVER_SDK_KEY =
     process.env['DEVCYCLE_SERVER_SDK_KEY'] || '<DEVCYCLE_SERVER_SDK_KEY>'
@@ -77,11 +75,11 @@ const defaultHeaders = {
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
 }
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
 
 async function validateUserFromQueryParams(
-    queryParams: Query,
+    queryParams: express.Request['query'],
 ): Promise<DevCycleUser> {
     if (!queryParams) {
         throw new Error('Invalid query parameters')

@@ -1,6 +1,5 @@
 const DevCycle = require('@devcycle/nodejs-server-sdk')
 const express = require('express')
-const bodyParser = require('body-parser')
 
 const DEVCYCLE_SERVER_SDK_KEY =
     process.env['DEVCYCLE_SERVER_SDK_KEY'] || '<DEVCYCLE_SERVER_SDK_KEY>'
@@ -68,8 +67,8 @@ const defaultHeaders = {
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
 }
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
 
 function createUserFromQueryParams(queryParams) {
     let user = {}
