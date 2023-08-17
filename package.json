@@ -183,6 +183,9 @@
             "nx affected:lint --uncommitted --parallel --fix=true && :"
         ]
     },
+    "resolutions": {
+        "@nx/js@16.3.2": "patch:@nx/js@npm%3A16.3.2#./.yarn/patches/@nx-js-npm-16.3.2-a543eca792.patch"
+    },
     "config": {
         "commitizen": {
             "path": "./node_modules/cz-conventional-changelog"
