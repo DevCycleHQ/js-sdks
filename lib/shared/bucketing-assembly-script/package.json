@@ -11,6 +11,9 @@
         "index*",
         "README.md"
     ],
+    "dependencies": {
+        "protobufjs": "^7.2.2"
+    },
     "devDependencies": {
         "@devcycle/bucketing-test-data": "^1.2.19"
     }

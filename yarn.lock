@@ -4796,6 +4796,7 @@ __metadata:
   resolution: "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script"
   dependencies:
     "@devcycle/bucketing-test-data": ^1.2.19
+    protobufjs: ^7.2.2
   languageName: unknown
   linkType: soft
 
