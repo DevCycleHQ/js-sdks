@@ -1,7 +1,7 @@
 {
     "name": "@devcycle/nodejs-server-sdk-cloud-js-example",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "dependencies": {
-        "@devcycle/nodejs-server-sdk": "^1.15.0"
+        "@devcycle/nodejs-server-sdk": "^1.15.1"
     }
 }
