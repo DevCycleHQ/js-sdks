@@ -80,6 +80,7 @@ export class DevCycleClient<
     private pageVisibilityHandler?: () => void
     private inactivityHandlerId?: number
     private windowMessageHandler?: (event: MessageEvent) => void
+    private windowPageHideHandler?: () => void
 
     constructor(
         sdkKey: string,
@@ -134,6 +135,11 @@ export class DevCycleClient<
                 }
             }
             window.addEventListener('message', this.windowMessageHandler)
+
+            this.windowPageHideHandler = () => {
+                this.flushEvents()
+            }
+            window.addEventListener('pagehide', this.windowPageHideHandler)
         }
     }
 
@@ -564,6 +570,10 @@ export class DevCycleClient<
 
         if (this.windowMessageHandler) {
             window.removeEventListener('message', this.windowMessageHandler)
+        }
+
+        if (this.windowPageHideHandler) {
+            window.removeEventListener('pagehide', this.windowPageHideHandler)
         }
 
         this.streamingConnection?.close()
