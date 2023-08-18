@@ -115,12 +115,6 @@ export function initializeDevCycle<
             client.logger.error(`Error initializing DevCycle: ${err}`),
         )
 
-    if (!options?.reactNative && typeof window !== 'undefined') {
-        window.addEventListener('pagehide', () => {
-            client.flushEvents()
-        })
-    }
-
     return client
 }
 
