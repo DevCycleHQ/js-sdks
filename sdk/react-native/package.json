@@ -19,5 +19,10 @@
         "@react-native-async-storage/async-storage": "^1.17.11",
         "react-native-device-info": "^8.7.0",
         "react-native-get-random-values": "^1.7.2"
+    },
+    "devDependencies": {
+        "@babel/plugin-syntax-jsx": "^7.22.5",
+        "@babel/preset-env": "^7.22.10",
+        "@babel/preset-react": "^7.22.5"
     }
 }
