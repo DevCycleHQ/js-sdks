@@ -6,9 +6,11 @@
                 "runtime": "automatic",
                 "useBuiltIns": "usage"
             }
-        ]
+        ],
+        "@babel/preset-react",
+        "@babel/preset-env"
     ],
-    "plugins": [],
+    "plugins": ["@babel/plugin-syntax-jsx"],
     "env": {
         "test": {
             "presets": ["module:metro-react-native-babel-preset"]
