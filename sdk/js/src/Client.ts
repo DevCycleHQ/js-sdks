@@ -57,6 +57,10 @@ export class DevCycleClient<
     logger: DVCLogger
     config?: BucketedUserConfig
     user?: DVCPopulatedUser
+    _isInitialized = false
+    public get isInitialized(): boolean {
+        return this._isInitialized
+    }
 
     private sdkKey: string
     private readonly options: DevCycleOptions
@@ -117,7 +121,10 @@ export class DevCycleClient<
         this.registerVisibilityChangeHandler()
 
         this.onInitialized = new Promise((resolve, reject) => {
-            this.resolveOnInitialized = resolve
+            this.resolveOnInitialized = (value) => {
+                this._isInitialized = true
+                resolve(value)
+            }
         })
 
         if (!this.options.deferInitialization) {
