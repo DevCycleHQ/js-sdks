@@ -37,6 +37,9 @@ class Client {
     close() {
         // no-op
     }
+    onClientInitialized() {
+        return Promise.resolve(this)
+    }
 }
 
 module.exports = {

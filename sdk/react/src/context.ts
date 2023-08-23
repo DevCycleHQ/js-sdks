@@ -11,3 +11,10 @@ const { Provider, Consumer } = context
 export { Provider, Consumer }
 export type { DevCycleContext }
 export default context
+
+export type InitializedContext = {
+    isInitialized: boolean
+}
+export const initializedContext = createContext<InitializedContext>({
+    isInitialized: false,
+})
