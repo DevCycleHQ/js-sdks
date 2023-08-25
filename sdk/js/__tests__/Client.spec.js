@@ -12,9 +12,9 @@ jest.mock('../src/StreamingConnection')
 const getConfigJson_mock = mocked(getConfigJson)
 const saveEntity_mock = mocked(saveEntity)
 
-const createClientWithConfigImplementation = (implementation) => {
+const createClientWithConfigImplementation = (implementation, options) => {
     getConfigJson_mock.mockImplementation(implementation)
-    return new DevCycleClient('test_sdk_key', { user_id: 'user1' })
+    return new DevCycleClient('test_sdk_key', { user_id: 'user1' }, options)
 }
 
 describe('DevCycleClient tests', () => {
@@ -278,12 +278,12 @@ describe('DevCycleClient tests', () => {
     describe('variable', () => {
         let client
 
-        const createClientWithDelay = (delay) => {
+        const createClientWithDelay = (delay, options) => {
             return createClientWithConfigImplementation(() => {
                 return new Promise((resolve) => {
                     setTimeout(() => resolve(testConfig), delay)
                 })
-            })
+            }, options)
         }
 
         it('return a variable with the correct value from the config', async () => {
@@ -429,6 +429,22 @@ describe('DevCycleClient tests', () => {
             )
             expect(variable.value).toEqual(cachedConfig.variables.key.value)
             expect(onUpdate).toBeCalledTimes(1)
+        })
+        it('should return initial variable value until config is loaded', async () => {
+            client = createClientWithDelay(1000, {
+                initialVariableValues: { key: 'initial_value' },
+            })
+            const variable = client.variable('key', 'default_value')
+            expect(variable.value).toBe('initial_value')
+            expect(variable.defaultValue).toBe('default_value')
+
+            expect(client.variableValue('key', 'default_value')).toBe(
+                'initial_value',
+            )
+            await client.onClientInitialized()
+            expect(client.variableValue('key', 'default_value')).toBe('value1')
+            expect(variable.value).toBe('value1')
+            expect(variable.defaultValue).toBe('default_value')
         })
     })
 

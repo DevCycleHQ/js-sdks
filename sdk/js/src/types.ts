@@ -103,6 +103,11 @@ export interface DevCycleOptions {
      * Controls the maximum size the event queue can grow to until events are dropped. Defaults to `1000`.
      */
     maxEventQueueSize?: number
+
+    /**
+     * Provide initial values to use for variables until a fresh config has been loaded
+     */
+    initialVariableValues?: Record<string, string>
 }
 
 export interface DevCycleUser {

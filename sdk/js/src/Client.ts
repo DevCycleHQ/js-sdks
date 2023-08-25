@@ -72,6 +72,7 @@ export class DevCycleClient<
     private _closing = false
     private isConfigCached = false
     private initializeTriggered = false
+    private initialVariableValues: Record<string, string> | null = null
 
     private variableDefaultMap: {
         [key: string]: { [key: string]: DVCVariable<any> }
@@ -112,6 +113,7 @@ export class DevCycleClient<
         )
 
         this.options = options
+        this.initialVariableValues = options.initialVariableValues ?? null
 
         this.sdkKey = sdkKey
         this.variableDefaultMap = {}
@@ -286,18 +288,28 @@ export class DevCycleClient<
         } else {
             const configVariable = this.config?.variables?.[key]
 
+            const configVariableValue = this.initialVariableValues
+                ? this.initialVariableValues[key]
+                : configVariable?.value
+
             const data: DVCVariableOptions<T> = {
                 key,
                 defaultValue,
             }
 
-            if (configVariable) {
-                if (configVariable.type === type) {
-                    data.value = configVariable.value as VariableTypeAlias<T>
-                    data.evalReason = configVariable.evalReason
+            if (typeof configVariableValue != 'undefined') {
+                const configVariableType = getVariableTypeFromValue(
+                    configVariableValue,
+                    key,
+                    this.logger,
+                    false,
+                )
+                if (configVariableType === type) {
+                    data.value = configVariableValue as VariableTypeAlias<T>
+                    data.evalReason = configVariable?.evalReason
                 } else {
                     this.logger.warn(
-                        `Type mismatch for variable ${key}. Expected ${type}, got ${configVariable.type}`,
+                        `Type mismatch for variable ${key}. Expected ${type}, got ${configVariableType}`,
                     )
                 }
             }
@@ -613,6 +625,7 @@ export class DevCycleClient<
         this.config = config
         this.store.saveConfig(config, user, dateFetched)
         this.isConfigCached = false
+        this.initialVariableValues = null
 
         if (this.user != user || !this.userSaved) {
             this.user = user
