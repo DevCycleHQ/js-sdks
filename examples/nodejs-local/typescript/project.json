@@ -11,6 +11,7 @@
                 "outputPath": "dist/examples/nodejs-local/typescript",
                 "main": "examples/nodejs-local/typescript/src/main.ts",
                 "tsConfig": "examples/nodejs-local/typescript/tsconfig.app.json",
+                "webpackConfig": "examples/nodejs-local/typescript/webpack.config.js",
                 "compiler": "tsc",
                 "target": "node"
             }
