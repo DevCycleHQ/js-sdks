@@ -4830,7 +4830,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk-cloud-js-example@workspace:examples/nodejs-cloud/js"
   dependencies:
-    "@devcycle/nodejs-server-sdk": ^1.15.2
+    "@devcycle/nodejs-server-sdk": ^1.15.3
   languageName: unknown
   linkType: soft
 
@@ -4844,7 +4844,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk-local-js-example@workspace:examples/nodejs-local/js"
   dependencies:
-    "@devcycle/nodejs-server-sdk": ^1.15.2
+    "@devcycle/nodejs-server-sdk": ^1.15.3
   languageName: unknown
   linkType: soft
 
@@ -4854,7 +4854,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/nodejs-server-sdk@^1.15.2, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
+"@devcycle/nodejs-server-sdk@^1.15.3, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
