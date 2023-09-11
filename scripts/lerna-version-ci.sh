@@ -49,13 +49,15 @@ done
 # join packages with comma
 PACKAGES=$(IFS=','; echo "${PACKAGES[*]}")
 
-yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish" --no-immutable --no-push --yes "$1"
+yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish" --no-push --yes "$1"
 
 # store the tags created for this commit
 RELEASE_TAGS=$(git tag --points-at HEAD)
+
 #  run yarn and add any lockfile changes
-yarn
+yarn --no-immutable
 git add yarn.lock
+
 # amend the previous commit with the new lock file. Now the SHA is different and the tags are wrong
 git commit --amend --no-edit --no-verify
 
