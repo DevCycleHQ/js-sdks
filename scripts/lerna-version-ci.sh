@@ -21,7 +21,7 @@ echo "Affected projects: $AFFECTED_PROJECTS"
 # exit if no affected projects
 if [ -z "$AFFECTED_PROJECTS" ]; then
   echo "No affected projects found. Exiting."
-  exit 0
+  exit 1
 fi
 
 # strip whitespace from affected projects
