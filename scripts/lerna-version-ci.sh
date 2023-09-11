@@ -49,7 +49,7 @@ done
 # join packages with comma
 PACKAGES=$(IFS=','; echo "${PACKAGES[*]}")
 
-yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish" --no-push --yes "$1"
+yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish" --no-immutable --no-push --yes "$1"
 
 # store the tags created for this commit
 RELEASE_TAGS=$(git tag --points-at HEAD)
