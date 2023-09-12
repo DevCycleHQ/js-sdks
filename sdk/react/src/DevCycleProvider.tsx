@@ -9,16 +9,12 @@ type Props = {
     children: ReactNode
 }
 
-let client: DevCycleClient | undefined
 export function DevCycleProvider(props: Props): React.ReactElement {
     const { config } = props
     const { user, options } = config
-    const [isInitialized, setIsInitialized] = useState(() => {
-        if (client) {
-            return client.isInitialized
-        }
-        return false
-    })
+    const [isInitialized, setIsInitialized] = useState(false)
+    const clientRef = useRef<DevCycleClient>()
+
     const initializedWatcher = useRef<boolean>(isInitialized)
     let sdkKey: string
     if ('sdkKey' in config) {
@@ -30,15 +26,19 @@ export function DevCycleProvider(props: Props): React.ReactElement {
         throw new Error('You must provide a sdkKey to DevCycleProvider')
     }
 
-    if (!client) {
-        client = initializeDevCycleClient(sdkKey, user, options)
+    if (!clientRef.current) {
+        // if on server, set deferInitialization to true
+        clientRef.current = initializeDevCycleClient(sdkKey, user, {
+            ...options,
+            deferInitialization: typeof window === 'undefined',
+        })
     }
 
     // ensure there is exactly one initialization event handler per provider
     // use a ref so we don't re-render while setting this up
     if (!initializedWatcher.current) {
         initializedWatcher.current = true
-        client
+        clientRef.current
             .onClientInitialized()
             .then(() => {
                 setIsInitialized(true)
@@ -52,13 +52,13 @@ export function DevCycleProvider(props: Props): React.ReactElement {
 
     useEffect(() => {
         return () => {
-            client?.close()
-            client = undefined
+            clientRef.current?.close()
+            clientRef.current = undefined
         }
     }, [])
 
     return (
-        <Provider value={{ client }}>
+        <Provider value={{ client: clientRef.current }}>
             <initializedContext.Provider value={{ isInitialized }}>
                 {props.children}
             </initializedContext.Provider>
