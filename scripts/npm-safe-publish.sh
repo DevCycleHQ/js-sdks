@@ -41,6 +41,14 @@ function parse_arguments() {
   done
 }
 
+function npm_authenticated() {
+  if [[ -z "$NODE_AUTH_TOKEN" ]]; then
+    npm "$@" --otp="$OTP"
+  else
+    npm "$@"
+  fi
+}
+
 # Initialize variables to ensure they exist
 OTP=""
 DRY_RUN=""
@@ -87,14 +95,14 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
   fi
 
   # check if otp is set
-  if [[ -z "$OTP" ]]; then
+  if [[ -z "$OTP" && -z "$NODE_AUTH_TOKEN" ]]; then
     echo "Must specify the NPM one-time password using the --otp option."
     exit 1
   fi
 
   if [[ -z "$DRY_RUN" ]]; then
     echo "Publishing $PACKAGE@$NPM_LS to NPM."
-    npm publish --otp=$OTP
+    npm_authenticated publish --otp=$OTP
   else
     echo "[DRY RUN] Not publishing $PACKAGE@$NPM_LS to NPM."
   fi
@@ -137,11 +145,11 @@ if [[ "$DEPRECATED_PACKAGE" != "" ]]; then
     # Deploy logic
     if [[ -z "$DRY_RUN" ]]; then
       echo "Publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
-      npm publish --otp=$OTP
+      npm_authenticated publish --otp=$OTP
 
       sleep 10
 
-      npm deprecate "$DEPRECATED_PACKAGE"@"*" "Package has been renamed to: $PACKAGE" --otp=$OTP
+      npm_authenticated deprecate "$DEPRECATED_PACKAGE"@"*" "Package has been renamed to: $PACKAGE" --otp=$OTP
     else
       echo "[DRY RUN] Not publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
     fi
