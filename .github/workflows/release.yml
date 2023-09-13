@@ -35,13 +35,6 @@ jobs:
                   token: ${{ secrets.AUTOMATION_USER_TOKEN }}
                   fetch-depth: 0
 
-            - uses: DevCycleHQ/release-action/prepare-release@main
-              id: prepare-release
-              with:
-                github-token: ${{ secrets.AUTOMATION_USER_TOKEN }}
-                draft: ${{ github.event.inputs.draft }}
-                version-increment-type: ${{ github.event.inputs.version-increment-type }}
-
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v2.2.0
               with:
