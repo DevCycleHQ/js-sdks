@@ -93,7 +93,7 @@ yarn local-registry disable
 
 Keeping the server active may interfere with normal npm and npx activities, so if anything's acting strange, just kill the server and disable the registry updates.
 
-Corresponding updates have been added to the `npm-safe-publish.sh` script to account for the locally running server.
+> :warning: The `npm-safe-publish.sh` script will not use the locally running server!
 
 ### Linting and Running Tests
 
