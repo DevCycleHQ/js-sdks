@@ -33,7 +33,6 @@ function parse_arguments() {
         DRY_RUN="true"
         echo "Dry run enabled. Not pushing to NPM."
         shift
-        exit 1
         ;;
       *)
         shift
