@@ -3,11 +3,6 @@ name: Release
 on:
     workflow_dispatch:
         inputs:
-            prerelease:
-                description: 'Prerelease'
-                required: true
-                default: false
-                type: boolean
             draft:
                 description: 'Draft'
                 required: true
@@ -40,6 +35,13 @@ jobs:
                   token: ${{ secrets.AUTOMATION_USER_TOKEN }}
                   fetch-depth: 0
 
+            - uses: DevCycleHQ/release-action/prepare-release@main
+              id: prepare-release
+              with:
+                github-token: ${{ secrets.AUTOMATION_USER_TOKEN }}
+                draft: ${{ github.event.inputs.draft }}
+                version-increment-type: ${{ github.event.inputs.version-increment-type }}
+
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v2.2.0
               with:
@@ -60,6 +62,27 @@ jobs:
 
             - run: yarn --immutable
 
-            - name: Lerna
+            - name: Increment package versions with lerna
               run: |
                   ./scripts/lerna-version-ci.sh "${{ inputs.version-increment-type }}"
+
+            - name: Push version changes and tags
+              run: |
+                  git push origin HEAD:main --follow-tags
+              if: inputs.draft != true && github.ref == 'refs/heads/main'
+
+            - name: Push to npm
+              run: |
+                  yarn npm-publish --dry-run
+              env:
+                  NPM_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
+                  DEVCYCLE_PROD_SLEUTH_API_TOKEN: ${{ secrets.SLEUTH_API_KEY }}
+              if: inputs.draft != true
+
+            - name: Build UMD bundles
+              run: |
+                  nx build:cdn js
+
+            - name: Upload CDN Release
+              run: aws s3 sync dist/sdk/js s3://js.devcycle.com/ --include "devcycle.min.js*" --acl public-read --dryrun
+              if: inputs.draft != true
