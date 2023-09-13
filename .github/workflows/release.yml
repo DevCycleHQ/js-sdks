@@ -64,6 +64,7 @@ jobs:
                   git push origin HEAD:main --follow-tags
               if: inputs.draft != true && github.ref == 'refs/heads/main'
 
+            # TODO: remove --dry-run
             - name: Push to npm
               run: |
                   yarn npm-publish --dry-run
@@ -76,6 +77,7 @@ jobs:
               run: |
                   nx build:cdn js
 
+            # TODO: remove --dryrun
             - name: Upload CDN Release
               run: aws s3 sync dist/sdk/js s3://js.devcycle.com/ --include "devcycle.min.js*" --acl public-read --dryrun
               if: inputs.draft != true

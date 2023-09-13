@@ -65,16 +65,19 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
     exit 1
   fi
 
-  # check if we're on main branch
-  if [[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then
-    echo "Not on main branch. Aborting."
-    exit 1
-  fi
+  # Check for main branch and local changes when running locally
+  if [[ -z "$CI" ]]; then
+    # check if we're on main branch
+    if [[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then
+      echo "Not on main branch. Aborting."
+      exit 1
+    fi
 
-  # check if working directory is clean
-  if [[ -n "$(git status --porcelain)" ]]; then
-    echo "Working directory is not clean. Aborting."
-    exit 1
+    # check if working directory is clean
+    if [[ -n "$(git status --porcelain)" ]]; then
+      echo "Working directory is not clean. Aborting."
+      exit 1
+    fi
   fi
 
   # check if current commit is tagged with the requested version
