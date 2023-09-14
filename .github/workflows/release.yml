@@ -75,7 +75,7 @@ jobs:
 
             - name: Build UMD bundles
               run: |
-                  nx build:cdn js
+                  yarn nx build:cdn js
 
             # TODO: remove --dryrun
             - name: Upload CDN Release
