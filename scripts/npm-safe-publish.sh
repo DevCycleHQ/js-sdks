@@ -42,10 +42,10 @@ function parse_arguments() {
 }
 
 function npm_authenticated() {
-  if [[ -z "$NODE_AUTH_TOKEN" ]]; then
-    npm "$@" --otp="$OTP"
+  if [[ -z "$NPM_TOKEN" ]]; then
+    yarn npm "$@" --otp="$OTP"
   else
-    npm "$@"
+    yarn npm "$@"
   fi
 }
 
@@ -59,6 +59,12 @@ NPM_LS="$(cat package.json | jq -r $JQ_PATH)"
 
 if [[ "$NPM_REGISTRY" != "https://registry.yarnpkg.com" ]]; then
   echo "NPM registry is not set to https://registry.yarnpkg.com. Aborting."
+  exit 1
+fi
+
+# check if otp is set
+if [[ -z "$OTP" && -z "$NPM_TOKEN" ]]; then
+  echo "Must specify the NPM one-time password using the --otp option, or set the NPM_TOKEN environment variable. Aborting."
   exit 1
 fi
 
@@ -94,15 +100,9 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
     exit 1
   fi
 
-  # check if otp is set
-  if [[ -z "$OTP" && -z "$NODE_AUTH_TOKEN" ]]; then
-    echo "Must specify the NPM one-time password using the --otp option."
-    exit 1
-  fi
-
   if [[ -z "$DRY_RUN" ]]; then
     echo "Publishing $PACKAGE@$NPM_LS to NPM."
-    npm_authenticated publish --otp=$OTP
+    npm_authenticated publish
   else
     echo "[DRY RUN] Not publishing $PACKAGE@$NPM_LS to NPM."
   fi
@@ -145,11 +145,11 @@ if [[ "$DEPRECATED_PACKAGE" != "" ]]; then
     # Deploy logic
     if [[ -z "$DRY_RUN" ]]; then
       echo "Publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
-      npm_authenticated publish --otp=$OTP
+      npm_authenticated publish
 
       sleep 10
 
-      npm_authenticated deprecate "$DEPRECATED_PACKAGE"@"*" "Package has been renamed to: $PACKAGE" --otp=$OTP
+      npm_authenticated deprecate "$DEPRECATED_PACKAGE"@"*" "Package has been renamed to: $PACKAGE"
     else
       echo "[DRY RUN] Not publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
     fi
