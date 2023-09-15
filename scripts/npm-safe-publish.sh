@@ -42,10 +42,10 @@ function parse_arguments() {
 }
 
 function npm_authenticated() {
-  if [[ -z "$NPM_TOKEN" ]]; then
-    yarn npm "$@" --otp="$OTP"
+  if [[ -z "$NODE_AUTH_TOKEN" ]]; then
+    npm "$@" --otp="$OTP"
   else
-    yarn npm "$@"
+    npm "$@"
   fi
 }
 
@@ -63,8 +63,8 @@ if [[ "$NPM_REGISTRY" != "https://registry.yarnpkg.com" ]]; then
 fi
 
 # check if otp is set
-if [[ -z "$OTP" && -z "$NPM_TOKEN" ]]; then
-  echo "Must specify the NPM one-time password using the --otp option, or set the NPM_TOKEN environment variable. Aborting."
+if [[ -z "$OTP" && -z "$NODE_AUTH_TOKEN" ]]; then
+  echo "Must specify the NPM one-time password using the --otp option, or set the NODE_AUTH_TOKEN environment variable. Aborting."
   exit 1
 fi
 

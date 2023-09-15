@@ -32,6 +32,9 @@ jobs:
         strategy:
             matrix:
                 node-version: [18.x]
+        env:
+            # The setup-node action configures this env var as the source for the npm auth token
+            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
         steps:
             # Check out the repo with credentials that can bypass branch protection, and fetch git history instead of just latest commit
@@ -39,6 +42,11 @@ jobs:
               with:
                   token: ${{ secrets.AUTOMATION_USER_TOKEN }}
                   fetch-depth: 0
+
+            - name: Validate npm config and auth
+              run: |
+                  npm config list
+                  npm whoami
 
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v2.2.0
@@ -56,6 +64,7 @@ jobs:
               uses: actions/setup-node@v3
               with:
                   node-version: ${{ matrix.node-version }}
+                  registry-url: 'https://registry.npmjs.org'
                   cache: 'yarn'
 
             - run: yarn --immutable
@@ -78,20 +87,14 @@ jobs:
 
             - name: Push to npm
               run: |
-                  # Use the NPM_TOKEN environment variable to authenticate to the registry
-                  echo 'npmAuthToken: ${NPM_TOKEN}' >> .yarnrc.yml
-
                   yarn npm-publish
               env:
-                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
                   DEVCYCLE_PROD_SLEUTH_API_TOKEN: ${{ secrets.SLEUTH_API_KEY }}
               if: inputs.draft != true
 
             - name: Build UMD bundles
               run: |
                   yarn nx build:cdn js
-              env:
-                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
             - name: Upload CDN Release
               run: aws s3 sync dist/sdk/js s3://js.devcycle.com/ --include "devcycle.min.js*" --acl public-read
