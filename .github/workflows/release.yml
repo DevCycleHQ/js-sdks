@@ -76,13 +76,12 @@ jobs:
                   git push origin HEAD:main --follow-tags
               if: inputs.draft != true && github.ref == 'refs/heads/main'
 
-            # TODO: remove --dry-run
             - name: Push to npm
               run: |
                   # Use the NPM_TOKEN environment variable to authenticate to the registry
                   echo 'npmAuthToken: ${NPM_TOKEN}' >> .yarnrc.yml
 
-                  yarn npm-publish --dry-run
+                  yarn npm-publish
               env:
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
                   DEVCYCLE_PROD_SLEUTH_API_TOKEN: ${{ secrets.SLEUTH_API_KEY }}
@@ -94,7 +93,6 @@ jobs:
               env:
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-            # TODO: remove --dryrun
             - name: Upload CDN Release
-              run: aws s3 sync dist/sdk/js s3://js.devcycle.com/ --include "devcycle.min.js*" --acl public-read --dryrun
-              if: inputs.draft != true
+              run: aws s3 sync dist/sdk/js s3://js.devcycle.com/ --include "devcycle.min.js*" --acl public-read
+              if: inputs.draft != true && github.ref == 'refs/heads/main'

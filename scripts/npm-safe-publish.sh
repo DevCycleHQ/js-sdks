@@ -4,7 +4,7 @@
 # If it doesn't exist, check that we're on the main branch, the working directory is clean, and the current commit
 # is tagged with the requested version
 
-set -euxo pipefail
+set -euo pipefail
 
 if [[ $# -eq 0 ]]; then
   echo "Must specify the package to push/check."
