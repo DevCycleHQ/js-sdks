@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-set -exo pipefail
+set -eo pipefail
 
 # Get the last tagged sha from the output of "git describe"
-LAST_TAG=$(git describe --always --dirty --first-parent --abbrev=0)
+LAST_TAG=$(git describe --always --first-parent --abbrev=0)
 
 echo "Last Tag $LAST_TAG"
 LAST_TAGGED_SHA=$(git rev-list -n 1 $LAST_TAG)
@@ -15,7 +15,39 @@ fi
 
 echo "Last tagged sha: $LAST_TAGGED_SHA"
 
-AFFECTED_PROJECTS=$(yarn nx print-affected --base $LAST_TAGGED_SHA --select=projects)
+function parse_arguments() {
+  while (( "$#" )); do
+    case "$1" in
+      --all-packages)
+        AFFECTED_PROJECTS=$(yarn nx show projects | paste -sd "," -)
+        echo "Selecting all projects for version increment"
+        shift
+        ;;
+      --version-increment-type=*)
+        VERSION_INCREMENT_TYPE="${1#*=}"
+        shift
+        ;;
+      --version-increment-type*)
+        VERSION_INCREMENT_TYPE="${2}"
+        shift 2
+        ;;
+      *)
+        echo "error: unrecognized argument(s): $@"
+        exit 1
+        ;;
+    esac
+  done
+}
+
+AFFECTED_PROJECTS=""
+VERSION_INCREMENT_TYPE="patch"
+
+parse_arguments "$@"
+
+if [ -z "$AFFECTED_PROJECTS" ]; then
+  AFFECTED_PROJECTS=$(yarn nx print-affected --base $LAST_TAGGED_SHA --select=projects)
+fi
+
 echo "Affected projects: $AFFECTED_PROJECTS"
 
 # exit if no affected projects
@@ -39,7 +71,12 @@ for PROJECT in "${AFFECTED_PROJECTS[@]}"; do
   # get filepath from project.json
   FILEPATH=$(yarn nx show project $PROJECT | jq -r ".sourceRoot")
 
-  # get package name from project.json
+  if [ ! -f "$FILEPATH/../package.json" ]; then
+    echo "Unable to find package.json for $PROJECT"
+    continue
+  fi
+
+  # get package name from package.json
   PACKAGE=$(cat "$FILEPATH/../package.json" | jq -r '.name')
 
   # add package to array
@@ -49,7 +86,9 @@ done
 # join packages with comma
 PACKAGES=$(IFS=','; echo "${PACKAGES[*]}")
 
-yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish" --no-push --yes "$1"
+echo -e "Applying version increment $VERSION_INCREMENT_TYPE to packages:\n$PACKAGES"
+
+yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish" --no-push --yes "$VERSION_INCREMENT_TYPE"
 
 # store the tags created for this commit
 RELEASE_TAGS=$(git tag --points-at HEAD)

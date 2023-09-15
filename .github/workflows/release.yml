@@ -8,6 +8,11 @@ on:
                 required: true
                 default: false
                 type: boolean
+            update_all:
+                description: 'Force update all packages'
+                required: true
+                default: false
+                type: boolean
             version-increment-type:
                 description: 'Which part of the version to increment:'
                 required: true
@@ -55,9 +60,16 @@ jobs:
 
             - run: yarn --immutable
 
-            - name: Increment package versions with lerna
+            # Only one of the following two steps will run, depending on whether the `update_all` input is set
+            - name: Increment affected package versions with lerna
               run: |
-                  ./scripts/lerna-version-ci.sh "${{ inputs.version-increment-type }}"
+                  ./scripts/lerna-version-ci.sh --version-increment-type "${{ inputs.version-increment-type }}"
+              if: inputs.update_all != true
+
+            - name: Increment all package versions with lerna
+              run: |
+                  ./scripts/lerna-version-ci.sh --all-packages --version-increment-type="${{ inputs.version-increment-type }}"
+              if: inputs.update_all == true
 
             - name: Push version changes and tags
               run: |
