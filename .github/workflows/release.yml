@@ -43,11 +43,6 @@ jobs:
                   token: ${{ secrets.AUTOMATION_USER_TOKEN }}
                   fetch-depth: 0
 
-            - name: Validate npm config and auth
-              run: |
-                  npm config list
-                  npm whoami
-
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v2.2.0
               with:
@@ -66,6 +61,11 @@ jobs:
                   node-version: ${{ matrix.node-version }}
                   registry-url: 'https://registry.npmjs.org'
                   cache: 'yarn'
+
+            - name: Validate npm config and auth
+              run: |
+                  npm config list
+                  npm whoami
 
             - run: yarn --immutable
 
