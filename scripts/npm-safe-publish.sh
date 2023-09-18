@@ -64,7 +64,7 @@ fi
 
 # check if otp is set
 if [[ -z "$OTP" && -z "$NODE_AUTH_TOKEN" ]]; then
-  echo "Must specify the NPM one-time password using the --otp option, or set the NODE_AUTH_TOKEN environment variable. Aborting."
+  echo "::error::Must specify the NPM one-time password using the --otp option, or set the NODE_AUTH_TOKEN environment variable. Aborting."
   exit 1
 fi
 
@@ -75,7 +75,7 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
 
   # make sure we're able to track this deployment
   if [[ -z "$DEVCYCLE_PROD_SLEUTH_API_TOKEN" ]]; then
-    echo "Sleuth.io deployment tracking token not found. Aborting."
+    echo "::error::Sleuth.io deployment tracking token not found. Aborting."
     exit 1
   fi
 
@@ -96,19 +96,19 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
 
   # check if current commit is tagged with the requested version
   if [[ -z "$(git tag --points-at HEAD "$PACKAGE@$NPM_LS")" ]]; then
-    echo "Current commit is not tagged with the requested version. Aborting."
+    echo "::error::Current commit is not tagged with the requested version. Aborting."
     exit 1
   fi
 
   if [[ -z "$DRY_RUN" ]]; then
-    echo "Publishing $PACKAGE@$NPM_LS to NPM."
+    echo "::info::Publishing $PACKAGE@$NPM_LS to NPM."
     npm_authenticated publish
   else
-    echo "[DRY RUN] Not publishing $PACKAGE@$NPM_LS to NPM."
+    echo "::warning::[DRY RUN] Not publishing $PACKAGE@$NPM_LS to NPM."
   fi
 
   if [[ "$?" != 0 ]]; then
-    echo "Publish failed. Aborting."
+    echo "::error::Publish of package $PACKAGE@$NPM_LS failed. Aborting."
     exit 1
   fi
 
@@ -117,7 +117,7 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
     -d environment=production \
     -d sha=$SHA https://app.sleuth.io/api/1/deployments/taplytics/js-sdks-2/register_deploy
 else
-  echo "Versions are the same ($NPM_SHOW = $NPM_LS). Not pushing"
+  echo "::info::Versions are the same ($NPM_SHOW = $NPM_LS). Not pushing"
 fi
 
 # If DEPRECATED_PACKAGE is set, run the deploy logic for it
@@ -130,7 +130,7 @@ if [[ "$DEPRECATED_PACKAGE" != "" ]]; then
   echo "$DEPRECATED_PACKAGE npm show: $NPM_SHOW_DEPRECATED, npm ls: $NPM_LS"
 
   if [[ "$NPM_SHOW_DEPRECATED" != "$NPM_LS" ]]; then
-    echo "Versions are not the same, (Remote = $NPM_SHOW_DEPRECATED; Local = $NPM_LS). Proceeding with deploy for deprecated package."
+    echo "::info::Versions are not the same, (Remote = $NPM_SHOW_DEPRECATED; Local = $NPM_LS). Proceeding with deploy for deprecated package."
 
     # Backup the original package.json
     cp package.json package.json.bak
@@ -151,7 +151,7 @@ if [[ "$DEPRECATED_PACKAGE" != "" ]]; then
 
       npm_authenticated deprecate "$DEPRECATED_PACKAGE"@"*" "Package has been renamed to: $PACKAGE"
     else
-      echo "[DRY RUN] Not publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
+      echo "::warning::[DRY RUN] Not publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
     fi
 
     # Restore the original package.json (trap will take care of this if the script exits prematurely)
@@ -160,6 +160,6 @@ if [[ "$DEPRECATED_PACKAGE" != "" ]]; then
     # Remove trap once the job is done
     trap - EXIT
   else
-    echo "Versions are the same ($NPM_SHOW_DEPRECATED = $NPM_LS). Not pushing deprecated package."
+    echo "::info::Versions are the same ($NPM_SHOW_DEPRECATED = $NPM_LS). Not pushing deprecated package."
   fi
 fi

@@ -5,7 +5,7 @@ set -eo pipefail
 # Get the last tagged sha from the output of "git describe"
 LAST_TAG=$(git describe --always --first-parent --abbrev=0)
 
-echo "Last Tag $LAST_TAG"
+echo "::info::Last Tag $LAST_TAG"
 LAST_TAGGED_SHA=$(git rev-list -n 1 $LAST_TAG)
 
 if [ -z "$LAST_TAGGED_SHA" ]; then
@@ -72,7 +72,7 @@ for PROJECT in "${AFFECTED_PROJECTS[@]}"; do
   FILEPATH=$(yarn nx show project $PROJECT | jq -r ".sourceRoot")
 
   if [ ! -f "$FILEPATH/../package.json" ]; then
-    echo "Unable to find package.json for $PROJECT"
+    echo "::warning::Unable to find package.json for $PROJECT"
     continue
   fi
 
@@ -86,7 +86,7 @@ done
 # join packages with comma
 PACKAGES=$(IFS=','; echo "${PACKAGES[*]}")
 
-echo -e "Applying version increment $VERSION_INCREMENT_TYPE to packages:\n$PACKAGES"
+echo -e "::info::Applying version increment $VERSION_INCREMENT_TYPE to packages:\n$PACKAGES"
 
 yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish" --no-push --yes "$VERSION_INCREMENT_TYPE"
 
