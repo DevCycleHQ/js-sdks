@@ -4,7 +4,7 @@
 # If it doesn't exist, check that we're on the main branch, the working directory is clean, and the current commit
 # is tagged with the requested version
 
-set -euo pipefail
+set -eo pipefail
 
 if [[ $# -eq 0 ]]; then
   echo "Must specify the package to push/check."
@@ -16,6 +16,9 @@ DEPRECATED_PACKAGE=""
 JQ_PATH=".version"
 NPM_REGISTRY="$(yarn config get npmRegistryServer)"
 SHA="$(git rev-parse HEAD)"
+OTP=""
+DRY_RUN=""
+
 
 # Use bash function to parse arguments more efficiently
 function parse_arguments() {
@@ -49,9 +52,6 @@ function npm_authenticated() {
   fi
 }
 
-# Initialize variables to ensure they exist
-OTP=""
-DRY_RUN=""
 parse_arguments "$@"
 
 NPM_SHOW="$(npm show "$PACKAGE" version)"
