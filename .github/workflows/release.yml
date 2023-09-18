@@ -92,6 +92,13 @@ jobs:
                   DEVCYCLE_PROD_SLEUTH_API_TOKEN: ${{ secrets.SLEUTH_API_KEY }}
               if: inputs.draft != true
 
+            - name: Push to npm (dry run)
+              run: |
+                  yarn npm-publish --dry-run
+              env:
+                  DEVCYCLE_PROD_SLEUTH_API_TOKEN: ${{ secrets.SLEUTH_API_KEY }}
+              if: inputs.draft == true
+
             - name: Build UMD bundles
               run: |
                   yarn nx build:cdn js
