@@ -4531,6 +4531,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cloudflare/workers-types@npm:^4.20230914.0":
+  version: 4.20230914.0
+  resolution: "@cloudflare/workers-types@npm:4.20230914.0"
+  checksum: 2314928d43d81b5a1086b9fc0975576bb10d4fb991b068aaf3d7903eee60703a1f37aedb6da97de1a94e50a4aae575203e5b18ffc5a19de03320b732af084b1a
+  languageName: node
+  linkType: hard
+
 "@colors/colors@npm:1.5.0":
   version: 1.5.0
   resolution: "@colors/colors@npm:1.5.0"
@@ -4837,6 +4844,14 @@ __metadata:
 "@devcycle/js-client-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/js-cloud-server-sdk@workspace:sdk/js-cloud-server":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/js-cloud-server-sdk@workspace:sdk/js-cloud-server"
+  dependencies:
+    "@devcycle/bucketing-test-data": ^1.2.21
   languageName: unknown
   linkType: soft
 
@@ -14683,6 +14698,7 @@ __metadata:
     "@altack/nx-bundlefy": ^0.16.0
     "@babel/core": ^7.17.7
     "@babel/preset-react": ^7.14.5
+    "@cloudflare/workers-types": ^4.20230914.0
     "@commitlint/cli": ^16.2.3
     "@commitlint/config-conventional": ^16.2.1
     "@devcycle/assemblyscript-json": ^2.0.0

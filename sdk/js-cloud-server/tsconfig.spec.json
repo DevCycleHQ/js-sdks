@@ -1,0 +1,23 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "target": "es2019",
+        "outDir": "../../dist/out-tsc",
+        "module": "commonjs",
+        "lib": ["esnext", "webworker"],
+        "types": ["jest", "node", "@cloudflare/workers-types"]
+    },
+    "include": [
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "**/*.test.tsx",
+        "**/*.spec.tsx",
+        "**/*.test.js",
+        "**/*.spec.js",
+        "**/*.test.jsx",
+        "**/*.spec.jsx",
+        "**/__mocks__/**/*.ts",
+        "**/*.d.ts",
+        "jest.config.ts"
+    ]
+}

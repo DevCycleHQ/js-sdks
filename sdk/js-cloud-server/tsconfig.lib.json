@@ -1,0 +1,17 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "module": "commonjs",
+        "outDir": "../../dist/out-tsc",
+        "declaration": true,
+        "lib": ["esnext", "webworker"],
+        "types": ["node", "@cloudflare/workers-types"]
+    },
+    "exclude": [
+        "**/*.spec.ts",
+        "**/*.test.ts",
+        "**/__mocks__/**/*.ts",
+        "jest.config.ts"
+    ],
+    "include": ["**/*.ts"]
+}
