@@ -8,7 +8,10 @@ import {
 import { DVCVariable } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
 import { dvcDefaultLogger } from './utils/logger'
-import { DVCPopulatedUser } from './models/populatedUser'
+import {
+    DVCPopulatedUser,
+    DevCyclePlatformDetails,
+} from './models/populatedUser'
 import {
     DVCLogger,
     getVariableTypeFromValue,
@@ -68,12 +71,18 @@ export class DevCycleCloudClient {
     private sdkKey: string
     private logger: DVCLogger
     private options: DevCycleOptions
+    private platformDetails: DevCyclePlatformDetails
 
-    constructor(sdkKey: string, options: DevCycleOptions) {
+    constructor(
+        sdkKey: string,
+        options: DevCycleOptions,
+        platformDetails: DevCyclePlatformDetails,
+    ) {
         this.sdkKey = sdkKey
         this.logger =
             options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.options = options
+        this.platformDetails = platformDetails
         this.logger.info('Running DevCycle NodeJS SDK in Cloud Bucketing mode')
     }
 

@@ -1,7 +1,14 @@
 import { DVCCustomDataJSON } from '../types'
 import * as packageJson from '../../package.json'
 import { DevCycleUser } from './user'
-// import os from 'os'
+
+export type DevCyclePlatformDetails = {
+    platform?: string
+    platformVersion?: string
+    sdkType?: 'server'
+    sdkVersion?: string
+    hostname?: string
+}
 
 export class DVCPopulatedUser implements DevCycleUser {
     user_id: string
@@ -21,7 +28,7 @@ export class DVCPopulatedUser implements DevCycleUser {
     readonly sdkVersion: string
     readonly hostname: string
 
-    constructor(user: DevCycleUser) {
+    constructor(user: DevCycleUser, platformDetails?: DevCyclePlatformDetails) {
         this.user_id = user.user_id
         this.email = user.email
         this.name = user.name
@@ -37,11 +44,11 @@ export class DVCPopulatedUser implements DevCycleUser {
          * Read only properties initialized once
          */
         this.createdDate = new Date()
-        this.platform = 'NodeJS'
-        this.platformVersion = '' //process.version
-        this.sdkType = 'server'
-        this.sdkVersion = packageJson.version
-        this.hostname = '' //os.hostname()
+        this.platform = platformDetails?.platform || 'NodeJS'
+        this.platformVersion = platformDetails?.platformVersion || ''
+        this.sdkType = platformDetails?.sdkType || 'server'
+        this.sdkVersion = platformDetails?.sdkVersion || packageJson.version
+        this.hostname = platformDetails?.hostname || ''
     }
 
     static fromDVCUser(user: DevCycleUser): DVCPopulatedUser {
