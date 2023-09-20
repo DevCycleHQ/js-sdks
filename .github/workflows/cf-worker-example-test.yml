@@ -1,0 +1,30 @@
+name: Run CF Worker Example App
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on:
+      labels: ubuntu-latest-4-core
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+      - name: Install protoc for protobuf compilation
+        run: sudo apt-get install -y protobuf-compiler
+      - name: Run Yarn
+        run: yarn --immutable
+      - name: Setup .dev.vars file
+        run: echo "DEVCYCLE_SERVER_SDK_KEY=${{ secrets.DEVCYCLE_SERVER_SDK_KEY }}" > examples/js-cloud-server/cloudflare-worker/.dev.vars
+      - name: run example app
+        run: yarn nx serve example-js-cloud-server-sdk-cf-worker
+
