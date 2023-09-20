@@ -1,5 +1,5 @@
 import { BucketedUserConfig, SDKVariable, VariableType } from '@devcycle/types'
-import { DVCPopulatedUser } from '../models/populatedUser'
+import { DVCPopulatedPBUser } from '../models/populatedUser'
 import { getBucketingLib } from '../bucketing'
 import {
     VariableForUserParams_PB,
@@ -8,7 +8,7 @@ import {
 import { pbSDKVariableTransform } from '../pb-types/pbTypeHelpers'
 
 export function bucketUserForConfig(
-    user: DVCPopulatedUser,
+    user: DVCPopulatedPBUser,
     sdkKey: string,
 ): BucketedUserConfig {
     return JSON.parse(
@@ -37,7 +37,7 @@ export function getVariableTypeCode(type: VariableType): number {
 
 export function variableForUser(
     sdkKey: string,
-    usr: DVCPopulatedUser,
+    usr: DVCPopulatedPBUser,
     key: string,
     type: number,
 ): SDKVariable | null {
@@ -54,7 +54,7 @@ export function variableForUser(
 
 export function variableForUser_PB(
     sdkKey: string,
-    usr: DVCPopulatedUser,
+    usr: DVCPopulatedPBUser,
     key: string,
     type: number,
 ): SDKVariable | null {

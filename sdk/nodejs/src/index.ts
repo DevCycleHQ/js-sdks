@@ -1,8 +1,11 @@
 import { DevCycleOptions, DevCycleEvent } from './types'
 import { DevCycleClient } from './client'
-import { DevCycleCloudClient } from './cloudClient'
 import { isValidServerSDKKey } from './utils/paramUtils'
-import { DevCycleUser } from './models/user'
+import {
+    DevCycleUser,
+    DevCycleCloudClient,
+} from '@devcycle/js-cloud-server-sdk'
+import { getNodeJSPlatformDetails } from './utils/platformDetails'
 
 export { DevCycleClient, DevCycleCloudClient, DevCycleUser }
 export * from './types'
@@ -61,7 +64,11 @@ export function initializeDevCycle(
     }
 
     if (options.enableCloudBucketing) {
-        return new DevCycleCloudClient(sdkKey, options)
+        return new DevCycleCloudClient(
+            sdkKey,
+            options,
+            getNodeJSPlatformDetails(),
+        )
     }
     return new DevCycleClient(sdkKey, options)
 }

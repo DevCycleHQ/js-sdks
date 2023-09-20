@@ -15,7 +15,7 @@ import { DVCVariable, VariableParam } from './models/variable'
 import { checkParamDefined } from './utils/paramUtils'
 import { EventQueue, EventTypes } from './eventQueue'
 import { dvcDefaultLogger } from './utils/logger'
-import { DVCPopulatedUser } from './models/populatedUser'
+import { DVCPopulatedPBUser } from './models/populatedUser'
 import * as packageJson from '../package.json'
 import { importBucketingLib, getBucketingLib } from './bucketing'
 import {
@@ -24,8 +24,8 @@ import {
     VariableTypeAlias,
 } from '@devcycle/types'
 import os from 'os'
-import { DevCycleUser } from './models/user'
 import { UserError } from './utils/userError'
+import { DevCycleUser } from '@devcycle/js-cloud-server-sdk'
 
 interface IPlatformData {
     platform: string
@@ -141,7 +141,7 @@ export class DevCycleClient {
             this.logger,
             true,
         )
-        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+        const populatedUser = DVCPopulatedPBUser.fromDVCUser(incomingUser)
 
         if (!this.initialized) {
             this.logger.warn(
@@ -204,7 +204,7 @@ export class DevCycleClient {
             return {}
         }
 
-        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+        const populatedUser = DVCPopulatedPBUser.fromDVCUser(incomingUser)
         const bucketedConfig = bucketUserForConfig(populatedUser, this.sdkKey)
         return bucketedConfig?.variables || {}
     }
@@ -219,7 +219,7 @@ export class DevCycleClient {
             return {}
         }
 
-        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+        const populatedUser = DVCPopulatedPBUser.fromDVCUser(incomingUser)
         const bucketedConfig = bucketUserForConfig(populatedUser, this.sdkKey)
         return bucketedConfig?.features || {}
     }
@@ -235,7 +235,7 @@ export class DevCycleClient {
         }
 
         checkParamDefined('type', event.type)
-        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+        const populatedUser = DVCPopulatedPBUser.fromDVCUser(incomingUser)
         this.eventQueue.queueEvent(populatedUser, event)
     }
 

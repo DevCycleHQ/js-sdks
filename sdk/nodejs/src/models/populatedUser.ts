@@ -1,84 +1,52 @@
 import { DVCCustomDataJSON } from '../types'
-import * as packageJson from '../../package.json'
-import { DevCycleUser } from './user'
-import os from 'os'
 import { ProtobufTypes } from '@devcycle/bucketing-assembly-script'
+import {
+    DVCPopulatedUser,
+    DevCycleUser,
+    DevCyclePlatformDetails,
+} from '@devcycle/js-cloud-server-sdk'
+import { getNodeJSPlatformDetails } from '../utils/platformDetails'
 
-export class DVCPopulatedUser implements DevCycleUser {
-    user_id: string
-    email?: string
-    name?: string
-    language?: string
-    country?: string
-    appVersion?: string
-    appBuild?: number
-    customData?: DVCCustomDataJSON
-    privateCustomData?: DVCCustomDataJSON
-    readonly lastSeenDate: Date
-    readonly createdDate: Date
-    readonly platform: string
-    readonly platformVersion: string
-    readonly sdkType: 'server'
-    readonly sdkVersion: string
-    readonly hostname: string
-
-    constructor(user: DevCycleUser) {
-        this.user_id = user.user_id
-        this.email = user.email
-        this.name = user.name
-        this.language = user.language
-        this.country = user.country
-        this.appVersion = user.appVersion
-        this.appBuild = user.appBuild
-        this.customData = user.customData
-        this.privateCustomData = user.privateCustomData
-        this.lastSeenDate = new Date()
-
-        /**
-         * Read only properties initialized once
-         */
-        this.createdDate = new Date()
-        this.platform = 'NodeJS'
-        this.platformVersion = process.version
-        this.sdkType = 'server'
-        this.sdkVersion = packageJson.version
-        this.hostname = os.hostname()
+export class DVCPopulatedPBUser extends DVCPopulatedUser {
+    constructor(user: DevCycleUser, platformDetails?: DevCyclePlatformDetails) {
+        const userDetails = platformDetails || getNodeJSPlatformDetails()
+        super(user, userDetails)
     }
 
     toPBUser(): ProtobufTypes.DVCUser_PB {
         const params = {
-            user_id: this.user_id,
+            user_id: super.user_id,
             email: ProtobufTypes.NullableString.create({
-                value: this.email || '',
-                isNull: !this.email,
+                value: super.email || '',
+                isNull: !super.email,
             }),
             name: ProtobufTypes.NullableString.create({
-                value: this.name || '',
-                isNull: !this.name,
+                value: super.name || '',
+                isNull: !super.name,
             }),
             language: ProtobufTypes.NullableString.create({
-                value: this.language || '',
-                isNull: !this.language,
+                value: super.language || '',
+                isNull: !super.language,
             }),
             country: ProtobufTypes.NullableString.create({
-                value: this.country || '',
-                isNull: !this.country,
+                value: super.country || '',
+                isNull: !super.country,
             }),
             appBuild: ProtobufTypes.NullableDouble.create({
-                value: this.appBuild || 0,
-                isNull: this.appBuild === null || this.appBuild === undefined,
+                value: super.appBuild || 0,
+                isNull: super.appBuild === null || super.appBuild === undefined,
             }),
             appVersion: ProtobufTypes.NullableString.create({
-                value: this.appVersion || '',
-                isNull: !this.appVersion,
+                value: super.appVersion || '',
+                isNull: !super.appVersion,
             }),
             deviceModel: ProtobufTypes.NullableString.create({
                 value: '',
                 isNull: true,
             }),
-            customData: getNullableCustomDataValue(this.customData),
+            customData: getNullableCustomDataValue(super.customData),
             privateCustomData: getNullableCustomDataValue(
-                this.privateCustomData,
+                super.privateCustomData,
             ),
         }
         const err = ProtobufTypes.DVCUser_PB.verify(params)
@@ -87,8 +55,8 @@ export class DVCPopulatedUser implements DevCycleUser {
         return ProtobufTypes.DVCUser_PB.create(params)
     }
 
-    static fromDVCUser(user: DevCycleUser): DVCPopulatedUser {
-        return new DVCPopulatedUser(user)
+    static fromDVCUser(user: DevCycleUser): DVCPopulatedPBUser {
+        return new DVCPopulatedPBUser(user)
     }
 }
 

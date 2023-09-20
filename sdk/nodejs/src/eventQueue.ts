@@ -1,15 +1,14 @@
 import { DevCycleEvent } from './types'
 import { DVCRequestEvent } from './models/requestEvent'
-import { DVCPopulatedUser } from './models/populatedUser'
+import { DVCPopulatedPBUser } from './models/populatedUser'
 import {
     BucketedUserConfig,
     DVCLogger,
     DVCReporter,
     FlushResults,
 } from '@devcycle/types'
-
 import { getBucketingLib } from './bucketing'
-import { publishEvents } from './request'
+import { publishEvents } from '@devcycle/js-cloud-server-sdk'
 
 export const AggregateEventTypes: Record<string, string> = {
     variableEvaluated: 'variableEvaluated',
@@ -23,7 +22,7 @@ export const EventTypes: Record<string, string> = {
 }
 
 type UserEventsBatchRecord = {
-    user: DVCPopulatedUser
+    user: DVCPopulatedPBUser
     events: DVCRequestEvent[]
 }
 export type FlushPayload = {
@@ -264,7 +263,7 @@ export class EventQueue {
     /**
      * Queue DVCAPIEvent for publishing to DevCycle Events API.
      */
-    queueEvent(user: DVCPopulatedUser, event: DevCycleEvent): void {
+    queueEvent(user: DVCPopulatedPBUser, event: DevCycleEvent): void {
         if (this.checkEventQueueSize()) {
             this.logger.warn(
                 `Max event queue size reached, dropping event: ${event}`,
@@ -284,7 +283,7 @@ export class EventQueue {
      * by incrementing the 'value' field.
      */
     queueAggregateEvent(
-        user: DVCPopulatedUser,
+        user: DVCPopulatedPBUser,
         event: DevCycleEvent,
         bucketedConfig?: BucketedUserConfig,
     ): void {

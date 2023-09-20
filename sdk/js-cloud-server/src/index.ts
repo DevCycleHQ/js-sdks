@@ -4,7 +4,10 @@ import { isValidServerSDKKey } from './utils/paramUtils'
 import { DevCycleUser } from './models/user'
 
 export { DevCycleCloudClient, DevCycleUser }
+export * from './models/populatedUser'
+export * from './models/user'
 export * from './types'
+export * from './request'
 export { dvcDefaultLogger } from './utils/logger'
 
 type DevCycleOptionsCloudEnabled = DevCycleOptions & {
