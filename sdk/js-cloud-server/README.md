@@ -1,18 +1,17 @@
-# DevCycle NodeJS Server SDK
+# DevCycle Javascript Cloud Bucketing Server SDK
 
-The NodeJS Server SDK for DevCycle.
+This SDK is used to integrate DevCycle with your Javascript server-side application, where a NodeJS runtime isn't available.
+Example use-cases would be Cloudflare Workers and other edge-worker runtimes.
 
-This SDK uses local bucketing to perform all user segmentation and bucketing locally in the SDK, 
-providing immediate responses to variable and feature requests for a user. 
-The SDK will download the latest version of your DevCycle environments configuration from a CDN on initialization,
-and will periodically poll the CDN for configuration changes.
+This SDK makes API requests to DevCycle's [Bucketing API](https://docs.devcycle.com/bucketing-api/) to perform bucketing.
+See our [System Architecture Documentation](https://docs.devcycle.com/introduction/architecture#cloud-bucketing-server-sdk-architecture) for more details.
 
 ### Installation
 
 Our library can be found on npm and installed by the following:
 
 ```
-npm install @devcycle/nodejs-server-sdk
+npm install @devcycle/js-cloud-server-sdk"
 ```
 
 ### Usage
