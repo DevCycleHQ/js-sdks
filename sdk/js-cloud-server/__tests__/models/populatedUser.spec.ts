@@ -3,17 +3,20 @@ import { DevCycleUser } from '../../src/models/user'
 
 describe('DVCPopulatedUser Unit Tests', () => {
     it('should construct DVCPopulatedUser from UserParam', () => {
-        const requestUser = new DVCPopulatedUser({
-            user_id: 'user_id',
-            email: 'email',
-            name: 'name',
-            language: 'en',
-            country: 'ca',
-            appVersion: 'appVersion',
-            appBuild: 1,
-            customData: { custom: 'data' },
-            privateCustomData: { private: 'customData' },
-        })
+        const requestUser = new DVCPopulatedUser(
+            {
+                user_id: 'user_id',
+                email: 'email',
+                name: 'name',
+                language: 'en',
+                country: 'ca',
+                appVersion: 'appVersion',
+                appBuild: 1,
+                customData: { custom: 'data' },
+                privateCustomData: { private: 'customData' },
+            },
+            {},
+        )
         expect(requestUser).toEqual(
             expect.objectContaining({
                 user_id: 'user_id',
@@ -47,7 +50,7 @@ describe('DVCPopulatedUser Unit Tests', () => {
             customData: { custom: 'data' },
             privateCustomData: { private: 'customData' },
         })
-        const populatedUser = DVCPopulatedUser.fromDVCUser(requestUser)
+        const populatedUser = DVCPopulatedUser.fromDVCUser(requestUser, {})
         expect(populatedUser).toEqual(
             expect.objectContaining({
                 user_id: 'user_id',

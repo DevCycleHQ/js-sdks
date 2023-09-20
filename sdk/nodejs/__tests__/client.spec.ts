@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { getBucketingLib } from '../src/bucketing'
 import { DevCycleClient } from '../src/client'
-import { DevCycleUser } from '../src/models/user'
+import { DevCycleUser } from '@devcycle/js-cloud-server-sdk'
 
 jest.mock('../src/bucketing')
 jest.mock('../src/environmentConfigManager')

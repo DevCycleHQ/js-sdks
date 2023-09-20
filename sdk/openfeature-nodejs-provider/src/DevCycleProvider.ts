@@ -15,6 +15,7 @@ import {
     DevCycleCloudClient,
     DevCycleOptions,
     DVCVariable,
+    DVCVariableInterface,
     DevCycleUser,
     DVCJSON,
     DVCCustomDataJSON,
@@ -175,7 +176,7 @@ export default class DevCycleProvider implements Provider {
      * @private
      */
     private resultFromDVCVariable<T>(
-        variable: DVCVariable,
+        variable: DVCVariableInterface,
     ): ResolutionDetails<T> {
         return {
             value: variable.value as T,

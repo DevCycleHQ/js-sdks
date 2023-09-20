@@ -1,21 +1,12 @@
-import {
-    DevCycleClient,
-    DevCycleCloudClient,
-    initializeDevCycle,
-} from '../src/index'
+import { DevCycleCloudClient, initializeDevCycle } from '../src/index'
 
-jest.mock('../src/bucketing')
-jest.mock('../src/environmentConfigManager')
-
-describe('NodeJS SDK Initialize', () => {
+describe('JS Cloud Bucketing Server SDK Initialize', () => {
     afterAll(() => {
         jest.clearAllMocks()
     })
 
     it('sucessfully calls initialize with no options', async () => {
-        const client: DevCycleClient = await initializeDevCycle(
-            'dvc_server_token',
-        ).onClientInitialized()
+        const client = initializeDevCycle('dvc_server_token')
         expect(client).toBeDefined()
     })
 
