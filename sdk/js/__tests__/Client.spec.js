@@ -39,6 +39,26 @@ describe('DevCycleClient tests', () => {
             },
         },
     }
+    const bootstrap = {
+        var: {
+            _id: '650089e2b0a71cf3c65fb9c2',
+            key: 'var',
+            type: 'Boolean',
+            value: false,
+        },
+        key: {
+            _id: '6508a19c10c98d6fdbf167ec',
+            key: 'ssr-button-text',
+            type: 'String',
+            value: 'bootstrap_value',
+        },
+        'ssg-header': {
+            _id: '6508a34cd34702dd9a9dcf84',
+            key: 'ssg-header',
+            type: 'String',
+            value: 'header is off',
+        },
+    }
 
     beforeEach(() => {
         jest.clearAllMocks()
@@ -74,11 +94,7 @@ describe('DevCycleClient tests', () => {
             return Promise.resolve(testConfig)
         })
         const dvcOptions = { enableEdgeDB: true }
-        const client = new DevCycleClient(
-            'test_sdk_key',
-            { user_id: 'user1' },
-            dvcOptions,
-        )
+        const client = new DevCycleClient('test_sdk_key', { user_id: 'user1' }, dvcOptions)
         await client.onClientInitialized()
         expect(getConfigJson_mock).toBeCalledWith(
             'test_sdk_key',
@@ -105,11 +121,7 @@ describe('DevCycleClient tests', () => {
             })
         })
         const dvcOptions = { enableEdgeDB: true }
-        const client = new DevCycleClient(
-            'test_sdk_key',
-            { user_id: 'user1' },
-            dvcOptions,
-        )
+        const client = new DevCycleClient('test_sdk_key', { user_id: 'user1' }, dvcOptions)
         await client.onClientInitialized()
         expect(getConfigJson_mock).toBeCalledWith(
             'test_sdk_key',
@@ -127,11 +139,7 @@ describe('DevCycleClient tests', () => {
             return Promise.resolve(testConfig)
         })
         const dvcOptions = { enableEdgeDB: false }
-        const client = new DevCycleClient(
-            'test_sdk_key',
-            { user_id: 'user1' },
-            dvcOptions,
-        )
+        const client = new DevCycleClient('test_sdk_key', { user_id: 'user1' }, dvcOptions)
         await client.onClientInitialized()
         expect(getConfigJson_mock).toBeCalledWith(
             'test_sdk_key',
@@ -161,9 +169,7 @@ describe('DevCycleClient tests', () => {
         })
         const client = new DevCycleClient('test_sdk_key', { isAnonymous: true })
         await client.onClientInitialized()
-        const anonymousUserId = await client.store.store.load(
-            StoreKey.AnonUserId,
-        )
+        const anonymousUserId = await client.store.store.load(StoreKey.AnonUserId)
         expect(anonymousUserId).toEqual(client.user.user_id)
     })
 
@@ -172,27 +178,19 @@ describe('DevCycleClient tests', () => {
             user_id: 'user1',
             isAnonymous: false,
         })
-        const anonymousUserId = await client.store.store.load(
-            StoreKey.AnonUserId,
-        )
+        const anonymousUserId = await client.store.store.load(StoreKey.AnonUserId)
         expect(anonymousUserId).toBeUndefined()
     })
 
     it('should get the anonymous user id from local storage if it exists', async () => {
-        window.localStorage.setItem(
-            StoreKey.AnonUserId,
-            JSON.stringify('test_anon_user_id'),
-        )
+        window.localStorage.setItem(StoreKey.AnonUserId, JSON.stringify('test_anon_user_id'))
         const client = new DevCycleClient('test_sdk_key', { isAnonymous: true })
         await client.onClientInitialized()
         expect(client.user.user_id).toEqual('test_anon_user_id')
     })
 
     it('should clear the anonymous user id from local storage when initialized with non-anon user', async () => {
-        window.localStorage.setItem(
-            StoreKey.AnonUserId,
-            JSON.stringify('anon_user_id'),
-        )
+        window.localStorage.setItem(StoreKey.AnonUserId, JSON.stringify('anon_user_id'))
         const client = new DevCycleClient('test_sdk_key', { user_id: 'user1' })
         await client.onClientInitialized()
         expect(client.user.user_id).toEqual('user1')
@@ -238,11 +236,7 @@ describe('DevCycleClient tests', () => {
         it('should not send a request to edgedb for an anonymous user', async () => {
             saveEntity_mock.mockResolvedValue({})
 
-            const client = new DevCycleClient(
-                'test_sdk_key',
-                { isAnonymous: true },
-                { enableEdgeDB: true },
-            )
+            const client = new DevCycleClient('test_sdk_key', { isAnonymous: true }, { enableEdgeDB: true })
             await client.onClientInitialized()
 
             expect(getConfigJson_mock).toBeCalled()
@@ -254,14 +248,8 @@ describe('DevCycleClient tests', () => {
                 user_id: 'user1',
             })
             await client.onClientInitialized()
-            expect(
-                window.localStorage.getItem(
-                    `${StoreKey.IdentifiedConfig}.user_id`,
-                ),
-            ).toBe(JSON.stringify('user1'))
-            expect(window.localStorage.getItem(StoreKey.IdentifiedConfig)).toBe(
-                JSON.stringify(testConfig),
-            )
+            expect(window.localStorage.getItem(`${StoreKey.IdentifiedConfig}.user_id`)).toBe(JSON.stringify('user1'))
+            expect(window.localStorage.getItem(StoreKey.IdentifiedConfig)).toBe(JSON.stringify(testConfig))
         })
 
         it('should save config for anonymous user', async () => {
@@ -269,9 +257,7 @@ describe('DevCycleClient tests', () => {
                 isAnonymous: true,
             })
             await client.onClientInitialized()
-            expect(window.localStorage.getItem(StoreKey.AnonymousConfig)).toBe(
-                JSON.stringify(testConfig),
-            )
+            expect(window.localStorage.getItem(StoreKey.AnonymousConfig)).toBe(JSON.stringify(testConfig))
         })
     })
 
@@ -310,9 +296,7 @@ describe('DevCycleClient tests', () => {
             })
             await client.onClientInitialized()
             const variable = client.variable('key', 'default_value')
-            expect(client.variableValue('key', 'default_value')).toBe(
-                'default_value',
-            )
+            expect(client.variableValue('key', 'default_value')).toBe('default_value')
             expect(variable.value).toBe('default_value')
             expect(variable.defaultValue).toBe('default_value')
         })
@@ -323,31 +307,19 @@ describe('DevCycleClient tests', () => {
             })
             await client.onClientInitialized()
             const variable = client.variable('key', 'default_value')
-            expect(
-                client.variableDefaultMap['key']['default_value'],
-            ).toBeDefined()
+            expect(client.variableDefaultMap['key']['default_value']).toBeDefined()
             client.variable('key', 'default_value')
-            expect(Object.values(client.variableDefaultMap['key']).length).toBe(
-                1,
-            )
-            expect(client.variableDefaultMap['key']['default_value']).toEqual(
-                variable,
-            )
+            expect(Object.values(client.variableDefaultMap['key']).length).toBe(1)
+            expect(client.variableDefaultMap['key']['default_value']).toEqual(variable)
             client.variableValue('key', 'default_value')
-            expect(Object.values(client.variableDefaultMap['key']).length).toBe(
-                1,
-            )
-            expect(client.variableDefaultMap['key']['default_value']).toEqual(
-                variable,
-            )
+            expect(Object.values(client.variableDefaultMap['key']).length).toBe(1)
+            expect(client.variableDefaultMap['key']['default_value']).toEqual(variable)
         })
 
         it('should have no value and default value if config not done fetching', () => {
             client = createClientWithDelay(500)
             const variable = client.variable('key', 'default_value')
-            expect(client.variableValue('key', 'default_value')).toBe(
-                'default_value',
-            )
+            expect(client.variableValue('key', 'default_value')).toBe('default_value')
             expect(variable.value).toBe('default_value')
             expect(variable.defaultValue).toBe('default_value')
         })
@@ -362,9 +334,7 @@ describe('DevCycleClient tests', () => {
             expect(variableMap['default_value']).toEqual(stringVariable)
             expect(variableMap['true']).toEqual(boolVariable)
             expect(variableMap['12.4']).toEqual(numVariable)
-            expect(
-                variableMap[JSON.stringify(jsonVariable.defaultValue)],
-            ).toEqual(jsonVariable)
+            expect(variableMap[JSON.stringify(jsonVariable.defaultValue)]).toEqual(jsonVariable)
             expect(Object.values(variableMap).length).toBe(4)
         })
 
@@ -423,10 +393,7 @@ describe('DevCycleClient tests', () => {
             const onUpdate = jest.fn()
             variable.onUpdate(onUpdate)
             await client.onClientInitialized()
-            const cachedConfig = await client.store.loadConfig(
-                client.user,
-                client.configCacheTTL,
-            )
+            const cachedConfig = await client.store.loadConfig(client.user, client.configCacheTTL)
             expect(variable.value).toEqual(cachedConfig.variables.key.value)
             expect(onUpdate).toBeCalledTimes(1)
         })
@@ -494,11 +461,7 @@ describe('DevCycleClient tests', () => {
             })
             saveEntity_mock.mockResolvedValue({})
             const dvcOptions = { enableEdgeDB: true }
-            const client = new DevCycleClient(
-                'test_sdk_key',
-                { user_id: 'user1' },
-                dvcOptions,
-            )
+            const client = new DevCycleClient('test_sdk_key', { user_id: 'user1' }, dvcOptions)
 
             await client.onClientInitialized()
             getConfigJson_mock.mockClear()
@@ -531,13 +494,9 @@ describe('DevCycleClient tests', () => {
             getConfigJson_mock.mockResolvedValue(testConfig)
             saveEntity_mock.mockResolvedValue({})
 
-            const client = new DevCycleClient(
-                'test_sdk_key',
-                new DVCPopulatedUser({ isAnonymous: true }),
-                {
-                    enableEdgeDB: true,
-                },
-            )
+            const client = new DevCycleClient('test_sdk_key', new DVCPopulatedUser({ isAnonymous: true }), {
+                enableEdgeDB: true,
+            })
             await client.onClientInitialized()
             getConfigJson_mock.mockClear()
             saveEntity_mock.mockClear()
@@ -549,9 +508,7 @@ describe('DevCycleClient tests', () => {
 
         it('should throw an error if the user is invalid', async () => {
             await expect(client.identifyUser({ user_id: '' })).rejects.toThrow(
-                new Error(
-                    'A User cannot be created with a user_id that is an empty string',
-                ),
+                new Error('A User cannot be created with a user_id that is an empty string'),
             )
         })
 
@@ -568,9 +525,7 @@ describe('DevCycleClient tests', () => {
 
         it('should clear existing anon user id from local storage when client initialize is delayed', async () => {
             const newUser = { user_id: 'user2' }
-            client = createClientWithConfigImplementation(() =>
-                setTimeout(() => Promise.resolve(testConfig), 1000),
-            )
+            client = createClientWithConfigImplementation(() => setTimeout(() => Promise.resolve(testConfig), 1000))
             client.store.store.save(StoreKey.AnonUserId, 'anon-user-id')
 
             await client.identifyUser(newUser)
@@ -589,9 +544,7 @@ describe('DevCycleClient tests', () => {
             await client.onClientInitialized()
             const originalAnonUserId = client.user.user_id
             await client.identifyUser({ isAnonymous: true })
-            const anonUserId = await client.store.store.load(
-                StoreKey.AnonUserId,
-            )
+            const anonUserId = await client.store.store.load(StoreKey.AnonUserId)
 
             expect(anonUserId).toBe(originalAnonUserId)
             expect(anonUserId).not.toBe(null)
@@ -662,11 +615,7 @@ describe('DevCycleClient tests', () => {
             })
             saveEntity_mock.mockResolvedValue({})
             const dvcOptions = { enableEdgeDB: true }
-            const client = new DevCycleClient(
-                'test_sdk_key',
-                { user_id: 'user1' },
-                dvcOptions,
-            )
+            const client = new DevCycleClient('test_sdk_key', { user_id: 'user1' }, dvcOptions)
             await client.onClientInitialized()
             getConfigJson_mock.mockClear()
             saveEntity_mock.mockClear()
@@ -696,15 +645,11 @@ describe('DevCycleClient tests', () => {
                 isAnonymous: true,
             })
             await client.onClientInitialized()
-            const oldAnonymousId = await client.store.store.load(
-                StoreKey.AnonUserId,
-            )
+            const oldAnonymousId = await client.store.store.load(StoreKey.AnonUserId)
             expect(oldAnonymousId).toBeTruthy()
 
             await client.resetUser()
-            const newAnonymousId = await client.store.store.load(
-                StoreKey.AnonUserId,
-            )
+            const newAnonymousId = await client.store.store.load(StoreKey.AnonUserId)
             expect(oldAnonymousId).not.toEqual(newAnonymousId)
             expect(client.user.user_id).toEqual(newAnonymousId)
         })
@@ -794,11 +739,7 @@ describe('DevCycleClient tests', () => {
         })
 
         it('should not queue event if disableCustomEventLogging is enabled', async () => {
-            client = new DevCycleClient(
-                'test_sdk_key',
-                { user_id: 'user1' },
-                { disableCustomEventLogging: true },
-            )
+            client = new DevCycleClient('test_sdk_key', { user_id: 'user1' }, { disableCustomEventLogging: true })
             await client.onClientInitialized()
             jest.spyOn(client.eventQueue, 'queueEvent')
 
@@ -819,11 +760,7 @@ describe('DevCycleClient tests', () => {
         })
 
         it('should not queue automatic event if disableAutomaticEventLogging is enabled', async () => {
-            client = new DevCycleClient(
-                'test_sdk_key',
-                { user_id: 'user1' },
-                { disableAutomaticEventLogging: true },
-            )
+            client = new DevCycleClient('test_sdk_key', { user_id: 'user1' }, { disableAutomaticEventLogging: true })
             await client.onClientInitialized()
             jest.spyOn(client.eventQueue, 'queueAggregateEvent')
 
@@ -905,9 +842,7 @@ describe('DevCycleClient tests', () => {
             expect(
                 await Promise.race([
                     client.onInitialized,
-                    new Promise((resolve) =>
-                        setTimeout(() => resolve('timed out'), 10),
-                    ),
+                    new Promise((resolve) => setTimeout(() => resolve('timed out'), 10)),
                 ]),
             ).toEqual('timed out')
             expect(client.user).toBeUndefined()
@@ -927,9 +862,7 @@ describe('DevCycleClient tests', () => {
         it('identifies correctly after initial identify', async () => {
             const configForUser2 = { ...testConfig, forUser2: true }
             getConfigJson_mock.mockImplementation((key, user) => {
-                return Promise.resolve(
-                    user.user_id === 'test2' ? configForUser2 : testConfig,
-                )
+                return Promise.resolve(user.user_id === 'test2' ? configForUser2 : testConfig)
             })
             const client = new DevCycleClient('test_sdk_key', {
                 deferInitialization: true,
@@ -953,9 +886,7 @@ describe('DevCycleClient tests', () => {
             publishEvents.mockResolvedValue({ status: 201 })
             const configForUser2 = { ...testConfig, forUser2: true }
             getConfigJson_mock.mockImplementation((key, user) => {
-                return Promise.resolve(
-                    user.user_id === 'test2' ? configForUser2 : testConfig,
-                )
+                return Promise.resolve(user.user_id === 'test2' ? configForUser2 : testConfig)
             })
             const client = new DevCycleClient('test_sdk_key', {
                 deferInitialization: true,
@@ -979,12 +910,66 @@ describe('DevCycleClient tests', () => {
                 'test_sdk_key',
                 testConfig,
                 expect.objectContaining({ user_id: 'test' }),
-                [
-                    { type: 'test' },
-                    expect.objectContaining({ type: 'variableDefaulted' }),
-                ],
+                [{ type: 'test' }, expect.objectContaining({ type: 'variableDefaulted' })],
                 expect.anything(),
             )
+        })
+    })
+    describe('bootstrapVariables', () => {
+        let client
+
+        const createClientWithDelay = (delay) => {
+            return createClientWithConfigImplementation(() => {
+                return new Promise((resolve) => {
+                    setTimeout(() => resolve(testConfig), delay)
+                })
+            })
+        }
+
+        it('return a variable with the bootstrap value from the config when not initialized', async () => {
+            client = createClientWithDelay(3000)
+            expect(client.allVariables()).toEqual({})
+            client.bootstrapVariables = JSON.parse(JSON.stringify(bootstrap))
+
+            // normal variable test
+            expect(client.variableValue('normalVar', 'default_value')).toBe('default_value')
+
+            // bootstrap variable test
+            const bootstrapVariable = client.variable('ssg-header', 'default_value')
+            expect(bootstrapVariable.value).toBe('header is off')
+            expect(bootstrapVariable.defaultValue).toBe('default_value')
+        })
+
+        it('return a variable with the bootstrap value when client fails to get configs', async () => {
+            client = createClientWithConfigImplementation(() => {
+                return Promise.reject(new Error('Getting config failed'))
+            })
+            await client.onClientInitialized()
+
+            // setup bootstrap variables
+            client.bootstrapVariables = JSON.parse(JSON.stringify(bootstrap))
+
+            // normal variable test which is in config but gets bootstrap value
+            expect(client.variableValue('key', 'default_value')).toBe('bootstrap_value')
+
+            // bootstrap variable test which is not in config
+            const variable = client.variable('ssg-header', 'default_value')
+            expect(variable.value).toBe('header is off')
+            expect(variable.defaultValue).toBe('default_value')
+        })
+
+        it('does not return bootstrap value variable after initialization', async () => {
+            client = createClientWithDelay()
+            await client.onClientInitialized()
+
+            // normal variable test which is in config
+            expect(client.variableValue('key', 'default_value')).toBe('value1')
+
+            // bootstrap variable test which is not in config
+            client.bootstrapVariables = JSON.parse(JSON.stringify(bootstrap))
+            const variable = client.variable('ssg-header', 'default_value')
+            expect(variable.value).toBe('header is off')
+            expect(variable.defaultValue).toBe('default_value')
         })
     })
 })

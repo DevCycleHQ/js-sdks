@@ -58,6 +58,9 @@ export class DevCycleClient<
     config?: BucketedUserConfig
     user?: DVCPopulatedUser
     _isInitialized = false
+    bootstrapVariables: {
+        [key: string]: DVCVariableValue
+    }
     public get isInitialized(): boolean {
         return this._isInitialized
     }
@@ -114,6 +117,13 @@ export class DevCycleClient<
         this.options = options
 
         this.sdkKey = sdkKey
+        this.bootstrapVariables = {}
+        if (options.bootstrapVariables) {
+            const bootstrapOptions = JSON.parse(options.bootstrapVariables)
+            for (const key in bootstrapOptions) {
+                this.bootstrapVariables[key] = bootstrapOptions[key].value
+            }
+        }
         this.variableDefaultMap = {}
         this.eventQueue = new EventQueue(sdkKey, this, options)
 
@@ -262,6 +272,9 @@ export class DevCycleClient<
             throw new Error('Default value is a required param')
         }
 
+        const bootstrapValue: VariableTypeAlias<T> | undefined =
+            this.bootstrapVariables?.[key] ? this.bootstrapVariables[key] as VariableTypeAlias<T> : undefined
+
         // this will throw if type is invalid
         const type = getVariableTypeFromValue(
             defaultValue,
@@ -289,6 +302,7 @@ export class DevCycleClient<
             const data: DVCVariableOptions<T> = {
                 key,
                 defaultValue,
+                value: bootstrapValue,
             }
 
             if (configVariable) {
