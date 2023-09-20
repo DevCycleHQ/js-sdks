@@ -6,12 +6,7 @@
     "deploy": "wrangler deploy",
     "start": "wrangler dev"
   },
-	"dependencies": {
-		"@devcycle/js-cloud-server-sdk": "file:../js-sdks/dist/sdk/js-cloud-server"
-	},
-  "devDependencies": {
-    "@cloudflare/workers-types": "^4.20230419.0",
-    "typescript": "^5.0.4",
-    "wrangler": "^3.0.0"
+  "dependencies": {
+    "@devcycle/js-cloud-server-sdk": "1.0.0"
   }
 }

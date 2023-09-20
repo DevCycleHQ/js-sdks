@@ -1,3 +1,4 @@
 name = "js-cloud-server-sdk-test-worker"
 main = "src/index.ts"
 compatibility_date = "2023-09-18"
+account_id = "<Your Cloudflare Account ID>"

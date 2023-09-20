@@ -1,0 +1,43 @@
+{
+    "name": "example-js-cloud-server-sdk-cf-worker",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "examples/js-cloud-server/cloudflare-worker/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nx/webpack:webpack",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/examples/js-cloud-server/cloudflare-worker",
+                "main": "examples/js-cloud-server/cloudflare-worker/src/index.ts",
+                "tsConfig": "examples/js-cloud-server/cloudflare-worker/tsconfig.json",
+                "compiler": "tsc",
+                "target": "node"
+            }
+        },
+        "serve": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "yarn run -T wrangler dev",
+                "cwd": "examples/js-cloud-server/cloudflare-worker"
+            },
+            "dependsOn": ["build"]
+        },
+        "deploy": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "yarn run -T wrangler deploy",
+                "cwd": "examples/js-cloud-server/cloudflare-worker"
+            },
+            "dependsOn": ["upload-sourcemaps"]
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["examples/js-cloud-server/cloudflare-worker/**/*.ts"]
+            }
+        }
+    },
+    "tags": []
+}
