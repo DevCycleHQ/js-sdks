@@ -1,7 +1,13 @@
 name: Run CF Worker Example App
+#on:
+#  pull_request:
+#    branches: [main]
 on:
-  pull_request:
-    branches: [main]
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
 
 jobs:
   build:
