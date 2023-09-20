@@ -1,4 +1,4 @@
-import { DVCPopulatedUser } from '../src/models/populatedUser'
+import { DVCPopulatedUser } from '../src/models/populatedPBUser'
 
 jest.mock('../src/request')
 import { EventQueue, EventQueueOptions } from '../src/eventQueue'

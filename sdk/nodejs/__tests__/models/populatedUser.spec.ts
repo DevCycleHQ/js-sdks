@@ -1,4 +1,4 @@
-import { DVCPopulatedUser } from '../../src/models/populatedUser'
+import { DVCPopulatedUser } from '../../src/models/populatedPBUser'
 import { DevCycleUser } from '../../src/models/user'
 
 describe('DVCPopulatedUser Unit Tests', () => {

@@ -1,16 +1,14 @@
-import { DVCCustomDataJSON } from '../types'
 import { ProtobufTypes } from '@devcycle/bucketing-assembly-script'
 import {
     DVCPopulatedUser,
     DevCycleUser,
-    DevCyclePlatformDetails,
+    DVCCustomDataJSON,
 } from '@devcycle/js-cloud-server-sdk'
 import { getNodeJSPlatformDetails } from '../utils/platformDetails'
 
 export class DVCPopulatedPBUser extends DVCPopulatedUser {
-    constructor(user: DevCycleUser, platformDetails?: DevCyclePlatformDetails) {
-        const userDetails = platformDetails || getNodeJSPlatformDetails()
-        super(user, userDetails)
+    constructor(user: DevCycleUser) {
+        super(user, getNodeJSPlatformDetails())
     }
 
     toPBUser(): ProtobufTypes.DVCUser_PB {

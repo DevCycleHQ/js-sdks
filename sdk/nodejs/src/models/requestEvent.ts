@@ -1,6 +1,9 @@
-import { DevCycleEvent } from '../types'
-import { checkParamDefined, checkParamString } from '../utils/paramUtils'
 import { EventTypes } from '../eventQueue'
+import {
+    DevCycleEvent,
+    checkParamDefined,
+    checkParamString,
+} from '@devcycle/js-cloud-server-sdk'
 
 export class DVCRequestEvent {
     type: string

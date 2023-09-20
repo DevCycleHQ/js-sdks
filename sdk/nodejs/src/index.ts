@@ -1,15 +1,38 @@
-import { DevCycleOptions, DevCycleEvent } from './types'
 import { DevCycleClient } from './client'
-import { isValidServerSDKKey } from './utils/paramUtils'
 import {
     DevCycleUser,
     DevCycleCloudClient,
+    dvcDefaultLogger,
+    isValidServerSDKKey,
+    DevCycleOptions,
+    DevCycleEvent,
+    DVCVariableValue,
+    JSON,
+    DVCJSON,
+    DVCCustomDataJSON,
+    DVCVariableSet,
+    DVCVariableInterface,
+    DVCFeature,
+    DVCFeatureSet,
 } from '@devcycle/js-cloud-server-sdk'
 import { getNodeJSPlatformDetails } from './utils/platformDetails'
 
-export { DevCycleClient, DevCycleCloudClient, DevCycleUser }
-export * from './types'
-export { dvcDefaultLogger } from './utils/logger'
+export {
+    DevCycleClient,
+    DevCycleCloudClient,
+    DevCycleUser,
+    DevCycleOptions,
+    DevCycleEvent,
+    DVCVariableValue,
+    JSON,
+    DVCJSON,
+    DVCCustomDataJSON,
+    DVCVariableSet,
+    DVCVariableInterface,
+    DVCFeature,
+    DVCFeatureSet,
+}
+export { dvcDefaultLogger }
 
 /**
  * @deprecated Use DevCycleClient instead

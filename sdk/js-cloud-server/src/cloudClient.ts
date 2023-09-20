@@ -92,7 +92,10 @@ export class DevCycleCloudClient {
         defaultValue: T,
     ): Promise<DVCVariable<T>> {
         const incomingUser = castIncomingUser(user)
-        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+        const populatedUser = DVCPopulatedUser.fromDVCUser(
+            incomingUser,
+            this.platformDetails,
+        )
 
         checkParamDefined('key', key)
         checkParamDefined('defaultValue', defaultValue)
@@ -146,7 +149,10 @@ export class DevCycleCloudClient {
     async allVariables(user: DevCycleUser): Promise<DVCVariableSet> {
         const incomingUser = castIncomingUser(user)
 
-        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+        const populatedUser = DVCPopulatedUser.fromDVCUser(
+            incomingUser,
+            this.platformDetails,
+        )
 
         return getAllVariables(populatedUser, this.sdkKey, this.options)
             .then(async (res: Response) => {
@@ -168,7 +174,10 @@ export class DevCycleCloudClient {
     async allFeatures(user: DevCycleUser): Promise<DVCFeatureSet> {
         const incomingUser = castIncomingUser(user)
 
-        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+        const populatedUser = DVCPopulatedUser.fromDVCUser(
+            incomingUser,
+            this.platformDetails,
+        )
 
         return getAllFeatures(populatedUser, this.sdkKey, this.options)
             .then(async (res: Response) => {
@@ -199,7 +208,10 @@ export class DevCycleCloudClient {
             throw new Error('Invalid Event')
         }
         checkParamDefined('type', event.type)
-        const populatedUser = DVCPopulatedUser.fromDVCUser(incomingUser)
+        const populatedUser = DVCPopulatedUser.fromDVCUser(
+            incomingUser,
+            this.platformDetails,
+        )
         return postTrack(populatedUser, event, this.sdkKey, this.options)
             .then(() => {
                 this.logger.debug('DVC Event Tracked')

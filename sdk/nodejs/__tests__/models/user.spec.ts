@@ -3,7 +3,7 @@ import { DevCycleUser } from '../../src/models/user'
 import {
     DVCPopulatedUser,
     getNullableCustomDataValue,
-} from '../../src/models/populatedUser'
+} from '../../src/models/populatedPBUser'
 import { ProtobufTypes } from '@devcycle/bucketing-assembly-script'
 
 describe('DVCUser', () => {

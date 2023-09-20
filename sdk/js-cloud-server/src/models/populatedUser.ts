@@ -28,7 +28,7 @@ export class DVCPopulatedUser implements DevCycleUser {
     readonly sdkVersion: string
     readonly hostname: string
 
-    constructor(user: DevCycleUser, platformDetails?: DevCyclePlatformDetails) {
+    constructor(user: DevCycleUser, platformDetails: DevCyclePlatformDetails) {
         this.user_id = user.user_id
         this.email = user.email
         this.name = user.name
@@ -51,7 +51,10 @@ export class DVCPopulatedUser implements DevCycleUser {
         this.hostname = platformDetails?.hostname || ''
     }
 
-    static fromDVCUser(user: DevCycleUser): DVCPopulatedUser {
-        return new DVCPopulatedUser(user)
+    static fromDVCUser(
+        user: DevCycleUser,
+        platformDetails: DevCyclePlatformDetails,
+    ): DVCPopulatedUser {
+        return new DVCPopulatedUser(user, platformDetails)
     }
 }

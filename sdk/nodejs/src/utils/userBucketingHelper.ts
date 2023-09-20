@@ -1,5 +1,5 @@
 import { BucketedUserConfig, SDKVariable, VariableType } from '@devcycle/types'
-import { DVCPopulatedPBUser } from '../models/populatedUser'
+import { DVCPopulatedPBUser } from '../models/populatedPBUser'
 import { getBucketingLib } from '../bucketing'
 import {
     VariableForUserParams_PB,
