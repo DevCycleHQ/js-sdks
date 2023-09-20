@@ -26,7 +26,9 @@
                 "lib/shared/bucketing-test-data/src/index.ts"
             ],
             "@devcycle/js-client-sdk": ["sdk/js/src/index.ts"],
-            "@devcycle/js-cloud-server-sdk": ["sdk/js-cloud-server/src/index.ts"],
+            "@devcycle/js-cloud-server-sdk": [
+                "sdk/js-cloud-server/src/index.ts"
+            ],
             "@devcycle/nodejs-server-sdk": ["sdk/nodejs/src/index.ts"],
             "@devcycle/openfeature-nodejs-provider": [
                 "sdk/openfeature-nodejs-provider/src/index.ts"
