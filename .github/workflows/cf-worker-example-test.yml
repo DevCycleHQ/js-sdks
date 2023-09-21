@@ -29,7 +29,7 @@ jobs:
       - name: Run example app in background
         run: |
           yarn nx serve example-js-cloud-server-sdk-cf-worker &
-          echo "SERVER_PID=$!" >> $SERVER_PID
+          echo "SERVER_PID=$!" >> $GITHUB_ENV
         continue-on-error: true
       - name: Wait for the server to be up
         run: sleep 10
