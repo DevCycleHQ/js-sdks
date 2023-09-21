@@ -1,8 +1,7 @@
 name: Run CF Worker Example App
-#on:
-#  pull_request:
-#    branches: [main]
-on: push
+on:
+  pull_request:
+    branches: [main]
 
 jobs:
   build:
