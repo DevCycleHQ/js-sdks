@@ -26,6 +26,21 @@ jobs:
         run: yarn --immutable
       - name: Setup .dev.vars file
         run: echo "DEVCYCLE_SERVER_SDK_KEY=${{ secrets.DEVCYCLE_SERVER_SDK_KEY }}" > examples/js-cloud-server/cloudflare-worker/.dev.vars
-      - name: run example app
-        run: yarn nx serve example-js-cloud-server-sdk-cf-worker
+      - name: Run example app in background
+        run: |
+          yarn nx serve example-js-cloud-server-sdk-cf-worker &
+          echo "SERVER_PID=$!" >> $SERVER_PID
+        continue-on-error: true
+      - name: Wait for the server to be up
+        run: sleep 10
+      - name: Test server with curl
+        run: |
+          RESPONSE=$(curl -s http://localhost:8787)  # Replace with your server's port
+          # Check the response or do something based on the result.
+          if [[ "$RESPONSE" != *"DevCycle Variables:"* ]]; then
+            echo "Server didn't return the expected 'DevCycle Variables:' response"
+            exit 1
+          fi
+      - name: Cleanup server
+        run: kill ${{ env.SERVER_PID }}
 
