@@ -1,11 +1,8 @@
 import { DVCLogger } from '@devcycle/types'
 import { getBucketingLib } from './bucketing'
 import { UserError } from './utils/userError'
-import {
-    getEnvironmentConfig,
-    ResponseError,
-    DevCycleOptions,
-} from '@devcycle/js-cloud-server-sdk'
+import { getEnvironmentConfig } from './request'
+import { ResponseError, DevCycleOptions } from '@devcycle/js-cloud-server-sdk'
 
 type ConfigPollingOptions = DevCycleOptions & {
     cdnURI?: string

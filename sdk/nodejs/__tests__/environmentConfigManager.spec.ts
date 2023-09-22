@@ -1,4 +1,4 @@
-jest.mock('../../js-cloud-server/src/request')
+jest.mock('../src/request')
 jest.useFakeTimers()
 jest.spyOn(global, 'setInterval')
 jest.mock('../src/bucketing')
@@ -7,11 +7,8 @@ import { EnvironmentConfigManager } from '../src/environmentConfigManager'
 import { importBucketingLib, getBucketingLib } from '../src/bucketing'
 import { mocked } from 'jest-mock'
 import { Response } from 'cross-fetch'
-import {
-    dvcDefaultLogger,
-    getEnvironmentConfig,
-    ResponseError,
-} from '@devcycle/js-cloud-server-sdk'
+import { dvcDefaultLogger, ResponseError } from '@devcycle/js-cloud-server-sdk'
+import { getEnvironmentConfig } from '../src/request'
 
 const setInterval_mock = mocked(setInterval)
 const getEnvironmentConfig_mock = mocked(getEnvironmentConfig)

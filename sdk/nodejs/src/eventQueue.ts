@@ -6,11 +6,8 @@ import {
     FlushResults,
 } from '@devcycle/types'
 import { getBucketingLib } from './bucketing'
-import {
-    publishEvents,
-    DevCycleEvent,
-    DVCPopulatedUser,
-} from '@devcycle/js-cloud-server-sdk'
+import { publishEvents } from './request'
+import { DevCycleEvent, DVCPopulatedUser } from '@devcycle/js-cloud-server-sdk'
 
 export const AggregateEventTypes: Record<string, string> = {
     variableEvaluated: 'variableEvaluated',
