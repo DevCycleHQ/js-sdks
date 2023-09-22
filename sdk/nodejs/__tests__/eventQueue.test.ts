@@ -1,5 +1,3 @@
-import { DVCPopulatedPBUser } from '../src/models/populatedPBUser'
-
 jest.mock('../../js-cloud-server/src/request')
 import { EventQueue, EventQueueOptions } from '../src/eventQueue'
 import { EventTypes } from '../src/eventQueue'
@@ -13,6 +11,7 @@ import {
 import { setPlatformDataJSON } from './utils/setPlatformData'
 import { Response } from 'cross-fetch'
 import { dvcDefaultLogger, publishEvents } from '@devcycle/js-cloud-server-sdk'
+import { DVCPopulatedUserFromDevCycleUser } from '../src/models/populatedUserHelpers'
 
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
@@ -102,7 +101,7 @@ describe('EventQueue Unit Tests', () => {
 
         const sdkKey = 'sdkKey'
         const eventQueue = initEventQueue(sdkKey, { reporter })
-        const user = new DVCPopulatedPBUser({ user_id: 'user_id' })
+        const user = DVCPopulatedUserFromDevCycleUser({ user_id: 'user_id' })
         const event = { type: 'test_event' }
         eventQueue.queueEvent(user, event)
 
@@ -146,7 +145,7 @@ describe('EventQueue Unit Tests', () => {
         const eventQueue = initEventQueue('sdkKey', {
             eventsAPIURI: 'localhost:3000/client/1',
         })
-        const user = new DVCPopulatedPBUser({ user_id: 'user_id' })
+        const user = DVCPopulatedUserFromDevCycleUser({ user_id: 'user_id' })
         const event = { type: 'test_event' }
         eventQueue.queueEvent(user, event)
 
@@ -220,7 +219,7 @@ describe('EventQueue Unit Tests', () => {
         const eventQueue = initEventQueue('sdkKey', {
             eventsAPIURI: 'localhost:3000/client/1',
         })
-        const user = new DVCPopulatedPBUser({ user_id: 'user_id' })
+        const user = DVCPopulatedUserFromDevCycleUser({ user_id: 'user_id' })
         const event = { type: 'test_event' }
         eventQueue.queueEvent(user, event)
 
@@ -336,7 +335,7 @@ describe('EventQueue Unit Tests', () => {
                 disableAutomaticEventLogging: false,
                 disableCustomEventLogging: true,
             })
-            const user = new DVCPopulatedPBUser({ user_id: 'user1' })
+            const user = DVCPopulatedUserFromDevCycleUser({ user_id: 'user1' })
             const event = { type: 'test_event' }
             eventQueue.queueEvent(user, event)
 
@@ -392,7 +391,9 @@ describe('EventQueue Unit Tests', () => {
                 disableAutomaticEventLogging: true,
                 disableCustomEventLogging: false,
             })
-            const user = new DVCPopulatedPBUser({ user_id: 'user_id' })
+            const user = DVCPopulatedUserFromDevCycleUser({
+                user_id: 'user_id',
+            })
             const event = { type: 'test_event' }
             eventQueue.queueEvent(user, event)
 
@@ -436,7 +437,7 @@ describe('EventQueue Unit Tests', () => {
         publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
         const eventQueue = initEventQueue('sdkKey')
-        const user1 = new DVCPopulatedPBUser({ user_id: 'user1' })
+        const user1 = DVCPopulatedUserFromDevCycleUser({ user_id: 'user1' })
         eventQueue.queueAggregateEvent(
             user1,
             { type: EventTypes.aggVariableDefaulted, target: 'unknown_key' },
@@ -481,8 +482,8 @@ describe('EventQueue Unit Tests', () => {
         publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
         const eventQueue = initEventQueue('sdkKey')
-        const user1 = new DVCPopulatedPBUser({ user_id: 'user1' })
-        const user2 = new DVCPopulatedPBUser({ user_id: 'user2' })
+        const user1 = DVCPopulatedUserFromDevCycleUser({ user_id: 'user1' })
+        const user2 = DVCPopulatedUserFromDevCycleUser({ user_id: 'user2' })
         eventQueue.queueEvent(user1, { type: 'test_event_1' })
         eventQueue.queueEvent(user1, { type: 'test_event_2' })
 
@@ -588,8 +589,8 @@ describe('EventQueue Unit Tests', () => {
 
     it('should handle event request failures and re-queue events', async () => {
         const eventQueue = initEventQueue('sdkKey')
-        const user = new DVCPopulatedPBUser({ user_id: 'user1' })
-        const user2 = new DVCPopulatedPBUser({ user_id: 'user2' })
+        const user = DVCPopulatedUserFromDevCycleUser({ user_id: 'user1' })
+        const user2 = DVCPopulatedUserFromDevCycleUser({ user_id: 'user2' })
         eventQueue.queueEvent(user, { type: 'test_event' })
 
         const aggEvent = {
@@ -662,7 +663,9 @@ describe('EventQueue Unit Tests', () => {
             const eventQueue = initEventQueue('sdkKey')
 
             for (let i = 0; i < 150; i++) {
-                const user = new DVCPopulatedPBUser({ user_id: `user${i}` })
+                const user = DVCPopulatedUserFromDevCycleUser({
+                    user_id: `user${i}`,
+                })
                 eventQueue.queueEvent(user, { type: 'test_event' })
             }
 
@@ -674,7 +677,9 @@ describe('EventQueue Unit Tests', () => {
                     target: key,
                 }
                 varMap[key] = { _feature: 'feature', _variation: 'variation' }
-                const user = new DVCPopulatedPBUser({ user_id: `user${i}` })
+                const user = DVCPopulatedUserFromDevCycleUser({
+                    user_id: `user${i}`,
+                })
                 eventQueue.queueAggregateEvent(user, aggEvent, {
                     ...bucketedUserConfig,
                     variableVariationMap: varMap,
@@ -807,7 +812,9 @@ describe('EventQueue Unit Tests', () => {
 
                 const sdkKey = 'sdkKey'
                 const eventQueue = initEventQueue(sdkKey, { logger })
-                const user = new DVCPopulatedPBUser({ user_id: 'user1' })
+                const user = DVCPopulatedUserFromDevCycleUser({
+                    user_id: 'user1',
+                })
 
                 for (let i = 0; i < 500; i++) {
                     const target = `key${i}`
@@ -854,7 +861,9 @@ describe('EventQueue Unit Tests', () => {
 
                 const sdkKey = 'sdkKey'
                 const eventQueue = initEventQueue(sdkKey, { logger })
-                const user = new DVCPopulatedPBUser({ user_id: 'user1' })
+                const user = DVCPopulatedUserFromDevCycleUser({
+                    user_id: 'user1',
+                })
 
                 for (let i = 0; i < 500; i++) {
                     eventQueue.queueEvent(user, { type: 'test_event' })
@@ -905,7 +914,9 @@ describe('EventQueue Unit Tests', () => {
                 const sdkKey = 'sdkKey'
                 const eventQueue = initEventQueue(sdkKey)
                 const flushEvents_mock = jest.spyOn(eventQueue, 'flushEvents')
-                const user = new DVCPopulatedPBUser({ user_id: 'user1' })
+                const user = DVCPopulatedUserFromDevCycleUser({
+                    user_id: 'user1',
+                })
 
                 // set eventQueueSize to 1000
                 for (let i = 0; i < 500; i++) {
@@ -942,7 +953,9 @@ describe('EventQueue Unit Tests', () => {
                 const eventQueue = initEventQueue(sdkKey)
                 const flushEvents_mock = jest.spyOn(eventQueue, 'flushEvents')
 
-                const user = new DVCPopulatedPBUser({ user_id: 'user1' })
+                const user = DVCPopulatedUserFromDevCycleUser({
+                    user_id: 'user1',
+                })
 
                 // set eventQueueSize to 1000
                 for (let i = 0; i < 500; i++) {

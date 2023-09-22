@@ -1,19 +1,21 @@
-import { DVCPopulatedPBUser } from '../../src/models/populatedPBUser'
+import { DVCPopulatedUserFromDevCycleUser } from '../../src/models/populatedUserHelpers'
 import { DevCycleUser } from '@devcycle/js-cloud-server-sdk'
 
 describe('DVCPopulatedPBUser Unit Tests', () => {
     it('should construct DVCPopulatedPBUser from UserParam', () => {
-        const requestUser = new DVCPopulatedPBUser({
-            user_id: 'user_id',
-            email: 'email',
-            name: 'name',
-            language: 'en',
-            country: 'ca',
-            appVersion: 'appVersion',
-            appBuild: 1,
-            customData: { custom: 'data' },
-            privateCustomData: { private: 'customData' },
-        })
+        const requestUser = DVCPopulatedUserFromDevCycleUser(
+            new DevCycleUser({
+                user_id: 'user_id',
+                email: 'email',
+                name: 'name',
+                language: 'en',
+                country: 'ca',
+                appVersion: 'appVersion',
+                appBuild: 1,
+                customData: { custom: 'data' },
+                privateCustomData: { private: 'customData' },
+            }),
+        )
         expect(requestUser).toEqual(
             expect.objectContaining({
                 user_id: 'user_id',
@@ -47,7 +49,7 @@ describe('DVCPopulatedPBUser Unit Tests', () => {
             customData: { custom: 'data' },
             privateCustomData: { private: 'customData' },
         })
-        const populatedUser = DVCPopulatedPBUser.fromDVCUser(requestUser)
+        const populatedUser = DVCPopulatedUserFromDevCycleUser(requestUser)
         expect(populatedUser).toEqual(
             expect.objectContaining({
                 user_id: 'user_id',

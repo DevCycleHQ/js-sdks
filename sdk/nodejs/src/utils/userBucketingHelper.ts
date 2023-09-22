@@ -1,14 +1,15 @@
 import { BucketedUserConfig, SDKVariable, VariableType } from '@devcycle/types'
-import { DVCPopulatedPBUser } from '../models/populatedPBUser'
+import { DVCPopulatedUser } from '@devcycle/js-cloud-server-sdk'
 import { getBucketingLib } from '../bucketing'
 import {
     VariableForUserParams_PB,
     SDKVariable_PB,
 } from '@devcycle/bucketing-assembly-script/protobuf/compiled'
 import { pbSDKVariableTransform } from '../pb-types/pbTypeHelpers'
+import { DVCPopulatedUserToPBUser } from '../models/populatedUserHelpers'
 
 export function bucketUserForConfig(
-    user: DVCPopulatedPBUser,
+    user: DVCPopulatedUser,
     sdkKey: string,
 ): BucketedUserConfig {
     return JSON.parse(
@@ -37,13 +38,13 @@ export function getVariableTypeCode(type: VariableType): number {
 
 export function variableForUser(
     sdkKey: string,
-    usr: DVCPopulatedPBUser,
+    user: DVCPopulatedUser,
     key: string,
     type: number,
 ): SDKVariable | null {
     const bucketedVariable = getBucketingLib().variableForUser(
         sdkKey,
-        JSON.stringify(usr),
+        JSON.stringify(user),
         key,
         type,
         true,
@@ -54,13 +55,13 @@ export function variableForUser(
 
 export function variableForUser_PB(
     sdkKey: string,
-    usr: DVCPopulatedPBUser,
+    user: DVCPopulatedUser,
     key: string,
     type: number,
 ): SDKVariable | null {
     const params = {
         sdkKey,
-        user: usr.toPBUser(),
+        user: DVCPopulatedUserToPBUser(user),
         variableKey: key,
         variableType: type,
         shouldTrackEvent: true,

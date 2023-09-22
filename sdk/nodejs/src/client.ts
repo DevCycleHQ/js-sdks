@@ -5,7 +5,6 @@ import {
     variableForUser_PB,
 } from './utils/userBucketingHelper'
 import { EventQueue, EventTypes } from './eventQueue'
-import { DVCPopulatedPBUser } from './models/populatedPBUser'
 import * as packageJson from '../package.json'
 import { importBucketingLib, getBucketingLib } from './bucketing'
 import {
@@ -27,6 +26,7 @@ import {
     DVCFeatureSet,
     DevCycleEvent,
 } from '@devcycle/js-cloud-server-sdk'
+import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
 
 interface IPlatformData {
     platform: string
@@ -142,7 +142,7 @@ export class DevCycleClient {
             this.logger,
             true,
         )
-        const populatedUser = DVCPopulatedPBUser.fromDVCUser(incomingUser)
+        const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
 
         if (!this.initialized) {
             this.logger.warn(
@@ -205,7 +205,7 @@ export class DevCycleClient {
             return {}
         }
 
-        const populatedUser = DVCPopulatedPBUser.fromDVCUser(incomingUser)
+        const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
         const bucketedConfig = bucketUserForConfig(populatedUser, this.sdkKey)
         return bucketedConfig?.variables || {}
     }
@@ -220,7 +220,7 @@ export class DevCycleClient {
             return {}
         }
 
-        const populatedUser = DVCPopulatedPBUser.fromDVCUser(incomingUser)
+        const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
         const bucketedConfig = bucketUserForConfig(populatedUser, this.sdkKey)
         return bucketedConfig?.features || {}
     }
@@ -236,7 +236,7 @@ export class DevCycleClient {
         }
 
         checkParamDefined('type', event.type)
-        const populatedUser = DVCPopulatedPBUser.fromDVCUser(incomingUser)
+        const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
         this.eventQueue.queueEvent(populatedUser, event)
     }
 

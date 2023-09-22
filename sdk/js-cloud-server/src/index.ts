@@ -12,8 +12,7 @@ export * from './request'
 export * from './utils/logger'
 export * from './utils/paramUtils'
 
-type DevCycleOptionsCloudEnabled = DevCycleOptions & {
-    enableCloudBucketing: true
+type DevCycleCloudOptions = DevCycleOptions & {
     platform?: 'NodeJS' | 'Electron' | 'EdgeWorker'
     platformVersion?: string
     hostname?: string
@@ -21,7 +20,7 @@ type DevCycleOptionsCloudEnabled = DevCycleOptions & {
 
 export function initializeDevCycle(
     sdkKey: string,
-    options: DevCycleOptionsCloudEnabled = { enableCloudBucketing: true },
+    options: DevCycleCloudOptions = {},
 ): DevCycleCloudClient {
     if (!sdkKey) {
         throw new Error('Missing SDK key! Call initialize with a valid SDK key')
