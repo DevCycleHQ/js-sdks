@@ -3,22 +3,25 @@ import { DVCLogger, DVCReporter } from '@devcycle/types'
 import { DevCycleOptions } from './types'
 
 let Bucketing: Exports | null
-let InstantiatePromise: Promise<Exports> | null
+let bucketingInstantiationCount = 0
+const bucketingInstantiationWarning = 3
 
 export const importBucketingLib = async ({
     logger,
     options,
 }: { logger?: DVCLogger; options?: DevCycleOptions } = {}): Promise<void> => {
-    if (InstantiatePromise) {
-        await InstantiatePromise
-        return
-    }
     const debugWASM = process.env.DEVCYCLE_DEBUG_WASM === '1'
-    InstantiatePromise = instantiate(debugWASM).then((exports) => {
+    await instantiate(debugWASM).then((exports) => {
+        bucketingInstantiationCount++
+        if (bucketingInstantiationCount > bucketingInstantiationWarning) {
+            logger?.warn(
+                `Warning: The DevCycle SDK has been instantiated over ${bucketingInstantiationWarning} times. ` +
+                    'This may cause higher than expected memory usage and indicate a faulty integration.',
+            )
+        }
         Bucketing = exports
         return Bucketing
     })
-    await InstantiatePromise
     startTrackingMemoryUsage(logger, options?.reporter)
 }
 
