@@ -1,70 +1,85 @@
 {
-    "name": "nodejs",
-    "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "sdk/nodejs/src",
-    "implicitDependencies": [
-        "shared-bucketing-as",
-        "shared-bucketing-test-data"
-    ],
-    "targets": {
-        "check-types": {
-            "executor": "nx:run-commands",
-            "options": {
-                "command": "yarn run -T tsc -b --incremental",
-                "cwd": "sdk/nodejs"
-            }
-        },
-        "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": ["sdk/nodejs/**/*.ts"]
-            }
-        },
-        "test": {
-            "executor": "@nx/jest:jest",
-            "outputs": ["{workspaceRoot}/coverage/sdk/nodejs"],
-            "options": {
-                "jestConfig": "sdk/nodejs/jest.config.ts",
-                "passWithNoTests": false,
-                "codeCoverage": true
-            },
-            "dependsOn": [
-                {
-                    "target": "build"
-                },
-                {
-                    "target": "build:json",
-                    "dependencies": true
-                }
-            ]
-        },
-        "build": {
-            "executor": "@nx/js:tsc",
-            "outputs": ["{options.outputPath}"],
-            "options": {
-                "outputPath": "dist/sdk/nodejs",
-                "tsConfig": "sdk/nodejs/tsconfig.lib.json",
-                "packageJson": "sdk/nodejs/package.json",
-                "buildableProjectDepsInPackageJsonType": "dependencies",
-                "main": "sdk/nodejs/src/index.ts",
-                "assets": ["sdk/nodejs/*.md"]
-            },
-            "dependsOn": [
-                {
-                    "target": "build",
-                    "dependencies": true
-                }
-            ]
-        },
-        "npm-publish": {
-            "executor": "nx:run-commands",
-            "options": {
-                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/nodejs-server-sdk\"",
-                "cwd": "dist/sdk/nodejs",
-                "forwardAllArgs": true
-            }
-        }
+  "name": "nodejs",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "sdk/nodejs/src",
+  "implicitDependencies": [
+    "shared-bucketing-as",
+    "shared-bucketing-test-data"
+  ],
+  "targets": {
+    "check-types": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "yarn run -T tsc -b --incremental",
+        "cwd": "sdk/nodejs"
+      }
     },
-    "tags": []
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "sdk/nodejs/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/sdk/nodejs"
+      ],
+      "options": {
+        "jestConfig": "sdk/nodejs/jest.config.ts",
+        "passWithNoTests": false,
+        "codeCoverage": true
+      },
+      "dependsOn": [
+        {
+          "target": "build"
+        },
+        {
+          "target": "build:json",
+          "dependencies": true
+        }
+      ]
+    },
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/sdk/nodejs",
+        "tsConfig": "sdk/nodejs/tsconfig.lib.json",
+        "packageJson": "sdk/nodejs/package.json",
+        "buildableProjectDepsInPackageJsonType": "dependencies",
+        "main": "sdk/nodejs/src/index.ts",
+        "assets": [
+          "sdk/nodejs/*.md"
+        ],
+        "external": [
+            "shared-types",
+            "shared-bucketing-test-data",
+            "js-cloud-server-sdk"
+        ]
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "dependencies": true
+        }
+      ]
+    },
+    "npm-publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/nodejs-server-sdk\"",
+        "cwd": "dist/sdk/nodejs",
+        "forwardAllArgs": true
+      }
+    }
+  },
+  "tags": []
 }

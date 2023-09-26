@@ -25,6 +25,9 @@
             "@devcycle/bucketing-test-data": [
                 "lib/shared/bucketing-test-data/src/index.ts"
             ],
+            "@devcycle/config-manager": [
+                "lib/shared/config-manager/src/index.ts"
+            ],
             "@devcycle/js-client-sdk": ["sdk/js/src/index.ts"],
             "@devcycle/js-cloud-server-sdk": [
                 "sdk/js-cloud-server/src/index.ts"

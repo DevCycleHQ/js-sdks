@@ -1,4 +1,4 @@
-import { EnvironmentConfigManager } from './environmentConfigManager'
+import { EnvironmentConfigManager } from '@devcycle/config-manager'
 import {
     bucketUserForConfig,
     getVariableTypeCode,
@@ -73,6 +73,7 @@ export class DevCycleClient {
                 this.configHelper = new EnvironmentConfigManager(
                     this.logger,
                     sdkKey,
+                    getBucketingLib().setConfigDataUTF8,
                     options || {},
                 )
                 this.eventQueue = new EventQueue(sdkKey, {

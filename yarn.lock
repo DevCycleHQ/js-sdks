@@ -4879,6 +4879,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@devcycle/config-manager@workspace:lib/shared/config-manager":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/config-manager@workspace:lib/shared/config-manager"
+  languageName: unknown
+  linkType: soft
+
 "@devcycle/js-client-sdk-web-example@workspace:examples/js/web-elements-app":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk-web-example@workspace:examples/js/web-elements-app"
@@ -4891,7 +4897,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/js-cloud-server-sdk@1.0.0, @devcycle/js-cloud-server-sdk@workspace:sdk/js-cloud-server":
+"@devcycle/js-cloud-server-sdk@1.0.0, @devcycle/js-cloud-server-sdk@^1.0.0, @devcycle/js-cloud-server-sdk@workspace:sdk/js-cloud-server":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-cloud-server-sdk@workspace:sdk/js-cloud-server"
   dependencies:
@@ -4933,6 +4939,8 @@ __metadata:
   dependencies:
     "@devcycle/bucketing-assembly-script": ^1.8.4
     "@devcycle/bucketing-test-data": ^1.2.22
+    "@devcycle/js-cloud-server-sdk": ^1.0.0
+    "@devcycle/types": ^1.1.15
   languageName: unknown
   linkType: soft
 
@@ -4985,7 +4993,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/types@workspace:lib/shared/types":
+"@devcycle/types@^1.1.15, @devcycle/types@workspace:lib/shared/types":
   version: 0.0.0-use.local
   resolution: "@devcycle/types@workspace:lib/shared/types"
   languageName: unknown
