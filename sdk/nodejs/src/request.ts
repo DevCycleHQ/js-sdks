@@ -27,13 +27,10 @@ export async function getEnvironmentConfig(
 
 export async function publishEvents(
     logger: DVCLogger,
-    sdkKey: string | null,
+    sdkKey: string,
     eventsBatch: SDKEventBatchRequestBody,
     eventsBaseURLOverride?: string,
 ): Promise<Response> {
-    if (!sdkKey) {
-        throw new Error('DevCycle is not yet initialized to publish events.')
-    }
     const url = eventsBaseURLOverride
         ? `${eventsBaseURLOverride}${EVENTS_PATH}`
         : `${EVENT_URL}${HOST}${EVENTS_PATH}`

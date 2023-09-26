@@ -14,14 +14,6 @@ describe('request.ts Unit Tests', () => {
         fetchRequestMock.mockReset()
     })
 
-    describe('publishEvents', () => {
-        it('should throw errors for missing sdkKey / config', async () => {
-            await expect(() => publishEvents(logger, null, [])).rejects.toThrow(
-                'DevCycle is not yet initialized to publish events.',
-            )
-        })
-    })
-
     describe('getEnvironmentConfig', () => {
         it('should get environment config', async () => {
             const url = 'https://test.devcycle.com/config'
