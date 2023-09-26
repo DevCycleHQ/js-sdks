@@ -1,4 +1,4 @@
-import { getWithTimeout, post } from '@devcycle/server-request'
+import { post } from '@devcycle/server-request'
 import { DVCLogger, SDKEventBatchRequestBody } from '@devcycle/types'
 
 export const HOST = '.devcycle.com'
