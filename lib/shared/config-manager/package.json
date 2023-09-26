@@ -1,6 +1,7 @@
 {
   "name": "@devcycle/config-manager",
-  "version": "0.0.1",
+  "private": true,
+  "version": "1.0.0",
   "type": "commonjs",
   "dependencies": {
     "@devcycle/js-cloud-server-sdk": "^1.0.0",

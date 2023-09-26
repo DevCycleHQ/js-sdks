@@ -1,6 +1,7 @@
 # config-manager
 
-This library was generated with [Nx](https://nx.dev).
+This library extracts the `EnvironmentConfigManager` Server SDK logic to be used across the NodeJS SDK 
+and Edge Worker SDKs. 
 
 ## Building
 
