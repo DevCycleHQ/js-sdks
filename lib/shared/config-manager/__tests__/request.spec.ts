@@ -3,11 +3,8 @@ import fetch, { Response } from 'cross-fetch'
 
 global.fetch = fetch
 
+import { getEnvironmentConfig } from '../src/request'
 const fetchRequestMock = fetch as jest.MockedFn<typeof fetch>
-
-import { publishEvents, getEnvironmentConfig } from '../src/request'
-import { dvcDefaultLogger } from '@devcycle/js-cloud-server-sdk'
-const logger = dvcDefaultLogger()
 
 describe('request.ts Unit Tests', () => {
     beforeEach(() => {
