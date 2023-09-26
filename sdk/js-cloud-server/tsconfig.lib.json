@@ -4,8 +4,7 @@
         "module": "commonjs",
         "outDir": "../../dist/out-tsc",
         "declaration": true,
-        "lib": ["esnext", "webworker"],
-        "types": ["node", "@cloudflare/workers-types"]
+        "types": []
     },
     "exclude": [
         "**/*.spec.ts",

@@ -4,8 +4,7 @@
         "target": "es2019",
         "outDir": "../../dist/out-tsc",
         "module": "commonjs",
-        "lib": ["esnext", "webworker"],
-        "types": ["jest", "node", "@cloudflare/workers-types"]
+        "types": ["jest", "node"]
     },
     "include": [
         "**/*.test.ts",

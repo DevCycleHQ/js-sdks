@@ -32,8 +32,7 @@ export function initializeDevCycle(
 
     return new DevCycleCloudClient(sdkKey, options, {
         platform: options.platform || 'NodeJS',
-        platformVersion:
-            options.platformVersion || process?.version || undefined,
+        platformVersion: options.platformVersion || undefined,
         sdkType: 'server',
         hostname: options.hostname || undefined,
     })
