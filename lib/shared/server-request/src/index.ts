@@ -1,5 +1,7 @@
 import fetchWithRetry, { RequestInitWithRetry } from 'fetch-retry'
 
+export * from './userError'
+
 export class ResponseError extends Error {
     constructor(message: string) {
         super(message)
