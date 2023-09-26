@@ -9,7 +9,8 @@
   "dependencies": {
     "@devcycle/bucketing-assembly-script": "^1.8.4",
     "@devcycle/js-cloud-server-sdk": "^1.0.0",
-    "@devcycle/types": "^1.1.15"
+    "@devcycle/types": "^1.1.15",
+    "fetch-retry": "^5.0.3"
   },
   "engines": {
     "node": ">=14.0.0"

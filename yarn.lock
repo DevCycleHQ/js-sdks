@@ -4944,6 +4944,7 @@ __metadata:
     "@devcycle/bucketing-test-data": ^1.2.22
     "@devcycle/js-cloud-server-sdk": ^1.0.0
     "@devcycle/types": ^1.1.15
+    fetch-retry: ^5.0.3
   languageName: unknown
   linkType: soft
 
