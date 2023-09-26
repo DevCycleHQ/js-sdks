@@ -4997,6 +4997,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@devcycle/server-request@workspace:lib/shared/server-request":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/server-request@workspace:lib/shared/server-request"
+  languageName: unknown
+  linkType: soft
+
 "@devcycle/types@^1.1.15, @devcycle/types@workspace:lib/shared/types":
   version: 0.0.0-use.local
   resolution: "@devcycle/types@workspace:lib/shared/types"

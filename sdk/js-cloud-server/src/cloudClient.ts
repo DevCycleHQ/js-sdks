@@ -22,9 +22,9 @@ import {
     getAllVariables,
     getVariable,
     postTrack,
-    ResponseError,
 } from './request'
 import { DevCycleUser } from './models/user'
+import { ResponseError } from '@devcycle/server-request'
 
 const castIncomingUser = (user: DevCycleUser) => {
     if (!(user instanceof DevCycleUser)) {

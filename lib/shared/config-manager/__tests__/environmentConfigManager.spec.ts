@@ -8,10 +8,10 @@ import { Response } from 'cross-fetch'
 import {
     DevCycleOptions,
     dvcDefaultLogger,
-    ResponseError,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCLogger } from '@devcycle/types'
 import { getEnvironmentConfig } from '../src/request'
+import { ResponseError } from '@devcycle/server-request'
 
 const setInterval_mock = mocked(setInterval)
 const getEnvironmentConfig_mock = mocked(getEnvironmentConfig)

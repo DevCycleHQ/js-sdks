@@ -1,7 +1,8 @@
 import { DVCLogger } from '@devcycle/types'
 // import { UserError } from './utils/userError'
 import { getEnvironmentConfig } from './request'
-import { ResponseError, DevCycleOptions } from '@devcycle/js-cloud-server-sdk'
+import { DevCycleOptions } from '@devcycle/js-cloud-server-sdk'
+import { ResponseError } from '@devcycle/server-request'
 
 type ConfigPollingOptions = DevCycleOptions & {
     cdnURI?: string
