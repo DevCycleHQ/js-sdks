@@ -1,5 +1,4 @@
 import { DVCLogger } from '@devcycle/types'
-// import { getBucketingLib } from './bucketing'
 // import { UserError } from './utils/userError'
 import { getEnvironmentConfig } from './request'
 import { ResponseError, DevCycleOptions } from '@devcycle/js-cloud-server-sdk'
@@ -8,7 +7,10 @@ type ConfigPollingOptions = DevCycleOptions & {
     cdnURI?: string
 }
 
-type SetConfigBuffer = (sdkKey: string, configBuffer: Buffer) => void
+type SetIntervalInterface = (handler: () => void, timeout?: number) => any
+type ClearIntervalInterface = (intervalTimeout: any) => void
+
+type SetConfigBuffer = (sdkKey: string, projectConfig: string) => void
 
 export class EnvironmentConfigManager {
     private readonly logger: DVCLogger
@@ -19,14 +21,18 @@ export class EnvironmentConfigManager {
     private readonly requestTimeoutMS: number
     private readonly cdnURI: string
     fetchConfigPromise: Promise<void>
-    private intervalTimeout?: NodeJS.Timeout
+    private intervalTimeout?: any
     private disablePolling = false
     private readonly setConfigBuffer: SetConfigBuffer
+    private readonly setInterval: SetIntervalInterface
+    private readonly clearInterval: ClearIntervalInterface
 
     constructor(
         logger: DVCLogger,
         sdkKey: string,
         setConfigBuffer: SetConfigBuffer,
+        setInterval: SetIntervalInterface,
+        clearInterval: ClearIntervalInterface,
         {
             configPollingIntervalMS = 10000,
             configPollingTimeoutMS = 5000,
@@ -36,7 +42,11 @@ export class EnvironmentConfigManager {
     ) {
         this.logger = logger
         this.sdkKey = sdkKey
+
         this.setConfigBuffer = setConfigBuffer
+        this.setInterval = setInterval
+        this.clearInterval = clearInterval
+
         this.pollingIntervalMS =
             configPollingIntervalMS >= 1000 ? configPollingIntervalMS : 1000
         this.requestTimeoutMS =
@@ -53,7 +63,7 @@ export class EnvironmentConfigManager {
                 if (this.disablePolling) {
                     return
                 }
-                this.intervalTimeout = setInterval(async () => {
+                this.intervalTimeout = this.setInterval(async () => {
                     try {
                         await this._fetchConfig()
                     } catch (ex) {
@@ -65,7 +75,7 @@ export class EnvironmentConfigManager {
 
     stopPolling(): void {
         this.disablePolling = true
-        clearInterval(this.intervalTimeout)
+        this.clearInterval(this.intervalTimeout)
     }
 
     cleanup(): void {
@@ -124,8 +134,7 @@ export class EnvironmentConfigManager {
         } else if (res?.status === 200 && projectConfig) {
             try {
                 const etag = res?.headers.get('etag') || ''
-                const configBuffer = Buffer.from(projectConfig, 'utf8')
-                this.setConfigBuffer(this.sdkKey, configBuffer)
+                this.setConfigBuffer(this.sdkKey, projectConfig)
                 this.hasConfig = true
                 this.configEtag = etag
                 return

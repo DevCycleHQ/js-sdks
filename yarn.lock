@@ -4882,6 +4882,9 @@ __metadata:
 "@devcycle/config-manager@workspace:lib/shared/config-manager":
   version: 0.0.0-use.local
   resolution: "@devcycle/config-manager@workspace:lib/shared/config-manager"
+  dependencies:
+    "@devcycle/js-cloud-server-sdk": ^1.0.0
+    "@devcycle/types": ^1.1.15
   languageName: unknown
   linkType: soft
 

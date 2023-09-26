@@ -1,5 +1,9 @@
 {
   "name": "@devcycle/config-manager",
   "version": "0.0.1",
-  "type": "commonjs"
+  "type": "commonjs",
+  "dependencies": {
+    "@devcycle/js-cloud-server-sdk": "^1.0.0",
+    "@devcycle/types": "^1.1.15"
+  }
 }

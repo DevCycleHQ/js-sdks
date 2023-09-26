@@ -8,7 +8,7 @@ import {
     getBucketingLib,
     importBucketingLib,
 } from '../src/bucketing'
-import { setPlatformDataJSON } from './utils/setPlatformData.spec'
+import { setPlatformDataJSON } from './utils/setPlatformData'
 import { Response } from 'cross-fetch'
 import { dvcDefaultLogger } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from '../src/models/populatedUserHelpers'
