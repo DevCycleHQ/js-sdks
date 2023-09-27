@@ -1,4 +1,3 @@
-import { DVCRequestEvent } from './models/requestEvent'
 import {
     BucketedUserConfig,
     DVCLogger,
@@ -6,19 +5,12 @@ import {
     FlushResults,
 } from '@devcycle/types'
 import { getBucketingLib } from './bucketing'
-import { publishEvents } from './request'
-import { DevCycleEvent, DVCPopulatedUser } from '@devcycle/js-cloud-server-sdk'
-
-export const AggregateEventTypes: Record<string, string> = {
-    variableEvaluated: 'variableEvaluated',
-    aggVariableEvaluated: 'aggVariableEvaluated',
-    variableDefaulted: 'variableDefaulted',
-    aggVariableDefaulted: 'aggVariableDefaulted',
-}
-
-export const EventTypes: Record<string, string> = {
-    ...AggregateEventTypes,
-}
+import { DVCPopulatedUser } from '@devcycle/js-cloud-server-sdk'
+import {
+    DevCycleEvent,
+    DVCRequestEvent,
+    publishEvents,
+} from '@devcycle/server-request'
 
 type UserEventsBatchRecord = {
     user: DVCPopulatedUser

@@ -1,7 +1,7 @@
 jest.unmock('cross-fetch')
 import fetch from 'cross-fetch'
 global.fetch = fetch
-import { DevCycleEvent } from '../src/types'
+import { DevCycleEvent } from '@devcycle/server-request'
 import * as DVC from '../src'
 import { server } from '../src/__mocks__/server'
 

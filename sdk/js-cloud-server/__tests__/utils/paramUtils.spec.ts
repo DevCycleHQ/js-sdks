@@ -2,7 +2,7 @@ import {
     checkParamDefined,
     checkParamType,
     typeEnum,
-} from '../../src/utils/paramUtils'
+} from '../../../../lib/shared/server-request/src/utils/paramUtils'
 
 describe('paramUtils Unit Tests', () => {
     describe('checkParamDefined', () => {

@@ -1,5 +1,5 @@
 import { DVCCustomDataJSON } from '@devcycle/types'
-import { checkParamType, typeEnum } from '../utils/paramUtils'
+import { checkParamType, typeEnum } from '@devcycle/server-request'
 
 type DevCycleUserData = {
     user_id: string

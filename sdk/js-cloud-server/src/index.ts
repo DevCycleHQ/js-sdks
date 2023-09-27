@@ -1,6 +1,6 @@
 import { DevCycleOptions } from './types'
 import { DevCycleCloudClient } from './cloudClient'
-import { isValidServerSDKKey } from './utils/paramUtils'
+import { isValidServerSDKKey } from '@devcycle/server-request'
 import { DevCycleUser } from './models/user'
 
 export { DevCycleCloudClient, DevCycleUser }
@@ -10,7 +10,6 @@ export * from './models/variable'
 export * from './types'
 export * from './request'
 export * from './utils/logger'
-export * from './utils/paramUtils'
 
 export type DevCycleCloudOptions = Pick<
     DevCycleOptions,

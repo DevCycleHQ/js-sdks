@@ -9,16 +9,18 @@ import {
     DevCycleUser,
     DVCVariable,
     VariableParam,
-    checkParamDefined,
     dvcDefaultLogger,
     DVCVariableValue,
     DVCVariableSet,
     DVCFeatureSet,
-    DevCycleEvent,
     DevCycleCloudOptions,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
-import { UserError } from '@devcycle/server-request'
+import {
+    UserError,
+    DevCycleEvent,
+    checkParamDefined,
+} from '@devcycle/server-request'
 import { generateBucketedConfig } from '@devcycle/bucketing'
 
 const castIncomingUser = (user: DevCycleUser) => {

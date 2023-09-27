@@ -4,7 +4,7 @@ import {
     checkParamDefined,
     checkParamType,
     typeEnum,
-} from '../utils/paramUtils'
+} from '@devcycle/server-request'
 
 export type VariableParam<T extends DVCVariableValue> = {
     key: string

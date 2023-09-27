@@ -3,9 +3,7 @@ import {
     DevCycleUser,
     DevCycleCloudClient,
     dvcDefaultLogger,
-    isValidServerSDKKey,
     DevCycleOptions,
-    DevCycleEvent,
     DVCVariableValue,
     JSON,
     DVCJSON,
@@ -17,6 +15,7 @@ import {
     DVCFeatureSet,
     DevCycleCloudOptions,
 } from '@devcycle/js-cloud-server-sdk'
+import { isValidServerSDKKey, DevCycleEvent } from '@devcycle/server-request'
 
 export {
     DevCycleEdgeClient,
@@ -36,10 +35,14 @@ export {
 }
 export { dvcDefaultLogger }
 
-type DevCycleOptionsCloudEnabled = DevCycleCloudOptions & {
+type DevCycleEdgeOptions = DevCycleCloudOptions & {
+    enableCloudBucketing?: boolean
+}
+
+type DevCycleOptionsCloudEnabled = DevCycleEdgeOptions & {
     enableCloudBucketing: true
 }
-type DevCycleOptionsLocalEnabled = DevCycleCloudOptions & {
+type DevCycleOptionsLocalEnabled = DevCycleEdgeOptions & {
     enableCloudBucketing?: false
 }
 
@@ -53,11 +56,11 @@ export function initializeDevCycle(
 ): DevCycleCloudClient
 export function initializeDevCycle(
     sdkKey: string,
-    options?: DevCycleCloudOptions,
+    options?: DevCycleEdgeOptions,
 ): DevCycleEdgeClient | DevCycleCloudClient
 export function initializeDevCycle(
     sdkKey: string,
-    options: DevCycleCloudOptions = {},
+    options: DevCycleEdgeOptions = {},
 ): DevCycleEdgeClient | DevCycleCloudClient {
     if (!sdkKey) {
         throw new Error('Missing SDK key! Call initialize with a valid SDK key')

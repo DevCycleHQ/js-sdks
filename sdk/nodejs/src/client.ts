@@ -4,7 +4,7 @@ import {
     getVariableTypeCode,
     variableForUser_PB,
 } from './utils/userBucketingHelper'
-import { EventQueue, EventTypes } from './eventQueue'
+import { EventQueue } from './eventQueue'
 import * as packageJson from '../package.json'
 import {
     importBucketingLib,
@@ -21,16 +21,19 @@ import {
     DevCycleUser,
     DVCVariable,
     VariableParam,
-    checkParamDefined,
     dvcDefaultLogger,
     DevCycleOptions,
     DVCVariableValue,
     DVCVariableSet,
     DVCFeatureSet,
-    DevCycleEvent,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
-import { UserError } from '@devcycle/server-request'
+import {
+    UserError,
+    EventTypes,
+    DevCycleEvent,
+    checkParamDefined,
+} from '@devcycle/server-request'
 
 interface IPlatformData {
     platform: string

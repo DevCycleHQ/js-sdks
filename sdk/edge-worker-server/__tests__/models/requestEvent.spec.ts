@@ -1,5 +1,4 @@
-import { DVCRequestEvent } from '../../src/models/requestEvent'
-// import { EventTypes } from '../../src/eventQueue'
+import { DVCRequestEvent, EventTypes } from '@devcycle/server-request'
 
 describe('DVCRequestEvent Unit Tests', () => {
     it('should construct custom DVCRequestEvent from DVCEvent', () => {
@@ -28,21 +27,21 @@ describe('DVCRequestEvent Unit Tests', () => {
         })
     })
 
-    // it('should construct an event for an internal DVC Event', () => {
-    //     const requestEvent = new DVCRequestEvent(
-    //         {
-    //             type: EventTypes.variableEvaluated,
-    //         },
-    //         'user_id',
-    //     )
-    //     expect(requestEvent).toEqual(
-    //         expect.objectContaining({
-    //             type: EventTypes.variableEvaluated,
-    //             user_id: 'user_id',
-    //             clientDate: expect.any(Number),
-    //         }),
-    //     )
-    // })
+    it('should construct an event for an internal DVC Event', () => {
+        const requestEvent = new DVCRequestEvent(
+            {
+                type: EventTypes.variableEvaluated,
+            },
+            'user_id',
+        )
+        expect(requestEvent).toEqual(
+            expect.objectContaining({
+                type: EventTypes.variableEvaluated,
+                user_id: 'user_id',
+                clientDate: expect.any(Number),
+            }),
+        )
+    })
 
     it('should check that type is defined as a string', () => {
         expect(() => new (DVCRequestEvent as any)({})).toThrow(
