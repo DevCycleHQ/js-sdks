@@ -24,6 +24,7 @@ import {
 } from '@devcycle/server-request'
 import { generateBucketedConfig } from '@devcycle/bucketing'
 import { generateAggEvent, publishDevCycleEvents } from './eventsPublisher'
+import isArray from 'lodash/isArray'
 
 const castIncomingUser = (user: DevCycleUser) => {
     if (!(user instanceof DevCycleUser)) {
@@ -141,7 +142,7 @@ export class DevCycleEdgeClient {
 
         const dvcVariable = new DVCVariable(options)
 
-        const aggEvents = generateAggEvent(
+        const aggEvent = generateAggEvent(
             populatedUser.user_id,
             dvcVariable.isDefaulted
                 ? EventTypes.aggVariableDefaulted
@@ -154,7 +155,7 @@ export class DevCycleEdgeClient {
             this.logger,
             this.sdkKey,
             populatedUser,
-            aggEvents,
+            [aggEvent],
             bucketedConfig.featureVariationMap,
         )
 
@@ -199,6 +200,10 @@ export class DevCycleEdgeClient {
         return bucketedConfig?.features || {}
     }
 
+    private static checkDevCycleEvent(event: DevCycleEvent): void {
+        checkParamDefined('type', event.type)
+    }
+
     async track(
         user: DevCycleUser,
         event: DevCycleEvent | DevCycleEvent[],
@@ -212,7 +217,11 @@ export class DevCycleEdgeClient {
             return
         }
 
-        checkParamDefined('type', event.type)
+        if (isArray(event)) {
+            event.forEach(DevCycleEdgeClient.checkDevCycleEvent)
+        } else {
+            DevCycleEdgeClient.checkDevCycleEvent(event)
+        }
         const populatedUser = DVCPopulatedUserFromDevCycleUser(
             incomingUser,
             this.options,
@@ -226,7 +235,7 @@ export class DevCycleEdgeClient {
             this.logger,
             this.sdkKey,
             populatedUser,
-            typeof event === 'object' ? [event] : event,
+            isArray(event) ? event : [event],
             bucketedConfig.featureVariationMap,
         )
     }

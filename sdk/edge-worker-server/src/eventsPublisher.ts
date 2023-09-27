@@ -4,20 +4,27 @@ import {
     DVCRequestEvent,
     publishEvents,
 } from '@devcycle/server-request'
-import { BucketedUserConfig, DVCLogger, SDKEventBatchRequestBody } from '@devcycle/types'
+import {
+    BucketedUserConfig,
+    DVCLogger,
+    SDKEventBatchRequestBody,
+} from '@devcycle/types'
 
 export function generateAggEvent(
     user_id: string,
     type: string,
     variableKey: string,
     variableVariationMap: BucketedUserConfig['variableVariationMap'],
-): DVCRequestEvent[] {
-    return new DVCRequestEvent({
-        type,
-        target: variableKey,
-        value: 1,
-        metaData: variableVariationMap[variableKey]
-    }, user_id)
+): DVCRequestEvent {
+    return new DVCRequestEvent(
+        {
+            type,
+            target: variableKey,
+            value: 1,
+            metaData: variableVariationMap[variableKey],
+        },
+        user_id,
+    )
 }
 
 export async function publishDevCycleEvents(
@@ -45,9 +52,11 @@ export async function publishDevCycleEvents(
                 }, body: ${await res.text()}`,
             )
         } else {
-            this.logger.debug(
-                `DevCycle Flushed ${requestEvents.length} Events`,
-            )
+            this.logger.debug(`DevCycle Flushed ${requestEvents.length} Events`)
         }
+    } catch (ex) {
+        this.logger.error(
+            `DevCycle Error Flushing Events response message: ${ex.message}`,
+        )
     }
 }
