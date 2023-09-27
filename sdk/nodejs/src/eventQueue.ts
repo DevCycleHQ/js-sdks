@@ -122,7 +122,7 @@ export class EventQueue {
                 metricTags,
             )
         } catch (ex) {
-            this.logger.error(`DVC Error Flushing Events: ${ex.message}`)
+            this.logger.error(`DevCycle Error Flushing Events: ${ex.message}`)
         }
 
         const results: FlushResults = {
@@ -149,7 +149,7 @@ export class EventQueue {
             val + batches.eventCount
         const eventCount = flushPayloads.reduce(reducer, 0)
         this.logger.debug(
-            `DVC Flush ${eventCount} Events, for ${flushPayloads.length} Users`,
+            `DevCycle Flush ${eventCount} Events, for ${flushPayloads.length} Users`,
         )
 
         const startTimeRequests = Date.now()
@@ -186,7 +186,7 @@ export class EventQueue {
                         }
                     } else {
                         this.logger.debug(
-                            `DVC Flushed ${eventCount} Events, for ${flushPayload.records.length} Users`,
+                            `DevCycle Flushed ${eventCount} Events, for ${flushPayload.records.length} Users`,
                         )
                         getBucketingLib().onPayloadSuccess(
                             this.sdkKey,
@@ -196,7 +196,7 @@ export class EventQueue {
                     }
                 } catch (ex) {
                     this.logger.error(
-                        `DVC Error Flushing Events response message: ${ex.message}`,
+                        `DevCycle Error Flushing Events response message: ${ex.message}`,
                     )
                     getBucketingLib().onPayloadFailure(
                         this.sdkKey,
@@ -240,7 +240,7 @@ export class EventQueue {
         try {
             await this._flushEvents()
         } catch (e) {
-            this.logger.error(`DVC Error Flushing Events`, e)
+            this.logger.error(`DevCycle Error Flushing Events`, e)
         }
 
         this.flushInProgress = false

@@ -20,8 +20,10 @@ import {
     UserError,
     DevCycleEvent,
     checkParamDefined,
+    EventTypes,
 } from '@devcycle/server-request'
 import { generateBucketedConfig } from '@devcycle/bucketing'
+import { generateAggEvent, publishDevCycleEvents } from './eventsPublisher'
 
 const castIncomingUser = (user: DevCycleUser) => {
     if (!(user instanceof DevCycleUser)) {
@@ -31,6 +33,7 @@ const castIncomingUser = (user: DevCycleUser) => {
 }
 
 export class DevCycleEdgeClient {
+    private sdkKey: string
     private options: DevCycleCloudOptions
     private configHelper: EnvironmentConfigManager
     private onInitialized: Promise<DevCycleEdgeClient>
@@ -39,6 +42,7 @@ export class DevCycleEdgeClient {
     private configData: ConfigBody
 
     constructor(sdkKey: string, options: DevCycleCloudOptions = {}) {
+        this.sdkKey = sdkKey
         this.options = options
         this.logger =
             options?.logger || dvcDefaultLogger({ level: options?.logLevel })
@@ -71,10 +75,6 @@ export class DevCycleEdgeClient {
                 }
                 return this
             })
-
-        // process.on('exit', () => {
-        //     this.close()
-        // })
     }
 
     setConfigData(sdkKey: string, projectConfigStr: string): void {
@@ -139,7 +139,26 @@ export class DevCycleEdgeClient {
             }
         }
 
-        return new DVCVariable(options)
+        const dvcVariable = new DVCVariable(options)
+
+        const aggEvents = generateAggEvent(
+            populatedUser.user_id,
+            dvcVariable.isDefaulted
+                ? EventTypes.aggVariableDefaulted
+                : EventTypes.aggVariableEvaluated,
+            key,
+            bucketedConfig.variableVariationMap,
+        )
+        // Don't await for the event to be published to the Events API
+        publishDevCycleEvents(
+            this.logger,
+            this.sdkKey,
+            populatedUser,
+            aggEvents,
+            bucketedConfig.featureVariationMap,
+        )
+
+        return dvcVariable
     }
 
     async variableValue<T extends DVCVariableValue>(
@@ -180,7 +199,10 @@ export class DevCycleEdgeClient {
         return bucketedConfig?.features || {}
     }
 
-    async track(user: DevCycleUser, event: DevCycleEvent): Promise<void> {
+    async track(
+        user: DevCycleUser,
+        event: DevCycleEvent | DevCycleEvent[],
+    ): Promise<void> {
         const incomingUser = castIncomingUser(user)
 
         if (!this.initialized) {
@@ -195,17 +217,22 @@ export class DevCycleEdgeClient {
             incomingUser,
             this.options,
         )
-        // this.eventQueue.queueEvent(populatedUser, event)
-    }
+        const bucketedConfig = generateBucketedConfig({
+            config: this.configData,
+            user: populatedUser,
+        })
 
-    async flushEvents(callback?: () => void): Promise<void> {
-        // return this.eventQueue.flushEvents().then(callback)
+        await publishDevCycleEvents(
+            this.logger,
+            this.sdkKey,
+            populatedUser,
+            typeof event === 'object' ? [event] : event,
+            bucketedConfig.featureVariationMap,
+        )
     }
 
     async close(): Promise<void> {
         await this.onInitialized
-        await this.flushEvents()
         this.configHelper.cleanup()
-        // this.eventQueue.cleanup()
     }
 }
