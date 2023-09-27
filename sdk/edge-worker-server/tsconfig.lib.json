@@ -1,0 +1,18 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "module": "commonjs",
+        "outDir": "../../dist/out-tsc",
+        "declaration": true,
+        "lib": ["es2021", "WebWorker"],
+        "types": ["@cloudflare/workers-types"]
+    },
+    "exclude": [
+        "**/*.spec.ts",
+        "**/*.test.ts",
+        "**/__mocks__/**/*.ts",
+        "**/__tests__/**/*.ts",
+        "jest.config.ts"
+    ],
+    "include": ["**/*.ts"]
+}

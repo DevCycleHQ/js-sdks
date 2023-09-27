@@ -12,7 +12,7 @@ export * from './request'
 export * from './utils/logger'
 export * from './utils/paramUtils'
 
-type DevCycleCloudOptions = Pick<
+export type DevCycleCloudOptions = Pick<
     DevCycleOptions,
     'logger' | 'logLevel' | 'enableEdgeDB' | 'bucketingAPIURI'
 > & {

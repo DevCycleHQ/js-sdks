@@ -10,7 +10,7 @@ type ConfigPollingOptions = DevCycleOptions & {
 type SetIntervalInterface = (handler: () => void, timeout?: number) => any
 type ClearIntervalInterface = (intervalTimeout: any) => void
 
-type SetConfigBuffer = (sdkKey: string, projectConfig: string) => void
+type SetConfigBuffer = (sdkKey: string, projectConfigStr: string) => void
 
 export class EnvironmentConfigManager {
     private readonly logger: DVCLogger
