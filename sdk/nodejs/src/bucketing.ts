@@ -15,7 +15,7 @@ export const importBucketingLib = async ({
         bucketingInstantiationCount++
         if (bucketingInstantiationCount > bucketingInstantiationWarning) {
             logger?.warn(
-                `Warning: The DevCycle SDK has been instantiated over ${bucketingInstantiationWarning} times. ` +
+                `Warning: The DevCycle SDK has been instantiated ${bucketingInstantiationWarning} times. ` +
                     'This may cause higher than expected memory usage and indicate a faulty integration.',
             )
         }
