@@ -5,38 +5,20 @@ describe('JS Cloud Bucketing Server SDK Initialize', () => {
         jest.clearAllMocks()
     })
 
-    it('sucessfully calls initialize with no options', async () => {
+    it('successfully calls initialize with no options', async () => {
         const client = initializeDevCycle('dvc_server_token')
         expect(client).toBeDefined()
     })
 
-    it('fails to initialize in Local Bucketing mode when no token is provided', () => {
+    it('fails to initialize when no token is provided', () => {
         expect(() =>
             initializeDevCycle(undefined as unknown as string),
         ).toThrow('Missing SDK key! Call initialize with a valid SDK key')
     })
 
-    it('fails to initialize in Local Bucketing mode when client token is provided', () => {
+    it('fails to initialize when client token is provided', () => {
         expect(() => initializeDevCycle('dvc_client_token')).toThrow(
             'Invalid SDK key provided. Please call initialize with a valid server SDK key',
         )
-    })
-
-    it('sucessfully calls initialize with enableCloudBucketing set to true', () => {
-        const client: DevCycleCloudClient = initializeDevCycle(
-            'dvc_server_token',
-            {
-                enableCloudBucketing: true,
-            },
-        )
-        expect(client).toBeDefined()
-    })
-
-    it('fails to initialize in Cloud Bucketing mode when no token is provided', () => {
-        expect(() =>
-            initializeDevCycle(undefined as unknown as string, {
-                enableCloudBucketing: true,
-            }),
-        ).toThrow('Missing SDK key! Call initialize with a valid SDK key')
     })
 })
