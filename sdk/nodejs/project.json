@@ -59,8 +59,10 @@
         "assets": [
           "sdk/nodejs/*.md"
         ],
+        // External pacakges now need to be defined here, all other pacakges will be compiled into the sdk.
         "external": [
             "shared-types",
+            "shared-bucketing-as",
             "shared-bucketing-test-data",
             "js-cloud-server-sdk"
         ]
