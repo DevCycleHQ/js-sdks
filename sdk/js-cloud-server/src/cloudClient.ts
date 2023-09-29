@@ -106,34 +106,38 @@ export class DevCycleCloudClient {
             true,
         )
 
-        return getVariable(populatedUser, this.sdkKey, key, this.options)
-            .then(async (res: Response) => {
-                const variableResponse: any = await res.json()
-                if (variableResponse.type !== type) {
-                    this.logger.error(
-                        `Type mismatch for variable ${key}. Expected ${type}, got ${variableResponse.type}`,
-                    )
-                    // Default Variable
-                    return new DVCVariable({ key, type, defaultValue })
-                }
-
-                return new DVCVariable({
-                    key,
-                    type,
-                    defaultValue,
-                    value: variableResponse.value as VariableTypeAlias<T>,
-                })
-            })
-            .catch((err: unknown) => {
-                throwIfUserError(err)
+        try {
+            const res = await getVariable(
+                populatedUser,
+                this.sdkKey,
+                key,
+                this.options,
+            )
+            const variableResponse: any = await res.json()
+            if (variableResponse.type !== type) {
                 this.logger.error(
-                    `Request to get variable: ${key} failed with response message: ${
-                        (err as any).message
-                    }`,
+                    `Type mismatch for variable ${key}. Expected ${type}, got ${variableResponse.type}`,
                 )
                 // Default Variable
                 return new DVCVariable({ key, type, defaultValue })
+            }
+
+            return new DVCVariable({
+                key,
+                type,
+                defaultValue,
+                value: variableResponse.value as VariableTypeAlias<T>,
             })
+        } catch (err) {
+            throwIfUserError(err)
+            this.logger.error(
+                `Request to get variable: ${key} failed with response message: ${
+                    (err as any).message
+                }`,
+            )
+            // Default Variable
+            return new DVCVariable({ key, type, defaultValue })
+        }
     }
 
     async variableValue<T extends DVCVariableValue>(
@@ -141,9 +145,7 @@ export class DevCycleCloudClient {
         key: string,
         defaultValue: T,
     ): Promise<VariableTypeAlias<T>> {
-        return this.variable(user, key, defaultValue).then(
-            (variable) => variable.value,
-        )
+        return (await this.variable(user, key, defaultValue)).value
     }
 
     async allVariables(user: DevCycleUser): Promise<DVCVariableSet> {
@@ -154,21 +156,23 @@ export class DevCycleCloudClient {
             this.platformDetails,
         )
 
-        return getAllVariables(populatedUser, this.sdkKey, this.options)
-            .then(async (res: Response) => {
-                const variablesResponse = await res.json()
-
-                return (variablesResponse || {}) as DVCVariableSet
-            })
-            .catch((err: unknown) => {
-                throwIfUserError(err)
-                this.logger.error(
-                    `Request to get all variable failed with response message: ${
-                        (err as any).message
-                    }`,
-                )
-                return {} as DVCVariableSet
-            })
+        try {
+            const res = await getAllVariables(
+                populatedUser,
+                this.sdkKey,
+                this.options,
+            )
+            const variablesResponse = await res.json()
+            return (variablesResponse || {}) as DVCVariableSet
+        } catch (err) {
+            throwIfUserError(err)
+            this.logger.error(
+                `Request to get all variable failed with response message: ${
+                    (err as any).message
+                }`,
+            )
+            return {} as DVCVariableSet
+        }
     }
 
     async allFeatures(user: DevCycleUser): Promise<DVCFeatureSet> {
@@ -179,21 +183,23 @@ export class DevCycleCloudClient {
             this.platformDetails,
         )
 
-        return getAllFeatures(populatedUser, this.sdkKey, this.options)
-            .then(async (res: Response) => {
-                const featuresResponse = await res.json()
-
-                return (featuresResponse || {}) as DVCFeatureSet
-            })
-            .catch((err: unknown) => {
-                throwIfUserError(err)
-                this.logger.error(
-                    `Request to get all features failed with response message: ${
-                        (err as any).message
-                    }`,
-                )
-                return {} as DVCFeatureSet
-            })
+        try {
+            const res = await getAllFeatures(
+                populatedUser,
+                this.sdkKey,
+                this.options,
+            )
+            const featuresResponse = await res.json()
+            return (featuresResponse || {}) as DVCFeatureSet
+        } catch (err) {
+            throwIfUserError(err)
+            this.logger.error(
+                `Request to get all features failed with response message: ${
+                    (err as any).message
+                }`,
+            )
+            return {} as DVCFeatureSet
+        }
     }
 
     async track(user: DevCycleUser, event: DevCycleEvent): Promise<void> {
@@ -212,17 +218,16 @@ export class DevCycleCloudClient {
             incomingUser,
             this.platformDetails,
         )
-        return postTrack(populatedUser, event, this.sdkKey, this.options)
-            .then(() => {
-                this.logger.debug('DVC Event Tracked')
-            })
-            .catch((err: unknown) => {
-                throwIfUserError(err)
-                this.logger.error(
-                    `DVC Error Tracking Event. Response message: ${
-                        (err as any).message
-                    }`,
-                )
-            })
+        try {
+            await postTrack(populatedUser, event, this.sdkKey, this.options)
+            this.logger.debug('DVC Event Tracked')
+        } catch (err) {
+            throwIfUserError(err)
+            this.logger.error(
+                `DVC Error Tracking Event. Response message: ${
+                    (err as any).message
+                }`,
+            )
+        }
     }
 }
