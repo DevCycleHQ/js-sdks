@@ -1,6 +1,6 @@
 # server-request
 
-This library was generated with [Nx](https://nx.dev).
+This library contains common code for making requests to the DevCycle server from server SDKs.
 
 ## Building
 
