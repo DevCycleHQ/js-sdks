@@ -1,11 +1,10 @@
-# DevCycle NodeJS Server SDK
+# DevCycle EdgeWorker Server SDK
 
-The NodeJS Server SDK for DevCycle.
-
-This SDK uses local bucketing to perform all user segmentation and bucketing locally in the SDK, 
-providing immediate responses to variable and feature requests for a user. 
-The SDK will download the latest version of your DevCycle environments configuration from a CDN on initialization,
-and will periodically poll the CDN for configuration changes.
+This SDK supports EdgeWorker environments like CloudFlare Worker WebWorker environments.
+It acts as a server-side SDK for EdgeWorker environments, either in local or cloud bucketing mode. 
+Local bucketing mode will make all variable evaluations locally in the SDK after fetching the latest 
+project configuration from our CDN. Whereas cloud bucketing mode will make a request to the DevCycle bucketing API, 
+hosted on a Cloudflare Worker, for all variable evaluations. See the docs for more information.
 
 ### Installation
 
