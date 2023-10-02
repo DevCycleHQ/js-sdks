@@ -12,7 +12,10 @@ export * from './request'
 export * from './utils/logger'
 export * from './utils/paramUtils'
 
-type DevCycleCloudOptions = DevCycleOptions & {
+type DevCycleCloudOptions = Pick<
+    DevCycleOptions,
+    'logger' | 'logLevel' | 'enableEdgeDB' | 'bucketingAPIURI'
+> & {
     platform?: 'NodeJS' | 'Electron' | 'EdgeWorker'
     platformVersion?: string
     hostname?: string
