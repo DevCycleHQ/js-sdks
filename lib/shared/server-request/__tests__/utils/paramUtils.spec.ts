@@ -1,8 +1,4 @@
-import {
-    checkParamDefined,
-    checkParamType,
-    typeEnum,
-} from '../../../../lib/shared/server-request/src/utils/paramUtils'
+import { checkParamDefined, checkParamType, typeEnum } from '../../src'
 
 describe('paramUtils Unit Tests', () => {
     describe('checkParamDefined', () => {

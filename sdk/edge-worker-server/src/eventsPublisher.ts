@@ -14,14 +14,16 @@ export function generateAggEvent(
     user_id: string,
     type: string,
     variableKey: string,
-    variableVariationMap: BucketedUserConfig['variableVariationMap'],
+    variableVariationMap?: BucketedUserConfig['variableVariationMap'],
 ): DVCRequestEvent {
     return new DVCRequestEvent(
         {
             type,
             target: variableKey,
             value: 1,
-            metaData: variableVariationMap[variableKey],
+            metaData: variableVariationMap
+                ? variableVariationMap[variableKey]
+                : undefined,
         },
         user_id,
     )

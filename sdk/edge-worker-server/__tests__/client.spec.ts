@@ -19,6 +19,12 @@ const mockGenerateBucketedConfig = jest.fn().mockReturnValue({
             type: 'release',
         },
     },
+    variableVariationMap: {
+        'test-key': {
+            _feature: 'test-id',
+            _variation: 'variation-id',
+        },
+    },
 })
 jest.mock('@devcycle/bucketing', () => {
     return {

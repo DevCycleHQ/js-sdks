@@ -1,4 +1,4 @@
-import { DVCRequestEvent, EventTypes } from '@devcycle/server-request'
+import { DVCRequestEvent, EventTypes } from '../../src'
 
 describe('DVCRequestEvent Unit Tests', () => {
     it('should construct custom DVCRequestEvent from DVCEvent', () => {
