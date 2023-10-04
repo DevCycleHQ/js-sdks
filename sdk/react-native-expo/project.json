@@ -1,0 +1,74 @@
+{
+    "name": "react-native-expo",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "sdk/react-native-expo/src",
+    "projectType": "library",
+    "tags": [],
+    "targets": {
+        "check-types": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "yarn run -T tsc -b --incremental",
+                "cwd": "sdk/react-native-expo"
+            }
+        },
+        "build:expo": {
+            "executor": "@altack/nx-bundlefy:run",
+            "configurations": {},
+            "dependsOn": ["build:es5"],
+            "outputs": ["{options.outputFile}"]
+        },
+        "build:es5": {
+            "dependsOn": [
+                "shared-types:build:es5",
+                "js:build:es5",
+                "react:build:es5"
+            ],
+            "executor": "@nrwl/rollup:rollup",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/sdk/react-native-expo",
+                "tsConfig": "sdk/react-native-expo/tsconfig.lib.json",
+                "project": "sdk/react-native-expo/package.json",
+                "entryFile": "sdk/react-native-expo/src/index.ts",
+                "format": ["esm", "cjs"],
+                "external": "all",
+                "rollupConfig": "@nx/react/plugins/bundle-rollup",
+                "compiler": "babel",
+                "assets": [
+                    {
+                        "glob": "sdk/react-native-expo/README.md",
+                        "input": ".",
+                        "output": "."
+                    }
+                ]
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": [
+                    "sdk/react-native-expo/**/*.{ts,tsx,js,jsx}"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/sdk/react-native"],
+            "options": {
+                "jestConfig": "sdk/react-native-expo/jest.config.ts",
+                "passWithNoTests": true,
+                "codeCoverage": true
+            }
+        },
+        "npm-publish": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/react-native-expo-client-sdk\"",
+                "cwd": "dist/sdk/react-native-expo",
+                "forwardAllArgs": true
+            }
+        }
+    }
+}

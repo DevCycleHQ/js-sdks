@@ -23,6 +23,7 @@
         "<rootDir>/build"
     ],
     "dependencies": {
+        "@altack/nx-bundlefy": "^0.16.0",
         "@devcycle/assemblyscript-json": "^2.0.0",
         "@nestjs/class-validator": "^0.13.4",
         "@openfeature/js-sdk": "^1.4.2",

@@ -39,6 +39,26 @@
                 ]
             }
         },
+        "build:es5": {
+            "executor": "@nrwl/rollup:rollup",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "format": ["cjs"],
+                "external": "all",
+                "project": "lib/shared/types/package.json",
+                "outputPath": "dist/lib/shared/types",
+                "entryFile": "lib/shared/types/src/index.ts",
+                "tsConfig": "lib/shared/types/tsconfig.lib.es5.json",
+                "buildableProjectDepsInPackageJsonType": "dependencies",
+                "assets": [
+                    {
+                        "glob": "*.md",
+                        "input": "lib/shared/types",
+                        "output": "."
+                    }
+                ]
+            }
+        },
         "build:emit-legacy-types": {
             "executor": "nx:run-commands",
             "options": {

@@ -34,6 +34,9 @@
             "@devcycle/react-native-client-sdk": [
                 "sdk/react-native/src/index.ts"
             ],
+            "@devcycle/react-native-expo-client-sdk": [
+                "sdk/react-native-expo/src/index.ts"
+            ],
             "@devcycle/types": ["lib/shared/types/src/index.ts"]
         }
     },
