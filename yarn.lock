@@ -14826,6 +14826,7 @@ __metadata:
     ua-parser-js: ^1.0.2
     url-loader: ^4.1.1
     uuid: ^8.3.2
+    validate-npm-package-name: ^5.0.0
     verdaccio: ^5.15.4
     webpack: ^5.75.0
     webpack-merge: ^5.8.0
@@ -31657,6 +31658,15 @@ __metadata:
   dependencies:
     builtins: ^5.0.0
   checksum: a32fd537bad17fcb59cfd58ae95a414d443866020d448ec3b22e8d40550cb585026582a57efbe1f132b882eea4da8ac38ee35f7be0dd72988a3cb55d305a20c1
+  languageName: node
+  linkType: hard
+
+"validate-npm-package-name@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "validate-npm-package-name@npm:5.0.0"
+  dependencies:
+    builtins: ^5.0.0
+  checksum: 5342a994986199b3c28e53a8452a14b2bb5085727691ea7aa0d284a6606b127c371e0925ae99b3f1ef7cc7d2c9de75f52eb61a3d1cc45e39bca1e3a9444cbb4e
   languageName: node
   linkType: hard
 

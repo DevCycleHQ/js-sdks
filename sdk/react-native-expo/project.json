@@ -12,6 +12,10 @@
                 "cwd": "sdk/react-native-expo"
             }
         },
+        "build": {
+            "command": "echo Building Expo Target",
+            "dependsOn": ["build:expo"]
+        },
         "build:expo": {
             "executor": "@altack/nx-bundlefy:run",
             "configurations": {},
