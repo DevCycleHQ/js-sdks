@@ -5,6 +5,8 @@ import {
     VariableValue,
     DVCJSON,
     DVCCustomDataJSON,
+    ConfigBody,
+    BucketedUserConfig,
 } from '@devcycle/types'
 
 export type DVCVariableValue = VariableValue
@@ -103,6 +105,14 @@ export interface DevCycleOptions {
      * Controls the maximum size the event queue can grow to until events are dropped. Defaults to `1000`.
      */
     maxEventQueueSize?: number
+
+    /**
+     * A full configuration payload to boostrap the SDK with. This will immediately initialize the SDK with
+     * the provided data and prevent a server roundtrip to fetch a new config. This option can be used for passing
+     * in a config that was prefetched in a server-side rendered environment, or to implement a custom caching
+     * system.
+     */
+    bootstrapConfig?: BucketedUserConfig
 }
 
 export interface DevCycleUser {
