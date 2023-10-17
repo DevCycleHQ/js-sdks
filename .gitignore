@@ -93,4 +93,5 @@ react-native-app-e2e/artifacts
 
 # Next.js
 .next
+**/.next
 verdaccio

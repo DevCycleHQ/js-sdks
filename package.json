@@ -45,7 +45,7 @@
         "md5": "^2.2.1",
         "moment": "^2.29.4",
         "murmurhash": "^2.0.0",
-        "next": "13.3.0",
+        "next": "13.5.5",
         "protobufjs": "^7.2.5",
         "react": "18.0.0",
         "react-bootstrap": "^2.2.1",
