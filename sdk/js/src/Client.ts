@@ -43,6 +43,7 @@ type variableEvaluatedHandler = (
 
 export type DevCycleOptionsWithDeferredInitialization = DevCycleOptions & {
     deferInitialization: true
+    bootstrapConfig?: never
 }
 
 export const isDeferredOptions = (
@@ -132,6 +133,10 @@ export class DevCycleClient<
                 throw new Error('User must be provided to initialize SDK')
             }
             this.clientInitialization(user)
+        } else if (this.options.bootstrapConfig) {
+            throw new Error(
+                'bootstrapConfig option can not be combined with deferred initialization!',
+            )
         }
 
         if (!options?.reactNative && typeof window !== 'undefined') {
@@ -171,7 +176,9 @@ export class DevCycleClient<
             storedAnonymousId,
         )
 
-        await this.getConfigCache(this.user)
+        if (!this.options.bootstrapConfig) {
+            await this.getConfigCache(this.user)
+        }
 
         // set up requestConsolidator and hook up callback methods
         this.requestConsolidator = new ConfigRequestConsolidator(
@@ -189,7 +196,15 @@ export class DevCycleClient<
         )
 
         try {
-            await this.requestConsolidator.queue(this.user)
+            if (!this.options.bootstrapConfig) {
+                await this.requestConsolidator.queue(this.user)
+            } else {
+                this.handleConfigReceived(
+                    this.options.bootstrapConfig,
+                    this.user,
+                    Date.now(),
+                )
+            }
         } catch (err) {
             this.eventEmitter.emitInitialized(false)
             this.eventEmitter.emitError(err)
@@ -727,6 +742,7 @@ export class DevCycleClient<
             user,
             this.options.configCacheTTL,
         )
+
         if (cachedConfig) {
             this.config = cachedConfig
             this.isConfigCached = true

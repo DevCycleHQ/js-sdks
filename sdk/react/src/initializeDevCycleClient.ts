@@ -10,6 +10,7 @@ const initializeDevCycleClient = (
         return initializeDevCycle(sdkKey, {
             ...options,
             deferInitialization: true, // make typescript happy
+            bootstrapConfig: undefined,
         })
     }
     return initializeDevCycle(sdkKey, user, options)

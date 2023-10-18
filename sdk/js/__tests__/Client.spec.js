@@ -56,6 +56,40 @@ describe('DevCycleClient tests', () => {
         expect(client.config).toStrictEqual(testConfig)
     })
 
+    it('should use bootstrapped config when set, not fetch a new one, initialize SDK', async () => {
+        const client = new DevCycleClient(
+            'test_sdk_key',
+            { user_id: 'user1' },
+            { bootstrapConfig: testConfig },
+        )
+        await client.onInitialized
+        expect(getConfigJson_mock).not.toBeCalled()
+        expect(client.config).toStrictEqual(testConfig)
+        expect(client.user.user_id).toEqual('user1')
+    })
+
+    it('should use bootstrapped config when set, ignore cached config', async () => {
+        getConfigJson_mock.mockImplementation(() => {
+            return Promise.resolve({ ...testConfig, cached: true })
+        })
+        const spy = jest.spyOn(window.localStorage.__proto__, 'getItem')
+        const client = new DevCycleClient('test_sdk_key', { user_id: 'user1' })
+        await client.onInitialized
+        // one call to get anon ID, one to get cached config
+        expect(spy).toHaveBeenCalledTimes(2)
+        // construct another client to test if it reads from the cache populated by the initialization of the first
+        // client
+        const client2 = new DevCycleClient(
+            'test_sdk_key',
+            { user_id: 'user1' },
+            { bootstrapConfig: testConfig },
+        )
+        await client2.onInitialized
+        // one more call to get anon ID
+        expect(spy).toHaveBeenCalledTimes(3)
+        expect(client2.config).toStrictEqual(testConfig)
+    })
+
     it('should establish a streaming connection if available', async () => {
         getConfigJson_mock.mockImplementation(() => {
             return Promise.resolve({
