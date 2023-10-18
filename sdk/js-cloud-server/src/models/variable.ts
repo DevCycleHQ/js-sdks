@@ -1,5 +1,5 @@
 import { VariableType, VariableTypeAlias } from '@devcycle/types'
-import { DVCVariable as DVCVariableInterface, DVCVariableValue } from '../types'
+import { DVCVariableInterface, DVCVariableValue } from '../types'
 import {
     checkParamDefined,
     checkParamType,

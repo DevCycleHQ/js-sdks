@@ -1,0 +1,67 @@
+{
+    "name": "js-cloud-server-sdk",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "sdk/js-cloud-server/src",
+    "implicitDependencies": [],
+    "targets": {
+        "check-types": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "yarn run -T tsc -b --incremental",
+                "cwd": "sdk/js-cloud-server"
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["sdk/js-cloud-server/**/*.ts"]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/sdk/js-cloud-server"],
+            "options": {
+                "jestConfig": "sdk/js-cloud-server/jest.config.ts",
+                "passWithNoTests": false,
+                "codeCoverage": true
+            },
+            "dependsOn": [
+                {
+                    "target": "build"
+                },
+                {
+                    "target": "build:json",
+                    "dependencies": true
+                }
+            ]
+        },
+        "build": {
+            "executor": "@nx/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/sdk/js-cloud-server",
+                "tsConfig": "sdk/js-cloud-server/tsconfig.lib.json",
+                "packageJson": "sdk/js-cloud-server/package.json",
+                "buildableProjectDepsInPackageJsonType": "dependencies",
+                "main": "sdk/js-cloud-server/src/index.ts",
+                "assets": ["sdk/js-cloud-server/*.md"]
+            },
+            "dependsOn": [
+                {
+                    "target": "build",
+                    "dependencies": true
+                }
+            ]
+        },
+        "npm-publish": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/nodejs-server-sdk\"",
+                "cwd": "dist/sdk/js-cloud-server",
+                "forwardAllArgs": true
+            }
+        }
+    },
+    "tags": []
+}

@@ -1,15 +1,13 @@
-import { DevCycleEvent } from './types'
 import { DVCRequestEvent } from './models/requestEvent'
-import { DVCPopulatedUser } from './models/populatedUser'
 import {
     BucketedUserConfig,
     DVCLogger,
     DVCReporter,
     FlushResults,
 } from '@devcycle/types'
-
 import { getBucketingLib } from './bucketing'
 import { publishEvents } from './request'
+import { DevCycleEvent, DVCPopulatedUser } from '@devcycle/js-cloud-server-sdk'
 
 export const AggregateEventTypes: Record<string, string> = {
     variableEvaluated: 'variableEvaluated',

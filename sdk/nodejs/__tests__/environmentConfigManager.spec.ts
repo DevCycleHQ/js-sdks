@@ -4,11 +4,11 @@ jest.spyOn(global, 'setInterval')
 jest.mock('../src/bucketing')
 
 import { EnvironmentConfigManager } from '../src/environmentConfigManager'
-import { getEnvironmentConfig, ResponseError } from '../src/request'
 import { importBucketingLib, getBucketingLib } from '../src/bucketing'
 import { mocked } from 'jest-mock'
-import { dvcDefaultLogger } from '../src/utils/logger'
 import { Response } from 'cross-fetch'
+import { dvcDefaultLogger, ResponseError } from '@devcycle/js-cloud-server-sdk'
+import { getEnvironmentConfig } from '../src/request'
 
 const setInterval_mock = mocked(setInterval)
 const getEnvironmentConfig_mock = mocked(getEnvironmentConfig)

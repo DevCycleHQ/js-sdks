@@ -21,7 +21,6 @@ describe('DevCycleCloudClient without EdgeDB', () => {
     beforeAll(async () => {
         client = DVC.initializeDevCycle('dvc_server_token', {
             logLevel: 'error',
-            enableCloudBucketing: true,
         })
         server.listen()
     })
@@ -246,7 +245,6 @@ describe('DevCycleCloudClient with EdgeDB Enabled', () => {
     beforeAll(async () => {
         client = DVC.initializeDevCycle('dvc_server_token', {
             logLevel: 'error',
-            enableCloudBucketing: true,
             enableEdgeDB: true,
         })
         server.listen()

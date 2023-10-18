@@ -97,10 +97,10 @@ export type { DVCJSON, DVCCustomDataJSON }
 
 export type DVCVariableSet = Record<
     string,
-    Omit<DVCVariable, 'defaultValue' | 'isDefaulted'> & { _id: string }
+    Omit<DVCVariableInterface, 'defaultValue' | 'isDefaulted'> & { _id: string }
 >
 
-export interface DVCVariable {
+export interface DVCVariableInterface {
     /**
      * Unique "key" by Project to use for this Dynamic Variable.
      */
