@@ -1,5 +1,5 @@
 {
-  "name": "@devcycle/server-request",
-  "version": "1.0.0",
-  "type": "commonjs"
+    "name": "@devcycle/server-request",
+    "version": "1.0.0",
+    "type": "commonjs"
 }
