@@ -1,18 +1,18 @@
 {
-  "name": "@devcycle/edge-worker-server-sdk",
-  "version": "1.15.4",
-  "description": "The DevCycle Edge Worker Server SDK used for feature management.",
-  "license": "MIT",
-  "devDependencies": {
-    "@devcycle/bucketing-test-data": "^1.2.21"
-  },
-  "dependencies": {
-    "@devcycle/bucketing": "^1.4.2",
-    "@devcycle/js-cloud-server-sdk": "^1.0.0",
-    "@devcycle/types": "^1.1.15",
-    "fetch-retry": "^5.0.3"
-  },
-  "engines": {
-    "node": ">=14.0.0"
-  }
+    "name": "@devcycle/edge-worker-server-sdk",
+    "version": "1.15.4",
+    "description": "The DevCycle Edge Worker Server SDK used for feature management.",
+    "license": "MIT",
+    "devDependencies": {
+        "@devcycle/bucketing-test-data": "^1.2.21"
+    },
+    "dependencies": {
+        "@devcycle/bucketing": "^1.4.2",
+        "@devcycle/js-cloud-server-sdk": "^1.0.0",
+        "@devcycle/types": "^1.1.15",
+        "fetch-retry": "^5.0.3"
+    },
+    "engines": {
+        "node": ">=14.0.0"
+    }
 }
