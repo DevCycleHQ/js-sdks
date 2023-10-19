@@ -1,10 +1,10 @@
 {
-  "name": "@devcycle/config-manager",
-  "private": true,
-  "version": "1.0.0",
-  "type": "commonjs",
-  "dependencies": {
-    "@devcycle/js-cloud-server-sdk": "^1.0.0",
-    "@devcycle/types": "^1.1.15"
-  }
+    "name": "@devcycle/config-manager",
+    "private": true,
+    "version": "1.0.0",
+    "type": "commonjs",
+    "dependencies": {
+        "@devcycle/js-cloud-server-sdk": "^1.0.0",
+        "@devcycle/types": "^1.1.15"
+    }
 }
