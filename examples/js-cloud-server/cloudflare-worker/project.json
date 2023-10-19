@@ -34,7 +34,9 @@
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["examples/js-cloud-server/cloudflare-worker/**/*.ts"]
+                "lintFilePatterns": [
+                    "examples/js-cloud-server/cloudflare-worker/**/*.ts"
+                ]
             }
         }
     },
