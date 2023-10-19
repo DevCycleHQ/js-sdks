@@ -178,7 +178,8 @@
         "validate-npm-package-name": "^5.0.0",
         "verdaccio": "^5.15.4",
         "webpack": "^5.75.0",
-        "webpack-merge": "^5.8.0"
+        "webpack-merge": "^5.8.0",
+        "wrangler": "^3.0.0"
     },
     "lint-staged": {
         "**/*.{ts,js}": [
