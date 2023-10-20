@@ -167,6 +167,7 @@ export class DevCycleClient<
         }
         this.initializeTriggered = true
 
+        // don't wait to load anon id if we're being provided with a real one
         const storedAnonymousId = initialUser.user_id
             ? undefined
             : await this.store.loadAnonUserId()

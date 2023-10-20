@@ -2,9 +2,6 @@ import '../styles/globals.css'
 import * as React from 'react'
 import {
     DevCycleClientProvider,
-    DevCycleContext,
-    getDevCycleContext,
-    getSDKKey,
     getVariableValue,
     identifyUser,
     setSDKKey,
@@ -17,14 +14,21 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode
 }) {
+    // TODO these two calls could be one call
+    // they could also be props to the provider component, but this allows variable usage before the provider
+    // is rendered. Important?
     setSDKKey('client-c3b75096-70bb-47b8-9898-4f145f2caa26')
     await identifyUser({ user_id: 'test' })
-    const variable = await getVariableValue('my-variable', false)
-    console.log('VARIABLE', variable)
+
+    const variable = await getVariableValue('test-featre', false)
+    console.log('SERVER VARIABLE', variable)
     return (
         <html lang="en">
             <body>
-                <DevCycleClientProvider context={await getDevCycleContext()}>
+                {/* the provider doesnt actually "provide" anything, it just creates a client on global*/}
+                {/* maybe a better name? It also doesnt need to wrap children*/}
+                <DevCycleClientProvider>
+                    <div>Server Variable! {JSON.stringify(variable)}</div>
                     {children}
                 </DevCycleClientProvider>
             </body>

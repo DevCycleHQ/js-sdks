@@ -1,38 +1,31 @@
-import { getDevCycleContext, setClient } from '@devcycle/next-sdk/server'
+import { getDevCycleContext } from '@devcycle/next-sdk/server'
 import React from 'react'
-import { DevCycleClient, DevCycleProvider } from '@devcycle/react-client-sdk'
 import { initializeDevCycle } from '@devcycle/js-client-sdk'
+import { DevCycleClientProviderClientSide } from './DevCycleClientProviderClientside'
 
 type DevCycleClientProviderProps = {
-    context: Awaited<ReturnType<typeof getDevCycleContext>>
     children: React.ReactNode
 }
 
-let devcycleClient: DevCycleClient
+export const serverGlobal = globalThis as any
 
-export const getDevCycleClient = () => devcycleClient
-
-export const DevCycleClientProvider = ({
+export const DevCycleClientProvider = async ({
     children,
-    context,
 }: DevCycleClientProviderProps) => {
-    if (!devcycleClient) {
-        devcycleClient = initializeDevCycle(context.sdkKey, context.user!, {
-            bootstrapConfig: context.config,
-        })
-        setClient(devcycleClient)
+    const context = await getDevCycleContext()
+    if (!serverGlobal.devcycleClient) {
+        serverGlobal.devcycleClient = initializeDevCycle(
+            context.sdkKey,
+            context.user!,
+            {
+                bootstrapConfig: context.config,
+            },
+        )
     }
     return (
-        <DevCycleProvider
-            config={{
-                sdkKey: context.sdkKey,
-                user: context.user,
-                options: {
-                    bootstrapConfig: context.config,
-                },
-            }}
-        >
+        <>
+            <DevCycleClientProviderClientSide context={context} />
             {children}
-        </DevCycleProvider>
+        </>
     )
 }
