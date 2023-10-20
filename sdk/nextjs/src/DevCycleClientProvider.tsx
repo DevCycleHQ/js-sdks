@@ -24,6 +24,7 @@ export const DevCycleClientProvider = async ({
     }
     return (
         <>
+            {/* this renders a client component that also sets the client on global*/}
             <DevCycleClientProviderClientSide context={context} />
             {children}
         </>
