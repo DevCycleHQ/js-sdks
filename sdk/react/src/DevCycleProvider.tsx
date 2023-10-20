@@ -1,3 +1,4 @@
+'use client'
 import { ProviderConfig } from './types'
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import initializeDevCycleClient from './initializeDevCycleClient'

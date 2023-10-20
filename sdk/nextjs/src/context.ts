@@ -1,5 +1,5 @@
 import { cache } from 'react'
-import { DevCycleUser } from '@devcycle/js-client-sdk'
+import { DevCycleClient, DevCycleUser } from '@devcycle/js-client-sdk'
 
 export const context = <T>(
     defaultValue: T,
@@ -24,6 +24,11 @@ export const [getIdentity, setIdentity] = context<DevCycleUser | undefined>(
 const [_getSDKKey, _setSDKKey] = context<string | undefined>(
     undefined,
     'sdkKey',
+)
+
+export const [getClient, setClient] = context<DevCycleClient | undefined>(
+    undefined,
+    'client',
 )
 
 export const getSDKKey = () => {

@@ -1,8 +1,9 @@
 import '../styles/globals.css'
 import * as React from 'react'
-import { WithProviders } from './providers'
 import {
+    DevCycleClientProvider,
     DevCycleContext,
+    getDevCycleContext,
     getSDKKey,
     getVariableValue,
     identifyUser,
@@ -23,7 +24,9 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <body>
-                <WithProviders>{children}</WithProviders>
+                <DevCycleClientProvider context={await getDevCycleContext()}>
+                    {children}
+                </DevCycleClientProvider>
             </body>
         </html>
     )
