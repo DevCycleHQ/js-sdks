@@ -2,8 +2,6 @@
 import React from 'react'
 import { withDevCycleProvider } from '@devcycle/react-client-sdk'
 
-const SDK_KEY =
-    process.env.DEVCYCLE_CLIENT_SDK_KEY || '<DEVCYCLE_CLIENT_SDK_KEY>'
 const user = {
     user_id: 'userId1',
     email: 'auto@taplytics.com',
@@ -20,6 +18,6 @@ function _WithProviders({ children }: { children: React.ReactNode }) {
 }
 
 export const WithProviders = withDevCycleProvider({
-    sdkKey: SDK_KEY,
+    sdkKey: 'asdas',
     user: user,
 })(_WithProviders)

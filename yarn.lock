@@ -5157,6 +5157,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@devcycle/next-sdk@workspace:sdk/nextjs":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/next-sdk@workspace:sdk/nextjs"
+  languageName: unknown
+  linkType: soft
+
 "@devcycle/nodejs-server-sdk-cloud-js-example@workspace:examples/nodejs-cloud/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk-cloud-js-example@workspace:examples/nodejs-cloud/js"
@@ -7451,12 +7457,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/eslint-plugin-next@npm:13.1.1":
-  version: 13.1.1
-  resolution: "@next/eslint-plugin-next@npm:13.1.1"
+"@next/eslint-plugin-next@npm:13.4.1":
+  version: 13.4.1
+  resolution: "@next/eslint-plugin-next@npm:13.4.1"
   dependencies:
     glob: 7.1.7
-  checksum: 27e49ef988db3203d494930ad1fcdc270761a61a41e6925c0eadf1e2b1ebd6648722a3aaec7f0c0266eea8771797e06d52f041d33c93d21ba3b361ffe696c36c
+  checksum: fff59da7aa7838e6cb1f19f33b1c5265f0e4ea5a910a7702f2fadbf76c3387dceb388230cd7f9ce810db73c3b78b2342e77a0dbf77f4560eecf85905adb5f671
   languageName: node
   linkType: hard
 
@@ -15473,7 +15479,7 @@ __metadata:
     dotenv-webpack: ^7.0.3
     esbuild: 0.19.5
     eslint: 8.46.0
-    eslint-config-next: 13.1.1
+    eslint-config-next: 13.4.1
     eslint-config-prettier: ^8.8.0
     eslint-config-standard: ^12.0.0
     eslint-plugin-babel: ^5.3.0
@@ -15525,7 +15531,7 @@ __metadata:
     prettier-eslint-cli: ~5.0.1
     protobufjs: ^7.2.5
     protobufjs-cli: ^1.1.2
-    react: 18.2.0
+    react: 18.3.0-canary-0210f0b08-20230525
     react-bootstrap: ^2.2.1
     react-dom: 18.2.0
     react-is: 18.2.0
@@ -15544,6 +15550,7 @@ __metadata:
     style-loader: ^3.3.0
     stylus: 0.59.0
     stylus-loader: ^7.1.0
+    swc-loader: 0.1.15
     terser-webpack-plugin: ^5.3.6
     ts-jest: 29.1.0
     ts-node: ~10.9.1
@@ -16624,11 +16631,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-next@npm:13.1.1":
-  version: 13.1.1
-  resolution: "eslint-config-next@npm:13.1.1"
+"eslint-config-next@npm:13.4.1":
+  version: 13.4.1
+  resolution: "eslint-config-next@npm:13.4.1"
   dependencies:
-    "@next/eslint-plugin-next": 13.1.1
+    "@next/eslint-plugin-next": 13.4.1
     "@rushstack/eslint-patch": ^1.1.3
     "@typescript-eslint/parser": ^5.42.0
     eslint-import-resolver-node: ^0.3.6
@@ -16643,7 +16650,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 098465b42e277433e4f815465b49ab655fc35a62ac016a47f60d7e44248f1b87a70b2dfd2ef090ffbb4cb1a694d409ff0811d2eb64028ce61f535403c7a0f27a
+  checksum: 232fb7a3dcc2b4674d9b0e3b03e76121d0dd7bea921bfd3320f3ac0a21ca7080f67a6cee0ceeb06c3a7386b854e9449da6a9fdd81f5d441a2e8d4a7237e94f59
   languageName: node
   linkType: hard
 
@@ -28051,12 +28058,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:*, react@npm:18.2.0":
+"react@npm:*":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
   dependencies:
     loose-envify: ^1.1.0
   checksum: 88e38092da8839b830cda6feef2e8505dec8ace60579e46aa5490fc3dc9bba0bd50336507dc166f43e3afc1c42939c09fe33b25fae889d6f402721dcd78fca1b
+  languageName: node
+  linkType: hard
+
+"react@npm:18.3.0-canary-0210f0b08-20230525":
+  version: 18.3.0-canary-0210f0b08-20230525
+  resolution: "react@npm:18.3.0-canary-0210f0b08-20230525"
+  dependencies:
+    loose-envify: ^1.1.0
+  checksum: 798d129dd4852207bc60434171ee4ca0139cd49a772dd5f0e230defbb00d7ea312bfda546c9cc42fbbfbc35e4a2425738f8c1935a882d67fa91792d6b9956aad
   languageName: node
   linkType: hard
 
@@ -30409,6 +30425,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"swc-loader@npm:0.1.15":
+  version: 0.1.15
+  resolution: "swc-loader@npm:0.1.15"
+  dependencies:
+    loader-utils: ^2.0.0
+  peerDependencies:
+    "@swc/core": ^1.2.52
+    webpack: ">=2"
+  checksum: dd3b5893cc04abba85f7f3abbd97f4e810da5df24fe87123d4c0b4ac8559df37b59b3b044e88661e9ae52cbb111e0eb6eff02c96e243f984f26cba651eb90f15
+  languageName: node
+  linkType: hard
+
 "symbol-tree@npm:^3.2.4":
   version: 3.2.4
   resolution: "symbol-tree@npm:3.2.4"
@@ -30640,6 +30668,12 @@ __metadata:
   checksum: 3b34a3d77165a2cb82b34014b3aba93b1c4637a5011807557dc2f3da826c59975a5ccad765721c4648b39817e3472789f9b0fa98fc854c5c1c7a1e632aacdc28
   languageName: node
   linkType: hard
+
+"test-react-ba89f2@workspace:lib/test-react":
+  version: 0.0.0-use.local
+  resolution: "test-react-ba89f2@workspace:lib/test-react"
+  languageName: unknown
+  linkType: soft
 
 "text-extensions@npm:^1.0.0":
   version: 1.9.0
