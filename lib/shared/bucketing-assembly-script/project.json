@@ -105,7 +105,7 @@
                         "command": "mkdir ./assembly/types/protobuf-generated"
                     },
                     {
-                        "command": "protoc --plugin=protoc-gen-as=../../../node_modules/.bin/as-proto-gen --as_opt=gen-helper-methods --as_out=./assembly/types/protobuf-generated ./protobuf/*.proto"
+                        "command": "protoc --plugin=protoc-gen-as=../../../node_modules/as-proto-gen/bin/as-proto-gen --as_opt=gen-helper-methods --as_out=./assembly/types/protobuf-generated ./protobuf/*.proto"
                     }
                 ],
                 "cwd": "lib/shared/bucketing-assembly-script",
