@@ -21,15 +21,18 @@ const generateBucketedConfigCached = cache(
         )
         console.log('BUCKETING USER', populatedUser.user_id)
         return {
-            config: generateBucketedConfig({ user: populatedUser, config }),
+            config: {
+                ...generateBucketedConfig({ user: populatedUser, config }),
+                sse: config.sse,
+            },
             populatedUser,
         }
     },
 )
 
-export const getBucketedConfig = async () => {
+export const getBucketedConfig = async (lastModified?: string) => {
     // this request will be cached by Next
-    const cdnConfig = await fetchCDNConfig()
+    const cdnConfig = await fetchCDNConfig(lastModified)
     const user = getIdentity()
     if (!user) {
         throw Error('User must be set in cookie')
@@ -41,9 +44,11 @@ export const getBucketedConfig = async () => {
     )
 
     return {
-        config,
+        config: {
+            ...config,
+            lastModified: cdnConfig.headers.get('last-modified') ?? undefined,
+        },
         user,
         populatedUser,
-        timestamp: cdnConfig.headers.get('last-modified'),
     }
 }

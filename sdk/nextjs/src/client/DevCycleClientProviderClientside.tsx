@@ -1,12 +1,9 @@
 'use client'
 import type { getDevCycleContext } from '@devcycle/next-sdk/server'
-import React, { useEffect, useRef } from 'react'
-import {
-    DevCycleClient,
-    DVCPopulatedUser,
-    initializeDevCycle,
-} from '@devcycle/js-client-sdk'
+import React, { useEffect, useRef, useState } from 'react'
+import { DevCycleClient, initializeDevCycle } from '@devcycle/js-client-sdk'
 import { useRouter } from 'next/navigation'
+import { updateDVCCookie } from './updateDVCCookie'
 
 type ClientDevCycleContext = Omit<
     Awaited<ReturnType<typeof getDevCycleContext>>,
@@ -27,30 +24,39 @@ export const DevCycleClientProviderClientSide = ({
     children,
 }: DevCycleClientProviderProps) => {
     const router = useRouter()
+    console.log('RECEIVED', context.user.user_id)
     const clientRef = useRef<DevCycleClient>()
+    const [previousContext, setPreviousContext] = useState<
+        ClientDevCycleContext | undefined
+    >()
 
     if (!clientRef.current) {
+        console.log('SETTING UP CLIENT')
         clientRef.current = initializeDevCycle(context.sdkKey, context.user!, {
             bootstrapConfig: context.config,
         })
-    } else {
+    } else if (previousContext != context) {
         // change user and config data to match latest server data
-        // TODO make this a method on the client or find a more elegant way to do this
-        clientRef.current.config = context.config
-        clientRef.current.user = new DVCPopulatedUser(context.user!, {})
+        // if the data has changed since the last invocation
+        console.log('SYNCHRONIZING BOOTSTRAP DATA')
+        clientRef.current.synchronizeBootstrapData(context.config, context.user)
+        setPreviousContext(context)
     }
 
+    updateDVCCookie(clientRef.current!)
+
     useEffect(() => {
-        clientRef.current?.subscribe('configUpdated', () => {
+        const handler = () => {
             // trigger an in-place refetch of server components
             console.log('REFRESHING FROM CONFIG CHANGE!')
             router.refresh()
-        })
+        }
+        clientRef.current?.subscribe('configUpdated', handler)
         return () => {
-            clientRef.current?.unsubscribe('configUpdated')
-            clientRef.current = undefined
+            clientRef.current?.unsubscribe('configUpdated', handler)
         }
     }, [])
+
     return (
         <ClientContext.Provider value={clientRef.current}>
             {children}

@@ -4,6 +4,7 @@ import { serializeUserSearchParams, generateEventPayload } from './utils'
 import axios, { AxiosResponse } from 'axios'
 import axiosRetry from 'axios-retry'
 import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
+import { ConfigWithLastModified } from './ConfigRequestConsolidator'
 
 const axiosClient = axios.create({
     timeout: 5 * 1000,
@@ -80,7 +81,7 @@ export const getConfigJson = async (
     logger: DVCLogger,
     options?: DevCycleOptions,
     extraParams?: { sse: boolean; lastModified?: number; etag?: string },
-): Promise<BucketedUserConfig> => {
+): Promise<ConfigWithLastModified> => {
     const queryParams = new URLSearchParams({ sdkKey })
     serializeUserSearchParams(user, queryParams)
     if (options?.enableEdgeDB) {
@@ -104,7 +105,7 @@ export const getConfigJson = async (
 
     try {
         const res = await get(url)
-        return res.data
+        return { ...res.data, lastModified: res.headers['last-modified'] }
     } catch (ex: any) {
         const errorString = JSON.stringify(ex?.response?.data?.data?.errors)
         logger.error(

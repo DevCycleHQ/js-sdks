@@ -2,18 +2,15 @@
 import { DevCycleUser } from '@devcycle/js-client-sdk'
 import { createCookieContents } from '../common/cookie'
 import { useDevCycleClient } from './useDevCycleClient'
+import { updateDVCCookie } from './updateDVCCookie'
 
 export const useIdentifyUser = () => {
     const client = useDevCycleClient()
     return (user: DevCycleUser) => {
         client.identifyUser(user).then(() => {
-            console.log('REFRESHING FROM USEIDENTIFYUSER')
+            console.log('DONE IDENTIFY USER')
             // set coookie
-            document.cookie =
-                'devcycle-next=' +
-                createCookieContents({
-                    user_id: client.user!.user_id,
-                })
+            updateDVCCookie(client)
         })
     }
 }

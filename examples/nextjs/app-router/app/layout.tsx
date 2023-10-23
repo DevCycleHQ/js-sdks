@@ -4,9 +4,21 @@ import {
     DevCycleClientProvider,
     getVariableValue,
     identifyUser,
-    initialize,
     setSDKKey,
 } from '@devcycle/next-sdk/server'
+
+const serverIds = [
+    'server-1',
+    'server-2',
+    'server-3',
+    'server-4',
+    'server-5',
+    'server-6',
+    'server-7',
+    'server-8',
+    'server-9',
+    'server-10',
+]
 
 export default async function RootLayout({
     // Layouts must accept a children prop.
@@ -15,25 +27,15 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode
 }) {
-    await initialize('client-c3b75096-70bb-47b8-9898-4f145f2caa26', {
-        user_id: 'test',
-    })
-
+    const randomId = serverIds[Math.floor(Math.random() * serverIds.length)]
     return (
         <html lang="en">
             <body>
-                {/* the provider doesnt actually "provide" anything, it just creates a client on global*/}
-                {/* maybe a better name? It also doesnt need to wrap children*/}
                 <DevCycleClientProvider
                     sdkKey={'client-c3b75096-70bb-47b8-9898-4f145f2caa26'}
-                    user={{ user_id: 'test' }}
+                    user={{ user_id: randomId }}
+                    options={{ initialUserOnly: true }}
                 >
-                    <div>
-                        Server Variable!{' '}
-                        {JSON.stringify(
-                            await getVariableValue('test-featre', false),
-                        )}
-                    </div>
                     {children}
                 </DevCycleClientProvider>
             </body>

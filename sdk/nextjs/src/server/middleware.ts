@@ -12,7 +12,6 @@ export const DevCycleMiddleware = (token: string) => {
     return async function (request: NextRequest) {
         const dvcCookie = request.cookies.get(cookieName)
         if (dvcCookie?.value) {
-            console.log('VALUE', dvcCookie)
             // const data = JSON.parse(dvcCookie.value)
         }
         // const response = NextResponse.next()

@@ -10,6 +10,7 @@ import {
 import React from 'react'
 import { DevCycleUser, initializeDevCycle } from '@devcycle/js-client-sdk'
 import { DevCycleClientProviderClientSide } from '../client/DevCycleClientProviderClientside'
+import { getDVCCookie } from './cookie'
 
 type DevCycleServerOptions = {
     initialUserOnly?: boolean
@@ -44,7 +45,6 @@ export const initialize = async (
             }),
         )
     } else {
-        console.log('SAME CLIENT!')
         client.user = context.populatedUser
     }
 
@@ -57,6 +57,7 @@ export const DevCycleClientProvider = async ({
     user,
     options,
 }: DevCycleClientProviderProps) => {
+    setSDKKey(sdkKey)
     const context = await initialize(sdkKey, user, options)
     const { populatedUser, ...clientContext } = context
 

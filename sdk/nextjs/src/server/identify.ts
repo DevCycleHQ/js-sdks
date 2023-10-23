@@ -1,7 +1,7 @@
 import 'server-only'
 import { DevCycleUser } from '@devcycle/js-client-sdk'
 import { getBucketedConfig } from './bucketing'
-import { getClient, setIdentity } from './context'
+import { getClient, getIdentity, setIdentity } from './context'
 import { getDVCCookie } from './cookie'
 
 /**
@@ -10,11 +10,7 @@ import { getDVCCookie } from './cookie'
  */
 export const identifyUser = async (user: DevCycleUser) => {
     setIdentity(user)
-    const { populatedUser } = await getBucketedConfig()
-    let client = getClient()
-    if (client) {
-        client.user = populatedUser
-    }
+    await _fetchConfigForUser()
 }
 
 /**
@@ -29,9 +25,16 @@ export const identifyInitialUser = async (user: DevCycleUser) => {
         console.log('SETTING IDENTITY')
         setIdentity(dvcCookie.user)
     }
-    const { populatedUser } = await getBucketedConfig()
+    await _fetchConfigForUser()
+}
+
+const _fetchConfigForUser = async () => {
+    const dvcCookie = getDVCCookie()
+    const { populatedUser } = await getBucketedConfig(dvcCookie?.timestamp)
     let client = getClient()
     if (client) {
         client.user = populatedUser
     }
 }
+
+export const getUserIdentity = () => getIdentity()

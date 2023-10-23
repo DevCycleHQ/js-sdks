@@ -22,7 +22,10 @@ import {
     getVariableTypeFromValue,
     VariableTypeAlias,
 } from '@devcycle/types'
-import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
+import {
+    ConfigRequestConsolidator,
+    ConfigWithLastModified,
+} from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
@@ -56,7 +59,7 @@ export class DevCycleClient<
     Variables extends VariableDefinitions = VariableDefinitions,
 > {
     logger: DVCLogger
-    config?: BucketedUserConfig
+    config?: ConfigWithLastModified
     user?: DVCPopulatedUser
     _isInitialized = false
     public get isInitialized(): boolean {
@@ -224,6 +227,8 @@ export class DevCycleClient<
         } else {
             this.store.removeAnonUserId()
         }
+
+        console.log('SSE', this.config?.sse)
 
         if (this.config?.sse?.url) {
             if (!this.options.disableRealtimeUpdates) {
@@ -613,6 +618,18 @@ export class DevCycleClient<
         return this._closing
     }
 
+    /**
+     * Method to be called by the Isomorphic SDKs to update the bootstrapped config and user data when the server's
+     * representation has changed.
+     * NOTE: It is not recommended to call this yourself.
+     * @param config
+     * @param user
+     */
+    synchronizeBootstrapData(config: BucketedUserConfig, user: DevCycleUser) {
+        const populatedUser = new DVCPopulatedUser(user, this.options)
+        this.handleConfigReceived(config, populatedUser, Date.now(), true)
+    }
+
     private async refetchConfig(
         sse: boolean,
         lastModified?: number,
@@ -623,10 +640,10 @@ export class DevCycleClient<
     }
 
     private handleConfigReceived(
-        config: BucketedUserConfig,
+        config: ConfigWithLastModified,
         user: DVCPopulatedUser,
         dateFetched: number,
-        lastModifiedDate?: number,
+        skipConfigEvent: boolean = false,
     ) {
         const oldConfig = this.config
         this.config = config
@@ -669,7 +686,10 @@ export class DevCycleClient<
             this.variableDefaultMap,
         )
 
-        if (!oldConfig || oldConfig.etag !== this.config.etag) {
+        if (
+            (!oldConfig || oldConfig.etag !== this.config.etag) &&
+            !skipConfigEvent
+        ) {
             this.eventEmitter.emitConfigUpdate(config.variables)
         }
     }
