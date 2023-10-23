@@ -17,6 +17,10 @@ export const [getIdentity, setIdentity] = context<DevCycleUser | undefined>(
     undefined,
 )
 
+export const [getClient, setClient] = context<DevCycleClient | undefined>(
+    undefined,
+)
+
 const [_getSDKKey, _setSDKKey] = context<string | undefined>(undefined)
 
 export const getSDKKey = () => {

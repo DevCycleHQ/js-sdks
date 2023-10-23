@@ -13,13 +13,12 @@ export const DevCycleMiddleware = (token: string) => {
         const dvcCookie = request.cookies.get(cookieName)
         if (dvcCookie?.value) {
             console.log('VALUE', dvcCookie)
-            const data = JSON.parse(dvcCookie.value)
-            await identifyUser(data.user)
+            // const data = JSON.parse(dvcCookie.value)
         }
-        const response = NextResponse.next()
-        const identified = getIdentity()
-        if (identified) {
-            response.cookies.set(cookieName, createCookieContents(identified))
-        }
+        // const response = NextResponse.next()
+        // const identified = getIdentity()
+        // if (identified) {
+        //     response.cookies.set(cookieName, createCookieContents(identified))
+        // }
     }
 }

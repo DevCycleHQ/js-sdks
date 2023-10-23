@@ -1,20 +1,36 @@
 'use client'
 import type { DVCVariableValue } from '@devcycle/js-client-sdk'
-import { useCallback, useState } from 'react'
-import { dvcGlobal } from '../common/global'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { VariableTypeAlias } from '@devcycle/types'
+import { DVCVariable } from '@devcycle/js-client-sdk'
+import { ClientContext } from './DevCycleClientProviderClientside'
+
+export const useVariable = <T extends DVCVariableValue>(
+    key: string,
+    defaultValue: T,
+): DVCVariable<T> => {
+    const [_, forceRerender] = useState({})
+    const forceRerenderCallback = useCallback(() => forceRerender({}), [])
+    const context = useContext(ClientContext)
+
+    useEffect(() => {
+        context?.subscribe(`variableUpdated:${key}`, forceRerenderCallback)
+        return () => {
+            context?.unsubscribe(
+                `variableUpdated:${key}`,
+                forceRerenderCallback,
+            )
+        }
+    }, [key, forceRerenderCallback])
+
+    return context!.variable(key, defaultValue)
+}
 
 export const useVariableValue = <T extends DVCVariableValue>(
     key: string,
     defaultValue: T,
 ): VariableTypeAlias<T> => {
-    const [_, forceRerender] = useState({})
-    const forceRerenderCallback = useCallback(() => forceRerender({}), [])
-    const client = dvcGlobal.devcycleClient
-
-    return client
-        ? client.variable(key, defaultValue).value
-        : (defaultValue as VariableTypeAlias<T>)
+    return useVariable(key, defaultValue).value
 }
 
 export default useVariableValue

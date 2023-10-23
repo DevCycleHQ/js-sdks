@@ -25,6 +25,7 @@ export class ConfigRequestConsolidator {
         private handleConfigReceivedFunction: (
             config: BucketedUserConfig,
             user: DVCPopulatedUser,
+            lastModified: string,
         ) => void,
         private nextUser: DVCPopulatedUser,
     ) {}

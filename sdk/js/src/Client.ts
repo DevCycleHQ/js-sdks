@@ -626,6 +626,7 @@ export class DevCycleClient<
         config: BucketedUserConfig,
         user: DVCPopulatedUser,
         dateFetched: number,
+        lastModifiedDate?: number,
     ) {
         const oldConfig = this.config
         this.config = config

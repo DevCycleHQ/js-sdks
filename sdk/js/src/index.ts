@@ -120,6 +120,8 @@ export function initializeDevCycle<
     return client
 }
 
+export { DVCPopulatedUser } from './User'
+
 /**
  * @deprecated Use initializeDevCycle instead
  */

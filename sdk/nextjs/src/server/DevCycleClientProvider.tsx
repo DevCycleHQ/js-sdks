@@ -1,33 +1,70 @@
 import 'server-only'
-import { getDevCycleContext } from '@devcycle/next-sdk/server'
+import {
+    getClient,
+    getDevCycleContext,
+    identifyInitialUser,
+    identifyUser,
+    setClient,
+    setSDKKey,
+} from '@devcycle/next-sdk/server'
 import React from 'react'
-import { initializeDevCycle } from '@devcycle/js-client-sdk'
+import { DevCycleUser, initializeDevCycle } from '@devcycle/js-client-sdk'
 import { DevCycleClientProviderClientSide } from '../client/DevCycleClientProviderClientside'
-import { dvcGlobal } from '../common/global'
+
+type DevCycleServerOptions = {
+    initialUserOnly?: boolean
+}
 
 type DevCycleClientProviderProps = {
+    sdkKey: string
+    user: DevCycleUser
+    options?: DevCycleServerOptions
     children: React.ReactNode
+}
+
+export const initialize = async (
+    sdkKey: string,
+    user: DevCycleUser,
+    { initialUserOnly = true }: DevCycleServerOptions = {},
+) => {
+    setSDKKey(sdkKey)
+    if (initialUserOnly) {
+        await identifyInitialUser(user)
+    } else {
+        await identifyUser(user)
+    }
+
+    const context = await getDevCycleContext()
+
+    let client = getClient()
+    if (!client) {
+        setClient(
+            initializeDevCycle(sdkKey, user, {
+                bootstrapConfig: context.config,
+            }),
+        )
+    } else {
+        console.log('SAME CLIENT!')
+        client.user = context.populatedUser
+    }
+
+    return context
 }
 
 export const DevCycleClientProvider = async ({
     children,
+    sdkKey,
+    user,
+    options,
 }: DevCycleClientProviderProps) => {
-    const context = await getDevCycleContext()
-    if (!dvcGlobal.devcycleClient) {
-        dvcGlobal.devcycleClient = initializeDevCycle(
-            context.sdkKey,
-            context.user!,
-            {
-                bootstrapConfig: context.config,
-            },
-        )
-    }
+    const context = await initialize(sdkKey, user, options)
+    const { populatedUser, ...clientContext } = context
+
+    // this renders a client component that also sets the client on global
+    // context is passed to perform bootstrapping of the server's config on clientside
     return (
-        <>
-            {/* this renders a client component that also sets the client on global*/}
-            {/* context is passed to perform bootstrapping of the server's config on clientside */}
-            <DevCycleClientProviderClientSide context={context} />
+        <DevCycleClientProviderClientSide context={clientContext}>
             {children}
-        </>
+        </DevCycleClientProviderClientSide>
     )
 }
