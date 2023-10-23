@@ -12,6 +12,14 @@ type ClearIntervalInterface = (intervalTimeout: any) => void
 
 type SetConfigBuffer = (sdkKey: string, projectConfig: string) => void
 
+export class UserError extends Error {
+    constructor(error: Error | string) {
+        super(error instanceof Error ? error.message : error)
+        this.name = 'UserError'
+        this.stack = error instanceof Error ? error.stack : undefined
+    }
+}
+
 export class EnvironmentConfigManager {
     private readonly logger: DVCLogger
     private readonly sdkKey: string
@@ -150,8 +158,7 @@ export class EnvironmentConfigManager {
             )
         } else if (responseError?.status === 403) {
             this.stopPolling()
-            // UserError
-            throw new Error(`Invalid SDK key provided: ${this.sdkKey}`)
+            throw new UserError(`Invalid SDK key provided: ${this.sdkKey}`)
         } else {
             throw new Error('Failed to download DevCycle config.')
         }
