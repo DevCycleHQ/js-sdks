@@ -4,20 +4,23 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import { useVariable } from '@devcycle/next-sdk'
+import { useVariableValue } from '@devcycle/next-sdk'
+import { UserIdentity } from './UserIdentity'
 
 const Home: NextPage = () => {
+    console.log('RENDERING')
+
     const variableKey = 'test-featre'
     const variableKeyString = 'variable-key-string'
     const variableKeyNumber = 'variable-key-number'
     const variableKeyBoolean = 'variable-key-boolean'
     const variableKeyJsonString = 'variable-json-key-string'
 
-    const variable = useVariable(variableKey, false)
-    const variableString = useVariable(variableKeyString, 'default')
-    const variableNumber = useVariable(variableKeyNumber, 100)
-    const variableBoolean = useVariable(variableKeyBoolean, true)
-    const variableJsonString = useVariable(variableKeyJsonString, {
+    const variable = useVariableValue(variableKey, false)
+    const variableString = useVariableValue(variableKeyString, 'default')
+    const variableNumber = useVariableValue(variableKeyNumber, 100)
+    const variableBoolean = useVariableValue(variableKeyBoolean, true)
+    const variableJsonString = useVariableValue(variableKeyJsonString, {
         jsonStringKeyDefault: 'json string default',
     })
     return (
@@ -42,6 +45,7 @@ const Home: NextPage = () => {
                     and
                     <code className={styles.code}>app/layout.tsx</code>
                 </p>
+                <UserIdentity />
 
                 <div className={styles.description}>
                     <div>
@@ -51,31 +55,31 @@ const Home: NextPage = () => {
                         <div>
                             <span>
                                 variable test-featre ={' '}
-                                {JSON.stringify(variable?.value)}{' '}
+                                {JSON.stringify(variable)}{' '}
                             </span>
                         </div>
                         <div>
                             <span>
                                 variable variable-key-string ={' '}
-                                {JSON.stringify(variableString?.value)}{' '}
+                                {JSON.stringify(variableString)}{' '}
                             </span>
                         </div>
                         <div>
                             <span>
                                 variable variable-key-number ={' '}
-                                {JSON.stringify(variableNumber?.value)}{' '}
+                                {JSON.stringify(variableNumber)}{' '}
                             </span>
                         </div>
                         <div>
                             <span>
                                 variable variable-key-boolean ={' '}
-                                {JSON.stringify(variableBoolean?.value)}
+                                {JSON.stringify(variableBoolean)}
                             </span>
                         </div>
                         <div>
                             <span>
                                 variable variable-json-key-string ={' '}
-                                {JSON.stringify(variableJsonString?.value)}{' '}
+                                {JSON.stringify(variableJsonString)}{' '}
                             </span>
                         </div>
                     </div>

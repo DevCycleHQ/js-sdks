@@ -1,16 +1,13 @@
 import { cache } from 'react'
 import { DevCycleClient, DevCycleUser } from '@devcycle/js-client-sdk'
 
-export const context = <T>(
-    defaultValue: T,
-    namespace: string,
-): [() => T, (v: T) => void] => {
-    const getRef = cache((namespace: string) => ({ current: defaultValue }))
+export const context = <T>(defaultValue: T): [() => T, (v: T) => void] => {
+    const getRef = cache(() => ({ current: defaultValue }))
 
-    const getValue = (): T => getRef(namespace).current
+    const getValue = (): T => getRef().current
 
     const setValue = (value: T) => {
-        getRef(namespace).current = value
+        getRef().current = value
     }
 
     return [getValue, setValue]
@@ -18,18 +15,9 @@ export const context = <T>(
 
 export const [getIdentity, setIdentity] = context<DevCycleUser | undefined>(
     undefined,
-    'user',
 )
 
-const [_getSDKKey, _setSDKKey] = context<string | undefined>(
-    undefined,
-    'sdkKey',
-)
-
-export const [getClient, setClient] = context<DevCycleClient | undefined>(
-    undefined,
-    'client',
-)
+const [_getSDKKey, _setSDKKey] = context<string | undefined>(undefined)
 
 export const getSDKKey = () => {
     const key = _getSDKKey()
@@ -40,6 +28,7 @@ export const getSDKKey = () => {
 }
 
 export const setSDKKey = (key: string) => {
+    // attempt to make sure server keys don't leak to the client!
     if (
         key?.length &&
         !key.startsWith('dvc_client') &&

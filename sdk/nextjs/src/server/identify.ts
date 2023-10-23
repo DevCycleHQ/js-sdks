@@ -1,3 +1,4 @@
+import 'server-only'
 import { DevCycleUser } from '@devcycle/js-client-sdk'
 import { getBucketedConfig } from './bucketing'
 import { setIdentity } from './context'

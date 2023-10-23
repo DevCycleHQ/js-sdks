@@ -1,20 +1,20 @@
+import 'server-only'
 import { getDevCycleContext } from '@devcycle/next-sdk/server'
 import React from 'react'
 import { initializeDevCycle } from '@devcycle/js-client-sdk'
-import { DevCycleClientProviderClientSide } from './DevCycleClientProviderClientside'
+import { DevCycleClientProviderClientSide } from '../client/DevCycleClientProviderClientside'
+import { dvcGlobal } from '../common/global'
 
 type DevCycleClientProviderProps = {
     children: React.ReactNode
 }
 
-export const serverGlobal = globalThis as any
-
 export const DevCycleClientProvider = async ({
     children,
 }: DevCycleClientProviderProps) => {
     const context = await getDevCycleContext()
-    if (!serverGlobal.devcycleClient) {
-        serverGlobal.devcycleClient = initializeDevCycle(
+    if (!dvcGlobal.devcycleClient) {
+        dvcGlobal.devcycleClient = initializeDevCycle(
             context.sdkKey,
             context.user!,
             {
@@ -25,6 +25,7 @@ export const DevCycleClientProvider = async ({
     return (
         <>
             {/* this renders a client component that also sets the client on global*/}
+            {/* context is passed to perform bootstrapping of the server's config on clientside */}
             <DevCycleClientProviderClientSide context={context} />
             {children}
         </>
