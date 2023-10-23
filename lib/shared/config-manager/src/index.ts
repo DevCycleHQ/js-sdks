@@ -12,14 +12,6 @@ type ClearIntervalInterface = (intervalTimeout: any) => void
 
 type SetConfigBuffer = (sdkKey: string, projectConfig: string) => void
 
-export class UserError extends Error {
-    constructor(error: Error | string) {
-        super(error instanceof Error ? error.message : error)
-        this.name = 'UserError'
-        this.stack = error instanceof Error ? error.stack : undefined
-    }
-}
-
 export class EnvironmentConfigManager {
     private readonly logger: DVCLogger
     private readonly sdkKey: string
