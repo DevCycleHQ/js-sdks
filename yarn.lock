@@ -5000,6 +5000,8 @@ __metadata:
 "@devcycle/server-request@workspace:lib/shared/server-request":
   version: 0.0.0-use.local
   resolution: "@devcycle/server-request@workspace:lib/shared/server-request"
+  dependencies:
+    fetch-retry: ^5.0.3
   languageName: unknown
   linkType: soft
 
