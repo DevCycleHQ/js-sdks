@@ -7,13 +7,13 @@ import * as React from 'react'
 async function ServerData() {
     return (
         <>
-            <h2>Server Variable</h2>
-            <h3>
+            <b>Server Variable</b>
+            <span>
                 {' '}
                 {JSON.stringify(await getVariableValue('test-featre', false))}
-            </h3>
-            <h2>Server Identity</h2>
-            <h3>{getUserIdentity()?.user_id}</h3>
+            </span>
+            <b>Server Identity</b>
+            <span>{getUserIdentity()?.user_id}</span>
         </>
     )
 }

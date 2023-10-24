@@ -17,10 +17,10 @@ export const UserIdentity = () => {
     }
     return (
         <>
-            <h2>Client Variable</h2>
-            <h3>{JSON.stringify(variable)}</h3>
-            <h2>Client User Identity</h2>
-            <h3>{JSON.stringify(client.user?.user_id)}</h3>
+            <b>Client Variable</b>
+            <span>{JSON.stringify(variable)}</span>
+            <b>Client User Identity</b>
+            <span>{JSON.stringify(client.user?.user_id)}</span>
             <button onClick={identifyNewUser}>Identify User Clientside</button>
         </>
     )
