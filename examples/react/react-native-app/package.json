@@ -6,7 +6,7 @@
         "@babel/plugin-proposal-decorators": "*",
         "@nestjs/class-validator": "*",
         "@react-native-async-storage/async-storage": "*",
-        "@testing-library/jest-dom": "^6.1.4",
+        "@testing-library/jest-dom": "*",
         "@testing-library/jest-native": "*",
         "@testing-library/react": "*",
         "axios": "*",
