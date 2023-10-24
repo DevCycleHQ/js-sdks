@@ -16469,7 +16469,7 @@ __metadata:
     metro-config: "*"
     nock: "*"
     react: "*"
-    react-native: ^0.72.6
+    react-native: "*"
     react-native-device-info: "*"
     react-native-get-random-values: "*"
     react-native-svg: "*"
@@ -27215,7 +27215,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native@npm:^0.72.6":
+"react-native@npm:*, react-native@npm:^0.72.6":
   version: 0.72.6
   resolution: "react-native@npm:0.72.6"
   dependencies:
