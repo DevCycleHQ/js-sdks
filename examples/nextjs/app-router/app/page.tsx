@@ -1,10 +1,16 @@
 import type { NextPage } from 'next'
 import { ReactNode } from 'react'
-import Home from './clientside'
-import { getUserIdentity, getVariableValue } from '@devcycle/next-sdk/server'
+import ClientSide from './clientside'
+import {
+    getUserIdentity,
+    getVariableValue,
+    identifyUser,
+} from '@devcycle/next-sdk/server'
 import * as React from 'react'
 
 async function ServerData() {
+    await identifyUser({ user_id: 'server-override' })
+
     return (
         <>
             <b>Server Variable</b>
@@ -18,13 +24,14 @@ async function ServerData() {
     )
 }
 
-const Page: NextPage = ({ children }: { children: ReactNode }) => {
+const Page: NextPage = async ({ children }: { children: ReactNode }) => {
     console.log('RENDERING')
 
     return (
-        <Home>
+        <ClientSide>
             <ServerData />
-        </Home>
+            {children}
+        </ClientSide>
     )
 }
 

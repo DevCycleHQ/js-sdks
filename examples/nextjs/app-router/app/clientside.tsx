@@ -7,7 +7,7 @@ import { useVariableValue } from '@devcycle/next-sdk'
 import { UserIdentity } from './UserIdentity'
 import { ReactNode } from 'react'
 
-const Home = ({ children }: { children: ReactNode }) => {
+const ClientSide = ({ children }: { children: ReactNode }) => {
     console.log('RENDERING')
 
     const variableKey = 'test-featre'
@@ -155,4 +155,4 @@ const Home = ({ children }: { children: ReactNode }) => {
     )
 }
 
-export default Home
+export default ClientSide
