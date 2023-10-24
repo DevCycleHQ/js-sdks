@@ -36,6 +36,7 @@ export const DevCycleClientProviderClientSide = ({
             serverData.user!,
             {
                 bootstrapConfig: serverData.config,
+                disableConfigCache: true,
             },
         )
     } else if (previousContext != serverData) {

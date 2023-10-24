@@ -32,11 +32,10 @@ const generateBucketedConfigCached = cache(
  * Retrieve the config from CDN for the current request's SDK Key. This data will often be cached
  * Compute the bucketed config for the current request's user using that data, with local bucketing library
  * Cache the bucketed config for this request so that repeated calls to this function are memoized
- * @param lastModified
  */
-export const getBucketedConfig = async (lastModified?: string) => {
+export const getBucketedConfig = async () => {
     // this request will be cached by Next
-    const cdnConfig = await fetchCDNConfig(lastModified)
+    const cdnConfig = await fetchCDNConfig()
     const user = getIdentity()
     if (!user) {
         throw Error('User must be set in cookie')

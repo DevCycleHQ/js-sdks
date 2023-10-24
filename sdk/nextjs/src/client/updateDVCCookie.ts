@@ -17,10 +17,7 @@ export const updateDVCCookie = (
     }
     document.cookie =
         'devcycle-next=' +
-        createCookieContents(
-            {
-                user_id: user ? user.user_id : client.user!.user_id,
-            },
-            client.config?.lastModified,
-        )
+        createCookieContents({
+            user_id: user ? user.user_id : client.user!.user_id,
+        })
 }

@@ -29,8 +29,7 @@ export const identifyInitialUser = async (user: DevCycleUser) => {
 }
 
 const _fetchConfigForUser = async () => {
-    const dvcCookie = getDVCCookie()
-    const { populatedUser } = await getBucketedConfig(dvcCookie?.timestamp)
+    const { populatedUser } = await getBucketedConfig()
     let client = getClient()
     if (client) {
         client.user = populatedUser
