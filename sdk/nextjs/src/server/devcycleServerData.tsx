@@ -1,8 +1,8 @@
 import { getBucketedConfig } from './bucketing'
-import { getSDKKey } from './context'
+import { getSDKKey } from './requestContext'
 import { headers } from 'next/headers'
 
-export const getDevCycleContext = async () => {
+export const getDevCycleServerData = async () => {
     const { config, user, populatedUser } = await getBucketedConfig()
     return {
         user,

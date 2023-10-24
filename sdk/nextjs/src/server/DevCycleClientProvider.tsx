@@ -1,7 +1,7 @@
 import 'server-only'
 import {
     getClient,
-    getDevCycleContext,
+    getDevCycleServerData,
     identifyInitialUser,
     identifyUser,
     setClient,
@@ -35,7 +35,7 @@ export const initialize = async (
         await identifyUser(user)
     }
 
-    const context = await getDevCycleContext()
+    const context = await getDevCycleServerData()
 
     let client = getClient()
     if (!client) {

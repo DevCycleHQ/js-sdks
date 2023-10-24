@@ -1,6 +1,6 @@
 import { fetchCDNConfig } from './requests'
 import { generateBucketedConfig } from '@devcycle/bucketing'
-import { getIdentity } from './context'
+import { getIdentity } from './requestContext'
 import { DVCBucketingUser } from '@devcycle/types'
 import { cache } from 'react'
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'

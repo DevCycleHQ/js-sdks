@@ -1,7 +1,7 @@
 import 'server-only'
 import { DevCycleUser } from '@devcycle/js-client-sdk'
 import { getBucketedConfig } from './bucketing'
-import { getClient, getIdentity, setIdentity } from './context'
+import { getClient, getIdentity, setIdentity } from './requestContext'
 import { getDVCCookie } from './cookie'
 
 /**

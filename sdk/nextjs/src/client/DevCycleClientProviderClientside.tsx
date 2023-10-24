@@ -1,12 +1,12 @@
 'use client'
-import type { getDevCycleContext } from '@devcycle/next-sdk/server'
+import type { getDevCycleServerData } from '@devcycle/next-sdk/server'
 import React, { useEffect, useRef, useState } from 'react'
 import { DevCycleClient, initializeDevCycle } from '@devcycle/js-client-sdk'
 import { useRouter } from 'next/navigation'
 import { updateDVCCookie } from './updateDVCCookie'
 
 type ClientDevCycleContext = Omit<
-    Awaited<ReturnType<typeof getDevCycleContext>>,
+    Awaited<ReturnType<typeof getDevCycleServerData>>,
     'populatedUser'
 >
 

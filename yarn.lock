@@ -30677,12 +30677,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"test-react-ba89f2@workspace:lib/test-react":
-  version: 0.0.0-use.local
-  resolution: "test-react-ba89f2@workspace:lib/test-react"
-  languageName: unknown
-  linkType: soft
-
 "text-extensions@npm:^1.0.0":
   version: 1.9.0
   resolution: "text-extensions@npm:1.9.0"

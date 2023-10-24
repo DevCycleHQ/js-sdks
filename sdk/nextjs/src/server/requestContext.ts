@@ -1,7 +1,9 @@
 import { cache } from 'react'
 import { DevCycleClient, DevCycleUser } from '@devcycle/js-client-sdk'
 
-export const context = <T>(defaultValue: T): [() => T, (v: T) => void] => {
+export const requestContext = <T>(
+    defaultValue: T,
+): [() => T, (v: T) => void] => {
     const getRef = cache(() => ({ current: defaultValue }))
 
     const getValue = (): T => getRef().current
@@ -13,15 +15,15 @@ export const context = <T>(defaultValue: T): [() => T, (v: T) => void] => {
     return [getValue, setValue]
 }
 
-export const [getIdentity, setIdentity] = context<DevCycleUser | undefined>(
-    undefined,
-)
+export const [getIdentity, setIdentity] = requestContext<
+    DevCycleUser | undefined
+>(undefined)
 
-export const [getClient, setClient] = context<DevCycleClient | undefined>(
-    undefined,
-)
+export const [getClient, setClient] = requestContext<
+    DevCycleClient | undefined
+>(undefined)
 
-const [_getSDKKey, _setSDKKey] = context<string | undefined>(undefined)
+const [_getSDKKey, _setSDKKey] = requestContext<string | undefined>(undefined)
 
 export const getSDKKey = () => {
     const key = _getSDKKey()
