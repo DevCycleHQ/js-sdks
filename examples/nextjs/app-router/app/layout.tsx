@@ -32,7 +32,7 @@ export default async function RootLayout({
         <html lang="en">
             <body>
                 <DevCycleClientProvider
-                    sdkKey={'client-c3b75096-70bb-47b8-9898-4f145f2caa26'}
+                    sdkKey={process.env.DEVCYCLE_CLIENT_SDK_KEY ?? ''}
                     user={{ user_id: randomId }}
                     options={{ initialUserOnly: true }}
                 >
