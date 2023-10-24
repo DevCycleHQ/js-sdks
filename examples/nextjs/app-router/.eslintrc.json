@@ -1,0 +1,28 @@
+{
+    "extends": [
+        "plugin:@nx/react-typescript",
+        "../../../.eslintrc.json",
+        "next",
+        "next/core-web-vitals"
+    ],
+    "ignorePatterns": ["!**/*", "node_modules/*", ".next/*"],
+    "overrides": [
+        {
+            "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+            "rules": {
+                "@typescript-eslint/explicit-module-boundary-types": "off"
+            }
+        },
+        {
+            "files": ["*.ts", "*.tsx"],
+            "rules": {}
+        },
+        {
+            "files": ["*.js", "*.jsx"],
+            "rules": {}
+        }
+    ],
+    "env": {
+        "jest": true
+    }
+}

@@ -1,7 +1,7 @@
 {
-    "name": "example-react-next-js-app",
+    "name": "example-nextjs-app-router",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "examples/react/next-js-app",
+    "sourceRoot": "examples/nextjs/app-router",
     "projectType": "application",
     "targets": {
         "build": {
@@ -9,28 +9,28 @@
             "outputs": ["{options.outputPath}"],
             "defaultConfiguration": "production",
             "options": {
-                "outputPath": "dist/examples/react/next-js-app"
+                "outputPath": "dist/examples/nextjs/app-router"
             },
             "configurations": {
                 "production": {},
                 "development": {
-                    "outputPath": "examples/react/next-js-app"
+                    "outputPath": "examples/nextjs/app-router"
                 }
             }
         },
         "serve": {
             "executor": "@nx/next:server",
             "options": {
-                "buildTarget": "example-react-next-js-app:build",
+                "buildTarget": "example-nextjs-app-router:build",
                 "dev": true
             },
             "configurations": {
                 "production": {
-                    "buildTarget": "example-react-next-js-app:build:production",
+                    "buildTarget": "example-nextjs-app-router:build:production",
                     "dev": false
                 },
                 "development": {
-                    "buildTarget": "example-react-next-js-app:build:development",
+                    "buildTarget": "example-nextjs-app-router:build:development",
                     "dev": true
                 }
             },
@@ -39,7 +39,7 @@
         "export": {
             "executor": "@nx/next:export",
             "options": {
-                "buildTarget": "example-react-next-js-app:build:production"
+                "buildTarget": "example-nextjs-app-router:build:production"
             }
         },
         "lint": {
@@ -47,7 +47,7 @@
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
-                    "examples/react/next-js-app/**/*.{ts,tsx,js,jsx}"
+                    "examples/nextjs/app-router/**/*.{ts,tsx,js,jsx}"
                 ]
             }
         }
