@@ -88,9 +88,9 @@
         "@nx/workspace": "16.3.2",
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
         "@react-native-async-storage/async-storage": "1.18.1",
-        "@react-native-community/cli": "10.2.2",
-        "@react-native-community/cli-platform-android": "10.2.0",
-        "@react-native-community/cli-platform-ios": "10.2.1",
+        "@react-native-community/cli": "~10.2.5",
+        "@react-native-community/cli-platform-android": "~10.2.0",
+        "@react-native-community/cli-platform-ios": "~10.2.5",
         "@svgr/webpack": "^6.1.2",
         "@testing-library/jest-dom": "^6.1.4",
         "@testing-library/jest-native": "~5.4.3",
@@ -176,7 +176,7 @@
         "typescript": "5.0.4",
         "url-loader": "^4.1.1",
         "validate-npm-package-name": "^5.0.0",
-        "verdaccio": "^5.15.4",
+        "verdaccio": "^5.27.0",
         "webpack": "^5.75.0",
         "webpack-merge": "^5.8.0",
         "wrangler": "^3.0.0"
@@ -189,7 +189,8 @@
     },
     "resolutions": {
         "@nx/js@16.3.2": "patch:@nx/js@npm%3A16.3.2#./.yarn/patches/@nx-js-npm-16.3.2-a543eca792.patch",
-        "word-wrap@1.2.3": "^1.2.4"
+        "word-wrap@1.2.3": "^1.2.4",
+        "@sideway/formula@3.0.0": "^3.0.1"
     },
     "config": {
         "commitizen": {
