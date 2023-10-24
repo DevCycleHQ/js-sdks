@@ -1,4 +1,4 @@
-import { DevCycleCloudClient, initializeDevCycle } from '../src/index'
+import { initializeDevCycle } from '../src/index'
 
 describe('JS Cloud Bucketing Server SDK Initialize', () => {
     afterAll(() => {
