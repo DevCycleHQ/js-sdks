@@ -1,0 +1,9 @@
+{
+    "name": "@devcycle/server-request",
+    "version": "1.0.0",
+    "type": "commonjs",
+    "private": true,
+    "dependencies": {
+        "fetch-retry": "^5.0.3"
+    }
+}

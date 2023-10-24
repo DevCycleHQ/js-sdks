@@ -1,5 +1,4 @@
-import { RequestInitWithRetry } from 'fetch-retry'
-import { get, post } from '@devcycle/js-cloud-server-sdk'
+import { post } from '@devcycle/server-request'
 import { DVCLogger, SDKEventBatchRequestBody } from '@devcycle/types'
 
 export const HOST = '.devcycle.com'
@@ -22,21 +21,4 @@ export async function publishEvents(
         },
         sdkKey,
     )
-}
-
-async function getWithTimeout(
-    url: string,
-    requestConfig: RequestInit | RequestInitWithRetry,
-    timeout: number,
-): Promise<Response> {
-    const controller = new AbortController()
-    const id = setTimeout(() => {
-        controller.abort()
-    }, timeout)
-    const response = await get(url, {
-        ...requestConfig,
-        signal: controller.signal,
-    })
-    clearTimeout(id)
-    return response
 }

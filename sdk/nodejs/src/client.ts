@@ -17,7 +17,6 @@ import {
     VariableTypeAlias,
 } from '@devcycle/types'
 import os from 'os'
-import { UserError } from './utils/userError'
 import {
     DevCycleUser,
     DVCVariable,
@@ -31,6 +30,7 @@ import {
     DevCycleEvent,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
+import { UserError } from '@devcycle/server-request'
 
 interface IPlatformData {
     platform: string

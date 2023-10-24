@@ -5,7 +5,7 @@ global.fetch = fetch
 
 const fetchRequestMock = fetch as jest.MockedFn<typeof fetch>
 
-import { post, get } from '../src/request'
+import { post, get } from '../src/'
 
 describe('request.ts Unit Tests', () => {
     beforeEach(() => {

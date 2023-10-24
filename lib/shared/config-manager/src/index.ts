@@ -1,7 +1,7 @@
 import { DVCLogger } from '@devcycle/types'
-// import { UserError } from './utils/userError'
 import { getEnvironmentConfig } from './request'
-import { ResponseError, DevCycleOptions } from '@devcycle/js-cloud-server-sdk'
+import { DevCycleOptions } from '@devcycle/js-cloud-server-sdk'
+import { ResponseError, UserError } from '@devcycle/server-request'
 
 type ConfigPollingOptions = DevCycleOptions & {
     cdnURI?: string
@@ -11,14 +11,6 @@ type SetIntervalInterface = (handler: () => void, timeout?: number) => any
 type ClearIntervalInterface = (intervalTimeout: any) => void
 
 type SetConfigBuffer = (sdkKey: string, projectConfig: string) => void
-
-export class UserError extends Error {
-    constructor(error: Error | string) {
-        super(error instanceof Error ? error.message : error)
-        this.name = 'UserError'
-        this.stack = error instanceof Error ? error.stack : undefined
-    }
-}
 
 export class EnvironmentConfigManager {
     private readonly logger: DVCLogger
