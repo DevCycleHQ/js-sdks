@@ -36,15 +36,15 @@
             "@devcycle/openfeature-nodejs-provider": [
                 "sdk/openfeature-nodejs-provider/src/index.ts"
             ],
-            "@devcycle/server-request": [
-                "lib/shared/server-request/src/index.ts"
-            ],
             "@devcycle/react-client-sdk": ["sdk/react/src/index.ts"],
             "@devcycle/react-native-client-sdk": [
                 "sdk/react-native/src/index.ts"
             ],
             "@devcycle/react-native-expo-client-sdk": [
                 "sdk/react-native-expo/src/index.ts"
+            ],
+            "@devcycle/server-request": [
+                "lib/shared/server-request/src/index.ts"
             ],
             "@devcycle/types": ["lib/shared/types/src/index.ts"]
         }

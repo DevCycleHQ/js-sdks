@@ -49,7 +49,6 @@
                 "buildableProjectDepsInPackageJsonType": "dependencies",
                 "main": "sdk/nodejs/src/index.ts",
                 "assets": ["sdk/nodejs/*.md"],
-                // External pacakges now need to be defined here, all other pacakges will be compiled into the sdk.
                 "external": [
                     "shared-types",
                     "shared-bucketing-as",

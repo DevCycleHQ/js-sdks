@@ -11,7 +11,8 @@
                 "outputPath": "dist/lib/shared/server-request",
                 "main": "lib/shared/server-request/src/index.ts",
                 "tsConfig": "lib/shared/server-request/tsconfig.lib.json",
-                "assets": ["lib/shared/server-request/*.md"]
+                "assets": ["lib/shared/server-request/*.md"],
+                "updateBuildableProjectDepsInPackageJson": true
             }
         },
         "lint": {
