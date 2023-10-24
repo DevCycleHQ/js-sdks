@@ -3,10 +3,8 @@ import {
     DVCVariableValue,
     DVCVariableSet,
     DVCFeatureSet,
-    DevCycleEvent,
 } from './types'
 import { DVCVariable } from './models/variable'
-import { checkParamDefined } from './utils/paramUtils'
 import { dvcDefaultLogger } from './utils/logger'
 import {
     DVCPopulatedUser,
@@ -24,7 +22,11 @@ import {
     postTrack,
 } from './request'
 import { DevCycleUser } from './models/user'
-import { ResponseError } from '@devcycle/server-request'
+import {
+    ResponseError,
+    DevCycleEvent,
+    checkParamDefined,
+} from '@devcycle/server-request'
 
 const castIncomingUser = (user: DevCycleUser) => {
     if (!(user instanceof DevCycleUser)) {

@@ -1,4 +1,4 @@
-import { DevCycleClient } from './client'
+import { DevCycleEdgeClient } from './client'
 import {
     DevCycleUser,
     DevCycleCloudClient,
@@ -13,12 +13,12 @@ import {
     DVCVariableInterface,
     DVCFeature,
     DVCFeatureSet,
+    DevCycleCloudOptions,
 } from '@devcycle/js-cloud-server-sdk'
-import { getNodeJSPlatformDetails } from './utils/platformDetails'
 import { isValidServerSDKKey, DevCycleEvent } from '@devcycle/server-request'
 
 export {
-    DevCycleClient,
+    DevCycleEdgeClient,
     DevCycleCloudClient,
     DevCycleUser,
     DevCycleOptions,
@@ -35,50 +35,33 @@ export {
 }
 export { dvcDefaultLogger }
 
-/**
- * @deprecated Use DevCycleClient instead
- */
-export type DVCClient = DevCycleClient
-/**
- * @deprecated Use DevCycleCloudClient instead
- */
-export type DVCCloudClient = DevCycleCloudClient
-/**
- * @deprecated Use DevCycleUser instead
- */
-export type DVCUser = DevCycleUser
-/**
- * @deprecated Use DevCycleEvent instead
- */
-export type DVCEvent = DevCycleEvent
-/**
- * @deprecated Use DevCycleOptions instead
- */
-export type DVCOptions = DevCycleOptions
+type DevCycleEdgeOptions = DevCycleCloudOptions & {
+    enableCloudBucketing?: boolean
+}
 
-type DevCycleOptionsCloudEnabled = DevCycleOptions & {
+type DevCycleOptionsCloudEnabled = DevCycleEdgeOptions & {
     enableCloudBucketing: true
 }
-type DevCycleOptionsLocalEnabled = DevCycleOptions & {
+type DevCycleOptionsLocalEnabled = DevCycleEdgeOptions & {
     enableCloudBucketing?: false
 }
 
 export function initializeDevCycle(
     sdkKey: string,
     options?: DevCycleOptionsLocalEnabled,
-): DevCycleClient
+): DevCycleEdgeClient
 export function initializeDevCycle(
     sdkKey: string,
     options: DevCycleOptionsCloudEnabled,
 ): DevCycleCloudClient
 export function initializeDevCycle(
     sdkKey: string,
-    options?: DevCycleOptions,
-): DevCycleClient | DevCycleCloudClient
+    options?: DevCycleEdgeOptions,
+): DevCycleEdgeClient | DevCycleCloudClient
 export function initializeDevCycle(
     sdkKey: string,
-    options: DevCycleOptions = {},
-): DevCycleClient | DevCycleCloudClient {
+    options: DevCycleEdgeOptions = {},
+): DevCycleEdgeClient | DevCycleCloudClient {
     if (!sdkKey) {
         throw new Error('Missing SDK key! Call initialize with a valid SDK key')
     } else if (!isValidServerSDKKey(sdkKey)) {
@@ -88,13 +71,9 @@ export function initializeDevCycle(
     }
 
     if (options.enableCloudBucketing) {
-        return new DevCycleCloudClient(
-            sdkKey,
-            options,
-            getNodeJSPlatformDetails(),
-        )
+        return new DevCycleCloudClient(sdkKey, options, options)
     }
-    return new DevCycleClient(sdkKey, options)
+    return new DevCycleEdgeClient(sdkKey, options)
 }
 
 /**

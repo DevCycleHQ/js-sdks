@@ -4871,7 +4871,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/bucketing@workspace:lib/shared/bucketing":
+"@devcycle/bucketing@^1.4.2, @devcycle/bucketing@workspace:lib/shared/bucketing":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing@workspace:lib/shared/bucketing"
   dependencies:
@@ -4885,6 +4885,18 @@ __metadata:
   dependencies:
     "@devcycle/js-cloud-server-sdk": ^1.0.0
     "@devcycle/types": ^1.1.15
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/edge-worker-server-sdk@workspace:sdk/edge-worker-server":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/edge-worker-server-sdk@workspace:sdk/edge-worker-server"
+  dependencies:
+    "@devcycle/bucketing": ^1.4.2
+    "@devcycle/bucketing-test-data": ^1.2.21
+    "@devcycle/js-cloud-server-sdk": ^1.0.0
+    "@devcycle/types": ^1.1.15
+    fetch-retry: ^5.0.3
   languageName: unknown
   linkType: soft
 

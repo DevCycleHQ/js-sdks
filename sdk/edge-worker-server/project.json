@@ -1,0 +1,72 @@
+{
+    "name": "edge-worker",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "sdk/edge-worker-server/src",
+    "targets": {
+        "check-types": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "yarn run -T tsc -b --incremental",
+                "cwd": "sdk/edge-worker-server"
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["sdk/edge-worker-server/**/*.ts"]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/sdk/edge-worker-server"],
+            "options": {
+                "jestConfig": "sdk/edge-worker-server/jest.config.ts",
+                "passWithNoTests": false,
+                "codeCoverage": true
+            },
+            "dependsOn": [
+                {
+                    "target": "build"
+                },
+                {
+                    "target": "build:json",
+                    "dependencies": true
+                }
+            ]
+        },
+        "build": {
+            "executor": "@nx/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/sdk/edge-worker-server",
+                "tsConfig": "sdk/edge-worker-server/tsconfig.lib.json",
+                "packageJson": "sdk/edge-worker-server/package.json",
+                "buildableProjectDepsInPackageJsonType": "dependencies",
+                "main": "sdk/edge-worker-server/src/index.ts",
+                "assets": ["sdk/edge-worker-server/*.md"],
+                "external": [
+                    "shared-types",
+                    "shared-bucketing-test-data",
+                    "shared-bucketing",
+                    "js-cloud-server-sdk"
+                ]
+            },
+            "dependsOn": [
+                {
+                    "target": "build",
+                    "dependencies": true
+                }
+            ]
+        },
+        "npm-publish": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/edge-worker-server-sdk\"",
+                "cwd": "dist/sdk/edge-worker-server",
+                "forwardAllArgs": true
+            }
+        }
+    },
+    "tags": []
+}

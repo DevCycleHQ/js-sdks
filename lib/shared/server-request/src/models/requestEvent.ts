@@ -1,9 +1,16 @@
-import { EventTypes } from '../eventQueue'
-import {
-    DevCycleEvent,
-    checkParamDefined,
-    checkParamString,
-} from '@devcycle/js-cloud-server-sdk'
+import { checkParamDefined, checkParamString } from '../utils/paramUtils'
+import { DevCycleEvent } from './devcycleEvent'
+
+export const AggregateEventTypes: Record<string, string> = {
+    variableEvaluated: 'variableEvaluated',
+    aggVariableEvaluated: 'aggVariableEvaluated',
+    variableDefaulted: 'variableDefaulted',
+    aggVariableDefaulted: 'aggVariableDefaulted',
+}
+
+export const EventTypes: Record<string, string> = {
+    ...AggregateEventTypes,
+}
 
 export class DVCRequestEvent {
     type: string

@@ -1,6 +1,6 @@
-jest.mock('../src/request')
+jest.mock('@devcycle/server-request')
+
 import { EventQueue, EventQueueOptions } from '../src/eventQueue'
-import { EventTypes } from '../src/eventQueue'
 import { BucketedUserConfig, DVCReporter, PublicProject } from '@devcycle/types'
 import { mocked } from 'jest-mock'
 import {
@@ -12,7 +12,7 @@ import { setPlatformDataJSON } from './utils/setPlatformData'
 import { Response } from 'cross-fetch'
 import { dvcDefaultLogger } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from '../src/models/populatedUserHelpers'
-import { publishEvents } from '../src/request'
+import { EventTypes, publishEvents } from '@devcycle/server-request'
 
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData

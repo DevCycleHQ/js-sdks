@@ -238,7 +238,7 @@ export const generateBucketedConfig = ({
     }
 
     segmentedFeatures.forEach(({ feature, target }) => {
-        const { _id, key, type, variations, settings } = feature
+        const { variations } = feature
         const { rolloutHash, bucketingHash } = generateBoundedHashes(
             user.user_id,
             target._id,
