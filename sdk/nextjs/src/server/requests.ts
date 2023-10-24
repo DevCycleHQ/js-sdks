@@ -7,7 +7,12 @@ export const fetchCDNConfig = async (lastModified?: string) => {
     const response = await fetch(
         getFetchUrl(),
         // only store for 30 seconds, or force revalidate
-        { next: { revalidate: 30 } },
+        {
+            next: {
+                revalidate: 30,
+                tags: [getSDKKey()],
+            },
+        },
     )
 
     const lastModifiedHeader = response.headers.get('last-modified')
@@ -24,7 +29,7 @@ export const fetchCDNConfig = async (lastModified?: string) => {
         return await fetch(
             getFetchUrl(),
             // force revalidate when client has newer config
-            { next: { revalidate: 0 } },
+            { next: { revalidate: 0, tags: [getSDKKey()] } },
         )
     } else {
         // otherwise use cached response

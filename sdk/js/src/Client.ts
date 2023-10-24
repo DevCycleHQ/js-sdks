@@ -228,8 +228,6 @@ export class DevCycleClient<
             this.store.removeAnonUserId()
         }
 
-        console.log('SSE', this.config?.sse)
-
         if (this.config?.sse?.url) {
             if (!this.options.disableRealtimeUpdates) {
                 this.streamingConnection = new StreamingConnection(

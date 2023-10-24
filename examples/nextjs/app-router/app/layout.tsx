@@ -3,8 +3,6 @@ import * as React from 'react'
 import {
     DevCycleClientProvider,
     getVariableValue,
-    identifyUser,
-    setSDKKey,
 } from '@devcycle/next-sdk/server'
 
 const serverIds = [
@@ -34,7 +32,7 @@ export default async function RootLayout({
                 <DevCycleClientProvider
                     sdkKey={process.env.DEVCYCLE_CLIENT_SDK_KEY ?? ''}
                     user={{ user_id: randomId }}
-                    options={{ initialUserOnly: true }}
+                    options={{ enableClientsideIdentify: true }}
                 >
                     {children}
                 </DevCycleClientProvider>

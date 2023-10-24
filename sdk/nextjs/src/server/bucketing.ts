@@ -1,10 +1,8 @@
 import { fetchCDNConfig } from './requests'
 import { generateBucketedConfig } from '@devcycle/bucketing'
 import { getIdentity } from './requestContext'
-import { DVCBucketingUser } from '@devcycle/types'
 import { cache } from 'react'
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
-import { userAgent } from 'next/server'
 import { headers } from 'next/headers'
 
 // wrap this function in react cache to avoid redoing work for the same user and config
@@ -19,7 +17,7 @@ const generateBucketedConfigCached = cache(
             undefined,
             ua ?? undefined,
         )
-        console.log('BUCKETING USER', populatedUser.user_id)
+
         return {
             config: {
                 ...generateBucketedConfig({ user: populatedUser, config }),
@@ -30,6 +28,12 @@ const generateBucketedConfigCached = cache(
     },
 )
 
+/**
+ * Retrieve the config from CDN for the current request's SDK Key. This data will often be cached
+ * Compute the bucketed config for the current request's user using that data, with local bucketing library
+ * Cache the bucketed config for this request so that repeated calls to this function are memoized
+ * @param lastModified
+ */
 export const getBucketedConfig = async (lastModified?: string) => {
     // this request will be cached by Next
     const cdnConfig = await fetchCDNConfig(lastModified)

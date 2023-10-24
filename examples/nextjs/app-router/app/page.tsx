@@ -9,8 +9,6 @@ import {
 import * as React from 'react'
 
 async function ServerData() {
-    await identifyUser({ user_id: 'server-override' })
-
     return (
         <>
             <b>Server Variable</b>

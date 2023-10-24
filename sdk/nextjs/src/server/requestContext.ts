@@ -34,7 +34,6 @@ export const getSDKKey = () => {
 }
 
 export const setSDKKey = (key: string) => {
-    console.log('SETTING SDK KEY')
     // attempt to make sure server keys don't leak to the client!
     if (
         key?.length &&

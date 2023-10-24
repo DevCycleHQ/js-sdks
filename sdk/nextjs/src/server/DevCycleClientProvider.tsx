@@ -1,19 +1,18 @@
 import 'server-only'
-import {
-    getClient,
-    getDevCycleServerData,
-    identifyInitialUser,
-    identifyUser,
-    setClient,
-    setSDKKey,
-} from '@devcycle/next-sdk/server'
 import React from 'react'
 import { DevCycleUser, initializeDevCycle } from '@devcycle/js-client-sdk'
 import { DevCycleClientProviderClientSide } from '../client/DevCycleClientProviderClientside'
-import { getDVCCookie } from './cookie'
+import { getClient, setClient, setSDKKey } from './requestContext'
+import { identifyInitialUser, identifyUser } from './identify'
+import { getDevCycleServerData } from './devcycleServerData'
 
 type DevCycleServerOptions = {
-    initialUserOnly?: boolean
+    /**
+     * Option to enable the ability to identify a user clientside. This allows `identifyUser` to be called in a client
+     * component and synchronizes the user data via a cookie. The method will only work if cookie support is enabled
+     * on the browser.
+     */
+    enableClientsideIdentify?: boolean
 }
 
 type DevCycleClientProviderProps = {
@@ -26,10 +25,10 @@ type DevCycleClientProviderProps = {
 export const initialize = async (
     sdkKey: string,
     user: DevCycleUser,
-    { initialUserOnly = true }: DevCycleServerOptions = {},
+    { enableClientsideIdentify = true }: DevCycleServerOptions = {},
 ) => {
     setSDKKey(sdkKey)
-    if (initialUserOnly) {
+    if (enableClientsideIdentify) {
         await identifyInitialUser(user)
     } else {
         await identifyUser(user)
@@ -57,14 +56,13 @@ export const DevCycleClientProvider = async ({
     user,
     options,
 }: DevCycleClientProviderProps) => {
-    setSDKKey(sdkKey)
-    const context = await initialize(sdkKey, user, options)
-    const { populatedUser, ...clientContext } = context
+    const serverData = await initialize(sdkKey, user, options)
+    const { populatedUser, ...serverDataForClient } = serverData
 
     // this renders a client component that also sets the client on global
     // context is passed to perform bootstrapping of the server's config on clientside
     return (
-        <DevCycleClientProviderClientSide context={clientContext}>
+        <DevCycleClientProviderClientSide serverData={serverDataForClient}>
             {children}
         </DevCycleClientProviderClientSide>
     )

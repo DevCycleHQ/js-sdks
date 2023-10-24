@@ -3,7 +3,7 @@ import type { DVCVariableValue } from '@devcycle/js-client-sdk'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { VariableTypeAlias } from '@devcycle/types'
 import { DVCVariable } from '@devcycle/js-client-sdk'
-import { ClientContext } from './DevCycleClientProviderClientside'
+import { DevCycleClientContext } from './DevCycleClientProviderClientside'
 
 export const useVariable = <T extends DVCVariableValue>(
     key: string,
@@ -11,19 +11,22 @@ export const useVariable = <T extends DVCVariableValue>(
 ): DVCVariable<T> => {
     const [_, forceRerender] = useState({})
     const forceRerenderCallback = useCallback(() => forceRerender({}), [])
-    const context = useContext(ClientContext)
+    const context = useContext(DevCycleClientContext)
 
     useEffect(() => {
-        context?.subscribe(`variableUpdated:${key}`, forceRerenderCallback)
+        context.client.subscribe(
+            `variableUpdated:${key}`,
+            forceRerenderCallback,
+        )
         return () => {
-            context?.unsubscribe(
+            context.client.unsubscribe(
                 `variableUpdated:${key}`,
                 forceRerenderCallback,
             )
         }
     }, [key, forceRerenderCallback])
 
-    return context!.variable(key, defaultValue)
+    return context.client.variable(key, defaultValue)
 }
 
 export const useVariableValue = <T extends DVCVariableValue>(

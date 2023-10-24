@@ -1,16 +1,17 @@
 'use client'
 import { DevCycleUser } from '@devcycle/js-client-sdk'
-import { createCookieContents } from '../common/cookie'
 import { useDevCycleClient } from './useDevCycleClient'
 import { updateDVCCookie } from './updateDVCCookie'
+import { useRouter } from 'next/navigation'
+import { startTransition } from 'react'
 
 export const useIdentifyUser = () => {
     const client = useDevCycleClient()
+    const router = useRouter()
     return (user: DevCycleUser) => {
-        client.identifyUser(user).then(() => {
-            console.log('DONE IDENTIFY USER')
-            // set coookie
-            updateDVCCookie(client)
+        updateDVCCookie(client, user)
+        startTransition(() => {
+            router.refresh()
         })
     }
 }
