@@ -10211,10 +10211,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/ua-parser-js@npm:^0.7.36":
-  version: 0.7.36
-  resolution: "@types/ua-parser-js@npm:0.7.36"
-  checksum: 8c24d4dc12ed1b8b98195838093391c358c81bf75e9cae0ecec8f7824b441e069daaa17b974a3e257172caddb671439f0c0b44bf43bfcf409b7a574a25aab948
+"@types/ua-parser-js@npm:^0.7.38":
+  version: 0.7.38
+  resolution: "@types/ua-parser-js@npm:0.7.38"
+  checksum: 8a44887f7c782ed4c59c4d9cb254674f2ff41d8f653da0c2bd6d4ace79cc3de1ce5648b77f906e337fb97328e1114583e54c3b8882d194e1b8cb281f407a1ef7
   languageName: node
   linkType: hard
 
@@ -14648,7 +14648,7 @@ __metadata:
     "@types/react": 18.0.28
     "@types/react-dom": 18.0.11
     "@types/react-native": 0.71.7
-    "@types/ua-parser-js": ^0.7.36
+    "@types/ua-parser-js": ^0.7.38
     "@types/uuid": ^8.3.1
     "@typescript-eslint/eslint-plugin": 5.59.9
     "@typescript-eslint/parser": 5.59.9
@@ -14747,7 +14747,7 @@ __metadata:
     ts-node: ~10.9.1
     tslib: ^2.3.0
     typescript: 5.0.4
-    ua-parser-js: ^1.0.2
+    ua-parser-js: ^1.0.36
     url-loader: ^4.1.1
     uuid: ^8.3.2
     validate-npm-package-name: ^5.0.0
@@ -30587,17 +30587,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ua-parser-js@npm:*":
-  version: 1.0.35
-  resolution: "ua-parser-js@npm:1.0.35"
-  checksum: 02370d38a0c8b586f2503d1c3bbba5cbc0b97d407282f9023201a99e4c03eae4357a2800fdf50cf80d73ec25c0b0cc5bfbaa03975b0add4043d6e4c86712c9c1
-  languageName: node
-  linkType: hard
-
-"ua-parser-js@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "ua-parser-js@npm:1.0.2"
-  checksum: ff7f6d79a9c1a38aa85a0e751040fc7e17a0b621bda876838d14ebe55aca4e50e68da0350f181e58801c2d8a35e7db4e12473776e558910c4b7cabcec96aa3bf
+"ua-parser-js@npm:*, ua-parser-js@npm:^1.0.36":
+  version: 1.0.36
+  resolution: "ua-parser-js@npm:1.0.36"
+  checksum: 5b2c8a5e3443dfbba7624421805de946457c26ae167cb2275781a2729d1518f7067c9d5c74c3b0acac4b9ff3278cae4eace08ca6eecb63848bc3b2f6a63cc975
   languageName: node
   linkType: hard
 
