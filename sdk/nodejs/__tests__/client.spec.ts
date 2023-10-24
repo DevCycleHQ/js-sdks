@@ -4,7 +4,7 @@ import { DevCycleClient } from '../src/client'
 import { DevCycleUser } from '@devcycle/js-cloud-server-sdk'
 
 jest.mock('../src/bucketing')
-jest.mock('../src/environmentConfigManager')
+jest.mock('@devcycle/config-manager')
 jest.mock('../src/eventQueue')
 
 describe('DevCycleClient', () => {

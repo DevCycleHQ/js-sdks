@@ -55,3 +55,11 @@ export const getBucketingLib = (): Exports => {
 export const cleanupBucketingLib = (): void => {
     Bucketing = null
 }
+
+export const setConfigDataUTF8 = (
+    sdkKey: string,
+    projectConfigStr: string,
+): void => {
+    const configBuffer = Buffer.from(projectConfigStr, 'utf8')
+    getBucketingLib().setConfigDataUTF8(sdkKey, configBuffer)
+}

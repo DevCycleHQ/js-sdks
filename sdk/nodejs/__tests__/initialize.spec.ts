@@ -5,7 +5,7 @@ import {
 } from '../src/index'
 
 jest.mock('../src/bucketing')
-jest.mock('../src/environmentConfigManager')
+jest.mock('@devcycle/config-manager')
 
 describe('NodeJS SDK Initialize', () => {
     afterAll(() => {
