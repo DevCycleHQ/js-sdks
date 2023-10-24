@@ -24,7 +24,7 @@
         "react-native-get-random-values": "*",
         "react-native-svg": "*",
         "reflect-metadata": "*",
-        "ua-parser-js": "*",
+        "ua-parser-js": "^1.0.36",
         "uuid": "*"
     },
     "devDependencies": {
