@@ -78,6 +78,8 @@ export async function post(
         Authorization: sdkKey,
         'Content-Type': 'application/json',
     }
+
+    console.log(`POST: ${url}`)
     const res = await _fetch(url, {
         ...config,
         headers: postHeaders,
@@ -94,6 +96,7 @@ export async function get(
     const [_fetch, config] = await getFetchAndConfig(requestConfig)
     const headers = { ...config.headers, 'Content-Type': 'application/json' }
 
+    console.log(`GET: ${url}`)
     const res = await _fetch(url, {
         ...config,
         headers,

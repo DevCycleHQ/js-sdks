@@ -17,15 +17,16 @@ const respond500User = { user_id: '500' }
 
 jest.mock('fetch-retry')
 
+beforeAll(() => server.listen())
+afterEach(() => server.resetHandlers())
+afterAll(() => server.close())
+
 describe('DevCycleCloudClient without EdgeDB', () => {
     beforeAll(async () => {
         client = DVC.initializeDevCycle('dvc_server_token', {
             logLevel: 'error',
         })
-        server.listen()
     })
-    afterEach(() => server.resetHandlers())
-    afterAll(() => server.close())
 
     describe('variable', () => {
         it('to return a Value and not be defaulted', async () => {
@@ -247,10 +248,7 @@ describe('DevCycleCloudClient with EdgeDB Enabled', () => {
             logLevel: 'error',
             enableEdgeDB: true,
         })
-        server.listen()
     })
-    afterEach(() => server.resetHandlers())
-    afterAll(() => server.close())
 
     describe('variable', () => {
         it('to return a Value and not be defaulted', async () => {

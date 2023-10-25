@@ -5,6 +5,7 @@ export const handlers = [
     http.post(
         'https://bucketing-api.devcycle.com/v1/variables/test-key-not-in-config',
         () => {
+            console.log
             return HttpResponse.json({}, { status: 404 })
         },
     ),
