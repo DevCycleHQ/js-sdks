@@ -1,9 +1,10 @@
 import { fetchCDNConfig } from './requests'
 import { generateBucketedConfig } from '@devcycle/bucketing'
-import { getIdentity } from './requestContext'
+import { getIdentity, getSDKKey } from './requestContext'
 import { cache } from 'react'
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { headers } from 'next/headers'
+import { getSSEUrl } from './ably'
 
 // wrap this function in react cache to avoid redoing work for the same user and config
 const generateBucketedConfigCached = cache(
@@ -21,7 +22,10 @@ const generateBucketedConfigCached = cache(
         return {
             config: {
                 ...generateBucketedConfig({ user: populatedUser, config }),
-                sse: config.sse,
+                sse: {
+                    url: await getSSEUrl(getSDKKey(), config.ably?.apiKey),
+                    inactivityDelay: 1000 * 60 * 2,
+                },
             },
             populatedUser,
         }
