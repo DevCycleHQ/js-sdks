@@ -25,7 +25,8 @@
         "react-native-svg": "*",
         "reflect-metadata": "*",
         "ua-parser-js": "*",
-        "uuid": "*"
+        "uuid": "*",
+        "@react-native/metro-config": "*"
     },
     "devDependencies": {
         "@babel/plugin-proposal-decorators": "*"
