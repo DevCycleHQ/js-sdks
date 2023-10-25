@@ -1,6 +1,9 @@
 'use server'
-import { revalidateTag } from 'next/cache'
+import { invalidateConfigCache } from '../server/requests'
 
-export const invalidateConfig = async (sdkToken: string) => {
-    revalidateTag(sdkToken)
+export const invalidateConfig = async (
+    sdkToken: string,
+    lastModified?: number,
+) => {
+    await invalidateConfigCache(sdkToken, lastModified)
 }

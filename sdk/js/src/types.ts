@@ -113,6 +113,13 @@ export interface DevCycleOptions {
      * system.
      */
     bootstrapConfig?: BucketedUserConfig
+
+    /**
+     * options set by Next SDK. Not for direct use.
+     */
+    next?: {
+        configRefreshHandler?: (lastModifiedDate?: number) => void
+    }
 }
 
 export interface DevCycleUser {

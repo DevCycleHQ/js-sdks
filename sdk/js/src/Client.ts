@@ -89,6 +89,7 @@ export class DevCycleClient<
     private inactivityHandlerId?: number
     private windowMessageHandler?: (event: MessageEvent) => void
     private windowPageHideHandler?: () => void
+    private configRefetchHandler: (lastModifiedDate?: number) => void
 
     constructor(
         sdkKey: string,
@@ -106,6 +107,10 @@ export class DevCycleClient<
             options = userOrOptions
         } else {
             user = userOrOptions
+        }
+
+        if (options.next?.configRefreshHandler) {
+            this.configRefetchHandler = options.next.configRefreshHandler
         }
 
         this.logger =
@@ -634,7 +639,15 @@ export class DevCycleClient<
         etag?: string,
     ) {
         await this.onInitialized
-        await this.requestConsolidator.queue(null, { sse, lastModified, etag })
+        if (this.configRefetchHandler) {
+            this.configRefetchHandler(lastModified)
+        } else {
+            await this.requestConsolidator.queue(null, {
+                sse,
+                lastModified,
+                etag,
+            })
+        }
     }
 
     private handleConfigReceived(

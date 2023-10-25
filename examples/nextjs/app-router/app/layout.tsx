@@ -1,7 +1,7 @@
 import '../styles/globals.css'
 import * as React from 'react'
 import {
-    DevCycleClientProvider,
+    DevCycleServersideProvider,
     getVariableValue,
 } from '@devcycle/next-sdk/server'
 
@@ -18,6 +18,8 @@ const serverIds = [
     'server-10',
 ]
 
+const getUserFromDatabase = () => {}
+
 export default async function RootLayout({
     // Layouts must accept a children prop.
     // This will be populated with nested layouts or pages
@@ -26,16 +28,19 @@ export default async function RootLayout({
     children: React.ReactNode
 }) {
     const randomId = serverIds[Math.floor(Math.random() * serverIds.length)]
+    const shouldTrustServerData = false
     return (
         <html lang="en">
             <body>
-                <DevCycleClientProvider
+                <DevCycleServersideProvider
                     sdkKey={process.env.DEVCYCLE_CLIENT_SDK_KEY ?? ''}
                     user={{ user_id: randomId }}
-                    options={{ enableClientsideIdentify: true }}
+                    options={{
+                        enableClientsideIdentify: !shouldTrustServerData,
+                    }}
                 >
                     {children}
-                </DevCycleClientProvider>
+                </DevCycleServersideProvider>
             </body>
         </html>
     )

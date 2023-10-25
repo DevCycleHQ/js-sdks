@@ -3,7 +3,7 @@ import type { DVCVariableValue } from '@devcycle/js-client-sdk'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { VariableTypeAlias } from '@devcycle/types'
 import { DVCVariable } from '@devcycle/js-client-sdk'
-import { DevCycleClientContext } from './DevCycleClientProviderClientside'
+import { DevCycleClientContext } from './DevCycleClientsideProvider'
 
 export const useVariable = <T extends DVCVariableValue>(
     key: string,

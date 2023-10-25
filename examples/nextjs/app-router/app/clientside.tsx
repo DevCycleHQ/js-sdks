@@ -4,7 +4,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { useVariableValue } from '@devcycle/next-sdk'
-import { UserIdentity } from './UserIdentity'
+import { ClientIdentity } from './ClientIdentity'
 import { ReactNode } from 'react'
 
 const ClientSide = ({ children }: { children: ReactNode }) => {
@@ -46,46 +46,46 @@ const ClientSide = ({ children }: { children: ReactNode }) => {
                     <code className={styles.code}>app/layout.tsx</code>
                 </p>
                 {children}
-                <UserIdentity />
+                <ClientIdentity />
                 <br />
 
-                <div className={styles.description}>
-                    <div>
-                        <div>
-                            <span>React next js</span>
-                        </div>
-                        <div>
-                            <span>
-                                variable test-featre ={' '}
-                                {JSON.stringify(variable)}{' '}
-                            </span>
-                        </div>
-                        <div>
-                            <span>
-                                variable variable-key-string ={' '}
-                                {JSON.stringify(variableString)}{' '}
-                            </span>
-                        </div>
-                        <div>
-                            <span>
-                                variable variable-key-number ={' '}
-                                {JSON.stringify(variableNumber)}{' '}
-                            </span>
-                        </div>
-                        <div>
-                            <span>
-                                variable variable-key-boolean ={' '}
-                                {JSON.stringify(variableBoolean)}
-                            </span>
-                        </div>
-                        <div>
-                            <span>
-                                variable variable-json-key-string ={' '}
-                                {JSON.stringify(variableJsonString)}{' '}
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                {/*<div className={styles.description}>*/}
+                {/*    <div>*/}
+                {/*        <div>*/}
+                {/*            <span>React next js</span>*/}
+                {/*        </div>*/}
+                {/*        <div>*/}
+                {/*            <span>*/}
+                {/*                variable test-featre ={' '}*/}
+                {/*                {JSON.stringify(variable)}{' '}*/}
+                {/*            </span>*/}
+                {/*        </div>*/}
+                {/*        <div>*/}
+                {/*            <span>*/}
+                {/*                variable variable-key-string ={' '}*/}
+                {/*                {JSON.stringify(variableString)}{' '}*/}
+                {/*            </span>*/}
+                {/*        </div>*/}
+                {/*        <div>*/}
+                {/*            <span>*/}
+                {/*                variable variable-key-number ={' '}*/}
+                {/*                {JSON.stringify(variableNumber)}{' '}*/}
+                {/*            </span>*/}
+                {/*        </div>*/}
+                {/*        <div>*/}
+                {/*            <span>*/}
+                {/*                variable variable-key-boolean ={' '}*/}
+                {/*                {JSON.stringify(variableBoolean)}*/}
+                {/*            </span>*/}
+                {/*        </div>*/}
+                {/*        <div>*/}
+                {/*            <span>*/}
+                {/*                variable variable-json-key-string ={' '}*/}
+                {/*                {JSON.stringify(variableJsonString)}{' '}*/}
+                {/*            </span>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
 
                 <div className={styles.grid}>
                     <a href="https://nextjs.org/docs" className={styles.card}>

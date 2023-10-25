@@ -17,7 +17,7 @@ const clientsideIds = [
     'clientside-10',
 ]
 
-export const UserIdentity = () => {
+export const ClientIdentity = () => {
     const client = useDevCycleClient()
     const variable = useVariableValue('test-featre', false)
     const identifyUser = useIdentifyUser()
