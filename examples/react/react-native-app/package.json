@@ -6,6 +6,7 @@
         "@babel/plugin-proposal-decorators": "*",
         "@nestjs/class-validator": "*",
         "@react-native-async-storage/async-storage": "*",
+        "@react-native/metro-config": "*",
         "@testing-library/jest-dom": "*",
         "@testing-library/jest-native": "*",
         "@testing-library/react": "*",
@@ -25,8 +26,7 @@
         "react-native-svg": "*",
         "reflect-metadata": "*",
         "ua-parser-js": "*",
-        "uuid": "*",
-        "@react-native/metro-config": "*"
+        "uuid": "*"
     },
     "devDependencies": {
         "@babel/plugin-proposal-decorators": "*"
