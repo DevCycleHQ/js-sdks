@@ -78,6 +78,7 @@ export async function post(
         Authorization: sdkKey,
         'Content-Type': 'application/json',
     }
+
     const res = await _fetch(url, {
         ...config,
         headers: postHeaders,
