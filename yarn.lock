@@ -5258,7 +5258,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/react-client-sdk@workspace:sdk/react":
+"@devcycle/react-client-sdk@^1.11.11, @devcycle/react-client-sdk@workspace:sdk/react":
   version: 0.0.0-use.local
   resolution: "@devcycle/react-client-sdk@workspace:sdk/react"
   dependencies:
@@ -5285,6 +5285,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/react-native-expo-client-sdk@workspace:sdk/react-native-expo"
   dependencies:
+    "@devcycle/react-client-sdk": ^1.11.11
     "@react-native-async-storage/async-storage": ^1.17.11
     react-native-device-info: ^8.7.0
     react-native-get-random-values: ^1.7.2
