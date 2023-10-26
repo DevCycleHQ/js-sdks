@@ -45,10 +45,10 @@ export const DevCycleClientsideProvider = ({
                 disableConfigCache: true,
                 next: {
                     configRefreshHandler: revalidateConfig,
+                    eventsToTrack: serverData.events,
                 },
             },
         )
-        // TODO is this always true because the reference changes on re-render?
     } else if (previousContext != serverData) {
         // change user and config data to match latest server data
         // if the data has changed since the last invocation
@@ -65,6 +65,7 @@ export const DevCycleClientsideProvider = ({
         <DevCycleClientContext.Provider
             value={{ client: clientRef.current, sdkKey: serverData.sdkKey }}
         >
+            <button onClick={() => router.refresh()}>Test</button>
             {children}
         </DevCycleClientContext.Provider>
     )

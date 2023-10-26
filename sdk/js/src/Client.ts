@@ -233,6 +233,13 @@ export class DevCycleClient<
             this.store.removeAnonUserId()
         }
 
+        if (this.options.next?.eventsToTrack) {
+            for (const event of this.options.next.eventsToTrack) {
+                console.log('TRACKING', event)
+                this.track(event)
+            }
+        }
+
         if (this.config?.sse?.url) {
             if (!this.options.disableRealtimeUpdates) {
                 this.streamingConnection = new StreamingConnection(

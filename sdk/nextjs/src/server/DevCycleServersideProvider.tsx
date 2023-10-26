@@ -1,12 +1,16 @@
 import 'server-only'
 import React from 'react'
-import { DevCycleUser, initializeDevCycle } from '@devcycle/js-client-sdk'
+import {
+    DevCycleOptions,
+    DevCycleUser,
+    initializeDevCycle,
+} from '@devcycle/js-client-sdk'
 import { DevCycleClientsideProvider } from '../client/DevCycleClientsideProvider'
 import { getClient, setClient, setSDKKey } from './requestContext'
 import { identifyInitialUser, identifyUser } from './identify'
 import { getDevCycleServerData } from './devcycleServerData'
 
-type DevCycleServerOptions = {
+type DevCycleNextOptions = DevCycleOptions & {
     /**
      * Option to enable the ability to identify a user clientside. This allows `identifyUser` to be called in a client
      * component and synchronizes the user data via a cookie. The method will only work if cookie support is enabled
@@ -20,14 +24,14 @@ type DevCycleServerOptions = {
 type DevCycleServersideProviderProps = {
     sdkKey: string
     user: DevCycleUser
-    options?: DevCycleServerOptions
+    options?: DevCycleNextOptions
     children: React.ReactNode
 }
 
 export const initialize = async (
     sdkKey: string,
     user: DevCycleUser,
-    { enableClientsideIdentify = false }: DevCycleServerOptions = {},
+    { enableClientsideIdentify = false, ...options }: DevCycleNextOptions = {},
 ) => {
     setSDKKey(sdkKey)
     if (enableClientsideIdentify) {
@@ -42,12 +46,15 @@ export const initialize = async (
     if (!client) {
         setClient(
             initializeDevCycle(sdkKey, user, {
+                ...options,
                 bootstrapConfig: context.config,
+                // set this so SDK knows we're on Next
+                next: {},
+                disableAutomaticEventLogging: true,
+                disableCustomEventLogging: true,
+                disableConfigCache: true,
             }),
         )
-    } else {
-        // TODO is this ever hit and should it use sync boostrapping data
-        client.user = context.populatedUser
     }
 
     return context

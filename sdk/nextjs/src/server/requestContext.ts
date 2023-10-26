@@ -1,5 +1,9 @@
 import { cache } from 'react'
-import { DevCycleClient, DevCycleUser } from '@devcycle/js-client-sdk'
+import {
+    DevCycleClient,
+    DevCycleEvent,
+    DevCycleUser,
+} from '@devcycle/js-client-sdk'
 
 export const requestContext = <T>(
     defaultValue: T,
@@ -46,3 +50,17 @@ export const setSDKKey = (key: string) => {
     }
     _setSDKKey(key)
 }
+
+const [_getTrackedEvents, _setTrackedEvents] = requestContext<DevCycleEvent[]>(
+    [],
+)
+
+export const addTrackedEvent = (type: string, target: string) => {
+    console.log('TRACKING EVENT')
+    _setTrackedEvents([
+        ..._getTrackedEvents(),
+        { type, target, date: Date.now(), metaData: { serverside: true } },
+    ])
+}
+
+export const getTrackedEvents = () => _getTrackedEvents()

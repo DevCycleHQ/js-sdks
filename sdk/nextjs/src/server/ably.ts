@@ -23,6 +23,7 @@ export const getUserChannelName = async (
     return `dvc_user_${await sha1(`${userId}`, subtle)}_v1`
 }
 
+// TODO put this in next data cache when unstable cache is available
 export async function getSSEUrl(
     sdkKey: string,
     apiKey: string,

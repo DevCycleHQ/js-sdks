@@ -58,18 +58,18 @@ export function initializeDevCycle<
     userOrOptions: DevCycleUser | DevCycleOptionsWithDeferredInitialization,
     optionsArg: DevCycleOptions = {},
 ): DevCycleClient<Variables> {
-    // TODO: implement logger
-    if (typeof window === 'undefined') {
-        console.warn(
-            'Window is not defined, try initializing in a browser context',
-        )
-    }
-
     let options = optionsArg
     let isDeferred = false
     if (isDeferredOptions(userOrOptions)) {
         isDeferred = true
         options = userOrOptions
+    }
+
+    // TODO: implement logger
+    if (typeof window === 'undefined' && !options.next) {
+        console.warn(
+            'Window is not defined, try initializing in a browser context',
+        )
     }
 
     if (
