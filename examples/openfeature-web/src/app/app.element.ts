@@ -4,7 +4,7 @@ import './app.element.css'
 import DevCycleProvider from '@devcycle/openfeature-web-provider'
 import { OpenFeature } from '@openfeature/web-sdk'
 
-const SDK_KEY =
+const DEVCYCLE_CLIENT_SDK_KEY =
     process.env.DEVCYCLE_CLIENT_SDK_KEY || '<DEVCYCLE_CLIENT_SDK_KEY>'
 
 export class AppElement extends HTMLElement {
@@ -469,13 +469,9 @@ const user = {
     isAnonymous: false,
 }
 
-const devcycleProvider = new DevCycleProvider(SDK_KEY, { logLevel: 'debug' })
-OpenFeature.setProvider(devcycleProvider)
-const ofClient = OpenFeature.getClient()
-console.log(`Set OF Context`)
-OpenFeature.setContext(user).then(() => {
-    console.log(`OF Context set`)
-    devcycleProvider.DevcycleClient?.onClientInitialized(() =>
-        customElements.define('devcycle-root', AppElement),
-    )
+const devcycleProvider = new DevCycleProvider(DEVCYCLE_CLIENT_SDK_KEY)
+OpenFeature.setContext(user)
+OpenFeature.setProviderAndWait(devcycleProvider).then(() => {
+    customElements.define('devcycle-root', AppElement)
 })
+const ofClient = OpenFeature.getClient()

@@ -22,7 +22,6 @@ See our [documentation](https://docs.devcycle.com/sdk/client-side-sdks/javascrip
 // TODO: update
 
 ```typescript
-import { initializeDevCycle } from '@devcycle/js-client-sdk'
 import DevCycleProvider from '@devcycle/openfeature-web-provider'
 import { OpenFeature } from '@openfeature/web-sdk'
 
@@ -30,14 +29,14 @@ import { OpenFeature } from '@openfeature/web-sdk'
 
 const user = { user_id: 'user_id' }
 
-// Initialize the DevCycle SDK
-const devcycleClient = initializeDevCycle(DVC_SERVER_SDK_KEY, user)
-// Set the initialzed DevCycle client as the provider for OpenFeature
-OpenFeature.setProvider(new DevCycleProvider(devcycleClient))
+// Initialize the DevCycle Provider
+const devcycleProvider = new DevCycleProvider(DEVCYCLE_CLIENT_SDK_KEY)
+// Set the context before the provider is set to ensure the DevCycle SDK is initialized with a user context.
+OpenFeature.setContext(user)
+// Set the DevCycleProvider for OpenFeature
+await OpenFeature.setProviderAndWait(devcycleProvider)
 // Get the OpenFeature client
-openFeatureClient = OpenFeature.getClient()
-// Set the context for the OpenFeature client, you can use 'targetingKey' or 'user_id'
-openFeatureClient.setContext(user)
+const openFeatureClient = OpenFeature.getClient()
 
 // Retrieve a boolean flag from the OpenFeature client
 const boolFlag = openFeatureClient.getBooleanValue('boolean-flag', false)
@@ -49,8 +48,7 @@ Ensure that you pass any custom DVCOptions to the DevCycleProvider constructor
 
 ```typescript
 const options = { logger: dvcDefaultLogger({ level: 'debug' }) }
-const devcycleClient = initializeDevCycle(DVC_SERVER_SDK_KEY, options)
-OpenFeature.setProvider(new DevCycleProvider(devcycleClient, options))
+OpenFeature.setProvider(new DevCycleProvider(DEVCYCLE_CLIENT_SDK_KEY, options))
 ```
 
 #### Required TargetingKey

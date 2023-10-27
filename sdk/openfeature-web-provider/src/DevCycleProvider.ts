@@ -9,7 +9,6 @@ import {
     ParseError,
     TargetingKeyMissingError,
     InvalidContextError,
-    Logger,
     ProviderStatus,
 } from '@openfeature/web-sdk'
 import {
@@ -59,17 +58,20 @@ export default class DevCycleProvider implements Provider {
     }
 
     async initialize(context?: EvaluationContext): Promise<void> {
-        console.log(
-            `of initialize DVC: ${this.sdkKey}, context: ${JSON.stringify(
-                context,
-            )}`,
-        )
         this.devcycleClient = await initializeDevCycle(
             this.sdkKey,
-            this.dvcUserFromContext(context || {}),
+            context ? this.dvcUserFromContext(context) : {},
             this.options,
         ).onClientInitialized()
-        console.log('of initialize DVC done')
+
+        if (!context) {
+            this.devcycleClient.logger.warn(
+                'DevCycle initialized without context being set. ' +
+                    'It is highly recommended to set a context `OpenFeature.setContext()` ' +
+                    'before setting an OpenFeature Provider `OpenFeature.setProvider()` ' +
+                    'to avoid multiple API fetch calls.',
+            )
+        }
     }
 
     get status(): ProviderStatus {
@@ -114,13 +116,10 @@ export default class DevCycleProvider implements Provider {
      * Resolve a boolean OpenFeature flag and its evaluation details.
      * @param flagKey
      * @param defaultValue
-     * @param context
      */
     resolveBooleanEvaluation(
         flagKey: string,
         defaultValue: boolean,
-        context: EvaluationContext,
-        logger: Logger,
     ): ResolutionDetails<boolean> {
         return this.getDVCVariable(flagKey, defaultValue, defaultValue)
     }
@@ -129,13 +128,10 @@ export default class DevCycleProvider implements Provider {
      * Resolve a string OpenFeature flag and its evaluation details.
      * @param flagKey
      * @param defaultValue
-     * @param context
      */
     resolveStringEvaluation(
         flagKey: string,
         defaultValue: string,
-        context: EvaluationContext,
-        logger: Logger,
     ): ResolutionDetails<string> {
         return this.getDVCVariable(flagKey, defaultValue, defaultValue)
     }
@@ -144,28 +140,22 @@ export default class DevCycleProvider implements Provider {
      * Resolve a number OpenFeature flag and its evaluation details.
      * @param flagKey
      * @param defaultValue
-     * @param context
      */
     resolveNumberEvaluation(
         flagKey: string,
         defaultValue: number,
-        context: EvaluationContext,
-        logger: Logger,
     ): ResolutionDetails<number> {
         return this.getDVCVariable(flagKey, defaultValue, defaultValue)
     }
 
     /**
-     * Resolve a object OpenFeature flag and its evaluation details.
+     * Resolve an object OpenFeature flag and its evaluation details.
      * @param flagKey
      * @param defaultValue
-     * @param context
      */
     resolveObjectEvaluation<T extends JsonValue>(
         flagKey: string,
         defaultValue: T,
-        context: EvaluationContext,
-        logger: Logger,
     ): ResolutionDetails<T> {
         return this.getDVCVariable(
             flagKey,
