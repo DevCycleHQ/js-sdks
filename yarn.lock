@@ -8587,10 +8587,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openfeature/web-sdk@npm:^0.3.4-experimental":
-  version: 0.3.11
-  resolution: "@openfeature/web-sdk@npm:0.3.11"
-  checksum: bbc2f191829c547b5eedf12784475f105c2ad899ffcc95c018d899d3cfcbbeb8e507c606a841894f1432c25d18ade85ecffec13f957f134e72c5a78155a679c7
+"@openfeature/web-sdk@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "@openfeature/web-sdk@npm:0.4.1"
+  checksum: 6f1d6d5644c944d6f3bb93b055baffe17ede1213fffe422b8d8580bd74139d902359a51f60db313b92fbaa4d6fa235368cc8dc2285baf9d37cc04180a309b0ed
   languageName: node
   linkType: hard
 
@@ -15347,7 +15347,7 @@ __metadata:
     "@nx/webpack": 16.10.0
     "@nx/workspace": 16.10.0
     "@openfeature/js-sdk": ^1.4.2
-    "@openfeature/web-sdk": ^0.3.4-experimental
+    "@openfeature/web-sdk": ^0.4.1
     "@pmmmwh/react-refresh-webpack-plugin": ^0.5.7
     "@react-native-async-storage/async-storage": 1.19.4
     "@react-native-community/cli": 11.3.6
