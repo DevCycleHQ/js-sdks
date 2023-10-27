@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 
 import './app.element.css'
-import { initializeDevCycle } from 'sdk/js/src'
 import DevCycleProvider from '@devcycle/openfeature-web-provider'
 import { OpenFeature } from '@openfeature/web-sdk'
 
@@ -20,10 +19,7 @@ export class AppElement extends HTMLElement {
             'titlevariable',
             'Welcome 👋',
         )
-        const variableKey = ofClient.getBooleanValue(
-            'feature-release',
-            true,
-        )
+        const variableKey = ofClient.getBooleanValue('feature-release', true)
         const variableKeyString = ofClient.getStringValue(
             'variable-key-string',
             'default',
@@ -456,7 +452,7 @@ export class AppElement extends HTMLElement {
 
     connectedCallback(): void {
         this.updateInnerHTML()
-        devcycleClient.subscribe('configUpdated', () => {
+        devcycleProvider.DevcycleClient?.subscribe('configUpdated', () => {
             this.updateInnerHTML()
         })
     }
@@ -473,14 +469,13 @@ const user = {
     isAnonymous: false,
 }
 
-const devcycleClient = initializeDevCycle(SDK_KEY, user, {
-    enableEdgeDB: false,
-    logLevel: 'error',
+const devcycleProvider = new DevCycleProvider(SDK_KEY, { logLevel: 'debug' })
+OpenFeature.setProvider(devcycleProvider)
+const ofClient = OpenFeature.getClient()
+console.log(`Set OF Context`)
+OpenFeature.setContext(user).then(() => {
+    console.log(`OF Context set`)
+    devcycleProvider.DevcycleClient?.onClientInitialized(() =>
+        customElements.define('devcycle-root', AppElement),
+    )
 })
-
-OpenFeature.setProvider(new DevCycleProvider(devcycleClient))
-const ofClient = OpenFeature.getClient();
-
-devcycleClient.onClientInitialized(() =>
-    customElements.define('devcycle-root', AppElement),
-)

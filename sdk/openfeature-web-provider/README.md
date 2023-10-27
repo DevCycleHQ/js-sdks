@@ -5,15 +5,15 @@ for [DevCycle Javascript Client SDK](https://docs.devcycle.com/sdk/client-side-s
 
 ## Building
 
-Run `nx build sdk-openfeature-web-provider` to build the library.
+Run `yarn nx build sdk-openfeature-web-provider` to build the library.
 
 ## Running Unit Tests
 
-Run `nx test sdk-openfeature-web-provider` to execute the unit tests via [Jest](https://jestjs.io).
+Run `yarn nx test sdk-openfeature-web-provider` to execute the unit tests via [Jest](https://jestjs.io).
 
 ## Example App
 
-See the [example app](/examples/openfeature-js) for a working example of the OpenFeature DevCycle NodeJS Provider.
+See the [example app](/examples/openfeature-web) for a working example of the OpenFeature Web DevCycle Provider.
 
 ## Usage
 
@@ -22,24 +22,25 @@ See our [documentation](https://docs.devcycle.com/sdk/client-side-sdks/javascrip
 // TODO: update
 
 ```typescript
-import { OpenFeature, Client } from '@openfeature/js-sdk'
-import { DevCycleProvider } from '@devcycle/openfeature-web-provider'
-import { initialize } from '@devcycle/devcycle-js-sdk'
+import { initializeDevCycle } from '@devcycle/js-client-sdk'
+import DevCycleProvider from '@devcycle/openfeature-web-provider'
+import { OpenFeature } from '@openfeature/web-sdk'
 
 ... 
 
+const user = { user_id: 'user_id' }
+
 // Initialize the DevCycle SDK
-const dvcClient = await initialize(DVC_SERVER_SDK_KEY).onClientInitialized()
+const devcycleClient = initializeDevCycle(DVC_SERVER_SDK_KEY, user)
 // Set the initialzed DevCycle client as the provider for OpenFeature
-OpenFeature.setProvider(new DevCycleProvider(dvcClient))
+OpenFeature.setProvider(new DevCycleProvider(devcycleClient))
 // Get the OpenFeature client
 openFeatureClient = OpenFeature.getClient()
 // Set the context for the OpenFeature client, you can use 'targetingKey' or 'user_id'
-openFeatureClient.setContext({ targetingKey: 'js_sdk_test' })
-
+openFeatureClient.setContext(user)
 
 // Retrieve a boolean flag from the OpenFeature client
-const boolFlag = await openFeatureClient.getBooleanValue('boolean-flag', false)
+const boolFlag = openFeatureClient.getBooleanValue('boolean-flag', false)
 ```
 
 #### Passing DVCOptions to the DevCycleProvider
@@ -48,8 +49,8 @@ Ensure that you pass any custom DVCOptions to the DevCycleProvider constructor
 
 ```typescript
 const options = { logger: dvcDefaultLogger({ level: 'debug' }) }
-const dvcClient = await initialize(DVC_SERVER_SDK_KEY, options).onClientInitialized()
-OpenFeature.setProvider(new DevCycleProvider(dvcClient, options))
+const devcycleClient = initializeDevCycle(DVC_SERVER_SDK_KEY, options)
+OpenFeature.setProvider(new DevCycleProvider(devcycleClient, options))
 ```
 
 #### Required TargetingKey

@@ -13,15 +13,15 @@ import {
     ProviderStatus,
 } from '@openfeature/web-sdk'
 import {
+    initializeDevCycle,
     DevCycleClient,
     DevCycleOptions,
     DVCVariable,
     DevCycleUser,
     DVCJSON,
     DVCCustomDataJSON,
-    dvcDefaultLogger,
 } from '@devcycle/js-client-sdk'
-import { DVCLogger, VariableValue } from '@devcycle/types'
+import { VariableValue } from '@devcycle/types'
 
 const DVCKnownPropertyKeyTypes: Record<string, string> = {
     email: 'string',
@@ -45,35 +45,48 @@ export default class DevCycleProvider implements Provider {
 
     readonly runsOn = 'client'
 
-    private readonly logger: DVCLogger
+    private readonly options: DevCycleOptions
+    private readonly sdkKey: string
 
-    constructor(
-        private readonly DevCycleClient: DevCycleClient,
-        options: DevCycleOptions = {},
-    ) {
-        this.logger =
-            options.logger ?? dvcDefaultLogger({ level: options.logLevel })
+    private devcycleClient: DevCycleClient | null = null
+    get DevcycleClient(): DevCycleClient | null {
+        return this.devcycleClient
+    }
+
+    constructor(sdkKey: string, options: DevCycleOptions = {}) {
+        this.sdkKey = sdkKey
+        this.options = options
     }
 
     async initialize(context?: EvaluationContext): Promise<void> {
-        await this.DevCycleClient.onClientInitialized()
+        console.log(
+            `of initialize DVC: ${this.sdkKey}, context: ${JSON.stringify(
+                context,
+            )}`,
+        )
+        this.devcycleClient = await initializeDevCycle(
+            this.sdkKey,
+            this.dvcUserFromContext(context || {}),
+            this.options,
+        ).onClientInitialized()
+        console.log('of initialize DVC done')
     }
 
     get status(): ProviderStatus {
-        return this.DevCycleClient.isInitialized
+        return this.devcycleClient?.isInitialized
             ? ProviderStatus.READY
             : ProviderStatus.NOT_READY
     }
 
     async onClose(): Promise<void> {
-        await this.DevCycleClient.close()
+        await this.devcycleClient?.close()
     }
 
     async onContextChange(
         oldContext: EvaluationContext,
         newContext: EvaluationContext,
     ): Promise<void> {
-        await this.DevCycleClient.identifyUser(
+        await this.devcycleClient?.identifyUser(
             this.dvcUserFromContext(newContext),
         )
     }
@@ -81,15 +94,20 @@ export default class DevCycleProvider implements Provider {
     /**
      * Generic function to retrieve a DVC variable and convert it to a ResolutionDetails.
      * @param flagKey
-     * @param defaultValue
+     * @param dvcDefaultValue
+     * @param ofDefaultValue
      * @private
      */
     private getDVCVariable<I extends VariableValue, O>(
         flagKey: string,
-        defaultValue: I,
+        dvcDefaultValue: I,
+        ofDefaultValue: O,
     ): ResolutionDetails<O> {
-        const dvcVariable = this.DevCycleClient.variable(flagKey, defaultValue)
-        return this.resultFromDVCVariable<O, I>(dvcVariable)
+        const dvcVariable = this.devcycleClient?.variable(
+            flagKey,
+            dvcDefaultValue,
+        )
+        return this.resultFromDVCVariable<O, I>(dvcVariable, ofDefaultValue)
     }
 
     /**
@@ -104,7 +122,7 @@ export default class DevCycleProvider implements Provider {
         context: EvaluationContext,
         logger: Logger,
     ): ResolutionDetails<boolean> {
-        return this.getDVCVariable(flagKey, defaultValue)
+        return this.getDVCVariable(flagKey, defaultValue, defaultValue)
     }
 
     /**
@@ -119,7 +137,7 @@ export default class DevCycleProvider implements Provider {
         context: EvaluationContext,
         logger: Logger,
     ): ResolutionDetails<string> {
-        return this.getDVCVariable(flagKey, defaultValue)
+        return this.getDVCVariable(flagKey, defaultValue, defaultValue)
     }
 
     /**
@@ -134,7 +152,7 @@ export default class DevCycleProvider implements Provider {
         context: EvaluationContext,
         logger: Logger,
     ): ResolutionDetails<number> {
-        return this.getDVCVariable(flagKey, defaultValue)
+        return this.getDVCVariable(flagKey, defaultValue, defaultValue)
     }
 
     /**
@@ -152,6 +170,7 @@ export default class DevCycleProvider implements Provider {
         return this.getDVCVariable(
             flagKey,
             this.defaultValueFromJsonValue(defaultValue),
+            defaultValue,
         )
     }
 
@@ -181,17 +200,24 @@ export default class DevCycleProvider implements Provider {
      * Convert a DVCVariable result into a OpenFeature ResolutionDetails.
      * TODO: add support for variant / reason / and more error codes from DVC.
      * @param variable
+     * @param ofDefaultValue
      * @private
      */
     private resultFromDVCVariable<T, I extends VariableValue>(
-        variable: DVCVariable<I>,
+        variable: DVCVariable<I> | undefined,
+        ofDefaultValue: T,
     ): ResolutionDetails<T> {
-        return {
-            value: variable.value as T,
-            reason: variable.isDefaulted
-                ? StandardResolutionReasons.DEFAULT
-                : StandardResolutionReasons.TARGETING_MATCH,
-        }
+        return variable
+            ? {
+                  value: variable.value as T,
+                  reason: variable.isDefaulted
+                      ? StandardResolutionReasons.DEFAULT
+                      : StandardResolutionReasons.TARGETING_MATCH,
+              }
+            : {
+                  value: ofDefaultValue,
+                  reason: StandardResolutionReasons.DEFAULT,
+              }
     }
 
     /**
@@ -223,7 +249,7 @@ export default class DevCycleProvider implements Provider {
             const knownValueType = DVCKnownPropertyKeyTypes[key]
             if (knownValueType) {
                 if (typeof value !== knownValueType) {
-                    this.logger.warn(
+                    this.devcycleClient?.logger.warn(
                         `Expected DevCycleUser property "${key}" to be "${knownValueType}" but got ` +
                             `"${typeof value}" in EvaluationContext. Ignoring value.`,
                     )
@@ -270,7 +296,7 @@ export default class DevCycleProvider implements Provider {
                             customData[key] = null
                             break
                         }
-                        this.logger.warn(
+                        this.devcycleClient?.logger.warn(
                             `EvaluationContext property "${key}" is an ${
                                 Array.isArray(value) ? 'Array' : 'Object'
                             }. ` +
@@ -279,7 +305,7 @@ export default class DevCycleProvider implements Provider {
                         )
                         break
                     default:
-                        this.logger.warn(
+                        this.devcycleClient?.logger.warn(
                             `Unknown EvaluationContext property "${key}" type. ` +
                                 'DevCycleUser only supports flat customData properties of type ' +
                                 'string / number / boolean / null',
@@ -322,7 +348,7 @@ export default class DevCycleProvider implements Provider {
                     customData[key] = null
                     break
                 default:
-                    this.logger.warn(
+                    this.devcycleClient?.logger.warn(
                         `EvaluationContext property "customData" contains "${key}" property of type ${typeof value}.` +
                             'DevCycleUser only supports flat customData properties of type ' +
                             'string / number / boolean / null',
