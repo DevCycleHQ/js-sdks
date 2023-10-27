@@ -5,11 +5,11 @@ for [DevCycle Javascript Client SDK](https://docs.devcycle.com/sdk/client-side-s
 
 ## Building
 
-Run `nx build sdk-openfeature-js-provider` to build the library.
+Run `nx build sdk-openfeature-web-provider` to build the library.
 
 ## Running Unit Tests
 
-Run `nx test sdk-openfeature-js-provider` to execute the unit tests via [Jest](https://jestjs.io).
+Run `nx test sdk-openfeature-web-provider` to execute the unit tests via [Jest](https://jestjs.io).
 
 ## Example App
 
@@ -23,7 +23,7 @@ See our [documentation](https://docs.devcycle.com/sdk/client-side-sdks/javascrip
 
 ```typescript
 import { OpenFeature, Client } from '@openfeature/js-sdk'
-import { DevCycleProvider } from '@devcycle/openfeature-js-provider'
+import { DevCycleProvider } from '@devcycle/openfeature-web-provider'
 import { initialize } from '@devcycle/devcycle-js-sdk'
 
 ... 

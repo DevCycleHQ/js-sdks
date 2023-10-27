@@ -49,8 +49,8 @@
             "@devcycle/server-request": [
                 "lib/shared/server-request/src/index.ts"
             ],
-            "@devcycle/openfeature-js-provider": [
-                "sdk/openfeature-js-provider/src/index.ts"
+            "@devcycle/openfeature-web-provider": [
+                "sdk/openfeature-web-provider/src/index.ts"
             ],
             "@devcycle/types": ["lib/shared/types/src/index.ts"]
         }

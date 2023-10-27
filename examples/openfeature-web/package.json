@@ -1,0 +1,7 @@
+{
+    "name": "@devcycle/openfeature-web-example",
+    "version": "1.0.10",
+    "dependencies": {
+        "@openfeature/web-sdk": "^0.4.1"
+    }
+}

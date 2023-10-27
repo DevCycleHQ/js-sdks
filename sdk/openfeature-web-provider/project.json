@@ -1,40 +1,41 @@
 {
-    "name": "openfeature-js-provider",
+    "name": "openfeature-web-provider",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "sdk/openfeature-js-provider/src",
+    "sourceRoot": "sdk/openfeature-web-provider/src",
     "implicitDependencies": ["js"],
     "targets": {
         "build": {
             "executor": "@nx/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
-                "outputPath": "dist/sdk/openfeature-js-provider",
-                "main": "sdk/openfeature-js-provider/src/index.ts",
-                "tsConfig": "sdk/openfeature-js-provider/tsconfig.lib.json",
+                "outputPath": "dist/sdk/openfeature-web-provider",
+                "main": "sdk/openfeature-web-provider/src/index.ts",
+                "tsConfig": "sdk/openfeature-web-provider/tsconfig.lib.json",
                 "updateBuildableProjectDepsInPackageJson": true,
                 "buildableProjectDepsInPackageJsonType": "dependencies",
-                "assets": ["sdk/openfeature-js-provider/*.md"]
+                "assets": ["sdk/openfeature-web-provider/*.md"],
+                "external": ["js"]
             }
         },
         "lint": {
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["sdk/openfeature-js-provider/**/*.ts"]
+                "lintFilePatterns": ["sdk/openfeature-web-provider/**/*.ts"]
             }
         },
         "test": {
             "executor": "@nx/jest:jest",
-            "outputs": ["{workspaceRoot}/coverage/sdk/openfeature-js-provider"],
+            "outputs": ["{workspaceRoot}/coverage/sdk/openfeature-web-provider"],
             "options": {
-                "jestConfig": "sdk/openfeature-js-provider/jest.config.ts"
+                "jestConfig": "sdk/openfeature-web-provider/jest.config.ts"
             }
         },
         "npm-publish": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/openfeature-js-provider\"",
-                "cwd": "dist/sdk/openfeature-js-provider",
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/openfeature-web-provider\"",
+                "cwd": "dist/sdk/openfeature-web-provider",
                 "forwardAllArgs": true
             }
         }

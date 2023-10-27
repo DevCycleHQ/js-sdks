@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-    displayName: 'sdk-openfeature-js-provider',
+    displayName: 'sdk-openfeature-web-provider',
     preset: '../../jest.preset.js',
     globals: {},
     transform: {
@@ -12,7 +12,7 @@ export default {
         ],
     },
     moduleFileExtensions: ['ts', 'js'],
-    coverageDirectory: '../../coverage/sdk/openfeature-js-provider',
+    coverageDirectory: '../../coverage/sdk/openfeature-web-provider',
     collectCoverage: true,
     collectCoverageFrom: [
         '<rootDir>/src/**/*.{ts,js}',
