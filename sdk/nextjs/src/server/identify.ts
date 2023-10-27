@@ -22,7 +22,6 @@ export const identifyInitialUser = async (user: DevCycleUser) => {
     if (!dvcCookie) {
         setIdentity(user)
     } else {
-        console.log('SETTING IDENTITY')
         setIdentity(dvcCookie.user)
     }
     await _fetchConfigForUser()

@@ -11,13 +11,17 @@ import { createCookieContents } from '../common/cookie'
 export const updateDVCCookie = (
     client: DevCycleClient,
     user?: DevCycleUser,
+    newIdentity = false,
 ) => {
     if (typeof document === 'undefined') {
         return
     }
     document.cookie =
         'devcycle-next=' +
-        createCookieContents({
-            user_id: user ? user.user_id : client.user!.user_id,
-        })
+        createCookieContents(
+            {
+                user_id: user ? user.user_id : client.user!.user_id,
+            },
+            newIdentity,
+        )
 }

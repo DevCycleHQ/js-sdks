@@ -3,7 +3,7 @@ import {
     DevCycleUser,
     initializeDevCycle,
 } from '@devcycle/js-client-sdk'
-import { getClient, setClient, setSDKKey } from './requestContext'
+import { getClient, setClient, setOptions, setSDKKey } from './requestContext'
 import { identifyInitialUser, identifyUser } from './identify'
 import { getDevCycleServerData } from './devcycleServerData'
 
@@ -30,9 +30,13 @@ export type DevCycleNextOptions = DevCycleOptions & {
 export const initialize = async (
     sdkKey: string,
     user: DevCycleUser,
-    { enableClientsideIdentify = false, ...options }: DevCycleNextOptions = {},
+    options: DevCycleNextOptions = {},
 ) => {
     setSDKKey(sdkKey)
+    setOptions(options)
+
+    const { enableClientsideIdentify = false } = options
+
     if (enableClientsideIdentify) {
         await identifyInitialUser(user)
     } else {
@@ -58,8 +62,6 @@ export const initialize = async (
             }),
         )
     }
-
-    console.log('DONE INITIALIZING')
 
     return context
 }

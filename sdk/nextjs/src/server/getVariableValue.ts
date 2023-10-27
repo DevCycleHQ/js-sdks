@@ -3,6 +3,7 @@ import {
     addTrackedEvent,
     getClient,
     getInitializedPromise,
+    getOptions,
 } from './requestContext'
 import { DVCVariableValue } from '@devcycle/js-client-sdk'
 
@@ -10,7 +11,12 @@ export async function getVariableValue<T extends DVCVariableValue>(
     key: string,
     defaultValue: T,
 ) {
-    await getInitializedPromise()
+    const { enableStreaming } = getOptions()
+    const initializedPromise = getInitializedPromise()
+    if (!enableStreaming) {
+        await initializedPromise
+    }
+
     const client = getClient()
     if (!client) {
         console.error(
@@ -21,9 +27,9 @@ export async function getVariableValue<T extends DVCVariableValue>(
 
     const variable = client.variable(key, defaultValue)
     if (variable.isDefaulted) {
-        addTrackedEvent('variableDefaulted', key)
+        addTrackedEvent({ type: 'variableDefaulted', target: key })
     } else {
-        addTrackedEvent('variableEvaluated', key)
+        addTrackedEvent({ type: 'variableEvaluated', target: key })
     }
 
     return variable.value

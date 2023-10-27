@@ -2,15 +2,13 @@ import { DevCycleUser } from '@devcycle/js-client-sdk'
 
 export type DVCCookie = {
     user: DevCycleUser
-    timestamp: string
-    forceRefresh: boolean
+    fromClient: boolean
 }
 
 export const createCookieContents = (
     user: DevCycleUser,
-    configTimestamp?: string,
-    forceRefresh: boolean = false,
+    fromClient: boolean = false,
 ) => {
-    return JSON.stringify({ user, timestamp: configTimestamp, forceRefresh })
+    return JSON.stringify({ user, fromClient })
 }
 export const cookieName = 'devcycle-next'

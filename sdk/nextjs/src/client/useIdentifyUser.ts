@@ -9,7 +9,7 @@ export const useIdentifyUser = () => {
     const client = useDevCycleClient()
     const router = useRouter()
     return (user: DevCycleUser) => {
-        updateDVCCookie(client, user)
+        updateDVCCookie(client, user, true)
         startTransition(() => {
             router.refresh()
         })

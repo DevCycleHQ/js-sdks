@@ -5,7 +5,7 @@ import { DevCycleClientsideProvider } from '../client/DevCycleClientsideProvider
 import { getIdentity, getSDKKey, setInitializedPromise } from './requestContext'
 import { DevCycleNextOptions, initialize } from './initialize'
 
-type DevCycleServersideProviderProps = {
+export type DevCycleServersideProviderProps = {
     sdkKey: string
     user: DevCycleUser
     options?: DevCycleNextOptions

@@ -4,7 +4,11 @@ import {
     DevCycleEvent,
     DevCycleUser,
 } from '@devcycle/js-client-sdk'
-import { initialize } from './initialize'
+import { DevCycleNextOptions, initialize } from './initialize'
+import {
+    DevCycleServersideProvider,
+    DevCycleServersideProviderProps,
+} from '@devcycle/next-sdk/server'
 
 export const requestContext = <T>(
     defaultValue: T,
@@ -56,10 +60,14 @@ const [_getTrackedEvents, _setTrackedEvents] = requestContext<DevCycleEvent[]>(
     [],
 )
 
-export const addTrackedEvent = (type: string, target: string) => {
+export const addTrackedEvent = (event: DevCycleEvent) => {
+    const metaData = {
+        ...event.metaData,
+        serverside: true,
+    }
     _setTrackedEvents([
         ..._getTrackedEvents(),
-        { type, target, date: Date.now(), metaData: { serverside: true } },
+        { date: Date.now(), ...event, metaData },
     ])
 }
 
@@ -68,3 +76,5 @@ export const getTrackedEvents = () => _getTrackedEvents()
 export const [getInitializedPromise, setInitializedPromise] = requestContext<
     ReturnType<typeof initialize> | undefined
 >(undefined)
+
+export const [getOptions, setOptions] = requestContext<DevCycleNextOptions>({})

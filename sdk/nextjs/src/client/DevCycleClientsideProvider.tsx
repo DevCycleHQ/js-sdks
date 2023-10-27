@@ -49,6 +49,7 @@ export const DevCycleClientsideProvider = ({
                 },
             },
         )
+        updateDVCCookie(clientRef.current!)
     } else if (previousContext != serverData) {
         // change user and config data to match latest server data
         // if the data has changed since the last invocation
@@ -57,9 +58,8 @@ export const DevCycleClientsideProvider = ({
             serverData.user,
         )
         setPreviousContext(serverData)
+        updateDVCCookie(clientRef.current!)
     }
-
-    updateDVCCookie(clientRef.current!)
 
     return (
         <DevCycleClientContext.Provider
