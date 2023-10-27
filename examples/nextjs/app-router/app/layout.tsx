@@ -37,6 +37,7 @@ export default async function RootLayout({
                     user={{ user_id: randomId }}
                     options={{
                         enableClientsideIdentify: !shouldTrustServerData,
+                        enableStreaming: true,
                     }}
                 >
                     {children}

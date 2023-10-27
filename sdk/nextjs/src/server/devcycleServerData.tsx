@@ -1,6 +1,5 @@
 import { getBucketedConfig } from './bucketing'
 import { getSDKKey, getTrackedEvents } from './requestContext'
-import { headers } from 'next/headers'
 
 export const getDevCycleServerData = async () => {
     const { config, user, populatedUser } = await getBucketedConfig()
@@ -9,7 +8,6 @@ export const getDevCycleServerData = async () => {
         populatedUser,
         config,
         sdkKey: getSDKKey(),
-        userAgent: headers().get('user-agent'),
         events: getTrackedEvents(),
     }
 }

@@ -40,6 +40,7 @@ const generateBucketedConfigCached = cache(
 export const getBucketedConfig = async () => {
     // this request will be cached by Next
     const cdnConfig = await fetchCDNConfig()
+    await new Promise((resolve) => setTimeout(resolve, 10000))
     const user = getIdentity()
     if (!user) {
         throw Error('User must be set in cookie')

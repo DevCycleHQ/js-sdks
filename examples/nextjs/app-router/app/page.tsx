@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { ReactNode } from 'react'
+import { ReactNode, Suspense } from 'react'
 import ClientSide from './clientside'
 import * as React from 'react'
 import { ServerIdentity } from './ServerIdentity'
@@ -7,7 +7,9 @@ import { ServerIdentity } from './ServerIdentity'
 const Page: NextPage = async ({ children }: { children: ReactNode }) => {
     return (
         <ClientSide>
-            <ServerIdentity />
+            <Suspense fallback={<div>Loading...</div>}>
+                <ServerIdentity />
+            </Suspense>
             {children}
         </ClientSide>
     )

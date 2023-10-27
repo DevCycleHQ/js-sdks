@@ -1,12 +1,16 @@
 import { getBucketedConfig } from './bucketing'
-import { addTrackedEvent, getClient } from './requestContext'
+import {
+    addTrackedEvent,
+    getClient,
+    getInitializedPromise,
+} from './requestContext'
 import { DVCVariableValue } from '@devcycle/js-client-sdk'
 
 export async function getVariableValue<T extends DVCVariableValue>(
     key: string,
     defaultValue: T,
 ) {
-    await getBucketedConfig()
+    await getInitializedPromise()
     const client = getClient()
     if (!client) {
         console.error(

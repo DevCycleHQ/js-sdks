@@ -4,6 +4,7 @@ import {
     DevCycleEvent,
     DevCycleUser,
 } from '@devcycle/js-client-sdk'
+import { initialize } from './initialize'
 
 export const requestContext = <T>(
     defaultValue: T,
@@ -56,7 +57,6 @@ const [_getTrackedEvents, _setTrackedEvents] = requestContext<DevCycleEvent[]>(
 )
 
 export const addTrackedEvent = (type: string, target: string) => {
-    console.log('TRACKING EVENT')
     _setTrackedEvents([
         ..._getTrackedEvents(),
         { type, target, date: Date.now(), metaData: { serverside: true } },
@@ -64,3 +64,7 @@ export const addTrackedEvent = (type: string, target: string) => {
 }
 
 export const getTrackedEvents = () => _getTrackedEvents()
+
+export const [getInitializedPromise, setInitializedPromise] = requestContext<
+    ReturnType<typeof initialize> | undefined
+>(undefined)
