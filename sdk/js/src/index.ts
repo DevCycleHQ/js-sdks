@@ -35,7 +35,8 @@ export type DVCOptions = DevCycleOptions
 export type DVCOptionsWithDeferredInitialization =
     DevCycleOptionsWithDeferredInitialization
 
-export type { DevCycleClient, DevCycleOptionsWithDeferredInitialization }
+export type { DevCycleOptionsWithDeferredInitialization }
+export { DevCycleClient }
 
 export function initializeDevCycle<
     Variables extends VariableDefinitions = VariableDefinitions,

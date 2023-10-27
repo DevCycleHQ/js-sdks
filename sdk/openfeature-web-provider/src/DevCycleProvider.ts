@@ -39,7 +39,7 @@ type EvaluationContextObject = {
 
 export default class DevCycleProvider implements Provider {
     readonly metadata: ProviderMetadata = {
-        name: 'devcycle-js-provider',
+        name: 'devcycle-web-provider',
     } as const
 
     readonly runsOn = 'client'
