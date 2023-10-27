@@ -3,7 +3,7 @@ import * as React from 'react'
 
 export const ServerIdentity = async function () {
     return (
-        <>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
             <b>Server Variable</b>
             <span>
                 {' '}
@@ -11,6 +11,6 @@ export const ServerIdentity = async function () {
             </span>
             <b>Server Identity</b>
             <span>{getUserIdentity()?.user_id}</span>
-        </>
+        </div>
     )
 }

@@ -13,9 +13,7 @@ export async function getVariableValue<T extends DVCVariableValue>(
 ) {
     const { enableStreaming } = getOptions()
     const initializedPromise = getInitializedPromise()
-    if (!enableStreaming) {
-        await initializedPromise
-    }
+    await initializedPromise
 
     const client = getClient()
     if (!client) {

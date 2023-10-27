@@ -107,6 +107,18 @@ export default MyComponent = function() {
 }
 ```
 
+```typescript jsx
+'use server'
+
+/**
+ * Track event in server action
+ */
+export function submitForm() {
+    trackEvent({type: "formSubmitted"})
+    // ...
+}
+```
+
 ### Tracking an event (client component)
 
 ```typescript jsx

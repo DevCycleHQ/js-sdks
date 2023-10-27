@@ -1,17 +1,26 @@
 import type { NextPage } from 'next'
 import { ReactNode, Suspense } from 'react'
-import ClientSide from './clientside'
 import * as React from 'react'
 import { ServerIdentity } from './ServerIdentity'
+import { ClientIdentity } from './ClientIdentity'
+import { ClientComponent } from './ClientComponent'
 
 const Page: NextPage = async ({ children }: { children: ReactNode }) => {
     return (
-        <ClientSide>
-            <Suspense fallback={<div>Loading...</div>}>
+        <div
+            style={{ display: 'flex', flexDirection: 'column', width: '400px' }}
+        >
+            <div>Server content without a variable call</div>
+            <Suspense fallback={<div>Loading Server...</div>}>
                 <ServerIdentity />
             </Suspense>
+            <br />
+            <ClientComponent />
+            <Suspense fallback={<div>Loading Client...</div>}>
+                <ClientIdentity />
+            </Suspense>
             {children}
-        </ClientSide>
+        </div>
     )
 }
 

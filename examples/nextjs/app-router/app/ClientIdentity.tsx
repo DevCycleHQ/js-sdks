@@ -1,8 +1,10 @@
+'use client'
 import {
     useDevCycleClient,
     useIdentifyUser,
     useVariableValue,
 } from '@devcycle/next-sdk'
+import { b } from 'msw/lib/glossary-dc3fd077'
 
 const clientsideIds = [
     'clientside-1',
@@ -29,12 +31,12 @@ export const ClientIdentity = () => {
         identifyUser(clientsideUser)
     }
     return (
-        <>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
             <b>Client Variable</b>
             <span>{JSON.stringify(variable)}</span>
             <b>Client User Identity</b>
             <span>{client.user?.user_id}</span>
             <button onClick={identifyNewUser}>Identify User Clientside</button>
-        </>
+        </div>
     )
 }

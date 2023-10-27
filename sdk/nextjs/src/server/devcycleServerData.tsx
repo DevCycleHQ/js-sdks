@@ -1,5 +1,5 @@
 import { getBucketedConfig } from './bucketing'
-import { getSDKKey, getTrackedEvents } from './requestContext'
+import { getOptions, getSDKKey, getTrackedEvents } from './requestContext'
 
 export const getDevCycleServerData = async () => {
     const { config, user, populatedUser } = await getBucketedConfig()
@@ -9,5 +9,6 @@ export const getDevCycleServerData = async () => {
         config,
         sdkKey: getSDKKey(),
         events: getTrackedEvents(),
+        options: getOptions(),
     }
 }

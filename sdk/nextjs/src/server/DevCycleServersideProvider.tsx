@@ -4,6 +4,9 @@ import { DevCycleUser } from '@devcycle/js-client-sdk'
 import { DevCycleClientsideProvider } from '../client/DevCycleClientsideProvider'
 import { getIdentity, getSDKKey, setInitializedPromise } from './requestContext'
 import { DevCycleNextOptions, initialize } from './initialize'
+import { any } from 'async'
+import { fallbackConfig } from '../common/fallbackConfig'
+import { getUserIdentity } from './identify'
 
 export type DevCycleServersideProviderProps = {
     sdkKey: string
@@ -23,53 +26,69 @@ export const DevCycleServersideProvider = async ({
 
     if (!options?.enableStreaming) {
         await serverDataPromise
-        return (
-            <BlockingClientProvider initializePromise={serverDataPromise}>
-                {children}
-            </BlockingClientProvider>
-        )
+        // return (
+        //     <BlockingClientProvider initializePromise={serverDataPromise}>
+        //         {children}
+        //     </BlockingClientProvider>
+        // )
     }
 
     // this renders a client component that provides an instance of DevCycle client to client components via context
     // server data is passed to perform bootstrapping of the server's config on clientside
+
+    const clientPromise = (async () => {
+        const serverData = await serverDataPromise
+        const { populatedUser, ...clientData } = serverData
+        return clientData
+    })()
+
+    console.log('RENDERING CLIENT')
+
     return (
-        <Suspense
-            fallback={
-                <DevCycleClientsideProvider
-                    serverData={{
-                        config: {
-                            project: { settings: {} }, // TODO update the SDK to accept "deferred bootstrapping"
-                            features: {},
-                            variables: {},
-                        } as any,
-                        sdkKey: getSDKKey(),
-                        user: getIdentity()!,
-                        events: [],
-                    }}
-                >
-                    {children}
-                </DevCycleClientsideProvider>
-            }
+        // <Suspense
+        //     fallback={
+        //         <DevCycleClientsideProvider
+        //             serverData={{
+        //                 // TODO update the SDK to accept "deferred bootstrapping"
+        //                 config: fallbackConfig,
+        //                 sdkKey: getSDKKey(),
+        //                 user: getIdentity()!,
+        //                 events: [],
+        //                 options,
+        //             }}
+        //         >
+        //             {children}
+        //         </DevCycleClientsideProvider>
+        //     }
+        // >
+        //     <BlockingClientProvider initializePromise={serverDataPromise}>
+        //         {children}
+        //     </BlockingClientProvider>
+        // </Suspense>
+
+        <DevCycleClientsideProvider
+            serverDataPromise={clientPromise}
+            user={getUserIdentity()!}
+            sdkKey={getSDKKey()}
+            enableStreaming={options?.enableStreaming ?? false}
         >
-            <BlockingClientProvider initializePromise={serverDataPromise}>
-                {children}
-            </BlockingClientProvider>
-        </Suspense>
-    )
-}
-
-const BlockingClientProvider = async ({
-    initializePromise,
-    children,
-}: {
-    initializePromise: ReturnType<typeof initialize>
-    children: ReactNode
-}) => {
-    const { populatedUser, ...serverDataForClient } = await initializePromise
-
-    return (
-        <DevCycleClientsideProvider serverData={serverDataForClient}>
             {children}
         </DevCycleClientsideProvider>
     )
 }
+
+// const BlockingClientProvider = async ({
+//     initializePromise,
+//     children,
+// }: {
+//     initializePromise: ReturnType<typeof initialize>
+//     children: ReactNode
+// }) => {
+//     const { populatedUser, ...serverDataForClient } = await initializePromise
+//
+//     return (
+//         <DevCycleClientsideProvider serverData={serverDataForClient}>
+//             {children}
+//         </DevCycleClientsideProvider>
+//     )
+// }

@@ -6,6 +6,7 @@ import {
 import { getClient, setClient, setOptions, setSDKKey } from './requestContext'
 import { identifyInitialUser, identifyUser } from './identify'
 import { getDevCycleServerData } from './devcycleServerData'
+import { fallbackConfig } from '../common/fallbackConfig'
 
 export type DevCycleNextOptions = DevCycleOptions & {
     /**
@@ -27,6 +28,16 @@ export type DevCycleNextOptions = DevCycleOptions & {
     enableStreaming?: boolean
 }
 
+const jsClientOptions = {
+    next: {
+        // don't allow the config to be fetched inside the SDK
+        configRefreshHandler: async () => {},
+    },
+    disableAutomaticEventLogging: true,
+    disableCustomEventLogging: true,
+    disableConfigCache: true,
+}
+
 export const initialize = async (
     sdkKey: string,
     user: DevCycleUser,
@@ -35,7 +46,18 @@ export const initialize = async (
     setSDKKey(sdkKey)
     setOptions(options)
 
-    const { enableClientsideIdentify = false } = options
+    const { enableClientsideIdentify = false, enableStreaming = false } =
+        options
+
+    if (enableStreaming) {
+        setClient(
+            initializeDevCycle(sdkKey, user, {
+                ...options,
+                bootstrapConfig: fallbackConfig,
+                ...jsClientOptions,
+            }),
+        )
+    }
 
     if (enableClientsideIdentify) {
         await identifyInitialUser(user)
@@ -51,17 +73,14 @@ export const initialize = async (
             initializeDevCycle(sdkKey, user, {
                 ...options,
                 bootstrapConfig: context.config,
-                // set this so SDK knows we're on Next
-                next: {
-                    // don't allow the config to be fetched inside the SDK
-                    configRefreshHandler: async () => {},
-                },
-                disableAutomaticEventLogging: true,
-                disableCustomEventLogging: true,
-                disableConfigCache: true,
+                ...jsClientOptions,
             }),
         )
+    } else {
+        client.synchronizeBootstrapData(context.config, user)
     }
+
+    console.log('Done Initializing.')
 
     return context
 }
