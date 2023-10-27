@@ -1,6 +1,6 @@
 import { fetchCDNConfig } from './requests'
 import { generateBucketedConfig } from '@devcycle/bucketing'
-import { getIdentity, getSDKKey } from './requestContext'
+import { getIdentity, getOptions, getSDKKey } from './requestContext'
 import { cache } from 'react'
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { headers } from 'next/headers'
@@ -40,7 +40,10 @@ const generateBucketedConfigCached = cache(
 export const getBucketedConfig = async () => {
     // this request will be cached by Next
     const cdnConfig = await fetchCDNConfig()
-    await new Promise((resolve) => setTimeout(resolve, 5000))
+    if (getOptions().enableStreaming) {
+        // TODO temporary fake delay to watch streaming work!
+        await new Promise((resolve) => setTimeout(resolve, 5000))
+    }
     const user = getIdentity()
     if (!user) {
         throw Error('User must be set in cookie')

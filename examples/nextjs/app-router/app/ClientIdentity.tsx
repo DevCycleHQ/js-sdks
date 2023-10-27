@@ -31,11 +31,18 @@ export const ClientIdentity = () => {
         identifyUser(clientsideUser)
     }
     return (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: '#DDF',
+            }}
+        >
             <b>Client Variable</b>
             <span>{JSON.stringify(variable)}</span>
             <b>Client User Identity</b>
             <span>{client.user?.user_id}</span>
+            <br />
             <button onClick={identifyNewUser}>Identify User Clientside</button>
         </div>
     )

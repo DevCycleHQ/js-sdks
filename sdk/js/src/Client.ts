@@ -19,6 +19,7 @@ import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
 import {
     BucketedUserConfig,
+    ConfigBody,
     getVariableTypeFromValue,
     VariableTypeAlias,
 } from '@devcycle/types'
@@ -638,6 +639,13 @@ export class DevCycleClient<
     synchronizeBootstrapData(config: BucketedUserConfig, user: DevCycleUser) {
         const populatedUser = new DVCPopulatedUser(user, this.options)
         this.handleConfigReceived(config, populatedUser, Date.now(), true)
+        if (config.sse?.url && !this.streamingConnection) {
+            this.streamingConnection = new StreamingConnection(
+                config.sse.url,
+                this.onSSEMessage.bind(this),
+                this.logger,
+            )
+        }
     }
 
     private async refetchConfig(

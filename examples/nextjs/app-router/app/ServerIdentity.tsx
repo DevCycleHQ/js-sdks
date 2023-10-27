@@ -3,7 +3,13 @@ import * as React from 'react'
 
 export const ServerIdentity = async function () {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: '#FDD',
+            }}
+        >
             <b>Server Variable</b>
             <span>
                 {' '}

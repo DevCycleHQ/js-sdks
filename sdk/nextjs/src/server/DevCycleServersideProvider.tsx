@@ -42,8 +42,6 @@ export const DevCycleServersideProvider = async ({
         return clientData
     })()
 
-    console.log('RENDERING CLIENT')
-
     return (
         // <Suspense
         //     fallback={

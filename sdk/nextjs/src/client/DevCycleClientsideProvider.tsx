@@ -64,7 +64,9 @@ export const DevCycleClientsideProvider = ({
     const clientRef = useRef<DevCycleClient>()
 
     const revalidateConfig = (lastModified?: number) => {
+        console.log('SSE INVALIDATE!')
         invalidateConfig(sdkKey, lastModified).finally(() => {
+            console.log('INVALIDATED')
             router.refresh()
         })
     }
@@ -95,7 +97,6 @@ export const DevCycleClientsideProvider = ({
                     {children}
                 </SuspendedProvider>
             </Suspense>
-            <button onClick={() => router.refresh()}>Refresh</button>
         </DevCycleClientContext.Provider>
     )
 }

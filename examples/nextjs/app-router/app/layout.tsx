@@ -35,10 +35,12 @@ export default async function RootLayout({
                 <DevCycleServersideProvider
                     sdkKey={process.env.DEVCYCLE_CLIENT_SDK_KEY ?? ''}
                     user={{ user_id: randomId }}
-                    options={{
-                        enableClientsideIdentify: !shouldTrustServerData,
-                        enableStreaming: true,
-                    }}
+                    options={
+                        {
+                            // enableClientsideIdentify: !shouldTrustServerData,
+                            // enableStreaming: true,
+                        }
+                    }
                 >
                     {children}
                 </DevCycleServersideProvider>

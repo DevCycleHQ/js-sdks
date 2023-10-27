@@ -8,14 +8,27 @@ import { ClientComponent } from './ClientComponent'
 const Page: NextPage = async ({ children }: { children: ReactNode }) => {
     return (
         <div
-            style={{ display: 'flex', flexDirection: 'column', width: '400px' }}
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                width: '400px',
+                padding: '20px',
+            }}
         >
-            <div>Server content without a variable call</div>
+            <div
+                style={{
+                    backgroundColor: '#FFD',
+                }}
+            >
+                Server content without a variable call
+            </div>
+            <br />
             <Suspense fallback={<div>Loading Server...</div>}>
                 <ServerIdentity />
             </Suspense>
             <br />
             <ClientComponent />
+            <br />
             <Suspense fallback={<div>Loading Client...</div>}>
                 <ClientIdentity />
             </Suspense>
