@@ -10,6 +10,7 @@ import {
     TargetingKeyMissingError,
     InvalidContextError,
     Logger,
+    ProviderStatus,
 } from '@openfeature/web-sdk'
 import {
     DevCycleClient,
@@ -42,6 +43,8 @@ export default class DevCycleProvider implements Provider {
         name: 'devcycle-js-provider',
     } as const
 
+    readonly runsOn = 'client'
+
     private readonly logger: DVCLogger
 
     constructor(
@@ -56,6 +59,12 @@ export default class DevCycleProvider implements Provider {
         await this.DevCycleClient.onClientInitialized()
     }
 
+    get status(): ProviderStatus {
+        return this.DevCycleClient.isInitialized
+            ? ProviderStatus.READY
+            : ProviderStatus.NOT_READY
+    }
+
     async onClose(): Promise<void> {
         await this.DevCycleClient.close()
     }
@@ -64,7 +73,9 @@ export default class DevCycleProvider implements Provider {
         oldContext: EvaluationContext,
         newContext: EvaluationContext,
     ): Promise<void> {
-        await this.DevCycleClient.identifyUser(this.dvcUserFromContext(newContext))
+        await this.DevCycleClient.identifyUser(
+            this.dvcUserFromContext(newContext),
+        )
     }
 
     /**
@@ -93,8 +104,6 @@ export default class DevCycleProvider implements Provider {
         context: EvaluationContext,
         logger: Logger,
     ): ResolutionDetails<boolean> {
-        // TODO: What is the logger for?
-        // TODO: Is the context here different then onContextChange?
         return this.getDVCVariable(flagKey, defaultValue)
     }
 
@@ -216,7 +225,7 @@ export default class DevCycleProvider implements Provider {
                 if (typeof value !== knownValueType) {
                     this.logger.warn(
                         `Expected DevCycleUser property "${key}" to be "${knownValueType}" but got ` +
-                        `"${typeof value}" in EvaluationContext. Ignoring value.`,
+                            `"${typeof value}" in EvaluationContext. Ignoring value.`,
                     )
                     continue
                 }
