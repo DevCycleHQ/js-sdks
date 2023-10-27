@@ -12,14 +12,14 @@ import {
     Logger,
 } from '@openfeature/web-sdk'
 import {
-    DVCClient,
-    DVCOptions,
+    DevCycleClient,
+    DevCycleOptions,
     DVCVariable,
-    DVCUser,
+    DevCycleUser,
     DVCJSON,
     DVCCustomDataJSON,
     dvcDefaultLogger,
-} from '@devcycle/devcycle-js-sdk'
+} from '@devcycle/js-client-sdk'
 import { DVCLogger, VariableValue } from '@devcycle/types'
 
 const DVCKnownPropertyKeyTypes: Record<string, string> = {
@@ -45,26 +45,26 @@ export default class DevCycleProvider implements Provider {
     private readonly logger: DVCLogger
 
     constructor(
-        private readonly dvcClient: DVCClient,
-        options: DVCOptions = {},
+        private readonly DevCycleClient: DevCycleClient,
+        options: DevCycleOptions = {},
     ) {
         this.logger =
             options.logger ?? dvcDefaultLogger({ level: options.logLevel })
     }
 
     async initialize(context?: EvaluationContext): Promise<void> {
-        await this.dvcClient.onClientInitialized()
+        await this.DevCycleClient.onClientInitialized()
     }
 
     async onClose(): Promise<void> {
-        await this.dvcClient.close()
+        await this.DevCycleClient.close()
     }
 
     async onContextChange(
         oldContext: EvaluationContext,
         newContext: EvaluationContext,
     ): Promise<void> {
-        await this.dvcClient.identifyUser(this.dvcUserFromContext(newContext))
+        await this.DevCycleClient.identifyUser(this.dvcUserFromContext(newContext))
     }
 
     /**
@@ -77,7 +77,7 @@ export default class DevCycleProvider implements Provider {
         flagKey: string,
         defaultValue: I,
     ): ResolutionDetails<O> {
-        const dvcVariable = this.dvcClient.variable(flagKey, defaultValue)
+        const dvcVariable = this.DevCycleClient.variable(flagKey, defaultValue)
         return this.resultFromDVCVariable<O, I>(dvcVariable)
     }
 
@@ -186,11 +186,11 @@ export default class DevCycleProvider implements Provider {
     }
 
     /**
-     * Convert an OpenFeature EvaluationContext into a DVCUser.
+     * Convert an OpenFeature EvaluationContext into a DevCycleUser.
      * @param context
      * @private
      */
-    private dvcUserFromContext(context: EvaluationContext): DVCUser {
+    private dvcUserFromContext(context: EvaluationContext): DevCycleUser {
         const user_id = context.targetingKey ?? context.user_id
         if (!user_id) {
             throw new TargetingKeyMissingError(
@@ -215,8 +215,8 @@ export default class DevCycleProvider implements Provider {
             if (knownValueType) {
                 if (typeof value !== knownValueType) {
                     this.logger.warn(
-                        `Expected DVCUser property "${key}" to be "${knownValueType}" but got "${typeof value}" in ` +
-                            'EvaluationContext. Ignoring value.',
+                        `Expected DevCycleUser property "${key}" to be "${knownValueType}" but got ` +
+                        `"${typeof value}" in EvaluationContext. Ignoring value.`,
                     )
                     continue
                 }
@@ -265,14 +265,14 @@ export default class DevCycleProvider implements Provider {
                             `EvaluationContext property "${key}" is an ${
                                 Array.isArray(value) ? 'Array' : 'Object'
                             }. ` +
-                                'DVCUser only supports flat customData properties of type ' +
+                                'DevCycleUser only supports flat customData properties of type ' +
                                 'string / number / boolean / null',
                         )
                         break
                     default:
                         this.logger.warn(
                             `Unknown EvaluationContext property "${key}" type. ` +
-                                'DVCUser only supports flat customData properties of type ' +
+                                'DevCycleUser only supports flat customData properties of type ' +
                                 'string / number / boolean / null',
                         )
                         break
@@ -290,7 +290,7 @@ export default class DevCycleProvider implements Provider {
     }
 
     /**
-     * Convert customData from an OpenFeature EvaluationContextObject into a DVCUser customData.
+     * Convert customData from an OpenFeature EvaluationContextObject into a DevCycleUser customData.
      * @param evaluationData
      * @private
      */
@@ -315,7 +315,8 @@ export default class DevCycleProvider implements Provider {
                 default:
                     this.logger.warn(
                         `EvaluationContext property "customData" contains "${key}" property of type ${typeof value}.` +
-                            'DVCUser only supports flat customData properties of type string / number / boolean / null',
+                            'DevCycleUser only supports flat customData properties of type ' +
+                            'string / number / boolean / null',
                     )
                     break
             }
