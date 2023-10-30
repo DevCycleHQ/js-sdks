@@ -14,11 +14,14 @@ const sha1 = async (str: string, subtle: SubtleCrypto) => {
         .join('')
 }
 
-export const getChannelName = async (key: string, subtle: SubtleCrypto) => {
+const getChannelName = async (key: string, subtle: SubtleCrypto) => {
     return `dvc_client_${await sha1(`${key}`, subtle)}_v1`
 }
 
-export const sseURlGetter = (sdkKey: string, apiKey: string) => {
+export const sseURlGetter = (
+    sdkKey: string,
+    apiKey: string,
+): (() => Promise<string>) => {
     return unstable_cache(async () => {
         const subtle = crypto.subtle
         const channels = await getChannelName(sdkKey, subtle)

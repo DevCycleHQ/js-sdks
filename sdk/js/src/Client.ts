@@ -634,16 +634,27 @@ export class DevCycleClient<
      * NOTE: It is not recommended to call this yourself.
      * @param config
      * @param user
+     * @param userAgent
      */
-    synchronizeBootstrapData(config: BucketedUserConfig, user: DevCycleUser) {
+    synchronizeBootstrapData(
+        config: BucketedUserConfig,
+        user: DevCycleUser,
+        userAgent?: string,
+    ): void {
         this.options.bootstrapConfig = config
         if (this.options.deferInitialization && !this.initializeTriggered) {
             void this.clientInitialization(user)
             return
         }
 
-        const populatedUser = new DVCPopulatedUser(user, this.options)
-        this.handleConfigReceived(config, populatedUser, Date.now(), true)
+        const populatedUser = new DVCPopulatedUser(
+            user,
+            this.options,
+            undefined,
+            undefined,
+            userAgent,
+        )
+        this.handleConfigReceived(config, populatedUser, Date.now())
     }
 
     private async refetchConfig(
@@ -667,7 +678,6 @@ export class DevCycleClient<
         config: ConfigWithLastModified,
         user: DVCPopulatedUser,
         dateFetched: number,
-        skipConfigEvent: boolean = false,
     ) {
         const oldConfig = this.config
         this.config = config
@@ -710,10 +720,7 @@ export class DevCycleClient<
             this.variableDefaultMap,
         )
 
-        if (
-            (!oldConfig || oldConfig.etag !== this.config.etag) &&
-            !skipConfigEvent
-        ) {
+        if (!oldConfig || oldConfig.etag !== this.config.etag) {
             this.eventEmitter.emitConfigUpdate(config.variables)
         }
     }

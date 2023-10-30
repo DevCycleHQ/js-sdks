@@ -8,7 +8,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { updateDVCCookie } from './updateDVCCookie'
 import { invalidateConfig } from '../common/invalidateConfig'
-import { DevCycleServerDataForClient } from '@devcycle/next-sdk'
+import { DevCycleServerDataForClient } from '../common/types'
 
 type DevCycleClientsideProviderProps = {
     serverDataPromise: Promise<DevCycleServerDataForClient>
@@ -37,13 +37,13 @@ export const SuspendedProvider = ({
 }: Pick<
     DevCycleClientsideProviderProps,
     'serverDataPromise' | 'enableClientsideIdentify'
->) => {
+>): React.ReactElement => {
     const serverData = use(serverDataPromise)
     const [previousContext, setPreviousContext] = useState<
         DevCycleServerDataForClient | undefined
     >()
     const context = useContext(DevCycleClientContext)
-    if (previousContext != serverData) {
+    if (previousContext !== serverData) {
         // change user and config data to match latest server data
         // if the data has changed since the last invocation
         context.client.synchronizeBootstrapData(
@@ -52,7 +52,7 @@ export const SuspendedProvider = ({
         )
         setPreviousContext(serverData)
         if (enableClientsideIdentify) {
-            updateDVCCookie(context.client!)
+            updateDVCCookie(context.client)
         }
     }
     return <></>
@@ -65,7 +65,7 @@ export const DevCycleClientsideProvider = ({
     enableClientsideIdentify,
     user,
     children,
-}: DevCycleClientsideProviderProps) => {
+}: DevCycleClientsideProviderProps): React.ReactElement => {
     const router = useRouter()
     const clientRef = useRef<DevCycleClient>()
 

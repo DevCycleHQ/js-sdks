@@ -12,7 +12,7 @@ export const updateDVCCookie = (
     client: DevCycleClient,
     user?: DevCycleUser,
     newIdentity = false,
-) => {
+): void => {
     if (typeof document === 'undefined') {
         return
     }

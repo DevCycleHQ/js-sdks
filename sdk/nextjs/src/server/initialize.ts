@@ -6,6 +6,7 @@ import {
 import { getClient, setClient, setOptions, setSDKKey } from './requestContext'
 import { identifyInitialUser, identifyUser } from './identify'
 import { getDevCycleServerData } from './devcycleServerData'
+import { getUserAgent } from './userAgent'
 
 export type DevCycleNextOptions = DevCycleOptions & {
     /**
@@ -25,15 +26,25 @@ export type DevCycleNextOptions = DevCycleOptions & {
      * and will re-render when the configuration is ready.
      */
     enableStreaming?: boolean
+
+    /**
+     * Used to disable any SDK features that require dynamic request context. This allows the SDK to be used in pages
+     * that are intended to be statically generated, as long as nothing else on that page consumes request details
+     * like headers or cookies.
+     * This option will disable the following features:
+     * - automatic user agent parsing to populate targeting rule data for Platform Version and Device Model
+     *
+     * enableClientsideIdentify cannot be true while this is set
+     */
+    staticMode?: boolean
 }
 
 const jsClientOptions = {
     next: {
-        // don't allow the config to be fetched inside the SDK
-        configRefreshHandler: async () => {},
+        configRefreshHandler: async () => {
+            // don't allow the config to be fetched inside the SDK
+        },
     },
-    disableAutomaticEventLogging: true,
-    disableCustomEventLogging: true,
     disableConfigCache: true,
 }
 
@@ -41,12 +52,17 @@ export const initialize = async (
     sdkKey: string,
     user: DevCycleUser,
     options: DevCycleNextOptions = {},
-) => {
+): Promise<Awaited<ReturnType<typeof getDevCycleServerData>>> => {
     setSDKKey(sdkKey)
     setOptions(options)
 
-    const { enableClientsideIdentify = false, enableStreaming = false } =
-        options
+    const { enableClientsideIdentify = false, staticMode = false } = options
+
+    if (enableClientsideIdentify && staticMode) {
+        throw new Error(
+            'enableClientsideIdentify cannot be true while staticMode is enabled',
+        )
+    }
 
     setClient(
         initializeDevCycle(sdkKey, user, {
@@ -57,14 +73,14 @@ export const initialize = async (
     )
 
     if (enableClientsideIdentify) {
-        await identifyInitialUser(user)
+        identifyInitialUser(user)
     } else {
-        await identifyUser(user)
+        identifyUser(user)
     }
 
     const context = await getDevCycleServerData()
 
-    let client = getClient()
+    const client = getClient()
     if (!client) {
         setClient(
             initializeDevCycle(sdkKey, user, {
@@ -74,7 +90,7 @@ export const initialize = async (
             }),
         )
     } else {
-        client.synchronizeBootstrapData(context.config, user)
+        client.synchronizeBootstrapData(context.config, user, getUserAgent())
     }
 
     return context

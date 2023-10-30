@@ -3,14 +3,16 @@ import { generateBucketedConfig } from '@devcycle/bucketing'
 import { getIdentity, getOptions, getSDKKey } from './requestContext'
 import { cache } from 'react'
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
-import { headers } from 'next/headers'
 import { sseURlGetter } from './ably'
+import { getUserAgent } from './userAgent'
+import { config } from 'winston'
+import { BucketedUserConfig } from '@devcycle/types'
 
 // wrap this function in react cache to avoid redoing work for the same user and config
 const generateBucketedConfigCached = cache(
     async (user: DevCycleUser, configResponse: Response) => {
         const config = await configResponse.json()
-        const ua = headers().get('user-agent')
+        const ua = getUserAgent()
         const populatedUser = new DVCPopulatedUser(
             user,
             {},
@@ -37,7 +39,9 @@ const generateBucketedConfigCached = cache(
  * Compute the bucketed config for the current request's user using that data, with local bucketing library
  * Cache the bucketed config for this request so that repeated calls to this function are memoized
  */
-export const getBucketedConfig = async () => {
+export const getBucketedConfig = async (): Promise<
+    BucketedUserConfig & { lastModified?: string }
+> => {
     // this request will be cached by Next
     const cdnConfig = await fetchCDNConfig()
     if (getOptions().enableStreaming) {
@@ -45,8 +49,9 @@ export const getBucketedConfig = async () => {
         await new Promise((resolve) => setTimeout(resolve, 5000))
     }
     const user = getIdentity()
+
     if (!user) {
-        throw Error('User must be set in cookie')
+        throw Error('User should be defined')
     }
 
     const { config, populatedUser } = await generateBucketedConfigCached(
@@ -55,11 +60,7 @@ export const getBucketedConfig = async () => {
     )
 
     return {
-        config: {
-            ...config,
-            lastModified: cdnConfig.headers.get('last-modified') ?? undefined,
-        },
-        user,
-        populatedUser,
+        ...config,
+        lastModified: cdnConfig.headers.get('last-modified') ?? undefined,
     }
 }

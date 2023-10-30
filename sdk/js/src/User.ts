@@ -13,13 +13,6 @@ type StaticData = Pick<
     | 'sdkVersion'
 >
 
-type PropertiesOnly<T> = Pick<
-    T,
-    {
-        [K in keyof T]: T[K] extends Function ? never : K
-    }[keyof T]
->
-
 export class DVCPopulatedUser implements DevCycleUser {
     readonly isAnonymous: boolean
     readonly user_id: string
@@ -116,27 +109,5 @@ export class DVCPopulatedUser implements DevCycleUser {
         }
 
         return new DVCPopulatedUser(user, options, this.getStaticData())
-    }
-
-    toObject(): PropertiesOnly<DVCPopulatedUser> {
-        return {
-            isAnonymous: this.isAnonymous,
-            user_id: this.user_id,
-            email: this.email,
-            name: this.name,
-            language: this.language,
-            country: this.country,
-            appVersion: this.appVersion,
-            appBuild: this.appBuild,
-            customData: this.customData,
-            privateCustomData: this.privateCustomData,
-            lastSeenDate: this.lastSeenDate,
-            createdDate: this.createdDate,
-            platform: this.platform,
-            platformVersion: this.platformVersion,
-            deviceModel: this.deviceModel,
-            sdkType: this.sdkType,
-            sdkVersion: this.sdkVersion,
-        }
     }
 }

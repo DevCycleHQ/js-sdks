@@ -8,7 +8,8 @@ import { getUserIdentity } from './identify'
 
 export type DevCycleServersideProviderProps = {
     sdkKey: string
-    user: DevCycleUser
+    // server-side users must always be "identified" with a user id
+    user: Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & { user_id: string }
     options?: DevCycleNextOptions
     children: React.ReactNode
 }
@@ -18,7 +19,7 @@ export const DevCycleServersideProvider = async ({
     sdkKey,
     user,
     options,
-}: DevCycleServersideProviderProps) => {
+}: DevCycleServersideProviderProps): Promise<React.ReactElement> => {
     const serverDataPromise = initialize(sdkKey, user, options)
     setInitializedPromise(serverDataPromise)
 
@@ -29,15 +30,9 @@ export const DevCycleServersideProvider = async ({
     // this renders a client component that provides an instance of DevCycle client to client components via context
     // server data is passed to perform bootstrapping of the server's config on clientside
 
-    const clientPromise = (async () => {
-        const serverData = await serverDataPromise
-        const { populatedUser, ...clientData } = serverData
-        return clientData
-    })()
-
     return (
         <DevCycleClientsideProvider
-            serverDataPromise={clientPromise}
+            serverDataPromise={serverDataPromise}
             user={getUserIdentity()!}
             sdkKey={getSDKKey()}
             enableStreaming={options?.enableStreaming ?? false}

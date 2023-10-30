@@ -1,7 +1,7 @@
 import { addTrackedEvent, getClient } from './requestContext'
 import { DevCycleEvent } from '@devcycle/js-client-sdk'
 
-export const trackEvent = (event: DevCycleEvent) => {
+export const trackEvent = (event: DevCycleEvent): void => {
     const client = getClient()
     if (!client) {
         console.error('DevCycle client not initialized to track event!')

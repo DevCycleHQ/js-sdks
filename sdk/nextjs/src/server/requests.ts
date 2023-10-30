@@ -6,7 +6,7 @@ const getFetchUrl = (sdkKey?: string) =>
         sdkKey ?? getSDKKey()
     }.json`
 
-export const fetchCDNConfig = async (sdkKey?: string) => {
+export const fetchCDNConfig = async (sdkKey?: string): Promise<Response> => {
     return await fetch(
         getFetchUrl(sdkKey),
         // only store for 60 seconds
@@ -22,7 +22,7 @@ export const fetchCDNConfig = async (sdkKey?: string) => {
 export const invalidateConfigCache = async (
     sdkKey: string,
     lastModified?: number,
-) => {
+): Promise<void> => {
     const response = await fetchCDNConfig(sdkKey)
 
     const lastModifiedHeader = response.headers.get('last-modified')

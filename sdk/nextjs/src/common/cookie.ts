@@ -7,8 +7,8 @@ export type DVCCookie = {
 
 export const createCookieContents = (
     user: DevCycleUser,
-    fromClient: boolean = false,
-) => {
+    fromClient = false,
+): string => {
     return JSON.stringify({ user, fromClient })
 }
 export const cookieName = 'devcycle-next'

@@ -5,10 +5,6 @@ import {
     DevCycleUser,
 } from '@devcycle/js-client-sdk'
 import { DevCycleNextOptions, initialize } from './initialize'
-import {
-    DevCycleServersideProvider,
-    DevCycleServersideProviderProps,
-} from '@devcycle/next-sdk/server'
 
 export const requestContext = <T>(
     defaultValue: T,
@@ -34,7 +30,7 @@ export const [getClient, setClient] = requestContext<
 
 const [_getSDKKey, _setSDKKey] = requestContext<string | undefined>(undefined)
 
-export const getSDKKey = () => {
+export const getSDKKey = (): string => {
     const key = _getSDKKey()
     if (!key) {
         throw new Error('SDK Client Key must be set!')
@@ -42,7 +38,7 @@ export const getSDKKey = () => {
     return key
 }
 
-export const setSDKKey = (key: string) => {
+export const setSDKKey = (key: string): void => {
     // attempt to make sure server keys don't leak to the client!
     if (
         key?.length &&
@@ -60,7 +56,7 @@ const [_getTrackedEvents, _setTrackedEvents] = requestContext<DevCycleEvent[]>(
     [],
 )
 
-export const addTrackedEvent = (event: DevCycleEvent) => {
+export const addTrackedEvent = (event: DevCycleEvent): void => {
     const metaData = {
         ...event.metaData,
         serverside: true,
@@ -71,7 +67,7 @@ export const addTrackedEvent = (event: DevCycleEvent) => {
     ])
 }
 
-export const getTrackedEvents = () => _getTrackedEvents()
+export const getTrackedEvents = (): DevCycleEvent[] => _getTrackedEvents()
 
 const [_getInitializedPromise, _setInitializedPromise] = requestContext<
     ReturnType<typeof initialize> | undefined
@@ -81,7 +77,7 @@ export const getInitializedPromise = _getInitializedPromise
 
 export const setInitializedPromise = (
     promise: ReturnType<typeof initialize>,
-) => {
+): void => {
     if (_getInitializedPromise()) {
         return
     }
