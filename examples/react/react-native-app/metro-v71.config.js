@@ -1,6 +1,7 @@
 /**
  * Old custom configuration for React Native v0.71.
- * From @react-native/metro-config 0.72.1, it is no longer necessary to use a config function to access the complete default config.
+ * From @react-native/metro-config 0.72.1,
+ * it is no longer necessary to use a config function to access the complete default config.
  * Please port your custom configuration to metro.config.js.
  * Please see https://reactnative.dev/docs/metro to learn about configuration.
  */
