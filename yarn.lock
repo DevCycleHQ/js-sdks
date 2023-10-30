@@ -7687,6 +7687,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nx/js@patch:@nx/js@npm%3A16.5.5#./.yarn/patches/@nx-js-npm-16.3.2-a543eca792.patch::locator=devcycle-js-sdks%40workspace%3A.":
+  version: 16.5.5
+  resolution: "@nx/js@patch:@nx/js@npm%3A16.5.5#./.yarn/patches/@nx-js-npm-16.3.2-a543eca792.patch::version=16.5.5&hash=39f3b0&locator=devcycle-js-sdks%40workspace%3A."
+  dependencies:
+    "@babel/core": ^7.15.0
+    "@babel/plugin-proposal-class-properties": ^7.14.5
+    "@babel/plugin-proposal-decorators": ^7.14.5
+    "@babel/plugin-transform-runtime": ^7.15.0
+    "@babel/preset-env": ^7.15.0
+    "@babel/preset-typescript": ^7.15.0
+    "@babel/runtime": ^7.14.8
+    "@nrwl/js": 16.5.5
+    "@nx/devkit": 16.5.5
+    "@nx/workspace": 16.5.5
+    "@phenomnomnominal/tsquery": ~5.0.1
+    babel-plugin-const-enum: ^1.0.1
+    babel-plugin-macros: ^2.8.0
+    babel-plugin-transform-typescript-metadata: ^0.3.1
+    chalk: ^4.1.0
+    detect-port: ^1.5.1
+    fast-glob: 3.2.7
+    fs-extra: ^11.1.0
+    ignore: ^5.0.4
+    js-tokens: ^4.0.0
+    minimatch: 3.0.5
+    semver: 7.5.3
+    source-map-support: 0.5.19
+    tslib: ^2.3.0
+  peerDependencies:
+    verdaccio: ^5.0.4
+  peerDependenciesMeta:
+    verdaccio:
+      optional: true
+  checksum: 0dbcbf95445f4b7e300be2181866cacc7acb416438e725071a88b4ca9d787cae79fb7bb27b22643fe2be63154001b0201b148341af92315a450c5dbb6d0b3358
+  languageName: node
+  linkType: hard
+
 "@nx/linter@npm:16.5.5":
   version: 16.5.5
   resolution: "@nx/linter@npm:16.5.5"
