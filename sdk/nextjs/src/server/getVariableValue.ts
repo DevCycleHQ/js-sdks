@@ -1,9 +1,7 @@
-import { getBucketedConfig } from './bucketing'
 import {
     addTrackedEvent,
     getClient,
     getInitializedPromise,
-    getOptions,
 } from './requestContext'
 import { DVCVariableValue } from '@devcycle/js-client-sdk'
 
@@ -11,7 +9,6 @@ export async function getVariableValue<T extends DVCVariableValue>(
     key: string,
     defaultValue: T,
 ) {
-    const { enableStreaming } = getOptions()
     const initializedPromise = getInitializedPromise()
     await initializedPromise
 

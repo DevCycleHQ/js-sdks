@@ -73,8 +73,19 @@ export const addTrackedEvent = (event: DevCycleEvent) => {
 
 export const getTrackedEvents = () => _getTrackedEvents()
 
-export const [getInitializedPromise, setInitializedPromise] = requestContext<
+const [_getInitializedPromise, _setInitializedPromise] = requestContext<
     ReturnType<typeof initialize> | undefined
 >(undefined)
+
+export const getInitializedPromise = _getInitializedPromise
+
+export const setInitializedPromise = (
+    promise: ReturnType<typeof initialize>,
+) => {
+    if (_getInitializedPromise()) {
+        return
+    }
+    _setInitializedPromise(promise)
+}
 
 export const [getOptions, setOptions] = requestContext<DevCycleNextOptions>({})

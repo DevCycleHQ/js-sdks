@@ -1,3 +1,5 @@
+import { unstable_cache } from 'next/cache'
+
 const sha1 = async (str: string, subtle: SubtleCrypto) => {
     const source = new TextEncoder().encode(str)
     const result = await subtle.digest(
@@ -16,25 +18,12 @@ export const getChannelName = async (key: string, subtle: SubtleCrypto) => {
     return `dvc_client_${await sha1(`${key}`, subtle)}_v1`
 }
 
-export const getUserChannelName = async (
-    userId: string,
-    subtle: SubtleCrypto,
-) => {
-    return `dvc_user_${await sha1(`${userId}`, subtle)}_v1`
-}
+export const sseURlGetter = (sdkKey: string, apiKey: string) => {
+    return unstable_cache(async () => {
+        const subtle = crypto.subtle
+        const channels = await getChannelName(sdkKey, subtle)
 
-// TODO put this in next data cache when unstable cache is available
-export async function getSSEUrl(
-    sdkKey: string,
-    apiKey: string,
-    debugUserId?: string,
-) {
-    const subtle = crypto.subtle
-    const projectChannel = await getChannelName(sdkKey, subtle)
-    const channels = debugUserId
-        ? `${await getUserChannelName(debugUserId, subtle)},${projectChannel}`
-        : projectChannel
-
-    const SSEBaseUrl = 'https://realtime.ably.io/event-stream'
-    return `${SSEBaseUrl}?channels=${channels}&v=1.2&key=${apiKey}`
+        const SSEBaseUrl = 'https://realtime.ably.io/event-stream'
+        return `${SSEBaseUrl}?channels=${channels}&v=1.2&key=${apiKey}`
+    }, [sdkKey, apiKey])
 }

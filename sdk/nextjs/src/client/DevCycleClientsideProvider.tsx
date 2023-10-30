@@ -10,13 +10,12 @@ import { updateDVCCookie } from './updateDVCCookie'
 import { invalidateConfig } from '../common/invalidateConfig'
 import { DevCycleServerDataForClient } from '@devcycle/next-sdk'
 
-import { fallbackConfig } from '../common/fallbackConfig'
-
 type DevCycleClientsideProviderProps = {
     serverDataPromise: Promise<DevCycleServerDataForClient>
     sdkKey: string
     user: DevCycleUser
     enableStreaming: boolean
+    enableClientsideIdentify: boolean
     children: React.ReactNode
 }
 
@@ -24,6 +23,7 @@ type ClientProviderContext = {
     client: DevCycleClient
     sdkKey: string
     enableStreaming: boolean
+    enableClientsideIdentify: boolean
     serverDataPromise: Promise<unknown>
 }
 
@@ -33,8 +33,11 @@ export const DevCycleClientContext = React.createContext<ClientProviderContext>(
 
 export const SuspendedProvider = ({
     serverDataPromise,
-    children,
-}: Pick<DevCycleClientsideProviderProps, 'serverDataPromise' | 'children'>) => {
+    enableClientsideIdentify,
+}: Pick<
+    DevCycleClientsideProviderProps,
+    'serverDataPromise' | 'enableClientsideIdentify'
+>) => {
     const serverData = use(serverDataPromise)
     const [previousContext, setPreviousContext] = useState<
         DevCycleServerDataForClient | undefined
@@ -48,15 +51,18 @@ export const SuspendedProvider = ({
             serverData.user,
         )
         setPreviousContext(serverData)
-        updateDVCCookie(context.client!)
+        if (enableClientsideIdentify) {
+            updateDVCCookie(context.client!)
+        }
     }
-    return <>{children}</>
+    return <></>
 }
 
 export const DevCycleClientsideProvider = ({
     serverDataPromise,
     sdkKey,
     enableStreaming,
+    enableClientsideIdentify,
     user,
     children,
 }: DevCycleClientsideProviderProps) => {
@@ -64,23 +70,20 @@ export const DevCycleClientsideProvider = ({
     const clientRef = useRef<DevCycleClient>()
 
     const revalidateConfig = (lastModified?: number) => {
-        console.log('SSE INVALIDATE!')
         invalidateConfig(sdkKey, lastModified).finally(() => {
-            console.log('INVALIDATED')
             router.refresh()
         })
     }
 
     if (!clientRef.current) {
         clientRef.current = initializeDevCycle(sdkKey, user!, {
-            bootstrapConfig: fallbackConfig,
+            deferInitialization: true,
             disableConfigCache: true,
             next: {
                 configRefreshHandler: revalidateConfig,
                 // eventsToTrack: serverData.events,
             },
         })
-        updateDVCCookie(clientRef.current!)
     }
 
     return (
@@ -89,14 +92,17 @@ export const DevCycleClientsideProvider = ({
                 client: clientRef.current,
                 sdkKey: sdkKey,
                 enableStreaming,
+                enableClientsideIdentify,
                 serverDataPromise,
             }}
         >
-            <Suspense fallback={children}>
-                <SuspendedProvider serverDataPromise={serverDataPromise}>
-                    {children}
-                </SuspendedProvider>
+            <Suspense>
+                <SuspendedProvider
+                    serverDataPromise={serverDataPromise}
+                    enableClientsideIdentify={enableClientsideIdentify}
+                />
             </Suspense>
+            {children}
         </DevCycleClientContext.Provider>
     )
 }

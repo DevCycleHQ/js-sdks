@@ -6,7 +6,6 @@ import {
 import { getClient, setClient, setOptions, setSDKKey } from './requestContext'
 import { identifyInitialUser, identifyUser } from './identify'
 import { getDevCycleServerData } from './devcycleServerData'
-import { fallbackConfig } from '../common/fallbackConfig'
 
 export type DevCycleNextOptions = DevCycleOptions & {
     /**
@@ -49,15 +48,13 @@ export const initialize = async (
     const { enableClientsideIdentify = false, enableStreaming = false } =
         options
 
-    if (enableStreaming) {
-        setClient(
-            initializeDevCycle(sdkKey, user, {
-                ...options,
-                bootstrapConfig: fallbackConfig,
-                ...jsClientOptions,
-            }),
-        )
-    }
+    setClient(
+        initializeDevCycle(sdkKey, user, {
+            ...options,
+            deferInitialization: true,
+            ...jsClientOptions,
+        }),
+    )
 
     if (enableClientsideIdentify) {
         await identifyInitialUser(user)
@@ -79,8 +76,6 @@ export const initialize = async (
     } else {
         client.synchronizeBootstrapData(context.config, user)
     }
-
-    console.log('Done Initializing.')
 
     return context
 }

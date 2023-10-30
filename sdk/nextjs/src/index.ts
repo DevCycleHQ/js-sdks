@@ -2,5 +2,5 @@
 export * from './client/useVariableValue'
 export * from './client/DevCycleClientsideProvider'
 export * from './client/useIdentifyUser'
-export * from './client/useDevCycleClient'
 export * from './common/types'
+export * from './client/useUserIdentity'

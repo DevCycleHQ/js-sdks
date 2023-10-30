@@ -236,7 +236,6 @@ export class DevCycleClient<
 
         if (this.options.next?.eventsToTrack) {
             for (const event of this.options.next.eventsToTrack) {
-                console.log('TRACKING', event)
                 this.track(event)
             }
         }
@@ -637,15 +636,14 @@ export class DevCycleClient<
      * @param user
      */
     synchronizeBootstrapData(config: BucketedUserConfig, user: DevCycleUser) {
+        this.options.bootstrapConfig = config
+        if (this.options.deferInitialization && !this.initializeTriggered) {
+            void this.clientInitialization(user)
+            return
+        }
+
         const populatedUser = new DVCPopulatedUser(user, this.options)
         this.handleConfigReceived(config, populatedUser, Date.now(), true)
-        if (config.sse?.url && !this.streamingConnection) {
-            this.streamingConnection = new StreamingConnection(
-                config.sse.url,
-                this.onSSEMessage.bind(this),
-                this.logger,
-            )
-        }
     }
 
     private async refetchConfig(

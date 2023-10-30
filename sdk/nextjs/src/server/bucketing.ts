@@ -4,7 +4,7 @@ import { getIdentity, getOptions, getSDKKey } from './requestContext'
 import { cache } from 'react'
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { headers } from 'next/headers'
-import { getSSEUrl } from './ably'
+import { sseURlGetter } from './ably'
 
 // wrap this function in react cache to avoid redoing work for the same user and config
 const generateBucketedConfigCached = cache(
@@ -23,7 +23,7 @@ const generateBucketedConfigCached = cache(
             config: {
                 ...generateBucketedConfig({ user: populatedUser, config }),
                 sse: {
-                    url: await getSSEUrl(getSDKKey(), config.ably?.apiKey),
+                    url: await sseURlGetter(getSDKKey(), config.ably?.apiKey)(),
                     inactivityDelay: 1000 * 60 * 2,
                 },
             },

@@ -1,10 +1,10 @@
 'use client'
 import {
-    useDevCycleClient,
     useIdentifyUser,
+    useUserIdentity,
     useVariableValue,
 } from '@devcycle/next-sdk'
-import { b } from 'msw/lib/glossary-dc3fd077'
+import { useDevCycleClient } from '@devcycle/react-client-sdk'
 
 const clientsideIds = [
     'clientside-1',
@@ -20,8 +20,8 @@ const clientsideIds = [
 ]
 
 export const ClientIdentity = () => {
-    const client = useDevCycleClient()
     const variable = useVariableValue('test-featre', false)
+    const userIdentity = useUserIdentity()
     const identifyUser = useIdentifyUser()
     const clientsideUser = {
         user_id:
@@ -41,7 +41,7 @@ export const ClientIdentity = () => {
             <b>Client Variable</b>
             <span>{JSON.stringify(variable)}</span>
             <b>Client User Identity</b>
-            <span>{client.user?.user_id}</span>
+            <span>{userIdentity?.user_id}</span>
             <br />
             <button onClick={identifyNewUser}>Identify User Clientside</button>
         </div>
