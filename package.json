@@ -187,7 +187,7 @@
         ]
     },
     "resolutions": {
-        "@nx/js@16.3.2": "patch:@nx/js@npm%3A16.3.2#./.yarn/patches/@nx-js-npm-16.3.2-a543eca792.patch",
+        "@nx/js@16.5.5": "patch:@nx/js@npm%3A16.5.5#./.yarn/patches/@nx-js-npm-16.3.2-a543eca792.patch",
         "word-wrap@1.2.3": "^1.2.4",
         "@sideway/formula@3.0.0": "^3.0.1"
     },
