@@ -460,7 +460,7 @@ export class AppElement extends HTMLElement {
 
 const user = {
     user_id: 'userId1',
-    email: 'auto@taplytics.com',
+    email: 'example@taplytics.com',
     customData: {
         cps: 'Matthew',
         cpn: 777,

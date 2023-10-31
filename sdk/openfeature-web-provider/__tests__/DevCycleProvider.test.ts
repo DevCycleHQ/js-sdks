@@ -1,14 +1,15 @@
 import DevCycleProvider from '../src/DevCycleProvider'
 import {
-    OpenFeature,
     Client,
+    OpenFeature,
     StandardResolutionReasons,
 } from '@openfeature/web-sdk'
-import { DevCycleClient, DevCycleUser } from '@devcycle/js-client-sdk'
+import { DevCycleClient } from '@devcycle/js-client-sdk'
 
 jest.mock('@devcycle/nodejs-server-sdk')
 
 const variableMock = jest.spyOn(DevCycleClient.prototype, 'variable')
+const identifyUserMock = jest.spyOn(DevCycleClient.prototype, 'identifyUser')
 const logger = {
     debug: jest.fn(),
     info: jest.fn(),
@@ -31,6 +32,7 @@ async function initOFClient(): Promise<{
 describe('DevCycleProvider Unit Tests', () => {
     beforeEach(() => {
         variableMock.mockClear()
+        identifyUserMock.mockClear()
     })
 
     it('should setup an OpenFeature provider with a DevCycleClient', async () => {
@@ -50,37 +52,56 @@ describe('DevCycleProvider Unit Tests', () => {
                 evalReason: undefined,
                 onUpdate: jest.fn(),
             })
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            identifyUserMock.mockResolvedValue({})
         })
 
-        it('should throw error if targetingKey is missing', async () => {
-            const { ofClient } = await initOFClient()
-            await OpenFeature.setContext({})
+        // OF doesn't expose context errors to the user through a handler / hook yet.
+        // This is likely to change in future versions based off slack discussions.
+        //
+        // it('should throw error if targetingKey is missing', async () => {
+        //     const { ofClient } = await initOFClient()
+        //     variableMock.mockReturnValue({
+        //         key: 'boolean-flag',
+        //         value: false,
+        //         defaultValue: false,
+        //         isDefaulted: true,
+        //         evalReason: undefined,
+        //         onUpdate: jest.fn(),
+        //     })
+        //
+        //     await OpenFeature.setContext({})
+        //
+        //     expect(errHandler).toHaveBeenCalled()
+        //     expect(errHook).toHaveBeenCalled()
+        //
+        //     const details = ofClient.getBooleanDetails('boolean-flag', false)
+        //     expect(details).toEqual({
+        //         flagKey: 'boolean-flag',
+        //         value: false,
+        //         errorCode: 'TARGETING_KEY_MISSING',
+        //         errorMessage: 'Missing targetingKey or user_id in context',
+        //         reason: 'ERROR',
+        //         flagMetadata: {},
+        //     })
+        // })
+        //
+        // it('should throw error if targetingKey is not a string', async () => {
+        //     const { ofClient } = await initOFClient()
+        //     await OpenFeature.setContext({ user_id: 123 })
+        //
+        //     expect(ofClient.getBooleanDetails('boolean-flag', false)).toEqual({
+        //         flagKey: 'boolean-flag',
+        //         value: false,
+        //         errorCode: 'INVALID_CONTEXT',
+        //         errorMessage: 'targetingKey or user_id must be a string',
+        //         reason: 'ERROR',
+        //         flagMetadata: {},
+        //     })
+        // })
 
-            expect(ofClient.getBooleanDetails('boolean-flag', false)).toEqual({
-                flagKey: 'boolean-flag',
-                value: false,
-                errorCode: 'TARGETING_KEY_MISSING',
-                errorMessage: 'Missing targetingKey or user_id in context',
-                reason: 'ERROR',
-                flagMetadata: {},
-            })
-        })
-
-        it('should throw error if targetingKey is not a string', async () => {
-            const { ofClient } = await initOFClient()
-            await OpenFeature.setContext({ user_id: 123 })
-
-            expect(ofClient.getBooleanDetails('boolean-flag', false)).toEqual({
-                flagKey: 'boolean-flag',
-                value: false,
-                errorCode: 'INVALID_CONTEXT',
-                errorMessage: 'targetingKey or user_id must be a string',
-                reason: 'ERROR',
-                flagMetadata: {},
-            })
-        })
-
-        it('should convert Context properties to DVCUser properties', async () => {
+        it('should convert Context properties to DevCycleUser properties', async () => {
             const { ofClient, provider } = await initOFClient()
             const dvcUser = {
                 user_id: 'user_id',
@@ -95,17 +116,19 @@ describe('DevCycleProvider Unit Tests', () => {
             }
             await OpenFeature.setContext(dvcUser)
 
-            await expect(
-                ofClient.getBooleanValue('boolean-flag', false),
-            ).resolves.toEqual(true)
-            expect(provider.DevcycleClient?.variable).toHaveBeenCalledWith(
+            expect(ofClient.getBooleanValue('boolean-flag', false)).toEqual(
+                true,
+            )
+            expect(provider.DevcycleClient?.identifyUser).toHaveBeenCalledWith(
                 dvcUser,
+            )
+            expect(provider.DevcycleClient?.variable).toHaveBeenCalledWith(
                 'boolean-flag',
                 false,
             )
         })
 
-        it('should skip DVCUser properties that are not the correct type', async () => {
+        it('should skip DevCycleUser properties that are not the correct type', async () => {
             const { ofClient, provider } = await initOFClient()
             const dvcUser = {
                 user_id: 'user_id',
@@ -113,57 +136,66 @@ describe('DevCycleProvider Unit Tests', () => {
                 appBuild: 'string',
                 customData: 'data',
             }
-            OpenFeature.setContext(dvcUser)
-
-            await expect(
-                ofClient.getBooleanValue('boolean-flag', false),
-            ).resolves.toEqual(true)
-
-            expect(provider.DevcycleClient?.variable).toHaveBeenCalledWith(
-                { user_id: 'user_id' },
-                'boolean-flag',
-                false,
-            )
-            expect(logger.warn).toHaveBeenCalledWith(
-                'Expected DVCUser property "appVersion" to be "string" but got "number" in EvaluationContext. ' +
-                    'Ignoring value.',
-            )
-            expect(logger.warn).toHaveBeenCalledWith(
-                'Expected DVCUser property "appBuild" to be "number" but got "string" in EvaluationContext. ' +
-                    'Ignoring value.',
-            )
-            expect(logger.warn).toHaveBeenCalledWith(
-                'Expected DVCUser property "customData" to be "object" but got "string" in EvaluationContext. ' +
-                    'Ignoring value.',
-            )
-        })
-
-        it('should skip Context properties that are sub-objects as DVCUser only supports flat properties', async () => {
-            const { ofClient, provider } = await initOFClient()
-            const dvcUser = {
-                user_id: 'user_id',
-                nullKey: null,
-                obj: { key: 'value' },
-            }
             await OpenFeature.setContext(dvcUser)
 
-            await expect(
-                ofClient.getBooleanValue('boolean-flag', false),
-            ).resolves.toEqual(true)
+            expect(ofClient.getBooleanValue('boolean-flag', false)).toEqual(
+                true,
+            )
 
+            expect(provider.DevcycleClient?.identifyUser).toHaveBeenCalledWith({
+                user_id: 'user_id',
+            })
             expect(provider.DevcycleClient?.variable).toHaveBeenCalledWith(
-                {
-                    user_id: 'user_id',
-                    customData: { nullKey: null },
-                },
                 'boolean-flag',
                 false,
             )
             expect(logger.warn).toHaveBeenCalledWith(
-                'EvaluationContext property "obj" is an Object. ' +
-                    'DVCUser only supports flat customData properties of type string / number / boolean / null',
+                'Expected DevCycleUser property "appVersion" to be "string" but got "number" in EvaluationContext. ' +
+                    'Ignoring value.',
+            )
+            expect(logger.warn).toHaveBeenCalledWith(
+                'Expected DevCycleUser property "appBuild" to be "number" but got "string" in EvaluationContext. ' +
+                    'Ignoring value.',
+            )
+            expect(logger.warn).toHaveBeenCalledWith(
+                'Expected DevCycleUser property "customData" to be "object" but got "string" in EvaluationContext. ' +
+                    'Ignoring value.',
             )
         })
+
+        it(
+            'should skip Context properties that are sub-objects as DevCycleUser ' +
+                'only supports flat properties',
+            async () => {
+                const { ofClient, provider } = await initOFClient()
+                const dvcUser = {
+                    user_id: 'user_id',
+                    nullKey: null,
+                    obj: { key: 'value' },
+                }
+                await OpenFeature.setContext(dvcUser)
+
+                expect(ofClient.getBooleanValue('boolean-flag', false)).toEqual(
+                    true,
+                )
+
+                expect(
+                    provider.DevcycleClient?.identifyUser,
+                ).toHaveBeenCalledWith({
+                    user_id: 'user_id',
+                    customData: { nullKey: null },
+                })
+                expect(provider.DevcycleClient?.variable).toHaveBeenCalledWith(
+                    'boolean-flag',
+                    false,
+                )
+                expect(logger.warn).toHaveBeenCalledWith(
+                    'EvaluationContext property "obj" is an Object. ' +
+                        'DevCycleUser only supports flat customData properties of type ' +
+                        'string / number / boolean / null',
+                )
+            },
+        )
 
         it('should skip customData key that is not a flat json property', async () => {
             const { ofClient, provider } = await initOFClient()
@@ -172,17 +204,21 @@ describe('DevCycleProvider Unit Tests', () => {
                 customData: { obj: { key: 'value' }, num: 610 },
             }
             await OpenFeature.setContext(dvcUser)
-            await expect(
-                ofClient.getBooleanValue('boolean-flag', false),
-            ).resolves.toEqual(true)
+            expect(ofClient.getBooleanValue('boolean-flag', false)).toEqual(
+                true,
+            )
+
+            expect(provider.DevcycleClient?.identifyUser).toHaveBeenCalledWith({
+                user_id: 'user_id',
+                customData: { num: 610 },
+            })
             expect(provider.DevcycleClient?.variable).toHaveBeenCalledWith(
-                { user_id: 'user_id', customData: { num: 610 } },
                 'boolean-flag',
                 false,
             )
             expect(logger.warn).toHaveBeenCalledWith(
                 'EvaluationContext property "customData" contains "obj" property of type object.' +
-                    'DVCUser only supports flat customData properties of type string / number / boolean / null',
+                    'DevCycleUser only supports flat customData properties of type string / number / boolean / null',
             )
         })
     })
@@ -197,20 +233,21 @@ describe('DevCycleProvider Unit Tests', () => {
                 evalReason: undefined,
                 onUpdate: jest.fn(),
             })
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            identifyUserMock.mockResolvedValue({})
         })
 
         it('should resolve a boolean flag value', async () => {
             const { ofClient } = await initOFClient()
-            expect(
-                ofClient.getBooleanValue('boolean-flag', false),
-            ).resolves.toEqual(true)
+            expect(ofClient.getBooleanValue('boolean-flag', false)).toEqual(
+                true,
+            )
         })
 
         it('should resolve a boolean flag details', async () => {
             const { ofClient } = await initOFClient()
-            expect(
-                ofClient.getBooleanDetails('boolean-flag', false),
-            ).resolves.toEqual({
+            expect(ofClient.getBooleanDetails('boolean-flag', false)).toEqual({
                 flagKey: 'boolean-flag',
                 value: true,
                 reason: StandardResolutionReasons.TARGETING_MATCH,
@@ -229,9 +266,7 @@ describe('DevCycleProvider Unit Tests', () => {
             })
 
             const { ofClient } = await initOFClient()
-            expect(
-                ofClient.getBooleanDetails('boolean-flag', false),
-            ).resolves.toEqual({
+            expect(ofClient.getBooleanDetails('boolean-flag', false)).toEqual({
                 flagKey: 'boolean-flag',
                 value: false,
                 reason: StandardResolutionReasons.DEFAULT,
@@ -250,20 +285,23 @@ describe('DevCycleProvider Unit Tests', () => {
                 evalReason: undefined,
                 onUpdate: jest.fn(),
             })
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            identifyUserMock.mockResolvedValue({})
         })
 
         it('should resolve a string flag value', async () => {
             const { ofClient } = await initOFClient()
             expect(
                 ofClient.getStringValue('string-flag', 'string-default'),
-            ).resolves.toEqual('string-value')
+            ).toEqual('string-value')
         })
 
         it('should resolve a string flag details', async () => {
             const { ofClient } = await initOFClient()
             expect(
                 ofClient.getStringDetails('string-flag', 'string-default'),
-            ).resolves.toEqual({
+            ).toEqual({
                 flagKey: 'string-flag',
                 value: 'string-value',
                 reason: StandardResolutionReasons.TARGETING_MATCH,
@@ -282,20 +320,19 @@ describe('DevCycleProvider Unit Tests', () => {
                 evalReason: undefined,
                 onUpdate: jest.fn(),
             })
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            identifyUserMock.mockResolvedValue({})
         })
 
         it('should resolve a number flag value', async () => {
             const { ofClient } = await initOFClient()
-            expect(ofClient.getNumberValue('num-flag', 2056)).resolves.toEqual(
-                610,
-            )
+            expect(ofClient.getNumberValue('num-flag', 2056)).toEqual(610)
         })
 
         it('should resolve a number flag details', async () => {
             const { ofClient } = await initOFClient()
-            expect(
-                ofClient.getNumberDetails('num-flag', 2056),
-            ).resolves.toEqual({
+            expect(ofClient.getNumberDetails('num-flag', 2056)).toEqual({
                 flagKey: 'num-flag',
                 value: 610,
                 reason: StandardResolutionReasons.TARGETING_MATCH,
@@ -314,20 +351,23 @@ describe('DevCycleProvider Unit Tests', () => {
                 evalReason: undefined,
                 onUpdate: jest.fn(),
             })
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            identifyUserMock.mockResolvedValue({})
         })
 
         it('should resolve a string flag value', async () => {
             const { ofClient } = await initOFClient()
             expect(
                 ofClient.getObjectValue('json-flag', { default: 'value' }),
-            ).resolves.toEqual({ hello: 'world' })
+            ).toEqual({ hello: 'world' })
         })
 
         it('should resolve a boolean flag details', async () => {
             const { ofClient } = await initOFClient()
             expect(
                 ofClient.getObjectDetails('json-flag', { default: 'value' }),
-            ).resolves.toEqual({
+            ).toEqual({
                 flagKey: 'json-flag',
                 value: { hello: 'world' },
                 reason: StandardResolutionReasons.TARGETING_MATCH,
@@ -337,9 +377,7 @@ describe('DevCycleProvider Unit Tests', () => {
 
         it('should return default value if json default is not an object', async () => {
             const { ofClient } = await initOFClient()
-            expect(
-                ofClient.getObjectDetails('json-flag', ['arry']),
-            ).resolves.toEqual({
+            expect(ofClient.getObjectDetails('json-flag', ['arry'])).toEqual({
                 flagKey: 'json-flag',
                 value: ['arry'],
                 reason: 'ERROR',
@@ -348,9 +386,7 @@ describe('DevCycleProvider Unit Tests', () => {
                     'DevCycle only supports object values for JSON flags',
                 flagMetadata: {},
             })
-            expect(
-                ofClient.getObjectDetails('json-flag', 610),
-            ).resolves.toEqual({
+            expect(ofClient.getObjectDetails('json-flag', 610)).toEqual({
                 flagKey: 'json-flag',
                 value: 610,
                 reason: 'ERROR',
@@ -359,9 +395,7 @@ describe('DevCycleProvider Unit Tests', () => {
                     'DevCycle only supports object values for JSON flags',
                 flagMetadata: {},
             })
-            expect(
-                ofClient.getObjectDetails('json-flag', 'string'),
-            ).resolves.toEqual({
+            expect(ofClient.getObjectDetails('json-flag', 'string')).toEqual({
                 flagKey: 'json-flag',
                 value: 'string',
                 reason: 'ERROR',
@@ -370,9 +404,7 @@ describe('DevCycleProvider Unit Tests', () => {
                     'DevCycle only supports object values for JSON flags',
                 flagMetadata: {},
             })
-            expect(
-                ofClient.getObjectDetails('json-flag', false),
-            ).resolves.toEqual({
+            expect(ofClient.getObjectDetails('json-flag', false)).toEqual({
                 flagKey: 'json-flag',
                 value: false,
                 reason: 'ERROR',
@@ -381,9 +413,7 @@ describe('DevCycleProvider Unit Tests', () => {
                     'DevCycle only supports object values for JSON flags',
                 flagMetadata: {},
             })
-            expect(
-                ofClient.getObjectDetails('json-flag', null),
-            ).resolves.toEqual({
+            expect(ofClient.getObjectDetails('json-flag', null)).toEqual({
                 flagKey: 'json-flag',
                 value: null,
                 reason: 'ERROR',
