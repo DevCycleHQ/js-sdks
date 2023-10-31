@@ -117,14 +117,13 @@ export interface DevCycleOptions {
 
 export interface DevCycleUser {
     /**
-     * Users must be explicitly defined as anonymous, where the SDK will
-     * generate a random `user_id` for them. If they are `isAnonymous = false`
-     * a `user_id` value must be provided.
+     * If a user is anonymous a unique anonymous user id will be generated and stored in the cache.
+     * If no user_id is provided, the user is assumed to be anonymous.
      */
     isAnonymous?: boolean
 
     /**
-     * Must be defined if `isAnonymous = false`
+     * A unique user ID. If not provided, an anonymous user ID will be generated.
      */
     user_id?: string
 
