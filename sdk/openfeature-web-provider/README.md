@@ -5,11 +5,11 @@ for [DevCycle Javascript Client SDK](https://docs.devcycle.com/sdk/client-side-s
 
 ## Building
 
-Run `yarn nx build sdk-openfeature-web-provider` to build the library.
+Run `yarn nx build openfeature-web-provider` to build the library.
 
 ## Running Unit Tests
 
-Run `yarn nx test sdk-openfeature-web-provider` to execute the unit tests via [Jest](https://jestjs.io).
+Run `yarn nx test openfeature-web-provider` to execute the unit tests via [Jest](https://jestjs.io).
 
 ## Example App
 
@@ -32,7 +32,7 @@ const user = { user_id: 'user_id' }
 // Initialize the DevCycle Provider
 const devcycleProvider = new DevCycleProvider(DEVCYCLE_CLIENT_SDK_KEY)
 // Set the context before the provider is set to ensure the DevCycle SDK is initialized with a user context.
-OpenFeature.setContext(user)
+await OpenFeature.setContext(user)
 // Set the DevCycleProvider for OpenFeature
 await OpenFeature.setProviderAndWait(devcycleProvider)
 // Get the OpenFeature client
@@ -48,7 +48,7 @@ Ensure that you pass any custom DVCOptions to the DevCycleProvider constructor
 
 ```typescript
 const options = { logger: dvcDefaultLogger({ level: 'debug' }) }
-OpenFeature.setProvider(new DevCycleProvider(DEVCYCLE_CLIENT_SDK_KEY, options))
+await OpenFeature.setProviderAndWait(new DevCycleProvider(DEVCYCLE_CLIENT_SDK_KEY, options))
 ```
 
 #### Required TargetingKey
@@ -63,7 +63,7 @@ The provider will automatically translate known `DVCUser` properties from the Op
 
 For example all these properties will be set on the `DVCUser`:
 ```typescript
-openFeatureClient.setContext({
+await OpenFeature.setContext({
     user_id: 'user_id',
     email: 'email@devcycle.com',
     name: 'name',
@@ -85,7 +85,7 @@ DevCycle only supports flat JSON Object properties used in the Context. Non-flat
 
 For example `obj` will be ignored: 
 ```typescript
-openFeatureClient.setContext({
+await OpenFeature.setContext({
     user_id: 'user_id',
     obj: { key: 'value' }
 })

@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-    displayName: 'sdk-openfeature-web-provider',
+    displayName: 'openfeature-web-provider',
     preset: '../../jest.preset.js',
     globals: {},
     transform: {

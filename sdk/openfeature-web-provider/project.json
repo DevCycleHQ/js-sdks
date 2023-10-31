@@ -13,8 +13,7 @@
                 "tsConfig": "sdk/openfeature-web-provider/tsconfig.lib.json",
                 "updateBuildableProjectDepsInPackageJson": true,
                 "buildableProjectDepsInPackageJsonType": "dependencies",
-                "assets": ["sdk/openfeature-web-provider/*.md"],
-                "external": ["js"]
+                "assets": ["sdk/openfeature-web-provider/*.md"]
             }
         },
         "lint": {
