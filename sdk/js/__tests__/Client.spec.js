@@ -233,6 +233,19 @@ describe('DevCycleClient tests', () => {
         expect(window.localStorage.getItem(StoreKey.AnonUserId)).toBeNull()
     })
 
+    it('should not clear the anonymous user id from local storage when initialized without user_id and isAnonymous', async () => {
+        window.localStorage.setItem(
+            StoreKey.AnonUserId,
+            JSON.stringify('anon_user_id'),
+        )
+        const client = new DevCycleClient('test_sdk_key', {})
+        await client.onClientInitialized()
+        expect(client.user.user_id).toEqual('anon_user_id')
+        expect(window.localStorage.getItem(StoreKey.AnonUserId)).toEqual(
+            JSON.stringify('anon_user_id'),
+        )
+    })
+
     describe('onClientInitialized', () => {
         beforeEach(() => {
             getConfigJson_mock.mockImplementation(() => {

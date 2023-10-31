@@ -216,7 +216,7 @@ export class DevCycleClient<
 
         this.eventEmitter.emitInitialized(true)
 
-        if (initialUser.isAnonymous) {
+        if (this.user.isAnonymous) {
             this.store.saveAnonUserId(this.user.user_id)
         } else {
             this.store.removeAnonUserId()
