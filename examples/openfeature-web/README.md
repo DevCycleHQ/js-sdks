@@ -1,6 +1,6 @@
 # DevCycle JS Client SDK - Web Elements Example App
 
-Example app for using the DevCycle Client SDK with Web Elements.
+Example app for using the DevCycle Client SDK with the OpenFeature Web Client SDK.
 
 ### Run
 
