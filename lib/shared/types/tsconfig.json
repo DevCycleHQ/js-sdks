@@ -2,8 +2,8 @@
     "extends": "../../../tsconfig.base.json",
     "compilerOptions": {
         "target": "ESNext",
-        "module": "ESNext",
-        "moduleResolution": "node",
+        "module": "esnext",
+        "moduleResolution": "bundler",
         "forceConsistentCasingInFileNames": true,
         "strict": true,
         "noImplicitOverride": true,
