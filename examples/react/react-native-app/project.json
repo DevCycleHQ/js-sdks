@@ -8,7 +8,8 @@
             "executor": "@nx/react-native:start",
             "options": {
                 "port": 8081
-            }
+            },
+            "dependsOn": ["ensure-symlink", "sync-deps", "pod-install"]
         },
         "serve": {
             "executor": "nx:run-commands",
@@ -18,7 +19,8 @@
         },
         "run-ios": {
             "executor": "@nx/react-native:run-ios",
-            "options": {}
+            "options": {},
+            "dependsOn": ["ensure-symlink", "sync-deps", "pod-install"]
         },
         "bundle-ios": {
             "executor": "@nx/react-native:bundle",
@@ -27,11 +29,13 @@
                 "entryFile": "src/main.tsx",
                 "platform": "ios",
                 "bundleOutput": "dist/examples/react/react-native-app/ios/main.jsbundle"
-            }
+            },
+            "dependsOn": ["ensure-symlink"]
         },
         "run-android": {
             "executor": "@nx/react-native:run-android",
-            "options": {}
+            "options": {},
+            "dependsOn": ["ensure-symlink", "sync-deps"]
         },
         "build-android": {
             "executor": "@nx/react-native:build-android",
@@ -39,16 +43,19 @@
                 "{projectRoot}/android/app/build/outputs/bundle",
                 "{projectRoot}/android/app/build/outputs/apk"
             ],
-            "options": {}
+            "options": {},
+            "dependsOn": ["ensure-symlink", "sync-deps"]
         },
         "build-ios": {
             "executor": "@nx/react-native:build-ios",
             "outputs": ["{projectRoot}/ios/build/Build"],
-            "options": {}
+            "options": {},
+            "dependsOn": ["ensure-symlink", "sync-deps", "pod-install"]
         },
         "pod-install": {
             "executor": "@nx/react-native:pod-install",
-            "options": {}
+            "options": {},
+            "dependsOn": ["ensure-symlink", "sync-deps"]
         },
         "bundle-android": {
             "executor": "@nx/react-native:bundle",
@@ -57,7 +64,8 @@
                 "entryFile": "src/main.tsx",
                 "platform": "android",
                 "bundleOutput": "dist/examples/react/react-native-app/android/main.jsbundle"
-            }
+            },
+            "dependsOn": ["ensure-symlink"]
         },
         "sync-deps": {
             "executor": "@nx/react-native:sync-deps",

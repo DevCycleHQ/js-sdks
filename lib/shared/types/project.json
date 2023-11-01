@@ -30,6 +30,7 @@
                 "entryFile": "lib/shared/types/src/index.ts",
                 "tsConfig": "lib/shared/types/tsconfig.lib.json",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
+                "updateBuildableProjectDepsInPackageJson": true,
                 "assets": [
                     {
                         "glob": "*.md",
@@ -50,6 +51,7 @@
                 "entryFile": "lib/shared/types/src/index.ts",
                 "tsConfig": "lib/shared/types/tsconfig.lib.es5.json",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
+                "updateBuildableProjectDepsInPackageJson": true,
                 "assets": [
                     {
                         "glob": "*.md",

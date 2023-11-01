@@ -12,7 +12,8 @@
                 "main": "lib/shared/config-manager/src/index.ts",
                 "tsConfig": "lib/shared/config-manager/tsconfig.lib.json",
                 "assets": ["lib/shared/config-manager/*.md"],
-                "external": ["shared-types", "js-cloud-server-sdk"]
+                "external": ["shared-types", "js-cloud-server-sdk"],
+                "updateBuildableProjectDepsInPackageJson": true
             }
         },
         "lint": {

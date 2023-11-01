@@ -27,7 +27,8 @@
                 "main": "lib/shared/bucketing/src/index.ts",
                 "tsConfig": "lib/shared/bucketing/tsconfig.lib.json",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
-                "assets": ["lib/shared/bucketing/*.md"]
+                "assets": ["lib/shared/bucketing/*.md"],
+                "updateBuildableProjectDepsInPackageJson": true
             }
         },
         "lint": {

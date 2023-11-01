@@ -71,8 +71,8 @@
             "executor": "nx:run-commands",
             "inputs": ["{projectRoot}/protobuf/*.proto"],
             "outputs": [
-                "lib/shared/bucketing-assembly-script/protobuf/compiled.js",
-                "lib/shared/bucketing-assembly-script/protobuf/compiled.d.ts"
+                "{projectRoot}/protobuf/compiled.js",
+                "{projectRoot}/protobuf/compiled.d.ts"
             ],
             "options": {
                 "commands": [
@@ -93,9 +93,7 @@
         "compile-pb-as": {
             "executor": "nx:run-commands",
             "inputs": ["{projectRoot}/protobuf/*.proto"],
-            "outputs": [
-                "lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated"
-            ],
+            "outputs": ["{projectRoot}/assembly/types/protobuf-generated"],
             "options": {
                 "commands": [
                     {
@@ -115,7 +113,7 @@
         "build": {
             "executor": "nx:run-commands",
             "inputs": ["!{projectRoot}/build/**/*"],
-            "outputs": ["lib/shared/bucketing-assembly-script"],
+            "outputs": ["{projectRoot}"],
             "options": {
                 "commands": [
                     {
