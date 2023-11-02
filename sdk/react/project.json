@@ -16,7 +16,7 @@
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/react",
-                "tsConfig": "sdk/react/tsconfig.lib.es5.json",
+                "tsConfig": "sdk/react/tsconfig.lib.json",
                 "project": "sdk/react/package.json",
                 "entryFile": "sdk/react/src/index.ts",
                 "format": ["esm", "cjs"],
@@ -24,7 +24,6 @@
                 "rollupConfig": "@nx/react/plugins/bundle-rollup",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
                 "updateBuildableProjectDepsInPackageJson": true,
-
                 "compiler": "babel",
                 "assets": [
                     {
