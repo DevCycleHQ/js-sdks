@@ -10,8 +10,6 @@
                 "outputPath": "dist/sdk/openfeature-nodejs-provider",
                 "tsConfig": "sdk/openfeature-nodejs-provider/tsconfig.lib.json",
                 "packageJson": "sdk/openfeature-nodejs-provider/package.json",
-                "updateBuildableProjectDepsInPackageJson": true,
-                "buildableProjectDepsInPackageJsonType": "dependencies",
                 "main": "sdk/openfeature-nodejs-provider/src/index.ts",
                 "assets": ["sdk/openfeature-nodejs-provider/*.md"],
                 "external": [
@@ -27,7 +25,10 @@
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["sdk/openfeature-nodejs-provider/**/*.ts"]
+                "lintFilePatterns": [
+                    "sdk/openfeature-nodejs-provider/**/*.ts",
+                    "sdk/openfeature-nodejs-provider/package.json"
+                ]
             }
         },
         "test": {

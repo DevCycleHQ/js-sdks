@@ -10,5 +10,6 @@
         "@devcycle/types": "^1.1.16",
         "lodash": "^4.17.21"
     },
+    "main": "src/index.js",
     "types": "src/index.d.ts"
 }

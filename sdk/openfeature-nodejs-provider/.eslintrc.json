@@ -3,6 +3,13 @@
     "ignorePatterns": ["!**/*", "node_modules/*"],
     "overrides": [
         {
+            "files": ["*.json"],
+            "parser": "jsonc-eslint-parser",
+            "rules": {
+                "@nx/dependency-checks": "error"
+            }
+        },
+        {
             "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
             "rules": {}
         },
