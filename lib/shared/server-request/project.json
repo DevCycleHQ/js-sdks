@@ -12,7 +12,8 @@
                 "main": "lib/shared/server-request/src/index.ts",
                 "tsConfig": "lib/shared/server-request/tsconfig.lib.json",
                 "assets": ["lib/shared/server-request/*.md"],
-                "updateBuildableProjectDepsInPackageJson": true
+                "updateBuildableProjectDepsInPackageJson": true,
+                "buildableProjectDepsInPackageJsonType": "dependencies"
             }
         },
         "lint": {

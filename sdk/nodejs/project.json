@@ -47,6 +47,8 @@
                 "tsConfig": "sdk/nodejs/tsconfig.lib.json",
                 "packageJson": "sdk/nodejs/package.json",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
+                "updateBuildableProjectDepsInPackageJson": true,
+
                 "main": "sdk/nodejs/src/index.ts",
                 "assets": ["sdk/nodejs/*.md"],
                 "external": [
