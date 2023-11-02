@@ -23,6 +23,8 @@
                 "external": "all",
                 "rollupConfig": "@nx/react/plugins/bundle-rollup",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
+                "updateBuildableProjectDepsInPackageJson": true,
+
                 "compiler": "babel",
                 "assets": [
                     {
@@ -45,6 +47,8 @@
                 "external": "all",
                 "rollupConfig": "@nx/react/plugins/bundle-rollup",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
+                "updateBuildableProjectDepsInPackageJson": true,
+
                 "compiler": "babel",
                 "assets": [
                     {
