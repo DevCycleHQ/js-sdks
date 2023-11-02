@@ -5264,6 +5264,9 @@ __metadata:
   resolution: "@devcycle/openfeature-nodejs-provider@workspace:sdk/openfeature-nodejs-provider"
   dependencies:
     "@devcycle/bucketing-test-data": ^1.2.22
+    "@devcycle/nodejs-server-sdk": ^1.15.5
+    "@devcycle/types": ^1.1.16
+    "@openfeature/js-sdk": ^1.4.2
   languageName: unknown
   linkType: soft
 

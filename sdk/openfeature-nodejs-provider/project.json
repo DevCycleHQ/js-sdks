@@ -2,18 +2,19 @@
     "name": "openfeature-nodejs-provider",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "sdk/openfeature-nodejs-provider/src",
-    "implicitDependencies": ["nodejs"],
     "targets": {
         "build": {
             "executor": "@nx/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/openfeature-nodejs-provider",
-                "main": "sdk/openfeature-nodejs-provider/src/index.ts",
                 "tsConfig": "sdk/openfeature-nodejs-provider/tsconfig.lib.json",
+                "packageJson": "sdk/openfeature-nodejs-provider/package.json",
                 "updateBuildableProjectDepsInPackageJson": true,
                 "buildableProjectDepsInPackageJsonType": "dependencies",
-                "assets": ["sdk/openfeature-nodejs-provider/*.md"]
+                "main": "sdk/openfeature-nodejs-provider/src/index.ts",
+                "assets": ["sdk/openfeature-nodejs-provider/*.md"],
+                "external": ["nodejs", "types"]
             }
         },
         "lint": {
