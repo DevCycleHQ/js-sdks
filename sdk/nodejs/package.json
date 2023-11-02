@@ -15,5 +15,6 @@
     "engines": {
         "node": ">=14.0.0"
     },
+    "main": "src/index.js",
     "types": "src/index.d.ts"
 }

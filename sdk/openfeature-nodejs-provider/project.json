@@ -14,7 +14,7 @@
                 "buildableProjectDepsInPackageJsonType": "dependencies",
                 "main": "sdk/openfeature-nodejs-provider/src/index.ts",
                 "assets": ["sdk/openfeature-nodejs-provider/*.md"],
-                "external": ["nodejs", "types"]
+                "external": ["nodejs", "shared-types"]
             }
         },
         "lint": {
