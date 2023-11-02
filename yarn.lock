@@ -5208,6 +5208,7 @@ __metadata:
   resolution: "@devcycle/js-cloud-server-sdk@workspace:sdk/js-cloud-server"
   dependencies:
     "@devcycle/bucketing-test-data": ^1.2.21
+    "@devcycle/types": ^1.1.16
   languageName: unknown
   linkType: soft
 
@@ -5309,7 +5310,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/types@^1.1.15, @devcycle/types@workspace:lib/shared/types":
+"@devcycle/types@^1.1.15, @devcycle/types@^1.1.16, @devcycle/types@workspace:lib/shared/types":
   version: 0.0.0-use.local
   resolution: "@devcycle/types@workspace:lib/shared/types"
   languageName: unknown
