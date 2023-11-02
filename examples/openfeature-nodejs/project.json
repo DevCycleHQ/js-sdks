@@ -11,7 +11,6 @@
                 "outputPath": "dist/examples/openfeature-nodejs",
                 "main": "examples/openfeature-nodejs/src/main.ts",
                 "tsConfig": "examples/openfeature-nodejs/tsconfig.app.json",
-                "webpackConfig": "examples/openfeature-nodejs/webpack.config.js",
                 "compiler": "tsc",
                 "target": "node",
                 "external": ["nodejs", "shared-types"]
