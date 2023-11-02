@@ -17,7 +17,6 @@
                 "external": [
                     "nodejs",
                     "shared-types",
-                    "shared-bucketing-test-data",
                     "js-cloud-server-sdk",
                     "server-request",
                     "config-manager"
