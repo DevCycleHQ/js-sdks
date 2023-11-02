@@ -18,7 +18,10 @@
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["sdk/nodejs/**/*.ts"]
+                "lintFilePatterns": [
+                    "sdk/nodejs/**/*.ts",
+                    "sdk/nodejs/package.json"
+                ]
             }
         },
         "test": {
