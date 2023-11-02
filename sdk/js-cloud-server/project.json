@@ -47,10 +47,7 @@
                 "updateBuildableProjectDepsInPackageJson": true,
                 "main": "sdk/js-cloud-server/src/index.ts",
                 "assets": ["sdk/js-cloud-server/*.md"],
-                "external": [
-                    "shared-types",
-                    "shared-bucketing-test-data"
-                ]
+                "external": ["shared-types", "shared-bucketing-test-data"]
             },
             "dependsOn": [
                 {
