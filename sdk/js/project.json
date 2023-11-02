@@ -44,6 +44,7 @@
                 "tsConfig": "sdk/js/tsconfig.lib.json",
                 "packageJson": "sdk/js/package.json",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
+                "updateBuildableProjectDepsInPackageJson": true,
                 "main": "sdk/js/src/index.ts",
                 "assets": ["sdk/js/*.md"]
             }
@@ -56,6 +57,7 @@
                 "tsConfig": "sdk/js/tsconfig.lib.es5.json",
                 "packageJson": "sdk/js/package.json",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
+                "updateBuildableProjectDepsInPackageJson": true,
                 "main": "sdk/js/src/index.ts",
                 "assets": ["sdk/js/*.md"]
             }
@@ -79,6 +81,7 @@
                 "tsConfig": "sdk/js/tsconfig.lib.json",
                 "packageJson": "sdk/js/package.json",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
+                "updateBuildableProjectDepsInPackageJson": true,
                 "main": "sdk/js/src/index.ts",
                 "index": "",
                 "optimization": true,

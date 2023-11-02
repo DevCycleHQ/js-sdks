@@ -13,6 +13,7 @@
                 "tsConfig": "lib/shared/config-manager/tsconfig.lib.json",
                 "assets": ["lib/shared/config-manager/*.md"],
                 "external": ["shared-types", "js-cloud-server-sdk"],
+                "buildableProjectDepsInPackageJsonType": "dependencies",
                 "updateBuildableProjectDepsInPackageJson": true
             }
         },

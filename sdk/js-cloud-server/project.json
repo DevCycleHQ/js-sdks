@@ -44,8 +44,10 @@
                 "tsConfig": "sdk/js-cloud-server/tsconfig.lib.json",
                 "packageJson": "sdk/js-cloud-server/package.json",
                 "buildableProjectDepsInPackageJsonType": "dependencies",
+                "updateBuildableProjectDepsInPackageJson": true,
                 "main": "sdk/js-cloud-server/src/index.ts",
-                "assets": ["sdk/js-cloud-server/*.md"]
+                "assets": ["sdk/js-cloud-server/*.md"],
+                "external": ["shared-types", "shared-bucketing-test-data"]
             },
             "dependsOn": [
                 {
