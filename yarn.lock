@@ -5209,6 +5209,7 @@ __metadata:
   dependencies:
     "@devcycle/bucketing-test-data": ^1.2.21
     "@devcycle/types": ^1.1.16
+    lodash: ^4.17.21
   languageName: unknown
   linkType: soft
 

@@ -7,7 +7,8 @@
         "@devcycle/bucketing-test-data": "^1.2.21"
     },
     "dependencies": {
-        "@devcycle/types": "^1.1.16"
+        "@devcycle/types": "^1.1.16",
+        "lodash": "^4.17.21"
     },
     "types": "src/index.d.ts"
 }
