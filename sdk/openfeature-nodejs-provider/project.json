@@ -14,7 +14,14 @@
                 "buildableProjectDepsInPackageJsonType": "dependencies",
                 "main": "sdk/openfeature-nodejs-provider/src/index.ts",
                 "assets": ["sdk/openfeature-nodejs-provider/*.md"],
-                "external": ["nodejs", "shared-types"]
+                "external": [
+                    "nodejs",
+                    "shared-types",
+                    "shared-bucketing-test-data",
+                    "js-cloud-server-sdk",
+                    "server-request",
+                    "config-manager"
+                ]
             }
         },
         "lint": {
