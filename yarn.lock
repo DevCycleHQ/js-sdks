@@ -5307,11 +5307,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/react-native-expo-client-sdk@workspace:sdk/react-native-expo"
   dependencies:
+    "@devcycle/js-client-sdk": "*"
     "@devcycle/react-client-sdk": ^1.11.11
     "@react-native-async-storage/async-storage": ^1.17.11
     react-native-device-info: ^8.7.0
     react-native-get-random-values: ^1.7.2
   peerDependencies:
+    react: ">=16.8.0"
     react-native: ">=0.64.0"
   languageName: unknown
   linkType: soft
