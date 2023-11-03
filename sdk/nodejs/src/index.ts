@@ -4,7 +4,6 @@ import {
     DevCycleCloudClient,
     dvcDefaultLogger,
     isValidServerSDKKey,
-    DevCycleOptions,
     DevCycleEvent,
     DVCVariableValue,
     JSON,
@@ -16,6 +15,7 @@ import {
     DVCFeature,
     DVCFeatureSet,
 } from '@devcycle/js-cloud-server-sdk'
+import { DevCycleOptions } from '@devcycle/types'
 import { getNodeJSPlatformDetails } from './utils/platformDetails'
 
 export {

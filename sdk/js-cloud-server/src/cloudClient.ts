@@ -1,5 +1,4 @@
 import {
-    DevCycleOptions,
     DVCVariableValue,
     DVCVariableSet,
     DVCFeatureSet,
@@ -13,6 +12,7 @@ import {
     DevCyclePlatformDetails,
 } from './models/populatedUser'
 import {
+    DevCycleOptions,
     DVCLogger,
     getVariableTypeFromValue,
     VariableTypeAlias,

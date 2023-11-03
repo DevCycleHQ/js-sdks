@@ -5,17 +5,18 @@ jest.spyOn(global, 'setInterval')
 import { EnvironmentConfigManager } from '../src'
 import { mocked } from 'jest-mock'
 import { Response } from 'cross-fetch'
-import {
-    DevCycleOptions,
-    dvcDefaultLogger,
-} from '@devcycle/js-cloud-server-sdk'
-import { DVCLogger } from '@devcycle/types'
+import { DVCLogger, DevCycleOptions } from '@devcycle/types'
 import { getEnvironmentConfig } from '../src/request'
 import { ResponseError } from '@devcycle/server-request'
 
 const setInterval_mock = mocked(setInterval)
 const getEnvironmentConfig_mock = mocked(getEnvironmentConfig)
-const logger = dvcDefaultLogger()
+const logger = {
+    error: jest.fn(),
+    warn: jest.fn(),
+    info: jest.fn(),
+    debug: jest.fn(),
+}
 
 const mockSDKConfig = jest.fn()
 

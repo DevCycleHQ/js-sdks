@@ -14,6 +14,7 @@ import {
     setConfigDataUTF8,
 } from './bucketing'
 import {
+    DevCycleOptions,
     DVCLogger,
     getVariableTypeFromValue,
     VariableTypeAlias,
@@ -25,7 +26,6 @@ import {
     VariableParam,
     checkParamDefined,
     dvcDefaultLogger,
-    DevCycleOptions,
     DVCVariableValue,
     DVCVariableSet,
     DVCFeatureSet,

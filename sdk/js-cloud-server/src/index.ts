@@ -1,4 +1,4 @@
-import { DevCycleOptions } from './types'
+import { DevCycleOptions } from '@devcycle/types'
 import { DevCycleCloudClient } from './cloudClient'
 import { isValidServerSDKKey } from './utils/paramUtils'
 import { DevCycleUser } from './models/user'

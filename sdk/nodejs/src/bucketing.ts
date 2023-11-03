@@ -1,6 +1,5 @@
 import { instantiate, Exports } from '@devcycle/bucketing-assembly-script'
-import { DVCLogger, DVCReporter } from '@devcycle/types'
-import { DevCycleOptions } from '@devcycle/js-cloud-server-sdk'
+import { DVCLogger, DVCReporter, DevCycleOptions } from '@devcycle/types'
 
 let Bucketing: Exports | null
 let InstantiatePromise: Promise<Exports> | null
