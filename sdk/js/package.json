@@ -15,9 +15,9 @@
     "dependencies": {
         "@devcycle/types": "*",
         "axios": "^1.0.0",
-        "uuid": "^8.3.2",
-        "lodash": "^4.17.21",
         "axios-retry": "^3.3.1",
-        "ua-parser-js": "^1.0.36"
+        "lodash": "^4.17.21",
+        "ua-parser-js": "^1.0.36",
+        "uuid": "^8.3.2"
     }
 }

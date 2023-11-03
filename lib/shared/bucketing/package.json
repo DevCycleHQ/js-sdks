@@ -4,11 +4,11 @@
     "license": "MIT",
     "dependencies": {
         "@devcycle/types": "*",
-        "moment": "^2.29.4",
         "lodash": "^4.17.21",
-        "uuid": "^8.3.2",
+        "moment": "^2.29.4",
         "murmurhash": "^2.0.0",
-        "ua-parser-js": "^1.0.36"
+        "ua-parser-js": "^1.0.36",
+        "uuid": "^8.3.2"
     },
     "types": "src/index.d.ts",
     "main": "src/index.js"

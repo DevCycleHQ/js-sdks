@@ -5178,16 +5178,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing@workspace:lib/shared/bucketing"
   dependencies:
-    "@devcycle/bucketing-test-data": ^1.2.22
-  languageName: unknown
-  linkType: soft
-
-"@devcycle/config-manager@workspace:lib/shared/config-manager":
-  version: 0.0.0-use.local
-  resolution: "@devcycle/config-manager@workspace:lib/shared/config-manager"
-  dependencies:
-    "@devcycle/js-cloud-server-sdk": ^1.0.0
-    "@devcycle/types": ^1.1.15
+    "@devcycle/types": "*"
+    lodash: ^4.17.21
+    moment: ^2.29.4
+    murmurhash: ^2.0.0
+    ua-parser-js: ^1.0.36
+    uuid: ^8.3.2
   languageName: unknown
   linkType: soft
 
@@ -5197,9 +5193,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/js-client-sdk@workspace:sdk/js":
+"@devcycle/js-client-sdk@*, @devcycle/js-client-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
+  dependencies:
+    "@devcycle/types": "*"
+    axios: ^1.0.0
+    axios-retry: ^3.3.1
+    lodash: ^4.17.21
+    ua-parser-js: ^1.0.36
+    uuid: ^8.3.2
   languageName: unknown
   linkType: soft
 
@@ -5209,7 +5212,10 @@ __metadata:
   dependencies:
     "@devcycle/bucketing-test-data": ^1.2.21
     "@devcycle/types": ^1.1.16
+    cross-fetch: ^3.1.8
+    fetch-retry: ^5.0.3
     lodash: ^4.17.21
+    msw: ^2.0.0
   languageName: unknown
   linkType: soft
 
@@ -5246,9 +5252,9 @@ __metadata:
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
     "@devcycle/bucketing-assembly-script": ^1.8.4
-    "@devcycle/bucketing-test-data": ^1.2.22
     "@devcycle/js-cloud-server-sdk": ^1.0.0
     "@devcycle/types": ^1.1.15
+    cross-fetch: ^3.1.8
     fetch-retry: ^5.0.3
   languageName: unknown
   linkType: soft
@@ -5270,12 +5276,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/react-client-sdk@^1.11.11, @devcycle/react-client-sdk@workspace:sdk/react":
+"@devcycle/react-client-sdk@*, @devcycle/react-client-sdk@^1.11.11, @devcycle/react-client-sdk@workspace:sdk/react":
   version: 0.0.0-use.local
   resolution: "@devcycle/react-client-sdk@workspace:sdk/react"
   dependencies:
+    "@devcycle/js-client-sdk": "*"
+    "@devcycle/types": "*"
     hoist-non-react-statics: ^3.3.2
-    nock: ^13.3.1
   peerDependencies:
     react: ">=16.8.0"
   languageName: unknown
@@ -5285,10 +5292,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/react-native-client-sdk@workspace:sdk/react-native"
   dependencies:
+    "@devcycle/js-client-sdk": "*"
+    "@devcycle/react-client-sdk": "*"
     "@react-native-async-storage/async-storage": ^1.17.11
     react-native-device-info: ^8.7.0
     react-native-get-random-values: ^1.7.2
   peerDependencies:
+    react: ">=16.8.0"
     react-native: ">=0.64.0"
   languageName: unknown
   linkType: soft
@@ -5306,17 +5316,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/server-request@workspace:lib/shared/server-request":
-  version: 0.0.0-use.local
-  resolution: "@devcycle/server-request@workspace:lib/shared/server-request"
-  dependencies:
-    fetch-retry: ^5.0.3
-  languageName: unknown
-  linkType: soft
-
-"@devcycle/types@^1.1.15, @devcycle/types@^1.1.16, @devcycle/types@workspace:lib/shared/types":
+"@devcycle/types@*, @devcycle/types@^1.1.15, @devcycle/types@^1.1.16, @devcycle/types@workspace:lib/shared/types":
   version: 0.0.0-use.local
   resolution: "@devcycle/types@workspace:lib/shared/types"
+  dependencies:
+    "@nestjs/class-validator": ^0.13.4
+    class-transformer: 0.5.1
+    iso-639-1: ^2.1.13
+    lodash: ^4.17.21
+    reflect-metadata: ^0.1.13
   languageName: unknown
   linkType: soft
 
@@ -24474,18 +24482,6 @@ __metadata:
     lodash: ^4.17.21
     propagate: ^2.0.0
   checksum: 1d7d5fda1816a3a0d2cb47f10283db139fcd15be6975db6f9b260efa781d5f0eeadf9bd7aab6db61191c519dd99bcd4c5c061e77880341be60abc39cd6163c1f
-  languageName: node
-  linkType: hard
-
-"nock@npm:^13.3.1":
-  version: 13.3.1
-  resolution: "nock@npm:13.3.1"
-  dependencies:
-    debug: ^4.1.0
-    json-stringify-safe: ^5.0.1
-    lodash: ^4.17.21
-    propagate: ^2.0.0
-  checksum: 0f2a73e8432f6b5650656c53eef99f9e5bbde3df538dc2f07057edc4438cfc61a394c9d06dd82e60f6e86d42433f20f3c04364a1f088beee7bf03a24e3f0fdd0
   languageName: node
   linkType: hard
 
