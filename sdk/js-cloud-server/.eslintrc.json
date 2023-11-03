@@ -10,10 +10,10 @@
                     "error",
                     {
                         "ignoredDependencies": [
-                          "@devcycle/bucketing-test-data",
-                          "@devcycle/server-request",
+                            "@devcycle/bucketing-test-data",
+                            "@devcycle/server-request",
                             "fetch-retry",
-                          "msw"
+                            "msw"
                         ]
                     }
                 ]
