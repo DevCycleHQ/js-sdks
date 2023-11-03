@@ -23,7 +23,6 @@
                 "format": ["esm", "cjs"],
                 "external": "all",
                 "rollupConfig": "@nx/react/plugins/bundle-rollup",
-                "buildableProjectDepsInPackageJsonType": "dependencies",
                 "compiler": "babel",
                 "assets": [
                     {
@@ -31,8 +30,7 @@
                         "input": ".",
                         "output": "."
                     }
-                ],
-                "updateBuildableProjectDepsInPackageJson": true
+                ]
             }
         },
         "lint": {

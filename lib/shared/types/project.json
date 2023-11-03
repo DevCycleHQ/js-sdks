@@ -29,8 +29,6 @@
                 "outputPath": "dist/lib/shared/types",
                 "entryFile": "lib/shared/types/src/index.ts",
                 "tsConfig": "lib/shared/types/tsconfig.lib.json",
-                "buildableProjectDepsInPackageJsonType": "dependencies",
-                "updateBuildableProjectDepsInPackageJson": true,
                 "assets": [
                     {
                         "glob": "*.md",

@@ -76,8 +76,6 @@
                 "outputPath": "dist/sdk/js",
                 "tsConfig": "sdk/js/tsconfig.lib.json",
                 "packageJson": "sdk/js/package.json",
-                "buildableProjectDepsInPackageJsonType": "dependencies",
-                "updateBuildableProjectDepsInPackageJson": true,
                 "main": "sdk/js/src/index.ts",
                 "index": "",
                 "optimization": true,
