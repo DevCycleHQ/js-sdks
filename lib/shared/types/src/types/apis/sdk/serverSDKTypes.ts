@@ -4,7 +4,7 @@ import { DVCReporter } from '../../../reporter'
 /**
  * Options to control the setup of the DevCycle NodeJS Server SDK.
  */
-export interface DevCycleOptions {
+export interface DevCycleServerSDKOptions {
     /**
      * Logger override to replace default logger
      */

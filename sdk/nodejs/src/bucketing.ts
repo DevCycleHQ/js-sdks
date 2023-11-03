@@ -1,5 +1,9 @@
 import { instantiate, Exports } from '@devcycle/bucketing-assembly-script'
-import { DVCLogger, DVCReporter, DevCycleOptions } from '@devcycle/types'
+import {
+    DVCLogger,
+    DVCReporter,
+    DevCycleServerSDKOptions,
+} from '@devcycle/types'
 
 let Bucketing: Exports | null
 let InstantiatePromise: Promise<Exports> | null
@@ -7,7 +11,10 @@ let InstantiatePromise: Promise<Exports> | null
 export const importBucketingLib = async ({
     logger,
     options,
-}: { logger?: DVCLogger; options?: DevCycleOptions } = {}): Promise<void> => {
+}: {
+    logger?: DVCLogger
+    options?: DevCycleServerSDKOptions
+} = {}): Promise<void> => {
     if (InstantiatePromise) {
         await InstantiatePromise
         return

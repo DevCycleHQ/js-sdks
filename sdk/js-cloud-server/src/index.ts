@@ -1,4 +1,4 @@
-import { DevCycleOptions } from '@devcycle/types'
+import { DevCycleServerSDKOptions } from '@devcycle/types'
 import { DevCycleCloudClient } from './cloudClient'
 import { isValidServerSDKKey } from './utils/paramUtils'
 import { DevCycleUser } from './models/user'
@@ -13,7 +13,7 @@ export * from './utils/logger'
 export * from './utils/paramUtils'
 
 type DevCycleCloudOptions = Pick<
-    DevCycleOptions,
+    DevCycleServerSDKOptions,
     'logger' | 'logLevel' | 'enableEdgeDB' | 'bucketingAPIURI'
 > & {
     platform?: 'NodeJS' | 'Electron' | 'EdgeWorker'

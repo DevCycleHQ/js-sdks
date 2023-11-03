@@ -14,7 +14,6 @@ import {
     DevCycleClient,
     DevCycleCloudClient,
     DevCycleOptions,
-    DVCVariable,
     DVCVariableInterface,
     DevCycleUser,
     DVCJSON,
