@@ -6,7 +6,18 @@
             "files": ["*.json"],
             "parser": "jsonc-eslint-parser",
             "rules": {
-                "@nx/dependency-checks": "error"
+                "@nx/dependency-checks": [
+                    "error",
+                    {
+                        "ignoredDependencies": [
+                            "@devcycle/server-request",
+                            "@devcycle/config-manager",
+                            "@devcycle/bucketing-test-data",
+                            "fetch-retry",
+                            "jest-mock"
+                        ]
+                    }
+                ]
             }
         },
         {
