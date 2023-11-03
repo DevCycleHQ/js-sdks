@@ -7,7 +7,7 @@
         "@devcycle/types": "^1.1.16",
         "cross-fetch": "^3.1.8",
         "fetch-retry": "^5.0.3",
-        "lodash": "^4.17.21",
+        "lodash": "^4.17.21"
     },
     "main": "src/index.js",
     "types": "src/index.d.ts"
