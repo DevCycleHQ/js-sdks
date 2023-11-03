@@ -24,6 +24,7 @@ import {
     postTrack,
 } from './request'
 import { DevCycleUser } from './models/user'
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { ResponseError } from '@devcycle/server-request'
 
 const castIncomingUser = (user: DevCycleUser) => {

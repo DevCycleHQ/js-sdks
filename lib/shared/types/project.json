@@ -50,8 +50,6 @@
                 "outputPath": "dist/lib/shared/types",
                 "entryFile": "lib/shared/types/src/index.ts",
                 "tsConfig": "lib/shared/types/tsconfig.lib.es5.json",
-                "buildableProjectDepsInPackageJsonType": "dependencies",
-                "updateBuildableProjectDepsInPackageJson": true,
                 "assets": [
                     {
                         "glob": "*.md",
@@ -74,7 +72,10 @@
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["lib/shared/types/**/*.ts"]
+                "lintFilePatterns": [
+                    "lib/shared/types/**/*.ts",
+                    "lib/shared/types/package.json"
+                ]
             }
         },
         "test": {

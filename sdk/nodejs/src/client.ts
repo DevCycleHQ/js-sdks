@@ -1,4 +1,9 @@
+// disable Nx linter cuz it doesnt know about inlined packages
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { EnvironmentConfigManager } from '@devcycle/config-manager'
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { UserError } from '@devcycle/server-request'
+
 import {
     bucketUserForConfig,
     getVariableTypeCode,
@@ -30,7 +35,6 @@ import {
     DevCycleEvent,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
-import { UserError } from '@devcycle/server-request'
 
 interface IPlatformData {
     platform: string

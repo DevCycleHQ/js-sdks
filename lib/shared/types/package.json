@@ -9,5 +9,12 @@
                 "./ts3.5/*"
             ]
         }
+    },
+    "dependencies": {
+        "class-transformer": "0.5.1",
+        "@nestjs/class-validator": "^0.13.4",
+        "reflect-metadata": "^0.1.13",
+        "lodash": "^4.17.21",
+        "iso-639-1": "^2.1.13"
     }
 }
