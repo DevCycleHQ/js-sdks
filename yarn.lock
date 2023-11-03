@@ -15401,6 +15401,7 @@ __metadata:
     msw: ^2.0.0
     murmurhash: ^2.0.0
     next: 13.5.5
+    nock: ^13.3.8
     npm-run-all: ^4.1.5
     nx: 16.10.0
     prettier: ^2.8.8
@@ -24484,6 +24485,17 @@ __metadata:
     lodash: ^4.17.21
     propagate: ^2.0.0
   checksum: 1d7d5fda1816a3a0d2cb47f10283db139fcd15be6975db6f9b260efa781d5f0eeadf9bd7aab6db61191c519dd99bcd4c5c061e77880341be60abc39cd6163c1f
+  languageName: node
+  linkType: hard
+
+"nock@npm:^13.3.8":
+  version: 13.3.8
+  resolution: "nock@npm:13.3.8"
+  dependencies:
+    debug: ^4.1.0
+    json-stringify-safe: ^5.0.1
+    propagate: ^2.0.0
+  checksum: 98f7d9d1c6b4fad560d7f1033705f9a0318e288060c10e36973d1798d6c824fee1f23a9ecbb1118bf70068f58bb04eaa50c5d046f5cf0ceaf4a2dc76fe7a82b2
   languageName: node
   linkType: hard
 

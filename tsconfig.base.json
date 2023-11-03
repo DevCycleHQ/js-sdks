@@ -23,7 +23,10 @@
         "paths": {
             "@devcycle/bucketing": ["lib/shared/bucketing/src/index.ts"],
             "@devcycle/bucketing-test-data": [
-                "lib/shared/bucketing-test-data/src/index.ts"
+                "lib/shared/bucketing-test-data/src/main.ts"
+            ],
+            "@devcycle/bucketing-test-data/json-data/testData.json": [
+                "lib/shared/bucketing-test-data/json-data/testData.json"
             ],
             "@devcycle/config-manager": [
                 "lib/shared/config-manager/src/index.ts"
