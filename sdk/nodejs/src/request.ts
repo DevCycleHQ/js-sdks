@@ -1,4 +1,3 @@
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { post } from '@devcycle/server-request'
 import { DVCLogger, SDKEventBatchRequestBody } from '@devcycle/types'
 

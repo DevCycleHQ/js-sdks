@@ -1,7 +1,4 @@
-// disable Nx linter cuz it doesnt know about inlined packages
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { EnvironmentConfigManager } from '@devcycle/config-manager'
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { UserError } from '@devcycle/server-request'
 
 import {
