@@ -62,7 +62,10 @@
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["sdk/react/**/*.{ts,tsx,js,jsx}"]
+                "lintFilePatterns": [
+                    "sdk/react/**/*.{ts,tsx,js,jsx}",
+                    "sdk/react/package.json"
+                ]
             }
         },
         "test": {

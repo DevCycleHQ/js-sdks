@@ -26,16 +26,17 @@
                 "outputPath": "dist/lib/shared/bucketing",
                 "main": "lib/shared/bucketing/src/index.ts",
                 "tsConfig": "lib/shared/bucketing/tsconfig.lib.json",
-                "buildableProjectDepsInPackageJsonType": "dependencies",
-                "assets": ["lib/shared/bucketing/*.md"],
-                "updateBuildableProjectDepsInPackageJson": true
+                "assets": ["lib/shared/bucketing/*.md"]
             }
         },
         "lint": {
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["lib/shared/bucketing/**/*.ts"]
+                "lintFilePatterns": [
+                    "lib/shared/bucketing/**/*.ts",
+                    "lib/shared/bucketing/package.json"
+                ]
             }
         },
         "test": {
