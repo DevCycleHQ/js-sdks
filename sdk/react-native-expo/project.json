@@ -45,8 +45,7 @@
                         "input": ".",
                         "output": "."
                     }
-                ],
-                "updateBuildableProjectDepsInPackageJson": true
+                ]
             }
         },
         "lint": {
@@ -54,7 +53,8 @@
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
-                    "sdk/react-native-expo/**/*.{ts,tsx,js,jsx}"
+                    "sdk/react-native-expo/**/*.{ts,tsx,js,jsx}",
+                    "sdk/react-native-expo/package.json"
                 ]
             }
         },

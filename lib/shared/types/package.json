@@ -2,12 +2,20 @@
     "name": "@devcycle/types",
     "version": "1.1.16",
     "license": "MIT",
-    "types": "index.cjs.d.ts",
+    "main": "./index.cjs.js",
+    "types": "./index.cjs.d.ts",
     "typesVersions": {
         "<4.0": {
             "*": [
                 "./ts3.5/*"
             ]
         }
+    },
+    "dependencies": {
+        "@nestjs/class-validator": "^0.13.4",
+        "class-transformer": "0.5.1",
+        "iso-639-1": "^2.1.13",
+        "lodash": "^4.17.21",
+        "reflect-metadata": "^0.1.13"
     }
 }

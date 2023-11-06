@@ -18,7 +18,10 @@
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["sdk/nodejs/**/*.ts"]
+                "lintFilePatterns": [
+                    "sdk/nodejs/**/*.ts",
+                    "sdk/nodejs/package.json"
+                ]
             }
         },
         "test": {
@@ -46,8 +49,6 @@
                 "outputPath": "dist/sdk/nodejs",
                 "tsConfig": "sdk/nodejs/tsconfig.lib.json",
                 "packageJson": "sdk/nodejs/package.json",
-                "buildableProjectDepsInPackageJsonType": "dependencies",
-                "updateBuildableProjectDepsInPackageJson": true,
                 "main": "sdk/nodejs/src/index.ts",
                 "assets": ["sdk/nodejs/*.md"],
                 "external": [

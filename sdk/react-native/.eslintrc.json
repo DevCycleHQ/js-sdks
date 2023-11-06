@@ -3,6 +3,22 @@
     "ignorePatterns": ["!**/*", "public", ".cache", "node_modules"],
     "overrides": [
         {
+            "files": ["*.json"],
+            "parser": "jsonc-eslint-parser",
+            "rules": {
+                "@nx/dependency-checks": [
+                    "error",
+                    {
+                        "ignoredDependencies": [
+                            "react-native",
+                            "react-native-device-info",
+                            "react-native-get-random-values"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
             "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
             "rules": {}
         },

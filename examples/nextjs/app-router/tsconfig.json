@@ -26,7 +26,8 @@
         "**/*.js",
         "**/*.jsx",
         "next-env.d.ts",
-        "../../../examples/nextjs/app-router/.next/types/**/*.ts"
+        "../../../examples/nextjs/app-router/.next/types/**/*.ts",
+        "../../../dist/examples/nextjs/app-router/.next/types/**/*.ts"
     ],
     "exclude": ["node_modules"]
 }

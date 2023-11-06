@@ -10,7 +10,7 @@ import {
     config,
     barrenConfig,
     configWithNullCustomData,
-} from '@devcycle/bucketing-test-data/src/data/testData'
+} from '@devcycle/bucketing-test-data'
 
 import moment from 'moment'
 import times from 'lodash/times'

@@ -1,4 +1,6 @@
 import { EnvironmentConfigManager } from '@devcycle/config-manager'
+import { UserError } from '@devcycle/server-request'
+
 import {
     bucketUserForConfig,
     getVariableTypeCode,
@@ -30,7 +32,6 @@ import {
     DevCycleEvent,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
-import { UserError } from '@devcycle/server-request'
 
 interface IPlatformData {
     platform: string

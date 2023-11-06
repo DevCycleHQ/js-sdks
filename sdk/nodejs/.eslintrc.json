@@ -3,6 +3,23 @@
     "ignorePatterns": ["!**/*", "node_modules/*", "src/pb-types/compiled*"],
     "overrides": [
         {
+            "files": ["*.json"],
+            "parser": "jsonc-eslint-parser",
+            "rules": {
+                "@nx/dependency-checks": [
+                    "error",
+                    {
+                        "ignoredDependencies": [
+                            "@devcycle/server-request",
+                            "@devcycle/config-manager",
+                            "fetch-retry",
+                            "cross-fetch"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
             "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
             "rules": {}
         },

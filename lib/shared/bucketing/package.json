@@ -2,7 +2,12 @@
     "name": "@devcycle/bucketing",
     "version": "1.4.3",
     "license": "MIT",
-    "devDependencies": {
-        "@devcycle/bucketing-test-data": "^1.2.22"
-    }
+    "dependencies": {
+        "@devcycle/types": "*",
+        "lodash": "^4.17.21",
+        "murmurhash": "^2.0.0",
+        "ua-parser-js": "^1.0.36"
+    },
+    "types": "src/index.d.ts",
+    "main": "src/index.js"
 }

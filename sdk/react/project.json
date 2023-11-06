@@ -22,8 +22,6 @@
                 "format": ["esm", "cjs"],
                 "external": "all",
                 "rollupConfig": "@nx/react/plugins/bundle-rollup",
-                "buildableProjectDepsInPackageJsonType": "dependencies",
-                "updateBuildableProjectDepsInPackageJson": true,
                 "compiler": "babel",
                 "assets": [
                     {
@@ -45,9 +43,6 @@
                 "format": ["esm", "cjs"],
                 "external": "all",
                 "rollupConfig": "@nx/react/plugins/bundle-rollup",
-                "buildableProjectDepsInPackageJsonType": "dependencies",
-                "updateBuildableProjectDepsInPackageJson": true,
-
                 "compiler": "babel",
                 "assets": [
                     {
@@ -62,7 +57,10 @@
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["sdk/react/**/*.{ts,tsx,js,jsx}"]
+                "lintFilePatterns": [
+                    "sdk/react/**/*.{ts,tsx,js,jsx}",
+                    "sdk/react/package.json"
+                ]
             }
         },
         "test": {

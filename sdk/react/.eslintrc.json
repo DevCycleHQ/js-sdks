@@ -3,6 +3,21 @@
     "ignorePatterns": ["!**/*", "node_modules/*"],
     "overrides": [
         {
+            "files": ["*.json"],
+            "parser": "jsonc-eslint-parser",
+            "rules": {
+                "@nx/dependency-checks": [
+                    "error",
+                    {
+                        "ignoredDependencies": [
+                            "@testing-library/jest-dom",
+                            "@testing-library/react"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
             "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
             "rules": {}
         },

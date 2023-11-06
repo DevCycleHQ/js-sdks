@@ -11,5 +11,6 @@
     "devDependencies": {
         "@devcycle/bucketing-test-data": "^1.2.22"
     },
+    "main": "src/index.js",
     "types": "src/index.d.ts"
 }

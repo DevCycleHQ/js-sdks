@@ -24,6 +24,7 @@
         "react-native-device-info": "*",
         "react-native-get-random-values": "*",
         "react-native-svg": "*",
+        "react-native-svg-transformer": "*",
         "reflect-metadata": "*",
         "ua-parser-js": "*",
         "uuid": "*"

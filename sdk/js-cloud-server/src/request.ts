@@ -1,6 +1,6 @@
+import { post } from '@devcycle/server-request'
 import { DVCPopulatedUser } from './models/populatedUser'
 import { DevCycleEvent, DevCycleOptions } from './types'
-import { post } from '@devcycle/server-request'
 
 export const HOST = '.devcycle.com'
 

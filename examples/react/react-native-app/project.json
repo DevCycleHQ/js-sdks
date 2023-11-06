@@ -14,7 +14,7 @@
         "serve": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "nx start react-native-app"
+                "command": "nx start example-react-native-app"
             }
         },
         "run-ios": {
