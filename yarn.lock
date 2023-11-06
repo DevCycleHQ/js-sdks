@@ -5180,10 +5180,8 @@ __metadata:
   dependencies:
     "@devcycle/types": "*"
     lodash: ^4.17.21
-    moment: ^2.29.4
     murmurhash: ^2.0.0
     ua-parser-js: ^1.0.36
-    uuid: ^8.3.2
   languageName: unknown
   linkType: soft
 
