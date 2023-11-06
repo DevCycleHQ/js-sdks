@@ -102,7 +102,7 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
 
   if [[ -z "$DRY_RUN" ]]; then
     echo "::info::Publishing $PACKAGE@$NPM_LS to NPM."
-    npm_authenticated publish
+    npm_authenticated publish --access=public
   else
     echo "::warning::[DRY RUN] Not publishing $PACKAGE@$NPM_LS to NPM."
   fi
