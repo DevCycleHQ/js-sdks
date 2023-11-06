@@ -145,7 +145,7 @@ if [[ "$DEPRECATED_PACKAGE" != "" ]]; then
     # Deploy logic
     if [[ -z "$DRY_RUN" ]]; then
       echo "Publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
-      npm_authenticated publish
+      npm_authenticated publish --access=public
 
       sleep 10
 
