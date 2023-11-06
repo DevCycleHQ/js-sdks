@@ -1,4 +1,4 @@
-import { useVariable } from './'
+import { useVariable } from './useVariable'
 import type { DVCVariableValue } from '@devcycle/js-client-sdk'
 import { VariableTypeAlias } from '@devcycle/types'
 
