@@ -29,7 +29,17 @@
             "{workspaceRoot}/.circleci/config.yml",
             "{workspaceRoot}/babel.config.json"
         ],
-        "default": ["sharedGlobals"]
+        "default": ["{projectRoot}/**/*", "sharedGlobals"],
+        "production": [
+            "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+            "!{projectRoot}/**/__mocks__/**",
+            "!{projectRoot}/tsconfig.spec.json",
+            "!{projectRoot}/jest.config.[jt]s",
+            "!{projectRoot}/src/test-setup.[jt]s",
+            "!{projectRoot}/test-setup.[jt]s",
+            "!{projectRoot}/.eslintrc.json",
+            "!{projectRoot}/eslint.config.js"
+        ]
     },
     "extends": "nx/presets/npm.json",
     "npmScope": "devcycle",
@@ -77,7 +87,8 @@
     "$schema": "./node_modules/nx/schemas/nx-schema.json",
     "targetDefaults": {
         "build": {
-            "dependsOn": ["^build"]
+            "dependsOn": ["^build"],
+            "inputs": ["production", "^production"]
         },
         "prepare": {
             "dependsOn": ["^prepare"]

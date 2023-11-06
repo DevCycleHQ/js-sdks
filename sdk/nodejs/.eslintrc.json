@@ -12,9 +12,8 @@
                         "ignoredDependencies": [
                             "@devcycle/server-request",
                             "@devcycle/config-manager",
-                            "@devcycle/bucketing-test-data",
                             "fetch-retry",
-                            "jest-mock"
+                            "cross-fetch"
                         ]
                     }
                 ]

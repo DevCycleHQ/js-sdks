@@ -10,7 +10,6 @@
                     "error",
                     {
                         "ignoredDependencies": [
-                            "@testing-library/jest-native",
                             "react-native",
                             "react-native-device-info",
                             "react-native-get-random-values"
