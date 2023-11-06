@@ -1,5 +1,4 @@
 import {
-    DevCycleOptions,
     DVCVariableValue,
     DVCVariableSet,
     DVCFeatureSet,
@@ -13,6 +12,7 @@ import {
     DevCyclePlatformDetails,
 } from './models/populatedUser'
 import {
+    DevCycleServerSDKOptions,
     DVCLogger,
     getVariableTypeFromValue,
     VariableTypeAlias,
@@ -70,12 +70,12 @@ const throwIfUserError = (err: unknown) => {
 export class DevCycleCloudClient {
     private sdkKey: string
     private logger: DVCLogger
-    private options: DevCycleOptions
+    private options: DevCycleServerSDKOptions
     private platformDetails: DevCyclePlatformDetails
 
     constructor(
         sdkKey: string,
-        options: DevCycleOptions,
+        options: DevCycleServerSDKOptions,
         platformDetails: DevCyclePlatformDetails,
     ) {
         this.sdkKey = sdkKey

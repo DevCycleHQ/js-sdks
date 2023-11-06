@@ -14,6 +14,7 @@ import {
     setConfigDataUTF8,
 } from './bucketing'
 import {
+    DevCycleServerSDKOptions,
     DVCLogger,
     getVariableTypeFromValue,
     VariableTypeAlias,
@@ -25,7 +26,6 @@ import {
     VariableParam,
     checkParamDefined,
     dvcDefaultLogger,
-    DevCycleOptions,
     DVCVariableValue,
     DVCVariableSet,
     DVCFeatureSet,
@@ -56,7 +56,7 @@ export class DevCycleClient {
     private logger: DVCLogger
     private initialized = false
 
-    constructor(sdkKey: string, options?: DevCycleOptions) {
+    constructor(sdkKey: string, options?: DevCycleServerSDKOptions) {
         this.sdkKey = sdkKey
         this.logger =
             options?.logger || dvcDefaultLogger({ level: options?.logLevel })

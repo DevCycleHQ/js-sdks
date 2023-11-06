@@ -1,4 +1,4 @@
-import { DVCLogger } from '@devcycle/types'
+import { DVCLogger, DevCycleServerSDKOptions } from '@devcycle/types'
 import { getEnvironmentConfig } from './request'
 import { ResponseError, UserError } from '@devcycle/server-request'
 

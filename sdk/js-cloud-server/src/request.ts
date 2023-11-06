@@ -1,6 +1,7 @@
-import { post } from '@devcycle/server-request'
 import { DVCPopulatedUser } from './models/populatedUser'
-import { DevCycleEvent, DevCycleOptions } from './types'
+import { DevCycleEvent } from './types'
+import { DevCycleServerSDKOptions } from '@devcycle/types'
+import { post } from '@devcycle/server-request'
 
 export const HOST = '.devcycle.com'
 
@@ -14,7 +15,7 @@ const EDGE_DB_QUERY_PARAM = '?enableEdgeDB='
 export async function getAllFeatures(
     user: DVCPopulatedUser,
     sdkKey: string,
-    options: DevCycleOptions,
+    options: DevCycleServerSDKOptions,
 ): Promise<Response> {
     const baseUrl = `${
         options.bucketingAPIURI || BUCKETING_URL
@@ -35,7 +36,7 @@ export async function getAllFeatures(
 export async function getAllVariables(
     user: DVCPopulatedUser,
     sdkKey: string,
-    options: DevCycleOptions,
+    options: DevCycleServerSDKOptions,
 ): Promise<Response> {
     const baseUrl = `${
         options.bucketingAPIURI || BUCKETING_URL
@@ -58,7 +59,7 @@ export async function getVariable(
     user: DVCPopulatedUser,
     sdkKey: string,
     variableKey: string,
-    options: DevCycleOptions,
+    options: DevCycleServerSDKOptions,
 ): Promise<Response> {
     const baseUrl = `${
         options.bucketingAPIURI || BUCKETING_URL
@@ -80,7 +81,7 @@ export async function postTrack(
     user: DVCPopulatedUser,
     event: DevCycleEvent,
     sdkKey: string,
-    options: DevCycleOptions,
+    options: DevCycleServerSDKOptions,
 ): Promise<void> {
     const baseUrl = `${options.bucketingAPIURI || BUCKETING_URL}${TRACK_PATH}`
     const postUrl = baseUrl.concat(
