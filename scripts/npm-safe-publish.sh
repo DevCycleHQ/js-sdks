@@ -146,10 +146,6 @@ if [[ "$DEPRECATED_PACKAGE" != "" ]]; then
     if [[ -z "$DRY_RUN" ]]; then
       echo "Publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
       npm_authenticated publish --access=public
-
-      sleep 10
-
-      npm_authenticated deprecate "$DEPRECATED_PACKAGE"@"*" "Package has been renamed to: $PACKAGE"
     else
       echo "::warning::[DRY RUN] Not publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
     fi
