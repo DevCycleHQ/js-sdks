@@ -12,7 +12,6 @@ if [[ $# -eq 0 ]]; then
 fi
 
 PACKAGE=$1
-DEPRECATED_PACKAGE=""
 JQ_PATH=".version"
 NPM_REGISTRY="$(yarn config get npmRegistryServer)"
 SHA="$(git rev-parse HEAD)"
@@ -26,10 +25,6 @@ function parse_arguments() {
     case "$1" in
       --otp=*)
         OTP="${1#*=}"
-        shift
-        ;;
-      --deprecated-package=*)
-        DEPRECATED_PACKAGE="${1#*=}"
         shift
         ;;
       --dry-run)
@@ -102,7 +97,7 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
 
   if [[ -z "$DRY_RUN" ]]; then
     echo "::info::Publishing $PACKAGE@$NPM_LS to NPM."
-    npm_authenticated publish
+    npm_authenticated publish --access=public
   else
     echo "::warning::[DRY RUN] Not publishing $PACKAGE@$NPM_LS to NPM."
   fi
@@ -118,48 +113,4 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
     -d sha=$SHA https://app.sleuth.io/api/1/deployments/taplytics/js-sdks-2/register_deploy
 else
   echo "::info::Versions are the same ($NPM_SHOW = $NPM_LS). Not pushing"
-fi
-
-# If DEPRECATED_PACKAGE is set, run the deploy logic for it
-if [[ "$DEPRECATED_PACKAGE" != "" ]]; then
-  echo "Deploy to Deprecated Package: $DEPRECATED_PACKAGE"
-
-  # Check version for DEPRECATED_PACKAGE
-  NPM_SHOW_DEPRECATED="$(npm show "$DEPRECATED_PACKAGE" version)"
-
-  echo "$DEPRECATED_PACKAGE npm show: $NPM_SHOW_DEPRECATED, npm ls: $NPM_LS"
-
-  if [[ "$NPM_SHOW_DEPRECATED" != "$NPM_LS" ]]; then
-    echo "::info::Versions are not the same, (Remote = $NPM_SHOW_DEPRECATED; Local = $NPM_LS). Proceeding with deploy for deprecated package."
-
-    # Backup the original package.json
-    cp package.json package.json.bak
-
-    # Ensure the original package.json is restored even if the script exits prematurely
-    trap 'mv package.json.bak package.json' EXIT
-
-    # Update the name field to DEPRECATED_PACKAGE
-    jq --arg DEPRECATED_PACKAGE "$DEPRECATED_PACKAGE" '.name = $DEPRECATED_PACKAGE' package.json > package.json.temp
-    mv package.json.temp package.json
-
-    # Deploy logic
-    if [[ -z "$DRY_RUN" ]]; then
-      echo "Publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
-      npm_authenticated publish --access=public
-
-      sleep 10
-
-      npm_authenticated deprecate "$DEPRECATED_PACKAGE"@"*" "Package has been renamed to: $PACKAGE"
-    else
-      echo "::warning::[DRY RUN] Not publishing $DEPRECATED_PACKAGE@$NPM_LS to NPM."
-    fi
-
-    # Restore the original package.json (trap will take care of this if the script exits prematurely)
-    mv package.json.bak package.json
-
-    # Remove trap once the job is done
-    trap - EXIT
-  else
-    echo "::info::Versions are the same ($NPM_SHOW_DEPRECATED = $NPM_LS). Not pushing deprecated package."
-  fi
 fi
