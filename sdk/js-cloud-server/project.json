@@ -60,7 +60,7 @@
         "npm-publish": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/nodejs-server-sdk\"",
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/js-cloud-server-sdk\"",
                 "cwd": "dist/sdk/js-cloud-server",
                 "forwardAllArgs": true
             }
