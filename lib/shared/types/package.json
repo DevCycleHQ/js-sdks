@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/types",
-    "version": "1.1.16",
+    "version": "1.2.0",
     "license": "MIT",
     "main": "./index.cjs.js",
     "types": "./index.cjs.d.ts",

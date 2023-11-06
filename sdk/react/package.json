@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/react-client-sdk",
-    "version": "1.11.11",
+    "version": "1.12.0",
     "description": "The DevCycle React SDK used for feature management.",
     "scripts": {
         "clean": "rimraf dist",
@@ -11,8 +11,8 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "@devcycle/js-client-sdk": "*",
-        "@devcycle/types": "*",
+        "@devcycle/js-client-sdk": "^1.14.0",
+        "@devcycle/types": "^1.2.0",
         "hoist-non-react-statics": "^3.3.2"
     },
     "peerDependencies": {
