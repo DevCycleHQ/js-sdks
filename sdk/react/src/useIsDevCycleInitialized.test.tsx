@@ -103,6 +103,7 @@ describe('useIsDevCycleInitialized', () => {
 
         const App = withDevCycleProvider({
             sdkKey: 'dvc_test_key',
+            user: { user_id: 'test_user' },
             options: {
                 bootstrapConfig: {} as BucketedUserConfig,
             },
