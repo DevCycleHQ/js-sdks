@@ -132,7 +132,7 @@ export class DevCycleClient<
             if (!user) {
                 throw new Error('User must be provided to initialize SDK')
             }
-            this.clientInitialization(user)
+            void this.clientInitialization(user)
         } else if (this.options.bootstrapConfig) {
             throw new Error(
                 'bootstrapConfig option can not be combined with deferred initialization!',
@@ -167,7 +167,9 @@ export class DevCycleClient<
         }
         this.initializeTriggered = true
 
-        const storedAnonymousId = await this.store.loadAnonUserId()
+        const storedAnonymousId = initialUser.user_id
+            ? undefined
+            : await this.store.loadAnonUserId()
 
         this.user = new DVCPopulatedUser(
             initialUser,
