@@ -110,7 +110,7 @@ describe('useIsDevCycleInitialized', () => {
 
         render(<App />)
 
-        expect(await screen.findAllByText('Done')).toHaveLength(1)
+        expect(screen.getAllByText('Done')).toHaveLength(1)
     })
 
     it('should immediately render if the client is already initialized', async () => {
