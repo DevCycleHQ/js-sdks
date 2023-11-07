@@ -15,7 +15,6 @@ export function DevCycleProvider(props: Props): React.ReactElement {
     const [isInitialized, setIsInitialized] = useState(false)
     const clientRef = useRef<DevCycleClient>()
 
-    const initializedWatcher = useRef<boolean>(isInitialized)
     let sdkKey: string
     if ('sdkKey' in config) {
         sdkKey = config.sdkKey
@@ -27,35 +26,27 @@ export function DevCycleProvider(props: Props): React.ReactElement {
     }
 
     if (!clientRef.current) {
-        // if on server, set deferInitialization to true
         clientRef.current = initializeDevCycleClient(sdkKey, user, {
             ...options,
-            deferInitialization: typeof window === 'undefined',
         })
     }
 
     useEffect(() => {
-        // ensure there is exactly one initialization event handler per provider
-        // use a ref so we don't re-render while setting this up
-        if (!initializedWatcher.current) {
-            initializedWatcher.current = true
-            // assert this is defined otherwise we have a bug
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            clientRef
-                .current!.onClientInitialized()
-                .then(() => {
-                    setIsInitialized(true)
-                })
-                .catch(() => {
-                    // set to true to unblock app load
-                    console.log('Error initializing DevCycle.')
-                    setIsInitialized(true)
-                })
-        }
+        // assert this is defined otherwise we have a bug
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        clientRef
+            .current!.onClientInitialized()
+            .then(() => {
+                setIsInitialized(true)
+            })
+            .catch(() => {
+                // set to true to unblock app load
+                console.log('Error initializing DevCycle.')
+                setIsInitialized(true)
+            })
 
         return () => {
             clientRef.current?.close()
-            clientRef.current = undefined
         }
     }, [])
 
