@@ -52,7 +52,12 @@ export function DevCycleProvider(props: Props): React.ReactElement {
 
     return (
         <Provider value={{ client: clientRef.current }}>
-            <initializedContext.Provider value={{ isInitialized }}>
+            <initializedContext.Provider
+                value={{
+                    isInitialized:
+                        isInitialized || clientRef.current.isInitialized,
+                }}
+            >
                 {props.children}
             </initializedContext.Provider>
         </Provider>
