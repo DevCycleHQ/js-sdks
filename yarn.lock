@@ -5116,7 +5116,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/bucketing@workspace:lib/shared/bucketing":
+"@devcycle/bucketing@*, @devcycle/bucketing@workspace:lib/shared/bucketing":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing@workspace:lib/shared/bucketing"
   dependencies:
@@ -5133,7 +5133,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/js-client-sdk@^1.16.0, @devcycle/js-client-sdk@workspace:sdk/js":
+"@devcycle/js-client-sdk@*, @devcycle/js-client-sdk@^1.16.0, @devcycle/js-client-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
   dependencies:
@@ -5160,6 +5160,14 @@ __metadata:
 "@devcycle/next-sdk@workspace:sdk/nextjs":
   version: 0.0.0-use.local
   resolution: "@devcycle/next-sdk@workspace:sdk/nextjs"
+  dependencies:
+    "@devcycle/bucketing": "*"
+    "@devcycle/js-client-sdk": "*"
+    "@devcycle/types": "*"
+    server-only: ^0.0.1
+  peerDependencies:
+    next: 14.0.0
+    react: ^18.3.0-canary-0210f0b08-20230525
   languageName: unknown
   linkType: soft
 
@@ -5278,7 +5286,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/types@^1.4.0, @devcycle/types@workspace:lib/shared/types":
+"@devcycle/types@*, @devcycle/types@^1.4.0, @devcycle/types@workspace:lib/shared/types":
   version: 0.0.0-use.local
   resolution: "@devcycle/types@workspace:lib/shared/types"
   dependencies:

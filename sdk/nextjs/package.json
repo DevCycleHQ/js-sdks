@@ -1,4 +1,14 @@
 {
     "name": "@devcycle/next-sdk",
-    "version": "0.0.1"
+    "version": "0.0.1",
+    "dependencies": {
+        "@devcycle/bucketing": "*",
+        "@devcycle/js-client-sdk": "*",
+        "@devcycle/types": "*",
+        "server-only": "^0.0.1"
+    },
+    "peerDependencies": {
+        "next": "14.0.0",
+        "react": "^18.3.0-canary-0210f0b08-20230525"
+    }
 }

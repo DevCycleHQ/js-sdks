@@ -9,7 +9,10 @@
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["sdk/nextjs/**/*.{ts,tsx,js,jsx}"]
+                "lintFilePatterns": [
+                    "sdk/nextjs/**/*.{ts,tsx,js,jsx}",
+                    "sdk/nextjs/package.json"
+                ]
             }
         },
         "build": {
