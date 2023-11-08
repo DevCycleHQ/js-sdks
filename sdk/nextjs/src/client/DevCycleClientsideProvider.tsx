@@ -31,6 +31,14 @@ export const DevCycleClientContext = React.createContext<ClientProviderContext>(
     {} as ClientProviderContext,
 )
 
+/**
+ * Component which renders nothing, but runs code to keep client state in sync with server
+ * Also waits for the server's data promise with the `use` hook. This triggers the nearest suspense boundary,
+ * so this component is being rendered inside of a Suspense by the DevCycleClientsideProvider.
+ * @param serverDataPromise
+ * @param enableClientsideIdentify
+ * @constructor
+ */
 export const SuspendedProvider = ({
     serverDataPromise,
     enableClientsideIdentify,

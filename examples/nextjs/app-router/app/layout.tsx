@@ -27,7 +27,9 @@ export default async function RootLayout({
         <html lang="en">
             <body>
                 <DevCycleServersideProvider
-                    sdkKey={process.env.DEVCYCLE_CLIENT_SDK_KEY ?? ''}
+                    sdkKey={
+                        process.env.NEXT_PUBLIC_DEVCYCLE_CLIENT_SDK_KEY ?? ''
+                    }
                     user={{ user_id: randomId }}
                     options={{
                         enableStreaming: true,

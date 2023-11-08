@@ -4,7 +4,6 @@ import {
     useUserIdentity,
     useVariableValue,
 } from '@devcycle/next-sdk'
-import { useDevCycleClient } from '@devcycle/react-client-sdk'
 
 const clientsideIds = [
     'clientside-1',

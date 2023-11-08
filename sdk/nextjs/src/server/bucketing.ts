@@ -1,11 +1,10 @@
 import { fetchCDNConfig } from './requests'
 import { generateBucketedConfig } from '@devcycle/bucketing'
-import { getIdentity, getOptions, getSDKKey } from './requestContext'
+import { getIdentity, getSDKKey } from './requestContext'
 import { cache } from 'react'
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { sseURlGetter } from './ably'
 import { getUserAgent } from './userAgent'
-import { config } from 'winston'
 import { BucketedUserConfig } from '@devcycle/types'
 
 // wrap this function in react cache to avoid redoing work for the same user and config
@@ -29,7 +28,6 @@ const generateBucketedConfigCached = cache(
                     inactivityDelay: 1000 * 60 * 2,
                 },
             },
-            populatedUser,
         }
     },
 )
@@ -44,20 +42,13 @@ export const getBucketedConfig = async (): Promise<
 > => {
     // this request will be cached by Next
     const cdnConfig = await fetchCDNConfig()
-    if (getOptions().enableStreaming) {
-        // TODO temporary fake delay to watch streaming work!
-        await new Promise((resolve) => setTimeout(resolve, 5000))
-    }
     const user = getIdentity()
 
     if (!user) {
         throw Error('User should be defined')
     }
 
-    const { config, populatedUser } = await generateBucketedConfigCached(
-        user,
-        cdnConfig,
-    )
+    const { config } = await generateBucketedConfigCached(user, cdnConfig)
 
     return {
         ...config,

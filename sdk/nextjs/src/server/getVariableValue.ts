@@ -22,11 +22,10 @@ export async function getVariableValue<T extends DVCVariableValue>(
     }
 
     const variable = client.variable(key, defaultValue)
-    if (variable.isDefaulted) {
-        addTrackedEvent({ type: 'variableDefaulted', target: key })
-    } else {
-        addTrackedEvent({ type: 'variableEvaluated', target: key })
-    }
+    addTrackedEvent({
+        type: variable.isDefaulted ? 'variableDefaulted' : 'variableEvaluated',
+        target: key,
+    })
 
     return variable.value
 }

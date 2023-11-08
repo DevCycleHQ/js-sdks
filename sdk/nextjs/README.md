@@ -47,7 +47,7 @@ export default async function RootLayout({
 }
 ```
 Note: You _must_ use the client SDK key of your project, not the server SDK key. The key is used across the server and
-the client and will be sent to the clientside to boostrap the client SDK.
+the client and will be sent to the clientside to bootstrap the client SDK.
 
 The DevCycleServersideProvider will:
 - fetch your project's configuration from DevCycle
@@ -77,7 +77,7 @@ export const MyServerComponent = async function () {
 ### Get a variable value (client component)
 ```typescript jsx
 'use client'
-import { getVariableValue } from '@devcycle/next-sdk/server'
+import { useVariableValue } from '@devcycle/next-sdk'
 import * as React from 'react'
 
 export const MyClientComponent = function () {
