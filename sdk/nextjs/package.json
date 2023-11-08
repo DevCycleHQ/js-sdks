@@ -10,5 +10,6 @@
     "peerDependencies": {
         "next": "14.0.0",
         "react": "^18.3.0-canary-0210f0b08-20230525"
-    }
+    },
+    "types": "./src/index.d.ts"
 }

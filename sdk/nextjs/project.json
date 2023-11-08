@@ -16,16 +16,13 @@
             }
         },
         "build": {
-            "executor": "@nx/rollup:rollup",
+            "executor": "@nx/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/nextjs",
                 "tsConfig": "sdk/nextjs/tsconfig.lib.json",
-                "project": "sdk/nextjs/package.json",
-                "entryFile": "sdk/nextjs/src/index.ts",
-                "external": ["react", "react-dom", "react/jsx-runtime"],
-                "rollupConfig": "@nx/react/plugins/bundle-rollup",
-                "compiler": "swc",
+                "packageJson": "sdk/nextjs/package.json",
+                "main": "sdk/nextjs/src/index.ts",
                 "assets": [
                     {
                         "glob": "nextjs/README.md",
