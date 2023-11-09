@@ -17,8 +17,6 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: 'yarn'
-            - name: Install protoc for protobuf compilation
-              run: sudo apt-get install -y protobuf-compiler
             - run: git fetch origin main
             - run: yarn --immutable
             - run: yarn affected:lint
