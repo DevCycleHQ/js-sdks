@@ -54,7 +54,7 @@ jobs:
                   git config --global user.name "DevCycle Automation"
 
             - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
                   node-version: ${{ matrix.node-version }}
                   registry-url: 'https://registry.npmjs.org'
