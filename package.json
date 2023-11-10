@@ -190,7 +190,8 @@
     },
     "resolutions": {
         "word-wrap@1.2.3": "^1.2.4",
-        "@sideway/formula@3.0.0": "^3.0.1"
+        "@sideway/formula@3.0.0": "^3.0.1",
+        "dns-packet@^5.2.2": "^5.4.0"
     },
     "config": {
         "commitizen": {
