@@ -138,3 +138,4 @@ This will create three files in the `dist/sdk/js` folder:
 ```
 
 Upload them all to S3. Ensure that their access controls allow public access.
+
