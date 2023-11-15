@@ -19,8 +19,6 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: 'yarn'
-            - name: Install protoc for protobuf compilation
-              run: sudo apt-get install -y protobuf-compiler
             - name: Run Yarn
               run: yarn --immutable
             - name: Check affected projects
