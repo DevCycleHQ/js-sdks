@@ -111,7 +111,7 @@
         "as-proto-gen": "^1.3.0",
         "as-uuid": "^0.0.4",
         "as-wasi": "^0.4.6",
-        "assemblyscript": "~0.27.1",
+        "assemblyscript": "~0.27.18",
         "assemblyscript-regex": "https://github.com/DevCycleHQ/assemblyscript-regex.git#8ff33297841880c16e38bd67a84df4cbdb8e887f",
         "babel-jest": "29.4.3",
         "cross-env": "^7.0.3",
