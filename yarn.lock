@@ -5142,7 +5142,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/js-client-sdk@^1.15.1, @devcycle/js-client-sdk@workspace:sdk/js":
+"@devcycle/js-client-sdk@1.15.1, @devcycle/js-client-sdk@^1.15.1, @devcycle/js-client-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
   dependencies:
@@ -5154,24 +5154,6 @@ __metadata:
     uuid: ^8.3.2
   languageName: unknown
   linkType: soft
-
-"@devcycle/js-client-sdk@npm:1.13.10":
-  version: 1.13.10
-  resolution: "@devcycle/js-client-sdk@npm:1.13.10"
-  dependencies:
-    "@devcycle/types": 1.1.16
-    "@nestjs/class-validator": 0.13.4
-    axios: ^1.0.0
-    axios-retry: ^3.3.1
-    class-transformer: 0.5.1
-    iso-639-1: 2.1.13
-    lodash: ^4.17.21
-    reflect-metadata: 0.1.13
-    ua-parser-js: ^1.0.2
-    uuid: ^8.3.2
-  checksum: f0f6b09d3f61dae30bfe404afaf1cfb698d29cc147f8515c598affc533db06fbb71e79274f11f6afc81fae33783584765740045743976c583cf9c6bbf07b0784
-  languageName: node
-  linkType: hard
 
 "@devcycle/js-cloud-server-sdk@^1.2.0, @devcycle/js-cloud-server-sdk@workspace:sdk/js-cloud-server":
   version: 0.0.0-use.local
@@ -5254,7 +5236,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-web-provider@workspace:sdk/openfeature-web-provider"
   dependencies:
-    "@devcycle/js-client-sdk": 1.13.10
+    "@devcycle/js-client-sdk": 1.15.1
     "@openfeature/core": ^0.0.16
     "@openfeature/web-sdk": ^0.4.3
   languageName: unknown
@@ -5313,19 +5295,6 @@ __metadata:
     reflect-metadata: ^0.1.13
   languageName: unknown
   linkType: soft
-
-"@devcycle/types@npm:1.1.16":
-  version: 1.1.16
-  resolution: "@devcycle/types@npm:1.1.16"
-  dependencies:
-    "@nestjs/class-validator": 0.13.4
-    class-transformer: 0.5.1
-    iso-639-1: 2.1.13
-    lodash: 4.17.21
-    reflect-metadata: 0.1.13
-  checksum: d347c59eb997c705f6b0fbdd9e01a782a4c1e517634f30bce7d3f56bba34b5e559f77a291645c60f0a0c6fc6fe32c518d707ee5a88ad12c9d86f4680bd166ec0
-  languageName: node
-  linkType: hard
 
 "@esbuild-plugins/node-globals-polyfill@npm:^0.2.3":
   version: 0.2.3
@@ -7477,7 +7446,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/class-validator@npm:*, @nestjs/class-validator@npm:0.13.4, @nestjs/class-validator@npm:^0.13.4":
+"@nestjs/class-validator@npm:*, @nestjs/class-validator@npm:^0.13.4":
   version: 0.13.4
   resolution: "@nestjs/class-validator@npm:0.13.4"
   dependencies:
@@ -20125,7 +20094,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iso-639-1@npm:2.1.13, iso-639-1@npm:^2.1.13":
+"iso-639-1@npm:^2.1.13":
   version: 2.1.13
   resolution: "iso-639-1@npm:2.1.13"
   checksum: 53c0a76ad742b08dd1a5a525514f95457aa71aee4b9b71ad6bf8d5dc30b5db1cb9ec2dc3919ac6eb9b281c314a3e439b027760777e8c373068d38d003dd6812d
@@ -28087,7 +28056,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reflect-metadata@npm:*, reflect-metadata@npm:0.1.13, reflect-metadata@npm:^0.1.13":
+"reflect-metadata@npm:*, reflect-metadata@npm:^0.1.13":
   version: 0.1.13
   resolution: "reflect-metadata@npm:0.1.13"
   checksum: 798d379a7b6f6455501145419505c97dd11cbc23857a386add2b9ef15963ccf15a48d9d15507afe01d4cd74116df8a213247200bac00320bd7c11ddeaa5e8fb4
@@ -31032,13 +31001,6 @@ __metadata:
   version: 1.0.36
   resolution: "ua-parser-js@npm:1.0.36"
   checksum: 5b2c8a5e3443dfbba7624421805de946457c26ae167cb2275781a2729d1518f7067c9d5c74c3b0acac4b9ff3278cae4eace08ca6eecb63848bc3b2f6a63cc975
-  languageName: node
-  linkType: hard
-
-"ua-parser-js@npm:^1.0.2":
-  version: 1.0.37
-  resolution: "ua-parser-js@npm:1.0.37"
-  checksum: 4d481c720d523366d7762dc8a46a1b58967d979aacf786f9ceceb1cd767de069f64a4bdffb63956294f1c0696eb465ddb950f28ba90571709e33521b4bd75e07
   languageName: node
   linkType: hard
 

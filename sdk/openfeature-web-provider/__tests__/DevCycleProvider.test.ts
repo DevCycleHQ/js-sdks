@@ -6,7 +6,7 @@ import {
 } from '@openfeature/web-sdk'
 import { DevCycleClient } from '@devcycle/js-client-sdk'
 
-jest.mock('@devcycle/nodejs-server-sdk')
+jest.mock('@devcycle/js-client-sdk')
 
 const variableMock = jest.spyOn(DevCycleClient.prototype, 'variable')
 const identifyUserMock = jest.spyOn(DevCycleClient.prototype, 'identifyUser')
@@ -356,14 +356,14 @@ describe('DevCycleProvider Unit Tests', () => {
             identifyUserMock.mockResolvedValue({})
         })
 
-        it('should resolve a string flag value', async () => {
+        it('should resolve a json flag value', async () => {
             const { ofClient } = await initOFClient()
             expect(
                 ofClient.getObjectValue('json-flag', { default: 'value' }),
             ).toEqual({ hello: 'world' })
         })
 
-        it('should resolve a boolean flag details', async () => {
+        it('should resolve a json flag details', async () => {
             const { ofClient } = await initOFClient()
             expect(
                 ofClient.getObjectDetails('json-flag', { default: 'value' }),

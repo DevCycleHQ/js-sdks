@@ -19,8 +19,6 @@ See the [example app](/examples/openfeature-web) for a working example of the Op
 
 See our [documentation](https://docs.devcycle.com/sdk/client-side-sdks/javascript/javascript-usage) for more information.
 
-// TODO: update
-
 ```typescript
 import DevCycleProvider from '@devcycle/openfeature-web-provider'
 import { OpenFeature } from '@openfeature/web-sdk'

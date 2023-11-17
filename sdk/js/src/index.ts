@@ -124,8 +124,3 @@ export function initializeDevCycle<
  * @deprecated Use initializeDevCycle instead
  */
 export const initialize = initializeDevCycle
-
-export default {
-    initialize,
-    initializeDevCycle,
-}
