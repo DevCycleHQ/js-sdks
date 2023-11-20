@@ -4,12 +4,11 @@ import {
     OpenFeature,
     StandardResolutionReasons,
 } from '@openfeature/web-sdk'
-import { DevCycleClient } from '@devcycle/js-client-sdk'
 
-jest.mock('@devcycle/js-client-sdk')
+let variableMock: any
+let identifyUserMock: any
+let isInitializedMock: any
 
-const variableMock = jest.spyOn(DevCycleClient.prototype, 'variable')
-const identifyUserMock = jest.spyOn(DevCycleClient.prototype, 'identifyUser')
 const logger = {
     debug: jest.fn(),
     info: jest.fn(),
@@ -25,26 +24,19 @@ async function initOFClient(): Promise<{
     OpenFeature.setContext({ targetingKey: 'node_sdk_test' })
     const provider = new DevCycleProvider('DVC_SERVER_SDK_KEY', options)
     await OpenFeature.setProviderAndWait(provider)
-    const ofClient = OpenFeature.getClient()
-    return { ofClient, provider }
-}
 
-describe('DevCycleProvider Unit Tests', () => {
-    beforeEach(() => {
-        variableMock.mockClear()
-        identifyUserMock.mockClear()
-    })
-
-    it('should setup an OpenFeature provider with a DevCycleClient', async () => {
-        const { ofClient, provider } = await initOFClient()
-        expect(ofClient).toBeDefined()
-        expect(provider).toBeDefined()
-        expect(provider.DevcycleClient).toBeDefined()
-    })
-
-    describe('User Context', () => {
-        beforeEach(() => {
-            variableMock.mockReturnValue({
+    if (provider.devcycleClient) {
+        isInitializedMock = jest
+            .spyOn(provider.devcycleClient, 'isInitialized', 'get')
+            .mockReturnValue(true)
+        identifyUserMock = jest
+            .spyOn(provider.devcycleClient, 'identifyUser')
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            .mockResolvedValue({})
+        variableMock = jest
+            .spyOn(provider.devcycleClient, 'variable')
+            .mockReturnValue({
                 key: 'boolean-flag',
                 value: true,
                 defaultValue: false,
@@ -52,11 +44,26 @@ describe('DevCycleProvider Unit Tests', () => {
                 evalReason: undefined,
                 onUpdate: jest.fn(),
             })
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            identifyUserMock.mockResolvedValue({})
-        })
+    }
+    const ofClient = OpenFeature.getClient()
+    return { ofClient, provider }
+}
 
+describe('DevCycleProvider Unit Tests', () => {
+    afterEach(() => {
+        variableMock?.mockClear()
+        identifyUserMock?.mockClear()
+        isInitializedMock?.mockClear()
+    })
+
+    it('should setup an OpenFeature provider with a DevCycleClient', async () => {
+        const { ofClient, provider } = await initOFClient()
+        expect(ofClient).toBeDefined()
+        expect(provider).toBeDefined()
+        expect(provider.devcycleClient).toBeDefined()
+    })
+
+    describe('User Context', () => {
         // OF doesn't expose context errors to the user through a handler / hook yet.
         // This is likely to change in future versions based off slack discussions.
         //
@@ -119,10 +126,10 @@ describe('DevCycleProvider Unit Tests', () => {
             expect(ofClient.getBooleanValue('boolean-flag', false)).toEqual(
                 true,
             )
-            expect(provider.DevcycleClient?.identifyUser).toHaveBeenCalledWith(
+            expect(provider.devcycleClient?.identifyUser).toHaveBeenCalledWith(
                 dvcUser,
             )
-            expect(provider.DevcycleClient?.variable).toHaveBeenCalledWith(
+            expect(provider.devcycleClient?.variable).toHaveBeenCalledWith(
                 'boolean-flag',
                 false,
             )
@@ -142,10 +149,10 @@ describe('DevCycleProvider Unit Tests', () => {
                 true,
             )
 
-            expect(provider.DevcycleClient?.identifyUser).toHaveBeenCalledWith({
+            expect(provider.devcycleClient?.identifyUser).toHaveBeenCalledWith({
                 user_id: 'user_id',
             })
-            expect(provider.DevcycleClient?.variable).toHaveBeenCalledWith(
+            expect(provider.devcycleClient?.variable).toHaveBeenCalledWith(
                 'boolean-flag',
                 false,
             )
@@ -180,12 +187,12 @@ describe('DevCycleProvider Unit Tests', () => {
                 )
 
                 expect(
-                    provider.DevcycleClient?.identifyUser,
+                    provider.devcycleClient?.identifyUser,
                 ).toHaveBeenCalledWith({
                     user_id: 'user_id',
                     customData: { nullKey: null },
                 })
-                expect(provider.DevcycleClient?.variable).toHaveBeenCalledWith(
+                expect(provider.devcycleClient?.variable).toHaveBeenCalledWith(
                     'boolean-flag',
                     false,
                 )
@@ -208,11 +215,11 @@ describe('DevCycleProvider Unit Tests', () => {
                 true,
             )
 
-            expect(provider.DevcycleClient?.identifyUser).toHaveBeenCalledWith({
+            expect(provider.devcycleClient?.identifyUser).toHaveBeenCalledWith({
                 user_id: 'user_id',
                 customData: { num: 610 },
             })
-            expect(provider.DevcycleClient?.variable).toHaveBeenCalledWith(
+            expect(provider.devcycleClient?.variable).toHaveBeenCalledWith(
                 'boolean-flag',
                 false,
             )
@@ -224,20 +231,6 @@ describe('DevCycleProvider Unit Tests', () => {
     })
 
     describe('Boolean Flags', () => {
-        beforeEach(() => {
-            variableMock.mockReturnValue({
-                key: 'boolean-flag',
-                value: true,
-                defaultValue: false,
-                isDefaulted: false,
-                evalReason: undefined,
-                onUpdate: jest.fn(),
-            })
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            identifyUserMock.mockResolvedValue({})
-        })
-
         it('should resolve a boolean flag value', async () => {
             const { ofClient } = await initOFClient()
             expect(ofClient.getBooleanValue('boolean-flag', false)).toEqual(
@@ -256,6 +249,7 @@ describe('DevCycleProvider Unit Tests', () => {
         })
 
         it('should return default value if flag is not found', async () => {
+            const { ofClient } = await initOFClient()
             variableMock.mockReturnValue({
                 key: 'boolean-flag',
                 value: false,
@@ -265,7 +259,6 @@ describe('DevCycleProvider Unit Tests', () => {
                 onUpdate: jest.fn(),
             })
 
-            const { ofClient } = await initOFClient()
             expect(ofClient.getBooleanDetails('boolean-flag', false)).toEqual({
                 flagKey: 'boolean-flag',
                 value: false,
@@ -276,7 +269,11 @@ describe('DevCycleProvider Unit Tests', () => {
     })
 
     describe('String Flags', () => {
-        beforeEach(() => {
+        let openFeatureClient: Client
+        beforeEach(async () => {
+            const { ofClient } = await initOFClient()
+            openFeatureClient = ofClient
+
             variableMock.mockReturnValue({
                 key: 'string-flag',
                 value: 'string-value',
@@ -285,22 +282,23 @@ describe('DevCycleProvider Unit Tests', () => {
                 evalReason: undefined,
                 onUpdate: jest.fn(),
             })
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            identifyUserMock.mockResolvedValue({})
         })
 
         it('should resolve a string flag value', async () => {
-            const { ofClient } = await initOFClient()
             expect(
-                ofClient.getStringValue('string-flag', 'string-default'),
+                openFeatureClient.getStringValue(
+                    'string-flag',
+                    'string-default',
+                ),
             ).toEqual('string-value')
         })
 
         it('should resolve a string flag details', async () => {
-            const { ofClient } = await initOFClient()
             expect(
-                ofClient.getStringDetails('string-flag', 'string-default'),
+                openFeatureClient.getStringDetails(
+                    'string-flag',
+                    'string-default',
+                ),
             ).toEqual({
                 flagKey: 'string-flag',
                 value: 'string-value',
@@ -311,7 +309,11 @@ describe('DevCycleProvider Unit Tests', () => {
     })
 
     describe('Number Flags', () => {
-        beforeEach(() => {
+        let openFeatureClient: Client
+        beforeEach(async () => {
+            const { ofClient } = await initOFClient()
+            openFeatureClient = ofClient
+
             variableMock.mockReturnValue({
                 key: 'num-flag',
                 value: 610,
@@ -320,19 +322,18 @@ describe('DevCycleProvider Unit Tests', () => {
                 evalReason: undefined,
                 onUpdate: jest.fn(),
             })
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            identifyUserMock.mockResolvedValue({})
         })
 
         it('should resolve a number flag value', async () => {
-            const { ofClient } = await initOFClient()
-            expect(ofClient.getNumberValue('num-flag', 2056)).toEqual(610)
+            expect(openFeatureClient.getNumberValue('num-flag', 2056)).toEqual(
+                610,
+            )
         })
 
         it('should resolve a number flag details', async () => {
-            const { ofClient } = await initOFClient()
-            expect(ofClient.getNumberDetails('num-flag', 2056)).toEqual({
+            expect(
+                openFeatureClient.getNumberDetails('num-flag', 2056),
+            ).toEqual({
                 flagKey: 'num-flag',
                 value: 610,
                 reason: StandardResolutionReasons.TARGETING_MATCH,
@@ -342,7 +343,11 @@ describe('DevCycleProvider Unit Tests', () => {
     })
 
     describe('JSON Flags', () => {
-        beforeEach(() => {
+        let openFeatureClient: Client
+        beforeEach(async () => {
+            const { ofClient } = await initOFClient()
+            openFeatureClient = ofClient
+
             variableMock.mockReturnValue({
                 key: 'json-flag',
                 value: { hello: 'world' },
@@ -351,22 +356,21 @@ describe('DevCycleProvider Unit Tests', () => {
                 evalReason: undefined,
                 onUpdate: jest.fn(),
             })
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            identifyUserMock.mockResolvedValue({})
         })
 
         it('should resolve a json flag value', async () => {
-            const { ofClient } = await initOFClient()
             expect(
-                ofClient.getObjectValue('json-flag', { default: 'value' }),
+                openFeatureClient.getObjectValue('json-flag', {
+                    default: 'value',
+                }),
             ).toEqual({ hello: 'world' })
         })
 
         it('should resolve a json flag details', async () => {
-            const { ofClient } = await initOFClient()
             expect(
-                ofClient.getObjectDetails('json-flag', { default: 'value' }),
+                openFeatureClient.getObjectDetails('json-flag', {
+                    default: 'value',
+                }),
             ).toEqual({
                 flagKey: 'json-flag',
                 value: { hello: 'world' },
@@ -376,8 +380,9 @@ describe('DevCycleProvider Unit Tests', () => {
         })
 
         it('should return default value if json default is not an object', async () => {
-            const { ofClient } = await initOFClient()
-            expect(ofClient.getObjectDetails('json-flag', ['arry'])).toEqual({
+            expect(
+                openFeatureClient.getObjectDetails('json-flag', ['arry']),
+            ).toEqual({
                 flagKey: 'json-flag',
                 value: ['arry'],
                 reason: 'ERROR',
@@ -386,7 +391,9 @@ describe('DevCycleProvider Unit Tests', () => {
                     'DevCycle only supports object values for JSON flags',
                 flagMetadata: {},
             })
-            expect(ofClient.getObjectDetails('json-flag', 610)).toEqual({
+            expect(
+                openFeatureClient.getObjectDetails('json-flag', 610),
+            ).toEqual({
                 flagKey: 'json-flag',
                 value: 610,
                 reason: 'ERROR',
@@ -395,7 +402,9 @@ describe('DevCycleProvider Unit Tests', () => {
                     'DevCycle only supports object values for JSON flags',
                 flagMetadata: {},
             })
-            expect(ofClient.getObjectDetails('json-flag', 'string')).toEqual({
+            expect(
+                openFeatureClient.getObjectDetails('json-flag', 'string'),
+            ).toEqual({
                 flagKey: 'json-flag',
                 value: 'string',
                 reason: 'ERROR',
@@ -404,7 +413,9 @@ describe('DevCycleProvider Unit Tests', () => {
                     'DevCycle only supports object values for JSON flags',
                 flagMetadata: {},
             })
-            expect(ofClient.getObjectDetails('json-flag', false)).toEqual({
+            expect(
+                openFeatureClient.getObjectDetails('json-flag', false),
+            ).toEqual({
                 flagKey: 'json-flag',
                 value: false,
                 reason: 'ERROR',
@@ -413,7 +424,9 @@ describe('DevCycleProvider Unit Tests', () => {
                     'DevCycle only supports object values for JSON flags',
                 flagMetadata: {},
             })
-            expect(ofClient.getObjectDetails('json-flag', null)).toEqual({
+            expect(
+                openFeatureClient.getObjectDetails('json-flag', null),
+            ).toEqual({
                 flagKey: 'json-flag',
                 value: null,
                 reason: 'ERROR',

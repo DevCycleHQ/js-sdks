@@ -47,9 +47,9 @@ export default class DevCycleProvider implements Provider {
     private readonly options: DevCycleOptions
     private readonly sdkKey: string
 
-    private devcycleClient: DevCycleClient | null = null
-    get DevcycleClient(): DevCycleClient | null {
-        return this.devcycleClient
+    private _devcycleClient: DevCycleClient | null = null
+    get devcycleClient(): DevCycleClient | null {
+        return this._devcycleClient
     }
 
     constructor(sdkKey: string, options: DevCycleOptions = {}) {
@@ -58,14 +58,14 @@ export default class DevCycleProvider implements Provider {
     }
 
     async initialize(context?: EvaluationContext): Promise<void> {
-        this.devcycleClient = await initializeDevCycle(
+        this._devcycleClient = await initializeDevCycle(
             this.sdkKey,
             context ? this.dvcUserFromContext(context) : {},
             this.options,
         ).onClientInitialized()
 
         if (!context) {
-            this.devcycleClient.logger.warn(
+            this._devcycleClient.logger.warn(
                 'DevCycle initialized without context being set. ' +
                     'It is highly recommended to set a context `OpenFeature.setContext()` ' +
                     'before setting an OpenFeature Provider `OpenFeature.setProvider()` ' +
@@ -75,20 +75,20 @@ export default class DevCycleProvider implements Provider {
     }
 
     get status(): ProviderStatus {
-        return this.devcycleClient?.isInitialized
+        return this._devcycleClient?.isInitialized
             ? ProviderStatus.READY
             : ProviderStatus.NOT_READY
     }
 
     async onClose(): Promise<void> {
-        await this.devcycleClient?.close()
+        await this._devcycleClient?.close()
     }
 
     async onContextChange(
         oldContext: EvaluationContext,
         newContext: EvaluationContext,
     ): Promise<void> {
-        await this.devcycleClient?.identifyUser(
+        await this._devcycleClient?.identifyUser(
             this.dvcUserFromContext(newContext),
         )
     }
@@ -105,7 +105,7 @@ export default class DevCycleProvider implements Provider {
         dvcDefaultValue: I,
         ofDefaultValue: O,
     ): ResolutionDetails<O> {
-        const dvcVariable = this.devcycleClient?.variable(
+        const dvcVariable = this._devcycleClient?.variable(
             flagKey,
             dvcDefaultValue,
         )
@@ -239,7 +239,7 @@ export default class DevCycleProvider implements Provider {
             const knownValueType = DVCKnownPropertyKeyTypes[key]
             if (knownValueType) {
                 if (typeof value !== knownValueType) {
-                    this.devcycleClient?.logger.warn(
+                    this._devcycleClient?.logger.warn(
                         `Expected DevCycleUser property "${key}" to be "${knownValueType}" but got ` +
                             `"${typeof value}" in EvaluationContext. Ignoring value.`,
                     )
@@ -286,7 +286,7 @@ export default class DevCycleProvider implements Provider {
                             customData[key] = null
                             break
                         }
-                        this.devcycleClient?.logger.warn(
+                        this._devcycleClient?.logger.warn(
                             `EvaluationContext property "${key}" is an ${
                                 Array.isArray(value) ? 'Array' : 'Object'
                             }. ` +
@@ -295,7 +295,7 @@ export default class DevCycleProvider implements Provider {
                         )
                         break
                     default:
-                        this.devcycleClient?.logger.warn(
+                        this._devcycleClient?.logger.warn(
                             `Unknown EvaluationContext property "${key}" type. ` +
                                 'DevCycleUser only supports flat customData properties of type ' +
                                 'string / number / boolean / null',
@@ -338,7 +338,7 @@ export default class DevCycleProvider implements Provider {
                     customData[key] = null
                     break
                 default:
-                    this.devcycleClient?.logger.warn(
+                    this._devcycleClient?.logger.warn(
                         `EvaluationContext property "customData" contains "${key}" property of type ${typeof value}.` +
                             'DevCycleUser only supports flat customData properties of type ' +
                             'string / number / boolean / null',
