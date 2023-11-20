@@ -9,11 +9,11 @@
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/openfeature-web-provider",
-                "main": "sdk/openfeature-web-provider/src/index.ts",
                 "tsConfig": "sdk/openfeature-web-provider/tsconfig.lib.json",
-                "updateBuildableProjectDepsInPackageJson": true,
-                "buildableProjectDepsInPackageJsonType": "dependencies",
-                "assets": ["sdk/openfeature-web-provider/*.md"]
+                "packageJson": "sdk/openfeature-web-provider/package.json",
+                "main": "sdk/openfeature-web-provider/src/index.ts",
+                "assets": ["sdk/openfeature-web-provider/*.md"],
+                "external": ["js"]
             }
         },
         "lint": {

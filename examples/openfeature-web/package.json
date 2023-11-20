@@ -1,8 +1,5 @@
 {
     "name": "@devcycle/openfeature-web-example",
     "version": "1.0.0",
-    "dependencies": {
-        "@openfeature/core": "^0.0.16",
-        "@openfeature/web-sdk": "^0.4.3"
-    }
+    "license": "MIT"
 }
