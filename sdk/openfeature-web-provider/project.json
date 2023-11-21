@@ -1,0 +1,45 @@
+{
+    "name": "openfeature-web-provider",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "sdk/openfeature-web-provider/src",
+    "implicitDependencies": ["js"],
+    "targets": {
+        "build": {
+            "executor": "@nx/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/sdk/openfeature-web-provider",
+                "tsConfig": "sdk/openfeature-web-provider/tsconfig.lib.json",
+                "packageJson": "sdk/openfeature-web-provider/package.json",
+                "main": "sdk/openfeature-web-provider/src/index.ts",
+                "assets": ["sdk/openfeature-web-provider/*.md"],
+                "external": ["js"]
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["sdk/openfeature-web-provider/**/*.ts"]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/sdk/openfeature-web-provider"
+            ],
+            "options": {
+                "jestConfig": "sdk/openfeature-web-provider/jest.config.ts"
+            }
+        },
+        "npm-publish": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/openfeature-web-provider\"",
+                "cwd": "dist/sdk/openfeature-web-provider",
+                "forwardAllArgs": true
+            }
+        }
+    },
+    "tags": []
+}

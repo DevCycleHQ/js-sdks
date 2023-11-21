@@ -1,42 +1,43 @@
-# OpenFeature DevCycle NodeJS Provider
+# OpenFeature DevCycle Javascript Web Provider
 
-This library provides a NodeJS implementation of the [OpenFeature](https://openfeature.dev/) Provider interface for DevCycle.
+This library provides a Javascript implementation of the [OpenFeature](https://openfeature.dev/) Web Provider interface 
+for [DevCycle Javascript Client SDK](https://docs.devcycle.com/sdk/client-side-sdks/javascript/).
 
 ## Building
 
-Run `nx build openfeature-nodejs-provider` to build the library.
+Run `yarn nx build openfeature-web-provider` to build the library.
 
 ## Running Unit Tests
 
-Run `nx test openfeature-nodejs-provider` to execute the unit tests via [Jest](https://jestjs.io).
+Run `yarn nx test openfeature-web-provider` to execute the unit tests via [Jest](https://jestjs.io).
 
 ## Example App
 
-See the [example app](/examples/openfeature-nodejs) for a working example of the OpenFeature DevCycle NodeJS Provider.
+See the [example app](/examples/openfeature-web) for a working example of the OpenFeature Web DevCycle Provider.
 
 ## Usage
 
-See our [documentation](https://docs.devcycle.com/sdk/server-side-sdks/node/) for more information.
+See our [documentation](https://docs.devcycle.com/sdk/client-side-sdks/javascript/javascript-usage) for more information.
 
 ```typescript
-import { OpenFeature, Client } from '@openfeature/js-sdk'
-import { DevCycleProvider } from '@devcycle/openfeature-nodejs-provider'
-import { initialize } from '@devcycle/nodejs-server-sdk'
+import DevCycleProvider from '@devcycle/openfeature-web-provider'
+import { OpenFeature } from '@openfeature/web-sdk'
 
 ... 
 
-// Initialize the DevCycle SDK
-const devcycleClient = await initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY).onClientInitialized()
-// Set the initialzed DevCycle client as the provider for OpenFeature
-OpenFeature.setProvider(new DevCycleProvider(devcycleClient))
-// Get the OpenFeature client
-openFeatureClient = OpenFeature.getClient()
-// Set the context for the OpenFeature client, you can use 'targetingKey' or 'user_id'
-openFeatureClient.setContext({ targetingKey: 'node_sdk_test' })
+const user = { user_id: 'user_id' }
 
+// Initialize the DevCycle Provider
+const devcycleProvider = new DevCycleProvider(DEVCYCLE_CLIENT_SDK_KEY)
+// Set the context before the provider is set to ensure the DevCycle SDK is initialized with a user context.
+await OpenFeature.setContext(user)
+// Set the DevCycleProvider for OpenFeature
+await OpenFeature.setProviderAndWait(devcycleProvider)
+// Get the OpenFeature client
+const openFeatureClient = OpenFeature.getClient()
 
 // Retrieve a boolean flag from the OpenFeature client
-const boolFlag = await openFeatureClient.getBooleanValue('boolean-flag', false)
+const boolFlag = openFeatureClient.getBooleanValue('boolean-flag', false)
 ```
 
 #### Passing DVCOptions to the DevCycleProvider
@@ -45,8 +46,7 @@ Ensure that you pass any custom DVCOptions to the DevCycleProvider constructor
 
 ```typescript
 const options = { logger: dvcDefaultLogger({ level: 'debug' }) }
-const devcycleClient = await initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY, options).onClientInitialized()
-OpenFeature.setProvider(new DevCycleProvider(devcycleClient, options))
+await OpenFeature.setProviderAndWait(new DevCycleProvider(DEVCYCLE_CLIENT_SDK_KEY, options))
 ```
 
 #### Required TargetingKey
@@ -61,7 +61,7 @@ The provider will automatically translate known `DVCUser` properties from the Op
 
 For example all these properties will be set on the `DVCUser`:
 ```typescript
-openFeatureClient.setContext({
+await OpenFeature.setContext({
     user_id: 'user_id',
     email: 'email@devcycle.com',
     name: 'name',
@@ -83,7 +83,7 @@ DevCycle only supports flat JSON Object properties used in the Context. Non-flat
 
 For example `obj` will be ignored: 
 ```typescript
-openFeatureClient.setContext({
+await OpenFeature.setContext({
     user_id: 'user_id',
     obj: { key: 'value' }
 })

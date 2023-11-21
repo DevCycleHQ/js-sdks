@@ -11,6 +11,7 @@ import {
 } from './Client'
 
 export * from './types'
+export { dvcDefaultLogger } from './logger'
 
 /**
  * @deprecated Use DevCycleClient instead
@@ -34,7 +35,8 @@ export type DVCOptions = DevCycleOptions
 export type DVCOptionsWithDeferredInitialization =
     DevCycleOptionsWithDeferredInitialization
 
-export type { DevCycleClient, DevCycleOptionsWithDeferredInitialization }
+export type { DevCycleOptionsWithDeferredInitialization }
+export { DevCycleClient }
 
 export function initializeDevCycle<
     Variables extends VariableDefinitions = VariableDefinitions,
@@ -122,8 +124,3 @@ export function initializeDevCycle<
  * @deprecated Use initializeDevCycle instead
  */
 export const initialize = initializeDevCycle
-
-export default {
-    initialize,
-    initializeDevCycle,
-}
