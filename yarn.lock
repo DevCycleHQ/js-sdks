@@ -5133,7 +5133,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/js-client-sdk@^1.15.1, @devcycle/js-client-sdk@workspace:sdk/js":
+"@devcycle/js-client-sdk@1.15.1, @devcycle/js-client-sdk@^1.15.1, @devcycle/js-client-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
   dependencies:
@@ -5211,6 +5211,22 @@ __metadata:
     "@devcycle/nodejs-server-sdk": ^1.17.0
     "@devcycle/types": ^1.3.0
     "@openfeature/js-sdk": ^1.4.2
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/openfeature-web-example@workspace:examples/openfeature-web":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/openfeature-web-example@workspace:examples/openfeature-web"
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/openfeature-web-provider@workspace:sdk/openfeature-web-provider":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/openfeature-web-provider@workspace:sdk/openfeature-web-provider"
+  dependencies:
+    "@devcycle/js-client-sdk": 1.15.1
+    "@openfeature/core": ^0.0.18
+    "@openfeature/web-sdk": ^0.4.5
   languageName: unknown
   linkType: soft
 
@@ -8565,10 +8581,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@openfeature/core@npm:^0.0.18":
+  version: 0.0.18
+  resolution: "@openfeature/core@npm:0.0.18"
+  checksum: 4399e1835ffb7ba402ffea2fe4d0be03c985148de5f5de54f87843c30f8ad535a0df5102faa27ccdfad558058642efd54c31c64fb498e26d6b50fe90a6dc489a
+  languageName: node
+  linkType: hard
+
 "@openfeature/js-sdk@npm:^1.4.2":
   version: 1.4.2
   resolution: "@openfeature/js-sdk@npm:1.4.2"
   checksum: f5a101eeb45ba7dc090fc9272426873f8be3c9efcbf2166353eec1ebbd476dc6eed2590ad6efc3494ecc44ae69fcde60c93576d13cd74698d0eaec0c15857e14
+  languageName: node
+  linkType: hard
+
+"@openfeature/web-sdk@npm:^0.4.5":
+  version: 0.4.5
+  resolution: "@openfeature/web-sdk@npm:0.4.5"
+  peerDependencies:
+    "@openfeature/core": 0.0.18
+  checksum: 3475d48f45cbdebc53a667a398becfb80b2f9fbd5b36b59516074d93f4a082b4bad9025862ec90915ef2a1ed0f3f64443e26ceffae3eb09478ec9b0525bc705b
   languageName: node
   linkType: hard
 
@@ -15394,7 +15426,9 @@ __metadata:
     "@nx/web": 16.10.0
     "@nx/webpack": 16.10.0
     "@nx/workspace": 16.10.0
+    "@openfeature/core": ^0.0.18
     "@openfeature/js-sdk": ^1.4.2
+    "@openfeature/web-sdk": ^0.4.5
     "@pmmmwh/react-refresh-webpack-plugin": ^0.5.7
     "@react-native-async-storage/async-storage": 1.19.4
     "@react-native-community/cli": 11.3.6

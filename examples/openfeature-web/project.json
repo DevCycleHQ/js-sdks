@@ -1,0 +1,73 @@
+{
+    "name": "example-openfeature-web",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "sourceRoot": "examples/openfeature-web/src",
+    "tags": [],
+    "targets": {
+        "build": {
+            "executor": "@nx/webpack:webpack",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "production",
+            "options": {
+                "outputPath": "dist/examples/openfeature-web",
+                "compiler": "babel",
+                "index": "examples/openfeature-web/src/index.html",
+                "baseHref": "/",
+                "main": "examples/openfeature-web/src/main.ts",
+                "polyfills": "examples/openfeature-web/src/polyfills.ts",
+                "tsConfig": "examples/openfeature-web/tsconfig.app.json",
+                "assets": [
+                    "examples/openfeature-web/src/favicon.ico",
+                    "examples/openfeature-web/src/assets"
+                ],
+                "styles": ["examples/openfeature-web/src/styles.css"],
+                "scripts": []
+            },
+            "configurations": {
+                "production": {
+                    "fileReplacements": [
+                        {
+                            "replace": "examples/openfeature-web/src/environments/environment.ts",
+                            "with": "examples/openfeature-web/src/environments/environment.prod.ts"
+                        }
+                    ],
+                    "optimization": true,
+                    "outputHashing": "all",
+                    "sourceMap": false,
+                    "namedChunks": false,
+                    "extractLicenses": true,
+                    "vendorChunk": false
+                },
+                "development": {
+                    "extractLicenses": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "vendorChunk": true
+                }
+            }
+        },
+        "serve": {
+            "executor": "@nx/webpack:dev-server",
+            "options": {
+                "buildTarget": "example-openfeature-web:build"
+            },
+            "configurations": {
+                "production": {
+                    "buildTarget": "example-openfeature-web:build:production"
+                },
+                "development": {
+                    "buildTarget": "example-openfeature-web:build:development"
+                }
+            },
+            "defaultConfiguration": "development"
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["examples/openfeature-web/**/*.ts"]
+            }
+        }
+    }
+}
