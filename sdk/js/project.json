@@ -7,7 +7,7 @@
         "npm-publish": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/js-client-sdk\" --deprecated-package=\"@devcycle/devcycle-js-sdk\"",
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/js-client-sdk\"",
                 "cwd": "dist/sdk/js",
                 "forwardAllArgs": true
             },
