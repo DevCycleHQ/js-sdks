@@ -11,6 +11,8 @@ import {
     InvalidContextError,
     ProviderStatus,
 } from '@openfeature/web-sdk'
+// Need to disable this to keep the working jest mock
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
     initializeDevCycle,
     DevCycleClient,
