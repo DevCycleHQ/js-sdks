@@ -25,7 +25,9 @@
         },
         "test": {
             "executor": "@nx/jest:jest",
-            "outputs": ["{workspaceRoot}/coverage/sdk/openfeature-web-provider"],
+            "outputs": [
+                "{workspaceRoot}/coverage/sdk/openfeature-web-provider"
+            ],
             "options": {
                 "jestConfig": "sdk/openfeature-web-provider/jest.config.ts"
             }
