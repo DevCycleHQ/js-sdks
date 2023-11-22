@@ -20,7 +20,7 @@
         "serve": {
             "executor": "@nx/js:node",
             "options": {
-                "buildTarget": "self:build"
+                "buildTarget": "build"
             },
             "dependsOn": ["^build"]
         },
