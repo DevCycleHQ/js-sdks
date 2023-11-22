@@ -452,7 +452,7 @@ export class AppElement extends HTMLElement {
 
     connectedCallback(): void {
         this.updateInnerHTML()
-        devcycleProvider.DevcycleClient?.subscribe('configUpdated', () => {
+        devcycleProvider.devcycleClient?.subscribe('configUpdated', () => {
             this.updateInnerHTML()
         })
     }
