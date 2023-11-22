@@ -54,7 +54,11 @@ export class DevCycleClient {
     private eventQueue: EventQueue
     private onInitialized: Promise<DevCycleClient>
     private logger: DVCLogger
-    private initialized = false
+    private _isInitialized = false
+
+    get isInitialized(): boolean {
+        return this._isInitialized
+    }
 
     constructor(sdkKey: string, options?: DevCycleServerSDKOptions) {
         this.sdkKey = sdkKey
@@ -103,8 +107,8 @@ export class DevCycleClient {
 
         this.onInitialized = initializePromise
             .then(() => {
-                this.logger.info('DevCycle initialized')
-                this.initialized = true
+                this.logger.info('DevCycle _isInitialized')
+                this._isInitialized = true
                 return this
             })
             .catch((err) => {
@@ -152,9 +156,9 @@ export class DevCycleClient {
         )
         const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
 
-        if (!this.initialized) {
+        if (!this._isInitialized) {
             this.logger.warn(
-                'variable called before DevCycleClient initialized, returning default value',
+                'variable called before DevCycleClient _isInitialized, returning default value',
             )
 
             this.eventQueue?.queueAggregateEvent(populatedUser, {
@@ -206,9 +210,9 @@ export class DevCycleClient {
     allVariables(user: DevCycleUser): DVCVariableSet {
         const incomingUser = castIncomingUser(user)
 
-        if (!this.initialized) {
+        if (!this._isInitialized) {
             this.logger.warn(
-                'allVariables called before DevCycleClient initialized',
+                'allVariables called before DevCycleClient _isInitialized',
             )
             return {}
         }
@@ -221,9 +225,9 @@ export class DevCycleClient {
     allFeatures(user: DevCycleUser): DVCFeatureSet {
         const incomingUser = castIncomingUser(user)
 
-        if (!this.initialized) {
+        if (!this._isInitialized) {
             this.logger.warn(
-                'allFeatures called before DevCycleClient initialized',
+                'allFeatures called before DevCycleClient _isInitialized',
             )
             return {}
         }
@@ -236,9 +240,9 @@ export class DevCycleClient {
     track(user: DevCycleUser, event: DevCycleEvent): void {
         const incomingUser = castIncomingUser(user)
 
-        if (!this.initialized) {
+        if (!this._isInitialized) {
             this.logger.warn(
-                'track called before DevCycleClient initialized, event will not be tracked',
+                'track called before DevCycleClient _isInitialized, event will not be tracked',
             )
             return
         }

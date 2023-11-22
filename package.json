@@ -27,7 +27,7 @@
         "@devcycle/assemblyscript-json": "^2.0.0",
         "@nestjs/class-validator": "^0.13.4",
         "@openfeature/core": "^0.0.19",
-        "@openfeature/js-sdk": "^1.4.2",
+        "@openfeature/js-sdk": "^1.6.1",
         "@openfeature/web-sdk": "^0.4.6",
         "@types/express": "^4.17.17",
         "async": "^3.2.1",
