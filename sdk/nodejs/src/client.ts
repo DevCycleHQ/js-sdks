@@ -107,7 +107,7 @@ export class DevCycleClient {
 
         this.onInitialized = initializePromise
             .then(() => {
-                this.logger.info('DevCycle _isInitialized')
+                this.logger.info('DevCycle initialized')
                 this._isInitialized = true
                 return this
             })
@@ -158,7 +158,7 @@ export class DevCycleClient {
 
         if (!this._isInitialized) {
             this.logger.warn(
-                'variable called before DevCycleClient _isInitialized, returning default value',
+                'variable called before DevCycleClient initialized, returning default value',
             )
 
             this.eventQueue?.queueAggregateEvent(populatedUser, {
@@ -212,7 +212,7 @@ export class DevCycleClient {
 
         if (!this._isInitialized) {
             this.logger.warn(
-                'allVariables called before DevCycleClient _isInitialized',
+                'allVariables called before DevCycleClient initialized',
             )
             return {}
         }
@@ -227,7 +227,7 @@ export class DevCycleClient {
 
         if (!this._isInitialized) {
             this.logger.warn(
-                'allFeatures called before DevCycleClient _isInitialized',
+                'allFeatures called before DevCycleClient initialized',
             )
             return {}
         }
@@ -242,7 +242,7 @@ export class DevCycleClient {
 
         if (!this._isInitialized) {
             this.logger.warn(
-                'track called before DevCycleClient _isInitialized, event will not be tracked',
+                'track called before DevCycleClient initialized, event will not be tracked',
             )
             return
         }
