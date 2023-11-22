@@ -49,7 +49,7 @@ function npm_authenticated() {
 
 parse_arguments "$@"
 
-#NPM_SHOW="$(npm show "$PACKAGE" version)"
+NPM_SHOW="$(npm show "$PACKAGE" version)"
 NPM_LS="$(cat package.json | jq -r $JQ_PATH)"
 
 if [[ "$NPM_REGISTRY" != "https://registry.yarnpkg.com" ]]; then
@@ -63,7 +63,7 @@ if [[ -z "$OTP" && -z "$NODE_AUTH_TOKEN" ]]; then
   exit 1
 fi
 
-#echo "$PACKAGE npm show: $NPM_SHOW, npm ls: $NPM_LS"
+echo "$PACKAGE npm show: $NPM_SHOW, npm ls: $NPM_LS"
 
 if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
   echo "Versions are not the same, (Remote = $NPM_SHOW; Local = $NPM_LS). Checking for publish eligibility."
