@@ -9,6 +9,7 @@ import {
     ParseError,
     TargetingKeyMissingError,
     InvalidContextError,
+    ProviderStatus,
 } from '@openfeature/js-sdk'
 import {
     DevCycleClient,
@@ -50,6 +51,12 @@ export default class DevCycleProvider implements Provider {
     ) {
         this.logger =
             options.logger ?? dvcDefaultLogger({ level: options.logLevel })
+    }
+
+    get status(): ProviderStatus {
+        return this.devcycleClient.isInitialized
+            ? ProviderStatus.READY
+            : ProviderStatus.NOT_READY
     }
 
     async initialize(context?: EvaluationContext): Promise<void> {

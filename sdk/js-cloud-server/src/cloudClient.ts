@@ -86,6 +86,14 @@ export class DevCycleCloudClient {
         this.logger.info('Running DevCycle NodeJS SDK in Cloud Bucketing mode')
     }
 
+    /**
+     * Always returns true for Cloud Client because once the client is created,
+     * it is initialized as all request are async to the API.
+     */
+    get isInitialized(): boolean {
+        return true
+    }
+
     async variable<T extends DVCVariableValue>(
         user: DevCycleUser,
         key: string,
