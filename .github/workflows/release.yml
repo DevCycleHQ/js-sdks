@@ -42,12 +42,10 @@ jobs:
               with:
                   token: ${{ secrets.AUTOMATION_USER_TOKEN }}
                   fetch-depth: 0
-
             - name: Configure AWS Credentials
-              uses: aws-actions/configure-aws-credentials@v2.2.0
+              uses: aws-actions/configure-aws-credentials@v4
               with:
-                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_GHA }}
-                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_GHA }}
+                  role-to-assume: arn:aws:iam::134377926370:role/GitHub
                   aws-region: us-east-1
 
             - name: Configure git
