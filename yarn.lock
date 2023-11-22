@@ -10633,7 +10633,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:18.2.20, @types/react@npm:>=16.9.11":
+"@types/react@npm:*, @types/react@npm:>=16.9.11":
   version: 18.2.20
   resolution: "@types/react@npm:18.2.20"
   dependencies:
@@ -10641,6 +10641,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: 30f699c60e5e4bfef273ce64d320651cdd60f5c6a08361c6c7eca8cebcccda1ac953d2ee57c9f321b5ae87f8a62c72b6d35ca42df0e261d337849952daab2141
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:18.2.38":
+  version: 18.2.38
+  resolution: "@types/react@npm:18.2.38"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: 71f8c167173d32252be8b2d3c1c76b3570b94d2fbbd139da86d146be453626f5777e12c2781559119637520dbef9f91cffe968f67b5901618f29226d49fad326
   languageName: node
   linkType: hard
 
@@ -15446,7 +15457,7 @@ __metadata:
     "@types/jest": 29.4.4
     "@types/lodash": ^4.14.175
     "@types/node": 18.14.4
-    "@types/react": 18.2.20
+    "@types/react": 18.2.38
     "@types/react-dom": 18.2.6
     "@types/ua-parser-js": ^0.7.38
     "@types/uuid": ^8.3.1
