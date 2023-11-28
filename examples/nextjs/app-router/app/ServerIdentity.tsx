@@ -11,12 +11,14 @@ export const ServerIdentity = async function () {
             }}
         >
             <b>Server Variable</b>
-            <span>
+            <span data-testid={'server-variable-value'}>
                 {' '}
                 {JSON.stringify(await getVariableValue('test-featre', false))}
             </span>
             <b>Server Identity</b>
-            <span>{getUserIdentity()?.user_id}</span>
+            <span data-testid={'server-user-id'}>
+                {getUserIdentity()?.user_id}
+            </span>
         </div>
     )
 }
