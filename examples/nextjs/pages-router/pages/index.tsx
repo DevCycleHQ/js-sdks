@@ -1,17 +1,18 @@
-import type { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { useVariable } from '@devcycle/react-client-sdk'
+import { getServerSideDevCycle } from '@devcycle/next-sdk/pages'
 
 const Home: NextPage = () => {
-    const variableKey = 'feature-release'
+    const variableKey = 'test-featre'
     const variableKeyString = 'variable-key-string'
     const variableKeyNumber = 'variable-key-number'
     const variableKeyBoolean = 'variable-key-boolean'
     const variableKeyJsonString = 'variable-json-key-string'
 
-    const variable = useVariable(variableKey, true)
+    const variable = useVariable(variableKey, false)
     const variableString = useVariable(variableKeyString, 'default')
     const variableNumber = useVariable(variableKeyNumber, 100)
     const variableBoolean = useVariable(variableKeyBoolean, true)
@@ -145,6 +146,20 @@ const Home: NextPage = () => {
             </footer>
         </div>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    return {
+        props: {
+            ...(await getServerSideDevCycle(
+                process.env.NEXT_PUBLIC_DEVCYCLE_CLIENT_SDK_KEY || '',
+                {
+                    user_id: 'server-user',
+                },
+                context,
+            )),
+        },
+    }
 }
 
 export default Home
