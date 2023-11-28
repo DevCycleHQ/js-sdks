@@ -1,4 +1,3 @@
-// wrap this function in react cache to avoid redoing work for the same user and config
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { generateBucketedConfig } from '@devcycle/bucketing'
 import { sseURlGetter } from '../server/ably'
