@@ -2,6 +2,5 @@
 // or other non-server utilities
 export * from './client/useVariableValue'
 export * from './client/DevCycleClientsideProvider'
-export * from './client/useIdentifyUser'
 export * from './common/types'
 export * from './client/useUserIdentity'

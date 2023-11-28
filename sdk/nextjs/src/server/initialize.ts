@@ -10,14 +10,6 @@ import { getUserAgent } from './userAgent'
 
 export type DevCycleNextOptions = DevCycleOptions & {
     /**
-     * Option to enable the ability to identify a user clientside. This allows `identifyUser` to be called in a client
-     * component and synchronizes the user data via a cookie. The method will only work if cookie support is enabled
-     * on the browser.
-     * Enabling this option will also cause every component below this point to be rendered dynamically. If you want to
-     * use static generation, you should disable this option and always provide the correct user on the serverside.
-     */
-    enableClientsideIdentify?: boolean
-    /**
      * Make the SDK's initialization non-blocking. This unblocks serverside rendering up to the point of a variable
      * evaluation, and allows the use of a Suspense boundary to stream flagged components to the client when the
      * configuration is ready.
@@ -34,7 +26,6 @@ export type DevCycleNextOptions = DevCycleOptions & {
      * This option will disable the following features:
      * - automatic user agent parsing to populate targeting rule data for Platform Version and Device Model
      *
-     * enableClientsideIdentify cannot be true while this is set
      */
     staticMode?: boolean
 }
@@ -56,14 +47,6 @@ export const initialize = async (
     setSDKKey(sdkKey)
     setOptions(options)
 
-    const { enableClientsideIdentify = false, staticMode = false } = options
-
-    if (enableClientsideIdentify && staticMode) {
-        throw new Error(
-            'enableClientsideIdentify cannot be true while staticMode is enabled',
-        )
-    }
-
     setClient(
         initializeDevCycle(sdkKey, user, {
             ...options,
@@ -72,11 +55,7 @@ export const initialize = async (
         }),
     )
 
-    if (enableClientsideIdentify) {
-        identifyInitialUser(user)
-    } else {
-        identifyUser(user)
-    }
+    identifyUser(user)
 
     const context = await getDevCycleServerData()
 

@@ -36,9 +36,6 @@ export const DevCycleServersideProvider = async ({
             user={getUserIdentity()!}
             sdkKey={getSDKKey()}
             enableStreaming={options?.enableStreaming ?? false}
-            enableClientsideIdentify={
-                options?.enableClientsideIdentify ?? false
-            }
         >
             {children}
         </DevCycleClientsideProvider>

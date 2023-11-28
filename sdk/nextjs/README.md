@@ -35,7 +35,6 @@ export default async function RootLayout({
                     sdkKey={process.env.NEXT_PUBLIC_DEVCYCLE_CLIENT_SDK_KEY ?? ''}
                     user={{ user_id: userIdentity.id }}
                     options={{
-                        enableClientsideIdentify: !shouldTrustServerData,
                         enableStreaming: true,
                     }}
                 >
@@ -93,32 +92,6 @@ export const MyClientComponent = function () {
 }
 ```
 
-### Tracking an event (server component)
-```typescript jsx
-import { trackEvent } from '@devcycle/next-sdk/server'
-import * as React from 'react'
-export default MyComponent = function() {
-    trackEvent({type: "myEvent"})
-    return (
-        <div>
-            Track Event When This Renders
-        </div>
-    )
-}
-```
-
-```typescript jsx
-'use server'
-
-/**
- * Track event in server action
- */
-export function submitForm() {
-    trackEvent({type: "formSubmitted"})
-    // ...
-}
-```
-
 ### Tracking an event (client component)
 
 ```typescript jsx
@@ -136,6 +109,10 @@ export default MyComponent = function () {
 }
 ```
 
+### Tracking an event (server component)
+Currently, tracking events in server components is not supported. Please trigger any event tracking
+from client components.
+
 ## Advanced
 ### Non-Blocking Initialization
 If you wish to render your page without waiting for the DevCycle configuration to be retrieved, you can use the
@@ -146,34 +123,6 @@ use a `Suspense` boundary to send a fallback while the config is being retrieved
 the client once the config is retrieved.
 - client components will be rendered with their default values. When the configuration is retrieved, it will be
 streamed to the client and components will render again with their true variable values.
-
-### Identifying the user clientside
-For some use cases, it may make sense to be able to change the user's identity after the page is served from the
-clientside. The SDK can support this use case via the use of a cookie to keep the identity in sync across the
-server and client.
-To enable this feature, set the `enableClientsideIdentify` option. When enabled, the user that is provided to the
-serverside provider will only be used in the case where the incoming request does not contain a special DevCycle cookie
-containing the latest user identity. If the cookie is present, the user identity from the cookie will be used instead.
-
-To identify the user clientside, use the `useIdentifyUser` method on the clientside SDK:
-```typescript jsx
-import { useIdentifyUser } from '@devcycle/next-sdk'
-
-export default MyComponent = function () {
-    const identifyUser = useIdentifyUser()
-    return (
-        <button onClick={() => identifyUser({ user_id: 'new_user_id' })}>
-            Identify User
-        </button>
-    )
-}
-```
-
-When the user is identified, the cookie will be updated with that identity and the SDK will trigger a re-render of the 
-page to receive updated server and client components.
-
-Note that using this option will expose your user data to the clientside. If you wish for that data to remain private
-from the end-user, you should only identify users on the serverside.
 
 ## Running unit tests
 

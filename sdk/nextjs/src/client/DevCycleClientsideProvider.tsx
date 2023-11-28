@@ -15,7 +15,6 @@ type DevCycleClientsideProviderProps = {
     sdkKey: string
     user: DevCycleUser
     enableStreaming: boolean
-    enableClientsideIdentify: boolean
     children: React.ReactNode
 }
 
@@ -23,7 +22,6 @@ type ClientProviderContext = {
     client: DevCycleClient
     sdkKey: string
     enableStreaming: boolean
-    enableClientsideIdentify: boolean
     serverDataPromise: Promise<unknown>
 }
 
@@ -36,15 +34,13 @@ export const DevCycleClientContext = React.createContext<ClientProviderContext>(
  * Also waits for the server's data promise with the `use` hook. This triggers the nearest suspense boundary,
  * so this component is being rendered inside of a Suspense by the DevCycleClientsideProvider.
  * @param serverDataPromise
- * @param enableClientsideIdentify
  * @constructor
  */
 export const SuspendedProvider = ({
     serverDataPromise,
-    enableClientsideIdentify,
 }: Pick<
     DevCycleClientsideProviderProps,
-    'serverDataPromise' | 'enableClientsideIdentify'
+    'serverDataPromise'
 >): React.ReactElement => {
     const serverData = use(serverDataPromise)
     const [previousContext, setPreviousContext] = useState<
@@ -59,9 +55,6 @@ export const SuspendedProvider = ({
             serverData.user,
         )
         setPreviousContext(serverData)
-        if (enableClientsideIdentify) {
-            updateDVCCookie(context.client)
-        }
     }
     return <></>
 }
@@ -70,7 +63,6 @@ export const DevCycleClientsideProvider = ({
     serverDataPromise,
     sdkKey,
     enableStreaming,
-    enableClientsideIdentify,
     user,
     children,
 }: DevCycleClientsideProviderProps): React.ReactElement => {
@@ -89,7 +81,6 @@ export const DevCycleClientsideProvider = ({
             disableConfigCache: true,
             next: {
                 configRefreshHandler: revalidateConfig,
-                // eventsToTrack: serverData.events,
             },
         })
     }
@@ -100,15 +91,11 @@ export const DevCycleClientsideProvider = ({
                 client: clientRef.current,
                 sdkKey: sdkKey,
                 enableStreaming,
-                enableClientsideIdentify,
                 serverDataPromise,
             }}
         >
             <Suspense>
-                <SuspendedProvider
-                    serverDataPromise={serverDataPromise}
-                    enableClientsideIdentify={enableClientsideIdentify}
-                />
+                <SuspendedProvider serverDataPromise={serverDataPromise} />
             </Suspense>
             {children}
         </DevCycleClientContext.Provider>
