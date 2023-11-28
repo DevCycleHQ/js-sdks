@@ -27,6 +27,7 @@ export default async function RootLayout({
     children: React.ReactNode
 }) {
     // pseudocode function for determining user identity based on request data.
+    // replace with your own function for determining your user's identity
     const userIdentity = await determineUserIdentity()
     return (
         <html lang="en">
@@ -123,7 +124,3 @@ use a `Suspense` boundary to send a fallback while the config is being retrieved
 the client once the config is retrieved.
 - client components will be rendered with their default values. When the configuration is retrieved, it will be
 streamed to the client and components will render again with their true variable values.
-
-## Running unit tests
-
-Run `nx test nextjs` to execute the unit tests via [Jest](https://jestjs.io).

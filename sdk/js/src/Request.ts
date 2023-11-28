@@ -104,7 +104,7 @@ export const getConfigJson = async (
 
     try {
         const res = await get(url)
-        return { ...res.data, lastModified: res.headers['last-modified'] }
+        return res.data
     } catch (ex: any) {
         const errorString = JSON.stringify(ex?.response?.data?.data?.errors)
         logger.error(

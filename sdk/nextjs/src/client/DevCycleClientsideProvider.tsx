@@ -6,7 +6,6 @@ import {
     initializeDevCycle,
 } from '@devcycle/js-client-sdk'
 import { useRouter } from 'next/navigation'
-import { updateDVCCookie } from './updateDVCCookie'
 import { invalidateConfig } from '../common/invalidateConfig'
 import { DevCycleServerDataForClient } from '../common/types'
 
