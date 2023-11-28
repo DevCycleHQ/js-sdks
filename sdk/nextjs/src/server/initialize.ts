@@ -4,7 +4,7 @@ import {
     initializeDevCycle,
 } from '@devcycle/js-client-sdk'
 import { getClient, setClient, setOptions, setSDKKey } from './requestContext'
-import { identifyInitialUser, identifyUser } from './identify'
+import { identifyUser } from './identify'
 import { getDevCycleServerData } from './devcycleServerData'
 import { getUserAgent } from './userAgent'
 

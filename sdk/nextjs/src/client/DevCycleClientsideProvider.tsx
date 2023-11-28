@@ -35,7 +35,7 @@ export const DevCycleClientContext = React.createContext<ClientProviderContext>(
  * @param serverDataPromise
  * @constructor
  */
-export const SuspendedProvider = ({
+export const SuspendedProviderInitialization = ({
     serverDataPromise,
 }: Pick<
     DevCycleClientsideProviderProps,
@@ -75,7 +75,7 @@ export const DevCycleClientsideProvider = ({
     }
 
     if (!clientRef.current) {
-        clientRef.current = initializeDevCycle(sdkKey, user!, {
+        clientRef.current = initializeDevCycle(sdkKey, user, {
             deferInitialization: true,
             disableConfigCache: true,
             next: {
@@ -94,7 +94,9 @@ export const DevCycleClientsideProvider = ({
             }}
         >
             <Suspense>
-                <SuspendedProvider serverDataPromise={serverDataPromise} />
+                <SuspendedProviderInitialization
+                    serverDataPromise={serverDataPromise}
+                />
             </Suspense>
             {children}
         </DevCycleClientContext.Provider>
