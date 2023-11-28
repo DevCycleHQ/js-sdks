@@ -19,14 +19,10 @@ import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
 import {
     BucketedUserConfig,
-    ConfigBody,
     getVariableTypeFromValue,
     VariableTypeAlias,
 } from '@devcycle/types'
-import {
-    ConfigRequestConsolidator,
-    ConfigWithLastModified,
-} from './ConfigRequestConsolidator'
+import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
@@ -60,7 +56,7 @@ export class DevCycleClient<
     Variables extends VariableDefinitions = VariableDefinitions,
 > {
     logger: DVCLogger
-    config?: ConfigWithLastModified
+    config?: BucketedUserConfig
     user?: DVCPopulatedUser
     _isInitialized = false
     public get isInitialized(): boolean {
@@ -669,7 +665,7 @@ export class DevCycleClient<
     }
 
     private handleConfigReceived(
-        config: ConfigWithLastModified,
+        config: BucketedUserConfig,
         user: DVCPopulatedUser,
         dateFetched: number,
     ) {

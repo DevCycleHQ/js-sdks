@@ -2,22 +2,18 @@ import { BucketedUserConfig } from '@devcycle/types'
 import { DVCPopulatedUser } from './User'
 
 type PromiseResolver = {
-    resolve: (value: ConfigWithLastModified) => void
+    resolve: (value: BucketedUserConfig) => void
     reject: (err?: any) => void
 }
 
 type RequestParams = { sse: boolean; lastModified?: number; etag?: string }
-
-export type ConfigWithLastModified = BucketedUserConfig & {
-    lastModified?: string
-}
 
 /**
  * Ensures we only have one active config request at a time
  * any calls made while another is ongoing will be merged together by using the latest user object provided
  */
 export class ConfigRequestConsolidator {
-    currentPromise: Promise<ConfigWithLastModified> | null
+    currentPromise: Promise<BucketedUserConfig> | null
     resolvers: PromiseResolver[] = []
     requestParams: RequestParams | null = null
 
@@ -25,9 +21,9 @@ export class ConfigRequestConsolidator {
         private requestConfigFunction: (
             user: DVCPopulatedUser,
             params?: RequestParams,
-        ) => Promise<ConfigWithLastModified>,
+        ) => Promise<BucketedUserConfig>,
         private handleConfigReceivedFunction: (
-            config: ConfigWithLastModified,
+            config: BucketedUserConfig,
             user: DVCPopulatedUser,
         ) => void,
         private nextUser: DVCPopulatedUser,
@@ -36,7 +32,7 @@ export class ConfigRequestConsolidator {
     async queue(
         user: DVCPopulatedUser | null,
         requestParams?: RequestParams,
-    ): Promise<ConfigWithLastModified> {
+    ): Promise<BucketedUserConfig> {
         if (user) {
             this.nextUser = user
         }
@@ -45,14 +41,12 @@ export class ConfigRequestConsolidator {
             this.requestParams = requestParams
         }
 
-        const resolver = new Promise<ConfigWithLastModified>(
-            (resolve, reject) => {
-                this.resolvers.push({
-                    resolve,
-                    reject,
-                })
-            },
-        )
+        const resolver = new Promise<BucketedUserConfig>((resolve, reject) => {
+            this.resolvers.push({
+                resolve,
+                reject,
+            })
+        })
 
         if (!this.currentPromise) {
             this.processQueue()
@@ -89,7 +83,7 @@ export class ConfigRequestConsolidator {
 
     private async performRequest(
         user: DVCPopulatedUser,
-    ): Promise<ConfigWithLastModified> {
+    ): Promise<BucketedUserConfig> {
         this.currentPromise = this.requestConfigFunction(
             user,
             this.requestParams ? this.requestParams : undefined,
