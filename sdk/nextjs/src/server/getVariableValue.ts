@@ -1,8 +1,4 @@
-import {
-    addTrackedEvent,
-    getClient,
-    getInitializedPromise,
-} from './requestContext'
+import { getClient, getInitializedPromise } from './requestContext'
 import { DVCVariableValue } from '@devcycle/js-client-sdk'
 import { VariableTypeAlias } from '@devcycle/types'
 
@@ -22,10 +18,6 @@ export async function getVariableValue<T extends DVCVariableValue>(
     }
 
     const variable = client.variable(key, defaultValue)
-    addTrackedEvent({
-        type: variable.isDefaulted ? 'variableDefaulted' : 'variableEvaluated',
-        target: key,
-    })
 
     return variable.value
 }

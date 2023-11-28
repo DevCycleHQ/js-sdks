@@ -1,9 +1,5 @@
 import { cache } from 'react'
-import {
-    DevCycleClient,
-    DevCycleEvent,
-    DevCycleUser,
-} from '@devcycle/js-client-sdk'
+import { DevCycleClient, DevCycleUser } from '@devcycle/js-client-sdk'
 import { DevCycleNextOptions, initialize } from './initialize'
 
 export const requestContext = <T>(
@@ -51,23 +47,6 @@ export const setSDKKey = (key: string): void => {
     }
     _setSDKKey(key)
 }
-
-const [_getTrackedEvents, _setTrackedEvents] = requestContext<DevCycleEvent[]>(
-    [],
-)
-
-export const addTrackedEvent = (event: DevCycleEvent): void => {
-    const metaData = {
-        ...event.metaData,
-        serverside: true,
-    }
-    _setTrackedEvents([
-        ..._getTrackedEvents(),
-        { date: Date.now(), ...event, metaData },
-    ])
-}
-
-export const getTrackedEvents = (): DevCycleEvent[] => _getTrackedEvents()
 
 const [_getInitializedPromise, _setInitializedPromise] = requestContext<
     ReturnType<typeof initialize> | undefined

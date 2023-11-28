@@ -27,13 +27,21 @@ export const DevCycleServersideProvider = async ({
         await serverDataPromise
     }
 
+    const identifiedUser = getUserIdentity()
+
+    if (!identifiedUser) {
+        throw new Error(
+            "React 'cache' function not working as expected. Please contact DevCycle support.",
+        )
+    }
+
     // this renders a client component that provides an instance of DevCycle client to client components via context
     // server data is passed to perform bootstrapping of the server's config on clientside
 
     return (
         <DevCycleClientsideProvider
             serverDataPromise={serverDataPromise}
-            user={getUserIdentity()!}
+            user={identifiedUser}
             sdkKey={getSDKKey()}
             enableStreaming={options?.enableStreaming ?? false}
         >
