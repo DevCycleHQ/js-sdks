@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
     displayName: 'nextjs',
-    preset: '../jest.preset.js',
+    preset: '../../jest.preset.js',
     transform: {
         '^.+\\.[tj]sx?$': [
             '@swc/jest',
