@@ -31,12 +31,12 @@ export type DevCycleNextOptions = DevCycleOptions & {
 }
 
 const jsClientOptions = {
-    next: {
-        configRefreshHandler: async () => {
-            // don't allow the config to be fetched inside the SDK
-        },
-    },
+    // pass next object to enable "next" mode in JS SDK
+    next: {},
     disableConfigCache: true,
+    disableRealtimeUpdates: true,
+    disableAutomaticEventLogging: true,
+    disableCustomEventLogging: true,
 }
 
 export const initialize = async (
@@ -60,17 +60,14 @@ export const initialize = async (
     const context = await getDevCycleServerData()
 
     const client = getClient()
+
     if (!client) {
-        setClient(
-            initializeDevCycle(sdkKey, user, {
-                ...options,
-                bootstrapConfig: context.config,
-                ...jsClientOptions,
-            }),
+        throw new Error(
+            "React 'cache' function not working as expected. Please contact DevCycle support.",
         )
-    } else {
-        client.synchronizeBootstrapData(context.config, user, getUserAgent())
     }
+
+    client.synchronizeBootstrapData(context.config, user, getUserAgent())
 
     return context
 }

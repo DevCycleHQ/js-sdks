@@ -12,6 +12,8 @@ Official SDK for integrating DevCycle feature flags with your Next.js applicatio
 ## Limitations
 - currently only App Router is supported.
 - Minimum Next.js version: 14.0.0
+- Minimum React version: 18.3 (currently only available in Canary and Experimental releases)
+- variable evaluations are only tracked in client components.
 
 ## Installation
 ```npm install @devcycle/nextjs-sdk```
