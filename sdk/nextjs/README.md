@@ -168,6 +168,27 @@ This helper will retrieve the DevCycle configuration and pass it to the rest of 
 It will bootstrap the DevCycle on the client browser with the same configuration used by the server, allowing
 for faster page rendering and matching hydration of client-rendered and server-rendered content.
 
+From this point, usage becomes the same as the Devcycle React SDK. Refer to the 
+[documentation](https://docs.devcycle.com/sdk/client-side-sdks/react/react-usage) for that SDK.
+
+For example, to retrieve a variable value in a component:
+```typescript jsx
+import { useVariableValue } from '@devcycle/react-client-sdk'
+import * as React from 'react'
+
+export const MyComponent = () => {
+    const myVariable = useVariableValue('myVariable', false)
+    return (
+        <>
+            <b>Variable</b>
+            <span>
+                {JSON.stringify(myVariable)}
+            </span>
+        </>
+    )
+}
+```
+
 ### Static Rendering
 If your page uses static rendering instead, you can use the static version of the DevCycle helper:
 
