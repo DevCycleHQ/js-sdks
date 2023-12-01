@@ -10,7 +10,6 @@ Official SDK for integrating DevCycle feature flags with your Next.js applicatio
 - support for non-blocking flag state retrieval and streaming 
 
 ## Limitations
-- currently only App Router is supported.
 - Minimum Next.js version: 14.0.0
 - Minimum React version: 18.3 (currently only available in Canary and Experimental releases)
 - variable evaluations are only tracked in client components.
@@ -19,7 +18,7 @@ Official SDK for integrating DevCycle feature flags with your Next.js applicatio
 ```npm install @devcycle/nextjs-sdk```
 ```yarn add @devcycle/nextjs-sdk```
 
-## Usage
+## Usage (App Router)
 ### Wrap your app in the DevCycleServersideProvider
 In a server component (as early as possible in the tree):
 ```typescript jsx
@@ -126,3 +125,72 @@ use a `Suspense` boundary to send a fallback while the config is being retrieved
 the client once the config is retrieved.
 - client components will be rendered with their default values. When the configuration is retrieved, it will be
 streamed to the client and components will render again with their true variable values.
+
+## Usage (Pages Router)
+### Wrap your app in the DevCycle Higher-Order Component
+In your `_app.tsx` file, wrap the App component in the DevCycle HOC:
+```typescript jsx
+// _app.tsx
+import React from 'react'
+import type { AppProps } from 'next/app'
+import { appWithDevCycle } from '@devcycle/next-sdk/pages'
+
+function MyApp({ Component, pageProps }: AppProps) {
+    return <Component {...pageProps} />
+}
+
+export default appWithDevCycle(MyApp)
+```
+
+In each page in your App where you are using DevCycle, hook up the server-side helper to retrieve
+configuration on the server and allow for server-side rendering using the same user data as the client:
+```typescript jsx
+import { GetServerSideProps } from 'next'
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    // get the user identity serverside. Replace with your own function for determining your user's identity
+    const user = {
+        user_id: 'server-user',
+    }
+    return {
+        props: {
+            ...(await getServerSideDevCycle(
+                process.env.NEXT_PUBLIC_DEVCYCLE_CLIENT_SDK_KEY || '',
+                user,
+                context,
+            )),
+        },
+    }
+}
+```
+
+This helper will retrieve the DevCycle configuration and pass it to the rest of the component tree. 
+It will bootstrap the DevCycle on the client browser with the same configuration used by the server, allowing
+for faster page rendering and matching hydration of client-rendered and server-rendered content.
+
+### Static Rendering
+If your page uses static rendering instead, you can use the static version of the DevCycle helper:
+
+```typescript jsx
+import { GetStaticProps } from 'next'
+
+export const getStaticProps: GetStaticProps = async () => {
+    // get the user identity serverside. Replace with your own function for determining your user's identity
+    const user = {
+        user_id: 'server-user',
+    }
+    return {
+        props: {
+            ...(await getStaticDevCycle
+            (
+                process.env.NEXT_PUBLIC_DEVCYCLE_CLIENT_SDK_KEY || '',
+                user,
+            )),
+        },
+    }
+}
+```
+The static version of the helper still retrieves the DevCycle configuration and allows for client boostrapping.
+However, it omits features that rely on the dynamic request information to work. This includes:
+- automatic determination of the platform version based on the userAgent of the request. Targeting by
+this property in the DevCycle platform will be unavailable.

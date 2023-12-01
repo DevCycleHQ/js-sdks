@@ -7,4 +7,4 @@ function MyApp({ Component, pageProps }: AppProps) {
     return <Component {...pageProps} />
 }
 
-export default appWithDevCycle(MyApp as React.FC)
+export default appWithDevCycle(MyApp)
