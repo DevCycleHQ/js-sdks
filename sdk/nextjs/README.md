@@ -171,9 +171,11 @@ for faster page rendering and matching hydration of client-rendered and server-r
 From this point, usage becomes the same as the Devcycle React SDK. Refer to the 
 [documentation](https://docs.devcycle.com/sdk/client-side-sdks/react/react-usage) for that SDK.
 
+The same hooks used in that SDK are re-exported from this SDK.
+
 For example, to retrieve a variable value in a component:
 ```typescript jsx
-import { useVariableValue } from '@devcycle/react-client-sdk'
+import { useVariableValue } from '@devcycle/nextjs-sdk/pages'
 import * as React from 'react'
 
 export const MyComponent = () => {
