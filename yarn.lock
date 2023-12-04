@@ -5157,9 +5157,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/next-sdk@workspace:sdk/nextjs":
+"@devcycle/nextjs-sdk@workspace:sdk/nextjs":
   version: 0.0.0-use.local
-  resolution: "@devcycle/next-sdk@workspace:sdk/nextjs"
+  resolution: "@devcycle/nextjs-sdk@workspace:sdk/nextjs"
   dependencies:
     "@devcycle/bucketing": "*"
     "@devcycle/js-client-sdk": "*"

@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { useVariable } from '@devcycle/react-client-sdk'
-import { getServerSideDevCycle } from '@devcycle/next-sdk/pages'
+import { getServerSideDevCycle } from '@devcycle/nextjs-sdk/pages'
 
 const Home: NextPage = () => {
     const variableKey = 'test-featre'

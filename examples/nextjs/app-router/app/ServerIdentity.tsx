@@ -1,4 +1,4 @@
-import { getUserIdentity, getVariableValue } from '@devcycle/next-sdk/server'
+import { getUserIdentity, getVariableValue } from '@devcycle/nextjs-sdk/server'
 import * as React from 'react'
 
 export const ServerIdentity = async function () {

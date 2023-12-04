@@ -1,7 +1,7 @@
 import '../styles/globals.css'
 import React from 'react'
 import type { AppProps } from 'next/app'
-import { appWithDevCycle } from '@devcycle/next-sdk/pages'
+import { appWithDevCycle } from '@devcycle/nextjs-sdk/pages'
 
 function MyApp({ Component, pageProps }: AppProps) {
     return <Component {...pageProps} />
