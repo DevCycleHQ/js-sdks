@@ -17,5 +17,6 @@
     },
     "peerDependencies": {
         "react": ">=16.8.0"
-    }
+    },
+    "types": "./index.cjs.d.ts"
 }
