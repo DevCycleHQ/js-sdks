@@ -32,7 +32,6 @@ export const getStaticDevCycle = async (
     return {
         _devcycleSSR: {
             bucketedConfig: bucketingConfig.config,
-            sdkKey,
             user,
         },
     }
