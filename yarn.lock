@@ -5163,7 +5163,9 @@ __metadata:
   dependencies:
     "@devcycle/bucketing": "*"
     "@devcycle/js-client-sdk": "*"
+    "@devcycle/react-client-sdk": "*"
     "@devcycle/types": "*"
+    hoist-non-react-statics: ^3.3.2
     server-only: ^0.0.1
   peerDependencies:
     next: ^14.0.0
@@ -5244,7 +5246,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/react-client-sdk@^1.14.0, @devcycle/react-client-sdk@workspace:sdk/react":
+"@devcycle/react-client-sdk@*, @devcycle/react-client-sdk@^1.14.0, @devcycle/react-client-sdk@workspace:sdk/react":
   version: 0.0.0-use.local
   resolution: "@devcycle/react-client-sdk@workspace:sdk/react"
   dependencies:

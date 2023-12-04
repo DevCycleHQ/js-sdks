@@ -1,12 +1,11 @@
 import { getBucketedConfig } from './bucketing'
-import { getOptions, getSDKKey, getTrackedEvents } from './requestContext'
+import { getOptions, getSDKKey } from './requestContext'
 import { DevCycleUser } from '@devcycle/js-client-sdk'
 import { getUserIdentity } from './identify'
 
 export const getDevCycleServerData = async (): Promise<{
     config: Awaited<ReturnType<typeof getBucketedConfig>>
     sdkKey: string
-    events: ReturnType<typeof getTrackedEvents>
     options: ReturnType<typeof getOptions>
     user: DevCycleUser
 }> => {
@@ -19,7 +18,6 @@ export const getDevCycleServerData = async (): Promise<{
         config,
         user,
         sdkKey: getSDKKey(),
-        events: getTrackedEvents(),
         options: getOptions(),
     }
 }

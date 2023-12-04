@@ -37,6 +37,7 @@
             ],
             "@devcycle/next-sdk": ["sdk/nextjs/src/index.ts"],
             "@devcycle/next-sdk/server": ["sdk/nextjs/src/server.ts"],
+            "@devcycle/next-sdk/pages": ["sdk/nextjs/src/pages.ts"],
             "@devcycle/nodejs-server-sdk": ["sdk/nodejs/src/index.ts"],
             "@devcycle/openfeature-nodejs-provider": [
                 "sdk/openfeature-nodejs-provider/src/index.ts"
