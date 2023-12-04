@@ -79,7 +79,8 @@
             },
             "library": {
                 "style": "css",
-                "linter": "eslint"
+                "linter": "eslint",
+                "unitTestRunner": "jest"
             }
         }
     },
@@ -114,6 +115,9 @@
         },
         "lint": {
             "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
+        },
+        "e2e": {
+            "inputs": ["default", "^default"]
         }
     }
 }

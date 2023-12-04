@@ -86,6 +86,7 @@ export class DevCycleClient<
     private inactivityHandlerId?: number
     private windowMessageHandler?: (event: MessageEvent) => void
     private windowPageHideHandler?: () => void
+    private configRefetchHandler: (lastModifiedDate?: number) => void
 
     constructor(
         sdkKey: string,
@@ -103,6 +104,10 @@ export class DevCycleClient<
             options = userOrOptions
         } else {
             user = userOrOptions
+        }
+
+        if (options.next?.configRefreshHandler) {
+            this.configRefetchHandler = options.next.configRefreshHandler
         }
 
         this.logger =
@@ -167,6 +172,7 @@ export class DevCycleClient<
         }
         this.initializeTriggered = true
 
+        // don't wait to load anon id if we're being provided with a real one
         const storedAnonymousId = initialUser.user_id
             ? undefined
             : await this.store.loadAnonUserId()
@@ -612,13 +618,50 @@ export class DevCycleClient<
         return this._closing
     }
 
+    /**
+     * Method to be called by the Isomorphic SDKs to update the bootstrapped config and user data when the server's
+     * representation has changed.
+     * NOTE: It is not recommended to call this yourself.
+     * @param config
+     * @param user
+     * @param userAgent
+     */
+    synchronizeBootstrapData(
+        config: BucketedUserConfig,
+        user: DevCycleUser,
+        userAgent?: string,
+    ): void {
+        this.options.bootstrapConfig = config
+        if (this.options.deferInitialization && !this.initializeTriggered) {
+            void this.clientInitialization(user)
+            return
+        }
+
+        const populatedUser = new DVCPopulatedUser(
+            user,
+            this.options,
+            undefined,
+            undefined,
+            userAgent,
+        )
+        this.handleConfigReceived(config, populatedUser, Date.now())
+    }
+
     private async refetchConfig(
         sse: boolean,
         lastModified?: number,
         etag?: string,
     ) {
         await this.onInitialized
-        await this.requestConsolidator.queue(null, { sse, lastModified, etag })
+        if (this.configRefetchHandler) {
+            this.configRefetchHandler(lastModified)
+        } else {
+            await this.requestConsolidator.queue(null, {
+                sse,
+                lastModified,
+                etag,
+            })
+        }
     }
 
     private handleConfigReceived(

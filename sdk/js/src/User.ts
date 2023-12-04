@@ -38,6 +38,7 @@ export class DVCPopulatedUser implements DevCycleUser {
         options: DevCycleOptions,
         staticData?: StaticData,
         anonymousUserId?: string,
+        headerUserAgent?: string,
     ) {
         if (user.user_id?.trim() === '') {
             throw new Error(
@@ -60,6 +61,11 @@ export class DVCPopulatedUser implements DevCycleUser {
         this.privateCustomData = user.privateCustomData
         this.lastSeenDate = new Date()
 
+        const userAgentString =
+            typeof window !== 'undefined'
+                ? window.navigator.userAgent
+                : headerUserAgent
+
         /**
          * Read only properties initialized once
          */
@@ -67,11 +73,7 @@ export class DVCPopulatedUser implements DevCycleUser {
         if (staticData) {
             Object.assign(this, staticData)
         } else {
-            const userAgent = new UAParser(
-                typeof window !== 'undefined'
-                    ? window.navigator.userAgent
-                    : undefined,
-            )
+            const userAgent = new UAParser(userAgentString)
             const platformVersion =
                 userAgent.getBrowser().name &&
                 `${userAgent.getBrowser().name} ${
@@ -84,9 +86,7 @@ export class DVCPopulatedUser implements DevCycleUser {
             this.deviceModel =
                 options?.reactNative && globalThis.DeviceInfo
                     ? globalThis.DeviceInfo.getModel()
-                    : typeof window !== 'undefined'
-                    ? window.navigator.userAgent
-                    : 'SSR - unknown'
+                    : userAgentString ?? 'SSR - unknown'
             this.sdkType = 'client'
             this.sdkVersion = packageJson.version
         }

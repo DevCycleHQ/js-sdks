@@ -1,3 +1,4 @@
+'use client'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import context from './context'
 import type { DVCVariable, DVCVariableValue } from '@devcycle/js-client-sdk'

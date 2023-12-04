@@ -1,10 +1,8 @@
 import '../styles/globals.css'
 import * as React from 'react'
-import { WithProviders } from './providers'
+import { DevCycleServersideProvider } from '@devcycle/next-sdk/server'
 
-export default function RootLayout({
-    // Layouts must accept a children prop.
-    // This will be populated with nested layouts or pages
+export default async function RootLayout({
     children,
 }: {
     children: React.ReactNode
@@ -12,7 +10,17 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>
-                <WithProviders>{children}</WithProviders>
+                <DevCycleServersideProvider
+                    sdkKey={
+                        process.env.NEXT_PUBLIC_DEVCYCLE_CLIENT_SDK_KEY ?? ''
+                    }
+                    user={{ user_id: 'server-user' }}
+                    options={{
+                        enableStreaming: true,
+                    }}
+                >
+                    {children}
+                </DevCycleServersideProvider>
             </body>
         </html>
     )
