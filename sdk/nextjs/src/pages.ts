@@ -5,6 +5,9 @@ export {
     useVariable,
     useIsDevCycleInitialized,
     useDevCycleClient,
+} from '@devcycle/react-client-sdk'
+
+export type {
     DevCycleUser,
     DevCycleEvent,
     DevCycleClient,
