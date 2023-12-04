@@ -1,6 +1,6 @@
 import '../styles/globals.css'
 import * as React from 'react'
-import { DevCycleServersideProvider } from '@devcycle/next-sdk/server'
+import { DevCycleServersideProvider } from '@devcycle/nextjs-sdk/server'
 
 export default async function RootLayout({
     children,

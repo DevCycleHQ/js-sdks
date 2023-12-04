@@ -1,5 +1,5 @@
 'use client'
-import { useUserIdentity, useVariableValue } from '@devcycle/next-sdk'
+import { useUserIdentity, useVariableValue } from '@devcycle/nextjs-sdk'
 
 export const ClientIdentity = () => {
     const variable = useVariableValue('test-featre', false)

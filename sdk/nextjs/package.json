@@ -1,6 +1,6 @@
 {
-    "name": "@devcycle/next-sdk",
-    "version": "0.0.1",
+    "name": "@devcycle/nextjs-sdk",
+    "version": "0.0.1-beta.0",
     "dependencies": {
         "@devcycle/bucketing": "*",
         "@devcycle/js-client-sdk": "*",
