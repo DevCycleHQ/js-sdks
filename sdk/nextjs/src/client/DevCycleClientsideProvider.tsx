@@ -6,13 +6,13 @@ import {
     initializeDevCycle,
 } from '@devcycle/js-client-sdk'
 import { useRouter } from 'next/navigation'
-import { invalidateConfig } from '../common/invalidateConfig'
 import { DevCycleServerDataForClient } from '../common/types'
 
 type DevCycleClientsideProviderProps = {
     serverDataPromise: Promise<DevCycleServerDataForClient>
     sdkKey: string
     user: DevCycleUser
+    invalidateConfig: (sdkKey: string, date?: number) => Promise<void>
     enableStreaming: boolean
     children: React.ReactNode
 }
@@ -62,6 +62,7 @@ export const DevCycleClientsideProvider = ({
     serverDataPromise,
     sdkKey,
     enableStreaming,
+    invalidateConfig,
     user,
     children,
 }: DevCycleClientsideProviderProps): React.ReactElement => {

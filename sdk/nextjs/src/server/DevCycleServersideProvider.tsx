@@ -10,6 +10,7 @@ export type DevCycleServersideProviderProps = {
     sdkKey: string
     // server-side users must always be "identified" with a user id
     user: Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & { user_id: string }
+    invalidateConfig: (sdkKey: string, time?: number) => Promise<void>
     options?: DevCycleNextOptions
     children: React.ReactNode
 }
@@ -18,6 +19,7 @@ export const DevCycleServersideProvider = async ({
     children,
     sdkKey,
     user,
+    invalidateConfig,
     options,
 }: DevCycleServersideProviderProps): Promise<React.ReactElement> => {
     const serverDataPromise = initialize(sdkKey, user, options)
@@ -42,6 +44,7 @@ export const DevCycleServersideProvider = async ({
         <DevCycleClientsideProvider
             serverDataPromise={serverDataPromise}
             user={identifiedUser}
+            invalidateConfig={invalidateConfig}
             sdkKey={getSDKKey()}
             enableStreaming={options?.enableStreaming ?? false}
         >
