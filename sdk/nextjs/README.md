@@ -22,6 +22,8 @@ Official SDK for integrating DevCycle feature flags with your Next.js applicatio
 ### Wrap your app in the DevCycleServersideProvider
 In a server component (as early as possible in the tree):
 ```typescript jsx
+import { DevCycleServersideProvider, invalidateConfig } from '@devcycle/nextjs-sdk/server'
+
 export default async function RootLayout({
  children,
 }: {
@@ -39,6 +41,7 @@ export default async function RootLayout({
                     options={{
                         enableStreaming: true,
                     }}
+                    invalidateConfig={invalidateConfig}
                 >
                     {children}
                 </DevCycleServersideProvider>
@@ -47,6 +50,9 @@ export default async function RootLayout({
     )
 }
 ```
+It is important to import and provide the `invalidateConfig` function to the DevCycleServersideProvider. This works
+around a bug in NextJS where the server action is not bundled correctly due to being defined in an NPM module.
+
 Note: You _must_ use the client SDK key of your project, not the server SDK key. The key is used across the server and
 the client and will be sent to the clientside to bootstrap the client SDK.
 
