@@ -45,7 +45,7 @@
                 "format": ["cjs"],
                 "external": "all",
                 "project": "lib/shared/types/package.json",
-                "outputPath": "dist/lib/shared/types",
+                "outputPath": "dist/lib/shared/es5/types",
                 "entryFile": "lib/shared/types/src/index.ts",
                 "tsConfig": "lib/shared/types/tsconfig.lib.es5.json",
                 "assets": [

@@ -25,7 +25,11 @@
         "build:es5": {
             "dependsOn": [
                 "shared-types:build:es5",
+                "shared-types:build",
                 "js:build:es5",
+                "js:build",
+                "react:build:es5",
+                "react:build",
                 "react:build:es5"
             ],
             "executor": "@nrwl/rollup:rollup",
