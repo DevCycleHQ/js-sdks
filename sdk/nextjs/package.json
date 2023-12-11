@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/nextjs-sdk",
-    "version": "0.0.1",
+    "version": "0.0.1-beta.2",
     "dependencies": {
         "@devcycle/bucketing": "^1.7.1",
         "@devcycle/js-client-sdk": "^1.16.1",
@@ -12,6 +12,23 @@
     "peerDependencies": {
         "next": "^14.0.0",
         "react": "^18.3.0-canary-0210f0b08-20230525"
+    },
+    "exports": {
+        ".": {
+            "import": "./src/index.js",
+            "require": "./src/index.js",
+            "types": "./src/index.d.ts"
+        },
+        "./server": {
+            "import": "./src/server.js",
+            "require": "./src/server.js",
+            "types": "./src/server.d.ts"
+        },
+        "./pages": {
+            "import": "./src/pages.js",
+            "require": "./src/pages.js",
+            "types": "./src/pages.d.ts"
+        }
     },
     "types": "./src/index.d.ts"
 }
