@@ -51,7 +51,7 @@
             "executor": "@nx/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
-                "outputPath": "dist/sdk/js",
+                "outputPath": "dist/sdk/es5/js",
                 "tsConfig": "sdk/js/tsconfig.lib.es5.json",
                 "packageJson": "sdk/js/package.json",
                 "main": "sdk/js/src/index.ts",
