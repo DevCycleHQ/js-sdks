@@ -1,7 +1,7 @@
 {
     "name": "@devcycle/nodejs-server-sdk-local-js-example",
-    "version": "1.3.1",
+    "version": "1.3.2",
     "dependencies": {
-        "@devcycle/nodejs-server-sdk": "^1.18.1"
+        "@devcycle/nodejs-server-sdk": "^1.18.2"
     }
 }
