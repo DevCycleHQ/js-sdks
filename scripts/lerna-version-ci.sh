@@ -4,6 +4,7 @@ set -eo pipefail
 
 # Get the last tagged sha from the output of "git describe"
 LAST_TAG=$(git describe --always --first-parent --abbrev=0)
+IGNORED_PACKAGES=("@devcycle/nextjs-sdk")
 
 echo "::info::Last Tag $LAST_TAG"
 LAST_TAGGED_SHA=$(git rev-list -n 1 $LAST_TAG)
@@ -78,6 +79,11 @@ for PROJECT in "${AFFECTED_PROJECTS[@]}"; do
 
   # get package name from package.json
   PACKAGE=$(cat "$FILEPATH/../package.json" | jq -r '.name')
+
+  if [[ " ${IGNORED_PACKAGES[*]} " =~ " $PACKAGE " ]]; then
+      echo "::info::Ignoring package $PACKAGE"
+      continue
+  fi
 
   # add package to array
   PACKAGES+=("$PACKAGE")
