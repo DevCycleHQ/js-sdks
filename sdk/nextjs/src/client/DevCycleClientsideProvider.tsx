@@ -12,7 +12,7 @@ type DevCycleClientsideProviderProps = {
     serverDataPromise: Promise<DevCycleServerDataForClient>
     sdkKey: string
     user: DevCycleUser
-    invalidateConfig: (sdkKey: string, date?: number) => Promise<void>
+    invalidateConfig?: (sdkKey: string, date?: number) => Promise<void>
     enableStreaming: boolean
     children: React.ReactNode
 }
@@ -70,15 +70,23 @@ export const DevCycleClientsideProvider = ({
     const clientRef = useRef<DevCycleClient>()
 
     const revalidateConfig = (lastModified?: number) => {
-        invalidateConfig(sdkKey, lastModified).finally(() => {
+        invalidateConfig?.(sdkKey, lastModified).finally(() => {
             router.refresh()
         })
+    }
+
+    if (!invalidateConfig) {
+        console.warn(
+            'DevCycle: invalidateConfig prop not provided. Realtime updates will not work. ' +
+                'Check documentation for details.',
+        )
     }
 
     if (!clientRef.current) {
         clientRef.current = initializeDevCycle(sdkKey, user, {
             deferInitialization: true,
             disableConfigCache: true,
+            disableRealtimeUpdates: !invalidateConfig,
             next: {
                 configRefreshHandler: revalidateConfig,
             },

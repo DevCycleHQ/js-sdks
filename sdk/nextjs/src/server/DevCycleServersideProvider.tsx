@@ -10,7 +10,7 @@ export type DevCycleServersideProviderProps = {
     sdkKey: string
     // server-side users must always be "identified" with a user id
     user: Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & { user_id: string }
-    invalidateConfig: (sdkKey: string, time?: number) => Promise<void>
+    invalidateConfig?: (sdkKey: string, time?: number) => Promise<void>
     options?: DevCycleNextOptions
     children: React.ReactNode
 }

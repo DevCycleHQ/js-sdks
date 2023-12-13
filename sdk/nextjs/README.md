@@ -22,7 +22,7 @@ Official SDK for integrating DevCycle feature flags with your Next.js applicatio
 ### Wrap your app in the DevCycleServersideProvider
 In a server component (as early as possible in the tree):
 ```typescript jsx
-import { DevCycleServersideProvider, invalidateConfig } from '@devcycle/nextjs-sdk/server'
+import { DevCycleServersideProvider } from '@devcycle/nextjs-sdk/server'
 
 export default async function RootLayout({
  children,
@@ -38,10 +38,6 @@ export default async function RootLayout({
                 <DevCycleServersideProvider
                     sdkKey={process.env.NEXT_PUBLIC_DEVCYCLE_CLIENT_SDK_KEY ?? ''}
                     user={{ user_id: userIdentity.id }}
-                    options={{
-                        enableStreaming: true,
-                    }}
-                    invalidateConfig={invalidateConfig}
                 >
                     {children}
                 </DevCycleServersideProvider>
@@ -50,8 +46,6 @@ export default async function RootLayout({
     )
 }
 ```
-It is important to import and provide the `invalidateConfig` function to the DevCycleServersideProvider. This works
-around a bug in NextJS where the server action is not bundled correctly due to being defined in an NPM module.
 
 Note: You _must_ use the client SDK key of your project, not the server SDK key. The key is used across the server and
 the client and will be sent to the clientside to bootstrap the client SDK.
@@ -62,6 +56,34 @@ The DevCycleServersideProvider will:
 
 It will also await the retrieval of the DevCycle configuration, thus blocking further rendering until the flag states
 have been retrieved and rendering can take place with the correct values.
+
+#### Enabling Realtime Updates
+Due to current limitations in NextJS, the SDK provider must be explicitly passed a server action that is required
+to invalidate the config cache when a realtime update is received. To do so, provide the invalidateConfig function as
+shown:
+```typescript jsx
+import { DevCycleServersideProvider, invalidateConfig } from '@devcycle/nextjs-sdk/server'
+
+export default async function RootLayout({
+ children,
+}: {
+    children: React.ReactNode
+}) {
+    return (
+        <html lang="en">
+            <body>
+                <DevCycleServersideProvider
+                    {/* other props... */}
+                    {/* pass invalidate config function directly: */}
+                    invalidateConfig={invalidateConfig}
+                >
+                    {children}
+                </DevCycleServersideProvider>
+            </body>
+        </html>
+    )
+}
+```
 
 ### Get a variable value (server component)
 ```typescript jsx
@@ -122,7 +144,7 @@ Currently, tracking events in server components is not supported. Please trigger
 from client components.
 
 ## Advanced
-### Non-Blocking Initialization
+### Non-Blocking Initialization (Streaming)
 If you wish to render your page without waiting for the DevCycle configuration to be retrieved, you can use the
 `enableStreaming` option. Doing so enables the following behaviour:
 - the DevCycleServersideProvider will not block rendering of the rest of the server component tree
