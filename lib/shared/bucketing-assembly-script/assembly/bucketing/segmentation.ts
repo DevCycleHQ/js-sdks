@@ -244,6 +244,17 @@ export function _checkNumberFilter(num: f64, filterNums: f64[], operator: string
         return false
     }
 
+    if (operator === '!=') {
+        let passesFilter = true
+        for (let i = 0; i < filterNums.length; i++) {
+            const filterNum = filterNums[i]
+            if (isNaN(filterNum) || num === filterNum) {
+                passesFilter = false
+            }
+        }
+        return passesFilter
+    }
+
     // replace filterNums.some() logic
     let someValue = false
     for (let i = 0; i < filterNums.length; i++) {
@@ -254,8 +265,6 @@ export function _checkNumberFilter(num: f64, filterNums: f64[], operator: string
 
         if (operator === '=') {
             someValue = num === filterNum
-        } else if (operator === '!=') {
-            someValue = num !== filterNum
         } else if (operator === '>') {
             someValue = num > filterNum
         } else if (operator === '>=') {

@@ -255,27 +255,33 @@ export const checkNumberFilter = (
     }
 
     if (isNumber(num) && !isNaN(num)) {
-        return filterNums.some((filterNum) => {
-            if (!(isNumber(filterNum) && !isNaN(filterNum))) {
+        if (operator === '!=') {
+            return filterNums.every((filterNum) => {
+                if (!(isNumber(filterNum) && !isNaN(filterNum))) {
+                    return false
+                }
+                return num !== filterNum
+            })
+        } else {
+            return filterNums.some((filterNum) => {
+                if (!(isNumber(filterNum) && !isNaN(filterNum))) {
+                    return false
+                }
+                switch (operator) {
+                    case '=':
+                        return num === filterNum
+                    case '>':
+                        return num > filterNum
+                    case '>=':
+                        return num >= filterNum
+                    case '<':
+                        return num < filterNum
+                    case '<=':
+                        return num <= filterNum
+                }
                 return false
-            }
-
-            switch (operator) {
-                case '=':
-                    return num === filterNum
-                case '!=':
-                    return num !== filterNum
-                case '>':
-                    return num > filterNum
-                case '>=':
-                    return num >= filterNum
-                case '<':
-                    return num < filterNum
-                case '<=':
-                    return num <= filterNum
-            }
-            return false
-        })
+            })
+        }
     }
     return false
 }
