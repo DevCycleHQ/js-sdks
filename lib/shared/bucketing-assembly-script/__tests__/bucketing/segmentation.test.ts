@@ -1676,8 +1676,21 @@ describe('SegmentationManager Unit Test', () => {
             filter.values = [0, 1]
             assert.strictEqual(true, checkCustomData({ numKey: 1 }, filter))
         })
+
         it('should return false if number value is not equal', () => {
             assert.strictEqual(false, checkCustomData({ numKey: 1 }, filterNum))
+        })
+
+        it.failing('should return false when num is in values for != comparator', () => {
+            filterNum.comparator = '!='
+            filterNum.values = [0, 1]
+            assert.strictEqual(false, checkCustomData({ numKey: 1 }, filterNum))
+        })
+
+        it('should return true when num isnt in values for != comparator', () => {
+            filterNum.comparator = '!='
+            filterNum.values = [0, 1]
+            assert.strictEqual(true, checkCustomData({ numKey: 12 }, filterNum))
         })
 
         const filterBool = { ...filterStr }

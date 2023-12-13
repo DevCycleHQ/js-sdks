@@ -2893,6 +2893,24 @@ describe('SegmentationManager Unit Test', () => {
             )
         })
 
+        it.failing('should return false if num is in values for !=', () => {
+            filterNum.comparator = FilterComparator['!=']
+            filterNum.values = [0, 1]
+            assert.strictEqual(
+                false,
+                segmentation.checkCustomData({ numKey: 1 }, filterNum),
+            )
+        })
+
+        it('should return true if num isnt in values for !=', () => {
+            filterNum.comparator = FilterComparator['!=']
+            filterNum.values = [0, 1]
+            assert.strictEqual(
+                true,
+                segmentation.checkCustomData({ numKey: 12 }, filterNum),
+            )
+        })
+
         const filterBool = clone(filterStr)
         filterBool.dataKey = 'boolKey'
         filterBool.values = [false]
