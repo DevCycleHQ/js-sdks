@@ -17,7 +17,8 @@
         "prettier:format": "yarn prettier --write .",
         "start": "nx serve",
         "lerna:version": "scripts/lerna-version.sh",
-        "local-registry": "./scripts/local-registry.sh"
+        "local-registry": "./scripts/local-registry.sh",
+        "e2e:nextjs-app-router:start": "nx build nextjs && ./e2e/nextjs/app-router/app/start.sh"
     },
     "modulePathIgnorePatterns": [
         "<rootDir>/build"
@@ -109,8 +110,8 @@
         "@types/jest": "29.4.4",
         "@types/lodash": "^4.14.175",
         "@types/node": "18.14.4",
-        "@types/react": "18.2.24",
-        "@types/react-dom": "18.2.9",
+        "@types/react": "18.2.20",
+        "@types/react-dom": "18.2.6",
         "@types/ua-parser-js": "^0.7.38",
         "@types/uuid": "^8.3.1",
         "@typescript-eslint/eslint-plugin": "5.62.0",

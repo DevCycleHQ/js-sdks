@@ -25,3 +25,6 @@ jobs:
             - name: Run Affected Tests
               shell: bash
               run: yarn affected:test
+            - name: Run Affected E2E Tests
+              shell: bash
+              run: yarn affected:e2e

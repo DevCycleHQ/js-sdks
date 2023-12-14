@@ -20,5 +20,5 @@
             }
         }
     },
-    "implicitDependencies": ["example-nextjs-app-router"]
+    "implicitDependencies": ["example-nextjs-app-router", "nextjs"]
 }
