@@ -1,10 +1,6 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
 import { DevCycleServersideProvider } from '@devcycle/nextjs-sdk/server'
 import React from 'react'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
     title: 'Create Next App',
@@ -18,7 +14,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className={inter.className}>
+            <body>
                 <DevCycleServersideProvider
                     sdkKey={
                         process.env.NEXT_PUBLIC_DEVCYCLE_CLIENT_SDK_KEY ?? ''
