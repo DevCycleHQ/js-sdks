@@ -1,4 +1,4 @@
-import { unstable_cache } from 'next/cache'
+import { unstable_cache } from 'next/cache.js'
 
 const sha1 = async (str: string, subtle: SubtleCrypto) => {
     const source = new TextEncoder().encode(str)
