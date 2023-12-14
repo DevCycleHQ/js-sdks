@@ -1,8 +1,8 @@
 {
     "name": "@devcycle/nextjs-sdk",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "dependencies": {
-        "@devcycle/bucketing": "^1.7.2",
+        "@devcycle/bucketing": "^1.7.3",
         "@devcycle/js-client-sdk": "^1.16.2",
         "@devcycle/react-client-sdk": "^1.14.2",
         "@devcycle/types": "^1.4.2",

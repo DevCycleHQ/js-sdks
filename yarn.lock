@@ -5115,7 +5115,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@devcycle/bucketing-assembly-script@^1.11.2, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
+"@devcycle/bucketing-assembly-script@^1.11.3, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script"
   dependencies:
@@ -5130,7 +5130,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/bucketing@^1.7.2, @devcycle/bucketing@workspace:lib/shared/bucketing":
+"@devcycle/bucketing@^1.7.3, @devcycle/bucketing@workspace:lib/shared/bucketing":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing@workspace:lib/shared/bucketing"
   dependencies:
@@ -5175,7 +5175,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nextjs-sdk@workspace:sdk/nextjs"
   dependencies:
-    "@devcycle/bucketing": ^1.7.2
+    "@devcycle/bucketing": ^1.7.3
     "@devcycle/js-client-sdk": ^1.16.2
     "@devcycle/react-client-sdk": ^1.14.2
     "@devcycle/types": ^1.4.2
@@ -5191,7 +5191,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk-cloud-js-example@workspace:examples/nodejs-cloud/js"
   dependencies:
-    "@devcycle/nodejs-server-sdk": ^1.18.2
+    "@devcycle/nodejs-server-sdk": ^1.18.3
   languageName: unknown
   linkType: soft
 
@@ -5205,7 +5205,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk-local-js-example@workspace:examples/nodejs-local/js"
   dependencies:
-    "@devcycle/nodejs-server-sdk": ^1.18.2
+    "@devcycle/nodejs-server-sdk": ^1.18.3
   languageName: unknown
   linkType: soft
 
@@ -5215,11 +5215,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/nodejs-server-sdk@^1.18.2, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
+"@devcycle/nodejs-server-sdk@^1.18.3, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
-    "@devcycle/bucketing-assembly-script": ^1.11.2
+    "@devcycle/bucketing-assembly-script": ^1.11.3
     "@devcycle/js-cloud-server-sdk": ^1.3.2
     "@devcycle/types": ^1.4.2
     cross-fetch: ^3.1.8
@@ -5238,7 +5238,7 @@ __metadata:
   resolution: "@devcycle/openfeature-nodejs-provider@workspace:sdk/openfeature-nodejs-provider"
   dependencies:
     "@devcycle/bucketing-test-data": ^1.5.2
-    "@devcycle/nodejs-server-sdk": ^1.18.2
+    "@devcycle/nodejs-server-sdk": ^1.18.3
     "@devcycle/types": ^1.4.2
     "@openfeature/js-sdk": ^1.6.1
   languageName: unknown
