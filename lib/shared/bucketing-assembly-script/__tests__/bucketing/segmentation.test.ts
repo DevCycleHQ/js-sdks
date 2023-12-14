@@ -1676,8 +1676,62 @@ describe('SegmentationManager Unit Test', () => {
             filter.values = [0, 1]
             assert.strictEqual(true, checkCustomData({ numKey: 1 }, filter))
         })
+
         it('should return false if number value is not equal', () => {
             assert.strictEqual(false, checkCustomData({ numKey: 1 }, filterNum))
+        })
+
+        it('should return false when num is in values for != comparator', () => {
+            const filter = { ...filterNum }
+            filter.comparator = '!='
+            filter.values = [0, 1]
+            assert.strictEqual(false, checkCustomData({ numKey: 1 }, filter))
+        })
+
+        it('should return true when num isnt in values for != comparator', () => {
+            const filter = { ...filterNum }
+            filter.comparator = '!='
+            filter.values = [0, 1]
+            assert.strictEqual(true, checkCustomData({ numKey: 12 }, filter))
+        })
+
+        it('should work for num for > comparator', () => {
+            const filter = { ...filterNum }
+            filter.comparator = '>'
+            filter.values = [4, 10]
+            assert.strictEqual(true, checkCustomData({ numKey: 12 }, filter))
+            assert.strictEqual(true, checkCustomData({ numKey: 5 }, filter))
+            assert.strictEqual(false, checkCustomData({ numKey: 4 }, filter))
+        })
+
+        it('should work for num for >= comparator', () => {
+            const filter = { ...filterNum }
+            filter.comparator = '>='
+            filter.values = [4, 10]
+            assert.strictEqual(true, checkCustomData({ numKey: 12 }, filter))
+            assert.strictEqual(true, checkCustomData({ numKey: 5 }, filter))
+            assert.strictEqual(true, checkCustomData({ numKey: 4 }, filter))
+            assert.strictEqual(false, checkCustomData({ numKey: 3 }, filter))
+        })
+
+        it('should work for num for < comparator', () => {
+            const filter = { ...filterNum }
+            filter.comparator = '<'
+            filter.values = [4, 10]
+            assert.strictEqual(false, checkCustomData({ numKey: 12 }, filter))
+            assert.strictEqual(true, checkCustomData({ numKey: 5 }, filter))
+            assert.strictEqual(true, checkCustomData({ numKey: 3 }, filter))
+        })
+
+        it('should work for num for <= comparator', () => {
+            const filter = { ...filterNum }
+            filter.comparator = '<='
+            filter.values = [4, 10]
+            assert.strictEqual(false, checkCustomData({ numKey: 12 }, filter))
+            assert.strictEqual(true, checkCustomData({ numKey: 10 }, filter))
+            assert.strictEqual(true, checkCustomData({ numKey: 5 }, filter))
+            assert.strictEqual(true, checkCustomData({ numKey: 4 }, filter))
+            assert.strictEqual(true, checkCustomData({ numKey: 3 }, filter))
         })
 
         const filterBool = { ...filterStr }

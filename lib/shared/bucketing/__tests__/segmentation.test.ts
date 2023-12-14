@@ -2893,6 +2893,106 @@ describe('SegmentationManager Unit Test', () => {
             )
         })
 
+        it('should return false if num is in values for !=', () => {
+            const filter = clone(filterNum)
+            filter.comparator = FilterComparator['!=']
+            filter.values = [0, 1]
+            assert.strictEqual(
+                false,
+                segmentation.checkCustomData({ numKey: 1 }, filter),
+            )
+        })
+
+        it('should return true if num isnt in values for !=', () => {
+            const filter = clone(filterNum)
+            filter.comparator = FilterComparator['!=']
+            filter.values = [0, 1]
+            assert.strictEqual(
+                true,
+                segmentation.checkCustomData({ numKey: 12 }, filter),
+            )
+        })
+
+        it('should work for num with > operator', () => {
+            const filter = clone(filterNum)
+            filter.comparator = FilterComparator['>']
+            filter.values = [4, 10]
+            assert.strictEqual(
+                true,
+                segmentation.checkCustomData({ numKey: 5 }, filter),
+            )
+
+            assert.strictEqual(
+                true,
+                segmentation.checkCustomData({ numKey: 11 }, filter),
+            )
+
+            assert.strictEqual(
+                false,
+                segmentation.checkCustomData({ numKey: 3 }, filter),
+            )
+        })
+
+        it('should work for num with >= operator', () => {
+            const filter = clone(filterNum)
+            filter.comparator = FilterComparator['>=']
+            filter.values = [4, 10]
+            assert.strictEqual(
+                true,
+                segmentation.checkCustomData({ numKey: 4 }, filter),
+            )
+
+            assert.strictEqual(
+                true,
+                segmentation.checkCustomData({ numKey: 11 }, filter),
+            )
+
+            assert.strictEqual(
+                false,
+                segmentation.checkCustomData({ numKey: 3 }, filter),
+            )
+        })
+
+        it('should work for num with < operator', () => {
+            const filter = clone(filterNum)
+            filter.comparator = FilterComparator['<']
+            filter.values = [4, 10]
+            assert.strictEqual(
+                true,
+                segmentation.checkCustomData({ numKey: 9 }, filter),
+            )
+
+            assert.strictEqual(
+                true,
+                segmentation.checkCustomData({ numKey: 3 }, filter),
+            )
+
+            assert.strictEqual(
+                false,
+                segmentation.checkCustomData({ numKey: 11 }, filter),
+            )
+        })
+
+        it('should work for num with >= operator', () => {
+            const filter = clone(filterNum)
+            filter.comparator = FilterComparator['<=']
+            filter.values = [4, 10]
+            assert.strictEqual(
+                true,
+                segmentation.checkCustomData({ numKey: 4 }, filter),
+            )
+
+            assert.strictEqual(
+                true,
+                segmentation.checkCustomData({ numKey: 9 }, filter),
+            )
+
+            assert.strictEqual(
+                false,
+                segmentation.checkCustomData({ numKey: 11 }, filter),
+            )
+        })
+
         const filterBool = clone(filterStr)
         filterBool.dataKey = 'boolKey'
         filterBool.values = [false]
