@@ -120,11 +120,10 @@ from client components.
 If you wish to render your page without waiting for the DevCycle configuration to be retrieved, you can use the
 `enableStreaming` option. Doing so enables the following behaviour:
 - the DevCycleServersideProvider will not block rendering of the rest of the server component tree
-- any calls to `getVariableValue` will still block on the config being retrieved. To unblock rendering on these calls,
+- any calls to `getVariableValue` in server components or `useVariableValue` in client components
+will still block on the config being retrieved. To unblock rendering on these calls,
 use a `Suspense` boundary to send a fallback while the config is being retrieved. The component will then stream to 
 the client once the config is retrieved.
-- client components will be rendered with their default values. When the configuration is retrieved, it will be
-streamed to the client and components will render again with their true variable values.
 
 ## Usage (Pages Router)
 ### Wrap your app in the DevCycle Higher-Order Component

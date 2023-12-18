@@ -11,6 +11,8 @@ export const useVariable = <T extends DVCVariableValue>(
     const [_, forceRerender] = useState({})
     const forceRerenderCallback = useCallback(() => forceRerender({}), [])
 
+    console.log('CONTEXT?', dvcContext)
+
     if (dvcContext === undefined)
         throw new Error('useVariable must be used within DevCycleProvider')
 
