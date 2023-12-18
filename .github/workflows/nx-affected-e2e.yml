@@ -20,7 +20,8 @@ jobs:
             - run: git fetch origin main
             - run: yarn --immutable
             - name: Install Playwright Browsers
-              run: npx playwright install --with-deps
+              shell: bash
+              run: yarn playwright install --with-deps
             - name: Run Affected E2E Tests
               shell: bash
               run: yarn affected:e2e
