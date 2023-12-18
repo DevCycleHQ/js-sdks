@@ -14,16 +14,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body>
-                <DevCycleServersideProvider
-                    sdkKey={
-                        process.env.NEXT_PUBLIC_DEVCYCLE_CLIENT_SDK_KEY ?? ''
-                    }
-                    user={{ user_id: '123' }}
-                >
-                    {children}
-                </DevCycleServersideProvider>
-            </body>
+            <body>{children}</body>
         </html>
     )
 }

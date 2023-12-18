@@ -15,7 +15,7 @@ const baseURL = process.env['BASE_URL'] || 'http://127.0.0.1:3000'
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-const nxConfig = nxE2EPreset(__filename, { testDir: './src' })
+const nxConfig = nxE2EPreset(__filename, { testDir: './tests' })
 
 export default defineConfig({
     ...{

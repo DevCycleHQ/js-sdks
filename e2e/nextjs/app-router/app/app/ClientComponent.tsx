@@ -2,12 +2,14 @@
 import { useVariableValue } from '@devcycle/nextjs-sdk'
 
 export const ClientComponent = () => {
-    const variable = useVariableValue('variable-key', false)
+    const enabledVar = useVariableValue('enabled-feature', false)
+    const disabledVar = useVariableValue('disabled-feature', false)
 
     return (
         <div>
             <h1>Client Component</h1>
-            <p>Client Variable: {JSON.stringify(variable)}</p>
+            <p>Client Enabled Variable: {JSON.stringify(enabledVar)}</p>
+            <p>Client Disabled Variable: {JSON.stringify(disabledVar)}</p>
         </div>
     )
 }
