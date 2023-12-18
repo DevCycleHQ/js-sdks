@@ -13,11 +13,14 @@
         "test": "nx run-many --parallel --target test --all",
         "affected:lint": "nx affected --base=origin/main --head=HEAD --target=lint --fix",
         "affected:test": "nx affected --base=origin/main --head=HEAD --target=test",
+        "affected:e2e": "nx affected --base=origin/main --head=HEAD --target=e2e",
         "npm-publish": "nx affected --base=origin/main~1 --target=npm-publish",
         "prettier:format": "yarn prettier --write .",
         "start": "nx serve",
         "lerna:version": "scripts/lerna-version.sh",
-        "local-registry": "./scripts/local-registry.sh"
+        "local-registry": "./scripts/local-registry.sh",
+        "e2e:nextjs-app-router:start": "nx build nextjs && ./e2e/nextjs/app-router/app/start.sh",
+        "e2e:nextjs-pages-router:start": "nx build nextjs && ./e2e/nextjs/pages-router/app/start.sh"
     },
     "modulePathIgnorePatterns": [
         "<rootDir>/build"
@@ -84,11 +87,13 @@
         "@nx/linter": "16.10.0",
         "@nx/next": "16.10.0",
         "@nx/node": "16.10.0",
+        "@nx/playwright": "16.10.0",
         "@nx/react": "16.10.0",
         "@nx/react-native": "16.10.0",
         "@nx/web": "16.10.0",
         "@nx/webpack": "16.10.0",
         "@nx/workspace": "16.10.0",
+        "@playwright/test": "^1.36.0",
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
         "@react-native-async-storage/async-storage": "1.19.4",
         "@react-native-community/cli": "11.3.6",
@@ -135,6 +140,7 @@
         "eslint-plugin-import": "2.27.5",
         "eslint-plugin-jsx-a11y": "6.8.0",
         "eslint-plugin-no-only-tests": "^2.4.0",
+        "eslint-plugin-playwright": "^0.15.3",
         "eslint-plugin-prettier": "^3.3.1",
         "eslint-plugin-promise": "^4.2.1",
         "eslint-plugin-react": "7.32.2",

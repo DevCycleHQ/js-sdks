@@ -1,6 +1,6 @@
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { generateBucketedConfig } from '@devcycle/bucketing'
-import { sseURlGetter } from '../server/ably'
+import { sseURlGetter } from '../server/ably.js'
 import { BucketedUserConfig } from '@devcycle/types'
 
 const getFetchUrl = (sdkKey: string) =>
@@ -13,7 +13,7 @@ export const fetchCDNConfig = async (sdkKey: string): Promise<Response> => {
 export const getBucketedConfig = async (
     sdkKey: string,
     user: DevCycleUser,
-    userAgent?: string,
+    userAgent: string | null,
 ): Promise<{ config: BucketedUserConfig }> => {
     const configResponse = await fetchCDNConfig(sdkKey)
     if (!configResponse.ok) {

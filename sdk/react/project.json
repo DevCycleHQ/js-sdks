@@ -21,6 +21,7 @@
                 "entryFile": "sdk/react/src/index.ts",
                 "format": ["esm", "cjs"],
                 "external": "all",
+                "generateExportsField": true,
                 "rollupConfig": "@nx/react/plugins/bundle-rollup",
                 "compiler": "babel",
                 "assets": [

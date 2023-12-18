@@ -8467,6 +8467,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nx/playwright@npm:16.10.0":
+  version: 16.10.0
+  resolution: "@nx/playwright@npm:16.10.0"
+  dependencies:
+    "@nx/devkit": 16.10.0
+    "@nx/linter": 16.10.0
+    tslib: ^2.3.0
+  peerDependencies:
+    "@playwright/test": ^1.36.0
+  peerDependenciesMeta:
+    "@playwright/test":
+      optional: true
+  checksum: 07ce07dc4cbef47dddde07140120f392a2388412d46e0e9df11ee404fd4926bb7de25d77bd1924fea8b3b455fdf0f6e1daf1233e06f610f795b632e5f5ac1cf7
+  languageName: node
+  linkType: hard
+
 "@nx/react-native@npm:16.10.0":
   version: 16.10.0
   resolution: "@nx/react-native@npm:16.10.0"
@@ -8842,6 +8858,17 @@ __metadata:
     picocolors: ^1.0.0
     tslib: ^2.5.0
   checksum: 654682860272541a40485b01e0763b155ec31faeba85b2c51e38b59c4ff1f8918c37b87b5ecbda3ff482d8486eba086e92b991fe4a8ed62efbbbdf83c0f64409
+  languageName: node
+  linkType: hard
+
+"@playwright/test@npm:^1.36.0":
+  version: 1.40.0
+  resolution: "@playwright/test@npm:1.40.0"
+  dependencies:
+    playwright: 1.40.0
+  bin:
+    playwright: cli.js
+  checksum: 128f05978f9f5a557f0b7924ec134d43cb70c78d74bc3bf7b18576f00e72399100ddf1f4a139e05ea8275407d8e27be0203ac34f514319a2cbeb01eaf0be5be4
   languageName: node
   linkType: hard
 
@@ -15828,6 +15855,7 @@ __metadata:
     "@nx/linter": 16.10.0
     "@nx/next": 16.10.0
     "@nx/node": 16.10.0
+    "@nx/playwright": 16.10.0
     "@nx/react": 16.10.0
     "@nx/react-native": 16.10.0
     "@nx/web": 16.10.0
@@ -15836,6 +15864,7 @@ __metadata:
     "@openfeature/core": ^0.0.19
     "@openfeature/js-sdk": ^1.6.1
     "@openfeature/web-sdk": ^0.4.6
+    "@playwright/test": ^1.36.0
     "@pmmmwh/react-refresh-webpack-plugin": ^0.5.7
     "@react-native-async-storage/async-storage": 1.19.4
     "@react-native-community/cli": 11.3.6
@@ -15891,6 +15920,7 @@ __metadata:
     eslint-plugin-jsx-a11y: 6.8.0
     eslint-plugin-lodash: ^7.4.0
     eslint-plugin-no-only-tests: ^2.4.0
+    eslint-plugin-playwright: ^0.15.3
     eslint-plugin-prettier: ^3.3.1
     eslint-plugin-promise: ^4.2.1
     eslint-plugin-react: 7.32.2
@@ -17281,6 +17311,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-playwright@npm:^0.15.3":
+  version: 0.15.3
+  resolution: "eslint-plugin-playwright@npm:0.15.3"
+  peerDependencies:
+    eslint: ">=7"
+    eslint-plugin-jest: ">=25"
+  peerDependenciesMeta:
+    eslint-plugin-jest:
+      optional: true
+  checksum: 5dff7f1d8346dac41980197ce24f2629f09acc44b612c38a6859cb31d5dc29caa4d9a09fec0b10443bae7ebc4b79d4c926dca284707bae729469016ce9f1dbfc
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-prettier@npm:^3.3.1":
   version: 3.4.1
   resolution: "eslint-plugin-prettier@npm:3.4.1"
@@ -18636,7 +18679,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fsevents@npm:^2.3.2, fsevents@npm:~2.3.2":
+"fsevents@npm:2.3.2, fsevents@npm:^2.3.2, fsevents@npm:~2.3.2":
   version: 2.3.2
   resolution: "fsevents@npm:2.3.2"
   dependencies:
@@ -18646,7 +18689,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fsevents@patch:fsevents@^2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
+"fsevents@patch:fsevents@2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@^2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
   version: 2.3.2
   resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"
   dependencies:
@@ -27042,6 +27085,30 @@ __metadata:
   version: 1.3.6
   resolution: "platform@npm:1.3.6"
   checksum: 6f472a09c61d418c7e26c1c16d0bdc029549d512dbec6526216a1e59ec68100d07007d0097dcba69dddad883d6f2a83361b4bdfe0094a3d9a2af24158643d85e
+  languageName: node
+  linkType: hard
+
+"playwright-core@npm:1.40.0":
+  version: 1.40.0
+  resolution: "playwright-core@npm:1.40.0"
+  bin:
+    playwright-core: cli.js
+  checksum: 57de5c91a4c404b120ed2af8541b21cdedcbc4f27477341157666d356bbee3b3fab8e61d020f0f450708fa2e8f6dc244b9224cb1985d5426e609cebed15af095
+  languageName: node
+  linkType: hard
+
+"playwright@npm:1.40.0":
+  version: 1.40.0
+  resolution: "playwright@npm:1.40.0"
+  dependencies:
+    fsevents: 2.3.2
+    playwright-core: 1.40.0
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    playwright: cli.js
+  checksum: 7ba49e5376a6cfd1d32048dbdb2fd38e09182aa2e4619fdb23d3e6530fa6987f2f3fd34ad1d9d906fb4ec2da69ee7536eeb881982d60750fde809183caa607fc
   languageName: node
   linkType: hard
 

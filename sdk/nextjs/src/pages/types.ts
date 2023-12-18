@@ -6,6 +6,6 @@ export type SSRProps = {
         bucketedConfig: BucketedUserConfig
         user: DevCycleUser
         sdkKey: string
-        userAgent?: string
+        userAgent: string | null
     }
 }

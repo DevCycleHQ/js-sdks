@@ -14,9 +14,13 @@ export default async function RootLayout({
                     sdkKey={
                         process.env.NEXT_PUBLIC_DEVCYCLE_CLIENT_SDK_KEY ?? ''
                     }
-                    user={{ user_id: 'server-user' }}
+                    user={{
+                        user_id:
+                            process.env.NEXT_PUBLIC_USER_ID || 'server-user',
+                    }}
                     options={{
-                        enableStreaming: true,
+                        enableStreaming:
+                            process.env.NEXT_PUBLIC_ENABLE_STREAMING === '1',
                     }}
                 >
                     {children}

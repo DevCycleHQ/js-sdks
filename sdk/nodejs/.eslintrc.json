@@ -12,6 +12,7 @@
                         "ignoredDependencies": [
                             "@devcycle/server-request",
                             "@devcycle/config-manager",
+                            "@devcycle/bucketing-assembly-script",
                             "fetch-retry",
                             "cross-fetch"
                         ]

@@ -1,0 +1,30 @@
+{
+    "name": "app",
+    "packageManager": "yarn@4.0.2",
+    "private": true,
+    "scripts": {
+        "dev": "node --preserve-symlinks node_modules/next/dist/bin/next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@devcycle/nextjs-sdk": "file:../../../../dist/sdk/nextjs",
+        "next": "14.0.4",
+        "react": "^18.3.0-canary-0210f0b08-20230525",
+        "react-dom": "^18.3.0-canary-0210f0b08-20230525"
+    },
+    "devDependencies": {
+        "@types/node": "^20",
+        "@types/react": "18.2.20",
+        "@types/react-dom": "18.2.6",
+        "typescript": "^5"
+    },
+    "resolutions": {
+        "@types/react": "18.2.20",
+        "@devcycle/bucketing": "file:../../../../dist/lib/shared/bucketing",
+        "@devcycle/js-client-sdk": "file:../../../../dist/sdk/js",
+        "@devcycle/react-client-sdk": "file:../../../../dist/sdk/react",
+        "@devcycle/types": "file:../../../../dist/lib/shared/types"
+    }
+}

@@ -13,9 +13,11 @@ export const ClientIdentity = () => {
             }}
         >
             <b>Client Variable</b>
-            <span>{JSON.stringify(variable)}</span>
+            <span data-testid={'client-variable-value'}>
+                {JSON.stringify(variable)}
+            </span>
             <b>Client User Identity</b>
-            <span>{userIdentity?.user_id}</span>
+            <span data-testid={'client-user-id'}>{userIdentity?.user_id}</span>
             <br />
         </div>
     )

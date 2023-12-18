@@ -1,0 +1,29 @@
+name: Nx Affected E2E
+on:
+    pull_request:
+        branches: [main]
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [18.x]
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'yarn'
+            - run: git fetch origin main
+            - run: yarn --immutable
+            - name: Install Playwright Browsers
+              shell: bash
+              run: yarn playwright install --with-deps
+            - name: Run Affected E2E Tests
+              shell: bash
+              run: yarn affected:e2e
+              env:
+                NEXT_PUBLIC_E2E_NEXTJS_KEY: ${{ secrets.NEXT_PUBLIC_E2E_NEXTJS_KEY }}
