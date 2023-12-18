@@ -34,6 +34,7 @@ export default defineConfig({
         command: 'yarn e2e:nextjs-pages-router:start',
         url: 'http://127.0.0.1:3000',
         reuseExistingServer: !process.env.CI,
+        stdout: 'pipe',
         cwd: workspaceRoot,
     },
 })
