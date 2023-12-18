@@ -28,3 +28,5 @@ jobs:
             - name: Run Affected E2E Tests
               shell: bash
               run: yarn affected:e2e
+              env:
+                NEXT_PUBLIC_E2E_NEXTJS_KEY: ${{ secrets.NEXT_PUBLIC_E2E_NEXTJS_KEY }}
