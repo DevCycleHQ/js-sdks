@@ -11,6 +11,7 @@ import { DevCycleServerDataForClient } from '../common/types'
 
 type DevCycleClientsideProviderProps = {
     serverDataPromise: Promise<DevCycleServerDataForClient>
+    serverData?: DevCycleServerDataForClient
     sdkKey: string
     user: DevCycleUser
     enableStreaming: boolean
@@ -60,6 +61,7 @@ export const SuspendedProviderInitialization = ({
 
 export const DevCycleClientsideProvider = ({
     serverDataPromise,
+    serverData,
     sdkKey,
     enableStreaming,
     user,
@@ -76,8 +78,9 @@ export const DevCycleClientsideProvider = ({
 
     if (!clientRef.current) {
         clientRef.current = initializeDevCycle(sdkKey, user, {
-            deferInitialization: true,
+            deferInitialization: enableStreaming,
             disableConfigCache: true,
+            bootstrapConfig: enableStreaming ? undefined : serverData?.config,
             next: {
                 configRefreshHandler: revalidateConfig,
             },
@@ -93,11 +96,13 @@ export const DevCycleClientsideProvider = ({
                 serverDataPromise,
             }}
         >
-            <Suspense>
-                <SuspendedProviderInitialization
-                    serverDataPromise={serverDataPromise}
-                />
-            </Suspense>
+            {enableStreaming && (
+                <Suspense>
+                    <SuspendedProviderInitialization
+                        serverDataPromise={serverDataPromise}
+                    />
+                </Suspense>
+            )}
             {children}
         </DevCycleClientContext.Provider>
     )

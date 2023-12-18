@@ -23,10 +23,6 @@ export const DevCycleServersideProvider = async ({
     const serverDataPromise = initialize(sdkKey, user, options)
     setInitializedPromise(serverDataPromise)
 
-    if (!options?.enableStreaming) {
-        await serverDataPromise
-    }
-
     const identifiedUser = getUserIdentity()
 
     if (!identifiedUser) {
@@ -41,6 +37,9 @@ export const DevCycleServersideProvider = async ({
     return (
         <DevCycleClientsideProvider
             serverDataPromise={serverDataPromise}
+            serverData={
+                options?.enableStreaming ? undefined : await serverDataPromise
+            }
             user={identifiedUser}
             sdkKey={getSDKKey()}
             enableStreaming={options?.enableStreaming ?? false}
