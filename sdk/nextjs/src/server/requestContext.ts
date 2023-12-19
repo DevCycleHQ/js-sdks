@@ -37,20 +37,6 @@ const createAccessors = <T extends keyof Storage>(
     ]
 }
 
-// export const requestContext = <T>(
-//     defaultValue: T,
-// ): [() => T, (v: T) => void] => {
-//     const getRef = cache(() => ({ current: defaultValue }))
-//
-//     const getValue = (): T => getRef().current
-//
-//     const setValue = (value: T) => {
-//         getRef().current = value
-//     }
-//
-//     return [getValue, setValue]
-// }
-
 export const [getIdentity, setIdentity] = createAccessors('identity')
 
 export const [getClient, setClient] = createAccessors('client')
