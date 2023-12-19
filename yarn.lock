@@ -5183,7 +5183,7 @@ __metadata:
     server-only: ^0.0.1
   peerDependencies:
     next: ^14.0.0
-    react: ^18.3.0-canary-0210f0b08-20230525
+    react: ^18.2.0
   languageName: unknown
   linkType: soft
 
@@ -15964,7 +15964,7 @@ __metadata:
     prettier-eslint-cli: ~5.0.1
     protobufjs: ^7.2.5
     protobufjs-cli: ^1.1.2
-    react: 18.3.0-canary-0210f0b08-20230525
+    react: ^18.2.0
     react-bootstrap: ^2.2.1
     react-dom: 18.2.0
     react-is: 18.2.0
@@ -28860,21 +28860,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:*":
+"react@npm:*, react@npm:^18.2.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
   dependencies:
     loose-envify: ^1.1.0
   checksum: 88e38092da8839b830cda6feef2e8505dec8ace60579e46aa5490fc3dc9bba0bd50336507dc166f43e3afc1c42939c09fe33b25fae889d6f402721dcd78fca1b
-  languageName: node
-  linkType: hard
-
-"react@npm:18.3.0-canary-0210f0b08-20230525":
-  version: 18.3.0-canary-0210f0b08-20230525
-  resolution: "react@npm:18.3.0-canary-0210f0b08-20230525"
-  dependencies:
-    loose-envify: ^1.1.0
-  checksum: 798d129dd4852207bc60434171ee4ca0139cd49a772dd5f0e230defbb00d7ea312bfda546c9cc42fbbfbc35e4a2425738f8c1935a882d67fa91792d6b9956aad
   languageName: node
   linkType: hard
 
