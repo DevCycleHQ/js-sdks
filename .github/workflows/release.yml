@@ -31,7 +31,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                node-version: [18.x]
+                node-version: [20.x]
         env:
             # The setup-node action configures this env var as the source for the npm auth token
             NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
