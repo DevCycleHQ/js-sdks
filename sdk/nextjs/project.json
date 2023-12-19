@@ -23,13 +23,7 @@
                 "tsConfig": "sdk/nextjs/tsconfig.lib.json",
                 "packageJson": "sdk/nextjs/package.json",
                 "main": "sdk/nextjs/src/index.ts",
-                "assets": [
-                    {
-                        "glob": "sdk/nextjs/README.md",
-                        "input": ".",
-                        "output": "."
-                    }
-                ]
+                "assets": ["sdk/nextjs/README.md"]
             }
         },
         "test": {
