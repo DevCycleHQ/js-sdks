@@ -28,7 +28,9 @@ export default defineConfig({
         baseURL,
         /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
         trace: 'on-first-retry',
+        video: 'retain-on-failure',
     },
+
     /* Run your local dev server before starting the tests */
     webServer: {
         command: 'yarn e2e:nextjs-app-router:start',
