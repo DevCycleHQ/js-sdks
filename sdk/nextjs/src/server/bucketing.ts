@@ -41,7 +41,7 @@ export const getBucketedConfig = async (): Promise<
     BucketedUserConfig & { lastModified?: string }
 > => {
     // this request will be cached by Next
-    const cdnConfig = await fetchCDNConfig()
+    const cdnConfig = await fetchCDNConfig(getSDKKey())
     const user = getIdentity()
 
     if (!user) {
