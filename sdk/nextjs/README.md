@@ -7,13 +7,13 @@ Official SDK for integrating DevCycle feature flags with your Next.js applicatio
 - keep server and client rendered content in sync with the same flag values
 - keep user data for targeting rule evaluation private on the server
 - realtime updates to flag values for both server and client components
-- support for non-blocking flag state retrieval and streaming 
+- support for non-blocking flag state retrieval and streaming (not implemented, see below)
+
+## Requirements
+- Minimum Next.js version: 14.0.0
+- Minimum React version: 18.2
 
 ## Limitations
-- Minimum Next.js version: 14.0.0
-- Minimum React version: 18.3 (currently only available in Canary and Experimental releases). This version is required
-because the SDK relies on the new [React Cache API](https://react.dev/reference/react/cache) 
-in order to share context across Server Components during rendering.
 - variable evaluations are only tracked in client components in App Router.
 
 ## Installation
@@ -118,7 +118,12 @@ Currently, tracking events in server components is not supported. Please trigger
 from client components.
 
 ## Advanced
-### Non-Blocking Initialization
+### Non-Blocking Initialization (Not Implemented)
+**Note**: This feature is not yet implemented because it relies on the new React `use` function, which is only 
+available in canary builds currently. When `use` is released in a stable React version, the SDK will be updated to 
+include this feature. The documentation for the feature as it will exist continues below:
+
+
 If you wish to render your page without waiting for the DevCycle configuration to be retrieved, you can use the
 `enableStreaming` option. Doing so enables the following behaviour:
 - the DevCycleServersideProvider will not block rendering of the rest of the server component tree
