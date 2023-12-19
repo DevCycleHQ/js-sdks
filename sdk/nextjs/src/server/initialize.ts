@@ -4,7 +4,7 @@ import {
     initializeDevCycle,
 } from '@devcycle/js-client-sdk'
 import { getClient, setClient, setOptions, setSDKKey } from './requestContext'
-import { identifyUser } from './identify'
+import { getUserIdentity, identifyUser } from './identify'
 import { getDevCycleServerData } from './devcycleServerData'
 import { getUserAgent } from './userAgent'
 
@@ -39,11 +39,11 @@ const jsClientOptions = {
     disableCustomEventLogging: true,
 }
 
-export const initialize = async (
+export const setupContext = (
     sdkKey: string,
     user: DevCycleUser,
     options: DevCycleNextOptions = {},
-): Promise<Awaited<ReturnType<typeof getDevCycleServerData>>> => {
+): void => {
     setSDKKey(sdkKey)
     setOptions(options)
 
@@ -56,12 +56,17 @@ export const initialize = async (
     )
 
     identifyUser(user)
+}
 
+export const initialize = async (): Promise<
+    Awaited<ReturnType<typeof getDevCycleServerData>>
+> => {
     const context = await getDevCycleServerData()
 
     const client = getClient()
+    const user = getUserIdentity()
 
-    if (!client) {
+    if (!client || !user) {
         throw new Error(
             "React 'cache' function not working as expected. Please contact DevCycle support.",
         )

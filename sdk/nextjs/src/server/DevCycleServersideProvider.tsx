@@ -8,7 +8,7 @@ import {
     requestContext,
     setInitializedPromise,
 } from './requestContext'
-import { DevCycleNextOptions, initialize } from './initialize'
+import { DevCycleNextOptions, initialize, setupContext } from './initialize'
 import { getUserIdentity } from './identify'
 
 export type DevCycleServersideProviderProps = {
@@ -26,7 +26,8 @@ export const DevCycleServersideProvider = async ({
     options,
 }: DevCycleServersideProviderProps): Promise<React.ReactElement> => {
     requestContext.enterWith({})
-    const serverDataPromise = initialize(sdkKey, user, options)
+    setupContext(sdkKey, user, options)
+    const serverDataPromise = initialize()
     setInitializedPromise(serverDataPromise)
 
     const identifiedUser = getUserIdentity()

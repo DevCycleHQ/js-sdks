@@ -66,6 +66,11 @@ export const getSDKKey = (): string => {
 }
 
 export const setSDKKey = (key: string): void => {
+    if (!key) {
+        throw new Error(
+            'Missing SDK key! Provide a valid SDK key to DevCycleServersideProvider',
+        )
+    }
     // attempt to make sure server keys don't leak to the client!
     if (
         key?.length &&
@@ -95,7 +100,7 @@ export const setInitializedPromise = (
 
 export const [getOptions, setOptions] = createAccessors('options')
 
-export const asyncStorageError = () => {
+export const asyncStorageError = (): Error => {
     return new Error(
         'AsyncLocalStorage is not working as expected. Please contact DevCycle support.',
     )
