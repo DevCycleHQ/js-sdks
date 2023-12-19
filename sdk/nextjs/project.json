@@ -25,7 +25,7 @@
                 "main": "sdk/nextjs/src/index.ts",
                 "assets": [
                     {
-                        "glob": "nextjs/README.md",
+                        "glob": "sdk/nextjs/README.md",
                         "input": ".",
                         "output": "."
                     }
