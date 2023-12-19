@@ -2,7 +2,12 @@ import 'server-only'
 import React from 'react'
 import { DevCycleUser } from '@devcycle/js-client-sdk'
 import { DevCycleClientsideProvider } from '../client/DevCycleClientsideProvider'
-import { getSDKKey, setInitializedPromise } from './requestContext'
+import {
+    asyncStorageError,
+    getSDKKey,
+    requestContext,
+    setInitializedPromise,
+} from './requestContext'
 import { DevCycleNextOptions, initialize } from './initialize'
 import { getUserIdentity } from './identify'
 
@@ -20,15 +25,14 @@ export const DevCycleServersideProvider = async ({
     user,
     options,
 }: DevCycleServersideProviderProps): Promise<React.ReactElement> => {
+    requestContext.enterWith({})
     const serverDataPromise = initialize(sdkKey, user, options)
     setInitializedPromise(serverDataPromise)
 
     const identifiedUser = getUserIdentity()
 
     if (!identifiedUser) {
-        throw new Error(
-            "React 'cache' function not working as expected. Please contact DevCycle support.",
-        )
+        throw asyncStorageError()
     }
 
     // this renders a client component that provides an instance of DevCycle client to client components via context
