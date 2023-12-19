@@ -11,8 +11,10 @@ Official SDK for integrating DevCycle feature flags with your Next.js applicatio
 
 ## Limitations
 - Minimum Next.js version: 14.0.0
-- Minimum React version: 18.3 (currently only available in Canary and Experimental releases)
-- variable evaluations are only tracked in client components.
+- Minimum React version: 18.3 (currently only available in Canary and Experimental releases). This version is required
+because the SDK relies on the new [React Cache API](https://react.dev/reference/react/cache) 
+in order to share context across Server Components during rendering.
+- variable evaluations are only tracked in client components in App Router.
 
 ## Installation
 ```npm install @devcycle/nextjs-sdk```
@@ -124,6 +126,9 @@ If you wish to render your page without waiting for the DevCycle configuration t
 will still block on the config being retrieved. To unblock rendering on these calls,
 use a `Suspense` boundary to send a fallback while the config is being retrieved. The component will then stream to 
 the client once the config is retrieved.
+
+Note: The DevCycle initialization process is normally very fast (<50ms). 
+Only use this option if your application is very performance sensitive.
 
 ## Usage (Pages Router)
 ### Wrap your app in the DevCycle Higher-Order Component
