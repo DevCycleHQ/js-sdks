@@ -41,13 +41,11 @@ export const DevCycleServersideProvider = async ({
         <DevCycleClientsideProvider
             serverDataPromise={serverDataPromise}
             serverData={
-                // options?.enableStreaming ? undefined : await serverDataPromise
-                await serverDataPromise
+                options?.enableStreaming ? undefined : await serverDataPromise
             }
             user={identifiedUser}
             sdkKey={getSDKKey()}
-            // enableStreaming={options?.enableStreaming ?? false}
-            enableStreaming={false}
+            enableStreaming={options?.enableStreaming ?? false}
         >
             {children}
         </DevCycleClientsideProvider>
