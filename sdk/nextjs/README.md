@@ -38,9 +38,6 @@ export default async function RootLayout({
                 <DevCycleServersideProvider
                     sdkKey={process.env.NEXT_PUBLIC_DEVCYCLE_CLIENT_SDK_KEY ?? ''}
                     user={{ user_id: userIdentity.id }}
-                    options={{
-                        enableStreaming: true,
-                    }}
                 >
                     {children}
                 </DevCycleServersideProvider>
@@ -61,7 +58,7 @@ have been retrieved and rendering can take place with the correct values.
 
 ### Get a variable value (server component)
 ```typescript jsx
-import { getVariableValue } from '@devcycle/next-sdk/server'
+import { getVariableValue } from '@devcycle/nextjs-sdk/server'
 import * as React from 'react'
 
 export const MyServerComponent = async function () {
@@ -80,7 +77,7 @@ export const MyServerComponent = async function () {
 ### Get a variable value (client component)
 ```typescript jsx
 'use client'
-import { useVariableValue } from '@devcycle/next-sdk'
+import { useVariableValue } from '@devcycle/nextjs-sdk'
 import * as React from 'react'
 
 export const MyClientComponent = function () {
@@ -101,7 +98,7 @@ export const MyClientComponent = function () {
 ```typescript jsx
 'use client'
 import * as React from 'react'
-import { useDevCycleClient } from '@devcycle/next-sdk'
+import { useDevCycleClient } from '@devcycle/nextjs-sdk'
 
 export default MyComponent = function () {
     const client = useDevCycleClient()
@@ -142,7 +139,7 @@ In your `_app.tsx` file, wrap the App component in the DevCycle HOC:
 // _app.tsx
 import React from 'react'
 import type { AppProps } from 'next/app'
-import { appWithDevCycle } from '@devcycle/next-sdk/pages'
+import { appWithDevCycle } from '@devcycle/nextjs-sdk/pages'
 
 function MyApp({ Component, pageProps }: AppProps) {
     return <Component {...pageProps} />
