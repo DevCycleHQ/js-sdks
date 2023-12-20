@@ -15964,7 +15964,7 @@ __metadata:
     prettier-eslint-cli: ~5.0.1
     protobufjs: ^7.2.5
     protobufjs-cli: ^1.1.2
-    react: ^18.2.0
+    react: 18.2.0
     react-bootstrap: ^2.2.1
     react-dom: 18.2.0
     react-is: 18.2.0
@@ -28860,7 +28860,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:*, react@npm:^18.2.0":
+"react@npm:*, react@npm:18.2.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
   dependencies:

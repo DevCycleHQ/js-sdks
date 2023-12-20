@@ -17,8 +17,7 @@ export type DevCycleNextOptions = DevCycleOptions & {
      * When this is enabled, client components will initially render using default variable values,
      * and will re-render when the configuration is ready.
      */
-    // TODO - re-add when React 18.3 is released with a stable "use" function
-    // enableStreaming?: boolean
+    enableStreaming?: boolean
 
     /**
      * Used to disable any SDK features that require dynamic request context. This allows the SDK to be used in pages

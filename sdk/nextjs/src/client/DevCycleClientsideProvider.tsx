@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef } from 'react'
+import React, { Suspense, use, useContext, useRef, useState } from 'react'
 import {
     DevCycleClient,
     DevCycleUser,
@@ -29,36 +29,35 @@ export const DevCycleClientContext = React.createContext<ClientProviderContext>(
     {} as ClientProviderContext,
 )
 
-// /**
-//  * Component which renders nothing, but runs code to keep client state in sync with server
-//  * Also waits for the server's data promise with the `use` hook. This triggers the nearest suspense boundary,
-//  * so this component is being rendered inside of a Suspense by the DevCycleClientsideProvider.
-//  * @param serverDataPromise
-//  * @constructor
-//  */
-// TODO - re-add when React 18.3 is released with a stable "use" function
-// export const SuspendedProviderInitialization = ({
-//     serverDataPromise,
-// }: Pick<
-//     DevCycleClientsideProviderProps,
-//     'serverDataPromise'
-// >): React.ReactElement => {
-//     const serverData = use(serverDataPromise)
-//     const [previousContext, setPreviousContext] = useState<
-//         DevCycleServerDataForClient | undefined
-//     >()
-//     const context = useContext(DevCycleClientContext)
-//     if (previousContext !== serverData) {
-//         // change user and config data to match latest server data
-//         // if the data has changed since the last invocation
-//         context.client.synchronizeBootstrapData(
-//             serverData.config,
-//             serverData.user,
-//         )
-//         setPreviousContext(serverData)
-//     }
-//     return <></>
-// }
+/**
+ * Component which renders nothing, but runs code to keep client state in sync with server
+ * Also waits for the server's data promise with the `use` hook. This triggers the nearest suspense boundary,
+ * so this component is being rendered inside of a Suspense by the DevCycleClientsideProvider.
+ * @param serverDataPromise
+ * @constructor
+ */
+export const SuspendedProviderInitialization = ({
+    serverDataPromise,
+}: Pick<
+    DevCycleClientsideProviderProps,
+    'serverDataPromise'
+>): React.ReactElement => {
+    const serverData = use(serverDataPromise)
+    const [previousContext, setPreviousContext] = useState<
+        DevCycleServerDataForClient | undefined
+    >()
+    const context = useContext(DevCycleClientContext)
+    if (previousContext !== serverData) {
+        // change user and config data to match latest server data
+        // if the data has changed since the last invocation
+        context.client.synchronizeBootstrapData(
+            serverData.config,
+            serverData.user,
+        )
+        setPreviousContext(serverData)
+    }
+    return <></>
+}
 
 export const DevCycleClientsideProvider = ({
     serverDataPromise,
@@ -97,14 +96,13 @@ export const DevCycleClientsideProvider = ({
                 serverDataPromise,
             }}
         >
-            {/* TODO - re-add when React 18.3 is released with a stable "use" function */}
-            {/*{enableStreaming && (*/}
-            {/*    <Suspense>*/}
-            {/*        <SuspendedProviderInitialization*/}
-            {/*            serverDataPromise={serverDataPromise}*/}
-            {/*        />*/}
-            {/*    </Suspense>*/}
-            {/*)}*/}
+            {enableStreaming && (
+                <Suspense>
+                    <SuspendedProviderInitialization
+                        serverDataPromise={serverDataPromise}
+                    />
+                </Suspense>
+            )}
             {children}
         </DevCycleClientContext.Provider>
     )

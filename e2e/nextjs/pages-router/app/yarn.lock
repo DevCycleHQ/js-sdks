@@ -42,7 +42,7 @@ __metadata:
 
 "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs::locator=app%40workspace%3A.":
   version: 0.0.4
-  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=7c9d07&locator=app%40workspace%3A."
+  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=11f915&locator=app%40workspace%3A."
   dependencies:
     "@devcycle/bucketing": "npm:^1.7.4"
     "@devcycle/js-client-sdk": "npm:^1.16.3"
@@ -53,7 +53,7 @@ __metadata:
   peerDependencies:
     next: ^14.0.0
     react: ^18.2.0
-  checksum: 0913c9cbf1cfe9263b7d9367f001ac3526378340a1943d917177af122abb9b1d796b1c9947811c5e7aae11556e9ba06e6eb239d8fd84318718584b6fa69af253
+  checksum: 3b1947b28c1cbf2ac2eded4d30d48312a4b33e8d606b0cc3c13431ddf0f5bdbc608248ce9ed4ee0cb9a188e61563f325d9c003903d2ea4038bb194a18c5e2dca
   languageName: node
   linkType: hard
 
@@ -173,11 +173,11 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:^20":
-  version: 20.10.4
-  resolution: "@types/node@npm:20.10.4"
+  version: 20.10.5
+  resolution: "@types/node@npm:20.10.5"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: c10c1dd13f5c2341ad866777dc32946538a99e1ebd203ae127730814b8e5fa4aedfbcb01cb3e24a5466f1af64bcdfa16e7de6e745ff098fff0942aa779b7fe03
+  checksum: 4a378428d2c9f692b19801a5a3d20dc4c0ad5d4a3d103350f8b401af439941a9aa5efeadc8eb9db13c66c620318bc7f336abfc8934f82fd32c4a689d85068c6f
   languageName: node
   linkType: hard
 
@@ -377,9 +377,9 @@ __metadata:
   linkType: hard
 
 "libphonenumber-js@npm:^1.9.43":
-  version: 1.10.51
-  resolution: "libphonenumber-js@npm:1.10.51"
-  checksum: 925fda2ecba5d1e655f9d6e43cd15b2d41f7fe9db38828f4159442bc263ae959a26f212223336831c6f64e58b82e91477f7ac814d66b48c80e5852529545032b
+  version: 1.10.52
+  resolution: "libphonenumber-js@npm:1.10.52"
+  checksum: d8a41623e1144b07482c01156316e35708fd9b371a2a72086d25213f2dee1755ff2abf660dfe9df3c38500689868dc2fb7e462ca23207b0b8ca95daad9c5bd74
   languageName: node
   linkType: hard
 
@@ -550,9 +550,9 @@ __metadata:
   linkType: hard
 
 "regenerator-runtime@npm:^0.14.0":
-  version: 0.14.0
-  resolution: "regenerator-runtime@npm:0.14.0"
-  checksum: 6c19495baefcf5fbb18a281b56a97f0197b5f219f42e571e80877f095320afac0bdb31dab8f8186858e6126950068c3f17a1226437881e3e70446ea66751897c
+  version: 0.14.1
+  resolution: "regenerator-runtime@npm:0.14.1"
+  checksum: 5db3161abb311eef8c45bcf6565f4f378f785900ed3945acf740a9888c792f75b98ecb77f0775f3bf95502ff423529d23e94f41d80c8256e8fa05ed4b07cf471
   languageName: node
   linkType: hard
 

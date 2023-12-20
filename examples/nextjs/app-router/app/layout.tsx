@@ -18,12 +18,10 @@ export default async function RootLayout({
                         user_id:
                             process.env.NEXT_PUBLIC_USER_ID || 'server-user',
                     }}
-                    options={
-                        {
-                            // enableStreaming:
-                            //     process.env.NEXT_PUBLIC_ENABLE_STREAMING === '1',
-                        }
-                    }
+                    options={{
+                        enableStreaming:
+                            process.env.NEXT_PUBLIC_ENABLE_STREAMING === '1',
+                    }}
                 >
                     {children}
                 </DevCycleServersideProvider>
