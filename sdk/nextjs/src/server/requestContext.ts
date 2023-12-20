@@ -1,47 +1,30 @@
 import { DevCycleClient, DevCycleUser } from '@devcycle/js-client-sdk'
 import { DevCycleNextOptions, initialize } from './initialize'
-import { AsyncLocalStorage } from 'node:async_hooks'
+import { cache } from 'react'
 
-type Storage = {
-    identity?: DevCycleUser
-    client?: DevCycleClient
-    options?: DevCycleNextOptions
-    initializedPromise?: ReturnType<typeof initialize>
-    sdkKey?: string
+export const requestContext = <T>(
+    defaultValue: T,
+): [() => T, (v: T) => void] => {
+    const getRef = cache(() => ({ current: defaultValue }))
+
+    const getValue = (): T => getRef().current
+
+    const setValue = (value: T) => {
+        getRef().current = value
+    }
+
+    return [getValue, setValue]
 }
 
-export const requestContext = new AsyncLocalStorage<Storage>()
+export const [getIdentity, setIdentity] = requestContext<
+    DevCycleUser | undefined
+>(undefined)
 
-const createAccessors = <T extends keyof Storage>(
-    key: T,
-): [() => Storage[T], (value: Storage[T]) => void] => {
-    return [
-        (): Storage[T] | undefined => {
-            const storage = requestContext.getStore()
-            if (!storage) {
-                throw new Error(
-                    '[DevCycle] Request context not initialized. Please contact DevCycle support.',
-                )
-            }
-            return storage[key]
-        },
-        (value: Storage[T]): void => {
-            const storage = requestContext.getStore()
-            if (!storage) {
-                throw new Error(
-                    '[DevCycle] Request context not initialized. Please contact DevCycle support.',
-                )
-            }
-            storage[key] = value
-        },
-    ]
-}
+export const [getClient, setClient] = requestContext<
+    DevCycleClient | undefined
+>(undefined)
 
-export const [getIdentity, setIdentity] = createAccessors('identity')
-
-export const [getClient, setClient] = createAccessors('client')
-
-const [_getSDKKey, _setSDKKey] = createAccessors('sdkKey')
+const [_getSDKKey, _setSDKKey] = requestContext<string | undefined>(undefined)
 
 export const getSDKKey = (): string => {
     const key = _getSDKKey()
@@ -57,6 +40,7 @@ export const setSDKKey = (key: string): void => {
             'Missing SDK key! Provide a valid SDK key to DevCycleServersideProvider',
         )
     }
+
     // attempt to make sure server keys don't leak to the client!
     if (
         key?.length &&
@@ -70,8 +54,9 @@ export const setSDKKey = (key: string): void => {
     _setSDKKey(key)
 }
 
-const [_getInitializedPromise, _setInitializedPromise] =
-    createAccessors('initializedPromise')
+const [_getInitializedPromise, _setInitializedPromise] = requestContext<
+    ReturnType<typeof initialize> | undefined
+>(undefined)
 
 export const getInitializedPromise = _getInitializedPromise
 
@@ -84,10 +69,10 @@ export const setInitializedPromise = (
     _setInitializedPromise(promise)
 }
 
-export const [getOptions, setOptions] = createAccessors('options')
+export const [getOptions, setOptions] = requestContext<DevCycleNextOptions>({})
 
-export const asyncStorageError = (): Error => {
+export const cacheStorageError = (): Error => {
     return new Error(
-        'AsyncLocalStorage is not working as expected. Please contact DevCycle support.',
+        'React cache API is not working as expected. Please contact DevCycle support.',
     )
 }

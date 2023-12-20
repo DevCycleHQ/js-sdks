@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { DevCycleServersideProvider } from '@devcycle/nextjs-sdk/server'
 import React from 'react'
 
 export const metadata: Metadata = {
