@@ -3,13 +3,16 @@ import React from 'react'
 import { DevCycleUser } from '@devcycle/js-client-sdk'
 import { DevCycleClientsideProvider } from '../client/DevCycleClientsideProvider'
 import {
-    asyncStorageError,
+    cacheStorageError,
     getSDKKey,
-    requestContext,
     setInitializedPromise,
 } from './requestContext'
 import { DevCycleNextOptions, initialize, setupContext } from './initialize'
 import { getUserIdentity } from './identify'
+
+import { cache, use } from 'react'
+
+console.log(cache, use)
 
 export type DevCycleServersideProviderProps = {
     sdkKey: string
@@ -25,7 +28,6 @@ export const DevCycleServersideProvider = async ({
     user,
     options,
 }: DevCycleServersideProviderProps): Promise<React.ReactElement> => {
-    requestContext.enterWith({})
     setupContext(sdkKey, user, options)
     const serverDataPromise = initialize()
     setInitializedPromise(serverDataPromise)
@@ -33,7 +35,7 @@ export const DevCycleServersideProvider = async ({
     const identifiedUser = getUserIdentity()
 
     if (!identifiedUser) {
-        throw asyncStorageError()
+        throw cacheStorageError()
     }
 
     // this renders a client component that provides an instance of DevCycle client to client components via context

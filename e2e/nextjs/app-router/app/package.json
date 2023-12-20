@@ -11,8 +11,8 @@
     "dependencies": {
         "@devcycle/nextjs-sdk": "file:../../../../dist/sdk/nextjs",
         "next": "14.0.4",
-        "react": "^18.3.0-canary-0210f0b08-20230525",
-        "react-dom": "^18.3.0-canary-0210f0b08-20230525"
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
     },
     "devDependencies": {
         "@types/node": "^20",
