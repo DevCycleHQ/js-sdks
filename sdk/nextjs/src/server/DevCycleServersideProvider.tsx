@@ -10,10 +10,6 @@ import {
 import { DevCycleNextOptions, initialize, setupContext } from './initialize'
 import { getUserIdentity } from './identify'
 
-import { cache, use } from 'react'
-
-console.log(cache, use)
-
 export type DevCycleServersideProviderProps = {
     sdkKey: string
     // server-side users must always be "identified" with a user id

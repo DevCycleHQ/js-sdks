@@ -5,10 +5,6 @@ import { ServerIdentity } from './ServerIdentity'
 import { ClientIdentity } from './ClientIdentity'
 import { ClientComponent } from './ClientComponent'
 
-import { cache } from 'react'
-
-console.log(cache)
-
 const Page: NextPage = async ({ children }: { children: ReactNode }) => {
     return (
         <div
