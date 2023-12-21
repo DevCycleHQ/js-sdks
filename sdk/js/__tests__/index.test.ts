@@ -16,4 +16,34 @@ describe('initialize', () => {
         // @ts-expect-error - should not allow invalid variable keys
         client.variableValue('bad-key', false)
     })
+    it('should use second arg as options instead of user in deferred mode', () => {
+        const client = initializeDevCycle('test', {
+            deferInitialization: true,
+        })
+        expect(client.user).toBeUndefined()
+    })
+    it('should use the second arg as user when not in deferred mode', () => {
+        const client = initializeDevCycle('test', {
+            user_id: 'test',
+        })
+        expect(client.user).toBeDefined()
+    })
+    it('should use the second arg as user when deferred mode is explicitly off', () => {
+        const client = initializeDevCycle(
+            'test',
+            {
+                user_id: 'test',
+            },
+            {
+                deferInitialization: false,
+            },
+        )
+        expect(client.user).toBeDefined()
+    })
+    it('should not allow no user when deferred mode is explicitly off', () => {
+        initializeDevCycle('test', {
+            // @ts-expect-error - should not allow no user when deferred mode is explicitly off
+            deferInitialization: false,
+        })
+    })
 })

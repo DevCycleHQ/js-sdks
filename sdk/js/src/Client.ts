@@ -49,7 +49,7 @@ export type DevCycleOptionsWithDeferredInitialization = DevCycleOptions & {
 export const isDeferredOptions = (
     arg: DevCycleUser | DevCycleOptionsWithDeferredInitialization,
 ): arg is DevCycleOptionsWithDeferredInitialization => {
-    return !!arg && 'deferInitialization' in arg
+    return !!arg && 'deferInitialization' in arg && arg.deferInitialization
 }
 
 export class DevCycleClient<
