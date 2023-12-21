@@ -33,10 +33,11 @@ export function DevCycleProvider(props: Props): React.ReactElement {
     }
 
     useEffect(() => {
+        const client = clientRef.current
         // assert this is defined otherwise we have a bug
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        clientRef
-            .current!.onClientInitialized()
+        client!
+            .onClientInitialized()
             .then(() => {
                 setIsInitialized(true)
             })
@@ -47,7 +48,7 @@ export function DevCycleProvider(props: Props): React.ReactElement {
             })
 
         return () => {
-            clientRef.current?.close()
+            client?.close()
         }
     }, [])
 
