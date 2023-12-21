@@ -35,8 +35,7 @@ export type DVCOptions = DevCycleOptions
 export type DVCOptionsWithDeferredInitialization =
     DevCycleOptionsWithDeferredInitialization
 
-export type { DevCycleOptionsWithDeferredInitialization }
-export { DevCycleClient }
+export type { DevCycleOptionsWithDeferredInitialization, DevCycleClient }
 
 const determineUserAndOptions = (
     userOrOptions: DevCycleUser | DevCycleOptionsWithDeferredInitialization,
@@ -93,6 +92,10 @@ export function initializeDevCycle<
     userOrOptions: DevCycleUser | DevCycleOptionsWithDeferredInitialization,
     optionsArg: DevCycleOptions = {},
 ): DevCycleClient<Variables> {
+    if (!sdkKey) {
+        throw new Error('Missing SDK key! Call initialize with a valid SDK key')
+    }
+
     const userAndOptions = determineUserAndOptions(userOrOptions, optionsArg)
     const { options } = userAndOptions
 
@@ -119,10 +122,6 @@ export function initializeDevCycle<
             'DeviceInfo is not defined. ' +
                 'Import react-native-device-info and set global.DeviceInfo when running on React Native',
         )
-    }
-
-    if (!sdkKey) {
-        throw new Error('Missing SDK key! Call initialize with a valid SDK key')
     }
 
     if (!options || options === null) {
