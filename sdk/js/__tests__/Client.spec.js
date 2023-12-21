@@ -943,7 +943,7 @@ describe('DevCycleClient tests', () => {
             getConfigJson_mock.mockImplementation(() => {
                 return Promise.resolve(testConfig)
             })
-            const client = new DevCycleClient('test_sdk_key', {
+            const client = new DevCycleClient('test_sdk_key', undefined, {
                 deferInitialization: true,
             })
             await new Promise((resolve) => setTimeout(resolve, 10))
@@ -977,7 +977,7 @@ describe('DevCycleClient tests', () => {
                     user.user_id === 'test2' ? configForUser2 : testConfig,
                 )
             })
-            const client = new DevCycleClient('test_sdk_key', {
+            const client = new DevCycleClient('test_sdk_key', undefined, {
                 deferInitialization: true,
             })
             await new Promise((resolve) => setTimeout(resolve, 10))
@@ -1003,7 +1003,7 @@ describe('DevCycleClient tests', () => {
                     user.user_id === 'test2' ? configForUser2 : testConfig,
                 )
             })
-            const client = new DevCycleClient('test_sdk_key', {
+            const client = new DevCycleClient('test_sdk_key', undefined, {
                 deferInitialization: true,
             })
 

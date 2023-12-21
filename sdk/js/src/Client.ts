@@ -49,7 +49,7 @@ export type DevCycleOptionsWithDeferredInitialization = DevCycleOptions & {
 export const isDeferredOptions = (
     arg: DevCycleUser | DevCycleOptionsWithDeferredInitialization,
 ): arg is DevCycleOptionsWithDeferredInitialization => {
-    return !!arg && 'deferInitialization' in arg
+    return !!arg && 'deferInitialization' in arg && arg.deferInitialization
 }
 
 export class DevCycleClient<
@@ -90,22 +90,15 @@ export class DevCycleClient<
 
     constructor(
         sdkKey: string,
+        user: undefined,
         options: DevCycleOptionsWithDeferredInitialization,
     )
     constructor(sdkKey: string, user: DevCycleUser, options?: DevCycleOptions)
     constructor(
         sdkKey: string,
-        userOrOptions: DevCycleUser | DevCycleOptionsWithDeferredInitialization,
-        optionsArg: DevCycleOptions = {},
+        user: DevCycleUser | undefined,
+        options: DevCycleOptions = {},
     ) {
-        let user: DevCycleUser | undefined
-        let options = optionsArg
-        if (isDeferredOptions(userOrOptions)) {
-            options = userOrOptions
-        } else {
-            user = userOrOptions
-        }
-
         if (options.next?.configRefreshHandler) {
             this.configRefetchHandler = options.next.configRefreshHandler
         }
