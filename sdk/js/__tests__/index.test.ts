@@ -1,6 +1,7 @@
 import { initializeDevCycle } from '../src/index'
 jest.mock('../src/Request')
 jest.mock('../src/StreamingConnection')
+jest.mock('../src/CacheStore')
 
 type VariableTypes = {
     some_key: string
@@ -22,13 +23,13 @@ describe('initialize', () => {
         })
         expect(client.user).toBeUndefined()
     })
-    it('should use the second arg as user when not in deferred mode', () => {
+    it('should use the second arg as user when not in deferred mode', async () => {
         const client = initializeDevCycle('test', {
             user_id: 'test',
         })
         expect(client.user).toBeDefined()
     })
-    it('should use the second arg as user when deferred mode is explicitly off', () => {
+    it('should use the second arg as user when deferred mode is explicitly off', async () => {
         const client = initializeDevCycle(
             'test',
             {
@@ -40,10 +41,12 @@ describe('initialize', () => {
         )
         expect(client.user).toBeDefined()
     })
-    it('should not allow no user when deferred mode is explicitly off', () => {
-        initializeDevCycle('test', {
-            // @ts-expect-error - should not allow no user when deferred mode is explicitly off
-            deferInitialization: false,
-        })
+    it('should not allow no user when deferred mode is explicitly off', async () => {
+        expect(() =>
+            initializeDevCycle('test', {
+                // @ts-expect-error - should not allow no user when deferred mode is explicitly off
+                deferInitialization: false,
+            }),
+        ).toThrow('Missing user! Call initialize with a valid user')
     })
 })

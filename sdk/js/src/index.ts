@@ -38,6 +38,41 @@ export type DVCOptionsWithDeferredInitialization =
 export type { DevCycleOptionsWithDeferredInitialization }
 export { DevCycleClient }
 
+const determineUserAndOptions = (
+    userOrOptions: DevCycleUser | DevCycleOptionsWithDeferredInitialization,
+    optionsArg: DevCycleOptions = {},
+):
+    | {
+          user: undefined
+          options: DevCycleOptionsWithDeferredInitialization
+          isDeferred: true
+      }
+    | {
+          user: DevCycleUser
+          options: DevCycleOptions
+          isDeferred: false
+      } => {
+    let user: DevCycleUser | undefined = undefined
+    if (!!userOrOptions && 'deferInitialization' in userOrOptions) {
+        if (userOrOptions.deferInitialization) {
+            return {
+                user: undefined,
+                options:
+                    userOrOptions as DevCycleOptionsWithDeferredInitialization,
+                isDeferred: true,
+            }
+        }
+    } else {
+        user = userOrOptions
+    }
+
+    if (!user) {
+        throw new Error('Missing user! Call initialize with a valid user')
+    }
+
+    return { user, options: optionsArg, isDeferred: false }
+}
+
 export function initializeDevCycle<
     Variables extends VariableDefinitions = VariableDefinitions,
 >(
@@ -58,12 +93,8 @@ export function initializeDevCycle<
     userOrOptions: DevCycleUser | DevCycleOptionsWithDeferredInitialization,
     optionsArg: DevCycleOptions = {},
 ): DevCycleClient<Variables> {
-    let options = optionsArg
-    let isDeferred = false
-    if (isDeferredOptions(userOrOptions)) {
-        isDeferred = true
-        options = userOrOptions
-    }
+    const userAndOptions = determineUserAndOptions(userOrOptions, optionsArg)
+    const { options } = userAndOptions
 
     // TODO: implement logger
     if (typeof window === 'undefined' && !options.next) {
@@ -94,20 +125,20 @@ export function initializeDevCycle<
         throw new Error('Missing SDK key! Call initialize with a valid SDK key')
     }
 
-    if (!isDeferred && !userOrOptions) {
-        throw new Error('Missing user! Call initialize with a valid user')
-    }
-
     if (!options || options === null) {
         throw new Error('Invalid options! Call initialize with valid options')
     }
 
     let client: DevCycleClient
 
-    if (isDeferredOptions(userOrOptions)) {
-        client = new DevCycleClient(sdkKey, userOrOptions)
+    if (userAndOptions.isDeferred) {
+        client = new DevCycleClient(sdkKey, undefined, userAndOptions.options)
     } else {
-        client = new DevCycleClient(sdkKey, userOrOptions, options)
+        client = new DevCycleClient(
+            sdkKey,
+            userAndOptions.user,
+            userAndOptions.options,
+        )
     }
 
     client
