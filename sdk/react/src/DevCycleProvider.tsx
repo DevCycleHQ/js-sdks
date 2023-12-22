@@ -1,6 +1,6 @@
 'use client'
 import { ProviderConfig } from './types'
-import React, { ReactNode, useEffect, useRef, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import initializeDevCycleClient from './initializeDevCycleClient'
 import { Provider, initializedContext } from './context'
 import { DevCycleClient } from '@devcycle/js-client-sdk'
@@ -14,7 +14,6 @@ export function DevCycleProvider(props: Props): React.ReactElement {
     const { config } = props
     const { user, options } = config
     const [isInitialized, setIsInitialized] = useState(false)
-    const clientRef = useRef<DevCycleClient>()
 
     let sdkKey: string
     if ('sdkKey' in config) {
@@ -26,17 +25,16 @@ export function DevCycleProvider(props: Props): React.ReactElement {
         throw new Error('You must provide a sdkKey to DevCycleProvider')
     }
 
-    if (!clientRef.current) {
-        clientRef.current = initializeDevCycleClient(sdkKey, user, {
+    const [client] = useState<DevCycleClient>(
+        initializeDevCycleClient(sdkKey, user, {
             ...options,
-        })
-    }
+        }),
+    )
 
     useEffect(() => {
-        const client = clientRef.current
         // assert this is defined otherwise we have a bug
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        client!
+        client
             .onClientInitialized()
             .then(() => {
                 setIsInitialized(true)
@@ -50,14 +48,13 @@ export function DevCycleProvider(props: Props): React.ReactElement {
         return () => {
             client?.close()
         }
-    }, [])
+    }, [client])
 
     return (
-        <Provider value={{ client: clientRef.current }}>
+        <Provider value={{ client: client }}>
             <initializedContext.Provider
                 value={{
-                    isInitialized:
-                        isInitialized || clientRef.current.isInitialized,
+                    isInitialized: isInitialized || client.isInitialized,
                 }}
             >
                 {props.children}
