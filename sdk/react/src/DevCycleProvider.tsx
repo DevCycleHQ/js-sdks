@@ -44,7 +44,7 @@ export function DevCycleProvider(props: Props): React.ReactElement {
             })
 
         return () => {
-            client?.close()
+            void client.close()
         }
     }, [client])
 
