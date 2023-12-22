@@ -32,8 +32,6 @@ export function DevCycleProvider(props: Props): React.ReactElement {
     )
 
     useEffect(() => {
-        // assert this is defined otherwise we have a bug
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         client
             .onClientInitialized()
             .then(() => {
@@ -51,7 +49,7 @@ export function DevCycleProvider(props: Props): React.ReactElement {
     }, [client])
 
     return (
-        <Provider value={{ client: client }}>
+        <Provider value={{ client }}>
             <initializedContext.Provider
                 value={{
                     isInitialized: isInitialized || client.isInitialized,
