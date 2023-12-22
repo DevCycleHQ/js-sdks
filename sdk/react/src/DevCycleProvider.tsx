@@ -25,7 +25,7 @@ export function DevCycleProvider(props: Props): React.ReactElement {
         throw new Error('You must provide a sdkKey to DevCycleProvider')
     }
 
-    const [client] = useState<DevCycleClient>(
+    const [client] = useState<DevCycleClient>(() =>
         initializeDevCycleClient(sdkKey, user, {
             ...options,
         }),
