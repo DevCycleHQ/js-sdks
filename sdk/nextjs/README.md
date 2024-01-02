@@ -11,9 +11,7 @@ Official SDK for integrating DevCycle feature flags with your Next.js applicatio
 
 ## Limitations
 - Minimum Next.js version: 14.0.0
-- Minimum React version: 18.3 (currently only available in Canary and Experimental releases). This version is required
-because the SDK relies on the new [React Cache API](https://react.dev/reference/react/cache) 
-in order to share context across Server Components during rendering.
+- Minimum React version: 18.2
 - variable evaluations are only tracked in client components in App Router.
 
 ## Installation
