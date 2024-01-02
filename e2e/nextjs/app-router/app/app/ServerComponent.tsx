@@ -1,9 +1,7 @@
-import { getVariableValue } from '@devcycle/nextjs-sdk/server'
+import { getVariableValue } from './shared'
 export const ServerComponent = async () => {
-    console.log('starting server component')
     const enabledVar = await getVariableValue('enabled-feature', false)
     const disabledVar = await getVariableValue('disabled-feature', false)
-    console.log('finished server component')
 
     return (
         <div>

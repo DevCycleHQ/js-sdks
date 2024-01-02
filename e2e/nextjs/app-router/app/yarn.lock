@@ -28,7 +28,7 @@ __metadata:
 
 "@devcycle/js-client-sdk@file:../../../../dist/sdk/js::locator=app%40workspace%3A.":
   version: 1.16.3
-  resolution: "@devcycle/js-client-sdk@file:../../../../dist/sdk/js#../../../../dist/sdk/js::hash=6237d3&locator=app%40workspace%3A."
+  resolution: "@devcycle/js-client-sdk@file:../../../../dist/sdk/js#../../../../dist/sdk/js::hash=9f1169&locator=app%40workspace%3A."
   dependencies:
     "@devcycle/types": "npm:^1.4.3"
     axios: "npm:^1.0.0"
@@ -36,13 +36,13 @@ __metadata:
     lodash: "npm:^4.17.21"
     ua-parser-js: "npm:^1.0.36"
     uuid: "npm:^8.3.2"
-  checksum: 8534e04d4c4206a3d592c67c34e4d3e1678ab579fc427a21541b744ddb6cecd478e552c449aa64afea3cf190768f61d9466ceaf53fe2adce046cfe7f477e1e08
+  checksum: 55969603a19f6d6dd8736896c7e82ea6a05c061b5c47f05c795f837163b3f0b54765ac8a6182b32933bdbcf1ee8370d0b5b75e17ea2c801491c5b35c5b8684b6
   languageName: node
   linkType: hard
 
 "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs::locator=app%40workspace%3A.":
   version: 0.0.4
-  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=11f915&locator=app%40workspace%3A."
+  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=155ec5&locator=app%40workspace%3A."
   dependencies:
     "@devcycle/bucketing": "npm:^1.7.4"
     "@devcycle/js-client-sdk": "npm:^1.16.3"
@@ -53,20 +53,20 @@ __metadata:
   peerDependencies:
     next: ^14.0.0
     react: ^18.2.0
-  checksum: 3b1947b28c1cbf2ac2eded4d30d48312a4b33e8d606b0cc3c13431ddf0f5bdbc608248ce9ed4ee0cb9a188e61563f325d9c003903d2ea4038bb194a18c5e2dca
+  checksum: f40a622a52c5f428b7a5b37c73e84a0c84c183966a23116cb82d8255bdc0853755ee2f355bf226a7642867db21057490975cea02e6276e313c747473829dc7f2
   languageName: node
   linkType: hard
 
 "@devcycle/react-client-sdk@file:../../../../dist/sdk/react::locator=app%40workspace%3A.":
   version: 1.14.3
-  resolution: "@devcycle/react-client-sdk@file:../../../../dist/sdk/react#../../../../dist/sdk/react::hash=7e87a5&locator=app%40workspace%3A."
+  resolution: "@devcycle/react-client-sdk@file:../../../../dist/sdk/react#../../../../dist/sdk/react::hash=270cdd&locator=app%40workspace%3A."
   dependencies:
     "@devcycle/js-client-sdk": "npm:^1.16.3"
     "@devcycle/types": "npm:^1.4.3"
     hoist-non-react-statics: "npm:^3.3.2"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 188179d78fd65ad77faafee06f6c394c0e1e719a4d94c3d4884349aab1802884b8740477cf3d5c6f639c232c588ec487f20ce0c36d3a44fa21d566ac6fddd7f9
+  checksum: 9cef0c3d4540ca394c37ceb25e4a2781e0801609c2ee2f4c9b401567477432d1e8dd38a4cf0317c6dc99f5ba2713c4108605e6662e32195f84cd5681d21bdc05
   languageName: node
   linkType: hard
 

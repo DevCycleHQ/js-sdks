@@ -1,13 +1,14 @@
 import { ClientComponent } from '@/app/ClientComponent'
 import { ServerComponent } from '@/app/ServerComponent'
 import React, { Suspense } from 'react'
-import { DevCycleServersideProvider } from '@devcycle/nextjs-sdk/server'
+import Link from 'next/link'
 
 export const Home = ({
     searchParams,
 }: {
     searchParams: { [key: string]: string | string[] | undefined }
 }) => {
+    console.log('RUNNING PAGE!')
     const enableStreaming = searchParams['enableStreaming'] === '1'
     return (
         <main>
@@ -16,18 +17,12 @@ export const Home = ({
             ) : (
                 <div>Streaming Disabled</div>
             )}
-            <DevCycleServersideProvider
-                sdkKey={process.env.NEXT_PUBLIC_E2E_NEXTJS_KEY ?? ''}
-                user={{ user_id: '123' }}
-                options={{
-                    enableStreaming,
-                }}
-            >
-                <Suspense fallback={<div>Loading...</div>}>
-                    <ClientComponent />
-                    <ServerComponent />
-                </Suspense>
-            </DevCycleServersideProvider>
+
+            <Suspense fallback={<div>Loading...</div>}>
+                <ClientComponent />
+                <ServerComponent />
+            </Suspense>
+            <Link href="/test">Go To page</Link>
         </main>
     )
 }
