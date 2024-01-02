@@ -58,7 +58,6 @@ export default async function RootLayout({
             <body>
                 <DevCycleClientsideProvider
                     context={getClientContext()}
-                    user={{user_id: userIdentity.id}}
                 >
                     {children}
                 </DevCycleClientsideProvider>
