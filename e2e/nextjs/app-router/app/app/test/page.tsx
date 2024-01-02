@@ -1,6 +1,11 @@
-import { getVariableValue } from '../shared'
+import { ClientComponent } from '@/app/test/ClientComponent'
+import { ServerComponent } from '@/app/test/ServerComponent'
 
 export default async function Page() {
-    await getVariableValue('boolean-flag', false)
-    return <div>Page</div>
+    return (
+        <div>
+            <ClientComponent />
+            <ServerComponent />
+        </div>
+    )
 }

@@ -4,7 +4,7 @@ const { getVariableValue, getClientContext } = setupDevCycle(
     async () => ({
         user_id: '123',
     }),
-    {},
+    { enableStreaming: true },
 )
 
 export { getVariableValue, getClientContext }
