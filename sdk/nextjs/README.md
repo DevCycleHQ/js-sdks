@@ -19,26 +19,49 @@ Official SDK for integrating DevCycle feature flags with your Next.js applicatio
 ```yarn add @devcycle/nextjs-sdk```
 
 ## Usage (App Router)
-### Wrap your app in the DevCycleServersideProvider
-In a server component (as early as possible in the tree):
+### Create the DevCycle context and export it
+To use DevCycle on the server, you must create a context that can be shared across your server components.
+
+In a shared file somewhere (for example, app/devcycle.ts):
+```typescript
+import { setupDevCycle } from '@devcycle/nextjs-sdk/server'
+const { getVariableValue, getClientContext } = setupDevCycle(
+    // SDK Key. This will be public and sent to the client, so you MUST use the client SDK key.
+    process.env.NEXT_PUBLIC_DEVCYCLE_CLIENT_SDK_KEY ?? '',
+    // User data getter. Provide a function that resolves to the user relevant to the current request. You can use
+    // Next APIs such as `headers()` and `cookies()` here.
+    async () => {
+        // pseudocode function representing some call you might make to your code to determine the current user
+        const myUser = await determineUserIdentity()
+        return {
+            user_id: myUser.id
+        }
+    }
+)
+
+export { getVariableValue, getClientContext }
+```
+Provide the context function to the DevCycleClientsideProvider as high as possible in your component tree.
+
 ```typescript jsx
+import { DevCycleClientsideProvider } from '@devcycle/nextjs-sdk'
+// import the getClientContext method from your shared DevCycle file
+import { getClientContext } from './devcycle'
+
 export default async function RootLayout({
- children,
+    children,
 }: {
     children: React.ReactNode
 }) {
-    // pseudocode function for determining user identity based on request data.
-    // replace with your own function for determining your user's identity
-    const userIdentity = await determineUserIdentity()
     return (
         <html lang="en">
             <body>
-                <DevCycleServersideProvider
-                    sdkKey={process.env.NEXT_PUBLIC_DEVCYCLE_CLIENT_SDK_KEY ?? ''}
-                    user={{ user_id: userIdentity.id }}
+                <DevCycleClientsideProvider
+                    context={getClientContext()}
+                    user={{user_id: userIdentity.id}}
                 >
                     {children}
-                </DevCycleServersideProvider>
+                </DevCycleClientsideProvider>
             </body>
         </html>
     )
@@ -47,16 +70,18 @@ export default async function RootLayout({
 Note: You _must_ use the client SDK key of your project, not the server SDK key. The key is used across the server and
 the client and will be sent to the clientside to bootstrap the client SDK.
 
-The DevCycleServersideProvider will:
-- fetch your project's configuration from DevCycle
-- render a client component provider that provides a clientside DevCycle SDK
+The setupDevCycle method will:
+- provide a getVariableValue method that encapsulates your configured SDK key, user getter and options
+- fetch your project's configuration from DevCycle when needed
+- return a context to be passed to the client component provider that provides a clientside DevCycle SDK, and bootstraps
+it with the server's user and DevCycle configuration data.
 
 It will also await the retrieval of the DevCycle configuration, thus blocking further rendering until the flag states
 have been retrieved and rendering can take place with the correct values.
 
 ### Get a variable value (server component)
 ```typescript jsx
-import { getVariableValue } from '@devcycle/nextjs-sdk/server'
+import { getVariableValue } from './devcycle'
 import * as React from 'react'
 
 export const MyServerComponent = async function () {
@@ -71,6 +96,9 @@ export const MyServerComponent = async function () {
     )
 }
 ```
+
+Note: it is recommended to use a module alias to access your DevCycle shared file from your server components.
+https://nextjs.org/docs/app/building-your-application/configuring/absolute-imports-and-module-aliases
 
 ### Get a variable value (client component)
 ```typescript jsx
