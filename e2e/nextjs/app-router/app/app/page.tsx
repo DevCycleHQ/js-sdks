@@ -8,7 +8,6 @@ export const Home = ({
 }: {
     searchParams: { [key: string]: string | string[] | undefined }
 }) => {
-    console.log('RUNNING PAGE!')
     const enableStreaming = searchParams['enableStreaming'] === '1'
     return (
         <main>

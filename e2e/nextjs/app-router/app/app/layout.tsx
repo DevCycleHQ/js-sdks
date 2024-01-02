@@ -13,7 +13,6 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode
 }) {
-    console.log('RUNNING LAYOUT')
     return (
         <html lang="en">
             <body>
