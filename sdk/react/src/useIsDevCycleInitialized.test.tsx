@@ -14,16 +14,6 @@ import { BucketedUserConfig } from '@devcycle/types'
 jest.unmock('@devcycle/js-client-sdk')
 
 describe('useIsDevCycleInitialized', () => {
-    const TestApp = () => {
-        const isReady = useIsDevCycleInitialized()
-
-        if (!isReady) {
-            return <div>Loading...</div>
-        }
-
-        return <div>Done</div>
-    }
-
     it('should render the app once the SDK initializes', async () => {
         const scope = nock('https://sdk-api.devcycle.com/v1')
         scope
@@ -34,6 +24,16 @@ describe('useIsDevCycleInitialized', () => {
             .query((query) => query.user_id === 'test_user')
             .delay(1000)
             .reply(200, mockConfig)
+
+        const TestApp = () => {
+            const isReady = useIsDevCycleInitialized()
+
+            if (!isReady) {
+                return <div>Loading...</div>
+            }
+
+            return <div>Done</div>
+        }
 
         const App = withDevCycleProvider({
             user: { user_id: 'test_user' },
