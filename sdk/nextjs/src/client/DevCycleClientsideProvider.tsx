@@ -15,6 +15,7 @@ export type DevCycleClientContext = {
     sdkKey: string
     user: DevCycleUser
     enableStreaming: boolean
+    userAgent?: string
 }
 
 type DevCycleClientsideProviderProps = {
@@ -38,11 +39,16 @@ export const DevCycleClientContext = React.createContext<ClientProviderContext>(
  * Also waits for the server's data promise with the `use` hook. This triggers the nearest suspense boundary,
  * so this component is being rendered inside of a Suspense by the DevCycleClientsideProvider.
  * @param serverDataPromise
+ * @param userAgent
  * @constructor
  */
 export const SuspendedProviderInitialization = ({
     serverDataPromise,
-}: Pick<DevCycleClientContext, 'serverDataPromise'>): React.ReactElement => {
+    userAgent,
+}: Pick<
+    DevCycleClientContext,
+    'serverDataPromise' | 'userAgent'
+>): React.ReactElement => {
     const serverData = use(serverDataPromise)
     const [previousContext, setPreviousContext] = useState<
         DevCycleServerDataForClient | undefined
@@ -54,6 +60,7 @@ export const SuspendedProviderInitialization = ({
         context.client.synchronizeBootstrapData(
             serverData.config,
             serverData.user,
+            userAgent,
         )
         setPreviousContext(serverData)
     }

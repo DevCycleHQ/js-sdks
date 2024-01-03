@@ -6,6 +6,7 @@ import {
 } from './requestContext'
 import { DevCycleNextOptions, initialize, setupContext } from './initialize'
 import { DevCycleUser } from '@devcycle/js-client-sdk'
+import { getUserAgent } from './userAgent'
 
 // server-side users must always be "identified" with a user id
 type ServerUser = Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & {
@@ -72,6 +73,7 @@ export const setupDevCycle = (
             sdkKey: sdkKey,
             user: user,
             enableStreaming: options?.enableStreaming ?? false,
+            userAgent: getUserAgent(),
         }
     }
 
