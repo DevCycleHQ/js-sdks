@@ -1,4 +1,4 @@
-import { useDevCycleClient } from './useDevCycleClient'
+import { useDevCycleClient } from './internal/useDevCycleClient'
 import { DVCPopulatedUser } from '@devcycle/js-client-sdk'
 
 export const useUserIdentity = (): DVCPopulatedUser | undefined => {
