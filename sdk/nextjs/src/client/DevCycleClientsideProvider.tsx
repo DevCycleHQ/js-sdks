@@ -9,12 +9,16 @@ import { useRouter } from 'next/navigation'
 import { invalidateConfig } from '../common/invalidateConfig'
 import { DevCycleServerDataForClient } from '../common/types'
 
-type DevCycleClientsideProviderProps = {
+export type DevCycleClientContext = {
     serverDataPromise: Promise<DevCycleServerDataForClient>
     serverData?: DevCycleServerDataForClient
     sdkKey: string
     user: DevCycleUser
     enableStreaming: boolean
+}
+
+type DevCycleClientsideProviderProps = {
+    context: DevCycleClientContext
     children: React.ReactNode
 }
 
@@ -38,10 +42,7 @@ export const DevCycleClientContext = React.createContext<ClientProviderContext>(
  */
 export const SuspendedProviderInitialization = ({
     serverDataPromise,
-}: Pick<
-    DevCycleClientsideProviderProps,
-    'serverDataPromise'
->): React.ReactElement => {
+}: Pick<DevCycleClientContext, 'serverDataPromise'>): React.ReactElement => {
     const serverData = use(serverDataPromise)
     const [previousContext, setPreviousContext] = useState<
         DevCycleServerDataForClient | undefined
@@ -60,15 +61,14 @@ export const SuspendedProviderInitialization = ({
 }
 
 export const DevCycleClientsideProvider = ({
-    serverDataPromise,
-    serverData,
-    sdkKey,
-    enableStreaming,
-    user,
+    context,
     children,
 }: DevCycleClientsideProviderProps): React.ReactElement => {
     const router = useRouter()
     const clientRef = useRef<DevCycleClient>()
+
+    const { serverDataPromise, serverData, sdkKey, enableStreaming, user } =
+        context
 
     const revalidateConfig = (lastModified?: number) => {
         invalidateConfig(sdkKey, lastModified).finally(() => {
