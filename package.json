@@ -193,7 +193,7 @@
         "verdaccio": "^5.27.0",
         "webpack": "5.89.0",
         "webpack-merge": "^5.8.0",
-        "wrangler": "^3.0.0"
+        "wrangler": "^3.22.2"
     },
     "lint-staged": {
         "**/*.{ts,js}": [
