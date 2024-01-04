@@ -3,7 +3,7 @@ import { ServerComponent } from '@/app/ServerComponent'
 import React, { Suspense } from 'react'
 import Link from 'next/link'
 
-export const Home = ({
+const Home = ({
     searchParams,
 }: {
     searchParams: { [key: string]: string | string[] | undefined }
