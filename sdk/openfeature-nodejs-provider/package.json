@@ -6,7 +6,7 @@
     "dependencies": {
         "@devcycle/nodejs-server-sdk": "^1.18.5",
         "@devcycle/types": "^1.4.4",
-        "@openfeature/js-sdk": "^1.6.1"
+        "@openfeature/server-sdk": "^1.8.0"
     },
     "devDependencies": {
         "@devcycle/bucketing-test-data": "^1.5.4"
