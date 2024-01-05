@@ -3,7 +3,7 @@ import {
     OpenFeature,
     Client,
     StandardResolutionReasons,
-} from '@openfeature/js-sdk'
+} from '@openfeature/server-sdk'
 import {
     DevCycleClient,
     DevCycleCloudClient,
