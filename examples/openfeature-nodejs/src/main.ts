@@ -1,4 +1,4 @@
-import { OpenFeature, Client } from '@openfeature/js-sdk'
+import { OpenFeature, Client } from '@openfeature/server-sdk'
 import DevCycleProvider from '@devcycle/openfeature-nodejs-provider'
 import { initializeDevCycle } from '@devcycle/nodejs-server-sdk'
 

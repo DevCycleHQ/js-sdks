@@ -19,7 +19,7 @@ See the [example app](/examples/openfeature-nodejs) for a working example of the
 See our [documentation](https://docs.devcycle.com/sdk/server-side-sdks/node/) for more information.
 
 ```typescript
-import { OpenFeature, Client } from '@openfeature/js-sdk'
+import { OpenFeature, Client } from '@openfeature/server-sdk'
 import { DevCycleProvider } from '@devcycle/openfeature-nodejs-provider'
 import { initialize } from '@devcycle/nodejs-server-sdk'
 
@@ -27,7 +27,7 @@ import { initialize } from '@devcycle/nodejs-server-sdk'
 
 // Initialize the DevCycle SDK
 const devcycleClient = await initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY).onClientInitialized()
-// Set the initialzed DevCycle client as the provider for OpenFeature
+// Set the initialized DevCycle client as the provider for OpenFeature
 OpenFeature.setProvider(new DevCycleProvider(devcycleClient))
 // Get the OpenFeature client
 openFeatureClient = OpenFeature.getClient()
