@@ -1,0 +1,6 @@
+{
+    "extends": "next",
+    "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": "off"
+    }
+}

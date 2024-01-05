@@ -1,19 +1,10 @@
-'use client'
-import React, { Suspense, use, useContext, useRef, useState } from 'react'
-import {
-    DevCycleClient,
-    DevCycleUser,
-    initializeDevCycle,
-} from '@devcycle/js-client-sdk'
-import { useRouter } from 'next/navigation'
-import { invalidateConfig } from '../common/invalidateConfig'
-import { DevCycleServerDataForClient } from '../common/types'
+import React, { Suspense, use } from 'react'
+import { DevCycleServerData } from '../common/types'
+import { InternalDevCycleClientsideProvider } from './internal/InternalDevCycleClientsideProvider'
 
 export type DevCycleClientContext = {
-    serverDataPromise: Promise<DevCycleServerDataForClient>
-    serverData?: DevCycleServerDataForClient
+    serverDataPromise: Promise<DevCycleServerData>
     sdkKey: string
-    user: DevCycleUser
     enableStreaming: boolean
     userAgent?: string
 }
@@ -23,94 +14,53 @@ type DevCycleClientsideProviderProps = {
     children: React.ReactNode
 }
 
-type ClientProviderContext = {
-    client: DevCycleClient
-    sdkKey: string
-    enableStreaming: boolean
-    serverDataPromise: Promise<unknown>
-}
-
-export const DevCycleClientContext = React.createContext<ClientProviderContext>(
-    {} as ClientProviderContext,
-)
+let promiseResolved = false
 
 /**
- * Component which renders nothing, but runs code to keep client state in sync with server
- * Also waits for the server's data promise with the `use` hook. This triggers the nearest suspense boundary,
- * so this component is being rendered inside of a Suspense by the DevCycleClientsideProvider.
- * @param serverDataPromise
- * @param userAgent
+ * Component which renders nothing but "awaits" the promise to trigger a suspense if it is not yet resolved
+ * If it is resolved, then a global variable is flipped which is passed to the InternalDevCycleClientsideProvider,
+ * telling it to "use" the promise to obtain the resolved value in the first render pass.
+ * This is to work around cases where the initialize promise has resolved by now due to layouts rendering after pages
+ * so the server is already rendering with variable values, but the client provider won't otherwise
+ * use those values on the first pass. We can't always "use"  the promise inside the provider
+ * because in streaming mode that would sometimes block rendering unless the provider was inside a suspense
+ * @param promise
  * @constructor
  */
-export const SuspendedProviderInitialization = ({
-    serverDataPromise,
-    userAgent,
-}: Pick<
-    DevCycleClientContext,
-    'serverDataPromise' | 'userAgent'
->): React.ReactElement => {
-    const serverData = use(serverDataPromise)
-    const [previousContext, setPreviousContext] = useState<
-        DevCycleServerDataForClient | undefined
-    >()
-    const context = useContext(DevCycleClientContext)
-    if (previousContext !== serverData) {
-        // change user and config data to match latest server data
-        // if the data has changed since the last invocation
-        context.client.synchronizeBootstrapData(
-            serverData.config,
-            serverData.user,
-            userAgent,
-        )
-        setPreviousContext(serverData)
-    }
-    return <></>
+const PromiseResolver = async ({ promise }: { promise: Promise<unknown> }) => {
+    await promise
+    promiseResolved = true
+    return null
 }
 
-export const DevCycleClientsideProvider = ({
+const promiseResolvedValue = (): boolean => {
+    const previouslyResolved = promiseResolved
+    promiseResolved = false
+    return previouslyResolved
+}
+
+export const DevCycleClientsideProvider = async ({
     context,
     children,
-}: DevCycleClientsideProviderProps): React.ReactElement => {
-    const router = useRouter()
-    const clientRef = useRef<DevCycleClient>()
-
-    const { serverDataPromise, serverData, sdkKey, enableStreaming, user } =
-        context
-
-    const revalidateConfig = (lastModified?: number) => {
-        invalidateConfig(sdkKey, lastModified).finally(() => {
-            router.refresh()
-        })
-    }
-
-    if (!clientRef.current) {
-        clientRef.current = initializeDevCycle(sdkKey, user, {
-            deferInitialization: enableStreaming,
-            disableConfigCache: true,
-            bootstrapConfig: enableStreaming ? undefined : serverData?.config,
-            next: {
-                configRefreshHandler: revalidateConfig,
-            },
-        })
+}: DevCycleClientsideProviderProps): Promise<React.ReactElement> => {
+    const clientsideContext = {
+        ...context,
+        serverData: context.enableStreaming
+            ? undefined
+            : await context.serverDataPromise,
     }
 
     return (
-        <DevCycleClientContext.Provider
-            value={{
-                client: clientRef.current,
-                sdkKey: sdkKey,
-                enableStreaming,
-                serverDataPromise,
-            }}
-        >
-            {enableStreaming && (
-                <Suspense>
-                    <SuspendedProviderInitialization
-                        serverDataPromise={serverDataPromise}
-                    />
-                </Suspense>
-            )}
-            {children}
-        </DevCycleClientContext.Provider>
+        <>
+            <Suspense>
+                <PromiseResolver promise={context.serverDataPromise} />
+            </Suspense>
+            <InternalDevCycleClientsideProvider
+                context={clientsideContext}
+                promiseResolved={promiseResolvedValue()}
+            >
+                {children}
+            </InternalDevCycleClientsideProvider>
+        </>
     )
 }
