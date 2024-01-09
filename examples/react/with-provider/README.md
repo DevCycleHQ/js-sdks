@@ -16,3 +16,9 @@ You can now start the app by running:
 yarn nx serve example-react-with-provider
 ```
 Open [http://localhost:4200](http://localhost:4200) to view it in the browser.
+
+### Run with Bundle Analysis
+
+```sh 
+ANALYZE=true yarn nx serve example-react-with-provider
+```
