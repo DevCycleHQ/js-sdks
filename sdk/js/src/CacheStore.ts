@@ -1,4 +1,4 @@
-import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
+import type { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 import { DVCStorage, StoreKey } from './types'
 import { DVCPopulatedUser } from './User'
 

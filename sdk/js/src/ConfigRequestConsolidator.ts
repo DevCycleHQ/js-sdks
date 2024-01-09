@@ -1,4 +1,4 @@
-import { BucketedUserConfig } from '@devcycle/types'
+import type { BucketedUserConfig } from '@devcycle/types'
 import { DVCPopulatedUser } from './User'
 
 type PromiseResolver = {

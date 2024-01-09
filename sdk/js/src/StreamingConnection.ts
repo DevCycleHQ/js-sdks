@@ -1,4 +1,4 @@
-import { DVCLogger } from '@devcycle/types'
+import type { DVCLogger } from '@devcycle/types'
 
 export class StreamingConnection {
     private connection?: EventSource

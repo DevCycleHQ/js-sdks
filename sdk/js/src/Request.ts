@@ -3,7 +3,7 @@ import { DVCPopulatedUser } from './User'
 import { serializeUserSearchParams, generateEventPayload } from './utils'
 import axios, { AxiosResponse } from 'axios'
 import axiosRetry from 'axios-retry'
-import { BucketedUserConfig, DVCLogger } from '@devcycle/types'
+import type { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 
 const axiosClient = axios.create({
     timeout: 5 * 1000,

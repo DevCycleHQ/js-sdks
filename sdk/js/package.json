@@ -11,8 +11,7 @@
             ]
         }
     },
-    "main": "./src/index.js",
-    "types": "./src/index.d.ts",
+    "types": "./index.cjs.d.ts",
     "dependencies": {
         "@devcycle/types": "^1.4.4",
         "axios": "^1.0.0",

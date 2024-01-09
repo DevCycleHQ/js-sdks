@@ -23,8 +23,9 @@
             "executor": "@nrwl/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "options": {
-                "format": ["cjs"],
+                "format": ["cjs", "esm"],
                 "external": "all",
+                "generateExportsField": true,
                 "project": "lib/shared/types/package.json",
                 "outputPath": "dist/lib/shared/types",
                 "entryFile": "lib/shared/types/src/index.ts",
