@@ -17,14 +17,11 @@ import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
 import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
-import {
-    BucketedUserConfig,
-    getVariableTypeFromValue,
-    VariableTypeAlias,
-} from '@devcycle/types'
+import type { BucketedUserConfig, VariableTypeAlias } from '@devcycle/types'
+import { getVariableTypeFromValue } from '@devcycle/types'
 import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
-import { DVCLogger } from '@devcycle/types'
+import type { DVCLogger } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
 
 type variableUpdatedHandler = (

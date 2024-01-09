@@ -1,7 +1,7 @@
 // Type to retrieve the element type from an array
 // eg. ArrayElement<string[]> -> string
-import { VariableType, VariableValue } from './types/config/models'
-import { DVCLogger } from './logger'
+import { VariableType, VariableValue } from './types/config/models/variable'
+import type { DVCLogger } from './logger'
 
 export type ArrayElement<ArrayType extends readonly unknown[]> =
     ArrayType extends readonly (infer ElementType)[] ? ElementType : never

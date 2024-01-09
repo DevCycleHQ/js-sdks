@@ -1,7 +1,7 @@
 import { DevCycleEvent } from './types'
 import { DVCRequestEvent } from './RequestEvent'
 import { DVCPopulatedUser } from './User'
-import {
+import type {
     BucketedUserConfig,
     SDKEventRequestBody,
     DVCClientAPIUser,

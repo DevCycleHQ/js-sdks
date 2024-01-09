@@ -1,11 +1,10 @@
-import {
+import type {
     DVCLogger,
     DVCDefaultLogLevel,
     VariableTypeAlias,
     VariableValue,
     DVCJSON,
     DVCCustomDataJSON,
-    ConfigBody,
     BucketedUserConfig,
 } from '@devcycle/types'
 

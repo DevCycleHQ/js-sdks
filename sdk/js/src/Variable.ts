@@ -1,6 +1,6 @@
 import { DVCVariable as Variable, DVCVariableValue } from './types'
 import { checkParamDefined, checkParamType } from './utils'
-import { VariableTypeAlias } from '@devcycle/types'
+import type { VariableTypeAlias } from '@devcycle/types'
 
 export interface DVCVariableOptions<T> {
     key: string
