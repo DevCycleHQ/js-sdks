@@ -5240,6 +5240,7 @@ __metadata:
     "@devcycle/bucketing-test-data": ^1.5.5
     "@devcycle/nodejs-server-sdk": ^1.18.6
     "@devcycle/types": ^1.4.5
+    "@openfeature/core": ^0.0.22
     "@openfeature/server-sdk": ^1.8.0
   languageName: unknown
   linkType: soft
@@ -8813,6 +8814,13 @@ __metadata:
   version: 0.0.21
   resolution: "@openfeature/core@npm:0.0.21"
   checksum: 44c9d52b9af56e4caffb921b38a3e53d7d2d87c381ca32d7c5cb22c708f9889d9644d5d55768a1b2acec19c676a70b21c76223cb41f3b32da4fb5eeac087c609
+  languageName: node
+  linkType: hard
+
+"@openfeature/core@npm:^0.0.22":
+  version: 0.0.22
+  resolution: "@openfeature/core@npm:0.0.22"
+  checksum: e04f64c34000ac691072adf686780f71c34b4f7f53882b511ceb49221501a872ff3ccca3655c9983a01849e40b4398c999ca6098291f6e8d5ec89af4082558bd
   languageName: node
   linkType: hard
 
