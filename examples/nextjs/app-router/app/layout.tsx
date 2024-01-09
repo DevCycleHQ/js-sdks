@@ -11,7 +11,7 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <body>
-                <DevCycleClientsideProvider context={await getClientContext()}>
+                <DevCycleClientsideProvider context={getClientContext()}>
                     {children}
                 </DevCycleClientsideProvider>
             </body>
