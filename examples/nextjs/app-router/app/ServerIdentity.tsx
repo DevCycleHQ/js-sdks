@@ -1,5 +1,5 @@
-import { getUserIdentity, getVariableValue } from '@devcycle/nextjs-sdk/server'
 import * as React from 'react'
+import { getVariableValue, getUserIdentity } from './devcycle'
 
 export const ServerIdentity = async function () {
     return (
@@ -17,7 +17,7 @@ export const ServerIdentity = async function () {
             </span>
             <b>Server Identity</b>
             <span data-testid={'server-user-id'}>
-                {getUserIdentity()?.user_id}
+                {(await getUserIdentity()).user_id}
             </span>
         </div>
     )
