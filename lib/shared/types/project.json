@@ -30,6 +30,7 @@
                 "outputPath": "dist/lib/shared/types",
                 "entryFile": "lib/shared/types/src/index.ts",
                 "tsConfig": "lib/shared/types/tsconfig.lib.json",
+                "compiler": "tsc",
                 "assets": [
                     {
                         "glob": "*.md",
@@ -49,6 +50,7 @@
                 "outputPath": "dist/lib/shared/es5/types",
                 "entryFile": "lib/shared/types/src/index.ts",
                 "tsConfig": "lib/shared/types/tsconfig.lib.es5.json",
+                "compiler": "tsc",
                 "assets": [
                     {
                         "glob": "*.md",
