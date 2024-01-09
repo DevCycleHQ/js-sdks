@@ -95,3 +95,5 @@ react-native-app-e2e/artifacts
 .next
 **/.next
 verdaccio
+
+**/analyze

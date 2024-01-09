@@ -29,6 +29,7 @@
         "@altack/nx-bundlefy": "^0.16.0",
         "@devcycle/assemblyscript-json": "^2.0.0",
         "@nestjs/class-validator": "^0.13.4",
+        "@next/bundle-analyzer": "^14.0.4",
         "@openfeature/core": "^0.0.21",
         "@openfeature/server-sdk": "^1.8.0",
         "@openfeature/web-sdk": "^0.4.8",
@@ -192,6 +193,7 @@
         "validate-npm-package-name": "^5.0.0",
         "verdaccio": "^5.27.0",
         "webpack": "5.89.0",
+        "webpack-bundle-analyzer": "^4.10.1",
         "webpack-merge": "^5.8.0",
         "wrangler": "^3.0.0"
     },

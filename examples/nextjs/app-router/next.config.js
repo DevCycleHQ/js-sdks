@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const withNx = require('@nx/next/plugins/with-nx')
+const withBundleAnalyzer = require('@next/bundle-analyzer')()
 
 /**
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
@@ -12,4 +13,8 @@ const nextConfig = {
     },
 }
 
-module.exports = withNx(nextConfig)
+if (process.env.ANALYZE === 'true') {
+    module.exports = withBundleAnalyzer(withNx(nextConfig))
+} else {
+    module.exports = withNx(nextConfig)
+}
