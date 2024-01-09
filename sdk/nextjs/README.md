@@ -180,6 +180,7 @@ In each page in your App where you are using DevCycle, hook up the server-side h
 configuration on the server and allow for server-side rendering using the same user data as the client:
 ```typescript jsx
 import { GetServerSideProps } from 'next'
+import { getServerSideDevCycle } from '@devcycle/nextjs-sdk/pages'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     // get the user identity serverside. Replace with your own function for determining your user's identity
