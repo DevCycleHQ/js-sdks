@@ -827,7 +827,7 @@ const checkIfEdgeEnabled = (
     enableEdgeDB?: boolean,
     logWarning = false,
 ) => {
-    if (config?.project.settings?.edgeDB?.enabled) {
+    if (config?.project?.settings?.edgeDB?.enabled) {
         return !!enableEdgeDB
     } else {
         if (enableEdgeDB && logWarning) {
