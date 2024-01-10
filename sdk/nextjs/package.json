@@ -1,11 +1,11 @@
 {
     "name": "@devcycle/nextjs-sdk",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "dependencies": {
-        "@devcycle/bucketing": "^1.7.6",
-        "@devcycle/js-client-sdk": "^1.16.5",
-        "@devcycle/react-client-sdk": "^1.14.5",
-        "@devcycle/types": "^1.4.5",
+        "@devcycle/bucketing": "^1.7.7",
+        "@devcycle/js-client-sdk": "^1.16.6",
+        "@devcycle/react-client-sdk": "^1.14.6",
+        "@devcycle/types": "^1.4.6",
         "hoist-non-react-statics": "^3.3.2",
         "server-only": "^0.0.1"
     },
