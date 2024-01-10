@@ -23,7 +23,7 @@
                 "external": "all",
                 "generateExportsField": true,
                 "rollupConfig": "@nx/react/plugins/bundle-rollup",
-                "compiler": "babel",
+                "compiler": "tsc",
                 "assets": [
                     {
                         "glob": "sdk/react/README.md",
@@ -44,7 +44,7 @@
                 "format": ["esm", "cjs"],
                 "external": "all",
                 "rollupConfig": "@nx/react/plugins/bundle-rollup",
-                "compiler": "babel",
+                "compiler": "tsc",
                 "assets": [
                     {
                         "glob": "sdk/react/README.md",

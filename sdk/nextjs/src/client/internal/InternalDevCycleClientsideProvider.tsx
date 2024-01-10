@@ -78,6 +78,14 @@ export const InternalDevCycleClientsideProvider = ({
     }
 
     if (!clientRef.current) {
+        clientRef.current = initializeDevCycle(sdkKey, {
+            deferInitialization: true,
+            disableConfigCache: true,
+            next: {
+                configRefreshHandler: revalidateConfig,
+            },
+        })
+
         if (resolvedServerData || !enableStreaming) {
             // we expect that either the promise has resolved and we got the server data that way, or we weren't in
             // streaming mode and so the promise was awaited at a higher level and passed in here as serverData
@@ -86,26 +94,11 @@ export const InternalDevCycleClientsideProvider = ({
                     'Server data should be available. Please contact DevCycle support.',
                 )
             }
-            clientRef.current = initializeDevCycle(
-                sdkKey,
+            clientRef.current.synchronizeBootstrapData(
+                resolvedServerData.config,
                 resolvedServerData.user,
-                {
-                    deferInitialization: false,
-                    disableConfigCache: true,
-                    bootstrapConfig: resolvedServerData.config,
-                    next: {
-                        configRefreshHandler: revalidateConfig,
-                    },
-                },
+                context.userAgent,
             )
-        } else {
-            clientRef.current = initializeDevCycle(sdkKey, {
-                deferInitialization: true,
-                disableConfigCache: true,
-                next: {
-                    configRefreshHandler: revalidateConfig,
-                },
-            })
         }
     }
 

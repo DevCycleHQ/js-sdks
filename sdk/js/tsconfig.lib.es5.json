@@ -3,6 +3,7 @@
     "compilerOptions": {
         "target": "es5",
         "outDir": "../../dist/out-tsc",
+        "module": "esnext",
         "declaration": true,
         "types": []
     },

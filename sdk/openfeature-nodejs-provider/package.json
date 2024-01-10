@@ -1,15 +1,16 @@
 {
     "name": "@devcycle/openfeature-nodejs-provider",
-    "version": "1.6.6",
+    "version": "1.6.7",
     "description": "OpenFeature Node Provider for DevCycle NodeJS SDK",
     "license": "MIT",
     "dependencies": {
-        "@devcycle/nodejs-server-sdk": "^1.18.6",
-        "@devcycle/types": "^1.4.5",
+        "@devcycle/nodejs-server-sdk": "^1.18.7",
+        "@devcycle/types": "^1.4.6",
+        "@openfeature/core": "^0.0.22",
         "@openfeature/server-sdk": "^1.8.0"
     },
     "devDependencies": {
-        "@devcycle/bucketing-test-data": "^1.5.5"
+        "@devcycle/bucketing-test-data": "^1.5.6"
     },
     "main": "src/index.js",
     "types": "src/index.d.ts"
