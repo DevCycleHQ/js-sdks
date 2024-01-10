@@ -6,6 +6,7 @@
     "dependencies": {
         "@devcycle/nodejs-server-sdk": "^1.18.6",
         "@devcycle/types": "^1.4.5",
+        "@openfeature/core": "^0.0.22",
         "@openfeature/server-sdk": "^1.8.0"
     },
     "devDependencies": {
