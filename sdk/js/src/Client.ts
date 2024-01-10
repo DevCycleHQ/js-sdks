@@ -203,13 +203,11 @@ export class DevCycleClient<
                     Date.now(),
                 )
             }
-        } catch (err) {
-            this.eventEmitter.emitInitialized(false)
-            this.eventEmitter.emitError(err)
-            return this
-        } finally {
             this.resolveOnInitialized(this)
             this.logger.info('Client initialized')
+        } catch (err) {
+            this.initializeOnConfigFailure(this.user, err)
+            return this
         }
 
         this.eventEmitter.emitInitialized(true)
@@ -235,6 +233,24 @@ export class DevCycleClient<
         }
 
         return this
+    }
+
+    /**
+     * Complete initialization process without config so that we can return default values
+     */
+    private initializeOnConfigFailure = (
+        user: DVCPopulatedUser,
+        err?: unknown,
+    ) => {
+        if (this.isInitialized) {
+            return
+        }
+        this.eventEmitter.emitInitialized(false)
+        if (err) {
+            this.eventEmitter.emitError(err)
+        }
+        this.setUser(user)
+        this.resolveOnInitialized(this)
     }
 
     /**
@@ -617,16 +633,10 @@ export class DevCycleClient<
      * @param userAgent
      */
     synchronizeBootstrapData(
-        config: BucketedUserConfig,
+        config: BucketedUserConfig | null,
         user: DevCycleUser,
         userAgent?: string,
     ): void {
-        this.options.bootstrapConfig = config
-        if (this.options.deferInitialization && !this.initializeTriggered) {
-            void this.clientInitialization(user)
-            return
-        }
-
         const populatedUser = new DVCPopulatedUser(
             user,
             this.options,
@@ -634,6 +644,21 @@ export class DevCycleClient<
             undefined,
             userAgent,
         )
+
+        if (!config) {
+            // config is null indicating we failed to fetch it, finish initialization so default values can be returned
+            this.initializeOnConfigFailure(populatedUser)
+            return
+        }
+
+        this.options.bootstrapConfig = config
+        if (this.options.deferInitialization && !this.initializeTriggered) {
+            // if Next SDK has deferred initialization until config was available, providing it as the boostrap config
+            // will now trigger initialization
+            void this.clientInitialization(user)
+            return
+        }
+
         this.handleConfigReceived(config, populatedUser, Date.now())
     }
 
@@ -664,6 +689,23 @@ export class DevCycleClient<
         this.store.saveConfig(config, user, dateFetched)
         this.isConfigCached = false
 
+        this.setUser(user)
+
+        const oldFeatures = oldConfig?.features || {}
+        const oldVariables = oldConfig?.variables || {}
+        this.eventEmitter.emitFeatureUpdates(oldFeatures, config.features)
+        this.eventEmitter.emitVariableUpdates(
+            oldVariables,
+            config.variables,
+            this.variableDefaultMap,
+        )
+
+        if (!oldConfig || oldConfig.etag !== this.config.etag) {
+            this.eventEmitter.emitConfigUpdate(config.variables)
+        }
+    }
+
+    private setUser(user: DVCPopulatedUser) {
         if (this.user != user || !this.userSaved) {
             this.user = user
 
@@ -672,8 +714,8 @@ export class DevCycleClient<
             if (
                 !this.user.isAnonymous &&
                 checkIfEdgeEnabled(
-                    config,
                     this.logger,
+                    this.config,
                     this.options?.enableEdgeDB,
                     true,
                 )
@@ -689,19 +731,6 @@ export class DevCycleClient<
             }
 
             this.userSaved = true
-        }
-
-        const oldFeatures = oldConfig?.features || {}
-        const oldVariables = oldConfig?.variables || {}
-        this.eventEmitter.emitFeatureUpdates(oldFeatures, config.features)
-        this.eventEmitter.emitVariableUpdates(
-            oldVariables,
-            config.variables,
-            this.variableDefaultMap,
-        )
-
-        if (!oldConfig || oldConfig.etag !== this.config.etag) {
-            this.eventEmitter.emitConfigUpdate(config.variables)
         }
     }
 
@@ -793,12 +822,12 @@ export class DevCycleClient<
 }
 
 const checkIfEdgeEnabled = (
-    config: BucketedUserConfig,
     logger: DVCLogger,
+    config?: BucketedUserConfig,
     enableEdgeDB?: boolean,
     logWarning = false,
 ) => {
-    if (config.project.settings?.edgeDB?.enabled) {
+    if (config?.project.settings?.edgeDB?.enabled) {
         return !!enableEdgeDB
     } else {
         if (enableEdgeDB && logWarning) {

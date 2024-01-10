@@ -42,6 +42,10 @@ export const getBucketedConfig = async (): Promise<
 > => {
     // this request will be cached by Next
     const cdnConfig = await fetchCDNConfig(getSDKKey())
+    if (!cdnConfig.ok) {
+        const responseText = await cdnConfig.text()
+        throw new Error('Could not fetch config: ' + responseText)
+    }
     const user = getIdentity()
 
     if (!user) {
