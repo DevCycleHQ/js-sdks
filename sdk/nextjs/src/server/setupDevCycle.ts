@@ -1,10 +1,11 @@
 import { getVariableValue } from './getVariableValue'
 import { getInitializedPromise, setInitializedPromise } from './requestContext'
-import { DevCycleNextOptions, initialize } from './initialize'
+import { initialize } from './initialize'
 import { DevCycleUser } from '@devcycle/js-client-sdk'
 import { getUserAgent } from './userAgent'
 import { getAllVariables } from './getAllVariables'
 import { getAllFeatures } from './allFeatures'
+import { DevCycleNextOptions } from '../common/types'
 
 // server-side users must always be "identified" with a user id
 type ServerUser = Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & {
@@ -55,9 +56,30 @@ export const setupDevCycle = (
     const _getClientContext = () => {
         const { serverDataPromise } = ensureSetup(sdkKey, userGetter, options)
 
+        const { enableStreaming, ...otherOptions } = options
+
+        const {
+            disableAutomaticEventLogging,
+            disableCustomEventLogging,
+            disableRealtimeUpdates,
+            apiProxyURL,
+            eventFlushIntervalMS,
+            flushEventQueueSize,
+        } = otherOptions
+
+        const clientOptions = {
+            disableAutomaticEventLogging,
+            disableCustomEventLogging,
+            disableRealtimeUpdates,
+            apiProxyURL,
+            eventFlushIntervalMS,
+            flushEventQueueSize,
+        }
+
         return {
             serverDataPromise,
             sdkKey: sdkKey,
+            options: clientOptions,
             enableStreaming: options?.enableStreaming ?? false,
             userAgent: getUserAgent(),
         }

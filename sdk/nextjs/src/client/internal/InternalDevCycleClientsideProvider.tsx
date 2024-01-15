@@ -3,13 +3,14 @@ import React, { Suspense, use, useContext, useRef, useState } from 'react'
 import { DevCycleClient, initializeDevCycle } from '@devcycle/js-client-sdk'
 import { useRouter } from 'next/navigation'
 import { invalidateConfig } from '../../common/invalidateConfig'
-import { DevCycleServerData } from '../../common/types'
+import { DevCycleNextOptions, DevCycleServerData } from '../../common/types'
 import { DevCycleProviderContext } from './context'
 
 export type DevCycleClientContext = {
     serverDataPromise: Promise<DevCycleServerData>
     serverData?: DevCycleServerData
     sdkKey: string
+    options: DevCycleNextOptions
     enableStreaming: boolean
     userAgent?: string
 }
@@ -79,6 +80,7 @@ export const InternalDevCycleClientsideProvider = ({
 
     if (!clientRef.current) {
         clientRef.current = initializeDevCycle(sdkKey, {
+            ...context.options,
             deferInitialization: true,
             disableConfigCache: true,
             next: {
