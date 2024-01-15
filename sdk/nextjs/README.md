@@ -10,7 +10,7 @@ Official SDK for integrating DevCycle feature flags with your Next.js applicatio
 - support for non-blocking flag state retrieval and streaming 
 
 ## Limitations
-- Minimum Next.js version: 14.0.0
+- Minimum Next.js version: 14.0.5
 - Minimum React version: 18.2
 - variable evaluations are only tracked in client components in App Router.
 

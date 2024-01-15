@@ -8,7 +8,16 @@ import { identifyUser } from './identify'
 import { getDevCycleServerData } from './devcycleServerData'
 import { getUserAgent } from './userAgent'
 
-export type DevCycleNextOptions = DevCycleOptions & {
+export type DevCycleNextOptions = Omit<
+    DevCycleOptions,
+    | 'configCacheTTL'
+    | 'disableConfigCache'
+    | 'bootstrapConfig'
+    | 'storage'
+    | 'reactNative'
+    | 'deferInitialization'
+    | 'next'
+> & {
     /**
      * Make the SDK's initialization non-blocking. This unblocks serverside rendering up to the point of a variable
      * evaluation, and allows the use of a Suspense boundary to stream flagged components to the client when the
