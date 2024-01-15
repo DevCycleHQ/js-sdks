@@ -43,7 +43,7 @@ jobs:
                   token: ${{ secrets.AUTOMATION_USER_TOKEN }}
                   fetch-depth: 0
             - name: Configure AWS Credentials
-              uses: aws-actions/configure-aws-credentials@v4
+              uses: aws-actions/configure-aws-credentials@v4.0.1
               with:
                   role-to-assume: arn:aws:iam::134377926370:role/GitHub-Actions
                   aws-region: us-east-1
