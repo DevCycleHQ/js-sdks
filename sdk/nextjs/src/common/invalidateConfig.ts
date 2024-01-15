@@ -6,6 +6,13 @@ export const invalidateConfig = async (
     sdkToken: string,
     lastModified?: number,
 ): Promise<void> => {
+    if (typeof window != 'undefined') {
+        console.error(
+            'DevCycle realtime updates are only available in Next.js 14.0.5 and above. Please update your version ' +
+                'or disable realtime updates.',
+        )
+        return
+    }
     await invalidateConfigCache(sdkToken, lastModified)
 }
 
@@ -25,7 +32,7 @@ export const invalidateConfigCache = async (
         lastModified &&
         lastModifiedClient > lastModifiedCache
     ) {
-        console.log('Invalidating old cached config')
+        console.log('Invalidating old DevCycle cached config')
         revalidateTag(sdkKey)
     }
 }
