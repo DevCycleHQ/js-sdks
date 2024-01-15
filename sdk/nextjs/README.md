@@ -1,6 +1,6 @@
-# DevCycle NextJS SDK
+# DevCycle Next.js SDK
 
-The NextJS SDK for DevCycle!
+The Next.js SDK for DevCycle!
 
 # Usage
 
