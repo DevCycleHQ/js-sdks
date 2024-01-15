@@ -1,11 +1,12 @@
-import React, { Suspense, use } from 'react'
-import { DevCycleServerData } from '../common/types'
+import React, { Suspense } from 'react'
+import { DevCycleNextOptions, DevCycleServerData } from '../common/types'
 import { InternalDevCycleClientsideProvider } from './internal/InternalDevCycleClientsideProvider'
 
 export type DevCycleClientContext = {
     serverDataPromise: Promise<DevCycleServerData>
     sdkKey: string
     enableStreaming: boolean
+    options: DevCycleNextOptions
     userAgent?: string
 }
 

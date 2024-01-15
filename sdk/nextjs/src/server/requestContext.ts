@@ -1,6 +1,7 @@
 import { DevCycleClient, DevCycleUser } from '@devcycle/js-client-sdk'
-import { DevCycleNextOptions, initialize } from './initialize'
+import { initialize } from './initialize'
 import { cache } from 'react'
+import { DevCycleNextOptions } from '../common/types'
 
 export const requestContext = <T>(
     defaultValue: T,
