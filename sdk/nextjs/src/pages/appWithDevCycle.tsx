@@ -5,6 +5,19 @@ import { DevCycleProvider, useDevCycleClient } from '@devcycle/react-client-sdk'
 import React from 'react'
 import { DevCycleOptions } from '@devcycle/js-client-sdk'
 
+type DevCycleNextOptions = Pick<
+    DevCycleOptions,
+    | 'maxEventQueueSize'
+    | 'flushEventQueueSize'
+    | 'eventFlushIntervalMS'
+    | 'logger'
+    | 'logLevel'
+    | 'apiProxyURL'
+    | 'disableRealtimeUpdates'
+    | 'disableAutomaticEventLogging'
+    | 'disableCustomEventLogging'
+>
+
 /**
  * Component which runs a one-time sync of the server's boostrap data to the client's DevCycleClient
  * @param devcycleSSR
@@ -34,7 +47,7 @@ const BootstrapSync = ({
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const appWithDevCycle = <Props extends NextJsAppProps>(
     WrappedComponent: React.ComponentType<Props>,
-    additionalOptions: DevCycleOptions = {},
+    additionalOptions: DevCycleNextOptions = {},
 ) => {
     const AppWithDevCycle = (
         props: Props & { pageProps: Props['pageProps'] & SSRProps },

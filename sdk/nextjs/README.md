@@ -131,12 +131,12 @@ export const MyClientComponent = function () {
 ```typescript jsx
 'use client'
 import * as React from 'react'
-import { useDevCycleClient } from '@devcycle/nextjs-sdk'
+import { useTrack } from '@devcycle/nextjs-sdk'
 
 export default MyComponent = function () {
-    const client = useDevCycleClient()
+    const trackEvent = useTrack()
     return (
-        <button onClick={() => client.track('myEvent')}>
+        <button onClick={() => trackEvent('myEvent')}>
             Track Event
         </button>
     )

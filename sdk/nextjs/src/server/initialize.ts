@@ -8,15 +8,17 @@ import { identifyUser } from './identify'
 import { getDevCycleServerData } from './devcycleServerData'
 import { getUserAgent } from './userAgent'
 
-export type DevCycleNextOptions = Omit<
+export type DevCycleNextOptions = Pick<
     DevCycleOptions,
-    | 'configCacheTTL'
-    | 'disableConfigCache'
-    | 'bootstrapConfig'
-    | 'storage'
-    | 'reactNative'
-    | 'deferInitialization'
-    | 'next'
+    | 'maxEventQueueSize'
+    | 'flushEventQueueSize'
+    | 'eventFlushIntervalMS'
+    | 'logger'
+    | 'logLevel'
+    | 'apiProxyURL'
+    | 'disableRealtimeUpdates'
+    | 'disableAutomaticEventLogging'
+    | 'disableCustomEventLogging'
 > & {
     /**
      * Make the SDK's initialization non-blocking. This unblocks serverside rendering up to the point of a variable

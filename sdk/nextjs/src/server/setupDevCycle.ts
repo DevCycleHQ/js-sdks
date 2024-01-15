@@ -3,6 +3,8 @@ import { getInitializedPromise, setInitializedPromise } from './requestContext'
 import { DevCycleNextOptions, initialize } from './initialize'
 import { DevCycleUser } from '@devcycle/js-client-sdk'
 import { getUserAgent } from './userAgent'
+import { getAllVariables } from './getAllVariables'
+import { getAllFeatures } from './allFeatures'
 
 // server-side users must always be "identified" with a user id
 type ServerUser = Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & {
@@ -40,6 +42,16 @@ export const setupDevCycle = (
         return getVariableValue(key, defaultValue)
     }
 
+    const _getAllVariables: typeof getAllVariables = async () => {
+        ensureSetup(sdkKey, userGetter, options)
+        return getAllVariables()
+    }
+
+    const _getAllFeatures: typeof getAllFeatures = async () => {
+        ensureSetup(sdkKey, userGetter, options)
+        return getAllFeatures()
+    }
+
     const _getClientContext = () => {
         const { serverDataPromise } = ensureSetup(sdkKey, userGetter, options)
 
@@ -53,6 +65,8 @@ export const setupDevCycle = (
 
     return {
         getVariableValue: _getVariableValue,
+        getAllVariables: _getAllVariables,
+        getAllFeatures: _getAllFeatures,
         getClientContext: _getClientContext,
     }
 }

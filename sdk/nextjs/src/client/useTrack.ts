@@ -2,7 +2,9 @@
 import type { DevCycleEvent } from '@devcycle/js-client-sdk'
 import { useDevCycleClient } from './internal/useDevCycleClient'
 
-export const useTrack = (event: DevCycleEvent): void => {
+export const useTrack = (): ((event: DevCycleEvent) => void) => {
     const client = useDevCycleClient()
-    client.track(event)
+    return (event: DevCycleEvent) => {
+        client.track(event)
+    }
 }
