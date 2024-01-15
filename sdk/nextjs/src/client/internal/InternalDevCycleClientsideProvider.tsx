@@ -113,13 +113,11 @@ export const InternalDevCycleClientsideProvider = ({
                 serverDataPromise,
             }}
         >
-            {enableStreaming && (
-                <Suspense>
-                    <SuspendedProviderInitialization
-                        serverDataPromise={serverDataPromise}
-                    />
-                </Suspense>
-            )}
+            <Suspense>
+                <SuspendedProviderInitialization
+                    serverDataPromise={serverDataPromise}
+                />
+            </Suspense>
             {children}
         </DevCycleProviderContext.Provider>
     )
