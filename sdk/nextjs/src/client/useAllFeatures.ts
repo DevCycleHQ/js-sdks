@@ -1,9 +1,10 @@
 'use client'
 import { useDevCycleClient } from './internal/useDevCycleClient'
 import { useRerenderOnVariableChange } from './internal/useRerenderOnVariableChange'
+import { DVCFeatureSet } from '@devcycle/js-client-sdk'
 
-export const useAllFeatures = (): void => {
+export const useAllFeatures = (): DVCFeatureSet => {
     const client = useDevCycleClient()
     useRerenderOnVariableChange()
-    client.allFeatures()
+    return client.allFeatures()
 }
