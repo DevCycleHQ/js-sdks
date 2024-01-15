@@ -3,7 +3,7 @@ import { getClient, setClient, setOptions, setSDKKey } from './requestContext'
 import { identifyUser } from './identify'
 import { getDevCycleServerData } from './devcycleServerData'
 import { getUserAgent } from './userAgent'
-import { DevCycleNextOptions } from '../common/types';
+import { DevCycleNextOptions } from '../common/types'
 
 const jsClientOptions = {
     // pass next object to enable "next" mode in JS SDK
