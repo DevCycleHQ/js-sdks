@@ -11,7 +11,7 @@ export async function getVariableValue<T extends DVCVariableValue>(
     const client = getClient()
     if (!client) {
         console.error(
-            'getVariableValue can only be called within a DevCycleServersideProvider',
+            'React cache API is not working as expected. Please contact DevCycle support.',
         )
         return defaultValue as VariableTypeAlias<T>
     }
