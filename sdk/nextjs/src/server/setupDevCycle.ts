@@ -1,6 +1,6 @@
+import 'server-only'
 import { getVariableValue } from './getVariableValue'
-import { getInitializedPromise, setInitializedPromise } from './requestContext'
-import { initialize } from './initialize'
+import { initialize, validateSDKKey } from './initialize'
 import { DevCycleUser } from '@devcycle/js-client-sdk'
 import { getUserAgent } from './userAgent'
 import { getAllVariables } from './getAllVariables'
@@ -12,22 +12,6 @@ type ServerUser = Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & {
     user_id: string
 }
 
-const ensureSetup = (
-    sdkKey: string,
-    userGetter: () => Promise<ServerUser> | ServerUser,
-    options: DevCycleNextOptions,
-) => {
-    const initializedPromise = getInitializedPromise()
-    if (!initializedPromise) {
-        const serverDataPromise = initialize(sdkKey, userGetter, options)
-        setInitializedPromise(serverDataPromise)
-
-        return { serverDataPromise }
-    }
-
-    return { serverDataPromise: initializedPromise }
-}
-
 // allow return type inference
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const setupDevCycle = (
@@ -35,29 +19,28 @@ export const setupDevCycle = (
     userGetter: () => Promise<ServerUser> | ServerUser,
     options: DevCycleNextOptions = {},
 ) => {
+    validateSDKKey(sdkKey)
+
     const _getVariableValue: typeof getVariableValue = async (
         key,
         defaultValue,
     ) => {
-        const { serverDataPromise } = ensureSetup(sdkKey, userGetter, options)
-        await serverDataPromise
+        await initialize(sdkKey, userGetter, options)
         return getVariableValue(key, defaultValue)
     }
 
     const _getAllVariables: typeof getAllVariables = async () => {
-        const { serverDataPromise } = ensureSetup(sdkKey, userGetter, options)
-        await serverDataPromise
+        await initialize(sdkKey, userGetter, options)
         return getAllVariables()
     }
 
     const _getAllFeatures: typeof getAllFeatures = async () => {
-        const { serverDataPromise } = ensureSetup(sdkKey, userGetter, options)
-        await serverDataPromise
+        await initialize(sdkKey, userGetter, options)
         return getAllFeatures()
     }
 
     const _getClientContext = () => {
-        const { serverDataPromise } = ensureSetup(sdkKey, userGetter, options)
+        const serverDataPromise = initialize(sdkKey, userGetter, options)
 
         const { enableStreaming, ...otherOptions } = options
 
@@ -84,7 +67,7 @@ export const setupDevCycle = (
             sdkKey: sdkKey,
             options: clientOptions,
             enableStreaming: options?.enableStreaming ?? false,
-            userAgent: getUserAgent(),
+            userAgent: getUserAgent(options),
         }
     }
 

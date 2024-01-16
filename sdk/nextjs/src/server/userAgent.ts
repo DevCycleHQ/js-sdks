@@ -1,13 +1,9 @@
-import { cacheStorageError, getOptions } from './requestContext'
 import { headers } from 'next/headers'
+import { DevCycleNextOptions } from '../common/types'
 
-export const getUserAgent = (): string | undefined => {
-    const options = getOptions()
-
-    if (!options) {
-        throw cacheStorageError()
-    }
-
+export const getUserAgent = (
+    options: DevCycleNextOptions,
+): string | undefined => {
     if (options.staticMode) {
         return
     }

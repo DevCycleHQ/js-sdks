@@ -1,7 +1,11 @@
 import { test, expect } from '@playwright/test'
 
 test('has expected page elements when streaming mode', async ({ page }) => {
-    await page.goto('/streaming')
+    await page.goto('/streaming', {
+        // wait until the page starts to render...
+        waitUntil: 'commit',
+    })
+    await expect(page.getByText('Loading...')).toBeVisible()
     await expect(page.getByText('Streaming Enabled')).toBeVisible()
 
     await expect(page.getByText('Server Enabled Variable: true')).toBeVisible()

@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { DevCycleNextOptions, DevCycleServerData } from '../common/types'
 import { InternalDevCycleClientsideProvider } from './internal/InternalDevCycleClientsideProvider'
 
@@ -15,11 +15,9 @@ type DevCycleClientsideProviderProps = {
     children: React.ReactNode
 }
 
-let promiseResolved = false
-
 /**
- * Component which renders nothing but "awaits" the promise to trigger a suspense if it is not yet resolved
- * If it is resolved, then a global variable is flipped which is passed to the InternalDevCycleClientsideProvider,
+ * Function which synchronously checks if the promise is resolved
+ * If it is resolved, then a true is returned which is passed to the InternalDevCycleClientsideProvider,
  * telling it to "use" the promise to obtain the resolved value in the first render pass.
  * This is to work around cases where the initialize promise has resolved by now due to layouts rendering after pages
  * so the server is already rendering with variable values, but the client provider won't otherwise
@@ -28,16 +26,12 @@ let promiseResolved = false
  * @param promise
  * @constructor
  */
-const PromiseResolver = async ({ promise }: { promise: Promise<unknown> }) => {
-    await promise
-    promiseResolved = true
-    return null
-}
-
-const promiseResolvedValue = (): boolean => {
-    const previouslyResolved = promiseResolved
-    promiseResolved = false
-    return previouslyResolved
+const checkIfPromiseResolved = (promise: Promise<unknown>) => {
+    let promiseResolved = false
+    promise.then(() => {
+        promiseResolved = true
+    })
+    return promiseResolved
 }
 
 export const DevCycleClientsideProvider = async ({
@@ -51,17 +45,14 @@ export const DevCycleClientsideProvider = async ({
             : await context.serverDataPromise,
     }
 
+    const promiseResolved = checkIfPromiseResolved(context.serverDataPromise)
+
     return (
-        <>
-            <Suspense>
-                <PromiseResolver promise={context.serverDataPromise} />
-            </Suspense>
-            <InternalDevCycleClientsideProvider
-                context={clientsideContext}
-                promiseResolved={promiseResolvedValue()}
-            >
-                {children}
-            </InternalDevCycleClientsideProvider>
-        </>
+        <InternalDevCycleClientsideProvider
+            context={clientsideContext}
+            promiseResolved={promiseResolved}
+        >
+            {children}
+        </InternalDevCycleClientsideProvider>
     )
 }

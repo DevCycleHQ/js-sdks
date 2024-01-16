@@ -42,18 +42,17 @@ __metadata:
 
 "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs::locator=app%40workspace%3A.":
   version: 0.0.7
-  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=ccc3bb&locator=app%40workspace%3A."
+  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=804f8c&locator=app%40workspace%3A."
   dependencies:
     "@devcycle/bucketing": "npm:^1.7.7"
     "@devcycle/js-client-sdk": "npm:^1.16.6"
     "@devcycle/react-client-sdk": "npm:^1.14.6"
     "@devcycle/types": "npm:^1.4.6"
     hoist-non-react-statics: "npm:^3.3.2"
-    server-only: "npm:^0.0.1"
   peerDependencies:
     next: ">=14.0.0"
     react: ^18.2.0
-  checksum: c7bf0bb6055a35e887b29700d7446183bbc460eb5a2dc280b2ff642256e90c67017c9811fad617a55653df45d5f3b41d715cae72bf43588f28675b158dd1d2ac
+  checksum: 0d9e23b033c555a7a77b733fe2512fbeea64828c4c87d7556de337e34d73bbcf56fd87abfcb0c25bbade715d29f9765fa86d64d692aca5ed3d821f14530a051b
   languageName: node
   linkType: hard
 
@@ -562,13 +561,6 @@ __metadata:
   dependencies:
     loose-envify: "npm:^1.1.0"
   checksum: 0c4557aa37bafca44ff21dc0ea7c92e2dbcb298bc62eae92b29a39b029134f02fb23917d6ebc8b1fa536b4184934314c20d8864d156a9f6357f3398aaf7bfda8
-  languageName: node
-  linkType: hard
-
-"server-only@npm:^0.0.1":
-  version: 0.0.1
-  resolution: "server-only@npm:0.0.1"
-  checksum: c432348956641ea3f460af8dc3765f3a1bdbcf7a1e0205b0756d868e6e6fe8934cdee6bff68401a1dd49ba4a831c75916517a877446d54b334f7de36fa273e53
   languageName: node
   linkType: hard
 
