@@ -112,10 +112,14 @@ export const getConfigJson = async (
                 `response message: ${ex.message}` +
                 (errorString ? `, response data: ${errorString}` : ''),
         )
-        throw new Error(
-            `Failed to download DevCycle config.` +
-                (errorString ? ` Error details: ${errorString}` : ''),
-        )
+        if(ex?.message !== 'Network Error') {
+            throw new Error(
+                `Failed to download DevCycle config.` +
+                    (errorString ? ` Error details: ${errorString}` : ''),
+            ) 
+        } 
+        return { } as BucketedUserConfig
+        
     }
 }
 

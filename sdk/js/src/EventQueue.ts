@@ -128,7 +128,9 @@ export class EventQueue {
                     )
                 }
             } catch (ex: any) {
-                this.client.eventEmitter.emitError(ex)
+                if(ex?.message !== 'Network Error') {
+                    this.client.eventEmitter.emitError(ex)
+                }
                 this.client.logger.error(
                     'failed to flush events due to error, dropping events. ' +
                         `Error message: ${ex?.message}`,
