@@ -1,5 +1,5 @@
-import type { getDevCycleServerData } from '../server/devcycleServerData'
-import { DevCycleOptions } from '@devcycle/js-client-sdk'
+import { DevCycleOptions, DevCycleUser } from '@devcycle/js-client-sdk'
+import { BucketedUserConfig } from '@devcycle/types'
 
 export type DevCycleNextOptions = Pick<
     DevCycleOptions,
@@ -34,6 +34,13 @@ export type DevCycleNextOptions = Pick<
     staticMode?: boolean
 }
 
-export type DevCycleServerData = Awaited<
-    ReturnType<typeof getDevCycleServerData>
->
+export type BucketedConfigWithLastModified = BucketedUserConfig & {
+    lastModified?: string
+}
+
+export type DevCycleServerData = {
+    options: DevCycleNextOptions
+    user: DevCycleUser
+    sdkKey: string
+    config: BucketedConfigWithLastModified | null
+}

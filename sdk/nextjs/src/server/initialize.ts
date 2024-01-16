@@ -1,9 +1,9 @@
 import { DevCycleUser, initializeDevCycle } from '@devcycle/js-client-sdk'
-import { getClient, setClient, setOptions, setSDKKey } from './requestContext'
-import { identifyUser } from './identify'
-import { getDevCycleServerData } from './devcycleServerData'
+import { getClient, setClient } from './requestContext'
 import { getUserAgent } from './userAgent'
-import { DevCycleNextOptions } from '../common/types'
+import { DevCycleNextOptions, DevCycleServerData } from '../common/types'
+import { cache } from 'react'
+import { getBucketedConfig } from './bucketing'
 
 const jsClientOptions = {
     // pass next object to enable "next" mode in JS SDK
@@ -14,28 +14,47 @@ const jsClientOptions = {
     disableCustomEventLogging: true,
 }
 
+const cachedUserGetter = cache(
+    async (
+        userGetter: () => DevCycleUser | Promise<DevCycleUser>,
+    ): Promise<DevCycleUser> => {
+        return userGetter()
+    },
+)
+
 export const initialize = async (
     sdkKey: string,
     userGetter: () => DevCycleUser | Promise<DevCycleUser>,
     options: DevCycleNextOptions = {},
-): Promise<Awaited<ReturnType<typeof getDevCycleServerData>>> => {
-    setSDKKey(sdkKey)
-    setOptions(options)
-    const user = await userGetter()
+): Promise<DevCycleServerData> => {
+    validateSDKKey(sdkKey)
+    // TODO moving this call to inside `getBucketedConfig` appears to cause static build issues from reading headers
+    // Might be a bug in Next, if moving this make sure to verify you can `yarn next build` the e2e app router app
+    const userAgent = getUserAgent(options)
+
+    const user = await cachedUserGetter(userGetter)
     if (!user || typeof user.user_id !== 'string') {
         throw new Error('DevCycle user getter must return a user')
     }
-    identifyUser(user)
 
-    setClient(
-        initializeDevCycle(sdkKey, user, {
-            ...options,
-            deferInitialization: true,
-            ...jsClientOptions,
-        }),
-    )
+    const initializeAlreadyCalled = !!getClient()
 
-    const context = await getDevCycleServerData()
+    if (!initializeAlreadyCalled) {
+        setClient(
+            initializeDevCycle(sdkKey, user, {
+                ...options,
+                deferInitialization: true,
+                ...jsClientOptions,
+            }),
+        )
+    }
+
+    let config = null
+    try {
+        config = await getBucketedConfig(sdkKey, user, userAgent)
+    } catch (e) {
+        console.error('Error fetching DevCycle config', e)
+    }
 
     const client = getClient()
 
@@ -45,7 +64,28 @@ export const initialize = async (
         )
     }
 
-    client.synchronizeBootstrapData(context.config, user, getUserAgent())
+    if (!initializeAlreadyCalled) {
+        client.synchronizeBootstrapData(config, user, getUserAgent(options))
+    }
 
-    return context
+    return { config, user, options, sdkKey }
+}
+
+const validateSDKKey = (sdkKey: string): void => {
+    if (!sdkKey) {
+        throw new Error(
+            'Missing SDK key! Provide a valid SDK key to DevCycleServersideProvider',
+        )
+    }
+
+    // attempt to make sure server keys don't leak to the client!
+    if (
+        sdkKey?.length &&
+        !sdkKey.startsWith('dvc_client') &&
+        !sdkKey.startsWith('client')
+    ) {
+        throw new Error(
+            'Must use a client SDK key. This key will be sent to the client!',
+        )
+    }
 }
