@@ -39,17 +39,20 @@ export const setupDevCycle = (
         key,
         defaultValue,
     ) => {
-        ensureSetup(sdkKey, userGetter, options)
+        const { serverDataPromise } = ensureSetup(sdkKey, userGetter, options)
+        await serverDataPromise
         return getVariableValue(key, defaultValue)
     }
 
     const _getAllVariables: typeof getAllVariables = async () => {
-        ensureSetup(sdkKey, userGetter, options)
+        const { serverDataPromise } = ensureSetup(sdkKey, userGetter, options)
+        await serverDataPromise
         return getAllVariables()
     }
 
     const _getAllFeatures: typeof getAllFeatures = async () => {
-        ensureSetup(sdkKey, userGetter, options)
+        const { serverDataPromise } = ensureSetup(sdkKey, userGetter, options)
+        await serverDataPromise
         return getAllFeatures()
     }
 

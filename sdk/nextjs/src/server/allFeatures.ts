@@ -1,9 +1,7 @@
-import { getClient, getInitializedPromise } from './requestContext'
+import { getClient } from './requestContext'
 import { DVCFeatureSet } from '@devcycle/js-client-sdk'
 
 export async function getAllFeatures(): Promise<DVCFeatureSet> {
-    await getInitializedPromise()
-
     const client = getClient()
     if (!client) {
         console.error(
