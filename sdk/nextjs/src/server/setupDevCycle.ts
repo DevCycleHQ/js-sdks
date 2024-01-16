@@ -1,3 +1,4 @@
+import 'server-only'
 import { getVariableValue } from './getVariableValue'
 import { initialize, validateSDKKey } from './initialize'
 import { DevCycleUser } from '@devcycle/js-client-sdk'
