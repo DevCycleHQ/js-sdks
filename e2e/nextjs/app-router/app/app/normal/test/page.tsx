@@ -1,5 +1,5 @@
-import { ClientComponent } from '@/app/test/ClientComponent'
-import { ServerComponent } from '@/app/test/ServerComponent'
+import { ClientComponent } from './ClientComponent'
+import { ServerComponent } from './ServerComponent'
 
 export default async function Page() {
     return (
