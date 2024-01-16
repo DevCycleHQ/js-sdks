@@ -27,7 +27,6 @@ export const initialize = async (
     userGetter: () => DevCycleUser | Promise<DevCycleUser>,
     options: DevCycleNextOptions = {},
 ): Promise<DevCycleServerData> => {
-    validateSDKKey(sdkKey)
     // TODO moving this call to inside `getBucketedConfig` appears to cause static build issues from reading headers
     // Might be a bug in Next, if moving this make sure to verify you can `yarn next build` the e2e app router app
     const userAgent = getUserAgent(options)
@@ -71,7 +70,7 @@ export const initialize = async (
     return { config, user, options, sdkKey }
 }
 
-const validateSDKKey = (sdkKey: string): void => {
+export const validateSDKKey = (sdkKey: string): void => {
     if (!sdkKey) {
         throw new Error(
             'Missing SDK key! Provide a valid SDK key to DevCycleServersideProvider',

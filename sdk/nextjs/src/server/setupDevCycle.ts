@@ -1,5 +1,5 @@
 import { getVariableValue } from './getVariableValue'
-import { initialize } from './initialize'
+import { initialize, validateSDKKey } from './initialize'
 import { DevCycleUser } from '@devcycle/js-client-sdk'
 import { getUserAgent } from './userAgent'
 import { getAllVariables } from './getAllVariables'
@@ -18,6 +18,8 @@ export const setupDevCycle = (
     userGetter: () => Promise<ServerUser> | ServerUser,
     options: DevCycleNextOptions = {},
 ) => {
+    validateSDKKey(sdkKey)
+
     const _getVariableValue: typeof getVariableValue = async (
         key,
         defaultValue,
