@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import React from 'react'
+import { DevCycleClientsideProvider } from '@devcycle/nextjs-sdk'
+import { getClientContext } from './devcycle'
 
 export const metadata: Metadata = {
     title: 'Create Next App',
@@ -13,7 +15,11 @@ export default async function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body>{children}</body>
+            <body>
+                <DevCycleClientsideProvider context={getClientContext()}>
+                    {children}
+                </DevCycleClientsideProvider>
+            </body>
         </html>
     )
 }
