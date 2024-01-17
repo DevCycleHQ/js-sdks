@@ -9,6 +9,7 @@
         "hoist-non-react-statics": "^3.3.2",
         "server-only": "^0.0.1"
     },
+    "types": "./src/index.d.ts",
     "exports": {
         ".": {
             "import": "./index.js",
@@ -25,6 +26,5 @@
             "require": "./pages.js",
             "types": "./pages.d.ts"
         }
-    },
-    "types": "./src/index.d.ts"
+    }
 }
