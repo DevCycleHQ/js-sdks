@@ -1,7 +1,6 @@
 {
     "name": "nextjs",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "sdk/nextjs/src",
     "projectType": "library",
     "tags": [],
     "targets": {
@@ -22,7 +21,7 @@
                 "outputPath": "dist/sdk/nextjs",
                 "tsConfig": "sdk/nextjs/tsconfig.lib.json",
                 "packageJson": "sdk/nextjs/package.json",
-                "main": "sdk/nextjs/src/index.ts",
+                "main": "sdk/nextjs/index.ts",
                 "assets": ["sdk/nextjs/README.md"]
             }
         },

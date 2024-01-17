@@ -15,19 +15,19 @@
     },
     "exports": {
         ".": {
-            "import": "./src/index.js",
-            "require": "./src/index.js",
-            "types": "./src/index.d.ts"
+            "import": "./index.js",
+            "require": "./index.js",
+            "types": "./index.d.ts"
         },
         "./server": {
-            "import": "./src/server.js",
-            "require": "./src/server.js",
-            "types": "./src/server.d.ts"
+            "import": "./server.js",
+            "require": "./server.js",
+            "types": "./server.d.ts"
         },
         "./pages": {
-            "import": "./src/pages.js",
-            "require": "./src/pages.js",
-            "types": "./src/pages.d.ts"
+            "import": "./pages.js",
+            "require": "./pages.js",
+            "types": "./pages.d.ts"
         }
     },
     "types": "./src/index.d.ts"
