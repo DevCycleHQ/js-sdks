@@ -11,7 +11,7 @@
     "scripts": {
         "lint": "nx run-many --parallel --target lint --all",
         "test": "nx run-many --parallel --target test --all",
-        "affected:lint": "nx affected --base=origin/main --head=HEAD --target=lint --fix",
+        "affected:lint": "nx affected --base=origin/main --head=HEAD --target=lint",
         "affected:test": "nx affected --base=origin/main --head=HEAD --target=test",
         "affected:e2e": "nx affected --base=origin/main --head=HEAD --target=e2e",
         "npm-publish": "nx affected --base=origin/main~1 --target=npm-publish",
