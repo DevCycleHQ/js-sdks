@@ -1,5 +1,5 @@
-export * from './src/pages/getServerSideDevCycle'
-export * from './src/pages/appWithDevCycle'
+export * from './src/pages/getServerSideDevCycle.js'
+export * from './src/pages/appWithDevCycle.js'
 export {
     useVariableValue,
     useVariable,
