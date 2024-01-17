@@ -9,9 +9,6 @@
         "hoist-non-react-statics": "^3.3.2",
         "server-only": "^0.0.1"
     },
-    "peerDependencies": {
-        "react": "^18.2.0"
-    },
     "exports": {
         ".": {
             "import": "./index.js",
