@@ -21,6 +21,9 @@
         "src/**/*.jsx",
         "src/**/*.ts",
         "src/**/*.tsx",
+        "index.ts",
+        "pages.ts",
+        "server.ts",
         "next-env.d.ts"
     ]
 }
