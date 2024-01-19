@@ -5181,6 +5181,9 @@ __metadata:
     "@devcycle/types": ^1.4.6
     hoist-non-react-statics: ^3.3.2
     server-only: ^0.0.1
+  peerDependencies:
+    next: ">=14.1"
+    react: ">=18.2"
   languageName: unknown
   linkType: soft
 
