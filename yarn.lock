@@ -4867,12 +4867,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@commitlint/config-conventional@npm:^16.2.1":
-  version: 16.2.4
-  resolution: "@commitlint/config-conventional@npm:16.2.4"
+"@commitlint/config-conventional@npm:^18.5.0":
+  version: 18.5.0
+  resolution: "@commitlint/config-conventional@npm:18.5.0"
   dependencies:
-    conventional-changelog-conventionalcommits: ^4.3.1
-  checksum: 211a322967c1eeee961eb0be9752782d16c025213520b7ada173d6b16050efe477778103f32b62361ad595b79ff6703694569d99705469cb2be0ac5ffba6465e
+    conventional-changelog-conventionalcommits: ^7.0.2
+  checksum: 787f7b6f8ad0dc550932798a4f3ad427f407518397deeb6ddc0c25c160086f25a9953dc4428319a89d71f626c86b8a1102a60d0a40d422199a8f80185e85ed0b
   languageName: node
   linkType: hard
 
@@ -14646,14 +14646,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conventional-changelog-conventionalcommits@npm:^4.3.1":
-  version: 4.6.3
-  resolution: "conventional-changelog-conventionalcommits@npm:4.6.3"
+"conventional-changelog-conventionalcommits@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "conventional-changelog-conventionalcommits@npm:7.0.2"
   dependencies:
     compare-func: ^2.0.0
-    lodash: ^4.17.15
-    q: ^1.5.1
-  checksum: 7b8e8a21ebb56f9aaa510e12917b7c609202072c3e71089e0a09630c37c2e8146cdb04364809839b0e3eb55f807fe84d03b2079500b37f6186d505848be5c562
+  checksum: e17ac5970ae09d6e9b0c3a7edaed075b836c0c09c34c514589cbe06554f46ed525067fa8150a8467cc03b1cf9af2073e7ecf48790d4f5ea399921b1cbe313711
   languageName: node
   linkType: hard
 
@@ -15863,7 +15861,7 @@ __metadata:
     "@babel/preset-react": ^7.14.5
     "@cloudflare/workers-types": ^4.20230914.0
     "@commitlint/cli": ^16.2.3
-    "@commitlint/config-conventional": ^16.2.1
+    "@commitlint/config-conventional": ^18.5.0
     "@devcycle/assemblyscript-json": ^2.0.0
     "@nestjs/class-validator": ^0.13.4
     "@nrwl/js": 16.10.0
