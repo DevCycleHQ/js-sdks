@@ -6,7 +6,6 @@ import { getUserAgent } from './userAgent'
 import { getAllVariables } from './getAllVariables'
 import { getAllFeatures } from './allFeatures'
 import { DevCycleNextOptions } from '../common/types'
-import { ComponentProps, ComponentType, lazy } from 'react'
 
 // server-side users must always be "identified" with a user id
 type ServerUser = Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & {

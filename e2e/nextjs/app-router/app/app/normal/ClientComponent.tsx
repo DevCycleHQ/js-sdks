@@ -3,10 +3,10 @@ import {
     useVariableValue,
     useAllVariables,
     useAllFeatures,
-    ifEnabled,
+    renderIfEnabled,
 } from '@devcycle/nextjs-sdk'
 
-const ConditionalComponent = ifEnabled(
+const ConditionalComponent = renderIfEnabled(
     'enabled-feature',
     () => import('./ConditionalClientComponent'),
 )
