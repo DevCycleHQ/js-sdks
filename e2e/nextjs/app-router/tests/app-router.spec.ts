@@ -91,6 +91,10 @@ test('has expected page elements', async ({ page }) => {
             /Client All Features: .*"key":"enabled-feature","type":"permission"/,
         ),
     ).toBeVisible()
+
+    await expect(
+        page.getByText('Client Component Conditionally Bundled'),
+    ).toBeVisible()
 })
 
 test('works after a client side navigation', async ({ page }) => {
