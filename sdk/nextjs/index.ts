@@ -1,9 +1,10 @@
 // Use this file to export React client code (e.g. those with 'use client' directive)
 // or other non-server utilities
-export * from './src/client/useVariableValue'
-export * from './src/client/DevCycleClientsideProvider'
-export * from './src/common/types'
-export * from './src/client/useUserIdentity'
-export * from './src/client/useTrack'
-export * from './src/client/useAllVariables'
-export * from './src/client/useAllFeatures'
+export { useVariable, useVariableValue } from './src/client/useVariableValue'
+export type * from './src/common/types'
+export { useUserIdentity } from './src/client/useUserIdentity'
+export { useTrack } from './src/client/useTrack'
+export { useAllVariables } from './src/client/useAllVariables'
+export { useAllFeatures } from './src/client/useAllFeatures'
+export { ifEnabled } from './src/client/IfEnabled'
+export { DevCycleClientsideProvider } from './src/client/DevCycleClientsideProvider'
