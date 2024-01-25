@@ -3,7 +3,13 @@ import {
     useVariableValue,
     useAllVariables,
     useAllFeatures,
+    renderIfEnabled,
 } from '@devcycle/nextjs-sdk'
+
+const ConditionalComponent = renderIfEnabled(
+    'enabled-feature',
+    () => import('./ConditionalClientComponent'),
+)
 
 export const ClientComponent = () => {
     const enabledVar = useVariableValue('enabled-feature', false)
@@ -18,6 +24,7 @@ export const ClientComponent = () => {
             <p>Client Disabled Variable: {JSON.stringify(disabledVar)}</p>
             <p>Client All Variables: {JSON.stringify(allVariables)}</p>
             <p>Client All Features: {JSON.stringify(allFeatures)}</p>
+            <ConditionalComponent />
         </div>
     )
 }

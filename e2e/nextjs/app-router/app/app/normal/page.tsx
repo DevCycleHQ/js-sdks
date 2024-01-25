@@ -3,7 +3,7 @@ import { ServerComponent } from './ServerComponent'
 import React, { Suspense } from 'react'
 import Link from 'next/link'
 
-const Home = () => {
+const Home = async () => {
     return (
         <main>
             <div>Streaming Disabled</div>
