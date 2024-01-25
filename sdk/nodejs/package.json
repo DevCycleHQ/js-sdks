@@ -7,6 +7,8 @@
         "@devcycle/bucketing-assembly-script": "^1.12.0",
         "@devcycle/js-cloud-server-sdk": "^1.4.0",
         "@devcycle/types": "^1.5.0",
+        "@openfeature/core": "^0.0.23",
+        "@openfeature/server-sdk": "^1.9.1",
         "cross-fetch": "^3.1.8",
         "fetch-retry": "^5.0.3"
     },

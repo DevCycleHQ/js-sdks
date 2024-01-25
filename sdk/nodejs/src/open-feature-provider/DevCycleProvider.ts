@@ -20,7 +20,7 @@ import {
     DVCJSON,
     DVCCustomDataJSON,
     dvcDefaultLogger,
-} from '@devcycle/nodejs-server-sdk'
+} from '../index'
 import { DVCLogger, VariableValue } from '@devcycle/types'
 
 const DVCKnownPropertyKeyTypes: Record<string, string> = {
@@ -42,6 +42,8 @@ export default class DevCycleProvider implements Provider {
     readonly metadata: ProviderMetadata = {
         name: 'devcycle-nodejs-provider',
     } as const
+
+    readonly runsOn = 'server'
 
     private readonly logger: DVCLogger
 
