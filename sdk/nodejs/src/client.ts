@@ -1,6 +1,5 @@
 import { EnvironmentConfigManager } from '@devcycle/config-manager'
 import { UserError } from '@devcycle/server-request'
-
 import {
     bucketUserForConfig,
     getVariableTypeCode,
@@ -32,6 +31,7 @@ import {
     DevCycleEvent,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
+import DevCycleProvider from './open-feature-provider/DevCycleProvider'
 
 interface IPlatformData {
     platform: string
@@ -55,6 +55,7 @@ export class DevCycleClient {
     private onInitialized: Promise<DevCycleClient>
     private logger: DVCLogger
     private _isInitialized = false
+    private openFeatureProvider: DevCycleProvider
 
     get isInitialized(): boolean {
         return this._isInitialized
@@ -122,6 +123,13 @@ export class DevCycleClient {
         process.on('exit', () => {
             this.close()
         })
+    }
+
+    getOpenFeatureProvider(): DevCycleProvider {
+        if (this.openFeatureProvider) return this.openFeatureProvider
+
+        this.openFeatureProvider = new DevCycleProvider(this)
+        return this.openFeatureProvider
     }
 
     /**

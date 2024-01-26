@@ -1,4 +1,4 @@
-import DevCycleProvider from '../src/DevCycleProvider'
+import DevCycleProvider from '../../src/open-feature-provider/DevCycleProvider'
 import {
     OpenFeature,
     Client,
@@ -8,7 +8,7 @@ import {
     DevCycleClient,
     DevCycleCloudClient,
     DevCycleUser,
-} from '@devcycle/nodejs-server-sdk'
+} from '../../src/index'
 
 jest.mock('@devcycle/nodejs-server-sdk')
 

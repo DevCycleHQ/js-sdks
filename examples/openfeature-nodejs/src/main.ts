@@ -1,5 +1,4 @@
 import { OpenFeature, Client } from '@openfeature/server-sdk'
-import DevCycleProvider from '@devcycle/openfeature-nodejs-provider'
 import { initializeDevCycle } from '@devcycle/nodejs-server-sdk'
 
 const DEVCYCLE_SERVER_SDK_KEY =
@@ -8,10 +7,9 @@ const DEVCYCLE_SERVER_SDK_KEY =
 let openFeatureClient: Client
 
 async function startDevCycle() {
-    const devcycleClient = await initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY, {
-        logLevel: 'info',
-    }).onClientInitialized()
-    OpenFeature.setProvider(new DevCycleProvider(devcycleClient))
+    await OpenFeature.setProviderAndWait(
+        initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY).getOpenFeatureProvider(),
+    )
     openFeatureClient = OpenFeature.getClient()
 
     console.log('DevCycle OpenFeature client initialized')

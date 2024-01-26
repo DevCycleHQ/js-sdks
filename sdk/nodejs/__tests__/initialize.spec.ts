@@ -1,8 +1,5 @@
-import {
-    DevCycleClient,
-    DevCycleCloudClient,
-    initializeDevCycle,
-} from '../src/index'
+import { DevCycleCloudClient, initializeDevCycle } from '../src/index'
+import { OpenFeature } from '@openfeature/server-sdk'
 
 jest.mock('../src/bucketing')
 jest.mock('@devcycle/config-manager')
@@ -12,10 +9,21 @@ describe('NodeJS SDK Initialize', () => {
         jest.clearAllMocks()
     })
 
-    it('sucessfully calls initialize with no options', async () => {
-        const client: DevCycleClient = await initializeDevCycle(
+    it('successfully calls initialize with no options', async () => {
+        const client = await initializeDevCycle(
             'dvc_server_token',
         ).onClientInitialized()
+        expect(client).toBeDefined()
+    })
+
+    it('successfully creates a OpenFeature provider', async () => {
+        const provider =
+            initializeDevCycle('dvc_server_token').getOpenFeatureProvider()
+        expect(provider).toBeDefined()
+        expect(provider.status).toBe('NOT_READY')
+        await OpenFeature.setProviderAndWait(provider)
+        expect(provider.status).toBe('READY')
+        const client = OpenFeature.getClient()
         expect(client).toBeDefined()
     })
 

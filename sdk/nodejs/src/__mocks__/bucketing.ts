@@ -41,6 +41,8 @@ export const importBucketingLib = async (): Promise<void> => {
                 .mockReturnValue(JSON.stringify(testVariable)),
             variableForUser_PB: jest.fn().mockReturnValue(buffer),
             VariableType,
+            initEventQueue: jest.fn(),
+            flushEventQueue: jest.fn(),
         }),
     )
 }
