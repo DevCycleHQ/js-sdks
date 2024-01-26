@@ -8845,26 +8845,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openfeature/core@npm:^0.0.21":
-  version: 0.0.21
-  resolution: "@openfeature/core@npm:0.0.21"
-  checksum: 44c9d52b9af56e4caffb921b38a3e53d7d2d87c381ca32d7c5cb22c708f9889d9644d5d55768a1b2acec19c676a70b21c76223cb41f3b32da4fb5eeac087c609
-  languageName: node
-  linkType: hard
-
 "@openfeature/core@npm:^0.0.23":
   version: 0.0.23
   resolution: "@openfeature/core@npm:0.0.23"
   checksum: 348c6abb7a2ff5ecb47c59191520a5f74bae42c7d14c5f2b710fc12973ad76585a651e5606a0ebf4cd2d6f4134c7d600ebf7ebc8c0668a0af8e05621e92664d4
-  languageName: node
-  linkType: hard
-
-"@openfeature/server-sdk@npm:^1.8.0":
-  version: 1.8.0
-  resolution: "@openfeature/server-sdk@npm:1.8.0"
-  peerDependencies:
-    "@openfeature/core": 0.0.21
-  checksum: b6efd421569f7aef3090fd40f4bc7fd4ce3ae66a6b354f1970671d9d37a13c2af3dc6bcfe6e422785e000494c1500e9df8115dcd41fd2e8e70c1b8b742921cfd
   languageName: node
   linkType: hard
 
@@ -15790,8 +15774,8 @@ __metadata:
     "@nx/web": 16.10.0
     "@nx/webpack": 16.10.0
     "@nx/workspace": 16.10.0
-    "@openfeature/core": ^0.0.21
-    "@openfeature/server-sdk": ^1.8.0
+    "@openfeature/core": ^0.0.23
+    "@openfeature/server-sdk": ^1.9.1
     "@openfeature/web-sdk": ^0.4.8
     "@playwright/test": ^1.36.0
     "@pmmmwh/react-refresh-webpack-plugin": ^0.5.7
