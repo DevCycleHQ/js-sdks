@@ -7,10 +7,8 @@ const DEVCYCLE_SERVER_SDK_KEY =
 let openFeatureClient: Client
 
 async function startDevCycle() {
-    OpenFeature.setProvider(
-        await initializeDevCycle(
-            DEVCYCLE_SERVER_SDK_KEY,
-        ).getOpenFeatureProvider(),
+    await OpenFeature.setProviderAndWait(
+        initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY).getOpenFeatureProvider(),
     )
     openFeatureClient = OpenFeature.getClient()
 

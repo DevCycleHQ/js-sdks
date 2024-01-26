@@ -125,10 +125,9 @@ export class DevCycleClient {
         })
     }
 
-    async getOpenFeatureProvider(): Promise<DevCycleProvider> {
+    getOpenFeatureProvider(): DevCycleProvider {
         if (this.openFeatureProvider) return this.openFeatureProvider
 
-        await this.onInitialized
         this.openFeatureProvider = new DevCycleProvider(this)
         return this.openFeatureProvider
     }

@@ -1,4 +1,5 @@
 import { DevCycleCloudClient, initializeDevCycle } from '../src/index'
+import { OpenFeature } from '@openfeature/server-sdk'
 
 jest.mock('../src/bucketing')
 jest.mock('@devcycle/config-manager')
@@ -16,11 +17,14 @@ describe('NodeJS SDK Initialize', () => {
     })
 
     it('successfully creates a OpenFeature provider', async () => {
-        const provider = await initializeDevCycle(
-            'dvc_server_token',
-        ).getOpenFeatureProvider()
+        const provider =
+            initializeDevCycle('dvc_server_token').getOpenFeatureProvider()
         expect(provider).toBeDefined()
+        expect(provider.status).toBe('NOT READY')
+        await OpenFeature.setProviderAndWait(provider)
         expect(provider.status).toBe('READY')
+        const client = OpenFeature.getClient()
+        expect(client).toBeDefined()
     })
 
     it('fails to initialize in Local Bucketing mode when no token is provided', () => {
