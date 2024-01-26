@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/react-native-expo-client-sdk",
-    "version": "1.9.0",
+    "version": "1.10.0",
     "description": "The DevCycle React Native Expo SDK used for feature management.",
     "main": "dist/index.js",
     "scripts": {
@@ -13,8 +13,8 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "@devcycle/js-client-sdk": "^1.17.0",
-        "@devcycle/react-client-sdk": "^1.15.0",
+        "@devcycle/js-client-sdk": "^1.18.0",
+        "@devcycle/react-client-sdk": "^1.16.0",
         "@react-native-async-storage/async-storage": "^1.17.11",
         "react-native-device-info": "^8.7.0",
         "react-native-get-random-values": "^1.7.2"
