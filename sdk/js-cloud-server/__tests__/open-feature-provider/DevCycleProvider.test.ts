@@ -3,12 +3,11 @@ import {
     Client,
     StandardResolutionReasons,
 } from '@openfeature/server-sdk'
-import { DevCycleClient, DevCycleUser } from '../../src/index'
+import { DevCycleCloudClient, DevCycleUser } from '../../src/index'
 
-jest.mock('../../src/bucketing')
 jest.mock('@devcycle/config-manager')
 
-const variableMock = jest.spyOn(DevCycleClient.prototype, 'variable')
+const variableMock = jest.spyOn(DevCycleCloudClient.prototype, 'variable')
 const logger = {
     debug: jest.fn(),
     info: jest.fn(),
@@ -18,10 +17,17 @@ const logger = {
 
 async function initOFClient(): Promise<{
     ofClient: Client
-    dvcClient: DevCycleClient
+    dvcClient: DevCycleCloudClient
 }> {
     const options = { logger }
-    const dvcClient = new DevCycleClient('DEVCYCLE_SERVER_SDK_KEY', options)
+    const dvcClient = new DevCycleCloudClient(
+        'DEVCYCLE_SERVER_SDK_KEY',
+        options,
+        {
+            platform: 'NodeJS',
+            sdkType: 'server',
+        },
+    )
     await OpenFeature.setProviderAndWait(dvcClient.getOpenFeatureProvider())
     const ofClient = OpenFeature.getClient()
     ofClient.setContext({ targetingKey: 'node_sdk_test' })
@@ -41,7 +47,7 @@ describe('DevCycleProvider Unit Tests', () => {
 
     describe('User Context', () => {
         beforeEach(() => {
-            variableMock.mockReturnValue({
+            variableMock.mockResolvedValue({
                 key: 'boolean-flag',
                 value: true,
                 defaultValue: false,
@@ -197,7 +203,7 @@ describe('DevCycleProvider Unit Tests', () => {
 
     describe('Boolean Flags', () => {
         beforeEach(() => {
-            variableMock.mockReturnValue({
+            variableMock.mockResolvedValue({
                 key: 'boolean-flag',
                 value: true,
                 defaultValue: false,
@@ -226,7 +232,7 @@ describe('DevCycleProvider Unit Tests', () => {
         })
 
         it('should return default value if flag is not found', async () => {
-            variableMock.mockReturnValue({
+            variableMock.mockResolvedValue({
                 key: 'boolean-flag',
                 value: false,
                 defaultValue: false,
@@ -247,7 +253,7 @@ describe('DevCycleProvider Unit Tests', () => {
 
     describe('String Flags', () => {
         beforeEach(() => {
-            variableMock.mockReturnValue({
+            variableMock.mockResolvedValue({
                 key: 'string-flag',
                 value: 'string-value',
                 defaultValue: 'string-default',
@@ -278,7 +284,7 @@ describe('DevCycleProvider Unit Tests', () => {
 
     describe('Number Flags', () => {
         beforeEach(() => {
-            variableMock.mockReturnValue({
+            variableMock.mockResolvedValue({
                 key: 'num-flag',
                 value: 610,
                 defaultValue: 2056,
@@ -309,7 +315,7 @@ describe('DevCycleProvider Unit Tests', () => {
 
     describe('JSON Flags', () => {
         beforeEach(() => {
-            variableMock.mockReturnValue({
+            variableMock.mockResolvedValue({
                 key: 'json-flag',
                 value: { hello: 'world' },
                 defaultValue: { default: 'value' },

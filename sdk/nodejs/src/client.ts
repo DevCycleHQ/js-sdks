@@ -20,6 +20,7 @@ import {
 } from '@devcycle/types'
 import os from 'os'
 import {
+    DevCycleCommonClient,
     DevCycleUser,
     DVCVariable,
     VariableParam,
@@ -29,9 +30,9 @@ import {
     DVCVariableSet,
     DVCFeatureSet,
     DevCycleEvent,
+    DevCycleProvider,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
-import DevCycleProvider from './open-feature-provider/DevCycleProvider'
 
 interface IPlatformData {
     platform: string
@@ -48,7 +49,7 @@ const castIncomingUser = (user: DevCycleUser) => {
     return user
 }
 
-export class DevCycleClient {
+export class DevCycleClient implements DevCycleCommonClient {
     private sdkKey: string
     private configHelper: EnvironmentConfigManager
     private eventQueue: EventQueue
@@ -128,7 +129,9 @@ export class DevCycleClient {
     getOpenFeatureProvider(): DevCycleProvider {
         if (this.openFeatureProvider) return this.openFeatureProvider
 
-        this.openFeatureProvider = new DevCycleProvider(this)
+        this.openFeatureProvider = new DevCycleProvider(this, {
+            logger: this.logger,
+        })
         return this.openFeatureProvider
     }
 

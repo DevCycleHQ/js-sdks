@@ -13,7 +13,6 @@
                             "@devcycle/server-request",
                             "@devcycle/config-manager",
                             "@devcycle/bucketing-assembly-script",
-                            "@openfeature/core",
                             "fetch-retry",
                             "cross-fetch"
                         ]

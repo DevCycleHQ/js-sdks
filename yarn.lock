@@ -5146,6 +5146,8 @@ __metadata:
   resolution: "@devcycle/js-cloud-server-sdk@workspace:sdk/js-cloud-server"
   dependencies:
     "@devcycle/types": ^1.6.0
+    "@openfeature/core": ^0.0.23
+    "@openfeature/server-sdk": ^1.9.1
     cross-fetch: ^3.1.8
     fetch-retry: ^5.0.3
     lodash: ^4.17.21
@@ -5200,8 +5202,6 @@ __metadata:
     "@devcycle/bucketing-assembly-script": ^1.13.0
     "@devcycle/js-cloud-server-sdk": ^1.5.0
     "@devcycle/types": ^1.6.0
-    "@openfeature/core": ^0.0.23
-    "@openfeature/server-sdk": ^1.9.1
     cross-fetch: ^3.1.8
     fetch-retry: ^5.0.3
   languageName: unknown

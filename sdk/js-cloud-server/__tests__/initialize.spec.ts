@@ -1,4 +1,5 @@
 import { initializeDevCycle } from '../src/index'
+import { OpenFeature } from '@openfeature/server-sdk'
 
 describe('JS Cloud Bucketing Server SDK Initialize', () => {
     afterAll(() => {
@@ -7,6 +8,17 @@ describe('JS Cloud Bucketing Server SDK Initialize', () => {
 
     it('successfully calls initialize with no options', async () => {
         const client = initializeDevCycle('dvc_server_token')
+        expect(client).toBeDefined()
+    })
+
+    it('successfully creates a OpenFeature provider', async () => {
+        const provider =
+            initializeDevCycle('dvc_server_token').getOpenFeatureProvider()
+        expect(provider).toBeDefined()
+        expect(provider.status).toBe('READY') // isInitialized() always returns true
+        await OpenFeature.setProviderAndWait(provider)
+        expect(provider.status).toBe('READY')
+        const client = OpenFeature.getClient()
         expect(client).toBeDefined()
     })
 

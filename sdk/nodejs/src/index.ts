@@ -14,10 +14,10 @@ import {
     DVCVariableInterface,
     DVCFeature,
     DVCFeatureSet,
+    DevCycleProvider,
 } from '@devcycle/js-cloud-server-sdk'
 import { DevCycleServerSDKOptions } from '@devcycle/types'
 import { getNodeJSPlatformDetails } from './utils/platformDetails'
-import DevCycleProvider from './open-feature-provider/DevCycleProvider'
 
 export {
     DevCycleClient,

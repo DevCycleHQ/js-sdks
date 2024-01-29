@@ -25,6 +25,7 @@ import {
 } from './request'
 import { DevCycleUser } from './models/user'
 import { ResponseError } from '@devcycle/server-request'
+import DevCycleProvider from './open-feature-provider/DevCycleProvider'
 
 const castIncomingUser = (user: DevCycleUser) => {
     if (!(user instanceof DevCycleUser)) {
@@ -67,11 +68,44 @@ const throwIfUserError = (err: unknown) => {
     throw err
 }
 
-export class DevCycleCloudClient {
+export interface DevCycleCommonClient {
+    get isInitialized(): boolean
+
+    getOpenFeatureProvider(): DevCycleProvider
+
+    onClientInitialized?(
+        onInitialized?: (err?: Error) => void,
+    ): Promise<DevCycleCommonClient>
+
+    variable<T extends DVCVariableValue>(
+        user: DevCycleUser,
+        key: string,
+        defaultValue: T,
+    ): Promise<DVCVariable<T>> | DVCVariable<T>
+
+    variableValue<T extends DVCVariableValue>(
+        user: DevCycleUser,
+        key: string,
+        defaultValue: T,
+    ): Promise<VariableTypeAlias<T>> | VariableTypeAlias<T>
+
+    allVariables(user: DevCycleUser): Promise<DVCVariableSet> | DVCVariableSet
+
+    allFeatures(user: DevCycleUser): Promise<DVCFeatureSet> | DVCFeatureSet
+
+    track(user: DevCycleUser, event: DevCycleEvent): Promise<void> | void
+
+    flushEvents?(callback?: () => void): Promise<void>
+
+    close?(): Promise<void>
+}
+
+export class DevCycleCloudClient implements DevCycleCommonClient {
     private sdkKey: string
     private logger: DVCLogger
     private options: DevCycleServerSDKOptions
     private platformDetails: DevCyclePlatformDetails
+    private openFeatureProvider: DevCycleProvider
 
     constructor(
         sdkKey: string,
@@ -92,6 +126,15 @@ export class DevCycleCloudClient {
      */
     get isInitialized(): boolean {
         return true
+    }
+
+    getOpenFeatureProvider(): DevCycleProvider {
+        if (this.openFeatureProvider) return this.openFeatureProvider
+
+        this.openFeatureProvider = new DevCycleProvider(this, {
+            logger: this.logger,
+        })
+        return this.openFeatureProvider
     }
 
     async variable<T extends DVCVariableValue>(

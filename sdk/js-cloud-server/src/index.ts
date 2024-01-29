@@ -1,9 +1,15 @@
 import { DevCycleServerSDKOptions } from '@devcycle/types'
-import { DevCycleCloudClient } from './cloudClient'
+import { DevCycleCloudClient, DevCycleCommonClient } from './cloudClient'
 import { isValidServerSDKKey } from './utils/paramUtils'
 import { DevCycleUser } from './models/user'
+import DevCycleProvider from './open-feature-provider/DevCycleProvider'
 
-export { DevCycleCloudClient, DevCycleUser }
+export {
+    DevCycleCloudClient,
+    DevCycleCommonClient,
+    DevCycleUser,
+    DevCycleProvider,
+}
 export * from './models/populatedUser'
 export * from './models/user'
 export * from './models/variable'

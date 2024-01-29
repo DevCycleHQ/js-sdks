@@ -11,6 +11,7 @@
                     {
                         "ignoredDependencies": [
                             "@devcycle/server-request",
+                            "@openfeature/core",
                             "fetch-retry",
                             "cross-fetch"
                         ]

@@ -12,16 +12,18 @@ import {
     ProviderStatus,
 } from '@openfeature/server-sdk'
 import {
-    DevCycleClient,
-    DevCycleCloudClient,
-    DevCycleOptions,
+    DevCycleCommonClient,
     DVCVariableInterface,
     DevCycleUser,
     DVCJSON,
     DVCCustomDataJSON,
     dvcDefaultLogger,
 } from '../index'
-import { DVCLogger, VariableValue } from '@devcycle/types'
+import {
+    DVCLogger,
+    VariableValue,
+    DevCycleServerSDKOptions,
+} from '@devcycle/types'
 
 const DVCKnownPropertyKeyTypes: Record<string, string> = {
     email: 'string',
@@ -48,8 +50,8 @@ export default class DevCycleProvider implements Provider {
     private readonly logger: DVCLogger
 
     constructor(
-        private readonly devcycleClient: DevCycleClient | DevCycleCloudClient,
-        options: DevCycleOptions = {},
+        private readonly devcycleClient: DevCycleCommonClient,
+        options: Pick<DevCycleServerSDKOptions, 'logger' | 'logLevel'> = {},
     ) {
         this.logger =
             options.logger ?? dvcDefaultLogger({ level: options.logLevel })
@@ -62,13 +64,13 @@ export default class DevCycleProvider implements Provider {
     }
 
     async initialize(context?: EvaluationContext): Promise<void> {
-        if (this.devcycleClient instanceof DevCycleCloudClient) return
+        if (!this.devcycleClient.onClientInitialized) return
 
         await this.devcycleClient.onClientInitialized()
     }
 
     async onClose(): Promise<void> {
-        if (this.devcycleClient instanceof DevCycleCloudClient) return
+        if (!this.devcycleClient.close) return
 
         await this.devcycleClient.close()
     }
