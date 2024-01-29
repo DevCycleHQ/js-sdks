@@ -49,7 +49,7 @@ export default class DevCycleProvider implements Provider {
 
     constructor(
         private readonly devcycleClient: DevCycleClient | DevCycleCloudClient,
-        options: DevCycleOptions = {},
+        options: Pick<DevCycleOptions, 'logger' | 'logLevel'> = {},
     ) {
         this.logger =
             options.logger ?? dvcDefaultLogger({ level: options.logLevel })
@@ -323,7 +323,7 @@ export default class DevCycleProvider implements Provider {
                     break
                 default:
                     this.logger.warn(
-                        `EvaluationContext property "customData" contains "${key}" property of type ${typeof value}.` +
+                        `EvaluationContext property "customData" contains "${key}" property of type ${typeof value}. ` +
                             'DevCycleUser only supports flat customData properties of type ' +
                             'string / number / boolean / null',
                     )

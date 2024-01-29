@@ -69,7 +69,7 @@ const throwIfUserError = (err: unknown) => {
 
 export class DevCycleCloudClient {
     private sdkKey: string
-    private logger: DVCLogger
+    protected logger: DVCLogger
     private options: DevCycleServerSDKOptions
     private platformDetails: DevCyclePlatformDetails
 

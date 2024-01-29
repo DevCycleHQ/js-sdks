@@ -128,7 +128,9 @@ export class DevCycleClient {
     getOpenFeatureProvider(): DevCycleProvider {
         if (this.openFeatureProvider) return this.openFeatureProvider
 
-        this.openFeatureProvider = new DevCycleProvider(this)
+        this.openFeatureProvider = new DevCycleProvider(this, {
+            logger: this.logger,
+        })
         return this.openFeatureProvider
     }
 
