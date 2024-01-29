@@ -1,7 +1,7 @@
 import { DevCycleClient } from './client'
 import {
     DevCycleUser,
-    DevCycleCloudClient as DevCycleCloudServerClient,
+    DevCycleCloudClient as InternalDevCycleCloudClient,
     dvcDefaultLogger,
     isValidServerSDKKey,
     DevCycleEvent,
@@ -20,7 +20,7 @@ import { DevCycleServerSDKOptions } from '@devcycle/types'
 import { getNodeJSPlatformDetails } from './utils/platformDetails'
 import DevCycleProvider from './open-feature-provider/DevCycleProvider'
 
-class DevCycleCloudClient extends DevCycleCloudServerClient {
+class DevCycleCloudClient extends InternalDevCycleCloudClient {
     private openFeatureProvider: DevCycleProvider
 
     constructor(
