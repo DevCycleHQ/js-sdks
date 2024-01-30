@@ -1,7 +1,7 @@
 import { DevCycleClient } from './client'
 import {
     DevCycleUser,
-    DevCycleCloudClient,
+    DevCycleCloudClient as InternalDevCycleCloudClient,
     dvcDefaultLogger,
     isValidServerSDKKey,
     DevCycleEvent,
@@ -14,10 +14,32 @@ import {
     DVCVariableInterface,
     DVCFeature,
     DVCFeatureSet,
+    DevCyclePlatformDetails,
 } from '@devcycle/js-cloud-server-sdk'
 import { DevCycleServerSDKOptions } from '@devcycle/types'
 import { getNodeJSPlatformDetails } from './utils/platformDetails'
 import DevCycleProvider from './open-feature-provider/DevCycleProvider'
+
+class DevCycleCloudClient extends InternalDevCycleCloudClient {
+    private openFeatureProvider: DevCycleProvider
+
+    constructor(
+        sdkKey: string,
+        options: DevCycleServerSDKOptions,
+        platformDetails: DevCyclePlatformDetails,
+    ) {
+        super(sdkKey, options, platformDetails)
+    }
+
+    getOpenFeatureProvider(): DevCycleProvider {
+        if (this.openFeatureProvider) return this.openFeatureProvider
+
+        this.openFeatureProvider = new DevCycleProvider(this, {
+            logger: this.logger,
+        })
+        return this.openFeatureProvider
+    }
+}
 
 export {
     DevCycleClient,

@@ -5,7 +5,7 @@
     "license": "MIT",
     "dependencies": {
         "@devcycle/js-client-sdk": "^1.18.0",
-        "@openfeature/core": "^0.0.19",
-        "@openfeature/web-sdk": "^0.4.6"
+        "@openfeature/core": "^0.0.23",
+        "@openfeature/web-sdk": "^0.4.10"
     }
 }

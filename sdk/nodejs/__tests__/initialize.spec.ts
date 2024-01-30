@@ -16,11 +16,23 @@ describe('NodeJS SDK Initialize', () => {
         expect(client).toBeDefined()
     })
 
-    it('successfully creates a OpenFeature provider', async () => {
+    it('successfully creates a OpenFeature provider - local', async () => {
         const provider =
             initializeDevCycle('dvc_server_token').getOpenFeatureProvider()
         expect(provider).toBeDefined()
         expect(provider.status).toBe('NOT_READY')
+        await OpenFeature.setProviderAndWait(provider)
+        expect(provider.status).toBe('READY')
+        const client = OpenFeature.getClient()
+        expect(client).toBeDefined()
+    })
+
+    it('successfully creates a OpenFeature provider - cloud', async () => {
+        const provider = initializeDevCycle('dvc_server_token', {
+            enableCloudBucketing: true,
+        }).getOpenFeatureProvider()
+        expect(provider).toBeDefined()
+        expect(provider.status).toBe('READY') // onIntialized() is always true for cloud
         await OpenFeature.setProviderAndWait(provider)
         expect(provider.status).toBe('READY')
         const client = OpenFeature.getClient()

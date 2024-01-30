@@ -5224,8 +5224,8 @@ __metadata:
   resolution: "@devcycle/openfeature-web-provider@workspace:sdk/openfeature-web-provider"
   dependencies:
     "@devcycle/js-client-sdk": ^1.18.0
-    "@openfeature/core": ^0.0.19
-    "@openfeature/web-sdk": ^0.4.6
+    "@openfeature/core": ^0.0.23
+    "@openfeature/web-sdk": ^0.4.10
   languageName: unknown
   linkType: soft
 
@@ -8796,13 +8796,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openfeature/core@npm:^0.0.19":
-  version: 0.0.19
-  resolution: "@openfeature/core@npm:0.0.19"
-  checksum: 0648210b648c0cf76a00b462a472e4f989a7b07cc601ccd1ed9ebe74ebb17dc0f50a4ce75c1334beec8117403ba098ea7f3e553ed8fff42043e5a1eefb35eeb6
-  languageName: node
-  linkType: hard
-
 "@openfeature/core@npm:^0.0.23":
   version: 0.0.23
   resolution: "@openfeature/core@npm:0.0.23"
@@ -8819,12 +8812,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openfeature/web-sdk@npm:^0.4.6":
-  version: 0.4.6
-  resolution: "@openfeature/web-sdk@npm:0.4.6"
+"@openfeature/web-sdk@npm:^0.4.10":
+  version: 0.4.10
+  resolution: "@openfeature/web-sdk@npm:0.4.10"
   peerDependencies:
-    "@openfeature/core": 0.0.19
-  checksum: 4b75152c895a4d653536a0895f0af77a1028400c62e4e3129065777dad1fde6fa2f2ddf076cc2445eb61bd00623eb998759e611bdcc2c6ec535d501a3809b1c8
+    "@openfeature/core": 0.0.23
+  checksum: 796c93af7d7ee3ef0e23a0f26fa7886b5632e17dc39de316ed69a382cc091a542e60b7d2f772d1e085e47a0c29af05dbb12cc3299c478e2e619ef4443a6f0e0e
   languageName: node
   linkType: hard
 
