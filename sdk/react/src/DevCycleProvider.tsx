@@ -1,6 +1,6 @@
 'use client'
 import { ProviderConfig } from './types'
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import initializeDevCycleClient from './initializeDevCycleClient'
 import { Provider, initializedContext } from './context'
 import { DevCycleClient } from '@devcycle/js-client-sdk'
@@ -25,14 +25,22 @@ export function DevCycleProvider(props: Props): React.ReactElement {
         throw new Error('You must provide a sdkKey to DevCycleProvider')
     }
 
-    const [client] = useState<DevCycleClient>(() =>
-        initializeDevCycleClient(sdkKey, user, {
+    const clientRef = useRef<DevCycleClient>()
+
+    if (clientRef.current === undefined) {
+        clientRef.current = initializeDevCycleClient(sdkKey, user, {
             ...options,
-        }),
-    )
+        })
+    }
 
     useEffect(() => {
-        client
+        if (clientRef.current === undefined) {
+            clientRef.current = initializeDevCycleClient(sdkKey, user, {
+                ...options,
+            })
+        }
+
+        clientRef.current
             .onClientInitialized()
             .then(() => {
                 setIsInitialized(true)
@@ -44,15 +52,17 @@ export function DevCycleProvider(props: Props): React.ReactElement {
             })
 
         return () => {
-            void client.close()
+            void clientRef.current?.close()
+            clientRef.current = undefined
         }
-    }, [client])
+    }, [sdkKey, user, options])
 
     return (
-        <Provider value={{ client }}>
+        <Provider value={{ client: clientRef.current }}>
             <initializedContext.Provider
                 value={{
-                    isInitialized: isInitialized || client.isInitialized,
+                    isInitialized:
+                        isInitialized || clientRef.current.isInitialized,
                 }}
             >
                 {props.children}
