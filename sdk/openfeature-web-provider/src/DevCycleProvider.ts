@@ -1,26 +1,28 @@
 import {
-    Provider,
-    ResolutionDetails,
     EvaluationContext,
-    JsonValue,
     EvaluationContextValue,
-    ProviderMetadata,
-    StandardResolutionReasons,
-    ParseError,
-    TargetingKeyMissingError,
     InvalidContextError,
+    JsonValue,
+    OpenFeatureEventEmitter,
+    ParseError,
+    Provider,
+    ProviderEvents,
+    ProviderMetadata,
     ProviderStatus,
+    ResolutionDetails,
+    StandardResolutionReasons,
+    TargetingKeyMissingError,
 } from '@openfeature/web-sdk'
 // Need to disable this to keep the working jest mock
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import {
-    initializeDevCycle,
     DevCycleClient,
     DevCycleOptions,
-    DVCVariable,
     DevCycleUser,
-    DVCJSON,
     DVCCustomDataJSON,
+    DVCJSON,
+    DVCVariable,
+    initializeDevCycle,
 } from '@devcycle/js-client-sdk'
 import { VariableValue } from '@devcycle/types'
 
@@ -48,6 +50,7 @@ export default class DevCycleProvider implements Provider {
 
     private readonly options: DevCycleOptions
     private readonly sdkKey: string
+    private _events = new OpenFeatureEventEmitter()
 
     private _devcycleClient: DevCycleClient | null = null
     get devcycleClient(): DevCycleClient | null {
@@ -65,6 +68,20 @@ export default class DevCycleProvider implements Provider {
             context ? this.dvcUserFromContext(context) : {},
             this.options,
         ).onClientInitialized()
+
+        this._devcycleClient.eventEmitter.subscribe(
+            'configUpdated',
+            (allVariables) => {
+                this._events.emit(
+                    ProviderEvents.ConfigurationChanged,
+                    allVariables,
+                )
+            },
+        )
+
+        this._devcycleClient.eventEmitter.subscribe('error', (error) => {
+            this._events.emit(ProviderEvents.Error, error)
+        })
 
         if (!context) {
             this._devcycleClient.logger.warn(
