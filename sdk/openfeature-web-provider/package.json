@@ -4,8 +4,9 @@
     "description": "OpenFeature Web SDK Provider for DevCycle JS SDK",
     "license": "MIT",
     "dependencies": {
-        "@devcycle/js-client-sdk": "^1.19.0",
-        "@openfeature/core": "^0.0.23",
+        "@devcycle/js-client-sdk": "^1.19.0"
+    },
+    "peerDependencies": {
         "@openfeature/web-sdk": "^0.4.10"
     }
 }
