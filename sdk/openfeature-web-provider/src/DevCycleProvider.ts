@@ -50,7 +50,8 @@ export default class DevCycleProvider implements Provider {
 
     private readonly options: DevCycleOptions
     private readonly sdkKey: string
-    private _events = new OpenFeatureEventEmitter()
+
+    readonly events = new OpenFeatureEventEmitter()
 
     private _devcycleClient: DevCycleClient | null = null
     get devcycleClient(): DevCycleClient | null {
@@ -72,7 +73,7 @@ export default class DevCycleProvider implements Provider {
         this._devcycleClient.eventEmitter.subscribe(
             'configUpdated',
             (allVariables) => {
-                this._events.emit(
+                this.events.emit(
                     ProviderEvents.ConfigurationChanged,
                     allVariables,
                 )
@@ -80,7 +81,7 @@ export default class DevCycleProvider implements Provider {
         )
 
         this._devcycleClient.eventEmitter.subscribe('error', (error) => {
-            this._events.emit(ProviderEvents.Error, error)
+            this.events.emit(ProviderEvents.Error, error)
         })
 
         if (!context) {
