@@ -7,7 +7,7 @@ import {
     IsOptional,
     IsString,
     ValidateNested,
-} from '@nestjs/class-validator'
+} from 'class-validator'
 import { Type } from 'class-transformer'
 
 /**

@@ -12,8 +12,8 @@
         }
     },
     "dependencies": {
-        "@nestjs/class-validator": "^0.13.4",
         "class-transformer": "0.5.1",
+        "class-validator": "0.14.1",
         "iso-639-1": "^2.1.13",
         "lodash": "^4.17.21",
         "reflect-metadata": "^0.1.13"

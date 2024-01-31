@@ -1,9 +1,4 @@
-import {
-    IsNotEmpty,
-    IsNumber,
-    IsOptional,
-    IsString,
-} from '@nestjs/class-validator'
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 import { DVCAPIUser } from '../sdk/clientSDKAPI'
 import 'reflect-metadata'
 

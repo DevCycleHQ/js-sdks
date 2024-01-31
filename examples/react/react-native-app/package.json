@@ -4,7 +4,6 @@
     "private": true,
     "dependencies": {
         "@babel/plugin-proposal-decorators": "*",
-        "@nestjs/class-validator": "*",
         "@react-native-async-storage/async-storage": "*",
         "@react-native/metro-config": "0.72.11",
         "@testing-library/jest-dom": "*",
@@ -13,6 +12,7 @@
         "axios": "*",
         "axios-retry": "*",
         "class-transformer": "*",
+        "class-validator": "*",
         "hoist-non-react-statics": "*",
         "iso-639-1": "*",
         "jest-mock": "*",
