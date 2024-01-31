@@ -29,6 +29,7 @@
         "@altack/nx-bundlefy": "^0.16.0",
         "@devcycle/assemblyscript-json": "^2.0.0",
         "@nestjs/class-validator": "^0.13.4",
+        "@openfeature/core": "^0.0.24",
         "@openfeature/server-sdk": "^1.10.0",
         "@openfeature/web-sdk": "^0.4.11",
         "@types/express": "^4.17.17",

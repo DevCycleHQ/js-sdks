@@ -8796,6 +8796,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@openfeature/core@npm:^0.0.24":
+  version: 0.0.24
+  resolution: "@openfeature/core@npm:0.0.24"
+  checksum: 075e6b5b284fffaef0e73b52d09224ee0d9223ff7c04055da298d9024e900c001fa67f19de05a5f4bcdc351731357105c79da3dbb3609245762fa1808aa98b0d
+  languageName: node
+  linkType: hard
+
 "@openfeature/server-sdk@npm:^1.10.0":
   version: 1.10.0
   resolution: "@openfeature/server-sdk@npm:1.10.0"
@@ -15709,6 +15716,7 @@ __metadata:
     "@nx/web": 16.10.0
     "@nx/webpack": 16.10.0
     "@nx/workspace": 16.10.0
+    "@openfeature/core": ^0.0.24
     "@openfeature/server-sdk": ^1.10.0
     "@openfeature/web-sdk": ^0.4.11
     "@playwright/test": ^1.36.0
