@@ -4,7 +4,7 @@ import isBoolean from 'lodash/isBoolean'
 import isPlainObject from 'lodash/isPlainObject'
 import isNull from 'lodash/isNull'
 import isUndefined from 'lodash/isUndefined'
-import { registerDecorator, ValidationOptions } from '@nestjs/class-validator'
+import { registerDecorator, ValidationOptions } from 'class-validator'
 
 /**
  * Validates that JSON Object is a valid JSON Object with only

@@ -1,6 +1,6 @@
 import { plainToInstance } from 'class-transformer'
 import { DVCAPIUser } from '../src/types/apis/sdk/clientSDKAPI'
-import { validate } from '@nestjs/class-validator'
+import { validate } from 'class-validator'
 
 const date = new Date()
 const testUserData = {

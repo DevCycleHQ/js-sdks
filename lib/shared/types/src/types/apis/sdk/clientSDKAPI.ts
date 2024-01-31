@@ -15,7 +15,7 @@ import {
     IsIn,
     IsNotEmpty,
     IsISO31661Alpha2,
-} from '@nestjs/class-validator'
+} from 'class-validator'
 import { Transform, Type } from 'class-transformer'
 import 'reflect-metadata'
 import { IsDVCCustomDataJSONObject } from '../../validators/dvcCustomDataJSON'
