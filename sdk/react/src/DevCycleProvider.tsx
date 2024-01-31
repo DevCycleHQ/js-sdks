@@ -26,6 +26,7 @@ export function DevCycleProvider(props: Props): React.ReactElement {
     }
 
     const clientRef = useRef<DevCycleClient>()
+    const [_, forceRerender] = useState({})
 
     if (clientRef.current === undefined) {
         clientRef.current = initializeDevCycleClient(sdkKey, user, {
@@ -38,6 +39,8 @@ export function DevCycleProvider(props: Props): React.ReactElement {
             clientRef.current = initializeDevCycleClient(sdkKey, user, {
                 ...options,
             })
+            // react doesn't know the effect changed the ref, make sure it re-renders
+            forceRerender({})
         }
 
         clientRef.current
