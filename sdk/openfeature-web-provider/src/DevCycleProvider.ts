@@ -51,7 +51,7 @@ export default class DevCycleProvider implements Provider {
     private readonly options: DevCycleOptions
     private readonly sdkKey: string
 
-    readonly events = new OpenFeatureEventEmitter()
+    events = new OpenFeatureEventEmitter()
 
     private _devcycleClient: DevCycleClient | null = null
     get devcycleClient(): DevCycleClient | null {
