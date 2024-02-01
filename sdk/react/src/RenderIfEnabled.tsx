@@ -50,7 +50,8 @@ export const RenderIfEnabled = <T extends DVCVariableValue>(
                             backgroundColor: '#ff6347',
                         }}
                         target={'_blank'}
-                        href={`https://app.devcycle.com/r/variables/${props.variableKey}`} rel="noreferrer"
+                        href={`https://app.devcycle.com/r/variables/${props.variableKey}`}
+                        rel="noreferrer"
                     >
                         {props.variableKey}: {JSON.stringify(variableValue)}
                     </a>
