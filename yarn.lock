@@ -5203,7 +5203,7 @@ __metadata:
     cross-fetch: ^3.1.8
     fetch-retry: ^5.0.3
   peerDependencies:
-    "@openfeature/server-sdk": ^1.9.1
+    "@openfeature/server-sdk": ^1.11.0
   languageName: unknown
   linkType: soft
 
@@ -5225,7 +5225,7 @@ __metadata:
   dependencies:
     "@devcycle/js-client-sdk": ^1.20.1
   peerDependencies:
-    "@openfeature/web-sdk": ^0.4.10
+    "@openfeature/web-sdk": ^0.4.12
   languageName: unknown
   linkType: soft
 
@@ -8786,28 +8786,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openfeature/core@npm:^0.0.24":
-  version: 0.0.24
-  resolution: "@openfeature/core@npm:0.0.24"
-  checksum: 075e6b5b284fffaef0e73b52d09224ee0d9223ff7c04055da298d9024e900c001fa67f19de05a5f4bcdc351731357105c79da3dbb3609245762fa1808aa98b0d
+"@openfeature/core@npm:^0.0.25":
+  version: 0.0.25
+  resolution: "@openfeature/core@npm:0.0.25"
+  checksum: f5d09d0b1b24d997a3a3e5d11c08b655dbe16457e683963678d646b91814c40d4969efc2e1a9466a1ecb27ab00ca5df94634185e2252fcd9ab7c1e1691a09888
   languageName: node
   linkType: hard
 
-"@openfeature/server-sdk@npm:^1.10.0":
-  version: 1.10.0
-  resolution: "@openfeature/server-sdk@npm:1.10.0"
+"@openfeature/server-sdk@npm:^1.11.0":
+  version: 1.11.0
+  resolution: "@openfeature/server-sdk@npm:1.11.0"
   peerDependencies:
-    "@openfeature/core": 0.0.24
-  checksum: 53b6a874e051bf8438784c2ec19d152d72135d0921ea63e89621c0a4051324180ee982785c62d65adfb47163bba89c485f42c6747c31b4d22d0069c4400da43a
+    "@openfeature/core": 0.0.25
+  checksum: cd5558f0a16340a0121e5ac004547c9629f59fba8ef8fe5e1e30e805a9a2171ba3b0f39cc475bfb8b6a88a0233331c136402b13277e0a82f6f8bcdda9106cf9b
   languageName: node
   linkType: hard
 
-"@openfeature/web-sdk@npm:^0.4.11":
-  version: 0.4.11
-  resolution: "@openfeature/web-sdk@npm:0.4.11"
+"@openfeature/web-sdk@npm:^0.4.12":
+  version: 0.4.12
+  resolution: "@openfeature/web-sdk@npm:0.4.12"
   peerDependencies:
-    "@openfeature/core": 0.0.24
-  checksum: d146cc1af7d0fc247be1ed6cc7059d7729f03bd855233dd0cc62031093da65f8c730a1539c69da0a7fd9204d80310eca50cad641e81961bcaeeb3bde4b8f2839
+    "@openfeature/core": 0.0.25
+  checksum: e49058c4a317ee7a0c5600fdb803bfde075bde9f94a037d6b7dddffcdd402534ac64d417bb0e891270e75265a31acce27a542fc07f6dc0e27e392c6e040d4e11
   languageName: node
   linkType: hard
 
@@ -15723,9 +15723,9 @@ __metadata:
     "@nx/web": 16.10.0
     "@nx/webpack": 16.10.0
     "@nx/workspace": 16.10.0
-    "@openfeature/core": ^0.0.24
-    "@openfeature/server-sdk": ^1.10.0
-    "@openfeature/web-sdk": ^0.4.11
+    "@openfeature/core": ^0.0.25
+    "@openfeature/server-sdk": ^1.11.0
+    "@openfeature/web-sdk": ^0.4.12
     "@playwright/test": ^1.36.0
     "@pmmmwh/react-refresh-webpack-plugin": ^0.5.7
     "@react-native-async-storage/async-storage": 1.19.4
