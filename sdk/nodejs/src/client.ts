@@ -31,7 +31,7 @@ import {
     DevCycleEvent,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
-import DevCycleProvider from './open-feature-provider/DevCycleProvider'
+// import DevCycleProvider from './open-feature-provider/DevCycleProvider'
 
 interface IPlatformData {
     platform: string
@@ -48,6 +48,10 @@ const castIncomingUser = (user: DevCycleUser) => {
     return user
 }
 
+type OptionalDevCycleProvider =
+    | typeof import('./open-feature-provider/DevCycleProvider')
+    | undefined
+
 export class DevCycleClient {
     private sdkKey: string
     private configHelper: EnvironmentConfigManager
@@ -55,7 +59,7 @@ export class DevCycleClient {
     private onInitialized: Promise<DevCycleClient>
     private logger: DVCLogger
     private _isInitialized = false
-    private openFeatureProvider: DevCycleProvider
+    private openFeatureProvider: OptionalDevCycleProvider
 
     get isInitialized(): boolean {
         return this._isInitialized
@@ -125,7 +129,20 @@ export class DevCycleClient {
         })
     }
 
-    getOpenFeatureProvider(): DevCycleProvider {
+    async getOpenFeatureProvider(): Promise<OptionalDevCycleProvider> {
+        let DevCycleProvider: OptionalDevCycleProvider
+
+        try {
+            DevCycleProvider = (
+                await import('./open-feature-provider/DevCycleProvider.js')
+            ).default
+        } catch (error) {
+            console.warn(
+                'OpenFeature SDK is not available. Running without it.',
+            )
+        }
+
+        if (!DevCycleProvider) return
         if (this.openFeatureProvider) return this.openFeatureProvider
 
         this.openFeatureProvider = new DevCycleProvider(this, {
