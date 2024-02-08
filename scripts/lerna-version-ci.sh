@@ -72,13 +72,13 @@ for PROJECT in "${AFFECTED_PROJECTS[@]}"; do
   # get filepath from project.json
   FILEPATH=$(yarn nx show project $PROJECT | jq -r ".root")
 
-  if [ ! -f "$FILEPATH/../package.json" ]; then
+  if [ ! -f "$FILEPATH/package.json" ]; then
     echo "::warning::Unable to find package.json for $PROJECT"
     continue
   fi
 
   # get package name from package.json
-  PACKAGE=$(cat "$FILEPATH/../package.json" | jq -r '.name')
+  PACKAGE=$(cat "$FILEPATH/package.json" | jq -r '.name')
 
   if [[ " ${IGNORED_PACKAGES[*]} " =~ " $PACKAGE " ]]; then
       echo "::info::Ignoring package $PACKAGE"
