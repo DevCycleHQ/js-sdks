@@ -47,10 +47,10 @@ for PROJECT in "${AFFECTED_PROJECTS[@]}"; do
   echo "Getting package name for $PROJECT"
 
   # get filepath from project.json
-  FILEPATH=$(yarn nx show project $PROJECT | jq -r ".sourceRoot")
+  FILEPATH=$(yarn nx show project $PROJECT | jq -r ".root")
 
   # get package name from project.json
-  PACKAGE=$(cat "$FILEPATH/../package.json" | jq -r '.name')
+  PACKAGE=$(cat "$FILEPATH/package.json" | jq -r '.name')
 
   # add package to array
   PACKAGES+=("$PACKAGE")
