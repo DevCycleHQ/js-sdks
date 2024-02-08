@@ -70,7 +70,7 @@ for PROJECT in "${AFFECTED_PROJECTS[@]}"; do
   echo "Getting package name for $PROJECT"
 
   # get filepath from project.json
-  FILEPATH=$(yarn nx show project $PROJECT | jq -r ".sourceRoot")
+  FILEPATH=$(yarn nx show project $PROJECT | jq -r ".root")
 
   if [ ! -f "$FILEPATH/../package.json" ]; then
     echo "::warning::Unable to find package.json for $PROJECT"
