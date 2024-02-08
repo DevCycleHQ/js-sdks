@@ -47,9 +47,9 @@ const castIncomingUser = (user: DevCycleUser) => {
     return user
 }
 
-type OptionalDevCycleProvider =
-    | typeof import('./open-feature-provider/DevCycleProvider').DevCycleProvider
-    | undefined
+type DevCycleProviderConstructor =
+    typeof import('./open-feature-provider/DevCycleProvider').DevCycleProvider
+type DevCycleProviderInstance = InstanceType<DevCycleProviderConstructor>
 
 export class DevCycleClient {
     private sdkKey: string
@@ -58,7 +58,7 @@ export class DevCycleClient {
     private onInitialized: Promise<DevCycleClient>
     private logger: DVCLogger
     private _isInitialized = false
-    private openFeatureProvider: OptionalDevCycleProvider
+    private openFeatureProvider: DevCycleProviderInstance
 
     get isInitialized(): boolean {
         return this._isInitialized
@@ -128,7 +128,7 @@ export class DevCycleClient {
         })
     }
 
-    async getOpenFeatureProvider(): Promise<OptionalDevCycleProvider> {
+    async getOpenFeatureProvider(): Promise<DevCycleProviderInstance> {
         let DevCycleProvider
 
         try {
@@ -142,11 +142,14 @@ export class DevCycleClient {
             )
         }
 
-        if (!DevCycleProvider) return
+        if (!DevCycleProvider) {
+            throw new Error(
+                'Missing "@openfeature/server-sdk" and/or "@openfeature/core" ' +
+                    'peer dependencies to get OpenFeature Provider',
+            )
+        }
         if (this.openFeatureProvider) return this.openFeatureProvider
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         this.openFeatureProvider = new DevCycleProvider(this, {
             logger: this.logger,
         })
