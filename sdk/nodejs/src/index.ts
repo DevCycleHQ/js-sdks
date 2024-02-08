@@ -19,12 +19,13 @@ import {
 import { DevCycleServerSDKOptions } from '@devcycle/types'
 import { getNodeJSPlatformDetails } from './utils/platformDetails'
 
-type OptionalDevCycleProvider =
-    | typeof import('./open-feature-provider/DevCycleProvider')
-    | undefined
+// Dynamically import the OpenFeature Provider, as it's an optional peer dependency
+type DevCycleProviderConstructor =
+    typeof import('./open-feature-provider/DevCycleProvider').DevCycleProvider
+type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
 
 class DevCycleCloudClient extends InternalDevCycleCloudClient {
-    private openFeatureProvider: OptionalDevCycleProvider
+    private openFeatureProvider: DevCycleProvider
 
     constructor(
         sdkKey: string,
@@ -34,25 +35,29 @@ class DevCycleCloudClient extends InternalDevCycleCloudClient {
         super(sdkKey, options, platformDetails)
     }
 
-    async getOpenFeatureProvider(): Promise<OptionalDevCycleProvider> {
-        let DevCycleProvider: OptionalDevCycleProvider
+    async getOpenFeatureProvider(): Promise<DevCycleProvider> {
+        let DevCycleProviderClass
 
         try {
-            DevCycleProvider = (
-                await import('./open-feature-provider/DevCycleProvider.js')
-            ).default
+            const importedModule = await import(
+                './open-feature-provider/DevCycleProvider.js'
+            )
+            DevCycleProviderClass = importedModule.DevCycleProvider
         } catch (error) {
-            console.warn(
-                'OpenFeature SDK is not available. Running without it.',
+            this.logger.error(
+                'Error importing OpenFeatureProvider, OpenFeature peer dependency may be missing.',
             )
         }
 
-        if (!DevCycleProvider) return
+        if (!DevCycleProviderClass) {
+            throw new Error(
+                'Missing "@openfeature/server-sdk" and/or "@openfeature/core" ' +
+                    'peer dependencies to get OpenFeature Provider',
+            )
+        }
         if (this.openFeatureProvider) return this.openFeatureProvider
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        this.openFeatureProvider = new DevCycleProvider(this, {
+        this.openFeatureProvider = new DevCycleProviderClass(this, {
             logger: this.logger,
         })
         return this.openFeatureProvider

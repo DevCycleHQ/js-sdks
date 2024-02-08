@@ -47,9 +47,10 @@ const castIncomingUser = (user: DevCycleUser) => {
     return user
 }
 
+// Dynamically import the OpenFeature Provider, as it's an optional peer dependency
 type DevCycleProviderConstructor =
     typeof import('./open-feature-provider/DevCycleProvider').DevCycleProvider
-type DevCycleProviderInstance = InstanceType<DevCycleProviderConstructor>
+type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
 
 export class DevCycleClient {
     private sdkKey: string
@@ -58,7 +59,7 @@ export class DevCycleClient {
     private onInitialized: Promise<DevCycleClient>
     private logger: DVCLogger
     private _isInitialized = false
-    private openFeatureProvider: DevCycleProviderInstance
+    private openFeatureProvider: DevCycleProvider
 
     get isInitialized(): boolean {
         return this._isInitialized
@@ -128,21 +129,21 @@ export class DevCycleClient {
         })
     }
 
-    async getOpenFeatureProvider(): Promise<DevCycleProviderInstance> {
-        let DevCycleProvider
+    async getOpenFeatureProvider(): Promise<DevCycleProvider> {
+        let DevCycleProviderClass
 
         try {
             const importedModule = await import(
                 './open-feature-provider/DevCycleProvider.js'
             )
-            DevCycleProvider = importedModule.DevCycleProvider
+            DevCycleProviderClass = importedModule.DevCycleProvider
         } catch (error) {
             this.logger.error(
                 'Error importing OpenFeatureProvider, OpenFeature peer dependency may be missing.',
             )
         }
 
-        if (!DevCycleProvider) {
+        if (!DevCycleProviderClass) {
             throw new Error(
                 'Missing "@openfeature/server-sdk" and/or "@openfeature/core" ' +
                     'peer dependencies to get OpenFeature Provider',
@@ -150,7 +151,7 @@ export class DevCycleClient {
         }
         if (this.openFeatureProvider) return this.openFeatureProvider
 
-        this.openFeatureProvider = new DevCycleProvider(this, {
+        this.openFeatureProvider = new DevCycleProviderClass(this, {
             logger: this.logger,
         })
         return this.openFeatureProvider
