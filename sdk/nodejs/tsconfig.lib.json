@@ -3,8 +3,7 @@
     "compilerOptions": {
         "outDir": "../../dist/out-tsc",
         "declaration": true,
-        "types": ["node"],
-        "allowSyntheticDefaultImports": true
+        "types": ["node"]
     },
     "exclude": [
         "**/*.spec.ts",
