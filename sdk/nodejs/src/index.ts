@@ -18,10 +18,13 @@ import {
 } from '@devcycle/js-cloud-server-sdk'
 import { DevCycleServerSDKOptions } from '@devcycle/types'
 import { getNodeJSPlatformDetails } from './utils/platformDetails'
-import DevCycleProvider from './open-feature-provider/DevCycleProvider'
+
+type OptionalDevCycleProvider =
+    | typeof import('./open-feature-provider/DevCycleProvider')
+    | undefined
 
 class DevCycleCloudClient extends InternalDevCycleCloudClient {
-    private openFeatureProvider: DevCycleProvider
+    private openFeatureProvider: OptionalDevCycleProvider
 
     constructor(
         sdkKey: string,
@@ -31,9 +34,24 @@ class DevCycleCloudClient extends InternalDevCycleCloudClient {
         super(sdkKey, options, platformDetails)
     }
 
-    getOpenFeatureProvider(): DevCycleProvider {
+    async getOpenFeatureProvider(): Promise<OptionalDevCycleProvider> {
+        let DevCycleProvider: OptionalDevCycleProvider
+
+        try {
+            DevCycleProvider = (
+                await import('./open-feature-provider/DevCycleProvider.js')
+            ).default
+        } catch (error) {
+            console.warn(
+                'OpenFeature SDK is not available. Running without it.',
+            )
+        }
+
+        if (!DevCycleProvider) return
         if (this.openFeatureProvider) return this.openFeatureProvider
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         this.openFeatureProvider = new DevCycleProvider(this, {
             logger: this.logger,
         })
@@ -47,7 +65,6 @@ export {
     DevCycleUser,
     DevCycleServerSDKOptions as DevCycleOptions,
     DevCycleEvent,
-    DevCycleProvider,
     DVCVariableValue,
     JSON,
     DVCJSON,

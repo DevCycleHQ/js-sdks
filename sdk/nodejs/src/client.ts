@@ -31,7 +31,6 @@ import {
     DevCycleEvent,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
-// import DevCycleProvider from './open-feature-provider/DevCycleProvider'
 
 interface IPlatformData {
     platform: string
@@ -49,7 +48,7 @@ const castIncomingUser = (user: DevCycleUser) => {
 }
 
 type OptionalDevCycleProvider =
-    | typeof import('./open-feature-provider/DevCycleProvider')
+    | typeof import('./open-feature-provider/DevCycleProvider').DevCycleProvider
     | undefined
 
 export class DevCycleClient {
@@ -130,21 +129,24 @@ export class DevCycleClient {
     }
 
     async getOpenFeatureProvider(): Promise<OptionalDevCycleProvider> {
-        let DevCycleProvider: OptionalDevCycleProvider
+        let DevCycleProvider
 
         try {
-            DevCycleProvider = (
-                await import('./open-feature-provider/DevCycleProvider.js')
-            ).default
+            const importedModule = await import(
+                './open-feature-provider/DevCycleProvider.js'
+            )
+            DevCycleProvider = importedModule.DevCycleProvider
         } catch (error) {
-            console.warn(
-                'OpenFeature SDK is not available. Running without it.',
+            this.logger.error(
+                'Error importing OpenFeatureProvider, OpenFeature peer dependency may be missing.',
             )
         }
 
         if (!DevCycleProvider) return
         if (this.openFeatureProvider) return this.openFeatureProvider
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         this.openFeatureProvider = new DevCycleProvider(this, {
             logger: this.logger,
         })
