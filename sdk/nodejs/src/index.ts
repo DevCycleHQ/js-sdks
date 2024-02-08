@@ -44,17 +44,12 @@ class DevCycleCloudClient extends InternalDevCycleCloudClient {
             )
             DevCycleProviderClass = importedModule.DevCycleProvider
         } catch (error) {
-            this.logger.error(
-                'Error importing OpenFeatureProvider, OpenFeature peer dependency may be missing.',
-            )
-        }
-
-        if (!DevCycleProviderClass) {
             throw new Error(
                 'Missing "@openfeature/server-sdk" and/or "@openfeature/core" ' +
                     'peer dependencies to get OpenFeature Provider',
             )
         }
+
         if (this.openFeatureProvider) return this.openFeatureProvider
 
         this.openFeatureProvider = new DevCycleProviderClass(this, {
