@@ -1,6 +1,6 @@
-# DevCycle NodeJS Local Server SDK - Typescript Example App
+# DevCycle Node.js Local Server SDK - Typescript Example App
 
-Example app for using the DevCycle NodeJS Server SDK with nodeJS and javascript.
+Example app for using the DevCycle Node.js Server SDK with node.js and javascript.
 
 ### Run
 

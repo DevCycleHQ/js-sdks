@@ -1,6 +1,6 @@
 # DevCycle Javascript Cloud Bucketing Server SDK
 
-This SDK is used to integrate DevCycle with your Javascript server-side application, where a NodeJS runtime isn't available.
+This SDK is used to integrate DevCycle with your Javascript server-side application, where a Node.js runtime isn't available.
 Example use-cases would be Cloudflare Workers and other edge-worker runtimes.
 
 This SDK makes API requests to DevCycle's [Bucketing API](https://docs.devcycle.com/bucketing-api/) to perform bucketing.

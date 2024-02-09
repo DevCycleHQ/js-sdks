@@ -18,7 +18,11 @@ import {
 } from '@devcycle/js-cloud-server-sdk'
 import { DevCycleServerSDKOptions } from '@devcycle/types'
 import { getNodeJSPlatformDetails } from './utils/platformDetails'
-import DevCycleProvider from './open-feature-provider/DevCycleProvider'
+
+// Dynamically import the OpenFeature Provider, as it's an optional peer dependency
+type DevCycleProviderConstructor =
+    typeof import('./open-feature-provider/DevCycleProvider').DevCycleProvider
+type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
 
 class DevCycleCloudClient extends InternalDevCycleCloudClient {
     private openFeatureProvider: DevCycleProvider
@@ -31,10 +35,24 @@ class DevCycleCloudClient extends InternalDevCycleCloudClient {
         super(sdkKey, options, platformDetails)
     }
 
-    getOpenFeatureProvider(): DevCycleProvider {
+    async getOpenFeatureProvider(): Promise<DevCycleProvider> {
+        let DevCycleProviderClass
+
+        try {
+            const importedModule = await import(
+                './open-feature-provider/DevCycleProvider.js'
+            )
+            DevCycleProviderClass = importedModule.DevCycleProvider
+        } catch (error) {
+            throw new Error(
+                'Missing "@openfeature/server-sdk" and/or "@openfeature/core" ' +
+                    'peer dependencies to get OpenFeature Provider',
+            )
+        }
+
         if (this.openFeatureProvider) return this.openFeatureProvider
 
-        this.openFeatureProvider = new DevCycleProvider(this, {
+        this.openFeatureProvider = new DevCycleProviderClass(this, {
             logger: this.logger,
         })
         return this.openFeatureProvider
@@ -47,7 +65,6 @@ export {
     DevCycleUser,
     DevCycleServerSDKOptions as DevCycleOptions,
     DevCycleEvent,
-    DevCycleProvider,
     DVCVariableValue,
     JSON,
     DVCJSON,

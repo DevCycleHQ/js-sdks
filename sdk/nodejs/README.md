@@ -1,6 +1,6 @@
-# DevCycle NodeJS Server SDK
+# DevCycle Node.js Server SDK
 
-The NodeJS Server SDK for DevCycle.
+The Node.js Server SDK for DevCycle.
 
 This SDK uses local bucketing to perform all user segmentation and bucketing locally in the SDK, 
 providing immediate responses to variable and feature requests for a user. 

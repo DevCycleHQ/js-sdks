@@ -2,5 +2,9 @@
     "name": "@devcycle/openfeature-nodejs-example",
     "version": "1.7.1",
     "description": "DevCycle OpenFeature NodeJS Example App",
-    "license": "MIT"
+    "license": "MIT",
+    "dependencies": {
+        "@openfeature/core": "^0.0.25",
+        "@openfeature/server-sdk": "^1.11.0"
+    }
 }

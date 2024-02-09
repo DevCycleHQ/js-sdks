@@ -8,7 +8,7 @@ To view the README for a specific SDK, navigate to that SDK inside the `sdk` dir
 
 [React Client SDK](sdk/react)
 
-[NodeJS Server SDK](sdk/nodejs)
+[Node.js Server SDK](sdk/nodejs)
 
 There are several examples included in this repository for various SDKs. If you want to run them, proceed to setup:
 

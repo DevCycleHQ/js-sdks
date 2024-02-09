@@ -1,6 +1,6 @@
 # config-manager
 
-This library extracts the `EnvironmentConfigManager` Server SDK logic to be used across the NodeJS SDK 
+This library extracts the `EnvironmentConfigManager` Server SDK logic to be used across the Node.js SDK 
 and Edge Worker SDKs. 
 
 ## Building

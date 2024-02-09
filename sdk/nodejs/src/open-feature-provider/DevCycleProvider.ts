@@ -38,7 +38,7 @@ type EvaluationContextObject = {
     [key: string]: EvaluationContextValue
 }
 
-export default class DevCycleProvider implements Provider {
+export class DevCycleProvider implements Provider {
     readonly metadata: ProviderMetadata = {
         name: 'devcycle-nodejs-provider',
     } as const

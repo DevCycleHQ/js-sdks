@@ -1,6 +1,8 @@
 # OpenFeature DevCycle Provider Example App
 
-Example app for using the OpenFeature NodeJS SDK with the DevCycle Provider.
+
+
+Example app for using the OpenFeature Node.js SDK with the DevCycle Provider.
 
 ### Build and Run
 
