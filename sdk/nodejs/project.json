@@ -27,7 +27,7 @@
         "test": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "NODE_OPTIONS=--experimental-vm-modules yarn nx test-jest nodejs",
+                "command": "NODE_OPTIONS=--experimental-vm-modules yarn nx test-jest nodejs"
             }
         },
         "test-jest": {
