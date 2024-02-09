@@ -5204,9 +5204,6 @@ __metadata:
     fetch-retry: ^5.0.3
   peerDependencies:
     "@openfeature/server-sdk": ^1.11.0
-  peerDependenciesMeta:
-    "@openfeature/server-sdk":
-      optional: true
   languageName: unknown
   linkType: soft
 
