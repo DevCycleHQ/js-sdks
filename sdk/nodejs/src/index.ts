@@ -40,14 +40,15 @@ class DevCycleCloudClient extends InternalDevCycleCloudClient {
 
         try {
             const importedModule = await import(
-                './open-feature-provider/DevCycleProvider.js'
+                `./open-feature-provider/DevCycleProvider.js`
             )
             DevCycleProviderClass = importedModule.DevCycleProvider
         } catch (error) {
-            throw new Error(
-                'Missing "@openfeature/server-sdk" and/or "@openfeature/core" ' +
-                    'peer dependencies to get OpenFeature Provider',
-            )
+            throw error
+            // throw new Error(
+            //     'Missing "@openfeature/server-sdk" and/or "@openfeature/core" ' +
+            //         'peer dependencies to get OpenFeature Provider',
+            // )
         }
 
         if (this.openFeatureProvider) return this.openFeatureProvider

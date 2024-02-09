@@ -45,7 +45,7 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                           },
                       )
             await OpenFeature.setProviderAndWait(
-                dvcClient.getOpenFeatureProvider(),
+                await dvcClient.getOpenFeatureProvider(),
             )
             const ofClient = OpenFeature.getClient()
             ofClient.setContext({ targetingKey: 'node_sdk_test' })

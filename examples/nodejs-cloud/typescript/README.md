@@ -1,6 +1,6 @@
-# DevCycle NodeJS Cloud Server SDK - Typescript Example App
+# DevCycle Node.js Cloud Server SDK - Typescript Example App
 
-Example app for using the DevCycle NodeJS Server SDK with nodeJS and typescript.
+Example app for using the DevCycle Node.js Server SDK with node.js and typescript.
 
 ### Build and Run
 
