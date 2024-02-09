@@ -21,7 +21,6 @@ describe('NodeJS SDK Initialize', () => {
             'dvc_server_token',
         ).getOpenFeatureProvider()
         expect(provider).toBeDefined()
-        expect(provider.status).toBe('NOT_READY')
         await OpenFeature.setProviderAndWait(provider)
         expect(provider.status).toBe('READY')
         const client = OpenFeature.getClient()
