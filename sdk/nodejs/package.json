@@ -13,11 +13,6 @@
     "peerDependencies": {
         "@openfeature/server-sdk": "^1.11.0"
     },
-    "peerDependenciesMeta": {
-        "@openfeature/server-sdk": {
-            "optional": true
-        }
-    },
     "engines": {
         "node": ">=16.0.0"
     },
