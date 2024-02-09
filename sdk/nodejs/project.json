@@ -25,12 +25,6 @@
             }
         },
         "test": {
-            "executor": "nx:run-commands",
-            "options": {
-                "command": "NODE_OPTIONS=--experimental-vm-modules yarn nx test-jest nodejs"
-            }
-        },
-        "test-jest": {
             "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/sdk/nodejs"],
             "options": {
