@@ -1,0 +1,5 @@
+{
+    "name": "@devcycle/server-request",
+    "version": "1.0.0",
+    "types": "src/index.d.ts"
+}
