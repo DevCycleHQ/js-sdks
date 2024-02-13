@@ -7,8 +7,8 @@
         "@devcycle/bucketing-assembly-script": "^1.16.0",
         "@devcycle/js-cloud-server-sdk": "^1.8.0",
         "@devcycle/types": "^1.9.0",
-        "cross-fetch": "^3.1.8",
-        "fetch-retry": "^5.0.3"
+        "cross-fetch": "^4.0.0",
+        "fetch-retry": "^5.0.6"
     },
     "peerDependencies": {
         "@openfeature/server-sdk": "^1.11.0"
