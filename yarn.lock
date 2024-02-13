@@ -5705,8 +5705,7 @@ __metadata:
   resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
   dependencies:
     "@devcycle/types": ^1.9.1
-    axios: ^1.0.0
-    axios-retry: ^3.3.1
+    fetch-retry: ^5.0.6
     lodash: ^4.17.21
     ua-parser-js: ^1.0.36
     uuid: ^8.3.2
@@ -5718,8 +5717,8 @@ __metadata:
   resolution: "@devcycle/js-cloud-server-sdk@workspace:sdk/js-cloud-server"
   dependencies:
     "@devcycle/types": ^1.9.1
-    cross-fetch: ^3.1.8
-    fetch-retry: ^5.0.3
+    cross-fetch: ^4.0.0
+    fetch-retry: ^5.0.6
     lodash: ^4.17.21
   languageName: unknown
   linkType: soft
@@ -5767,8 +5766,8 @@ __metadata:
     "@devcycle/bucketing-assembly-script": ^1.16.1
     "@devcycle/js-cloud-server-sdk": ^1.8.1
     "@devcycle/types": ^1.9.1
-    cross-fetch: ^3.1.8
-    fetch-retry: ^5.0.3
+    cross-fetch: ^4.0.0
+    fetch-retry: ^5.0.6
   peerDependencies:
     "@openfeature/server-sdk": ^1.11.0
   languageName: unknown
@@ -5835,6 +5834,12 @@ __metadata:
   peerDependencies:
     react: ">=16.8.0"
     react-native: ">=0.64.0"
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/server-request@workspace:lib/shared/server-request":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/server-request@workspace:lib/shared/server-request"
   languageName: unknown
   linkType: soft
 
@@ -15771,12 +15776,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-fetch@npm:^3.1.8":
-  version: 3.1.8
-  resolution: "cross-fetch@npm:3.1.8"
+"cross-fetch@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "cross-fetch@npm:4.0.0"
   dependencies:
     node-fetch: ^2.6.12
-  checksum: 78f993fa099eaaa041122ab037fe9503ecbbcb9daef234d1d2e0b9230a983f64d645d088c464e21a247b825a08dc444a6e7064adfa93536d3a9454b4745b3632
+  checksum: ecca4f37ffa0e8283e7a8a590926b66713a7ef7892757aa36c2d20ffa27b0ac5c60dcf453119c809abe5923fc0bae3702a4d896bfb406ef1077b0d0018213e24
   languageName: node
   linkType: hard
 
@@ -16712,7 +16717,7 @@ __metadata:
     class-validator: ^0.14.1
     core-js: ^3.6.5
     cross-env: ^7.0.3
-    cross-fetch: ^3.1.8
+    cross-fetch: ^4.0.0
     css-loader: ^6.4.0
     cypress: ^13.0.0
     detox: 20.13.1
@@ -16735,7 +16740,7 @@ __metadata:
     eslint-plugin-react-hooks: ~4.6.0
     eslint-plugin-standard: ^5.0.0
     express: ^4.18.2
-    fetch-retry: ^5.0.3
+    fetch-retry: ^5.0.6
     fs-extra: ^11.2.0
     hoist-non-react-statics: ^3.3.2
     husky: ^7.0.0
@@ -18950,10 +18955,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fetch-retry@npm:^5.0.3":
-  version: 5.0.3
-  resolution: "fetch-retry@npm:5.0.3"
-  checksum: b4eebc04bd41651417e89ae9287e5b9e5421970ce07058c6e1e22f7d9c1cd5f935fc39a328fd66b433247c0ae1bb8a6b2d48c073d5a9f911992f72c5d311b14d
+"fetch-retry@npm:^5.0.6":
+  version: 5.0.6
+  resolution: "fetch-retry@npm:5.0.6"
+  checksum: 4ad8bca6ec7a7b1212e636bb422a9ae8bb9dce38df0b441c9eb77a29af99b368029d6248ff69427da67e3d43c53808b121135ea395e7fe4f8f383e0ad65b4f27
   languageName: node
   linkType: hard
 

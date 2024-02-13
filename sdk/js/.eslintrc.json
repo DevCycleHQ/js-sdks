@@ -9,7 +9,7 @@
                 "@nx/dependency-checks": [
                     "error",
                     {
-                        "ignoredDependencies": []
+                        "ignoredDependencies": ["fetch-retry", "cross-fetch"]
                     }
                 ]
             }

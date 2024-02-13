@@ -1,14 +1,15 @@
-import { DevCycleClient } from '../src/Client'
-jest.mock('../src/Request')
-jest.mock('../src/StreamingConnection')
-
+jest.unmock('cross-fetch')
+import fetch from 'cross-fetch'
+global.fetch = fetch
 type Variables = {
     enum_var: 'value1' | 'value2'
     bool: boolean
     string: string
     number: number
 }
-
+jest.mock('fetch-retry')
+import { DevCycleClient } from '../src/Client'
+jest.mock('../src/StreamingConnection')
 describe('DevCycleClient', () => {
     it('should prevent invalid variables', () => {
         const client = new DevCycleClient<Variables>('test', {
