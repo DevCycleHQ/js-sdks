@@ -603,7 +603,7 @@ export class DevCycleClient<
                 this.pageVisibilityHandler,
             )
         }
-
+        console.log('TEEST')
         if (this.windowMessageHandler) {
             window.removeEventListener('message', this.windowMessageHandler)
         }
