@@ -22,6 +22,50 @@ export class DefaultCacheStore {
     remove(storeKey: string): void {
         this.store?.removeItem(storeKey)
     }
+
+    // Initialize IndexedDB
+    async initIndexedDB(): Promise<void> {
+        const dbName = 'myDatabase';
+        const storeName = 'myStore';
+
+        const request = indexedDB.open(dbName, 1);
+        request.onupgradeneeded = (event) => {
+            const db = request.result;
+            if (!db.objectStoreNames.contains(storeName)) {
+                db.createObjectStore(storeName, { keyPath: 'id' });
+            }
+        };
+
+        this.db = await new Promise((resolve, reject) => {
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    // IndexedDB save
+    async indexedDBSave(storeKey, data): Promise<void> {
+        const tx = this.db.transaction('myStore', 'readwrite');
+        const store = tx.objectStore('myStore');
+        await store.put({ id: storeKey, data: data });
+    }
+
+    // IndexedDB load
+    async indexedDBLoad(storeKey):  Promise<void> {
+        const tx = this.db.transaction('myStore', 'readonly');
+        const store = tx.objectStore('myStore');
+        const request = store.get(storeKey);
+        return new Promise((resolve, reject) => {
+            request.onsuccess = () => resolve(request.result ? request.result.data : null);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    // IndexedDB remove
+    async indexedDBRemove(storeKey) {
+        const tx = this.db.transaction('myStore', 'readwrite');
+        const store = tx.objectStore('myStore');
+        await store.delete(storeKey);
+    }
 }
 
 const stubbedLocalStorage = {
