@@ -12,7 +12,7 @@ import {
 import { DVCVariable, DVCVariableOptions } from './Variable'
 import { getConfigJson, saveEntity } from './Request'
 import CacheStore from './CacheStore'
-import DefaultStorage from './DefaultStorage'
+import { getStorageStrategy } from './DefaultCacheStore'
 import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
 import { checkParamDefined } from './utils'
@@ -103,7 +103,7 @@ export class DevCycleClient<
         this.logger =
             options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.store = new CacheStore(
-            options.storage || new DefaultStorage(),
+            options.storage || getStorageStrategy(),
             this.logger,
         )
 
@@ -188,8 +188,8 @@ export class DevCycleClient<
                     this.options,
                     extraParams,
                 ),
-            (config: BucketedUserConfig, user: DVCPopulatedUser) =>
-                this.handleConfigReceived(config, user, Date.now()),
+            async (config: BucketedUserConfig, user: DVCPopulatedUser) =>
+                await this.handleConfigReceived(config, user, Date.now()),
             this.user,
         )
 
@@ -197,7 +197,7 @@ export class DevCycleClient<
             if (!this.options.bootstrapConfig) {
                 await this.requestConsolidator.queue(this.user)
             } else {
-                this.handleConfigReceived(
+                await this.handleConfigReceived(
                     this.options.bootstrapConfig,
                     this.user,
                     Date.now(),
@@ -213,9 +213,9 @@ export class DevCycleClient<
         this.eventEmitter.emitInitialized(true)
 
         if (this.user.isAnonymous) {
-            this.store.saveAnonUserId(this.user.user_id)
+            await this.store.saveAnonUserId(this.user.user_id)
         } else {
-            this.store.removeAnonUserId()
+            await this.store.removeAnonUserId()
         }
 
         if (this.config?.sse?.url) {
@@ -439,7 +439,7 @@ export class DevCycleClient<
             }
             const config = await this.requestConsolidator.queue(updatedUser)
             if (user.isAnonymous || !user.user_id) {
-                this.store.saveAnonUserId(updatedUser.user_id)
+                await this.store.saveAnonUserId(updatedUser.user_id)
             }
             return config.variables || {}
         } catch (err) {
@@ -469,20 +469,20 @@ export class DevCycleClient<
 
             this.onInitialized
                 .then(() => this.store.loadAnonUserId())
-                .then((cachedAnonId) => {
-                    this.store.removeAnonUserId()
+                .then(async (cachedAnonId) => {
+                    await this.store.removeAnonUserId()
                     oldAnonymousId = cachedAnonId
                     return
                 })
                 .then(() => this.requestConsolidator.queue(anonUser))
-                .then((config) => {
-                    this.store.saveAnonUserId(anonUser.user_id)
+                .then(async (config) => {
+                    await this.store.saveAnonUserId(anonUser.user_id)
                     resolve(config.variables || {})
                 })
-                .catch((e) => {
+                .catch(async (e) => {
                     this.eventEmitter.emitError(e)
                     if (oldAnonymousId) {
-                        this.store.saveAnonUserId(oldAnonymousId)
+                        await this.store.saveAnonUserId(oldAnonymousId)
                     }
                     reject(e)
                 })
@@ -603,7 +603,6 @@ export class DevCycleClient<
                 this.pageVisibilityHandler,
             )
         }
-        console.log('TEEST')
         if (this.windowMessageHandler) {
             window.removeEventListener('message', this.windowMessageHandler)
         }
@@ -679,14 +678,14 @@ export class DevCycleClient<
         }
     }
 
-    private handleConfigReceived(
+    private async handleConfigReceived(
         config: BucketedUserConfig,
         user: DVCPopulatedUser,
         dateFetched: number,
     ) {
         const oldConfig = this.config
         this.config = config
-        this.store.saveConfig(config, user, dateFetched)
+        await this.store.saveConfig(config, user, dateFetched)
         this.isConfigCached = false
 
         this.setUser(user)

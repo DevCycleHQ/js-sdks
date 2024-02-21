@@ -25,7 +25,7 @@ export class ConfigRequestConsolidator {
         private handleConfigReceivedFunction: (
             config: BucketedUserConfig,
             user: DVCPopulatedUser,
-        ) => void,
+        ) => Promise<void>,
         private nextUser: DVCPopulatedUser,
     ) {}
 
@@ -62,14 +62,17 @@ export class ConfigRequestConsolidator {
 
         const resolvers = this.resolvers.splice(0)
         await this.performRequest(this.nextUser)
-            .then((result) => {
+            .then(async (result) => {
                 if (this.resolvers.length) {
                     // if more resolvers have been registered since this request was made,
                     // don't resolve anything and just make another request while keeping all the previous resolvers
                     this.resolvers.push(...resolvers)
                 } else {
                     resolvers.forEach(({ resolve }) => resolve(result))
-                    this.handleConfigReceivedFunction(result, this.nextUser)
+                    await this.handleConfigReceivedFunction(
+                        result,
+                        this.nextUser,
+                    )
                 }
             })
             .catch((err) => {

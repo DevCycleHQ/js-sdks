@@ -1,70 +1,39 @@
-export class DefaultCacheStore {
-    private store?: Storage
+// Abstract Storage class
+import { DVCStorage } from './types'
+import { checkIsServiceWorker } from './utils'
 
-    constructor() {
-        this.store =
-            typeof window !== 'undefined'
-                ? window.localStorage
-                : stubbedLocalStorage
+export abstract class StorageStrategy implements DVCStorage {
+    abstract store: unknown
+    abstract init(): Promise<unknown>
+    abstract save(storeKey: string, data: unknown): Promise<void>
+    abstract load<T>(storeKey: string): Promise<T | undefined>
+    abstract remove(storeKey: string): Promise<void>
+}
+
+// LocalStorage implementation
+export class LocalStorageStrategy extends StorageStrategy {
+    override store: Storage
+    private isTesting: boolean
+
+    constructor(isTesting = false) {
+        super()
+        this.isTesting = isTesting
+        this.init()
+    }
+    async init(): Promise<void> {
+        this.store = this.isTesting ? stubbedLocalStorage : window.localStorage
+    }
+    async save(storeKey: string, data: unknown): Promise<void> {
+        this.store.setItem(storeKey, JSON.stringify(data))
     }
 
-    save(storeKey: string, data: unknown): void {
-        this.store?.setItem(storeKey, JSON.stringify(data))
+    async load<T>(storeKey: string): Promise<T | undefined> {
+        const item = this.store.getItem(storeKey)
+        return item ? JSON.parse(item) : undefined
     }
 
-    load<T>(storeKey: string): Promise<T | null | undefined> {
-        return new Promise((resolve) => {
-            const item = this.store?.getItem(storeKey)
-            resolve(item ? JSON.parse(item) : null)
-        })
-    }
-
-    remove(storeKey: string): void {
-        this.store?.removeItem(storeKey)
-    }
-
-    // Initialize IndexedDB
-    async initIndexedDB(): Promise<void> {
-        const dbName = 'myDatabase';
-        const storeName = 'myStore';
-
-        const request = indexedDB.open(dbName, 1);
-        request.onupgradeneeded = (event) => {
-            const db = request.result;
-            if (!db.objectStoreNames.contains(storeName)) {
-                db.createObjectStore(storeName, { keyPath: 'id' });
-            }
-        };
-
-        this.db = await new Promise((resolve, reject) => {
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = () => reject(request.error);
-        });
-    }
-
-    // IndexedDB save
-    async indexedDBSave(storeKey, data): Promise<void> {
-        const tx = this.db.transaction('myStore', 'readwrite');
-        const store = tx.objectStore('myStore');
-        await store.put({ id: storeKey, data: data });
-    }
-
-    // IndexedDB load
-    async indexedDBLoad(storeKey):  Promise<void> {
-        const tx = this.db.transaction('myStore', 'readonly');
-        const store = tx.objectStore('myStore');
-        const request = store.get(storeKey);
-        return new Promise((resolve, reject) => {
-            request.onsuccess = () => resolve(request.result ? request.result.data : null);
-            request.onerror = () => reject(request.error);
-        });
-    }
-
-    // IndexedDB remove
-    async indexedDBRemove(storeKey) {
-        const tx = this.db.transaction('myStore', 'readwrite');
-        const store = tx.objectStore('myStore');
-        await store.delete(storeKey);
+    async remove(storeKey: string): Promise<void> {
+        this.store.removeItem(storeKey)
     }
 }
 
@@ -76,5 +45,91 @@ const stubbedLocalStorage = {
     key: () => null,
     length: 0,
 }
+// IndexedDB implementation
+export class IndexedDBStrategy extends StorageStrategy {
+    override store: IDBDatabase
+    private ready: Promise<void>
+    private static storeName = 'DevcycleStore'
+    private static DBName = 'DevcycleDB'
+    constructor() {
+        super()
+        this.ready = new Promise((resolve, reject) => {
+            this.init()
+                .then((db) => {
+                    this.store = db
+                    resolve()
+                })
+                .catch((err) => reject(err))
+        })
+    }
 
-export default DefaultCacheStore
+    async init(): Promise<IDBDatabase> {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(IndexedDBStrategy.DBName, 1)
+
+            request.onupgradeneeded = (event) => {
+                const db = request.result
+                if (
+                    !db.objectStoreNames.contains(IndexedDBStrategy.storeName)
+                ) {
+                    db.createObjectStore(IndexedDBStrategy.storeName, {
+                        keyPath: 'id',
+                    })
+                }
+            }
+
+            request.onsuccess = (event) => {
+                resolve(request.result)
+            }
+
+            request.onerror = (event) => {
+                reject(request.error)
+            }
+        })
+    }
+    async save(storeKey: string, data: unknown): Promise<void> {
+        await this.ready
+        const tx = this.store.transaction(
+            IndexedDBStrategy.storeName,
+            'readwrite',
+        )
+        const store = tx.objectStore(IndexedDBStrategy.storeName)
+        store.put({ id: storeKey, data: data })
+    }
+
+    // IndexedDB load
+    async load<T>(storeKey: string): Promise<T | undefined> {
+        await this.ready
+        const tx = this.store.transaction(
+            IndexedDBStrategy.storeName,
+            'readonly',
+        )
+        const store = tx.objectStore(IndexedDBStrategy.storeName)
+        const request = store.get(storeKey)
+        return new Promise((resolve, reject) => {
+            request.onsuccess = () => {
+                resolve(request.result ? request.result.data : undefined)
+            }
+            request.onerror = () => reject(request.error)
+        })
+    }
+
+    // IndexedDB remove
+    async remove(storeKey: string): Promise<void> {
+        await this.ready
+        const tx = this.store.transaction(
+            IndexedDBStrategy.storeName,
+            'readwrite',
+        )
+        const store = tx.objectStore(IndexedDBStrategy.storeName)
+        store.delete(storeKey)
+    }
+}
+
+export function getStorageStrategy(): StorageStrategy {
+    if (checkIsServiceWorker()) {
+        return new IndexedDBStrategy()
+    } else {
+        return new LocalStorageStrategy(typeof window === 'undefined')
+    }
+}

@@ -38,17 +38,17 @@ export class CacheStore {
         return parseInt(fetchDate, 10)
     }
 
-    saveConfig(
+    async saveConfig(
         data: BucketedUserConfig,
         user: DVCPopulatedUser,
         dateFetched: number,
-    ): void {
+    ): Promise<void> {
         const configKey = this.getConfigKey(user)
         const fetchDateKey = this.getConfigFetchDateKey(user)
         const userIdKey = this.getConfigUserIdKey(user)
-        this.store.save(configKey, data)
-        this.store.save(fetchDateKey, dateFetched)
-        this.store.save(userIdKey, user.user_id)
+        await this.store.save(configKey, data)
+        await this.store.save(fetchDateKey, dateFetched)
+        await this.store.save(userIdKey, user.user_id)
         this.logger?.info('Successfully saved config to local storage')
     }
 
@@ -106,20 +106,20 @@ export class CacheStore {
         return config
     }
 
-    saveUser(user: DVCPopulatedUser): void {
+    async saveUser(user: DVCPopulatedUser): Promise<void> {
         if (!user) {
             throw new Error('No user to save')
         }
-        this.store.save(StoreKey.User, user)
+        await this.store.save(StoreKey.User, user)
         this.logger?.info('Successfully saved user to local storage')
     }
 
     async loadUser(): Promise<DVCPopulatedUser | undefined> {
-        return this.store.load<DVCPopulatedUser>(StoreKey.User)
+        return await this.store.load<DVCPopulatedUser>(StoreKey.User)
     }
 
-    saveAnonUserId(userId: string): void {
-        this.store.save(StoreKey.AnonUserId, userId)
+    async saveAnonUserId(userId: string): Promise<void> {
+        await this.store.save(StoreKey.AnonUserId, userId)
         this.logger?.info(
             'Successfully saved anonymous user id to local storage',
         )
@@ -129,8 +129,8 @@ export class CacheStore {
         return await this.store.load<string>(StoreKey.AnonUserId)
     }
 
-    removeAnonUserId(): void {
-        this.store.remove(StoreKey.AnonUserId)
+    async removeAnonUserId(): Promise<void> {
+        await this.store.remove(StoreKey.AnonUserId)
     }
 }
 
