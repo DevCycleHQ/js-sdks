@@ -265,7 +265,7 @@ export interface DVCStorage {
      * @param key
      * @param value
      **/
-    save(key: string, value: unknown): void
+    save(key: string, value: unknown): Promise<void>
 
     /**
      * Get a value from the cache store
@@ -277,7 +277,7 @@ export interface DVCStorage {
      * Remove a value from the cache store
      * @param key
      */
-    remove(key: string): void
+    remove(key: string): Promise<void>
 }
 
 export const StoreKey = {
