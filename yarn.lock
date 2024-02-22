@@ -5133,6 +5133,7 @@ __metadata:
   resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
   dependencies:
     "@devcycle/types": ^1.9.0
+    cross-fetch: ^4.0.0
     fetch-retry: ^5.0.6
     lodash: ^4.17.21
     ua-parser-js: ^1.0.36
@@ -5270,12 +5271,6 @@ __metadata:
   peerDependencies:
     react: ">=16.8.0"
     react-native: ">=0.64.0"
-  languageName: unknown
-  linkType: soft
-
-"@devcycle/server-request@workspace:lib/shared/server-request":
-  version: 0.0.0-use.local
-  resolution: "@devcycle/server-request@workspace:lib/shared/server-request"
   languageName: unknown
   linkType: soft
 

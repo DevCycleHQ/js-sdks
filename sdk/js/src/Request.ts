@@ -8,7 +8,7 @@ import {
     getWithTimeout,
     post,
     patch,
-} from '@devcycle/server-request'
+} from './RequestUtils'
 import { RequestInitWithRetry } from 'fetch-retry'
 
 const HOST = '.devcycle.com'
