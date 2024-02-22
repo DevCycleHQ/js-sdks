@@ -46,7 +46,7 @@
                 "entryFile": "sdk/js/src/index.ts",
                 "compiler": "tsc",
                 "format": ["esm", "cjs"],
-                "external": ["shared-types"],
+                "external": "all",
                 "generateExportsField": true,
                 "assets": [
                     {
