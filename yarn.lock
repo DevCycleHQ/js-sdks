@@ -16773,7 +16773,7 @@ __metadata:
     style-loader: ^3.3.0
     stylus: 0.59.0
     stylus-loader: ^7.1.0
-    supports-color: 8.1.1
+    supports-color: 9.4.0
     swc-loader: 0.1.15
     terser-webpack-plugin: ^5.3.6
     ts-jest: 29.1.0
@@ -31933,6 +31933,13 @@ __metadata:
   dependencies:
     has-flag: ^4.0.0
   checksum: c052193a7e43c6cdc741eb7f378df605636e01ad434badf7324f17fb60c69a880d8d8fcdcb562cf94c2350e57b937d7425ab5b8326c67c2adc48f7c87c1db406
+  languageName: node
+  linkType: hard
+
+"supports-color@npm:9.4.0":
+  version: 9.4.0
+  resolution: "supports-color@npm:9.4.0"
+  checksum: cb8ff8daeaf1db642156f69a9aa545b6c01dd9c4def4f90a49f46cbf24be0c245d392fcf37acd119cd1819b99dad2cc9b7e3260813f64bcfd7f5b18b5a1eefb8
   languageName: node
   linkType: hard
 
