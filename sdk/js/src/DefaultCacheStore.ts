@@ -20,9 +20,11 @@ export class LocalStorageStrategy extends StorageStrategy {
         this.isTesting = isTesting
         this.init()
     }
+
     async init(): Promise<void> {
         this.store = this.isTesting ? stubbedLocalStorage : window.localStorage
     }
+
     async save(storeKey: string, data: unknown): Promise<void> {
         this.store.setItem(storeKey, JSON.stringify(data))
     }
@@ -49,8 +51,9 @@ const stubbedLocalStorage = {
 export class IndexedDBStrategy extends StorageStrategy {
     override store: IDBDatabase
     private ready: Promise<void>
-    private static storeName = 'DevcycleStore'
-    private static DBName = 'DevcycleDB'
+    private static storeName = 'DevCycleStore'
+    private static DBName = 'DevCycleDB'
+
     constructor() {
         super()
         this.ready = new Promise((resolve, reject) => {
@@ -87,6 +90,7 @@ export class IndexedDBStrategy extends StorageStrategy {
             }
         })
     }
+
     async save(storeKey: string, data: unknown): Promise<void> {
         await this.ready
         const tx = this.store.transaction(
