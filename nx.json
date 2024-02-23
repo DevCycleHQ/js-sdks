@@ -21,6 +21,9 @@
     "pluginsConfig": {
         "@nx/js": {
             "analyzeSourceFiles": true
+        },
+        "@nrwl/rollup": {
+            "analyzeSourceFiles": true
         }
     },
     "namedInputs": {

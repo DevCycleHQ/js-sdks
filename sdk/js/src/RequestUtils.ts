@@ -1,8 +1,7 @@
-// NOTE: This file is duplicated in "sdk/js/src/RequestUtils" because nx:rollup cant build non-external dependencies
+// NOTE: This file is duplicated from "lib/shared/server-request" because nx:rollup cant build non-external dependencies
 // from outside the root directory https://github.com/nrwl/nx/issues/10395
 
 import fetchWithRetry, { RequestInitWithRetry } from 'fetch-retry'
-
 export class ResponseError extends Error {
     constructor(message: string) {
         super(message)
