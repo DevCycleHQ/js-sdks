@@ -1,0 +1,92 @@
+{
+    "name": "examples-debugger-widget",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "examples/debugger-widget/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nx/webpack:webpack",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "production",
+            "options": {
+                "compiler": "babel",
+                "outputPath": "dist/examples/debugger-widget",
+                "index": "examples/debugger-widget/src/index.html",
+                "baseHref": "/",
+                "main": "examples/debugger-widget/src/main.tsx",
+                "tsConfig": "examples/debugger-widget/tsconfig.app.json",
+                "assets": [
+                    "examples/debugger-widget/src/favicon.ico",
+                    "examples/debugger-widget/src/assets"
+                ],
+                "styles": ["examples/debugger-widget/src/styles.css"],
+                "scripts": [],
+                "isolatedConfig": true,
+                "webpackConfig": "examples/debugger-widget/webpack.config.js"
+            },
+            "configurations": {
+                "development": {
+                    "extractLicenses": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "vendorChunk": true
+                },
+                "production": {
+                    "fileReplacements": [
+                        {
+                            "replace": "examples/debugger-widget/src/environments/environment.ts",
+                            "with": "examples/debugger-widget/src/environments/environment.prod.ts"
+                        }
+                    ],
+                    "optimization": true,
+                    "outputHashing": "all",
+                    "sourceMap": false,
+                    "namedChunks": false,
+                    "extractLicenses": true,
+                    "vendorChunk": false
+                }
+            }
+        },
+        "serve": {
+            "executor": "@nx/webpack:dev-server",
+            "defaultConfiguration": "development",
+            "options": {
+                "buildTarget": "examples-debugger-widget:build",
+                "hmr": true
+            },
+            "configurations": {
+                "development": {
+                    "buildTarget": "examples-debugger-widget:build:development"
+                },
+                "production": {
+                    "buildTarget": "examples-debugger-widget:build:production",
+                    "hmr": false
+                }
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": [
+                    "examples/debugger-widget/**/*.{ts,tsx,js,jsx}"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "examples/debugger-widget/jest.config.ts",
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        }
+    },
+    "tags": []
+}
