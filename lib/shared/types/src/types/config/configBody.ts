@@ -93,7 +93,8 @@ export class ConfigBody<IdType = string> {
      * SSE information used for establishing connections.
      */
     sse?: {
-        url: string
+        hostname: string
+        path: string
         inactivityDelay: number
     }
 }
