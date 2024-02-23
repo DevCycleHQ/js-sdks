@@ -1,0 +1,71 @@
+{
+    "name": "sdk-debugger-widget-app",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "sdk/debugger-widget-app",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nx/next:build",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "production",
+            "options": {
+                "outputPath": "dist/sdk/debugger-widget-app"
+            },
+            "configurations": {
+                "development": {
+                    "outputPath": "sdk/debugger-widget-app"
+                },
+                "production": {}
+            }
+        },
+        "serve": {
+            "executor": "@nx/next:server",
+            "defaultConfiguration": "development",
+            "options": {
+                "buildTarget": "sdk-debugger-widget-app:build",
+                "dev": true,
+                "port": 4201
+            },
+            "configurations": {
+                "development": {
+                    "buildTarget": "sdk-debugger-widget-app:build:development",
+                    "dev": true
+                },
+                "production": {
+                    "buildTarget": "sdk-debugger-widget-app:build:production",
+                    "dev": false
+                }
+            }
+        },
+        "export": {
+            "executor": "@nx/next:export",
+            "options": {
+                "buildTarget": "sdk-debugger-widget-app:build:production"
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "sdk/debugger-widget-app/jest.config.ts",
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": [
+                    "sdk/debugger-widget-app/**/*.{ts,tsx,js,jsx}"
+                ]
+            }
+        }
+    },
+    "tags": []
+}

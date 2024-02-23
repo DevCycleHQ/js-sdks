@@ -15,12 +15,14 @@ export default function DevCycleExample(): React.ReactElement {
     const variableJsonString = useVariable(variableKeyJsonString, {
         jsonStringKeyDefault: 'json string default',
     })
+    const [_, triggerRerender] = React.useState({})
 
     return (
         <div>
             <div>
                 <span>React With Provider</span>
             </div>
+            <button onClick={triggerRerender}>Rerender</button>
             <div>
                 <span>
                     variable feature-release = {JSON.stringify(variable.value)}{' '}
