@@ -188,8 +188,8 @@ export class DevCycleClient<
                     this.options,
                     extraParams,
                 ),
-            async (config: BucketedUserConfig, user: DVCPopulatedUser) =>
-                await this.handleConfigReceived(config, user, Date.now()),
+            (config: BucketedUserConfig, user: DVCPopulatedUser) =>
+                this.handleConfigReceived(config, user, Date.now()),
             this.user,
         )
 
@@ -203,14 +203,10 @@ export class DevCycleClient<
                     Date.now(),
                 )
             }
-            this.resolveOnInitialized(this)
-            this.logger.info('Client initialized')
         } catch (err) {
-            this.initializeOnConfigFailure(this.user, err)
+            await this.initializeOnConfigFailure(this.user, err)
             return this
         }
-
-        this.eventEmitter.emitInitialized(true)
 
         if (this.user.isAnonymous) {
             await this.store.saveAnonUserId(this.user.user_id)
@@ -232,13 +228,17 @@ export class DevCycleClient<
             }
         }
 
+        this.resolveOnInitialized(this)
+        this.logger.info('Client initialized')
+        this.eventEmitter.emitInitialized(true)
+
         return this
     }
 
     /**
      * Complete initialization process without config so that we can return default values
      */
-    private initializeOnConfigFailure = (
+    private initializeOnConfigFailure = async (
         user: DVCPopulatedUser,
         err?: unknown,
     ) => {
@@ -249,7 +249,7 @@ export class DevCycleClient<
         if (err) {
             this.eventEmitter.emitError(err)
         }
-        this.setUser(user)
+        await this.setUser(user)
         this.resolveOnInitialized(this)
     }
 
@@ -631,11 +631,11 @@ export class DevCycleClient<
      * @param user
      * @param userAgent
      */
-    synchronizeBootstrapData(
+    async synchronizeBootstrapData(
         config: BucketedUserConfig | null,
         user: DevCycleUser,
         userAgent?: string,
-    ): void {
+    ): Promise<void> {
         const populatedUser = new DVCPopulatedUser(
             user,
             this.options,
@@ -646,7 +646,7 @@ export class DevCycleClient<
 
         if (!config) {
             // config is null indicating we failed to fetch it, finish initialization so default values can be returned
-            this.initializeOnConfigFailure(populatedUser)
+            await this.initializeOnConfigFailure(populatedUser)
             return
         }
 
@@ -658,7 +658,7 @@ export class DevCycleClient<
             return
         }
 
-        this.handleConfigReceived(config, populatedUser, Date.now())
+        await this.handleConfigReceived(config, populatedUser, Date.now())
     }
 
     private async refetchConfig(
@@ -688,7 +688,7 @@ export class DevCycleClient<
         await this.store.saveConfig(config, user, dateFetched)
         this.isConfigCached = false
 
-        this.setUser(user)
+        await this.setUser(user)
 
         const oldFeatures = oldConfig?.features || {}
         const oldVariables = oldConfig?.variables || {}
@@ -704,11 +704,11 @@ export class DevCycleClient<
         }
     }
 
-    private setUser(user: DVCPopulatedUser) {
+    private async setUser(user: DVCPopulatedUser) {
         if (this.user != user || !this.userSaved) {
             this.user = user
 
-            this.store.saveUser(user)
+            await this.store.saveUser(user)
 
             if (
                 !this.user.isAnonymous &&
@@ -719,14 +719,13 @@ export class DevCycleClient<
                     true,
                 )
             ) {
-                saveEntity(
+                const res = await saveEntity(
                     this.user,
                     this.sdkKey,
                     this.logger,
                     this.options,
-                ).then((res) =>
-                    this.logger.info(`Saved response entity! ${res}`),
                 )
+                this.logger.info(`Saved response entity! ${res}`)
             }
 
             this.userSaved = true

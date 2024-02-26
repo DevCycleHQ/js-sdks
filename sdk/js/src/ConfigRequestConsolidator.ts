@@ -68,11 +68,11 @@ export class ConfigRequestConsolidator {
                     // don't resolve anything and just make another request while keeping all the previous resolvers
                     this.resolvers.push(...resolvers)
                 } else {
-                    resolvers.forEach(({ resolve }) => resolve(result))
                     await this.handleConfigReceivedFunction(
                         result,
                         this.nextUser,
                     )
+                    resolvers.forEach(({ resolve }) => resolve(result))
                 }
             })
             .catch((err) => {
