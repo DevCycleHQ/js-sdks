@@ -29,7 +29,7 @@ export class CacheStore {
         user: DVCPopulatedUser,
     ): Promise<string | undefined> {
         const userIdKey = this.getConfigUserIdKey(user)
-        return this.store.load<string>(userIdKey)
+        return await this.store.load<string>(userIdKey)
     }
 
     private async loadConfigFetchDate(user: DVCPopulatedUser): Promise<number> {
@@ -46,9 +46,11 @@ export class CacheStore {
         const configKey = this.getConfigKey(user)
         const fetchDateKey = this.getConfigFetchDateKey(user)
         const userIdKey = this.getConfigUserIdKey(user)
-        await this.store.save(configKey, data)
-        await this.store.save(fetchDateKey, dateFetched)
-        await this.store.save(userIdKey, user.user_id)
+        await Promise.all([
+            this.store.save(configKey, data),
+            this.store.save(fetchDateKey, dateFetched),
+            this.store.save(userIdKey, user.user_id),
+        ])
         this.logger?.info('Successfully saved config to local storage')
     }
 

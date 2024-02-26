@@ -17,28 +17,36 @@ const createClientWithConfigImplementation = (implementation) => {
     return new DevCycleClient('test_sdk_key', { user_id: 'user1' })
 }
 
+const testConfig = {
+    project: {
+        settings: {
+            edgeDB: {
+                enabled: true,
+            },
+        },
+    },
+    environment: {},
+    features: {},
+    featureVariationMap: {},
+    variableVariationMap: {},
+    variables: {
+        key: {
+            _id: 'id',
+            value: 'value1',
+            type: 'String',
+            default_value: 'default_value',
+        },
+    },
+}
+const createClientWithDelay = (delay) => {
+    return createClientWithConfigImplementation(() => {
+        return new Promise((resolve) => {
+            setTimeout(() => resolve(testConfig), delay)
+        })
+    })
+}
+
 describe('DevCycleClient tests', () => {
-    const testConfig = {
-        project: {
-            settings: {
-                edgeDB: {
-                    enabled: true,
-                },
-            },
-        },
-        environment: {},
-        features: {},
-        featureVariationMap: {},
-        variableVariationMap: {},
-        variables: {
-            key: {
-                _id: 'id',
-                value: 'value1',
-                type: 'String',
-                default_value: 'default_value',
-            },
-        },
-    }
 
     beforeEach(() => {
         jest.clearAllMocks()
@@ -134,6 +142,7 @@ describe('DevCycleClient tests', () => {
         getConfigJson_mock.mockImplementation(() => {
             return Promise.resolve({
                 ...testConfig,
+                project: { settings: { edgeDB: { enabled: false } } },
                 project: { settings: { edgeDB: { enabled: false } } },
             })
         })
@@ -323,14 +332,6 @@ describe('DevCycleClient tests', () => {
 
     describe('variable', () => {
         let client
-
-        const createClientWithDelay = (delay) => {
-            return createClientWithConfigImplementation(() => {
-                return new Promise((resolve) => {
-                    setTimeout(() => resolve(testConfig), delay)
-                })
-            })
-        }
 
         it('return a variable with the correct value from the config', async () => {
             client = createClientWithDelay(0)
@@ -613,13 +614,10 @@ describe('DevCycleClient tests', () => {
         })
 
         it('should clear existing anon user id from local storage when client initialize is delayed', async () => {
-            const newUser = { user_id: 'user2' }
-            client = createClientWithConfigImplementation(() =>
-                setTimeout(() => Promise.resolve(testConfig), 1000),
-            )
-            client.store.store.save(StoreKey.AnonUserId, 'anon-user-id')
+            client = createClientWithDelay(1000)
+            await client.store.store.save(StoreKey.AnonUserId, 'anon-user-id')
 
-            await client.identifyUser(newUser)
+            await client.onClientInitialized()
             const anonUser = await client.store.store.load(StoreKey.AnonUserId)
 
             expect(anonUser).toBeUndefined()
