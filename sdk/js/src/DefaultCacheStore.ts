@@ -50,16 +50,18 @@ const stubbedLocalStorage = {
 // IndexedDB implementation
 export class IndexedDBStrategy extends StorageStrategy {
     override store: IDBDatabase
-    private ready: Promise<void>
+    private isReady: boolean
+    private connectionPromise: Promise<void>
     private static storeName = 'DevCycleStore'
     private static DBName = 'DevCycleDB'
 
     constructor() {
         super()
-        this.ready = new Promise((resolve, reject) => {
+        this.connectionPromise = new Promise((resolve, reject) => {
             this.init()
                 .then((db) => {
                     this.store = db
+                    this.isReady = true
                     resolve()
                 })
                 .catch((err) => reject(err))
@@ -92,7 +94,7 @@ export class IndexedDBStrategy extends StorageStrategy {
     }
 
     async save(storeKey: string, data: unknown): Promise<void> {
-        await this.ready
+        await this.connectionPromise
         const tx = this.store.transaction(
             IndexedDBStrategy.storeName,
             'readwrite',
@@ -100,10 +102,9 @@ export class IndexedDBStrategy extends StorageStrategy {
         const store = tx.objectStore(IndexedDBStrategy.storeName)
         store.put({ id: storeKey, data: data })
     }
-
     // IndexedDB load
     async load<T>(storeKey: string): Promise<T | undefined> {
-        await this.ready
+        await this.connectionPromise
         const tx = this.store.transaction(
             IndexedDBStrategy.storeName,
             'readonly',
@@ -120,7 +121,7 @@ export class IndexedDBStrategy extends StorageStrategy {
 
     // IndexedDB remove
     async remove(storeKey: string): Promise<void> {
-        await this.ready
+        await this.connectionPromise
         const tx = this.store.transaction(
             IndexedDBStrategy.storeName,
             'readwrite',

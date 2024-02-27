@@ -197,21 +197,21 @@ export class DevCycleClient<
             if (!this.options.bootstrapConfig) {
                 await this.requestConsolidator.queue(this.user)
             } else {
-                await this.handleConfigReceived(
+                this.handleConfigReceived(
                     this.options.bootstrapConfig,
                     this.user,
                     Date.now(),
                 )
             }
         } catch (err) {
-            await this.initializeOnConfigFailure(this.user, err)
+            this.initializeOnConfigFailure(this.user, err)
             return this
         }
 
         if (this.user.isAnonymous) {
-            await this.store.saveAnonUserId(this.user.user_id)
+            this.store.saveAnonUserId(this.user.user_id)
         } else {
-            await this.store.removeAnonUserId()
+            this.store.removeAnonUserId()
         }
 
         if (this.config?.sse?.url) {
@@ -238,7 +238,7 @@ export class DevCycleClient<
     /**
      * Complete initialization process without config so that we can return default values
      */
-    private initializeOnConfigFailure = async (
+    private initializeOnConfigFailure = (
         user: DVCPopulatedUser,
         err?: unknown,
     ) => {
@@ -249,7 +249,7 @@ export class DevCycleClient<
         if (err) {
             this.eventEmitter.emitError(err)
         }
-        await this.setUser(user)
+        this.setUser(user)
         this.resolveOnInitialized(this)
     }
 
@@ -631,11 +631,11 @@ export class DevCycleClient<
      * @param user
      * @param userAgent
      */
-    async synchronizeBootstrapData(
+    synchronizeBootstrapData(
         config: BucketedUserConfig | null,
         user: DevCycleUser,
         userAgent?: string,
-    ): Promise<void> {
+    ): void {
         const populatedUser = new DVCPopulatedUser(
             user,
             this.options,
@@ -646,7 +646,7 @@ export class DevCycleClient<
 
         if (!config) {
             // config is null indicating we failed to fetch it, finish initialization so default values can be returned
-            await this.initializeOnConfigFailure(populatedUser)
+            this.initializeOnConfigFailure(populatedUser)
             return
         }
 
@@ -658,7 +658,7 @@ export class DevCycleClient<
             return
         }
 
-        await this.handleConfigReceived(config, populatedUser, Date.now())
+        this.handleConfigReceived(config, populatedUser, Date.now())
     }
 
     private async refetchConfig(
@@ -678,17 +678,17 @@ export class DevCycleClient<
         }
     }
 
-    private async handleConfigReceived(
+    private handleConfigReceived(
         config: BucketedUserConfig,
         user: DVCPopulatedUser,
         dateFetched: number,
     ) {
         const oldConfig = this.config
         this.config = config
-        await this.store.saveConfig(config, user, dateFetched)
+        this.store.saveConfig(config, user, dateFetched)
         this.isConfigCached = false
 
-        await this.setUser(user)
+        this.setUser(user)
 
         const oldFeatures = oldConfig?.features || {}
         const oldVariables = oldConfig?.variables || {}

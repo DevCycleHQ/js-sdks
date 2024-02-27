@@ -20,7 +20,6 @@ const isInvalidEventKey = (key: string): boolean => {
         !key.startsWith(EventNames.VARIABLE_UPDATED) &&
         !key.startsWith(EventNames.FEATURE_UPDATED) &&
         !key.startsWith(EventNames.NEW_VARIABLES) &&
-        !key.startsWith(EventNames.CONFIG_UPDATED) &&
         !key.startsWith(EventNames.VARIABLE_EVALUATED)
     )
 }

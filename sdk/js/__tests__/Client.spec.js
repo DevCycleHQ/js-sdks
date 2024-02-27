@@ -47,7 +47,6 @@ const createClientWithDelay = (delay) => {
 }
 
 describe('DevCycleClient tests', () => {
-
     beforeEach(() => {
         jest.clearAllMocks()
         window.localStorage.clear()
