@@ -65,11 +65,7 @@ export const initialize = async (
     }
 
     if (!initializeAlreadyCalled) {
-        await client.synchronizeBootstrapData(
-            config,
-            user,
-            getUserAgent(options),
-        )
+        client.synchronizeBootstrapData(config, user, getUserAgent(options))
     }
 
     return { config, user, options, sdkKey }

@@ -200,21 +200,24 @@ export class DevCycleClient<
             if (!this.options.bootstrapConfig) {
                 await this.requestConsolidator.queue(this.user)
             } else {
-                await this.handleConfigReceived(
+                this.handleConfigReceived(
                     this.options.bootstrapConfig,
                     this.user,
                     Date.now(),
                 )
             }
+            this.resolveOnInitialized(this)
+            this.logger.info('Client initialized')
         } catch (err) {
-            await this.initializeOnConfigFailure(this.user, err)
+            this.initializeOnConfigFailure(this.user, err)
             return this
         }
+        this.eventEmitter.emitInitialized(true)
 
         if (this.user.isAnonymous) {
-            await this.store.saveAnonUserId(this.user.user_id)
+            void this.store.saveAnonUserId(this.user.user_id)
         } else {
-            await this.store.removeAnonUserId()
+            void this.store.removeAnonUserId()
         }
 
         if (this.config?.sse?.url) {
@@ -231,17 +234,13 @@ export class DevCycleClient<
             }
         }
 
-        this.resolveOnInitialized(this)
-        this.logger.info('Client initialized')
-        this.eventEmitter.emitInitialized(true)
-
         return this
     }
 
     /**
      * Complete initialization process without config so that we can return default values
      */
-    private initializeOnConfigFailure = async (
+    private initializeOnConfigFailure = (
         user: DVCPopulatedUser,
         err?: unknown,
     ) => {
@@ -252,7 +251,7 @@ export class DevCycleClient<
         if (err) {
             this.eventEmitter.emitError(err)
         }
-        await this.setUser(user)
+        void this.setUser(user)
         this.resolveOnInitialized(this)
     }
 
@@ -425,7 +424,7 @@ export class DevCycleClient<
             return this.config?.variables || {}
         }
 
-        this.eventQueue.flushEvents()
+        void this.eventQueue.flushEvents()
 
         try {
             await this.onInitialized
@@ -634,11 +633,11 @@ export class DevCycleClient<
      * @param user
      * @param userAgent
      */
-    async synchronizeBootstrapData(
+    synchronizeBootstrapData(
         config: BucketedUserConfig | null,
         user: DevCycleUser,
         userAgent?: string,
-    ): Promise<void> {
+    ): void {
         const populatedUser = new DVCPopulatedUser(
             user,
             this.options,
@@ -649,7 +648,7 @@ export class DevCycleClient<
 
         if (!config) {
             // config is null indicating we failed to fetch it, finish initialization so default values can be returned
-            await this.initializeOnConfigFailure(populatedUser)
+            this.initializeOnConfigFailure(populatedUser)
             return
         }
 
@@ -661,7 +660,7 @@ export class DevCycleClient<
             return
         }
 
-        await this.handleConfigReceived(config, populatedUser, Date.now())
+        this.handleConfigReceived(config, populatedUser, Date.now())
     }
 
     private async refetchConfig(
@@ -681,17 +680,17 @@ export class DevCycleClient<
         }
     }
 
-    private async handleConfigReceived(
+    private handleConfigReceived(
         config: BucketedUserConfig,
         user: DVCPopulatedUser,
         dateFetched: number,
     ) {
         const oldConfig = this.config
         this.config = config
-        await this.store.saveConfig(config, user, dateFetched)
+        void this.store.saveConfig(config, user, dateFetched)
         this.isConfigCached = false
 
-        await this.setUser(user)
+        void this.setUser(user)
 
         const oldFeatures = oldConfig?.features || {}
         const oldVariables = oldConfig?.variables || {}
