@@ -85,6 +85,7 @@ describe('Request tests', () => {
                 user,
                 events,
                 defaultLogger,
+                {},
             )
 
             const call = fetchRequestMock.mock.calls[0]

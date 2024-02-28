@@ -27,5 +27,9 @@ export class Project<IdType = string> {
             }
             poweredByAlignment?: 'center' | 'left' | 'right' | 'hidden'
         }
+        obfuscation?: {
+            required: boolean
+            enabled: string
+        }
     }
 }

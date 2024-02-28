@@ -51,6 +51,9 @@ export const getConfigJson = async (
             queryParams.append('sseEtag', extraParams.etag)
         }
     }
+    if (options?.enableObfuscation) {
+        queryParams.append('obfuscate', '1')
+    }
     const url =
         `${options?.apiProxyURL || CLIENT_SDK_URL}${CONFIG_PATH}?` +
         queryParams.toString()
@@ -75,7 +78,7 @@ export const publishEvents = async (
     user: DVCPopulatedUser,
     events: DevCycleEvent[],
     logger: DVCLogger,
-    options?: DevCycleOptions,
+    options: DevCycleOptions,
 ): Promise<Response> => {
     if (!sdkKey) {
         throw new Error('Missing sdkKey to publish events to Events API')
@@ -84,8 +87,13 @@ export const publishEvents = async (
     const payload = generateEventPayload(config, user, events)
     logger.info(`Submit Events Payload: ${JSON.stringify(payload)}`)
 
+    let url = `${options.apiProxyURL || EVENT_URL}${EVENTS_PATH}`
+    if (options.enableObfuscation) {
+        url += '?obfuscate=1'
+    }
+
     const res = await post(
-        `${options?.apiProxyURL || EVENT_URL}${EVENTS_PATH}`,
+        url,
         {
             ...requestConfig,
             body: JSON.stringify(payload),

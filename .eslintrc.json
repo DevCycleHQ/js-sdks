@@ -24,10 +24,7 @@
         },
         {
             "files": ["*.ts", "*.tsx"],
-            "extends": ["plugin:@nx/typescript", "./eslint-common.js"],
-            "rules": {
-                "@typescript-eslint/explicit-module-boundary-types": ["error"]
-            }
+            "extends": ["plugin:@nx/typescript", "./eslint-common.js"]
         },
         {
             "files": ["*.js", "*.jsx"],

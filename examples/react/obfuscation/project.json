@@ -1,0 +1,92 @@
+{
+    "name": "examples-react-obfuscation",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "examples/react/obfuscation/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nx/webpack:webpack",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "production",
+            "options": {
+                "compiler": "babel",
+                "outputPath": "dist/examples/react/obfuscation",
+                "index": "examples/react/obfuscation/src/index.html",
+                "baseHref": "/",
+                "main": "examples/react/obfuscation/src/main.tsx",
+                "tsConfig": "examples/react/obfuscation/tsconfig.app.json",
+                "assets": [
+                    "examples/react/obfuscation/src/favicon.ico",
+                    "examples/react/obfuscation/src/assets"
+                ],
+                "styles": ["examples/react/obfuscation/src/styles.css"],
+                "scripts": [],
+                "isolatedConfig": true,
+                "webpackConfig": "examples/react/obfuscation/webpack.config.js"
+            },
+            "configurations": {
+                "development": {
+                    "extractLicenses": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "vendorChunk": true
+                },
+                "production": {
+                    "fileReplacements": [
+                        {
+                            "replace": "examples/react/obfuscation/src/environments/environment.ts",
+                            "with": "examples/react/obfuscation/src/environments/environment.prod.ts"
+                        }
+                    ],
+                    "optimization": true,
+                    "outputHashing": "all",
+                    "sourceMap": false,
+                    "namedChunks": false,
+                    "extractLicenses": true,
+                    "vendorChunk": false
+                }
+            }
+        },
+        "serve": {
+            "executor": "@nx/webpack:dev-server",
+            "defaultConfiguration": "development",
+            "options": {
+                "buildTarget": "examples-react-obfuscation:build",
+                "hmr": true
+            },
+            "configurations": {
+                "development": {
+                    "buildTarget": "examples-react-obfuscation:build:development"
+                },
+                "production": {
+                    "buildTarget": "examples-react-obfuscation:build:production",
+                    "hmr": false
+                }
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": [
+                    "examples/react/obfuscation/**/*.{ts,tsx,js,jsx}"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "examples/react/obfuscation/jest.config.ts",
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        }
+    },
+    "tags": []
+}

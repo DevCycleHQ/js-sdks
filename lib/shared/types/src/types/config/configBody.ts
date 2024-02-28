@@ -77,6 +77,14 @@ export class ConfigBody<IdType = string> {
     }
 
     /**
+     * Map of obfuscated keys to their unobfuscated values for use on backend APIs like events API
+     * This mapping is never sent to clients and is not publicly accessible
+     */
+    keyTranslation?: {
+        [key: string]: string
+    }
+
+    /**
      * **Implement Later**
      *
      * All List Audiences in the project
