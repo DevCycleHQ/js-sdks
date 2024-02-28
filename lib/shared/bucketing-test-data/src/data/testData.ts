@@ -194,6 +194,17 @@ export const audiences: TargetAudience[] = [
             operator: AudienceOperator.and,
         },
     },
+    {
+        _id: '6153557f1ed7bac7268ea0d9',
+        filters: {
+            filters: [
+                {
+                    type: FilterType.all,
+                },
+            ],
+            operator: AudienceOperator.and,
+        },
+    },
 ]
 
 export const variables: PublicVariable[] = [
@@ -470,6 +481,16 @@ export const config: ConfigBody = {
                         distribution: [
                             {
                                 _variation: variations[1]._id,
+                                percentage: 1,
+                            },
+                        ],
+                    },
+                    {
+                        _id: '61536f468fd67f0091982535',
+                        _audience: audiences[7],
+                        distribution: [
+                            {
+                                _variation: variations[0]._id,
                                 percentage: 1,
                             },
                         ],
