@@ -154,6 +154,22 @@ type SegmentedFeatureData = {
     target: PublicTarget<string>
 }
 
+const checkRollout = ({
+    user,
+    target,
+}: {
+    user: DVCBucketingUser
+    target: PublicTarget
+}) => {
+    const { rolloutHash } = generateBoundedHashes(user.user_id, target._id)
+    if (!target.rollout) return true
+    else
+        return doesUserPassRollout({
+            boundedHash: rolloutHash,
+            rollout: target.rollout,
+        })
+}
+
 export const getSegmentedFeatureDataFromConfig = ({
     config,
     user,
@@ -170,13 +186,15 @@ export const getSegmentedFeatureDataFromConfig = ({
 
         const segmentedFeatureTarget = feature.configuration.targets.find(
             (target) => {
-                return evaluateOperator({
-                    operator: target._audience.filters,
-                    data: user,
-                    featureId: feature._id,
-                    isOptInEnabled: !!isOptInEnabled,
-                    audiences: config.audiences,
-                })
+                return (
+                    evaluateOperator({
+                        operator: target._audience.filters,
+                        data: user,
+                        featureId: feature._id,
+                        isOptInEnabled: !!isOptInEnabled,
+                        audiences: config.audiences,
+                    }) && checkRollout({ target, user })
+                )
             },
         )
         if (segmentedFeatureTarget) {
@@ -238,20 +256,11 @@ export const generateBucketedConfig = ({
     }
 
     segmentedFeatures.forEach(({ feature, target }) => {
-        const { _id, key, type, variations, settings } = feature
-        const { rolloutHash, bucketingHash } = generateBoundedHashes(
+        const { variations } = feature
+        const { bucketingHash } = generateBoundedHashes(
             user.user_id,
             target._id,
         )
-        if (
-            target.rollout &&
-            !doesUserPassRollout({
-                boundedHash: rolloutHash,
-                rollout: target.rollout,
-            })
-        ) {
-            return
-        }
 
         const variation_id = bucketForSegmentedFeature({
             boundedHash: bucketingHash,
