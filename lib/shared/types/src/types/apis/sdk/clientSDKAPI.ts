@@ -21,6 +21,7 @@ import 'reflect-metadata'
 import { IsDVCCustomDataJSONObject } from '../../validators/dvcCustomDataJSON'
 import { IsNotBlank } from '../../validators/isNotBlank'
 import { IsISO6391 } from '../../validators/isIso6391'
+import { DevCycleServerSDKOptions } from './serverSDKTypes'
 
 export const SDKTypeValues = ['client', 'server', 'mobile', 'api']
 export type SDKTypes = (typeof SDKTypeValues)[number]
@@ -413,4 +414,21 @@ export interface BucketedUserConfig {
      * staleness.
      */
     etag?: string
+
+    /**
+     * Overrides SDK options
+     * TODO: move to common shared interface between server / client for shared options
+     */
+    sdkOverrides: Pick<
+        DevCycleServerSDKOptions,
+        | 'logLevel'
+        | 'enableEdgeDB'
+        | 'configPollingIntervalMS'
+        | 'configPollingTimeoutMS'
+        | 'eventFlushIntervalMS'
+        | 'disableAutomaticEventLogging'
+        | 'disableCustomEventLogging'
+        | 'flushEventQueueSize'
+        | 'maxEventQueueSize'
+    >
 }

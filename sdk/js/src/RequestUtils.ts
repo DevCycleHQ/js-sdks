@@ -142,7 +142,7 @@ async function getFetchWithRetry() {
 }
 
 type FetchClient = Awaited<ReturnType<typeof getFetch>>
-type FetchAndConfig = [FetchClient, RequestInit]
+type FetchAndConfig = [FetchClient, RequestInitWithRetry]
 
 async function getFetchAndConfig(
     requestConfig: RequestInit | RequestInitWithRetry,

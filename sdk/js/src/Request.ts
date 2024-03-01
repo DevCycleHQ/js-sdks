@@ -82,10 +82,13 @@ export const publishEvents = async (
     }
 
     const payload = generateEventPayload(config, user, events)
-    logger.info(`Submit Events Payload: ${JSON.stringify(payload)}`)
+    const url = `${options?.apiProxyURL || EVENT_URL}${EVENTS_PATH}`
+    logger.info(
+        `Submit Events URL: ${url}, Payload: ${JSON.stringify(payload)}`,
+    )
 
     const res = await post(
-        `${options?.apiProxyURL || EVENT_URL}${EVENTS_PATH}`,
+        url,
         {
             ...requestConfig,
             body: JSON.stringify(payload),

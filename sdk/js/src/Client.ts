@@ -61,7 +61,7 @@ export class DevCycleClient<
     }
 
     private sdkKey: string
-    private readonly options: DevCycleOptions
+    private options: DevCycleOptions
 
     private onInitialized: Promise<DevCycleClient<Variables>>
     private resolveOnInitialized: (client: DevCycleClient<Variables>) => void
@@ -111,7 +111,7 @@ export class DevCycleClient<
 
         this.sdkKey = sdkKey
         this.variableDefaultMap = {}
-        this.eventQueue = new EventQueue(sdkKey, this, options)
+        this.eventQueue = new EventQueue(sdkKey, this, this.options)
 
         this.eventEmitter = new EventEmitter()
         this.registerVisibilityChangeHandler()
@@ -689,6 +689,7 @@ export class DevCycleClient<
         this.store.saveConfig(config, user, dateFetched)
         this.isConfigCached = false
 
+        this.handleSDKOverrides(config)
         this.setUser(user)
 
         const oldFeatures = oldConfig?.features || {}
@@ -703,6 +704,16 @@ export class DevCycleClient<
         if (!oldConfig || oldConfig.etag !== this.config.etag) {
             this.eventEmitter.emitConfigUpdate(config.variables)
         }
+    }
+
+    private handleSDKOverrides(config: BucketedUserConfig) {
+        if (!config.sdkOverrides) return
+
+        this.logger.debug(
+            `Set SDK Overrides: ${JSON.stringify(config.sdkOverrides)}`,
+        )
+        this.options = { ...this.options, ...config.sdkOverrides }
+        this.eventQueue.setOptions(this.options)
     }
 
     private setUser(user: DVCPopulatedUser) {

@@ -15,7 +15,7 @@ type AggregateEvent = DevCycleEvent & {
 
 export class EventQueue {
     private readonly sdkKey: string
-    private readonly options: DevCycleOptions
+    protected options: DevCycleOptions
     private readonly client: DevCycleClient
     private eventQueue: DevCycleEvent[]
     private aggregateEventMap: Record<string, Record<string, AggregateEvent>>
@@ -33,6 +33,10 @@ export class EventQueue {
         this.client = dvcClient
         this.eventQueue = []
         this.aggregateEventMap = {}
+        this.setOptions(options)
+    }
+
+    setOptions(options: DevCycleOptions): void {
         this.options = options
 
         const eventFlushIntervalMS =
@@ -49,6 +53,12 @@ export class EventQueue {
             )
         }
 
+        if (this.flushInterval) {
+            console.log(
+                `Clearing event flush interval, set to ${eventFlushIntervalMS}ms`,
+            )
+            clearInterval(this.flushInterval)
+        }
         this.flushInterval = setInterval(
             this.flushEvents.bind(this),
             eventFlushIntervalMS,
@@ -110,6 +120,7 @@ export class EventQueue {
                     user,
                     eventRequest,
                     this.client.logger,
+                    { apiProxyURL: 'http://localhost:4032' },
                 )
                 if (res.status === 201) {
                     this.client.logger.info(
