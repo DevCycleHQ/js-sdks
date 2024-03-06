@@ -2,6 +2,7 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 export default {
     displayName: 'js-client-sdk',
+
     globals: {},
     transform: {
         '^.+\\.(ts|tsx|js|jsx)?$': [

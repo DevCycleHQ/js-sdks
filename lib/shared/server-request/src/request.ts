@@ -1,6 +1,3 @@
-// NOTE: This file is duplicated in "sdk/js/src/RequestUtils" because nx:rollup cant build non-external dependencies
-// from outside the root directory https://github.com/nrwl/nx/issues/10395
-
 import fetchWithRetry, { RequestInitWithRetry } from 'fetch-retry'
 
 export class ResponseError extends Error {
@@ -12,9 +9,7 @@ export class ResponseError extends Error {
     status: number
 }
 
-export const exponentialBackoff: RequestInitWithRetry['retryDelay'] = (
-    attempt,
-) => {
+const exponentialBackoff: RequestInitWithRetry['retryDelay'] = (attempt) => {
     const delay = Math.pow(2, attempt) * 100
     const randomSum = delay * 0.2 * Math.random()
     return delay + randomSum
@@ -36,7 +31,7 @@ const retryOnRequestError: retryOnRequestErrorFunc = (retries) => {
     }
 }
 
-export async function handleResponse(res: Response): Promise<Response> {
+const handleResponse = async (res: Response) => {
     // res.ok only checks for 200-299 status codes
     if (!res.ok && res.status >= 400) {
         let error
@@ -93,26 +88,6 @@ export async function post(
     return handleResponse(res)
 }
 
-export async function patch(
-    url: string,
-    requestConfig: RequestInit | RequestInitWithRetry,
-    sdkKey: string,
-): Promise<Response> {
-    const [_fetch, config] = await getFetchAndConfig(requestConfig)
-    const patchHeaders = {
-        ...config.headers,
-        Authorization: sdkKey,
-        'Content-Type': 'application/json',
-    }
-
-    const res = await _fetch(url, {
-        ...config,
-        headers: patchHeaders,
-        method: 'PATCH',
-    })
-
-    return handleResponse(res)
-}
 export async function get(
     url: string,
     requestConfig: RequestInit | RequestInitWithRetry,
