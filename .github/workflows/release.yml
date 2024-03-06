@@ -37,6 +37,8 @@ jobs:
             NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
         steps:
+            - name: Disabled
+              run: echo "Release action is disabled" && exit 1
             # Check out the repo with credentials that can bypass branch protection, and fetch git history instead of just latest commit
             - uses: actions/checkout@v4
               with:
