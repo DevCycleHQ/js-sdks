@@ -98,6 +98,9 @@ export const getConfigJson = async (
             queryParams.append('sseEtag', extraParams.etag)
         }
     }
+    if (options?.enableObfuscation) {
+        queryParams.append('obfuscate', '1')
+    }
     const url =
         `${options?.apiProxyURL || CLIENT_SDK_URL}${CONFIG_PATH}?` +
         queryParams.toString()
@@ -134,8 +137,13 @@ export const publishEvents = async (
     const payload = generateEventPayload(config, user, events)
     logger.info(`Submit Events Payload: ${JSON.stringify(payload)}`)
 
+    let url = `${options?.apiProxyURL || EVENT_URL}${EVENTS_PATH}`
+    if (options?.enableObfuscation) {
+        url += '?obfuscate=1'
+    }
+
     const res = await post(
-        `${options?.apiProxyURL || EVENT_URL}${EVENTS_PATH}`,
+        url,
         sdkKey,
         payload as unknown as Record<string, unknown>,
     )

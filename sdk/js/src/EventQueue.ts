@@ -110,6 +110,7 @@ export class EventQueue {
                     user,
                     eventRequest,
                     this.client.logger,
+                    this.options,
                 )
                 if (res.status === 201) {
                     this.client.logger.info(

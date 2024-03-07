@@ -119,6 +119,12 @@ export interface DevCycleOptions {
     next?: {
         configRefreshHandler?: (lastModifiedDate?: number) => void
     }
+
+    /**
+     * Enable obfuscation of the variable keys in the SDK. This setting should be used with a generated DevCycle client
+     * using the CLI.
+     */
+    enableObfuscation?: boolean
 }
 
 export interface DevCycleUser {

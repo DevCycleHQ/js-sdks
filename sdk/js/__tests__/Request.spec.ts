@@ -110,6 +110,7 @@ describe('Request tests', () => {
                 user,
                 events,
                 defaultLogger,
+                {},
             )
 
             expect(axiosRequestMock).toBeCalledWith({

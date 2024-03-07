@@ -24,5 +24,7 @@ module.exports = (config, { options }) => {
         filename: `${libraryName.toLowerCase()}.min.js`,
     }
 
+    console.log(config)
+
     return config
 }
