@@ -139,7 +139,7 @@ export const publishEvents = async (
 
     let url = `${options?.apiProxyURL || EVENT_URL}${EVENTS_PATH}`
     if (options?.enableObfuscation) {
-        url += '?obfuscate=1'
+        url += '?obfuscated=1'
     }
 
     const res = await post(
