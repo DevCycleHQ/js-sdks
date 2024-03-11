@@ -10,6 +10,11 @@ const loggerMock = {
     error: jest.fn(),
 }
 
+const eventQueueOptions = {
+    flushEventQueueSize: 10,
+    maxEventQueueSize: 100,
+}
+
 describe('EventQueue tests', () => {
     beforeAll(() => {
         dvcClient = new DevCycleClient(
@@ -18,10 +23,11 @@ describe('EventQueue tests', () => {
             { logger: loggerMock },
         )
         dvcClient.config = { features: [] }
-        eventQueue = new EventQueue('test_sdk_key', dvcClient, {
-            flushEventQueueSize: 10,
-            maxEventQueueSize: 100,
-        })
+        eventQueue = new EventQueue(
+            'test_sdk_key',
+            dvcClient,
+            eventQueueOptions,
+        )
     })
 
     beforeEach(() => {
@@ -112,6 +118,7 @@ describe('EventQueue tests', () => {
                 dvcClient.user,
                 expect.any(Object),
                 expect.any(Object),
+                eventQueueOptions,
             )
         })
 
@@ -151,6 +158,7 @@ describe('EventQueue tests', () => {
                 dvcClient.user,
                 events.slice(0, 100),
                 expect.any(Object),
+                eventQueueOptions,
             )
             expect(Request.publishEvents).toHaveBeenNthCalledWith(
                 2,
@@ -159,6 +167,7 @@ describe('EventQueue tests', () => {
                 dvcClient.user,
                 events.slice(100, 200),
                 expect.any(Object),
+                eventQueueOptions,
             )
         })
 
@@ -382,6 +391,7 @@ describe('EventQueue tests', () => {
                 'test_sdk_key',
                 dvcClient.config,
                 dvcClient.user,
+                expect.any(Object),
                 expect.any(Object),
                 expect.any(Object),
             )

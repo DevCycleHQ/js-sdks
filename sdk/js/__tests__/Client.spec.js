@@ -1030,6 +1030,34 @@ describe('DevCycleClient tests', () => {
                     expect.objectContaining({ type: 'variableDefaulted' }),
                 ],
                 expect.anything(),
+                expect.any(Object),
+            )
+        })
+    })
+    describe('obfuscation', () => {
+        it('forwards obfuscation option', async () => {
+            publishEvents.mockResolvedValue({ status: 201 })
+            getConfigJson_mock.mockResolvedValue(testConfig)
+            const client = new DevCycleClient(
+                'test_sdk_key',
+                {
+                    user_id: 'user1',
+                },
+                { enableObfuscation: true },
+            )
+            await client.onClientInitialized()
+
+            expect(client.variable('test', false))
+            await client.flushEvents()
+            expect(publishEvents).toHaveBeenCalledWith(
+                'test_sdk_key',
+                testConfig,
+                expect.objectContaining({ user_id: 'user1' }),
+                [expect.objectContaining({ type: 'variableDefaulted' })],
+                expect.anything(),
+                {
+                    enableObfuscation: true,
+                },
             )
         })
     })

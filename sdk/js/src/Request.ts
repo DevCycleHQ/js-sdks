@@ -99,7 +99,7 @@ export const getConfigJson = async (
         }
     }
     if (options?.enableObfuscation) {
-        queryParams.append('obfuscate', '1')
+        queryParams.append('obfuscated', '1')
     }
     const url =
         `${options?.apiProxyURL || CLIENT_SDK_URL}${CONFIG_PATH}?` +

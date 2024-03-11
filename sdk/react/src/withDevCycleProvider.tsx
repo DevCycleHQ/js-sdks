@@ -15,7 +15,6 @@ export function withDevCycleProvider<T extends object>(
             )
         }
 
-        // @ts-ignore
         hoistNonReactStatics(HoistedComponent, WrappedComponent)
 
         return HoistedComponent

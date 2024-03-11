@@ -139,6 +139,37 @@ describe('Request tests', () => {
                 },
             })
         })
+
+        it('should call with obfuscation param', async () => {
+            const user = { user_id: 'my_user' } as DVCPopulatedUser
+            const config = {} as BucketedUserConfig
+            const sdkKey = 'my_sdk_key'
+            const events = [{ type: 'event_1_type' }, { type: 'event_2_type' }]
+            axiosRequestMock.mockResolvedValue({
+                status: 200,
+                data: 'messages',
+            })
+
+            await Request.publishEvents(
+                sdkKey,
+                config,
+                user,
+                events,
+                defaultLogger,
+                { enableObfuscation: true },
+            )
+
+            expect(axiosRequestMock).toBeCalledWith(
+                expect.objectContaining({
+                    headers: {
+                        Authorization: 'my_sdk_key',
+                        'Content-Type': 'application/json',
+                    },
+                    method: 'POST',
+                    url: 'https://events.devcycle.com/v1/events?obfuscated=1',
+                }),
+            )
+        })
     })
 
     describe('saveEntity', () => {
