@@ -95,3 +95,7 @@ react-native-app-e2e/artifacts
 .next
 **/.next
 verdaccio
+
+# Minified SDK in e2e tests
+e2e/js/js-cdn/src/assets/devcycle.min.js
+e2e/js/js-cdn/playwright-report/

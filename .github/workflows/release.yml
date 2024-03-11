@@ -104,5 +104,5 @@ jobs:
                   yarn nx build:cdn js
 
             - name: Upload CDN Release
-              run: aws s3 sync dist/sdk/js s3://js.devcycle.com/ --include "devcycle.min.js*" --acl public-read
+              run: aws s3 sync dist/sdk/cdn/js s3://js.devcycle.com/ --include "devcycle.min.js*" --acl public-read
               if: inputs.draft != true && github.ref == 'refs/heads/main'
