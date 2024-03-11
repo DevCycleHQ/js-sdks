@@ -1,0 +1,84 @@
+{
+    "name": "js-cdn",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "sourceRoot": "e2e/js/js-cdn/src",
+    "tags": [],
+    "targets": {
+        "build": {
+            "executor": "@nx/webpack:webpack",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "production",
+            "options": {
+                "outputPath": "dist/e2e/js/js-cdn",
+                "compiler": "swc",
+                "main": "e2e/js/js-cdn/src/main.ts",
+                "tsConfig": "e2e/js/js-cdn/tsconfig.app.json",
+                "webpackConfig": "e2e/js/js-cdn/webpack.config.js",
+                "assets": [
+                    "e2e/js/js-cdn/src/favicon.ico",
+                    "e2e/js/js-cdn/src/assets"
+                ],
+                "index": "e2e/js/js-cdn/src/index.html",
+                "baseHref": "/",
+                "styles": ["e2e/js/js-cdn/src/styles.css"],
+                "scripts": []
+            },
+            "configurations": {
+                "production": {
+                    "optimization": true,
+                    "outputHashing": "all",
+                    "sourceMap": false,
+                    "namedChunks": false,
+                    "extractLicenses": true,
+                    "vendorChunk": false,
+                    "fileReplacements": [
+                        {
+                            "replace": "e2e/js/js-cdn/src/environments/environment.ts",
+                            "with": "e2e/js/js-cdn/src/environments/environment.prod.ts"
+                        }
+                    ]
+                }
+            }
+        },
+        "serve": {
+            "executor": "@nx/webpack:dev-server",
+            "options": {
+                "buildTarget": "js-cdn:build"
+            },
+            "configurations": {
+                "production": {
+                    "buildTarget": "js-cdn:build:production"
+                }
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["e2e/js/js-cdn/**/*.ts"]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "e2e/js/js-cdn/jest.config.ts",
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        },
+        "e2e": {
+            "executor": "@nx/playwright:playwright",
+            "outputs": ["{workspaceRoot}/dist/.playwright/e2e/js/js-cdn"],
+            "options": {
+                "config": "e2e/js/js-cdn/playwright.config.ts"
+            }
+        }
+    }
+}

@@ -36,8 +36,8 @@
                 "sdk/js-cloud-server/src/index.ts"
             ],
             "@devcycle/nextjs-sdk": ["sdk/nextjs/src/index.ts"],
-            "@devcycle/nextjs-sdk/server": ["sdk/nextjs/src/server.ts"],
             "@devcycle/nextjs-sdk/pages": ["sdk/nextjs/src/pages.ts"],
+            "@devcycle/nextjs-sdk/server": ["sdk/nextjs/src/server.ts"],
             "@devcycle/nodejs-server-sdk": ["sdk/nodejs/src/index.ts"],
             "@devcycle/openfeature-web-provider": [
                 "sdk/openfeature-web-provider/src/index.ts"

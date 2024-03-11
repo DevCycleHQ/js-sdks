@@ -15,80 +15,68 @@ __metadata:
   linkType: hard
 
 "@devcycle/bucketing@file:../../../../dist/lib/shared/bucketing::locator=app%40workspace%3A.":
-  version: 1.7.7
-  resolution: "@devcycle/bucketing@file:../../../../dist/lib/shared/bucketing#../../../../dist/lib/shared/bucketing::hash=4bb41b&locator=app%40workspace%3A."
+  version: 1.12.1
+  resolution: "@devcycle/bucketing@file:../../../../dist/lib/shared/bucketing#../../../../dist/lib/shared/bucketing::hash=d62e72&locator=app%40workspace%3A."
   dependencies:
-    "@devcycle/types": "npm:^1.4.6"
+    "@devcycle/types": "npm:^1.9.1"
     lodash: "npm:^4.17.21"
     murmurhash: "npm:^2.0.0"
     ua-parser-js: "npm:^1.0.36"
-  checksum: 754e0fd14f31b3dc1801d667c4a60c445ecd428372ccab843457a20583029612d595a59e6cc740fec1f6d04c356677eeed7d8eca9d8f1ddc8b992b0a57b997f6
+  checksum: 3624992a9097e80f0555b621f754311901e4b6f0cdad939ae42f96ee0ed633cddce282bd7ae17ba7f38e23e4c6c81721d2884d6458308fd3830586f8761e41b6
   languageName: node
   linkType: hard
 
 "@devcycle/js-client-sdk@file:../../../../dist/sdk/js::locator=app%40workspace%3A.":
-  version: 1.16.6
-  resolution: "@devcycle/js-client-sdk@file:../../../../dist/sdk/js#../../../../dist/sdk/js::hash=43a538&locator=app%40workspace%3A."
+  version: 1.21.1
+  resolution: "@devcycle/js-client-sdk@file:../../../../dist/sdk/js#../../../../dist/sdk/js::hash=1c507d&locator=app%40workspace%3A."
   dependencies:
-    "@devcycle/types": "npm:^1.4.6"
+    "@devcycle/types": "npm:^1.9.1"
     axios: "npm:^1.0.0"
     axios-retry: "npm:^3.3.1"
     lodash: "npm:^4.17.21"
     ua-parser-js: "npm:^1.0.36"
     uuid: "npm:^8.3.2"
-  checksum: b7fcfa181dcacefd0da6cc57c909f5f9bf1f3c0de06a591282af0d1c1cbedee6d13ad51b9e7451eff40d73b95e6eb094e3e62ff2f610acc5105a9df5effee297
+  checksum: 59364e207831e299f917557c04bc83b645a69c9cf8065351f84bedffa9c189ce5de0843d195203b80a270a635aa15ce56cb5edafb58fa1867bff75fc7a918cab
   languageName: node
   linkType: hard
 
 "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs::locator=app%40workspace%3A.":
-  version: 0.0.7
-  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=804f8c&locator=app%40workspace%3A."
+  version: 1.5.2
+  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=e0af39&locator=app%40workspace%3A."
   dependencies:
-    "@devcycle/bucketing": "npm:^1.7.7"
-    "@devcycle/js-client-sdk": "npm:^1.16.6"
-    "@devcycle/react-client-sdk": "npm:^1.14.6"
-    "@devcycle/types": "npm:^1.4.6"
+    "@devcycle/bucketing": "npm:^1.12.1"
+    "@devcycle/js-client-sdk": "npm:^1.21.1"
+    "@devcycle/react-client-sdk": "npm:^1.19.1"
+    "@devcycle/types": "npm:^1.9.1"
     hoist-non-react-statics: "npm:^3.3.2"
-  peerDependencies:
-    next: ">=14.0.0"
-    react: ^18.2.0
-  checksum: 0d9e23b033c555a7a77b733fe2512fbeea64828c4c87d7556de337e34d73bbcf56fd87abfcb0c25bbade715d29f9765fa86d64d692aca5ed3d821f14530a051b
+    server-only: "npm:^0.0.1"
+  checksum: 08ebbbab9567da318f8123091b5d935a1cc7e7a96b020c6533cc514a56a38e5903aacc64626fa40f4faaa96d6a5689d6d1d9dfc21b444e9338c5e737e41fc5fb
   languageName: node
   linkType: hard
 
 "@devcycle/react-client-sdk@file:../../../../dist/sdk/react::locator=app%40workspace%3A.":
-  version: 1.14.6
-  resolution: "@devcycle/react-client-sdk@file:../../../../dist/sdk/react#../../../../dist/sdk/react::hash=74c96f&locator=app%40workspace%3A."
+  version: 1.19.1
+  resolution: "@devcycle/react-client-sdk@file:../../../../dist/sdk/react#../../../../dist/sdk/react::hash=b5d4b4&locator=app%40workspace%3A."
   dependencies:
-    "@devcycle/js-client-sdk": "npm:^1.16.6"
-    "@devcycle/types": "npm:^1.4.6"
+    "@devcycle/js-client-sdk": "npm:^1.21.1"
+    "@devcycle/types": "npm:^1.9.1"
     hoist-non-react-statics: "npm:^3.3.2"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 5a6d1ff022225a8ab7f9571d2060ba4d494afa320544679406e26f7b83d5d96517d4ce01e03b322bfb9860dd85d945be331a69cfbcdb9e69a2e7fadaea9db20e
+  checksum: 7f587b98bd583ff306ebae73d62549f8de7ac0db4ad3806190394d252018bdcdcc7c5572eb1df37e8c54b975da2fea6d48e45e67c4c5ffa20f493d5f9235a671
   languageName: node
   linkType: hard
 
 "@devcycle/types@file:../../../../dist/lib/shared/types::locator=app%40workspace%3A.":
-  version: 1.4.6
-  resolution: "@devcycle/types@file:../../../../dist/lib/shared/types#../../../../dist/lib/shared/types::hash=9c2d1a&locator=app%40workspace%3A."
+  version: 1.9.1
+  resolution: "@devcycle/types@file:../../../../dist/lib/shared/types#../../../../dist/lib/shared/types::hash=ff4b16&locator=app%40workspace%3A."
   dependencies:
-    "@nestjs/class-validator": "npm:^0.13.4"
     class-transformer: "npm:0.5.1"
+    class-validator: "npm:0.14.1"
     iso-639-1: "npm:^2.1.13"
     lodash: "npm:^4.17.21"
     reflect-metadata: "npm:^0.1.13"
-  checksum: b220dc7f0e41efd79a28c531dac99923cd26cac506340499840f0d84d45c61a638243d757de4aa1f033bc6e8591ee9d9b9391dc444b6cc3196dd3904909dece0
-  languageName: node
-  linkType: hard
-
-"@nestjs/class-validator@npm:^0.13.4":
-  version: 0.13.4
-  resolution: "@nestjs/class-validator@npm:0.13.4"
-  dependencies:
-    libphonenumber-js: "npm:^1.9.43"
-    validator: "npm:^13.7.0"
-  checksum: 755211eb8153b8efdc845875cafa799b29341afdf3b65df39a613f1b0e6f25cec5b0c479795c2a814841b7d84b921bdbaf1f3aa3f59b0abe08dfe23ab63e68df
+  checksum: 0180105c8e65d6dff9922f4bd1267ada1afeb65d8228a1e2a155da2098807f7b6f989f7963ed95ba4a9f94e65b25343aa72a92819a7a18139b4fe69ff0bedf19
   languageName: node
   linkType: hard
 
@@ -214,6 +202,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/validator@npm:^13.11.8":
+  version: 13.11.9
+  resolution: "@types/validator@npm:13.11.9"
+  checksum: 2d397c69293cc726e0cf1b4c74c563ca4e459b00f216f3ff0ac184c9648103be27169e8c67f85be9c6e7a3fcbb149c6add66a2547b185a1b25aa79e4b61261bd
+  languageName: node
+  linkType: hard
+
 "app@workspace:.":
   version: 0.0.0-use.local
   resolution: "app@workspace:."
@@ -277,6 +272,17 @@ __metadata:
   version: 0.5.1
   resolution: "class-transformer@npm:0.5.1"
   checksum: 750327e3e9a5cf233c5234252f4caf6b06c437bf68a24acbdcfb06c8e0bfff7aa97c30428184813e38e08111b42871f20c5cf669ea4490f8ae837c09f08b31e7
+  languageName: node
+  linkType: hard
+
+"class-validator@npm:0.14.1":
+  version: 0.14.1
+  resolution: "class-validator@npm:0.14.1"
+  dependencies:
+    "@types/validator": "npm:^13.11.8"
+    libphonenumber-js: "npm:^1.10.53"
+    validator: "npm:^13.9.0"
+  checksum: 0c34592a1cbdd5e9c35cd02f4babd94120339e875fc7627aa2bf5dffb45ecc373275e854389c6ff3d39781cddb85a18193b4e9e8f4d77d6d90e445fd0b8b8e11
   languageName: node
   linkType: hard
 
@@ -375,10 +381,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"libphonenumber-js@npm:^1.9.43":
-  version: 1.10.53
-  resolution: "libphonenumber-js@npm:1.10.53"
-  checksum: 206a324c064572741ec2a949cddd2d36ada2da0e54889dbf67fe525e17a66cdfffd6deaaff773133bfae9aed4359bb7dd41bfee77cb620abe5c788ff2726db47
+"libphonenumber-js@npm:^1.10.53":
+  version: 1.10.57
+  resolution: "libphonenumber-js@npm:1.10.57"
+  checksum: 7344dd7e8f35b0bd19c5a4fecfd5f252ba3e1f2fa938e552662a34fbc0bc3bf02d3c0a7ce5adf369280a741c7c7d54940232092e997890b71cb3cb1114e9184b
   languageName: node
   linkType: hard
 
@@ -564,6 +570,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"server-only@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "server-only@npm:0.0.1"
+  checksum: c432348956641ea3f460af8dc3765f3a1bdbcf7a1e0205b0756d868e6e6fe8934cdee6bff68401a1dd49ba4a831c75916517a877446d54b334f7de36fa273e53
+  languageName: node
+  linkType: hard
+
 "source-map-js@npm:^1.0.2":
   version: 1.0.2
   resolution: "source-map-js@npm:1.0.2"
@@ -644,7 +657,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"validator@npm:^13.7.0":
+"validator@npm:^13.9.0":
   version: 13.11.0
   resolution: "validator@npm:13.11.0"
   checksum: 4bf094641eb71729c06a42d669840e7189597ba655a8264adabac9bf03f95cd6fde5fbc894b0a13ee861bd4a852f56d2afdc9391aeaeb3fc0f9633a974140e12
