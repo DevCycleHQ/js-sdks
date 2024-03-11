@@ -7,7 +7,7 @@ type ConfigPollingOptions = {
     configPollingTimeoutMS?: number
     configCDNURI?: string
     cdnURI?: string
-    clientConfig?: boolean
+    clientMode?: boolean
 }
 
 type SetIntervalInterface = (handler: () => void, timeout?: number) => any
@@ -29,7 +29,7 @@ export class EnvironmentConfigManager {
     private readonly setConfigBuffer: SetConfigBuffer
     private readonly setInterval: SetIntervalInterface
     private readonly clearInterval: ClearIntervalInterface
-    private clientConfig: boolean
+    private clientMode: boolean
 
     constructor(
         logger: DVCLogger,
@@ -42,7 +42,7 @@ export class EnvironmentConfigManager {
             configPollingTimeoutMS = 5000,
             configCDNURI,
             cdnURI = 'https://config-cdn.devcycle.com',
-            clientConfig = false,
+            clientMode = false,
         }: ConfigPollingOptions,
     ) {
         this.logger = logger
@@ -51,7 +51,7 @@ export class EnvironmentConfigManager {
         this.setConfigBuffer = setConfigBuffer
         this.setInterval = setInterval
         this.clearInterval = clearInterval
-        this.clientConfig = clientConfig
+        this.clientMode = clientMode
 
         this.pollingIntervalMS =
             configPollingIntervalMS >= 1000 ? configPollingIntervalMS : 1000
@@ -89,7 +89,7 @@ export class EnvironmentConfigManager {
     }
 
     getConfigURL(): string {
-        if (this.clientConfig) {
+        if (this.clientMode) {
             return `${this.cdnURI}/config/v1/client/${this.sdkKey}.json`
         }
         return `${this.cdnURI}/config/v1/server/${this.sdkKey}.json`
@@ -144,7 +144,7 @@ export class EnvironmentConfigManager {
             try {
                 const etag = res?.headers.get('etag') || ''
                 this.setConfigBuffer(
-                    `${this.sdkKey}${this.clientConfig ? '_client' : ''}`,
+                    `${this.sdkKey}${this.clientMode ? '_client' : ''}`,
                     projectConfig,
                 )
                 this.hasConfig = true

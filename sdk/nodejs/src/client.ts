@@ -101,7 +101,7 @@ export class DevCycleClient {
                         setConfigDataUTF8,
                         setInterval,
                         clearInterval,
-                        options || {},
+                        { ...options, clientMode: true },
                     )
                 }
                 this.eventQueue = new EventQueue(sdkKey, {
@@ -309,8 +309,21 @@ export class DevCycleClient {
             )
         }
 
-        const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
-        return bucketUserForConfig(populatedUser, `${this.sdkKey}_client`)
+        try {
+            const { DVCPopulatedUser } = await import('@devcycle/js-client-sdk')
+            const populatedUser = new DVCPopulatedUser(
+                incomingUser,
+                {},
+                undefined,
+                undefined,
+                userAgent ?? undefined,
+            )
+            return bucketUserForConfig(populatedUser, `${this.sdkKey}_client`)
+        } catch (e) {
+            throw new Error(
+                '@devcycle/js-client-sdk package could not be found. Please install it to use client boostrapping',
+            )
+        }
     }
 
     async flushEvents(callback?: () => void): Promise<void> {
