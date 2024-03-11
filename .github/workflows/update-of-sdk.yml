@@ -38,6 +38,7 @@ jobs:
         run: yarn add --peer @openfeature/web-sdk
 
       - name: Check for changes to package.json
+        shell: bash
         run: |
           IS_UPDATED=$(git diff --name-only origin/main package.json sdk/nodejs/package.json sdk/openfeature-web-provider/package.json | wc -l)
           if [ "$IS_UPDATED" -gt "0" ]; then
