@@ -7,6 +7,6 @@
         "@devcycle/js-client-sdk": "^1.21.1"
     },
     "peerDependencies": {
-        "@openfeature/web-sdk": "^0.4.12"
+        "@openfeature/web-sdk": "*"
     }
 }
