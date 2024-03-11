@@ -7,6 +7,7 @@ type ConfigPollingOptions = {
     configPollingTimeoutMS?: number
     configCDNURI?: string
     cdnURI?: string
+    clientConfig?: boolean
 }
 
 type SetIntervalInterface = (handler: () => void, timeout?: number) => any
@@ -29,6 +30,7 @@ export class EnvironmentConfigManager {
     private readonly setConfigBuffer: SetConfigBuffer
     private readonly setInterval: SetIntervalInterface
     private readonly clearInterval: ClearIntervalInterface
+    private clientConfig: boolean
 
     constructor(
         logger: DVCLogger,
@@ -41,6 +43,7 @@ export class EnvironmentConfigManager {
             configPollingTimeoutMS = 5000,
             configCDNURI,
             cdnURI = 'https://config-cdn.devcycle.com',
+            clientConfig = false,
         }: ConfigPollingOptions,
     ) {
         this.logger = logger
@@ -49,6 +52,7 @@ export class EnvironmentConfigManager {
         this.setConfigBuffer = setConfigBuffer
         this.setInterval = setInterval
         this.clearInterval = clearInterval
+        this.clientConfig = clientConfig
 
         this.pollingIntervalMS =
             configPollingIntervalMS >= 1000 ? configPollingIntervalMS : 1000
@@ -86,6 +90,9 @@ export class EnvironmentConfigManager {
     }
 
     getConfigURL(): string {
+        if (this.clientConfig) {
+            return `${this.cdnURI}/config/v1/client/${this.sdkKey}.json`
+        }
         return `${this.cdnURI}/config/v1/server/${this.sdkKey}.json`
     }
 
@@ -141,7 +148,10 @@ export class EnvironmentConfigManager {
             try {
                 const etag = res?.headers.get('etag') || ''
                 const lastModified = res?.headers.get('last-modified') || ''
-                this.setConfigBuffer(this.sdkKey, projectConfig)
+                this.setConfigBuffer(
+                    `${this.sdkKey}${this.clientConfig ? '_client' : ''}`,
+                    projectConfig,
+                )
                 this.hasConfig = true
                 this.configEtag = etag
                 this.configLastModified = lastModified

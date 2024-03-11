@@ -13,6 +13,7 @@ import {
     setConfigDataUTF8,
 } from './bucketing'
 import {
+    BucketedUserConfig,
     DevCycleServerSDKOptions,
     DVCLogger,
     getVariableTypeFromValue,
@@ -55,6 +56,7 @@ type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
 export class DevCycleClient {
     private sdkKey: string
     private configHelper: EnvironmentConfigManager
+    private clientConfigHelper?: EnvironmentConfigManager
     private eventQueue: EventQueue
     private onInitialized: Promise<DevCycleClient>
     private logger: DVCLogger
@@ -92,6 +94,16 @@ export class DevCycleClient {
                     clearInterval,
                     options || {},
                 )
+                if (options?.enableClientBootstrapping) {
+                    this.clientConfigHelper = new EnvironmentConfigManager(
+                        this.logger,
+                        sdkKey,
+                        setConfigDataUTF8,
+                        setInterval,
+                        clearInterval,
+                        options || {},
+                    )
+                }
                 this.eventQueue = new EventQueue(sdkKey, {
                     ...options,
                     logger: this.logger,
@@ -107,7 +119,10 @@ export class DevCycleClient {
 
                 getBucketingLib().setPlatformData(JSON.stringify(platformData))
 
-                return this.configHelper.fetchConfigPromise
+                return Promise.all([
+                    this.configHelper.fetchConfigPromise,
+                    this.clientConfigHelper?.fetchConfigPromise,
+                ])
             })
 
         this.onInitialized = initializePromise
@@ -278,6 +293,24 @@ export class DevCycleClient {
         checkParamDefined('type', event.type)
         const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
         this.eventQueue.queueEvent(populatedUser, event)
+    }
+
+    async getClientBootstrapConfig(
+        user: DevCycleUser,
+        userAgent: string,
+    ): Promise<BucketedUserConfig> {
+        const incomingUser = castIncomingUser(user)
+
+        await this.onInitialized
+
+        if (!this.clientConfigHelper) {
+            throw new Error(
+                'enableClientBootstrapping option must be set to true to use getClientBootstrapConfig',
+            )
+        }
+
+        const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
+        return bucketUserForConfig(populatedUser, `${this.sdkKey}_client`)
     }
 
     async flushEvents(callback?: () => void): Promise<void> {
