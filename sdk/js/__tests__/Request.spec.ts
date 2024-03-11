@@ -91,6 +91,33 @@ describe('Request tests', () => {
                     `${sdkKey}&user_id=${user.user_id}&isAnonymous=false`,
             })
         })
+
+        it('should call get with obfuscate param', async () => {
+            const user = { user_id: 'my_user', isAnonymous: false }
+            const sdkKey = 'my_sdk_key'
+            axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
+
+            await Request.getConfigJson(
+                sdkKey,
+                user as DVCPopulatedUser,
+                defaultLogger,
+                { enableObfuscation: true },
+                {
+                    sse: true,
+                    lastModified: 1234,
+                    etag: 'etag',
+                },
+            )
+
+            expect(axiosRequestMock).toBeCalledWith({
+                headers: { 'Content-Type': 'application/json' },
+                method: 'GET',
+                url:
+                    'https://sdk-api.devcycle.com/v1/sdkConfig?sdkKey=' +
+                    `${sdkKey}&user_id=${user.user_id}` +
+                    '&isAnonymous=false&sse=1&sseLastModified=1234&sseEtag=etag&obfuscated=1',
+            })
+        })
     })
 
     describe('publishEvents', () => {

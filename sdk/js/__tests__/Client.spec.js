@@ -1035,7 +1035,7 @@ describe('DevCycleClient tests', () => {
         })
     })
     describe('obfuscation', () => {
-        it('forwards obfuscation option', async () => {
+        it('forwards obfuscation option to appropriate requests', async () => {
             publishEvents.mockResolvedValue({ status: 201 })
             getConfigJson_mock.mockResolvedValue(testConfig)
             const client = new DevCycleClient(
@@ -1046,6 +1046,15 @@ describe('DevCycleClient tests', () => {
                 { enableObfuscation: true },
             )
             await client.onClientInitialized()
+            expect(getConfigJson_mock).toHaveBeenCalledWith(
+                'test_sdk_key',
+                expect.objectContaining({ user_id: 'user1' }),
+                expect.any(Object),
+                {
+                    enableObfuscation: true,
+                },
+                undefined,
+            )
 
             expect(client.variable('test', false))
             await client.flushEvents()
