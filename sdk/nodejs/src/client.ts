@@ -295,6 +295,13 @@ export class DevCycleClient {
         this.eventQueue.queueEvent(populatedUser, event)
     }
 
+    /**
+     * Call this to obtain a config that is suitable for use in the "bootstrapConfig" option of client-side JS SDKs
+     * Useful for serverside-rendering use cases where the server performs the initial rendering pass, and provides it
+     * to the client along with the DevCycle config to allow hydration
+     * @param user
+     * @param userAgent
+     */
     async getClientBootstrapConfig(
         user: DevCycleUser,
         userAgent: string,
