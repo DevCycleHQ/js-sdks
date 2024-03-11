@@ -1,0 +1,17 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "target": "es2019",
+        "outDir": "../../dist/out-tsc",
+        "types": ["jest", "node"]
+    },
+    "include": [
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "**/*.test.js",
+        "**/*.spec.js",
+        "**/__mocks__/**/*.ts",
+        "**/*.d.ts",
+        "jest.config.ts"
+    ]
+}
