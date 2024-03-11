@@ -30,16 +30,12 @@ jobs:
         run: yarn add @openfeature/core @openfeature/server-sdk @openfeature/web-sdk
 
       - name: Update @openfeature/server-sdk peerDependencies in sdk/nodejs/package.json
-        run: |
-          cd sdk/nodejs
-          yarn add --peer @openfeature/server-sdk
-          cd ../..
+        working-directory: sdk/nodejs
+        run: yarn add --peer @openfeature/server-sdk
 
       - name: Update @openfeature/web-sdk peerDependencies in sdk/openfeature-web-provider/package.json
-        run: |
-          cd sdk/openfeature-web-provider
-          yarn add --peer @openfeature/web-sdk
-          cd ../..
+        working-directory: sdk/openfeature-web-provider
+        run: yarn add --peer @openfeature/web-sdk
 
       - name: Check for changes to package.json
         run: |
