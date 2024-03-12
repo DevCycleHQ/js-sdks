@@ -68,12 +68,6 @@ echo "$PACKAGE npm show: $NPM_SHOW, npm ls: $NPM_LS"
 if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
   echo "Versions are not the same, (Remote = $NPM_SHOW; Local = $NPM_LS). Checking for publish eligibility."
 
-  # make sure we're able to track this deployment
-  if [[ -z "$DEVCYCLE_PROD_SLEUTH_API_TOKEN" ]]; then
-    echo "::error::Sleuth.io deployment tracking token not found. Aborting."
-    exit 1
-  fi
-
   # Check for main branch and local changes when running locally
   if [[ -z "$CI" ]]; then
     # check if we're on main branch
@@ -106,11 +100,6 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
     echo "::error::Publish of package $PACKAGE@$NPM_LS failed. Aborting."
     exit 1
   fi
-
-  curl -X POST \
-    -d api_key=$DEVCYCLE_PROD_SLEUTH_API_TOKEN \
-    -d environment=production \
-    -d sha=$SHA https://app.sleuth.io/api/1/deployments/taplytics/js-sdks-2/register_deploy
 else
   echo "::info::Versions are the same ($NPM_SHOW = $NPM_LS). Not pushing"
 fi

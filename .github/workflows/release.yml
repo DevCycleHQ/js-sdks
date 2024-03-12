@@ -88,15 +88,11 @@ jobs:
             - name: Push to npm
               run: |
                   yarn npm-publish
-              env:
-                  DEVCYCLE_PROD_SLEUTH_API_TOKEN: ${{ secrets.SLEUTH_API_KEY }}
               if: inputs.draft != true
 
             - name: Push to npm (dry run)
               run: |
                   yarn npm-publish --dry-run
-              env:
-                  DEVCYCLE_PROD_SLEUTH_API_TOKEN: ${{ secrets.SLEUTH_API_KEY }}
               if: inputs.draft == true
 
             - name: Build UMD bundles
@@ -106,7 +102,7 @@ jobs:
             - name: Upload CDN Release
               run: |
                 JQ_PATH=".version"
-                SDK_VERSION="$(cat package.json | jq -r ${{ JQ_PATH }})"
+                SDK_VERSION="$(cat sdk/js/package.json | jq -r ${{ JQ_PATH }})"
                 aws s3 sync dist/sdk/cdn/js s3://js.devcycle.com/latest/ --include "devcycle.min.js*" --acl public-read
                 aws s3 sync dist/sdk/cdn/js s3://js.devcycle.com/${{ SDK_VERSION }}/ --include "devcycle.min.js*" --acl public-read
               if: inputs.draft != true && github.ref == 'refs/heads/main'
