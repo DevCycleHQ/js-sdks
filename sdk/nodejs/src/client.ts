@@ -317,13 +317,12 @@ export class DevCycleClient {
         }
 
         try {
-            const { DVCPopulatedUser } = await import('@devcycle/js-client-sdk')
-            const populatedUser = new DVCPopulatedUser(
+            const { generateClientPopulatedUser } = await import(
+                './clientUser.js'
+            )
+            const populatedUser = generateClientPopulatedUser(
                 incomingUser,
-                {},
-                undefined,
-                undefined,
-                userAgent ?? undefined,
+                userAgent,
             )
             return bucketUserForConfig(populatedUser, `${this.sdkKey}_client`)
         } catch (e) {
