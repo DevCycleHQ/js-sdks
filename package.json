@@ -117,7 +117,7 @@
         "@types/lodash": "^4.14.175",
         "@types/node": "18.14.4",
         "@types/react": "18.2.20",
-        "@types/react-dom": "18.2.6",
+        "@types/react-dom": "18.2.0",
         "@types/ua-parser-js": "^0.7.38",
         "@types/uuid": "^8.3.1",
         "@typescript-eslint/eslint-plugin": "5.62.0",
