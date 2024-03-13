@@ -1,13 +1,13 @@
 {
-    "extends": "../../../tsconfig.base.json",
-    "files": [],
-    "include": [],
-    "references": [
-        {
-            "path": "./tsconfig.app.json"
-        },
-        {
-            "path": "./tsconfig.spec.json"
-        }
-    ]
-}
+    "compilerOptions": {
+      "outDir": "./dist/",
+      "noImplicitAny": true,
+      "module": "es6",
+      "target": "es2015",
+      "jsx": "react",
+      "allowJs": false,
+      "skipLibCheck": true,
+      "experimentalDecorators": true,
+      "moduleResolution": "Node"
+    }
+  }

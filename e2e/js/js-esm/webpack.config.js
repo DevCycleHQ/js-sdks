@@ -1,18 +1,48 @@
-const { composePlugins, withNx } = require('@nx/webpack')
-const path = require('path')
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require("path");
 
-// Nx plugins for webpack.
-module.exports = composePlugins(withNx(), (config) => {
-    // Update the webpack config as needed here.
-    // e.g. `config.plugins.push(new MyPlugin())`
-    // const workspaceRoot = path.resolve(__dirname, '../../..')
-    // config.resolve = {
-    //     ...config.resolve,
-    //     alias: {
-    //         ...config.resolve.alias,
-    //         '@devcycle-client-sdk': `${workspaceRoot}/dist/sdk/`
-    //     },
-    //     modules: [`${workspaceRoot}/dist/sdk/`, 'node_modules'],
-    // }
-    return config
-})
+module.exports = () => ({
+  entry: "./src/index.ts",
+  mode: "production",
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.ts?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.scss$/i,
+        use: ["sass-to-string", "sass-loader"],
+      },
+    ],
+  },
+  resolve: {
+    extensions: [".ts", ".js"],
+  },
+  output: {
+    filename: "index.js",
+    path: path.resolve(__dirname, "dist"),
+  },
+  devServer: {
+    port: 3000,
+    historyApiFallback: {
+      index: "index.html",
+    },
+    client: {
+      overlay: {
+        errors: true,
+        warnings: false,
+        runtimeErrors: true,
+      },
+    }
+  },
+  stats: {
+    warnings: false
+  }
+});
