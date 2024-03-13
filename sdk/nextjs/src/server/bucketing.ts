@@ -46,10 +46,11 @@ const generateBucketedConfigCached = cache(
 export const getBucketedConfig = async (
     sdkKey: string,
     user: DevCycleUser,
+    options: DevCycleNextOptions,
     userAgent?: string,
 ): Promise<BucketedConfigWithLastModified> => {
     // this request will be cached by Next
-    const cdnConfig = await fetchCDNConfig(sdkKey)
+    const cdnConfig = await fetchCDNConfig(sdkKey, options)
     if (!cdnConfig.ok) {
         const responseText = await cdnConfig.text()
         throw new Error('Could not fetch config: ' + responseText)

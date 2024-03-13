@@ -65,7 +65,11 @@ export const InternalDevCycleClientsideProvider = ({
     const { serverDataPromise, serverData, sdkKey, enableStreaming } = context
 
     const revalidateConfig = (lastModified?: number) => {
-        invalidateConfig(sdkKey, lastModified).finally(() => {
+        invalidateConfig(
+            sdkKey,
+            !!context.options.enableObfuscation,
+            lastModified,
+        ).finally(() => {
             router.refresh()
         })
     }

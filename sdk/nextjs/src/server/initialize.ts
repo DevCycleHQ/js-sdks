@@ -50,7 +50,7 @@ export const initialize = async (
 
     let config = null
     try {
-        config = await getBucketedConfig(sdkKey, user, userAgent)
+        config = await getBucketedConfig(sdkKey, user, options, userAgent)
     } catch (e) {
         console.error('Error fetching DevCycle config', e)
     }

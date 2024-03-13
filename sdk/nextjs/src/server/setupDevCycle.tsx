@@ -42,7 +42,7 @@ export const setupDevCycle = (
     const _getClientContext = () => {
         const serverDataPromise = initialize(sdkKey, userGetter, options)
 
-        const { enableStreaming, ...otherOptions } = options
+        const { enableStreaming, enableObfuscation, ...otherOptions } = options
 
         const {
             disableAutomaticEventLogging,
@@ -60,6 +60,7 @@ export const setupDevCycle = (
             apiProxyURL,
             eventFlushIntervalMS,
             flushEventQueueSize,
+            enableObfuscation,
         }
 
         return {

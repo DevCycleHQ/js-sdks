@@ -1,9 +1,16 @@
-const getFetchUrl = (sdkKey: string) =>
-    `https://config-cdn.devcycle.com/config/v1/client/${sdkKey}.json`
+import { DevCycleNextOptions } from '../common/types'
 
-export const fetchCDNConfig = async (sdkKey: string): Promise<Response> => {
+const getFetchUrl = (sdkKey: string, obfuscated: boolean) =>
+    `https://config-cdn.devcycle.com/config/v1/client/${
+        obfuscated ? 'obfuscated/' : ''
+    }${sdkKey}.json`
+
+export const fetchCDNConfig = async (
+    sdkKey: string,
+    options: DevCycleNextOptions,
+): Promise<Response> => {
     return await fetch(
-        getFetchUrl(sdkKey),
+        getFetchUrl(sdkKey, !!options.enableObfuscation),
         // only store for 60 seconds
         {
             next: {
