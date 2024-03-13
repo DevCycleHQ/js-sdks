@@ -21,6 +21,9 @@ export type {
     DVCEvent,
 } from '@devcycle/js-client-sdk'
 
+export * from './RenderIfEnabled'
+export * from './SwapComponents'
+
 export {
     DevCycleProvider,
     DVCProvider,
