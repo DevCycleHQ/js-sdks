@@ -16,7 +16,7 @@ __metadata:
 
 "@devcycle/js-client-sdk@file:../../../dist/sdk/js::locator=webcomponents-starter%40workspace%3A.":
   version: 1.21.1
-  resolution: "@devcycle/js-client-sdk@file:../../../dist/sdk/js#../../../dist/sdk/js::hash=9a0f62&locator=webcomponents-starter%40workspace%3A."
+  resolution: "@devcycle/js-client-sdk@file:../../../dist/sdk/js#../../../dist/sdk/js::hash=13a37f&locator=webcomponents-starter%40workspace%3A."
   dependencies:
     "@devcycle/types": ^1.9.1
     axios: ^1.0.0
@@ -24,7 +24,7 @@ __metadata:
     lodash: ^4.17.21
     ua-parser-js: ^1.0.36
     uuid: ^8.3.2
-  checksum: ebe1734cdec07f3773163f07e3bc1fdb15433f71a9eb280cea785b198da0f6ef1f93f76aa31c565eab51ca790d9ef20a587ddd95820239714e598bfb7ecbe849
+  checksum: 93f923fea4fa46a897c2d930cc24e7dce8865b30e14a4785a592ecb850995e863dd437b1f7d041d5468b19e5db5b9bc3f6f4c96f8897b6ccac10e48b4a6a9b30
   languageName: node
   linkType: hard
 

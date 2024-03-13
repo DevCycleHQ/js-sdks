@@ -1,21 +1,18 @@
-# JS-SDK ESM E2E Test App
+# DevCycle JS SDK CDN E2E Test
 
 ## Getting started
 
-### Install dependencies
-
-Then, to init the project
+If you want to run the e2e app, from the root folder:
 
 ```bash
-yarn
+yarn e2e:js-esm:start
 ```
 
-### Start the project
+### Run
 
-If you want to run the project, simply run
+In [app.element.ts](src%2Fapp%2Fapp.element.ts), set `DEVCYCLE_CLIENT_SDK_KEY` to your Environment's SDK Key.
+You can find this under Settings / Environments on the DevCycle dashboard.
 
-```bash
-yarn start
-```
+To run the e2e tests, run from the repo's root folder:
 
-`Webpack` will then indicate you to open `localhost:3000`. When you'll do so, you'll see the project running.
+```yarn nx e2e js-esm```

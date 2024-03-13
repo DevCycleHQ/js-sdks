@@ -1,5 +1,5 @@
-// const SDK_KEY =
-//   process.env.NEXT_PUBLIC_E2E_NEXTJS_KEY || "<DEVCYCLE_CLIENT_SDK_KEY>";
+const SDK_KEY =
+    process.env.NEXT_PUBLIC_E2E_NEXTJS_KEY || 'DEVCYCLE_CLIENT_SDK_KEY'
 import { initializeDevCycle } from '@devcycle/js-client-sdk'
 
 export default class HomeComponent extends HTMLElement {
@@ -7,11 +7,20 @@ export default class HomeComponent extends HTMLElement {
         super()
     }
     updateInnerHTML(): void {
-        const enabledVariable = true
+        const enabledVariable = devcycleClient.variableValue(
+            'enabled-feature',
+            false,
+        )
 
-        const disabledVariable = true
+        const disabledVariable = devcycleClient.variableValue(
+            'disabled-feature',
+            false,
+        )
 
-        const defaultVariable = true
+        const defaultVariable = devcycleClient.variableValue(
+            'default-feature',
+            true,
+        )
         this.innerHTML = `
       <div class="wrapper">
         <div class="container">
@@ -23,7 +32,7 @@ export default class HomeComponent extends HTMLElement {
           </div>
           <div id="variableKey">
             <h1>
-              <span> JS Web Elements</span>
+              <span>JS Web Elements</span>
             </h1>
           </div>
           <div id="enabledVariableKey">
@@ -62,7 +71,7 @@ const user = {
     isAnonymous: false,
 }
 
-const devcycleClient = initializeDevCycle('SDK_KEY', user, {
+const devcycleClient = initializeDevCycle(SDK_KEY, user, {
     enableEdgeDB: false,
     logLevel: 'error',
 })
