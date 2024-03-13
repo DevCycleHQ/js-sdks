@@ -1,0 +1,12 @@
+{
+    "name": "app",
+    "packageManager": "yarn@4.0.2",
+    "private": true,
+    "main": "src/main.ts",
+    "dependencies": {
+        "@devcycle/js-client-sdk": "file:../../../dist/sdk/js"
+    },
+    "resolutions": {
+        "@devcycle/types": "file:../../../dist/lib/shared/types"
+    }
+}

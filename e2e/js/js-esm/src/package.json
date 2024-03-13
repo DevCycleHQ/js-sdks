@@ -1,9 +1,0 @@
-{
-    "name": "app",
-    "packageManager": "yarn@4.0.2",
-    "private": true,
-    "main": "src/main.ts",
-    "scripts": {
-        "start": "webpack serve"
-    }
-}
