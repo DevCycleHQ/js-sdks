@@ -1,4 +1,4 @@
-# DevCycle JS SDK CDN E2E Test
+# DevCycle JS SDK ESM E2E Test
 
 ## Getting started
 
@@ -15,4 +15,4 @@ You can find this under Settings / Environments on the DevCycle dashboard.
 
 To run the e2e tests, run from the repo's root folder:
 
-```yarn nx e2e js-esm```
+```yarn nx e2e e2e-js-esm```

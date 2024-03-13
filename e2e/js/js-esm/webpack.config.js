@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const DefinePlugin = require('webpack').DefinePlugin
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const path = require('path')
 
 module.exports = () => ({
@@ -14,6 +15,7 @@ module.exports = () => ({
                 process.env.NEXT_PUBLIC_E2E_NEXTJS_KEY,
             ),
         }),
+        new ForkTsCheckerWebpackPlugin(),
     ],
     module: {
         rules: [
