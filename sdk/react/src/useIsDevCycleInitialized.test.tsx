@@ -10,7 +10,8 @@ import { mockConfig } from '../mockData/mockConfig'
 import { useState } from 'react'
 import { setTimeout } from '@testing-library/react-native/build/helpers/timers'
 import { BucketedUserConfig } from '@devcycle/types'
-
+import fetch from 'cross-fetch'
+global.fetch = fetch
 jest.unmock('@devcycle/js-client-sdk')
 
 describe('useIsDevCycleInitialized', () => {

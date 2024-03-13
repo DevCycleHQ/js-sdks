@@ -10,6 +10,9 @@
     },
     "author": "",
     "license": "MIT",
+    "devDependencies": {
+        "cross-fetch": "4.0.0"
+    },
     "dependencies": {
         "@devcycle/js-client-sdk": "^1.21.1",
         "@devcycle/types": "^1.9.1",

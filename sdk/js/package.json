@@ -12,9 +12,11 @@
         }
     },
     "types": "./index.cjs.d.ts",
+    "devDependencies": {
+        "cross-fetch": "^4.0.0"
+    },
     "dependencies": {
         "@devcycle/types": "^1.9.1",
-        "cross-fetch": "^4.0.0",
         "fetch-retry": "^5.0.6",
         "lodash": "^4.17.21",
         "ua-parser-js": "^1.0.36",

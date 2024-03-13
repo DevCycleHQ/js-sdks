@@ -93,7 +93,6 @@ export const publishEvents = async (
     }
 
     const res = await post(
-
         url,
         {
             ...requestConfig,

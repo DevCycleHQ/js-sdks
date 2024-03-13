@@ -1,6 +1,4 @@
-jest.unmock('cross-fetch')
-import fetch from 'cross-fetch'
-global.fetch = fetch
+global.fetch = jest.fn()
 type Variables = {
     enum_var: 'value1' | 'value2'
     bool: boolean

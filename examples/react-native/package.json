@@ -9,8 +9,6 @@
         "@testing-library/jest-dom": "*",
         "@testing-library/jest-native": "*",
         "@testing-library/react": "*",
-        "axios": "*",
-        "axios-retry": "*",
         "class-transformer": "*",
         "class-validator": "*",
         "hoist-non-react-statics": "*",

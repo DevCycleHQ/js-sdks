@@ -1,14 +1,11 @@
-jest.mock('cross-fetch')
-import fetch, { Response } from 'cross-fetch'
-
-global.fetch = fetch
+global.fetch = jest.fn()
 import { DVCPopulatedUser } from '../src/User'
 import * as Request from '../src/Request'
 import { BucketedUserConfig } from '@devcycle/types'
 import { dvcDefaultLogger } from '../src/logger'
 const defaultLogger = dvcDefaultLogger({ level: 'debug' })
 const fetchRequestMock = fetch as jest.MockedFn<typeof fetch>
-
+import { Response } from 'cross-fetch'
 describe('Request tests', () => {
     beforeEach(() => {
         fetchRequestMock.mockClear()
@@ -69,7 +66,11 @@ describe('Request tests', () => {
         it('should call get with obfuscate param', async () => {
             const user = { user_id: 'my_user', isAnonymous: false }
             const sdkKey = 'my_sdk_key'
-            axiosRequestMock.mockResolvedValue({ status: 200, data: {} })
+            fetchRequestMock.mockResolvedValue(
+                new Response('{}', {
+                    status: 200,
+                }),
+            )
 
             await Request.getConfigJson(
                 sdkKey,
@@ -83,14 +84,15 @@ describe('Request tests', () => {
                 },
             )
 
-            expect(axiosRequestMock).toBeCalledWith({
-                headers: { 'Content-Type': 'application/json' },
-                method: 'GET',
-                url:
-                    'https://sdk-api.devcycle.com/v1/sdkConfig?sdkKey=' +
+            expect(fetchRequestMock).toBeCalledWith(
+                'https://sdk-api.devcycle.com/v1/sdkConfig?sdkKey=' +
                     `${sdkKey}&user_id=${user.user_id}` +
                     '&isAnonymous=false&sse=1&sseLastModified=1234&sseEtag=etag&obfuscated=1',
-            })
+                expect.objectContaining({
+                    headers: { 'Content-Type': 'application/json' },
+                    method: 'GET',
+                }),
+            )
         })
     })
 
@@ -142,10 +144,11 @@ describe('Request tests', () => {
             const config = {} as BucketedUserConfig
             const sdkKey = 'my_sdk_key'
             const events = [{ type: 'event_1_type' }, { type: 'event_2_type' }]
-            axiosRequestMock.mockResolvedValue({
-                status: 200,
-                data: 'messages',
-            })
+            fetchRequestMock.mockResolvedValue(
+                new Response(JSON.stringify('messages'), {
+                    status: 200,
+                }),
+            )
 
             await Request.publishEvents(
                 sdkKey,
@@ -156,14 +159,14 @@ describe('Request tests', () => {
                 { enableObfuscation: true },
             )
 
-            expect(axiosRequestMock).toBeCalledWith(
+            expect(fetchRequestMock).toBeCalledWith(
+                'https://events.devcycle.com/v1/events?obfuscated=1',
                 expect.objectContaining({
                     headers: {
                         Authorization: 'my_sdk_key',
                         'Content-Type': 'application/json',
                     },
                     method: 'POST',
-                    url: 'https://events.devcycle.com/v1/events?obfuscated=1',
                 }),
             )
         })
