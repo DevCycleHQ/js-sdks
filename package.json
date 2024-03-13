@@ -22,7 +22,8 @@
         "local-registry": "./scripts/local-registry.sh",
         "e2e:nextjs-app-router:start": "nx build nextjs && ./e2e/nextjs/app-router/app/start.sh",
         "e2e:nextjs-pages-router:start": "nx build nextjs && ./e2e/nextjs/pages-router/app/start.sh",
-        "e2e:js-cdn:start": "nx run js-cdn:build-with-sdk && nx run js-cdn:serve"
+        "e2e:js-cdn:start": "nx run js-cdn:build-with-sdk && nx run js-cdn:serve",
+        "e2e:js-esm:start": "nx build js && ./e2e/js/js-esm/start.sh"
     },
     "modulePathIgnorePatterns": [
         "<rootDir>/build"
