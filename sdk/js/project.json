@@ -93,7 +93,7 @@
             "options": {
                 "libraryName": "DevCycle",
                 "libraryTarget": "umd",
-                "outputPath": "dist/sdk/js",
+                "outputPath": "dist/sdk/cdn/js",
                 "tsConfig": "sdk/js/tsconfig.lib.json",
                 "packageJson": "sdk/js/package.json",
                 "main": "sdk/js/src/index.ts",
