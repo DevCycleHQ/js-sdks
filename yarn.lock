@@ -5122,9 +5122,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/js-client-sdk-web-example@workspace:examples/js/web-elements-app":
+"@devcycle/js-client-sdk-web-example@workspace:examples/js":
   version: 0.0.0-use.local
-  resolution: "@devcycle/js-client-sdk-web-example@workspace:examples/js/web-elements-app"
+  resolution: "@devcycle/js-client-sdk-web-example@workspace:examples/js"
   languageName: unknown
   linkType: soft
 
@@ -5165,35 +5165,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/nodejs-server-sdk-cloud-js-example@workspace:examples/nodejs-cloud/js":
+"@devcycle/nodejs-server-sdk-cloud-typescript-example@workspace:examples/nodejs-cloud":
   version: 0.0.0-use.local
-  resolution: "@devcycle/nodejs-server-sdk-cloud-js-example@workspace:examples/nodejs-cloud/js"
-  dependencies:
-    "@devcycle/nodejs-server-sdk": ^1.23.1
+  resolution: "@devcycle/nodejs-server-sdk-cloud-typescript-example@workspace:examples/nodejs-cloud"
   languageName: unknown
   linkType: soft
 
-"@devcycle/nodejs-server-sdk-cloud-typescript-example@workspace:examples/nodejs-cloud/typescript":
+"@devcycle/nodejs-server-sdk-local-typescript-example@workspace:examples/nodejs-local":
   version: 0.0.0-use.local
-  resolution: "@devcycle/nodejs-server-sdk-cloud-typescript-example@workspace:examples/nodejs-cloud/typescript"
+  resolution: "@devcycle/nodejs-server-sdk-local-typescript-example@workspace:examples/nodejs-local"
   languageName: unknown
   linkType: soft
 
-"@devcycle/nodejs-server-sdk-local-js-example@workspace:examples/nodejs-local/js":
-  version: 0.0.0-use.local
-  resolution: "@devcycle/nodejs-server-sdk-local-js-example@workspace:examples/nodejs-local/js"
-  dependencies:
-    "@devcycle/nodejs-server-sdk": ^1.23.1
-  languageName: unknown
-  linkType: soft
-
-"@devcycle/nodejs-server-sdk-local-typescript-example@workspace:examples/nodejs-local/typescript":
-  version: 0.0.0-use.local
-  resolution: "@devcycle/nodejs-server-sdk-local-typescript-example@workspace:examples/nodejs-local/typescript"
-  languageName: unknown
-  linkType: soft
-
-"@devcycle/nodejs-server-sdk@^1.23.1, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
+"@devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
@@ -17711,9 +17695,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"example-react-native-app@workspace:examples/react/react-native-app":
+"example-react-native-app@workspace:examples/react-native":
   version: 0.0.0-use.local
-  resolution: "example-react-native-app@workspace:examples/react/react-native-app"
+  resolution: "example-react-native-app@workspace:examples/react-native"
   dependencies:
     "@babel/plugin-proposal-decorators": "*"
     "@react-native-async-storage/async-storage": "*"
@@ -33317,9 +33301,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"with-provider@workspace:examples/react/with-provider":
+"with-provider@workspace:examples/react":
   version: 0.0.0-use.local
-  resolution: "with-provider@workspace:examples/react/with-provider"
+  resolution: "with-provider@workspace:examples/react"
   languageName: unknown
   linkType: soft
 
