@@ -1,22 +1,23 @@
 {
-    "name": "e2e-js-esm",
+    "name": "e2e-react",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "e2e/nextjs/app-router/src",
+    "sourceRoot": "e2e/react/src",
+    "implicitDependencies": ["js", "react"],
     "targets": {
         "e2e": {
             "executor": "@nx/playwright:playwright",
             "outputs": ["{workspaceRoot}/dist/.playwright/e2e"],
             "options": {
-                "config": "e2e/js/js-esm/playwright.config.ts"
+                "config": "e2e/react/playwright.config.ts"
             }
         },
         "lint": {
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["e2e/js/js-esm/**/*.{js,ts}"]
+                "lintFilePatterns": ["e2e/react/**/*.{ts,tsx,js,jsx}"]
             }
         }
     },
-    "implicitDependencies": ["js"]
+    "tags": []
 }
