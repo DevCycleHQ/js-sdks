@@ -4,6 +4,7 @@ import { revalidateTag } from 'next/cache'
 
 export const invalidateConfig = async (
     sdkToken: string,
+    obfuscated: boolean,
     lastModified?: number,
 ): Promise<void> => {
     if (typeof window != 'undefined') {
@@ -13,14 +14,17 @@ export const invalidateConfig = async (
         )
         return
     }
-    await invalidateConfigCache(sdkToken, lastModified)
+    await invalidateConfigCache(sdkToken, obfuscated, lastModified)
 }
 
 export const invalidateConfigCache = async (
     sdkKey: string,
+    obfuscated: boolean,
     lastModified?: number,
 ): Promise<void> => {
-    const response = await fetchCDNConfig(sdkKey)
+    const response = await fetchCDNConfig(sdkKey, {
+        enableObfuscation: obfuscated,
+    })
 
     const lastModifiedHeader = response.headers.get('last-modified')
 

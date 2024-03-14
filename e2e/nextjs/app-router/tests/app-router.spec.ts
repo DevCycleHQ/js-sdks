@@ -112,3 +112,42 @@ test('works after a client side navigation', async ({ page }) => {
         page.getByText('Client Disabled Variable: false'),
     ).toBeVisible()
 })
+
+test('has expected page elements when obfuscated', async ({ page }) => {
+    await page.goto('/obfuscated')
+    await expect(page.getByText('Streaming Disabled')).toBeVisible()
+
+    await expect(page.getByText('Server Enabled Variable: true')).toBeVisible()
+    await expect(
+        page.getByText('Server Disabled Variable: false'),
+    ).toBeVisible()
+    await expect(page.getByText('Client Enabled Variable: true')).toBeVisible()
+    await expect(
+        page.getByText('Client Disabled Variable: false'),
+    ).toBeVisible()
+    await expect(
+        page.getByText(
+            /Server All Variables: .*"key":"dvc_obfs_0f647e752bcd0586b2844212f720d0f3c9f892431a9b6f6a4076bb4e4ee68a5e","type":"Boolean"/,
+        ),
+    ).toBeVisible()
+    await expect(
+        page.getByText(
+            /Server All Features: .*"key":"dvc_obfs_6553a2aa0a2db40ce71b5fa1ecba4773236249e1e3b1b2270507c6b819e256f8","type":"permission"/,
+        ),
+    ).toBeVisible()
+
+    await expect(
+        page.getByText(
+            /Client All Variables: .*"key":"dvc_obfs_0f647e752bcd0586b2844212f720d0f3c9f892431a9b6f6a4076bb4e4ee68a5e","type":"Boolean"/,
+        ),
+    ).toBeVisible()
+    await expect(
+        page.getByText(
+            /Client All Features: .*"key":"dvc_obfs_6553a2aa0a2db40ce71b5fa1ecba4773236249e1e3b1b2270507c6b819e256f8","type":"permission"/,
+        ),
+    ).toBeVisible()
+
+    await expect(
+        page.getByText('Client Component Conditionally Bundled'),
+    ).toBeVisible()
+})
