@@ -1,0 +1,58 @@
+{
+    "name": "nestjs",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "sdk/nestjs/src",
+    "targets": {
+        "check-types": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "yarn run -T tsc -b --incremental",
+                "cwd": "sdk/nestjs"
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": [
+                    "sdk/nestjs/**/*.ts",
+                    "sdk/nestjs/package.json"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/sdk/nestjs"],
+            "options": {
+                "jestConfig": "sdk/nestjs/jest.config.ts",
+                "passWithNoTests": false,
+                "codeCoverage": true
+            },
+            "dependsOn": [
+                {
+                    "target": "build"
+                }
+            ]
+        },
+        "build": {
+            "executor": "@nx/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/sdk/nestjs",
+                "tsConfig": "sdk/nestjs/tsconfig.lib.json",
+                "packageJson": "sdk/nestjs/package.json",
+                "main": "sdk/nestjs/src/index.ts",
+                "assets": ["sdk/nestjs/*.md"]
+            }
+        },
+        "npm-publish": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/nestjs-server-sdk\"",
+                "cwd": "dist/sdk/nestjs",
+                "forwardAllArgs": true
+            }
+        }
+    },
+    "tags": []
+}

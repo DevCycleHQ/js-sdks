@@ -1,0 +1,22 @@
+{
+    "extends": ["../../.eslintrc.json"],
+    "ignorePatterns": ["!**/*", "node_modules/*", "src/pb-types/compiled*"],
+    "overrides": [
+        {
+            "files": ["*.json"],
+            "parser": "jsonc-eslint-parser",
+            "rules": {
+                "@nx/dependency-checks": [
+                    "error",
+                    {
+                        "ignoredDependencies": []
+                    }
+                ]
+            }
+        },
+        {
+            "files": ["*.ts", "*.js"],
+            "rules": {}
+        }
+    ]
+}
