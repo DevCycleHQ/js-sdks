@@ -1,74 +1,27 @@
 import { DevCycleEvent, DevCycleOptions } from './types'
 import { DVCPopulatedUser } from './User'
 import { serializeUserSearchParams, generateEventPayload } from './utils'
-import axios, { AxiosResponse } from 'axios'
-import axiosRetry from 'axios-retry'
 import type { BucketedUserConfig, DVCLogger } from '@devcycle/types'
+import {
+    ResponseError,
+    exponentialBackoff,
+    getWithTimeout,
+    post,
+    patch,
+} from './RequestUtils'
+import { RequestInitWithRetry } from 'fetch-retry'
 
-const axiosClient = axios.create({
-    timeout: 5 * 1000,
-    validateStatus: (status: number) => status < 400 && status >= 200,
-})
-axiosRetry(axiosClient, {
+const HOST = '.devcycle.com'
+const CLIENT_SDK_URL = 'https://sdk-api' + HOST
+const EVENT_URL = 'https://events' + HOST
+
+const CONFIG_PATH = '/v1/sdkConfig'
+const EVENTS_PATH = '/v1/events'
+const SAVE_ENTITY_PATH = '/v1/edgedb'
+
+const requestConfig: RequestInitWithRetry = {
     retries: 5,
-    // will do exponential retry until axios.timeout
-    retryDelay: axiosRetry.exponentialDelay,
-    shouldResetTimeout: true,
-    retryCondition: (error) => {
-        return !error.response || (error.response.status || 0) >= 500
-    },
-})
-
-export const HOST = '.devcycle.com'
-export const CLIENT_SDK_URL = 'https://sdk-api' + HOST
-export const EVENT_URL = 'https://events' + HOST
-
-export const CONFIG_PATH = '/v1/sdkConfig'
-export const EVENTS_PATH = '/v1/events'
-export const SAVE_ENTITY_PATH = '/v1/edgedb'
-
-export const baseRequestHeaders = (sdkKey?: string): Record<string, string> => {
-    return {
-        'Content-Type': 'application/json',
-        ...(sdkKey ? { Authorization: sdkKey } : {}),
-    }
-}
-
-/**
- * Base Requests
- */
-export const get = async (url: string): Promise<AxiosResponse> => {
-    return await axiosClient.request({
-        method: 'GET',
-        url: `${url}`,
-        headers: baseRequestHeaders(),
-    })
-}
-
-export const post = async (
-    url: string,
-    sdkKey: string,
-    body: Record<string, unknown>,
-): Promise<AxiosResponse> => {
-    return await axiosClient.request({
-        method: 'POST',
-        url,
-        data: body,
-        headers: baseRequestHeaders(sdkKey),
-    })
-}
-
-export const patch = async (
-    url: string,
-    sdkKey: string,
-    body: Record<string, unknown>,
-): Promise<AxiosResponse> => {
-    return await axiosClient.request({
-        method: 'PATCH',
-        url,
-        data: body,
-        headers: baseRequestHeaders(sdkKey),
-    })
+    retryDelay: exponentialBackoff,
 }
 
 /**
@@ -106,18 +59,15 @@ export const getConfigJson = async (
         queryParams.toString()
 
     try {
-        const res = await get(url)
-        return res.data
-    } catch (ex: any) {
-        const errorString = JSON.stringify(ex?.response?.data?.data?.errors)
+        const res = await getWithTimeout(url, requestConfig, 5000)
+        return await res.json()
+    } catch (e) {
         logger.error(
             `Request to get config failed for url: ${url}, ` +
-                `response message: ${ex.message}` +
-                (errorString ? `, response data: ${errorString}` : ''),
+                `response message: ${e}`,
         )
         throw new Error(
-            `Failed to download DevCycle config.` +
-                (errorString ? ` Error details: ${errorString}` : ''),
+            `Failed to download DevCycle config. Error details: ${e}`,
         )
     }
 }
@@ -129,7 +79,7 @@ export const publishEvents = async (
     events: DevCycleEvent[],
     logger: DVCLogger,
     options?: DevCycleOptions,
-): Promise<AxiosResponse> => {
+): Promise<Response> => {
     if (!sdkKey) {
         throw new Error('Missing sdkKey to publish events to Events API')
     }
@@ -144,15 +94,19 @@ export const publishEvents = async (
 
     const res = await post(
         url,
+        {
+            ...requestConfig,
+            body: JSON.stringify(payload),
+        },
         sdkKey,
-        payload as unknown as Record<string, unknown>,
     )
+    const data = await res.json()
     if (res.status >= 400) {
         logger.error(
-            `Error posting events, status: ${res.status}, body: ${res.data}`,
+            `Error posting events, status: ${res.status}, body: ${data}`,
         )
     } else {
-        logger.info(`Posted Events, status: ${res.status}, body: ${res.data}`)
+        logger.info(`Posted Events, status: ${res.status}, body: ${data}`)
     }
 
     return res
@@ -163,7 +117,7 @@ export const saveEntity = async (
     sdkKey: string,
     logger: DVCLogger,
     options?: DevCycleOptions,
-): Promise<AxiosResponse> => {
+): Promise<Response | undefined> => {
     if (!sdkKey) {
         throw new Error('Missing sdkKey to save to Edge DB!')
     }
@@ -173,32 +127,32 @@ export const saveEntity = async (
     if (user.isAnonymous) {
         throw new Error('Cannot save user data for an anonymous user!')
     }
-
-    const res = await patch(
-        `${
-            options?.apiProxyURL || CLIENT_SDK_URL
-        }${SAVE_ENTITY_PATH}/${encodeURIComponent(user.user_id)}`,
-        sdkKey,
-        user as unknown as Record<string, unknown>,
-    )
-
-    if (res.status === 403) {
-        logger.warn('Warning: EdgeDB feature is not enabled for this project')
-    } else if (res.status >= 400) {
-        logger.warn(
-            `Error saving user entity, status: ${res.status}, body: ${res.data}`,
+    try {
+        return await patch(
+            `${
+                options?.apiProxyURL || CLIENT_SDK_URL
+            }${SAVE_ENTITY_PATH}/${encodeURIComponent(user.user_id)}`,
+            {
+                ...requestConfig,
+                body: JSON.stringify(user),
+            },
+            sdkKey,
         )
-    } else {
-        logger.info(
-            `Saved user entity, status: ${res.status}, body: ${res.data}`,
-        )
+    } catch (e) {
+        const error = e as ResponseError
+        if (error.status === 403) {
+            logger.warn(
+                'Warning: EdgeDB feature is not enabled for this project',
+            )
+        } else if (error.status >= 400) {
+            logger.warn(
+                `Error saving user entity, status: ${error.status}, body: ${error.message}`,
+            )
+        } else {
+            logger.info(
+                `Saved user entity, status: ${error.status}, body: ${error.message}`,
+            )
+        }
+        return
     }
-    return res
-}
-
-export default {
-    get,
-    post,
-    getConfigJson,
-    publishEvents,
 }

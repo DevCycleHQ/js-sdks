@@ -1,8 +1,8 @@
-// NOTE: This file is duplicated in "sdk/js/src/RequestUtils" because nx:rollup cant build non-external dependencies
+// NOTE: This file is duplicated from "lib/shared/server-request" because nx:rollup cant build non-external dependencies
 // from outside the root directory https://github.com/nrwl/nx/issues/10395
+// EDIT: This file has diverged from the server-request lib by removing the dynamic import of cross-fetch
 
 import fetchWithRetry, { RequestInitWithRetry } from 'fetch-retry'
-
 export class ResponseError extends Error {
     constructor(message: string) {
         super(message)
@@ -129,20 +129,11 @@ export async function get(
     return handleResponse(res)
 }
 
-async function getFetch() {
-    if (typeof fetch !== 'undefined') {
-        return fetch
-    }
-
-    return (await import('cross-fetch')).default
-}
-
-async function getFetchWithRetry() {
-    const fetch = await getFetch()
+function getFetchWithRetry() {
     return fetchWithRetry(fetch)
 }
 
-type FetchClient = Awaited<ReturnType<typeof getFetch>>
+type FetchClient = Awaited<typeof fetch>
 type FetchAndConfig = [FetchClient, RequestInit]
 
 async function getFetchAndConfig(
@@ -153,8 +144,8 @@ async function getFetchAndConfig(
         const newConfig: RequestInitWithRetry = { ...requestConfig }
         newConfig.retryOn = retryOnRequestError(requestConfig.retries)
         newConfig.retryDelay = exponentialBackoff
-        return [await getFetchWithRetry(), newConfig]
+        return [getFetchWithRetry(), newConfig]
     }
 
-    return [await getFetch(), requestConfig]
+    return [fetch, requestConfig]
 }

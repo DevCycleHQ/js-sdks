@@ -7,7 +7,8 @@ import {
     withDevCycleProvider,
 } from '.'
 import { mockConfig } from '../mockData/mockConfig'
-
+import fetch from 'cross-fetch'
+global.fetch = fetch
 jest.unmock('@devcycle/js-client-sdk')
 
 describe('useVariableValue', () => {
