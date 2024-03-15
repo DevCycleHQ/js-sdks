@@ -12,6 +12,7 @@ const jsClientOptions = {
     disableRealtimeUpdates: true,
     disableAutomaticEventLogging: true,
     disableCustomEventLogging: true,
+    sdkPlatform: 'nextjs',
 }
 
 const cachedUserGetter = cache(

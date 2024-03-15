@@ -67,6 +67,7 @@ export const appWithDevCycle = <Props extends NextJsAppProps>(
                     sdkKey: devcycleSSR.sdkKey,
                     options: {
                         ...additionalOptions,
+                        sdkPlatform: 'nextjs',
                         deferInitialization: true,
                         disableAutomaticEventLogging: onServerside,
                         disableCustomEventLogging: onServerside,

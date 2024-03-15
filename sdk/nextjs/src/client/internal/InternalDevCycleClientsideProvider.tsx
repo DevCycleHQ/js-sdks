@@ -85,6 +85,7 @@ export const InternalDevCycleClientsideProvider = ({
     if (!clientRef.current) {
         clientRef.current = initializeDevCycle(sdkKey, {
             ...context.options,
+            sdkPlatform: 'nextjs',
             deferInitialization: true,
             disableConfigCache: true,
             next: {

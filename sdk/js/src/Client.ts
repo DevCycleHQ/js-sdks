@@ -96,6 +96,9 @@ export class DevCycleClient<
         user: DevCycleUser | undefined,
         options: DevCycleOptions = {},
     ) {
+        if (!options.sdkPlatform) {
+            options.sdkPlatform = 'js'
+        }
         if (options.next?.configRefreshHandler) {
             this.configRefetchHandler = options.next.configRefreshHandler
         }

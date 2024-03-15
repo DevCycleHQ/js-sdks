@@ -125,6 +125,12 @@ export interface DevCycleOptions {
      * using the CLI.
      */
     enableObfuscation?: boolean
+
+    /**
+     * The platform the SDK is running in. This is used for logging purposes.
+     * Example values ('of' for OpenFeature): 'js' | 'react' | 'react-native' | 'nextjs' | 'js-of' | 'react-of'
+     */
+    sdkPlatform?: string
 }
 
 export interface DevCycleUser {

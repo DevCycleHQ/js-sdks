@@ -60,6 +60,9 @@ export default class DevCycleProvider implements Provider {
 
     constructor(sdkKey: string, options: DevCycleOptions = {}) {
         this.sdkKey = sdkKey
+        if (!options.sdkPlatform) {
+            options.sdkPlatform = 'js-of'
+        }
         this.options = options
     }
 
