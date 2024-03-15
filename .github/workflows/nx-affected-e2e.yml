@@ -27,6 +27,7 @@ jobs:
               run: yarn affected:e2e
               env:
                 NEXT_PUBLIC_E2E_NEXTJS_KEY: ${{ secrets.NEXT_PUBLIC_E2E_NEXTJS_KEY }}
+                DVC_E2E_SERVER_SDK_KEY: ${{ secrets.DVC_E2E_SERVER_SDK_KEY }}
             - name: Upload Playwright Report
               if: always()
               uses: actions/upload-artifact@v2
