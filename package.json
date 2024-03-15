@@ -190,7 +190,7 @@
         "style-loader": "^3.3.0",
         "stylus": "0.59.0",
         "stylus-loader": "^7.1.0",
-        "supports-color": "8.1.1",
+        "supports-color": "9.4.0",
         "swc-loader": "0.1.15",
         "ts-jest": "29.1.0",
         "ts-node": "^10.9.2",
