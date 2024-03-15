@@ -73,7 +73,7 @@
         },
         "e2e": {
             "executor": "@nx/playwright:playwright",
-            "outputs": ["{workspaceRoot}/dist/.playwright/e2e/js/js-cdn"],
+            "outputs": ["{workspaceRoot}/dist/.playwright/e2e"],
             "options": {
                 "config": "e2e/js/js-cdn/playwright.config.ts"
             }

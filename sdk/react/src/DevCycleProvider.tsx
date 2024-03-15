@@ -14,7 +14,6 @@ export function DevCycleProvider(props: Props): React.ReactElement {
     const { config } = props
     const { user, options } = config
     const [isInitialized, setIsInitialized] = useState(false)
-
     let sdkKey: string
     if ('sdkKey' in config) {
         sdkKey = config.sdkKey
