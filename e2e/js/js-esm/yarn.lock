@@ -44,7 +44,7 @@ __metadata:
 
 "@devcycle/js-client-sdk@file:../../../dist/sdk/js::locator=e2e-js-esm%40workspace%3A.":
   version: 1.21.1
-  resolution: "@devcycle/js-client-sdk@file:../../../dist/sdk/js#../../../dist/sdk/js::hash=13a37f&locator=e2e-js-esm%40workspace%3A."
+  resolution: "@devcycle/js-client-sdk@file:../../../dist/sdk/js#../../../dist/sdk/js::hash=998b3d&locator=e2e-js-esm%40workspace%3A."
   dependencies:
     "@devcycle/types": ^1.9.1
     axios: ^1.0.0
@@ -52,20 +52,20 @@ __metadata:
     lodash: ^4.17.21
     ua-parser-js: ^1.0.36
     uuid: ^8.3.2
-  checksum: 93f923fea4fa46a897c2d930cc24e7dce8865b30e14a4785a592ecb850995e863dd437b1f7d041d5468b19e5db5b9bc3f6f4c96f8897b6ccac10e48b4a6a9b30
+  checksum: 4ea490970ba0e175ec2361ba0344d3970f953660bce23c507681332f55f42229dbe029456b10dce20670b2e1c63bb618da358f579e2d8338620c084e297a3464
   languageName: node
   linkType: hard
 
 "@devcycle/types@file:../../../dist/lib/shared/types::locator=e2e-js-esm%40workspace%3A.":
   version: 1.9.1
-  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=4210b0&locator=e2e-js-esm%40workspace%3A."
+  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=592588&locator=e2e-js-esm%40workspace%3A."
   dependencies:
     class-transformer: 0.5.1
     class-validator: 0.14.1
     iso-639-1: ^2.1.13
     lodash: ^4.17.21
     reflect-metadata: ^0.1.13
-  checksum: 42d15c555d1a2eee388f90bf590dee15387c6b79db9b4d5a5d13fc82b35724bfbb7f341bebc2bbb69733c09d7b656326109458dee88fa3d5da74c6f804325bc6
+  checksum: b95507448b925ee71f78034f1240d680f429f99aa3b4c265ea4dd2f5a8f79d15d146da6da3d682d3eec8ff800d2b2e8dc0c2118a3f361178a5b3c5b9ab79890b
   languageName: node
   linkType: hard
 
@@ -1797,12 +1797,12 @@ __metadata:
   linkType: hard
 
 "follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.15.4":
-  version: 1.15.5
-  resolution: "follow-redirects@npm:1.15.5"
+  version: 1.15.6
+  resolution: "follow-redirects@npm:1.15.6"
   peerDependenciesMeta:
     debug:
       optional: true
-  checksum: 5ca49b5ce6f44338cbfc3546823357e7a70813cecc9b7b768158a1d32c1e62e7407c944402a918ea8c38ae2e78266312d617dc68783fac502cbb55e1047b34ec
+  checksum: a62c378dfc8c00f60b9c80cab158ba54e99ba0239a5dd7c81245e5a5b39d10f0c35e249c3379eae719ff0285fff88c365dd446fab19dee771f1d76252df1bbf5
   languageName: node
   linkType: hard
 
