@@ -61,15 +61,23 @@ export async function getWithTimeout(
     timeout: number,
 ): Promise<Response> {
     const controller = new AbortController()
-    const id = setTimeout(() => {
-        controller.abort()
-    }, timeout)
-    const response = await get(url, {
-        ...requestConfig,
-        signal: controller.signal,
-    })
-    clearTimeout(id)
-    return response
+    try {
+        const id = setTimeout(() => {
+            controller.abort()
+        }, timeout)
+        const response = await get(url, {
+            ...requestConfig,
+            signal: controller.signal,
+        })
+        clearTimeout(id)
+        return response
+    } catch (e) {
+        if (controller?.signal?.aborted) {
+            throw new Error('Network connection timed out.')
+        } else {
+            throw e
+        }
+    }
 }
 
 export async function post(
