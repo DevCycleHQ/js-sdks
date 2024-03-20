@@ -1,0 +1,27 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../../../dist/out-tsc",
+        "target": "es2021",
+        "lib": ["es2021"],
+        "jsx": "react",
+        "module": "es2022",
+        "moduleResolution": "node",
+        "types": [
+            "@cloudflare/workers-types",
+            "@nx/react/typings/cssmodule.d.ts",
+            "@nx/react/typings/image.d.ts"
+        ],
+        "resolveJsonModule": true,
+        "allowJs": true,
+        "checkJs": false,
+        "noEmit": true,
+        "isolatedModules": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "skipLibCheck": true
+    },
+    "exclude": ["**/*.spec.ts", "**/*.test.ts"],
+    "include": ["**/*.ts"]
+}

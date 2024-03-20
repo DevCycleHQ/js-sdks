@@ -24,7 +24,8 @@
         "e2e:nextjs-pages-router:start": "nx build nextjs && ./e2e/nextjs/pages-router/app/start.sh",
         "e2e:js-cdn:start": "nx run js-cdn:build-with-sdk && nx run js-cdn:serve",
         "e2e:js-esm:start": "nx build js && ./e2e/js/js-esm/start.sh",
-        "e2e:react:start": "nx build react && ./e2e/react/start.sh"
+        "e2e:react:start": "nx build react && ./e2e/react/start.sh",
+        "e2e:js-cloud-server:start": "nx build js-cloud-server-sdk && ./e2e/js/js-cloud-server/start.sh"
     },
     "modulePathIgnorePatterns": [
         "<rootDir>/build"
@@ -80,6 +81,7 @@
         "@commitlint/config-conventional": "^18.6.0",
         "@nestjs/common": "^10.3.3",
         "@nestjs/core": "^10.3.3",
+        "@nrwl/jest": "^18.1.2",
         "@nrwl/js": "16.10.0",
         "@nrwl/rollup": "16.10.0",
         "@nx/cypress": "16.10.0",

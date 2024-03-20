@@ -1,0 +1,37 @@
+{
+    "name": "e2e-js-cloud-server",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "e2e/nextjs/app-router/src",
+    "targets": {
+        "serve": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "yarn run -T wrangler dev",
+                "parallel": false,
+                "cwd": "e2e/js/js-cloud-server"
+            }
+        },
+        "e2e": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "yarn jest --config ./jest.config.ts",
+                "cwd": "e2e/js/js-cloud-server"
+            },
+            "dependsOn": ["startServer"]
+        },
+        "startServer": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "yarn e2e:js-cloud-server:start "
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["e2e/js/js-cloud-server/**/*.{js,ts}"]
+            }
+        }
+    },
+    "implicitDependencies": ["js-cloud-server-sdk"]
+}

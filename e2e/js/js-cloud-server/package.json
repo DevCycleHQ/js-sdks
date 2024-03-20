@@ -1,0 +1,25 @@
+{
+    "name": "e2e-js-cloud-server",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "scripts": {
+        "start": "wrangler dev"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@devcycle/js-cloud-server-sdk": "file:../../../dist/sdk/js-cloud-server",
+        "fork-ts-checker-webpack-plugin": "^9.0.2"
+    },
+    "resolutions": {
+        "@devcycle/types": "file:../../../dist/lib/shared/types"
+    },
+    "devDependencies": {
+        "@nrwl/jest": "^18.1.2",
+        "@types/jest": "^29.5.12",
+        "jest": "^29.7.0",
+        "ts-jest": "^29.1.2",
+        "wrangler": "^3.34.2"
+    }
+}
