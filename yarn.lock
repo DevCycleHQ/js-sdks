@@ -8009,9 +8009,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/common@npm:^10.3.3":
-  version: 10.3.3
-  resolution: "@nestjs/common@npm:10.3.3"
+"@nestjs/common@npm:^10.3.4":
+  version: 10.3.4
+  resolution: "@nestjs/common@npm:10.3.4"
   dependencies:
     iterare: 1.2.1
     tslib: 2.6.2
@@ -8026,7 +8026,7 @@ __metadata:
       optional: true
     class-validator:
       optional: true
-  checksum: 604862c8ca21751899e770d54a4a14f57f22d8792fa2b4834015bf775f17922cc64acd52b66f8684e7bb4f9c25a26056d679e7d85211b1d9db9e47a8b217a206
+  checksum: 256bc543819c575940a78caf39cfc0edc93e2adc421f91f52d5c7913e36fe12983cca63c2f94318f53bc54fd0a526ec74d027a10271054eee0f5b4bc0d187c44
   languageName: node
   linkType: hard
 
@@ -16583,7 +16583,7 @@ __metadata:
     "@commitlint/cli": ^16.2.3
     "@commitlint/config-conventional": ^18.6.0
     "@devcycle/assemblyscript-json": ^2.0.0
-    "@nestjs/common": ^10.3.3
+    "@nestjs/common": ^10.3.4
     "@nestjs/core": ^10.3.3
     "@nrwl/jest": ^18.1.2
     "@nrwl/js": 16.10.0
