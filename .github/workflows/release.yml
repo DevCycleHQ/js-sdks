@@ -37,8 +37,6 @@ jobs:
             NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
         steps:
-            - name: Disabled
-              run: echo "Release action is disabled" && exit 1
             # Check out the repo with credentials that can bypass branch protection, and fetch git history instead of just latest commit
             - uses: actions/checkout@v4
               with:
@@ -101,7 +99,7 @@ jobs:
 
             - name: Upload CDN Release
               run: |
-                SDK_VERSION="$(cat sdk/js/package.json | jq -r ".version""
+                SDK_VERSION="$(cat sdk/js/package.json | jq -r ".version")"
                 aws s3 sync dist/sdk/cdn/js s3://js.devcycle.com/ --include "devcycle.min.js*" --acl public-read
                 aws s3 sync dist/sdk/cdn/js s3://js.devcycle.com/latest/ --include "devcycle.min.js*" --acl public-read
                 aws s3 sync dist/sdk/cdn/js s3://js.devcycle.com/${{ SDK_VERSION }}/ --include "devcycle.min.js*" --acl public-read
