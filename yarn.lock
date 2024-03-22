@@ -8548,12 +8548,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/rollup@npm:16.10.0":
-  version: 16.10.0
-  resolution: "@nrwl/rollup@npm:16.10.0"
+"@nrwl/rollup@npm:18.1.2":
+  version: 18.1.2
+  resolution: "@nrwl/rollup@npm:18.1.2"
   dependencies:
-    "@nx/rollup": 16.10.0
-  checksum: fdcd433b526c97d0c3338f43855e78d8a2d2789ee8ea6b0d8052a2d4cd4fb63f630be5141972916024bd0c74dff2d8d16e93ad04965e23ec69873bfd55a6063e
+    "@nx/rollup": 18.1.2
+  checksum: 09780bdd0451281ade86f78bc4334505c784f606b1fa639f47752f3e60cccca65e9b4d329fc75969069d8ba22e41dfe2c558d284440ca8ba5824d5375f01b557
   languageName: node
   linkType: hard
 
@@ -9155,13 +9155,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx/rollup@npm:16.10.0":
-  version: 16.10.0
-  resolution: "@nx/rollup@npm:16.10.0"
+"@nx/rollup@npm:18.1.2":
+  version: 18.1.2
+  resolution: "@nx/rollup@npm:18.1.2"
   dependencies:
-    "@nrwl/rollup": 16.10.0
-    "@nx/devkit": 16.10.0
-    "@nx/js": 16.10.0
+    "@nrwl/rollup": 18.1.2
+    "@nx/devkit": 18.1.2
+    "@nx/js": 18.1.2
     "@rollup/plugin-babel": ^5.3.0
     "@rollup/plugin-commonjs": ^20.0.0
     "@rollup/plugin-image": ^2.1.0
@@ -9170,16 +9170,15 @@ __metadata:
     autoprefixer: ^10.4.9
     babel-plugin-transform-async-to-promises: ^0.8.15
     chalk: ^4.1.0
-    fast-glob: ^3.2.7
     postcss: ^8.4.14
     rollup: ^2.56.2
     rollup-plugin-copy: ^3.4.0
     rollup-plugin-peer-deps-external: ^2.2.4
     rollup-plugin-postcss: ^4.0.1
-    rollup-plugin-typescript2: 0.34.1
+    rollup-plugin-typescript2: 0.36.0
     rxjs: ^7.8.0
     tslib: ^2.3.0
-  checksum: 6f27d32cd393f9758ebf8a354fceac53466d03e37f8a67494635a595978d5ca96dbbe4115274c1781dacecd4eec99228a5a864c816bf8883f654a9b7e15865cf
+  checksum: 38d9875cecb4c6f73e0e8a62f09ddc36f30a3eda2efed6a0527f00568987aa62af2267df0aee2deceeb4275021e5e3677327b499ce0300396e03ce77f7b3d40f
   languageName: node
   linkType: hard
 
@@ -16587,7 +16586,7 @@ __metadata:
     "@nestjs/core": ^10.3.3
     "@nrwl/jest": ^18.1.2
     "@nrwl/js": 16.10.0
-    "@nrwl/rollup": 16.10.0
+    "@nrwl/rollup": 18.1.2
     "@nx/cypress": 16.10.0
     "@nx/detox": 16.10.0
     "@nx/devkit": 16.10.0
@@ -30000,19 +29999,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup-plugin-typescript2@npm:0.34.1":
-  version: 0.34.1
-  resolution: "rollup-plugin-typescript2@npm:0.34.1"
+"rollup-plugin-typescript2@npm:0.36.0":
+  version: 0.36.0
+  resolution: "rollup-plugin-typescript2@npm:0.36.0"
   dependencies:
     "@rollup/pluginutils": ^4.1.2
     find-cache-dir: ^3.3.2
     fs-extra: ^10.0.0
-    semver: ^7.3.7
-    tslib: ^2.4.0
+    semver: ^7.5.4
+    tslib: ^2.6.2
   peerDependencies:
     rollup: ">=1.26.3"
     typescript: ">=2.4.0"
-  checksum: 107e66b9ab1aaf4b237564e500ea9de9f2d3f0a81be5139dc753fc76bbf00a1a2230eb1ec59145d2dfc4c4da9be8211f1f3e1370007efe1e24ce45a00905e558
+  checksum: 199afe11f9218ad943b67138b3165c2be2cd2535926da6ed467124273f7bbb1dd779521a648a26a65073cafe43388104857a90e0fdf06ca526a6613771eb2e70
   languageName: node
   linkType: hard
 
@@ -32287,7 +32286,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.6.2, tslib@npm:^2.2.0":
+"tslib@npm:2.6.2, tslib@npm:^2.2.0, tslib@npm:^2.6.2":
   version: 2.6.2
   resolution: "tslib@npm:2.6.2"
   checksum: 329ea56123005922f39642318e3d1f0f8265d1e7fcb92c633e0809521da75eeaca28d2cf96d7248229deb40e5c19adf408259f4b9640afd20d13aecc1430f3ad
