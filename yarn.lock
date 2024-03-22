@@ -6245,6 +6245,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@eslint/js@npm:8.57.0":
+  version: 8.57.0
+  resolution: "@eslint/js@npm:8.57.0"
+  checksum: 315dc65b0e9893e2bff139bddace7ea601ad77ed47b4550e73da8c9c2d2766c7a575c3cddf17ef85b8fd6a36ff34f91729d0dcca56e73ca887c10df91a41b0bb
+  languageName: node
+  linkType: hard
+
 "@fastify/busboy@npm:^2.0.0":
   version: 2.0.0
   resolution: "@fastify/busboy@npm:2.0.0"
@@ -6275,7 +6282,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@humanwhocodes/config-array@npm:^0.11.13":
+"@humanwhocodes/config-array@npm:^0.11.13, @humanwhocodes/config-array@npm:^0.11.14":
   version: 0.11.14
   resolution: "@humanwhocodes/config-array@npm:0.11.14"
   dependencies:
@@ -8458,12 +8465,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/node@npm:16.10.0":
-  version: 16.10.0
-  resolution: "@nrwl/node@npm:16.10.0"
+"@nrwl/node@npm:18.1.2":
+  version: 18.1.2
+  resolution: "@nrwl/node@npm:18.1.2"
   dependencies:
-    "@nx/node": 16.10.0
-  checksum: 473fa88c69e7d1c5d76fb22d9de6bbaa525abc32b9754a96a06a525bf1ce53dca2df49c87f930cfbe816edefb63c1034c774b52e2e15b05fa137398baed820ef
+    "@nx/node": 18.1.2
+  checksum: 3478f9a0a2af252da5370e6a3e9e17c0fedc68b548fb967931b50685523ad5ad937cb3af95fcb79fd02a6cfe2377eb6a67ca112e840e6fa7ffc5a8ab2c4c84ec
   languageName: node
   linkType: hard
 
@@ -8759,6 +8766,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nx/eslint@npm:18.1.2":
+  version: 18.1.2
+  resolution: "@nx/eslint@npm:18.1.2"
+  dependencies:
+    "@nx/devkit": 18.1.2
+    "@nx/js": 18.1.2
+    "@nx/linter": 18.1.2
+    eslint: ^8.0.0
+    tslib: ^2.3.0
+    typescript: ~5.3.2
+  peerDependencies:
+    js-yaml: 4.1.0
+  peerDependenciesMeta:
+    js-yaml:
+      optional: true
+  checksum: edd6322890db513edf419a0a04542bc8efd393592127bde58e3f6030eec7ceba502f9970376b572f5db4421ca2181c174ff4915f209a158e2200e79b54ddff34
+  languageName: node
+  linkType: hard
+
 "@nx/jest@npm:16.10.0":
   version: 16.10.0
   resolution: "@nx/jest@npm:16.10.0"
@@ -8909,6 +8935,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nx/linter@npm:18.1.2":
+  version: 18.1.2
+  resolution: "@nx/linter@npm:18.1.2"
+  dependencies:
+    "@nx/eslint": 18.1.2
+  checksum: 0bf514ce5c47efb3b63bde463928fc29ae4918e7c02b8d977fa5dc8dfdd0ef10a774e7c676f671e56c660e508b157365d8a304164e07516c1a014a53ee8434be
+  languageName: node
+  linkType: hard
+
 "@nx/next@npm:16.10.0":
   version: 16.10.0
   resolution: "@nx/next@npm:16.10.0"
@@ -8936,18 +8971,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx/node@npm:16.10.0":
-  version: 16.10.0
-  resolution: "@nx/node@npm:16.10.0"
+"@nx/node@npm:18.1.2":
+  version: 18.1.2
+  resolution: "@nx/node@npm:18.1.2"
   dependencies:
-    "@nrwl/node": 16.10.0
-    "@nx/devkit": 16.10.0
-    "@nx/jest": 16.10.0
-    "@nx/js": 16.10.0
-    "@nx/linter": 16.10.0
-    "@nx/workspace": 16.10.0
+    "@nrwl/node": 18.1.2
+    "@nx/devkit": 18.1.2
+    "@nx/eslint": 18.1.2
+    "@nx/jest": 18.1.2
+    "@nx/js": 18.1.2
     tslib: ^2.3.0
-  checksum: 040c3995626c9f0b47604da396efd9b3d63433848e1360a64b9fbfcd345bfbfcdbe91af9aa48a5d0020977871c7658cb96b658be38ffd434a9b117b6e1921b38
+  checksum: 3e7c4234bb629e19ac7bfff7a16f1036326663e1f224bda74dc50c25e2642999ceb4eaa9500dc3002b64e3a1479adb4533ebd18edc7fdd71ace1264fafcbd1ac
   languageName: node
   linkType: hard
 
@@ -16597,7 +16631,7 @@ __metadata:
     "@nx/js": 16.10.0
     "@nx/linter": 16.10.0
     "@nx/next": 16.10.0
-    "@nx/node": 16.10.0
+    "@nx/node": 18.1.2
     "@nx/playwright": 16.10.0
     "@nx/react": 16.10.0
     "@nx/react-native": 16.10.0
@@ -18198,6 +18232,54 @@ __metadata:
   version: 3.3.0
   resolution: "eslint-visitor-keys@npm:3.3.0"
   checksum: d59e68a7c5a6d0146526b0eec16ce87fbf97fe46b8281e0d41384224375c4e52f5ffb9e16d48f4ea50785cde93f766b0c898e31ab89978d88b0e1720fbfb7808
+  languageName: node
+  linkType: hard
+
+"eslint@npm:^8.0.0":
+  version: 8.57.0
+  resolution: "eslint@npm:8.57.0"
+  dependencies:
+    "@eslint-community/eslint-utils": ^4.2.0
+    "@eslint-community/regexpp": ^4.6.1
+    "@eslint/eslintrc": ^2.1.4
+    "@eslint/js": 8.57.0
+    "@humanwhocodes/config-array": ^0.11.14
+    "@humanwhocodes/module-importer": ^1.0.1
+    "@nodelib/fs.walk": ^1.2.8
+    "@ungap/structured-clone": ^1.2.0
+    ajv: ^6.12.4
+    chalk: ^4.0.0
+    cross-spawn: ^7.0.2
+    debug: ^4.3.2
+    doctrine: ^3.0.0
+    escape-string-regexp: ^4.0.0
+    eslint-scope: ^7.2.2
+    eslint-visitor-keys: ^3.4.3
+    espree: ^9.6.1
+    esquery: ^1.4.2
+    esutils: ^2.0.2
+    fast-deep-equal: ^3.1.3
+    file-entry-cache: ^6.0.1
+    find-up: ^5.0.0
+    glob-parent: ^6.0.2
+    globals: ^13.19.0
+    graphemer: ^1.4.0
+    ignore: ^5.2.0
+    imurmurhash: ^0.1.4
+    is-glob: ^4.0.0
+    is-path-inside: ^3.0.3
+    js-yaml: ^4.1.0
+    json-stable-stringify-without-jsonify: ^1.0.1
+    levn: ^0.4.1
+    lodash.merge: ^4.6.2
+    minimatch: ^3.1.2
+    natural-compare: ^1.4.0
+    optionator: ^0.9.3
+    strip-ansi: ^6.0.1
+    text-table: ^0.2.0
+  bin:
+    eslint: bin/eslint.js
+  checksum: 3a48d7ff85ab420a8447e9810d8087aea5b1df9ef68c9151732b478de698389ee656fd895635b5f2871c89ee5a2652b3f343d11e9db6f8486880374ebc74a2d9
   languageName: node
   linkType: hard
 
@@ -32554,7 +32636,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.2.2":
+"typescript@npm:^5.2.2, typescript@npm:~5.3.2":
   version: 5.3.3
   resolution: "typescript@npm:5.3.3"
   bin:
@@ -32594,7 +32676,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^5.2.2#~builtin<compat/typescript>":
+"typescript@patch:typescript@^5.2.2#~builtin<compat/typescript>, typescript@patch:typescript@~5.3.2#~builtin<compat/typescript>":
   version: 5.3.3
   resolution: "typescript@patch:typescript@npm%3A5.3.3#~builtin<compat/typescript>::version=5.3.3&hash=5da071"
   bin:
