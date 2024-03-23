@@ -1,3 +1,4 @@
+global.fetch = jest.fn()
 import DevCycleProvider from '../src/DevCycleProvider'
 import {
     Client,

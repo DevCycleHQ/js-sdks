@@ -8,18 +8,17 @@ export class ReactNativeStore implements DVCStorage {
         this.store = AsyncStorage
     }
 
-    save(storeKey: string, data: unknown): void {
-        this.store.setItem(storeKey, JSON.stringify(data))
+    async save(storeKey: string, data: unknown): Promise<void> {
+        await this.store.setItem(storeKey, JSON.stringify(data))
     }
 
-    load<T>(storeKey: string): Promise<T | undefined> {
-        return this.store.getItem(storeKey).then((item) => {
-            return item ? JSON.parse(item) : undefined
-        })
+    async load<T>(storeKey: string): Promise<T | undefined> {
+        const item = await this.store.getItem(storeKey)
+        return item ? JSON.parse(item) : undefined
     }
 
-    remove(storeKey: string): void {
-        this.store.removeItem(storeKey)
+    async remove(storeKey: string): Promise<void> {
+        await this.store.removeItem(storeKey)
     }
 }
 

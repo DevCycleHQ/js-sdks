@@ -74,6 +74,18 @@ export function generateEventPayload(
     }
 }
 
+// The `self` property is available only in WorkerScope environments (which don't have access to window)
+// ServiceWorkerGlobalScope is the name of the class when in a service worker environment
+// https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope
+// https://developer.mozilla.org/en-US/docs/Web/API/WorkerGlobalScope/self
+//
+export function checkIsServiceWorker(): boolean {
+    return (
+        typeof self !== 'undefined' &&
+        self.constructor &&
+        self.constructor.name === 'ServiceWorkerGlobalScope'
+    )
+}
 export default {
     serializeUserSearchParams,
     checkParamDefined,

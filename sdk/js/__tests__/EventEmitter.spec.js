@@ -1,3 +1,4 @@
+global.fetch = jest.fn()
 import { EventEmitter } from '../src/EventEmitter'
 import { DevCycleClient } from '../src/Client'
 import { DVCPopulatedUser } from '../src/User'
@@ -465,14 +466,14 @@ describe('EventEmitter tests', () => {
             expect(configHandler).not.toHaveBeenCalled()
         })
 
-        it('fires when first config recieved', () => {
+        it('fires when first config recieved', async () => {
             const configHandler = jest.fn()
             const client = new DevCycleClient('test_sdk_key', {
                 user_id: 'user1',
             })
             client.eventEmitter = eventEmitter
             eventEmitter.subscribe('configUpdated', configHandler)
-            client.handleConfigReceived(
+            await client.handleConfigReceived(
                 testConfig,
                 new DVCPopulatedUser({ user_id: 'user1' }, null),
                 123,
@@ -480,7 +481,7 @@ describe('EventEmitter tests', () => {
             expect(configHandler).toHaveBeenCalledWith(testConfig.variables)
         })
 
-        it('doesnt fire when config recieved with same etag', () => {
+        it('doesnt fire when config recieved with same etag', async () => {
             const configHandler = jest.fn()
             const client = new DevCycleClient('test_sdk_key', {
                 user_id: 'user1',
@@ -488,7 +489,7 @@ describe('EventEmitter tests', () => {
             client.eventEmitter = eventEmitter
             client.config = testConfig
             eventEmitter.subscribe('configUpdated', configHandler)
-            client.handleConfigReceived(
+            await client.handleConfigReceived(
                 testConfig,
                 new DVCPopulatedUser({ user_id: 'user1' }, null),
                 123,
@@ -496,7 +497,7 @@ describe('EventEmitter tests', () => {
             expect(configHandler).not.toHaveBeenCalled()
         })
 
-        it('fires when config recieved with different etag', () => {
+        it('fires when config recieved with different etag', async () => {
             const configHandler = jest.fn()
             const client = new DevCycleClient('test_sdk_key', {
                 user_id: 'user1',
@@ -504,7 +505,7 @@ describe('EventEmitter tests', () => {
             client.eventEmitter = eventEmitter
             client.config = { ...testConfig, etag: '567' }
             eventEmitter.subscribe('configUpdated', configHandler)
-            client.handleConfigReceived(
+            await client.handleConfigReceived(
                 testConfig,
                 new DVCPopulatedUser({ user_id: 'user1' }, null),
                 123,
