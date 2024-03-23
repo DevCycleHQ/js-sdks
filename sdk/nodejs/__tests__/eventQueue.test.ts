@@ -178,7 +178,10 @@ describe('EventQueue Unit Tests', () => {
                             clientDate: expect.any(String),
                             customType: 'test_event',
                             date: expect.any(String),
-                            featureVars: {},
+                            featureVars: {
+                                '614ef6aa473928459060721a':
+                                    '6153553b8cf4e45e0464268d',
+                            },
                             type: 'customEvent',
                             user_id: 'user_id',
                         }),
@@ -255,7 +258,10 @@ describe('EventQueue Unit Tests', () => {
                             clientDate: expect.any(String),
                             customType: 'test_event',
                             date: expect.any(String),
-                            featureVars: {},
+                            featureVars: {
+                                '614ef6aa473928459060721a':
+                                    '6153553b8cf4e45e0464268d',
+                            },
                             type: 'customEvent',
                             user_id: 'user_id',
                         }),
@@ -313,7 +319,10 @@ describe('EventQueue Unit Tests', () => {
                             clientDate: expect.any(String),
                             customType: 'test_event',
                             date: expect.any(String),
-                            featureVars: {},
+                            featureVars: {
+                                '614ef6aa473928459060721a':
+                                    '6153553b8cf4e45e0464268d',
+                            },
                             type: 'customEvent',
                             user_id: 'user_id',
                         }),
@@ -424,7 +433,10 @@ describe('EventQueue Unit Tests', () => {
                             clientDate: expect.any(String),
                             customType: 'test_event',
                             date: expect.any(String),
-                            featureVars: {},
+                            featureVars: {
+                                '614ef6aa473928459060721a':
+                                    '6153553b8cf4e45e0464268d',
+                            },
                             type: 'customEvent',
                             user_id: 'user_id',
                         }),
