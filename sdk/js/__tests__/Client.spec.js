@@ -695,7 +695,7 @@ describe('DevCycleClient tests', () => {
                 'test_sdk_key',
                 expect.objectContaining(anonUser),
                 expect.any(Object),
-                {},
+                { sdkPlatform: 'js' },
                 undefined,
             )
             expect(result).toEqual(newVariables.variables)
@@ -1052,6 +1052,7 @@ describe('DevCycleClient tests', () => {
                 expect.any(Object),
                 {
                     enableObfuscation: true,
+                    sdkPlatform: 'js',
                 },
                 undefined,
             )
@@ -1066,6 +1067,7 @@ describe('DevCycleClient tests', () => {
                 expect.anything(),
                 {
                     enableObfuscation: true,
+                    sdkPlatform: 'js',
                 },
             )
         })

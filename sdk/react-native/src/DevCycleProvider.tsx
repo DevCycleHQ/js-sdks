@@ -22,6 +22,7 @@ export const getReactNativeConfig = (
         ...config,
         options: {
             ...config.options,
+            sdkPlatform: 'react-native',
             reactNative: true,
         },
     }
