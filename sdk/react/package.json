@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/react-client-sdk",
-    "version": "1.19.2",
+    "version": "1.19.3",
     "description": "The DevCycle React SDK used for feature management.",
     "scripts": {
         "clean": "rimraf dist",
@@ -14,7 +14,7 @@
         "cross-fetch": "4.0.0"
     },
     "dependencies": {
-        "@devcycle/js-client-sdk": "^1.21.2",
+        "@devcycle/js-client-sdk": "^1.21.3",
         "@devcycle/types": "^1.9.2",
         "hoist-non-react-statics": "^3.3.2"
     },
