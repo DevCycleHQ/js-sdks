@@ -1,0 +1,47 @@
+{
+    "name": "debugger",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "lib/debugger/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nx/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/lib/debugger",
+                "main": "lib/debugger/src/index.ts",
+                "tsConfig": "lib/debugger/tsconfig.lib.json",
+                "assets": ["lib/debugger/*.md"]
+            }
+        },
+        "publish": {
+            "command": "node tools/scripts/publish.mjs debugger {args.ver} {args.tag}",
+            "dependsOn": ["build"]
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": [
+                    "lib/debugger/**/*.ts",
+                    "lib/debugger/package.json"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "lib/debugger/jest.config.ts",
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        }
+    },
+    "tags": []
+}

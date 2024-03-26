@@ -47,7 +47,7 @@
     "extends": "nx/presets/npm.json",
     "npmScope": "devcycle",
     "workspaceLayout": {
-        "libsDir": "",
+        "libsDir": "lib",
         "appsDir": ""
     },
     "affected": {

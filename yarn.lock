@@ -4692,6 +4692,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@devcycle/debugger@workspace:lib/debugger":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/debugger@workspace:lib/debugger"
+  dependencies:
+    tslib: ^2.3.0
+  languageName: unknown
+  linkType: soft
+
 "@devcycle/js-client-sdk-web-example@workspace:examples/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk-web-example@workspace:examples/js"
