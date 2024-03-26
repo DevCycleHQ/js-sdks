@@ -2,13 +2,13 @@ import { useVariable } from '@devcycle/react-client-sdk'
 import React from 'react'
 
 export default function DevCycleExample(): React.ReactElement {
-    const variableKey = 'feature-release'
+    const variableKey = 'test-new-feature'
     const variableKeyString = 'variable-key-string'
     const variableKeyNumber = 'variable-key-number'
     const variableKeyBoolean = 'variable-key-boolean'
     const variableKeyJsonString = 'variable-json-key-string'
 
-    const variable = useVariable(variableKey, true)
+    const variable = useVariable(variableKey, false)
     const variableString = useVariable(variableKeyString, 'default')
     const variableNumber = useVariable(variableKeyNumber, 100)
     const variableBoolean = useVariable(variableKeyBoolean, true)

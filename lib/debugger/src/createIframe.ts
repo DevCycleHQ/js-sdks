@@ -15,27 +15,31 @@ type ClientData = {
     current: {
         config?: BucketedUserConfig
         user?: DevCycleUser
-        events: LiveEvent[]
+        liveEvents: LiveEvent[]
         loadCount: number
     }
 }
 
 const clientData: ClientData = {
     current: {
-        events: [],
+        liveEvents: [],
         loadCount: 0,
     },
 }
 
-const setupClientSubscription = (client: DevCycleClient) => {
+const setupClientSubscription = (
+    client: DevCycleClient,
+    postDataMessage: () => void,
+) => {
     const addEvent = (event: any) => {
-        clientData.current.events.unshift(event)
+        clientData.current.liveEvents.unshift(event)
     }
 
     const onConfigUpdated = () => {
         clientData.current.config = client.config
         clientData.current.user = client.user
         addEvent({ type: 'configUpdated', date: Date.now() })
+        postDataMessage()
     }
     const onVariableEvaluated = (key: string, variable: DVCVariable<any>) => {
         addEvent({
@@ -44,23 +48,28 @@ const setupClientSubscription = (client: DevCycleClient) => {
             variable: { ...variable },
             date: Date.now(),
         })
+        postDataMessage()
     }
     const onVariableUpdated = (
         key: string,
         variable: DVCVariable<any> | null,
     ) => {
+        console.log('VARIABLE UPDATED!')
         addEvent({
             type: 'variableUpdated',
             key,
             variable: variable ? { ...variable } : null,
             date: Date.now(),
         })
+        postDataMessage()
     }
+    console.log('subscribing to events')
     client.subscribe('configUpdated', onConfigUpdated)
     client.subscribe('variableEvaluated:*', onVariableEvaluated)
     client.subscribe('variableUpdated:*', onVariableUpdated)
 
     return () => {
+        console.log('unsubscribing to events')
         client.unsubscribe('configUpdated', onConfigUpdated)
         client.unsubscribe('variableEvaluated:*', onVariableEvaluated)
         client.unsubscribe('variableUpdated:*', onVariableUpdated)
@@ -70,20 +79,23 @@ const setupClientSubscription = (client: DevCycleClient) => {
 export const createIframe = (
     client: DevCycleClient,
     debuggerUrl = 'https://debugger.devcycle.com',
-) => {
-    const cleanup = setupClientSubscription(client)
+): (() => void) => {
     const iframe = document.createElement('iframe')
 
-    const postDataMessage = (data: ClientData['current']) => {
-        console.log('posting message', data)
-        iframe.contentWindow!.postMessage(
+    const updateIframeData = () => {
+        clientData.current.config = client.config
+        clientData.current.user = client.user
+        console.log('posting message', clientData.current)
+        iframe.contentWindow?.postMessage(
             {
-                ...data,
+                ...clientData.current,
                 type: 'dvcDebuggerData',
             },
             debuggerUrl,
         )
     }
+
+    const cleanup = setupClientSubscription(client, updateIframeData)
 
     const listener = (event: MessageEvent) => {
         if (event.origin === debuggerUrl) {
@@ -92,11 +104,15 @@ export const createIframe = (
                 event.data.type === 'DEVCYCLE_IDENTIFY_USER' &&
                 event.data.user
             ) {
-                void client.identifyUser(event.data.user)
+                client.identifyUser(event.data.user).then(() => {
+                    updateIframeData()
+                })
             } else if (event.data.type === 'DEVCYCLE_RESET_USER') {
-                void client.resetUser()
+                client.resetUser().then(() => {
+                    updateIframeData()
+                })
             } else if (event.data.type === 'DEVCYCLE_REFRESH') {
-                postDataMessage(clientData.current)
+                updateIframeData()
             }
         }
     }

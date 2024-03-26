@@ -6,7 +6,7 @@ import {
     withDevCycleProvider,
 } from '@devcycle/react-client-sdk'
 import DevCycleExample from './DevCycleExample'
-import { Iframe } from './Iframe'
+import { DevCycleDebugger } from '@devcycle/debugger/react'
 
 const SDK_KEY = 'client-c3b75096-70bb-47b8-9898-4f145f2caa26'
 const user = {
@@ -33,7 +33,7 @@ function App() {
 
     return (
         <div className="App">
-            <Iframe />
+            <DevCycleDebugger debuggerUrl={'http://localhost:4201'} />
 
             <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo" />
