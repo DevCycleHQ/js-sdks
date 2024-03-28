@@ -76,9 +76,17 @@ const setupClientSubscription = (
     }
 }
 
+export type DebuggerIframeOptions = {
+    position?: 'left' | 'right'
+    debuggerUrl?: string
+}
+
 export const createIframe = (
     client: DevCycleClient,
-    debuggerUrl = 'https://debugger.devcycle.com',
+    {
+        position = 'right',
+        debuggerUrl = 'https://debugger.devcycle.com',
+    }: DebuggerIframeOptions = {},
 ): (() => void) => {
     const iframe = document.createElement('iframe')
 
@@ -129,17 +137,23 @@ export const createIframe = (
             searchParams.set('user_id', client.user!.user_id)
             searchParams.set('environment_id', client.config!.environment._id)
             searchParams.set('parentOrigin', window.location.origin)
+            searchParams.set('position', position)
 
             iframe.id = 'devcycle-debugger-iframe'
             iframe.src = `${debuggerUrl}?${searchParams.toString()}`
             iframe.style.width = '500px'
             iframe.style.height = '700px'
-            iframe.style.position = 'absolute'
-            iframe.style.bottom = '50px'
-            iframe.style.right = '100px'
+            iframe.style.position = 'fixed'
+            iframe.style.bottom = '25px'
+            if (position === 'left') {
+                iframe.style.left = '25px'
+            } else {
+                iframe.style.right = '25px'
+            }
             iframe.style.border = 'none'
             iframe.style.overflow = 'hidden'
             iframe.title = 'Devcycle Debugger'
+            iframe.allow = 'clipboard-read; clipboard-write'
             iframe.onload = () => {
                 clientData.current.loadCount += 1
             }

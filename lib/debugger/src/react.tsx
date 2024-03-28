@@ -1,16 +1,18 @@
 import { useEffect } from 'react'
-import { createIframe } from './createIframe'
+import { createIframe, DebuggerIframeOptions } from './createIframe'
 import { useDevCycleClient } from '@devcycle/react-client-sdk'
 
 export const DevCycleDebugger = ({
     debuggerUrl,
-}: {
-    debuggerUrl?: string
-}): null => {
+    position,
+}: DebuggerIframeOptions): null => {
     const client = useDevCycleClient()
 
     useEffect(() => {
-        return createIframe(client, debuggerUrl)
+        return createIframe(client, {
+            debuggerUrl,
+            position,
+        })
     }, [client])
 
     return null

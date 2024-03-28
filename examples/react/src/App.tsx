@@ -33,7 +33,10 @@ function App() {
 
     return (
         <div className="App">
-            <DevCycleDebugger debuggerUrl={'http://localhost:4201'} />
+            <DevCycleDebugger
+                debuggerUrl={'http://localhost:4201'}
+                position={'right'}
+            />
 
             <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo" />
