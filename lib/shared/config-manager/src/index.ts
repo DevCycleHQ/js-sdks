@@ -91,7 +91,7 @@ export class EnvironmentConfigManager {
 
     getConfigURL(): string {
         if (this.clientMode) {
-            return `${this.cdnURI}/config/v1/client/${this.sdkKey}.json`
+            return `${this.cdnURI}/config/v1/server/bootstrap/${this.sdkKey}.json`
         }
         return `${this.cdnURI}/config/v1/server/${this.sdkKey}.json`
     }

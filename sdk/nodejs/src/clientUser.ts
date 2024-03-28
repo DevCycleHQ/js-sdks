@@ -1,5 +1,4 @@
-import { DVCPopulatedUser } from '@devcycle/js-client-sdk'
-import { DevCycleUser } from '@devcycle/js-cloud-server-sdk'
+import { DVCPopulatedUser, DevCycleUser } from '@devcycle/js-client-sdk'
 
 export const generateClientPopulatedUser = (
     user: DevCycleUser,
