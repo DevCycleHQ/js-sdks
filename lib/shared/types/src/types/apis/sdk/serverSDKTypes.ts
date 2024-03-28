@@ -83,4 +83,11 @@ export interface DevCycleServerSDKOptions {
      * Overrides the default URL for the DVC Config CDN when using local bucketing.
      */
     configCDNURI?: string
+
+    /**
+     * Enable the ability to create a client configuration for use as a bootstrapping config
+     * Useful for serverside-rendering usecases where the config can be obtained on the server
+     * and provided to the client
+     */
+    enableClientBootstrapping?: boolean
 }
