@@ -1,5 +1,6 @@
 import { ExecutionContext, createParamDecorator } from '@nestjs/common'
 import { DVCVariableValue } from '@devcycle/nodejs-server-sdk'
+import { getRequestFromContext } from './DevCycleModule/RequestWithData'
 
 type VariableValueData = {
     key: string
@@ -8,7 +9,7 @@ type VariableValueData = {
 
 export const VariableValue = createParamDecorator(
     (data: VariableValueData, ctx: ExecutionContext) => {
-        const req = ctx.switchToHttp().getRequest()
+        const req = getRequestFromContext(ctx)
 
         if (!req.dvc_client || !req.dvc_user) {
             throw new Error(

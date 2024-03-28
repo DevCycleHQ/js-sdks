@@ -7,10 +7,12 @@ import {
     MODULE_OPTIONS_TOKEN,
 } from './DevCycleModuleOptions'
 import { RequestInterceptor } from './RequestInterceptor'
+import { DevCycleService } from './DevCycleService'
 
 @Module({
-    exports: [DevCycleClient],
+    exports: [DevCycleClient, DevCycleService],
     providers: [
+        DevCycleService,
         {
             provide: DevCycleClient,
             useFactory: createClient,
