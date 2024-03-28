@@ -90,9 +90,11 @@ export class ConfigBody<IdType = string> {
     debugUsers?: string[]
 
     /**
-     * Ably information used for establishing connections
+     * SSE information used for establishing connections.
      */
-    ably?: {
-        apiKey: string
+    sse?: {
+        hostname: string
+        path: string
+        inactivityDelay: number
     }
 }
