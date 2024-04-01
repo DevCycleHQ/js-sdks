@@ -9,6 +9,7 @@ import {
     mixin,
 } from '@nestjs/common'
 import { DVCVariableValue, DevCycleClient } from '@devcycle/nodejs-server-sdk'
+import { getRequestFromContext } from './DevCycleModule/RequestWithData'
 
 type VariableValues = {
     [key: string]: DVCVariableValue
@@ -30,7 +31,7 @@ const RequireVariableValueInterceptor = (
         ) {}
 
         async intercept(context: ExecutionContext, next: CallHandler) {
-            const req = context.switchToHttp().getRequest()
+            const req = getRequestFromContext(context)
 
             if (!req.dvc_user) {
                 throw new Error(
