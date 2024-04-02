@@ -14,7 +14,7 @@
                 "@nx/dependency-checks": [
                     "error",
                     {
-                        "ignoredDependencies": []
+                        "ignoredDependencies": ["nestjs-cls"]
                     }
                 ]
             }

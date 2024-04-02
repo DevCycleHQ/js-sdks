@@ -5729,6 +5729,8 @@ __metadata:
   resolution: "@devcycle/nestjs-server-sdk@workspace:sdk/nestjs"
   dependencies:
     "@devcycle/nodejs-server-sdk": ^1.24.0
+    "@devcycle/types": ^1.10.0
+    nestjs-cls: ^4.3.0
   peerDependencies:
     "@nestjs/common": ^10.3.3
     "@nestjs/core": ^10.3.3
@@ -25406,6 +25408,18 @@ __metadata:
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: deac9f8d00eda7b2e5cd1b2549e26e10a0faa70adaa6fdadca701cc55f49ee9018e427f424bac0c790b7c7e2d3068db97f3093f1093975f2acb8f8818b936ed9
+  languageName: node
+  linkType: hard
+
+"nestjs-cls@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "nestjs-cls@npm:4.3.0"
+  peerDependencies:
+    "@nestjs/common": "> 7.0.0 < 11"
+    "@nestjs/core": "> 7.0.0 < 11"
+    reflect-metadata: "*"
+    rxjs: ">= 7"
+  checksum: 6981d318ebbf58a7176aad585be649e33ef1c7f6a3eedb81a43180e4c1ffdf242862e7bdb50c9e09485483e5f50a8e72d96026edd5461a2b66000e5dfea2e708
   languageName: node
   linkType: hard
 

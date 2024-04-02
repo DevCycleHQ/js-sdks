@@ -1,26 +1,27 @@
-import { ExecutionContext, createParamDecorator } from '@nestjs/common'
-import { DVCVariableValue } from '@devcycle/nodejs-server-sdk'
-import { getRequestFromContext } from './DevCycleModule/RequestWithData'
+import { createParamDecorator } from '@nestjs/common'
+import {
+    DVCVariableValue,
+    DevCycleClient,
+    DevCycleUser,
+} from '@devcycle/nodejs-server-sdk'
+import { ClsServiceManager } from 'nestjs-cls'
 
 type VariableValueData = {
     key: string
     default: DVCVariableValue
 }
 
-export const VariableValue = createParamDecorator(
-    (data: VariableValueData, ctx: ExecutionContext) => {
-        const req = getRequestFromContext(ctx)
+export const VariableValue = createParamDecorator((data: VariableValueData) => {
+    const cls = ClsServiceManager.getClsService()
 
-        if (!req.dvc_client || !req.dvc_user) {
-            throw new Error(
-                'Missing DevCycle context. Is the DevCycleModule imported?',
-            )
-        }
+    const client = cls.get('dvc_client') as DevCycleClient | undefined
+    const user = cls.get('dvc_user') as DevCycleUser | undefined
 
-        return req.dvc_client.variableValue(
-            req.dvc_user,
-            data.key,
-            data.default,
+    if (!client || !user) {
+        throw new Error(
+            'Missing DevCycle context. Is the DevCycleModule imported?',
         )
-    },
-)
+    }
+
+    return client.variableValue(user, data.key, data.default)
+})
