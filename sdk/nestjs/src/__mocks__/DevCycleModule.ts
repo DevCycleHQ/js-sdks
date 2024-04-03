@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { APP_INTERCEPTOR } from '@nestjs/core'
 import { DevCycleClient } from '@devcycle/nodejs-server-sdk'
+import { ClsModule } from 'nestjs-cls'
 import { MockDevCycleClient } from './DevCycleClient'
 import { RequestInterceptor } from '../DevCycleModule/RequestInterceptor'
 import { DevCycleService } from '../DevCycleModule/DevCycleService'
@@ -10,6 +11,12 @@ import {
 } from '../DevCycleModule/DevCycleModuleOptions'
 
 @Module({
+    imports: [
+        ClsModule.forRoot({
+            global: true,
+            middleware: { mount: true },
+        }),
+    ],
     exports: [DevCycleClient, DevCycleService],
     providers: [
         DevCycleService,
