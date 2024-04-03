@@ -9,7 +9,7 @@ import {
     mixin,
 } from '@nestjs/common'
 import { DVCVariableValue, DevCycleClient } from '@devcycle/nodejs-server-sdk'
-import { getRequestFromContext } from './DevCycleModule/RequestWithData'
+import { ClsService } from 'nestjs-cls'
 
 type VariableValues = {
     [key: string]: DVCVariableValue
@@ -28,12 +28,14 @@ const RequireVariableValueInterceptor = (
     class RequireVariableValueInterceptor implements NestInterceptor {
         constructor(
             @Inject(DevCycleClient) readonly dvcClient: DevCycleClient,
+            private readonly cls: ClsService,
         ) {}
 
         async intercept(context: ExecutionContext, next: CallHandler) {
-            const req = getRequestFromContext(context)
+            const req = context.switchToHttp().getRequest()
+            const user = this.cls.get('dvc_user')
 
-            if (!req.dvc_user) {
+            if (!user) {
                 throw new Error(
                     'Missing user context. Is the DevCycleModule imported?',
                 )
@@ -44,7 +46,7 @@ const RequireVariableValueInterceptor = (
             )) {
                 const defaultValue = getDefaultValue(requiredValue)
                 const { value: servedValue, isDefaulted } =
-                    this.dvcClient.variable(req.dvc_user, key, defaultValue)
+                    this.dvcClient.variable(user, key, defaultValue)
 
                 if (isDefaulted || servedValue !== requiredValue) {
                     throw new NotFoundException(

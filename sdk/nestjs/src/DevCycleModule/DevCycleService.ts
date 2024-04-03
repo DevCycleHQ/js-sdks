@@ -1,21 +1,21 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import {
     DVCVariableValue,
     DevCycleClient,
     DevCycleUser,
 } from '@devcycle/nodejs-server-sdk'
-import { RequestWithData } from './RequestWithData'
-import { REQUEST } from '@nestjs/core'
+import { VariableTypeAlias } from '@devcycle/types'
+import { ClsService } from 'nestjs-cls'
 
 @Injectable()
 export class DevCycleService {
     constructor(
-        private devcycleClient: DevCycleClient,
-        @Inject(REQUEST) private readonly request: RequestWithData,
+        private readonly devcycleClient: DevCycleClient,
+        private readonly cls: ClsService,
     ) {}
 
     getUser(): DevCycleUser {
-        return this.request.dvc_user
+        return this.cls.get('dvc_user')
     }
 
     isEnabled(key: string): boolean {
@@ -25,7 +25,7 @@ export class DevCycleService {
     variableValue<T extends DVCVariableValue>(
         key: string,
         defaultValue: T,
-    ): DVCVariableValue {
+    ): VariableTypeAlias<T> {
         return this.devcycleClient.variableValue(
             this.getUser(),
             key,
