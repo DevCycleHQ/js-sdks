@@ -4,6 +4,7 @@ import {
     DVCVariable,
 } from '@devcycle/js-client-sdk'
 import { BucketedUserConfig } from '@devcycle/types'
+import { setTimeout } from '@testing-library/react-native/build/helpers/timers'
 
 type LiveEvent = {
     type: string
@@ -17,6 +18,7 @@ type ClientData = {
         user?: DevCycleUser
         liveEvents: LiveEvent[]
         loadCount: number
+        expanded: boolean
     }
 }
 
@@ -24,7 +26,29 @@ const clientData: ClientData = {
     current: {
         liveEvents: [],
         loadCount: 0,
+        expanded: false,
     },
+}
+
+const synchronizeIframeUrl = (
+    client: DevCycleClient,
+    iframe: HTMLIFrameElement,
+    position: string,
+    debuggerUrl: string,
+) => {
+    const searchParams = new URLSearchParams()
+    // searchParams.set('project_id', client.config!.project._id)
+    // searchParams.set('org_id', client.config!.project.a0_organization)
+    // searchParams.set('user_id', client.user!.user_id)
+    // searchParams.set('environment_id', client.config!.environment._id)
+    searchParams.set('parentOrigin', window.location.origin)
+    searchParams.set('position', position)
+    const url = `${debuggerUrl}/${client.config!.project.a0_organization}/${
+        client.config!.project._id
+    }/${client.config!.environment._id}?${searchParams.toString()}`
+    if (url !== iframe.src) {
+        iframe.src = url
+    }
 }
 
 const setupClientSubscription = (
@@ -93,6 +117,7 @@ export const createIframe = (
     const updateIframeData = () => {
         clientData.current.config = client.config
         clientData.current.user = client.user
+        synchronizeIframeUrl(client, iframe, position, debuggerUrl)
         console.log('posting message', clientData.current)
         iframe.contentWindow?.postMessage(
             {
@@ -121,6 +146,15 @@ export const createIframe = (
                 })
             } else if (event.data.type === 'DEVCYCLE_REFRESH') {
                 updateIframeData()
+            } else if (event.data.type === 'DEVCYCLE_TOGGLE_OVERLAY') {
+                clientData.current.expanded = !clientData.current.expanded
+                iframe.style.width = clientData.current.expanded
+                    ? '500px'
+                    : '80px'
+                iframe.style.height = clientData.current.expanded
+                    ? '700px'
+                    : '80px'
+                updateIframeData()
             }
         }
     }
@@ -131,18 +165,10 @@ export const createIframe = (
             clientData.current.config = client.config
             clientData.current.user = client.user
 
-            const searchParams = new URLSearchParams()
-            searchParams.set('project_id', client.config!.project._id)
-            searchParams.set('org_id', client.config!.project.a0_organization)
-            searchParams.set('user_id', client.user!.user_id)
-            searchParams.set('environment_id', client.config!.environment._id)
-            searchParams.set('parentOrigin', window.location.origin)
-            searchParams.set('position', position)
-
             iframe.id = 'devcycle-debugger-iframe'
-            iframe.src = `${debuggerUrl}?${searchParams.toString()}`
-            iframe.style.width = '500px'
-            iframe.style.height = '700px'
+            synchronizeIframeUrl(client, iframe, position, debuggerUrl)
+            iframe.style.width = '80px'
+            iframe.style.height = '80px'
             iframe.style.position = 'fixed'
             iframe.style.bottom = '25px'
             if (position === 'left') {
