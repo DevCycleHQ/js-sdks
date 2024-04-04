@@ -11445,10 +11445,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.14.4":
-  version: 18.14.4
-  resolution: "@types/node@npm:18.14.4"
-  checksum: 3f2f625777747b9f87e793eea5a8bbf1ac2c828846bda5811d07a457d55cfe6762239779759de61e7b7e917632b9ceee3f7ffd2a024117e7ec364dc1b4eb8d55
+"@types/node@npm:20.12.4":
+  version: 20.12.4
+  resolution: "@types/node@npm:20.12.4"
+  dependencies:
+    undici-types: ~5.26.4
+  checksum: c29879642bd4f1f35ffc6e2356121c5ffdb6530d41db1e6ac013c6fbd1dfa4b213b9529a1213cf1f320f801423d00301176ffb41689f790b0cd8c1e82fe3ee74
   languageName: node
   linkType: hard
 
@@ -16385,7 +16387,7 @@ __metadata:
     "@types/hoist-non-react-statics": ^3.3.1
     "@types/jest": 29.4.4
     "@types/lodash": ^4.14.175
-    "@types/node": 18.14.4
+    "@types/node": 20.12.4
     "@types/react": 18.2.20
     "@types/react-dom": 18.2.0
     "@types/ua-parser-js": ^0.7.38
