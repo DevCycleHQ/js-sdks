@@ -1498,26 +1498,26 @@ __metadata:
 
 "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server::locator=e2e-js-cloud-server%40workspace%3A.":
   version: 1.8.1
-  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=cd9abb&locator=e2e-js-cloud-server%40workspace%3A."
+  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=d608a5&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
     "@devcycle/types": ^1.9.1
     cross-fetch: ^4.0.0
     fetch-retry: ^5.0.6
     lodash: ^4.17.21
-  checksum: 2d5697d86f2a28ce1e2b308d7ef2b32948e2b7fb94d406b8eafb11556edeac4b34eb28a5fa60f11cc9abbd2539cba9fe2b387b6d5e8658d368ac2be98a706950
+  checksum: 2701282cc5e1026e341b08d0184a1d1a0418a6804b135615f0147b105c2f548ac351f7aed9290ca8b7fc85f4162766d638ed9782b4db0be5266d54f6791ac270
   languageName: node
   linkType: hard
 
 "@devcycle/types@file:../../../dist/lib/shared/types::locator=e2e-js-cloud-server%40workspace%3A.":
   version: 1.9.1
-  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=4210b0&locator=e2e-js-cloud-server%40workspace%3A."
+  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=592588&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
     class-transformer: 0.5.1
     class-validator: 0.14.1
     iso-639-1: ^2.1.13
     lodash: ^4.17.21
     reflect-metadata: ^0.1.13
-  checksum: 42d15c555d1a2eee388f90bf590dee15387c6b79db9b4d5a5d13fc82b35724bfbb7f341bebc2bbb69733c09d7b656326109458dee88fa3d5da74c6f804325bc6
+  checksum: b95507448b925ee71f78034f1240d680f429f99aa3b4c265ea4dd2f5a8f79d15d146da6da3d682d3eec8ff800d2b2e8dc0c2118a3f361178a5b3c5b9ab79890b
   languageName: node
   linkType: hard
 
@@ -6681,11 +6681,11 @@ __metadata:
   linkType: hard
 
 "undici@npm:^5.28.2":
-  version: 5.28.3
-  resolution: "undici@npm:5.28.3"
+  version: 5.28.4
+  resolution: "undici@npm:5.28.4"
   dependencies:
     "@fastify/busboy": ^2.0.0
-  checksum: fa1e65aff896c5e2ee23637b632e306f9e3a2b32a3dc0b23ea71e5555ad350bcc25713aea894b3dccc0b7dc2c5e92a5a58435ebc2033b731a5524506f573dfd2
+  checksum: a8193132d84540e4dc1895ecc8dbaa176e8a49d26084d6fbe48a292e28397cd19ec5d13bc13e604484e76f94f6e334b2bdc740d5f06a6e50c44072818d0c19f9
   languageName: node
   linkType: hard
 
