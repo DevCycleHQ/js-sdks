@@ -4,7 +4,6 @@ import {
     DVCVariable,
 } from '@devcycle/js-client-sdk'
 import { BucketedUserConfig } from '@devcycle/types'
-import { setTimeout } from '@testing-library/react-native/build/helpers/timers'
 
 type LiveEvent = {
     type: string
