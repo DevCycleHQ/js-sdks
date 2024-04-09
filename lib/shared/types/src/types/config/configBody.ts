@@ -96,7 +96,6 @@ export class ConfigBody<IdType = string> {
         hostname: string
         path: string
         channel: string
-        inactivityDelay: number
     }
     /**
      * @deprecated Deprecated ably connection/configuration
