@@ -36,10 +36,6 @@ const synchronizeIframeUrl = (
     debuggerUrl: string,
 ) => {
     const searchParams = new URLSearchParams()
-    // searchParams.set('project_id', client.config!.project._id)
-    // searchParams.set('org_id', client.config!.project.a0_organization)
-    // searchParams.set('user_id', client.user!.user_id)
-    // searchParams.set('environment_id', client.config!.environment._id)
     searchParams.set('parentOrigin', window.location.origin)
     searchParams.set('position', position)
     const url = `${debuggerUrl}/${client.config!.project.a0_organization}/${
@@ -112,6 +108,7 @@ export const createIframe = (
     }: DebuggerIframeOptions = {},
 ): (() => void) => {
     const iframe = document.createElement('iframe')
+    const buttomIframe = document.createElement('iframe')
 
     const updateIframeData = () => {
         clientData.current.config = client.config
@@ -149,11 +146,11 @@ export const createIframe = (
                 clientData.current.expanded = !clientData.current.expanded
                 iframe.style.width = clientData.current.expanded
                     ? '500px'
-                    : '80px'
+                    : '0px'
                 iframe.style.height = clientData.current.expanded
                     ? '700px'
-                    : '80px'
-                updateIframeData()
+                    : '0px'
+                setTimeout(updateIframeData, 10)
             }
         }
     }
@@ -166,8 +163,8 @@ export const createIframe = (
 
             iframe.id = 'devcycle-debugger-iframe'
             synchronizeIframeUrl(client, iframe, position, debuggerUrl)
-            iframe.style.width = '80px'
-            iframe.style.height = '80px'
+            iframe.style.width = '0px'
+            iframe.style.height = '0px'
             iframe.style.position = 'fixed'
             iframe.style.bottom = '25px'
             if (position === 'left') {
@@ -183,7 +180,26 @@ export const createIframe = (
                 clientData.current.loadCount += 1
             }
 
+            buttomIframe.id = 'devcycle-debugger-buttom-iframe'
+            buttomIframe.style.width = '80px'
+            buttomIframe.style.height = '80px'
+            buttomIframe.style.position = 'fixed'
+            buttomIframe.style.bottom = '25px'
+            if (position === 'left') {
+                buttomIframe.style.left = '25px'
+            } else {
+                buttomIframe.style.right = '25px'
+            }
+            buttomIframe.style.border = 'none'
+            buttomIframe.style.overflow = 'hidden'
+            buttomIframe.title = 'Devcycle Debugger'
+            const searchParams = new URLSearchParams()
+            searchParams.set('parentOrigin', window.location.origin)
+            searchParams.set('position', position)
+            buttomIframe.src = `${debuggerUrl}/button?${searchParams.toString()}`
+
             document.body.appendChild(iframe)
+            document.body.appendChild(buttomIframe)
         })
     }
 
