@@ -1,4 +1,4 @@
-import { Audience, AudienceFilter } from './audience'
+import { Audience, AudienceFilter, TopLevelOperator } from './audience'
 import { Type } from 'class-transformer'
 
 export enum TargetingRuleTypes {
@@ -62,6 +62,10 @@ export class TargetDistribution<IdType = string> {
     percentage: number
 }
 
+export class TargetAudience<IdType = string> {
+    filters: TopLevelOperator<IdType>
+}
+
 /**
  * Defines an Audience Target including the Audience model, rollout, and variation distribution
  * _id needed as it will be used as the seed in the hashing function to determine a given users position
@@ -73,7 +77,7 @@ export class Target<IdType = string> {
     /**
      * Audience model describing target segmentation.
      */
-    _audience: Pick<Audience<IdType>, 'filters'>
+    _audience: TargetAudience<IdType>
 
     /**
      * Rollout sub-document describing how a Target's audience is rolled out
