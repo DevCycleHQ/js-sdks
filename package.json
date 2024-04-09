@@ -92,7 +92,7 @@
         "@nx/js": "16.10.0",
         "@nx/linter": "16.10.0",
         "@nx/next": "16.10.0",
-        "@nx/node": "16.10.0",
+        "@nx/node": "18.2.4",
         "@nx/playwright": "16.10.0",
         "@nx/react": "16.10.0",
         "@nx/react-native": "16.10.0",
