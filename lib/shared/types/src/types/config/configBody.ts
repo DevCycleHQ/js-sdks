@@ -102,6 +102,6 @@ export class ConfigBody<IdType = string> {
      * @deprecated Deprecated ably connection/configuration
      */
     ably?: {
-        apiKey: string;
-    };
+        apiKey: string
+    }
 }
