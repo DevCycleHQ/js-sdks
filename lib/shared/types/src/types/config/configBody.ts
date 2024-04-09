@@ -90,7 +90,15 @@ export class ConfigBody<IdType = string> {
     debugUsers?: string[]
 
     /**
-     * Ably information used for establishing connections
+     * SSE information used for establishing connections.
+     */
+    sse?: {
+        hostname: string
+        path: string
+        channel: string
+    }
+    /**
+     * @deprecated Deprecated ably connection/configuration
      */
     ably?: {
         apiKey: string
