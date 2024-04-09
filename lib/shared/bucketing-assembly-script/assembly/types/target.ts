@@ -145,7 +145,7 @@ export class AudienceOperator extends JSON.Value {
     }
 }
 
-export class NoIdAudience extends JSON.Value {
+export class Audience extends JSON.Value {
     readonly filters: AudienceOperator
 
     constructor(audience: JSON.Obj) {
@@ -156,22 +156,6 @@ export class NoIdAudience extends JSON.Value {
 
     stringify(): string {
         const json = new JSON.Obj()
-        json.set('filters', this.filters)
-        return json.stringify()
-    }
-}
-
-export class Audience extends NoIdAudience {
-    readonly _id: string
-
-    constructor(audience: JSON.Obj) {
-        super(audience)
-        this._id = getStringFromJSON(audience, '_id')
-    }
-
-    stringify(): string {
-        const json = new JSON.Obj()
-        json.set('_id', this._id)
         json.set('filters', this.filters)
         return json.stringify()
     }
