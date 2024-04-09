@@ -1,10 +1,10 @@
 {
     "name": "@devcycle/openfeature-web-provider",
-    "version": "0.8.2",
+    "version": "0.8.3",
     "description": "OpenFeature Web SDK Provider for DevCycle JS SDK",
     "license": "MIT",
     "dependencies": {
-        "@devcycle/js-client-sdk": "^1.22.2"
+        "@devcycle/js-client-sdk": "^1.22.3"
     },
     "peerDependencies": {
         "@openfeature/web-sdk": "^0.4.12"
