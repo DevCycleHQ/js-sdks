@@ -96,6 +96,7 @@ export class ConfigBody<IdType = string> {
         hostname: string
         path: string
         channel: string
+        testProperty: string
     }
     /**
      * @deprecated Deprecated ably connection/configuration
