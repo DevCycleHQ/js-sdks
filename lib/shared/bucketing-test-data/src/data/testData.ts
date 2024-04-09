@@ -9,7 +9,8 @@ import {
     PublicEnvironment,
     PublicProject,
     PublicVariable,
-    PublicVariation, TargetAudience,
+    PublicVariation,
+    TargetAudience,
     UserSubType,
     VariableType,
 } from '@devcycle/types'
@@ -46,7 +47,7 @@ export const reusableAudiences: PublicAudience[] = [
             ],
             operator: AudienceOperator.and,
         },
-    }
+    },
 ]
 
 export const audiences: TargetAudience[] = [
