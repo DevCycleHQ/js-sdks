@@ -8,7 +8,8 @@ import {
     validSubTypes,
     CustomDataFilter,
     UserFilter,
-    NoIdAudience, AudienceMatchFilter
+    AudienceMatchFilter,
+    Audience
 } from '../types'
 import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import { getF64FromJSONValue } from '../helpers/jsonHelpers'
@@ -24,7 +25,7 @@ import { getF64FromJSONValue } from '../helpers/jsonHelpers'
  */
 export function _evaluateOperator(
     operator: AudienceOperator,
-    audiences: Map<string, NoIdAudience>,
+    audiences: Map<string, Audience>,
     user: DVCPopulatedUser,
     clientCustomData: JSON.Obj
 ): bool {
@@ -61,7 +62,7 @@ export function _evaluateOperator(
 
 function doesUserPassFilter(
     filter: AudienceFilter,
-    audiences: Map<string, NoIdAudience>,
+    audiences: Map<string, Audience>,
     user: DVCPopulatedUser,
     clientCustomData: JSON.Obj
 ): bool {
@@ -96,7 +97,7 @@ function doesUserPassFilter(
 
 function filterForAudienceMatch(
     filter: AudienceMatchFilter,
-    configAudiences: Map<string, NoIdAudience>,
+    configAudiences: Map<string, Audience>,
     user: DVCPopulatedUser,
     clientCustomData: JSON.Obj
 ): bool {

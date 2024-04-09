@@ -102,6 +102,43 @@ export enum AudienceOperator {
     or = 'or',
 }
 
+export class AudienceFilter<IdType = string> {
+    /**
+     * Filter type of this audience filter (user, audienceTemplate etc.)
+     */
+    type: FilterType
+
+    /**
+     * Sub type of this filter (appVersion, mixpanel etc.)
+     */
+    subType?: UserSubType
+
+    /**
+     * Comparator to use if this is a filter
+     */
+    comparator: FilterComparator
+
+    /**
+     * Data Key used for custom data and other filter sub-type that require a key-value mapping.
+     */
+    dataKey?: string
+
+    /**
+     * Data Key used for custom data and other filter sub-type that require a key-value mapping.
+     */
+    dataKeyType?: DataKeyType
+
+    /**
+     * Filter values to segment against, must be set for all filter types other than 'all'
+     */
+    values?: string[] | boolean[] | number[]
+
+    /**
+     * Array of audience id's for filters of type audienceMatch
+     */
+    _audiences?: IdType[]
+}
+
 /**
  * Audience filter used to describe a segmentation for a user audience.
  */

@@ -10,6 +10,7 @@ import {
     PublicProject,
     PublicVariable,
     PublicVariation,
+    TargetAudience,
     UserSubType,
     VariableType,
 } from '@devcycle/types'
@@ -32,7 +33,7 @@ export const environment: PublicEnvironment = {
     key: 'test-environment',
 }
 
-export const audiences: PublicAudience[] = [
+export const reusableAudiences: PublicAudience[] = [
     {
         _id: '614ef6ea475929459060721a',
         filters: {
@@ -47,8 +48,23 @@ export const audiences: PublicAudience[] = [
             operator: AudienceOperator.and,
         },
     },
+]
+
+export const audiences: TargetAudience[] = [
     {
-        _id: '6153557f1ed7bac7268ea0d9',
+        filters: {
+            filters: [
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.email,
+                    comparator: FilterComparator['='],
+                    values: ['test@email.com', 'test2@email.com'],
+                },
+            ],
+            operator: AudienceOperator.and,
+        },
+    },
+    {
         filters: {
             filters: [
                 {
@@ -85,7 +101,6 @@ export const audiences: PublicAudience[] = [
         },
     },
     {
-        _id: '6153557f1ed7bac7268ea0d5',
         filters: {
             filters: [
                 {
@@ -115,7 +130,6 @@ export const audiences: PublicAudience[] = [
         },
     },
     {
-        _id: '6153557f1ed7bac7268ea0d6',
         filters: {
             filters: [
                 {
@@ -139,7 +153,6 @@ export const audiences: PublicAudience[] = [
         },
     },
     {
-        _id: '6153557f1ed7bac7268ea074',
         filters: {
             filters: [
                 {
@@ -152,7 +165,6 @@ export const audiences: PublicAudience[] = [
         },
     },
     {
-        _id: '6153557f1ed7bac7268ea0d7',
         filters: {
             filters: [
                 {
@@ -168,7 +180,6 @@ export const audiences: PublicAudience[] = [
         },
     },
     {
-        _id: '6153557f1ed7bac7268ea0d8',
         filters: {
             filters: [
                 {
@@ -404,10 +415,11 @@ function configBodyAudiences(audiences: PublicAudience[]): {
     })
     return auds
 }
+
 export const config: ConfigBody = {
     project,
     environment,
-    audiences: configBodyAudiences(audiences),
+    audiences: configBodyAudiences(reusableAudiences),
     features: [
         {
             _id: '614ef6aa473928459060721a',
@@ -634,7 +646,7 @@ export const barrenConfig: ConfigBody = {
 export const configWithNullCustomData: ConfigBody = {
     project,
     environment,
-    audiences: configBodyAudiences(audiences),
+    audiences: configBodyAudiences(reusableAudiences),
     features: [
         {
             _id: '614ef6aa475928459060721d',

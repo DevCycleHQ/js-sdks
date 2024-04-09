@@ -9,7 +9,7 @@ import {
     getJSONObjFromJSONOptional,
 } from '../helpers/jsonHelpers'
 import { Feature } from './feature'
-import { NoIdAudience } from './target'
+import { Audience } from './target'
 
 export class PublicProject extends JSON.Value {
     readonly _id: string
@@ -79,7 +79,7 @@ export class Variable extends JSON.Value {
 
 export class ConfigBody {
     readonly project: PublicProject
-    readonly audiences: Map<string, NoIdAudience>
+    readonly audiences: Map<string, Audience>
     readonly environment: PublicEnvironment
     readonly features: Feature[]
     readonly variables: Variable[]
@@ -170,13 +170,13 @@ export class ConfigBody {
             configJSONObj,
             'audiences',
         )
-        const audiences = new Map<string, NoIdAudience>()
+        const audiences = new Map<string, Audience>()
         if (audiencesJSON) {
             const audienceKeys = audiencesJSON.keys
             for (let i = 0; i < audienceKeys.length; i++) {
                 const audience_id = audienceKeys[i]
                 const aud = audiencesJSON.get(audience_id)
-                audiences.set(audience_id, new NoIdAudience(aud as JSON.Obj))
+                audiences.set(audience_id, new Audience(aud as JSON.Obj))
             }
         }
         this.audiences = audiences
