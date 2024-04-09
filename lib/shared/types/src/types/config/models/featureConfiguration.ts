@@ -1,4 +1,4 @@
-import { Audience } from './audience'
+import { Audience, AudienceFilter } from './audience'
 import { Type } from 'class-transformer'
 
 export enum TargetingRuleTypes {
@@ -73,7 +73,7 @@ export class Target<IdType = string> {
     /**
      * Audience model describing target segmentation.
      */
-    _audience: Audience<IdType>
+    _audience: Pick<Audience<IdType>, 'filters'>
 
     /**
      * Rollout sub-document describing how a Target's audience is rolled out

@@ -4,15 +4,16 @@ import pick from 'lodash/pick'
 import last from 'lodash/last'
 import first from 'lodash/first'
 import {
-    ConfigBody,
-    PublicTarget,
-    PublicFeature,
+    AudienceOperator,
     BucketedUserConfig,
+    ConfigBody,
+    DVCBucketingUser,
+    Feature,
+    PublicFeature,
     PublicRollout,
     PublicRolloutStage,
-    DVCBucketingUser,
+    PublicTarget,
     Variation,
-    Feature,
 } from '@devcycle/types'
 
 import murmurhash from 'murmurhash'
