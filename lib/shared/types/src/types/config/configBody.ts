@@ -95,6 +95,13 @@ export class ConfigBody<IdType = string> {
     sse?: {
         hostname: string
         path: string
+        channel: string
         inactivityDelay: number
     }
+    /**
+     * @deprecated Deprecated ably connection/configuration
+     */
+    ably?: {
+        apiKey: string;
+    };
 }
