@@ -95,7 +95,6 @@ export class ConfigBody<IdType = string> {
     sse?: {
         hostname: string
         path: string
-        channel: string
     }
     /**
      * @deprecated Deprecated ably connection/configuration
