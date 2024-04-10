@@ -2,6 +2,9 @@
 
 The Node.js Server SDK for DevCycle.
 
+DevCycle is a feature flag management provider with robust support for user targeting, realtime updates of flag values
+and deep integrations with your development workflow.
+
 This SDK uses local bucketing to perform all user segmentation and bucketing locally in the SDK, 
 providing immediate responses to variable and feature requests for a user. 
 The SDK will download the latest version of your DevCycle environments configuration from a CDN on initialization,
@@ -17,4 +20,4 @@ npm install @devcycle/nodejs-server-sdk
 
 ### Usage
 
-To find usage documentation, visit our [docs](https://docs.devcycle.com/docs/sdk/server-side-sdks/node#usage).
+To find usage documentation, visit our [docs](https://docs.devcycle.com/docs/sdk/server-side-sdks/node).

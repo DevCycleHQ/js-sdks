@@ -3,6 +3,20 @@
     "version": "1.14.4",
     "description": "The DevCycle React Native SDK used for feature management.",
     "main": "dist/index.js",
+    "author": "DevCycle <support@devcycle.com>",
+    "keywords": [
+        "devcycle",
+        "feature flag",
+        "javascript",
+        "client",
+        "react native",
+        "sdk"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/DevCycleHQ/js-sdks.git"
+    },
+    "homepage": "https://devcycle.com",
     "scripts": {
         "clean": "rimraf dist",
         "test": "jest",
@@ -10,7 +24,6 @@
         "build": "yarn clean && yarn tsc"
     },
     "types": "dist/index.d.ts",
-    "author": "",
     "license": "MIT",
     "dependencies": {
         "@devcycle/js-client-sdk": "^1.22.4",

@@ -9,8 +9,22 @@
         "tsc": "tsc",
         "build": "yarn clean && yarn tsc"
     },
+    "author": "DevCycle <support@devcycle.com>",
+    "keywords": [
+        "devcycle",
+        "feature flag",
+        "javascript",
+        "client",
+        "react native",
+        "expo",
+        "sdk"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/DevCycleHQ/js-sdks.git"
+    },
+    "homepage": "https://devcycle.com",
     "types": "dist/index.d.ts",
-    "author": "",
     "license": "MIT",
     "dependencies": {
         "@devcycle/js-client-sdk": "^1.22.4",
