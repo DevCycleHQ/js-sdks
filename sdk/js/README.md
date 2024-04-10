@@ -2,6 +2,9 @@
 
 The JS SDK for DevCycle!
 
+DevCycle is a feature flag management provider with robust support for user targeting, realtime updates of flag values
+and deep integrations with your development workflow.
+
 # Installation
 
 Our library can be found on npm and installed by the following:

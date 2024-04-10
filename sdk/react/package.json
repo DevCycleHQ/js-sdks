@@ -2,13 +2,26 @@
     "name": "@devcycle/react-client-sdk",
     "version": "1.20.4",
     "description": "The DevCycle React SDK used for feature management.",
+    "author": "DevCycle <support@devcycle.com>",
+    "keywords": [
+        "devcycle",
+        "feature flag",
+        "javascript",
+        "client",
+        "react",
+        "sdk"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/DevCycleHQ/js-sdks.git"
+    },
+    "homepage": "https://devcycle.com",
     "scripts": {
         "clean": "rimraf dist",
         "test": "jest",
         "tsc": "tsc",
         "build": "yarn clean && yarn tsc"
     },
-    "author": "",
     "license": "MIT",
     "devDependencies": {
         "cross-fetch": "4.0.0"

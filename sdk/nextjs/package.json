@@ -1,6 +1,22 @@
 {
     "name": "@devcycle/nextjs-sdk",
     "version": "1.6.4",
+    "license": "MIT",
+    "author": "DevCycle <support@devcycle.com>",
+    "keywords": [
+        "devcycle",
+        "feature flag",
+        "javascript",
+        "client",
+        "nextjs",
+        "server components",
+        "sdk"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/DevCycleHQ/js-sdks.git"
+    },
+    "homepage": "https://devcycle.com",
     "dependencies": {
         "@devcycle/bucketing": "^1.13.4",
         "@devcycle/js-client-sdk": "^1.22.4",

@@ -1,7 +1,10 @@
-# react-native
+# DevCycle React Native SDK
 
-This library was generated with [Nx](https://nx.dev).
+The React Native SDK for DevCycle!
 
-## Running unit tests
+DevCycle is a feature flag management provider with robust support for user targeting, realtime updates of flag values
+and deep integrations with your development workflow.
 
-Run `nx test react-native` to execute the unit tests via [Jest](https://jestjs.io).
+# Usage
+
+To find usage documentation, visit our [docs](https://docs.devcycle.com/sdk/client-side-sdks/react-native/).
