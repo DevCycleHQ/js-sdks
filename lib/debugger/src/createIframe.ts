@@ -29,194 +29,262 @@ const clientData: ClientData = {
     },
 }
 
-const synchronizeIframeUrl = (
-    client: DevCycleClient,
-    iframe: HTMLIFrameElement,
-    position: string,
-    debuggerUrl: string,
-) => {
-    const searchParams = new URLSearchParams()
-    searchParams.set('parentOrigin', window.location.origin)
-    searchParams.set('position', position)
-    const url = `${debuggerUrl}/${client.config!.project.a0_organization}/${
-        client.config!.project._id
-    }/${client.config!.environment._id}?${searchParams.toString()}`
-    if (url !== iframe.src) {
-        iframe.src = url
-    }
-}
-
-const setupClientSubscription = (
-    client: DevCycleClient,
-    postDataMessage: () => void,
-) => {
-    const addEvent = (event: any) => {
-        clientData.current.liveEvents.unshift(event)
-    }
-
-    const onConfigUpdated = () => {
-        clientData.current.config = client.config
-        clientData.current.user = client.user
-        addEvent({ type: 'configUpdated', date: Date.now() })
-        postDataMessage()
-    }
-    const onVariableEvaluated = (key: string, variable: DVCVariable<any>) => {
-        addEvent({
-            type: 'variableEvaluated',
-            key,
-            variable: { ...variable },
-            date: Date.now(),
-        })
-        postDataMessage()
-    }
-    const onVariableUpdated = (
-        key: string,
-        variable: DVCVariable<any> | null,
-    ) => {
-        console.log('VARIABLE UPDATED!')
-        addEvent({
-            type: 'variableUpdated',
-            key,
-            variable: variable ? { ...variable } : null,
-            date: Date.now(),
-        })
-        postDataMessage()
-    }
-    console.log('subscribing to events')
-    client.subscribe('configUpdated', onConfigUpdated)
-    client.subscribe('variableEvaluated:*', onVariableEvaluated)
-    client.subscribe('variableUpdated:*', onVariableUpdated)
-
-    return () => {
-        console.log('unsubscribing to events')
-        client.unsubscribe('configUpdated', onConfigUpdated)
-        client.unsubscribe('variableEvaluated:*', onVariableEvaluated)
-        client.unsubscribe('variableUpdated:*', onVariableUpdated)
-    }
-}
-
 export type DebuggerIframeOptions = {
     position?: 'left' | 'right'
     debuggerUrl?: string
+    debugLogs?: boolean
+    shouldEnable?: boolean | (() => boolean)
+    shouldEnableVariable?: string
 }
 
-export const createIframe = (
-    client: DevCycleClient,
-    {
-        position = 'right',
-        debuggerUrl = 'https://debugger.devcycle.com',
-    }: DebuggerIframeOptions = {},
-): (() => void) => {
-    const iframe = document.createElement('iframe')
-    const buttomIframe = document.createElement('iframe')
+const defaultEnabledCheck = () => {
+    return process.env['NODE_ENV'] === 'development'
+}
 
-    const updateIframeData = () => {
-        clientData.current.config = client.config
-        clientData.current.user = client.user
-        synchronizeIframeUrl(client, iframe, position, debuggerUrl)
-        console.log('posting message', clientData.current)
-        iframe.contentWindow?.postMessage(
+class IframeManager {
+    mainIframe: HTMLIFrameElement
+    buttonIframe: HTMLIFrameElement
+    debuggerUrl: string
+    position: string
+    debugLogs: boolean
+    client: DevCycleClient
+
+    constructor(
+        client: DevCycleClient,
+        {
+            position = 'right',
+            debuggerUrl = 'https://debugger.devcycle.com',
+            debugLogs = false,
+        }: DebuggerIframeOptions = {},
+    ) {
+        this.client = client
+        this.debuggerUrl = debuggerUrl
+        this.position = position
+        this.debugLogs = debugLogs
+        this.mainIframe = document.createElement('iframe')
+        this.buttonIframe = document.createElement('iframe')
+    }
+
+    createIframeWhenReady() {
+        this.client.onClientInitialized().then(() => {
+            clientData.current.config = this.client.config
+            clientData.current.user = this.client.user
+            this.createMainIframe()
+            this.createButtonIframe()
+        })
+    }
+
+    updateIframeData() {
+        clientData.current.config = this.client.config
+        clientData.current.user = this.client.user
+        this.synchronizeIframeUrl()
+        if (this.debugLogs) {
+            this.log('posting message', clientData.current)
+        }
+        this.mainIframe.contentWindow?.postMessage(
             {
                 ...clientData.current,
                 type: 'dvcDebuggerData',
             },
-            debuggerUrl,
+            this.debuggerUrl,
         )
     }
 
-    const cleanup = setupClientSubscription(client, updateIframeData)
+    setupSubscriptions() {
+        const addEvent = (event: any) => {
+            clientData.current.liveEvents.unshift(event)
+        }
 
-    const listener = (event: MessageEvent) => {
-        if (event.origin === debuggerUrl) {
-            console.log('Message received from iframe: ', event.data)
+        const onConfigUpdated = () => {
+            clientData.current.config = this.client.config
+            clientData.current.user = this.client.user
+            addEvent({ type: 'configUpdated', date: Date.now() })
+            this.updateIframeData()
+        }
+        const onVariableEvaluated = (
+            key: string,
+            variable: DVCVariable<any>,
+        ) => {
+            addEvent({
+                type: 'variableEvaluated',
+                key,
+                variable: { ...variable },
+                date: Date.now(),
+            })
+            this.updateIframeData()
+        }
+        const onVariableUpdated = (
+            key: string,
+            variable: DVCVariable<any> | null,
+        ) => {
+            addEvent({
+                type: 'variableUpdated',
+                key,
+                variable: variable ? { ...variable } : null,
+                date: Date.now(),
+            })
+            this.updateIframeData()
+        }
+        this.log('subscribing to events')
+        this.client.subscribe('configUpdated', onConfigUpdated)
+        this.client.subscribe('variableEvaluated:*', onVariableEvaluated)
+        this.client.subscribe('variableUpdated:*', onVariableUpdated)
+
+        window.addEventListener(
+            'message',
+            this.iframeMessageReceiver.bind(this),
+        )
+
+        return () => {
+            this.log('unsubscribing from events')
+            this.client.unsubscribe('configUpdated', onConfigUpdated)
+            this.client.unsubscribe('variableEvaluated:*', onVariableEvaluated)
+            this.client.unsubscribe('variableUpdated:*', onVariableUpdated)
+            window.removeEventListener(
+                'message',
+                this.iframeMessageReceiver.bind(this),
+            )
+        }
+    }
+
+    createButtonIframe() {
+        this.buttonIframe.id = 'devcycle-debugger-button-iframe'
+        this.buttonIframe.style.width = '80px'
+        this.buttonIframe.style.height = '80px'
+        this.buttonIframe.style.position = 'fixed'
+        this.buttonIframe.style.bottom = '25px'
+        if (this.position === 'left') {
+            this.buttonIframe.style.left = '25px'
+        } else {
+            this.buttonIframe.style.right = '25px'
+        }
+        this.buttonIframe.style.border = 'none'
+        this.buttonIframe.style.overflow = 'hidden'
+        this.buttonIframe.title = 'Devcycle Debugger'
+        const searchParams = new URLSearchParams()
+        searchParams.set('parentOrigin', window.location.origin)
+        searchParams.set('position', this.position)
+        this.buttonIframe.src = `${
+            this.debuggerUrl
+        }/button?${searchParams.toString()}`
+
+        document.body.appendChild(this.buttonIframe)
+    }
+
+    createMainIframe() {
+        this.mainIframe.id = 'devcycle-debugger-iframe'
+        this.synchronizeIframeUrl()
+        this.mainIframe.style.width = '0px'
+        this.mainIframe.style.height = '0px'
+        this.mainIframe.style.position = 'fixed'
+        this.mainIframe.style.bottom = '25px'
+        if (this.position === 'left') {
+            this.mainIframe.style.left = '25px'
+        } else {
+            this.mainIframe.style.right = '25px'
+        }
+        this.mainIframe.style.border = 'none'
+        this.mainIframe.style.overflow = 'hidden'
+        this.mainIframe.title = 'Devcycle Debugger'
+        this.mainIframe.allow = 'clipboard-read; clipboard-write'
+        this.mainIframe.onload = () => {
+            clientData.current.loadCount += 1
+        }
+        document.body.appendChild(this.mainIframe)
+    }
+
+    synchronizeIframeUrl() {
+        const searchParams = new URLSearchParams()
+        searchParams.set('parentOrigin', window.location.origin)
+        searchParams.set('position', this.position)
+        const url = `${this.debuggerUrl}/${
+            this.client.config!.project.a0_organization
+        }/${this.client.config!.project._id}/${
+            this.client.config!.environment._id
+        }?${searchParams.toString()}`
+        if (url !== this.mainIframe.src) {
+            this.mainIframe.src = url
+        }
+    }
+
+    iframeMessageReceiver(event: MessageEvent) {
+        if (event.origin === this.debuggerUrl) {
+            this.log('Message received from iframe: ', event.data)
             if (
                 event.data.type === 'DEVCYCLE_IDENTIFY_USER' &&
                 event.data.user
             ) {
-                client.identifyUser(event.data.user).then(() => {
-                    updateIframeData()
+                this.client.identifyUser(event.data.user).then(() => {
+                    this.updateIframeData()
                 })
             } else if (event.data.type === 'DEVCYCLE_RESET_USER') {
-                client.resetUser().then(() => {
-                    updateIframeData()
+                this.client.resetUser().then(() => {
+                    this.updateIframeData()
                 })
             } else if (event.data.type === 'DEVCYCLE_REFRESH') {
-                updateIframeData()
+                this.updateIframeData()
             } else if (event.data.type === 'DEVCYCLE_TOGGLE_OVERLAY') {
                 clientData.current.expanded = !clientData.current.expanded
-                iframe.style.width = clientData.current.expanded
+                this.mainIframe.style.width = clientData.current.expanded
                     ? '500px'
                     : '0px'
-                iframe.style.height = clientData.current.expanded
+                this.mainIframe.style.height = clientData.current.expanded
                     ? '700px'
                     : '0px'
-                setTimeout(updateIframeData, 10)
+                setTimeout(() => this.updateIframeData(), 10)
             }
         }
     }
-    window.addEventListener('message', listener)
 
-    const createIframeWhenReady = () => {
-        client.onClientInitialized().then(() => {
-            clientData.current.config = client.config
-            clientData.current.user = client.user
-
-            iframe.id = 'devcycle-debugger-iframe'
-            synchronizeIframeUrl(client, iframe, position, debuggerUrl)
-            iframe.style.width = '0px'
-            iframe.style.height = '0px'
-            iframe.style.position = 'fixed'
-            iframe.style.bottom = '25px'
-            if (position === 'left') {
-                iframe.style.left = '25px'
-            } else {
-                iframe.style.right = '25px'
-            }
-            iframe.style.border = 'none'
-            iframe.style.overflow = 'hidden'
-            iframe.title = 'Devcycle Debugger'
-            iframe.allow = 'clipboard-read; clipboard-write'
-            iframe.onload = () => {
-                clientData.current.loadCount += 1
-            }
-
-            buttomIframe.id = 'devcycle-debugger-buttom-iframe'
-            buttomIframe.style.width = '80px'
-            buttomIframe.style.height = '80px'
-            buttomIframe.style.position = 'fixed'
-            buttomIframe.style.bottom = '25px'
-            if (position === 'left') {
-                buttomIframe.style.left = '25px'
-            } else {
-                buttomIframe.style.right = '25px'
-            }
-            buttomIframe.style.border = 'none'
-            buttomIframe.style.overflow = 'hidden'
-            buttomIframe.title = 'Devcycle Debugger'
-            const searchParams = new URLSearchParams()
-            searchParams.set('parentOrigin', window.location.origin)
-            searchParams.set('position', position)
-            buttomIframe.src = `${debuggerUrl}/button?${searchParams.toString()}`
-
-            document.body.appendChild(iframe)
-            document.body.appendChild(buttomIframe)
-        })
+    log(...args: any[]) {
+        if (this.debugLogs) {
+            console.log(...args)
+        }
     }
+}
+
+export const createIframe = async (
+    client: DevCycleClient,
+    {
+        shouldEnable = defaultEnabledCheck,
+        shouldEnableVariable,
+        ...options
+    }: DebuggerIframeOptions = {},
+): Promise<() => void> => {
+    if (shouldEnableVariable) {
+        await client.onClientInitialized()
+        if (!client.config?.variables[shouldEnableVariable]) {
+            return () => {
+                // no-op
+            }
+        }
+    } else if (
+        !shouldEnable ||
+        (typeof shouldEnable === 'function' && !shouldEnable())
+    ) {
+        return () => {
+            // no-op
+        }
+    }
+
+    const iframeManager = new IframeManager(client, options)
 
     if (
         document.readyState === 'complete' ||
         document.readyState === 'interactive'
     ) {
-        createIframeWhenReady()
+        iframeManager.createIframeWhenReady()
     } else {
         document.addEventListener('DOMContentLoaded', () => {
-            createIframeWhenReady()
+            iframeManager.createIframeWhenReady()
         })
     }
 
+    const cleanup = iframeManager.setupSubscriptions()
+
     return () => {
-        window.removeEventListener('message', listener)
         cleanup()
-        document.body.removeChild(iframe)
+        document.body.removeChild(iframeManager.mainIframe)
+        document.body.removeChild(iframeManager.buttonIframe)
     }
 }

@@ -1,11 +1,13 @@
-# shared-debugger
+# DevCycle Debugger
 
-This library was generated with [Nx](https://nx.dev).
+Embeddable debugger tool for DevCycle feature flag managenent.
 
-## Building
+DevCycle is a feature flag management provider with robust support for user targeting, realtime updates of flag values
+and deep integrations with your development workflow.
 
-Run `nx build shared-debugger` to build the library.
+This debugger tool allows you to view the current state of your variables, change your current user data, and 
+override your local variable values to quickly test different variations.
 
-## Running unit tests
+## Usage
 
-Run `nx test shared-debugger` to execute the unit tests via [Jest](https://jestjs.io).
+To find usage documentation, visit our [docs](https://docs.devcycle.com/integrations/debugger).
