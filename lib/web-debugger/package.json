@@ -1,5 +1,5 @@
 {
-    "name": "@devcycle/debugger",
+    "name": "@devcycle/web-debugger",
     "version": "0.0.1",
     "type": "commonjs",
     "main": "./src/index.js",
@@ -15,5 +15,10 @@
             "require": "./src/react.js",
             "types": "./src/react.d.ts"
         }
+    },
+    "dependencies": {
+        "@devcycle/js-client-sdk": "*",
+        "@devcycle/react-client-sdk": "*",
+        "@devcycle/types": "*"
     }
 }

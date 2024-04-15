@@ -4692,19 +4692,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/debugger@workspace:lib/debugger":
-  version: 0.0.0-use.local
-  resolution: "@devcycle/debugger@workspace:lib/debugger"
-  languageName: unknown
-  linkType: soft
-
 "@devcycle/js-client-sdk-web-example@workspace:examples/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk-web-example@workspace:examples/js"
   languageName: unknown
   linkType: soft
 
-"@devcycle/js-client-sdk@^1.22.5, @devcycle/js-client-sdk@workspace:sdk/js":
+"@devcycle/js-client-sdk@*, @devcycle/js-client-sdk@^1.22.5, @devcycle/js-client-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
   dependencies:
@@ -4802,7 +4796,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/react-client-sdk@^1.20.5, @devcycle/react-client-sdk@workspace:sdk/react":
+"@devcycle/react-client-sdk@*, @devcycle/react-client-sdk@^1.20.5, @devcycle/react-client-sdk@workspace:sdk/react":
   version: 0.0.0-use.local
   resolution: "@devcycle/react-client-sdk@workspace:sdk/react"
   dependencies:
@@ -4845,7 +4839,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/types@^1.10.4, @devcycle/types@workspace:lib/shared/types":
+"@devcycle/types@*, @devcycle/types@^1.10.4, @devcycle/types@workspace:lib/shared/types":
   version: 0.0.0-use.local
   resolution: "@devcycle/types@workspace:lib/shared/types"
   dependencies:
@@ -4854,6 +4848,16 @@ __metadata:
     iso-639-1: ^2.1.13
     lodash: ^4.17.21
     reflect-metadata: ^0.1.13
+  languageName: unknown
+  linkType: soft
+
+"@devcycle/web-debugger@workspace:lib/web-debugger":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/web-debugger@workspace:lib/web-debugger"
+  dependencies:
+    "@devcycle/js-client-sdk": "*"
+    "@devcycle/react-client-sdk": "*"
+    "@devcycle/types": "*"
   languageName: unknown
   linkType: soft
 

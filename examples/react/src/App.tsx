@@ -6,11 +6,11 @@ import {
     withDevCycleProvider,
 } from '@devcycle/react-client-sdk'
 import DevCycleExample from './DevCycleExample'
-import { DevCycleDebugger } from '@devcycle/debugger/react'
+import { DevCycleDebugger } from '@devcycle/web-debugger/react'
 
-const SDK_KEY = 'client-c3b75096-70bb-47b8-9898-4f145f2caa26'
+const SDK_KEY = ''
 const user = {
-    user_id: 'userId1',
+    user_id: 'userId12',
     email: 'auto@taplytics.com',
     customData: {
         cps: 'Matthew',
