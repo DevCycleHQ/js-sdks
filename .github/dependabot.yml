@@ -11,3 +11,8 @@ updates:
     reviewers:
       - "devcyclehq/engineering"
     versioning-strategy: increase
+    ignore:
+      - dependency-name: "@nx/*"
+        versions: ["*"]
+      - dependency-name: "@nrwl/*"
+        versions: ["*"]
