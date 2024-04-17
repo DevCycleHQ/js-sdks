@@ -32,7 +32,6 @@
     ],
     "dependencies": {
         "@altack/nx-bundlefy": "^0.16.0",
-        "@auth0/nextjs-auth0": "^3.5.0",
         "@devcycle/assemblyscript-json": "^2.0.0",
         "@openfeature/core": "^0.0.25",
         "@openfeature/server-sdk": "^1.11.0",
