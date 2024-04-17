@@ -14,9 +14,13 @@
                 "assets": ["lib/web-debugger/*.md"]
             }
         },
-        "publish": {
-            "command": "node tools/scripts/publish.mjs debugger {args.ver} {args.tag}",
-            "dependsOn": ["build"]
+        "npm-publish": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/web-debugger\"",
+                "cwd": "dist/lib/web-debugger",
+                "forwardAllArgs": true
+            }
         },
         "lint": {
             "executor": "@nx/linter:eslint",
@@ -40,6 +44,13 @@
                     "ci": true,
                     "codeCoverage": true
                 }
+            }
+        },
+        "check-types": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "yarn run -T tsc -b --incremental",
+                "cwd": "lib/debugger"
             }
         }
     },

@@ -10,4 +10,4 @@ override your local variable values to quickly test different variations.
 
 ## Usage
 
-To find usage documentation, visit our [docs](https://docs.devcycle.com/integrations/debugger).
+To find usage documentation, visit our [docs](https://docs.devcycle.com/extras/web-debugger).
