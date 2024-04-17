@@ -6,11 +6,11 @@ import {
     withDevCycleProvider,
 } from '@devcycle/react-client-sdk'
 import DevCycleExample from './DevCycleExample'
-import { DevCycleDebugger } from '@devcycle/web-debugger/react'
 
-const SDK_KEY = ''
+const SDK_KEY =
+    process.env.DEVCYCLE_CLIENT_SDK_KEY || '<DEVCYCLE_CLIENT_SDK_KEY>'
 const user = {
-    user_id: 'userId12',
+    user_id: 'userId1',
     email: 'auto@taplytics.com',
     customData: {
         cps: 'Matthew',
@@ -33,11 +33,6 @@ function App() {
 
     return (
         <div className="App">
-            <DevCycleDebugger
-                debuggerUrl={'http://localhost:4201'}
-                position={'right'}
-            />
-
             <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo" />
                 <p>
