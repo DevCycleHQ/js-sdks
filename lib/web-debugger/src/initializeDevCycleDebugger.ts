@@ -65,7 +65,7 @@ class IframeManager {
         this.buttonIframe = document.createElement('iframe')
     }
 
-    createIframeWhenReady() {
+    createIframesWhenReady() {
         this.client.onClientInitialized().then(() => {
             clientData.current.config = this.client.config
             clientData.current.user = this.client.user
@@ -130,6 +130,20 @@ class IframeManager {
         this.client.subscribe('variableEvaluated:*', onVariableEvaluated)
         this.client.subscribe('variableUpdated:*', onVariableUpdated)
 
+        // wrap the original track method in a new method that can monitor and forward the events to the debugger
+        const oldTrack = this.client.track.bind(this.client)
+        this.client.track = (...args) => {
+            const [event] = args
+            addEvent({
+                type: event.type,
+                target: event.target,
+                value: event.value,
+                date: Date.now(),
+            })
+            this.updateIframeData()
+            oldTrack(...args)
+        }
+
         window.addEventListener(
             'message',
             this.iframeMessageReceiver.bind(this),
@@ -158,6 +172,7 @@ class IframeManager {
         } else {
             this.buttonIframe.style.right = '25px'
         }
+        this.buttonIframe.style.zIndex = '100'
         this.buttonIframe.style.border = 'none'
         this.buttonIframe.style.overflow = 'hidden'
         this.buttonIframe.title = 'Devcycle Debugger'
@@ -243,7 +258,7 @@ class IframeManager {
     }
 }
 
-export const createIframe = async (
+export const initializeDevCycleDebugger = async (
     client: DevCycleClient,
     {
         shouldEnable = defaultEnabledCheck,
@@ -273,10 +288,10 @@ export const createIframe = async (
         document.readyState === 'complete' ||
         document.readyState === 'interactive'
     ) {
-        iframeManager.createIframeWhenReady()
+        iframeManager.createIframesWhenReady()
     } else {
         document.addEventListener('DOMContentLoaded', () => {
-            iframeManager.createIframeWhenReady()
+            iframeManager.createIframesWhenReady()
         })
     }
 
