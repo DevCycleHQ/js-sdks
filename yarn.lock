@@ -4777,7 +4777,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/react-client-sdk@*, @devcycle/react-client-sdk@^1.20.5, @devcycle/react-client-sdk@workspace:sdk/react":
+"@devcycle/react-client-sdk@^1.20.5, @devcycle/react-client-sdk@workspace:sdk/react":
   version: 0.0.0-use.local
   resolution: "@devcycle/react-client-sdk@workspace:sdk/react"
   dependencies:
@@ -4837,8 +4837,12 @@ __metadata:
   resolution: "@devcycle/web-debugger@workspace:lib/web-debugger"
   dependencies:
     "@devcycle/js-client-sdk": "*"
-    "@devcycle/react-client-sdk": "*"
     "@devcycle/types": "*"
+  peerDependencies:
+    "@devcycle/react-client-sdk": "*"
+  peerDependenciesMeta:
+    "@devcycle/react-client-sdk":
+      optional: true
   languageName: unknown
   linkType: soft
 
