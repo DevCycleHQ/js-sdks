@@ -3,6 +3,7 @@
         "jsx": "react-jsx",
         "allowJs": false,
         "module": "esnext",
+        "moduleResolution": "bundler",
         "esModuleInterop": false,
         "allowSyntheticDefaultImports": true,
         "strict": true

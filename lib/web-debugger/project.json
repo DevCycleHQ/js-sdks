@@ -1,0 +1,58 @@
+{
+    "name": "debugger",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "lib/web-debugger/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nx/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/lib/debugger",
+                "main": "lib/web-debugger/src/index.ts",
+                "tsConfig": "lib/web-debugger/tsconfig.lib.json",
+                "assets": ["lib/web-debugger/*.md"]
+            }
+        },
+        "npm-publish": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/web-debugger\"",
+                "cwd": "dist/lib/web-debugger",
+                "forwardAllArgs": true
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": [
+                    "lib/web-debugger/**/*.ts",
+                    "lib/web-debugger/package.json"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "lib/web-debugger/jest.config.ts",
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        },
+        "check-types": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "yarn run -T tsc -b --incremental",
+                "cwd": "lib/debugger"
+            }
+        }
+    },
+    "tags": []
+}
