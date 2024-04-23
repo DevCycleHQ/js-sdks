@@ -4679,7 +4679,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/js-client-sdk@*, @devcycle/js-client-sdk@^1.22.5, @devcycle/js-client-sdk@workspace:sdk/js":
+"@devcycle/js-client-sdk@^1.22.5, @devcycle/js-client-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
   dependencies:
@@ -4836,9 +4836,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/web-debugger@workspace:lib/web-debugger"
   dependencies:
-    "@devcycle/js-client-sdk": "*"
     "@devcycle/types": "*"
   peerDependencies:
+    "@devcycle/js-client-sdk": "*"
     "@devcycle/react-client-sdk": "*"
   peerDependenciesMeta:
     "@devcycle/react-client-sdk":
