@@ -8,7 +8,7 @@
             "executor": "@nx/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
-                "outputPath": "dist/lib/debugger",
+                "outputPath": "dist/lib/web-debugger",
                 "main": "lib/web-debugger/index.ts",
                 "tsConfig": "lib/web-debugger/tsconfig.lib.json",
                 "assets": ["lib/web-debugger/*.md"]
