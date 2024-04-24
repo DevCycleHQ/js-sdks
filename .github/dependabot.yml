@@ -7,7 +7,7 @@ updates:
   - package-ecosystem: npm
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     reviewers:
       - "devcyclehq/engineering"
     versioning-strategy: increase
