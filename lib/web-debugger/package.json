@@ -33,10 +33,10 @@
         }
     },
     "dependencies": {
-        "@devcycle/js-client-sdk": "*",
         "@devcycle/types": "*"
     },
     "peerDependencies": {
+        "@devcycle/js-client-sdk": "*",
         "@devcycle/react-client-sdk": "*"
     },
     "peerDependenciesMeta": {
