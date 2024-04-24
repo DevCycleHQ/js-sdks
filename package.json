@@ -113,7 +113,7 @@
         "@testing-library/jest-dom": "^6.4.2",
         "@testing-library/jest-native": "5.4.3",
         "@testing-library/react": "14.0.0",
-        "@testing-library/react-native": "12.3.2",
+        "@testing-library/react-native": "12.4.5",
         "@types/async": "^3.2.8",
         "@types/hoist-non-react-statics": "^3.3.1",
         "@types/jest": "29.4.4",
