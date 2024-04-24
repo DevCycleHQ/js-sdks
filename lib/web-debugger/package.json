@@ -22,14 +22,14 @@
     "homepage": "https://devcycle.com",
     "exports": {
         ".": {
-            "import": "./src/index.js",
-            "require": "./src/index.js",
-            "types": "./src/index.d.ts"
+            "import": "./index.js",
+            "require": "./index.js",
+            "types": "./index.d.ts"
         },
         "./react": {
-            "import": "./src/react.js",
-            "require": "./src/react.js",
-            "types": "./src/react.d.ts"
+            "import": "./react.js",
+            "require": "./react.js",
+            "types": "./react.d.ts"
         }
     },
     "dependencies": {
