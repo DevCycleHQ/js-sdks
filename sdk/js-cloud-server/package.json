@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/js-cloud-server-sdk",
-    "version": "1.9.5",
+    "version": "1.9.6",
     "description": "The DevCycle JS Cloud Bucketing Server SDK used for feature management.",
     "author": "DevCycle <support@devcycle.com>",
     "keywords": [
@@ -19,7 +19,7 @@
     "license": "MIT",
     "homepage": "https://devcycle.com",
     "dependencies": {
-        "@devcycle/types": "^1.10.4",
+        "@devcycle/types": "^1.10.5",
         "cross-fetch": "^4.0.0",
         "fetch-retry": "^5.0.6",
         "lodash": "^4.17.21"
