@@ -1,1 +1,1 @@
-export * from './src/initializeDevCycleDebugger'
+export * from './src/initializeDevCycleDebugger.js'
