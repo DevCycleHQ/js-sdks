@@ -268,7 +268,7 @@ export const initializeDevCycleDebugger = async (
 ): Promise<() => void> => {
     if (shouldEnableVariable) {
         await client.onClientInitialized()
-        if (!client.config?.variables[shouldEnableVariable]) {
+        if (!client.variableValue(shouldEnableVariable, false)) {
             return () => {
                 // no-op
             }
