@@ -91,5 +91,23 @@ describe('initializeDevCycleDebugger', () => {
                 ).toBe(false)
             },
         )
+        it('should fall back to default check when nothing is specified', async () => {
+            const oldValue = process.env['NODE_ENV']
+            process.env['NODE_ENV'] = 'development'
+            expect(
+                await checkShouldEnable(
+                    createMockClient({ enableVar: true }),
+                    {},
+                ),
+            ).toBe(true)
+            process.env['NODE_ENV'] = 'production'
+            expect(
+                await checkShouldEnable(
+                    createMockClient({ enableVar: true }),
+                    {},
+                ),
+            ).toBe(false)
+            process.env['NODE_ENV'] = oldValue
+        })
     })
 })
