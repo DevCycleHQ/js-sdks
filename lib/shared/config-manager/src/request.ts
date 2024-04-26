@@ -4,10 +4,15 @@ export async function getEnvironmentConfig(
     url: string,
     requestTimeout: number,
     etag?: string,
+    lastModified?: string,
 ): Promise<Response> {
-    const headers: Record<string, string> = etag
-        ? { 'If-None-Match': etag }
-        : {}
+    const headers: Record<string, string> = {}
+    if (etag) {
+        headers['If-None-Match'] = etag
+    }
+    if (lastModified) {
+        headers['If-Modified-Since'] = lastModified
+    }
 
     return await getWithTimeout(
         url,
