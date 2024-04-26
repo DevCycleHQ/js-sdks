@@ -6,6 +6,7 @@ module.exports = composePlugins(
     withNx(),
     withReact(),
     (config, { options, context }) => {
+        // support resolving .js import extensions with their respective .ts extensions
         config.resolve.extensionAlias = {
             '.js': ['.ts', '.js'],
             '.mjs': ['.mts', '.mjs'],
