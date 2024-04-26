@@ -4751,7 +4751,7 @@ __metadata:
     cross-fetch: ^4.0.0
     fetch-retry: ^5.0.6
   peerDependencies:
-    "@openfeature/server-sdk": "*"
+    "@openfeature/server-sdk": ^1.13.5
   languageName: unknown
   linkType: soft
 
@@ -4773,7 +4773,7 @@ __metadata:
   dependencies:
     "@devcycle/js-client-sdk": ^1.22.6
   peerDependencies:
-    "@openfeature/web-sdk": "*"
+    "@openfeature/web-sdk": ^1.0.3
   languageName: unknown
   linkType: soft
 
@@ -8219,12 +8219,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openfeature/web-sdk@npm:^0.4.16":
-  version: 0.4.16
-  resolution: "@openfeature/web-sdk@npm:0.4.16"
+"@openfeature/web-sdk@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@openfeature/web-sdk@npm:1.0.3"
   peerDependencies:
-    "@openfeature/core": 1.0.0
-  checksum: e689413a384f1febb64e701bcf0cc53a4db48e09675d760df37dcb27382c8235dbfdd60a229fe98871ad9acd0691f8e3f6b3dd013fe29c1b9e584c720e657826
+    "@openfeature/core": 1.1.0
+  checksum: f84835dad77bfb7a8c762ea45dbc9362f174c37983c87436b7daca94cb230157be9f9f0a896525c5f83bd3ad63e1d4234a55bb38010352a9b1054e48fcd4f7e0
   languageName: node
   linkType: hard
 
@@ -15238,7 +15238,7 @@ __metadata:
     "@nx/workspace": 16.10.0
     "@openfeature/core": ^1.1.0
     "@openfeature/server-sdk": ^1.13.5
-    "@openfeature/web-sdk": ^0.4.16
+    "@openfeature/web-sdk": ^1.0.3
     "@playwright/test": ^1.36.0
     "@pmmmwh/react-refresh-webpack-plugin": ^0.5.7
     "@react-native-async-storage/async-storage": 1.19.4
