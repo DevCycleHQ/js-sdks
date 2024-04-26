@@ -31,8 +31,8 @@
             "@devcycle/config-manager": [
                 "lib/shared/config-manager/src/index.ts"
             ],
-            "@devcycle/web-debugger": ["lib/web-debugger/src/index.ts"],
-            "@devcycle/web-debugger/react": ["lib/web-debugger/src/react.tsx"],
+            "@devcycle/web-debugger": ["lib/web-debugger/index.ts"],
+            "@devcycle/web-debugger/react": ["lib/web-debugger/react.tsx"],
             "@devcycle/js-client-sdk": ["sdk/js/src/index.ts"],
             "@devcycle/js-cloud-server-sdk": [
                 "sdk/js-cloud-server/src/index.ts"
