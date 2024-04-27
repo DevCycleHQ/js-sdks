@@ -4751,7 +4751,7 @@ __metadata:
     cross-fetch: ^4.0.0
     fetch-retry: ^5.0.6
   peerDependencies:
-    "@openfeature/server-sdk": ^1.13.5
+    "@openfeature/server-sdk": "*"
   languageName: unknown
   linkType: soft
 
@@ -4773,7 +4773,7 @@ __metadata:
   dependencies:
     "@devcycle/js-client-sdk": ^1.22.6
   peerDependencies:
-    "@openfeature/web-sdk": ^1.0.3
+    "@openfeature/web-sdk": "*"
   languageName: unknown
   linkType: soft
 

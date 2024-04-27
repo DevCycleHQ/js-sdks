@@ -27,7 +27,7 @@
         "fetch-retry": "^5.0.6"
     },
     "peerDependencies": {
-        "@openfeature/server-sdk": "^1.13.5"
+        "@openfeature/server-sdk": "*"
     },
     "engines": {
         "node": ">=16.0.0"
