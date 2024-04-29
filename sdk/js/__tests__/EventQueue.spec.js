@@ -1,3 +1,4 @@
+global.fetch = jest.fn()
 import * as Request from '../src/Request'
 import { DevCycleClient } from '../src/Client'
 import { EventQueue, EventTypes } from '../src/EventQueue'
