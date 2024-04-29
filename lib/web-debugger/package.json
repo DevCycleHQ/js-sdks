@@ -2,8 +2,8 @@
     "name": "@devcycle/web-debugger",
     "version": "0.0.5",
     "type": "module",
-    "main": "./src/index.js",
-    "types": "./src/index.d.ts",
+    "main": "./index.js",
+    "types": "./index.d.ts",
     "description": "The DevCycle Web Debugger used for debugging feature flags from your own website",
     "license": "MIT",
     "author": "DevCycle <support@devcycle.com>",
@@ -23,12 +23,10 @@
     "exports": {
         ".": {
             "import": "./index.js",
-            "require": "./index.js",
             "types": "./index.d.ts"
         },
         "./react": {
             "import": "./react.js",
-            "require": "./react.js",
             "types": "./react.d.ts"
         }
     },

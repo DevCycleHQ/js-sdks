@@ -26,7 +26,7 @@
                 "tsConfig": "examples/react/tsconfig.app.json",
                 "assets": ["examples/react/src/public"],
                 "scripts": [],
-                "webpackConfig": "@nx/react/plugins/webpack"
+                "webpackConfig": "examples/react/webpack.config.js"
             },
             "defaultConfiguration": "production"
         },
