@@ -19,7 +19,7 @@ export function MyComponent() {
     )
 }
 ```
-This SDK depends on the [fetch](https://github.com/BuilderIO/this-package-uses-fetch) api.
+This SDK depends on the [fetch](https://github.com/BuilderIO/this-package-uses-fetch) API.
 
 # Usage
 
