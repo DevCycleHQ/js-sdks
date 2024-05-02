@@ -20,6 +20,10 @@ export function bucketUserForConfig(
     ) as BucketedUserConfig
 }
 
+export function getSDKKeyFromConfig(sdkKey: string): string | null {
+    return getBucketingLib().getSDKKeyFromConfig(sdkKey)
+}
+
 export function getVariableTypeCode(type: VariableType): number {
     const Bucketing = getBucketingLib()
     switch (type) {

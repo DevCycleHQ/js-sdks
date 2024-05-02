@@ -2,6 +2,7 @@ import { EnvironmentConfigManager } from '@devcycle/config-manager'
 import { UserError } from '@devcycle/server-request'
 import {
     bucketUserForConfig,
+    getSDKKeyFromConfig,
     getVariableTypeCode,
     variableForUser_PB,
 } from './utils/userBucketingHelper'
@@ -305,7 +306,7 @@ export class DevCycleClient {
     async getClientBootstrapConfig(
         user: DevCycleUser,
         userAgent: string,
-    ): Promise<BucketedUserConfig> {
+    ): Promise<BucketedUserConfig & { sdkKey: string }> {
         const incomingUser = castIncomingUser(user)
 
         await this.onInitialized
@@ -313,6 +314,14 @@ export class DevCycleClient {
         if (!this.clientConfigHelper) {
             throw new Error(
                 'enableClientBootstrapping option must be set to true to use getClientBootstrapConfig',
+            )
+        }
+
+        const sdkKey = getSDKKeyFromConfig(`${this.sdkKey}_client`)
+
+        if (!sdkKey) {
+            throw new Error(
+                'Client bootstrapping config is malformed. Please contact DevCycle support.',
             )
         }
 
@@ -324,7 +333,10 @@ export class DevCycleClient {
                 incomingUser,
                 userAgent,
             )
-            return bucketUserForConfig(populatedUser, `${this.sdkKey}_client`)
+            return {
+                ...bucketUserForConfig(populatedUser, `${this.sdkKey}_client`),
+                sdkKey,
+            }
         } catch (e) {
             throw new Error(
                 '@devcycle/js-client-sdk package could not be found. ' +

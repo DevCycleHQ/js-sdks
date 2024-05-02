@@ -395,6 +395,11 @@ export function setClientCustomDataUTF8(
     _setClientCustomData(sdkKey, parsed as JSON.Obj)
 }
 
+export function getSDKKeyFromConfig(sdkKey: string): string | null {
+    const config = _getConfigData(sdkKey)
+    return config.sdkKey
+}
+
 export * from './managers/eventQueueManager'
 
 export * from './testHelpers'
