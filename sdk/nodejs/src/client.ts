@@ -327,7 +327,9 @@ export class DevCycleClient {
             return bucketUserForConfig(populatedUser, `${this.sdkKey}_client`)
         } catch (e) {
             throw new Error(
-                '@devcycle/js-client-sdk package could not be found. Please install it to use client boostrapping',
+                '@devcycle/js-client-sdk package could not be found. ' +
+                    'Please install it to use client boostrapping. Error: ' +
+                    e.message,
             )
         }
     }
