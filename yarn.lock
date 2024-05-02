@@ -9798,9 +9798,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react-native@npm:12.3.2":
-  version: 12.3.2
-  resolution: "@testing-library/react-native@npm:12.3.2"
+"@testing-library/react-native@npm:12.5.0":
+  version: 12.5.0
+  resolution: "@testing-library/react-native@npm:12.5.0"
   dependencies:
     jest-matcher-utils: ^29.7.0
     pretty-format: ^29.7.0
@@ -9813,7 +9813,7 @@ __metadata:
   peerDependenciesMeta:
     jest:
       optional: true
-  checksum: c6fdaf64865a079b885ff83ae172330b354dbd13cb9a4370578a544080d87f21cc7a93e079a3bc4256ab0893c5de36feae4bcf6edf24b3a6617019f4369a6053
+  checksum: 33dc7f2e4b873449eea13c11595c98c6a098ef7009bc45b46df0ac93b1784ad38595de0104d60d4baa98c737705ad112e87e0acb6464aaf0f05f92f220208442
   languageName: node
   linkType: hard
 
@@ -15254,7 +15254,7 @@ __metadata:
     "@testing-library/jest-dom": ^6.4.2
     "@testing-library/jest-native": 5.4.3
     "@testing-library/react": 14.0.0
-    "@testing-library/react-native": 12.3.2
+    "@testing-library/react-native": 12.5.0
     "@types/async": ^3.2.8
     "@types/express": ^4.17.17
     "@types/hoist-non-react-statics": ^3.3.1
