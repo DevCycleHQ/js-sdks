@@ -1,12 +1,11 @@
 import { DVCCustomDataJSON } from '../types'
 import * as packageJson from '../../package.json'
 import { DevCycleUser } from './user'
-import { SDKTypes } from '@devcycle/types'
 
 export type DevCyclePlatformDetails = {
     platform?: string
     platformVersion?: string
-    sdkType?: SDKTypes
+    sdkType?: 'server'
     sdkVersion?: string
     hostname?: string
 }
@@ -25,9 +24,9 @@ export class DVCPopulatedUser implements DevCycleUser {
     readonly createdDate: Date
     readonly platform: string
     readonly platformVersion: string
-    readonly sdkType: SDKTypes
+    readonly sdkType: 'server'
     readonly sdkVersion: string
-    readonly hostname?: string
+    readonly hostname: string
 
     constructor(user: DevCycleUser, platformDetails: DevCyclePlatformDetails) {
         this.user_id = user.user_id
