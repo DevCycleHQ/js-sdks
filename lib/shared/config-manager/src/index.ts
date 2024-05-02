@@ -1,4 +1,4 @@
-import { DVCLogger, DevCycleServerSDKOptions } from '@devcycle/types'
+import { DVCLogger } from '@devcycle/types'
 import { getEnvironmentConfig } from './request'
 import { ResponseError, UserError } from '@devcycle/server-request'
 
@@ -19,6 +19,7 @@ export class EnvironmentConfigManager {
     private readonly sdkKey: string
     private hasConfig = false
     configEtag?: string
+    configLastModified?: string
     private readonly pollingIntervalMS: number
     private readonly requestTimeoutMS: number
     private readonly cdnURI: string
@@ -107,12 +108,14 @@ export class EnvironmentConfigManager {
 
         try {
             this.logger.debug(
-                `Requesting new config for ${url}, etag: ${this.configEtag}`,
+                `Requesting new config for ${url}, etag: ${this.configEtag}` +
+                    `, last-modified: ${this.configLastModified}`,
             )
             res = await getEnvironmentConfig(
                 url,
                 this.requestTimeoutMS,
                 this.configEtag,
+                this.configLastModified,
             )
             projectConfig = await res.text()
             this.logger.debug(
@@ -130,15 +133,18 @@ export class EnvironmentConfigManager {
 
         if (res?.status === 304) {
             this.logger.debug(
-                `Config not modified, using cache, etag: ${this.configEtag}`,
+                `Config not modified, using cache, etag: ${this.configEtag}` +
+                    `, last-modified: ${this.configLastModified}`,
             )
             return
         } else if (res?.status === 200 && projectConfig) {
             try {
                 const etag = res?.headers.get('etag') || ''
+                const lastModified = res?.headers.get('last-modified') || ''
                 this.setConfigBuffer(this.sdkKey, projectConfig)
                 this.hasConfig = true
                 this.configEtag = etag
+                this.configLastModified = lastModified
                 return
             } catch (e) {
                 logError(new Error('Invalid config JSON.'))
