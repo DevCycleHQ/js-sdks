@@ -104,7 +104,8 @@ export class ConfigBody<IdType = string> {
     }
 
     /**
-     * The SDK key corresponding to this config. Used when a client config is being retrieved via a server SDK key
+     * The client SDK key corresponding to this config. Used when a client config is
+     * being retrieved via a server SDK key
      */
-    sdkKey: string
+    clientSDKKey: string
 }

@@ -402,7 +402,7 @@ export function setClientCustomDataUTF8(
  */
 export function getSDKKeyFromConfig(sdkKey: string): string | null {
     const config = _getConfigData(sdkKey)
-    return config.sdkKey
+    return config.clientSDKKey
 }
 
 export * from './managers/eventQueueManager'
