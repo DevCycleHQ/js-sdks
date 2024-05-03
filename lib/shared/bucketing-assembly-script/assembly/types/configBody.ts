@@ -12,28 +12,42 @@ import {
 import { Feature } from './feature'
 import { Audience } from './target'
 
+export class Settings extends JSON.Obj {
+    readonly disablePassthroughRollout?: bool
+
+    constructor(settings: JSON.Obj) {
+        super();
+        if (settings.has("disablePassthroughRollout")) {
+            const value = settings.get("disablePassthroughRollout");
+            this.disablePassthroughRollout = value !== null ? !!value : undefined;
+        } else {
+            this.disablePassthroughRollout = undefined;
+        }
+    }
+}
+
 export class PublicProject extends JSON.Value {
-    readonly _id: string
-    readonly key: string
-    readonly a0_organization: string
-    readonly settings: JSON.Obj
+    readonly _id: string;
+    readonly key: string;
+    readonly a0_organization: string;
+    readonly settings: Settings;
 
     constructor(project: JSON.Obj) {
-        super()
-        this._id = getStringFromJSON(project, '_id')
-        this.key = getStringFromJSON(project, 'key')
-        this.a0_organization = getStringFromJSON(project, 'a0_organization')
-        this.settings = getJSONObjFromJSON(project, 'settings')
+        super();
+        this._id = getStringFromJSON(project, '_id');
+        this.key = getStringFromJSON(project, 'key');
+        this.a0_organization = getStringFromJSON(project, 'a0_organization');
+        this.settings = new Settings(getJSONObjFromJSON(project, 'settings'));
     }
 
     stringify(): string {
-        const json = new JSON.Obj()
-        json.set('_id', this._id)
-        json.set('key', this.key)
-        json.set('a0_organization', this.a0_organization)
-        json.set('settings', this.settings)
+        const json = new JSON.Obj();
+        json.set('_id', this._id);
+        json.set('key', this.key);
+        json.set('a0_organization', this.a0_organization);
+        json.set('settings', this.settings);
 
-        return json.stringify()
+        return json.stringify();
     }
 }
 
