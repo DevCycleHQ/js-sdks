@@ -564,7 +564,7 @@ export const config: ConfigBody = {
     ],
     variables,
     variableHashes,
-    sdkKey: 'test',
+    clientSDKKey: 'test',
 }
 
 export const barrenConfig: ConfigBody = {
@@ -642,7 +642,7 @@ export const barrenConfig: ConfigBody = {
     ],
     variables: [],
     variableHashes: {},
-    sdkKey: 'test',
+    clientSDKKey: 'test',
 }
 
 export const configWithNullCustomData: ConfigBody = {
@@ -695,5 +695,5 @@ export const configWithNullCustomData: ConfigBody = {
     ],
     variables,
     variableHashes,
-    sdkKey: 'test',
+    clientSDKKey: 'test',
 }

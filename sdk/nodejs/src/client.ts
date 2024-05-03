@@ -306,7 +306,7 @@ export class DevCycleClient {
     async getClientBootstrapConfig(
         user: DevCycleUser,
         userAgent: string,
-    ): Promise<BucketedUserConfig & { sdkKey: string }> {
+    ): Promise<BucketedUserConfig & { clientSDKKey: string }> {
         const incomingUser = castIncomingUser(user)
 
         await this.onInitialized
@@ -317,9 +317,9 @@ export class DevCycleClient {
             )
         }
 
-        const sdkKey = getSDKKeyFromConfig(`${this.sdkKey}_client`)
+        const clientSDKKey = getSDKKeyFromConfig(`${this.sdkKey}_client`)
 
-        if (!sdkKey) {
+        if (!clientSDKKey) {
             throw new Error(
                 'Client bootstrapping config is malformed. Please contact DevCycle support.',
             )
@@ -335,7 +335,7 @@ export class DevCycleClient {
             )
             return {
                 ...bucketUserForConfig(populatedUser, `${this.sdkKey}_client`),
-                sdkKey,
+                clientSDKKey,
             }
         } catch (e) {
             throw new Error(
