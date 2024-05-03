@@ -1,12 +1,14 @@
 import type { DVCLogger } from '@devcycle/types'
+import EventSource from 'eventsource'
 
 export class SSEConnection {
     private connection?: EventSource
 
     constructor(
         private url: string,
-        private onMessage: (message: unknown) => void,
         private logger: DVCLogger,
+        private onMessage: (message: unknown) => void,
+        private onConnectionError: () => void,
     ) {
         this.openConnection()
     }
@@ -26,6 +28,7 @@ export class SSEConnection {
             this.logger.warn(
                 'StreamingConnection warning. Connection failed to establish.',
             )
+            this.onConnectionError()
         }
         this.connection.onopen = () => {
             this.logger.debug('StreamingConnection opened')

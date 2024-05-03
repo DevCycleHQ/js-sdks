@@ -90,4 +90,9 @@ export interface DevCycleServerSDKOptions {
      * and provided to the client
      */
     enableClientBootstrapping?: boolean
+
+    /**
+     * Disable Real Time Updates and their associated SSE connection
+     */
+    disableRealtimeUpdates?: boolean
 }
