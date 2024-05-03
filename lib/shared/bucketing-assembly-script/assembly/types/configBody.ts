@@ -7,6 +7,7 @@ import {
     jsonObjFromMap,
     isValidString,
     getJSONObjFromJSONOptional,
+    getStringFromJSONOptional,
 } from '../helpers/jsonHelpers'
 import { Feature } from './feature'
 import { Audience } from './target'
@@ -84,6 +85,7 @@ export class ConfigBody {
     readonly features: Feature[]
     readonly variables: Variable[]
     readonly etag: string | null
+    readonly sdkKey: string | null
 
     private readonly _variableKeyMap: Map<string, Variable>
     private readonly _variableIdMap: Map<string, Variable>
@@ -119,6 +121,7 @@ export class ConfigBody {
 
     constructor(configJSONObj: JSON.Obj, etag: string | null = null) {
         this.etag = etag
+        this.sdkKey = getStringFromJSONOptional(configJSONObj, 'sdkKey')
 
         this.project = new PublicProject(
             getJSONObjFromJSON(configJSONObj, 'project'),
@@ -206,6 +209,7 @@ export class ConfigBody {
         json.set('audiences', jsonObjFromMap(this.audiences))
         json.set('features', jsonArrFromValueArray(this.features))
         json.set('variables', jsonArrFromValueArray(this.variables))
+        json.set('sdkKey', this.sdkKey)
         return json.stringify()
     }
 

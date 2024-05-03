@@ -31,5 +31,6 @@ export class Project<IdType = string> {
             enabled: boolean
             required: boolean
         }
+        disablePassthroughRollouts?: boolean
     }
 }

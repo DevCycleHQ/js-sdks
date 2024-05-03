@@ -1,15 +1,15 @@
 {
     "name": "debugger",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "lib/web-debugger/src",
+    "sourceRoot": "lib/web-debugger",
     "projectType": "library",
     "targets": {
         "build": {
             "executor": "@nx/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
-                "outputPath": "dist/lib/debugger",
-                "main": "lib/web-debugger/src/index.ts",
+                "outputPath": "dist/lib/web-debugger",
+                "main": "lib/web-debugger/index.ts",
                 "tsConfig": "lib/web-debugger/tsconfig.lib.json",
                 "assets": ["lib/web-debugger/*.md"]
             }
@@ -50,7 +50,7 @@
             "executor": "nx:run-commands",
             "options": {
                 "command": "yarn run -T tsc -b --incremental",
-                "cwd": "lib/debugger"
+                "cwd": "lib/web-debugger"
             }
         }
     },

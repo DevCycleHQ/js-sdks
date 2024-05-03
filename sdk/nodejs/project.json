@@ -55,7 +55,8 @@
                     "shared-types",
                     "shared-bucketing-as",
                     "shared-bucketing-test-data",
-                    "js-cloud-server-sdk"
+                    "js-cloud-server-sdk",
+                    "js"
                 ]
             },
             "dependsOn": [

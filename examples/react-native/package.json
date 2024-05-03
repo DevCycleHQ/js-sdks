@@ -1,6 +1,6 @@
 {
     "name": "example-react-native-app",
-    "version": "0.9.5",
+    "version": "0.11.0",
     "private": true,
     "dependencies": {
         "@babel/plugin-proposal-decorators": "*",

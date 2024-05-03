@@ -258,30 +258,49 @@ class IframeManager {
     }
 }
 
+export const checkShouldEnable = async (
+    client: DevCycleClient,
+    {
+        shouldEnable,
+        shouldEnableVariable,
+    }: Pick<DebuggerIframeOptions, 'shouldEnable' | 'shouldEnableVariable'>,
+): Promise<boolean> => {
+    if (typeof shouldEnable !== 'undefined') {
+        if (
+            !shouldEnable ||
+            (typeof shouldEnable === 'function' && !shouldEnable())
+        ) {
+            return false
+        }
+    } else if (typeof shouldEnableVariable === 'string') {
+        await client.onClientInitialized()
+        if (!client.variableValue(shouldEnableVariable, false)) {
+            return false
+        }
+    } else if (!defaultEnabledCheck()) {
+        return false
+    }
+    return true
+}
+
 export const initializeDevCycleDebugger = async (
     client: DevCycleClient,
     {
-        shouldEnable = defaultEnabledCheck,
+        shouldEnable,
         shouldEnableVariable,
         ...options
     }: DebuggerIframeOptions = {},
 ): Promise<() => void> => {
-    if (shouldEnableVariable) {
-        await client.onClientInitialized()
-        if (!client.config?.variables[shouldEnableVariable]) {
-            return () => {
-                // no-op
-            }
-        }
-    } else if (
-        !shouldEnable ||
-        (typeof shouldEnable === 'function' && !shouldEnable())
+    if (
+        !(await checkShouldEnable(client, {
+            shouldEnable,
+            shouldEnableVariable,
+        }))
     ) {
         return () => {
             // no-op
         }
     }
-
     const iframeManager = new IframeManager(client, options)
 
     if (

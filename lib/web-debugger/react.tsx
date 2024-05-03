@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import {
     initializeDevCycleDebugger,
     DebuggerIframeOptions,
-} from './initializeDevCycleDebugger'
+} from './src/initializeDevCycleDebugger.js'
 import { useDevCycleClient } from '@devcycle/react-client-sdk'
 
 export const DevCycleDebugger = (options: DebuggerIframeOptions): null => {

@@ -12,7 +12,7 @@ import {
 import { DVCVariable, DVCVariableOptions } from './Variable'
 import { getConfigJson, saveEntity } from './Request'
 import CacheStore from './CacheStore'
-import DefaultStorage from './DefaultStorage'
+import { getStorageStrategy } from './DefaultCacheStore'
 import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
 import { checkParamDefined } from './utils'
@@ -106,7 +106,7 @@ export class DevCycleClient<
         this.logger =
             options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.store = new CacheStore(
-            options.storage || new DefaultStorage(),
+            options.storage || getStorageStrategy(),
             this.logger,
         )
 
@@ -212,13 +212,12 @@ export class DevCycleClient<
             this.initializeOnConfigFailure(this.user, err)
             return this
         }
-
         this.eventEmitter.emitInitialized(true)
 
         if (this.user.isAnonymous) {
-            this.store.saveAnonUserId(this.user.user_id)
+            void this.store.saveAnonUserId(this.user.user_id)
         } else {
-            this.store.removeAnonUserId()
+            void this.store.removeAnonUserId()
         }
 
         if (this.config?.sse?.url) {
@@ -252,7 +251,7 @@ export class DevCycleClient<
         if (err) {
             this.eventEmitter.emitError(err)
         }
-        this.setUser(user)
+        void this.setUser(user)
         this.resolveOnInitialized(this)
     }
 
@@ -425,7 +424,7 @@ export class DevCycleClient<
             return this.config?.variables || {}
         }
 
-        this.eventQueue.flushEvents()
+        void this.eventQueue.flushEvents()
 
         try {
             await this.onInitialized
@@ -442,7 +441,7 @@ export class DevCycleClient<
             }
             const config = await this.requestConsolidator.queue(updatedUser)
             if (user.isAnonymous || !user.user_id) {
-                this.store.saveAnonUserId(updatedUser.user_id)
+                await this.store.saveAnonUserId(updatedUser.user_id)
             }
             return config.variables || {}
         } catch (err) {
@@ -472,20 +471,20 @@ export class DevCycleClient<
 
             this.onInitialized
                 .then(() => this.store.loadAnonUserId())
-                .then((cachedAnonId) => {
-                    this.store.removeAnonUserId()
+                .then(async (cachedAnonId) => {
+                    await this.store.removeAnonUserId()
                     oldAnonymousId = cachedAnonId
                     return
                 })
                 .then(() => this.requestConsolidator.queue(anonUser))
-                .then((config) => {
-                    this.store.saveAnonUserId(anonUser.user_id)
+                .then(async (config) => {
+                    await this.store.saveAnonUserId(anonUser.user_id)
                     resolve(config.variables || {})
                 })
-                .catch((e) => {
+                .catch(async (e) => {
                     this.eventEmitter.emitError(e)
                     if (oldAnonymousId) {
-                        this.store.saveAnonUserId(oldAnonymousId)
+                        await this.store.saveAnonUserId(oldAnonymousId)
                     }
                     reject(e)
                 })
@@ -606,7 +605,6 @@ export class DevCycleClient<
                 this.pageVisibilityHandler,
             )
         }
-
         if (this.windowMessageHandler) {
             window.removeEventListener('message', this.windowMessageHandler)
         }
@@ -689,10 +687,10 @@ export class DevCycleClient<
     ) {
         const oldConfig = this.config
         this.config = config
-        this.store.saveConfig(config, user, dateFetched)
+        void this.store.saveConfig(config, user, dateFetched)
         this.isConfigCached = false
 
-        this.setUser(user)
+        void this.setUser(user)
 
         const oldFeatures = oldConfig?.features || {}
         const oldVariables = oldConfig?.variables || {}
@@ -708,11 +706,11 @@ export class DevCycleClient<
         }
     }
 
-    private setUser(user: DVCPopulatedUser) {
+    private async setUser(user: DVCPopulatedUser) {
         if (this.user != user || !this.userSaved) {
             this.user = user
 
-            this.store.saveUser(user)
+            await this.store.saveUser(user)
 
             if (
                 !this.user.isAnonymous &&
@@ -723,14 +721,13 @@ export class DevCycleClient<
                     true,
                 )
             ) {
-                saveEntity(
+                const res = await saveEntity(
                     this.user,
                     this.sdkKey,
                     this.logger,
                     this.options,
-                ).then((res) =>
-                    this.logger.info(`Saved response entity! ${res}`),
                 )
+                this.logger.info(`Saved response entity! ${res}`)
             }
 
             this.userSaved = true

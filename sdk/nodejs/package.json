@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/nodejs-server-sdk",
-    "version": "1.24.5",
+    "version": "1.27.0",
     "description": "The DevCycle NodeJS Server SDK used for feature management.",
     "license": "MIT",
     "author": "DevCycle <support@devcycle.com>",
@@ -20,14 +20,14 @@
     },
     "homepage": "https://devcycle.com",
     "dependencies": {
-        "@devcycle/bucketing-assembly-script": "^1.17.4",
-        "@devcycle/js-cloud-server-sdk": "^1.9.5",
-        "@devcycle/types": "^1.10.4",
+        "@devcycle/bucketing-assembly-script": "^1.19.0",
+        "@devcycle/js-cloud-server-sdk": "^1.11.0",
+        "@devcycle/types": "^1.12.0",
         "cross-fetch": "^4.0.0",
         "fetch-retry": "^5.0.6"
     },
     "peerDependencies": {
-        "@openfeature/server-sdk": "^1.11.0"
+        "@openfeature/server-sdk": "^1.13.5"
     },
     "engines": {
         "node": ">=16.0.0"

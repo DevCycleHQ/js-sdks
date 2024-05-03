@@ -15,6 +15,7 @@ and Pages Router, and includes the following features:
 - support for static page rendering
 - exclude component code from client bundle when feature is disabled
 
+This SDK depends on the [fetch](https://github.com/BuilderIO/this-package-uses-fetch) API.
 # Usage
 
 To find usage documentation, visit our [docs](https://docs.devcycle.com/docs/sdk/client-side-sdks/nextjs).

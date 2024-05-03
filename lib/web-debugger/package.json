@@ -1,9 +1,9 @@
 {
     "name": "@devcycle/web-debugger",
-    "version": "0.0.1",
-    "type": "commonjs",
-    "main": "./src/index.js",
-    "types": "./src/index.d.ts",
+    "version": "0.2.0",
+    "type": "module",
+    "main": "./index.js",
+    "types": "./index.d.ts",
     "description": "The DevCycle Web Debugger used for debugging feature flags from your own website",
     "license": "MIT",
     "author": "DevCycle <support@devcycle.com>",
@@ -22,21 +22,19 @@
     "homepage": "https://devcycle.com",
     "exports": {
         ".": {
-            "import": "./src/index.js",
-            "require": "./src/index.js",
-            "types": "./src/index.d.ts"
+            "import": "./index.js",
+            "types": "./index.d.ts"
         },
         "./react": {
-            "import": "./src/react.js",
-            "require": "./src/react.js",
-            "types": "./src/react.d.ts"
+            "import": "./react.js",
+            "types": "./react.d.ts"
         }
     },
     "dependencies": {
-        "@devcycle/js-client-sdk": "*",
-        "@devcycle/types": "*"
+        "@devcycle/types": "^1.12.0"
     },
     "peerDependencies": {
+        "@devcycle/js-client-sdk": "*",
         "@devcycle/react-client-sdk": "*"
     },
     "peerDependenciesMeta": {
