@@ -100,12 +100,7 @@ export function initializeDevCycle<
     const userAndOptions = determineUserAndOptions(userOrOptions, optionsArg)
     const { options } = userAndOptions
     const isServiceWorker = checkIsServiceWorker()
-    // TODO: implement logger
-    if (typeof window === 'undefined' && !options.next && !isServiceWorker) {
-        console.warn(
-            'Window is not defined, try initializing in a browser context',
-        )
-    }
+
     if (
         typeof window !== 'undefined' &&
         !window.addEventListener &&
