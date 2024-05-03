@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
     displayName: 'shared-sse-connection',
-    preset: '../../jest.preset.js',
+    preset: '../../../jest.preset.js',
     testEnvironment: 'node',
     transform: {
         '^.+\\.[tj]s$': [
@@ -10,5 +10,5 @@ export default {
         ],
     },
     moduleFileExtensions: ['ts', 'js', 'html'],
-    coverageDirectory: '../../lib/coverage/shared/sse-connection',
+    coverageDirectory: '../../../lib/coverage/shared/sse-connection',
 }
