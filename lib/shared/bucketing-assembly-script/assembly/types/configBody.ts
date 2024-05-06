@@ -12,17 +12,22 @@ import {
 import { Feature } from './feature'
 import { Audience } from './target'
 
-export class Settings extends JSON.Obj {
-    readonly disablePassthroughRollout?: bool
+export class Settings extends JSON.Value {
+    readonly disablePassthroughRollouts: bool
 
     constructor(settings: JSON.Obj) {
         super();
-        if (settings.has("disablePassthroughRollout")) {
-            const value = settings.get("disablePassthroughRollout");
-            this.disablePassthroughRollout = value !== null ? !!value : undefined;
+        if (settings.has("disablePassthroughRollouts")) {
+            const value = settings.get("disablePassthroughRollouts");
+            this.disablePassthroughRollouts = !!value
         } else {
-            this.disablePassthroughRollout = undefined;
+            this.disablePassthroughRollouts = false
         }
+    }
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('disablePassthroughRollouts', this.disablePassthroughRollouts)
+        return json.stringify()
     }
 }
 

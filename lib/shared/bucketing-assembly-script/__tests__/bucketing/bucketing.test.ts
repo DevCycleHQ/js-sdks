@@ -8,8 +8,6 @@ import {
     setClientCustomData,
     variableForUser as variableForUser_AS,
     VariableType,
-    testConfigBodyClassFromUTF8,
-    testConfigBodyClass,
 } from '../bucketingImportHelper'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config, barrenConfig, configWithNullCustomData } = testData
@@ -515,7 +513,87 @@ describe('Config Parsing and Generating', () => {
         )
     })
 
-    it('pushes user to next target if not in rollout', () => {
+    it('holds user back if not in rollout and passthrough disabled', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'asuh',
+            customData: {
+                favouriteFood: 'pizza',
+                favouriteNull: null,
+            },
+            privateCustomData: {
+                favouriteDrink: 'coffee',
+                favouriteNumber: 610,
+                favouriteBoolean: true,
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'test@notemail.com',
+        }
+        const newConfig = {
+            ...config,
+            project: {
+                ...config.project,
+                settings: {
+                    ...config.project.settings,
+                    disablePassthroughRollouts: true
+                }
+            }
+        }
+        const expected = {
+            environment: {
+                _id: '6153553b8cf4e45e0464268d',
+                key: 'test-environment',
+            },
+            project: expect.objectContaining({
+                _id: '61535533396f00bab586cb17',
+                a0_organization: 'org_12345612345',
+                key: 'test-project',
+            }),
+            features: {
+                feature2: {
+                    _id: '614ef6aa475928459060721a',
+                    key: 'feature2',
+                    type: 'release',
+                    _variation: '615382338424cb11646d7667',
+                    variationName: 'variation 1 aud 2',
+                    variationKey: 'variation-1-aud-2-key',
+                },
+            },
+            variableVariationMap: {
+                feature2Var: {
+                    _feature: '614ef6aa475928459060721a',
+                    _variation: '615382338424cb11646d7667',
+                },
+            },
+            featureVariationMap: {
+                '614ef6aa475928459060721a': '615382338424cb11646d7667',
+            },
+            variables: {
+                feature2Var: {
+                    _id: '61538237b0a70b58ae6af71f',
+                    key: 'feature2Var',
+                    type: 'String',
+                    value: 'Var 1 aud 2',
+                },
+            },
+        }
+        initSDK(sdkKey, newConfig)
+
+        const c = generateBucketedConfig(user)
+        expect(c).toEqual(expected)
+
+        expectVariableForUser(
+            {
+                user,
+                variableKey: 'feature2Var',
+                variableType: VariableType.String,
+            },
+            expected.variables['feature2Var'],
+        )
+    })
+
+    it('pushes user to next target if not in rollout and passthrough not disabled', () => {
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',

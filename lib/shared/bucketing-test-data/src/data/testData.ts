@@ -25,6 +25,7 @@ export const project: PublicProject = {
         edgeDB: {
             enabled: false,
         },
+        disablePassthroughRollouts: false
     },
 }
 
@@ -195,7 +196,6 @@ export const audiences: TargetAudience[] = [
         },
     },
     {
-        _id: '6153557f1ed7bac7268ea0d9',
         filters: {
             filters: [
                 {
