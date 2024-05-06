@@ -3,6 +3,7 @@
     "compilerOptions": {
         "outDir": "../../dist/out-tsc",
         "module": "esnext",
+        "moduleResolution": "bundler",
         "declaration": true,
         "types": []
     },
