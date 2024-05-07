@@ -141,20 +141,20 @@ function evaluateSegmentationForFeature(
     // Returns the first target for which the user passes segmentation
     for (let i = 0; i < feature.configuration.targets.length; i++) {
         const target = feature.configuration.targets[i]
-        const boundedHashData = _generateBoundedHashes(user.user_id, target._id)
-        const rolloutHash = boundedHashData.rolloutHash
-        const passthroughRolloutEnabled = !config.project.settings.disablePassthroughRollout
-        let doesUserPassRollout: bool = true
+        const passthroughRolloutEnabled = !config.project.settings.disablePassthroughRollouts
+        let doesUserPassRollout = true
         if (target.rollout && passthroughRolloutEnabled) {
+            const boundedHashData = _generateBoundedHashes(user.user_id, target._id)
+            const rolloutHash = boundedHashData.rolloutHash
             doesUserPassRollout = _doesUserPassRollout(target.rollout, rolloutHash)
         }
         if (
-            _evaluateOperator(
+            doesUserPassRollout && _evaluateOperator(
                 target._audience.filters,
                 config.audiences,
                 user,
                 clientCustomData,
-            ) && doesUserPassRollout
+            )
         ) {
             return target
         }
@@ -213,7 +213,7 @@ function doesUserQualifyForFeature(
 
     const boundedHashData = _generateBoundedHashes(user.user_id, target._id)
     const rolloutHash = boundedHashData.rolloutHash
-    const passthroughRolloutEnabled = !config.project.settings.disablePassthroughRollout
+    const passthroughRolloutEnabled = !config.project.settings.disablePassthroughRollouts
     if (target.rollout && !passthroughRolloutEnabled && !_doesUserPassRollout(target.rollout, rolloutHash)) {
         return null
     }

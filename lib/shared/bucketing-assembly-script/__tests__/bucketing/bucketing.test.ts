@@ -722,6 +722,146 @@ describe('Config Parsing and Generating', () => {
         )
     })
 
+    it('pushes user to next target if not in rollout and passthrough setting not defined', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'asuh',
+            customData: {
+                favouriteFood: 'pizza',
+                favouriteNull: null,
+            },
+            privateCustomData: {
+                favouriteDrink: 'coffee',
+                favouriteNumber: 610,
+                favouriteBoolean: true,
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'test@notemail.com',
+        }
+        const newConfig = {
+            ...config,
+            project: {
+                ...config.project,
+                settings: {
+                    ...config.project.settings,
+                    disablePassthroughRollouts: undefined
+                }
+            }
+        }
+
+        const expected = {
+            environment: {
+                _id: '6153553b8cf4e45e0464268d',
+                key: 'test-environment',
+            },
+            project: expect.objectContaining({
+                _id: '61535533396f00bab586cb17',
+                a0_organization: 'org_12345612345',
+                key: 'test-project',
+            }),
+            features: {
+                feature1: {
+                    _id: "614ef6aa473928459060721a",
+                    _variation: "6153553b8cf4e45e0464268d",
+                    key: "feature1",
+                    type: "release",
+                    variationKey: "variation-1-key",
+                    variationName: "variation 1",
+                },
+                feature2: {
+                    _id: '614ef6aa475928459060721a',
+                    key: 'feature2',
+                    type: 'release',
+                    _variation: '615382338424cb11646d7667',
+                    variationName: 'variation 1 aud 2',
+                    variationKey: 'variation-1-aud-2-key',
+                },
+            },
+            variableVariationMap: {
+                "bool-var": {
+                    "_feature": "614ef6aa473928459060721a",
+                    "_variation": "6153553b8cf4e45e0464268d",
+                },
+                feature2Var: {
+                    _feature: '614ef6aa475928459060721a',
+                    _variation: '615382338424cb11646d7667',
+                },
+                "json-var": {
+                    "_feature": "614ef6aa473928459060721a",
+                    "_variation": "6153553b8cf4e45e0464268d",
+                },
+                "num-var": {
+                    "_feature": "614ef6aa473928459060721a",
+                    "_variation": "6153553b8cf4e45e0464268d",
+                },
+                "swagTest": {
+                    "_feature": "614ef6aa473928459060721a",
+                    "_variation": "6153553b8cf4e45e0464268d",
+                },
+                "test": {
+                    "_feature": "614ef6aa473928459060721a",
+                    "_variation": "6153553b8cf4e45e0464268d",
+                },
+            },
+            featureVariationMap: {
+                "614ef6aa473928459060721a": "6153553b8cf4e45e0464268d",
+                '614ef6aa475928459060721a': '615382338424cb11646d7667',
+            },
+            variables: {
+                feature2Var: {
+                    _id: '61538237b0a70b58ae6af71f',
+                    key: 'feature2Var',
+                    type: 'String',
+                    value: 'Var 1 aud 2',
+                },
+                'bool-var': {
+                    _id: '61538237b0a70b58ae6af71y',
+                    key: 'bool-var',
+                    type: 'Boolean',
+                    value: false,
+                },
+                'json-var': {
+                    _id: '61538237b0a70b58ae6af71q',
+                    key: 'json-var',
+                    type: 'JSON',
+                    value: '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var': {
+                    _id: '61538237b0a70b58ae6af71s',
+                    key: 'num-var',
+                    type: 'Number',
+                    value: 610.61,
+                },
+                swagTest: {
+                    _id: '615356f120ed334a6054564c',
+                    key: 'swagTest',
+                    type: 'String',
+                    value: 'man',
+                },
+                test: {
+                    _id: "614ef6ea475129459160721a",
+                    key: "test",
+                    type: "String",
+                    value: "scat",
+                },
+            },
+        }
+        initSDK(sdkKey, newConfig)
+
+        const c = generateBucketedConfig(user)
+        expect(c).toEqual(expected)
+
+        expectVariableForUser(
+            {
+                user,
+                variableKey: 'feature2Var',
+                variableType: VariableType.String,
+            },
+            expected.variables['feature2Var'],
+        )
+    })
+
     it('puts user through if in rollout', () => {
         const user = {
             country: 'U S AND A',

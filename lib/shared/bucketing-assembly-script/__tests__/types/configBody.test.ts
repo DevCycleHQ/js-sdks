@@ -22,6 +22,12 @@ describe.each([true, false])('Config Body', (utf8) => {
             JSON.parse(
                 JSON.stringify({
                     ...testData.config,
+                    project: {
+                        ...testData.config.project,
+                        settings: {
+                            disablePassthroughRollouts: false
+                        }
+                    },
                     variableHashes: undefined,
                 }),
             ),
@@ -48,6 +54,12 @@ describe.each([true, false])('Config Body', (utf8) => {
             JSON.parse(
                 JSON.stringify({
                     ...config,
+                    project: {
+                        ...config.project,
+                        settings: {
+                            disablePassthroughRollouts: false
+                        }
+                    },
                     variableHashes: undefined,
                 }),
             ),

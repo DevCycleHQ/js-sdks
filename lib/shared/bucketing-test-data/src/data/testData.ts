@@ -25,7 +25,7 @@ export const project: PublicProject = {
         edgeDB: {
             enabled: false,
         },
-        disablePassthroughRollouts: false
+        disablePassthroughRollouts: false,
     },
 }
 

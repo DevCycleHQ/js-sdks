@@ -155,20 +155,24 @@ type SegmentedFeatureData = {
     target: PublicTarget<string>
 }
 
-const checkRollout = ({
+const checkRolloutAndEvaluate = ({
     user,
     target,
+    disablePassthroughRollouts,
 }: {
     user: DVCBucketingUser
     target: PublicTarget
+    disablePassthroughRollouts: boolean
 }) => {
-    const { rolloutHash } = generateBoundedHashes(user.user_id, target._id)
-    if (!target.rollout) return true
-    else
+    if (!target.rollout || disablePassthroughRollouts) {
+        return true
+    } else {
+        const { rolloutHash } = generateBoundedHashes(user.user_id, target._id)
         return doesUserPassRollout({
             boundedHash: rolloutHash,
             rollout: target.rollout,
         })
+    }
 }
 
 export const getSegmentedFeatureDataFromConfig = ({
@@ -179,6 +183,8 @@ export const getSegmentedFeatureDataFromConfig = ({
     user: DVCBucketingUser
 }): SegmentedFeatureData[] => {
     const initialValue: SegmentedFeatureData[] = []
+    const disablePassthroughRollouts =
+        !!config.project.settings.disablePassthroughRollouts
     return config.features.reduce((accumulator, feature) => {
         // Returns the first target for which the user passes segmentation
         const isOptInEnabled =
@@ -188,13 +194,18 @@ export const getSegmentedFeatureDataFromConfig = ({
         const segmentedFeatureTarget = feature.configuration.targets.find(
             (target) => {
                 return (
+                    checkRolloutAndEvaluate({
+                        target,
+                        user,
+                        disablePassthroughRollouts,
+                    }) &&
                     evaluateOperator({
                         operator: target._audience.filters,
                         data: user,
                         featureId: feature._id,
                         isOptInEnabled: !!isOptInEnabled,
                         audiences: config.audiences,
-                    }) && checkRollout({ target, user })
+                    })
                 )
             },
         )
@@ -224,7 +235,8 @@ export const generateBucketedConfig = ({
         config,
         user,
     })
-
+    const disablePassthroughRollouts =
+        config.project.settings.disablePassthroughRollouts
     const updateMapsWithBucketedFeature = ({
         feature,
         variation,
@@ -257,11 +269,21 @@ export const generateBucketedConfig = ({
     }
 
     segmentedFeatures.forEach(({ feature, target }) => {
-        const { variations } = feature
-        const { bucketingHash } = generateBoundedHashes(
+        const { _id, key, type, variations, settings } = feature
+        const { rolloutHash, bucketingHash } = generateBoundedHashes(
             user.user_id,
             target._id,
         )
+        if (
+            target.rollout &&
+            disablePassthroughRollouts &&
+            !doesUserPassRollout({
+                boundedHash: rolloutHash,
+                rollout: target.rollout,
+            })
+        ) {
+            return
+        }
 
         const variation_id = bucketForSegmentedFeature({
             boundedHash: bucketingHash,

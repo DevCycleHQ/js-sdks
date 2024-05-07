@@ -8,6 +8,7 @@ import {
     isValidString,
     getJSONObjFromJSONOptional,
     getStringFromJSONOptional,
+    getBoolFromJSON
 } from '../helpers/jsonHelpers'
 import { Feature } from './feature'
 import { Audience } from './target'
@@ -16,13 +17,13 @@ export class Settings extends JSON.Value {
     readonly disablePassthroughRollouts: bool
 
     constructor(settings: JSON.Obj) {
-        super();
+        super()
         if (settings.has("disablePassthroughRollouts")) {
-            const value = settings.get("disablePassthroughRollouts");
-            this.disablePassthroughRollouts = !!value
+            this.disablePassthroughRollouts = getBoolFromJSON(settings, 'disablePassthroughRollouts')
         } else {
             this.disablePassthroughRollouts = false
         }
+
     }
     stringify(): string {
         const json = new JSON.Obj()
@@ -32,27 +33,27 @@ export class Settings extends JSON.Value {
 }
 
 export class PublicProject extends JSON.Value {
-    readonly _id: string;
-    readonly key: string;
-    readonly a0_organization: string;
-    readonly settings: Settings;
+    readonly _id: string
+    readonly key: string
+    readonly a0_organization: string
+    readonly settings: Settings
 
     constructor(project: JSON.Obj) {
-        super();
-        this._id = getStringFromJSON(project, '_id');
-        this.key = getStringFromJSON(project, 'key');
-        this.a0_organization = getStringFromJSON(project, 'a0_organization');
-        this.settings = new Settings(getJSONObjFromJSON(project, 'settings'));
+        super()
+        this._id = getStringFromJSON(project, '_id')
+        this.key = getStringFromJSON(project, 'key')
+        this.a0_organization = getStringFromJSON(project, 'a0_organization')
+        this.settings = new Settings(getJSONObjFromJSON(project, 'settings'))
     }
 
     stringify(): string {
-        const json = new JSON.Obj();
-        json.set('_id', this._id);
-        json.set('key', this.key);
-        json.set('a0_organization', this.a0_organization);
-        json.set('settings', this.settings);
+        const json = new JSON.Obj()
+        json.set('_id', this._id)
+        json.set('key', this.key)
+        json.set('a0_organization', this.a0_organization)
+        json.set('settings', this.settings)
 
-        return json.stringify();
+        return json.stringify()
     }
 }
 
