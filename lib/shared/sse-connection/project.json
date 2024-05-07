@@ -18,9 +18,7 @@
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": [
-                    "lib/shared/sse-connection/**/*.ts"
-                ]
+                "lintFilePatterns": ["lib/shared/sse-connection/**/*.ts"]
             }
         },
         "test": {
