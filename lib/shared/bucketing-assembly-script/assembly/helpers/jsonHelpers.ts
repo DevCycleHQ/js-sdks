@@ -6,6 +6,15 @@ export function getJSONObjFromJSON(jsonObj: JSON.Obj, key: string): JSON.Obj {
     return obj
 }
 
+export function getBoolFromJSON(jsonObj: JSON.Obj, key: string): bool {
+    const bool = jsonObj.getBool(key)
+    if (!bool) {
+        throw new Error(`Missing bool value for key: "${key}", obj: ${jsonObj.stringify()}`)
+    } else {
+        return bool.valueOf()
+    }
+}
+
 export function getJSONObjFromJSONOptional(jsonObj: JSON.Obj, key: string): JSON.Obj | null {
     const obj = jsonObj.getObj(key)
     if (!obj) {

@@ -368,21 +368,79 @@ describe('Config Parsing and Generating', () => {
                 _id: '6153553b8cf4e45e0464268d',
                 key: 'test-environment',
             },
-            project: expect.objectContaining({
+            featureVariationMap: {
+                '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
+            },
+            features: {
+                feature1: {
+                    _id: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                    key: 'feature1',
+                    type: 'release',
+                    variationKey: 'variation-1-key',
+                    variationName: 'variation 1',
+                },
+            },
+            project: {
                 _id: '61535533396f00bab586cb17',
                 a0_organization: 'org_12345612345',
                 key: 'test-project',
-            }),
-            features: {},
-            featureVariationMap: {},
+                settings: {
+                    edgeDB: {
+                        enabled: false,
+                    },
+                    disablePassthroughRollouts: false,
+                },
+            },
             variableVariationMap: {},
-            variables: {},
+            variables: {
+                'bool-var': {
+                    _id: '61538237b0a70b58ae6af71y',
+                    key: 'bool-var',
+                    type: 'Boolean',
+                    value: false,
+                },
+                'json-var': {
+                    _id: '61538237b0a70b58ae6af71q',
+                    key: 'json-var',
+                    type: 'JSON',
+                    value: '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var': {
+                    _id: '61538237b0a70b58ae6af71s',
+                    key: 'num-var',
+                    type: 'Number',
+                    value: 610.61,
+                },
+                swagTest: {
+                    _id: '615356f120ed334a6054564c',
+                    key: 'swagTest',
+                    type: 'String',
+                    value: 'man',
+                },
+                test: {
+                    _id: '614ef6ea475129459160721a',
+                    key: 'test',
+                    type: 'String',
+                    value: 'scat',
+                },
+            },
         }
         const c = generateBucketedConfig({ config, user })
         expect(c).toEqual(expected)
     })
 
-    it('holds user back if not in rollout', () => {
+    it('holds user in rollout if passthrough disabled', () => {
+        const newConfig = {
+            ...config,
+            project: {
+                ...config.project,
+                settings: {
+                    ...config.project.settings,
+                    disablePassthroughRollouts: true,
+                },
+            },
+        }
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -430,6 +488,208 @@ describe('Config Parsing and Generating', () => {
                     key: 'feature2Var',
                     type: 'String',
                     value: 'Var 1 aud 2',
+                },
+            },
+        }
+        const c = generateBucketedConfig({ config: newConfig, user })
+        expect(c).toEqual(expected)
+    })
+
+    it('pushes user to next target if not in rollout and passthrough undefined', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'asuh',
+            customData: {
+                favouriteFood: 'pizza',
+                favouriteNull: null,
+            },
+            privateCustomData: {
+                favouriteDrink: 'coffee',
+                favouriteNumber: 610,
+                favouriteBoolean: true,
+                privateNull: null,
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'test@notemail.com',
+        }
+
+        const newConfig = {
+            ...config,
+            project: {
+                ...config.project,
+                settings: {
+                    ...config.project.settings,
+                    disablePassthroughRollouts: undefined,
+                },
+            },
+        }
+
+        const expected = {
+            environment: {
+                _id: '6153553b8cf4e45e0464268d',
+                key: 'test-environment',
+            },
+            project: expect.objectContaining({
+                _id: '61535533396f00bab586cb17',
+                a0_organization: 'org_12345612345',
+                key: 'test-project',
+            }),
+            features: {
+                feature1: {
+                    _id: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                    key: 'feature1',
+                    settings: undefined,
+                    type: 'release',
+                    variationKey: 'variation-1-key',
+                    variationName: 'variation 1',
+                },
+                feature2: {
+                    _id: '614ef6aa475928459060721a',
+                    key: 'feature2',
+                    type: FeatureType.release,
+                    _variation: '615382338424cb11646d7667',
+                    variationName: 'variation 1 aud 2',
+                    variationKey: 'variation-1-aud-2-key',
+                },
+            },
+            featureVariationMap: {
+                '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
+                '614ef6aa475928459060721a': '615382338424cb11646d7667',
+            },
+            variableVariationMap: {},
+            variables: {
+                feature2Var: {
+                    _id: '61538237b0a70b58ae6af71f',
+                    key: 'feature2Var',
+                    type: 'String',
+                    value: 'Var 1 aud 2',
+                },
+                'bool-var': {
+                    _id: '61538237b0a70b58ae6af71y',
+                    key: 'bool-var',
+                    type: 'Boolean',
+                    value: false,
+                },
+                'json-var': {
+                    _id: '61538237b0a70b58ae6af71q',
+                    key: 'json-var',
+                    type: 'JSON',
+                    value: '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var': {
+                    _id: '61538237b0a70b58ae6af71s',
+                    key: 'num-var',
+                    type: 'Number',
+                    value: 610.61,
+                },
+                swagTest: {
+                    _id: '615356f120ed334a6054564c',
+                    key: 'swagTest',
+                    type: 'String',
+                    value: 'man',
+                },
+                test: {
+                    _id: '614ef6ea475129459160721a',
+                    key: 'test',
+                    type: 'String',
+                    value: 'scat',
+                },
+            },
+        }
+        const c = generateBucketedConfig({ config: newConfig, user })
+        expect(c).toEqual(expected)
+    })
+
+    it('pushes user to next target if not in rollout', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'asuh',
+            customData: {
+                favouriteFood: 'pizza',
+                favouriteNull: null,
+            },
+            privateCustomData: {
+                favouriteDrink: 'coffee',
+                favouriteNumber: 610,
+                favouriteBoolean: true,
+                privateNull: null,
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'test@notemail.com',
+        }
+        const expected = {
+            environment: {
+                _id: '6153553b8cf4e45e0464268d',
+                key: 'test-environment',
+            },
+            project: expect.objectContaining({
+                _id: '61535533396f00bab586cb17',
+                a0_organization: 'org_12345612345',
+                key: 'test-project',
+            }),
+            features: {
+                feature1: {
+                    _id: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                    key: 'feature1',
+                    settings: undefined,
+                    type: 'release',
+                    variationKey: 'variation-1-key',
+                    variationName: 'variation 1',
+                },
+                feature2: {
+                    _id: '614ef6aa475928459060721a',
+                    key: 'feature2',
+                    type: FeatureType.release,
+                    _variation: '615382338424cb11646d7667',
+                    variationName: 'variation 1 aud 2',
+                    variationKey: 'variation-1-aud-2-key',
+                },
+            },
+            featureVariationMap: {
+                '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
+                '614ef6aa475928459060721a': '615382338424cb11646d7667',
+            },
+            variableVariationMap: {},
+            variables: {
+                feature2Var: {
+                    _id: '61538237b0a70b58ae6af71f',
+                    key: 'feature2Var',
+                    type: 'String',
+                    value: 'Var 1 aud 2',
+                },
+                'bool-var': {
+                    _id: '61538237b0a70b58ae6af71y',
+                    key: 'bool-var',
+                    type: 'Boolean',
+                    value: false,
+                },
+                'json-var': {
+                    _id: '61538237b0a70b58ae6af71q',
+                    key: 'json-var',
+                    type: 'JSON',
+                    value: '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var': {
+                    _id: '61538237b0a70b58ae6af71s',
+                    key: 'num-var',
+                    type: 'Number',
+                    value: 610.61,
+                },
+                swagTest: {
+                    _id: '615356f120ed334a6054564c',
+                    key: 'swagTest',
+                    type: 'String',
+                    value: 'man',
+                },
+                test: {
+                    _id: '614ef6ea475129459160721a',
+                    key: 'test',
+                    type: 'String',
+                    value: 'scat',
                 },
             },
         }

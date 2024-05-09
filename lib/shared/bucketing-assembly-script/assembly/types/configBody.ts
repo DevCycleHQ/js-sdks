@@ -8,22 +8,42 @@ import {
     isValidString,
     getJSONObjFromJSONOptional,
     getStringFromJSONOptional,
+    getBoolFromJSON
 } from '../helpers/jsonHelpers'
 import { Feature } from './feature'
 import { Audience } from './target'
+
+export class Settings extends JSON.Value {
+    readonly disablePassthroughRollouts: bool
+
+    constructor(settings: JSON.Obj) {
+        super()
+        if (settings.has("disablePassthroughRollouts")) {
+            this.disablePassthroughRollouts = getBoolFromJSON(settings, 'disablePassthroughRollouts')
+        } else {
+            this.disablePassthroughRollouts = false
+        }
+    }
+    
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('disablePassthroughRollouts', this.disablePassthroughRollouts)
+        return json.stringify()
+    }
+}
 
 export class PublicProject extends JSON.Value {
     readonly _id: string
     readonly key: string
     readonly a0_organization: string
-    readonly settings: JSON.Obj
+    readonly settings: Settings
 
     constructor(project: JSON.Obj) {
         super()
         this._id = getStringFromJSON(project, '_id')
         this.key = getStringFromJSON(project, 'key')
         this.a0_organization = getStringFromJSON(project, 'a0_organization')
-        this.settings = getJSONObjFromJSON(project, 'settings')
+        this.settings = new Settings(getJSONObjFromJSON(project, 'settings'))
     }
 
     stringify(): string {
