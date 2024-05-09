@@ -16,7 +16,8 @@ type SetConfigBufferInterface = (sdkKey: string, projectConfig: string) => void
 type TrackSDKConfigEventInterface = (
     url: string,
     responseTimeMS: number,
-    res: Response,
+    res?: Response,
+    err?: ResponseError,
     reqEtag?: string,
     reqLastModified?: string,
 ) => void
@@ -127,6 +128,19 @@ export class EnvironmentConfigManager {
             }
         }
 
+        const trackEvent = (err?: ResponseError) => {
+            if ((res && res?.status !== 304) || err) {
+                this.trackSDKConfigEvent(
+                    url,
+                    responseTimeMS,
+                    res || undefined,
+                    err,
+                    reqEtag,
+                    reqLastModified,
+                )
+            }
+        }
+
         try {
             this.logger.debug(
                 `Requesting new config for ${url}, etag: ${this.configEtag}` +
@@ -146,6 +160,7 @@ export class EnvironmentConfigManager {
                 }, etag: ${res?.headers.get('etag')}`,
             )
         } catch (ex) {
+            trackEvent(ex)
             logError(ex)
             res = null
             if (ex instanceof ResponseError) {
@@ -170,21 +185,13 @@ export class EnvironmentConfigManager {
                 this.configLastModified =
                     res?.headers.get('last-modified') || ''
 
+                trackEvent()
                 return
             } catch (e) {
+                trackEvent()
                 logError(new Error('Invalid config JSON.'))
                 res = null
             }
-        }
-
-        if (res && res?.status !== 304) {
-            this.trackSDKConfigEvent(
-                url,
-                responseTimeMS,
-                res,
-                reqEtag,
-                reqLastModified,
-            )
         }
 
         if (this.hasConfig) {

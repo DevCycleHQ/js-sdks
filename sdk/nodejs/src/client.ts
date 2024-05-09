@@ -1,5 +1,5 @@
 import { EnvironmentConfigManager } from '@devcycle/config-manager'
-import { UserError } from '@devcycle/server-request'
+import { ResponseError, UserError } from '@devcycle/server-request'
 import {
     bucketUserForConfig,
     getSDKKeyFromConfig,
@@ -306,7 +306,8 @@ export class DevCycleClient {
     private trackSDKConfigEvent(
         url: string,
         responseTimeMS: number,
-        res: Response,
+        res?: Response,
+        err?: ResponseError,
         reqEtag?: string,
         reqLastModified?: string,
     ): void {
@@ -320,10 +321,12 @@ export class DevCycleClient {
                     clientUUID: this.clientUUID,
                     reqEtag,
                     reqLastModified,
-                    resEtag: res?.headers.get('etag') || '',
-                    resLastModified: res?.headers.get('last-modified') || '',
-                    resRayId: res?.headers.get('cf-ray') || '',
-                    resStatus: res?.status,
+                    resEtag: res?.headers.get('etag') || undefined,
+                    resLastModified:
+                        res?.headers.get('last-modified') || undefined,
+                    resRayId: res?.headers.get('cf-ray') || undefined,
+                    resStatus: err ? err.status : res?.status || undefined,
+                    errMsg: err ? err.message : undefined,
                 },
             },
         )
