@@ -1,6 +1,7 @@
 import { DVCLogger } from '@devcycle/types'
 import { getEnvironmentConfig } from './request'
 import { ResponseError, UserError } from '@devcycle/server-request'
+import { DevCycleEvent, DVCPopulatedUser } from '@devcycle/js-cloud-server-sdk'
 
 type ConfigPollingOptions = {
     configPollingIntervalMS?: number
@@ -12,8 +13,12 @@ type ConfigPollingOptions = {
 
 type SetIntervalInterface = (handler: () => void, timeout?: number) => any
 type ClearIntervalInterface = (intervalTimeout: any) => void
-
-type SetConfigBuffer = (sdkKey: string, projectConfig: string) => void
+type SetConfigBufferInterface = (sdkKey: string, projectConfig: string) => void
+type TrackSDKConfigEventInterface = (
+    url: string,
+    responseTimeMS: number,
+    res: Response,
+) => void
 
 export class EnvironmentConfigManager {
     private readonly logger: DVCLogger
@@ -27,17 +32,20 @@ export class EnvironmentConfigManager {
     fetchConfigPromise: Promise<void>
     private intervalTimeout?: any
     private disablePolling = false
-    private readonly setConfigBuffer: SetConfigBuffer
+    private clientMode: boolean
+
+    private readonly setConfigBuffer: SetConfigBufferInterface
     private readonly setInterval: SetIntervalInterface
     private readonly clearInterval: ClearIntervalInterface
-    private clientMode: boolean
+    private readonly trackSDKConfigEvent: TrackSDKConfigEventInterface
 
     constructor(
         logger: DVCLogger,
         sdkKey: string,
-        setConfigBuffer: SetConfigBuffer,
+        setConfigBuffer: SetConfigBufferInterface,
         setInterval: SetIntervalInterface,
         clearInterval: ClearIntervalInterface,
+        trackSDKConfigEvent: TrackSDKConfigEventInterface,
         {
             configPollingIntervalMS = 10000,
             configPollingTimeoutMS = 5000,
@@ -52,8 +60,9 @@ export class EnvironmentConfigManager {
         this.setConfigBuffer = setConfigBuffer
         this.setInterval = setInterval
         this.clearInterval = clearInterval
-        this.clientMode = clientMode
+        this.trackSDKConfigEvent = trackSDKConfigEvent
 
+        this.clientMode = clientMode
         this.pollingIntervalMS =
             configPollingIntervalMS >= 1000 ? configPollingIntervalMS : 1000
         this.requestTimeoutMS =
@@ -101,6 +110,8 @@ export class EnvironmentConfigManager {
         let res: Response | null
         let projectConfig: string | null = null
         let responseError: ResponseError | null = null
+        const startTime = Date.now()
+        let responseTimeMS = 0
 
         const logError = (error: any) => {
             const errMsg =
@@ -124,6 +135,7 @@ export class EnvironmentConfigManager {
                 this.configEtag,
                 this.configLastModified,
             )
+            responseTimeMS = Date.now() - startTime
             projectConfig = await res.text()
             this.logger.debug(
                 `Downloaded config, status: ${
@@ -146,20 +158,24 @@ export class EnvironmentConfigManager {
             return
         } else if (res?.status === 200 && projectConfig) {
             try {
-                const etag = res?.headers.get('etag') || ''
-                const lastModified = res?.headers.get('last-modified') || ''
                 this.setConfigBuffer(
                     `${this.sdkKey}${this.clientMode ? '_client' : ''}`,
                     projectConfig,
                 )
                 this.hasConfig = true
-                this.configEtag = etag
-                this.configLastModified = lastModified
+                this.configEtag = res?.headers.get('etag') || ''
+                this.configLastModified =
+                    res?.headers.get('last-modified') || ''
+
                 return
             } catch (e) {
                 logError(new Error('Invalid config JSON.'))
                 res = null
             }
+        }
+
+        if (res && res?.status !== 304) {
+            this.trackSDKConfigEvent(url, responseTimeMS, res)
         }
 
         if (this.hasConfig) {

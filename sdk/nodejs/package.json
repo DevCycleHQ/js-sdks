@@ -24,7 +24,8 @@
         "@devcycle/js-cloud-server-sdk": "^1.11.3",
         "@devcycle/types": "^1.12.3",
         "cross-fetch": "^4.0.0",
-        "fetch-retry": "^5.0.6"
+        "fetch-retry": "^5.0.6",
+        "uuid": "^8.3.2"
     },
     "peerDependencies": {
         "@openfeature/server-sdk": "^1.13.5"
