@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/nextjs-sdk",
-    "version": "1.8.2",
+    "version": "1.9.0",
     "license": "MIT",
     "author": "DevCycle <support@devcycle.com>",
     "keywords": [
@@ -18,7 +18,7 @@
     },
     "homepage": "https://devcycle.com",
     "dependencies": {
-        "@devcycle/bucketing": "^1.15.1",
+        "@devcycle/bucketing": "^1.16.0",
         "@devcycle/js-client-sdk": "^1.24.2",
         "@devcycle/react-client-sdk": "^1.22.2",
         "@devcycle/types": "^1.12.1",
