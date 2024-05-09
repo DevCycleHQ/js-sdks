@@ -107,5 +107,5 @@ export class ConfigBody<IdType = string> {
      * The client SDK key corresponding to this config. Used when a client config is
      * being retrieved via a server SDK key
      */
-    clientSDKKey: string
+    clientSDKKey?: string
 }
