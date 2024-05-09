@@ -307,6 +307,8 @@ export class DevCycleClient {
         url: string,
         responseTimeMS: number,
         res: Response,
+        reqEtag?: string,
+        reqLastModified?: string,
     ): void {
         this.eventQueue.queueEvent(
             DVCPopulatedUserFromDevCycleUser({ user_id: this.clientUUID }),
@@ -315,10 +317,13 @@ export class DevCycleClient {
                 target: url,
                 value: responseTimeMS,
                 metaData: {
-                    etag: res?.headers.get('etag') || '',
-                    lastModified: res?.headers.get('last-modified') || '',
-                    rayId: res?.headers.get('cf-ray') || '',
-                    status: res?.status,
+                    clientUUID: this.clientUUID,
+                    reqEtag,
+                    reqLastModified,
+                    resEtag: res?.headers.get('etag') || '',
+                    resLastModified: res?.headers.get('last-modified') || '',
+                    resRayId: res?.headers.get('cf-ray') || '',
+                    resStatus: res?.status,
                 },
             },
         )

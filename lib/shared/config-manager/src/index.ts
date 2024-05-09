@@ -1,7 +1,6 @@
 import { DVCLogger } from '@devcycle/types'
 import { getEnvironmentConfig } from './request'
 import { ResponseError, UserError } from '@devcycle/server-request'
-import { DevCycleEvent, DVCPopulatedUser } from '@devcycle/js-cloud-server-sdk'
 
 type ConfigPollingOptions = {
     configPollingIntervalMS?: number
@@ -18,6 +17,8 @@ type TrackSDKConfigEventInterface = (
     url: string,
     responseTimeMS: number,
     res: Response,
+    reqEtag?: string,
+    reqLastModified?: string,
 ) => void
 
 export class EnvironmentConfigManager {
@@ -112,6 +113,8 @@ export class EnvironmentConfigManager {
         let responseError: ResponseError | null = null
         const startTime = Date.now()
         let responseTimeMS = 0
+        const reqEtag = this.configEtag
+        const reqLastModified = this.configLastModified
 
         const logError = (error: any) => {
             const errMsg =
@@ -132,8 +135,8 @@ export class EnvironmentConfigManager {
             res = await getEnvironmentConfig(
                 url,
                 this.requestTimeoutMS,
-                this.configEtag,
-                this.configLastModified,
+                reqEtag,
+                reqLastModified,
             )
             responseTimeMS = Date.now() - startTime
             projectConfig = await res.text()
@@ -175,7 +178,13 @@ export class EnvironmentConfigManager {
         }
 
         if (res && res?.status !== 304) {
-            this.trackSDKConfigEvent(url, responseTimeMS, res)
+            this.trackSDKConfigEvent(
+                url,
+                responseTimeMS,
+                res,
+                reqEtag,
+                reqLastModified,
+            )
         }
 
         if (this.hasConfig) {
