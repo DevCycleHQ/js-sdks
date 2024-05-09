@@ -23,8 +23,8 @@ export class Settings extends JSON.Value {
         } else {
             this.disablePassthroughRollouts = false
         }
-
     }
+    
     stringify(): string {
         const json = new JSON.Obj()
         json.set('disablePassthroughRollouts', this.disablePassthroughRollouts)
