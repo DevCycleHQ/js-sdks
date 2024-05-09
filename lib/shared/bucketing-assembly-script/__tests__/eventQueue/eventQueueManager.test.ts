@@ -11,7 +11,7 @@ import {
     cleanupEventQueue,
     eventQueueSize as eventQueueSize_AS,
     setClientCustomData,
-    queueVariableEvaluatedEvent_JSON
+    queueVariableEvaluatedEvent_JSON,
 } from '../bucketingImportHelper'
 import { FlushPayload } from '../../assembly/types'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
@@ -33,16 +33,29 @@ const queueEvent = (sdkKey: string, user: unknown, event: unknown) => {
     return queueEvent_AS(sdkKey, JSON.stringify(user), JSON.stringify(event))
 }
 
-const queueAggregateEvent = (sdkKey: string, event: unknown, variableVariationMap: unknown) => {
-    return queueAggregateEvent_AS(sdkKey, JSON.stringify(event), JSON.stringify(variableVariationMap))
+const queueAggregateEvent = (
+    sdkKey: string,
+    event: unknown,
+    variableVariationMap: unknown,
+) => {
+    return queueAggregateEvent_AS(
+        sdkKey,
+        JSON.stringify(event),
+        JSON.stringify(variableVariationMap),
+    )
 }
 
-const queueVariableEvaluatedEvent = (sdkKey: string, config: unknown, variable: unknown, variableKey: string) => {
+const queueVariableEvaluatedEvent = (
+    sdkKey: string,
+    config: unknown,
+    variable: unknown,
+    variableKey: string,
+) => {
     return queueVariableEvaluatedEvent_JSON(
         sdkKey,
         JSON.stringify(config),
         variable ? JSON.stringify(variable) : null,
-        variableKey
+        variableKey,
     )
 }
 
@@ -52,13 +65,15 @@ const eventQueueSize = (sdkKey: string): number => {
 
 const initSDK = (sdkKey: string, eventOptions: unknown = {}) => {
     initEventQueue(sdkKey, eventOptions)
-    setPlatformData(JSON.stringify({
-        platform: 'NodeJS',
-        platformVersion: '16.0',
-        sdkType: 'server',
-        sdkVersion: '1.0.0',
-        hostname: 'host.name'
-    }))
+    setPlatformData(
+        JSON.stringify({
+            platform: 'NodeJS',
+            platformVersion: '16.0',
+            sdkType: 'server',
+            sdkVersion: '1.0.0',
+            hostname: 'host.name',
+        }),
+    )
     setConfigData(sdkKey, JSON.stringify(config))
 }
 
@@ -78,17 +93,22 @@ describe('EventQueueManager Tests', () => {
         })
 
         it('should throw error if no sdkKey', () => {
-            expect(() => initEventQueue(undefined, undefined)).toThrow('value must not be null')
+            expect(() => initEventQueue(undefined, undefined)).toThrow(
+                'value must not be null',
+            )
         })
 
         it('should throw error if no options', () => {
-            expect(() => initEventQueue('sdk_key_test_2', undefined)).toThrow('value must not be null')
+            expect(() => initEventQueue('sdk_key_test_2', undefined)).toThrow(
+                'value must not be null',
+            )
         })
 
         it('should throw if EnvQueue already setup for sdkKey', () => {
             initEventQueue('sdk_key_test_3', {})
-            expect(() => initEventQueue('sdk_key_test_3', {}))
-                .toThrow('Event Queue already exists for sdkKey')
+            expect(() => initEventQueue('sdk_key_test_3', {})).toThrow(
+                'Event Queue already exists for sdkKey',
+            )
         })
 
         it('should let you setup multiple EventQueues for multiple sdkKeys', () => {
@@ -99,13 +119,21 @@ describe('EventQueueManager Tests', () => {
         })
 
         it('should throw if eventRequestChunkSize is < 10', () => {
-            expect(() => initEventQueue('sdk_key_eventRequestChunkSize', { eventRequestChunkSize: 9 }))
-                .toThrow('eventRequestChunkSize: 9 must be larger than 10')
+            expect(() =>
+                initEventQueue('sdk_key_eventRequestChunkSize', {
+                    eventRequestChunkSize: 9,
+                }),
+            ).toThrow('eventRequestChunkSize: 9 must be larger than 10')
         })
 
         it('should throw if eventRequestChunkSize is > 20,000', () => {
-            expect(() => initEventQueue('sdk_key_eventRequestChunkSize', { eventRequestChunkSize: 900000 }))
-                .toThrow('eventRequestChunkSize: 900000 must be smaller than 10000')
+            expect(() =>
+                initEventQueue('sdk_key_eventRequestChunkSize', {
+                    eventRequestChunkSize: 900000,
+                }),
+            ).toThrow(
+                'eventRequestChunkSize: 900000 must be smaller than 10000',
+            )
         })
     })
 
@@ -119,7 +147,7 @@ describe('EventQueueManager Tests', () => {
             appBuild: 188,
             deviceModel: 'dvcServer',
             customData: { custom: 'data' },
-            privateCustomData: { private: 'customData' }
+            privateCustomData: { private: 'customData' },
         }
 
         it('should flush queued events', () => {
@@ -128,76 +156,85 @@ describe('EventQueueManager Tests', () => {
                 type: 'testType',
                 target: 'testTarget',
                 value: 10,
-                metaData: { test: 'data' }
+                metaData: { test: 'data' },
             }
             const aggEvent = {
                 type: 'aggVariableDefaulted',
-                target: 'variableKey'
+                target: 'variableKey',
             }
 
             initSDK(sdkKey)
             queueEvent(sdkKey, dvcUser, event)
             queueAggregateEvent(sdkKey, aggEvent, {})
             expect(eventQueueSize(sdkKey)).toEqual(2)
-            expect(flushEventQueue(sdkKey)).toEqual(expect.arrayContaining([
-                {
-                    'payloadId': expect.any(String),
-                    'eventCount': 2,
-                    'records': [
-                        {
-                            'events': [{
-                                'clientDate': expect.any(String),
-                                'customType': 'testType',
-                                'date': expect.any(String),
-                                'featureVars': {'614ef6aa473928459060721a': '6153553b8cf4e45e0464268d'},
-                                'metaData': { 'test': 'data' },
-                                'target': 'testTarget',
-                                'type': 'customEvent',
-                                'user_id': 'user_id',
-                                'value': 10,
-                            }],
-                            'user': {
-                                'createdDate': expect.any(String),
-                                'lastSeenDate': expect.any(String),
-                                'platform': 'NodeJS',
-                                'platformVersion': '16.0',
-                                'sdkType': 'server',
-                                'sdkVersion': '1.0.0',
-                                'user_id': 'user_id',
-                                'email': 'email@devcycle.com',
-                                'language': 'en',
-                                'country': 'us',
-                                'appVersion': '6.1.0',
-                                'appBuild': 188,
-                                'deviceModel': 'dvcServer',
-                                'customData': { 'custom': 'data' },
-                                'hostname': 'host.name',
-                            }
-                        },
-                        {
-                            'events': [{
-                                'clientDate': expect.any(String),
-                                'date': expect.any(String),
-                                'target': 'variableKey',
-                                'type': 'aggVariableDefaulted',
-                                'featureVars': {},
-                                'user_id': 'host.name',
-                                'value': 1
-                            }],
-                            'user': {
-                                'createdDate': expect.any(String),
-                                'lastSeenDate': expect.any(String),
-                                'platform': 'NodeJS',
-                                'platformVersion': '16.0',
-                                'sdkType': 'server',
-                                'sdkVersion': '1.0.0',
-                                'user_id': 'host.name',
-                                'hostname': 'host.name',
-                            }
-                        }
-                    ]
-                }
-            ]))
+            expect(flushEventQueue(sdkKey)).toEqual(
+                expect.arrayContaining([
+                    {
+                        payloadId: expect.any(String),
+                        eventCount: 2,
+                        records: [
+                            {
+                                events: [
+                                    {
+                                        clientDate: expect.any(String),
+                                        customType: 'testType',
+                                        date: expect.any(String),
+                                        featureVars: {
+                                            '614ef6aa473928459060721a':
+                                                '6153553b8cf4e45e0464268d',
+                                        },
+                                        metaData: { test: 'data' },
+                                        target: 'testTarget',
+                                        type: 'customEvent',
+                                        user_id: 'user_id',
+                                        value: 10,
+                                    },
+                                ],
+                                user: {
+                                    createdDate: expect.any(String),
+                                    lastSeenDate: expect.any(String),
+                                    platform: 'NodeJS',
+                                    platformVersion: '16.0',
+                                    sdkType: 'server',
+                                    sdkVersion: '1.0.0',
+                                    user_id: 'user_id',
+                                    email: 'email@devcycle.com',
+                                    language: 'en',
+                                    country: 'us',
+                                    appVersion: '6.1.0',
+                                    appBuild: 188,
+                                    deviceModel: 'dvcServer',
+                                    customData: { custom: 'data' },
+                                    hostname: 'host.name',
+                                },
+                            },
+                            {
+                                events: [
+                                    {
+                                        clientDate: expect.any(String),
+                                        date: expect.any(String),
+                                        target: 'variableKey',
+                                        type: 'aggVariableDefaulted',
+                                        featureVars: {},
+                                        user_id: 'host.name',
+                                        value: 1,
+                                    },
+                                ],
+                                user: {
+                                    createdDate: expect.any(String),
+                                    lastSeenDate: expect.any(String),
+                                    platform: 'NodeJS',
+                                    platformVersion: '16.0',
+                                    sdkType: 'server',
+                                    sdkVersion: '1.0.0',
+                                    user_id: 'host.name',
+                                    hostname: 'host.name',
+                                },
+                            },
+                        ],
+                    },
+                ]),
+            )
         })
 
         it('should merge client custom data into event user data', () => {
@@ -206,52 +243,65 @@ describe('EventQueueManager Tests', () => {
                 type: 'testType',
                 target: 'testTarget',
                 value: 10,
-                metaData: { test: 'data' }
+                metaData: { test: 'data' },
             }
 
             initSDK(sdkKey)
-            setClientCustomData(sdkKey, JSON.stringify({ clientCustom: 'data', private: 'field' }))
+            setClientCustomData(
+                sdkKey,
+                JSON.stringify({ clientCustom: 'data', private: 'field' }),
+            )
 
             queueEvent(sdkKey, dvcUser, event)
 
-            expect(flushEventQueue(sdkKey)).toEqual(expect.arrayContaining([
-                {
-                    'payloadId': expect.any(String),
-                    'eventCount': 1,
-                    'records': [
-                        {
-                            'events': [{
-                                'clientDate': expect.any(String),
-                                'customType': 'testType',
-                                'date': expect.any(String),
-                                'featureVars': {'614ef6aa473928459060721a': '6153553b8cf4e45e0464268d'},
-                                'metaData': { 'test': 'data' },
-                                'target': 'testTarget',
-                                'type': 'customEvent',
-                                'user_id': 'user_id',
-                                'value': 10,
-                            }],
-                            'user': {
-                                'createdDate': expect.any(String),
-                                'lastSeenDate': expect.any(String),
-                                'platform': 'NodeJS',
-                                'platformVersion': '16.0',
-                                'sdkType': 'server',
-                                'sdkVersion': '1.0.0',
-                                'user_id': 'user_id',
-                                'email': 'email@devcycle.com',
-                                'language': 'en',
-                                'country': 'us',
-                                'appVersion': '6.1.0',
-                                'appBuild': 188,
-                                'deviceModel': 'dvcServer',
-                                'customData': { 'custom': 'data', 'clientCustom': 'data' },
-                                'hostname': 'host.name',
-                            }
-                        }
-                    ]
-                }
-            ]))
+            expect(flushEventQueue(sdkKey)).toEqual(
+                expect.arrayContaining([
+                    {
+                        payloadId: expect.any(String),
+                        eventCount: 1,
+                        records: [
+                            {
+                                events: [
+                                    {
+                                        clientDate: expect.any(String),
+                                        customType: 'testType',
+                                        date: expect.any(String),
+                                        featureVars: {
+                                            '614ef6aa473928459060721a':
+                                                '6153553b8cf4e45e0464268d',
+                                        },
+                                        metaData: { test: 'data' },
+                                        target: 'testTarget',
+                                        type: 'customEvent',
+                                        user_id: 'user_id',
+                                        value: 10,
+                                    },
+                                ],
+                                user: {
+                                    createdDate: expect.any(String),
+                                    lastSeenDate: expect.any(String),
+                                    platform: 'NodeJS',
+                                    platformVersion: '16.0',
+                                    sdkType: 'server',
+                                    sdkVersion: '1.0.0',
+                                    user_id: 'user_id',
+                                    email: 'email@devcycle.com',
+                                    language: 'en',
+                                    country: 'us',
+                                    appVersion: '6.1.0',
+                                    appBuild: 188,
+                                    deviceModel: 'dvcServer',
+                                    customData: {
+                                        custom: 'data',
+                                        clientCustom: 'data',
+                                    },
+                                    hostname: 'host.name',
+                                },
+                            },
+                        ],
+                    },
+                ]),
+            )
         })
 
         it('should generate multiple batches for chunkSize and handle onPayloadSuccess', () => {
@@ -260,7 +310,7 @@ describe('EventQueueManager Tests', () => {
                 type: 'testType',
                 target: 'testTarget',
                 value: 10,
-                metaData: { test: 'data' }
+                metaData: { test: 'data' },
             }
 
             initSDK(sdkKey, { eventRequestChunkSize: 10 })
@@ -273,23 +323,25 @@ describe('EventQueueManager Tests', () => {
             expect(payloads.length).toEqual(10)
             expect(payloads[0].records[0].events.length).toEqual(10)
             expect(payloads[0].records[0].user).toEqual({
-                'createdDate': expect.any(String),
-                'lastSeenDate': expect.any(String),
-                'platform': 'NodeJS',
-                'platformVersion': '16.0',
-                'sdkType': 'server',
-                'sdkVersion': '1.0.0',
-                'user_id': 'user_id',
-                'email': 'email@devcycle.com',
-                'language': 'en',
-                'country': 'us',
-                'appVersion': '6.1.0',
-                'appBuild': 188,
-                'deviceModel': 'dvcServer',
-                'customData': { 'custom': 'data' },
-                'hostname': 'host.name',
+                createdDate: expect.any(String),
+                lastSeenDate: expect.any(String),
+                platform: 'NodeJS',
+                platformVersion: '16.0',
+                sdkType: 'server',
+                sdkVersion: '1.0.0',
+                user_id: 'user_id',
+                email: 'email@devcycle.com',
+                language: 'en',
+                country: 'us',
+                appVersion: '6.1.0',
+                appBuild: 188,
+                deviceModel: 'dvcServer',
+                customData: { custom: 'data' },
+                hostname: 'host.name',
             })
-            expect(payloads[0].records[0].user.privateCustomData).not.toBeDefined()
+            expect(
+                payloads[0].records[0].user.privateCustomData,
+            ).not.toBeDefined()
 
             for (const payload of payloads) {
                 onPayloadSuccess(sdkKey, payload.payloadId)
@@ -304,7 +356,7 @@ describe('EventQueueManager Tests', () => {
                 type: 'testType',
                 target: 'testTarget',
                 value: 10,
-                metaData: { test: 'data' }
+                metaData: { test: 'data' },
             }
             const dvcUser2 = { user_id: 'user_2' }
 
@@ -345,11 +397,15 @@ describe('EventQueueManager Tests', () => {
             expect(payloads[2].records.length).toEqual(2)
             expect(payloads[2].records[0].user.user_id).toEqual(dvcUser.user_id)
             expect(payloads[2].records[0].events.length).toEqual(6)
-            expect(payloads[2].records[1].user.user_id).toEqual(dvcUser2.user_id)
+            expect(payloads[2].records[1].user.user_id).toEqual(
+                dvcUser2.user_id,
+            )
             expect(payloads[2].records[1].events.length).toEqual(4)
 
             expect(payloads[3].records.length).toEqual(1)
-            expect(payloads[3].records[0].user.user_id).toEqual(dvcUser2.user_id)
+            expect(payloads[3].records[0].user.user_id).toEqual(
+                dvcUser2.user_id,
+            )
             expect(payloads[3].records[0].events.length).toEqual(10)
 
             for (const payload of payloads) {
@@ -365,7 +421,7 @@ describe('EventQueueManager Tests', () => {
                 type: 'testType',
                 target: 'testTarget',
                 value: 10,
-                metaData: { test: 'data' }
+                metaData: { test: 'data' },
             }
 
             initSDK(sdkKey, { eventRequestChunkSize: 10 })
@@ -394,7 +450,9 @@ describe('EventQueueManager Tests', () => {
             expect(failedPayloads[0]).toEqual(payloads[1])
             expect(failedPayloads[1]).toEqual(payloads[3])
             expect(failedPayloads[2].records.length).toEqual(1)
-            expect(failedPayloads[2].records[0].user.user_id).toEqual(dvcUser.user_id)
+            expect(failedPayloads[2].records[0].user.user_id).toEqual(
+                dvcUser.user_id,
+            )
             expect(failedPayloads[2].records[0].events.length).toEqual(4)
 
             for (const payload of failedPayloads) {
@@ -404,13 +462,13 @@ describe('EventQueueManager Tests', () => {
             expect(nextFlush).toEqual([])
         })
 
-        it('should throw error if re-queued payload hasn\'t finished sending', () => {
+        it("should throw error if re-queued payload hasn't finished sending", () => {
             const sdkKey = 'sdk_key_requeued_failed_test'
             const event = {
                 type: 'testType',
                 target: 'testTarget',
                 value: 10,
-                metaData: { test: 'data' }
+                metaData: { test: 'data' },
             }
 
             initSDK(sdkKey, { eventRequestChunkSize: 10 })
@@ -435,7 +493,9 @@ describe('EventQueueManager Tests', () => {
             onPayloadSuccess(sdkKey, failedPayloads[1].payloadId)
             onPayloadSuccess(sdkKey, failedPayloads[2].payloadId)
 
-            expect(() => flushEventQueue(sdkKey)).toThrow('has not finished sending')
+            expect(() => flushEventQueue(sdkKey)).toThrow(
+                'has not finished sending',
+            )
         })
 
         it('should throw error if all payloads have not finished sending', () => {
@@ -444,7 +504,7 @@ describe('EventQueueManager Tests', () => {
                 type: 'testType',
                 target: 'testTarget',
                 value: 10,
-                metaData: { test: 'data' }
+                metaData: { test: 'data' },
             }
 
             initSDK(sdkKey, { eventRequestChunkSize: 10 })
@@ -460,7 +520,9 @@ describe('EventQueueManager Tests', () => {
             onPayloadFailure(sdkKey, payloads[1].payloadId, false)
             onPayloadFailure(sdkKey, payloads[2].payloadId, false)
 
-            expect(() => flushEventQueue(sdkKey)).toThrow('has not finished sending')
+            expect(() => flushEventQueue(sdkKey)).toThrow(
+                'has not finished sending',
+            )
 
             for (let i = 0; i < 10; i++) {
                 event.target = `target_after_failed_${i}`
@@ -485,25 +547,92 @@ describe('EventQueueManager Tests', () => {
         const dvcUser = { user_id: 'user_id' }
         const event = {
             type: 'testType',
-            target: 'testTarget'
+            target: 'testTarget',
         }
 
         it('should throw error if SDK is not initialized', () => {
             const sdkKey = 'sdk_key_queueEvent_test'
             initEventQueue(sdkKey, {})
-            expect(() => queueEvent(sdkKey, dvcUser, event)).toThrow('Platform data is not set')
+            expect(() => queueEvent(sdkKey, dvcUser, event)).toThrow(
+                'Platform data is not set',
+            )
         })
 
         it('should throw error if config data not set', () => {
             const sdkKey = 'sdk_key_queueEvent_test_2'
             initEventQueue(sdkKey, {})
-            setPlatformData(JSON.stringify({
-                platform: 'NodeJS',
-                platformVersion: '16.0',
-                sdkType: 'server',
-                sdkVersion: '1.0.0'
-            }))
-            expect(() => queueEvent(sdkKey, dvcUser, event)).toThrow('Config data is not set.')
+            setPlatformData(
+                JSON.stringify({
+                    platform: 'NodeJS',
+                    platformVersion: '16.0',
+                    sdkType: 'server',
+                    sdkVersion: '1.0.0',
+                }),
+            )
+            expect(() => queueEvent(sdkKey, dvcUser, event)).toThrow(
+                'Config data is not set.',
+            )
+        })
+
+        it('should log sdkConfig as non-custom event', () => {
+            const sdkKey = 'sdk_key_queueEvent_test_2'
+            initSDK(sdkKey)
+
+            const sdkConfigEvent = {
+                type: 'sdkConfig',
+                target: 'url',
+                value: 610,
+                metaData: {
+                    clientUUID: 'clientUUID',
+                    reqEtag: 'reqEtag',
+                    reqLastModified: 'reqLastModified',
+                    resEtag: 'resEtag',
+                    resLastModified: 'resLastModified',
+                    resRayId: 'resRayId',
+                    resStatus: 200,
+                    errMsg: 'errMsg',
+                },
+            }
+            queueEvent(sdkKey, dvcUser, sdkConfigEvent)
+
+            const payloads = flushEventQueue(sdkKey)
+            expect(payloads.length).toEqual(1)
+            expect(payloads[0].records[0]).toEqual({
+                events: [
+                    {
+                        clientDate: expect.any(String),
+                        date: expect.any(String),
+                        featureVars: {
+                            '614ef6aa473928459060721a':
+                                '6153553b8cf4e45e0464268d',
+                        },
+                        metaData: {
+                            clientUUID: 'clientUUID',
+                            errMsg: 'errMsg',
+                            reqEtag: 'reqEtag',
+                            reqLastModified: 'reqLastModified',
+                            resEtag: 'resEtag',
+                            resLastModified: 'resLastModified',
+                            resRayId: 'resRayId',
+                            resStatus: 200,
+                        },
+                        target: 'url',
+                        type: 'sdkConfig',
+                        user_id: 'user_id',
+                        value: 610,
+                    },
+                ],
+                user: {
+                    createdDate: expect.any(String),
+                    lastSeenDate: expect.any(String),
+                    hostname: 'host.name',
+                    platform: 'NodeJS',
+                    platformVersion: '16.0',
+                    sdkType: 'server',
+                    sdkVersion: '1.0.0',
+                    user_id: 'user_id',
+                },
+            })
         })
     })
 
@@ -511,21 +640,26 @@ describe('EventQueueManager Tests', () => {
         const varVariationMap = {
             swagTest: {
                 _feature: '614ef6aa473928459060721a',
-                _variation: '615357cf7e9ebdca58446ed0'
-            }
+                _variation: '615357cf7e9ebdca58446ed0',
+            },
         }
 
         it('should log aggVariableEvaluated event', () => {
             const variable = {
-                '_id': '615356f120ed334a6054564c',
-                'key': 'swagTest',
-                'type': 'String',
-                'value': 'YEEEEOWZA',
+                _id: '615356f120ed334a6054564c',
+                key: 'swagTest',
+                type: 'String',
+                value: 'YEEEEOWZA',
             }
             const sdkKey = 'sdk_key_queueVariableEvaluatedEvent_test'
             initSDK(sdkKey)
 
-            queueVariableEvaluatedEvent(sdkKey, varVariationMap, variable, 'swagTest')
+            queueVariableEvaluatedEvent(
+                sdkKey,
+                varVariationMap,
+                variable,
+                'swagTest',
+            )
             expect(eventQueueSize(sdkKey)).toEqual(1)
         })
 
@@ -533,7 +667,12 @@ describe('EventQueueManager Tests', () => {
             const sdkKey = 'sdk_key_queueVariableEvaluatedEvent_test'
             initSDK(sdkKey)
 
-            queueVariableEvaluatedEvent(sdkKey, varVariationMap, null, 'unknownVariable')
+            queueVariableEvaluatedEvent(
+                sdkKey,
+                varVariationMap,
+                null,
+                'unknownVariable',
+            )
             expect(eventQueueSize(sdkKey)).toEqual(1)
         })
     })
@@ -541,36 +680,42 @@ describe('EventQueueManager Tests', () => {
     describe('queueAggregateEvent', () => {
         const event = {
             type: 'aggVariableDefaulted',
-            target: 'testTarget'
+            target: 'testTarget',
         }
 
         it('should throw error if no variableVariationMap', () => {
             const sdkKey = 'sdk_key_queueAggEvent_test'
             initEventQueue(sdkKey, {})
-            expect(() => queueAggregateEvent(sdkKey, event, null))
-                .toThrow('variableVariationMap is not a JSON Object')
+            expect(() => queueAggregateEvent(sdkKey, event, null)).toThrow(
+                'variableVariationMap is not a JSON Object',
+            )
         })
 
         it('should throw if no variable key value found for aggVariableEvaluated', () => {
             const sdkKey = 'sdk_key_agg_event_throw_test'
             const eventEvaluated = {
                 type: 'aggVariableEvaluated',
-                target: 'testTarget'
+                target: 'testTarget',
             }
             const variableVariationMap = {
                 test: {
                     _feature: '614ef6aa473928459060721a',
-                    _variation: '6153553b8cf4e45e0464268d'
+                    _variation: '6153553b8cf4e45e0464268d',
                 },
                 swagTest: {
                     _feature: '614ef6aa473928459060721a',
-                    _variation: '6153553b8cf4e45e0464268d'
-                }
+                    _variation: '6153553b8cf4e45e0464268d',
+                },
             }
 
             initSDK(sdkKey)
-            expect(() => queueAggregateEvent(sdkKey, eventEvaluated, variableVariationMap))
-                .toThrow('Missing variableVariationMap mapping for target')
+            expect(() =>
+                queueAggregateEvent(
+                    sdkKey,
+                    eventEvaluated,
+                    variableVariationMap,
+                ),
+            ).toThrow('Missing variableVariationMap mapping for target')
         })
 
         it('should throw if no target on event', () => {
@@ -578,47 +723,64 @@ describe('EventQueueManager Tests', () => {
             const eventEvaluated = { type: 'aggVariableEvaluated' }
 
             initSDK(sdkKey)
-            expect(() => queueAggregateEvent(sdkKey, eventEvaluated, {}))
-                .toThrow('Event missing target to save aggregate event')
+            expect(() =>
+                queueAggregateEvent(sdkKey, eventEvaluated, {}),
+            ).toThrow('Event missing target to save aggregate event')
         })
 
         it('should aggregate aggVariableDefaulted and aggVariableEvaluated events', () => {
             const sdkKey = 'sdk_key_agg_event_test'
             const eventDefaulted = {
                 type: 'aggVariableDefaulted',
-                target: 'testTarget'
+                target: 'testTarget',
             }
             const eventEvaluated = {
                 type: 'aggVariableEvaluated',
-                target: 'testTarget'
+                target: 'testTarget',
             }
             const variableVariationMap = {
                 test: {
                     _feature: '614ef6aa473928459060721a',
-                    _variation: '6153553b8cf4e45e0464268d'
+                    _variation: '6153553b8cf4e45e0464268d',
                 },
                 swagTest: {
                     _feature: '614ef6aa473928459060721a',
-                    _variation: '6153553b8cf4e45e0464268d'
-                }
+                    _variation: '6153553b8cf4e45e0464268d',
+                },
             }
 
             initSDK(sdkKey)
             for (let i = 0; i < 36; i++) {
                 eventDefaulted.target = 'testey_test'
-                queueAggregateEvent(sdkKey, eventDefaulted, variableVariationMap)
+                queueAggregateEvent(
+                    sdkKey,
+                    eventDefaulted,
+                    variableVariationMap,
+                )
             }
             for (let i = 0; i < 11; i++) {
                 eventDefaulted.target = 'swageyTest'
-                queueAggregateEvent(sdkKey, eventDefaulted, variableVariationMap)
+                queueAggregateEvent(
+                    sdkKey,
+                    eventDefaulted,
+                    variableVariationMap,
+                )
             }
             for (let i = 0; i < 36; i++) {
                 eventEvaluated.target = 'test'
-                queueAggregateEvent(sdkKey, eventEvaluated, variableVariationMap)
+                queueAggregateEvent(
+                    sdkKey,
+                    eventEvaluated,
+                    variableVariationMap,
+                )
             }
             for (let i = 0; i < 11; i++) {
                 eventEvaluated.target = 'swagTest'
-                queueAggregateEvent(sdkKey, eventEvaluated, variableVariationMap)
+                queueAggregateEvent(
+                    sdkKey,
+                    eventEvaluated,
+                    variableVariationMap,
+                )
             }
             expect(eventQueueSize(sdkKey)).toEqual(4)
 
@@ -626,46 +788,49 @@ describe('EventQueueManager Tests', () => {
             expect(payloads.length).toEqual(1)
             expect(payloads[0].records[0].events).toEqual([
                 {
-                    'clientDate': expect.any(String),
-                    'date': expect.any(String),
-                    'target': 'testey_test',
-                    'type': 'aggVariableDefaulted',
-                    'featureVars': {},
-                    'user_id': 'host.name',
-                    'value': 36
-                }, {
-                    'clientDate': expect.any(String),
-                    'date': expect.any(String),
-                    'target': 'swageyTest',
-                    'type': 'aggVariableDefaulted',
-                    'featureVars': {},
-                    'user_id': 'host.name',
-                    'value': 11
-                }, {
-                    'clientDate': expect.any(String),
-                    'date': expect.any(String),
-                    'target': 'test',
-                    'type': 'aggVariableEvaluated',
-                    'featureVars': {},
-                    'user_id': 'host.name',
-                    'value': 36,
-                    'metaData': {
+                    clientDate: expect.any(String),
+                    date: expect.any(String),
+                    target: 'testey_test',
+                    type: 'aggVariableDefaulted',
+                    featureVars: {},
+                    user_id: 'host.name',
+                    value: 36,
+                },
+                {
+                    clientDate: expect.any(String),
+                    date: expect.any(String),
+                    target: 'swageyTest',
+                    type: 'aggVariableDefaulted',
+                    featureVars: {},
+                    user_id: 'host.name',
+                    value: 11,
+                },
+                {
+                    clientDate: expect.any(String),
+                    date: expect.any(String),
+                    target: 'test',
+                    type: 'aggVariableEvaluated',
+                    featureVars: {},
+                    user_id: 'host.name',
+                    value: 36,
+                    metaData: {
                         _feature: '614ef6aa473928459060721a',
-                        _variation: '6153553b8cf4e45e0464268d'
-                    }
-                }, {
-                    'clientDate': expect.any(String),
-                    'date': expect.any(String),
-                    'target': 'swagTest',
-                    'type': 'aggVariableEvaluated',
-                    'featureVars': {},
-                    'user_id': 'host.name',
-                    'value': 11,
-                    'metaData': {
+                        _variation: '6153553b8cf4e45e0464268d',
+                    },
+                },
+                {
+                    clientDate: expect.any(String),
+                    date: expect.any(String),
+                    target: 'swagTest',
+                    type: 'aggVariableEvaluated',
+                    featureVars: {},
+                    user_id: 'host.name',
+                    value: 11,
+                    metaData: {
                         _feature: '614ef6aa473928459060721a',
-                        _variation: '6153553b8cf4e45e0464268d'
-                    }
-                }
+                        _variation: '6153553b8cf4e45e0464268d',
+                    },
+                },
             ])
             expect(payloads[0].records[0].user.user_id).toEqual('host.name')
         })
@@ -679,18 +844,20 @@ describe('EventQueueManager Tests', () => {
                 target: 'testTarget_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
                 date: new Date(),
                 value: 10000,
-                metaData: random_JSON
+                metaData: random_JSON,
             }
             const dvcUser = {
-                user_id: 'user_id_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
+                user_id:
+                    'user_id_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
                 email: '_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
                 language: 'en',
                 country: 'CA',
                 appBuild: 1000000,
                 appVersion: '1000000.1000000.10099999',
-                deviceModel: 'deviceModel_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
+                deviceModel:
+                    'deviceModel_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
                 customData: random_JSON,
-                privateCustomData: random_JSON
+                privateCustomData: random_JSON,
             }
 
             initSDK(sdkKey)
