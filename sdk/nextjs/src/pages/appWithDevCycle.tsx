@@ -2,7 +2,7 @@ import type { AppProps as NextJsAppProps } from 'next/app'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import { SSRProps } from './types'
 import { DevCycleProvider, useDevCycleClient } from '@devcycle/react-client-sdk'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { DevCycleOptions } from '@devcycle/js-client-sdk'
 
 type DevCycleNextOptions = Pick<
@@ -32,15 +32,37 @@ const BootstrapSync = ({
     children: React.ReactNode
 }) => {
     const client = useDevCycleClient()
-    const [isInitialized, setIsInitialized] = React.useState(false)
-    if (!isInitialized) {
+    const isInitializedRef = useRef(false)
+
+    if (!isInitializedRef.current) {
         client.synchronizeBootstrapData(
             devcycleSSR.bucketedConfig,
             devcycleSSR.user,
             devcycleSSR.userAgent ?? undefined,
         )
-        setIsInitialized(true)
+        isInitializedRef.current = true
     }
+
+    useEffect(() => {
+        if (!isInitializedRef.current) {
+            client.synchronizeBootstrapData(
+                devcycleSSR.bucketedConfig,
+                devcycleSSR.user,
+                devcycleSSR.userAgent ?? undefined,
+            )
+            isInitializedRef.current = true
+        }
+        return () => {
+            isInitializedRef.current = false
+        }
+    }, [
+        devcycleSSR.bucketedConfig,
+        devcycleSSR.sdkKey,
+        devcycleSSR.user,
+        devcycleSSR.userAgent,
+        client,
+    ])
+
     return children
 }
 
