@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/web-debugger",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "type": "module",
     "main": "./index.js",
     "types": "./index.d.ts",
@@ -31,7 +31,7 @@
         }
     },
     "dependencies": {
-        "@devcycle/types": "^1.12.1"
+        "@devcycle/types": "^1.12.2"
     },
     "peerDependencies": {
         "@devcycle/js-client-sdk": "*",
