@@ -1,14 +1,15 @@
 import { setupDevCycle } from '@devcycle/nextjs-sdk/server'
 const { getVariableValue, getClientContext, getAllVariables, getAllFeatures } =
-    setupDevCycle(
-        process.env.NEXT_PUBLIC_E2E_NEXTJS_KEY ?? '',
-        async () => {
+    setupDevCycle({
+        clientSDKKey: process.env.NEXT_PUBLIC_E2E_NEXTJS_CLIENT_KEY ?? '',
+        serverSDKKey: process.env.NEXT_PUBLIC_E2E_NEXTJS_SERVER_KEY ?? '',
+        userGetter: async () => {
             await new Promise((resolve) => setTimeout(resolve, 2000))
             return {
                 user_id: '123',
             }
         },
-        { enableStreaming: true },
-    )
+        options: { enableStreaming: true },
+    })
 
 export { getVariableValue, getClientContext, getAllVariables, getAllFeatures }

@@ -2,10 +2,8 @@ import { fetchCDNConfig } from './requests'
 import { generateBucketedConfig } from '@devcycle/bucketing'
 import { cache } from 'react'
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
-import { sseURlGetter } from './ably'
-import { getUserAgent } from './userAgent'
 import {
-    BucketedConfigWithLastModified,
+    BucketedConfigWithAdditionalFields,
     DevCycleNextOptions,
 } from '../common/types'
 
@@ -29,8 +27,9 @@ const generateBucketedConfigCached = cache(
         return {
             config: {
                 ...generateBucketedConfig({ user: populatedUser, config }),
+                clientSDKKey: config.clientSDKKey,
                 sse: {
-                    url: await sseURlGetter(sdkKey, config.ably?.apiKey)(),
+                    url: config.sse.hostname + config.sse.path,
                     inactivityDelay: 1000 * 60 * 2,
                 },
             },
@@ -48,7 +47,7 @@ export const getBucketedConfig = async (
     user: DevCycleUser,
     options: DevCycleNextOptions,
     userAgent?: string,
-): Promise<BucketedConfigWithLastModified> => {
+): Promise<BucketedConfigWithAdditionalFields> => {
     // this request will be cached by Next
     const cdnConfig = await fetchCDNConfig(sdkKey, options)
     if (!cdnConfig.ok) {

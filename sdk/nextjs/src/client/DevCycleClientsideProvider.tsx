@@ -4,7 +4,7 @@ import { InternalDevCycleClientsideProvider } from './internal/InternalDevCycleC
 
 export type DevCycleClientContext = {
     serverDataPromise: Promise<DevCycleServerData>
-    sdkKey: string
+    clientSDKKey: string
     enableStreaming: boolean
     options: DevCycleNextOptions
     userAgent?: string

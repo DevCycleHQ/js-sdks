@@ -1,10 +1,9 @@
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { generateBucketedConfig } from '@devcycle/bucketing'
-import { sseURlGetter } from '../server/ably.js'
 import { BucketedUserConfig } from '@devcycle/types'
 
 const getFetchUrl = (sdkKey: string) =>
-    `https://config-cdn.devcycle.com/config/v1/client/${sdkKey}.json`
+    `https://config-cdn.devcycle.com/config/v1/server/bootstrap/${sdkKey}.json`
 
 export const fetchCDNConfig = async (sdkKey: string): Promise<Response> => {
     return await fetch(getFetchUrl(sdkKey))
@@ -44,7 +43,7 @@ export const getBucketedConfig = async (
         config: {
             ...bucketedConfig,
             sse: {
-                url: await sseURlGetter(sdkKey, config.ably?.apiKey)(),
+                url: config.sse.hostname + config.sse.path,
                 inactivityDelay: 1000 * 60 * 2,
             },
         },

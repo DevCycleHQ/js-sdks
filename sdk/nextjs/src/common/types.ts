@@ -35,13 +35,16 @@ export type DevCycleNextOptions = Pick<
     staticMode?: boolean
 }
 
-export type BucketedConfigWithLastModified = BucketedUserConfig & {
+export type BucketedConfigWithAdditionalFields = BucketedUserConfig & {
     lastModified?: string
+    clientSDKKey: string
 }
 
 export type DevCycleServerData = {
     options: DevCycleNextOptions
     user: DevCycleUser
-    sdkKey: string
-    config: BucketedConfigWithLastModified | null
+    // this is null if the config failed to be fetched
+    config: BucketedConfigWithAdditionalFields | null
+    // this is null if the config failed to be fetched because it is obtained from the config
+    clientSDKKey: string | null
 }

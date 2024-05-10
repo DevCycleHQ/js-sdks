@@ -8,16 +8,22 @@ type IdentifiedUser = Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & {
     user_id: string
 }
 
-export const getServerSideDevCycle = async (
-    sdkKey: string,
-    user: IdentifiedUser,
-    context: GetServerSidePropsContext,
-): Promise<SSRProps> => {
+export const getServerSideDevCycle = async ({
+    serverSDKKey,
+    clientSDKKey,
+    user,
+    context,
+}: {
+    serverSDKKey: string
+    clientSDKKey: string
+    user: IdentifiedUser
+    context: GetServerSidePropsContext
+}): Promise<SSRProps> => {
     const userAgent = context.req.headers['user-agent'] ?? null
     let bucketedConfig: BucketedUserConfig | null = null
     try {
         const bucketingConfigResult = await getBucketedConfig(
-            sdkKey,
+            serverSDKKey,
             user,
             userAgent,
         )
@@ -30,21 +36,26 @@ export const getServerSideDevCycle = async (
         _devcycleSSR: {
             bucketedConfig,
             user,
-            sdkKey,
+            sdkKey: clientSDKKey,
             userAgent,
         },
     }
 }
 
-export const getStaticDevCycle = async (
-    sdkKey: string,
-    user: IdentifiedUser,
-): Promise<SSRProps> => {
-    const bucketingConfig = await getBucketedConfig(sdkKey, user, null)
+export const getStaticDevCycle = async ({
+    serverSDKKey,
+    clientSDKKey,
+    user,
+}: {
+    serverSDKKey: string
+    clientSDKKey: string
+    user: IdentifiedUser
+}): Promise<SSRProps> => {
+    const bucketingConfig = await getBucketedConfig(serverSDKKey, user, null)
     return {
         _devcycleSSR: {
             bucketedConfig: bucketingConfig.config,
-            sdkKey,
+            sdkKey: clientSDKKey,
             user,
             userAgent: null,
         },

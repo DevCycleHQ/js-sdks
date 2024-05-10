@@ -68,24 +68,25 @@ export const initialize = async (
         client.synchronizeBootstrapData(config, user, getUserAgent(options))
     }
 
-    return { config, user, options, sdkKey }
+    return { config, user, options, clientSDKKey: config?.clientSDKKey ?? null }
 }
 
-export const validateSDKKey = (sdkKey: string): void => {
+export const validateSDKKey = (
+    sdkKey: string,
+    type: 'server' | 'client',
+): void => {
     if (!sdkKey) {
         throw new Error(
-            'Missing SDK key! Provide a valid SDK key to DevCycleServersideProvider',
+            `Missing ${type} SDK key! Provide a valid SDK key to DevCycleServersideProvider`,
         )
     }
 
     // attempt to make sure server keys don't leak to the client!
     if (
         sdkKey?.length &&
-        !sdkKey.startsWith('dvc_client') &&
-        !sdkKey.startsWith('client')
+        !sdkKey.startsWith(`dvc_${type}`) &&
+        !sdkKey.startsWith(type)
     ) {
-        throw new Error(
-            'Must use a client SDK key. This key will be sent to the client!',
-        )
+        throw new Error(`Must use a ${type} SDK key.`)
     }
 }

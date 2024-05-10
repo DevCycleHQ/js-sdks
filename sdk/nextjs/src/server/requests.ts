@@ -1,7 +1,7 @@
 import { DevCycleNextOptions } from '../common/types'
 
 const getFetchUrl = (sdkKey: string, obfuscated: boolean) =>
-    `https://config-cdn.devcycle.com/config/v1/client/${
+    `https://config-cdn.devcycle.com/config/v1/server/bootstrap/${
         obfuscated ? 'obfuscated/' : ''
     }${sdkKey}.json`
 

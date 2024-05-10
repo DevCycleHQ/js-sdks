@@ -14,33 +14,40 @@ type ServerUser = Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & {
 
 // allow return type inference
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const setupDevCycle = (
-    sdkKey: string,
-    userGetter: () => Promise<ServerUser> | ServerUser,
-    options: DevCycleNextOptions = {},
-) => {
-    validateSDKKey(sdkKey)
+export const setupDevCycle = ({
+    serverSDKKey,
+    clientSDKKey,
+    userGetter,
+    options,
+}: {
+    serverSDKKey: string
+    clientSDKKey: string
+    userGetter: () => Promise<ServerUser> | ServerUser
+    options: DevCycleNextOptions
+}) => {
+    validateSDKKey(serverSDKKey, 'server')
+    validateSDKKey(clientSDKKey, 'client')
 
     const _getVariableValue: typeof getVariableValue = async (
         key,
         defaultValue,
     ) => {
-        await initialize(sdkKey, userGetter, options)
+        await initialize(serverSDKKey, userGetter, options)
         return getVariableValue(key, defaultValue)
     }
 
     const _getAllVariables: typeof getAllVariables = async () => {
-        await initialize(sdkKey, userGetter, options)
+        await initialize(serverSDKKey, userGetter, options)
         return getAllVariables()
     }
 
     const _getAllFeatures: typeof getAllFeatures = async () => {
-        await initialize(sdkKey, userGetter, options)
+        await initialize(serverSDKKey, userGetter, options)
         return getAllFeatures()
     }
 
     const _getClientContext = () => {
-        const serverDataPromise = initialize(sdkKey, userGetter, options)
+        const serverDataPromise = initialize(serverSDKKey, userGetter, options)
 
         const { enableStreaming, enableObfuscation, ...otherOptions } = options
 
@@ -65,8 +72,8 @@ export const setupDevCycle = (
 
         return {
             serverDataPromise,
-            sdkKey: sdkKey,
             options: clientOptions,
+            clientSDKKey: clientSDKKey,
             enableStreaming: options?.enableStreaming ?? false,
             userAgent: getUserAgent(options),
         }
