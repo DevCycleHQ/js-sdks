@@ -73,6 +73,13 @@
                 "codeCoverage": true
             }
         },
+        "build-changelog": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "yarn run -T standard-version",
+                "cwd": "sdk/react"
+            }
+        },
         "npm-publish": {
             "executor": "nx:run-commands",
             "options": {

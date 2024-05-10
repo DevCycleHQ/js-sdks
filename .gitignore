@@ -100,3 +100,5 @@ verdaccio
 e2e/js/js-cdn/src/assets/devcycle.min.js
 e2e/js/js-cdn/playwright-report/
 e2e/js/js-esm/playwright-report/
+
+.nx/cache

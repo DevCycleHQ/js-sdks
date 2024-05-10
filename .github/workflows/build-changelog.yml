@@ -1,0 +1,51 @@
+name: Build Changelog
+
+on:
+  pull_request
+
+jobs:
+    build-changelog:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [20.x]
+        env:
+            # The setup-node action configures this env var as the source for the npm auth token
+            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+        steps:
+            # Check out the repo with credentials that can bypass branch protection, and fetch git history instead of just latest commit
+            - uses: actions/checkout@v4
+              with:
+                  token: ${{ secrets.AUTOMATION_USER_TOKEN }}
+                  fetch-depth: 0
+
+            - name: Configure git
+              run: |
+                  git config --global user.email "github-tracker-bot@taplytics.com"
+                  git config --global user.name "DevCycle Automation"
+
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  registry-url: 'https://registry.npmjs.org'
+                  cache: 'yarn'
+
+            - name: Validate npm config and auth
+              run: |
+                  npm config list
+                  npm whoami
+
+            - run: yarn --immutable
+
+            - name: Update CHANGELOG
+              id: changelog
+              uses: requarks/changelog-action@v1
+              with:
+                token: ${{ secrets.GITHUB_TOKEN }}
+                tag: ${{ github.ref_name }}
+
+            - name: Output Changelog
+              run: echo CHANGELOG.md
+
