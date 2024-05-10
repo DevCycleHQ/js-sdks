@@ -18,5 +18,5 @@ export const {
             },
         }
     },
-    options: { enableStreaming: true },
+    options: { enableStreaming: false },
 })

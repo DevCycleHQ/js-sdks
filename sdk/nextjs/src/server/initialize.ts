@@ -68,7 +68,7 @@ export const initialize = async (
         client.synchronizeBootstrapData(config, user, getUserAgent(options))
     }
 
-    return { config, user, options, clientSDKKey: config?.clientSDKKey ?? null }
+    return { config, user, options }
 }
 
 export const validateSDKKey = (

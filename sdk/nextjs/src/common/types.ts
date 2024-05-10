@@ -45,6 +45,4 @@ export type DevCycleServerData = {
     user: DevCycleUser
     // this is null if the config failed to be fetched
     config: BucketedConfigWithAdditionalFields | null
-    // this is null if the config failed to be fetched because it is obtained from the config
-    clientSDKKey: string | null
 }
