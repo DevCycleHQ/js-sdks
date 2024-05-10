@@ -34,6 +34,27 @@ describe.each([true, false])('Config Body', (utf8) => {
         )
     })
 
+    it('should parse if missing optional top level field', () => {
+        const config = cloneDeep(testData.config)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        delete config.clientSDKKey
+        expect(testConfigBody(JSON.stringify(config), utf8)).toEqual(
+            JSON.parse(
+                JSON.stringify({
+                    ...testData.config,
+                    project: {
+                        ...testData.config.project,
+                        settings: {
+                            disablePassthroughRollouts: false
+                        }
+                    },
+                    variableHashes: undefined,
+                    clientSDKKey: undefined,
+                }),
+            ),
+        )
+    })
     it('should throw if target.rollout is missing type', () => {
         const config = cloneDeep(testData.config)
         const target: any = config.features[0].configuration.targets[0]
