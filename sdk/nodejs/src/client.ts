@@ -91,11 +91,6 @@ export class DevCycleClient {
                 throw new UserError(bucketingErr)
             })
             .then(() => {
-                this.eventQueue = new EventQueue(sdkKey, {
-                    ...options,
-                    logger: this.logger,
-                })
-
                 this.configHelper = new EnvironmentConfigManager(
                     this.logger,
                     sdkKey,
@@ -116,6 +111,11 @@ export class DevCycleClient {
                         { ...options, clientMode: true },
                     )
                 }
+
+                this.eventQueue = new EventQueue(sdkKey, {
+                    ...options,
+                    logger: this.logger,
+                })
 
                 const platformData: IPlatformData = {
                     platform: 'NodeJS',
