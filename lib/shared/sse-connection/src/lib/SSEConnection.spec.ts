@@ -1,7 +1,6 @@
-// import { sharedSseconnection } from './SSEConnection'
-//
-// describe('sharedSseconnection', () => {
-//     it('should work', () => {
-//         expect(sharedSseconnection()).toEqual('shared-sse-connection')
-//     })
-// })
+// Add empty test as a placeholder, passWithNoTests option wasn't working
+describe('SSEConnection', () => {
+    it('empty test', () => {
+        expect(null).toBeNull()
+    })
+})
