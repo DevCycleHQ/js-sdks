@@ -43,7 +43,7 @@ export const getBucketedConfig = async (
         config: {
             ...bucketedConfig,
             sse: {
-                url: config.sse.hostname + config.sse.path,
+                url: new URL(config.sse.path, config.sse.hostname).toString(),
                 inactivityDelay: 1000 * 60 * 2,
             },
         },

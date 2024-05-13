@@ -7,7 +7,7 @@ export const {
     getAllFeatures,
 } = setupDevCycle({
     clientSDKKey: process.env.NEXT_PUBLIC_E2E_NEXTJS_CLIENT_KEY ?? '',
-    serverSDKKey: process.env.NEXT_PUBLIC_E2E_NEXTJS_SERVER_KEY ?? '',
+    serverSDKKey: process.env.E2E_NEXTJS_SERVER_KEY ?? '',
     userGetter: async () => {
         const reqHeaders = headers()
         return {

@@ -25,8 +25,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
         props: {
             ...(await getServerSideDevCycle({
-                serverSDKKey:
-                    process.env.NEXT_PUBLIC_E2E_NEXTJS_SERVER_KEY || '',
+                serverSDKKey: process.env.E2E_NEXTJS_SERVER_KEY || '',
                 clientSDKKey:
                     process.env.NEXT_PUBLIC_E2E_NEXTJS_CLIENT_KEY || '',
                 user: { user_id: 'test' },
