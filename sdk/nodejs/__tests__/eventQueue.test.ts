@@ -189,7 +189,7 @@ describe('EventQueue Unit Tests', () => {
                 },
                 {
                     user: expect.objectContaining({
-                        user_id: 'host.name',
+                        user_id: 'client.UUID@host.name',
                         createdDate: expect.any(String),
                         lastSeenDate: expect.any(String),
                         platform: 'NodeJS',
@@ -203,7 +203,7 @@ describe('EventQueue Unit Tests', () => {
                             target: 'key',
                             clientDate: expect.any(String),
                             date: expect.any(String),
-                            user_id: 'host.name',
+                            user_id: 'client.UUID@host.name',
                             value: 1,
                             metaData: {
                                 _feature: 'feature',
@@ -269,7 +269,7 @@ describe('EventQueue Unit Tests', () => {
                 },
                 {
                     user: expect.objectContaining({
-                        user_id: 'host.name',
+                        user_id: 'client.UUID@host.name',
                         createdDate: expect.any(String),
                         lastSeenDate: expect.any(String),
                         platform: 'NodeJS',
@@ -283,7 +283,7 @@ describe('EventQueue Unit Tests', () => {
                             target: 'key',
                             clientDate: expect.any(String),
                             date: expect.any(String),
-                            user_id: 'host.name',
+                            user_id: 'client.UUID@host.name',
                             value: 1,
                             metaData: {
                                 _feature: 'feature',
@@ -362,7 +362,7 @@ describe('EventQueue Unit Tests', () => {
             expect(publishEvents_mock.mock.calls[0][2]).toEqual([
                 {
                     user: expect.objectContaining({
-                        user_id: 'host.name',
+                        user_id: 'client.UUID@host.name',
                         createdDate: expect.any(String),
                         lastSeenDate: expect.any(String),
                         platform: 'NodeJS',
@@ -376,7 +376,7 @@ describe('EventQueue Unit Tests', () => {
                             target: 'key',
                             clientDate: expect.any(String),
                             date: expect.any(String),
-                            user_id: 'host.name',
+                            user_id: 'client.UUID@host.name',
                             value: 1,
                             metaData: {
                                 _feature: 'feature',
@@ -471,7 +471,7 @@ describe('EventQueue Unit Tests', () => {
                             featureVars: {},
                             target: 'unknown_key',
                             type: 'aggVariableDefaulted',
-                            user_id: 'host.name',
+                            user_id: 'client.UUID@host.name',
                             value: 1,
                         },
                     ],
@@ -482,8 +482,9 @@ describe('EventQueue Unit Tests', () => {
                         platformVersion: '16.10.0',
                         sdkType: 'server',
                         sdkVersion: '1.0.0',
-                        user_id: 'host.name',
+                        user_id: 'client.UUID@host.name',
                         hostname: 'host.name',
+                        clientUUID: 'client.UUID',
                     },
                 },
             ],
@@ -567,31 +568,31 @@ describe('EventQueue Unit Tests', () => {
                     ],
                 },
                 {
-                    user: expect.objectContaining({ user_id: 'host.name' }),
+                    user: expect.objectContaining({ user_id: 'client.UUID@host.name' }),
                     events: [
                         expect.objectContaining({
                             type: 'aggVariableEvaluated',
                             target: 'key_1',
                             value: 1,
-                            user_id: 'host.name',
+                            user_id: 'client.UUID@host.name',
                         }),
                         expect.objectContaining({
                             type: 'aggVariableEvaluated',
                             target: 'key_3',
                             value: 1,
-                            user_id: 'host.name',
+                            user_id: 'client.UUID@host.name',
                         }),
                         expect.objectContaining({
                             type: 'aggVariableEvaluated',
                             target: 'key_4',
                             value: 2,
-                            user_id: 'host.name',
+                            user_id: 'client.UUID@host.name',
                         }),
                         expect.objectContaining({
                             type: 'aggVariableDefaulted',
                             target: 'key_4',
                             value: 1,
-                            user_id: 'host.name',
+                            user_id: 'client.UUID@host.name',
                         }),
                     ],
                 },
@@ -635,7 +636,7 @@ describe('EventQueue Unit Tests', () => {
                 ]),
             },
             {
-                user: expect.objectContaining({ user_id: 'host.name' }),
+                user: expect.objectContaining({ user_id: 'client.UUID@host.name' }),
                 events: expect.arrayContaining([
                     expect.objectContaining({
                         type: 'aggVariableEvaluated',
@@ -657,7 +658,7 @@ describe('EventQueue Unit Tests', () => {
                 ]),
             },
             {
-                user: expect.objectContaining({ user_id: 'host.name' }),
+                user: expect.objectContaining({ user_id: 'client.UUID@host.name' }),
                 events: expect.arrayContaining([
                     expect.objectContaining({
                         type: 'aggVariableEvaluated',
@@ -749,7 +750,7 @@ describe('EventQueue Unit Tests', () => {
                         ]),
                     },
                     {
-                        user: expect.objectContaining({ user_id: 'host.name' }),
+                        user: expect.objectContaining({ user_id: 'client.UUID@host.name' }),
                         events: expect.arrayContaining([
                             expect.objectContaining({
                                 type: 'aggVariableEvaluated',
@@ -771,7 +772,7 @@ describe('EventQueue Unit Tests', () => {
                         ]),
                     },
                     {
-                        user: expect.objectContaining({ user_id: 'host.name' }),
+                        user: expect.objectContaining({ user_id: 'client.UUID@host.name' }),
                         events: expect.arrayContaining([
                             expect.objectContaining({
                                 type: 'aggVariableEvaluated',

@@ -21,6 +21,7 @@ describe('DevCycleClient', () => {
             sdkVersion: expect.any(String),
             sdkType: 'server',
             hostname: expect.any(String),
+            clientUUID: expect.any(String),
         })
     })
 })
