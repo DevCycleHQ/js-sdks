@@ -321,12 +321,12 @@ export class DevCycleClient {
                     clientUUID: this.clientUUID,
                     reqEtag,
                     reqLastModified,
-                    resEtag: res?.headers.get('etag') || undefined,
+                    resEtag: res?.headers.get('etag') ?? undefined,
                     resLastModified:
-                        res?.headers.get('last-modified') || undefined,
-                    resRayId: res?.headers.get('cf-ray') || undefined,
-                    resStatus: err ? err.status : res?.status || undefined,
-                    errMsg: err ? err.message : undefined,
+                        res?.headers.get('last-modified') ?? undefined,
+                    resRayId: res?.headers.get('cf-ray') ?? undefined,
+                    resStatus: (err?.status || res?.status) ?? undefined,
+                    errMsg: err?.message ?? undefined,
                 },
             },
         )
