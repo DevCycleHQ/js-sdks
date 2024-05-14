@@ -63,6 +63,9 @@ export class TargetDistribution<IdType = string> {
 }
 
 export class TargetAudience<IdType = string> {
+    // this is leftover from legacy config format and is unused, but leads to parsing errors if removed
+    // we are going to write dummy strings here going forward
+    _id: string
     filters: TopLevelOperator<IdType>
 }
 

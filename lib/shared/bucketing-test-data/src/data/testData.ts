@@ -53,6 +53,7 @@ export const reusableAudiences: PublicAudience[] = [
 
 export const audiences: TargetAudience[] = [
     {
+        _id: '',
         filters: {
             filters: [
                 {
@@ -66,6 +67,7 @@ export const audiences: TargetAudience[] = [
         },
     },
     {
+        _id: '',
         filters: {
             filters: [
                 {
@@ -102,6 +104,7 @@ export const audiences: TargetAudience[] = [
         },
     },
     {
+        _id: '',
         filters: {
             filters: [
                 {
@@ -131,6 +134,7 @@ export const audiences: TargetAudience[] = [
         },
     },
     {
+        _id: '',
         filters: {
             filters: [
                 {
@@ -154,6 +158,7 @@ export const audiences: TargetAudience[] = [
         },
     },
     {
+        _id: '',
         filters: {
             filters: [
                 {
@@ -166,6 +171,7 @@ export const audiences: TargetAudience[] = [
         },
     },
     {
+        _id: '',
         filters: {
             filters: [
                 {
@@ -181,6 +187,7 @@ export const audiences: TargetAudience[] = [
         },
     },
     {
+        _id: '',
         filters: {
             filters: [
                 {
@@ -196,6 +203,7 @@ export const audiences: TargetAudience[] = [
         },
     },
     {
+        _id: '',
         filters: {
             filters: [
                 {
