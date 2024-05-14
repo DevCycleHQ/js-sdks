@@ -203,7 +203,8 @@ benchmarkSuite('setPlatformData', {
             platformVersion: '16.0',
             sdkType: 'server',
             sdkVersion: '1.0.' + i,
-            hostname: 'host.name'
+            hostname: 'host.name',
+            clientUUID: 'client.UUID'
         }))
         i++
     }

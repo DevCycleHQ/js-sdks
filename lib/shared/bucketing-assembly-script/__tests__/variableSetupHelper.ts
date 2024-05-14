@@ -66,7 +66,8 @@ export const initSDK = (sdkKey = 'sdkKey', projectConfig = config): void => {
         platformVersion: '16.0',
         sdkType: 'server',
         sdkVersion: '1.0.0',
-        hostname: 'host.name'
+        hostname: 'host.name',
+        clientUUID: 'client.UUID'
     }))
     setConfigData(sdkKey, JSON.stringify(projectConfig))
 }

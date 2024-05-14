@@ -13,7 +13,8 @@ const defaultPlatformData = {
     sdkType: 'server',
     sdkVersion: '1.0.0',
     deviceModel: '',
-    hostname: 'host.name'
+    hostname: 'host.name',
+    clientUUID: 'client.UUID'
 }
 
 export const setPlatformDataJSON = (data: unknown = defaultPlatformData): void => {
@@ -27,7 +28,8 @@ export const initSDK = (sdkKey: string, config: unknown = {}, eventOptions: unkn
         platformVersion: '16.0',
         sdkType: 'server',
         sdkVersion: '1.0.0',
-        hostname: 'host.name'
+        hostname: 'host.name',
+        clientUUID: 'client.UUID'
     }))
     setConfigData(sdkKey, JSON.stringify(config))
 }

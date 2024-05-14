@@ -72,6 +72,7 @@ const initSDK = (sdkKey: string, eventOptions: unknown = {}) => {
             sdkType: 'server',
             sdkVersion: '1.0.0',
             hostname: 'host.name',
+            clientUUID: 'client.UUID'
         }),
     )
     setConfigData(sdkKey, JSON.stringify(config))
@@ -206,6 +207,7 @@ describe('EventQueueManager Tests', () => {
                                     deviceModel: 'dvcServer',
                                     customData: { custom: 'data' },
                                     hostname: 'host.name',
+                                    clientUUID: 'client.UUID',
                                 },
                             },
                             {
@@ -216,7 +218,7 @@ describe('EventQueueManager Tests', () => {
                                         target: 'variableKey',
                                         type: 'aggVariableDefaulted',
                                         featureVars: {},
-                                        user_id: 'host.name',
+                                        user_id: 'client.UUID@host.name',
                                         value: 1,
                                     },
                                 ],
@@ -227,8 +229,9 @@ describe('EventQueueManager Tests', () => {
                                     platformVersion: '16.0',
                                     sdkType: 'server',
                                     sdkVersion: '1.0.0',
-                                    user_id: 'host.name',
+                                    user_id: 'client.UUID@host.name',
                                     hostname: 'host.name',
+                                    clientUUID: 'client.UUID',
                                 },
                             },
                         ],
@@ -296,6 +299,7 @@ describe('EventQueueManager Tests', () => {
                                         clientCustom: 'data',
                                     },
                                     hostname: 'host.name',
+                                    clientUUID: 'client.UUID',
                                 },
                             },
                         ],
@@ -338,6 +342,7 @@ describe('EventQueueManager Tests', () => {
                 deviceModel: 'dvcServer',
                 customData: { custom: 'data' },
                 hostname: 'host.name',
+                clientUUID: 'client.UUID',
             })
             expect(
                 payloads[0].records[0].user.privateCustomData,
@@ -626,6 +631,7 @@ describe('EventQueueManager Tests', () => {
                     createdDate: expect.any(String),
                     lastSeenDate: expect.any(String),
                     hostname: 'host.name',
+                    clientUUID: 'client.UUID',
                     platform: 'NodeJS',
                     platformVersion: '16.0',
                     sdkType: 'server',
@@ -793,7 +799,7 @@ describe('EventQueueManager Tests', () => {
                     target: 'testey_test',
                     type: 'aggVariableDefaulted',
                     featureVars: {},
-                    user_id: 'host.name',
+                    user_id: 'client.UUID@host.name',
                     value: 36,
                 },
                 {
@@ -802,7 +808,7 @@ describe('EventQueueManager Tests', () => {
                     target: 'swageyTest',
                     type: 'aggVariableDefaulted',
                     featureVars: {},
-                    user_id: 'host.name',
+                    user_id: 'client.UUID@host.name',
                     value: 11,
                 },
                 {
@@ -811,7 +817,7 @@ describe('EventQueueManager Tests', () => {
                     target: 'test',
                     type: 'aggVariableEvaluated',
                     featureVars: {},
-                    user_id: 'host.name',
+                    user_id: 'client.UUID@host.name',
                     value: 36,
                     metaData: {
                         _feature: '614ef6aa473928459060721a',
@@ -824,7 +830,7 @@ describe('EventQueueManager Tests', () => {
                     target: 'swagTest',
                     type: 'aggVariableEvaluated',
                     featureVars: {},
-                    user_id: 'host.name',
+                    user_id: 'client.UUID@host.name',
                     value: 11,
                     metaData: {
                         _feature: '614ef6aa473928459060721a',
@@ -832,7 +838,7 @@ describe('EventQueueManager Tests', () => {
                     },
                 },
             ])
-            expect(payloads[0].records[0].user.user_id).toEqual('host.name')
+            expect(payloads[0].records[0].user.user_id).toEqual('client.UUID@host.name')
         })
     })
 

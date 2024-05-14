@@ -68,9 +68,12 @@ export class RequestPayloadManager {
         const aggEvents: DVCRequestEvent[] = []
 
         const platformData = _getPlatformData()
-        const user_id = platformData.hostname
-            ? (platformData.hostname as string)
-            : 'aggregate'
+        let user_id = 'aggregate'
+        if (platformData.hostname && platformData.clientUUID) {
+            user_id = `${platformData.clientUUID as string}@${platformData.hostname as string}`
+        } else if (platformData.hostname) {
+            user_id = platformData.hostname as string
+        }
         const emptyFeatureVars = new Map<string, string>()
 
         for (let i = 0; i < aggEventQueueKeys.length; i++) {
