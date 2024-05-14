@@ -6,6 +6,8 @@ import {
     hasConfigDataForEtag,
 } from '../bucketingImportHelper'
 import cloneDeep from 'lodash/cloneDeep'
+import immutable from 'object-path-immutable'
+import { Feature } from '@devcycle/types'
 
 const testConfigBody = (str: string, utf8: boolean): any => {
     if (utf8) {
@@ -16,21 +18,24 @@ const testConfigBody = (str: string, utf8: boolean): any => {
     }
 }
 
+const postProcessedConfig = (config: unknown) => {
+    const parsedConfig = JSON.parse(JSON.stringify(config))
+    return immutable
+        .wrap(parsedConfig)
+        .set('project.settings', {disablePassthroughRollouts: false})
+        .del('variableHashes')
+        .set('features', parsedConfig.features.map((feature: Feature) => {
+            return immutable.set(feature, 'configuration.targets', feature.configuration.targets.map(target => {
+                return immutable.del(target, '_audience._id')
+            }))
+        }))
+        .value()
+}
+
 describe.each([true, false])('Config Body', (utf8) => {
     it('should parse valid JSON into ConfigBody class', () => {
         expect(testConfigBody(JSON.stringify(testData.config), utf8)).toEqual(
-            JSON.parse(
-                JSON.stringify({
-                    ...testData.config,
-                    project: {
-                        ...testData.config.project,
-                        settings: {
-                            disablePassthroughRollouts: false
-                        }
-                    },
-                    variableHashes: undefined,
-                }),
-            ),
+            postProcessedConfig(testData.config),
         )
     })
 
@@ -67,23 +72,9 @@ describe.each([true, false])('Config Body', (utf8) => {
     })
 
     it('should handle extended UTF8 characters, from UTF8: ' + utf8, () => {
-        const config = {
-            ...testData.config,
-            project: { ...testData.config.project, key: '👍 ö' },
-        }
-        expect(testConfigBody(JSON.stringify(config), utf8)).toEqual(
-            JSON.parse(
-                JSON.stringify({
-                    ...config,
-                    project: {
-                        ...config.project,
-                        settings: {
-                            disablePassthroughRollouts: false
-                        }
-                    },
-                    variableHashes: undefined,
-                }),
-            ),
+        const testConfig = immutable.set(testData.config, 'project.key', '👍 ö')
+        expect(testConfigBody(JSON.stringify(testConfig), utf8)).toEqual(
+            postProcessedConfig(testConfig)
         )
     })
 
