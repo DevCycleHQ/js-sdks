@@ -57,6 +57,7 @@ type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
 
 export class DevCycleClient {
     private clientUUID: string
+    private hostname: string
     private sdkKey: string
     private configHelper: EnvironmentConfigManager
     private clientConfigHelper?: EnvironmentConfigManager
@@ -73,6 +74,7 @@ export class DevCycleClient {
     constructor(sdkKey: string, options?: DevCycleServerSDKOptions) {
         // generate UUID for this client
         this.clientUUID = randomUUID()
+        this.hostname = `${os.hostname()}_${this.clientUUID}`
         this.sdkKey = sdkKey
         this.logger =
             options?.logger || dvcDefaultLogger({ level: options?.logLevel })
@@ -122,7 +124,7 @@ export class DevCycleClient {
                     platformVersion: process.version,
                     sdkType: 'server',
                     sdkVersion: packageJson.version,
-                    hostname: os.hostname(),
+                    hostname: this.hostname,
                 }
 
                 getBucketingLib().setPlatformData(JSON.stringify(platformData))
@@ -312,7 +314,9 @@ export class DevCycleClient {
         reqLastModified?: string,
     ): void {
         this.eventQueue.queueEvent(
-            DVCPopulatedUserFromDevCycleUser({ user_id: this.clientUUID }),
+            DVCPopulatedUserFromDevCycleUser({
+                user_id: this.hostname,
+            }),
             {
                 type: 'sdkConfig',
                 target: url,
