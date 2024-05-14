@@ -74,7 +74,7 @@ export class DevCycleClient {
     constructor(sdkKey: string, options?: DevCycleServerSDKOptions) {
         // generate UUID for this client
         this.clientUUID = randomUUID()
-        this.hostname = `${os.hostname()}@${this.clientUUID}`
+        this.hostname = `${this.clientUUID}@${os.hostname()}`
         this.sdkKey = sdkKey
         this.logger =
             options?.logger || dvcDefaultLogger({ level: options?.logLevel })
