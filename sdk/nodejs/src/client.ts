@@ -33,7 +33,7 @@ import {
     DevCycleEvent,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
-import { v4 as uuidv4 } from 'uuid'
+import { randomUUID } from 'crypto'
 
 interface IPlatformData {
     platform: string
@@ -72,7 +72,7 @@ export class DevCycleClient {
 
     constructor(sdkKey: string, options?: DevCycleServerSDKOptions) {
         // generate UUID for this client
-        this.clientUUID = uuidv4()
+        this.clientUUID = randomUUID()
         this.sdkKey = sdkKey
         this.logger =
             options?.logger || dvcDefaultLogger({ level: options?.logLevel })

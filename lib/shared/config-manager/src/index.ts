@@ -185,12 +185,12 @@ export class EnvironmentConfigManager {
                 this.configLastModified =
                     res?.headers.get('last-modified') || ''
 
-                trackEvent()
                 return
             } catch (e) {
-                trackEvent()
                 logError(new Error('Invalid config JSON.'))
                 res = null
+            } finally {
+                trackEvent()
             }
         }
 
