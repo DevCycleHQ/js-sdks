@@ -7,7 +7,7 @@ import {
     getStringFromJSONOptional,
     getStringMapFromJSONObj,
     jsonArrFromValueArray,
-    jsonObjFromMap,
+    jsonObjFromMap
 } from '../helpers/jsonHelpers'
 import { DVCPopulatedUser } from './dvcUser'
 import uuid from 'as-uuid/assembly'
@@ -47,15 +47,14 @@ export class DVCEvent extends JSON.Value {
         /**
          * extra metadata for event. Contextual to event type
          */
-        public readonly metaData: JSON.Obj | null,
+        public readonly metaData: JSON.Obj | null
     ) {
         super()
     }
 
     static fromJSONString(eventStr: string): DVCEvent {
         const eventJSON = JSON.parse(eventStr)
-        if (!eventJSON.isObj)
-            throw new Error('DVCEvent eventStr not a JSON Object')
+        if (!eventJSON.isObj) throw new Error('DVCEvent eventStr not a JSON Object')
         const event = eventJSON as JSON.Obj
 
         return new DVCEvent(
@@ -63,7 +62,7 @@ export class DVCEvent extends JSON.Value {
             getStringFromJSONOptional(event, 'target'),
             getDateFromJSONOptional(event, 'date'),
             getF64FromJSONOptional(event, 'value', NaN),
-            getJSONObjFromJSONOptional(event, 'metaData'),
+            getJSONObjFromJSONOptional(event, 'metaData')
         )
     }
 
@@ -116,11 +115,7 @@ export class DVCRequestEvent extends JSON.Value {
      */
     readonly metaData: JSON.Obj | null
 
-    constructor(
-        event: DVCEvent,
-        user_id: string,
-        featureVars: Map<string, string>,
-    ) {
+    constructor(event: DVCEvent, user_id: string, featureVars: Map<string, string>) {
         super()
 
         const isCustomEvent = !EventTypes.has(event.type)
@@ -131,7 +126,7 @@ export class DVCRequestEvent extends JSON.Value {
         this.user_id = user_id
         this.date = new Date(Date.now())
         const eventDate = event.date ? event.date : null
-        this.clientDate = eventDate ? eventDate : new Date(Date.now())
+        this.clientDate = eventDate ? eventDate: new Date(Date.now())
         this.value = event.value
         this.featureVars = featureVars
         this.metaData = event.metaData
@@ -156,7 +151,7 @@ export class DVCRequestEvent extends JSON.Value {
 export class UserEventsBatchRecord extends JSON.Value {
     constructor(
         public user: DVCPopulatedUser,
-        public events: DVCRequestEvent[],
+        public events: DVCRequestEvent[]
     ) {
         super()
 
@@ -176,7 +171,9 @@ export class FlushPayload extends JSON.Value {
     public readonly payloadId: string
     public status: string
 
-    constructor(public records: UserEventsBatchRecord[]) {
+    constructor(
+        public records: UserEventsBatchRecord[]
+    ) {
         super()
         this.status = 'sending'
         this.payloadId = uuid()
@@ -188,10 +185,7 @@ export class FlushPayload extends JSON.Value {
      */
     addBatchRecordForUser(record: UserEventsBatchRecord, chunkSize: i32): void {
         const userRecord = this.recordForUser(record.user.user_id)
-        const splicedEvents = record.events.splice(
-            0,
-            chunkSize - this.eventCount(),
-        )
+        const splicedEvents = record.events.splice(0, chunkSize - this.eventCount())
         if (splicedEvents.length === 0) return
 
         if (userRecord) {
@@ -200,7 +194,7 @@ export class FlushPayload extends JSON.Value {
         } else {
             const newBatchRecord = new UserEventsBatchRecord(
                 record.user,
-                splicedEvents,
+                splicedEvents
             )
             this.records.push(newBatchRecord)
         }
@@ -245,19 +239,14 @@ export function testDVCEventClass(eventStr: string): string {
     return event.stringify()
 }
 
-export function testDVCRequestEventClass(
-    eventStr: string,
-    user_id: string,
-    featureVarsStr: string,
-): string {
+export function testDVCRequestEventClass(eventStr: string, user_id: string, featureVarsStr: string): string {
     const featureVarsJSON = JSON.parse(featureVarsStr)
-    if (!featureVarsJSON.isObj)
-        throw new Error('featureVarsJSON is not a JSON Object')
+    if (!featureVarsJSON.isObj) throw new Error('featureVarsJSON is not a JSON Object')
 
     const requestEvent = new DVCRequestEvent(
         DVCEvent.fromJSONString(eventStr),
         user_id,
-        getStringMapFromJSONObj(featureVarsJSON as JSON.Obj),
+        getStringMapFromJSONObj(featureVarsJSON as JSON.Obj)
     )
     return requestEvent.stringify()
 }
