@@ -663,7 +663,6 @@ export const barrenConfig: ConfigBody = {
     ],
     variables: [],
     variableHashes: {},
-    clientSDKKey: 'test',
 }
 
 export const configWithNullCustomData: ConfigBody = {

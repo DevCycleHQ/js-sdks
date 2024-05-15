@@ -24,7 +24,6 @@ export class Settings extends JSON.Value {
             this.disablePassthroughRollouts = false
         }
     }
-    
     stringify(): string {
         const json = new JSON.Obj()
         json.set('disablePassthroughRollouts', this.disablePassthroughRollouts)
@@ -143,9 +142,8 @@ export class ConfigBody {
         this.etag = etag
         this.clientSDKKey = getStringFromJSONOptional(
             configJSONObj,
-            'clientSDKKey',
+            'clientSDKKey'
         )
-
         this.project = new PublicProject(
             getJSONObjFromJSON(configJSONObj, 'project'),
         )
@@ -232,7 +230,9 @@ export class ConfigBody {
         json.set('audiences', jsonObjFromMap(this.audiences))
         json.set('features', jsonArrFromValueArray(this.features))
         json.set('variables', jsonArrFromValueArray(this.variables))
-        json.set('clientSDKKey', this.clientSDKKey)
+        if (this.clientSDKKey) {
+            json.set('clientSDKKey', this.clientSDKKey)
+        }
         return json.stringify()
     }
 
