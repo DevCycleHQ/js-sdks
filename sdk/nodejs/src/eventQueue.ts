@@ -61,7 +61,6 @@ export class EventQueue {
         this.logger = options.logger
         this.reporter = options.reporter
         this.eventsAPIURI = options.eventsAPIURI
-        this.sdkKey = sdkKey
         this.eventFlushIntervalMS = options?.eventFlushIntervalMS || 10 * 1000
         if (this.eventFlushIntervalMS < 500) {
             throw new Error(
