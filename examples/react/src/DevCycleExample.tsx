@@ -44,7 +44,7 @@ export default function DevCycleExample(): React.ReactElement {
                     variable feature-release = {JSON.stringify(variable.value)}{' '}
                 </span>
             </div>
-            <RenderIfEnabled variableKey={'test-featre'} showBorder={true}>
+            <RenderIfEnabled variableKey={'test-featre'}>
                 <div>
                     <span>This content is conditionally rendered.</span>
                 </div>

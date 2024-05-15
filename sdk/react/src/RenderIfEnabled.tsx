@@ -1,11 +1,11 @@
 import useVariableValue from './useVariableValue'
 import { DVCVariableValue } from '@devcycle/js-client-sdk'
+import { useContext } from 'react'
+import { debugContext } from './context'
 
 type CommonProps = {
     children: React.ReactNode
     variableKey: string
-    showBorder?: boolean
-    borderColor?: string
 }
 
 type RenderIfEnabledProps<T extends DVCVariableValue> =
@@ -28,15 +28,17 @@ export const RenderIfEnabled = <T extends DVCVariableValue>(
         defaultValue = false
     }
 
-    const borderColor = props.borderColor ?? '#ff6347'
-
     const variableValue = useVariableValue(props.variableKey, defaultValue)
+    const debugSettings = useContext(debugContext)
+
+    console.log(debugSettings)
+
     if (variableValue === targetValue) {
-        if (props.showBorder) {
+        if (debugSettings.showConditionalBorders) {
             return (
                 <div
                     style={{
-                        border: `2px solid ${borderColor}`,
+                        border: `2px solid ${debugSettings.borderColor}`,
                         position: 'relative',
                     }}
                 >
@@ -49,7 +51,7 @@ export const RenderIfEnabled = <T extends DVCVariableValue>(
                             color: 'white',
                             fontSize: '1.5rem',
                             padding: '2px 5px',
-                            backgroundColor: `${borderColor}`,
+                            backgroundColor: `${debugSettings.borderColor}`,
                         }}
                         target={'_blank'}
                         href={`https://app.devcycle.com/r/variables/${props.variableKey}`}
