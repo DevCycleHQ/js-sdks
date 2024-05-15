@@ -39,7 +39,7 @@ export const RenderIfEnabled = <T extends DVCVariableValue>(
                         border: `2px solid ${debugSettings.borderColor}`,
                         position: 'relative',
                     }}
-                    className={`devcycle-conditional-border-${props.variableKey}`}
+                    className={`devcycle-conditional-border devcycle-conditional-border-${props.variableKey}`}
                 >
                     <a
                         style={{
