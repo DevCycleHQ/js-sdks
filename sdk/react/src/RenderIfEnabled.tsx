@@ -31,8 +31,6 @@ export const RenderIfEnabled = <T extends DVCVariableValue>(
     const variableValue = useVariableValue(props.variableKey, defaultValue)
     const debugSettings = useContext(debugContext)
 
-    console.log(debugSettings)
-
     if (variableValue === targetValue) {
         if (debugSettings.showConditionalBorders) {
             return (
@@ -41,6 +39,7 @@ export const RenderIfEnabled = <T extends DVCVariableValue>(
                         border: `2px solid ${debugSettings.borderColor}`,
                         position: 'relative',
                     }}
+                    className={`devcycle-conditional-border-${props.variableKey}`}
                 >
                     <a
                         style={{
