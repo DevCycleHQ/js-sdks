@@ -45,7 +45,6 @@ export type EventQueueOptions = {
 export class EventQueue {
     private readonly logger: DVCLogger
     private readonly reporter?: DVCReporter
-    private readonly sdkKey: string
     private readonly eventsAPIURI?: string
     eventFlushIntervalMS: number
     flushEventQueueSize: number
@@ -55,8 +54,8 @@ export class EventQueue {
     private flushCallbacks: Array<(arg: unknown) => void> = []
 
     constructor(
-        sdkKey: string,
-        clientUUID: string,
+        private readonly sdkKey: string,
+        private readonly clientUUID: string,
         options: EventQueueOptions,
     ) {
         this.logger = options.logger
@@ -109,7 +108,7 @@ export class EventQueue {
 
         getBucketingLib().initEventQueue(
             sdkKey,
-            clientUUID,
+            this.clientUUID,
             JSON.stringify(options),
         )
     }
