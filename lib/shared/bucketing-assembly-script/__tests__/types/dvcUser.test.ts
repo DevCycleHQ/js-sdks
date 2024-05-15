@@ -1,4 +1,7 @@
-import { testDVCUserClass, testDVCUserClassFromUTF8 } from '../bucketingImportHelper'
+import {
+    testDVCUserClass,
+    testDVCUserClassFromUTF8,
+} from '../bucketingImportHelper'
 import { setPlatformDataJSON } from '../setPlatformData'
 
 setPlatformDataJSON()
@@ -25,25 +28,27 @@ describe.each([true, false])('dvcUser Tests', (utf8) => {
             appBuild: 1911,
             deviceModel: 'iPhone',
             customData: {
-                'string': 'val',
-                'num': 610,
-                'bool': true
+                string: 'val',
+                num: 610,
+                bool: true,
             },
             privateCustomData: {
-                'key': 'val'
-            }
+                key: 'val',
+            },
         }
 
-        expect(testDVCUser(userObj, utf8)).toEqual(expect.objectContaining({
-            ...userObj,
-            deviceModel: 'iPhone',
-            platform: 'NodeJS',
-            platformVersion: '',
-            sdkType: 'server',
-            sdkVersion: '1.0.0',
-            createdDate: expect.any(String),
-            lastSeenDate: expect.any(String)
-        }))
+        expect(testDVCUser(userObj, utf8)).toEqual(
+            expect.objectContaining({
+                ...userObj,
+                deviceModel: 'iPhone',
+                platform: 'NodeJS',
+                platformVersion: '',
+                sdkType: 'server',
+                sdkVersion: '1.0.0',
+                createdDate: expect.any(String),
+                lastSeenDate: expect.any(String),
+            }),
+        )
     })
 
     it('should throw error if customData is not a flat JSON Obj', () => {
@@ -51,12 +56,13 @@ describe.each([true, false])('dvcUser Tests', (utf8) => {
             user_id: '24601',
             customData: {
                 string: 'val',
-                num: [610, 2809]
-            }
+                num: [610, 2809],
+            },
         }
 
-        expect(() => testDVCUser(userObj, utf8))
-            .toThrow('DVCUser customData can\'t contain nested objects or arrays')
+        expect(() => testDVCUser(userObj, utf8)).toThrow(
+            "DVCUser customData can't contain nested objects or arrays",
+        )
     })
 
     it('should throw error if privateCustomData is not a flat JSON Obj', () => {
@@ -64,44 +70,49 @@ describe.each([true, false])('dvcUser Tests', (utf8) => {
             user_id: '24601',
             privateCustomData: {
                 key: 'val',
-                values: { obj: true }
-            }
+                values: { obj: true },
+            },
         }
 
-        expect(() => testDVCUser(userObj, utf8))
-            .toThrow('DVCUser privateCustomData can\'t contain nested objects or arrays')
+        expect(() => testDVCUser(userObj, utf8)).toThrow(
+            "DVCUser privateCustomData can't contain nested objects or arrays",
+        )
     })
 
     it('should support user_id as email, and only require user_id to be set', () => {
         const userObj = {
-            user_id: 'test@devcycle.com'
+            user_id: 'test@devcycle.com',
         }
 
-        expect(testDVCUser(userObj, utf8)).toEqual(expect.objectContaining({
-            ...userObj,
-            platform: 'NodeJS',
-            platformVersion: '',
-            sdkType: 'server',
-            sdkVersion: '1.0.0',
-            createdDate: expect.any(String),
-            lastSeenDate: expect.any(String)
-        }))
+        expect(testDVCUser(userObj, utf8)).toEqual(
+            expect.objectContaining({
+                ...userObj,
+                platform: 'NodeJS',
+                platformVersion: '',
+                sdkType: 'server',
+                sdkVersion: '1.0.0',
+                createdDate: expect.any(String),
+                lastSeenDate: expect.any(String),
+            }),
+        )
     })
 
     it('should throw if appBuild is not a number', () => {
         const userObj = {
             user_id: 'test',
-            appBuild: 'not a number'
+            appBuild: 'not a number',
         }
 
-        expect(() => testDVCUser(userObj, utf8))
-            .toThrow('Invalid number value: not a number, for key: "appBuild"')
+        expect(() => testDVCUser(userObj, utf8)).toThrow(
+            'Invalid number value: not a number, for key: "appBuild"',
+        )
     })
 
     it('should throw is string key is not a string', () => {
         const userObj = { user_id: true }
 
-        expect(() => testDVCUser(userObj, utf8))
-            .toThrow('Missing string value for key: "user_id",')
+        expect(() => testDVCUser(userObj, utf8)).toThrow(
+            'Missing string value for key: "user_id",',
+        )
     })
 })

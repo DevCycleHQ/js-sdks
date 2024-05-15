@@ -19,9 +19,17 @@ const { config } = testData
 import random_JSON from './random_json_2kb.json'
 
 let currentSDKKey: string | null = null
-const initEventQueue = (sdkKey: unknown, clientUUID: unknown, options: unknown) => {
+const initEventQueue = (
+    sdkKey: unknown,
+    clientUUID: unknown,
+    options: unknown,
+) => {
     currentSDKKey = sdkKey as string
-    initEventQueue_AS(sdkKey as string, clientUUID as string, JSON.stringify(options))
+    initEventQueue_AS(
+        sdkKey as string,
+        clientUUID as string,
+        JSON.stringify(options),
+    )
 }
 
 const flushEventQueue = (sdkKey: string): FlushPayload[] => {
@@ -63,7 +71,11 @@ const eventQueueSize = (sdkKey: string): number => {
     return eventQueueSize_AS(sdkKey)
 }
 
-const initSDK = (sdkKey: string, eventOptions: unknown = {}, clientUUID = 'uuid') => {
+const initSDK = (
+    sdkKey: string,
+    eventOptions: unknown = {},
+    clientUUID = 'uuid',
+) => {
     initEventQueue(sdkKey, clientUUID, eventOptions)
     setPlatformData(
         JSON.stringify({
@@ -93,22 +105,22 @@ describe('EventQueueManager Tests', () => {
         })
 
         it('should throw error if no sdkKey', () => {
-            expect(() => initEventQueue(undefined, undefined, undefined)).toThrow(
-                'value must not be null',
-            )
+            expect(() =>
+                initEventQueue(undefined, undefined, undefined),
+            ).toThrow('value must not be null')
         })
 
         it('should throw error if no options', () => {
-            expect(() => initEventQueue('sdk_key_test_2', 'uuid_2', undefined)).toThrow(
-                'value must not be null',
-            )
+            expect(() =>
+                initEventQueue('sdk_key_test_2', 'uuid_2', undefined),
+            ).toThrow('value must not be null')
         })
 
         it('should throw if EnvQueue already setup for sdkKey', () => {
             initEventQueue('sdk_key_test_3', 'uuid_3', {})
-            expect(() => initEventQueue('sdk_key_test_3', 'uuid_3', {})).toThrow(
-                'Event Queue already exists for sdkKey',
-            )
+            expect(() =>
+                initEventQueue('sdk_key_test_3', 'uuid_3', {}),
+            ).toThrow('Event Queue already exists for sdkKey')
         })
 
         it('should let you setup multiple EventQueues for multiple sdkKeys', () => {
@@ -832,7 +844,9 @@ describe('EventQueueManager Tests', () => {
                     },
                 },
             ])
-            expect(payloads[0].records[0].user.user_id).toEqual('uuid@host.name')
+            expect(payloads[0].records[0].user.user_id).toEqual(
+                'uuid@host.name',
+            )
         })
     })
 

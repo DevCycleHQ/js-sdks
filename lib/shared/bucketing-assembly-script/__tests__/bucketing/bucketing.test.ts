@@ -536,9 +536,9 @@ describe('Config Parsing and Generating', () => {
                 ...config.project,
                 settings: {
                     ...config.project.settings,
-                    disablePassthroughRollouts: true
-                }
-            }
+                    disablePassthroughRollouts: true,
+                },
+            },
         }
         const expected = {
             environment: {
@@ -622,12 +622,12 @@ describe('Config Parsing and Generating', () => {
             }),
             features: {
                 feature1: {
-                    _id: "614ef6aa473928459060721a",
-                    _variation: "6153553b8cf4e45e0464268d",
-                    key: "feature1",
-                    type: "release",
-                    variationKey: "variation-1-key",
-                    variationName: "variation 1",
+                    _id: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                    key: 'feature1',
+                    type: 'release',
+                    variationKey: 'variation-1-key',
+                    variationName: 'variation 1',
                 },
                 feature2: {
                     _id: '614ef6aa475928459060721a',
@@ -639,33 +639,33 @@ describe('Config Parsing and Generating', () => {
                 },
             },
             variableVariationMap: {
-                "bool-var": {
-                    "_feature": "614ef6aa473928459060721a",
-                   "_variation": "6153553b8cf4e45e0464268d",
+                'bool-var': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
                 },
                 feature2Var: {
                     _feature: '614ef6aa475928459060721a',
                     _variation: '615382338424cb11646d7667',
                 },
-                "json-var": {
-                    "_feature": "614ef6aa473928459060721a",
-                    "_variation": "6153553b8cf4e45e0464268d",
+                'json-var': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
                 },
-                "num-var": {
-                    "_feature": "614ef6aa473928459060721a",
-                    "_variation": "6153553b8cf4e45e0464268d",
+                'num-var': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
                 },
-                "swagTest": {
-                    "_feature": "614ef6aa473928459060721a",
-                    "_variation": "6153553b8cf4e45e0464268d",
+                swagTest: {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
                 },
-                "test": {
-                    "_feature": "614ef6aa473928459060721a",
-                    "_variation": "6153553b8cf4e45e0464268d",
+                test: {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
                 },
             },
             featureVariationMap: {
-                "614ef6aa473928459060721a": "6153553b8cf4e45e0464268d",
+                '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
                 '614ef6aa475928459060721a': '615382338424cb11646d7667',
             },
             variables: {
@@ -700,10 +700,10 @@ describe('Config Parsing and Generating', () => {
                     value: 'man',
                 },
                 test: {
-                    _id: "614ef6ea475129459160721a",
-                    key: "test",
-                    type: "String",
-                    value: "scat",
+                    _id: '614ef6ea475129459160721a',
+                    key: 'test',
+                    type: 'String',
+                    value: 'scat',
                 },
             },
         }
@@ -745,9 +745,9 @@ describe('Config Parsing and Generating', () => {
                 ...config.project,
                 settings: {
                     ...config.project.settings,
-                    disablePassthroughRollouts: undefined
-                }
-            }
+                    disablePassthroughRollouts: undefined,
+                },
+            },
         }
 
         const expected = {
@@ -762,12 +762,12 @@ describe('Config Parsing and Generating', () => {
             }),
             features: {
                 feature1: {
-                    _id: "614ef6aa473928459060721a",
-                    _variation: "6153553b8cf4e45e0464268d",
-                    key: "feature1",
-                    type: "release",
-                    variationKey: "variation-1-key",
-                    variationName: "variation 1",
+                    _id: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                    key: 'feature1',
+                    type: 'release',
+                    variationKey: 'variation-1-key',
+                    variationName: 'variation 1',
                 },
                 feature2: {
                     _id: '614ef6aa475928459060721a',
@@ -779,33 +779,33 @@ describe('Config Parsing and Generating', () => {
                 },
             },
             variableVariationMap: {
-                "bool-var": {
-                    "_feature": "614ef6aa473928459060721a",
-                    "_variation": "6153553b8cf4e45e0464268d",
+                'bool-var': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
                 },
                 feature2Var: {
                     _feature: '614ef6aa475928459060721a',
                     _variation: '615382338424cb11646d7667',
                 },
-                "json-var": {
-                    "_feature": "614ef6aa473928459060721a",
-                    "_variation": "6153553b8cf4e45e0464268d",
+                'json-var': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
                 },
-                "num-var": {
-                    "_feature": "614ef6aa473928459060721a",
-                    "_variation": "6153553b8cf4e45e0464268d",
+                'num-var': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
                 },
-                "swagTest": {
-                    "_feature": "614ef6aa473928459060721a",
-                    "_variation": "6153553b8cf4e45e0464268d",
+                swagTest: {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
                 },
-                "test": {
-                    "_feature": "614ef6aa473928459060721a",
-                    "_variation": "6153553b8cf4e45e0464268d",
+                test: {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
                 },
             },
             featureVariationMap: {
-                "614ef6aa473928459060721a": "6153553b8cf4e45e0464268d",
+                '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
                 '614ef6aa475928459060721a': '615382338424cb11646d7667',
             },
             variables: {
@@ -840,10 +840,10 @@ describe('Config Parsing and Generating', () => {
                     value: 'man',
                 },
                 test: {
-                    _id: "614ef6ea475129459160721a",
-                    key: "test",
-                    type: "String",
-                    value: "scat",
+                    _id: '614ef6ea475129459160721a',
+                    key: 'test',
+                    type: 'String',
+                    value: 'scat',
                 },
             },
         }
@@ -1586,7 +1586,9 @@ describe('Client Data', () => {
         const c1 = generateBucketedConfig(user)
         expect(c1).toEqual(
             expect.objectContaining({
-                featureVariationMap: {'614ef6aa473928459060721a': '6153553b8cf4e45e0464268d'},
+                featureVariationMap: {
+                    '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
+                },
             }),
         )
 
@@ -1617,7 +1619,9 @@ describe('Client Data', () => {
         const c3 = generateBucketedConfig(user2)
         expect(c3).toEqual(
             expect.objectContaining({
-                featureVariationMap: {'614ef6aa473928459060721a': '6153553b8cf4e45e0464268d'},
+                featureVariationMap: {
+                    '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
+                },
             }),
         )
 
