@@ -102,8 +102,7 @@ describe('EventQueue Unit Tests', () => {
         }
 
         const sdkKey = 'sdkKey'
-        const clientUUID = 'uuid'
-        const eventQueue = initEventQueue(sdkKey, clientUUID, { reporter })
+        const eventQueue = initEventQueue(sdkKey, 'uuid', { reporter })
         const user = DVCPopulatedUserFromDevCycleUser({ user_id: 'user_id' })
         const event = { type: 'test_event' }
         eventQueue.queueEvent(user, event)
