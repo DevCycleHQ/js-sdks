@@ -317,25 +317,21 @@ export class DevCycleClient {
             user_id: `${this.clientUUID}@${this.hostname}`,
         })
 
-        this.eventQueue.queueEvent(
-            populatedUser,
-            {
-                type: 'sdkConfig',
-                target: url,
-                value: responseTimeMS,
-                metaData: {
-                    clientUUID: this.clientUUID,
-                    reqEtag,
-                    reqLastModified,
-                    resEtag: res?.headers.get('etag') ?? undefined,
-                    resLastModified:
-                        res?.headers.get('last-modified') ?? undefined,
-                    resRayId: res?.headers.get('cf-ray') ?? undefined,
-                    resStatus: (err?.status || res?.status) ?? undefined,
-                    errMsg: err?.message ?? undefined,
-                },
+        this.eventQueue.queueEvent(populatedUser, {
+            type: 'sdkConfig',
+            target: url,
+            value: responseTimeMS,
+            metaData: {
+                clientUUID: this.clientUUID,
+                reqEtag,
+                reqLastModified,
+                resEtag: res?.headers.get('etag') ?? undefined,
+                resLastModified: res?.headers.get('last-modified') ?? undefined,
+                resRayId: res?.headers.get('cf-ray') ?? undefined,
+                resStatus: (err?.status || res?.status) ?? undefined,
+                errMsg: err?.message ?? undefined,
             },
-        )
+        })
     }
 
     /**

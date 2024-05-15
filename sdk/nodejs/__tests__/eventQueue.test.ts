@@ -568,7 +568,9 @@ describe('EventQueue Unit Tests', () => {
                     ],
                 },
                 {
-                    user: expect.objectContaining({ user_id: 'uuid@host.name' }),
+                    user: expect.objectContaining({
+                        user_id: 'uuid@host.name',
+                    }),
                     events: [
                         expect.objectContaining({
                             type: 'aggVariableEvaluated',
@@ -750,7 +752,9 @@ describe('EventQueue Unit Tests', () => {
                         ]),
                     },
                     {
-                        user: expect.objectContaining({ user_id: 'uuid@host.name' }),
+                        user: expect.objectContaining({
+                            user_id: 'uuid@host.name',
+                        }),
                         events: expect.arrayContaining([
                             expect.objectContaining({
                                 type: 'aggVariableEvaluated',
@@ -772,7 +776,9 @@ describe('EventQueue Unit Tests', () => {
                         ]),
                     },
                     {
-                        user: expect.objectContaining({ user_id: 'uuid@host.name' }),
+                        user: expect.objectContaining({
+                            user_id: 'uuid@host.name',
+                        }),
                         events: expect.arrayContaining([
                             expect.objectContaining({
                                 type: 'aggVariableEvaluated',

@@ -1,7 +1,7 @@
 dist/
 coverage/
 test-results/
-lib/shared/bucketing-assembly-script/assembly/
+lib/shared/bucketing-assembly-script/
 eslint-common.js
 prettier.config.js
 jest.config.ts

@@ -54,7 +54,11 @@ export class EventQueue {
     private flushInProgress = false
     private flushCallbacks: Array<(arg: unknown) => void> = []
 
-    constructor(sdkKey: string, clientUUID: string, options: EventQueueOptions) {
+    constructor(
+        sdkKey: string,
+        clientUUID: string,
+        options: EventQueueOptions,
+    ) {
         this.logger = options.logger
         this.reporter = options.reporter
         this.eventsAPIURI = options.eventsAPIURI
@@ -103,7 +107,11 @@ export class EventQueue {
             this.eventFlushIntervalMS,
         )
 
-        getBucketingLib().initEventQueue(sdkKey, clientUUID, JSON.stringify(options))
+        getBucketingLib().initEventQueue(
+            sdkKey,
+            clientUUID,
+            JSON.stringify(options),
+        )
     }
 
     cleanup(): void {
