@@ -64,15 +64,11 @@ export function DevCycleProvider(props: Props): React.ReactElement {
         }
     }, [sdkKey, user, options])
 
-    console.log('options', props.config.options?.reactDebug)
-
     const mergedDebugOptions = Object.assign(
         {},
         debugContextDefaults,
         props.config.options?.reactDebug ?? {},
     )
-
-    console.log('merged options', mergedDebugOptions)
 
     return (
         <Provider value={{ client: clientRef.current }}>
