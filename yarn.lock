@@ -15372,6 +15372,7 @@ __metadata:
     nock: ^13.3.8
     npm-run-all: ^4.1.5
     nx: 16.10.0
+    object-path-immutable: ^4.1.2
     postcss: 8.4.31
     prettier: ^2.8.8
     prettier-eslint: ^16.3.0
@@ -25119,6 +25120,23 @@ __metadata:
   version: 1.1.1
   resolution: "object-keys@npm:1.1.1"
   checksum: b363c5e7644b1e1b04aa507e88dcb8e3a2f52b6ffd0ea801e4c7a62d5aa559affe21c55a07fd4b1fd55fc03a33c610d73426664b20032405d7b92a1414c34d6a
+  languageName: node
+  linkType: hard
+
+"object-path-immutable@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "object-path-immutable@npm:4.1.2"
+  dependencies:
+    is-plain-object: ^5.0.0
+    object-path: ^0.11.8
+  checksum: e5d730cc7bd5a5048fd6810a95624b173f044a906db5689e725d6c8bce3614465429d41ef71677f388b6e719099d3c7d41e5c1740173940c52a3cdd9f9d367fa
+  languageName: node
+  linkType: hard
+
+"object-path@npm:^0.11.8":
+  version: 0.11.8
+  resolution: "object-path@npm:0.11.8"
+  checksum: 684ccf0fb6b82f067dc81e2763481606692b8485bec03eb2a64e086a44dbea122b2b9ef44423a08e09041348fe4b4b67bd59985598f1652f67df95f0618f5968
   languageName: node
   linkType: hard
 
