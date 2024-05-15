@@ -22,13 +22,20 @@ const postProcessedConfig = (config: unknown) => {
     const parsedConfig = JSON.parse(JSON.stringify(config))
     return immutable
         .wrap(parsedConfig)
-        .set('project.settings', {disablePassthroughRollouts: false})
+        .set('project.settings', { disablePassthroughRollouts: false })
         .del('variableHashes')
-        .set('features', parsedConfig.features.map((feature: Feature) => {
-            return immutable.set(feature, 'configuration.targets', feature.configuration.targets.map(target => {
-                return immutable.del(target, '_audience._id')
-            }))
-        }))
+        .set(
+            'features',
+            parsedConfig.features.map((feature: Feature) => {
+                return immutable.set(
+                    feature,
+                    'configuration.targets',
+                    feature.configuration.targets.map((target) => {
+                        return immutable.del(target, '_audience._id')
+                    }),
+                )
+            }),
+        )
         .value()
 }
 
@@ -45,19 +52,7 @@ describe.each([true, false])('Config Body', (utf8) => {
         // @ts-ignore
         delete config.clientSDKKey
         expect(testConfigBody(JSON.stringify(config), utf8)).toEqual(
-            JSON.parse(
-                JSON.stringify({
-                    ...testData.config,
-                    project: {
-                        ...testData.config.project,
-                        settings: {
-                            disablePassthroughRollouts: false
-                        }
-                    },
-                    variableHashes: undefined,
-                    clientSDKKey: undefined,
-                }),
-            ),
+            immutable.del(postProcessedConfig(testData.config), 'clientSDKKey'),
         )
     })
     it('should throw if target.rollout is missing type', () => {
@@ -74,7 +69,7 @@ describe.each([true, false])('Config Body', (utf8) => {
     it('should handle extended UTF8 characters, from UTF8: ' + utf8, () => {
         const testConfig = immutable.set(testData.config, 'project.key', '👍 ö')
         expect(testConfigBody(JSON.stringify(testConfig), utf8)).toEqual(
-            postProcessedConfig(testConfig)
+            postProcessedConfig(testConfig),
         )
     })
 
