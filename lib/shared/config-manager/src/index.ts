@@ -23,8 +23,6 @@ type TrackSDKConfigEventInterface = (
 ) => void
 
 export class EnvironmentConfigManager {
-    private readonly logger: DVCLogger
-    private readonly sdkKey: string
     private hasConfig = false
     configEtag?: string
     configLastModified?: string
@@ -36,18 +34,13 @@ export class EnvironmentConfigManager {
     private disablePolling = false
     private clientMode: boolean
 
-    private readonly setConfigBuffer: SetConfigBufferInterface
-    private readonly setInterval: SetIntervalInterface
-    private readonly clearInterval: ClearIntervalInterface
-    private readonly trackSDKConfigEvent: TrackSDKConfigEventInterface
-
     constructor(
-        logger: DVCLogger,
-        sdkKey: string,
-        setConfigBuffer: SetConfigBufferInterface,
-        setInterval: SetIntervalInterface,
-        clearInterval: ClearIntervalInterface,
-        trackSDKConfigEvent: TrackSDKConfigEventInterface,
+        private readonly logger: DVCLogger,
+        private readonly sdkKey: string,
+        private readonly setConfigBuffer: SetConfigBufferInterface,
+        private readonly setInterval: SetIntervalInterface,
+        private readonly clearInterval: ClearIntervalInterface,
+        private readonly trackSDKConfigEvent: TrackSDKConfigEventInterface,
         {
             configPollingIntervalMS = 10000,
             configPollingTimeoutMS = 5000,
@@ -56,14 +49,6 @@ export class EnvironmentConfigManager {
             clientMode = false,
         }: ConfigPollingOptions,
     ) {
-        this.logger = logger
-        this.sdkKey = sdkKey
-
-        this.setConfigBuffer = setConfigBuffer
-        this.setInterval = setInterval
-        this.clearInterval = clearInterval
-        this.trackSDKConfigEvent = trackSDKConfigEvent
-
         this.clientMode = clientMode
         this.pollingIntervalMS =
             configPollingIntervalMS >= 1000 ? configPollingIntervalMS : 1000
