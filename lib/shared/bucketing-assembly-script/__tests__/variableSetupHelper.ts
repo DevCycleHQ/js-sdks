@@ -16,6 +16,7 @@ const { config } = testData
 
 type VariableForUserOptions = {
     sdkKey?: string,
+    clientUUID?: string,
     config?: unknown,
     user: unknown,
     variableKey: string,
@@ -59,15 +60,14 @@ export const variableForUserPreallocated = (
     return variableJSON ? JSON.parse(variableJSON) as SDKVariable : null
 }
 
-export const initSDK = (sdkKey = 'sdkKey', projectConfig = config): void => {
-    initEventQueue(sdkKey as string, JSON.stringify({}))
+export const initSDK = (sdkKey = 'sdkKey', clientUUID = 'uuid', projectConfig = config): void => {
+    initEventQueue(sdkKey, clientUUID, JSON.stringify({}))
     setPlatformData(JSON.stringify({
         platform: 'NodeJS',
         platformVersion: '16.0',
         sdkType: 'server',
         sdkVersion: '1.0.0',
         hostname: 'host.name',
-        clientUUID: 'client.UUID'
     }))
     setConfigData(sdkKey, JSON.stringify(projectConfig))
 }

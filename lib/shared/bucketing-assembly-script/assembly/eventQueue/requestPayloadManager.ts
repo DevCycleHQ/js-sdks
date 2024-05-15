@@ -23,10 +23,12 @@ import {
 export class RequestPayloadManager {
     private pendingPayloads: Map<string, FlushPayload>
     private readonly chunkSize: i32
+    private readonly clientUUID: string
 
-    constructor(options: EventQueueOptions) {
+    constructor(options: EventQueueOptions, clientUUID: string) {
         this.pendingPayloads = new Map<string, FlushPayload>()
         this.chunkSize = options.eventRequestChunkSize
+        this.clientUUID = clientUUID
     }
 
     constructFlushPayloads(
@@ -69,8 +71,8 @@ export class RequestPayloadManager {
 
         const platformData = _getPlatformData()
         let user_id = 'aggregate'
-        if (platformData.hostname && platformData.clientUUID) {
-            user_id = `${platformData.clientUUID as string}@${platformData.hostname as string}`
+        if (platformData.hostname && this.clientUUID) {
+            user_id = `${this.clientUUID}@${platformData.hostname as string}`
         } else if (platformData.hostname) {
             user_id = platformData.hostname as string
         }

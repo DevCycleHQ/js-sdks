@@ -19,9 +19,9 @@ const { config } = testData
 import random_JSON from './random_json_2kb.json'
 
 let currentSDKKey: string | null = null
-const initEventQueue = (sdkKey: unknown, options: unknown) => {
+const initEventQueue = (sdkKey: unknown, clientUUID: unknown, options: unknown) => {
     currentSDKKey = sdkKey as string
-    initEventQueue_AS(sdkKey as string, JSON.stringify(options))
+    initEventQueue_AS(sdkKey as string, clientUUID as string, JSON.stringify(options))
 }
 
 const flushEventQueue = (sdkKey: string): FlushPayload[] => {
@@ -63,8 +63,8 @@ const eventQueueSize = (sdkKey: string): number => {
     return eventQueueSize_AS(sdkKey)
 }
 
-const initSDK = (sdkKey: string, eventOptions: unknown = {}) => {
-    initEventQueue(sdkKey, eventOptions)
+const initSDK = (sdkKey: string, eventOptions: unknown = {}, clientUUID = 'uuid') => {
+    initEventQueue(sdkKey, clientUUID, eventOptions)
     setPlatformData(
         JSON.stringify({
             platform: 'NodeJS',
@@ -72,7 +72,6 @@ const initSDK = (sdkKey: string, eventOptions: unknown = {}) => {
             sdkType: 'server',
             sdkVersion: '1.0.0',
             hostname: 'host.name',
-            clientUUID: 'client.UUID'
         }),
     )
     setConfigData(sdkKey, JSON.stringify(config))
@@ -90,38 +89,38 @@ describe('EventQueueManager Tests', () => {
 
     describe('initEventQueue', () => {
         it('should init EventQueue without any options', () => {
-            initEventQueue('sdk_key_test', {})
+            initEventQueue('sdk_key_test', 'uuid', {})
         })
 
         it('should throw error if no sdkKey', () => {
-            expect(() => initEventQueue(undefined, undefined)).toThrow(
+            expect(() => initEventQueue(undefined, undefined, undefined)).toThrow(
                 'value must not be null',
             )
         })
 
         it('should throw error if no options', () => {
-            expect(() => initEventQueue('sdk_key_test_2', undefined)).toThrow(
+            expect(() => initEventQueue('sdk_key_test_2', 'uuid_2', undefined)).toThrow(
                 'value must not be null',
             )
         })
 
         it('should throw if EnvQueue already setup for sdkKey', () => {
-            initEventQueue('sdk_key_test_3', {})
-            expect(() => initEventQueue('sdk_key_test_3', {})).toThrow(
+            initEventQueue('sdk_key_test_3', 'uuid_3', {})
+            expect(() => initEventQueue('sdk_key_test_3', 'uuid_3', {})).toThrow(
                 'Event Queue already exists for sdkKey',
             )
         })
 
         it('should let you setup multiple EventQueues for multiple sdkKeys', () => {
-            initEventQueue('sdk_key_test_4', {})
-            initEventQueue('sdk_key_test_5', {})
-            initEventQueue('sdk_key_test_6', {})
-            initEventQueue('sdk_key_test_7', {})
+            initEventQueue('sdk_key_test_4', 'uuid_4', {})
+            initEventQueue('sdk_key_test_5', 'uuid_5', {})
+            initEventQueue('sdk_key_test_6', 'uuid_6', {})
+            initEventQueue('sdk_key_test_7', 'uuid_7', {})
         })
 
         it('should throw if eventRequestChunkSize is < 10', () => {
             expect(() =>
-                initEventQueue('sdk_key_eventRequestChunkSize', {
+                initEventQueue('sdk_key_eventRequestChunkSize', 'uuid', {
                     eventRequestChunkSize: 9,
                 }),
             ).toThrow('eventRequestChunkSize: 9 must be larger than 10')
@@ -129,7 +128,7 @@ describe('EventQueueManager Tests', () => {
 
         it('should throw if eventRequestChunkSize is > 20,000', () => {
             expect(() =>
-                initEventQueue('sdk_key_eventRequestChunkSize', {
+                initEventQueue('sdk_key_eventRequestChunkSize', 'uuid', {
                     eventRequestChunkSize: 900000,
                 }),
             ).toThrow(
@@ -207,7 +206,6 @@ describe('EventQueueManager Tests', () => {
                                     deviceModel: 'dvcServer',
                                     customData: { custom: 'data' },
                                     hostname: 'host.name',
-                                    clientUUID: 'client.UUID',
                                 },
                             },
                             {
@@ -218,7 +216,7 @@ describe('EventQueueManager Tests', () => {
                                         target: 'variableKey',
                                         type: 'aggVariableDefaulted',
                                         featureVars: {},
-                                        user_id: 'client.UUID@host.name',
+                                        user_id: 'uuid@host.name',
                                         value: 1,
                                     },
                                 ],
@@ -229,9 +227,8 @@ describe('EventQueueManager Tests', () => {
                                     platformVersion: '16.0',
                                     sdkType: 'server',
                                     sdkVersion: '1.0.0',
-                                    user_id: 'client.UUID@host.name',
+                                    user_id: 'uuid@host.name',
                                     hostname: 'host.name',
-                                    clientUUID: 'client.UUID',
                                 },
                             },
                         ],
@@ -299,7 +296,6 @@ describe('EventQueueManager Tests', () => {
                                         clientCustom: 'data',
                                     },
                                     hostname: 'host.name',
-                                    clientUUID: 'client.UUID',
                                 },
                             },
                         ],
@@ -342,7 +338,6 @@ describe('EventQueueManager Tests', () => {
                 deviceModel: 'dvcServer',
                 customData: { custom: 'data' },
                 hostname: 'host.name',
-                clientUUID: 'client.UUID',
             })
             expect(
                 payloads[0].records[0].user.privateCustomData,
@@ -557,7 +552,7 @@ describe('EventQueueManager Tests', () => {
 
         it('should throw error if SDK is not initialized', () => {
             const sdkKey = 'sdk_key_queueEvent_test'
-            initEventQueue(sdkKey, {})
+            initEventQueue(sdkKey, 'uuid', {})
             expect(() => queueEvent(sdkKey, dvcUser, event)).toThrow(
                 'Platform data is not set',
             )
@@ -565,7 +560,7 @@ describe('EventQueueManager Tests', () => {
 
         it('should throw error if config data not set', () => {
             const sdkKey = 'sdk_key_queueEvent_test_2'
-            initEventQueue(sdkKey, {})
+            initEventQueue(sdkKey, 'uuid', {})
             setPlatformData(
                 JSON.stringify({
                     platform: 'NodeJS',
@@ -588,7 +583,7 @@ describe('EventQueueManager Tests', () => {
                 target: 'url',
                 value: 610,
                 metaData: {
-                    clientUUID: 'clientUUID',
+                    clientUUID: 'uuid',
                     reqEtag: 'reqEtag',
                     reqLastModified: 'reqLastModified',
                     resEtag: 'resEtag',
@@ -612,7 +607,7 @@ describe('EventQueueManager Tests', () => {
                                 '6153553b8cf4e45e0464268d',
                         },
                         metaData: {
-                            clientUUID: 'clientUUID',
+                            clientUUID: 'uuid',
                             errMsg: 'errMsg',
                             reqEtag: 'reqEtag',
                             reqLastModified: 'reqLastModified',
@@ -631,7 +626,6 @@ describe('EventQueueManager Tests', () => {
                     createdDate: expect.any(String),
                     lastSeenDate: expect.any(String),
                     hostname: 'host.name',
-                    clientUUID: 'client.UUID',
                     platform: 'NodeJS',
                     platformVersion: '16.0',
                     sdkType: 'server',
@@ -691,7 +685,7 @@ describe('EventQueueManager Tests', () => {
 
         it('should throw error if no variableVariationMap', () => {
             const sdkKey = 'sdk_key_queueAggEvent_test'
-            initEventQueue(sdkKey, {})
+            initEventQueue(sdkKey, 'uuid', {})
             expect(() => queueAggregateEvent(sdkKey, event, null)).toThrow(
                 'variableVariationMap is not a JSON Object',
             )
@@ -799,7 +793,7 @@ describe('EventQueueManager Tests', () => {
                     target: 'testey_test',
                     type: 'aggVariableDefaulted',
                     featureVars: {},
-                    user_id: 'client.UUID@host.name',
+                    user_id: 'uuid@host.name',
                     value: 36,
                 },
                 {
@@ -808,7 +802,7 @@ describe('EventQueueManager Tests', () => {
                     target: 'swageyTest',
                     type: 'aggVariableDefaulted',
                     featureVars: {},
-                    user_id: 'client.UUID@host.name',
+                    user_id: 'uuid@host.name',
                     value: 11,
                 },
                 {
@@ -817,7 +811,7 @@ describe('EventQueueManager Tests', () => {
                     target: 'test',
                     type: 'aggVariableEvaluated',
                     featureVars: {},
-                    user_id: 'client.UUID@host.name',
+                    user_id: 'uuid@host.name',
                     value: 36,
                     metaData: {
                         _feature: '614ef6aa473928459060721a',
@@ -830,7 +824,7 @@ describe('EventQueueManager Tests', () => {
                     target: 'swagTest',
                     type: 'aggVariableEvaluated',
                     featureVars: {},
-                    user_id: 'client.UUID@host.name',
+                    user_id: 'uuid@host.name',
                     value: 11,
                     metaData: {
                         _feature: '614ef6aa473928459060721a',
@@ -838,7 +832,7 @@ describe('EventQueueManager Tests', () => {
                     },
                 },
             ])
-            expect(payloads[0].records[0].user.user_id).toEqual('client.UUID@host.name')
+            expect(payloads[0].records[0].user.user_id).toEqual('uuid@host.name')
         })
     })
 

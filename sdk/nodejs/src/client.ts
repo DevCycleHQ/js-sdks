@@ -41,7 +41,6 @@ interface IPlatformData {
     sdkType: string
     sdkVersion: string
     hostname?: string
-    clientUUID?: string
 }
 
 const castIncomingUser = (user: DevCycleUser) => {
@@ -77,6 +76,7 @@ export class DevCycleClient {
         this.clientUUID = randomUUID()
         this.hostname = os.hostname()
         this.sdkKey = sdkKey
+
         this.logger =
             options?.logger || dvcDefaultLogger({ level: options?.logLevel })
 
@@ -115,7 +115,7 @@ export class DevCycleClient {
                     )
                 }
 
-                this.eventQueue = new EventQueue(sdkKey, {
+                this.eventQueue = new EventQueue(sdkKey, this.clientUUID, {
                     ...options,
                     logger: this.logger,
                 })
@@ -126,7 +126,6 @@ export class DevCycleClient {
                     sdkType: 'server',
                     sdkVersion: packageJson.version,
                     hostname: this.hostname,
-                    clientUUID: this.clientUUID,
                 }
 
                 getBucketingLib().setPlatformData(JSON.stringify(platformData))
@@ -315,10 +314,12 @@ export class DevCycleClient {
         reqEtag?: string,
         reqLastModified?: string,
     ): void {
+        const populatedUser = DVCPopulatedUserFromDevCycleUser({
+            user_id: `${this.clientUUID}@${this.hostname}`,
+        })
+
         this.eventQueue.queueEvent(
-            DVCPopulatedUserFromDevCycleUser({
-                user_id: `${this.clientUUID}@${this.hostname}`,
-            }),
+            populatedUser,
             {
                 type: 'sdkConfig',
                 target: url,

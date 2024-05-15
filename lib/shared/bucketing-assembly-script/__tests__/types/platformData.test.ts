@@ -17,7 +17,6 @@ describe.each([true, false])('PlatformData Model Tests', (utf8) => {
             sdkType: 'server',
             sdkVersion: '3.3.3',
             hostname: 'host.name',
-            clientUUID: 'client.UUID'
         }
         expect(testPlatformData(JSON.stringify(platformData), utf8)).toEqual(platformData)
     })

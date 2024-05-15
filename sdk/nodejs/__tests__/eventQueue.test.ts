@@ -67,6 +67,7 @@ describe('EventQueue Unit Tests', () => {
     let currentEventKey = ''
     const initEventQueue = (
         sdkKey: string,
+        clientUUID: string,
         optionsOverrides?: Partial<EventQueueOptions>,
     ): EventQueue => {
         getBucketingLib().setConfigData(sdkKey, JSON.stringify(config))
@@ -75,7 +76,7 @@ describe('EventQueue Unit Tests', () => {
             logger: defaultLogger,
             ...optionsOverrides,
         }
-        return new EventQueue(sdkKey, options)
+        return new EventQueue(sdkKey, clientUUID, options)
     }
 
     beforeAll(async () => {
@@ -101,7 +102,8 @@ describe('EventQueue Unit Tests', () => {
         }
 
         const sdkKey = 'sdkKey'
-        const eventQueue = initEventQueue(sdkKey, { reporter })
+        const clientUUID = 'uuid'
+        const eventQueue = initEventQueue(sdkKey, clientUUID, { reporter })
         const user = DVCPopulatedUserFromDevCycleUser({ user_id: 'user_id' })
         const event = { type: 'test_event' }
         eventQueue.queueEvent(user, event)
@@ -143,7 +145,7 @@ describe('EventQueue Unit Tests', () => {
     it('should setup Event Queue and process events', async () => {
         publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
-        const eventQueue = initEventQueue('sdkKey', {
+        const eventQueue = initEventQueue('sdkKey', 'uuid', {
             eventsAPIURI: 'localhost:3000/client/1',
         })
         const user = DVCPopulatedUserFromDevCycleUser({ user_id: 'user_id' })
@@ -189,7 +191,7 @@ describe('EventQueue Unit Tests', () => {
                 },
                 {
                     user: expect.objectContaining({
-                        user_id: 'client.UUID@host.name',
+                        user_id: 'uuid@host.name',
                         createdDate: expect.any(String),
                         lastSeenDate: expect.any(String),
                         platform: 'NodeJS',
@@ -203,7 +205,7 @@ describe('EventQueue Unit Tests', () => {
                             target: 'key',
                             clientDate: expect.any(String),
                             date: expect.any(String),
-                            user_id: 'client.UUID@host.name',
+                            user_id: 'uuid@host.name',
                             value: 1,
                             metaData: {
                                 _feature: 'feature',
@@ -220,7 +222,7 @@ describe('EventQueue Unit Tests', () => {
     it('should prevent multiple concurrent flushes and resolve all promises', async () => {
         publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
-        const eventQueue = initEventQueue('sdkKey', {
+        const eventQueue = initEventQueue('sdkKey', 'uuid', {
             eventsAPIURI: 'localhost:3000/client/1',
         })
         const user = DVCPopulatedUserFromDevCycleUser({ user_id: 'user_id' })
@@ -269,7 +271,7 @@ describe('EventQueue Unit Tests', () => {
                 },
                 {
                     user: expect.objectContaining({
-                        user_id: 'client.UUID@host.name',
+                        user_id: 'uuid@host.name',
                         createdDate: expect.any(String),
                         lastSeenDate: expect.any(String),
                         platform: 'NodeJS',
@@ -283,7 +285,7 @@ describe('EventQueue Unit Tests', () => {
                             target: 'key',
                             clientDate: expect.any(String),
                             date: expect.any(String),
-                            user_id: 'client.UUID@host.name',
+                            user_id: 'uuid@host.name',
                             value: 1,
                             metaData: {
                                 _feature: 'feature',
@@ -341,7 +343,7 @@ describe('EventQueue Unit Tests', () => {
                 mockFetchResponse({ status: 201 }),
             )
 
-            const eventQueue = initEventQueue('sdkKey', {
+            const eventQueue = initEventQueue('sdkKey', 'uuid', {
                 disableAutomaticEventLogging: false,
                 disableCustomEventLogging: true,
             })
@@ -362,7 +364,7 @@ describe('EventQueue Unit Tests', () => {
             expect(publishEvents_mock.mock.calls[0][2]).toEqual([
                 {
                     user: expect.objectContaining({
-                        user_id: 'client.UUID@host.name',
+                        user_id: 'uuid@host.name',
                         createdDate: expect.any(String),
                         lastSeenDate: expect.any(String),
                         platform: 'NodeJS',
@@ -376,7 +378,7 @@ describe('EventQueue Unit Tests', () => {
                             target: 'key',
                             clientDate: expect.any(String),
                             date: expect.any(String),
-                            user_id: 'client.UUID@host.name',
+                            user_id: 'uuid@host.name',
                             value: 1,
                             metaData: {
                                 _feature: 'feature',
@@ -397,7 +399,7 @@ describe('EventQueue Unit Tests', () => {
                 mockFetchResponse({ status: 201 }),
             )
 
-            const eventQueue = initEventQueue('sdkKey', {
+            const eventQueue = initEventQueue('sdkKey', 'uuid', {
                 disableAutomaticEventLogging: true,
                 disableCustomEventLogging: false,
             })
@@ -449,7 +451,7 @@ describe('EventQueue Unit Tests', () => {
     it('should save aggVariableDefaulted event', async () => {
         publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
-        const eventQueue = initEventQueue('sdkKey')
+        const eventQueue = initEventQueue('sdkKey', 'uuid')
         const user1 = DVCPopulatedUserFromDevCycleUser({ user_id: 'user1' })
         eventQueue.queueAggregateEvent(
             user1,
@@ -471,7 +473,7 @@ describe('EventQueue Unit Tests', () => {
                             featureVars: {},
                             target: 'unknown_key',
                             type: 'aggVariableDefaulted',
-                            user_id: 'client.UUID@host.name',
+                            user_id: 'uuid@host.name',
                             value: 1,
                         },
                     ],
@@ -482,9 +484,8 @@ describe('EventQueue Unit Tests', () => {
                         platformVersion: '16.10.0',
                         sdkType: 'server',
                         sdkVersion: '1.0.0',
-                        user_id: 'client.UUID@host.name',
+                        user_id: 'uuid@host.name',
                         hostname: 'host.name',
-                        clientUUID: 'client.UUID',
                     },
                 },
             ],
@@ -495,7 +496,7 @@ describe('EventQueue Unit Tests', () => {
     it('should save multiple events from multiple users with aggregated values', async () => {
         publishEvents_mock.mockResolvedValue(mockFetchResponse({ status: 201 }))
 
-        const eventQueue = initEventQueue('sdkKey')
+        const eventQueue = initEventQueue('sdkKey', 'uuid')
         const user1 = DVCPopulatedUserFromDevCycleUser({ user_id: 'user1' })
         const user2 = DVCPopulatedUserFromDevCycleUser({ user_id: 'user2' })
         eventQueue.queueEvent(user1, { type: 'test_event_1' })
@@ -568,31 +569,31 @@ describe('EventQueue Unit Tests', () => {
                     ],
                 },
                 {
-                    user: expect.objectContaining({ user_id: 'client.UUID@host.name' }),
+                    user: expect.objectContaining({ user_id: 'uuid@host.name' }),
                     events: [
                         expect.objectContaining({
                             type: 'aggVariableEvaluated',
                             target: 'key_1',
                             value: 1,
-                            user_id: 'client.UUID@host.name',
+                            user_id: 'uuid@host.name',
                         }),
                         expect.objectContaining({
                             type: 'aggVariableEvaluated',
                             target: 'key_3',
                             value: 1,
-                            user_id: 'client.UUID@host.name',
+                            user_id: 'uuid@host.name',
                         }),
                         expect.objectContaining({
                             type: 'aggVariableEvaluated',
                             target: 'key_4',
                             value: 2,
-                            user_id: 'client.UUID@host.name',
+                            user_id: 'uuid@host.name',
                         }),
                         expect.objectContaining({
                             type: 'aggVariableDefaulted',
                             target: 'key_4',
                             value: 1,
-                            user_id: 'client.UUID@host.name',
+                            user_id: 'uuid@host.name',
                         }),
                     ],
                 },
@@ -602,7 +603,7 @@ describe('EventQueue Unit Tests', () => {
     })
 
     it('should handle event request failures and re-queue events', async () => {
-        const eventQueue = initEventQueue('sdkKey')
+        const eventQueue = initEventQueue('sdkKey', 'uuid')
         const user = DVCPopulatedUserFromDevCycleUser({ user_id: 'user1' })
         const user2 = DVCPopulatedUserFromDevCycleUser({ user_id: 'user2' })
         eventQueue.queueEvent(user, { type: 'test_event' })
@@ -636,7 +637,7 @@ describe('EventQueue Unit Tests', () => {
                 ]),
             },
             {
-                user: expect.objectContaining({ user_id: 'client.UUID@host.name' }),
+                user: expect.objectContaining({ user_id: 'uuid@host.name' }),
                 events: expect.arrayContaining([
                     expect.objectContaining({
                         type: 'aggVariableEvaluated',
@@ -658,7 +659,7 @@ describe('EventQueue Unit Tests', () => {
                 ]),
             },
             {
-                user: expect.objectContaining({ user_id: 'client.UUID@host.name' }),
+                user: expect.objectContaining({ user_id: 'uuid@host.name' }),
                 events: expect.arrayContaining([
                     expect.objectContaining({
                         type: 'aggVariableEvaluated',
@@ -674,7 +675,7 @@ describe('EventQueue Unit Tests', () => {
         'should send request in chunks when ' +
             'there are too many events, and requeue just the failed ones',
         async () => {
-            const eventQueue = initEventQueue('sdkKey')
+            const eventQueue = initEventQueue('sdkKey', 'uuid')
 
             for (let i = 0; i < 150; i++) {
                 const user = DVCPopulatedUserFromDevCycleUser({
@@ -750,7 +751,7 @@ describe('EventQueue Unit Tests', () => {
                         ]),
                     },
                     {
-                        user: expect.objectContaining({ user_id: 'client.UUID@host.name' }),
+                        user: expect.objectContaining({ user_id: 'uuid@host.name' }),
                         events: expect.arrayContaining([
                             expect.objectContaining({
                                 type: 'aggVariableEvaluated',
@@ -772,7 +773,7 @@ describe('EventQueue Unit Tests', () => {
                         ]),
                     },
                     {
-                        user: expect.objectContaining({ user_id: 'client.UUID@host.name' }),
+                        user: expect.objectContaining({ user_id: 'uuid@host.name' }),
                         events: expect.arrayContaining([
                             expect.objectContaining({
                                 type: 'aggVariableEvaluated',
@@ -825,7 +826,7 @@ describe('EventQueue Unit Tests', () => {
                 logger.warn = jest.fn()
 
                 const sdkKey = 'sdkKey'
-                const eventQueue = initEventQueue(sdkKey, { logger })
+                const eventQueue = initEventQueue(sdkKey, 'uuid', { logger })
                 const user = DVCPopulatedUserFromDevCycleUser({
                     user_id: 'user1',
                 })
@@ -874,7 +875,7 @@ describe('EventQueue Unit Tests', () => {
                 logger.warn = jest.fn()
 
                 const sdkKey = 'sdkKey'
-                const eventQueue = initEventQueue(sdkKey, { logger })
+                const eventQueue = initEventQueue(sdkKey, 'uuid', { logger })
                 const user = DVCPopulatedUserFromDevCycleUser({
                     user_id: 'user1',
                 })
@@ -926,7 +927,7 @@ describe('EventQueue Unit Tests', () => {
                 ' adding another user event',
             async () => {
                 const sdkKey = 'sdkKey'
-                const eventQueue = initEventQueue(sdkKey)
+                const eventQueue = initEventQueue(sdkKey, 'uuid')
                 const flushEvents_mock = jest.spyOn(eventQueue, 'flushEvents')
                 const user = DVCPopulatedUserFromDevCycleUser({
                     user_id: 'user1',
@@ -964,7 +965,7 @@ describe('EventQueue Unit Tests', () => {
                 'adding another agg event',
             async () => {
                 const sdkKey = 'sdkKey'
-                const eventQueue = initEventQueue(sdkKey)
+                const eventQueue = initEventQueue(sdkKey, 'uuid')
                 const flushEvents_mock = jest.spyOn(eventQueue, 'flushEvents')
 
                 const user = DVCPopulatedUserFromDevCycleUser({
@@ -1015,14 +1016,14 @@ describe('EventQueue Unit Tests', () => {
         it('should validate flushEventsMS', () => {
             expect(
                 () =>
-                    new EventQueue('test', {
+                    new EventQueue('test', 'uuid', {
                         logger: defaultLogger,
                         eventFlushIntervalMS: 400,
                     }),
             ).toThrow('eventFlushIntervalMS: 400 must be larger than 500ms')
             expect(
                 () =>
-                    new EventQueue('test', {
+                    new EventQueue('test', 'uuid', {
                         logger: defaultLogger,
                         eventFlushIntervalMS: 10 * 60 * 1000,
                     }),
@@ -1036,7 +1037,7 @@ describe('EventQueue Unit Tests', () => {
         it('should validate flushEventQueueSize and maxEventQueueSize', () => {
             expect(
                 () =>
-                    new EventQueue('test', {
+                    new EventQueue('test', 'uuid', {
                         logger: defaultLogger,
                         flushEventQueueSize: 2000,
                         maxEventQueueSize: 2000,
@@ -1047,7 +1048,7 @@ describe('EventQueue Unit Tests', () => {
 
             expect(
                 () =>
-                    new EventQueue('test', {
+                    new EventQueue('test', 'uuid', {
                         logger: defaultLogger,
                         flushEventQueueSize: 1000,
                         maxEventQueueSize: 2000,
@@ -1060,7 +1061,7 @@ describe('EventQueue Unit Tests', () => {
 
             expect(
                 () =>
-                    new EventQueue('test', {
+                    new EventQueue('test', 'uuid', {
                         logger: defaultLogger,
                         flushEventQueueSize: 25000,
                         maxEventQueueSize: 40000,
