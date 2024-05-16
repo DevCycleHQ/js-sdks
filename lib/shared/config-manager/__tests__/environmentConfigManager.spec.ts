@@ -11,6 +11,7 @@ import { ResponseError } from '@devcycle/server-request'
 
 const setInterval_mock = mocked(setInterval)
 const getEnvironmentConfig_mock = mocked(getEnvironmentConfig)
+const trackSDKConfigEvent_mock = jest.fn()
 const logger = {
     error: jest.fn(),
     warn: jest.fn(),
@@ -31,6 +32,7 @@ function getConfigManager(
         mockSDKConfig,
         setInterval,
         clearInterval,
+        trackSDKConfigEvent_mock,
         options,
     )
 }
@@ -136,17 +138,35 @@ describe('EnvironmentConfigManager Unit Tests', () => {
                 requestTimeoutMS: 1000,
             }),
         )
+        expect(trackSDKConfigEvent_mock).toBeCalledWith(
+            'https://config-cdn.devcycle.com/config/v1/server/sdkKey.json',
+            expect.any(Number),
+            expect.objectContaining({ status: 200 }),
+            undefined,
+            undefined,
+            undefined,
+        )
         expect(getEnvironmentConfig_mock).toBeCalledTimes(3)
     })
 
-    it('should throw error fetching config fails with 500 error', () => {
+    it('should throw error fetching config fails with 500 error', async () => {
         getEnvironmentConfig_mock.mockImplementation(async () =>
             mockFetchResponse({ status: 500 }),
         )
 
         const envConfig = getConfigManager(logger, 'sdkKey', {})
-        expect(envConfig.fetchConfigPromise).rejects.toThrow(
+        await expect(envConfig.fetchConfigPromise).rejects.toThrow(
             'Failed to download DevCycle config.',
+        )
+        expect(trackSDKConfigEvent_mock).toBeCalledWith(
+            'https://config-cdn.devcycle.com/config/v1/server/sdkKey.json',
+            expect.any(Number),
+            undefined,
+            expect.objectContaining({
+                status: 500,
+            }),
+            undefined,
+            undefined,
         )
     })
 

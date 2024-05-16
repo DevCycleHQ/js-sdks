@@ -1,5 +1,5 @@
 import { EnvironmentConfigManager } from '@devcycle/config-manager'
-import { UserError } from '@devcycle/server-request'
+import { ResponseError, UserError } from '@devcycle/server-request'
 import {
     bucketUserForConfig,
     getSDKKeyFromConfig,
@@ -33,6 +33,7 @@ import {
     DevCycleEvent,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
+import { randomUUID } from 'crypto'
 
 interface IPlatformData {
     platform: string
@@ -55,6 +56,8 @@ type DevCycleProviderConstructor =
 type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
 
 export class DevCycleClient {
+    private clientUUID: string
+    private hostname: string
     private sdkKey: string
     private configHelper: EnvironmentConfigManager
     private clientConfigHelper?: EnvironmentConfigManager
@@ -69,7 +72,10 @@ export class DevCycleClient {
     }
 
     constructor(sdkKey: string, options?: DevCycleServerSDKOptions) {
+        this.clientUUID = randomUUID()
+        this.hostname = os.hostname()
         this.sdkKey = sdkKey
+
         this.logger =
             options?.logger || dvcDefaultLogger({ level: options?.logLevel })
 
@@ -93,6 +99,7 @@ export class DevCycleClient {
                     setConfigDataUTF8,
                     setInterval,
                     clearInterval,
+                    this.trackSDKConfigEvent.bind(this),
                     options || {},
                 )
                 if (options?.enableClientBootstrapping) {
@@ -102,10 +109,12 @@ export class DevCycleClient {
                         setConfigDataUTF8,
                         setInterval,
                         clearInterval,
+                        this.trackSDKConfigEvent.bind(this),
                         { ...options, clientMode: true },
                     )
                 }
-                this.eventQueue = new EventQueue(sdkKey, {
+
+                this.eventQueue = new EventQueue(sdkKey, this.clientUUID, {
                     ...options,
                     logger: this.logger,
                 })
@@ -115,7 +124,7 @@ export class DevCycleClient {
                     platformVersion: process.version,
                     sdkType: 'server',
                     sdkVersion: packageJson.version,
-                    hostname: os.hostname(),
+                    hostname: this.hostname,
                 }
 
                 getBucketingLib().setPlatformData(JSON.stringify(platformData))
@@ -294,6 +303,35 @@ export class DevCycleClient {
         checkParamDefined('type', event.type)
         const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
         this.eventQueue.queueEvent(populatedUser, event)
+    }
+
+    private trackSDKConfigEvent(
+        url: string,
+        responseTimeMS: number,
+        res?: Response,
+        err?: ResponseError,
+        reqEtag?: string,
+        reqLastModified?: string,
+    ): void {
+        const populatedUser = DVCPopulatedUserFromDevCycleUser({
+            user_id: `${this.clientUUID}@${this.hostname}`,
+        })
+
+        this.eventQueue.queueEvent(populatedUser, {
+            type: 'sdkConfig',
+            target: url,
+            value: responseTimeMS,
+            metaData: {
+                clientUUID: this.clientUUID,
+                reqEtag,
+                reqLastModified,
+                resEtag: res?.headers.get('etag') ?? undefined,
+                resLastModified: res?.headers.get('last-modified') ?? undefined,
+                resRayId: res?.headers.get('cf-ray') ?? undefined,
+                resStatus: (err?.status || res?.status) ?? undefined,
+                errMsg: err?.message ?? undefined,
+            },
+        })
     }
 
     /**
