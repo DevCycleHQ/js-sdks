@@ -1,37 +1,24 @@
 {
-  "extends": [
-    "../../../.eslintrc.json"
-  ],
-  "ignorePatterns": [
-    "!**/*",
-    "node_modules/*",
-    "build/*",
-    "assembly/types/protobuf-generated/*",
-    "protobuf/compiled*"
-  ],
-  "overrides": [
-    {
-      "files": [
-        "*.ts",
-        "*.tsx",
-        "*.js",
-        "*.jsx"
-      ],
-      "rules": {}
-    },
-    {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
-      "rules": {}
-    },
-    {
-      "files": [
-        "*.js",
-        "*.jsx"
-      ],
-      "rules": {}
-    }
-  ]
+    "extends": ["../../../.eslintrc.json"],
+    "ignorePatterns": [
+        "!**/*",
+        "node_modules/*",
+        "build/*",
+        "assembly/types/protobuf-generated/*",
+        "protobuf/compiled*"
+    ],
+    "overrides": [
+        {
+            "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+            "rules": {}
+        },
+        {
+            "files": ["*.ts", "*.tsx"],
+            "rules": {}
+        },
+        {
+            "files": ["*.js", "*.jsx"],
+            "rules": {}
+        }
+    ]
 }

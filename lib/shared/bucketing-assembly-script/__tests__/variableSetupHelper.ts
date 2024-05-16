@@ -7,7 +7,7 @@ import {
     clearPlatformData,
     cleanupEventQueue,
     setClientCustomData,
-    VariableType
+    VariableType,
 } from './bucketingImportHelper'
 import { variableForUserPB } from './protobufVariableHelper'
 import { SDKVariable } from '@devcycle/types'
@@ -15,39 +15,55 @@ import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
 
 type VariableForUserOptions = {
-    sdkKey?: string,
-    clientUUID?: string,
-    config?: unknown,
-    user: unknown,
-    variableKey: string,
+    sdkKey?: string
+    clientUUID?: string
+    config?: unknown
+    user: unknown
+    variableKey: string
     variableType: VariableType
 }
 
-export const variableForUser_PB = (
-    { sdkKey = 'sdkKey', config, user, variableKey, variableType }: VariableForUserOptions
-): SDKVariable | null => {
+export const variableForUser_PB = ({
+    sdkKey = 'sdkKey',
+    config,
+    user,
+    variableKey,
+    variableType,
+}: VariableForUserOptions): SDKVariable | null => {
     if (config) {
         setConfigData(sdkKey, JSON.stringify(config))
     }
     return variableForUserPB({ sdkKey, user, variableKey, variableType })
 }
 
-export const variableForUser = (
-    { sdkKey = 'sdkKey', config, user, variableKey, variableType }: VariableForUserOptions
-): SDKVariable | null => {
+export const variableForUser = ({
+    sdkKey = 'sdkKey',
+    config,
+    user,
+    variableKey,
+    variableType,
+}: VariableForUserOptions): SDKVariable | null => {
     if (config) {
         setConfigData(sdkKey, JSON.stringify(config))
     }
     const userJSON = JSON.stringify(user)
     const variableJSON = variableForUser_AS(
-        sdkKey, userJSON, variableKey, variableType, true
+        sdkKey,
+        userJSON,
+        variableKey,
+        variableType,
+        true,
     )
-    return variableJSON ? JSON.parse(variableJSON) as SDKVariable : null
+    return variableJSON ? (JSON.parse(variableJSON) as SDKVariable) : null
 }
 
-export const variableForUserPreallocated = (
-    { sdkKey = 'sdkKey', config, user, variableKey, variableType }: VariableForUserOptions
-): SDKVariable | null => {
+export const variableForUserPreallocated = ({
+    sdkKey = 'sdkKey',
+    config,
+    user,
+    variableKey,
+    variableType,
+}: VariableForUserOptions): SDKVariable | null => {
     if (config) {
         setConfigData(sdkKey, JSON.stringify(config))
     }
@@ -55,20 +71,32 @@ export const variableForUserPreallocated = (
     const userJSON = userRaw + 'blahblahblah'
     const variableKeyPreallocated = variableKey + 'blahblahblahasdasd'
     const variableJSON = variableForUserPreallocated_AS(
-        sdkKey, userJSON, userRaw.length, variableKeyPreallocated, variableKey.length, variableType, true
+        sdkKey,
+        userJSON,
+        userRaw.length,
+        variableKeyPreallocated,
+        variableKey.length,
+        variableType,
+        true,
     )
-    return variableJSON ? JSON.parse(variableJSON) as SDKVariable : null
+    return variableJSON ? (JSON.parse(variableJSON) as SDKVariable) : null
 }
 
-export const initSDK = (sdkKey = 'sdkKey', clientUUID = 'uuid', projectConfig = config): void => {
+export const initSDK = (
+    sdkKey = 'sdkKey',
+    clientUUID = 'uuid',
+    projectConfig = config,
+): void => {
     initEventQueue(sdkKey, clientUUID, JSON.stringify({}))
-    setPlatformData(JSON.stringify({
-        platform: 'NodeJS',
-        platformVersion: '16.0',
-        sdkType: 'server',
-        sdkVersion: '1.0.0',
-        hostname: 'host.name',
-    }))
+    setPlatformData(
+        JSON.stringify({
+            platform: 'NodeJS',
+            platformVersion: '16.0',
+            sdkType: 'server',
+            sdkVersion: '1.0.0',
+            hostname: 'host.name',
+        }),
+    )
     setConfigData(sdkKey, JSON.stringify(projectConfig))
 }
 

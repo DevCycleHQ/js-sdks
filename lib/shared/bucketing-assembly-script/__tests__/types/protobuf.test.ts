@@ -27,7 +27,9 @@ describe('protobuf variable tests', () => {
         return variableForUser_PB(buffer)
     }
 
-    const callVariableForUser_PB_Preallocated = (params: any): Uint8Array | null => {
+    const callVariableForUser_PB_Preallocated = (
+        params: any,
+    ): Uint8Array | null => {
         const err = VariableForUserParams_PB.verify(params)
         if (err) throw new Error(err)
 
@@ -37,7 +39,9 @@ describe('protobuf variable tests', () => {
         return variableForUser_PB_Preallocated(combinedBuffer, buffer.length)
     }
 
-    const callTestVariableForUserParams_PB = (params: any): Uint8Array | null => {
+    const callTestVariableForUserParams_PB = (
+        params: any,
+    ): Uint8Array | null => {
         const err = VariableForUserParams_PB.verify(params)
         if (err) throw new Error(err)
 
@@ -70,7 +74,8 @@ describe('protobuf variable tests', () => {
         const root = protobuf.loadSync(filePath)
 
         VariableForUserParams_PB = root.lookupType('VariableForUserParams_PB')
-        if (!VariableForUserParams_PB) throw new Error('VariableForUserParams_PB not found')
+        if (!VariableForUserParams_PB)
+            throw new Error('VariableForUserParams_PB not found')
 
         DVCUser_PB = root.lookupType('DVCUser_PB')
         if (!DVCUser_PB) throw new Error('DVCUser_PB not found')
@@ -90,19 +95,19 @@ describe('protobuf variable tests', () => {
             userId: 'asuh',
             country: { value: 'canada', isNull: false },
             email: { value: 'test', isNull: false },
-        }
+        },
     }
     const varForUserExpected = {
-        '_id': '615356f120ed334a6054564c',
-        'boolValue': false,
-        'doubleValue': 0,
-        'evalReason': {
-            'isNull': true,
-            'value': '',
+        _id: '615356f120ed334a6054564c',
+        boolValue: false,
+        doubleValue: 0,
+        evalReason: {
+            isNull: true,
+            value: '',
         },
-        'key': 'swagTest',
-        'stringValue': 'YEEEEOWZA',
-        'type': VariableType.String,
+        key: 'swagTest',
+        stringValue: 'YEEEEOWZA',
+        type: VariableType.String,
     }
 
     it('should write protobuf message to variableForUser_PB', () => {
@@ -112,7 +117,8 @@ describe('protobuf variable tests', () => {
     })
 
     it('should write preallocated protobuf message to variableForUser_PB_Preallocated', () => {
-        const resultBuffer = callVariableForUser_PB_Preallocated(varForUserParams)
+        const resultBuffer =
+            callVariableForUser_PB_Preallocated(varForUserParams)
         expect(resultBuffer).not.toBeNull()
         expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(varForUserExpected)
     })
@@ -136,34 +142,45 @@ describe('protobuf variable tests', () => {
                         deviceModel: { value: 'NodeJS', isNull: false },
                         customData: {
                             value: {
-                                'isBatman': {
-                                    type: VariableType.Boolean, boolValue: true, doubleValue: 0, stringValue: ''
+                                isBatman: {
+                                    type: VariableType.Boolean,
+                                    boolValue: true,
+                                    doubleValue: 0,
+                                    stringValue: '',
                                 },
-                                'frequency': {
-                                    type: VariableType.Number, boolValue: false, doubleValue: 103.1, stringValue: ''
-                                }
+                                frequency: {
+                                    type: VariableType.Number,
+                                    boolValue: false,
+                                    doubleValue: 103.1,
+                                    stringValue: '',
+                                },
                             },
-                            isNull: false
+                            isNull: false,
                         },
                         privateCustomData: {
                             value: {
-                                'autoBotsMessage': {
+                                autoBotsMessage: {
                                     type: VariableType.String,
                                     boolValue: false,
                                     doubleValue: 0,
-                                    stringValue: 'roll out!'
+                                    stringValue: 'roll out!',
                                 },
-                                'isNull': {
-                                    type: 3, boolValue: false, doubleValue: 0, stringValue: ''
-                                }
+                                isNull: {
+                                    type: 3,
+                                    boolValue: false,
+                                    doubleValue: 0,
+                                    stringValue: '',
+                                },
                             },
-                            isNull: false
-                        }
-                    }
+                            isNull: false,
+                        },
+                    },
                 }
                 const resultBuffer = callTestVariableForUserParams_PB(params)
                 expect(resultBuffer).not.toBeNull()
-                expect(VariableForUserParams_PB.decode(resultBuffer!)).toEqual(params)
+                expect(VariableForUserParams_PB.decode(resultBuffer!)).toEqual(
+                    params,
+                )
             })
 
             it('should set defaults for missing user fields', () => {
@@ -176,11 +193,13 @@ describe('protobuf variable tests', () => {
                         userId: 'asuh',
                         customData: { value: {}, isNull: true },
                         privateCustomData: { value: {}, isNull: true },
-                    }
+                    },
                 }
                 const resultBuffer = callTestVariableForUserParams_PB(params)
                 expect(resultBuffer).not.toBeNull()
-                expect(VariableForUserParams_PB.decode(resultBuffer!)).toEqual(params)
+                expect(VariableForUserParams_PB.decode(resultBuffer!)).toEqual(
+                    params,
+                )
             })
         })
 
@@ -197,26 +216,38 @@ describe('protobuf variable tests', () => {
                     deviceModel: { value: 'NodeJS', isNull: false },
                     customData: {
                         value: {
-                            'isBatman': {
-                                type: VariableType.Boolean, boolValue: true, doubleValue: 0, stringValue: ''
+                            isBatman: {
+                                type: VariableType.Boolean,
+                                boolValue: true,
+                                doubleValue: 0,
+                                stringValue: '',
                             },
-                            'frequency': {
-                                type: VariableType.Number, boolValue: false, doubleValue: 103.1, stringValue: ''
-                            }
+                            frequency: {
+                                type: VariableType.Number,
+                                boolValue: false,
+                                doubleValue: 103.1,
+                                stringValue: '',
+                            },
                         },
-                        isNull: false
+                        isNull: false,
                     },
                     privateCustomData: {
                         value: {
-                            'autoBotsMessage': {
-                                type: VariableType.String, boolValue: false, doubleValue: 0, stringValue: 'roll out!'
+                            autoBotsMessage: {
+                                type: VariableType.String,
+                                boolValue: false,
+                                doubleValue: 0,
+                                stringValue: 'roll out!',
                             },
-                            'isNull': {
-                                type: 3, boolValue: false, doubleValue: 0, stringValue: ''
-                            }
+                            isNull: {
+                                type: 3,
+                                boolValue: false,
+                                doubleValue: 0,
+                                stringValue: '',
+                            },
                         },
-                        isNull: false
-                    }
+                        isNull: false,
+                    },
                 }
                 const resultBuffer = callTestDVCUser_PB(user)
                 expect(resultBuffer).not.toBeNull()
@@ -225,7 +256,7 @@ describe('protobuf variable tests', () => {
 
             it('should set defaults for missing user fields', () => {
                 const user = {
-                    userId: 'asuh'
+                    userId: 'asuh',
                 }
                 const resultBuffer = callTestDVCUser_PB(user)
                 expect(resultBuffer).not.toBeNull()
@@ -235,7 +266,7 @@ describe('protobuf variable tests', () => {
                     name: { value: '', isNull: true },
                     language: { value: '', isNull: true },
                     country: { value: '', isNull: true },
-                    appBuild: { value: 0, isNull: true, },
+                    appBuild: { value: 0, isNull: true },
                     appVersion: { value: '', isNull: true },
                     deviceModel: { value: '', isNull: true },
                     customData: { value: {}, isNull: true },
@@ -253,11 +284,13 @@ describe('protobuf variable tests', () => {
                     boolValue: true,
                     doubleValue: 0,
                     stringValue: '',
-                    evalReason: { value: '', isNull: true }
+                    evalReason: { value: '', isNull: true },
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()
-                expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(sdkVariable)
+                expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(
+                    sdkVariable,
+                )
             })
 
             it('should parse number SDKVariable_PB protobuf message', () => {
@@ -267,11 +300,13 @@ describe('protobuf variable tests', () => {
                     key: 'num-key',
                     boolValue: false,
                     doubleValue: 610,
-                    stringValue: ''
+                    stringValue: '',
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()
-                expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(sdkVariable)
+                expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(
+                    sdkVariable,
+                )
             })
 
             it('should parse string SDKVariable_PB protobuf message', () => {
@@ -281,11 +316,13 @@ describe('protobuf variable tests', () => {
                     key: 'string-key',
                     boolValue: false,
                     doubleValue: 0,
-                    stringValue: 'string-value'
+                    stringValue: 'string-value',
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()
-                expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(sdkVariable)
+                expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(
+                    sdkVariable,
+                )
             })
 
             it('should parse json SDKVariable_PB protobuf message', () => {
@@ -295,13 +332,14 @@ describe('protobuf variable tests', () => {
                     key: 'json-key',
                     boolValue: false,
                     doubleValue: 0,
-                    stringValue: '{"hello":"world"}'
+                    stringValue: '{"hello":"world"}',
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()
-                expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(sdkVariable)
+                expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(
+                    sdkVariable,
+                )
             })
         })
     })
-
 })
