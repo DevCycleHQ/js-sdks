@@ -4,7 +4,7 @@ import React from 'react'
 
 type ClientProviderContext = {
     client: DevCycleClient
-    sdkKey: string
+    clientSDKKey: string
     enableStreaming: boolean
     serverDataPromise: Promise<unknown>
 }

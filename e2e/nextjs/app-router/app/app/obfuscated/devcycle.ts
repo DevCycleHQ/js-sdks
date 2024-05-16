@@ -5,9 +5,10 @@ export const {
     getClientContext,
     getAllVariables,
     getAllFeatures,
-} = setupDevCycle(
-    process.env.NEXT_PUBLIC_E2E_NEXTJS_KEY ?? '',
-    async () => {
+} = setupDevCycle({
+    clientSDKKey: process.env.NEXT_PUBLIC_E2E_NEXTJS_CLIENT_KEY ?? '',
+    serverSDKKey: process.env.E2E_NEXTJS_SERVER_KEY ?? '',
+    userGetter: async () => {
         const reqHeaders = headers()
         return {
             user_id: '123',
@@ -17,5 +18,5 @@ export const {
             },
         }
     },
-    { enableStreaming: false, enableObfuscation: true },
-)
+    options: { enableStreaming: false, enableObfuscation: true },
+})

@@ -9,7 +9,7 @@ import { DevCycleProviderContext } from './context'
 export type DevCycleClientContext = {
     serverDataPromise: Promise<DevCycleServerData>
     serverData?: DevCycleServerData
-    sdkKey: string
+    clientSDKKey: string
     options: DevCycleNextOptions
     enableStreaming: boolean
     userAgent?: string
@@ -62,11 +62,12 @@ export const InternalDevCycleClientsideProvider = ({
     const router = useRouter()
     const clientRef = useRef<DevCycleClient>()
 
-    const { serverDataPromise, serverData, sdkKey, enableStreaming } = context
+    const { serverDataPromise, serverData, clientSDKKey, enableStreaming } =
+        context
 
     const revalidateConfig = (lastModified?: number) => {
         invalidateConfig(
-            sdkKey,
+            clientSDKKey,
             !!context.options.enableObfuscation,
             lastModified,
         ).finally(() => {
@@ -83,7 +84,7 @@ export const InternalDevCycleClientsideProvider = ({
     }
 
     if (!clientRef.current) {
-        clientRef.current = initializeDevCycle(sdkKey, {
+        clientRef.current = initializeDevCycle(clientSDKKey, {
             ...context.options,
             sdkPlatform: 'nextjs',
             deferInitialization: true,
@@ -113,7 +114,7 @@ export const InternalDevCycleClientsideProvider = ({
         <DevCycleProviderContext.Provider
             value={{
                 client: clientRef.current,
-                sdkKey: sdkKey,
+                clientSDKKey,
                 enableStreaming,
                 serverDataPromise,
             }}
