@@ -9,7 +9,7 @@ describe('eventQueueOptions Tests', () => {
         const options = {
             disableAutomaticEventLogging: true,
             disableCustomEventLogging: false,
-            eventRequestChunkSize: 10000
+            eventRequestChunkSize: 10000,
         }
         expect(testEventQueueOptions(options)).toEqual(options)
     })
@@ -18,7 +18,7 @@ describe('eventQueueOptions Tests', () => {
         expect(testEventQueueOptions({})).toEqual({
             eventRequestChunkSize: 100,
             disableAutomaticEventLogging: false,
-            disableCustomEventLogging: false
+            disableCustomEventLogging: false,
         })
     })
 })

@@ -17,6 +17,7 @@ EventTypes.add('variableEvaluated')
 EventTypes.add('aggVariableEvaluated')
 EventTypes.add('variableDefaulted')
 EventTypes.add('aggVariableDefaulted')
+EventTypes.add('sdkConfig')
 
 /**
  * Public interface for DVCEvent passed into SDK methods.
