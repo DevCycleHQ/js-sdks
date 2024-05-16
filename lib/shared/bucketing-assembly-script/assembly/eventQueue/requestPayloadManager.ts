@@ -23,10 +23,12 @@ import {
 export class RequestPayloadManager {
     private pendingPayloads: Map<string, FlushPayload>
     private readonly chunkSize: i32
+    private readonly clientUUID: string
 
-    constructor(options: EventQueueOptions) {
+    constructor(options: EventQueueOptions, clientUUID: string) {
         this.pendingPayloads = new Map<string, FlushPayload>()
         this.chunkSize = options.eventRequestChunkSize
+        this.clientUUID = clientUUID
     }
 
     constructFlushPayloads(
@@ -68,9 +70,12 @@ export class RequestPayloadManager {
         const aggEvents: DVCRequestEvent[] = []
 
         const platformData = _getPlatformData()
-        const user_id = platformData.hostname
-            ? (platformData.hostname as string)
-            : 'aggregate'
+        let user_id = 'aggregate'
+        if (platformData.hostname && this.clientUUID) {
+            user_id = `${this.clientUUID}@${platformData.hostname as string}`
+        } else if (platformData.hostname) {
+            user_id = platformData.hostname as string
+        }
         const emptyFeatureVars = new Map<string, string>()
 
         for (let i = 0; i < aggEventQueueKeys.length; i++) {

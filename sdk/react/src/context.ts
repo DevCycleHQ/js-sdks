@@ -19,3 +19,15 @@ export type InitializedContext = {
 export const initializedContext = createContext<InitializedContext>({
     isInitialized: false,
 })
+
+export type DebugContext = {
+    showConditionalBorders: boolean
+    borderColor: string
+}
+
+export const debugContextDefaults: DebugContext = {
+    showConditionalBorders: false,
+    borderColor: '#ff6347',
+}
+
+export const debugContext = createContext<DebugContext>(debugContextDefaults)

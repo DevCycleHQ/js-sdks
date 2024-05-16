@@ -1,4 +1,7 @@
-import { testPlatformDataClass, testPlatformDataClassFromUTF8 } from '../bucketingImportHelper'
+import {
+    testPlatformDataClass,
+    testPlatformDataClassFromUTF8,
+} from '../bucketingImportHelper'
 
 const testPlatformData = (str: string, utf8: boolean): any => {
     if (utf8) {
@@ -16,9 +19,11 @@ describe.each([true, false])('PlatformData Model Tests', (utf8) => {
             platformVersion: '1.0.0',
             sdkType: 'server',
             sdkVersion: '3.3.3',
-            hostname: 'host.name'
+            hostname: 'host.name',
         }
-        expect(testPlatformData(JSON.stringify(platformData), utf8)).toEqual(platformData)
+        expect(testPlatformData(JSON.stringify(platformData), utf8)).toEqual(
+            platformData,
+        )
     })
 
     it('should test PlatformData non-optional JSON parsing', () => {
@@ -26,8 +31,10 @@ describe.each([true, false])('PlatformData Model Tests', (utf8) => {
             platform: 'platform',
             platformVersion: '1.0.0',
             sdkType: 'server',
-            sdkVersion: '3.3.3'
+            sdkVersion: '3.3.3',
         }
-        expect(testPlatformData(JSON.stringify(platformData), utf8)).toEqual(platformData)
+        expect(testPlatformData(JSON.stringify(platformData), utf8)).toEqual(
+            platformData,
+        )
     })
 })

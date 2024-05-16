@@ -4,7 +4,7 @@ import {
     setConfigData,
     cleanupEventQueue,
     clearPlatformData,
-    setClientCustomData
+    setClientCustomData,
 } from './bucketingImportHelper'
 
 const defaultPlatformData = {
@@ -13,22 +13,31 @@ const defaultPlatformData = {
     sdkType: 'server',
     sdkVersion: '1.0.0',
     deviceModel: '',
-    hostname: 'host.name'
+    hostname: 'host.name',
 }
 
-export const setPlatformDataJSON = (data: unknown = defaultPlatformData): void => {
+export const setPlatformDataJSON = (
+    data: unknown = defaultPlatformData,
+): void => {
     setPlatformData(JSON.stringify(data))
 }
 
-export const initSDK = (sdkKey: string, config: unknown = {}, eventOptions: unknown = {}): void => {
-    initEventQueue(sdkKey, JSON.stringify(eventOptions))
-    setPlatformData(JSON.stringify({
-        platform: 'NodeJS',
-        platformVersion: '16.0',
-        sdkType: 'server',
-        sdkVersion: '1.0.0',
-        hostname: 'host.name'
-    }))
+export const initSDK = (
+    sdkKey: string,
+    config: unknown = {},
+    eventOptions: unknown = {},
+    clientUUID = 'uuid',
+): void => {
+    initEventQueue(sdkKey, clientUUID, JSON.stringify(eventOptions))
+    setPlatformData(
+        JSON.stringify({
+            platform: 'NodeJS',
+            platformVersion: '16.0',
+            sdkType: 'server',
+            sdkVersion: '1.0.0',
+            hostname: 'host.name',
+        }),
+    )
     setConfigData(sdkKey, JSON.stringify(config))
 }
 

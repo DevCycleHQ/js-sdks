@@ -4,7 +4,7 @@ import {
     cleanupSDK,
     initSDK,
     variableForUser,
-    variableForUser_PB
+    variableForUser_PB,
 } from '../__tests__/variableSetupHelper'
 import { ConfigBody } from '@devcycle/types'
 import {
@@ -14,7 +14,7 @@ import {
     setPlatformData,
     setConfigData,
     generateBucketedConfigForUser,
-    setClientCustomData
+    setClientCustomData,
 } from '../__tests__/bucketingImportHelper'
 import largeTestData from '@devcycle/bucketing-test-data/json-data/largeConfig.json'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
@@ -25,7 +25,7 @@ const largeConfig = largeTestData.largeConfig as unknown as ConfigBody
 const user = {
     user_id: 'asuh',
     email: 'test@email.com',
-    country: 'CA'
+    country: 'CA',
 }
 const largeUser = {
     user_id: 'asuh',
@@ -38,17 +38,17 @@ const largeUser = {
     customData: {
         'very long key that is longer than 50 characters long':
             'very long value that is longer than 50 characters long',
-        'longKey2': 123421423
+        longKey2: 123421423,
     },
     privateCustomData: {
         'very long key that is longer than 50 characters long':
             'very long value that is longer than 50 characters long',
-        'longKey2': 123421423
+        longKey2: 123421423,
     },
 }
 const defaultUser = { user_id: 'default' }
 const largeConfigUser = {
-    user_id: 'user_431a7ba3-32a2-40e8-ac42-ed2934422a5b'
+    user_id: 'user_431a7ba3-32a2-40e8-ac42-ed2934422a5b',
 }
 
 benchmarkSuite('variableForUser', {
@@ -62,49 +62,65 @@ benchmarkSuite('variableForUser', {
     },
     ['variableForUser']: () => {
         const variable = variableForUser({
-            user, variableKey: 'feature4Var', variableType: VariableType.String
+            user,
+            variableKey: 'feature4Var',
+            variableType: VariableType.String,
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
     ['variableForUser_PB']: () => {
         const variable = variableForUser_PB({
-            user, variableKey: 'feature4Var', variableType: VariableType.String
+            user,
+            variableKey: 'feature4Var',
+            variableType: VariableType.String,
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
     ['variableForUser - large user']: () => {
         const variable = variableForUser({
-            user: largeUser, variableKey: 'feature4Var', variableType: VariableType.String
+            user: largeUser,
+            variableKey: 'feature4Var',
+            variableType: VariableType.String,
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
     ['variableForUser_PB - large user']: () => {
         const variable = variableForUser_PB({
-            user: largeUser, variableKey: 'feature4Var', variableType: VariableType.String
+            user: largeUser,
+            variableKey: 'feature4Var',
+            variableType: VariableType.String,
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
     ['variableForUser - defaulted']: () => {
         const variable = variableForUser({
-            user: defaultUser, variableKey: 'feature4Var', variableType: VariableType.String
+            user: defaultUser,
+            variableKey: 'feature4Var',
+            variableType: VariableType.String,
         })
         if (variable) throw new Error('variable should be defaulted')
     },
     ['variableForUser_PB - defaulted']: () => {
         const variable = variableForUser_PB({
-            user: defaultUser, variableKey: 'feature4Var', variableType: VariableType.String
+            user: defaultUser,
+            variableKey: 'feature4Var',
+            variableType: VariableType.String,
         })
         if (variable) throw new Error('variable should be defaulted')
     },
     ['variableForUser - unknown key']: () => {
         const variable = variableForUser({
-            user: defaultUser, variableKey: 'unknown key', variableType: VariableType.String
+            user: defaultUser,
+            variableKey: 'unknown key',
+            variableType: VariableType.String,
         })
         if (variable) throw new Error('variable should be defaulted')
     },
     ['variableForUser_PB - unknown key']: () => {
         const variable = variableForUser_PB({
-            user: defaultUser, variableKey: 'unknown key', variableType: VariableType.String
+            user: defaultUser,
+            variableKey: 'unknown key',
+            variableType: VariableType.String,
         })
         if (variable) throw new Error('variable should be defaulted')
     },
@@ -122,16 +138,20 @@ benchmarkSuite('variableForUser - Large Config', {
     },
     ['variableForUser']: () => {
         const variable = variableForUser({
-            user: largeConfigUser, variableKey: 'v-key-50', variableType: VariableType.Boolean
+            user: largeConfigUser,
+            variableKey: 'v-key-50',
+            variableType: VariableType.Boolean,
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
     ['variableForUser_PB']: () => {
         const variable = variableForUser_PB({
-            user: largeConfigUser, variableKey: 'v-key-50', variableType: VariableType.Boolean
+            user: largeConfigUser,
+            variableKey: 'v-key-50',
+            variableType: VariableType.Boolean,
         })
         if (!variable) throw new Error('variable should not be defaulted')
-    }
+    },
 })
 
 benchmarkSuite('generateBucketedConfigForUser', {
@@ -184,7 +204,7 @@ benchmarkSuite('initEventQueue', {
     ['initEventQueue']: () => {
         initEventQueue('sdkKey_' + i, JSON.stringify({}))
         i++
-    }
+    },
 })
 
 benchmarkSuite('setPlatformData', {
@@ -198,15 +218,17 @@ benchmarkSuite('setPlatformData', {
         cleanupSDK()
     },
     ['setPlatformData']: () => {
-        setPlatformData(JSON.stringify({
-            platform: 'NodeJS',
-            platformVersion: '16.0',
-            sdkType: 'server',
-            sdkVersion: '1.0.' + i,
-            hostname: 'host.name'
-        }))
+        setPlatformData(
+            JSON.stringify({
+                platform: 'NodeJS',
+                platformVersion: '16.0',
+                sdkType: 'server',
+                sdkVersion: '1.0.' + i,
+                hostname: 'host.name',
+            }),
+        )
         i++
-    }
+    },
 })
 
 benchmarkSuite('setConfigData', {
@@ -226,7 +248,7 @@ benchmarkSuite('setConfigData', {
     ['setConfigData - large']: () => {
         setConfigData('sdkKey_' + i, JSON.stringify(largeConfig))
         i++
-    }
+    },
 })
 
 benchmarkSuite('setClientCustomData', {
@@ -240,5 +262,5 @@ benchmarkSuite('setClientCustomData', {
     },
     ['setClientCustomData - small']: () => {
         setClientCustomData('sdkKey', JSON.stringify(largeUser.customData))
-    }
+    },
 })

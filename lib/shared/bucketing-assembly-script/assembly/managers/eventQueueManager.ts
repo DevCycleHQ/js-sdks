@@ -41,7 +41,7 @@ function getRequestPayloadManager(sdkKey: string): RequestPayloadManager {
  * This creates the WASM EventQueue class and stores it in a map by env sdkKey,
  * this is needed because our SDKs support creating multiple DevCycleClient objects by sdkKey.
  */
-export function initEventQueue(sdkKey: string, optionsStr: string): void {
+export function initEventQueue(sdkKey: string, clientUUID: string, optionsStr: string): void {
     if (!sdkKey) {
         throw new Error('Missing sdkKey to initialize Event Queue')
     }
@@ -57,7 +57,10 @@ export function initEventQueue(sdkKey: string, optionsStr: string): void {
     const queue = new EventQueue(sdkKey, options)
     _eventQueueMap.set(sdkKey, queue)
 
-    const requestPayloadManager = new RequestPayloadManager(options)
+    const requestPayloadManager = new RequestPayloadManager(
+        options,
+        clientUUID
+    )
     _requestPayloadMap.set(sdkKey, requestPayloadManager)
 }
 

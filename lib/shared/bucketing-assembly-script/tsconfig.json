@@ -1,19 +1,17 @@
 {
-  "extends": "../../../tsconfig.base.json",
-  "files": [],
-  "include": [],
-  "exclude": [
-      "assembly/**/*.ts"
-  ],
-  "compilerOptions": {
-      "allowJs": true
-  },
-  "references": [
-    {
-      "path": "./tsconfig.lib.json"
+    "extends": "../../../tsconfig.base.json",
+    "files": [],
+    "include": [],
+    "exclude": ["assembly/**/*.ts"],
+    "compilerOptions": {
+        "allowJs": true
     },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-  ]
+    "references": [
+        {
+            "path": "./tsconfig.lib.json"
+        },
+        {
+            "path": "./tsconfig.spec.json"
+        }
+    ]
 }
