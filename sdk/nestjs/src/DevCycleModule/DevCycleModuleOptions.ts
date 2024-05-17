@@ -4,7 +4,7 @@ import { DevCycleOptions, DevCycleUser } from '@devcycle/nodejs-server-sdk'
 export interface DevCycleModuleOptions {
     key: string
     options?: Omit<DevCycleOptions, 'enableCloudBucketing'>
-    userFactory: (context: ExecutionContext) => DevCycleUser
+    userFactory?: (context: ExecutionContext) => DevCycleUser
 }
 
 export const { ConfigurableModuleClass, MODULE_OPTIONS_TOKEN } =

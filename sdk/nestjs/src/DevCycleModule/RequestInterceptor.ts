@@ -25,7 +25,7 @@ export class RequestInterceptor implements NestInterceptor {
         next: CallHandler,
     ): ReturnType<CallHandler['handle']> {
         this.cls.set('dvc_client', this.client)
-        this.cls.set('dvc_user', this.options.userFactory(context))
+        this.cls.set('dvc_user', this.options.userFactory?.(context))
 
         return next.handle()
     }
