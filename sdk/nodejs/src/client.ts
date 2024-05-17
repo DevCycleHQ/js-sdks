@@ -51,9 +51,9 @@ const castIncomingUser = (user: DevCycleUser) => {
 }
 
 // Dynamically import the OpenFeature Provider, as it's an optional peer dependency
-type DevCycleProviderConstructor =
-    typeof import('./open-feature-provider/DevCycleProvider').DevCycleProvider
-type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
+// type DevCycleProviderConstructor =
+//     typeof import('./open-feature-provider/DevCycleProvider').DevCycleProvider
+// type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
 
 export class DevCycleClient {
     private clientUUID: string
@@ -65,7 +65,7 @@ export class DevCycleClient {
     private onInitialized: Promise<DevCycleClient>
     private logger: DVCLogger
     private _isInitialized = false
-    private openFeatureProvider: DevCycleProvider
+    // private openFeatureProvider: DevCycleProvider
 
     get isInitialized(): boolean {
         return this._isInitialized
@@ -154,28 +154,28 @@ export class DevCycleClient {
         })
     }
 
-    async getOpenFeatureProvider(): Promise<DevCycleProvider> {
-        let DevCycleProviderClass
-
-        try {
-            const importedModule = await import(
-                './open-feature-provider/DevCycleProvider.js'
-            )
-            DevCycleProviderClass = importedModule.DevCycleProvider
-        } catch (error) {
-            throw new Error(
-                'Missing "@openfeature/server-sdk" and/or "@openfeature/core" ' +
-                    'peer dependencies to get OpenFeature Provider',
-            )
-        }
-
-        if (this.openFeatureProvider) return this.openFeatureProvider
-
-        this.openFeatureProvider = new DevCycleProviderClass(this, {
-            logger: this.logger,
-        })
-        return this.openFeatureProvider
-    }
+    // async getOpenFeatureProvider(): Promise<DevCycleProvider> {
+    //     let DevCycleProviderClass
+    //
+    //     try {
+    //         const importedModule = await import(
+    //             './open-feature-provider/DevCycleProvider.js'
+    //         )
+    //         DevCycleProviderClass = importedModule.DevCycleProvider
+    //     } catch (error) {
+    //         throw new Error(
+    //             'Missing "@openfeature/server-sdk" and/or "@openfeature/core" ' +
+    //                 'peer dependencies to get OpenFeature Provider',
+    //         )
+    //     }
+    //
+    //     if (this.openFeatureProvider) return this.openFeatureProvider
+    //
+    //     this.openFeatureProvider = new DevCycleProviderClass(this, {
+    //         logger: this.logger,
+    //     })
+    //     return this.openFeatureProvider
+    // }
 
     /**
      * Notify the user when Features have been loaded from the server.
@@ -341,48 +341,48 @@ export class DevCycleClient {
      * @param user
      * @param userAgent
      */
-    async getClientBootstrapConfig(
-        user: DevCycleUser,
-        userAgent: string,
-    ): Promise<BucketedUserConfig & { clientSDKKey: string }> {
-        const incomingUser = castIncomingUser(user)
-
-        await this.onInitialized
-
-        if (!this.clientConfigHelper) {
-            throw new Error(
-                'enableClientBootstrapping option must be set to true to use getClientBootstrapConfig',
-            )
-        }
-
-        const clientSDKKey = getSDKKeyFromConfig(`${this.sdkKey}_client`)
-
-        if (!clientSDKKey) {
-            throw new Error(
-                'Client bootstrapping config is malformed. Please contact DevCycle support.',
-            )
-        }
-
-        try {
-            const { generateClientPopulatedUser } = await import(
-                './clientUser.js'
-            )
-            const populatedUser = generateClientPopulatedUser(
-                incomingUser,
-                userAgent,
-            )
-            return {
-                ...bucketUserForConfig(populatedUser, `${this.sdkKey}_client`),
-                clientSDKKey,
-            }
-        } catch (e) {
-            throw new Error(
-                '@devcycle/js-client-sdk package could not be found. ' +
-                    'Please install it to use client boostrapping. Error: ' +
-                    e.message,
-            )
-        }
-    }
+    // async getClientBootstrapConfig(
+    //     user: DevCycleUser,
+    //     userAgent: string,
+    // ): Promise<BucketedUserConfig & { clientSDKKey: string }> {
+    //     const incomingUser = castIncomingUser(user)
+    //
+    //     await this.onInitialized
+    //
+    //     if (!this.clientConfigHelper) {
+    //         throw new Error(
+    //             'enableClientBootstrapping option must be set to true to use getClientBootstrapConfig',
+    //         )
+    //     }
+    //
+    //     const clientSDKKey = getSDKKeyFromConfig(`${this.sdkKey}_client`)
+    //
+    //     if (!clientSDKKey) {
+    //         throw new Error(
+    //             'Client bootstrapping config is malformed. Please contact DevCycle support.',
+    //         )
+    //     }
+    //
+    //     try {
+    //         const { generateClientPopulatedUser } = await import(
+    //             './clientUser.js'
+    //         )
+    //         const populatedUser = generateClientPopulatedUser(
+    //             incomingUser,
+    //             userAgent,
+    //         )
+    //         return {
+    //             ...bucketUserForConfig(populatedUser, `${this.sdkKey}_client`),
+    //             clientSDKKey,
+    //         }
+    //     } catch (e) {
+    //         throw new Error(
+    //             '@devcycle/js-client-sdk package could not be found. ' +
+    //                 'Please install it to use client boostrapping. Error: ' +
+    //                 e.message,
+    //         )
+    //     }
+    // }
 
     async flushEvents(callback?: () => void): Promise<void> {
         return this.eventQueue.flushEvents().then(callback)

@@ -24,6 +24,7 @@ export class RequestInterceptor implements NestInterceptor {
         context: ExecutionContext,
         next: CallHandler,
     ): ReturnType<CallHandler['handle']> {
+        console.log('calling interceptor!')
         this.cls.set('dvc_client', this.client)
         this.cls.set('dvc_user', this.options.userFactory(context))
 

@@ -31,12 +31,11 @@
             "@devcycle/config-manager": [
                 "lib/shared/config-manager/src/index.ts"
             ],
-            "@devcycle/web-debugger": ["lib/web-debugger/index.ts"],
-            "@devcycle/web-debugger/react": ["lib/web-debugger/react.tsx"],
             "@devcycle/js-client-sdk": ["sdk/js/src/index.ts"],
             "@devcycle/js-cloud-server-sdk": [
                 "sdk/js-cloud-server/src/index.ts"
             ],
+            "@devcycle/nestjs-server-sdk": ["sdk/nestjs/src/index.ts"],
             "@devcycle/nextjs-sdk": ["sdk/nextjs/src/index.ts"],
             "@devcycle/nextjs-sdk/pages": ["sdk/nextjs/src/pages.ts"],
             "@devcycle/nextjs-sdk/server": ["sdk/nextjs/src/server.ts"],
@@ -54,7 +53,9 @@
             "@devcycle/server-request": [
                 "lib/shared/server-request/src/index.ts"
             ],
-            "@devcycle/types": ["lib/shared/types/src/index.ts"]
+            "@devcycle/types": ["lib/shared/types/src/index.ts"],
+            "@devcycle/web-debugger": ["lib/web-debugger/index.ts"],
+            "@devcycle/web-debugger/react": ["lib/web-debugger/react.tsx"]
         }
     },
     "exclude": ["node_modules", "tmp"]

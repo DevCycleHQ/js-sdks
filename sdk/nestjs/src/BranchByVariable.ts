@@ -36,10 +36,11 @@ const GetInjectionTokens = <T extends Provider>(provider: T) => {
     return Reflect.getMetadata('design:paramtypes', provider) ?? []
 }
 
-export const BranchByVariable = <T extends Provider>(
+export const BranchByVariable = <T extends Provider, K extends Provider, Token>(
     key: string,
+    Token: Token,
     OldProvider: T,
-    NewProvider: T,
+    NewProvider: K,
 ) => {
     // get injection token metadata nest uses for injection
     const oldInjectionTokens = GetInjectionTokens(OldProvider)
@@ -52,13 +53,13 @@ export const BranchByVariable = <T extends Provider>(
             clsService: ClsService,
             ...injectedProviders: any[]
         ) => {
-            if (!clsService.get('dvc_user')) {
-                throw new Error(
-                    'Missing user context. Is the DevCycleModule imported?',
-                )
-            }
+            // if (!clsService.get('dvc_user')) {
+            //     throw new Error(
+            //         'Missing user context. Is the DevCycleModule imported?',
+            //     )
+            // }
             const enabled = devcycleClient.variableValue(
-                clsService.get('dvc_user'),
+                { user_id: 'test' },
                 key,
                 false,
             )
@@ -66,7 +67,7 @@ export const BranchByVariable = <T extends Provider>(
 
             const injectedProvidersToUse = enabled
                 ? injectedProviders.slice(oldInjectionTokens.length)
-                : injectedProviders.slice(0, oldInjectionTokens)
+                : injectedProviders.slice(0, oldInjectionTokens.length)
 
             if (isFactoryProvider(ProviderToUse)) {
                 return ProviderToUse.useFactory(...injectedProvidersToUse)

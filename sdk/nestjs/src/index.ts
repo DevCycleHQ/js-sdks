@@ -4,3 +4,4 @@ export * from './DevCycleModule'
 
 export * from './VariableValue'
 export * from './RequireVariableValue'
+export * from './BranchByVariable'
