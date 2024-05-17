@@ -37,7 +37,7 @@ const RequireVariableValueInterceptor = (
 
             if (!user) {
                 throw new Error(
-                    'Missing user context. Is the DevCycleModule imported?',
+                    'Missing user context. Is the DevCycleModule imported and a user factory set?',
                 )
             }
 
