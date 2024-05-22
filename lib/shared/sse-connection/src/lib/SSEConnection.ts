@@ -1,14 +1,19 @@
 import type { DVCLogger } from '@devcycle/types'
 import EventSource from 'eventsource'
 
+type SSEConnectionFunctions = {
+    onMessage: (message: unknown) => void
+    onOpen: () => void
+    onConnectionError: () => void
+}
+
 export class SSEConnection {
     private connection?: EventSource
 
     constructor(
         private url: string,
         private logger: DVCLogger,
-        private onMessage: (message: unknown) => void,
-        private onConnectionError: () => void,
+        private readonly callbacks: SSEConnectionFunctions,
     ) {
         this.openConnection()
     }
@@ -22,16 +27,17 @@ export class SSEConnection {
         }
         this.connection = new EventSource(this.url, { withCredentials: true })
         this.connection.onmessage = (event) => {
-            this.onMessage(event.data)
+            this.callbacks.onMessage(event.data)
         }
         this.connection.onerror = () => {
             this.logger.warn(
                 'StreamingConnection warning. Connection failed to establish.',
             )
-            this.onConnectionError()
+            this.callbacks.onConnectionError()
         }
         this.connection.onopen = () => {
             this.logger.debug('StreamingConnection opened')
+            this.callbacks.onOpen()
         }
     }
 
