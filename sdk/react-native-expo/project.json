@@ -13,25 +13,6 @@
             }
         },
         "build": {
-            "command": "echo Building Expo Target",
-            "dependsOn": ["build:expo"]
-        },
-        "build:expo": {
-            "executor": "@altack/nx-bundlefy:run",
-            "configurations": {},
-            "dependsOn": ["build:es5"],
-            "outputs": ["{options.outputFile}"]
-        },
-        "build:es5": {
-            "dependsOn": [
-                "shared-types:build:es5",
-                "shared-types:build",
-                "js:build:es5",
-                "js:build",
-                "react:build:es5",
-                "react:build",
-                "react:build:es5"
-            ],
             "executor": "@nrwl/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "options": {
@@ -41,8 +22,9 @@
                 "entryFile": "sdk/react-native-expo/src/index.ts",
                 "format": ["esm", "cjs"],
                 "external": "all",
+                "generateExportsField": true,
                 "rollupConfig": "@nx/react/plugins/bundle-rollup",
-                "compiler": "babel",
+                "compiler": "tsc",
                 "assets": [
                     {
                         "glob": "sdk/react-native-expo/README.md",
