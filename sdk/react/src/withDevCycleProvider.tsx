@@ -1,25 +1,32 @@
 import { ProviderConfig } from './types'
-import React from 'react'
+import React, {
+    forwardRef,
+    ForwardRefExoticComponent,
+    PropsWithoutRef,
+    RefAttributes,
+} from 'react'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import { DevCycleProvider } from './DevCycleProvider'
 
-export function withDevCycleProvider<T extends object>(
-    config: ProviderConfig,
-): (WrappedComponent: React.ComponentType<T>) => React.ComponentType<T> {
-    return (WrappedComponent) => {
-        const HoistedComponent = (props: T) => {
+export const withDevCycleProvider =
+    <T extends object>(config: ProviderConfig) =>
+    (
+        WrappedComponent: React.ComponentType<T>,
+    ): ForwardRefExoticComponent<
+        PropsWithoutRef<T> & RefAttributes<unknown>
+    > => {
+        const HoistedComponent = forwardRef((props: T, ref) => {
             return (
                 <DevCycleProvider config={config}>
-                    <WrappedComponent {...props} />
+                    <WrappedComponent {...props} ref={ref} />
                 </DevCycleProvider>
             )
-        }
+        })
 
         hoistNonReactStatics(HoistedComponent, WrappedComponent)
 
         return HoistedComponent
     }
-}
 
 /**
  * @deprecated Use withDevCycleProvider instead
