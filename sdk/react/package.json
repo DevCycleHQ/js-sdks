@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/react-client-sdk",
-    "version": "1.23.0",
+    "version": "1.23.1",
     "description": "The DevCycle React SDK used for feature management.",
     "author": "DevCycle <support@devcycle.com>",
     "keywords": [

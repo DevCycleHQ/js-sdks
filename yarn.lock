@@ -4722,7 +4722,7 @@ __metadata:
   dependencies:
     "@devcycle/bucketing": ^1.18.0
     "@devcycle/js-client-sdk": ^1.25.0
-    "@devcycle/react-client-sdk": ^1.23.0
+    "@devcycle/react-client-sdk": ^1.23.1
     "@devcycle/types": ^1.13.0
     hoist-non-react-statics: ^3.3.2
     server-only: ^0.0.1
@@ -4777,7 +4777,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/react-client-sdk@^1.23.0, @devcycle/react-client-sdk@workspace:sdk/react":
+"@devcycle/react-client-sdk@^1.23.1, @devcycle/react-client-sdk@workspace:sdk/react":
   version: 0.0.0-use.local
   resolution: "@devcycle/react-client-sdk@workspace:sdk/react"
   dependencies:
@@ -4795,7 +4795,7 @@ __metadata:
   resolution: "@devcycle/react-native-client-sdk@workspace:sdk/react-native"
   dependencies:
     "@devcycle/js-client-sdk": ^1.25.0
-    "@devcycle/react-client-sdk": ^1.23.0
+    "@devcycle/react-client-sdk": ^1.23.1
     "@react-native-async-storage/async-storage": ^1.17.11
     react-native-device-info: ^8.7.0
     react-native-get-random-values: ^1.7.2
@@ -4810,7 +4810,7 @@ __metadata:
   resolution: "@devcycle/react-native-expo-client-sdk@workspace:sdk/react-native-expo"
   dependencies:
     "@devcycle/js-client-sdk": ^1.25.0
-    "@devcycle/react-client-sdk": ^1.23.0
+    "@devcycle/react-client-sdk": ^1.23.1
     "@react-native-async-storage/async-storage": ^1.17.11
     react-native-device-info: ^8.7.0
     react-native-get-random-values: ^1.7.2
