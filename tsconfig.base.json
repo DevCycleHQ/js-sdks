@@ -31,8 +31,6 @@
             "@devcycle/config-manager": [
                 "lib/shared/config-manager/src/index.ts"
             ],
-            "@devcycle/web-debugger": ["lib/web-debugger/index.ts"],
-            "@devcycle/web-debugger/react": ["lib/web-debugger/react.tsx"],
             "@devcycle/js-client-sdk": ["sdk/js/src/index.ts"],
             "@devcycle/js-cloud-server-sdk": [
                 "sdk/js-cloud-server/src/index.ts"
@@ -54,7 +52,12 @@
             "@devcycle/server-request": [
                 "lib/shared/server-request/src/index.ts"
             ],
-            "@devcycle/types": ["lib/shared/types/src/index.ts"]
+            "@devcycle/sse-connection": [
+                "lib/shared/sse-connection/src/index.ts"
+            ],
+            "@devcycle/types": ["lib/shared/types/src/index.ts"],
+            "@devcycle/web-debugger": ["lib/web-debugger/index.ts"],
+            "@devcycle/web-debugger/react": ["lib/web-debugger/react.tsx"]
         }
     },
     "exclude": ["node_modules", "tmp"]
