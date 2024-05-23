@@ -25,6 +25,9 @@ type TrackSDKConfigEventInterface = (
     reqLastModified?: string,
 ) => void
 
+const isValidDate = (date: Date | null): date is Date =>
+    date instanceof Date && !isNaN(date.getTime())
+
 export class EnvironmentConfigManager {
     private _hasConfig = false
     configEtag?: string
@@ -58,8 +61,7 @@ export class EnvironmentConfigManager {
             cdnURI = 'https://config-cdn.devcycle.com',
             clientMode = false,
             betaEnableRealTimeUpdates = false,
-        }: // TODO: add sse timeout
-        ConfigPollingOptions,
+        }: ConfigPollingOptions,
     ) {
         this.clientMode = clientMode
         this.enableRealtimeUpdates = betaEnableRealTimeUpdates
@@ -125,29 +127,32 @@ export class EnvironmentConfigManager {
             const parsedMessage = JSON.parse(message as string)
             const messageData = JSON.parse(parsedMessage.data)
 
-            if (!messageData) {
+            if (
+                !messageData ||
+                !(!messageData.type || messageData.type === 'refetchConfig')
+            ) {
                 return
             }
-            if (!messageData.type || messageData.type === 'refetchConfig') {
-                if (!this.configEtag || messageData.etag !== this.configEtag) {
-                    this._fetchConfig()
-                        .then(() => {
-                            this.logger.debug('Config re-fetched')
-                        })
-                        .catch((e) => {
-                            this.logger.warn(`Failed to re-fetch config ${e}`)
-                        })
-
-                    // TODO: switch to config request consolidator? and check for etag / lastModified date
-                    // this.refetchConfig(
-                    //     true,
-                    //     messageData.lastModified,
-                    //     messageData.etag,
-                    // ).catch((e) => {
-                    //     this.logger.warn(`Failed to refetch config ${e}`)
-                    // })
-                }
+            if (this.configEtag && messageData.etag === this.configEtag) {
+                return
             }
+
+            if (this.isLastModifiedHeaderOld(messageData.lastModified)) {
+                this.logger.debug(
+                    'Skipping SSE message, config last modified is newer. ',
+                )
+                return
+            }
+
+            this._fetchConfig()
+                .then(() => {
+                    this.logger.debug('Config re-fetched from SSE message')
+                })
+                .catch((e) => {
+                    this.logger.warn(
+                        `Failed to re-fetch config from SSE Message: ${e}`,
+                    )
+                })
         } catch (e) {
             this.logger.warn(`Streaming Connection: Unparseable message ${e}`)
         }
@@ -269,6 +274,14 @@ export class EnvironmentConfigManager {
             )
             return
         } else if (res?.status === 200 && projectConfig) {
+            const lastModifiedHeader = res?.headers.get('last-modified')
+            if (this.isLastModifiedHeaderOld(lastModifiedHeader)) {
+                this.logger.warn(
+                    'Skipping saving config, existing last modified date is newer.',
+                )
+                return
+            }
+
             try {
                 this.handleSSEConfig(projectConfig)
 
@@ -278,9 +291,7 @@ export class EnvironmentConfigManager {
                 )
                 this._hasConfig = true
                 this.configEtag = res?.headers.get('etag') || ''
-                this.configLastModified =
-                    res?.headers.get('last-modified') || ''
-
+                this.configLastModified = lastModifiedHeader || ''
                 return
             } catch (e) {
                 logError(new Error('Invalid config JSON.'))
@@ -300,6 +311,21 @@ export class EnvironmentConfigManager {
         } else {
             throw new Error('Failed to download DevCycle config.')
         }
+    }
+
+    private isLastModifiedHeaderOld(lastModifiedHeader: string | null) {
+        const lastModifiedHeaderDate = lastModifiedHeader
+            ? new Date(lastModifiedHeader)
+            : null
+        const configLastModifiedDate = this.configLastModified
+            ? new Date(this.configLastModified)
+            : null
+
+        return (
+            isValidDate(configLastModifiedDate) &&
+            isValidDate(lastModifiedHeaderDate) &&
+            lastModifiedHeaderDate <= configLastModifiedDate
+        )
     }
 
     private handleSSEConfig(projectConfig: string) {

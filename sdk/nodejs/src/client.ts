@@ -50,10 +50,14 @@ const castIncomingUser = (user: DevCycleUser) => {
     return user
 }
 
+import { generateClientPopulatedUser } from './clientUser'
+
+import { DevCycleProvider } from './open-feature-provider/DevCycleProvider'
+
 // Dynamically import the OpenFeature Provider, as it's an optional peer dependency
-type DevCycleProviderConstructor =
-    typeof import('./open-feature-provider/DevCycleProvider').DevCycleProvider
-type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
+// type DevCycleProviderConstructor =
+//     typeof import('./open-feature-provider/DevCycleProvider').DevCycleProvider
+// type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
 
 export class DevCycleClient {
     private clientUUID: string
@@ -157,23 +161,23 @@ export class DevCycleClient {
     }
 
     async getOpenFeatureProvider(): Promise<DevCycleProvider> {
-        let DevCycleProviderClass
-
-        try {
-            const importedModule = await import(
-                './open-feature-provider/DevCycleProvider.js'
-            )
-            DevCycleProviderClass = importedModule.DevCycleProvider
-        } catch (error) {
-            throw new Error(
-                'Missing "@openfeature/server-sdk" and/or "@openfeature/core" ' +
-                    'peer dependencies to get OpenFeature Provider',
-            )
-        }
+        // let DevCycleProviderClass
+        //
+        // try {
+        //     const importedModule = await import(
+        //         './open-feature-provider/DevCycleProvider.js'
+        //     )
+        //     DevCycleProviderClass = importedModule.DevCycleProvider
+        // } catch (error) {
+        //     throw new Error(
+        //         'Missing "@openfeature/server-sdk" and/or "@openfeature/core" ' +
+        //             'peer dependencies to get OpenFeature Provider',
+        //     )
+        // }
 
         if (this.openFeatureProvider) return this.openFeatureProvider
 
-        this.openFeatureProvider = new DevCycleProviderClass(this, {
+        this.openFeatureProvider = new DevCycleProvider(this, {
             logger: this.logger,
         })
         return this.openFeatureProvider
@@ -366,9 +370,9 @@ export class DevCycleClient {
         }
 
         try {
-            const { generateClientPopulatedUser } = await import(
-                './clientUser.js'
-            )
+            // const { generateClientPopulatedUser } = await import(
+            //     './clientUser.js'
+            // )
             const populatedUser = generateClientPopulatedUser(
                 incomingUser,
                 userAgent,
