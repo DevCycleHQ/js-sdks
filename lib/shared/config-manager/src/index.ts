@@ -13,12 +13,6 @@ type ConfigPollingOptions = {
     betaEnableRealTimeUpdates?: boolean
 }
 
-enum ConfigFetchState {
-    POLLING,
-    SSE,
-    DISABLED,
-}
-
 type SetIntervalInterface = (handler: () => void, timeout?: number) => any
 type ClearIntervalInterface = (intervalTimeout: any) => void
 type SetConfigBufferInterface = (sdkKey: string, projectConfig: string) => void
@@ -64,7 +58,8 @@ export class EnvironmentConfigManager {
             cdnURI = 'https://config-cdn.devcycle.com',
             clientMode = false,
             betaEnableRealTimeUpdates = false,
-        }: ConfigPollingOptions,
+        }: // TODO: add sse timeout
+        ConfigPollingOptions,
     ) {
         this.clientMode = clientMode
         this.enableRealtimeUpdates = betaEnableRealTimeUpdates
@@ -137,10 +132,10 @@ export class EnvironmentConfigManager {
                 if (!this.configEtag || messageData.etag !== this.configEtag) {
                     this._fetchConfig()
                         .then(() => {
-                            this.logger.debug('Config refetched')
+                            this.logger.debug('Config re-fetched')
                         })
                         .catch((e) => {
-                            this.logger.warn(`Failed to refetch config ${e}`)
+                            this.logger.warn(`Failed to re-fetch config ${e}`)
                         })
 
                     // TODO: switch to config request consolidator? and check for etag / lastModified date
@@ -275,18 +270,7 @@ export class EnvironmentConfigManager {
             return
         } else if (res?.status === 200 && projectConfig) {
             try {
-                // const etag = res?.headers.get('etag') || ''
-                // const lastModified = res?.headers.get('last-modified') || ''
-
-                if (this.enableRealtimeUpdates) {
-                    const configBody = JSON.parse(
-                        projectConfig,
-                    ) as ConfigBody<string>
-                    this.configSSE = configBody.sse
-                    this.startSSE()
-                } else {
-                    this.configSSE = undefined
-                }
+                this.handleSSEConfig(projectConfig)
 
                 this.setConfigBuffer(
                     `${this.sdkKey}${this.clientMode ? '_client' : ''}`,
@@ -315,6 +299,28 @@ export class EnvironmentConfigManager {
             throw new UserError(`Invalid SDK key provided: ${this.sdkKey}`)
         } else {
             throw new Error('Failed to download DevCycle config.')
+        }
+    }
+
+    private handleSSEConfig(projectConfig: string) {
+        if (this.enableRealtimeUpdates) {
+            const configBody = JSON.parse(projectConfig) as ConfigBody<string>
+            const originalConfigSSE = this.configSSE
+            this.configSSE = configBody.sse
+
+            // Reconnect SSE if not first config fetch, and the SSE config has changed
+            if (
+                this.hasConfig &&
+                (!originalConfigSSE ||
+                    originalConfigSSE.hostname !== this.configSSE?.hostname ||
+                    originalConfigSSE.path !== this.configSSE?.path)
+            ) {
+                this.stopSSE()
+                this.startSSE()
+            }
+        } else {
+            this.configSSE = undefined
+            this.stopSSE()
         }
     }
 }
