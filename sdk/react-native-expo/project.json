@@ -15,6 +15,12 @@
         "build": {
             "executor": "@nrwl/rollup:rollup",
             "outputs": ["{options.outputPath}"],
+            "dependsOn": [
+                "shared-types:build",
+                "js:build",
+                "react:build",
+                "react-native:build"
+            ],
             "options": {
                 "outputPath": "dist/sdk/react-native-expo",
                 "tsConfig": "sdk/react-native-expo/tsconfig.lib.json",
