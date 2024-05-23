@@ -86,33 +86,37 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         envConfig.cleanup()
     })
 
-    it('should override the configPollingIntervalMS, configPollingTimeoutMS, and sseConfigPollingIntervalMS settings', async () => {
-        getEnvironmentConfig_mock.mockImplementation(async () =>
-            mockFetchResponse({ status: 200 }),
-        )
+    it(
+        'should override the configPollingIntervalMS, configPollingTimeoutMS, ' +
+            'and sseConfigPollingIntervalMS settings',
+        async () => {
+            getEnvironmentConfig_mock.mockImplementation(async () =>
+                mockFetchResponse({ status: 200 }),
+            )
 
-        const envConfig = getConfigManager(logger, 'sdkKey', {
-            configPollingIntervalMS: 10,
-            configPollingTimeoutMS: 10000,
-            sseConfigPollingIntervalMS: 2 * 60 * 1000,
-        })
-        await envConfig.fetchConfigPromise
-        expect(setInterval_mock).toHaveBeenCalledTimes(1)
-
-        await envConfig._fetchConfig()
-
-        expect(envConfig).toEqual(
-            expect.objectContaining({
-                sdkKey: 'sdkKey',
-                fetchConfigPromise: expect.any(Promise),
-                currentPollingInterval: 1000,
-                configPollingIntervalMS: 1000,
+            const envConfig = getConfigManager(logger, 'sdkKey', {
+                configPollingIntervalMS: 10,
+                configPollingTimeoutMS: 10000,
                 sseConfigPollingIntervalMS: 2 * 60 * 1000,
-                requestTimeoutMS: 1000,
-            }),
-        )
-        envConfig.cleanup()
-    })
+            })
+            await envConfig.fetchConfigPromise
+            expect(setInterval_mock).toHaveBeenCalledTimes(1)
+
+            await envConfig._fetchConfig()
+
+            expect(envConfig).toEqual(
+                expect.objectContaining({
+                    sdkKey: 'sdkKey',
+                    fetchConfigPromise: expect.any(Promise),
+                    currentPollingInterval: 1000,
+                    configPollingIntervalMS: 1000,
+                    sseConfigPollingIntervalMS: 2 * 60 * 1000,
+                    requestTimeoutMS: 1000,
+                }),
+            )
+            envConfig.cleanup()
+        },
+    )
 
     it('should call fetch config on the interval period time', async () => {
         getEnvironmentConfig_mock.mockImplementation(async () =>
