@@ -154,7 +154,9 @@ export class EnvironmentConfigManager {
                     )
                 })
         } catch (e) {
-            this.logger.warn(`Streaming Connection: Unparseable message ${e}`)
+            this.logger.warn(
+                `Streaming Connection: Unparseable message. Error: ${e}, message: ${message}`,
+            )
         }
     }
 
