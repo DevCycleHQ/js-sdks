@@ -77,14 +77,16 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             expect.objectContaining({
                 sdkKey: 'sdkKey',
                 fetchConfigPromise: expect.any(Promise),
-                pollingIntervalMS: 1000,
+                currentPollingInterval: 1000,
+                configPollingIntervalMS: 1000,
+                sseConfigPollingIntervalMS: 10 * 60 * 1000,
                 requestTimeoutMS: 1000,
             }),
         )
         envConfig.cleanup()
     })
 
-    it('should override the configPollingIntervalMS and configPollingTimeoutMS settings', async () => {
+    it('should override the configPollingIntervalMS, configPollingTimeoutMS, and sseConfigPollingIntervalMS settings', async () => {
         getEnvironmentConfig_mock.mockImplementation(async () =>
             mockFetchResponse({ status: 200 }),
         )
@@ -92,6 +94,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         const envConfig = getConfigManager(logger, 'sdkKey', {
             configPollingIntervalMS: 10,
             configPollingTimeoutMS: 10000,
+            sseConfigPollingIntervalMS: 2 * 60 * 1000,
         })
         await envConfig.fetchConfigPromise
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
@@ -102,7 +105,9 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             expect.objectContaining({
                 sdkKey: 'sdkKey',
                 fetchConfigPromise: expect.any(Promise),
-                pollingIntervalMS: 1000,
+                currentPollingInterval: 1000,
+                configPollingIntervalMS: 1000,
+                sseConfigPollingIntervalMS: 2 * 60 * 1000,
                 requestTimeoutMS: 1000,
             }),
         )
@@ -134,7 +139,9 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             expect.objectContaining({
                 sdkKey: 'sdkKey',
                 fetchConfigPromise: expect.any(Promise),
-                pollingIntervalMS: 1000,
+                currentPollingInterval: 1000,
+                configPollingIntervalMS: 1000,
+                sseConfigPollingIntervalMS: 10 * 60 * 1000,
                 requestTimeoutMS: 1000,
             }),
         )
