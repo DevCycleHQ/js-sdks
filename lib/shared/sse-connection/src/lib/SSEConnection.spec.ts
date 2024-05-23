@@ -9,8 +9,11 @@ const mockLogger = {
     info: jest.fn(),
     debug: jest.fn(),
 }
-const mockOnMessage = jest.fn()
-const mockOnConnectionError = jest.fn()
+const mockSSEConnectionFunctions = {
+    onMessage: jest.fn(),
+    onOpen: jest.fn(),
+    onConnectionError: jest.fn(),
+}
 
 describe('SSEConnection', () => {
     beforeAll(() => {
@@ -26,8 +29,7 @@ describe('SSEConnection', () => {
         const connection = new SSEConnection(
             url,
             mockLogger,
-            mockOnMessage,
-            mockOnConnectionError,
+            mockSSEConnectionFunctions,
         )
         expect(EventSource).toHaveBeenCalledWith(url, { withCredentials: true })
         expect(connection.isConnected()).toBe(true)
@@ -37,8 +39,7 @@ describe('SSEConnection', () => {
         const connection = new SSEConnection(
             'http://localhost:8080',
             mockLogger,
-            mockOnMessage,
-            mockOnConnectionError,
+            mockSSEConnectionFunctions,
         )
         connection.close()
         expect(EventSource.prototype.close).toHaveBeenCalled()
@@ -48,8 +49,7 @@ describe('SSEConnection', () => {
         const connection = new SSEConnection(
             'http://localhost:8080',
             mockLogger,
-            mockOnMessage,
-            mockOnConnectionError,
+            mockSSEConnectionFunctions,
         )
         connection.reopen()
         expect(EventSource.prototype.close).toHaveBeenCalled()
