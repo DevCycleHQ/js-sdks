@@ -15,11 +15,7 @@
         "build": {
             "executor": "@nrwl/rollup:rollup",
             "outputs": ["{options.outputPath}"],
-            "dependsOn": [
-                "shared-types:build",
-                "js:build",
-                "react:build"
-            ],
+            "dependsOn": ["shared-types:build", "js:build", "react:build"],
             "options": {
                 "outputPath": "dist/sdk/react-native",
                 "tsConfig": "sdk/react-native/tsconfig.lib.json",
