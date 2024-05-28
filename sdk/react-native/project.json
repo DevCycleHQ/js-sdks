@@ -27,7 +27,6 @@
                 "entryFile": "sdk/react-native/src/index.ts",
                 "format": ["esm", "cjs"],
                 "external": "all",
-                "generateExportsField": true,
                 "rollupConfig": "@nx/react/plugins/bundle-rollup",
                 "compiler": "tsc",
                 "assets": [
