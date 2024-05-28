@@ -4800,8 +4800,8 @@ __metadata:
     react-native-device-info: ^8.7.0
     react-native-get-random-values: ^1.7.2
   peerDependencies:
-    react: ">=16.8.0"
-    react-native: ">=0.64.0"
+    react: ">=18.0.0"
+    react-native: ">=0.69.5"
   languageName: unknown
   linkType: soft
 
@@ -4815,8 +4815,8 @@ __metadata:
     react-native-device-info: ^8.7.0
     react-native-get-random-values: ^1.7.2
   peerDependencies:
-    react: ">=16.8.0"
-    react-native: ">=0.64.0"
+    react: ">=18.0.0"
+    react-native: ">=0.69.5"
   languageName: unknown
   linkType: soft
 
