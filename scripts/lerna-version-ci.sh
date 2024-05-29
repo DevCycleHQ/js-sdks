@@ -100,13 +100,20 @@ yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish"
 RELEASE_TAGS=$(git tag --points-at HEAD)
 
 #  run yarn and add any lockfile changes
+echo -e "::info::Run yarn"
 yarn --no-immutable
 git add yarn.lock
 
 # amend the previous commit with the new lock file. Now the SHA is different and the tags are wrong
+echo -e "::info::Amend previous commit"
 git commit --amend --no-edit --no-verify
 
 # fix the tags by iterating over them and moving them to the new commit
-while IFS= read -r line; do
-  git tag -f "$line" -m "$line"
-done <<< "$RELEASE_TAGS"
+echo -e "::info::Fix the tags: $RELEASE_TAGS"
+if [ -n "$RELEASE_TAGS" ]; then
+  while IFS= read -r line; do
+    git tag -f "$line" -m "$line"
+  done <<< "$RELEASE_TAGS"
+else
+  echo -e "::info::No tags to fix."
+fi
