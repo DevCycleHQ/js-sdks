@@ -23,7 +23,7 @@ type TrackSDKConfigEventInterface = (
 ) => void
 
 export class EnvironmentConfigManager {
-    private hasConfig = false
+    hasConfig = false
     configEtag?: string
     configLastModified?: string
     private readonly pollingIntervalMS: number
