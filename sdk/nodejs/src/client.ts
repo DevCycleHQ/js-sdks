@@ -138,7 +138,6 @@ export class DevCycleClient {
         this.onInitialized = initializePromise
             .then(() => {
                 this.logger.info('DevCycle initialized')
-                this._isInitialized = true
                 return this
             })
             .catch((err) => {
@@ -147,6 +146,9 @@ export class DevCycleClient {
                     throw err
                 }
                 return this
+            })
+            .finally(() => {
+                this._isInitialized = true
             })
 
         process.on('exit', () => {
@@ -209,9 +211,9 @@ export class DevCycleClient {
         )
         const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
 
-        if (!this._isInitialized) {
+        if (!this.configHelper.hasConfig) {
             this.logger.warn(
-                'variable called before DevCycleClient initialized, returning default value',
+                'variable called before DevCycleClient has config, returning default value',
             )
 
             this.eventQueue?.queueAggregateEvent(populatedUser, {
@@ -263,9 +265,9 @@ export class DevCycleClient {
     allVariables(user: DevCycleUser): DVCVariableSet {
         const incomingUser = castIncomingUser(user)
 
-        if (!this._isInitialized) {
+        if (!this.configHelper.hasConfig) {
             this.logger.warn(
-                'allVariables called before DevCycleClient initialized',
+                'allVariables called before DevCycleClient has config',
             )
             return {}
         }
@@ -278,9 +280,9 @@ export class DevCycleClient {
     allFeatures(user: DevCycleUser): DVCFeatureSet {
         const incomingUser = castIncomingUser(user)
 
-        if (!this._isInitialized) {
+        if (!this.configHelper.hasConfig) {
             this.logger.warn(
-                'allFeatures called before DevCycleClient initialized',
+                'allFeatures called before DevCycleClient has config',
             )
             return {}
         }
