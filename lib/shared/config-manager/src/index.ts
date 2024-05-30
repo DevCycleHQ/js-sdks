@@ -168,10 +168,10 @@ export class EnvironmentConfigManager {
     }
 
     private startPolling(pollingInterval: number): void {
-        if (
-            this.intervalTimeout &&
-            pollingInterval !== this.currentPollingInterval
-        ) {
+        if (this.intervalTimeout) {
+            if (pollingInterval === this.currentPollingInterval) {
+                return
+            }
             // clear existing polling interval
             this.stopPolling()
         }

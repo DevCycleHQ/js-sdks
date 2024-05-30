@@ -21,7 +21,7 @@ export class SSEConnection {
     private openConnection() {
         if (typeof EventSource === 'undefined') {
             this.logger.warn(
-                'StreamingConnection not opened. EventSource is not available.',
+                'SSEConnection not opened. EventSource is not available.',
             )
             return
         }
@@ -29,14 +29,14 @@ export class SSEConnection {
         this.connection.onmessage = (event) => {
             this.callbacks.onMessage(event.data)
         }
-        this.connection.onerror = () => {
+        this.connection.onerror = (err) => {
             this.logger.warn(
-                'StreamingConnection warning. Connection failed to establish.',
+                `SSEConnection warning. Connection failed to establish. Error status: ${err.status}`,
             )
             this.callbacks.onConnectionError()
         }
         this.connection.onopen = () => {
-            this.logger.debug('StreamingConnection opened')
+            this.logger.debug('SSEConnection opened')
             this.callbacks.onOpen()
         }
     }

@@ -2,6 +2,17 @@ jest.mock('../src/request')
 jest.useFakeTimers()
 jest.spyOn(global, 'setInterval')
 
+const mockEventSourceMethods = {
+    onmessage: jest.fn(),
+    onerror: jest.fn(),
+    onopen: jest.fn(),
+    close: jest.fn(),
+}
+const MockEventSource = jest
+    .fn()
+    .mockImplementation(() => mockEventSourceMethods)
+jest.mock('eventsource', () => MockEventSource)
+
 import { EnvironmentConfigManager } from '../src'
 import { mocked } from 'jest-mock'
 import { Response } from 'cross-fetch'
@@ -39,20 +50,23 @@ function getConfigManager(
 
 describe('EnvironmentConfigManager Unit Tests', () => {
     beforeEach(() => {
-        getEnvironmentConfig_mock.mockReset()
-        setInterval_mock.mockReset()
+        jest.clearAllMocks()
     })
 
-    function mockFetchResponse(obj: any): Response {
+    function mockFetchResponse(
+        obj: any,
+        bodyStr?: string,
+        headers?: HeadersInit,
+    ): Response {
         if (obj.status >= 400) {
             const error = new ResponseError('')
             error.status = obj.status
             throw error
         }
-        return new Response('{}', {
+        return new Response(bodyStr ?? '{}', {
             status: 200,
             statusText: '',
-            headers: {},
+            headers: headers ?? {},
             config: {},
             ...obj,
         })
@@ -233,5 +247,125 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         const envConfig = getConfigManager(logger, 'sdkKey', {})
         await expect(envConfig.fetchConfigPromise).rejects.toThrow()
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
+    })
+
+    describe('SSE Connection', () => {
+        const lastModifiedDate = new Date()
+        const connectToSSE = async (config?: string) => {
+            getEnvironmentConfig_mock.mockImplementation(async () =>
+                mockFetchResponse(
+                    {
+                        status: 200,
+                        headers: {
+                            etag: 'etag-1',
+                            'last-modified': lastModifiedDate.toISOString(),
+                        },
+                    },
+                    config ??
+                        JSON.stringify({
+                            sse: {
+                                path: 'sse-path',
+                                hostname: 'https://sse.devcycle.com',
+                            },
+                        }),
+                ),
+            )
+
+            const envConfig = getConfigManager(logger, 'sdkKey', {
+                configPollingIntervalMS: 1000,
+                configPollingTimeoutMS: 1000,
+                enableBetaRealTimeUpdates: true,
+            })
+            await envConfig.fetchConfigPromise
+            return envConfig
+        }
+
+        it('should call fetch config if SSE connection is established after 10 min', async () => {
+            const envConfig = await connectToSSE()
+            mockEventSourceMethods.onopen()
+
+            expect(setInterval_mock).toHaveBeenCalledTimes(2)
+            expect(getEnvironmentConfig_mock).toBeCalledTimes(1)
+            expect(MockEventSource).toBeCalledTimes(1)
+
+            jest.advanceTimersByTime(10 * 60 * 1000)
+            expect(getEnvironmentConfig_mock).toBeCalledTimes(2)
+
+            envConfig.cleanup()
+        })
+
+        it('should not connect to SSE if no config.see', async () => {
+            const envConfig = await connectToSSE('{}')
+
+            expect(setInterval_mock).toHaveBeenCalledTimes(1)
+            expect(getEnvironmentConfig_mock).toBeCalledTimes(1)
+            expect(MockEventSource).not.toHaveBeenCalled()
+
+            envConfig.cleanup()
+        })
+
+        it('should continue polling and stop SSE if connection fails', async () => {
+            const envConfig = await connectToSSE()
+            mockEventSourceMethods.onerror({ status: 401 })
+
+            expect(setInterval_mock).toHaveBeenCalledTimes(1)
+            expect(getEnvironmentConfig_mock).toBeCalledTimes(1)
+            expect(mockEventSourceMethods.close).toBeCalledTimes(1)
+
+            jest.advanceTimersByTime(1000)
+            expect(setInterval_mock).toHaveBeenCalledTimes(1)
+            expect(getEnvironmentConfig_mock).toBeCalledTimes(2)
+
+            envConfig.cleanup()
+        })
+
+        it('should process SSE messages and fetch new config', async () => {
+            const envConfig = await connectToSSE()
+            mockEventSourceMethods.onopen()
+            expect(getEnvironmentConfig_mock).toBeCalledTimes(1)
+
+            mockEventSourceMethods.onmessage({
+                data: JSON.stringify({
+                    data: JSON.stringify({
+                        type: 'refetchConfig',
+                        etag: 'etag-2',
+                        lastModified: new Date().toISOString(),
+                    }),
+                }),
+            })
+            jest.advanceTimersByTime(1000)
+            expect(getEnvironmentConfig_mock).toBeCalledTimes(2)
+
+            envConfig.cleanup()
+        })
+
+        it('should skip SSE message if older last modified date is received', async () => {
+            const envConfig = await connectToSSE()
+            mockEventSourceMethods.onopen()
+            expect(getEnvironmentConfig_mock).toBeCalledTimes(1)
+
+            const oldLastModifiedDate = new Date(
+                lastModifiedDate.getTime() - 1000,
+            )
+            mockEventSourceMethods.onmessage({
+                data: JSON.stringify({
+                    data: JSON.stringify({
+                        type: 'refetchConfig',
+                        etag: 'etag-2',
+                        lastModified: oldLastModifiedDate.toISOString(),
+                    }),
+                }),
+            })
+            jest.advanceTimersByTime(1000)
+            expect(getEnvironmentConfig_mock).toBeCalledTimes(1)
+
+            envConfig.cleanup()
+        })
+
+        it('should skip fetching config if older last modified date is received', async () => {})
+
+        it('should handle SSE connection failures after initial connection and reconnect', async () => {})
+
+        it('should re-connect SSE if path changes', async () => {})
     })
 })
