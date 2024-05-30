@@ -138,7 +138,6 @@ export class DevCycleClient {
         this.onInitialized = initializePromise
             .then(() => {
                 this.logger.info('DevCycle initialized')
-                this._isInitialized = true
                 return this
             })
             .catch((err) => {
@@ -146,8 +145,10 @@ export class DevCycleClient {
                 if (err instanceof UserError) {
                     throw err
                 }
-                this._isInitialized = true
                 return this
+            })
+            .finally(() => {
+                this._isInitialized = true
             })
 
         process.on('exit', () => {

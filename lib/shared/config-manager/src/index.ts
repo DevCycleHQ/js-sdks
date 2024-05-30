@@ -23,7 +23,7 @@ type TrackSDKConfigEventInterface = (
 ) => void
 
 export class EnvironmentConfigManager {
-    hasConfig = false
+    private _hasConfig = false
     configEtag?: string
     configLastModified?: string
     private readonly pollingIntervalMS: number
@@ -75,7 +75,9 @@ export class EnvironmentConfigManager {
                 }, this.pollingIntervalMS)
             })
     }
-
+    get hasConfig(): boolean {
+        return this._hasConfig
+    }
     stopPolling(): void {
         this.disablePolling = true
         this.clearInterval(this.intervalTimeout)
@@ -106,7 +108,7 @@ export class EnvironmentConfigManager {
             const errMsg =
                 `Request to get config failed for url: ${url}, ` +
                 `response message: ${error.message}, response data: ${projectConfig}`
-            if (this.hasConfig) {
+            if (this._hasConfig) {
                 this.logger.warn(errMsg)
             } else {
                 this.logger.error(errMsg)
@@ -165,7 +167,7 @@ export class EnvironmentConfigManager {
                     `${this.sdkKey}${this.clientMode ? '_client' : ''}`,
                     projectConfig,
                 )
-                this.hasConfig = true
+                this._hasConfig = true
                 this.configEtag = res?.headers.get('etag') || ''
                 this.configLastModified =
                     res?.headers.get('last-modified') || ''
@@ -179,7 +181,7 @@ export class EnvironmentConfigManager {
             }
         }
 
-        if (this.hasConfig) {
+        if (this._hasConfig) {
             this.logger.warn(
                 `Failed to download config, using cached version. url: ${url}.`,
             )

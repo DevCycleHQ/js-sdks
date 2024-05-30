@@ -4,7 +4,30 @@ import { DevCycleClient } from '../src/client'
 import { DevCycleUser } from '@devcycle/js-cloud-server-sdk'
 
 jest.mock('../src/bucketing')
-jest.mock('@devcycle/config-manager')
+jest.mock('@devcycle/config-manager', () => {
+    return {
+        EnvironmentConfigManager: class {
+            hasConfig: boolean
+            config: unknown
+
+            constructor() {
+                this.hasConfig = true // Set hasConfig to true in the constructor
+            }
+
+            cleanup(): void {
+                return
+            }
+
+            getConfigURL(): string {
+                return 'url'
+            }
+
+            async _fetchConfig(): Promise<void> {
+                this.config = {}
+            }
+        },
+    }
+})
 jest.mock('../src/eventQueue')
 
 describe('DevCycleClient', () => {
