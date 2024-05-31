@@ -125,11 +125,11 @@
         }
     },
     "release": {
-     "projects": ["sdk/*", "!sdk/openfeature-web-provider"],
-     "projectsRelationship": "independent",
-     "version": {
-        "conventionalCommits": true,
-        "currentVersionResolver": "registry"
-      }
+        "projects": ["sdk/*", "!sdk/openfeature-web-provider"],
+        "projectsRelationship": "independent",
+        "version": {
+            "conventionalCommits": true,
+            "currentVersionResolver": "registry"
+        }
     }
 }

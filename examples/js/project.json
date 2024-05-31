@@ -22,7 +22,8 @@
                     "examples/js/src/assets"
                 ],
                 "styles": ["examples/js/src/styles.css"],
-                "scripts": []
+                "scripts": [],
+                "webpackConfig": "examples/js/webpack.config.js"
             },
             "configurations": {
                 "production": {
