@@ -340,6 +340,7 @@ export class EnvironmentConfigManager {
             if (
                 this.hasConfig &&
                 (!originalConfigSSE ||
+                    !this.sseConnection ||
                     originalConfigSSE.hostname !== this.configSSE?.hostname ||
                     originalConfigSSE.path !== this.configSSE?.path)
             ) {

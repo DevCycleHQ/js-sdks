@@ -51,7 +51,10 @@ function getConfigManager(
 describe('EnvironmentConfigManager Unit Tests', () => {
     beforeEach(() => {
         jest.clearAllMocks()
+        jest.clearAllTimers()
     })
+
+    const lastModifiedDate = new Date()
 
     function mockFetchResponse(
         obj: any,
@@ -219,7 +222,14 @@ describe('EnvironmentConfigManager Unit Tests', () => {
     it('should use cached config if fetching config fails', async () => {
         const config = { config: {} }
         getEnvironmentConfig_mock.mockImplementation(async () =>
-            mockFetchResponse({ status: 200, data: config }),
+            mockFetchResponse({
+                status: 200,
+                data: config,
+                headers: {
+                    etag: 'etag-1',
+                    'last-modified': lastModifiedDate.toISOString(),
+                },
+            }),
         )
 
         const envConfig = getConfigManager(logger, 'sdkKey', {
@@ -228,6 +238,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         })
         await envConfig.fetchConfigPromise
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
+        expect(envConfig.configEtag).toEqual('etag-1')
         await envConfig._fetchConfig()
 
         getEnvironmentConfig_mock.mockImplementation(async () =>
@@ -235,8 +246,10 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         )
         await envConfig._fetchConfig()
 
-        envConfig.cleanup()
+        expect(envConfig.configEtag).toEqual('etag-1')
         expect(getEnvironmentConfig_mock).toBeCalledTimes(3)
+
+        envConfig.cleanup()
     })
 
     it('should start interval if initial config fails', async () => {
@@ -247,6 +260,86 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         const envConfig = getConfigManager(logger, 'sdkKey', {})
         await expect(envConfig.fetchConfigPromise).rejects.toThrow()
         expect(setInterval_mock).toHaveBeenCalledTimes(1)
+    })
+
+    it('should skip fetching config if older last modified date is received', async () => {
+        const config = { config: {} }
+        getEnvironmentConfig_mock.mockImplementation(async () =>
+            mockFetchResponse({
+                status: 200,
+                data: config,
+                headers: {
+                    etag: 'etag-1',
+                    'last-modified': lastModifiedDate.toISOString(),
+                },
+            }),
+        )
+
+        const envConfig = getConfigManager(logger, 'sdkKey', {
+            configPollingIntervalMS: 1000,
+            configPollingTimeoutMS: 1000,
+        })
+        await envConfig.fetchConfigPromise
+        await envConfig._fetchConfig()
+        expect(envConfig.configEtag).toEqual('etag-1')
+
+        getEnvironmentConfig_mock.mockImplementation(async () =>
+            mockFetchResponse({
+                status: 200,
+                data: config,
+                headers: {
+                    etag: 'etag-2',
+                    'last-modified': new Date(
+                        lastModifiedDate.getTime() - 10000,
+                    ).toISOString(),
+                },
+            }),
+        )
+        await envConfig._fetchConfig()
+        expect(envConfig.configEtag).toEqual('etag-1')
+        expect(getEnvironmentConfig_mock).toBeCalledTimes(3)
+
+        envConfig.cleanup()
+    })
+
+    it('should keep updated config if etag and last modified date are newer', async () => {
+        const config = { config: {} }
+        getEnvironmentConfig_mock.mockImplementation(async () =>
+            mockFetchResponse({
+                status: 200,
+                data: config,
+                headers: {
+                    etag: 'etag-1',
+                    'last-modified': lastModifiedDate.toISOString(),
+                },
+            }),
+        )
+
+        const envConfig = getConfigManager(logger, 'sdkKey', {
+            configPollingIntervalMS: 1000,
+            configPollingTimeoutMS: 1000,
+        })
+        await envConfig.fetchConfigPromise
+        await envConfig._fetchConfig()
+        expect(envConfig.configEtag).toEqual('etag-1')
+
+        getEnvironmentConfig_mock.mockImplementation(async () =>
+            mockFetchResponse({
+                status: 200,
+                data: config,
+                headers: {
+                    etag: 'etag-2',
+                    'last-modified': new Date(
+                        lastModifiedDate.getTime() + 10000,
+                    ).toISOString(),
+                },
+            }),
+        )
+        await envConfig._fetchConfig()
+        expect(envConfig.configEtag).toEqual('etag-2')
+        expect(getEnvironmentConfig_mock).toBeCalledTimes(3)
+
+        envConfig.cleanup()
     })
 
     describe('SSE Connection', () => {
@@ -329,11 +422,13 @@ describe('EnvironmentConfigManager Unit Tests', () => {
                     data: JSON.stringify({
                         type: 'refetchConfig',
                         etag: 'etag-2',
-                        lastModified: new Date().toISOString(),
+                        lastModified: new Date(
+                            lastModifiedDate.getTime() + 1000,
+                        ).toISOString(),
                     }),
                 }),
             })
-            jest.advanceTimersByTime(1000)
+            jest.advanceTimersByTime(1005)
             expect(getEnvironmentConfig_mock).toBeCalledTimes(2)
 
             envConfig.cleanup()
@@ -362,10 +457,93 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             envConfig.cleanup()
         })
 
-        it('should skip fetching config if older last modified date is received', async () => {})
+        it('should handle SSE connection failures after initial connection and reconnect', async () => {
+            const envConfig = await connectToSSE()
+            mockEventSourceMethods.onopen()
+            expect(getEnvironmentConfig_mock).toBeCalledTimes(1)
+            expect(envConfig.configEtag).toEqual('etag-1')
 
-        it('should handle SSE connection failures after initial connection and reconnect', async () => {})
+            jest.advanceTimersByTime(10000)
+            getEnvironmentConfig_mock.mockImplementation(async () =>
+                mockFetchResponse(
+                    {
+                        status: 200,
+                        data: { config: {} },
+                        headers: {
+                            etag: 'etag-2',
+                            'last-modified': new Date(
+                                lastModifiedDate.getTime() + 10000,
+                            ).toISOString(),
+                        },
+                    },
+                    JSON.stringify({
+                        sse: {
+                            path: 'sse-path',
+                            hostname: 'https://sse.devcycle.com',
+                        },
+                    }),
+                ),
+            )
+            mockEventSourceMethods.onerror({ status: 500 })
+            expect(mockEventSourceMethods.close).toBeCalledTimes(1)
 
-        it('should re-connect SSE if path changes', async () => {})
+            jest.advanceTimersByTime(1000)
+            // Have to use real timers here to allow the event loop to
+            // process the fetch call that is happening from the setTimeout
+            jest.useRealTimers()
+            await new Promise((resolve) => setTimeout(resolve, 10))
+
+            expect(getEnvironmentConfig_mock).toBeCalledTimes(2)
+            expect(MockEventSource).toBeCalledTimes(2)
+            expect(envConfig.configEtag).toEqual('etag-2')
+
+            jest.useFakeTimers()
+        })
+
+        it('should re-connect SSE if path changes', async () => {
+            const envConfig = await connectToSSE()
+            mockEventSourceMethods.onopen()
+            expect(getEnvironmentConfig_mock).toBeCalledTimes(1)
+            expect(envConfig.configEtag).toEqual('etag-1')
+
+            const newLastModifiedDate = new Date(
+                lastModifiedDate.getTime() + 1000,
+            )
+            getEnvironmentConfig_mock.mockImplementation(async () =>
+                mockFetchResponse(
+                    {
+                        status: 200,
+                        headers: {
+                            etag: 'etag-2',
+                            'last-modified': newLastModifiedDate.toISOString(),
+                        },
+                    },
+                    JSON.stringify({
+                        sse: {
+                            path: 'sse-path-2',
+                            hostname: 'https://sse.devcycle.com',
+                        },
+                    }),
+                ),
+            )
+            mockEventSourceMethods.onmessage({
+                data: JSON.stringify({
+                    data: JSON.stringify({
+                        type: 'refetchConfig',
+                        etag: 'etag-2',
+                        lastModified: newLastModifiedDate.toISOString(),
+                    }),
+                }),
+            })
+            jest.advanceTimersByTime(1000)
+            jest.useRealTimers()
+            await new Promise((resolve) => setTimeout(resolve, 10))
+
+            expect(mockEventSourceMethods.close).toBeCalledTimes(1)
+            expect(MockEventSource).toBeCalledTimes(2)
+            expect(envConfig.configEtag).toEqual('etag-2')
+
+            jest.useFakeTimers()
+        })
     })
 })
