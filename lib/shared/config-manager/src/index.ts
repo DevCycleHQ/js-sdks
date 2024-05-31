@@ -191,7 +191,6 @@ export class EnvironmentConfigManager {
     }
 
     private stopPolling(): void {
-        this.disablePolling = true
         this.clearInterval(this.intervalTimeout)
         this.intervalTimeout = null
     }
