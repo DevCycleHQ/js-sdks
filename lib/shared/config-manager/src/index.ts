@@ -23,6 +23,7 @@ type TrackSDKConfigEventInterface = (
     err?: ResponseError,
     reqEtag?: string,
     reqLastModified?: string,
+    sseConnected?: boolean,
 ) => void
 
 const isValidDate = (date: Date | null): date is Date =>
@@ -154,8 +155,8 @@ export class EnvironmentConfigManager {
                     )
                 })
         } catch (e) {
-            this.logger.warn(
-                `Streaming Connection: Unparseable message. Error: ${e}, message: ${message}`,
+            this.logger.debug(
+                `SSE Message Error: Unparseable message. Error: ${e}, message: ${message}`,
             )
         }
     }
@@ -237,6 +238,7 @@ export class EnvironmentConfigManager {
                     err,
                     reqEtag,
                     reqLastModified,
+                    this.sseConnection?.isConnected() ?? false,
                 )
             }
         }

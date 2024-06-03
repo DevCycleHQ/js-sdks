@@ -173,6 +173,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             undefined,
             undefined,
             undefined,
+            false,
         )
         expect(getEnvironmentConfig_mock).toBeCalledTimes(3)
     })
@@ -195,6 +196,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             }),
             undefined,
             undefined,
+            false,
         )
     })
 
