@@ -20,6 +20,7 @@ export const exponentialBackoff: RequestInitWithRetry['retryDelay'] = (
     return delay + randomSum
 }
 
+export type RequestInitConfig = RequestInit | RequestInitWithRetry
 type retryOnRequestErrorFunc = (
     retries: number,
 ) => RequestInitWithRetry['retryOn']

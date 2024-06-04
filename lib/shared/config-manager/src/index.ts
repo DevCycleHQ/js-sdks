@@ -1,5 +1,5 @@
 import { ConfigBody, DVCLogger } from '@devcycle/types'
-import { getEnvironmentConfig } from './request'
+import { getEnvironmentConfig, isValidDate } from './request'
 import { ResponseError, UserError } from '@devcycle/server-request'
 import { SSEConnection } from '@devcycle/sse-connection'
 
@@ -25,9 +25,6 @@ type TrackSDKConfigEventInterface = (
     reqLastModified?: string,
     sseConnected?: boolean,
 ) => void
-
-const isValidDate = (date: Date | null): date is Date =>
-    date instanceof Date && !isNaN(date.getTime())
 
 export class EnvironmentConfigManager {
     private _hasConfig = false
@@ -127,25 +124,24 @@ export class EnvironmentConfigManager {
         try {
             const parsedMessage = JSON.parse(message as string)
             const messageData = JSON.parse(parsedMessage.data)
+            if (!messageData) return
+            const { type, etag, lastModified } = messageData
 
-            if (
-                !messageData ||
-                !(!messageData.type || messageData.type === 'refetchConfig')
-            ) {
+            if (!(!type || type === 'refetchConfig')) {
                 return
             }
-            if (this.configEtag && messageData.etag === this.configEtag) {
+            if (this.configEtag && etag === this.configEtag) {
                 return
             }
 
-            if (this.isLastModifiedHeaderOld(messageData.lastModified)) {
+            if (this.isLastModifiedHeaderOld(lastModified)) {
                 this.logger.debug(
                     'Skipping SSE message, config last modified is newer. ',
                 )
                 return
             }
 
-            this._fetchConfig()
+            this._fetchConfig(lastModified)
                 .then(() => {
                     this.logger.debug('Config re-fetched from SSE message')
                 })
@@ -208,15 +204,15 @@ export class EnvironmentConfigManager {
         return `${this.cdnURI}/config/v1/server/${this.sdkKey}.json`
     }
 
-    async _fetchConfig(): Promise<void> {
+    async _fetchConfig(sseLastModified?: string): Promise<void> {
         const url = this.getConfigURL()
         let res: Response | null
         let projectConfig: string | null = null
         let responseError: ResponseError | null = null
         const startTime = Date.now()
         let responseTimeMS = 0
-        const reqEtag = this.configEtag
-        const reqLastModified = this.configLastModified
+        const currentEtag = this.configEtag
+        const currentLastModified = this.configLastModified
 
         const logError = (error: any) => {
             const errMsg =
@@ -236,8 +232,8 @@ export class EnvironmentConfigManager {
                     responseTimeMS,
                     res || undefined,
                     err,
-                    reqEtag,
-                    reqLastModified,
+                    currentEtag,
+                    currentLastModified,
                     this.sseConnection?.isConnected() ?? false,
                 )
             }
@@ -248,12 +244,14 @@ export class EnvironmentConfigManager {
                 `Requesting new config for ${url}, etag: ${this.configEtag}` +
                     `, last-modified: ${this.configLastModified}`,
             )
-            res = await getEnvironmentConfig(
+            res = await getEnvironmentConfig({
+                logger: this.logger,
                 url,
-                this.requestTimeoutMS,
-                reqEtag,
-                reqLastModified,
-            )
+                requestTimeout: this.requestTimeoutMS,
+                currentEtag,
+                currentLastModified,
+                sseLastModified,
+            })
             responseTimeMS = Date.now() - startTime
             projectConfig = await res.text()
             this.logger.debug(

@@ -1,24 +1,77 @@
 import { getWithTimeout } from '@devcycle/server-request'
+import { RequestInitWithRetry } from 'fetch-retry'
+import { DVCLogger } from '@devcycle/types'
 
-export async function getEnvironmentConfig(
-    url: string,
-    requestTimeout: number,
-    etag?: string,
-    lastModified?: string,
-): Promise<Response> {
+export const isValidDate = (date: Date | null): date is Date =>
+    date instanceof Date && !isNaN(date.getTime())
+
+export async function getEnvironmentConfig({
+    logger,
+    url,
+    requestTimeout,
+    currentEtag,
+    currentLastModified,
+    sseLastModified,
+}: {
+    logger: DVCLogger
+    url: string
+    requestTimeout: number
+    currentEtag?: string
+    currentLastModified?: string
+    sseLastModified?: string
+}): Promise<Response> {
     const headers: Record<string, string> = {}
-    if (etag) {
-        headers['If-None-Match'] = etag
+    const retries = 2
+
+    let retryOn: RequestInitWithRetry['retryOn'] | undefined
+    const sseLastModifiedDate = sseLastModified
+        ? new Date(sseLastModified)
+        : null
+
+    // Retry fetching config if the Last-Modified header is older than
+    // the requiredLastModified from the SSE message
+    if (sseLastModified && isValidDate(sseLastModifiedDate)) {
+        retryOn = (attempt, error, response) => {
+            if (attempt >= retries) {
+                return false
+            } else if (response && response?.status === 200) {
+                const lastModifiedHeader =
+                    response?.headers.get('Last-Modified')
+                const lastModifiedHeaderDate = lastModifiedHeader
+                    ? new Date(lastModifiedHeader)
+                    : null
+
+                if (
+                    isValidDate(lastModifiedHeaderDate) &&
+                    lastModifiedHeaderDate < sseLastModifiedDate
+                ) {
+                    logger.debug(
+                        `Retry fetching config, last modified is old: ${lastModifiedHeader}` +
+                            `, sse last modified: ${sseLastModified}`,
+                    )
+                    return true
+                }
+                return false
+            } else if (response && response?.status < 500) {
+                return false
+            }
+
+            return true
+        }
     }
-    if (lastModified) {
-        headers['If-Modified-Since'] = lastModified
+    if (currentEtag) {
+        headers['If-None-Match'] = currentEtag
+    }
+    if (currentLastModified) {
+        headers['If-Modified-Since'] = currentLastModified
     }
 
     return await getWithTimeout(
         url,
         {
             headers: headers,
-            retries: 1,
+            retries,
+            retryOn,
         },
         requestTimeout,
     )
