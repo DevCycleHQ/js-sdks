@@ -31,7 +31,9 @@ export class SSEConnection {
         }
         this.connection.onerror = (err) => {
             this.logger.warn(
-                `SSEConnection warning. Connection failed. Error status: ${err.status}`,
+                `SSEConnection warning. Connection failed. Error status: ${
+                    err.status
+                }, message: ${(err as any).message}`,
             )
             this.callbacks.onConnectionError()
         }
