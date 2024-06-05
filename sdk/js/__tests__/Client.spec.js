@@ -476,6 +476,49 @@ describe('DevCycleClient tests', () => {
             expect(variable.value).toEqual(cachedConfig.variables.key.value)
             expect(onUpdate).toBeCalledTimes(1)
         })
+
+        it('should emit configUpdated event if debug user and etag matches', async () => {
+            const debugUserTestConfig = Object.assign({}, testConfig)
+            debugUserTestConfig.etag = 'test_etag'
+            debugUserTestConfig.sse = {
+                url: 'dvc_user',
+            }
+            client = createClientWithConfigImplementation(() => {
+                return Promise.resolve(debugUserTestConfig)
+            })
+
+            const onUpdate = jest.fn()
+            client.subscribe('configUpdated', onUpdate)
+            await client.onClientInitialized()
+            // trigger 2nd config call to check if etag matches
+            await client.identifyUser({
+                user_id: 'debugUser',
+            })
+            // called once for initial config fetch and again for etag match
+            // after identifying
+            expect(onUpdate).toBeCalledTimes(2)
+        })
+
+        it('should NOT emit configUpdated event if non-debug user and etag matches', async () => {
+            const normalUserTestConfig = Object.assign({}, testConfig)
+            normalUserTestConfig.etag = 'test_etag'
+            normalUserTestConfig.sse = {
+                url: 'dvc_client',
+            }
+            client = createClientWithConfigImplementation(() => {
+                return Promise.resolve(normalUserTestConfig)
+            })
+
+            const onUpdate = jest.fn()
+            client.subscribe('configUpdated', onUpdate)
+            await client.onClientInitialized()
+            // trigger 2nd config call to check if etag matches
+            await client.identifyUser({
+                user_id: 'debugUser',
+            })
+            // only called for initial config fetch
+            expect(onUpdate).toBeCalledTimes(1)
+        })
     })
 
     describe('identifyUser', () => {
