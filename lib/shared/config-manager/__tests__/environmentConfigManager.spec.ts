@@ -1,6 +1,14 @@
-jest.mock('../src/request')
 jest.useFakeTimers()
 jest.spyOn(global, 'setInterval')
+
+const getEnvironmentConfig_mock = jest.fn()
+jest.doMock('../src/request', () => {
+    const originalModule = jest.requireActual('../src/request')
+    return {
+        ...originalModule,
+        getEnvironmentConfig: getEnvironmentConfig_mock,
+    }
+})
 
 const mockEventSourceMethods = {
     onmessage: jest.fn(),
@@ -17,11 +25,9 @@ import { EnvironmentConfigManager } from '../src'
 import { mocked } from 'jest-mock'
 import { Response } from 'cross-fetch'
 import { DVCLogger, DevCycleServerSDKOptions } from '@devcycle/types'
-import { getEnvironmentConfig } from '../src/request'
 import { ResponseError } from '@devcycle/server-request'
 
 const setInterval_mock = mocked(setInterval)
-const getEnvironmentConfig_mock = mocked(getEnvironmentConfig)
 const trackSDKConfigEvent_mock = jest.fn()
 const logger = {
     error: jest.fn(),
@@ -442,7 +448,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             expect(getEnvironmentConfig_mock).toBeCalledTimes(1)
 
             const oldLastModifiedDate = new Date(
-                lastModifiedDate.getTime() - 1000,
+                lastModifiedDate.getTime() - 100000,
             )
             mockEventSourceMethods.onmessage({
                 data: JSON.stringify({
