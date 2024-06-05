@@ -277,7 +277,7 @@ export class EnvironmentConfigManager {
         } else if (res?.status === 200 && projectConfig) {
             const lastModifiedHeader = res?.headers.get('last-modified')
             if (this.isLastModifiedHeaderOld(lastModifiedHeader)) {
-                this.logger.warn(
+                this.logger.debug(
                     'Skipping saving config, existing last modified date is newer.',
                 )
                 return
