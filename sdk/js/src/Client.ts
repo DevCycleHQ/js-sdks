@@ -700,8 +700,11 @@ export class DevCycleClient<
             config.variables,
             this.variableDefaultMap,
         )
-
-        if (!oldConfig || oldConfig.etag !== this.config.etag) {
+        // The URL including dvc_user means that this user is subscribed to a user specific ably channel
+        // This means that the user is a debug user and we should emit a config update event even if the etag
+        // is the same.
+        const isDebugUser = this.config?.sse?.url?.includes('dvc_user')
+        if (!oldConfig || isDebugUser || oldConfig.etag !== this.config.etag) {
             this.eventEmitter.emitConfigUpdate(config.variables)
         }
     }
