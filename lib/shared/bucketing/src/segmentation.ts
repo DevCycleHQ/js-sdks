@@ -324,6 +324,10 @@ export const checkStringsFilter = (
                 (!isString(string) ||
                     !find(values, (value) => includes(string, value)))
             )
+        case 'startsWith':
+            return !!values && isString(string) && values.some(value => isString(value) && string.startsWith(value))
+        case 'endsWith' :
+            return !!values && isString(string) && values.some(value => isString(value) && string.endsWith(value))
     }
     return isString(string)
 }
@@ -395,30 +399,6 @@ export const checkCustomData = (
     }
     return true
 }
-
-// const checkListAudienceFilterOrOperator = ({ values = [], data, comparator }) => {
-//     const isInListAudience = values.some((value) => {
-//         if (!isObject(value)) {
-//             throw new Error('ListAudience filter must be an object, has not been prepared for segmentation')
-//         }
-//         return data.some((datum) => isEqual(datum, value))
-//     })
-//
-//     return comparator === '=' ? !!isInListAudience : !isInListAudience
-// }
-// exports.checkListAudienceFilter = checkListAudienceFilter
-
-//
-// const checkListAudienceFields = (data, filters) => {
-//     if (!filters || !filters.length) return true
-//
-//     return filters.every((filter) => {
-//         const values = getFilterValues(filter)
-//         const comparator = filter.comparator
-//         return checkListAudienceFilter({ data, values, comparator })
-//     })
-// }
-// exports.checkListAudienceFields = checkListAudienceFields
 
 export const getFilterValues = (
     filter: AudienceFilterOrOperator,

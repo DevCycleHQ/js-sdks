@@ -232,11 +232,11 @@ export function checkVersionFilter(
     return !not ? passed : !passed
 }
 
-export function _checkNumberFilter(num: f64, filterNums: f64[], operator: string | null): bool {
-    if (operator && isString(operator)) {
-        if (operator === 'exist') {
+export function _checkNumberFilter(num: f64, filterNums: f64[], comparator: string | null): bool {
+    if (comparator && isString(comparator)) {
+        if (comparator === 'exist') {
             return !isNaN(num)
-        } else if (operator === '!exist') {
+        } else if (comparator === '!exist') {
             return isNaN(num)
         }
     }
@@ -245,7 +245,7 @@ export function _checkNumberFilter(num: f64, filterNums: f64[], operator: string
         return false
     }
 
-    if (operator === '!=') {
+    if (comparator === '!=') {
         let passesFilter = true
         for (let i = 0; i < filterNums.length; i++) {
             const filterNum = filterNums[i]
@@ -264,15 +264,15 @@ export function _checkNumberFilter(num: f64, filterNums: f64[], operator: string
             continue
         }
 
-        if (operator === '=') {
+        if (comparator === '=') {
             someValue = num === filterNum
-        } else if (operator === '>') {
+        } else if (comparator === '>') {
             someValue = num > filterNum
-        } else if (operator === '>=') {
+        } else if (comparator === '>=') {
             someValue = num >= filterNum
-        } else if (operator === '<') {
+        } else if (comparator === '<') {
             someValue = num < filterNum
-        } else if (operator === '<=') {
+        } else if (comparator === '<=') {
             someValue = num <= filterNum
         } else {
             continue
@@ -311,6 +311,26 @@ export function _checkStringsFilter(string: string | null, filter: UserFilter): 
         return string !== null && !!findString(values, string)
     } else if (operator === '!contain') {
         return string === null || !findString(values, string)
+    } else if (operator === 'startsWith') {
+        if (string == null) {
+            return false
+        }
+        for (let i = 0; i < values.length; i++) {
+            if (string.startsWith(values[i])) {
+                return true
+            }
+        }
+        return false
+    } else if (operator === 'endsWith') {
+        if (string == null) {
+            return false
+        }
+        for (let i = 0; i < values.length; i++) {
+            if (string.endsWith(values[i])) {
+                return true
+            }
+        }
+        return false
     } else {
         return isString(string)
     }

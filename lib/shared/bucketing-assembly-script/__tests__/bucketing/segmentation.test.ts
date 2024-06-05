@@ -158,186 +158,6 @@ describe('SegmentationManager Unit Test', () => {
     beforeEach(() => {
         setPlatformDataJSON(defaultPlatformData)
     })
-    // TODO update and uncomment these tests when we incorporate list audiences
-    // describe('listAudience filters', () => {
-    //     it('passes segmentation for single list audience', () => {
-    //         const filters = [{
-    //             _id: 'some_id',
-    //             type: 'listAudience',
-    //             comparator: '=',
-    //             values: [{
-    //                 _listAudience: 'test1',
-    //                 version: '2'
-    //             }]
-    //         }]
-    //         const appUser = {
-    //             listAudienceSegmentation: [
-    //                 {
-    //                     _listAudience: 'test1',
-    //                     version: '1'
-    //                 }, {
-    //                     _listAudience: 'test1',
-    //                     version: '2'
-    //                 }, {
-    //                     _listAudience: 'test2',
-    //                     version: '1'
-    //                 }]
-    //         }
-    //
-    //         expect(segmentation.evaluateFilters({ filters, data: appUser })).toBe(true)
-    //     })
-    //
-    //     it('passes segmentation for multiple value list audience', () => {
-    //         const filters = [{
-    //             _id: 'some_id',
-    //             type: 'listAudience',
-    //             comparator: '=',
-    //             values: [{
-    //                 _listAudience: 'test1',
-    //                 version: '2'
-    //             }, {
-    //                 _listAudience: 'test1',
-    //                 version: '17'
-    //             }]
-    //         }]
-    //         const appUser = {
-    //             listAudienceSegmentation: [
-    //                 {
-    //                     _listAudience: 'test1',
-    //                     version: '1'
-    //                 }, {
-    //                     _listAudience: 'test1',
-    //                     version: '2'
-    //                 }, {
-    //                     _listAudience: 'test2',
-    //                     version: '1'
-    //                 }]
-    //         }
-    //
-    //         expect(segmentation.evaluateFilters({ filters, data: appUser })).toBe(true)
-    //     })
-    //
-    //     it('passes segmentation for not in list audience', () => {
-    //         const filters = [{
-    //             _id: 'some_id',
-    //             type: 'listAudience',
-    //             comparator: '!=',
-    //             values: [{
-    //                 _listAudience: 'test1',
-    //                 version: '14'
-    //             }, {
-    //                 _listAudience: 'test1',
-    //                 version: '17'
-    //             }]
-    //         }]
-    //         const appUser = {
-    //             listAudienceSegmentation: [
-    //                 {
-    //                     _listAudience: 'test1',
-    //                     version: '1'
-    //                 }, {
-    //                     _listAudience: 'test1',
-    //                     version: '2'
-    //                 }, {
-    //                     _listAudience: 'test2',
-    //                     version: '1'
-    //                 }]
-    //         }
-    //
-    //         expect(segmentation.evaluateFilters({ filters, data: appUser })).toBe(true)
-    //     })
-    //
-    //     it('fails segmentation for not in list audience while IN list audience', () => {
-    //         const filters = [{
-    //             _id: 'some_id',
-    //             type: 'listAudience',
-    //             comparator: '!=',
-    //             values: [{
-    //                 _listAudience: 'test1',
-    //                 version: '2'
-    //             }, {
-    //                 _listAudience: 'test1',
-    //                 version: '17'
-    //             }]
-    //         }]
-    //         const appUser = {
-    //             listAudienceSegmentation: [
-    //                 {
-    //                     _listAudience: 'test1',
-    //                     version: '1'
-    //                 }, {
-    //                     _listAudience: 'test1',
-    //                     version: '2'
-    //                 }, {
-    //                     _listAudience: 'test2',
-    //                     version: '1'
-    //                 }]
-    //         }
-    //
-    //         expect(segmentation.evaluateFilters({ filters, data: appUser })).toBe(false)
-    //     })
-    //
-    //     it('fails segmentation for in list audience while NOT IN list audience', () => {
-    //         const filters = [{
-    //             _id: 'some_id',
-    //             type: 'listAudience',
-    //             comparator: '=',
-    //             values: [{
-    //                 _listAudience: 'test1',
-    //                 version: '14'
-    //             }, {
-    //                 _listAudience: 'test1',
-    //                 version: '17'
-    //             }]
-    //         }]
-    //         const appUser = {
-    //             listAudienceSegmentation: [
-    //                 {
-    //                     _listAudience: 'test1',
-    //                     version: '1'
-    //                 }, {
-    //                     _listAudience: 'test1',
-    //                     version: '2'
-    //                 }, {
-    //                     _listAudience: 'test2',
-    //                     version: '1'
-    //                 }]
-    //         }
-    //
-    //         expect(segmentation.evaluateFilters({ filters, data: appUser })).toBe(false)
-    //     })
-    //
-    //     it('throws error when filters not prepared', () => {
-    //         const filters = [{
-    //             _id: 'some_id',
-    //             type: 'listAudience',
-    //             comparator: '!=',
-    //             values: ['test1']
-    //         }]
-    //         const appUser = {
-    //             listAudienceSegmentation: [
-    //                 {
-    //                     _listAudience: 'test1',
-    //                     version: '1'
-    //                 }, {
-    //                     _listAudience: 'test1',
-    //                     version: '2'
-    //                 }, {
-    //                     _listAudience: 'test2',
-    //                     version: '1'
-    //                 }]
-    //         }
-    //         try {
-    //             segmentation.evaluateFilters({ filters, data: appUser })
-    //         } catch (e) {
-    //             expect(e.message)
-    //              .toBe('ListAudience filter must be an object, has not been prepared for segmentation')
-    //             return
-    //         }
-    //
-    //         throw new Error()
-    //     })
-    // })
 
     describe('evaluateOperator', () => {
         it('should fail for empty filters', () => {
@@ -1260,6 +1080,38 @@ describe('SegmentationManager Unit Test', () => {
                 values: ['Chrome', 0],
             }
             assert.strictEqual(true, checkStringsFilter('Chrome', filter))
+        })
+        it('should return true if string startsWith value', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'startsWith',
+                values: ['something'],
+            }
+            assert.strictEqual(true, checkStringsFilter('something_else', filter))
+        })
+        it('should return false if string does not startsWith value', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'startsWith',
+                values: ['something'],
+            }
+            assert.strictEqual(false, checkStringsFilter('aaaa', filter))
+        })
+        it('should return true if string endsWith value', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'endsWith',
+                values: ['something'],
+            }
+            assert.strictEqual(true, checkStringsFilter('ends_something', filter))
+        })
+        it('should return false if string does not endsWith value', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'endsWith',
+                values: ['something'],
+            }
+            assert.strictEqual(false, checkStringsFilter('aaaa', filter))
         })
         it('should return true if browser device type filter works', () => {
             const filter = {

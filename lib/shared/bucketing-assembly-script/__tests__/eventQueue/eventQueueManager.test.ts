@@ -853,6 +853,7 @@ describe('EventQueueManager Tests', () => {
     describe('memory usage test', () => {
         it('should save a large number of events to AS Event Queue', () => {
             const sdkKey = 'sdk_key_memory_test'
+            const user_id = 'user_id_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test'
             const event = {
                 type: 'testType_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test_long_name',
                 target: 'testTarget_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
@@ -861,8 +862,7 @@ describe('EventQueueManager Tests', () => {
                 metaData: random_JSON,
             }
             const dvcUser = {
-                user_id:
-                    'user_id_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
+                user_id,
                 email: '_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
                 language: 'en',
                 country: 'CA',
@@ -877,7 +877,7 @@ describe('EventQueueManager Tests', () => {
             initSDK(sdkKey)
             for (let i = 0; i < 2000; i++) {
                 event.target += i
-                dvcUser.user_id += i
+                dvcUser.user_id = user_id + i
                 queueEvent(sdkKey, dvcUser, event)
             }
 
