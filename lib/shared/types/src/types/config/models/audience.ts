@@ -13,7 +13,7 @@ export enum FilterComparator {
     'contain' = 'contain',
     '!contain' = '!contain',
     'startsWith' = 'startsWith',
-    'endsWith' = 'endsWith'
+    'endsWith' = 'endsWith',
 }
 
 export enum BooleanFilterComparator {
@@ -30,7 +30,7 @@ export enum StringFilterComparator {
     'contain' = 'contain',
     '!contain' = '!contain',
     'startsWith' = 'startsWith',
-    'endsWith' = 'endsWith'
+    'endsWith' = 'endsWith',
 }
 
 export enum NumberFilterComparator {

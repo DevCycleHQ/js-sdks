@@ -325,9 +325,21 @@ export const checkStringsFilter = (
                     !find(values, (value) => includes(string, value)))
             )
         case 'startsWith':
-            return !!values && isString(string) && values.some(value => isString(value) && string.startsWith(value))
-        case 'endsWith' :
-            return !!values && isString(string) && values.some(value => isString(value) && string.endsWith(value))
+            return (
+                !!values &&
+                isString(string) &&
+                values.some(
+                    (value) => isString(value) && string.startsWith(value),
+                )
+            )
+        case 'endsWith':
+            return (
+                !!values &&
+                isString(string) &&
+                values.some(
+                    (value) => isString(value) && string.endsWith(value),
+                )
+            )
     }
     return isString(string)
 }

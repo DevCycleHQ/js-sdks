@@ -939,7 +939,10 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: 'startsWith',
                 values: ['something'],
             } as AudienceFilterOrOperator
-            assert.strictEqual(true, segmentation.checkStringsFilter('something_else', filter))
+            assert.strictEqual(
+                true,
+                segmentation.checkStringsFilter('something_else', filter),
+            )
         })
         it('should return false if string does not startsWith value', () => {
             const filter = {
@@ -947,7 +950,10 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: 'startsWith',
                 values: ['something'],
             } as AudienceFilterOrOperator
-            assert.strictEqual(false, segmentation.checkStringsFilter('aaaa', filter))
+            assert.strictEqual(
+                false,
+                segmentation.checkStringsFilter('aaaa', filter),
+            )
         })
         it('should return true if string endsWith value', () => {
             const filter = {
@@ -955,7 +961,10 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: 'endsWith',
                 values: ['something'],
             } as AudienceFilterOrOperator
-            assert.strictEqual(true, segmentation.checkStringsFilter('ends_something', filter))
+            assert.strictEqual(
+                true,
+                segmentation.checkStringsFilter('ends_something', filter),
+            )
         })
         it('should return false if string does not endsWith value', () => {
             const filter = {
@@ -963,7 +972,10 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: 'endsWith',
                 values: ['something'],
             } as AudienceFilterOrOperator
-            assert.strictEqual(false, segmentation.checkStringsFilter('aaaa', filter))
+            assert.strictEqual(
+                false,
+                segmentation.checkStringsFilter('aaaa', filter),
+            )
         })
         it('should return true if not contains filter and value', () => {
             const filter = {

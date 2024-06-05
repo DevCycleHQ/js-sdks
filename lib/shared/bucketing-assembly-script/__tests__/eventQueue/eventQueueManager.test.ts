@@ -853,7 +853,8 @@ describe('EventQueueManager Tests', () => {
     describe('memory usage test', () => {
         it('should save a large number of events to AS Event Queue', () => {
             const sdkKey = 'sdk_key_memory_test'
-            const user_id = 'user_id_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test'
+            const user_id =
+                'user_id_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test'
             const event = {
                 type: 'testType_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test_long_name',
                 target: 'testTarget_long_name_test_long_name_test_long_name_test_long_name_test_long_name_test',
