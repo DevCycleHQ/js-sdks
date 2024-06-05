@@ -6,6 +6,13 @@ global.fetch = fetch
 import { getEnvironmentConfig } from '../src/request'
 const fetchRequestMock = fetch as jest.MockedFn<typeof fetch>
 
+const logger = {
+    error: jest.fn(),
+    warn: jest.fn(),
+    info: jest.fn(),
+    debug: jest.fn(),
+}
+
 describe('request.ts Unit Tests', () => {
     beforeEach(() => {
         fetchRequestMock.mockReset()
@@ -20,12 +27,13 @@ describe('request.ts Unit Tests', () => {
                 new Response('', { status: 200 }) as any,
             )
 
-            const res = await getEnvironmentConfig(
+            const res = await getEnvironmentConfig({
+                logger,
                 url,
-                60000,
-                etag,
-                lastModified,
-            )
+                requestTimeout: 60000,
+                currentEtag: etag,
+                currentLastModified: lastModified,
+            })
             expect(res.status).toEqual(200)
             expect(fetchRequestMock).toBeCalledWith(url, {
                 headers: {
@@ -33,7 +41,7 @@ describe('request.ts Unit Tests', () => {
                     'If-Modified-Since': lastModified,
                     'Content-Type': 'application/json',
                 },
-                retries: 1,
+                retries: 2,
                 retryDelay: expect.any(Function),
                 retryOn: expect.any(Function),
                 method: 'GET',

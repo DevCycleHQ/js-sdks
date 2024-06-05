@@ -2,13 +2,10 @@ jest.useFakeTimers()
 jest.spyOn(global, 'setInterval')
 
 const getEnvironmentConfig_mock = jest.fn()
-jest.doMock('../src/request', () => {
-    const originalModule = jest.requireActual('../src/request')
-    return {
-        ...originalModule,
-        getEnvironmentConfig: getEnvironmentConfig_mock,
-    }
-})
+jest.doMock('../src/request', () => ({
+    ...jest.requireActual('../src/request'),
+    getEnvironmentConfig: getEnvironmentConfig_mock,
+}))
 
 const mockEventSourceMethods = {
     onmessage: jest.fn(),
