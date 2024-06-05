@@ -122,7 +122,7 @@ export class EnvironmentConfigManager {
     private onSSEMessage(message: string): void {
         this.logger.debug(`SSE message: ${message}`)
         try {
-            const parsedMessage = JSON.parse(message as string)
+            const parsedMessage = JSON.parse(message)
             const messageData = JSON.parse(parsedMessage.data)
             if (!messageData) return
             const { type, etag, lastModified } = messageData
