@@ -64,11 +64,7 @@
             "defaultConfiguration": "development"
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": ["examples/js/**/*.ts"]
-            }
+            "executor": "@nx/eslint:lint"
         }
     }
 }

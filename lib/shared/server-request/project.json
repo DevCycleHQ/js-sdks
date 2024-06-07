@@ -3,6 +3,7 @@
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "lib/shared/server-request/src",
     "projectType": "library",
+    "tags": [],
     "targets": {
         "build": {
             "executor": "@nx/js:tsc",
@@ -15,26 +16,14 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": ["lib/shared/server-request/**/*.ts"]
-            }
+            "executor": "@nx/eslint:lint"
         },
         "test": {
             "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
             "options": {
-                "jestConfig": "lib/shared/server-request/jest.config.ts",
-                "passWithNoTests": true
-            },
-            "configurations": {
-                "ci": {
-                    "ci": true,
-                    "codeCoverage": true
-                }
+                "jestConfig": "lib/shared/server-request/jest.config.ts"
             }
         }
-    },
-    "tags": []
+    }
 }

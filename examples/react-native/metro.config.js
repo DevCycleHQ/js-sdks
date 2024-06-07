@@ -18,15 +18,15 @@ const customConfig = {
     resolver: {
         assetExts: assetExts.filter((ext) => ext !== 'svg'),
         sourceExts: [...sourceExts, 'svg'],
-        blockList: exclusionList([
+        
             /^(?!.*node_modules).*\/dist\/.*/,
             // Need to add the nodejs example apps to the exclude list to avoid
             // metro file mapper from complaining about duplicate file/mocks.
             // This happens because the nodejs example apps have the same name in their package.json
             /.*nodejs.*/,
         ]),
-        unstable_enableSymlinks: true,
-        unstable_enablePackageExports: true,
+        
+        
     },
 }
 

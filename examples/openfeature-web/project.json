@@ -22,7 +22,8 @@
                     "examples/openfeature-web/src/assets"
                 ],
                 "styles": ["examples/openfeature-web/src/styles.css"],
-                "scripts": []
+                "scripts": [],
+                "webpackConfig": "examples/openfeature-web/webpack.config.js"
             },
             "configurations": {
                 "production": {
@@ -63,11 +64,7 @@
             "defaultConfiguration": "development"
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": ["examples/openfeature-web/**/*.ts"]
-            }
+            "executor": "@nx/eslint:lint"
         }
     }
 }

@@ -2,6 +2,7 @@
     "name": "shared-types",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "lib/shared/types/src",
+    "tags": [],
     "targets": {
         "check-types": {
             "executor": "nx:run-commands",
@@ -70,24 +71,15 @@
             "dependsOn": ["build"]
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": [
-                    "lib/shared/types/**/*.ts",
-                    "lib/shared/types/package.json"
-                ]
-            }
+            "executor": "@nx/eslint:lint"
         },
         "test": {
             "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/lib/shared/types"],
             "options": {
                 "jestConfig": "lib/shared/types/jest.config.ts",
-                "passWithNoTests": true,
                 "codeCoverage": true
             }
         }
-    },
-    "tags": []
+    }
 }

@@ -3,6 +3,7 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "lib/web-debugger",
     "projectType": "library",
+    "tags": [],
     "targets": {
         "build": {
             "executor": "@nx/js:tsc",
@@ -23,27 +24,13 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": [
-                    "lib/web-debugger/**/*.ts",
-                    "lib/web-debugger/package.json"
-                ]
-            }
+            "executor": "@nx/eslint:lint"
         },
         "test": {
             "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
             "options": {
-                "jestConfig": "lib/web-debugger/jest.config.ts",
-                "passWithNoTests": true
-            },
-            "configurations": {
-                "ci": {
-                    "ci": true,
-                    "codeCoverage": true
-                }
+                "jestConfig": "lib/web-debugger/jest.config.ts"
             }
         },
         "check-types": {
@@ -53,6 +40,5 @@
                 "cwd": "lib/web-debugger"
             }
         }
-    },
-    "tags": []
+    }
 }

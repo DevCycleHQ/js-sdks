@@ -2,6 +2,7 @@
     "name": "nodejs",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "sdk/nodejs/src",
+    "tags": [],
     "implicitDependencies": [
         "shared-bucketing-as",
         "shared-bucketing-test-data"
@@ -15,14 +16,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": [
-                    "sdk/nodejs/**/*.ts",
-                    "sdk/nodejs/package.json"
-                ]
-            }
+            "executor": "@nx/eslint:lint"
         },
         "test": {
             "executor": "@nx/jest:jest",
@@ -74,6 +68,5 @@
                 "forwardAllArgs": true
             }
         }
-    },
-    "tags": []
+    }
 }

@@ -1,23 +1,4 @@
 {
-    "tasksRunnerOptions": {
-        "default": {
-            "runner": "nx/tasks-runners/default",
-            "options": {
-                "cacheableOperations": [
-                    "build",
-                    "test",
-                    "lint",
-                    "check-types",
-                    "package",
-                    "prepare",
-                    "build:json",
-                    "compile-pb-js",
-                    "compile-pb-as"
-                ],
-                "parallel": 1
-            }
-        }
-    },
     "pluginsConfig": {
         "@nx/js": {
             "analyzeSourceFiles": true
@@ -45,13 +26,9 @@
         ]
     },
     "extends": "nx/presets/npm.json",
-    "npmScope": "devcycle",
     "workspaceLayout": {
         "libsDir": "",
         "appsDir": ""
-    },
-    "affected": {
-        "defaultBase": "main"
     },
     "generators": {
         "@nx/web:application": {
@@ -93,13 +70,8 @@
     "targetDefaults": {
         "build": {
             "dependsOn": ["^build"],
-            "inputs": ["production", "^production"]
-        },
-        "prepare": {
-            "dependsOn": ["^prepare"]
-        },
-        "package": {
-            "dependsOn": ["^package"]
+            "inputs": ["production", "^production"],
+            "cache": true
         },
         "npm-publish": {
             "dependsOn": [
@@ -111,17 +83,44 @@
                 "build"
             ]
         },
-        "test": {
-            "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]
-        },
         "benchmark": {
             "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]
         },
-        "lint": {
-            "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
-        },
         "e2e": {
             "inputs": ["default", "^default"]
+        },
+        "check-types": {
+            "cache": true
+        },
+        "build:json": {
+            "cache": true
+        },
+        "compile-pb-js": {
+            "cache": true
+        },
+        "compile-pb-as": {
+            "cache": true
+        },
+        "@nx/jest:jest": {
+            "cache": true,
+            "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/jest.preset.js"
+            ],
+            "options": {
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        },
+        "@nx/eslint:lint": {
+            "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
+            "cache": true
         }
     },
     "release": {
@@ -131,5 +130,19 @@
             "conventionalCommits": true,
             "currentVersionResolver": "registry"
         }
-    }
+    },
+    "parallel": 1,
+    "plugins": [
+        {
+            "plugin": "@nx/storybook/plugin",
+            "options": {
+                "serveStorybookTargetName": "storybook",
+                "buildStorybookTargetName": "build-storybook",
+                "testStorybookTargetName": "test-storybook",
+                "staticStorybookTargetName": "static-storybook"
+            }
+        }
+    ],
+    "useInferencePlugins": false,
+    "defaultBase": "main"
 }

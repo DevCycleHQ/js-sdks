@@ -3,24 +3,19 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "examples/react-native/src",
     "projectType": "application",
+    "tags": [],
     "targets": {
         "start": {
             "executor": "@nx/react-native:start",
             "options": {
                 "port": 8081
             },
-            "dependsOn": ["ensure-symlink", "sync-deps", "pod-install"]
-        },
-        "serve": {
-            "executor": "nx:run-commands",
-            "options": {
-                "command": "nx start example-react-native"
-            }
+            "dependsOn": ["sync-deps"]
         },
         "run-ios": {
             "executor": "@nx/react-native:run-ios",
             "options": {},
-            "dependsOn": ["ensure-symlink", "sync-deps", "pod-install"]
+            "dependsOn": ["sync-deps"]
         },
         "bundle-ios": {
             "executor": "@nx/react-native:bundle",
@@ -30,12 +25,12 @@
                 "platform": "ios",
                 "bundleOutput": "dist/examples/react-native/ios/main.jsbundle"
             },
-            "dependsOn": ["ensure-symlink"]
+            "dependsOn": []
         },
         "run-android": {
             "executor": "@nx/react-native:run-android",
             "options": {},
-            "dependsOn": ["ensure-symlink", "sync-deps"]
+            "dependsOn": ["sync-deps"]
         },
         "build-android": {
             "executor": "@nx/react-native:build-android",
@@ -44,18 +39,18 @@
                 "{projectRoot}/android/app/build/outputs/apk"
             ],
             "options": {},
-            "dependsOn": ["ensure-symlink", "sync-deps"]
+            "dependsOn": ["sync-deps"]
         },
         "build-ios": {
             "executor": "@nx/react-native:build-ios",
             "outputs": ["{projectRoot}/ios/build/Build"],
             "options": {},
-            "dependsOn": ["ensure-symlink", "sync-deps", "pod-install"]
+            "dependsOn": ["sync-deps"]
         },
         "pod-install": {
             "executor": "@nx/react-native:pod-install",
             "options": {},
-            "dependsOn": ["ensure-symlink", "sync-deps"]
+            "dependsOn": ["sync-deps"]
         },
         "bundle-android": {
             "executor": "@nx/react-native:bundle",
@@ -65,25 +60,69 @@
                 "platform": "android",
                 "bundleOutput": "dist/examples/react-native/android/main.jsbundle"
             },
-            "dependsOn": ["ensure-symlink"]
+            "dependsOn": []
         },
         "sync-deps": {
             "executor": "@nx/react-native:sync-deps",
             "options": {}
         },
-        "ensure-symlink": {
-            "executor": "@nx/react-native:ensure-symlink",
-            "options": {}
-        },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
+            "executor": "@nx/eslint:lint"
+        },
+        "build": {
+            "executor": "@nx/webpack:webpack",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "production",
             "options": {
-                "lintFilePatterns": [
-                    "examples/react-native/**/*.{ts,tsx,js,jsx}"
-                ]
+                "compiler": "babel",
+                "outputPath": "dist/examples/react-native/web",
+                "index": "examples/react-native/src/index.html",
+                "baseHref": "/",
+                "main": "examples/react-native/src/main-web.tsx",
+                "tsConfig": "examples/react-native/tsconfig.app.json",
+                "assets": [
+                    "examples/react-native/src/favicon.ico",
+                    "examples/react-native/src/assets"
+                ],
+                "webpackConfig": "examples/react-native/webpack.config.js"
+            },
+            "configurations": {
+                "development": {
+                    "extractLicenses": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "vendorChunk": true
+                },
+                "production": {
+                    "optimization": true,
+                    "outputHashing": "all",
+                    "sourceMap": false,
+                    "namedChunks": false,
+                    "extractLicenses": true,
+                    "vendorChunk": false
+                }
             }
+        },
+        "serve": {
+            "executor": "@nx/webpack:dev-server",
+            "defaultConfiguration": "development",
+            "options": {
+                "buildTarget": "example-react-native:build",
+                "hmr": true
+            },
+            "configurations": {
+                "development": {
+                    "buildTarget": "example-react-native:build:development"
+                },
+                "production": {
+                    "buildTarget": "example-react-native:build:production",
+                    "hmr": false
+                }
+            }
+        },
+        "upgrade": {
+            "executor": "@nx/react-native:upgrade",
+            "options": {}
         }
-    },
-    "tags": []
+    }
 }

@@ -2,6 +2,7 @@
     "name": "nestjs",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "sdk/nestjs/src",
+    "tags": [],
     "targets": {
         "check-types": {
             "executor": "nx:run-commands",
@@ -11,14 +12,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": [
-                    "sdk/nestjs/**/*.ts",
-                    "sdk/nestjs/package.json"
-                ]
-            }
+            "executor": "@nx/eslint:lint"
         },
         "test": {
             "executor": "@nx/jest:jest",
@@ -53,6 +47,5 @@
                 "forwardAllArgs": true
             }
         }
-    },
-    "tags": []
+    }
 }
