@@ -1,8 +1,8 @@
 import type { AppProps as NextJsAppProps } from 'next/app'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import { SSRProps } from './types'
-import { DevCycleProvider, useDevCycleClient } from '@devcycle/react-client-sdk'
-import React, { useEffect, useRef } from 'react'
+import { DevCycleProvider } from '@devcycle/react-client-sdk'
+import React from 'react'
 import { DevCycleOptions } from '@devcycle/js-client-sdk'
 
 type DevCycleNextOptions = Pick<
@@ -17,54 +17,6 @@ type DevCycleNextOptions = Pick<
     | 'disableAutomaticEventLogging'
     | 'disableCustomEventLogging'
 >
-
-/**
- * Component which runs a one-time sync of the server's boostrap data to the client's DevCycleClient
- * @param devcycleSSR
- * @param children
- * @constructor
- */
-const BootstrapSync = ({
-    devcycleSSR,
-    children,
-}: {
-    devcycleSSR: SSRProps['_devcycleSSR']
-    children: React.ReactNode
-}) => {
-    const client = useDevCycleClient()
-    const isInitializedRef = useRef(false)
-
-    if (!isInitializedRef.current) {
-        client.synchronizeBootstrapData(
-            devcycleSSR.bucketedConfig,
-            devcycleSSR.user,
-            devcycleSSR.userAgent ?? undefined,
-        )
-        isInitializedRef.current = true
-    }
-
-    useEffect(() => {
-        if (!isInitializedRef.current) {
-            client.synchronizeBootstrapData(
-                devcycleSSR.bucketedConfig,
-                devcycleSSR.user,
-                devcycleSSR.userAgent ?? undefined,
-            )
-            isInitializedRef.current = true
-        }
-        return () => {
-            isInitializedRef.current = false
-        }
-    }, [
-        devcycleSSR.bucketedConfig,
-        devcycleSSR.sdkKey,
-        devcycleSSR.user,
-        devcycleSSR.userAgent,
-        client,
-    ])
-
-    return children
-}
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const appWithDevCycle = <Props extends NextJsAppProps>(
@@ -87,21 +39,25 @@ export const appWithDevCycle = <Props extends NextJsAppProps>(
             <DevCycleProvider
                 config={{
                     sdkKey: devcycleSSR.sdkKey,
+                    user: devcycleSSR.user,
                     options: {
                         ...additionalOptions,
+                        ...(onServerside
+                            ? {
+                                  disableAutomaticEventLogging: true,
+                                  disableCustomEventLogging: true,
+                                  disableRealtimeUpdates: true,
+                              }
+                            : {}),
                         sdkPlatform: 'nextjs',
-                        deferInitialization: true,
-                        disableAutomaticEventLogging: onServerside,
-                        disableCustomEventLogging: onServerside,
-                        disableRealtimeUpdates: onServerside,
                         disableConfigCache: true,
+                        bootstrapConfig:
+                            devcycleSSR.bucketedConfig ?? undefined,
                         next: {},
                     },
                 }}
             >
-                <BootstrapSync devcycleSSR={devcycleSSR}>
-                    <WrappedComponent {...props} />
-                </BootstrapSync>
+                <WrappedComponent {...props} />
             </DevCycleProvider>
         )
     }
