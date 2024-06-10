@@ -36,8 +36,7 @@ export async function getEnvironmentConfig({
             if (attempt >= retries) {
                 return false
             } else if (response && response?.status === 200) {
-                const lastModifiedHeader =
-                    response?.headers.get('Last-Modified')
+                const lastModifiedHeader = response.headers.get('Last-Modified')
                 const lastModifiedHeaderDate = lastModifiedHeader
                     ? new Date(lastModifiedHeader)
                     : null
