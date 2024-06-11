@@ -41,7 +41,7 @@ describe('request.ts Unit Tests', () => {
                     'If-Modified-Since': lastModified,
                     'Content-Type': 'application/json',
                 },
-                retries: 2,
+                retries: 1,
                 retryDelay: expect.any(Function),
                 retryOn: expect.any(Function),
                 method: 'GET',
@@ -74,7 +74,7 @@ describe('request.ts Unit Tests', () => {
                 sseLastModified: sseLastModifiedDate.toISOString(),
             })
             expect(res.status).toEqual(200)
-            expect(fetchRequestMock).toHaveBeenCalledTimes(6)
+            expect(fetchRequestMock).toHaveBeenCalledTimes(4)
         })
     })
 })

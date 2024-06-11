@@ -21,7 +21,7 @@ export async function getEnvironmentConfig({
     sseLastModified?: string
 }): Promise<Response> {
     const headers: Record<string, string> = {}
-    let retries = 2
+    let retries = 1
 
     let retryOn: RequestInitWithRetry['retryOn'] | undefined
     const sseLastModifiedDate = sseLastModified
@@ -31,7 +31,7 @@ export async function getEnvironmentConfig({
     // Retry fetching config if the Last-Modified header is older than
     // the requiredLastModified from the SSE message
     if (sseLastModified && isValidDate(sseLastModifiedDate)) {
-        retries = 5
+        retries = 3
         retryOn = (attempt, error, response) => {
             if (attempt >= retries) {
                 return false
