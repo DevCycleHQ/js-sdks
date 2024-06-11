@@ -10,8 +10,7 @@ let devcycleClient: DevCycleClient
 
 async function startDevCycle() {
     devcycleClient = await initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY, {
-        logLevel: 'debug',
-        enableBetaRealTimeUpdates: true,
+        logLevel: 'info',
     }).onClientInitialized()
     console.log('DevCycle local bucketing typescript client initialized')
 
