@@ -4749,6 +4749,7 @@ __metadata:
     "@devcycle/js-cloud-server-sdk": ^1.12.1
     "@devcycle/types": ^1.13.1
     cross-fetch: ^4.0.0
+    eventsource: ^2.0.2
     fetch-retry: ^5.0.6
   peerDependencies:
     "@openfeature/server-sdk": ^1.13.5
