@@ -16,7 +16,8 @@
                             "@devcycle/js-client-sdk",
                             "@openfeature/core",
                             "fetch-retry",
-                            "cross-fetch"
+                            "cross-fetch",
+                            "eventsource"
                         ]
                     }
                 ]
