@@ -4749,6 +4749,7 @@ __metadata:
     "@devcycle/js-cloud-server-sdk": ^1.12.1
     "@devcycle/types": ^1.13.1
     cross-fetch: ^4.0.0
+    eventsource: ^2.0.2
     fetch-retry: ^5.0.6
   peerDependencies:
     "@openfeature/server-sdk": ^1.13.5
@@ -10033,6 +10034,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/eventsource@npm:^1.1.15":
+  version: 1.1.15
+  resolution: "@types/eventsource@npm:1.1.15"
+  checksum: 52e024f5aebfd6bc166f2162d6e408cf788886007e571519c75f8c3623feaa3c5a74681fd3a128de6d21b28ef88dd683421264f10d5c98728959b99b1229b85e
+  languageName: node
+  linkType: hard
+
 "@types/express-serve-static-core@npm:*, @types/express-serve-static-core@npm:^4.17.18":
   version: 4.17.28
   resolution: "@types/express-serve-static-core@npm:4.17.28"
@@ -15291,6 +15299,7 @@ __metadata:
     "@testing-library/react": 14.0.0
     "@testing-library/react-native": 12.3.2
     "@types/async": ^3.2.8
+    "@types/eventsource": ^1.1.15
     "@types/express": ^4.17.17
     "@types/hoist-non-react-statics": ^3.3.1
     "@types/jest": 29.4.4
@@ -15338,6 +15347,7 @@ __metadata:
     eslint-plugin-react: 7.32.2
     eslint-plugin-react-hooks: ~4.6.0
     eslint-plugin-standard: ^5.0.0
+    eventsource: ^2.0.2
     express: ^4.18.2
     fetch-retry: ^5.0.6
     fs-extra: ^11.2.0
@@ -17060,6 +17070,13 @@ __metadata:
   version: 3.3.0
   resolution: "events@npm:3.3.0"
   checksum: f6f487ad2198aa41d878fa31452f1a3c00958f46e9019286ff4787c84aac329332ab45c9cdc8c445928fc6d7ded294b9e005a7fce9426488518017831b272780
+  languageName: node
+  linkType: hard
+
+"eventsource@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "eventsource@npm:2.0.2"
+  checksum: c0072d972753e10c705d9b2285b559184bf29d011bc208973dde9c8b6b8b7b6fdad4ef0846cecb249f7b1585e860fdf324cbd2ac854a76bc53649e797496e99a
   languageName: node
   linkType: hard
 

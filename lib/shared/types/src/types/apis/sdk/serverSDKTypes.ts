@@ -90,4 +90,17 @@ export interface DevCycleServerSDKOptions {
      * and provided to the client
      */
     enableClientBootstrapping?: boolean
+
+    /**
+     * BETA: Enable Real Time Updates and their associated SSE connection
+     */
+    enableBetaRealTimeUpdates?: boolean
+
+    /**
+     * Controls the polling interval in milliseconds to fetch new environment config changes
+     * when SSE connections are enabled, defaults to 10 minutes.
+     * This is only used when enableBetaRealTimeUpdates is true.
+     * @min 60000
+     */
+    sseConfigPollingIntervalMS?: number
 }

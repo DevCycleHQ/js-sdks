@@ -314,6 +314,7 @@ export class DevCycleClient {
         err?: ResponseError,
         reqEtag?: string,
         reqLastModified?: string,
+        sseConnected?: boolean,
     ): void {
         const populatedUser = DVCPopulatedUserFromDevCycleUser({
             user_id: `${this.clientUUID}@${this.hostname}`,
@@ -332,6 +333,7 @@ export class DevCycleClient {
                 resRayId: res?.headers.get('cf-ray') ?? undefined,
                 resStatus: (err?.status || res?.status) ?? undefined,
                 errMsg: err?.message ?? undefined,
+                sseConnected: sseConnected ?? undefined,
             },
         })
     }
