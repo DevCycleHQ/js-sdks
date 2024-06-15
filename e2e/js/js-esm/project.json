@@ -2,6 +2,7 @@
     "name": "e2e-js-esm",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "e2e/nextjs/app-router/src",
+    "implicitDependencies": ["js"],
     "targets": {
         "e2e": {
             "executor": "@nx/playwright:playwright",
@@ -11,12 +12,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": ["e2e/js/js-esm/**/*.{js,ts}"]
-            }
+            "executor": "@nx/eslint:lint"
         }
-    },
-    "implicitDependencies": ["js"]
+    }
 }

@@ -3,6 +3,7 @@
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "examples/nextjs/app-router",
     "projectType": "application",
+    "tags": [],
     "targets": {
         "build": {
             "executor": "@nx/next:build",
@@ -43,14 +44,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": [
-                    "examples/nextjs/app-router/**/*.{ts,tsx,js,jsx}"
-                ]
-            }
+            "executor": "@nx/eslint:lint"
         }
-    },
-    "tags": []
+    }
 }

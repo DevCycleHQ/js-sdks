@@ -3,6 +3,7 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "examples/nodejs-cloud/src",
     "projectType": "application",
+    "tags": [],
     "targets": {
         "build": {
             "executor": "@nx/webpack:webpack",
@@ -12,7 +13,8 @@
                 "main": "examples/nodejs-cloud/src/main.ts",
                 "tsConfig": "examples/nodejs-cloud/tsconfig.app.json",
                 "compiler": "tsc",
-                "target": "node"
+                "target": "node",
+                "webpackConfig": "examples/nodejs-cloud/webpack.config.js"
             }
         },
         "serve": {
@@ -23,12 +25,7 @@
             "dependsOn": ["^build"]
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": ["examples/nodejs-cloud/**/*.ts"]
-            }
+            "executor": "@nx/eslint:lint"
         }
-    },
-    "tags": []
+    }
 }

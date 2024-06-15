@@ -3,6 +3,7 @@
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "examples/js-cloud-server/cloudflare-worker/src",
     "projectType": "application",
+    "tags": [],
     "targets": {
         "build": {
             "executor": "@nx/webpack:webpack",
@@ -12,7 +13,8 @@
                 "main": "examples/js-cloud-server/cloudflare-worker/src/index.ts",
                 "tsConfig": "examples/js-cloud-server/cloudflare-worker/tsconfig.json",
                 "compiler": "tsc",
-                "target": "node"
+                "target": "node",
+                "webpackConfig": "examples/js-cloud-server/cloudflare-worker/webpack.config.js"
             }
         },
         "serve": {
@@ -31,14 +33,7 @@
             "dependsOn": ["upload-sourcemaps"]
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": [
-                    "examples/js-cloud-server/cloudflare-worker/**/*.ts"
-                ]
-            }
+            "executor": "@nx/eslint:lint"
         }
-    },
-    "tags": []
+    }
 }

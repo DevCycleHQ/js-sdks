@@ -3,6 +3,7 @@
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "lib/shared/bucketing/src",
     "projectType": "library",
+    "tags": [],
     "targets": {
         "check-types": {
             "executor": "nx:run-commands",
@@ -30,21 +31,13 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": [
-                    "lib/shared/bucketing/**/*.ts",
-                    "lib/shared/bucketing/package.json"
-                ]
-            }
+            "executor": "@nx/eslint:lint"
         },
         "test": {
             "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/lib/shared/bucketing"],
             "options": {
-                "jestConfig": "lib/shared/bucketing/jest.config.ts",
-                "passWithNoTests": true
+                "jestConfig": "lib/shared/bucketing/jest.config.ts"
             },
             "dependsOn": [
                 {
@@ -53,6 +46,5 @@
                 }
             ]
         }
-    },
-    "tags": []
+    }
 }

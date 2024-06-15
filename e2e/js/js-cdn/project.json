@@ -65,11 +65,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": ["e2e/js/js-cdn/**/*.ts"]
-            }
+            "executor": "@nx/eslint:lint"
         },
         "e2e": {
             "executor": "@nx/playwright:playwright",

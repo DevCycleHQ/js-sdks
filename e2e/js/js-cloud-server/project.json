@@ -2,6 +2,7 @@
     "name": "e2e-js-cloud-server",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "e2e/nextjs/app-router/src",
+    "implicitDependencies": ["js-cloud-server-sdk"],
     "targets": {
         "serve": {
             "executor": "nx:run-commands",
@@ -26,12 +27,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": ["e2e/js/js-cloud-server/**/*.{js,ts}"]
-            }
+            "executor": "@nx/eslint:lint"
         }
-    },
-    "implicitDependencies": ["js-cloud-server-sdk"]
+    }
 }

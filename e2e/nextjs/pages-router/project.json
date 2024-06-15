@@ -2,6 +2,7 @@
     "name": "e2e-nextjs-pages-router",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "e2e/nextjs/pages-router/src",
+    "implicitDependencies": ["nextjs"],
     "targets": {
         "e2e": {
             "executor": "@nx/playwright:playwright",
@@ -13,12 +14,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": ["e2e/nextjs/pages-router/**/*.{js,ts}"]
-            }
+            "executor": "@nx/eslint:lint"
         }
-    },
-    "implicitDependencies": ["nextjs"]
+    }
 }

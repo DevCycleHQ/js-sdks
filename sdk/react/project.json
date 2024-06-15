@@ -55,21 +55,13 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": [
-                    "sdk/react/**/*.{ts,tsx,js,jsx}",
-                    "sdk/react/package.json"
-                ]
-            }
+            "executor": "@nx/eslint:lint"
         },
         "test": {
             "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/sdk/react"],
             "options": {
                 "jestConfig": "sdk/react/jest.config.ts",
-                "passWithNoTests": true,
                 "codeCoverage": true
             }
         },

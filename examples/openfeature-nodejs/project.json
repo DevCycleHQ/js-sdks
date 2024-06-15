@@ -3,6 +3,7 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "examples/openfeature-nodejs/src",
     "projectType": "application",
+    "tags": [],
     "targets": {
         "build": {
             "executor": "@nx/webpack:webpack",
@@ -25,12 +26,7 @@
             "dependsOn": ["^build"]
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": ["examples/openfeature-nodejs/**/*.ts"]
-            }
+            "executor": "@nx/eslint:lint"
         }
-    },
-    "tags": []
+    }
 }

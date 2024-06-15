@@ -40,21 +40,13 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": [
-                    "sdk/react-native-expo/**/*.{ts,tsx,js,jsx}",
-                    "sdk/react-native-expo/package.json"
-                ]
-            }
+            "executor": "@nx/eslint:lint"
         },
         "test": {
             "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/sdk/react-native"],
             "options": {
                 "jestConfig": "sdk/react-native-expo/jest.config.ts",
-                "passWithNoTests": true,
                 "codeCoverage": true
             }
         },

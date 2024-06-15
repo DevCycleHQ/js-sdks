@@ -2,6 +2,7 @@
     "name": "e2e-react",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "e2e/react/src",
+    "tags": [],
     "implicitDependencies": ["js", "react"],
     "targets": {
         "e2e": {
@@ -12,12 +13,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": ["e2e/react/**/*.{ts,tsx,js,jsx}"]
-            }
+            "executor": "@nx/eslint:lint"
         }
-    },
-    "tags": []
+    }
 }

@@ -26,12 +26,18 @@
             "files": ["*.ts", "*.tsx"],
             "extends": ["plugin:@nx/typescript", "./eslint-common.js"],
             "rules": {
-                "@typescript-eslint/explicit-module-boundary-types": ["error"]
+                "@typescript-eslint/explicit-module-boundary-types": ["error"],
+                "@typescript-eslint/no-extra-semi": "error",
+                "no-extra-semi": "off"
             }
         },
         {
             "files": ["*.js", "*.jsx"],
-            "extends": ["plugin:@nx/javascript", "./eslint-common.js"]
+            "extends": ["plugin:@nx/javascript", "./eslint-common.js"],
+            "rules": {
+                "@typescript-eslint/no-extra-semi": "error",
+                "no-extra-semi": "off"
+            }
         }
     ]
 }

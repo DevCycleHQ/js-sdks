@@ -2,8 +2,9 @@
     "name": "shared-bucketing-as",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "lib/shared/bucketing-assembly-script/assembly",
-    "implicitDependencies": ["shared-bucketing-test-data"],
     "projectType": "library",
+    "tags": [],
+    "implicitDependencies": ["shared-bucketing-test-data"],
     "targets": {
         "check-types": {
             "executor": "nx:run-commands",
@@ -13,13 +14,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": [
-                    "lib/shared/bucketing-assembly-script/**/*.ts"
-                ]
-            }
+            "executor": "@nx/eslint:lint"
         },
         "test": {
             "executor": "@nx/jest:jest",
@@ -156,6 +151,5 @@
                 "forwardAllArgs": true
             }
         }
-    },
-    "tags": []
+    }
 }

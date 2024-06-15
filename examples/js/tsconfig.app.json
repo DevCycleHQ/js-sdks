@@ -9,5 +9,5 @@
         ]
     },
     "exclude": ["**/*.spec.ts", "**/*.test.ts"],
-    "include": ["**/*.ts"]
+    "include": ["**/*.ts", "webpack.config.js"]
 }
