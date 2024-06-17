@@ -505,6 +505,39 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             jest.useFakeTimers()
         })
 
+        it('should handle SSE connection failures and reconnect from 304 config response', async () => {
+            const envConfig = await connectToSSE()
+            mockEventSourceMethods.onopen()
+            expect(getEnvironmentConfig_mock).toBeCalledTimes(1)
+            expect(envConfig.configEtag).toEqual('etag-1')
+
+            jest.advanceTimersByTime(10000)
+            getEnvironmentConfig_mock.mockImplementation(async () =>
+                mockFetchResponse({
+                    status: 304,
+                    data: { config: {} },
+                    headers: {
+                        etag: 'etag-1',
+                        'last-modified': lastModifiedDate.toISOString(),
+                    },
+                }),
+            )
+            mockEventSourceMethods.onerror({ status: 500 })
+            expect(mockEventSourceMethods.close).toBeCalledTimes(1)
+
+            jest.advanceTimersByTime(1000)
+            // Have to use real timers here to allow the event loop to
+            // process the fetch call that is happening from the setTimeout
+            jest.useRealTimers()
+            await new Promise((resolve) => setTimeout(resolve, 10))
+
+            expect(getEnvironmentConfig_mock).toBeCalledTimes(2)
+            expect(MockEventSource).toBeCalledTimes(2)
+            expect(envConfig.configEtag).toEqual('etag-1')
+
+            jest.useFakeTimers()
+        })
+
         it('should re-connect SSE if path changes', async () => {
             const envConfig = await connectToSSE()
             mockEventSourceMethods.onopen()

@@ -273,6 +273,7 @@ export class EnvironmentConfigManager {
                 `Config not modified, using cache, etag: ${this.configEtag}` +
                     `, last-modified: ${this.configLastModified}`,
             )
+            this.handleSSEConfig()
             return
         } else if (res?.status === 200 && projectConfig) {
             const lastModifiedHeader = res?.headers.get('last-modified')
@@ -329,11 +330,15 @@ export class EnvironmentConfigManager {
         )
     }
 
-    private handleSSEConfig(projectConfig: string) {
+    private handleSSEConfig(projectConfig?: string) {
         if (this.enableRealtimeUpdates) {
-            const configBody = JSON.parse(projectConfig) as ConfigBody<string>
             const originalConfigSSE = this.configSSE
-            this.configSSE = configBody.sse
+            if (projectConfig) {
+                const configBody = JSON.parse(
+                    projectConfig,
+                ) as ConfigBody<string>
+                this.configSSE = configBody.sse
+            }
 
             // Reconnect SSE if not first config fetch, and the SSE config has changed
             if (
