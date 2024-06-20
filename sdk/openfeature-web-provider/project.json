@@ -1,7 +1,6 @@
 {
     "name": "openfeature-web-provider",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "sdk/openfeature-web-provider/src",
     "implicitDependencies": ["js"],
     "targets": {
         "build": {

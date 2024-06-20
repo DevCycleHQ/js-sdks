@@ -34,6 +34,8 @@
         "@altack/nx-bundlefy": "^0.16.0",
         "@devcycle/assemblyscript-json": "^2.0.0",
         "@openfeature/core": "^1.1.0",
+        "@openfeature/multi-provider": "^0.1.1",
+        "@openfeature/multi-provider-web": "^0.0.1",
         "@openfeature/server-sdk": "^1.13.5",
         "@openfeature/web-sdk": "^1.0.3",
         "@swc/helpers": "~0.5.2",
