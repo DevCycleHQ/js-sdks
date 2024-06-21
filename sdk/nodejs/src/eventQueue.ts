@@ -136,7 +136,9 @@ export class EventQueue {
                 metricTags,
             )
         } catch (ex) {
-            this.logger.error(`DVC Error Flushing Events: ${ex.message}`)
+            this.logger.error(
+                `DVC Error: get flush events payload, message: ${ex.message}`,
+            )
         }
 
         const results: FlushResults = {
@@ -210,7 +212,7 @@ export class EventQueue {
                     }
                 } catch (ex) {
                     this.logger.error(
-                        `DVC Error Flushing Events response message: ${ex.message}`,
+                        `DVC Error Flushing Events response message: ${ex.message}, status: ${ex.status}`,
                     )
                     getBucketingLib().onPayloadFailure(
                         this.sdkKey,
