@@ -318,7 +318,11 @@ export const initializeDevCycleDebugger = async (
 
     return () => {
         cleanup()
-        document.body.removeChild(iframeManager.mainIframe)
-        document.body.removeChild(iframeManager.buttonIframe)
+        if (document.body.contains(iframeManager.mainIframe)) {
+            document.body.removeChild(iframeManager.mainIframe)
+        }
+        if (document.body.contains(iframeManager.buttonIframe)) {
+            document.body.removeChild(iframeManager.buttonIframe)
+        }
     }
 }
