@@ -81,6 +81,10 @@ class IframeManager {
         if (this.debugLogs) {
             this.log('posting message', clientData.current)
         }
+        if (!clientData.current.loadCount) {
+            // iframe hasn't loaded yet, don't post messages until it has
+            return
+        }
         this.mainIframe.contentWindow?.postMessage(
             {
                 ...clientData.current,
@@ -144,20 +148,16 @@ class IframeManager {
             oldTrack(...args)
         }
 
-        window.addEventListener(
-            'message',
-            this.iframeMessageReceiver.bind(this),
-        )
+        const boundMessageReceiver = this.iframeMessageReceiver.bind(this)
+
+        window.addEventListener('message', boundMessageReceiver)
 
         return () => {
             this.log('unsubscribing from events')
             this.client.unsubscribe('configUpdated', onConfigUpdated)
             this.client.unsubscribe('variableEvaluated:*', onVariableEvaluated)
             this.client.unsubscribe('variableUpdated:*', onVariableUpdated)
-            window.removeEventListener(
-                'message',
-                this.iframeMessageReceiver.bind(this),
-            )
+            window.removeEventListener('message', boundMessageReceiver)
         }
     }
 
@@ -318,7 +318,11 @@ export const initializeDevCycleDebugger = async (
 
     return () => {
         cleanup()
-        document.body.removeChild(iframeManager.mainIframe)
-        document.body.removeChild(iframeManager.buttonIframe)
+        if (document.body.contains(iframeManager.mainIframe)) {
+            document.body.removeChild(iframeManager.mainIframe)
+        }
+        if (document.body.contains(iframeManager.buttonIframe)) {
+            document.body.removeChild(iframeManager.buttonIframe)
+        }
     }
 }
