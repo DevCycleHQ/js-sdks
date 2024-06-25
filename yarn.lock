@@ -4752,7 +4752,7 @@ __metadata:
     eventsource: ^2.0.2
     fetch-retry: ^5.0.6
   peerDependencies:
-    "@openfeature/server-sdk": ^1.13.5
+    "@openfeature/server-sdk": "*"
   languageName: unknown
   linkType: soft
 
@@ -4774,7 +4774,7 @@ __metadata:
   dependencies:
     "@devcycle/js-client-sdk": ^1.26.1
   peerDependencies:
-    "@openfeature/web-sdk": ^1.0.3
+    "@openfeature/web-sdk": "*"
   languageName: unknown
   linkType: soft
 
