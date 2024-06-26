@@ -12,5 +12,5 @@
         "**/__tests__/**/*.ts",
         "jest.config.ts"
     ],
-    "include": ["**/*.ts"]
+    "include": ["**/*.ts", "openfeature-strategy.ts"]
 }

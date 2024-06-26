@@ -22,6 +22,24 @@
         "@devcycle/js-client-sdk": "^1.26.1"
     },
     "peerDependencies": {
+        "@openfeature/multi-provider-web": "^0.0.1",
         "@openfeature/web-sdk": "^1.0.3"
+    },
+    "peerDependenciesMeta": {
+        "@openfeature/multi-provider-web": {
+            "optional": true
+        }
+    },
+    "exports": {
+        ".": {
+            "import": "./src/index.js",
+            "require": "./src/index.js",
+            "types": "./src/index.d.ts"
+        },
+        "./strategy": {
+            "import": "./strategy.js",
+            "require": "./strategy.js",
+            "types": "./strategy.d.ts"
+        }
     }
 }

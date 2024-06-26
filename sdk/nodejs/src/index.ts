@@ -21,7 +21,7 @@ import { getNodeJSPlatformDetails } from './utils/platformDetails'
 
 // Dynamically import the OpenFeature Provider, as it's an optional peer dependency
 type DevCycleProviderConstructor =
-    typeof import('./open-feature-provider/DevCycleProvider').DevCycleProvider
+    typeof import('./open-feature/DevCycleProvider').DevCycleProvider
 type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
 
 class DevCycleCloudClient extends InternalDevCycleCloudClient {
@@ -40,7 +40,7 @@ class DevCycleCloudClient extends InternalDevCycleCloudClient {
 
         try {
             const importedModule = await import(
-                './open-feature-provider/DevCycleProvider.js'
+                './open-feature/DevCycleProvider.js'
             )
             DevCycleProviderClass = importedModule.DevCycleProvider
         } catch (error) {

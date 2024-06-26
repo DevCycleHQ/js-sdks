@@ -52,7 +52,7 @@ const castIncomingUser = (user: DevCycleUser) => {
 
 // Dynamically import the OpenFeature Provider, as it's an optional peer dependency
 type DevCycleProviderConstructor =
-    typeof import('./open-feature-provider/DevCycleProvider').DevCycleProvider
+    typeof import('./open-feature/DevCycleProvider').DevCycleProvider
 type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
 
 export class DevCycleClient {
@@ -161,7 +161,7 @@ export class DevCycleClient {
 
         try {
             const importedModule = await import(
-                './open-feature-provider/DevCycleProvider.js'
+                './open-feature/DevCycleProvider.js'
             )
             DevCycleProviderClass = importedModule.DevCycleProvider
         } catch (error) {

@@ -4752,7 +4752,11 @@ __metadata:
     eventsource: ^2.0.2
     fetch-retry: ^5.0.6
   peerDependencies:
+    "@openfeature/multi-provider": ^0.1.1
     "@openfeature/server-sdk": ^1.13.5
+  peerDependenciesMeta:
+    "@openfeature/multi-provider":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -4774,7 +4778,11 @@ __metadata:
   dependencies:
     "@devcycle/js-client-sdk": ^1.26.1
   peerDependencies:
+    "@openfeature/multi-provider-web": ^0.0.1
     "@openfeature/web-sdk": ^1.0.3
+  peerDependenciesMeta:
+    "@openfeature/multi-provider-web":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -8208,6 +8216,28 @@ __metadata:
   version: 1.1.0
   resolution: "@openfeature/core@npm:1.1.0"
   checksum: c94dfc47b3542a837ec8378a64ab6ad2884029947e27989ec1b4ace675b5598daaa9a004f7859df26a72e208b1a880c92a05c6e90d7d9cd8e61f079ffc4f140f
+  languageName: node
+  linkType: hard
+
+"@openfeature/multi-provider-web@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "@openfeature/multi-provider-web@npm:0.0.1"
+  dependencies:
+    tslib: ^2.3.0
+  peerDependencies:
+    "@openfeature/web-sdk": ^1.6.0
+  checksum: 01d24c5fa3f85bf64232486464aafa93774ab82324deca919816544899cd0d4e0cc0d37c5f7c2f3cf02743966a6691f8f87c8d8e7dc508e0ecfd225b74771bac
+  languageName: node
+  linkType: hard
+
+"@openfeature/multi-provider@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@openfeature/multi-provider@npm:0.1.1"
+  dependencies:
+    tslib: ^2.3.0
+  peerDependencies:
+    "@openfeature/server-sdk": ^1.6.0
+  checksum: e35defe85b336b3ff9279b1e4509fc89a4bd363f8b3b69cec3824a8c8ade02c068027966c6abce33fc788ca1860dab66ca67e440c705ed9d75963208fbb2f048
   languageName: node
   linkType: hard
 
@@ -15280,6 +15310,8 @@ __metadata:
     "@nx/webpack": 16.10.0
     "@nx/workspace": 16.10.0
     "@openfeature/core": ^1.1.0
+    "@openfeature/multi-provider": ^0.1.1
+    "@openfeature/multi-provider-web": ^0.0.1
     "@openfeature/server-sdk": ^1.13.5
     "@openfeature/web-sdk": ^1.0.3
     "@playwright/test": ^1.36.0
