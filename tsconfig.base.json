@@ -62,6 +62,9 @@
                 "lib/shared/sse-connection/src/index.ts"
             ],
             "@devcycle/types": ["lib/shared/types/src/index.ts"],
+            "@devcycle/vercel-edge-config": [
+                "shared/vercel-edge-config/src/index.ts"
+            ],
             "@devcycle/web-debugger": ["lib/web-debugger/index.ts"],
             "@devcycle/web-debugger/react": ["lib/web-debugger/react.tsx"]
         }

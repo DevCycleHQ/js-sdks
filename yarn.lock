@@ -4841,6 +4841,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@devcycle/vercel-edge-config@workspace:lib/shared/vercel-edge-config":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/vercel-edge-config@workspace:lib/shared/vercel-edge-config"
+  dependencies:
+    tslib: ^2.3.0
+  peerDependencies:
+    "@vercel/edge-config": ^1.2.0
+  languageName: unknown
+  linkType: soft
+
 "@devcycle/web-debugger@workspace:lib/web-debugger":
   version: 0.0.0-use.local
   resolution: "@devcycle/web-debugger@workspace:lib/web-debugger"
@@ -10844,6 +10854,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vercel/edge-config-fs@npm:0.1.0":
+  version: 0.1.0
+  resolution: "@vercel/edge-config-fs@npm:0.1.0"
+  checksum: 4eb27927a1c6a9d77cee4457424e208c3ff7f01e1cd0249b133804d12fd7099bd1aed6a9d9574b122d3bd59289b294a913b4df05bb69aca6091c8a020cbc2121
+  languageName: node
+  linkType: hard
+
+"@vercel/edge-config@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@vercel/edge-config@npm:1.2.0"
+  dependencies:
+    "@vercel/edge-config-fs": 0.1.0
+  peerDependencies:
+    "@opentelemetry/api": ^1.7.0
+  peerDependenciesMeta:
+    "@opentelemetry/api":
+      optional: true
+  checksum: 98b7c512308106b21b7c8c95e9659a37c2dda56b10b3d062bae0964b1d5500f092db297aeb6aaa3af8ebf2059f6804ba2647736b48bd8d047c9e24943549ebe4
+  languageName: node
+  linkType: hard
+
 "@verdaccio/auth@npm:7.0.0-next-7.15":
   version: 7.0.0-next-7.15
   resolution: "@verdaccio/auth@npm:7.0.0-next-7.15"
@@ -15343,6 +15374,7 @@ __metadata:
     "@types/uuid": ^8.3.1
     "@typescript-eslint/eslint-plugin": 5.62.0
     "@typescript-eslint/parser": 5.62.0
+    "@vercel/edge-config": ^1.2.0
     as-proto: ^1.3.0
     as-proto-gen: ^1.3.0
     as-uuid: ^0.0.4
