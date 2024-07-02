@@ -136,7 +136,7 @@ export class EventQueue {
                 metricTags,
             )
         } catch (ex) {
-            this.logger.error(`DVC Error Flushing Events: ${ex.message}`)
+            this.logger.error(`DevCycle Error Flushing Events: ${ex.message}`)
         }
 
         const results: FlushResults = {
@@ -163,7 +163,7 @@ export class EventQueue {
             val + batches.eventCount
         const eventCount = flushPayloads.reduce(reducer, 0)
         this.logger.debug(
-            `DVC Flush ${eventCount} Events, for ${flushPayloads.length} Users`,
+            `DevCycle Flush ${eventCount} Events, for ${flushPayloads.length} Users`,
         )
 
         const startTimeRequests = Date.now()
@@ -178,7 +178,7 @@ export class EventQueue {
                         this.eventsAPIURI,
                     )
                     if (res.status !== 201) {
-                        this.logger.error(
+                        this.logger.debug(
                             `Error publishing events, status: ${
                                 res.status
                             }, body: ${await res.text()}`,
@@ -200,7 +200,7 @@ export class EventQueue {
                         }
                     } else {
                         this.logger.debug(
-                            `DVC Flushed ${eventCount} Events, for ${flushPayload.records.length} Users`,
+                            `DevCycle Flushed ${eventCount} Events, for ${flushPayload.records.length} Users`,
                         )
                         getBucketingLib().onPayloadSuccess(
                             this.sdkKey,
@@ -209,8 +209,8 @@ export class EventQueue {
                         results.successes++
                     }
                 } catch (ex) {
-                    this.logger.error(
-                        `DVC Error Flushing Events response message: ${ex.message}`,
+                    this.logger.debug(
+                        `DevCycle Error Flushing Events response message: ${ex.message}`,
                     )
                     getBucketingLib().onPayloadFailure(
                         this.sdkKey,
