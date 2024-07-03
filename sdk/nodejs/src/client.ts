@@ -8,11 +8,7 @@ import {
 } from './utils/userBucketingHelper'
 import { EventQueue, EventTypes } from './eventQueue'
 import * as packageJson from '../package.json'
-import {
-    importBucketingLib,
-    getBucketingLib,
-    setConfigDataUTF8,
-} from './bucketing'
+import { importBucketingLib, setConfigDataUTF8 } from './bucketing'
 import {
     BucketedUserConfig,
     DevCycleServerSDKOptions,
@@ -34,6 +30,7 @@ import {
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
 import { randomUUID } from 'crypto'
+import { Exports } from '@devcycle/bucketing-assembly-script'
 
 interface IPlatformData {
     platform: string
@@ -66,6 +63,8 @@ export class DevCycleClient {
     private logger: DVCLogger
     private _isInitialized = false
     private openFeatureProvider: DevCycleProvider
+    private bucketing: Exports
+    private bucketingTracker?: NodeJS.Timer
 
     get isInitialized(): boolean {
         return this._isInitialized
@@ -85,9 +84,8 @@ export class DevCycleClient {
             )
         }
 
-        const initializePromise = importBucketingLib({
+        const initializePromise = this.initializeBucketing({
             options,
-            logger: this.logger,
         })
             .catch((bucketingErr) => {
                 throw new UserError(bucketingErr)
@@ -96,7 +94,12 @@ export class DevCycleClient {
                 this.configHelper = new EnvironmentConfigManager(
                     this.logger,
                     sdkKey,
-                    setConfigDataUTF8,
+                    (sdkKey: string, projectConfig: string) =>
+                        setConfigDataUTF8(
+                            this.bucketing,
+                            sdkKey,
+                            projectConfig,
+                        ),
                     setInterval,
                     clearInterval,
                     this.trackSDKConfigEvent.bind(this),
@@ -106,7 +109,12 @@ export class DevCycleClient {
                     this.clientConfigHelper = new EnvironmentConfigManager(
                         this.logger,
                         sdkKey,
-                        setConfigDataUTF8,
+                        (sdkKey: string, projectConfig: string) =>
+                            setConfigDataUTF8(
+                                this.bucketing,
+                                sdkKey,
+                                projectConfig,
+                            ),
                         setInterval,
                         clearInterval,
                         this.trackSDKConfigEvent.bind(this),
@@ -114,10 +122,15 @@ export class DevCycleClient {
                     )
                 }
 
-                this.eventQueue = new EventQueue(sdkKey, this.clientUUID, {
-                    ...options,
-                    logger: this.logger,
-                })
+                this.eventQueue = new EventQueue(
+                    sdkKey,
+                    this.clientUUID,
+                    this.bucketing,
+                    {
+                        ...options,
+                        logger: this.logger,
+                    },
+                )
 
                 const platformData: IPlatformData = {
                     platform: 'NodeJS',
@@ -127,7 +140,7 @@ export class DevCycleClient {
                     hostname: this.hostname,
                 }
 
-                getBucketingLib().setPlatformData(JSON.stringify(platformData))
+                this.bucketing.setPlatformData(JSON.stringify(platformData))
 
                 return Promise.all([
                     this.configHelper.fetchConfigPromise,
@@ -153,6 +166,17 @@ export class DevCycleClient {
 
         process.on('exit', () => {
             this.close()
+        })
+    }
+
+    async initializeBucketing({
+        options,
+    }: {
+        options?: DevCycleServerSDKOptions
+    }): Promise<void> {
+        ;[this.bucketing, this.bucketingTracker] = await importBucketingLib({
+            options,
+            logger: this.logger,
         })
     }
 
@@ -229,10 +253,11 @@ export class DevCycleClient {
         }
 
         const configVariable = variableForUser_PB(
+            this.bucketing,
             this.sdkKey,
             populatedUser,
             key,
-            getVariableTypeCode(type),
+            getVariableTypeCode(this.bucketing, type),
         )
 
         const options: VariableParam<T> = {
@@ -273,7 +298,11 @@ export class DevCycleClient {
         }
 
         const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
-        const bucketedConfig = bucketUserForConfig(populatedUser, this.sdkKey)
+        const bucketedConfig = bucketUserForConfig(
+            this.bucketing,
+            populatedUser,
+            this.sdkKey,
+        )
         return bucketedConfig?.variables || {}
     }
 
@@ -288,7 +317,11 @@ export class DevCycleClient {
         }
 
         const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
-        const bucketedConfig = bucketUserForConfig(populatedUser, this.sdkKey)
+        const bucketedConfig = bucketUserForConfig(
+            this.bucketing,
+            populatedUser,
+            this.sdkKey,
+        )
         return bucketedConfig?.features || {}
     }
 
@@ -359,7 +392,10 @@ export class DevCycleClient {
             )
         }
 
-        const clientSDKKey = getSDKKeyFromConfig(`${this.sdkKey}_client`)
+        const clientSDKKey = getSDKKeyFromConfig(
+            this.bucketing,
+            `${this.sdkKey}_client`,
+        )
 
         if (!clientSDKKey) {
             throw new Error(
@@ -376,7 +412,11 @@ export class DevCycleClient {
                 userAgent,
             )
             return {
-                ...bucketUserForConfig(populatedUser, `${this.sdkKey}_client`),
+                ...bucketUserForConfig(
+                    this.bucketing,
+                    populatedUser,
+                    `${this.sdkKey}_client`,
+                ),
                 clientSDKKey,
             }
         } catch (e) {
@@ -397,5 +437,6 @@ export class DevCycleClient {
         await this.flushEvents()
         this.configHelper.cleanup()
         this.eventQueue.cleanup()
+        clearInterval(this.bucketingTracker)
     }
 }

@@ -1,4 +1,4 @@
-import { getBucketingLib } from '../../src/bucketing'
+import { Exports } from '@devcycle/bucketing-assembly-script'
 
 const defaultPlatformData = {
     platform: 'NodeJS',
@@ -10,7 +10,8 @@ const defaultPlatformData = {
 }
 
 export const setPlatformDataJSON = (
+    bucketing: Exports,
     data: unknown = defaultPlatformData,
 ): void => {
-    getBucketingLib().setPlatformData(JSON.stringify(data))
+    bucketing.setPlatformData(JSON.stringify(data))
 }

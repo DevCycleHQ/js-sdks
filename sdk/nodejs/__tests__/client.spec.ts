@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { getBucketingLib } from '../src/bucketing'
 import { DevCycleClient } from '../src/client'
 import { DevCycleUser } from '@devcycle/js-cloud-server-sdk'
 
@@ -33,10 +32,10 @@ jest.mock('../src/eventQueue')
 describe('DevCycleClient', () => {
     it('imports bucketing lib on initialize', async () => {
         const client = new DevCycleClient('token')
-        expect(() => getBucketingLib()).toThrow()
+        expect((client as any).bucketing).toBeUndefined()
         await client.onClientInitialized()
-        const platformData = (getBucketingLib().setPlatformData as any).mock
-            .calls[0][0]
+        const platformData = ((client as any).bucketing.setPlatformData as any)
+            .mock.calls[0][0]
 
         expect(JSON.parse(platformData)).toEqual({
             platform: 'NodeJS',
@@ -92,19 +91,19 @@ describe('variable', () => {
 
     it('returns a valid variable object for a variable that is not in the config', () => {
         // @ts-ignore
-        getBucketingLib().variableForUser_PB.mockReturnValueOnce(null)
+        client.bucketing.variableForUser_PB.mockReturnValueOnce(null)
         const variable = client.variable(user, 'test-key2', false)
         expect(variable.value).toEqual(false)
         expect(variable.isDefaulted).toEqual(true)
 
         // @ts-ignore
-        getBucketingLib().variableForUser_PB.mockReturnValueOnce(null)
+        client.bucketing.variableForUser_PB.mockReturnValueOnce(null)
         expect(client.variableValue(user, 'test-key2', false)).toEqual(false)
     })
 
     it('returns a defaulted variable object for a variable that is in the config but the wrong type', () => {
         // @ts-ignore
-        getBucketingLib().variableForUser.mockReturnValueOnce(null)
+        client.bucketing.variableForUser.mockReturnValueOnce(null)
         const variable = client.variable(user, 'test-key', 'test')
         expect(variable.value).toEqual('test')
         expect(variable.isDefaulted).toEqual(true)

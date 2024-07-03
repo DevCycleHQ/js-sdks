@@ -5,9 +5,9 @@ import {
     DVCReporter,
     FlushResults,
 } from '@devcycle/types'
-import { getBucketingLib } from './bucketing'
 import { publishEvents } from './request'
 import { DevCycleEvent, DVCPopulatedUser } from '@devcycle/js-cloud-server-sdk'
+import { Exports } from '@devcycle/bucketing-assembly-script'
 
 export const AggregateEventTypes: Record<string, string> = {
     variableEvaluated: 'variableEvaluated',
@@ -56,6 +56,7 @@ export class EventQueue {
     constructor(
         private readonly sdkKey: string,
         private readonly clientUUID: string,
+        private readonly bucketing: Exports,
         options: EventQueueOptions,
     ) {
         this.logger = options.logger
@@ -105,7 +106,7 @@ export class EventQueue {
             this.eventFlushIntervalMS,
         )
 
-        getBucketingLib().initEventQueue(
+        this.bucketing.initEventQueue(
             sdkKey,
             this.clientUUID,
             JSON.stringify(options),
@@ -123,13 +124,13 @@ export class EventQueue {
         }
         this.reporter?.reportMetric(
             'queueLength',
-            getBucketingLib().eventQueueSize(this.sdkKey),
+            this.bucketing.eventQueueSize(this.sdkKey),
             metricTags,
         )
 
         let flushPayloadsStr
         try {
-            flushPayloadsStr = getBucketingLib().flushEventQueue(this.sdkKey)
+            flushPayloadsStr = this.bucketing.flushEventQueue(this.sdkKey)
             this.reporter?.reportMetric(
                 'flushPayloadSize',
                 flushPayloadsStr?.length,
@@ -185,14 +186,14 @@ export class EventQueue {
                         )
                         if (res.status >= 500) {
                             results.retries++
-                            getBucketingLib().onPayloadFailure(
+                            this.bucketing.onPayloadFailure(
                                 this.sdkKey,
                                 flushPayload.payloadId,
                                 true,
                             )
                         } else {
                             results.failures++
-                            getBucketingLib().onPayloadFailure(
+                            this.bucketing.onPayloadFailure(
                                 this.sdkKey,
                                 flushPayload.payloadId,
                                 false,
@@ -202,7 +203,7 @@ export class EventQueue {
                         this.logger.debug(
                             `DevCycle Flushed ${eventCount} Events, for ${flushPayload.records.length} Users`,
                         )
-                        getBucketingLib().onPayloadSuccess(
+                        this.bucketing.onPayloadSuccess(
                             this.sdkKey,
                             flushPayload.payloadId,
                         )
@@ -212,7 +213,7 @@ export class EventQueue {
                     this.logger.debug(
                         `DevCycle Error Flushing Events response message: ${ex.message}`,
                     )
-                    getBucketingLib().onPayloadFailure(
+                    this.bucketing.onPayloadFailure(
                         this.sdkKey,
                         flushPayload.payloadId,
                         true,
@@ -276,7 +277,7 @@ export class EventQueue {
             return
         }
 
-        getBucketingLib().queueEvent(
+        this.bucketing.queueEvent(
             this.sdkKey,
             JSON.stringify(user),
             JSON.stringify(event),
@@ -299,7 +300,7 @@ export class EventQueue {
             return
         }
 
-        getBucketingLib().queueAggregateEvent(
+        this.bucketing.queueAggregateEvent(
             this.sdkKey,
             JSON.stringify(event),
             JSON.stringify(bucketedConfig?.variableVariationMap || {}),
@@ -307,7 +308,7 @@ export class EventQueue {
     }
 
     private checkEventQueueSize(): boolean {
-        const queueSize = getBucketingLib().eventQueueSize(this.sdkKey)
+        const queueSize = this.bucketing.eventQueueSize(this.sdkKey)
         if (queueSize >= this.flushEventQueueSize) {
             this.flushEvents()
             if (queueSize >= this.maxEventQueueSize) {
