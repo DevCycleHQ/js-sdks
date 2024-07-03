@@ -23,7 +23,6 @@ const generateBucketedConfigCached = cache(
             undefined,
             userAgent ?? undefined,
         )
-
         return {
             config: {
                 ...generateBucketedConfig({ user: populatedUser, config }),
@@ -44,12 +43,13 @@ const generateBucketedConfigCached = cache(
  */
 export const getBucketedConfig = async (
     sdkKey: string,
+    clientSDKKey: string,
     user: DevCycleUser,
     options: DevCycleNextOptions,
     userAgent?: string,
 ): Promise<BucketedConfigWithAdditionalFields> => {
     // this request will be cached by Next
-    const cdnConfig = await fetchCDNConfig(sdkKey, options)
+    const cdnConfig = await fetchCDNConfig(sdkKey, clientSDKKey, options)
     if (!cdnConfig.ok) {
         const responseText = await cdnConfig.text()
         throw new Error('Could not fetch config: ' + responseText)

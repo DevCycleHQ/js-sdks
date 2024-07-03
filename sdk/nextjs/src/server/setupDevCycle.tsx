@@ -32,22 +32,27 @@ export const setupDevCycle = ({
         key,
         defaultValue,
     ) => {
-        await initialize(serverSDKKey, userGetter, options)
+        await initialize(serverSDKKey, clientSDKKey, userGetter, options)
         return getVariableValue(key, defaultValue)
     }
 
     const _getAllVariables: typeof getAllVariables = async () => {
-        await initialize(serverSDKKey, userGetter, options)
+        await initialize(serverSDKKey, clientSDKKey, userGetter, options)
         return getAllVariables()
     }
 
     const _getAllFeatures: typeof getAllFeatures = async () => {
-        await initialize(serverSDKKey, userGetter, options)
+        await initialize(serverSDKKey, clientSDKKey, userGetter, options)
         return getAllFeatures()
     }
 
     const _getClientContext = () => {
-        const serverDataPromise = initialize(serverSDKKey, userGetter, options)
+        const serverDataPromise = initialize(
+            serverSDKKey,
+            clientSDKKey,
+            userGetter,
+            options,
+        )
 
         const { enableStreaming, enableObfuscation, ...otherOptions } = options
 

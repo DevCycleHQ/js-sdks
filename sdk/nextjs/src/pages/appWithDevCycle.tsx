@@ -30,7 +30,6 @@ export const appWithDevCycle = <Props extends NextJsAppProps>(
             ._devcycleSSR as SSRProps['_devcycleSSR']
 
         const onServerside = typeof window === 'undefined'
-
         if (!devcycleSSR) {
             return <WrappedComponent {...props} />
         }

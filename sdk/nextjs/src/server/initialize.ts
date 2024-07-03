@@ -25,6 +25,7 @@ const cachedUserGetter = cache(
 
 export const initialize = async (
     sdkKey: string,
+    clientSDKKey: string,
     userGetter: () => DevCycleUser | Promise<DevCycleUser>,
     options: DevCycleNextOptions = {},
 ): Promise<DevCycleServerData> => {
@@ -51,7 +52,13 @@ export const initialize = async (
 
     let config = null
     try {
-        config = await getBucketedConfig(sdkKey, user, options, userAgent)
+        config = await getBucketedConfig(
+            sdkKey,
+            clientSDKKey,
+            user,
+            options,
+            userAgent,
+        )
     } catch (e) {
         console.error('Error fetching DevCycle config', e)
     }
