@@ -30,7 +30,7 @@ import {
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
 import { randomUUID } from 'crypto'
-import { Exports } from '@devcycle/bucketing-assembly-script'
+import { WASMBucketingExports } from '@devcycle/bucketing-assembly-script'
 
 interface IPlatformData {
     platform: string
@@ -63,7 +63,7 @@ export class DevCycleClient {
     private logger: DVCLogger
     private _isInitialized = false
     private openFeatureProvider: DevCycleProvider
-    private bucketing: Exports
+    private bucketing: WASMBucketingExports
     private bucketingTracker?: NodeJS.Timer
 
     get isInitialized(): boolean {

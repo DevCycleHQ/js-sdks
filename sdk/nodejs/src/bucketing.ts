@@ -1,4 +1,7 @@
-import { instantiate, Exports } from '@devcycle/bucketing-assembly-script'
+import {
+    instantiate,
+    WASMBucketingExports,
+} from '@devcycle/bucketing-assembly-script'
 import {
     DVCLogger,
     DVCReporter,
@@ -11,7 +14,7 @@ export const importBucketingLib = async ({
 }: {
     logger?: DVCLogger
     options?: DevCycleServerSDKOptions
-} = {}): Promise<[Exports, NodeJS.Timer | undefined]> => {
+} = {}): Promise<[WASMBucketingExports, NodeJS.Timer | undefined]> => {
     const debugWASM = process.env.DEVCYCLE_DEBUG_WASM === '1'
     const result = await instantiate(debugWASM)
     const interval = startTrackingMemoryUsage(result, logger, options?.reporter)
@@ -19,7 +22,7 @@ export const importBucketingLib = async ({
 }
 
 export const startTrackingMemoryUsage = (
-    bucketing: Exports,
+    bucketing: WASMBucketingExports,
     logger?: DVCLogger,
     reporter?: DVCReporter,
     interval: number = 30 * 1000,
@@ -33,7 +36,7 @@ export const startTrackingMemoryUsage = (
 }
 
 export const trackMemoryUsage = (
-    bucketing: Exports,
+    bucketing: WASMBucketingExports,
     reporter: DVCReporter,
     logger?: DVCLogger,
 ): void => {
@@ -44,7 +47,7 @@ export const trackMemoryUsage = (
 }
 
 export const setConfigDataUTF8 = (
-    bucketing: Exports,
+    bucketing: WASMBucketingExports,
     sdkKey: string,
     projectConfigStr: string,
 ): void => {

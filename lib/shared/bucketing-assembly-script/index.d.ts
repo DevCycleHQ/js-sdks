@@ -8,3 +8,4 @@ export const instantiate: (
 ) => Promise<typeof __AdaptedExports>
 
 export type Exports = typeof __AdaptedExports
+export type WASMBucketingExports = Exports
