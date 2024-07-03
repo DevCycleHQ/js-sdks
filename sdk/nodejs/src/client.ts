@@ -56,7 +56,7 @@ export class DevCycleClient {
     private clientUUID: string
     private hostname: string
     private sdkKey: string
-    private configHelper: EnvironmentConfigManager
+    private configHelper?: EnvironmentConfigManager
     private clientConfigHelper?: EnvironmentConfigManager
     private eventQueue: EventQueue
     private onInitialized: Promise<DevCycleClient>
@@ -235,7 +235,7 @@ export class DevCycleClient {
         )
         const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
 
-        if (!this.configHelper.hasConfig) {
+        if (!this.configHelper?.hasConfig) {
             this.logger.warn(
                 'variable called before DevCycleClient has config, returning default value',
             )
@@ -290,7 +290,7 @@ export class DevCycleClient {
     allVariables(user: DevCycleUser): DVCVariableSet {
         const incomingUser = castIncomingUser(user)
 
-        if (!this.configHelper.hasConfig) {
+        if (!this.configHelper?.hasConfig) {
             this.logger.warn(
                 'allVariables called before DevCycleClient has config',
             )
@@ -309,7 +309,7 @@ export class DevCycleClient {
     allFeatures(user: DevCycleUser): DVCFeatureSet {
         const incomingUser = castIncomingUser(user)
 
-        if (!this.configHelper.hasConfig) {
+        if (!this.configHelper?.hasConfig) {
             this.logger.warn(
                 'allFeatures called before DevCycleClient has config',
             )
@@ -435,7 +435,7 @@ export class DevCycleClient {
     async close(): Promise<void> {
         await this.onInitialized
         await this.flushEvents()
-        this.configHelper.cleanup()
+        this.configHelper?.cleanup()
         this.eventQueue.cleanup()
         clearInterval(this.bucketingTracker)
     }
