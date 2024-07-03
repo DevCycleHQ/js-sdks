@@ -6,10 +6,10 @@ import {
 } from '@devcycle/bucketing-assembly-script/protobuf/compiled'
 import { pbSDKVariableTransform } from '../pb-types/pbTypeHelpers'
 import { DVCPopulatedUserToPBUser } from '../models/populatedUserHelpers'
-import { Exports } from '@devcycle/bucketing-assembly-script'
+import { WASMBucketingExports } from '@devcycle/bucketing-assembly-script'
 
 export function bucketUserForConfig(
-    bucketing: Exports,
+    bucketing: WASMBucketingExports,
     user: DVCPopulatedUser,
     sdkKey: string,
 ): BucketedUserConfig {
@@ -19,14 +19,14 @@ export function bucketUserForConfig(
 }
 
 export function getSDKKeyFromConfig(
-    bucketing: Exports,
+    bucketing: WASMBucketingExports,
     sdkKey: string,
 ): string | null {
     return bucketing.getSDKKeyFromConfig(sdkKey)
 }
 
 export function getVariableTypeCode(
-    bucketing: Exports,
+    bucketing: WASMBucketingExports,
     type: VariableType,
 ): number {
     switch (type) {
@@ -44,7 +44,7 @@ export function getVariableTypeCode(
 }
 
 export function variableForUser(
-    bucketing: Exports,
+    bucketing: WASMBucketingExports,
     sdkKey: string,
     user: DVCPopulatedUser,
     key: string,
@@ -62,7 +62,7 @@ export function variableForUser(
 }
 
 export function variableForUser_PB(
-    bucketing: Exports,
+    bucketing: WASMBucketingExports,
     sdkKey: string,
     user: DVCPopulatedUser,
     key: string,

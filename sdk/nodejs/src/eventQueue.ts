@@ -7,7 +7,7 @@ import {
 } from '@devcycle/types'
 import { publishEvents } from './request'
 import { DevCycleEvent, DVCPopulatedUser } from '@devcycle/js-cloud-server-sdk'
-import { Exports } from '@devcycle/bucketing-assembly-script'
+import { WASMBucketingExports } from '@devcycle/bucketing-assembly-script'
 
 export const AggregateEventTypes: Record<string, string> = {
     variableEvaluated: 'variableEvaluated',
@@ -56,7 +56,7 @@ export class EventQueue {
     constructor(
         private readonly sdkKey: string,
         private readonly clientUUID: string,
-        private readonly bucketing: Exports,
+        private readonly bucketing: WASMBucketingExports,
         options: EventQueueOptions,
     ) {
         this.logger = options.logger
