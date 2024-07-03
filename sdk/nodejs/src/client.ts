@@ -27,6 +27,7 @@ import {
     DVCVariableSet,
     DVCFeatureSet,
     DevCycleEvent,
+    DVCPopulatedUser,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
 import { randomUUID } from 'crypto'
@@ -65,6 +66,7 @@ export class DevCycleClient {
     private openFeatureProvider: DevCycleProvider
     private bucketing: WASMBucketingExports
     private bucketingTracker?: NodeJS.Timer
+    private bucketingImportPromise: Promise<void>
 
     get isInitialized(): boolean {
         return this._isInitialized
@@ -84,14 +86,25 @@ export class DevCycleClient {
             )
         }
 
-        const initializePromise = this.initializeBucketing({
+        this.bucketingImportPromise = this.initializeBucketing({
             options,
+        }).catch((bucketingErr) => {
+            throw new UserError(bucketingErr)
         })
-            .catch((bucketingErr) => {
-                throw new UserError(bucketingErr)
-            })
-            .then(() => {
-                this.configHelper = new EnvironmentConfigManager(
+
+        const initializePromise = this.bucketingImportPromise.then(() => {
+            this.configHelper = new EnvironmentConfigManager(
+                this.logger,
+                sdkKey,
+                (sdkKey: string, projectConfig: string) =>
+                    setConfigDataUTF8(this.bucketing, sdkKey, projectConfig),
+                setInterval,
+                clearInterval,
+                this.trackSDKConfigEvent.bind(this),
+                options || {},
+            )
+            if (options?.enableClientBootstrapping) {
+                this.clientConfigHelper = new EnvironmentConfigManager(
                     this.logger,
                     sdkKey,
                     (sdkKey: string, projectConfig: string) =>
@@ -103,50 +116,35 @@ export class DevCycleClient {
                     setInterval,
                     clearInterval,
                     this.trackSDKConfigEvent.bind(this),
-                    options || {},
+                    { ...options, clientMode: true },
                 )
-                if (options?.enableClientBootstrapping) {
-                    this.clientConfigHelper = new EnvironmentConfigManager(
-                        this.logger,
-                        sdkKey,
-                        (sdkKey: string, projectConfig: string) =>
-                            setConfigDataUTF8(
-                                this.bucketing,
-                                sdkKey,
-                                projectConfig,
-                            ),
-                        setInterval,
-                        clearInterval,
-                        this.trackSDKConfigEvent.bind(this),
-                        { ...options, clientMode: true },
-                    )
-                }
+            }
 
-                this.eventQueue = new EventQueue(
-                    sdkKey,
-                    this.clientUUID,
-                    this.bucketing,
-                    {
-                        ...options,
-                        logger: this.logger,
-                    },
-                )
+            this.eventQueue = new EventQueue(
+                sdkKey,
+                this.clientUUID,
+                this.bucketing,
+                {
+                    ...options,
+                    logger: this.logger,
+                },
+            )
 
-                const platformData: IPlatformData = {
-                    platform: 'NodeJS',
-                    platformVersion: process.version,
-                    sdkType: 'server',
-                    sdkVersion: packageJson.version,
-                    hostname: this.hostname,
-                }
+            const platformData: IPlatformData = {
+                platform: 'NodeJS',
+                platformVersion: process.version,
+                sdkType: 'server',
+                sdkVersion: packageJson.version,
+                hostname: this.hostname,
+            }
 
-                this.bucketing.setPlatformData(JSON.stringify(platformData))
+            this.bucketing.setPlatformData(JSON.stringify(platformData))
 
-                return Promise.all([
-                    this.configHelper.fetchConfigPromise,
-                    this.clientConfigHelper?.fetchConfigPromise,
-                ])
-            })
+            return Promise.all([
+                this.configHelper.fetchConfigPromise,
+                this.clientConfigHelper?.fetchConfigPromise,
+            ])
+        })
 
         this.onInitialized = initializePromise
             .then(() => {
@@ -240,7 +238,7 @@ export class DevCycleClient {
                 'variable called before DevCycleClient has config, returning default value',
             )
 
-            this.eventQueue?.queueAggregateEvent(populatedUser, {
+            this.queueAggregateEvent(populatedUser, {
                 type: EventTypes.aggVariableDefaulted,
                 target: key,
             })
@@ -337,7 +335,22 @@ export class DevCycleClient {
 
         checkParamDefined('type', event.type)
         const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
-        this.eventQueue.queueEvent(populatedUser, event)
+        this.queueEvent(populatedUser, event)
+    }
+
+    private queueEvent(populatedUser: DVCPopulatedUser, event: DevCycleEvent) {
+        this.bucketingImportPromise.then(() => {
+            this.eventQueue.queueEvent(populatedUser, event)
+        })
+    }
+
+    private queueAggregateEvent(
+        populatedUser: DVCPopulatedUser,
+        event: DevCycleEvent,
+    ) {
+        this.bucketingImportPromise.then(() => {
+            this.eventQueue.queueAggregateEvent(populatedUser, event)
+        })
     }
 
     private trackSDKConfigEvent(
@@ -353,7 +366,7 @@ export class DevCycleClient {
             user_id: `${this.clientUUID}@${this.hostname}`,
         })
 
-        this.eventQueue.queueEvent(populatedUser, {
+        this.queueEvent(populatedUser, {
             type: 'sdkConfig',
             target: url,
             value: responseTimeMS,
@@ -429,7 +442,9 @@ export class DevCycleClient {
     }
 
     async flushEvents(callback?: () => void): Promise<void> {
-        return this.eventQueue.flushEvents().then(callback)
+        return this.bucketingImportPromise.then(() =>
+            this.eventQueue.flushEvents().then(callback),
+        )
     }
 
     async close(): Promise<void> {
