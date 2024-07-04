@@ -220,20 +220,6 @@ export class DevCycleClient<
             void this.store.removeAnonUserId()
         }
 
-        if (this.config?.sse?.url) {
-            if (!this.options.disableRealtimeUpdates) {
-                this.streamingConnection = new StreamingConnection(
-                    this.config.sse.url,
-                    this.onSSEMessage.bind(this),
-                    this.logger,
-                )
-            } else {
-                this.logger.info(
-                    'Disabling Realtime Updates based on Initialization parameter',
-                )
-            }
-        }
-
         return this
     }
 
@@ -706,6 +692,26 @@ export class DevCycleClient<
         const isDebugUser = this.config?.sse?.url?.includes('dvc_user')
         if (!oldConfig || isDebugUser || oldConfig.etag !== this.config.etag) {
             this.eventEmitter.emitConfigUpdate(config.variables)
+        }
+
+        // Update the streaming connection URL if it has changed (for ex. if the current user has targeting overrides)
+        if (config?.sse?.url) {
+            // construct the streamingConnection if necessary
+            if (!this.streamingConnection) {
+                if (!this.options.disableRealtimeUpdates) {
+                    this.streamingConnection = new StreamingConnection(
+                        config.sse.url,
+                        this.onSSEMessage.bind(this),
+                        this.logger,
+                    )
+                } else {
+                    this.logger.info(
+                        'Disabling Realtime Updates based on Initialization parameter',
+                    )
+                }
+            } else if (config.sse.url !== oldConfig?.sse?.url) {
+                this.streamingConnection.updateURL(config.sse.url)
+            }
         }
     }
 
