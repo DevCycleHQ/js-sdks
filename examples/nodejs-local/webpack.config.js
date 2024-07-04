@@ -5,5 +5,8 @@ module.exports = (config) => {
     }
     // set the "context" for where __dirname should be relative to, to the root of the repo.
     config.context = config.context + '/../..'
+    config.resolve.extensionAlias = {
+        '.js': ['.ts', '.js'],
+    }
     return config
 }
