@@ -64,7 +64,7 @@ export class DevCycleClient {
     private logger: DVCLogger
     private _isInitialized = false
     private openFeatureProvider: DevCycleProvider
-    private bucketing: WASMBucketingExports
+    private bucketingLib: WASMBucketingExports
     private bucketingTracker?: NodeJS.Timer
     private bucketingImportPromise: Promise<void>
 
@@ -97,7 +97,7 @@ export class DevCycleClient {
                 this.logger,
                 sdkKey,
                 (sdkKey: string, projectConfig: string) =>
-                    setConfigDataUTF8(this.bucketing, sdkKey, projectConfig),
+                    setConfigDataUTF8(this.bucketingLib, sdkKey, projectConfig),
                 setInterval,
                 clearInterval,
                 this.trackSDKConfigEvent.bind(this),
@@ -109,7 +109,7 @@ export class DevCycleClient {
                     sdkKey,
                     (sdkKey: string, projectConfig: string) =>
                         setConfigDataUTF8(
-                            this.bucketing,
+                            this.bucketingLib,
                             sdkKey,
                             projectConfig,
                         ),
@@ -123,7 +123,7 @@ export class DevCycleClient {
             this.eventQueue = new EventQueue(
                 sdkKey,
                 this.clientUUID,
-                this.bucketing,
+                this.bucketingLib,
                 {
                     ...options,
                     logger: this.logger,
@@ -138,7 +138,7 @@ export class DevCycleClient {
                 hostname: this.hostname,
             }
 
-            this.bucketing.setPlatformData(JSON.stringify(platformData))
+            this.bucketingLib.setPlatformData(JSON.stringify(platformData))
 
             return Promise.all([
                 this.configHelper.fetchConfigPromise,
@@ -172,7 +172,7 @@ export class DevCycleClient {
     }: {
         options?: DevCycleServerSDKOptions
     }): Promise<void> {
-        ;[this.bucketing, this.bucketingTracker] = await importBucketingLib({
+        ;[this.bucketingLib, this.bucketingTracker] = await importBucketingLib({
             options,
             logger: this.logger,
         })
@@ -251,11 +251,11 @@ export class DevCycleClient {
         }
 
         const configVariable = variableForUser_PB(
-            this.bucketing,
+            this.bucketingLib,
             this.sdkKey,
             populatedUser,
             key,
-            getVariableTypeCode(this.bucketing, type),
+            getVariableTypeCode(this.bucketingLib, type),
         )
 
         const options: VariableParam<T> = {
@@ -297,7 +297,7 @@ export class DevCycleClient {
 
         const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
         const bucketedConfig = bucketUserForConfig(
-            this.bucketing,
+            this.bucketingLib,
             populatedUser,
             this.sdkKey,
         )
@@ -316,7 +316,7 @@ export class DevCycleClient {
 
         const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
         const bucketedConfig = bucketUserForConfig(
-            this.bucketing,
+            this.bucketingLib,
             populatedUser,
             this.sdkKey,
         )
@@ -409,7 +409,7 @@ export class DevCycleClient {
         }
 
         const clientSDKKey = getSDKKeyFromConfig(
-            this.bucketing,
+            this.bucketingLib,
             `${this.sdkKey}_client`,
         )
 
@@ -429,7 +429,7 @@ export class DevCycleClient {
             )
             return {
                 ...bucketUserForConfig(
-                    this.bucketing,
+                    this.bucketingLib,
                     populatedUser,
                     `${this.sdkKey}_client`,
                 ),
