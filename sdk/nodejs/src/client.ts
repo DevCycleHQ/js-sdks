@@ -339,7 +339,8 @@ export class DevCycleClient {
     }
 
     private queueEvent(populatedUser: DVCPopulatedUser, event: DevCycleEvent) {
-        this.bucketingImportPromise.then(() => {
+        // we need the config in order to queue events since we need to know the featureVars
+        this.onInitialized.then(() => {
             this.eventQueue.queueEvent(populatedUser, event)
         })
     }
@@ -348,6 +349,8 @@ export class DevCycleClient {
         populatedUser: DVCPopulatedUser,
         event: DevCycleEvent,
     ) {
+        // we don't need the config for aggregate events since there are no featureVars stored, so just wait until
+        // bucketing lib itself is initialized
         this.bucketingImportPromise.then(() => {
             this.eventQueue.queueAggregateEvent(populatedUser, event)
         })
