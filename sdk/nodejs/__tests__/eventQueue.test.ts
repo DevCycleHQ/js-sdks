@@ -1,13 +1,11 @@
+import { Exports } from '@devcycle/bucketing-assembly-script'
+
 jest.mock('../src/request')
 import { EventQueue, EventQueueOptions } from '../src/eventQueue'
 import { EventTypes } from '../src/eventQueue'
 import { BucketedUserConfig, DVCReporter, PublicProject } from '@devcycle/types'
 import { mocked } from 'jest-mock'
-import {
-    cleanupBucketingLib,
-    getBucketingLib,
-    importBucketingLib,
-} from '../src/bucketing'
+import { importBucketingLib } from '../src/bucketing'
 import { setPlatformDataJSON } from './utils/setPlatformData'
 import { Response } from 'cross-fetch'
 import { dvcDefaultLogger } from '@devcycle/js-cloud-server-sdk'
@@ -21,6 +19,7 @@ const publishEvents_mock = mocked(publishEvents)
 const defaultLogger = dvcDefaultLogger()
 
 describe('EventQueue Unit Tests', () => {
+    let bucketing: Exports
     const bucketedUserConfig: BucketedUserConfig = {
         environment: { _id: '', key: '' },
         features: {},
@@ -70,27 +69,23 @@ describe('EventQueue Unit Tests', () => {
         clientUUID: string,
         optionsOverrides?: Partial<EventQueueOptions>,
     ): EventQueue => {
-        getBucketingLib().setConfigData(sdkKey, JSON.stringify(config))
+        bucketing.setConfigData(sdkKey, JSON.stringify(config))
         currentEventKey = sdkKey
         const options = {
             logger: defaultLogger,
             ...optionsOverrides,
         }
-        return new EventQueue(sdkKey, clientUUID, options)
+        return new EventQueue(sdkKey, clientUUID, bucketing, options)
     }
 
     beforeAll(async () => {
-        await importBucketingLib()
-        setPlatformDataJSON()
-    })
-
-    afterAll(() => {
-        cleanupBucketingLib()
+        ;[bucketing] = await importBucketingLib()
+        setPlatformDataJSON(bucketing)
     })
 
     afterEach(() => {
         publishEvents_mock.mockReset()
-        getBucketingLib().cleanupEventQueue(currentEventKey)
+        bucketing.cleanupEventQueue(currentEventKey)
     })
 
     it('should report metrics', async () => {
@@ -853,12 +848,12 @@ describe('EventQueue Unit Tests', () => {
                 for (let i = 0; i < 500; i++) {
                     eventQueue.queueEvent(user, { type: 'test_event' })
                 }
-                expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(1000)
+                expect(bucketing.eventQueueSize(sdkKey)).toEqual(1000)
 
                 for (let i = 0; i < 1000; i++) {
                     eventQueue.queueEvent(user, { type: 'test_event' })
                 }
-                expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(2000)
+                expect(bucketing.eventQueueSize(sdkKey)).toEqual(2000)
 
                 eventQueue.queueEvent(user, { type: 'test_event2' })
 
@@ -868,7 +863,7 @@ describe('EventQueue Unit Tests', () => {
                         'Max event queue size reached, dropping event',
                     ),
                 )
-                expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(2000)
+                expect(bucketing.eventQueueSize(sdkKey)).toEqual(2000)
             },
         )
 
@@ -901,12 +896,12 @@ describe('EventQueue Unit Tests', () => {
                         },
                     })
                 }
-                expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(1000)
+                expect(bucketing.eventQueueSize(sdkKey)).toEqual(1000)
 
                 for (let i = 0; i < 1000; i++) {
                     eventQueue.queueEvent(user, { type: 'test_event' })
                 }
-                expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(2000)
+                expect(bucketing.eventQueueSize(sdkKey)).toEqual(2000)
 
                 eventQueue.queueAggregateEvent(
                     user,
@@ -923,7 +918,7 @@ describe('EventQueue Unit Tests', () => {
                         'Max event queue size reached, dropping aggregate event',
                     ),
                 )
-                expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(2000)
+                expect(bucketing.eventQueueSize(sdkKey)).toEqual(2000)
             },
         )
 
@@ -956,12 +951,12 @@ describe('EventQueue Unit Tests', () => {
                     })
                 }
                 expect(flushEvents_mock).toBeCalledTimes(0)
-                expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(1000)
+                expect(bucketing.eventQueueSize(sdkKey)).toEqual(1000)
 
                 // since max event queue size has been reached, attempting to add a new user event will flush the queue
                 eventQueue.queueEvent(user, { type: 'test_event' })
                 expect(flushEvents_mock).toBeCalledTimes(1)
-                expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(1001)
+                expect(bucketing.eventQueueSize(sdkKey)).toEqual(1001)
             },
         )
 
@@ -995,7 +990,7 @@ describe('EventQueue Unit Tests', () => {
                     })
                 }
                 expect(flushEvents_mock).toBeCalledTimes(0)
-                expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(1000)
+                expect(bucketing.eventQueueSize(sdkKey)).toEqual(1000)
 
                 // since max event queue size has been reached, attempting to add a new agg event will flush the queue
                 eventQueue.queueAggregateEvent(
@@ -1012,7 +1007,7 @@ describe('EventQueue Unit Tests', () => {
                     },
                 )
                 expect(flushEvents_mock).toBeCalledTimes(1)
-                expect(getBucketingLib().eventQueueSize(sdkKey)).toEqual(1001)
+                expect(bucketing.eventQueueSize(sdkKey)).toEqual(1001)
             },
         )
     })
@@ -1021,14 +1016,14 @@ describe('EventQueue Unit Tests', () => {
         it('should validate flushEventsMS', () => {
             expect(
                 () =>
-                    new EventQueue('test', 'uuid', {
+                    new EventQueue('test', 'uuid', bucketing, {
                         logger: defaultLogger,
                         eventFlushIntervalMS: 400,
                     }),
             ).toThrow('eventFlushIntervalMS: 400 must be larger than 500ms')
             expect(
                 () =>
-                    new EventQueue('test', 'uuid', {
+                    new EventQueue('test', 'uuid', bucketing, {
                         logger: defaultLogger,
                         eventFlushIntervalMS: 10 * 60 * 1000,
                     }),
@@ -1042,7 +1037,7 @@ describe('EventQueue Unit Tests', () => {
         it('should validate flushEventQueueSize and maxEventQueueSize', () => {
             expect(
                 () =>
-                    new EventQueue('test', 'uuid', {
+                    new EventQueue('test', 'uuid', bucketing, {
                         logger: defaultLogger,
                         flushEventQueueSize: 2000,
                         maxEventQueueSize: 2000,
@@ -1053,7 +1048,7 @@ describe('EventQueue Unit Tests', () => {
 
             expect(
                 () =>
-                    new EventQueue('test', 'uuid', {
+                    new EventQueue('test', 'uuid', bucketing, {
                         logger: defaultLogger,
                         flushEventQueueSize: 1000,
                         maxEventQueueSize: 2000,
@@ -1066,7 +1061,7 @@ describe('EventQueue Unit Tests', () => {
 
             expect(
                 () =>
-                    new EventQueue('test', 'uuid', {
+                    new EventQueue('test', 'uuid', bucketing, {
                         logger: defaultLogger,
                         flushEventQueueSize: 25000,
                         maxEventQueueSize: 40000,

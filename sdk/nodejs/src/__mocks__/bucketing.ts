@@ -1,6 +1,4 @@
-import { ProtobufTypes } from '@devcycle/bucketing-assembly-script'
-
-let Bucketing: unknown
+import { Exports, ProtobufTypes } from '@devcycle/bucketing-assembly-script'
 
 const testVariable = {
     _id: 'test-id',
@@ -25,31 +23,23 @@ enum VariableType {
     JSON,
 }
 
-export const importBucketingLib = async (): Promise<void> => {
-    Bucketing = await new Promise((resolve) =>
-        resolve({
-            setConfigData: jest.fn(),
-            setConfigDataUTF8: jest.fn(),
-            setPlatformData: jest.fn(),
-            generateBucketedConfigForUser: jest.fn().mockReturnValue(
-                JSON.stringify({
-                    variables: { 'test-key': testVariable },
-                }),
-            ),
-            variableForUser: jest
-                .fn()
-                .mockReturnValue(JSON.stringify(testVariable)),
-            variableForUser_PB: jest.fn().mockReturnValue(buffer),
-            VariableType,
-            initEventQueue: jest.fn(),
-            flushEventQueue: jest.fn(),
-        }),
-    )
-}
-
-export const getBucketingLib = (): unknown => {
-    if (!Bucketing) {
-        throw new Error('Bucketing library not loaded')
-    }
-    return Bucketing
+export const importBucketingLib = async (): Promise<[Exports, undefined]> => {
+    const bucketing = await Promise.resolve({
+        setConfigData: jest.fn(),
+        setConfigDataUTF8: jest.fn(),
+        setPlatformData: jest.fn(),
+        generateBucketedConfigForUser: jest.fn().mockReturnValue(
+            JSON.stringify({
+                variables: { 'test-key': testVariable },
+            }),
+        ),
+        variableForUser: jest
+            .fn()
+            .mockReturnValue(JSON.stringify(testVariable)),
+        variableForUser_PB: jest.fn().mockReturnValue(buffer),
+        VariableType,
+        initEventQueue: jest.fn(),
+        flushEventQueue: jest.fn(),
+    })
+    return [bucketing as unknown as Exports, undefined]
 }

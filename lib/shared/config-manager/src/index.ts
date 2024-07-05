@@ -260,7 +260,11 @@ export class EnvironmentConfigManager {
                 }, etag: ${res?.headers.get('etag')}`,
             )
         } catch (ex) {
-            trackEvent(ex)
+            if (this.hasConfig) {
+                // TODO currently event queue in WASM requires a valid config
+                // switch this to hit the events API directly
+                trackEvent(ex)
+            }
             logError(ex)
             res = null
             if (ex instanceof ResponseError) {
