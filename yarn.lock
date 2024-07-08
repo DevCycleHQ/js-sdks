@@ -4778,7 +4778,7 @@ __metadata:
   dependencies:
     "@devcycle/js-client-sdk": ^1.27.1
   peerDependencies:
-    "@openfeature/multi-provider-web": ^0.0.1
+    "@openfeature/multi-provider-web": ^0.0.2
     "@openfeature/web-sdk": ^1.0.3
   peerDependenciesMeta:
     "@openfeature/multi-provider-web":
@@ -8219,14 +8219,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openfeature/multi-provider-web@npm:^0.0.1":
-  version: 0.0.1
-  resolution: "@openfeature/multi-provider-web@npm:0.0.1"
+"@openfeature/multi-provider-web@npm:^0.0.2":
+  version: 0.0.2
+  resolution: "@openfeature/multi-provider-web@npm:0.0.2"
   dependencies:
     tslib: ^2.3.0
   peerDependencies:
-    "@openfeature/web-sdk": ^1.6.0
-  checksum: 01d24c5fa3f85bf64232486464aafa93774ab82324deca919816544899cd0d4e0cc0d37c5f7c2f3cf02743966a6691f8f87c8d8e7dc508e0ecfd225b74771bac
+    "@openfeature/web-sdk": ^1.2.1
+  checksum: 67fa5256ac0cea682ce565e063be628ccb5673496da5ab27cb144e6b66d5d09a97b64b831ce820dbfc6af1a08c03b68283bf71fadd06e03a5f542352314d79e9
   languageName: node
   linkType: hard
 
@@ -15311,7 +15311,7 @@ __metadata:
     "@nx/workspace": 16.10.0
     "@openfeature/core": ^1.1.0
     "@openfeature/multi-provider": ^0.1.1
-    "@openfeature/multi-provider-web": ^0.0.1
+    "@openfeature/multi-provider-web": ^0.0.2
     "@openfeature/server-sdk": ^1.13.5
     "@openfeature/web-sdk": ^1.0.3
     "@playwright/test": ^1.36.0
