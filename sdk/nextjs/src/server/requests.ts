@@ -7,6 +7,7 @@ const getFetchUrl = (sdkKey: string, obfuscated: boolean) =>
 
 export const fetchCDNConfig = async (
     sdkKey: string,
+    clientSDKKey: string,
     options: DevCycleNextOptions,
 ): Promise<Response> => {
     return await fetch(
@@ -15,7 +16,7 @@ export const fetchCDNConfig = async (
         {
             next: {
                 revalidate: 60,
-                tags: [sdkKey],
+                tags: [sdkKey, clientSDKKey],
             },
         },
     )

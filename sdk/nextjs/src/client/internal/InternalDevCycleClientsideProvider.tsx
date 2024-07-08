@@ -1,7 +1,6 @@
 'use client'
 import React, { Suspense, use, useContext, useRef, useState } from 'react'
 import { DevCycleClient, initializeDevCycle } from '@devcycle/js-client-sdk'
-import { useRouter } from 'next/navigation'
 import { invalidateConfig } from '../../common/invalidateConfig'
 import { DevCycleNextOptions, DevCycleServerData } from '../../common/types'
 import { DevCycleProviderContext } from './context'
@@ -59,20 +58,13 @@ export const InternalDevCycleClientsideProvider = ({
     children,
     promiseResolved,
 }: DevCycleClientsideProviderProps): React.ReactElement => {
-    const router = useRouter()
     const clientRef = useRef<DevCycleClient>()
 
     const { serverDataPromise, serverData, clientSDKKey, enableStreaming } =
         context
 
     const revalidateConfig = (lastModified?: number) => {
-        invalidateConfig(
-            clientSDKKey,
-            !!context.options.enableObfuscation,
-            lastModified,
-        ).finally(() => {
-            router.refresh()
-        })
+        void invalidateConfig(clientSDKKey)
     }
 
     let resolvedServerData = serverData
