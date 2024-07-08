@@ -11,6 +11,12 @@ export class StreamingConnection {
         this.openConnection()
     }
 
+    public updateURL(url: string): void {
+        this.close()
+        this.url = url
+        this.openConnection()
+    }
+
     private openConnection() {
         if (typeof EventSource === 'undefined') {
             this.logger.warn(
