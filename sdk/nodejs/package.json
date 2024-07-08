@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/nodejs-server-sdk",
-    "version": "1.32.2",
+    "version": "1.32.3",
     "description": "The DevCycle NodeJS Server SDK used for feature management.",
     "license": "MIT",
     "author": "DevCycle <support@devcycle.com>",
