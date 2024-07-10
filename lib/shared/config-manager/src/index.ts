@@ -1,7 +1,10 @@
 import { ConfigBody, DVCLogger } from '@devcycle/types'
-import { getEnvironmentConfig, isValidDate } from './request'
 import { ResponseError, UserError } from '@devcycle/server-request'
 import { SSEConnection } from '@devcycle/sse-connection'
+import { DefaultConfigSource } from './DefaultConfigSource'
+import { isValidDate } from './request'
+
+export * from './ConfigSource'
 
 type ConfigPollingOptions = {
     configPollingIntervalMS?: number
@@ -26,90 +29,6 @@ type TrackSDKConfigEventInterface = (
     sseConnected?: boolean,
 ) => void
 
-export abstract class ConfigSource {
-    abstract getConfig(
-        sdkKey: string,
-        currentEtag?: string,
-        currentLastModified?: string,
-        lastModifiedThreshold?: string,
-    ): Promise<ConfigBody>
-}
-
-export class DefaultConfigSource implements ConfigSource {
-    configEtag?: string
-    configLastModified?: string
-
-    constructor(
-        private cdnURI: string,
-        private clientMode: boolean,
-        private logger: DVCLogger,
-        private requestTimeoutMS: number,
-    ) {}
-
-    async getConfig(
-        sdkKey: string,
-        currentEtag?: string,
-        currentLastModified?: string,
-        lastModifiedThreshold?: string,
-    ): Promise<ConfigBody> {
-        const res = await getEnvironmentConfig({
-            logger: this.logger,
-            url: this.getConfigURL(sdkKey),
-            requestTimeout: this.requestTimeoutMS,
-            currentEtag,
-            currentLastModified,
-            sseLastModified: lastModifiedThreshold,
-        })
-
-        const projectConfig = await res.text()
-
-        this.logger.debug(
-            `Downloaded config, status: ${
-                res?.status
-            }, etag: ${res?.headers.get('etag')}`,
-        )
-
-        if (res?.status === 304) {
-            this.logger.debug(
-                `Config not modified, using cache, etag: ${this.configEtag}` +
-                    `, last-modified: ${this.configLastModified}`,
-            )
-        } else if (res?.status === 200 && projectConfig) {
-            const lastModifiedHeader = res?.headers.get('last-modified')
-            if (this.isLastModifiedHeaderOld(lastModifiedHeader)) {
-                this.logger.debug(
-                    'Skipping saving config, existing last modified date is newer.',
-                )
-            }
-
-            this.configEtag = res?.headers.get('etag') || ''
-            this.configLastModified = lastModifiedHeader || ''
-        }
-    }
-
-    getConfigURL(sdkKey: string): string {
-        if (this.clientMode) {
-            return `${this.cdnURI}/config/v1/server/bootstrap/${sdkKey}.json`
-        }
-        return `${this.cdnURI}/config/v1/server/${sdkKey}.json`
-    }
-
-    private isLastModifiedHeaderOld(lastModifiedHeader: string | null) {
-        const lastModifiedHeaderDate = lastModifiedHeader
-            ? new Date(lastModifiedHeader)
-            : null
-        const configLastModifiedDate = this.configLastModified
-            ? new Date(this.configLastModified)
-            : null
-
-        return (
-            isValidDate(configLastModifiedDate) &&
-            isValidDate(lastModifiedHeaderDate) &&
-            lastModifiedHeaderDate <= configLastModifiedDate
-        )
-    }
-}
-
 export class EnvironmentConfigManager {
     private _hasConfig = false
     configEtag?: string
@@ -120,7 +39,6 @@ export class EnvironmentConfigManager {
     private readonly configPollingIntervalMS: number
     private readonly sseConfigPollingIntervalMS: number
     private readonly requestTimeoutMS: number
-    private readonly cdnURI: string
     private readonly enableRealtimeUpdates: boolean
 
     fetchConfigPromise: Promise<void>
@@ -144,7 +62,7 @@ export class EnvironmentConfigManager {
             clientMode = false,
             enableBetaRealTimeUpdates = false,
         }: ConfigPollingOptions,
-        private configSource: ConfigSource = new DefaultConfigSource(
+        private configSource = new DefaultConfigSource(
             cdnURI,
             clientMode,
             logger,
@@ -164,7 +82,6 @@ export class EnvironmentConfigManager {
             configPollingTimeoutMS >= this.configPollingIntervalMS
                 ? this.configPollingIntervalMS
                 : configPollingTimeoutMS
-        this.cdnURI = configCDNURI || cdnURI
 
         this.fetchConfigPromise = this._fetchConfig()
             .then(() => {
@@ -287,15 +204,8 @@ export class EnvironmentConfigManager {
         this.stopSSE()
     }
 
-    getConfigURL(): string {
-        if (this.clientMode) {
-            return `${this.cdnURI}/config/v1/server/bootstrap/${this.sdkKey}.json`
-        }
-        return `${this.cdnURI}/config/v1/server/${this.sdkKey}.json`
-    }
-
     async _fetchConfig(sseLastModified?: string): Promise<void> {
-        const url = this.getConfigURL()
+        const url = this.configSource.getConfigURL(this.sdkKey)
         let res: Response | null
         let projectConfig: ConfigBody | null = null
         let responseError: ResponseError | null = null
@@ -340,26 +250,33 @@ export class EnvironmentConfigManager {
                 currentLastModified,
                 sseLastModified,
             )
+            if (
+                this.isLastModifiedHeaderOld(
+                    this.configSource.configLastModified ?? null,
+                )
+            ) {
+                this.logger.debug(
+                    'Skipping saving config, existing last modified date is newer.',
+                )
+                return
+            }
             responseTimeMS = Date.now() - startTime
+            // if no errors occurred, the projectConfig is either new or null (meaning cached version is used)
+            // either way, trigger the SSE config handler to see if we need to reconnect
+            this.handleSSEConfig(projectConfig ?? undefined)
         } catch (ex) {
             trackEvent(ex)
             logError(ex)
-            res = null
             if (ex instanceof ResponseError) {
                 responseError = ex
             }
         }
 
-        if (res?.status === 304) {
-            this.handleSSEConfig()
-            return
-        } else if (res?.status === 200 && projectConfig) {
+        if (projectConfig) {
             try {
-                this.handleSSEConfig(projectConfig)
-
                 this.setConfigBuffer(
                     `${this.sdkKey}${this.clientMode ? '_client' : ''}`,
-                    projectConfig,
+                    JSON.stringify(projectConfig),
                 )
                 this._hasConfig = true
                 return
@@ -383,13 +300,25 @@ export class EnvironmentConfigManager {
         }
     }
 
-    private handleSSEConfig(projectConfig?: string) {
+    private isLastModifiedHeaderOld(lastModifiedHeader: string | null) {
+        const lastModifiedHeaderDate = lastModifiedHeader
+            ? new Date(lastModifiedHeader)
+            : null
+        const configLastModifiedDate = this.configLastModified
+            ? new Date(this.configLastModified)
+            : null
+
+        return (
+            isValidDate(configLastModifiedDate) &&
+            isValidDate(lastModifiedHeaderDate) &&
+            lastModifiedHeaderDate <= configLastModifiedDate
+        )
+    }
+
+    private handleSSEConfig(configBody?: ConfigBody<string>) {
         if (this.enableRealtimeUpdates) {
             const originalConfigSSE = this.configSSE
-            if (projectConfig) {
-                const configBody = JSON.parse(
-                    projectConfig,
-                ) as ConfigBody<string>
+            if (configBody) {
                 this.configSSE = configBody.sse
             }
 
