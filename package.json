@@ -33,6 +33,7 @@
     "dependencies": {
         "@altack/nx-bundlefy": "^0.16.0",
         "@devcycle/assemblyscript-json": "^2.0.0",
+        "@libsql/client": "^0.7.0",
         "@openfeature/core": "^1.1.0",
         "@openfeature/multi-provider": "^0.1.1",
         "@openfeature/multi-provider-web": "^0.0.2",

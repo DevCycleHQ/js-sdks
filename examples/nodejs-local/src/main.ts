@@ -8,11 +8,60 @@ const DEVCYCLE_SERVER_SDK_KEY =
     process.env['DEVCYCLE_SERVER_SDK_KEY'] || '<DEVCYCLE_SERVER_SDK_KEY>'
 let devcycleClient: DevCycleClient
 
+const TURSO_DATABASE_URL = process.env['TURSO_DATABASE_URL']
+const TURSO_AUTH_TOKEN = process.env['TURSO_AUTH_TOKEN']
+if (!TURSO_DATABASE_URL || !TURSO_AUTH_TOKEN) {
+    throw new Error('TURSO_DATABASE_URL and TURSO_AUTH_TOKEN must be defined')
+}
+
+type TursoClient = {
+    sync: () => Promise<void>
+} // Declare Client type locally
+let tursoClient: TursoClient
+
+async function startTurso() {
+    if (tursoClient) return
+
+    const libsqlModule = await import('@libsql/client/node') // Dynamic import
+    const createClient = libsqlModule.createClient
+
+    tursoClient = createClient({
+        url: 'file:/Users/jonathannorris/git/js-sdks/tmp/turso.db',
+        authToken: TURSO_AUTH_TOKEN,
+        syncUrl: TURSO_DATABASE_URL,
+        syncInterval: 5,
+    })
+    console.log('Turso local sqlite client initialized')
+    await tursoClient.sync()
+    console.log('Turso local sqlite client synced')
+
+    const count = 10
+    // generate count number of random numbers between 0 and 100000
+    const randomNumbers = Array.from({ length: count }, () =>
+        Math.floor(Math.random() * 100000),
+    )
+    console.log(`Random numbers: ${randomNumbers}`)
+
+    const allResults = await Promise.all(
+        randomNumbers.map(async (id) => {
+            // @ts-ignore
+            const res = await tursoClient.execute(
+                `SELECT * FROM EdgeDBTest WHERE unique_id = ${id}`,
+            )
+            return res.rows[0]
+        }),
+    )
+    console.log(`Turso results: `)
+    console.dir(allResults)
+}
+
 async function startDevCycle() {
     devcycleClient = await initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY, {
         logLevel: 'info',
     }).onClientInitialized()
     console.log('DevCycle local bucketing typescript client initialized')
+
+    await startTurso()
 
     const user = {
         user_id: 'node_sdk_test',
