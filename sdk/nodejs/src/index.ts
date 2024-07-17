@@ -98,7 +98,7 @@ export type DVCEvent = DevCycleEvent
  */
 export type DVCOptions = DevCycleServerSDKOptions
 
-export type { ConfigSource } from '@devcycle/config-manager'
+export { ConfigSource } from '@devcycle/config-manager'
 
 type DevCycleOptionsCloudEnabled = DevCycleServerSDKOptions & {
     enableCloudBucketing: true

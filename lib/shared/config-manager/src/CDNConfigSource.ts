@@ -1,18 +1,17 @@
 import { ConfigBody, DVCLogger } from '@devcycle/types'
 import { ConfigSource } from './ConfigSource'
-import { getEnvironmentConfig, isValidDate } from './request'
+import { getEnvironmentConfig } from './request'
 import { ResponseError, UserError } from '@devcycle/server-request'
 
-export class DefaultConfigSource implements ConfigSource {
-    configEtag?: string
-    configLastModified?: string
-
+export class CDNConfigSource extends ConfigSource {
     constructor(
         private cdnURI: string,
         private clientMode: boolean,
         private logger: DVCLogger,
         private requestTimeoutMS: number,
-    ) {}
+    ) {
+        super()
+    }
 
     async getConfig(
         sdkKey: string,
@@ -30,7 +29,7 @@ export class DefaultConfigSource implements ConfigSource {
             })
         } catch (e) {
             if (e instanceof ResponseError && e.status === 403) {
-                throw new UserError(`Invalid SDK key provided`)
+                throw new UserError(`Invalid SDK key provided: ${sdkKey}`)
             }
             throw e
         }
@@ -75,20 +74,5 @@ export class DefaultConfigSource implements ConfigSource {
             return `${this.cdnURI}/config/v1/server/bootstrap/${sdkKey}.json`
         }
         return `${this.cdnURI}/config/v1/server/${sdkKey}.json`
-    }
-
-    private isLastModifiedHeaderOld(lastModifiedHeader: string | null) {
-        const lastModifiedHeaderDate = lastModifiedHeader
-            ? new Date(lastModifiedHeader)
-            : null
-        const configLastModifiedDate = this.configLastModified
-            ? new Date(this.configLastModified)
-            : null
-
-        return (
-            isValidDate(configLastModifiedDate) &&
-            isValidDate(lastModifiedHeaderDate) &&
-            lastModifiedHeaderDate <= configLastModifiedDate
-        )
     }
 }

@@ -1,4 +1,5 @@
 import { ConfigBody } from '@devcycle/types'
+import { isValidDate } from './request'
 
 export abstract class ConfigSource {
     configEtag?: string
@@ -20,4 +21,21 @@ export abstract class ConfigSource {
      * @param sdkKey
      */
     abstract getConfigURL(sdkKey: string): string
+
+    protected isLastModifiedHeaderOld(
+        lastModifiedHeader: string | null,
+    ): boolean {
+        const lastModifiedHeaderDate = lastModifiedHeader
+            ? new Date(lastModifiedHeader)
+            : null
+        const configLastModifiedDate = this.configLastModified
+            ? new Date(this.configLastModified)
+            : null
+
+        return (
+            isValidDate(configLastModifiedDate) &&
+            isValidDate(lastModifiedHeaderDate) &&
+            lastModifiedHeaderDate <= configLastModifiedDate
+        )
+    }
 }

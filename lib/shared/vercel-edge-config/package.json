@@ -3,6 +3,8 @@
     "version": "0.0.1",
     "dependencies": {},
     "peerDependencies": {
+        "@devcycle/nodejs-server-sdk": "*",
+        "@devcycle/types": "*",
         "@vercel/edge-config": "^1.2.0"
     },
     "type": "commonjs",

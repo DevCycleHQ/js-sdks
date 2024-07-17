@@ -1,7 +1,7 @@
 import { ConfigBody, DVCLogger } from '@devcycle/types'
 import { ResponseError, UserError } from '@devcycle/server-request'
 import { SSEConnection } from '@devcycle/sse-connection'
-import { DefaultConfigSource } from './DefaultConfigSource'
+import { CDNConfigSource } from './CDNConfigSource'
 import { isValidDate } from './request'
 import { ConfigSource } from './ConfigSource'
 
@@ -61,7 +61,7 @@ export class EnvironmentConfigManager {
             clientMode = false,
             enableBetaRealTimeUpdates = false,
         }: ConfigPollingOptions,
-        configSource: ConfigSource,
+        configSource?: ConfigSource,
     ) {
         this.clientMode = clientMode
         this.enableRealtimeUpdates = enableBetaRealTimeUpdates
@@ -79,7 +79,7 @@ export class EnvironmentConfigManager {
 
         this.configSource =
             configSource ??
-            new DefaultConfigSource(
+            new CDNConfigSource(
                 cdnURI,
                 clientMode,
                 logger,
