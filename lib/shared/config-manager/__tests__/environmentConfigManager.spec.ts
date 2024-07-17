@@ -100,7 +100,6 @@ describe('EnvironmentConfigManager Unit Tests', () => {
                 currentPollingInterval: 1000,
                 configPollingIntervalMS: 1000,
                 sseConfigPollingIntervalMS: 10 * 60 * 1000,
-                requestTimeoutMS: 1000,
             }),
         )
         envConfig.cleanup()
@@ -131,7 +130,6 @@ describe('EnvironmentConfigManager Unit Tests', () => {
                     currentPollingInterval: 1000,
                     configPollingIntervalMS: 1000,
                     sseConfigPollingIntervalMS: 2 * 60 * 1000,
-                    requestTimeoutMS: 1000,
                 }),
             )
             envConfig.cleanup()
@@ -166,13 +164,12 @@ describe('EnvironmentConfigManager Unit Tests', () => {
                 currentPollingInterval: 1000,
                 configPollingIntervalMS: 1000,
                 sseConfigPollingIntervalMS: 10 * 60 * 1000,
-                requestTimeoutMS: 1000,
             }),
         )
         expect(trackSDKConfigEvent_mock).toBeCalledWith(
             'https://config-cdn.devcycle.com/config/v1/server/sdkKey.json',
             expect.any(Number),
-            expect.objectContaining({ status: 200 }),
+            expect.objectContaining({ resStatus: 200 }),
             undefined,
             undefined,
             undefined,
@@ -210,7 +207,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
 
         const envConfig = getConfigManager(logger, 'sdkKey', {})
         expect(envConfig.fetchConfigPromise).rejects.toThrow(
-            'Invalid SDK key provided:',
+            'Invalid SDK key provided',
         )
         expect(setInterval_mock).toHaveBeenCalledTimes(0)
     })

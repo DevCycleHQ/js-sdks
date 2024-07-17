@@ -4845,8 +4845,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/vercel-edge-config@workspace:lib/shared/vercel-edge-config"
   dependencies:
-    "@vercel/edge-config": ^1.2.0
     tslib: ^2.3.0
+  peerDependencies:
+    "@vercel/edge-config": ^1.2.0
   languageName: unknown
   linkType: soft
 

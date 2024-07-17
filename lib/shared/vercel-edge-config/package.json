@@ -2,8 +2,10 @@
     "name": "@devcycle/vercel-edge-config",
     "version": "0.0.1",
     "dependencies": {
-        "@vercel/edge-config": "^1.2.0",
         "tslib": "^2.3.0"
+    },
+    "peerDependencies": {
+        "@vercel/edge-config": "^1.2.0"
     },
     "type": "commonjs",
     "main": "./src/index.js",
