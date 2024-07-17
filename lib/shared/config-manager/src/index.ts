@@ -1,7 +1,10 @@
 import { ConfigBody, DVCLogger } from '@devcycle/types'
-import { getEnvironmentConfig, isValidDate } from './request'
 import { ResponseError, UserError } from '@devcycle/server-request'
 import { SSEConnection } from '@devcycle/sse-connection'
+import { DefaultConfigSource } from './DefaultConfigSource'
+import { isValidDate } from './request'
+
+export * from './ConfigSource'
 
 type ConfigPollingOptions = {
     configPollingIntervalMS?: number
@@ -19,108 +22,20 @@ type SetConfigBufferInterface = (sdkKey: string, projectConfig: string) => void
 type TrackSDKConfigEventInterface = (
     url: string,
     responseTimeMS: number,
-    res?: Response,
+    retrievalMetadata?: Record<string, unknown>,
     err?: ResponseError,
     reqEtag?: string,
     reqLastModified?: string,
     sseConnected?: boolean,
 ) => void
 
-export abstract class ConfigSource {
-    abstract getConfig(
-        sdkKey: string,
-        currentEtag?: string,
-        currentLastModified?: string,
-        lastModifiedThreshold?: string,
-    ): Promise<ConfigBody>
-}
-
-export class DefaultConfigSource implements ConfigSource {
-    configEtag?: string
-    configLastModified?: string
-
-    constructor(
-        private cdnURI: string,
-        private clientMode: boolean,
-        private logger: DVCLogger,
-        private requestTimeoutMS: number,
-    ) {}
-
-    async getConfig(
-        sdkKey: string,
-        currentEtag?: string,
-        currentLastModified?: string,
-        lastModifiedThreshold?: string,
-    ): Promise<ConfigBody> {
-        const res = await getEnvironmentConfig({
-            logger: this.logger,
-            url: this.getConfigURL(sdkKey),
-            requestTimeout: this.requestTimeoutMS,
-            currentEtag,
-            currentLastModified,
-            sseLastModified: lastModifiedThreshold,
-        })
-
-        const projectConfig = await res.text()
-
-        this.logger.debug(
-            `Downloaded config, status: ${
-                res?.status
-            }, etag: ${res?.headers.get('etag')}`,
-        )
-
-        if (res?.status === 304) {
-            this.logger.debug(
-                `Config not modified, using cache, etag: ${this.configEtag}` +
-                    `, last-modified: ${this.configLastModified}`,
-            )
-        } else if (res?.status === 200 && projectConfig) {
-            const lastModifiedHeader = res?.headers.get('last-modified')
-            if (this.isLastModifiedHeaderOld(lastModifiedHeader)) {
-                this.logger.debug(
-                    'Skipping saving config, existing last modified date is newer.',
-                )
-            }
-
-            this.configEtag = res?.headers.get('etag') || ''
-            this.configLastModified = lastModifiedHeader || ''
-        }
-    }
-
-    getConfigURL(sdkKey: string): string {
-        if (this.clientMode) {
-            return `${this.cdnURI}/config/v1/server/bootstrap/${sdkKey}.json`
-        }
-        return `${this.cdnURI}/config/v1/server/${sdkKey}.json`
-    }
-
-    private isLastModifiedHeaderOld(lastModifiedHeader: string | null) {
-        const lastModifiedHeaderDate = lastModifiedHeader
-            ? new Date(lastModifiedHeader)
-            : null
-        const configLastModifiedDate = this.configLastModified
-            ? new Date(this.configLastModified)
-            : null
-
-        return (
-            isValidDate(configLastModifiedDate) &&
-            isValidDate(lastModifiedHeaderDate) &&
-            lastModifiedHeaderDate <= configLastModifiedDate
-        )
-    }
-}
-
 export class EnvironmentConfigManager {
     private _hasConfig = false
-    configEtag?: string
-    configLastModified?: string
     configSSE?: ConfigBody<string>['sse']
 
     private currentPollingInterval: number
     private readonly configPollingIntervalMS: number
     private readonly sseConfigPollingIntervalMS: number
-    private readonly requestTimeoutMS: number
-    private readonly cdnURI: string
     private readonly enableRealtimeUpdates: boolean
 
     fetchConfigPromise: Promise<void>
@@ -139,12 +54,11 @@ export class EnvironmentConfigManager {
             configPollingIntervalMS = 10000,
             sseConfigPollingIntervalMS = 10 * 60 * 1000, // 10 minutes
             configPollingTimeoutMS = 5000,
-            configCDNURI,
             cdnURI = 'https://config-cdn.devcycle.com',
             clientMode = false,
             enableBetaRealTimeUpdates = false,
         }: ConfigPollingOptions,
-        private configSource: ConfigSource = new DefaultConfigSource(
+        private configSource = new DefaultConfigSource(
             cdnURI,
             clientMode,
             logger,
@@ -160,11 +74,6 @@ export class EnvironmentConfigManager {
             sseConfigPollingIntervalMS <= 60 * 1000
                 ? 10 * 60 * 1000
                 : sseConfigPollingIntervalMS
-        this.requestTimeoutMS =
-            configPollingTimeoutMS >= this.configPollingIntervalMS
-                ? this.configPollingIntervalMS
-                : configPollingTimeoutMS
-        this.cdnURI = configCDNURI || cdnURI
 
         this.fetchConfigPromise = this._fetchConfig()
             .then(() => {
@@ -220,7 +129,10 @@ export class EnvironmentConfigManager {
             if (!(!type || type === 'refetchConfig')) {
                 return
             }
-            if (this.configEtag && etag === this.configEtag) {
+            if (
+                this.configSource.configEtag &&
+                etag === this.configSource.configEtag
+            ) {
                 return
             }
 
@@ -277,6 +189,10 @@ export class EnvironmentConfigManager {
         return this._hasConfig
     }
 
+    get configEtag(): string | undefined {
+        return this.configSource.configEtag
+    }
+
     private stopPolling(): void {
         this.clearInterval(this.intervalTimeout)
         this.intervalTimeout = null
@@ -287,22 +203,16 @@ export class EnvironmentConfigManager {
         this.stopSSE()
     }
 
-    getConfigURL(): string {
-        if (this.clientMode) {
-            return `${this.cdnURI}/config/v1/server/bootstrap/${this.sdkKey}.json`
-        }
-        return `${this.cdnURI}/config/v1/server/${this.sdkKey}.json`
-    }
-
     async _fetchConfig(sseLastModified?: string): Promise<void> {
-        const url = this.getConfigURL()
-        let res: Response | null
+        const url = this.configSource.getConfigURL(this.sdkKey)
         let projectConfig: ConfigBody | null = null
-        let responseError: ResponseError | null = null
+        let retrievalMetadata: Record<string, unknown>
+        let userError: UserError | null = null
         const startTime = Date.now()
         let responseTimeMS = 0
-        const currentEtag = this.configEtag
-        const currentLastModified = this.configLastModified
+
+        const currentEtag = this.configSource.configEtag
+        const currentLastModified = this.configSource.configLastModified
 
         const logError = (error: any) => {
             const errMsg =
@@ -316,11 +226,11 @@ export class EnvironmentConfigManager {
         }
 
         const trackEvent = (err?: ResponseError) => {
-            if ((res && res?.status !== 304) || err) {
+            if (projectConfig || err) {
                 this.trackSDKConfigEvent(
                     url,
                     responseTimeMS,
-                    res || undefined,
+                    retrievalMetadata,
                     err,
                     currentEtag,
                     currentLastModified,
@@ -331,16 +241,15 @@ export class EnvironmentConfigManager {
 
         try {
             this.logger.debug(
-                `Requesting new config for ${url}, etag: ${this.configEtag}` +
-                    `, last-modified: ${this.configLastModified}`,
+                `Requesting new config for ${url}, etag: ${this.configSource.configEtag}` +
+                    `, last-modified: ${this.configSource.configLastModified}`,
             )
-            projectConfig = await this.configSource.getConfig(
-                this.sdkKey,
-                currentEtag,
-                currentLastModified,
-                sseLastModified,
-            )
+            ;[projectConfig, retrievalMetadata] =
+                await this.configSource.getConfig(this.sdkKey, sseLastModified)
             responseTimeMS = Date.now() - startTime
+            // if no errors occurred, the projectConfig is either new or null (meaning cached version is used)
+            // either way, trigger the SSE config handler to see if we need to reconnect
+            this.handleSSEConfig(projectConfig ?? undefined)
         } catch (ex) {
             if (this.hasConfig) {
                 // TODO currently event queue in WASM requires a valid config
@@ -348,28 +257,21 @@ export class EnvironmentConfigManager {
                 trackEvent(ex)
             }
             logError(ex)
-            res = null
-            if (ex instanceof ResponseError) {
-                responseError = ex
+            if (ex instanceof UserError) {
+                userError = ex
             }
         }
 
-        if (res?.status === 304) {
-            this.handleSSEConfig()
-            return
-        } else if (res?.status === 200 && projectConfig) {
+        if (projectConfig) {
             try {
-                this.handleSSEConfig(projectConfig)
-
                 this.setConfigBuffer(
                     `${this.sdkKey}${this.clientMode ? '_client' : ''}`,
-                    projectConfig,
+                    JSON.stringify(projectConfig),
                 )
                 this._hasConfig = true
                 return
             } catch (e) {
                 logError(new Error('Invalid config JSON.'))
-                res = null
             } finally {
                 trackEvent()
             }
@@ -379,21 +281,33 @@ export class EnvironmentConfigManager {
             this.logger.warn(
                 `Failed to download config, using cached version. url: ${url}.`,
             )
-        } else if (responseError?.status === 403) {
+        } else if (userError) {
             this.cleanup()
-            throw new UserError(`Invalid SDK key provided: ${this.sdkKey}`)
+            throw userError
         } else {
             throw new Error('Failed to download DevCycle config.')
         }
     }
 
-    private handleSSEConfig(projectConfig?: string) {
+    private isLastModifiedHeaderOld(lastModifiedHeader: string | null) {
+        const lastModifiedHeaderDate = lastModifiedHeader
+            ? new Date(lastModifiedHeader)
+            : null
+        const configLastModifiedDate = this.configSource.configLastModified
+            ? new Date(this.configSource.configLastModified)
+            : null
+
+        return (
+            isValidDate(configLastModifiedDate) &&
+            isValidDate(lastModifiedHeaderDate) &&
+            lastModifiedHeaderDate <= configLastModifiedDate
+        )
+    }
+
+    private handleSSEConfig(configBody?: ConfigBody<string>) {
         if (this.enableRealtimeUpdates) {
             const originalConfigSSE = this.configSSE
-            if (projectConfig) {
-                const configBody = JSON.parse(
-                    projectConfig,
-                ) as ConfigBody<string>
+            if (configBody) {
                 this.configSSE = configBody.sse
             }
 

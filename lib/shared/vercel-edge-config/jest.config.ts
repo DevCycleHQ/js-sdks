@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
     displayName: 'shared-vercel-edge-config',
-    preset: '../../jest.preset.js',
+    preset: '../../../jest.preset.js',
     testEnvironment: 'node',
     transform: {
         '^.+\\.[tj]s$': [

@@ -1,1 +1,1 @@
-export * from './lib/shared-vercel-edge-config'
+export * from './edge-config'
