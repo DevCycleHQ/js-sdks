@@ -1,11 +1,9 @@
-# shared-vercel-edge-config
+# DevCycle Vercel Edge Config Adapter
 
-This library was generated with [Nx](https://nx.dev).
+This library provides an adapter for DevCycle Node.js and Next.js SDKs to retrieve configuration data from Vercel
+Edge Config. To use this adapter, you must have the Vercel integration set up.
 
-## Building
+Vercel Edge Config provides a much faster configuration retrieval for services deployed to Vercel's cloud infrastructure.
+With the DevCycel Edge Config Adapter, you can significantly improve the speed flags are retrieved during user requests.
 
-Run `nx build shared-vercel-edge-config` to build the library.
-
-## Running unit tests
-
-Run `nx test shared-vercel-edge-config` to execute the unit tests via [Jest](https://jestjs.io).
+See the [docs](https://docs.devcycle.com/integrations/vercel-edge-config) for more information.

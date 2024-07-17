@@ -3,6 +3,7 @@ import { ResponseError, UserError } from '@devcycle/server-request'
 import { SSEConnection } from '@devcycle/sse-connection'
 import { DefaultConfigSource } from './DefaultConfigSource'
 import { isValidDate } from './request'
+import { ConfigSource } from './ConfigSource'
 
 export * from './ConfigSource'
 
@@ -42,6 +43,8 @@ export class EnvironmentConfigManager {
     private intervalTimeout?: any
     private clientMode: boolean
     private sseConnection?: SSEConnection
+    private readonly requestTimeoutMS: number
+    private configSource: ConfigSource
 
     constructor(
         private readonly logger: DVCLogger,
@@ -58,12 +61,7 @@ export class EnvironmentConfigManager {
             clientMode = false,
             enableBetaRealTimeUpdates = false,
         }: ConfigPollingOptions,
-        private configSource = new DefaultConfigSource(
-            cdnURI,
-            clientMode,
-            logger,
-            configPollingTimeoutMS,
-        ),
+        configSource: ConfigSource,
     ) {
         this.clientMode = clientMode
         this.enableRealtimeUpdates = enableBetaRealTimeUpdates
@@ -74,6 +72,19 @@ export class EnvironmentConfigManager {
             sseConfigPollingIntervalMS <= 60 * 1000
                 ? 10 * 60 * 1000
                 : sseConfigPollingIntervalMS
+        this.requestTimeoutMS =
+            configPollingTimeoutMS >= this.configPollingIntervalMS
+                ? this.configPollingIntervalMS
+                : configPollingTimeoutMS
+
+        this.configSource =
+            configSource ??
+            new DefaultConfigSource(
+                cdnURI,
+                clientMode,
+                logger,
+                this.requestTimeoutMS,
+            )
 
         this.fetchConfigPromise = this._fetchConfig()
             .then(() => {
@@ -129,10 +140,7 @@ export class EnvironmentConfigManager {
             if (!(!type || type === 'refetchConfig')) {
                 return
             }
-            if (
-                this.configSource.configEtag &&
-                etag === this.configSource.configEtag
-            ) {
+            if (this.configEtag && etag === this.configEtag) {
                 return
             }
 

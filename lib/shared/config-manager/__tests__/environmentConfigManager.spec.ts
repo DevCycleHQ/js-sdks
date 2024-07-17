@@ -100,6 +100,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
                 currentPollingInterval: 1000,
                 configPollingIntervalMS: 1000,
                 sseConfigPollingIntervalMS: 10 * 60 * 1000,
+                requestTimeoutMS: 1000,
             }),
         )
         envConfig.cleanup()
@@ -130,6 +131,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
                     currentPollingInterval: 1000,
                     configPollingIntervalMS: 1000,
                     sseConfigPollingIntervalMS: 2 * 60 * 1000,
+                    requestTimeoutMS: 1000,
                 }),
             )
             envConfig.cleanup()
@@ -164,6 +166,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
                 currentPollingInterval: 1000,
                 configPollingIntervalMS: 1000,
                 sseConfigPollingIntervalMS: 10 * 60 * 1000,
+                requestTimeoutMS: 1000,
             }),
         )
         expect(trackSDKConfigEvent_mock).toBeCalledWith(
