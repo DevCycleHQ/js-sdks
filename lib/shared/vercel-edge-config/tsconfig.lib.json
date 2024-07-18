@@ -1,7 +1,9 @@
 {
     "extends": "./tsconfig.json",
     "compilerOptions": {
-        "outDir": "../../dist/out-tsc",
+        "outDir": "../../../dist/out-tsc",
+        "module": "node16",
+        "moduleResolution": "node16",
         "declaration": true,
         "types": ["node"]
     },

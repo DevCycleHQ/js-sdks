@@ -1,20 +1,17 @@
-import { ConfigSource } from '@devcycle/nodejs-server-sdk'
+import { ConfigSource, UserError } from '@devcycle/nodejs-server-sdk'
 import { EdgeConfigClient, EdgeConfigValue } from '@vercel/edge-config'
 import { ConfigBody } from '@devcycle/types'
-import { UserError } from '@devcycle/server-request'
 
 export class EdgeConfigSource extends ConfigSource {
-    constructor(
-        private edgeConfigClient: EdgeConfigClient,
-        private kind: 'server' | 'bootstrap',
-    ) {
+    constructor(private edgeConfigClient: EdgeConfigClient) {
         super()
     }
 
     async getConfig(
         sdkKey: string,
+        kind: 'server' | 'bootstrap',
     ): Promise<[ConfigBody | null, Record<string, unknown>]> {
-        const configPath = this.getConfigURL(sdkKey)
+        const configPath = this.getConfigURL(sdkKey, kind)
         const config = await this.edgeConfigClient.get<{
             [x: string]: EdgeConfigValue
         }>(configPath)
@@ -36,9 +33,9 @@ export class EdgeConfigSource extends ConfigSource {
         ]
     }
 
-    getConfigURL(sdkKey: string): string {
-        return this.kind == 'server'
-            ? `devcycle-config-v1-server-${sdkKey}`
-            : `devcycle-config-v1-server-bootstrap-${sdkKey}`
+    getConfigURL(sdkKey: string, kind: 'server' | 'bootstrap'): string {
+        return kind == 'bootstrap'
+            ? `devcycle-config-v1-server-bootstrap-${sdkKey}`
+            : `devcycle-config-v1-server-${sdkKey}`
     }
 }

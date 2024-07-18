@@ -98,13 +98,23 @@ export type DVCEvent = DevCycleEvent
  */
 export type DVCOptions = DevCycleServerSDKOptions
 
-export { ConfigSource } from '@devcycle/config-manager'
+import { ConfigSource } from '@devcycle/config-manager'
+
+export { ConfigSource }
+
+export { UserError } from '@devcycle/server-request'
 
 type DevCycleOptionsCloudEnabled = DevCycleServerSDKOptions & {
     enableCloudBucketing: true
 }
-type DevCycleOptionsLocalEnabled = DevCycleServerSDKOptions & {
+
+export type DevCycleOptionsLocalEnabled = DevCycleServerSDKOptions & {
     enableCloudBucketing?: false
+
+    /**
+     * Override the source to retrieve configuration from. Defaults to the DevCycle CDN
+     */
+    configSource?: ConfigSource
 }
 
 export function initializeDevCycle(
@@ -138,7 +148,7 @@ export function initializeDevCycle(
             getNodeJSPlatformDetails(),
         )
     }
-    return new DevCycleClient(sdkKey, options)
+    return new DevCycleClient(sdkKey, options as DevCycleOptionsLocalEnabled)
 }
 
 /**

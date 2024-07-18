@@ -6,7 +6,6 @@ import { ResponseError, UserError } from '@devcycle/server-request'
 export class CDNConfigSource extends ConfigSource {
     constructor(
         private cdnURI: string,
-        private clientMode: boolean,
         private logger: DVCLogger,
         private requestTimeoutMS: number,
     ) {
@@ -15,13 +14,14 @@ export class CDNConfigSource extends ConfigSource {
 
     async getConfig(
         sdkKey: string,
+        kind: 'server' | 'bootstrap',
         lastModifiedThreshold?: string,
     ): Promise<[ConfigBody | null, Record<string, unknown>]> {
         let res: Response
         try {
             res = await getEnvironmentConfig({
                 logger: this.logger,
-                url: this.getConfigURL(sdkKey),
+                url: this.getConfigURL(sdkKey, kind),
                 requestTimeout: this.requestTimeoutMS,
                 currentEtag: this.configEtag,
                 currentLastModified: this.configLastModified,
@@ -69,8 +69,8 @@ export class CDNConfigSource extends ConfigSource {
         return [null, metadata]
     }
 
-    getConfigURL(sdkKey: string): string {
-        if (this.clientMode) {
+    getConfigURL(sdkKey: string, kind: 'server' | 'bootstrap'): string {
+        if (kind === 'bootstrap') {
             return `${this.cdnURI}/config/v1/server/bootstrap/${sdkKey}.json`
         }
         return `${this.cdnURI}/config/v1/server/${sdkKey}.json`

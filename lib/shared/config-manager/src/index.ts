@@ -79,12 +79,7 @@ export class EnvironmentConfigManager {
 
         this.configSource =
             configSource ??
-            new CDNConfigSource(
-                cdnURI,
-                clientMode,
-                logger,
-                this.requestTimeoutMS,
-            )
+            new CDNConfigSource(cdnURI, logger, this.requestTimeoutMS)
 
         this.fetchConfigPromise = this._fetchConfig()
             .then(() => {
@@ -212,7 +207,10 @@ export class EnvironmentConfigManager {
     }
 
     async _fetchConfig(sseLastModified?: string): Promise<void> {
-        const url = this.configSource.getConfigURL(this.sdkKey)
+        const url = this.configSource.getConfigURL(
+            this.sdkKey,
+            this.clientMode ? 'bootstrap' : 'server',
+        )
         let projectConfig: ConfigBody | null = null
         let retrievalMetadata: Record<string, unknown>
         let userError: UserError | null = null
@@ -253,7 +251,11 @@ export class EnvironmentConfigManager {
                     `, last-modified: ${this.configSource.configLastModified}`,
             )
             ;[projectConfig, retrievalMetadata] =
-                await this.configSource.getConfig(this.sdkKey, sseLastModified)
+                await this.configSource.getConfig(
+                    this.sdkKey,
+                    this.clientMode ? 'bootstrap' : 'server',
+                    sseLastModified,
+                )
             responseTimeMS = Date.now() - startTime
             // if no errors occurred, the projectConfig is either new or null (meaning cached version is used)
             // either way, trigger the SSE config handler to see if we need to reconnect
