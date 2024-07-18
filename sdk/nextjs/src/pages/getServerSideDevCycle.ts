@@ -1,11 +1,16 @@
 import { SSRProps } from './types'
-import { DevCycleUser } from '@devcycle/js-client-sdk'
+import { DevCycleOptions, DevCycleUser } from '@devcycle/js-client-sdk'
 import { getBucketedConfig } from './bucketing.js'
 import { GetServerSidePropsContext } from 'next'
 import { BucketedUserConfig } from '@devcycle/types'
+import { ConfigSource } from '../common/ConfigSource'
 
 type IdentifiedUser = Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & {
     user_id: string
+}
+
+type DevCycleServersideOptions = Pick<DevCycleOptions, 'enableObfuscation'> & {
+    configSource?: ConfigSource
 }
 
 export const getServerSideDevCycle = async ({
@@ -13,11 +18,13 @@ export const getServerSideDevCycle = async ({
     clientSDKKey,
     user,
     context,
+    options = {},
 }: {
     serverSDKKey: string
     clientSDKKey: string
     user: IdentifiedUser
     context: GetServerSidePropsContext
+    options?: DevCycleServersideOptions
 }): Promise<SSRProps> => {
     const userAgent = context.req.headers['user-agent'] ?? null
     let bucketedConfig: BucketedUserConfig | null = null
@@ -26,6 +33,8 @@ export const getServerSideDevCycle = async ({
             serverSDKKey,
             user,
             userAgent,
+            !!options.enableObfuscation,
+            options.configSource,
         )
         bucketedConfig = bucketingConfigResult.config
     } catch (e) {
@@ -46,12 +55,20 @@ export const getStaticDevCycle = async ({
     serverSDKKey,
     clientSDKKey,
     user,
+    options = {},
 }: {
     serverSDKKey: string
     clientSDKKey: string
     user: IdentifiedUser
+    options: DevCycleServersideOptions
 }): Promise<SSRProps> => {
-    const bucketingConfig = await getBucketedConfig(serverSDKKey, user, null)
+    const bucketingConfig = await getBucketedConfig(
+        serverSDKKey,
+        user,
+        null,
+        !!options.enableObfuscation,
+        options.configSource,
+    )
     return {
         _devcycleSSR: {
             bucketedConfig: bucketingConfig.config,
