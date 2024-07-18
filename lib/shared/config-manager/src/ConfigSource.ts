@@ -18,7 +18,11 @@ export abstract class ConfigSource {
         kind: 'server' | 'bootstrap',
         obfuscated: boolean,
         lastModifiedThreshold?: string,
-    ): Promise<[ConfigBody | null, Record<string, unknown>]>
+    ): Promise<{
+        config: ConfigBody | null
+        metaData: Record<string, unknown>
+        lastModified: string | null
+    }>
 
     /**
      * Return the URL (or path or storage key etc.) that will be used to retrieve the config for the given SDK key

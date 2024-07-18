@@ -11,7 +11,11 @@ export class EdgeConfigSource extends ConfigSource {
         sdkKey: string,
         kind: 'server' | 'bootstrap',
         obfuscated: boolean,
-    ): Promise<[ConfigBody | null, Record<string, unknown>]> {
+    ): Promise<{
+        config: ConfigBody | null
+        metaData: Record<string, unknown>
+        lastModified: string | null
+    }> {
         const configPath = this.getConfigURL(sdkKey, kind, obfuscated)
         const config = await this.edgeConfigClient.get<{
             [x: string]: EdgeConfigValue
@@ -24,14 +28,22 @@ export class EdgeConfigSource extends ConfigSource {
         const lastModified = config['lastModified'] as string
 
         if (this.isLastModifiedHeaderOld(lastModified)) {
-            return [null, { resLastModified: lastModified }]
+            return {
+                config: null,
+                metaData: {
+                    resLastModified: lastModified,
+                },
+                lastModified,
+            }
         }
 
         this.configLastModified = config['lastModified'] as string
-        return [
-            config as unknown as ConfigBody,
-            { resLastModified: this.configLastModified },
-        ]
+
+        return {
+            config: config as unknown as ConfigBody,
+            metaData: { resLastModified: this.configLastModified },
+            lastModified: this.configLastModified,
+        }
     }
 
     getConfigURL(
