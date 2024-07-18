@@ -15,6 +15,7 @@ export class CDNConfigSource extends ConfigSource {
     async getConfig(
         sdkKey: string,
         kind: 'server' | 'bootstrap',
+        obfuscated: boolean,
         lastModifiedThreshold?: string,
     ): Promise<[ConfigBody | null, Record<string, unknown>]> {
         let res: Response

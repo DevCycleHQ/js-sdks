@@ -209,6 +209,7 @@ export class EnvironmentConfigManager {
         const url = this.configSource.getConfigURL(
             this.sdkKey,
             this.clientMode ? 'bootstrap' : 'server',
+            false,
         )
         let projectConfig: ConfigBody | null = null
         let retrievalMetadata: Record<string, unknown>
@@ -253,6 +254,7 @@ export class EnvironmentConfigManager {
                 await this.configSource.getConfig(
                     this.sdkKey,
                     this.clientMode ? 'bootstrap' : 'server',
+                    false,
                     sseLastModified,
                 )
             responseTimeMS = Date.now() - startTime

@@ -1,5 +1,6 @@
 import { DevCycleOptions, DevCycleUser } from '@devcycle/js-client-sdk'
 import { BucketedUserConfig } from '@devcycle/types'
+import { ConfigSource } from './ConfigSource'
 
 export type DevCycleNextOptions = Pick<
     DevCycleOptions,
@@ -33,6 +34,11 @@ export type DevCycleNextOptions = Pick<
      *
      */
     staticMode?: boolean
+
+    /**
+     * Replace the default source for DevCycle configuration with an alternative
+     */
+    configSource?: ConfigSource
 }
 
 export type BucketedConfigWithAdditionalFields = BucketedUserConfig & {

@@ -10,8 +10,9 @@ export class EdgeConfigSource extends ConfigSource {
     async getConfig(
         sdkKey: string,
         kind: 'server' | 'bootstrap',
+        obfuscated: boolean,
     ): Promise<[ConfigBody | null, Record<string, unknown>]> {
-        const configPath = this.getConfigURL(sdkKey, kind)
+        const configPath = this.getConfigURL(sdkKey, kind, obfuscated)
         const config = await this.edgeConfigClient.get<{
             [x: string]: EdgeConfigValue
         }>(configPath)
@@ -33,9 +34,15 @@ export class EdgeConfigSource extends ConfigSource {
         ]
     }
 
-    getConfigURL(sdkKey: string, kind: 'server' | 'bootstrap'): string {
+    getConfigURL(
+        sdkKey: string,
+        kind: 'server' | 'bootstrap',
+        obfuscated?: boolean,
+    ): string {
         return kind == 'bootstrap'
-            ? `devcycle-config-v1-server-bootstrap-${sdkKey}`
+            ? `devcycle-config-v1-server-bootstrap${
+                  obfuscated ? '-obfuscated' : ''
+              }-${sdkKey}`
             : `devcycle-config-v1-server-${sdkKey}`
     }
 }
