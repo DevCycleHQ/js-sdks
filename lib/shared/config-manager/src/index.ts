@@ -12,7 +12,6 @@ type ConfigPollingOptions = {
     sseConfigPollingIntervalMS?: number
     configPollingTimeoutMS?: number
     configCDNURI?: string
-    cdnURI?: string
     clientMode?: boolean
     enableBetaRealTimeUpdates?: boolean
 }
@@ -57,7 +56,7 @@ export class EnvironmentConfigManager {
             configPollingIntervalMS = 10000,
             sseConfigPollingIntervalMS = 10 * 60 * 1000, // 10 minutes
             configPollingTimeoutMS = 5000,
-            cdnURI = 'https://config-cdn.devcycle.com',
+            configCDNURI = 'https://config-cdn.devcycle.com',
             clientMode = false,
             enableBetaRealTimeUpdates = false,
         }: ConfigPollingOptions,
@@ -79,7 +78,7 @@ export class EnvironmentConfigManager {
 
         this.configSource =
             configSource ??
-            new CDNConfigSource(cdnURI, logger, this.requestTimeoutMS)
+            new CDNConfigSource(configCDNURI, logger, this.requestTimeoutMS)
 
         this.fetchConfigPromise = this._fetchConfig()
             .then(() => {
