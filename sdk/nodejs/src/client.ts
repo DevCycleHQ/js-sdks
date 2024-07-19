@@ -381,7 +381,7 @@ export class DevCycleClient {
                 reqEtag,
                 reqLastModified,
                 ...metaData,
-                resStatus: metaData?.status ?? err?.status ?? undefined,
+                resStatus: metaData?.resStatus ?? err?.status ?? undefined,
                 errMsg: err?.message ?? undefined,
                 sseConnected: sseConnected ?? undefined,
             },
