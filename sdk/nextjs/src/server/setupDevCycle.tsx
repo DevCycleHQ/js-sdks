@@ -18,12 +18,12 @@ export const setupDevCycle = ({
     serverSDKKey,
     clientSDKKey,
     userGetter,
-    options,
+    options = {},
 }: {
     serverSDKKey: string
     clientSDKKey: string
     userGetter: () => Promise<ServerUser> | ServerUser
-    options: DevCycleNextOptions
+    options?: DevCycleNextOptions
 }) => {
     validateSDKKey(serverSDKKey, 'server')
     validateSDKKey(clientSDKKey, 'client')
