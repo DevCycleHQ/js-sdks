@@ -1,24 +1,55 @@
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { generateBucketedConfig } from '@devcycle/bucketing'
-import { BucketedUserConfig } from '@devcycle/types'
+import { BucketedUserConfig, ConfigBody } from '@devcycle/types'
+import { ConfigSource } from '../common/ConfigSource.js'
 
-const getFetchUrl = (sdkKey: string) =>
-    `https://config-cdn.devcycle.com/config/v1/server/bootstrap/${sdkKey}.json`
+const getFetchUrl = (sdkKey: string, obfuscated: boolean) =>
+    `https://config-cdn.devcycle.com/config/v1/server/bootstrap/${
+        obfuscated ? 'obfuscated/' : ''
+    }${sdkKey}.json`
 
-export const fetchCDNConfig = async (sdkKey: string): Promise<Response> => {
-    return await fetch(getFetchUrl(sdkKey))
+export const fetchCDNConfig = async (
+    sdkKey: string,
+    obfuscated: boolean,
+): Promise<Response> => {
+    return await fetch(getFetchUrl(sdkKey, obfuscated))
 }
+
+class CDNConfigSource extends ConfigSource {
+    async getConfig(
+        sdkKey: string,
+        kind: 'server' | 'bootstrap',
+        obfuscated: boolean,
+        lastModifiedThreshold?: string,
+    ): Promise<{
+        config: ConfigBody
+        lastModified: string | null
+    }> {
+        const configResponse = await fetchCDNConfig(sdkKey, obfuscated)
+        if (!configResponse.ok) {
+            throw new Error('Could not fetch config')
+        }
+        return {
+            config: await configResponse.json(),
+            lastModified: configResponse.headers.get('last-modified'),
+        }
+    }
+}
+
+const cdnConfigSource = new CDNConfigSource()
 
 export const getBucketedConfig = async (
     sdkKey: string,
     user: DevCycleUser,
     userAgent: string | null,
+    obfuscated: boolean,
+    configSource: ConfigSource = cdnConfigSource,
 ): Promise<{ config: BucketedUserConfig }> => {
-    const configResponse = await fetchCDNConfig(sdkKey)
-    if (!configResponse.ok) {
-        throw new Error('Could not fetch config')
-    }
-    const config = await configResponse.json()
+    const { config } = await configSource.getConfig(
+        sdkKey,
+        'bootstrap',
+        obfuscated,
+    )
     const populatedUser = new DVCPopulatedUser(
         user,
         {},
@@ -43,7 +74,9 @@ export const getBucketedConfig = async (
         config: {
             ...bucketedConfig,
             sse: {
-                url: new URL(config.sse.path, config.sse.hostname).toString(),
+                url: config.sse
+                    ? new URL(config.sse.path, config.sse.hostname).toString()
+                    : undefined,
                 inactivityDelay: 1000 * 60 * 2,
             },
         },

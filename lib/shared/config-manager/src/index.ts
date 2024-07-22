@@ -209,6 +209,7 @@ export class EnvironmentConfigManager {
         const url = this.configSource.getConfigURL(
             this.sdkKey,
             this.clientMode ? 'bootstrap' : 'server',
+            false,
         )
         let projectConfig: ConfigBody | null = null
         let retrievalMetadata: Record<string, unknown>
@@ -249,12 +250,13 @@ export class EnvironmentConfigManager {
                 `Requesting new config for ${url}, etag: ${this.configSource.configEtag}` +
                     `, last-modified: ${this.configSource.configLastModified}`,
             )
-            ;[projectConfig, retrievalMetadata] =
+            ;({ config: projectConfig, metaData: retrievalMetadata } =
                 await this.configSource.getConfig(
                     this.sdkKey,
                     this.clientMode ? 'bootstrap' : 'server',
+                    false,
                     sseLastModified,
-                )
+                ))
             responseTimeMS = Date.now() - startTime
             // if no errors occurred, the projectConfig is either new or null (meaning cached version is used)
             // either way, trigger the SSE config handler to see if we need to reconnect

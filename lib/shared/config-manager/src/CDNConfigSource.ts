@@ -15,8 +15,13 @@ export class CDNConfigSource extends ConfigSource {
     async getConfig(
         sdkKey: string,
         kind: 'server' | 'bootstrap',
+        obfuscated: boolean,
         lastModifiedThreshold?: string,
-    ): Promise<[ConfigBody | null, Record<string, unknown>]> {
+    ): Promise<{
+        config: ConfigBody | null
+        metaData: Record<string, unknown>
+        lastModified: string | null
+    }> {
         let res: Response
         try {
             res = await getEnvironmentConfig({
@@ -60,13 +65,25 @@ export class CDNConfigSource extends ConfigSource {
                 this.logger.debug(
                     'Skipping saving config, existing last modified date is newer.',
                 )
-                return [null, metadata]
+                return {
+                    config: null,
+                    metaData: metadata,
+                    lastModified: lastModifiedHeader,
+                }
             }
             this.configEtag = res.headers.get('etag') || ''
             this.configLastModified = lastModifiedHeader || ''
-            return [projectConfig as ConfigBody, metadata]
+            return {
+                config: projectConfig as ConfigBody,
+                metaData: metadata,
+                lastModified: lastModifiedHeader,
+            }
         }
-        return [null, metadata]
+        return {
+            config: null,
+            metaData: metadata,
+            lastModified: null,
+        }
     }
 
     getConfigURL(sdkKey: string, kind: 'server' | 'bootstrap'): string {

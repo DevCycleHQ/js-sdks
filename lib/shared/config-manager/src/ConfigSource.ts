@@ -10,20 +10,31 @@ export abstract class ConfigSource {
      * Should return null if the config has not changed, and throw an error if it could not be retrieved.
      * @param sdkKey
      * @param kind
+     * @param obfuscated
      * @param lastModifiedThreshold
      */
     abstract getConfig(
         sdkKey: string,
         kind: 'server' | 'bootstrap',
+        obfuscated: boolean,
         lastModifiedThreshold?: string,
-    ): Promise<[ConfigBody | null, Record<string, unknown>]>
+    ): Promise<{
+        config: ConfigBody | null
+        metaData: Record<string, unknown>
+        lastModified: string | null
+    }>
 
     /**
      * Return the URL (or path or storage key etc.) that will be used to retrieve the config for the given SDK key
      * @param sdkKey
      * @param kind
+     * @param obfuscated
      */
-    abstract getConfigURL(sdkKey: string, kind: 'server' | 'bootstrap'): string
+    abstract getConfigURL(
+        sdkKey: string,
+        kind: 'server' | 'bootstrap',
+        obfuscated: boolean,
+    ): string
 
     protected isLastModifiedHeaderOld(
         lastModifiedHeader: string | null,

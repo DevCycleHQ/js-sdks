@@ -4,6 +4,7 @@ import { SSRProps } from './types'
 import { DevCycleProvider } from '@devcycle/react-client-sdk'
 import React from 'react'
 import { DevCycleOptions } from '@devcycle/js-client-sdk'
+import { ConfigSource } from '../common/ConfigSource.js'
 
 type DevCycleNextOptions = Pick<
     DevCycleOptions,
@@ -16,7 +17,9 @@ type DevCycleNextOptions = Pick<
     | 'disableRealtimeUpdates'
     | 'disableAutomaticEventLogging'
     | 'disableCustomEventLogging'
->
+> & {
+    configSource?: ConfigSource
+}
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const appWithDevCycle = <Props extends NextJsAppProps>(

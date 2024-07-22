@@ -15,14 +15,19 @@ describe('EdgeConfigSource', () => {
             lastModified: 'some date',
         })
 
-        const result = await edgeConfigSource.getConfig('sdk-key', 'server')
+        const result = await edgeConfigSource.getConfig(
+            'sdk-key',
+            'server',
+            false,
+        )
 
         expect(get).toHaveBeenCalledWith('devcycle-config-v1-server-sdk-key')
 
-        expect(result).toEqual([
-            { key: 'value', lastModified: 'some date' },
-            { resLastModified: 'some date' },
-        ])
+        expect(result).toEqual({
+            config: { key: 'value', lastModified: 'some date' },
+            lastModified: 'some date',
+            metaData: { resLastModified: 'some date' },
+        })
     })
 
     it('returns null when the existing config date is newer', async () => {
@@ -43,10 +48,18 @@ describe('EdgeConfigSource', () => {
             lastModified: '2024-07-18T14:12:32.720Z',
         })
 
-        const result = await edgeConfigSource.getConfig('sdk-key', 'server')
-        expect(result[0]).not.toBeNull()
-        const result2 = await edgeConfigSource.getConfig('sdk-key', 'server')
-        expect(result2[0]).toBeNull()
+        const result = await edgeConfigSource.getConfig(
+            'sdk-key',
+            'server',
+            false,
+        )
+        expect(result.config).not.toBeNull()
+        const result2 = await edgeConfigSource.getConfig(
+            'sdk-key',
+            'server',
+            false,
+        )
+        expect(result2.config).toBeNull()
     })
 
     it('requests the bootstrap config', async () => {
@@ -62,10 +75,30 @@ describe('EdgeConfigSource', () => {
             lastModified: 'some date',
         })
 
-        await edgeConfigSource.getConfig('sdk-key', 'bootstrap')
+        await edgeConfigSource.getConfig('sdk-key', 'bootstrap', false)
 
         expect(get).toHaveBeenCalledWith(
             'devcycle-config-v1-server-bootstrap-sdk-key',
+        )
+    })
+
+    it('requests the obfuscated bootstrap config', async () => {
+        const get = jest.fn()
+        const edgeConfigSource = new EdgeConfigSource(
+            fromPartial({
+                get,
+            }),
+        )
+
+        get.mockResolvedValue({
+            key: 'value',
+            lastModified: 'some date',
+        })
+
+        await edgeConfigSource.getConfig('sdk-key', 'bootstrap', true)
+
+        expect(get).toHaveBeenCalledWith(
+            'devcycle-config-v1-server-bootstrap-obfuscated-sdk-key',
         )
     })
 })

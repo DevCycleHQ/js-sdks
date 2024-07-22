@@ -10,8 +10,13 @@ export class EdgeConfigSource extends ConfigSource {
     async getConfig(
         sdkKey: string,
         kind: 'server' | 'bootstrap',
-    ): Promise<[ConfigBody | null, Record<string, unknown>]> {
-        const configPath = this.getConfigURL(sdkKey, kind)
+        obfuscated: boolean,
+    ): Promise<{
+        config: ConfigBody | null
+        metaData: Record<string, unknown>
+        lastModified: string | null
+    }> {
+        const configPath = this.getConfigURL(sdkKey, kind, obfuscated)
         const config = await this.edgeConfigClient.get<{
             [x: string]: EdgeConfigValue
         }>(configPath)
@@ -23,19 +28,33 @@ export class EdgeConfigSource extends ConfigSource {
         const lastModified = config['lastModified'] as string
 
         if (this.isLastModifiedHeaderOld(lastModified)) {
-            return [null, { resLastModified: lastModified }]
+            return {
+                config: null,
+                metaData: {
+                    resLastModified: lastModified,
+                },
+                lastModified,
+            }
         }
 
         this.configLastModified = config['lastModified'] as string
-        return [
-            config as unknown as ConfigBody,
-            { resLastModified: this.configLastModified },
-        ]
+
+        return {
+            config: config as unknown as ConfigBody,
+            metaData: { resLastModified: this.configLastModified },
+            lastModified: this.configLastModified,
+        }
     }
 
-    getConfigURL(sdkKey: string, kind: 'server' | 'bootstrap'): string {
+    getConfigURL(
+        sdkKey: string,
+        kind: 'server' | 'bootstrap',
+        obfuscated?: boolean,
+    ): string {
         return kind == 'bootstrap'
-            ? `devcycle-config-v1-server-bootstrap-${sdkKey}`
+            ? `devcycle-config-v1-server-bootstrap${
+                  obfuscated ? '-obfuscated' : ''
+              }-${sdkKey}`
             : `devcycle-config-v1-server-${sdkKey}`
     }
 }

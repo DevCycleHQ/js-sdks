@@ -1,5 +1,3 @@
-import { DevCycleNextOptions } from '../common/types'
-
 const getFetchUrl = (sdkKey: string, obfuscated: boolean) =>
     `https://config-cdn.devcycle.com/config/v1/server/bootstrap/${
         obfuscated ? 'obfuscated/' : ''
@@ -8,10 +6,10 @@ const getFetchUrl = (sdkKey: string, obfuscated: boolean) =>
 export const fetchCDNConfig = async (
     sdkKey: string,
     clientSDKKey: string,
-    options: DevCycleNextOptions,
+    obfuscated: boolean,
 ): Promise<Response> => {
     return await fetch(
-        getFetchUrl(sdkKey, !!options.enableObfuscation),
+        getFetchUrl(sdkKey, obfuscated),
         // only store for 60 seconds
         {
             next: {

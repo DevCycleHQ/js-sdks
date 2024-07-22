@@ -6,16 +6,17 @@ import {
     BucketedConfigWithAdditionalFields,
     DevCycleNextOptions,
 } from '../common/types'
+import { ConfigSource } from '../common/ConfigSource'
+import { ConfigBody } from '@devcycle/types'
 
 // wrap this function in react cache to avoid redoing work for the same user and config
 const generateBucketedConfigCached = cache(
     async (
         sdkKey: string,
         user: DevCycleUser,
-        configResponse: Response,
+        config: ConfigBody,
         userAgent?: string,
     ) => {
-        const config = await configResponse.json()
         const populatedUser = new DVCPopulatedUser(
             user,
             {},
@@ -24,17 +25,43 @@ const generateBucketedConfigCached = cache(
             userAgent ?? undefined,
         )
         return {
-            config: {
+            bucketedConfig: {
                 ...generateBucketedConfig({ user: populatedUser, config }),
-                clientSDKKey: config.clientSDKKey,
+                // clientSDKKey is always defined for bootstrap config
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                clientSDKKey: config.clientSDKKey!,
                 sse: {
-                    url: config.sse.hostname + config.sse.path,
+                    url: config.sse
+                        ? `${config.sse.hostname}${config.sse.path}`
+                        : undefined,
                     inactivityDelay: 1000 * 60 * 2,
                 },
             },
         }
     },
 )
+
+class CDNConfigSource extends ConfigSource {
+    constructor(private clientSDKKey: string) {
+        super()
+    }
+    async getConfig(sdkKey: string, kind: string, obfuscated: boolean) {
+        // this request will be cached by Next
+        const cdnConfig = await fetchCDNConfig(
+            sdkKey,
+            this.clientSDKKey,
+            obfuscated,
+        )
+        if (!cdnConfig.ok) {
+            const responseText = await cdnConfig.text()
+            throw new Error('Could not fetch config: ' + responseText)
+        }
+        return {
+            config: await cdnConfig.json(),
+            lastModified: cdnConfig.headers.get('last-modified'),
+        }
+    }
+}
 
 /**
  * Retrieve the config from CDN for the current request's SDK Key. This data will often be cached
@@ -48,22 +75,24 @@ export const getBucketedConfig = async (
     options: DevCycleNextOptions,
     userAgent?: string,
 ): Promise<BucketedConfigWithAdditionalFields> => {
-    // this request will be cached by Next
-    const cdnConfig = await fetchCDNConfig(sdkKey, clientSDKKey, options)
-    if (!cdnConfig.ok) {
-        const responseText = await cdnConfig.text()
-        throw new Error('Could not fetch config: ' + responseText)
-    }
+    const cdnConfigSource = new CDNConfigSource(clientSDKKey)
 
-    const { config } = await generateBucketedConfigCached(
+    const configSource = options.configSource ?? cdnConfigSource
+    const { config, lastModified } = await configSource.getConfig(
+        sdkKey,
+        'bootstrap',
+        !!options.enableObfuscation,
+    )
+
+    const { bucketedConfig } = await generateBucketedConfigCached(
         sdkKey,
         user,
-        cdnConfig,
+        config,
         userAgent,
     )
 
     return {
-        ...config,
-        lastModified: cdnConfig.headers.get('last-modified') ?? undefined,
+        ...bucketedConfig,
+        lastModified: lastModified ?? undefined,
     }
 }
