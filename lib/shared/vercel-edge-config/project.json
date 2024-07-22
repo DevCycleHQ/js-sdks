@@ -1,0 +1,58 @@
+{
+    "name": "shared-vercel-edge-config",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "lib/shared/vercel-edge-config/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nx/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/lib/shared/vercel-edge-config",
+                "main": "lib/shared/vercel-edge-config/src/index.ts",
+                "tsConfig": "lib/shared/vercel-edge-config/tsconfig.lib.json",
+                "assets": ["lib/shared/vercel-edge-config/*.md"]
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": [
+                    "lib/shared/vercel-edge-config/**/*.ts",
+                    "lib/shared/vercel-edge-config/package.json"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "lib/shared/vercel-edge-config/jest.config.ts",
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        },
+        "check-types": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "yarn run -T tsc -b --incremental",
+                "cwd": "lib/shared/vercel-edge-config"
+            }
+        },
+        "npm-publish": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/vercel-edge-config\"",
+                "cwd": "dist/lib/shared/vercel-edge-config",
+                "forwardAllArgs": true
+            }
+        }
+    },
+    "tags": []
+}

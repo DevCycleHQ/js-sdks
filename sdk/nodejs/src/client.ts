@@ -31,6 +31,7 @@ import {
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
 import { randomUUID } from 'crypto'
+import { DevCycleOptionsLocalEnabled } from './index'
 import { WASMBucketingExports } from '@devcycle/bucketing-assembly-script'
 
 interface IPlatformData {
@@ -72,7 +73,7 @@ export class DevCycleClient {
         return this._isInitialized
     }
 
-    constructor(sdkKey: string, options?: DevCycleServerSDKOptions) {
+    constructor(sdkKey: string, options?: DevCycleOptionsLocalEnabled) {
         this.clientUUID = randomUUID()
         this.hostname = os.hostname()
         this.sdkKey = sdkKey
@@ -102,6 +103,7 @@ export class DevCycleClient {
                 clearInterval,
                 this.trackSDKConfigEvent.bind(this),
                 options || {},
+                options?.configSource,
             )
             if (options?.enableClientBootstrapping) {
                 this.clientConfigHelper = new EnvironmentConfigManager(
@@ -117,6 +119,7 @@ export class DevCycleClient {
                     clearInterval,
                     this.trackSDKConfigEvent.bind(this),
                     { ...options, clientMode: true },
+                    options?.configSource,
                 )
             }
 
@@ -359,7 +362,7 @@ export class DevCycleClient {
     private trackSDKConfigEvent(
         url: string,
         responseTimeMS: number,
-        res?: Response,
+        metaData?: Record<string, unknown>,
         err?: ResponseError,
         reqEtag?: string,
         reqLastModified?: string,
@@ -377,10 +380,8 @@ export class DevCycleClient {
                 clientUUID: this.clientUUID,
                 reqEtag,
                 reqLastModified,
-                resEtag: res?.headers.get('etag') ?? undefined,
-                resLastModified: res?.headers.get('last-modified') ?? undefined,
-                resRayId: res?.headers.get('cf-ray') ?? undefined,
-                resStatus: (err?.status || res?.status) ?? undefined,
+                ...metaData,
+                resStatus: metaData?.resStatus ?? err?.status ?? undefined,
                 errMsg: err?.message ?? undefined,
                 sseConnected: sseConnected ?? undefined,
             },

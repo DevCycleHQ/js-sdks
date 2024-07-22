@@ -172,7 +172,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
         expect(trackSDKConfigEvent_mock).toBeCalledWith(
             'https://config-cdn.devcycle.com/config/v1/server/sdkKey.json',
             expect.any(Number),
-            expect.objectContaining({ status: 200 }),
+            expect.objectContaining({ resStatus: 200 }),
             undefined,
             undefined,
             undefined,
@@ -211,7 +211,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
 
         const envConfig = getConfigManager(logger, 'sdkKey', {})
         expect(envConfig.fetchConfigPromise).rejects.toThrow(
-            'Invalid SDK key provided:',
+            'Invalid SDK key provided',
         )
         expect(setInterval_mock).toHaveBeenCalledTimes(0)
     })
