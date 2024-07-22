@@ -1,7 +1,7 @@
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { generateBucketedConfig } from '@devcycle/bucketing'
 import { BucketedUserConfig, ConfigBody } from '@devcycle/types'
-import { ConfigSource } from '../common/ConfigSource'
+import { ConfigSource } from '../common/ConfigSource.js'
 
 const getFetchUrl = (sdkKey: string, obfuscated: boolean) =>
     `https://config-cdn.devcycle.com/config/v1/server/bootstrap/${

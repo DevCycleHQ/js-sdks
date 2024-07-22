@@ -3,7 +3,7 @@ import { DevCycleOptions, DevCycleUser } from '@devcycle/js-client-sdk'
 import { getBucketedConfig } from './bucketing.js'
 import { GetServerSidePropsContext } from 'next'
 import { BucketedUserConfig } from '@devcycle/types'
-import { ConfigSource } from '../common/ConfigSource'
+import { ConfigSource } from '../common/ConfigSource.js'
 
 type IdentifiedUser = Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & {
     user_id: string
