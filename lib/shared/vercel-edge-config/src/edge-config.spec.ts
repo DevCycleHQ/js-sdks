@@ -23,10 +23,11 @@ describe('EdgeConfigSource', () => {
 
         expect(get).toHaveBeenCalledWith('devcycle-config-v1-server-sdk-key')
 
-        expect(result).toEqual([
-            { key: 'value', lastModified: 'some date' },
-            { resLastModified: 'some date' },
-        ])
+        expect(result).toEqual({
+            config: { key: 'value', lastModified: 'some date' },
+            lastModified: 'some date',
+            metaData: { resLastModified: 'some date' },
+        })
     })
 
     it('returns null when the existing config date is newer', async () => {
@@ -52,13 +53,13 @@ describe('EdgeConfigSource', () => {
             'server',
             false,
         )
-        expect(result[0]).not.toBeNull()
+        expect(result.config).not.toBeNull()
         const result2 = await edgeConfigSource.getConfig(
             'sdk-key',
             'server',
             false,
         )
-        expect(result2[0]).toBeNull()
+        expect(result2.config).toBeNull()
     })
 
     it('requests the bootstrap config', async () => {
