@@ -15,6 +15,7 @@ import {
     DVCLogger,
     getVariableTypeFromValue,
     VariableTypeAlias,
+    type VariableValue,
 } from '@devcycle/types'
 import os from 'os'
 import {
@@ -54,14 +55,20 @@ type DevCycleProviderConstructor =
     typeof import('./open-feature/DevCycleProvider').DevCycleProvider
 type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
 
-export class DevCycleClient {
+export interface VariableDefinitions {
+    [key: string]: VariableValue
+}
+
+export class DevCycleClient<
+    Variables extends VariableDefinitions = VariableDefinitions,
+> {
     private clientUUID: string
     private hostname: string
     private sdkKey: string
     private configHelper?: EnvironmentConfigManager
     private clientConfigHelper?: EnvironmentConfigManager
     private eventQueue: EventQueue
-    private onInitialized: Promise<DevCycleClient>
+    private onInitialized: Promise<DevCycleClient<Variables>>
     private logger: DVCLogger
     private _isInitialized = false
     private openFeatureProvider: DevCycleProvider
@@ -212,7 +219,7 @@ export class DevCycleClient {
      */
     async onClientInitialized(
         onInitialized?: (err?: Error) => void,
-    ): Promise<DevCycleClient> {
+    ): Promise<DevCycleClient<Variables>> {
         if (onInitialized && typeof onInitialized === 'function') {
             this.onInitialized
                 .then(() => onInitialized())
@@ -221,11 +228,10 @@ export class DevCycleClient {
         return this.onInitialized
     }
 
-    variable<T extends DVCVariableValue>(
-        user: DevCycleUser,
-        key: string,
-        defaultValue: T,
-    ): DVCVariable<T> {
+    variable<
+        K extends string & keyof Variables,
+        T extends DVCVariableValue & Variables[K],
+    >(user: DevCycleUser, key: K, defaultValue: T): DVCVariable<T> {
         const incomingUser = castIncomingUser(user)
         // this will throw if type is invalid
         const type = getVariableTypeFromValue(
@@ -280,11 +286,10 @@ export class DevCycleClient {
         return new DVCVariable(options)
     }
 
-    variableValue<T extends DVCVariableValue>(
-        user: DevCycleUser,
-        key: string,
-        defaultValue: T,
-    ): VariableTypeAlias<T> {
+    variableValue<
+        K extends string & keyof Variables,
+        T extends DVCVariableValue & Variables[K],
+    >(user: DevCycleUser, key: K, defaultValue: T): VariableTypeAlias<T> {
         return this.variable(user, key, defaultValue).value
     }
 
