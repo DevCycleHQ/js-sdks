@@ -26,7 +26,10 @@ const generateBucketedConfigCached = cache(
         )
         return {
             bucketedConfig: {
-                ...generateBucketedConfig({ user: populatedUser, config }),
+                ...generateBucketedConfig({
+                    user: populatedUser,
+                    config,
+                }),
                 // clientSDKKey is always defined for bootstrap config
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 clientSDKKey: config.clientSDKKey!,
@@ -63,6 +66,20 @@ class CDNConfigSource extends ConfigSource {
     }
 }
 
+export const getProjectConfig = async (
+    sdkKey: string,
+    clientSDKKey: string,
+    options: DevCycleNextOptions,
+): Promise<{ config: ConfigBody; lastModified: string | null }> => {
+    const cdnConfigSource = new CDNConfigSource(clientSDKKey)
+    const configSource = options.configSource ?? cdnConfigSource
+    return await configSource.getConfig(
+        sdkKey,
+        'bootstrap',
+        !!options.enableObfuscation,
+    )
+}
+
 /**
  * Retrieve the config from CDN for the current request's SDK Key. This data will often be cached
  * Compute the bucketed config for the current request's user using that data, with local bucketing library
@@ -75,13 +92,10 @@ export const getBucketedConfig = async (
     options: DevCycleNextOptions,
     userAgent?: string,
 ): Promise<BucketedConfigWithAdditionalFields> => {
-    const cdnConfigSource = new CDNConfigSource(clientSDKKey)
-
-    const configSource = options.configSource ?? cdnConfigSource
-    const { config, lastModified } = await configSource.getConfig(
+    const { config, lastModified } = await getProjectConfig(
         sdkKey,
-        'bootstrap',
-        !!options.enableObfuscation,
+        clientSDKKey,
+        options,
     )
 
     const { bucketedConfig } = await generateBucketedConfigCached(

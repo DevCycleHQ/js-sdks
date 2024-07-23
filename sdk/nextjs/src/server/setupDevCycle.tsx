@@ -6,6 +6,8 @@ import { getUserAgent } from './userAgent'
 import { getAllVariables } from './getAllVariables'
 import { getAllFeatures } from './allFeatures'
 import { DevCycleNextOptions } from '../common/types'
+import { getClient } from './requestContext'
+import { getProjectConfig } from './bucketing'
 
 // server-side users must always be "identified" with a user id
 type ServerUser = Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & {
@@ -44,6 +46,10 @@ export const setupDevCycle = ({
     const _getAllFeatures: typeof getAllFeatures = async () => {
         await initialize(serverSDKKey, clientSDKKey, userGetter, options)
         return getAllFeatures()
+    }
+
+    const _getConfig = async () => {
+        return getProjectConfig(serverSDKKey, clientSDKKey, options)
     }
 
     const _getClientContext = () => {
@@ -89,5 +95,6 @@ export const setupDevCycle = ({
         getAllVariables: _getAllVariables,
         getAllFeatures: _getAllFeatures,
         getClientContext: _getClientContext,
+        getConfig: _getConfig,
     }
 }

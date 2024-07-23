@@ -24,6 +24,7 @@
         "index.ts",
         "pages.ts",
         "server.ts",
+        "vercel.ts",
         "next-env.d.ts"
     ]
 }
