@@ -16,6 +16,7 @@ import {
     DVCLogger,
     getVariableTypeFromValue,
     VariableTypeAlias,
+    type VariableValue,
 } from '@devcycle/types'
 import {
     getAllFeatures,
@@ -67,7 +68,13 @@ const throwIfUserError = (err: unknown) => {
     throw err
 }
 
-export class DevCycleCloudClient {
+export interface VariableDefinitions {
+    [key: string]: VariableValue
+}
+
+export class DevCycleCloudClient<
+    Variables extends VariableDefinitions = VariableDefinitions,
+> {
     private sdkKey: string
     protected logger: DVCLogger
     private options: DevCycleServerSDKOptions
@@ -94,11 +101,10 @@ export class DevCycleCloudClient {
         return true
     }
 
-    async variable<T extends DVCVariableValue>(
-        user: DevCycleUser,
-        key: string,
-        defaultValue: T,
-    ): Promise<DVCVariable<T>> {
+    async variable<
+        K extends string & keyof Variables,
+        T extends DVCVariableValue & Variables[K],
+    >(user: DevCycleUser, key: K, defaultValue: T): Promise<DVCVariable<T>> {
         const incomingUser = castIncomingUser(user)
         const populatedUser = DVCPopulatedUser.fromDVCUser(
             incomingUser,
@@ -148,9 +154,12 @@ export class DevCycleCloudClient {
         }
     }
 
-    async variableValue<T extends DVCVariableValue>(
+    async variableValue<
+        K extends string & keyof Variables,
+        T extends DVCVariableValue & Variables[K],
+    >(
         user: DevCycleUser,
-        key: string,
+        key: K,
         defaultValue: T,
     ): Promise<VariableTypeAlias<T>> {
         return (await this.variable(user, key, defaultValue)).value

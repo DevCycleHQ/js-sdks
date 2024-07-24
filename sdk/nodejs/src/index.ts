@@ -16,6 +16,7 @@ import {
     DVCFeatureSet,
     DevCyclePlatformDetails,
 } from '@devcycle/js-cloud-server-sdk'
+import { VariableDefinitions } from '@devcycle/js-client-sdk'
 import { DevCycleServerSDKOptions } from '@devcycle/types'
 import { getNodeJSPlatformDetails } from './utils/platformDetails'
 
@@ -24,7 +25,9 @@ type DevCycleProviderConstructor =
     typeof import('./open-feature/DevCycleProvider').DevCycleProvider
 type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
 
-class DevCycleCloudClient extends InternalDevCycleCloudClient {
+class DevCycleCloudClient<
+    Variables extends VariableDefinitions = VariableDefinitions,
+> extends InternalDevCycleCloudClient {
     private openFeatureProvider: DevCycleProvider
 
     constructor(
@@ -117,22 +120,30 @@ export type DevCycleOptionsLocalEnabled = DevCycleServerSDKOptions & {
     configSource?: ConfigSource
 }
 
-export function initializeDevCycle(
+export function initializeDevCycle<
+    Variables extends VariableDefinitions = VariableDefinitions,
+>(
     sdkKey: string,
     options?: DevCycleOptionsLocalEnabled,
-): DevCycleClient
-export function initializeDevCycle(
+): DevCycleClient<Variables>
+export function initializeDevCycle<
+    Variables extends VariableDefinitions = VariableDefinitions,
+>(
     sdkKey: string,
     options: DevCycleOptionsCloudEnabled,
-): DevCycleCloudClient
-export function initializeDevCycle(
+): DevCycleCloudClient<Variables>
+export function initializeDevCycle<
+    Variables extends VariableDefinitions = VariableDefinitions,
+>(
     sdkKey: string,
     options?: DevCycleServerSDKOptions,
-): DevCycleClient | DevCycleCloudClient
-export function initializeDevCycle(
+): DevCycleClient<Variables> | DevCycleCloudClient<Variables>
+export function initializeDevCycle<
+    Variables extends VariableDefinitions = VariableDefinitions,
+>(
     sdkKey: string,
     options: DevCycleServerSDKOptions = {},
-): DevCycleClient | DevCycleCloudClient {
+): DevCycleClient<Variables> | DevCycleCloudClient<Variables> {
     if (!sdkKey) {
         throw new Error('Missing SDK key! Call initialize with a valid SDK key')
     } else if (!isValidServerSDKKey(sdkKey)) {

@@ -9,6 +9,7 @@ import {
     DVCFeature,
     VariableDefinitions,
 } from './types'
+
 import { DVCVariable, DVCVariableOptions } from './Variable'
 import { getConfigJson, saveEntity } from './Request'
 import CacheStore from './CacheStore'
