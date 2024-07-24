@@ -1,5 +1,7 @@
 import { unstable_flag as flag } from '@vercel/flags/next'
 import { setupDevCycle } from './src/server/setupDevCycle'
+import { cache } from 'react'
+import { ConfigBody } from '@devcycle/types'
 
 // mimic the Vercel JsonValue type since it is not exported
 type JsonValue =
@@ -7,6 +9,24 @@ type JsonValue =
     | number
     | boolean
     | { [key: string]: JsonValue | JsonValue[] }
+
+const configByVariable = cache((config: ConfigBody) => {
+    return {
+        ...config,
+        featureForVariable: config.features.reduce((acc, feature) => {
+            feature.variations.forEach((variation) => {
+                variation.variables.forEach((variable) => {
+                    acc[variable._var] = feature
+                })
+            })
+            return acc
+        }, {} as Record<string, ConfigBody['features'][0]>),
+        variables: config.variables.reduce((acc, variable) => {
+            acc[variable.key] = variable
+            return acc
+        }, {} as Record<string, ConfigBody['variables'][0]>),
+    }
+})
 
 export const setupDevCycleVercelFlagHelper = (
     context: Pick<
@@ -18,10 +38,9 @@ export const setupDevCycleVercelFlagHelper = (
         key: string,
         defaultValue: T,
     ): Promise<T> => {
-        const { config } = await context.getConfig()
-        const variable = config.variables.find(
-            (variable) => variable.key === key,
-        )
+        const { config: _config } = await context.getConfig()
+        const config = configByVariable(_config)
+        const variable = config.variables[key]
 
         const variableId = variable?._id
         if (!variableId) {
@@ -29,11 +48,7 @@ export const setupDevCycleVercelFlagHelper = (
             return defaultValue
         }
 
-        const featureForVariable = config.features.find((feature) => {
-            return !!feature.variations[0]?.variables.find(
-                (variable) => variable._var === variableId,
-            )
-        })
+        const featureForVariable = config.featureForVariable[variableId]
 
         if (!featureForVariable) {
             console.error('[DevCycle] No Feature found for Variable', key)

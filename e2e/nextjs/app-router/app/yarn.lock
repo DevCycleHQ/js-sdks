@@ -32,7 +32,7 @@ __metadata:
 
 "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs::locator=app%40workspace%3A.":
   version: 2.3.0
-  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=1ca446&locator=app%40workspace%3A."
+  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=8381c4&locator=app%40workspace%3A."
   dependencies:
     "@devcycle/bucketing": "npm:^1.21.0"
     "@devcycle/js-client-sdk": "npm:^1.28.0"
@@ -42,7 +42,7 @@ __metadata:
     server-only: "npm:^0.0.1"
   peerDependencies:
     "@vercel/flags": ^2.6.0
-  checksum: 5539566797790478572b7336d0fc96ee024cf60f3465fa8ede1988db9dab176978fc6c713fbed6613f2f22a1ac0e3a12b2c378af42fc85f685df437a90437dec
+  checksum: 2c8150c427aa00d3fb047288039e379231ac1660f374410cf14ef5feda306b63139fd7b149f841575dc666fa37c968cb35521b06130c65e8728a83ff75088a57
   languageName: node
   linkType: hard
 

@@ -44,6 +44,17 @@ const generateBucketedConfigCached = cache(
     },
 )
 
+const cachedConfig = cache(async (cdnConfig: Response) => {
+    if (!cdnConfig.ok) {
+        const responseText = await cdnConfig.text()
+        throw new Error('Could not fetch config: ' + responseText)
+    }
+    return {
+        config: await cdnConfig.json(),
+        lastModified: cdnConfig.headers.get('last-modified'),
+    }
+})
+
 class CDNConfigSource extends ConfigSource {
     constructor(private clientSDKKey: string) {
         super()
@@ -55,14 +66,7 @@ class CDNConfigSource extends ConfigSource {
             this.clientSDKKey,
             obfuscated,
         )
-        if (!cdnConfig.ok) {
-            const responseText = await cdnConfig.text()
-            throw new Error('Could not fetch config: ' + responseText)
-        }
-        return {
-            config: await cdnConfig.json(),
-            lastModified: cdnConfig.headers.get('last-modified'),
-        }
+        return cachedConfig(cdnConfig)
     }
 }
 
