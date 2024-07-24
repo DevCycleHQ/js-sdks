@@ -9,7 +9,10 @@ type JsonValue =
     | { [key: string]: JsonValue | JsonValue[] }
 
 export const setupDevCycleVercelFlagHelper = (
-    context: ReturnType<typeof setupDevCycle>,
+    context: Pick<
+        ReturnType<typeof setupDevCycle>,
+        'getConfig' | 'getAllFeatures'
+    >,
 ) => {
     return async <T extends JsonValue>(
         key: string,
@@ -22,16 +25,18 @@ export const setupDevCycleVercelFlagHelper = (
 
         const variableId = variable?._id
         if (!variableId) {
+            console.error('[DevCycle] No Variable found for key:', key)
             return defaultValue
         }
 
         const featureForVariable = config.features.find((feature) => {
-            feature.variations[0]?.variables.find(
+            return !!feature.variations[0]?.variables.find(
                 (variable) => variable._var === variableId,
             )
         })
 
         if (!featureForVariable) {
+            console.error('[DevCycle] No Feature found for Variable', key)
             return defaultValue
         }
 
@@ -53,6 +58,10 @@ export const setupDevCycleVercelFlagHelper = (
         const variationValue = await getFlag()
 
         if (variationValue === null) {
+            console.error(
+                '[DevCycle] No Variation Found for Variable in Flag Response',
+                key,
+            )
             return defaultValue
         }
 
@@ -63,6 +72,10 @@ export const setupDevCycleVercelFlagHelper = (
         )
 
         if (!matchedVariation) {
+            console.error(
+                '[DevCycle] No Variation Found for Variable In Config',
+                key,
+            )
             return defaultValue
         }
 
@@ -73,6 +86,10 @@ export const setupDevCycleVercelFlagHelper = (
         )
 
         if (!variationVariable) {
+            console.error(
+                '[DevCycle] No Variation Value Found for Variable',
+                key,
+            )
             return defaultValue
         }
 

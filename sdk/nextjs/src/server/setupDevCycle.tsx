@@ -6,7 +6,6 @@ import { getUserAgent } from './userAgent'
 import { getAllVariables } from './getAllVariables'
 import { getAllFeatures } from './allFeatures'
 import { DevCycleNextOptions } from '../common/types'
-import { getClient } from './requestContext'
 import { getProjectConfig } from './bucketing'
 
 // server-side users must always be "identified" with a user id

@@ -1,10 +1,12 @@
 import { setupDevCycle } from '@devcycle/nextjs-sdk/server'
+import { setupDevCycleVercelFlagHelper } from '@devcycle/nextjs-sdk/vercel'
 import { headers } from 'next/headers'
 export const {
     getVariableValue,
     getClientContext,
     getAllVariables,
     getAllFeatures,
+    getConfig,
 } = setupDevCycle({
     clientSDKKey: process.env.NEXT_PUBLIC_E2E_NEXTJS_CLIENT_KEY ?? '',
     serverSDKKey: process.env.E2E_NEXTJS_SERVER_KEY ?? '',
@@ -19,4 +21,9 @@ export const {
         }
     },
     options: { enableStreaming: false },
+})
+
+export const getFlag = setupDevCycleVercelFlagHelper({
+    getConfig,
+    getAllFeatures,
 })

@@ -95,6 +95,8 @@ test('has expected page elements', async ({ page }) => {
     await expect(
         page.getByText('Client Component Conditionally Bundled'),
     ).toBeVisible()
+
+    await expect(page.getByText('Vercel Flag: true')).toBeVisible()
 })
 
 test('works after a client side navigation', async ({ page }) => {
