@@ -4726,6 +4726,8 @@ __metadata:
     "@devcycle/types": ^1.16.0
     hoist-non-react-statics: ^3.3.2
     server-only: ^0.0.1
+  peerDependencies:
+    "@vercel/flags": ^2.6.0
   languageName: unknown
   linkType: soft
 
