@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/nodejs-server-sdk-local-typescript-example",
-    "version": "1.18.0",
+    "version": "1.18.1",
     "description": "DevCycle NodeJS Typescript Example App",
     "keywords": [],
     "license": "MIT"
