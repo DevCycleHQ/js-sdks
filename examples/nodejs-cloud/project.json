@@ -11,6 +11,7 @@
                 "outputPath": "dist/examples/nodejs-cloud",
                 "main": "examples/nodejs-cloud/src/main.ts",
                 "tsConfig": "examples/nodejs-cloud/tsconfig.app.json",
+                "webpackConfig": "examples/nodejs-cloud/webpack.config.js",
                 "compiler": "tsc",
                 "target": "node"
             }
