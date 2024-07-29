@@ -27,7 +27,7 @@ type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
 
 class DevCycleCloudClient<
     Variables extends VariableDefinitions = VariableDefinitions,
-> extends InternalDevCycleCloudClient {
+> extends InternalDevCycleCloudClient<Variables> {
     private openFeatureProvider: DevCycleProvider
 
     constructor(
