@@ -5,6 +5,7 @@ import {
     decideTargetVariation,
     generateBucketedConfig,
     doesUserPassRollout,
+    convertNumberToString,
 } from '../src/bucketing'
 import {
     config,
@@ -96,6 +97,22 @@ describe('User Hashing and Bucketing', () => {
             'fake',
         )
         expect(bucketingHash).not.toBe(rolloutHash)
+    })
+})
+
+describe('TypeScript Number conversion', () => {
+    it('converts numbers to strings', () => {
+        const number = 610
+        const convertedNumber = convertNumberToString(number)
+        expect(typeof convertedNumber).toBe('string')
+        expect(convertedNumber).toBe('610.0')
+    })
+
+    it('converts floats to strings', () => {
+        const number = 610.61
+        const convertedNumber = convertNumberToString(number)
+        expect(typeof convertedNumber).toBe('string')
+        expect(convertedNumber).toBe('610.61')
     })
 })
 

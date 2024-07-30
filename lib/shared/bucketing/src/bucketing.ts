@@ -175,6 +175,10 @@ const checkRolloutAndEvaluate = ({
     }
 }
 
+export const convertNumberToString = (num: number): string => {
+    return num.toString()
+}
+
 export const getSegmentedFeatureDataFromConfig = ({
     config,
     user,

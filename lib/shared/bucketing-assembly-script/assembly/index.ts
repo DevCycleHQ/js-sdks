@@ -63,6 +63,10 @@ export function generateBucketedConfigForUser(
     return bucketedConfig.stringify()
 }
 
+export function convertNumberToString(num: number): string {
+    return num.toString()
+}
+
 export function generateBucketedConfigForUserUTF8(
     sdkKey: string,
     userJSONStr: Uint8Array,

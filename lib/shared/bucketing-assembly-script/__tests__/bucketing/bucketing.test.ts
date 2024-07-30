@@ -8,6 +8,7 @@ import {
     setClientCustomData,
     variableForUser as variableForUser_AS,
     VariableType,
+    convertNumberToString,
 } from '../bucketingImportHelper'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config, barrenConfig, configWithNullCustomData } = testData
@@ -214,6 +215,22 @@ describe('User Hashing and Bucketing', () => {
             'fake',
         )
         expect(bucketingHash).not.toBe(rolloutHash)
+    })
+})
+
+describe('AS Number conversion', () => {
+    it('converts numbers to strings', () => {
+        const number = 610
+        const convertedNumber = convertNumberToString(number)
+        expect(typeof convertedNumber).toBe('string')
+        expect(convertedNumber).toBe('610')
+    })
+
+    it('converts floats to strings', () => {
+        const number = 610.61
+        const convertedNumber = convertNumberToString(number)
+        expect(typeof convertedNumber).toBe('string')
+        expect(convertedNumber).toBe('610.61')
     })
 })
 
