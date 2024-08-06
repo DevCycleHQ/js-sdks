@@ -268,6 +268,7 @@ export class EnvironmentConfigManager {
             }
             logError(ex)
             if (ex instanceof UserError) {
+                this.cleanup()
                 throw ex
             } else if (this._hasConfig) {
                 this.logger.warn(
