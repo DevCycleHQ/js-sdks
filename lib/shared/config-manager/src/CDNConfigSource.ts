@@ -46,8 +46,6 @@ export class CDNConfigSource extends ConfigSource {
             resStatus: res.status ?? undefined,
         }
 
-        const projectConfig = (await res.json()) as unknown
-
         this.logger.debug(
             `Downloaded config, status: ${
                 res?.status
@@ -59,7 +57,9 @@ export class CDNConfigSource extends ConfigSource {
                 `Config not modified, using cache, etag: ${this.configEtag}` +
                     `, last-modified: ${this.configLastModified}`,
             )
-        } else if (res.status === 200 && projectConfig) {
+        } else if (res.status === 200) {
+            const projectConfig = (await res.json()) as unknown
+
             const lastModifiedHeader = res.headers.get('last-modified')
             if (this.isLastModifiedHeaderOld(lastModifiedHeader ?? null)) {
                 this.logger.debug(

@@ -213,7 +213,6 @@ export class EnvironmentConfigManager {
         )
         let projectConfig: ConfigBody | null = null
         let retrievalMetadata: Record<string, unknown>
-        let userError: UserError | null = null
         const startTime = Date.now()
         let responseTimeMS = 0
 
@@ -269,7 +268,12 @@ export class EnvironmentConfigManager {
             }
             logError(ex)
             if (ex instanceof UserError) {
-                userError = ex
+                this.cleanup()
+                throw ex
+            } else if (this._hasConfig) {
+                this.logger.warn(
+                    `Failed to download config, using cached version. url: ${url}.`,
+                )
             }
         }
 
@@ -288,14 +292,7 @@ export class EnvironmentConfigManager {
             }
         }
 
-        if (this._hasConfig) {
-            this.logger.warn(
-                `Failed to download config, using cached version. url: ${url}.`,
-            )
-        } else if (userError) {
-            this.cleanup()
-            throw userError
-        } else {
+        if (!this._hasConfig) {
             throw new Error('Failed to download DevCycle config.')
         }
     }
