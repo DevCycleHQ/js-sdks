@@ -66,12 +66,16 @@ export const getConfigJson = async (
         const res = await getWithTimeout(url, requestConfig, 5000)
         return await res.json()
     } catch (e) {
+        const error = e as ResponseError
         logger.error(
             `Request to get config failed for url: ${url}, ` +
-                `response message: ${e}`,
+                `response message: ${error.message}`,
         )
+        if (error.status === 401 || error.status === 403) {
+            throw new Error(`Invalid SDK Key. Error details: ${error.message}`)
+        }
         throw new Error(
-            `Failed to download DevCycle config. Error details: ${e}`,
+            `Failed to download DevCycle config. Error details: ${error.message}`,
         )
     }
 }

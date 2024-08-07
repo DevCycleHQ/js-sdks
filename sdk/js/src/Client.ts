@@ -65,7 +65,10 @@ export class DevCycleClient<
     private readonly options: DevCycleOptions
 
     private onInitialized: Promise<DevCycleClient<Variables>>
-    private resolveOnInitialized: (client: DevCycleClient<Variables>) => void
+    private resolveOnInitialized: (
+        client: DevCycleClient<Variables>,
+        err?: unknown,
+    ) => void
 
     private userSaved = false
     private _closing = false
@@ -121,9 +124,14 @@ export class DevCycleClient<
         this.registerVisibilityChangeHandler()
 
         this.onInitialized = new Promise((resolve, reject) => {
-            this.resolveOnInitialized = (value) => {
-                this._isInitialized = true
-                resolve(value)
+            this.resolveOnInitialized = (value, error) => {
+                if (error) {
+                    this._isInitialized = false
+                    reject(error)
+                } else {
+                    this._isInitialized = true
+                    resolve(value)
+                }
             }
         })
 
@@ -207,6 +215,7 @@ export class DevCycleClient<
                     Date.now(),
                 )
             }
+            this._isInitialized = true
             this.resolveOnInitialized(this)
             this.logger.info('Client initialized')
         } catch (err) {
@@ -231,15 +240,17 @@ export class DevCycleClient<
         user: DVCPopulatedUser,
         err?: unknown,
     ) => {
+        let isInvalidConfigError = false
         if (this.isInitialized) {
             return
         }
         this.eventEmitter.emitInitialized(false)
         if (err) {
             this.eventEmitter.emitError(err)
+            isInvalidConfigError = err.toString().startsWith('Invalid SDK Key')
         }
         void this.setUser(user)
-        this.resolveOnInitialized(this)
+        this.resolveOnInitialized(this, isInvalidConfigError ? err : null)
     }
 
     /**
