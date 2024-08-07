@@ -66,6 +66,30 @@ describe.each([true, false])('Config Body', (utf8) => {
         )
     })
 
+    it('should parse target.bucketingKey exists', () => {
+        const config = cloneDeep(testData.config)
+        const target: any = config.features[0].configuration.targets[0]
+        target.bucketingKey = 'bucketingKey'
+        expect(testConfigBody(JSON.stringify(config), utf8)).toEqual(
+            postProcessedConfig(config),
+        )
+    })
+
+    it('should parse startsWith/endsWith filter', () => {
+        const config = cloneDeep(testData.config)
+        const filters =
+            config.features[0].configuration.targets[0]._audience.filters
+        filters.filters[0] = {
+            type: 'user',
+            comparator: 'startWith',
+            subType: 'email',
+            values: [],
+        } as (typeof filters.filters)[0]
+        expect(testConfigBody(JSON.stringify(config), utf8)).toEqual(
+            postProcessedConfig(config),
+        )
+    })
+
     it('should handle extended UTF8 characters, from UTF8: ' + utf8, () => {
         const testConfig = immutable.set(testData.config, 'project.key', '👍 ö')
         expect(testConfigBody(JSON.stringify(testConfig), utf8)).toEqual(
