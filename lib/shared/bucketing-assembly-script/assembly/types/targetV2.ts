@@ -13,12 +13,12 @@ import {
 } from '../helpers/jsonHelpers'
 import { SortingArray, sortObjectsByString } from '../helpers/arrayHelpers'
 
-export class Target extends JSON.Value {
+export class TargetV2 extends JSON.Value {
     readonly _id: string
     readonly _audience: Audience
     readonly rollout: Rollout | null
     readonly distribution: TargetDistribution[]
-
+    readonly bucketingKey: string | null
     private readonly _sortedDistribution: TargetDistribution[]
 
     constructor(target: JSON.Obj) {
@@ -43,6 +43,7 @@ export class Target extends JSON.Value {
                 value: distribution[i]._variation
             })
         }
+        this.bucketingKey = getStringFromJSONOptional(target, 'bucketingKey')
         this._sortedDistribution = sortObjectsByString<TargetDistribution>(sortingArray, 'desc')
     }
 
@@ -68,6 +69,9 @@ export class Target extends JSON.Value {
         json.set('_audience', this._audience)
         if (this.rollout) {
             json.set('rollout', this.rollout)
+        }
+        if (this.bucketingKey) {
+            json.set('bucketingKey', this.bucketingKey)
         }
         json.set('distribution', jsonArrFromValueArray(this.distribution))
         return json.stringify()
@@ -171,7 +175,8 @@ export const validSubTypes = [
 ]
 
 export const validComparators = [
-    '=', '!=', '>', '>=', '<', '<=', 'exist', '!exist', 'contain', '!contain'
+    '=', '!=', '>', '>=', '<', '<=', 'exist', '!exist', 'contain', '!contain',
+    'startWith', '!startWith', 'endWith', '!endWith'
 ]
 
 const validAudienceMatchComparators = ['=', '!=']

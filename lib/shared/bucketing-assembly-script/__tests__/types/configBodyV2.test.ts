@@ -1,7 +1,7 @@
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 import {
-    testConfigBodyClass,
-    testConfigBodyClassFromUTF8,
+    testConfigBodyV2Class,
+    testConfigBodyV2ClassFromUTF8,
     setConfigDataWithEtag,
     hasConfigDataForEtag,
 } from '../bucketingImportHelper'
@@ -9,12 +9,12 @@ import cloneDeep from 'lodash/cloneDeep'
 import immutable from 'object-path-immutable'
 import { Feature } from '@devcycle/types'
 
-const testConfigBody = (str: string, utf8: boolean): any => {
+const testConfigBodyV2 = (str: string, utf8: boolean): any => {
     if (utf8) {
         const buff = Buffer.from(str, 'utf8')
-        return JSON.parse(testConfigBodyClassFromUTF8(buff))
+        return JSON.parse(testConfigBodyV2ClassFromUTF8(buff))
     } else {
-        return JSON.parse(testConfigBodyClass(str))
+        return JSON.parse(testConfigBodyV2Class(str))
     }
 }
 
@@ -39,9 +39,9 @@ const postProcessedConfig = (config: unknown) => {
         .value()
 }
 
-describe.each([true, false])('Config Body', (utf8) => {
+describe.each([true, false])('Config Body V2', (utf8) => {
     it('should parse valid JSON into ConfigBody class', () => {
-        expect(testConfigBody(JSON.stringify(testData.config), utf8)).toEqual(
+        expect(testConfigBodyV2(JSON.stringify(testData.config), utf8)).toEqual(
             postProcessedConfig(testData.config),
         )
     })
@@ -51,7 +51,7 @@ describe.each([true, false])('Config Body', (utf8) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         delete config.clientSDKKey
-        expect(testConfigBody(JSON.stringify(config), utf8)).toEqual(
+        expect(testConfigBodyV2(JSON.stringify(config), utf8)).toEqual(
             immutable.del(postProcessedConfig(testData.config), 'clientSDKKey'),
         )
     })
@@ -61,21 +61,21 @@ describe.each([true, false])('Config Body', (utf8) => {
         target.rollout = {
             startDate: new Date(),
         }
-        expect(() => testConfigBody(JSON.stringify(config), utf8)).toThrow(
+        expect(() => testConfigBodyV2(JSON.stringify(config), utf8)).toThrow(
             'Missing string value for key: "type"',
         )
     })
 
-    it('should parse and omit bucketingKey', () => {
+    it('should parse target.bucketingKey exists', () => {
         const config = cloneDeep(testData.config)
         const target: any = config.features[0].configuration.targets[0]
         target.bucketingKey = 'bucketingKey'
-        expect(testConfigBody(JSON.stringify(testData.config), utf8)).toEqual(
-            postProcessedConfig(testData.config),
+        expect(testConfigBodyV2(JSON.stringify(config), utf8)).toEqual(
+            postProcessedConfig(config),
         )
     })
 
-    it('should parse for startsWith/endsWith filter', () => {
+    it('should parse startsWith/endsWith filter', () => {
         const config = cloneDeep(testData.config)
         const filters =
             config.features[0].configuration.targets[0]._audience.filters
@@ -85,14 +85,14 @@ describe.each([true, false])('Config Body', (utf8) => {
             subType: 'email',
             values: [],
         } as (typeof filters.filters)[0]
-        expect(testConfigBody(JSON.stringify(config), utf8)).toEqual(
+        expect(testConfigBodyV2(JSON.stringify(config), utf8)).toEqual(
             postProcessedConfig(config),
         )
     })
 
     it('should handle extended UTF8 characters, from UTF8: ' + utf8, () => {
         const testConfig = immutable.set(testData.config, 'project.key', '👍 ö')
-        expect(testConfigBody(JSON.stringify(testConfig), utf8)).toEqual(
+        expect(testConfigBodyV2(JSON.stringify(testConfig), utf8)).toEqual(
             postProcessedConfig(testConfig),
         )
     })
@@ -101,7 +101,7 @@ describe.each([true, false])('Config Body', (utf8) => {
         const config = cloneDeep(testData.config)
         const feature: any = config.features[0]
         feature.type = 'invalid'
-        expect(() => testConfigBody(JSON.stringify(config), utf8)).toThrow(
+        expect(() => testConfigBodyV2(JSON.stringify(config), utf8)).toThrow(
             'Invalid string value: invalid, for key: type, ' +
                 'must be one of: release, experiment, permission, ops',
         )
@@ -115,7 +115,7 @@ describe.each([true, false])('Config Body', (utf8) => {
             type: 'user',
             comparator: '=',
         } as (typeof filters.filters)[0]
-        expect(() => testConfigBody(JSON.stringify(config), utf8)).toThrow(
+        expect(() => testConfigBodyV2(JSON.stringify(config), utf8)).toThrow(
             'Array not found for key: "values"',
         )
     })
@@ -125,7 +125,9 @@ describe.each([true, false])('Config Body', (utf8) => {
         const filters =
             config.features[0].configuration.targets[0]._audience.filters
         filters.operator = 'xylophone'
-        expect(() => testConfigBody(JSON.stringify(config), utf8)).not.toThrow()
+        expect(() =>
+            testConfigBodyV2(JSON.stringify(config), utf8),
+        ).not.toThrow()
     })
 
     it('should throw if audience is missing comparator for user filter', () => {
@@ -137,7 +139,7 @@ describe.each([true, false])('Config Body', (utf8) => {
             values: [],
             subType: 'subtype',
         } as unknown as (typeof filters.filters)[0]
-        expect(() => testConfigBody(JSON.stringify(config), utf8)).toThrow(
+        expect(() => testConfigBodyV2(JSON.stringify(config), utf8)).toThrow(
             'Missing string value for key: "comparator", obj: {"type":"user","values":[],"subType":"subtype"',
         )
     })
@@ -153,7 +155,7 @@ describe.each([true, false])('Config Body', (utf8) => {
             dataKeyType: 'String',
             subType: 'customData',
         } as unknown as (typeof filters.filters)[0]
-        expect(() => testConfigBody(JSON.stringify(config), utf8)).toThrow(
+        expect(() => testConfigBodyV2(JSON.stringify(config), utf8)).toThrow(
             'Missing string value for key: "dataKey"',
         )
     })
@@ -169,7 +171,7 @@ describe.each([true, false])('Config Body', (utf8) => {
             dataKey: 'datakey',
             subType: 'customData',
         } as unknown as (typeof filters.filters)[0]
-        expect(() => testConfigBody(JSON.stringify(config), utf8)).toThrow(
+        expect(() => testConfigBodyV2(JSON.stringify(config), utf8)).toThrow(
             'Missing string value for key: "dataKeyType"',
         )
     })
@@ -186,7 +188,7 @@ describe.each([true, false])('Config Body', (utf8) => {
             dataKeyType: 'invalid',
             subType: 'customData',
         } as unknown as (typeof filters.filters)[0]
-        expect(() => testConfigBody(JSON.stringify(config), utf8)).toThrow(
+        expect(() => testConfigBodyV2(JSON.stringify(config), utf8)).toThrow(
             'Invalid string value: invalid, for key: dataKeyType',
         )
     })
@@ -198,12 +200,14 @@ describe.each([true, false])('Config Body', (utf8) => {
         filters.filters[0] = {
             type: 'all',
         } as (typeof filters.filters)[0]
-        expect(() => testConfigBody(JSON.stringify(config), utf8)).not.toThrow()
+        expect(() =>
+            testConfigBodyV2(JSON.stringify(config), utf8),
+        ).not.toThrow()
     })
 
     it('does not fail on multiple iterations of testConfigBodyClass', () => {
         for (let i = 0; i < 1000; i++) {
-            testConfigBody(JSON.stringify(testData.config), utf8)
+            testConfigBodyV2(JSON.stringify(testData.config), utf8)
         }
     })
 })
