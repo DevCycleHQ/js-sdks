@@ -10,12 +10,13 @@ import { mockSubscribeFunction } from '@devcycle/js-client-sdk' // defined in th
 
 jest.mock('@devcycle/js-client-sdk')
 
+const test_key = 'dvc_client_test_key'
 const ProviderWrapper = ({ children }: { children: ReactElement }) => {
     return (
         <DevCycleProvider
             config={{
                 user: { user_id: 'test', isAnonymous: false },
-                sdkKey: 'test',
+                sdkKey: test_key,
             }}
         >
             {children}

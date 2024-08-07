@@ -14,6 +14,8 @@ import fetch from 'cross-fetch'
 global.fetch = fetch
 jest.unmock('@devcycle/js-client-sdk')
 
+const test_key = 'dvc_client_test_key'
+
 describe('useIsDevCycleInitialized', () => {
     it('should render the app once the SDK initializes', async () => {
         const scope = nock('https://sdk-api.devcycle.com/v1')
@@ -38,7 +40,7 @@ describe('useIsDevCycleInitialized', () => {
 
         const App = withDevCycleProvider({
             user: { user_id: 'test_user' },
-            sdkKey: 'dvc_test_key',
+            sdkKey: test_key,
         })(TestApp)
 
         render(<App />)
@@ -73,7 +75,7 @@ describe('useIsDevCycleInitialized', () => {
         }
 
         const App = withDevCycleProvider({
-            sdkKey: 'dvc_test_key',
+            sdkKey: test_key,
             options: {
                 deferInitialization: true,
             },
@@ -103,7 +105,7 @@ describe('useIsDevCycleInitialized', () => {
         }
 
         const App = withDevCycleProvider({
-            sdkKey: 'dvc_test_key',
+            sdkKey: test_key,
             user: { user_id: 'test_user' },
             options: {
                 bootstrapConfig: {} as BucketedUserConfig,
@@ -150,7 +152,7 @@ describe('useIsDevCycleInitialized', () => {
 
         const App = withDevCycleProvider({
             user: { user_id: 'test_user' },
-            sdkKey: 'dvc_test_key',
+            sdkKey: test_key,
         })(TestApp)
 
         render(<App />)
