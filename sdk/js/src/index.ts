@@ -97,6 +97,12 @@ export function initializeDevCycle<
         throw new Error('Missing SDK key! Call initialize with a valid SDK key')
     }
 
+    if (!sdkKey.startsWith('client') && !sdkKey.startsWith('dvc_client')) {
+        throw new Error(
+            'Invalid SDK key! SDK key must start with "client_" or "dvc_client_"',
+        )
+    }
+
     const userAndOptions = determineUserAndOptions(userOrOptions, optionsArg)
     const { options } = userAndOptions
     const isServiceWorker = checkIsServiceWorker()
