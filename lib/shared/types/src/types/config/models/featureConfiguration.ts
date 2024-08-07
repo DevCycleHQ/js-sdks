@@ -98,6 +98,11 @@ export class Target<IdType = string> {
      * Currently indicates virtual targeting rules generated due to overrides.
      */
     type?: TargetingRuleTypes
+
+    /**
+     * Bucketing key to use for this target. If not provided, user_id will be used.
+     */
+    bucketingKey?: string
 }
 
 export class FeaturePrerequisites<IdType = string> {
