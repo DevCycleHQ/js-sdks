@@ -9,7 +9,7 @@ jest.spyOn(Request, 'getConfigJson').mockImplementation(() => {
 const test_key = 'client_test_sdk_key'
 const missingKeyError = 'Missing SDK key! Call initialize with a valid SDK key'
 const invalidKeyError =
-    'Invalid SDK key! SDK key must start with "client_" or "dvc_client_"'
+    'Invalid SDK key provided. Please call initialize with a valid client SDK key'
 const missingUserError = 'Missing user! Call initialize with a valid user'
 const invalidUserError =
     'Must have a user_id, or have "isAnonymous" set on the user'
