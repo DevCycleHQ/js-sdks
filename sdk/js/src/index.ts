@@ -99,7 +99,7 @@ export function initializeDevCycle<
 
     if (!sdkKey.startsWith('client') && !sdkKey.startsWith('dvc_client')) {
         throw new Error(
-            'Invalid SDK key! SDK key must start with "client_" or "dvc_client_"',
+            'Invalid SDK key provided. Please call initialize with a valid client SDK key',
         )
     }
 
