@@ -1,4 +1,4 @@
-import { Audience, AudienceFilter, TopLevelOperator } from './audience'
+import { TopLevelOperator } from './audience'
 import { Type } from 'class-transformer'
 
 export enum TargetingRuleTypes {
