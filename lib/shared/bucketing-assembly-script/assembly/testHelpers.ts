@@ -4,7 +4,7 @@
 
 import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import {
-    BucketedUserConfig, ConfigBody, CustomDataFilter,
+    BucketedUserConfig, ConfigBody, ConfigBodyV2, CustomDataFilter,
     DVCPopulatedUser,
     DVCUser,
     Rollout as PublicRollout,
@@ -128,6 +128,16 @@ export function testConfigBodyClass(configStr: string, etag: string | null = nul
 
 export function testConfigBodyClassFromUTF8(configStr: Uint8Array, etag: string | null = null): string {
     const config = ConfigBody.fromUTF8(configStr, etag)
+    return config.stringify()
+}
+
+export function testConfigBodyV2Class(configStr: string, etag: string | null = null): string {
+    const config = ConfigBodyV2.fromString(configStr, etag)
+    return config.stringify()
+}
+
+export function testConfigBodyV2ClassFromUTF8(configStr: Uint8Array, etag: string | null = null): string {
+    const config = ConfigBodyV2.fromUTF8(configStr, etag)
     return config.stringify()
 }
 
