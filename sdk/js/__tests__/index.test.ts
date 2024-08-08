@@ -8,9 +8,11 @@ type VariableTypes = {
     my_array_json: { test: string[] }
 }
 
+const test_key = 'client_test_sdk_key'
+
 describe('initialize', () => {
     it('allows a generic to be passed to initialize', () => {
-        const client = initializeDevCycle<VariableTypes>('test', {
+        const client = initializeDevCycle<VariableTypes>(test_key, {
             user_id: 'test',
         })
         client.variableValue('my_array_json', { test: [] })
@@ -18,20 +20,20 @@ describe('initialize', () => {
         client.variableValue('bad-key', false)
     })
     it('should use second arg as options instead of user in deferred mode', () => {
-        const client = initializeDevCycle('test', {
+        const client = initializeDevCycle(test_key, {
             deferInitialization: true,
         })
         expect(client.user).toBeUndefined()
     })
     it('should use the second arg as user when not in deferred mode', async () => {
-        const client = initializeDevCycle('test', {
+        const client = initializeDevCycle(test_key, {
             user_id: 'test',
         })
         expect(client.user).toBeDefined()
     })
     it('should use the second arg as user when deferred mode is explicitly off', async () => {
         const client = initializeDevCycle(
-            'test',
+            test_key,
             {
                 user_id: 'test',
             },
@@ -43,7 +45,7 @@ describe('initialize', () => {
     })
     it('should not allow no user when deferred mode is explicitly off', async () => {
         expect(() =>
-            initializeDevCycle('test', {
+            initializeDevCycle(test_key, {
                 // @ts-expect-error - should not allow no user when deferred mode is explicitly off
                 deferInitialization: false,
             }),

@@ -11,6 +11,8 @@ import fetch from 'cross-fetch'
 global.fetch = fetch
 jest.unmock('@devcycle/js-client-sdk')
 
+const test_key = 'dvc_client_test_key'
+
 describe('useVariableValue', () => {
     const Component = () => {
         const variableValue = useVariableValue('string-var', 'Hello')
@@ -75,7 +77,7 @@ describe('useVariableValue', () => {
 
             const App = withDevCycleProvider({
                 user: { user_id: 'test_user' },
-                sdkKey: 'dvc_test_key',
+                sdkKey: test_key,
             })(TestApp)
 
             render(<App />)
