@@ -16,7 +16,7 @@ import CacheStore from './CacheStore'
 import { getStorageStrategy } from './DefaultCacheStore'
 import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
-import { checkParamDefined } from './utils'
+import { checkParamDefined, UserError } from './utils'
 import { EventEmitter } from './EventEmitter'
 import type { BucketedUserConfig, VariableTypeAlias } from '@devcycle/types'
 import { getVariableTypeFromValue } from '@devcycle/types'
@@ -65,7 +65,7 @@ export class DevCycleClient<
     private readonly options: DevCycleOptions
 
     private onInitialized: Promise<DevCycleClient<Variables>>
-    private resolveOnInitialized: (
+    private settleOnInitialized: (
         client: DevCycleClient<Variables>,
         err?: unknown,
     ) => void
@@ -124,7 +124,7 @@ export class DevCycleClient<
         this.registerVisibilityChangeHandler()
 
         this.onInitialized = new Promise((resolve, reject) => {
-            this.resolveOnInitialized = (value, error) => {
+            this.settleOnInitialized = (value, error) => {
                 if (error) {
                     this._isInitialized = false
                     reject(error)
@@ -216,7 +216,7 @@ export class DevCycleClient<
                 )
             }
             this._isInitialized = true
-            this.resolveOnInitialized(this)
+            this.settleOnInitialized(this)
             this.logger.info('Client initialized')
         } catch (err) {
             this.initializeOnConfigFailure(this.user, err)
@@ -240,17 +240,15 @@ export class DevCycleClient<
         user: DVCPopulatedUser,
         err?: unknown,
     ) => {
-        let isInvalidConfigError = false
         if (this.isInitialized) {
             return
         }
         this.eventEmitter.emitInitialized(false)
         if (err) {
             this.eventEmitter.emitError(err)
-            isInvalidConfigError = err.toString().startsWith('Invalid SDK Key')
         }
         void this.setUser(user)
-        this.resolveOnInitialized(this, isInvalidConfigError ? err : null)
+        this.settleOnInitialized(this, err instanceof UserError ? err : null)
     }
 
     /**
