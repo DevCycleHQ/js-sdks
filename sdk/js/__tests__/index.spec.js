@@ -7,6 +7,7 @@ jest.spyOn(Request, 'getConfigJson').mockImplementation(() => {
 })
 
 const test_key = 'client_test_sdk_key'
+const test_server_key = 'dvc_server_key'
 const missingKeyError = 'Missing SDK key! Call initialize with a valid SDK key'
 const invalidKeyError =
     'Invalid SDK key provided. Please call initialize with a valid client SDK key'
@@ -59,6 +60,13 @@ describe('initializeDevCycle tests', () => {
         expect(() => DVC.initializeDevCycle(test_key, user, false)).toThrow(
             invalidOptionsError,
         )
+    })
+
+    it('should not throw an error if invalid SDK key is passed in initialize when running with next option set', () => {
+        const user = { user_id: 'user1' }
+        expect(() =>
+            DVC.initializeDevCycle(test_server_key, user, { next: 'test' }),
+        ).not.toThrow(invalidKeyError)
     })
 
     it('should flush when pagehide is triggered', () => {
