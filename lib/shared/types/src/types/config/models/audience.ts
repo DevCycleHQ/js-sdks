@@ -12,6 +12,10 @@ export enum FilterComparator {
     '!exist' = '!exist',
     'contain' = 'contain',
     '!contain' = '!contain',
+    'startWith' = 'startWith',
+    '!startWith' = '!startWith',
+    'endWith' = 'endWith',
+    '!endWith' = '!endWith',
 }
 
 export enum BooleanFilterComparator {
@@ -27,6 +31,10 @@ export enum StringFilterComparator {
     '!exist' = '!exist',
     'contain' = 'contain',
     '!contain' = '!contain',
+    'startWith' = 'startWith',
+    '!startWith' = '!startWith',
+    'endWith' = 'endWith',
+    '!endWith' = '!endWith',
 }
 
 export enum NumberFilterComparator {
