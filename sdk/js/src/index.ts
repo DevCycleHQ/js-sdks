@@ -7,9 +7,8 @@ import {
 import {
     DevCycleClient,
     DevCycleOptionsWithDeferredInitialization,
-    isDeferredOptions,
 } from './Client'
-import { checkIsServiceWorker } from './utils'
+import { checkIsServiceWorker, UserError } from './utils'
 
 export * from './types'
 export { dvcDefaultLogger } from './logger'
@@ -94,7 +93,9 @@ export function initializeDevCycle<
     optionsArg: DevCycleOptions = {},
 ): DevCycleClient<Variables> {
     if (!sdkKey) {
-        throw new Error('Missing SDK key! Call initialize with a valid SDK key')
+        throw new UserError(
+            'Missing SDK key! Call initialize with a valid SDK key',
+        )
     }
 
     if (
@@ -102,7 +103,7 @@ export function initializeDevCycle<
         !sdkKey.startsWith('dvc_client') &&
         !optionsArg?.next
     ) {
-        throw new Error(
+        throw new UserError(
             'Invalid SDK key provided. Please call initialize with a valid client SDK key',
         )
     }
