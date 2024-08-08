@@ -15,7 +15,13 @@ export class DevCycleService {
     ) {}
 
     getUser(): DevCycleUser {
-        return this.cls.get('dvc_user')
+        const user = this.cls.get('dvc_user')
+        if (!user) {
+            throw new Error(
+                'Missing user context. Is the DevCycleModule imported and a user factory set?',
+            )
+        }
+        return user
     }
 
     isEnabled(key: string): boolean {
