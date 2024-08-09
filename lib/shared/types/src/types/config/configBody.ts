@@ -108,4 +108,9 @@ export class ConfigBody<IdType = string> {
      * being retrieved via a server SDK key
      */
     clientSDKKey?: string
+
+    /**
+     * Optional key for which to perform bucketing/rollouts. If not provided, bucketing will be done on user_id
+     */
+    bucketingKey?: string
 }
