@@ -1071,5 +1071,18 @@ describe('EventQueue Unit Tests', () => {
                     'must be smaller than 20,000',
             )
         })
+
+        it('should not pass in logger to bucketing', () => {
+            const spy = jest.spyOn(bucketing, 'initEventQueue')
+            const options = {
+                logger: defaultLogger,
+                eventRequestChunkSize: 1000,
+                disableAutomaticEventLogging: true,
+                disableCustomEventLogging: false,
+            }
+            new EventQueue('test', 'uuid', bucketing, options)
+            const spyOptions = JSON.parse(spy.mock.calls[0][2])
+            expect(spyOptions.logger).toBeUndefined()
+        })
     })
 })
