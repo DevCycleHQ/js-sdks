@@ -42,6 +42,8 @@ export type EventQueueOptions = {
     eventsAPIURI?: string
 }
 
+export type EventQueueBucketingOptions = Omit<EventQueueOptions, 'logger'>
+
 export class EventQueue {
     private readonly logger: DVCLogger
     private readonly reporter?: DVCReporter
@@ -106,10 +108,16 @@ export class EventQueue {
             this.eventFlushIntervalMS,
         )
 
+        const eventQueueOptions = {
+            eventRequestChunkSize: chunkSize,
+            disableAutomaticEventLogging: options.disableAutomaticEventLogging,
+            disableCustomEventLogging: options.disableCustomEventLogging,
+        }
+
         this.bucketing.initEventQueue(
             sdkKey,
             this.clientUUID,
-            JSON.stringify(options),
+            JSON.stringify(eventQueueOptions),
         )
     }
 
