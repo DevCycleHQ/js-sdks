@@ -340,7 +340,7 @@ describe('DevCycleClient tests', () => {
             expect(client.isInitialized).toBe(true)
         })
 
-        it('should not initialize if there is an error reaching the DevCycle Client SDK API', async () => {
+        it('should serve the application without initializing the SDK due to an invalid SDK Key and defalut all variable calls', async () => {
             const client = new DevCycleClient(error_test_key, {
                 user_id: 'user1',
             })
@@ -348,6 +348,22 @@ describe('DevCycleClient tests', () => {
             const onInitialized = client.onClientInitialized(callback)
             expect(onInitialized).toBeFalsy()
             expect(client.isInitialized).toBe(false)
+            expect(
+                client.variable('key', 'should fallback to this').value,
+            ).toBe('should fallback to this')
+            expect(
+                client.eventQueue.aggregateEventMap.variableDefaulted,
+            ).toHaveProperty('key', {
+                type: 'variableDefaulted',
+                target: 'key',
+                value: 1,
+                metaData: {
+                    value: 'should fallback to this',
+                    type: 'String',
+                    _variable: undefined,
+                },
+                date: expect.any(Number),
+            })
         })
     })
 
