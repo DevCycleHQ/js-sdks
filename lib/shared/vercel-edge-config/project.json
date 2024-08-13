@@ -48,7 +48,7 @@
         "npm-publish": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/vercel-edge-config\"",
+                "command": "../../../../scripts/npm-safe-publish.sh \"@devcycle/vercel-edge-config\"",
                 "cwd": "dist/lib/shared/vercel-edge-config",
                 "forwardAllArgs": true
             }
