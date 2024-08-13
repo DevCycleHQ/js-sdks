@@ -26,7 +26,10 @@ const generateBucketedConfigCached = cache(
         )
         return {
             bucketedConfig: {
-                ...generateBucketedConfig({ user: populatedUser, config }),
+                ...generateBucketedConfig({
+                    user: populatedUser,
+                    config,
+                }),
                 // clientSDKKey is always defined for bootstrap config
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 clientSDKKey: config.clientSDKKey!,
@@ -41,6 +44,17 @@ const generateBucketedConfigCached = cache(
     },
 )
 
+const cachedConfig = cache(async (cdnConfig: Response) => {
+    if (!cdnConfig.ok) {
+        const responseText = await cdnConfig.text()
+        throw new Error('Could not fetch config: ' + responseText)
+    }
+    return {
+        config: await cdnConfig.json(),
+        lastModified: cdnConfig.headers.get('last-modified'),
+    }
+})
+
 class CDNConfigSource extends ConfigSource {
     constructor(private clientSDKKey: string) {
         super()
@@ -52,15 +66,22 @@ class CDNConfigSource extends ConfigSource {
             this.clientSDKKey,
             obfuscated,
         )
-        if (!cdnConfig.ok) {
-            const responseText = await cdnConfig.text()
-            throw new Error('Could not fetch config: ' + responseText)
-        }
-        return {
-            config: await cdnConfig.json(),
-            lastModified: cdnConfig.headers.get('last-modified'),
-        }
+        return cachedConfig(cdnConfig)
     }
+}
+
+export const getProjectConfig = async (
+    sdkKey: string,
+    clientSDKKey: string,
+    options: DevCycleNextOptions,
+): Promise<{ config: ConfigBody; lastModified: string | null }> => {
+    const cdnConfigSource = new CDNConfigSource(clientSDKKey)
+    const configSource = options.configSource ?? cdnConfigSource
+    return await configSource.getConfig(
+        sdkKey,
+        'bootstrap',
+        !!options.enableObfuscation,
+    )
 }
 
 /**
@@ -75,13 +96,10 @@ export const getBucketedConfig = async (
     options: DevCycleNextOptions,
     userAgent?: string,
 ): Promise<BucketedConfigWithAdditionalFields> => {
-    const cdnConfigSource = new CDNConfigSource(clientSDKKey)
-
-    const configSource = options.configSource ?? cdnConfigSource
-    const { config, lastModified } = await configSource.getConfig(
+    const { config, lastModified } = await getProjectConfig(
         sdkKey,
-        'bootstrap',
-        !!options.enableObfuscation,
+        clientSDKKey,
+        options,
     )
 
     const { bucketedConfig } = await generateBucketedConfigCached(

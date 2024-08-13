@@ -25,22 +25,26 @@
         "hoist-non-react-statics": "^3.3.2",
         "server-only": "^0.0.1"
     },
+    "peerDependencies": {
+        "@vercel/flags": "^2.6.0"
+    },
     "types": "./src/index.d.ts",
     "exports": {
         ".": {
             "import": "./index.js",
-            "require": "./index.js",
             "types": "./index.d.ts"
         },
         "./server": {
             "import": "./server.js",
-            "require": "./server.js",
             "types": "./server.d.ts"
         },
         "./pages": {
             "import": "./pages.js",
-            "require": "./pages.js",
             "types": "./pages.d.ts"
+        },
+        "./vercel": {
+            "import": "./vercel.js",
+            "types": "./vercel.d.ts"
         }
     }
 }
