@@ -1498,26 +1498,26 @@ __metadata:
 
 "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server::locator=e2e-js-cloud-server%40workspace%3A.":
   version: 1.13.0
-  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=54f652&locator=e2e-js-cloud-server%40workspace%3A."
+  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=ccfd04&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
     "@devcycle/types": ^1.14.0
     cross-fetch: ^4.0.0
     fetch-retry: ^5.0.6
     lodash: ^4.17.21
-  checksum: 7a176ee3bb2d79f24cf45f09502f8d84562b4366a61ed49806937686f0c6bf024d569c0792bbab5f0e193b19d4180d9ab4cc76ed830f37a4be1f18e9b80a9219
+  checksum: cbfd031e293dd729a6051d9eed706f981db22a04ec381a9f1ec5bcf28f8b6e7dc88b7055d71c053569967e1406cba10320715a36f47d868d896d972dcbbd5e0d
   languageName: node
   linkType: hard
 
 "@devcycle/types@file:../../../dist/lib/shared/types::locator=e2e-js-cloud-server%40workspace%3A.":
   version: 1.14.0
-  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=860d35&locator=e2e-js-cloud-server%40workspace%3A."
+  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=53fff0&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
     class-transformer: 0.5.1
     class-validator: 0.14.1
     iso-639-1: ^2.1.13
     lodash: ^4.17.21
     reflect-metadata: ^0.1.13
-  checksum: 7c877f421cb852de892290d76ac157bf5611f633a4a3f597a0669ad93631f75d0ea0f0188abfc3e19fbe401b9cd9041d97b4aa655eceebc014075c2247faa60f
+  checksum: f31345c67f7a3a6084d8dd501d32ecd5cc1753a8511af6e144cf51bbdcac42fedd657ba84a09f1cf468efcf86b8b6895e265e7112e06cb2b1106627526f7215a
   languageName: node
   linkType: hard
 
@@ -2720,13 +2720,13 @@ __metadata:
   linkType: hard
 
 "axios@npm:^1.6.0":
-  version: 1.6.8
-  resolution: "axios@npm:1.6.8"
+  version: 1.7.4
+  resolution: "axios@npm:1.7.4"
   dependencies:
     follow-redirects: ^1.15.6
     form-data: ^4.0.0
     proxy-from-env: ^1.1.0
-  checksum: bf007fa4b207d102459300698620b3b0873503c6d47bf5a8f6e43c0c64c90035a4f698b55027ca1958f61ab43723df2781c38a99711848d232cad7accbcdfcdd
+  checksum: 0c17039a9acfe6a566fca8431ba5c1b455c83d30ea6157fec68a6722878fcd30f3bd32d172f6bee0c51fe75ca98e6414ddcd968a87b5606b573731629440bfaf
   languageName: node
   linkType: hard
 
