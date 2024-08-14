@@ -20,7 +20,6 @@ class CDNConfigSource extends ConfigSource {
         sdkKey: string,
         kind: 'server' | 'bootstrap',
         obfuscated: boolean,
-        lastModifiedThreshold?: string,
     ): Promise<{
         config: ConfigBody
         lastModified: string | null
@@ -49,6 +48,8 @@ export const getBucketedConfig = async (
         sdkKey,
         'bootstrap',
         obfuscated,
+        '',
+        true,
     )
     const populatedUser = new DVCPopulatedUser(
         user,

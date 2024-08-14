@@ -7,12 +7,14 @@ export class EdgeConfigSource extends ConfigSource {
         super()
     }
 
-    async getConfig(
+    async getConfig<T extends boolean>(
         sdkKey: string,
         kind: 'server' | 'bootstrap',
         obfuscated: boolean,
+        lastModifiedThreshold?: string,
+        skipLastModified?: T,
     ): Promise<{
-        config: ConfigBody | null
+        config: T extends true ? ConfigBody : ConfigBody | null
         metaData: Record<string, unknown>
         lastModified: string | null
     }> {
@@ -22,14 +24,17 @@ export class EdgeConfigSource extends ConfigSource {
         }>(configPath)
 
         if (!config) {
-            throw new UserError(`Invalid SDK key provided: ${sdkKey}`)
+            throw new UserError(
+                `Invalid SDK key provided, or edge config integration is not setup: ${sdkKey}`,
+            )
         }
 
         const lastModified = config['lastModified'] as string
 
-        if (this.isLastModifiedHeaderOld(lastModified)) {
+        if (!skipLastModified && this.isLastModifiedHeaderOld(lastModified)) {
             return {
-                config: null,
+                // type hackery to make it accept the return type when skipLastModified is false
+                config: null as T extends true ? never : ConfigBody | null,
                 metaData: {
                     resLastModified: lastModified,
                 },
