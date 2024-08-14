@@ -4845,7 +4845,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/vercel-edge-config@workspace:lib/shared/vercel-edge-config"
   peerDependencies:
-    "@devcycle/nodejs-server-sdk": "*"
     "@devcycle/types": "*"
     "@vercel/edge-config": ^1.2.0
   languageName: unknown
