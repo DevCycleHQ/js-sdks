@@ -229,7 +229,7 @@ export interface DVCVariable<T extends DVCVariableValue> {
      *
      * @param callback
      */
-    onUpdate(callback: (value: DVCVariableValue) => void): DVCVariable<T>
+    onUpdate(callback: (value: VariableTypeAlias<T>) => void): DVCVariable<T>
 }
 
 export interface DevCycleEvent {
