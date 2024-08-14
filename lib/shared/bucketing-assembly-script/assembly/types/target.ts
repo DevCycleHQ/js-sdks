@@ -171,8 +171,8 @@ export const validSubTypes = [
 ]
 
 export const validComparators = [
-    '=', '!=', '>', '>=', '<', '<=', 'exist', '!exist', 'contain', '!contain'
-]
+    '=', '!=', '>', '>=', '<', '<=', 'exist', '!exist', 'contain', '!contain', 
+    'startWith', '!startWith', 'endWith', '!endWith' ]
 
 const validAudienceMatchComparators = ['=', '!=']
 export const validDataKeyTypes = [

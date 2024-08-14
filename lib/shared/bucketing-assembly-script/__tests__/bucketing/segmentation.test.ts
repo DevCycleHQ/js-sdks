@@ -1249,6 +1249,105 @@ describe('SegmentationManager Unit Test', () => {
             }
             assert.strictEqual(false, checkStringsFilter(null, filter))
         })
+        it('should return true if startWith filter and contains', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'startWith',
+                values: ['test@'],
+            }
+            assert.strictEqual(
+                true,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return true if ends filter and contains', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'endWith',
+                values: ['@devcycle.com'],
+            }
+            assert.strictEqual(
+                true,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return true if not startWith filter and does not contain', () => {
+            const filter = {
+                type: 'user',
+                comparator: '!startWith',
+                values: ['testuser@'],
+            }
+            assert.strictEqual(
+                true,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return true if ends with filter and contains', () => {
+            const filter = {
+                type: 'user',
+                comparator: '!endWith',
+                values: ['@devcycle.io'],
+            }
+            assert.strictEqual(
+                true,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return true if startWith filter and contains', () => {
+            const filter = {
+                type: 'user',
+                comparator: '!startWith',
+                values: ['test@'],
+            }
+            assert.strictEqual(
+                false,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return true if ends with filter and contains', () => {
+            const filter = {
+                type: 'user',
+                comparator: '!endWith',
+                values: ['@devcycle.com'],
+            }
+            assert.strictEqual(
+                false,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return false if starts with with filter with empty value', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'startsWith',
+                values: [''],
+            }
+            assert.strictEqual(
+                false,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return false if ends with filter with empty value', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'endWith',
+                values: [''],
+            }
+            assert.strictEqual(
+                false,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return false if contains filter with empty value', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'contains',
+                values: [''],
+            }
+            assert.strictEqual(
+                false,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
         it('should return true if browser filter works', () => {
             const filter = { type: 'user', comparator: '=', values: ['Chrome'] }
             assert.strictEqual(true, checkStringsFilter('Chrome', filter))
