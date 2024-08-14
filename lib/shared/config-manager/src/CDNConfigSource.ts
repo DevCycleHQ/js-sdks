@@ -1,7 +1,6 @@
-import { ConfigBody, DVCLogger } from '@devcycle/types'
-import { ConfigSource } from './ConfigSource'
+import { ConfigBody, DVCLogger, ConfigSource, UserError } from '@devcycle/types'
 import { getEnvironmentConfig } from './request'
-import { ResponseError, UserError } from '@devcycle/server-request'
+import { ResponseError } from '@devcycle/server-request'
 
 export class CDNConfigSource extends ConfigSource {
     constructor(
@@ -12,13 +11,14 @@ export class CDNConfigSource extends ConfigSource {
         super()
     }
 
-    async getConfig(
+    // type generic to make typescript happy. It's always false in this implementation
+    async getConfig<T extends boolean = false>(
         sdkKey: string,
         kind: 'server' | 'bootstrap',
         obfuscated: boolean,
         lastModifiedThreshold?: string,
     ): Promise<{
-        config: ConfigBody | null
+        config: T extends true ? ConfigBody : ConfigBody | null
         metaData: Record<string, unknown>
         lastModified: string | null
     }> {
@@ -66,7 +66,9 @@ export class CDNConfigSource extends ConfigSource {
                     'Skipping saving config, existing last modified date is newer.',
                 )
                 return {
-                    config: null,
+                    config: null as T extends true
+                        ? ConfigBody
+                        : ConfigBody | null,
                     metaData: metadata,
                     lastModified: lastModifiedHeader,
                 }
@@ -80,7 +82,7 @@ export class CDNConfigSource extends ConfigSource {
             }
         }
         return {
-            config: null,
+            config: null as T extends true ? ConfigBody : ConfigBody | null,
             metaData: metadata,
             lastModified: null,
         }

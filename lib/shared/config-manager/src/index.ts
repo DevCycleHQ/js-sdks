@@ -1,11 +1,8 @@
-import { ConfigBody, DVCLogger } from '@devcycle/types'
-import { ResponseError, UserError } from '@devcycle/server-request'
+import { ConfigBody, DVCLogger, ConfigSource, UserError } from '@devcycle/types'
+import { ResponseError } from '@devcycle/server-request'
 import { SSEConnection } from '@devcycle/sse-connection'
 import { CDNConfigSource } from './CDNConfigSource'
 import { isValidDate } from './request'
-import { ConfigSource } from './ConfigSource'
-
-export * from './ConfigSource'
 
 type ConfigPollingOptions = {
     configPollingIntervalMS?: number

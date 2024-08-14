@@ -1,7 +1,6 @@
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { generateBucketedConfig } from '@devcycle/bucketing'
-import { BucketedUserConfig, ConfigBody } from '@devcycle/types'
-import { ConfigSource } from '../common/ConfigSource.js'
+import { BucketedUserConfig, ConfigBody, ConfigSource } from '@devcycle/types'
 
 const getFetchUrl = (sdkKey: string, obfuscated: boolean) =>
     `https://config-cdn.devcycle.com/config/v1/server/bootstrap/${
@@ -23,6 +22,7 @@ class CDNConfigSource extends ConfigSource {
     ): Promise<{
         config: ConfigBody
         lastModified: string | null
+        metaData: Record<string, unknown>
     }> {
         const configResponse = await fetchCDNConfig(sdkKey, obfuscated)
         if (!configResponse.ok) {
@@ -31,7 +31,17 @@ class CDNConfigSource extends ConfigSource {
         return {
             config: await configResponse.json(),
             lastModified: configResponse.headers.get('last-modified'),
+            metaData: {},
         }
+    }
+
+    // implement a dummy version of this to satisfy shared type definition. Next does not use this method
+    getConfigURL(
+        sdkKey: string,
+        kind: 'server' | 'bootstrap',
+        obfuscated: boolean,
+    ): string {
+        return ''
     }
 }
 

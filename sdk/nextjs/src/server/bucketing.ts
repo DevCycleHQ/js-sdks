@@ -6,8 +6,7 @@ import {
     BucketedConfigWithAdditionalFields,
     DevCycleNextOptions,
 } from '../common/types'
-import { ConfigSource } from '../common/ConfigSource'
-import { ConfigBody } from '@devcycle/types'
+import { ConfigBody, ConfigSource } from '@devcycle/types'
 
 // wrap this function in react cache to avoid redoing work for the same user and config
 const generateBucketedConfigCached = cache(
@@ -59,7 +58,13 @@ class CDNConfigSource extends ConfigSource {
         return {
             config: (await cdnConfig.json()) as ConfigBody,
             lastModified: cdnConfig.headers.get('last-modified'),
+            metaData: {},
         }
+    }
+
+    // dummy implementation to make types happy, this method isn't used in Next
+    getConfigURL(): string {
+        return ''
     }
 }
 

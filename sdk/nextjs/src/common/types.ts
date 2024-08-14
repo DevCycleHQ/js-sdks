@@ -1,6 +1,5 @@
 import { DevCycleOptions, DevCycleUser } from '@devcycle/js-client-sdk'
-import { BucketedUserConfig } from '@devcycle/types'
-import { ConfigSource } from './ConfigSource'
+import { BucketedUserConfig, ConfigSource } from '@devcycle/types'
 
 export type DevCycleNextOptions = Pick<
     DevCycleOptions,
