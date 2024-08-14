@@ -21,7 +21,7 @@ describe('EdgeConfigSource', () => {
             false,
         )
 
-        expect(get).toHaveBeenCalledWith('devcycle-config-v1-server-sdk-key')
+        expect(get).toHaveBeenCalledWith('devcycle-config-v2-server-sdk-key')
 
         expect(result).toEqual({
             config: { key: 'value', lastModified: 'some date' },
@@ -78,7 +78,7 @@ describe('EdgeConfigSource', () => {
         await edgeConfigSource.getConfig('sdk-key', 'bootstrap', false)
 
         expect(get).toHaveBeenCalledWith(
-            'devcycle-config-v1-server-bootstrap-sdk-key',
+            'devcycle-config-v2-server-bootstrap-sdk-key',
         )
     })
 
@@ -98,7 +98,7 @@ describe('EdgeConfigSource', () => {
         await edgeConfigSource.getConfig('sdk-key', 'bootstrap', true)
 
         expect(get).toHaveBeenCalledWith(
-            'devcycle-config-v1-server-bootstrap-obfuscated-sdk-key',
+            'devcycle-config-v2-server-bootstrap-obfuscated-sdk-key',
         )
     })
 })

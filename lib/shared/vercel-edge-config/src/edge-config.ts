@@ -57,9 +57,9 @@ export class EdgeConfigSource extends ConfigSource {
         obfuscated?: boolean,
     ): string {
         return kind == 'bootstrap'
-            ? `devcycle-config-v1-server-bootstrap${
+            ? `devcycle-config-v2-server-bootstrap${
                   obfuscated ? '-obfuscated' : ''
               }-${sdkKey}`
-            : `devcycle-config-v1-server-${sdkKey}`
+            : `devcycle-config-v2-server-${sdkKey}`
     }
 }
