@@ -86,6 +86,7 @@ export function checkIsServiceWorker(): boolean {
         self.constructor.name === 'ServiceWorkerGlobalScope'
     )
 }
+
 export default {
     serializeUserSearchParams,
     checkParamDefined,

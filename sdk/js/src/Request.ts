@@ -1,4 +1,4 @@
-import { DevCycleEvent, DevCycleOptions } from './types'
+import { DevCycleEvent, DevCycleOptions, UserError } from './types'
 import { DVCPopulatedUser } from './User'
 import { serializeUserSearchParams, generateEventPayload } from './utils'
 import type { BucketedUserConfig, DVCLogger } from '@devcycle/types'
@@ -70,6 +70,19 @@ export const getConfigJson = async (
             `Request to get config failed for url: ${url}, ` +
                 `response message: ${e}`,
         )
+
+        if (e instanceof ResponseError) {
+            if (e.status === 401 || e.status === 403) {
+                throw new UserError(
+                    `Invalid SDK Key. Error details: ${e.message}`,
+                )
+            }
+
+            throw new Error(
+                `Failed to download DevCycle config. Error details: ${e.message}`,
+            )
+        }
+
         throw new Error(
             `Failed to download DevCycle config. Error details: ${e}`,
         )

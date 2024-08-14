@@ -23,7 +23,7 @@ async function initOFClient(): Promise<{
 }> {
     const options = { logger }
     OpenFeature.setContext({ targetingKey: 'node_sdk_test' })
-    const provider = new DevCycleProvider('DVC_SERVER_SDK_KEY', options)
+    const provider = new DevCycleProvider('dvc_client_sdk_key', options)
     await OpenFeature.setProviderAndWait(provider)
 
     if (provider.devcycleClient) {
