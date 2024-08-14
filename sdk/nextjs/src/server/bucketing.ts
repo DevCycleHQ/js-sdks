@@ -57,7 +57,7 @@ class CDNConfigSource extends ConfigSource {
             throw new Error('Could not fetch config: ' + responseText)
         }
         return {
-            config: await cdnConfig.json(),
+            config: (await cdnConfig.json()) as ConfigBody,
             lastModified: cdnConfig.headers.get('last-modified'),
         }
     }
@@ -82,6 +82,8 @@ export const getBucketedConfig = async (
         sdkKey,
         'bootstrap',
         !!options.enableObfuscation,
+        '',
+        true,
     )
 
     const { bucketedConfig } = await generateBucketedConfigCached(

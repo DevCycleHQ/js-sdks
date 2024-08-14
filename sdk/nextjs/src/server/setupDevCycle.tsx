@@ -80,6 +80,10 @@ export const setupDevCycle = ({
             options: clientOptions,
             clientSDKKey: clientSDKKey,
             enableStreaming: options?.enableStreaming ?? false,
+            // if a custom config source is set, add an artificial delay for realtime updates as a clumsy way to
+            // allow for propagation time of the custom source, since we don't have a first-class way to ensure its
+            // up to date
+            realtimeDelay: options?.configSource ? 10000 : undefined,
             userAgent: getUserAgent(options),
         }
     }

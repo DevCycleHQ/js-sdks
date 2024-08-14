@@ -4,6 +4,7 @@ import { DevCycleClient, initializeDevCycle } from '@devcycle/js-client-sdk'
 import { invalidateConfig } from '../../common/invalidateConfig'
 import { DevCycleNextOptions, DevCycleServerData } from '../../common/types'
 import { DevCycleProviderContext } from './context'
+import { useRouter } from 'next/navigation'
 
 export type DevCycleClientContext = {
     serverDataPromise: Promise<DevCycleServerData>
@@ -11,6 +12,7 @@ export type DevCycleClientContext = {
     clientSDKKey: string
     options: DevCycleNextOptions
     enableStreaming: boolean
+    realtimeDelay?: number
     userAgent?: string
 }
 
@@ -59,12 +61,28 @@ export const InternalDevCycleClientsideProvider = ({
     promiseResolved,
 }: DevCycleClientsideProviderProps): React.ReactElement => {
     const clientRef = useRef<DevCycleClient>()
+    const router = useRouter()
 
     const { serverDataPromise, serverData, clientSDKKey, enableStreaming } =
         context
 
-    const revalidateConfig = (lastModified?: number) => {
-        void invalidateConfig(clientSDKKey)
+    const revalidateConfig = async (lastModified?: number) => {
+        if (context.realtimeDelay) {
+            // wait configured delay before checking for new config
+            await new Promise((resolve) =>
+                setTimeout(resolve, context.realtimeDelay),
+            )
+        }
+        try {
+            await invalidateConfig(clientSDKKey)
+        } catch {
+            // do nothing on failure, this is best effort
+        }
+        if (context.realtimeDelay) {
+            // if delay is configured, assume that the server action invalidation won't update any content and just
+            // call for a full in-place refresh
+            router.refresh()
+        }
     }
 
     let resolvedServerData = serverData

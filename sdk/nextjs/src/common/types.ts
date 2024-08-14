@@ -47,7 +47,6 @@ export type BucketedConfigWithAdditionalFields = BucketedUserConfig & {
 }
 
 export type DevCycleServerData = {
-    options: DevCycleNextOptions
     user: DevCycleUser
     // this is null if the config failed to be fetched
     config: BucketedConfigWithAdditionalFields | null

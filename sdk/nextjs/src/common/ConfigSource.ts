@@ -8,11 +8,16 @@ export abstract class ConfigSource {
      * @param kind
      * @param obfuscated
      * @param lastModifiedThreshold
+     * @param skipLastModified
      */
-    abstract getConfig(
+    abstract getConfig<T extends boolean>(
         sdkKey: string,
         kind: 'server' | 'bootstrap',
         obfuscated: boolean,
         lastModifiedThreshold?: string,
-    ): Promise<{ config: ConfigBody; lastModified: string | null }>
+        skipLastModified?: T,
+    ): Promise<{
+        config: T extends true ? ConfigBody : ConfigBody | null
+        lastModified: string | null
+    }>
 }
