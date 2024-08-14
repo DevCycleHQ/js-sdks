@@ -68,6 +68,7 @@ export const InternalDevCycleClientsideProvider = ({
 
     const revalidateConfig = async (lastModified?: number) => {
         if (context.realtimeDelay) {
+            // wait configured delay before checking for new config
             await new Promise((resolve) =>
                 setTimeout(resolve, context.realtimeDelay),
             )
@@ -75,9 +76,11 @@ export const InternalDevCycleClientsideProvider = ({
         try {
             await invalidateConfig(clientSDKKey)
         } catch {
-            // do nothing on failure
+            // do nothing on failure, this is best effort
         }
         if (context.realtimeDelay) {
+            // if delay is configured, assume that the server action invalidation won't update any content and just
+            // call for a full in-place refresh
             router.refresh()
         }
     }
