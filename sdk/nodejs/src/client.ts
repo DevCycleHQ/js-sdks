@@ -1,5 +1,5 @@
 import { EnvironmentConfigManager } from '@devcycle/config-manager'
-import { ResponseError, UserError } from '@devcycle/server-request'
+import { ResponseError } from '@devcycle/server-request'
 import {
     bucketUserForConfig,
     getSDKKeyFromConfig,
@@ -16,6 +16,7 @@ import {
     getVariableTypeFromValue,
     VariableTypeAlias,
     type VariableValue,
+    UserError,
 } from '@devcycle/types'
 import os from 'os'
 import {

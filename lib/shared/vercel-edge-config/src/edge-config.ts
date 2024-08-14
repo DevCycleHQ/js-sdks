@@ -1,6 +1,5 @@
-import { ConfigSource, UserError } from '@devcycle/nodejs-server-sdk'
 import { EdgeConfigClient, EdgeConfigValue } from '@vercel/edge-config'
-import { ConfigBody } from '@devcycle/types'
+import { ConfigBody, ConfigSource, UserError } from '@devcycle/types'
 
 export class EdgeConfigSource extends ConfigSource {
     constructor(private edgeConfigClient: EdgeConfigClient) {

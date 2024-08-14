@@ -1,6 +1,11 @@
-import { ConfigBody } from '@devcycle/types'
-import { isValidDate } from './request'
+import { ConfigBody } from './config/configBody'
 
+export const isValidDate = (date: Date | null): date is Date =>
+    date instanceof Date && !isNaN(date.getTime())
+
+/**
+ * Interface representing a source to pull config data from. Used by the Node and Next SDKs
+ */
 export abstract class ConfigSource {
     configEtag?: string
     configLastModified?: string
@@ -12,16 +17,18 @@ export abstract class ConfigSource {
      * @param kind
      * @param obfuscated
      * @param lastModifiedThreshold
+     * @param skipLastModified
      */
-    abstract getConfig(
+    abstract getConfig<T extends boolean = false>(
         sdkKey: string,
         kind: 'server' | 'bootstrap',
         obfuscated: boolean,
         lastModifiedThreshold?: string,
+        skipLastModified?: T,
     ): Promise<{
-        config: ConfigBody | null
-        metaData: Record<string, unknown>
+        config: T extends true ? ConfigBody : ConfigBody | null
         lastModified: string | null
+        metaData: Record<string, unknown>
     }>
 
     /**

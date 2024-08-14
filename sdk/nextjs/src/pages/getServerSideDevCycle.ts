@@ -2,8 +2,7 @@ import { SSRProps } from './types'
 import { DevCycleOptions, DevCycleUser } from '@devcycle/js-client-sdk'
 import { getBucketedConfig } from './bucketing.js'
 import { GetServerSidePropsContext } from 'next'
-import { BucketedUserConfig } from '@devcycle/types'
-import { ConfigSource } from '../common/ConfigSource.js'
+import { BucketedUserConfig, ConfigSource } from '@devcycle/types'
 
 type IdentifiedUser = Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & {
     user_id: string

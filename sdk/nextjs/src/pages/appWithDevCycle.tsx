@@ -4,7 +4,7 @@ import { SSRProps } from './types'
 import { DevCycleProvider } from '@devcycle/react-client-sdk'
 import React from 'react'
 import { DevCycleOptions } from '@devcycle/js-client-sdk'
-import { ConfigSource } from '../common/ConfigSource.js'
+import { ConfigSource } from '@devcycle/types'
 
 type DevCycleNextOptions = Pick<
     DevCycleOptions,
