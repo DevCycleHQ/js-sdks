@@ -54,12 +54,7 @@ export const setupDevCycle = ({
             options,
         )
 
-        const {
-            enableStreaming,
-            enableObfuscation,
-            configSource,
-            ...otherOptions
-        } = options
+        const { enableStreaming, enableObfuscation, ...otherOptions } = options
 
         const {
             disableAutomaticEventLogging,
