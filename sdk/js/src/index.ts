@@ -3,12 +3,13 @@ import {
     DevCycleOptions,
     DevCycleUser,
     VariableDefinitions,
+    UserError,
 } from './types'
 import {
     DevCycleClient,
     DevCycleOptionsWithDeferredInitialization,
 } from './Client'
-import { checkIsServiceWorker, UserError } from './utils'
+import { checkIsServiceWorker } from './utils'
 
 export * from './types'
 export { dvcDefaultLogger } from './logger'

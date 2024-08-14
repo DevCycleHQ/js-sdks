@@ -1,10 +1,6 @@
-import { DevCycleEvent, DevCycleOptions } from './types'
+import { DevCycleEvent, DevCycleOptions, UserError } from './types'
 import { DVCPopulatedUser } from './User'
-import {
-    serializeUserSearchParams,
-    generateEventPayload,
-    UserError,
-} from './utils'
+import { serializeUserSearchParams, generateEventPayload } from './utils'
 import type { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 import {
     ResponseError,

@@ -7,6 +7,7 @@ import type {
     DVCCustomDataJSON,
     BucketedUserConfig,
 } from '@devcycle/types'
+export { UserError } from '@devcycle/types'
 
 export type DVCVariableValue = VariableValue
 export type { DVCJSON, DVCCustomDataJSON }

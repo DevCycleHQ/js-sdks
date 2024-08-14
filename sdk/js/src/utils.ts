@@ -87,13 +87,6 @@ export function checkIsServiceWorker(): boolean {
     )
 }
 
-export class UserError extends Error {
-    constructor(error: Error | string) {
-        super(error instanceof Error ? error.message : error)
-        this.name = 'UserError'
-    }
-}
-
 export default {
     serializeUserSearchParams,
     checkParamDefined,

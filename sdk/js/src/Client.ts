@@ -8,6 +8,7 @@ import {
     ErrorCallback,
     DVCFeature,
     VariableDefinitions,
+    UserError,
 } from './types'
 
 import { DVCVariable, DVCVariableOptions } from './Variable'
@@ -16,7 +17,7 @@ import CacheStore from './CacheStore'
 import { getStorageStrategy } from './DefaultCacheStore'
 import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
-import { checkParamDefined, UserError } from './utils'
+import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
 import type { BucketedUserConfig, VariableTypeAlias } from '@devcycle/types'
 import { getVariableTypeFromValue } from '@devcycle/types'
