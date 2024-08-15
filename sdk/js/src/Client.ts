@@ -122,7 +122,9 @@ export class DevCycleClient<
         this.eventQueue = new EventQueue(sdkKey, this, options)
 
         this.eventEmitter = new EventEmitter()
-        this.registerVisibilityChangeHandler()
+        if (!this.options.disableRefreshOnInactivity) {
+            this.registerVisibilityChangeHandler()
+        }
 
         this.onInitialized = new Promise((resolve, reject) => {
             this.settleOnInitialized = (value, error) => {

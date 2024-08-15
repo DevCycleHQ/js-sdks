@@ -82,6 +82,12 @@ export interface DevCycleOptions {
      * Disable Realtime Update and their SSE connection.
      */
     disableRealtimeUpdates?: boolean
+
+    /**
+     * Disable the behaviour of performing a configuration refresh when the current page is foregrounded after being
+     * inactive for a while. This may cause the SDk to miss configuration updates.
+     */
+    disableRefreshOnInactivity?: boolean
     /**
      * Defer fetching configuration from DevCycle until `client.identifyUser` is called. Useful when user data is not
      * available yet at time of client instantiation.
