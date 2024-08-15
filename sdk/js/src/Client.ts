@@ -122,7 +122,7 @@ export class DevCycleClient<
         this.eventQueue = new EventQueue(sdkKey, this, options)
 
         this.eventEmitter = new EventEmitter()
-        if (!this.options.disableRefreshOnInactivity) {
+        if (!this.options.disableRealtimeUpdates) {
             this.registerVisibilityChangeHandler()
         }
 
