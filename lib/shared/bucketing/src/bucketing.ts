@@ -4,7 +4,6 @@ import pick from 'lodash/pick'
 import last from 'lodash/last'
 import first from 'lodash/first'
 import {
-    AudienceOperator,
     BucketedUserConfig,
     ConfigBody,
     DVCBucketingUser,
@@ -22,6 +21,7 @@ import { evaluateOperator } from './segmentation'
 // Max value of an unsigned 32-bit integer, which is what murmurhash returns
 const MAX_HASH_VALUE = 4294967295
 const baseSeed = 1
+export const DEFAULT_BUCKETING_VALUE = 'null'
 
 export const generateBoundedHashes = (
     user_id: string,
@@ -167,7 +167,11 @@ const checkRolloutAndEvaluate = ({
     if (!target.rollout || disablePassthroughRollouts) {
         return true
     } else {
-        const { rolloutHash } = generateBoundedHashes(user.user_id, target._id)
+        const bucketingValue = getUserValueForBucketingKey({ user, target })
+        const { rolloutHash } = generateBoundedHashes(
+            bucketingValue,
+            target._id,
+        )
         return doesUserPassRollout({
             boundedHash: rolloutHash,
             rollout: target.rollout,
@@ -269,9 +273,10 @@ export const generateBucketedConfig = ({
     }
 
     segmentedFeatures.forEach(({ feature, target }) => {
-        const { _id, key, type, variations, settings } = feature
+        const { variations } = feature
+        const bucketingValue = getUserValueForBucketingKey({ user, target })
         const { rolloutHash, bucketingHash } = generateBoundedHashes(
-            user.user_id,
+            bucketingValue,
             target._id,
         )
         if (
@@ -325,4 +330,29 @@ export const generateBucketedConfig = ({
         variableVariationMap: {},
         variables: variableMap,
     }
+}
+
+export const getUserValueForBucketingKey = ({
+    user,
+    target,
+}: {
+    user: DVCBucketingUser
+    target: PublicTarget
+}): string => {
+    if (target.bucketingKey && target.bucketingKey !== 'user_id') {
+        const bucketingValue =
+            user.customData?.[target.bucketingKey] ||
+            user.privateCustomData?.[target.bucketingKey] ||
+            DEFAULT_BUCKETING_VALUE
+        if (
+            typeof bucketingValue !== 'string' &&
+            typeof bucketingValue !== 'number' &&
+            typeof bucketingValue !== 'boolean'
+        ) {
+            return DEFAULT_BUCKETING_VALUE
+        } else {
+            return String(bucketingValue)
+        }
+    }
+    return user.user_id
 }
