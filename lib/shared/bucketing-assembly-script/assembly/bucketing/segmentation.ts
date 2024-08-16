@@ -1,5 +1,5 @@
 import { RegExp } from 'assemblyscript-regex/assembly'
-import { findString, includes, replace } from '../helpers/lodashHelpers'
+import { findString, includes, replace, stringEndsWith, stringStartsWith } from '../helpers/lodashHelpers'
 import { OptionsType, versionCompare } from './versionCompare'
 import {
     AudienceOperator,
@@ -311,9 +311,36 @@ export function _checkStringsFilter(string: string | null, filter: UserFilter): 
         return string !== null && !!findString(values, string)
     } else if (operator === '!contain') {
         return string === null || !findString(values, string)
+    } else if (operator === 'startWith') {
+        return string !== null && _checkValueStartsWith(string, values)
+    } else if (operator === '!startWith') {
+        return string === null || !_checkValueStartsWith(string, values)
+    } else if (operator === 'endWith') {
+        return string !== null && _checkValueEndsWith(string, values)
+    } else if (operator === '!endWith') {
+        return string === null || !_checkValueEndsWith(string, values)
     } else {
         return isString(string)
     }
+}
+
+function _checkValueStartsWith(string: string, values: string[] | null): bool {
+    if(!values) return false
+    for (let i = 0; i < values.length; i++) {
+        if (stringStartsWith(string, values[i])) {
+            return true
+        }
+    }
+    return false
+}
+function _checkValueEndsWith(string: string, values: string[]| null): bool {
+    if(!values) return false
+    for (let i = 0; i < values.length; i++) {
+        if (stringEndsWith(string, values[i])) {
+            return true
+        }
+    }
+    return false
 }
 
 export function _checkBooleanFilter(bool: bool, filter: UserFilter): bool {
