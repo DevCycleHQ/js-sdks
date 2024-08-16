@@ -1318,7 +1318,7 @@ describe('SegmentationManager Unit Test', () => {
         it('should return false if starts with with filter with empty value', () => {
             const filter = {
                 type: 'user',
-                comparator: 'startsWith',
+                comparator: 'startWith',
                 values: [''],
             }
             assert.strictEqual(
