@@ -10,6 +10,7 @@ import {
     config,
     barrenConfig,
     configWithNullCustomData,
+    configWithBucketingKey,
 } from '@devcycle/bucketing-test-data'
 
 import moment from 'moment'
@@ -779,6 +780,241 @@ describe('Config Parsing and Generating', () => {
         }
         const c = generateBucketedConfig({ config, user })
         expect(c).toEqual(expected)
+    })
+
+    it('buckets a user with user_id if no bucketingKey', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'pass_rollout',
+            customData: {
+                favouriteFood: 'pizza',
+            },
+            privateCustomData: {
+                favouriteDrink: 'coffee',
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'test@notemail.com',
+        }
+
+        const cWithBucketingKey = configWithBucketingKey('user_id')
+        const bucketedConfig = generateBucketedConfig({
+            config: config,
+            user,
+        })
+
+        const bucketedConfigFromBucketingKey = generateBucketedConfig({
+            config: cWithBucketingKey,
+            user,
+        })
+        expect(bucketedConfig).toEqual(bucketedConfigFromBucketingKey)
+    })
+
+    it('buckets a user with custom bucketingKey', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'pass_rollout',
+            customData: {
+                favouriteFood: 'pizza',
+            },
+            privateCustomData: {
+                favouriteDrink: 'coffee',
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'testwithfood@email.com',
+        }
+        const sameUserDifferentFood = {
+            ...user,
+            customData: {
+                favouriteFood: 'pasta',
+            },
+        }
+        const differentUserSameFood = {
+            ...sameUserDifferentFood,
+            user_id: 'a_different_person',
+        }
+        const configBucketedByFood = configWithBucketingKey('favouriteFood')
+        const bucketedConfigOrig = generateBucketedConfig({
+            config: config,
+            user,
+        })
+        const bucketedConfigByFood = generateBucketedConfig({
+            config: configBucketedByFood,
+            user,
+        })
+        const bucketedConfigSameUserDifferentFood = generateBucketedConfig({
+            config: configBucketedByFood,
+            user: sameUserDifferentFood,
+        })
+        const bucketedConfigDifferentUserSameFood = generateBucketedConfig({
+            config: configBucketedByFood,
+            user: differentUserSameFood,
+        })
+        expect(bucketedConfigOrig.features.feature5.variationKey).not.toEqual(
+            bucketedConfigByFood.features.feature5.variationKey,
+        )
+        expect(bucketedConfigByFood.features.feature5.variationKey).not.toEqual(
+            bucketedConfigSameUserDifferentFood.features.feature5.variationKey,
+        )
+        expect(
+            bucketedConfigSameUserDifferentFood.features.feature5.variationKey,
+        ).toEqual(
+            bucketedConfigDifferentUserSameFood.features.feature5.variationKey,
+        )
+    })
+
+    it('buckets a user with custom bucketingKey from privateCustomData', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'pass_rollout',
+            privateCustomData: {
+                favouriteFood: 'pizza',
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'testwithfood@email.com',
+        }
+        const sameUserDifferentFood = {
+            ...user,
+            privateCustomData: {
+                favouriteFood: 'meatballs',
+            },
+        }
+        const differentUserSameFood = {
+            ...sameUserDifferentFood,
+            user_id: 'a_different_person',
+        }
+        const configBucketedByFood = configWithBucketingKey('favouriteFood')
+        const bucketedConfigOrig = generateBucketedConfig({
+            config: config,
+            user,
+        })
+        const bucketedConfigByFood = generateBucketedConfig({
+            config: configBucketedByFood,
+            user,
+        })
+        const bucketedConfigSameUserDifferentFood = generateBucketedConfig({
+            config: configBucketedByFood,
+            user: sameUserDifferentFood,
+        })
+        const bucketedConfigDifferentUserSameFood = generateBucketedConfig({
+            config: configBucketedByFood,
+            user: differentUserSameFood,
+        })
+        expect(bucketedConfigOrig.features.feature5.variationKey).not.toEqual(
+            bucketedConfigByFood.features.feature5.variationKey,
+        )
+        expect(bucketedConfigByFood.features.feature5.variationKey).not.toEqual(
+            bucketedConfigSameUserDifferentFood.features.feature5.variationKey,
+        )
+        expect(
+            bucketedConfigSameUserDifferentFood.features.feature5.variationKey,
+        ).toEqual(
+            bucketedConfigDifferentUserSameFood.features.feature5.variationKey,
+        )
+    })
+
+    it('buckets a user with custom number bucketingKey', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'pass_rollout',
+            privateCustomData: {
+                favouriteNumber: 610,
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'testwithfood@email.com',
+        }
+        const sameUserDifferentNum = {
+            ...user,
+            privateCustomData: {
+                favouriteNumber: 52900,
+            },
+        }
+        const differentUserSameNum = {
+            ...sameUserDifferentNum,
+            user_id: 'a_different_person',
+        }
+        const configBucketedByNumber = configWithBucketingKey('favouriteNumber')
+        const bucketedConfigOrig = generateBucketedConfig({
+            config: config,
+            user,
+        })
+        const bucketedConfigByNum = generateBucketedConfig({
+            config: configBucketedByNumber,
+            user,
+        })
+        const bucketedConfigSameUserDifferentNum = generateBucketedConfig({
+            config: configBucketedByNumber,
+            user: sameUserDifferentNum,
+        })
+        const bucketedConfigDifferentUserSameNum = generateBucketedConfig({
+            config: configBucketedByNumber,
+            user: differentUserSameNum,
+        })
+        expect(bucketedConfigOrig.features.feature5.variationKey).not.toEqual(
+            bucketedConfigByNum.features.feature5.variationKey,
+        )
+        expect(bucketedConfigByNum.features.feature5.variationKey).not.toEqual(
+            bucketedConfigSameUserDifferentNum.features.feature5.variationKey,
+        )
+        expect(
+            bucketedConfigSameUserDifferentNum.features.feature5.variationKey,
+        ).toEqual(
+            bucketedConfigDifferentUserSameNum.features.feature5.variationKey,
+        )
+    })
+
+    it('buckets a user with custom boolean bucketingKey', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'pass_rollout',
+            privateCustomData: {
+                signed_up: true,
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'testwithfood@email.com',
+        }
+        const sameUserDifferentNum = {
+            ...user,
+            privateCustomData: {
+                signed_up: false,
+            },
+        }
+        const differentUserSameNum = {
+            ...sameUserDifferentNum,
+            user_id: 'a_different_person',
+        }
+        const configBucketedByBool = configWithBucketingKey('signed_up')
+        const bucketedConfigOrig = generateBucketedConfig({
+            config: config,
+            user,
+        })
+        const bucketedConfigByBool = generateBucketedConfig({
+            config: configBucketedByBool,
+            user,
+        })
+        const bucketedConfigSameUserDifferentBool = generateBucketedConfig({
+            config: configBucketedByBool,
+            user: sameUserDifferentNum,
+        })
+        const bucketedConfigDifferentUserSameBool = generateBucketedConfig({
+            config: configBucketedByBool,
+            user: differentUserSameNum,
+        })
+        expect(bucketedConfigOrig.features.feature5.variationKey).not.toEqual(
+            bucketedConfigByBool.features.feature5.variationKey,
+        )
+        expect(bucketedConfigByBool.features.feature5.variationKey).not.toEqual(
+            bucketedConfigSameUserDifferentBool.features.feature5.variationKey,
+        )
+        expect(
+            bucketedConfigSameUserDifferentBool.features.feature5.variationKey,
+        ).toEqual(
+            bucketedConfigDifferentUserSameBool.features.feature5.variationKey,
+        )
     })
 
     it('errors when feature missing distribution', () => {

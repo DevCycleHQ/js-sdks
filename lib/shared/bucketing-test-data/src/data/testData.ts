@@ -213,6 +213,20 @@ export const audiences: TargetAudience[] = [
             operator: AudienceOperator.and,
         },
     },
+    {
+        _id: '',
+        filters: {
+            filters: [
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.email,
+                    comparator: FilterComparator['='],
+                    values: ['testwithfood@email.com'],
+                },
+            ],
+            operator: AudienceOperator.and,
+        },
+    },
 ]
 
 export const variables: PublicVariable[] = [
@@ -590,6 +604,49 @@ export const config: ConfigBody = {
             },
             variations: [variations[8]],
         },
+        {
+            _id: '614ef8aa475928459060721d',
+            type: FeatureType.release,
+            key: 'feature5',
+            configuration: {
+                _id: '61536f62502d80fff97ed641',
+                targets: [
+                    {
+                        _id: '61536f468fd67f0091982532',
+                        _audience: audiences[8],
+                        distribution: [
+                            {
+                                _variation: variations[0]._id,
+                                percentage: 0.2,
+                            },
+                            {
+                                _variation: variations[1]._id,
+                                percentage: 0.2,
+                            },
+                            {
+                                _variation: variations[2]._id,
+                                percentage: 0.2,
+                            },
+                            {
+                                _variation: variations[3]._id,
+                                percentage: 0.2,
+                            },
+                            {
+                                _variation: variations[4]._id,
+                                percentage: 0.2,
+                            },
+                        ],
+                    },
+                ],
+            },
+            variations: [
+                variations[0],
+                variations[1],
+                variations[2],
+                variations[3],
+                variations[4],
+            ],
+        },
     ],
     variables,
     variableHashes,
@@ -725,3 +782,19 @@ export const configWithNullCustomData: ConfigBody = {
     variableHashes,
     clientSDKKey: 'test',
 }
+
+export const configWithBucketingKey = (bucketingKey: string): ConfigBody => ({
+    ...config,
+    features: config.features.map((feature) => ({
+        ...feature,
+        configuration: {
+            ...feature.configuration,
+            targets: feature.configuration.targets.map((target) => {
+                return {
+                    ...target,
+                    bucketingKey,
+                }
+            }),
+        },
+    })),
+})
