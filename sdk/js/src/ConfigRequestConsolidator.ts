@@ -73,10 +73,8 @@ export class ConfigRequestConsolidator {
                 }
             })
             .catch((err) => {
-                resolvers.forEach(({ reject }) => reject(err))
-            })
-            .finally(() => {
                 this.currentPromise = null
+                resolvers.forEach(({ reject }) => reject(err))
             })
 
         if (this.resolvers.length) {
@@ -93,6 +91,7 @@ export class ConfigRequestConsolidator {
         )
         this.requestParams = null
         const bucketedConfig = await this.currentPromise
+        this.currentPromise = null
         return bucketedConfig
     }
 }
