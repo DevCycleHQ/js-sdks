@@ -11,6 +11,7 @@ import {
 } from '../bucketingImportHelper'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config, barrenConfig, configWithNullCustomData } = testData
+import { configWithBucketingKey } from '../helpers/configWithBucketingKey'
 
 import moment from 'moment'
 import * as uuid from 'uuid'
@@ -1633,27 +1634,14 @@ describe('Client Data', () => {
 describe('bucketingKey tests', () => {
     afterEach(() => cleanupSDK(sdkKey))
 
-    const configWithBucketingKey = (bucketingKey: string) => ({
-        ...config,
-        features: config.features.map((feature) => ({
-            ...feature,
-            configuration: {
-                ...feature.configuration,
-                targets: feature.configuration.targets.map((target) => ({
-                    ...target,
-                    bucketingKey,
-                })),
-            },
-        })),
-    })
-
     it('buckets a user with user_id if no bucketingKey', () => {
         const user = {
-            user_id: 'testwithfood@email.com',
+            user_id: 'test-id',
             customData: {
                 favouriteFood: 'pizza',
             },
             platformVersion: '1.1.2',
+            email: 'testwithfood@email.com',
         }
         const cWithBucketingKey = configWithBucketingKey('user_id')
         initSDK(sdkKey, cWithBucketingKey)
@@ -1665,8 +1653,9 @@ describe('bucketingKey tests', () => {
         initSDK(sdkKey, config)
         const c2 = generateBucketedConfig(user)
 
-        expect(c.featureVariationMap.feature5).toEqual(
-            c2.featureVariationMap.feature5,
+        expect(c.features.feature5).not.toBeFalsy()
+        expect(c.features.feature5.variationKey).toEqual(
+            c2.features.feature5.variationKey,
         )
     })
 
@@ -1705,11 +1694,11 @@ describe('bucketingKey tests', () => {
             differentUserSameFood,
         )
 
-        expect(c.featureVariationMap.feature5).not.toEqual(
-            cSameUserDifferentFood.featureVariationMap.feature5,
+        expect(c.features.feature5.variationKey).not.toEqual(
+            cSameUserDifferentFood.features.feature5.variationKey,
         )
-        expect(c.featureVariationMap.feature5).toEqual(
-            cDifferentUserSameFood.featureVariationMap.feature5,
+        expect(cSameUserDifferentFood.features.feature5.variationKey).toEqual(
+            cDifferentUserSameFood.features.feature5.variationKey,
         )
     })
 
@@ -1745,11 +1734,11 @@ describe('bucketingKey tests', () => {
             differentUserSameFood,
         )
 
-        expect(c.featureVariationMap.feature5).not.toEqual(
-            cSameUserDifferentFood.featureVariationMap.feature5,
+        expect(c.features.feature5.variationKey).not.toEqual(
+            cSameUserDifferentFood.features.feature5.variationKey,
         )
-        expect(c.featureVariationMap.feature5).toEqual(
-            cDifferentUserSameFood.featureVariationMap.feature5,
+        expect(cSameUserDifferentFood.features.feature5.variationKey).toEqual(
+            cDifferentUserSameFood.features.feature5.variationKey,
         )
     })
 
@@ -1783,11 +1772,11 @@ describe('bucketingKey tests', () => {
         const cDifferentUserSameNum =
             generateBucketedConfig(differentUserSameNum)
 
-        expect(c.featureVariationMap.feature5).not.toEqual(
-            cSameUserDifferentNum.featureVariationMap.feature5,
+        expect(c.features.feature5.variationKey).not.toEqual(
+            cSameUserDifferentNum.features.feature5.variationKey,
         )
-        expect(c.featureVariationMap.feature5).toEqual(
-            cDifferentUserSameNum.featureVariationMap.feature5,
+        expect(cSameUserDifferentNum.features.feature5.variationKey).toEqual(
+            cDifferentUserSameNum.features.feature5.variationKey,
         )
     })
 
@@ -1823,11 +1812,11 @@ describe('bucketingKey tests', () => {
             differentUserSameBool,
         )
 
-        expect(c.featureVariationMap.feature5).not.toEqual(
-            cSameUserDifferentBool.featureVariationMap.feature5,
+        expect(c.features.feature5.variationKey).not.toEqual(
+            cSameUserDifferentBool.features.feature5.variationKey,
         )
-        expect(c.featureVariationMap.feature5).toEqual(
-            cDifferentUserSameBool.featureVariationMap.feature5,
+        expect(cSameUserDifferentBool.features.feature5.variationKey).toEqual(
+            cDifferentUserSameBool.features.feature5.variationKey,
         )
     })
 })

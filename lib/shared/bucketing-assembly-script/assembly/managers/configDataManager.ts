@@ -1,4 +1,4 @@
-import { ConfigBody } from '../types'
+import { ConfigBodyV2 as ConfigBody } from '../types'
 
 const _configData: Map<string, ConfigBody> = new Map()
 
