@@ -73,7 +73,6 @@ export class ConfigRequestConsolidator {
                 }
             })
             .catch((err) => {
-                this.currentPromise = null
                 resolvers.forEach(({ reject }) => reject(err))
             })
 
@@ -90,8 +89,12 @@ export class ConfigRequestConsolidator {
             this.requestParams ? this.requestParams : undefined,
         )
         this.requestParams = null
-        const bucketedConfig = await this.currentPromise
-        this.currentPromise = null
+        const bucketedConfig = await this.currentPromise.finally(() => {
+            // clear the current promise so we can make another request
+            // this should happen regardless of whether the request was successful or not
+            this.currentPromise = null
+        })
+
         return bucketedConfig
     }
 }
