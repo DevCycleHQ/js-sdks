@@ -170,7 +170,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             }),
         )
         expect(trackSDKConfigEvent_mock).toBeCalledWith(
-            'https://config-cdn.devcycle.com/config/v1/server/sdkKey.json',
+            'https://config-cdn.devcycle.com/config/v2/server/sdkKey.json',
             expect.any(Number),
             expect.objectContaining({ resStatus: 200 }),
             undefined,
@@ -192,7 +192,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             'Failed to download DevCycle config.',
         )
         expect(trackSDKConfigEvent_mock).toBeCalledWith(
-            'https://config-cdn.devcycle.com/config/v1/server/sdkKey.json',
+            'https://config-cdn.devcycle.com/config/v2/server/sdkKey.json',
             expect.any(Number),
             undefined,
             expect.objectContaining({
