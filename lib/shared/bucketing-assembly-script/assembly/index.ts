@@ -1,6 +1,6 @@
 import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import {
-    ConfigBody,
+    ConfigBodyV2 as ConfigBody,
     DVCPopulatedUser,
     FeatureVariation,
     PlatformData,

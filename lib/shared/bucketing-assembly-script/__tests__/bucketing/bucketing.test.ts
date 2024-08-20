@@ -11,6 +11,7 @@ import {
 } from '../bucketingImportHelper'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config, barrenConfig, configWithNullCustomData } = testData
+import { configWithBucketingKey } from '../helpers/configWithBucketingKey'
 
 import moment from 'moment'
 import * as uuid from 'uuid'
@@ -1627,5 +1628,195 @@ describe('Client Data', () => {
 
         // cleanup
         setClientCustomDataJSON({})
+    })
+})
+
+describe('bucketingKey tests', () => {
+    afterEach(() => cleanupSDK(sdkKey))
+
+    it('buckets a user with user_id if no bucketingKey', () => {
+        const user = {
+            user_id: 'test-id',
+            customData: {
+                favouriteFood: 'pizza',
+            },
+            platformVersion: '1.1.2',
+            email: 'testwithfood@email.com',
+        }
+        const cWithBucketingKey = configWithBucketingKey('user_id')
+        initSDK(sdkKey, cWithBucketingKey)
+
+        const c = generateBucketedConfig(user)
+
+        cleanupSDK(sdkKey)
+
+        initSDK(sdkKey, config)
+        const c2 = generateBucketedConfig(user)
+
+        expect(c.features.feature5).not.toBeFalsy()
+        expect(c.features.feature5.variationKey).toEqual(
+            c2.features.feature5.variationKey,
+        )
+    })
+
+    it('buckets a user with custom bucketingKey', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'pass_rollout',
+            customData: {
+                favouriteFood: 'pizza',
+            },
+            privateCustomData: {
+                favouriteDrink: 'coffee',
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'testwithfood@email.com',
+        }
+        const sameUserDifferentFood = {
+            ...user,
+            customData: {
+                favouriteFood: 'pasta',
+            },
+        }
+        const differentUserSameFood = {
+            ...sameUserDifferentFood,
+            user_id: 'a_different_person',
+        }
+        const cWithBucketingKey = configWithBucketingKey('favouriteFood')
+        initSDK(sdkKey, cWithBucketingKey)
+
+        const c = generateBucketedConfig(user)
+        const cSameUserDifferentFood = generateBucketedConfig(
+            sameUserDifferentFood,
+        )
+        const cDifferentUserSameFood = generateBucketedConfig(
+            differentUserSameFood,
+        )
+
+        expect(c.features.feature5.variationKey).not.toEqual(
+            cSameUserDifferentFood.features.feature5.variationKey,
+        )
+        expect(cSameUserDifferentFood.features.feature5.variationKey).toEqual(
+            cDifferentUserSameFood.features.feature5.variationKey,
+        )
+    })
+
+    it('buckets a user with custom bucketingKey from privateCustomData', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'pass_rollout',
+            privateCustomData: {
+                favouriteFood: 'pizza',
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'testwithfood@email.com',
+        }
+        const sameUserDifferentFood = {
+            ...user,
+            privateCustomData: {
+                favouriteFood: 'pasta',
+            },
+        }
+        const differentUserSameFood = {
+            ...sameUserDifferentFood,
+            user_id: 'a_different_person',
+        }
+        const cWithBucketingKey = configWithBucketingKey('favouriteFood')
+        initSDK(sdkKey, cWithBucketingKey)
+
+        const c = generateBucketedConfig(user)
+        const cSameUserDifferentFood = generateBucketedConfig(
+            sameUserDifferentFood,
+        )
+        const cDifferentUserSameFood = generateBucketedConfig(
+            differentUserSameFood,
+        )
+
+        expect(c.features.feature5.variationKey).not.toEqual(
+            cSameUserDifferentFood.features.feature5.variationKey,
+        )
+        expect(cSameUserDifferentFood.features.feature5.variationKey).toEqual(
+            cDifferentUserSameFood.features.feature5.variationKey,
+        )
+    })
+
+    it('buckets a user with custom number bucketingKey', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'pass_rollout',
+            privateCustomData: {
+                favouriteNumber: 610,
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'testwithfood@email.com',
+        }
+        const sameUserDifferentNum = {
+            ...user,
+            privateCustomData: {
+                favouriteNumber: 52900,
+            },
+        }
+        const differentUserSameNum = {
+            ...sameUserDifferentNum,
+            user_id: 'a_different_person',
+        }
+        const cWithBucketingKey = configWithBucketingKey('favouriteNumber')
+        initSDK(sdkKey, cWithBucketingKey)
+
+        const c = generateBucketedConfig(user)
+        const cSameUserDifferentNum =
+            generateBucketedConfig(sameUserDifferentNum)
+        const cDifferentUserSameNum =
+            generateBucketedConfig(differentUserSameNum)
+
+        expect(c.features.feature5.variationKey).not.toEqual(
+            cSameUserDifferentNum.features.feature5.variationKey,
+        )
+        expect(cSameUserDifferentNum.features.feature5.variationKey).toEqual(
+            cDifferentUserSameNum.features.feature5.variationKey,
+        )
+    })
+
+    it('buckets a user with custom boolean bucketingKey', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'pass_rollout',
+            privateCustomData: {
+                signed_up: true,
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'testwithfood@email.com',
+        }
+        const sameUserDifferentBool = {
+            ...user,
+            privateCustomData: {
+                signed_up: false,
+            },
+        }
+        const differentUserSameBool = {
+            ...sameUserDifferentBool,
+            user_id: 'a_different_person',
+        }
+        const cWithBucketingKey = configWithBucketingKey('signed_up')
+        initSDK(sdkKey, cWithBucketingKey)
+
+        const c = generateBucketedConfig(user)
+        const cSameUserDifferentBool = generateBucketedConfig(
+            sameUserDifferentBool,
+        )
+        const cDifferentUserSameBool = generateBucketedConfig(
+            differentUserSameBool,
+        )
+
+        expect(c.features.feature5.variationKey).not.toEqual(
+            cSameUserDifferentBool.features.feature5.variationKey,
+        )
+        expect(cSameUserDifferentBool.features.feature5.variationKey).toEqual(
+            cDifferentUserSameBool.features.feature5.variationKey,
+        )
     })
 })

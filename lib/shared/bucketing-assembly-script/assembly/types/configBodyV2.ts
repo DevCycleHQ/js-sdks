@@ -8,8 +8,8 @@ import {
     getStringFromJSONOptional,
 } from '../helpers/jsonHelpers'
 import { FeatureV2 } from './featureV2'
-import { Audience } from './targetV2'
 import { PublicEnvironment, PublicProject, Variable} from './configBody'
+import { Audience } from './target'
 
 export class ConfigBodyV2 {
     readonly project: PublicProject

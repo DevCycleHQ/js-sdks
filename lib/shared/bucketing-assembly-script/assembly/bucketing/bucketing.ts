@@ -1,31 +1,32 @@
 import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import { first, last } from '../helpers/lodashHelpers'
 import {
-    ConfigBody,
-    Target as PublicTarget,
-    Feature as PublicFeature,
+    ConfigBodyV2 as ConfigBody,
+    TargetV2 as PublicTarget,
+    FeatureV2 as PublicFeature,
     BucketedUserConfig,
     Rollout as PublicRollout,
     DVCPopulatedUser,
     SDKVariable,
     SDKFeature,
     RolloutStage,
-    Target,
+    TargetV2 as Target,
     Variation,
     FeatureVariation,
-    Feature,
+    FeatureV2 as Feature,
 } from '../types'
 
 import { murmurhashV3 } from '../helpers/murmurhash'
 import { _evaluateOperator } from './segmentation'
 import {
-    getStringFromJSON,
     getStringFromJSONOptional,
+    getValueFromJSONOptional,
 } from '../helpers/jsonHelpers'
 
 // Max value of an unsigned 32-bit integer, which is what murmurhash returns
 const MAX_HASH_VALUE: f64 = 4294967295
 const baseSeed: i32 = 1
+const DEFAULT_BUCKETING_VALUE = 'null'
 
 export class BoundedHash {
     public rolloutHash: f64
@@ -144,7 +145,8 @@ function evaluateSegmentationForFeature(
         const passthroughRolloutEnabled = !config.project.settings.disablePassthroughRollouts
         let doesUserPassRollout = true
         if (target.rollout && passthroughRolloutEnabled) {
-            const boundedHashData = _generateBoundedHashes(user.user_id, target._id)
+            const bucketingValue = _getUserValueForBucketingKey(user, target)
+            const boundedHashData = _generateBoundedHashes(bucketingValue, target._id)
             const rolloutHash = boundedHashData.rolloutHash
             doesUserPassRollout = _doesUserPassRollout(target.rollout, rolloutHash)
         }
@@ -211,7 +213,8 @@ function doesUserQualifyForFeature(
     )
     if (!target) return null
 
-    const boundedHashData = _generateBoundedHashes(user.user_id, target._id)
+    const bucketingValue = _getUserValueForBucketingKey( user, target )
+    const boundedHashData = _generateBoundedHashes(bucketingValue, target._id)
     const rolloutHash = boundedHashData.rolloutHash
     const passthroughRolloutEnabled = !config.project.settings.disablePassthroughRollouts
     if (target.rollout && !passthroughRolloutEnabled && !_doesUserPassRollout(target.rollout, rolloutHash)) {
@@ -380,4 +383,30 @@ export function _generateBucketedVariableForUser(
         null,
     )
     return { variable: sdkVar, variation, feature: featureForVariable }
+}
+
+export function _getUserValueForBucketingKey(
+    user: DVCPopulatedUser,
+    target: PublicTarget
+): string {
+    if (target.bucketingKey && target.bucketingKey !== 'user_id') {
+        let bucketingValue: string = DEFAULT_BUCKETING_VALUE
+        const customData = user.getCombinedCustomData()
+        if (customData) {
+            const customDataValue = getValueFromJSONOptional(customData, target.bucketingKey)
+            bucketingValue = customDataValue
+                ? customDataValue.toString()
+                : DEFAULT_BUCKETING_VALUE
+        }
+        if (
+            typeof bucketingValue !== 'string' &&
+            typeof bucketingValue !== 'number' &&
+            typeof bucketingValue !== 'boolean'
+        ) {
+            return DEFAULT_BUCKETING_VALUE
+        } else {
+            return bucketingValue.toString()
+        }
+    }
+    return user.user_id
 }

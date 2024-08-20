@@ -29,6 +29,14 @@ export function getJSONArrayFromJSON(jsonObj: JSON.Obj, key: string): JSON.Arr {
     return obj
 }
 
+export function getValueFromJSONOptional(jsonObj: JSON.Obj, key: string): JSON.Value | null {
+    const value = jsonObj.get(key)
+    if (!value) {
+        return null
+    }
+    return value
+}
+
 export function getStringFromJSON(jsonObj: JSON.Obj, key: string): string {
     const str = jsonObj.getString(key)
     if (!str) {

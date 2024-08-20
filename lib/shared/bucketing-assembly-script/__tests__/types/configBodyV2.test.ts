@@ -9,6 +9,8 @@ import cloneDeep from 'lodash/cloneDeep'
 import immutable from 'object-path-immutable'
 import { Feature } from '@devcycle/types'
 
+import { configWithBucketingKey } from '../helpers/configWithBucketingKey'
+
 const testConfigBodyV2 = (str: string, utf8: boolean): any => {
     if (utf8) {
         const buff = Buffer.from(str, 'utf8')
@@ -40,23 +42,26 @@ const postProcessedConfig = (config: unknown) => {
 }
 
 describe.each([true, false])('Config Body V2', (utf8) => {
+    const testConfig = configWithBucketingKey(
+        'user_id',
+    ) as typeof testData.config
     it('should parse valid JSON into ConfigBody class', () => {
-        expect(testConfigBodyV2(JSON.stringify(testData.config), utf8)).toEqual(
-            postProcessedConfig(testData.config),
+        expect(testConfigBodyV2(JSON.stringify(testConfig), utf8)).toEqual(
+            postProcessedConfig(testConfig),
         )
     })
 
     it('should parse if missing optional top level field', () => {
-        const config = cloneDeep(testData.config)
+        const config = cloneDeep(testConfig)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         delete config.clientSDKKey
         expect(testConfigBodyV2(JSON.stringify(config), utf8)).toEqual(
-            immutable.del(postProcessedConfig(testData.config), 'clientSDKKey'),
+            immutable.del(postProcessedConfig(testConfig), 'clientSDKKey'),
         )
     })
     it('should throw if target.rollout is missing type', () => {
-        const config = cloneDeep(testData.config)
+        const config = cloneDeep(testConfig)
         const target: any = config.features[0].configuration.targets[0]
         target.rollout = {
             startDate: new Date(),
@@ -67,7 +72,7 @@ describe.each([true, false])('Config Body V2', (utf8) => {
     })
 
     it('should parse target.bucketingKey exists', () => {
-        const config = cloneDeep(testData.config)
+        const config = cloneDeep(testConfig)
         const target: any = config.features[0].configuration.targets[0]
         target.bucketingKey = 'bucketingKey'
         expect(testConfigBodyV2(JSON.stringify(config), utf8)).toEqual(
@@ -76,7 +81,7 @@ describe.each([true, false])('Config Body V2', (utf8) => {
     })
 
     it('should parse startsWith/endsWith filter', () => {
-        const config = cloneDeep(testData.config)
+        const config = cloneDeep(testConfig)
         const filters =
             config.features[0].configuration.targets[0]._audience.filters
         filters.filters[0] = {
@@ -91,14 +96,18 @@ describe.each([true, false])('Config Body V2', (utf8) => {
     })
 
     it('should handle extended UTF8 characters, from UTF8: ' + utf8, () => {
-        const testConfig = immutable.set(testData.config, 'project.key', '👍 ö')
-        expect(testConfigBodyV2(JSON.stringify(testConfig), utf8)).toEqual(
-            postProcessedConfig(testConfig),
+        const testInvalidConfig = immutable.set(
+            testConfig,
+            'project.key',
+            '👍 ö',
         )
+        expect(
+            testConfigBodyV2(JSON.stringify(testInvalidConfig), utf8),
+        ).toEqual(postProcessedConfig(testInvalidConfig))
     })
 
     it('should throw if feature.type is missing not a valid type', () => {
-        const config = cloneDeep(testData.config)
+        const config = cloneDeep(testConfig)
         const feature: any = config.features[0]
         feature.type = 'invalid'
         expect(() => testConfigBodyV2(JSON.stringify(config), utf8)).toThrow(
@@ -108,7 +117,7 @@ describe.each([true, false])('Config Body V2', (utf8) => {
     })
 
     it('should throw if audience is missing fields for user filter', () => {
-        const config = cloneDeep(testData.config)
+        const config = cloneDeep(testConfig)
         const filters =
             config.features[0].configuration.targets[0]._audience.filters
         filters.filters[0] = {
@@ -121,7 +130,7 @@ describe.each([true, false])('Config Body V2', (utf8) => {
     })
 
     it('should not throw if audience is using invalid operator', () => {
-        const config = cloneDeep(testData.config)
+        const config = cloneDeep(testConfig)
         const filters =
             config.features[0].configuration.targets[0]._audience.filters
         filters.operator = 'xylophone'
@@ -131,7 +140,7 @@ describe.each([true, false])('Config Body V2', (utf8) => {
     })
 
     it('should throw if audience is missing comparator for user filter', () => {
-        const config = cloneDeep(testData.config)
+        const config = cloneDeep(testConfig)
         const filters =
             config.features[0].configuration.targets[0]._audience.filters
         filters.filters[0] = {
@@ -145,7 +154,7 @@ describe.each([true, false])('Config Body V2', (utf8) => {
     })
 
     it('should throw if custom data filter is missing dataKey', () => {
-        const config = cloneDeep(testData.config)
+        const config = cloneDeep(testConfig)
         const filters =
             config.features[0].configuration.targets[0]._audience.filters
         filters.filters[0] = {
@@ -161,7 +170,7 @@ describe.each([true, false])('Config Body V2', (utf8) => {
     })
 
     it('should throw if custom data filter is missing dataKeyType', () => {
-        const config = cloneDeep(testData.config)
+        const config = cloneDeep(testConfig)
         const filters =
             config.features[0].configuration.targets[0]._audience.filters
         filters.filters[0] = {
@@ -177,7 +186,7 @@ describe.each([true, false])('Config Body V2', (utf8) => {
     })
 
     it('should throw if custom data filter has invalid dataKeyType', () => {
-        const config = cloneDeep(testData.config)
+        const config = cloneDeep(testConfig)
         const filters =
             config.features[0].configuration.targets[0]._audience.filters
         filters.filters[0] = {
@@ -194,7 +203,7 @@ describe.each([true, false])('Config Body V2', (utf8) => {
     })
 
     it('should pass if audience is missing fields but type is all', () => {
-        const config = cloneDeep(testData.config)
+        const config = cloneDeep(testConfig)
         const filters =
             config.features[0].configuration.targets[0]._audience.filters
         filters.filters[0] = {
@@ -207,7 +216,7 @@ describe.each([true, false])('Config Body V2', (utf8) => {
 
     it('does not fail on multiple iterations of testConfigBodyClass', () => {
         for (let i = 0; i < 1000; i++) {
-            testConfigBodyV2(JSON.stringify(testData.config), utf8)
+            testConfigBodyV2(JSON.stringify(testConfig), utf8)
         }
     })
 })

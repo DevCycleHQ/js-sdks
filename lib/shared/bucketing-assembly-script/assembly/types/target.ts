@@ -43,6 +43,7 @@ export class Target extends JSON.Value {
                 value: distribution[i]._variation
             })
         }
+
         this._sortedDistribution = sortObjectsByString<TargetDistribution>(sortingArray, 'desc')
     }
 
