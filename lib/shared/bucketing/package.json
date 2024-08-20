@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/bucketing",
-    "version": "1.21.2",
+    "version": "1.21.3",
     "license": "MIT",
     "dependencies": {
         "@devcycle/types": "^1.16.2",

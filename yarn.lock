@@ -4647,22 +4647,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@devcycle/bucketing-assembly-script@^1.25.2, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
+"@devcycle/bucketing-assembly-script@^1.25.3, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script"
   dependencies:
-    "@devcycle/bucketing-test-data": ^1.19.2
+    "@devcycle/bucketing-test-data": ^1.19.3
     protobufjs: ^7.2.5
   languageName: unknown
   linkType: soft
 
-"@devcycle/bucketing-test-data@^1.19.2, @devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data":
+"@devcycle/bucketing-test-data@^1.19.3, @devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data"
   languageName: unknown
   linkType: soft
 
-"@devcycle/bucketing@^1.21.2, @devcycle/bucketing@workspace:lib/shared/bucketing":
+"@devcycle/bucketing@^1.21.3, @devcycle/bucketing@workspace:lib/shared/bucketing":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing@workspace:lib/shared/bucketing"
   dependencies:
@@ -4707,7 +4707,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nestjs-server-sdk@workspace:sdk/nestjs"
   dependencies:
-    "@devcycle/nodejs-server-sdk": ^1.33.8
+    "@devcycle/nodejs-server-sdk": ^1.33.9
     "@devcycle/types": ^1.16.2
     nestjs-cls: ^4.3.0
   peerDependencies:
@@ -4720,7 +4720,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nextjs-sdk@workspace:sdk/nextjs"
   dependencies:
-    "@devcycle/bucketing": ^1.21.2
+    "@devcycle/bucketing": ^1.21.3
     "@devcycle/js-client-sdk": ^1.28.6
     "@devcycle/react-client-sdk": ^1.26.6
     "@devcycle/types": ^1.16.2
@@ -4741,11 +4741,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/nodejs-server-sdk@^1.33.8, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
+"@devcycle/nodejs-server-sdk@^1.33.9, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
-    "@devcycle/bucketing-assembly-script": ^1.25.2
+    "@devcycle/bucketing-assembly-script": ^1.25.3
     "@devcycle/js-cloud-server-sdk": ^1.15.3
     "@devcycle/types": ^1.16.2
     cross-fetch: ^4.0.0
