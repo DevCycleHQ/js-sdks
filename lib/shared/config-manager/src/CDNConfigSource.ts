@@ -90,8 +90,8 @@ export class CDNConfigSource extends ConfigSource {
 
     getConfigURL(sdkKey: string, kind: 'server' | 'bootstrap'): string {
         if (kind === 'bootstrap') {
-            return `${this.cdnURI}/config/v1/server/bootstrap/${sdkKey}.json`
+            return `${this.cdnURI}/config/v2/server/bootstrap/${sdkKey}.json`
         }
-        return `${this.cdnURI}/config/v1/server/${sdkKey}.json`
+        return `${this.cdnURI}/config/v2/server/${sdkKey}.json`
     }
 }
