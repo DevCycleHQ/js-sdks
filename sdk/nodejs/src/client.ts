@@ -60,6 +60,8 @@ export interface VariableDefinitions {
     [key: string]: VariableValue
 }
 
+console.log('trigger change')
+
 export class DevCycleClient<
     Variables extends VariableDefinitions = VariableDefinitions,
 > {
