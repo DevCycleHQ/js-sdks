@@ -5,6 +5,8 @@ import {
 } from '@devcycle/js-client-sdk'
 import { BucketedUserConfig } from '@devcycle/types'
 
+type NextClient = Omit<DevCycleClient, 'identifyUser' | 'resetUser'>
+
 type LiveEvent = {
     type: string
     key?: string
@@ -18,6 +20,7 @@ type ClientData = {
         liveEvents: LiveEvent[]
         loadCount: number
         expanded: boolean
+        allowIdentify: boolean
     }
 }
 
@@ -26,6 +29,7 @@ const clientData: ClientData = {
         liveEvents: [],
         loadCount: 0,
         expanded: false,
+        allowIdentify: true,
     },
 }
 
@@ -47,10 +51,10 @@ class IframeManager {
     debuggerUrl: string
     position: string
     debugLogs: boolean
-    client: DevCycleClient
+    client: DevCycleClient | NextClient
 
     constructor(
-        client: DevCycleClient,
+        client: DevCycleClient | NextClient,
         {
             position = 'right',
             debuggerUrl = 'https://debugger.devcycle.com',
@@ -58,6 +62,7 @@ class IframeManager {
         }: DebuggerIframeOptions = {},
     ) {
         this.client = client
+        clientData.current.allowIdentify = 'identifyUser' in client
         this.debuggerUrl = debuggerUrl
         this.position = position
         this.debugLogs = debugLogs
@@ -229,13 +234,25 @@ class IframeManager {
                 event.data.type === 'DEVCYCLE_IDENTIFY_USER' &&
                 event.data.user
             ) {
-                this.client.identifyUser(event.data.user).then(() => {
-                    this.updateIframeData()
-                })
+                if ('identifyUser' in this.client) {
+                    this.client.identifyUser(event.data.user).then(() => {
+                        this.updateIframeData()
+                    })
+                } else {
+                    this.log(
+                        'Unable to change user identity from debugger in Next.js',
+                    )
+                }
             } else if (event.data.type === 'DEVCYCLE_RESET_USER') {
-                this.client.resetUser().then(() => {
-                    this.updateIframeData()
-                })
+                if ('resetUser' in this.client) {
+                    this.client.resetUser().then(() => {
+                        this.updateIframeData()
+                    })
+                } else {
+                    this.log(
+                        'Unable to change user identity from debugger in Next.js',
+                    )
+                }
             } else if (event.data.type === 'DEVCYCLE_REFRESH') {
                 this.updateIframeData()
             } else if (event.data.type === 'DEVCYCLE_TOGGLE_OVERLAY') {
@@ -259,7 +276,7 @@ class IframeManager {
 }
 
 export const checkShouldEnable = async (
-    client: DevCycleClient,
+    client: DevCycleClient | NextClient,
     {
         shouldEnable,
         shouldEnableVariable,
@@ -284,7 +301,7 @@ export const checkShouldEnable = async (
 }
 
 export const initializeDevCycleDebugger = async (
-    client: DevCycleClient,
+    client: DevCycleClient | NextClient,
     {
         shouldEnable,
         shouldEnableVariable,

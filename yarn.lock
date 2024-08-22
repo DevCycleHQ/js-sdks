@@ -4857,8 +4857,11 @@ __metadata:
     "@devcycle/types": ^1.16.2
   peerDependencies:
     "@devcycle/js-client-sdk": "*"
+    "@devcycle/nextjs-sdk": "*"
     "@devcycle/react-client-sdk": "*"
   peerDependenciesMeta:
+    "@devcycle/nextjs-sdk":
+      optional: true
     "@devcycle/react-client-sdk":
       optional: true
   languageName: unknown
