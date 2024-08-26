@@ -42,7 +42,7 @@ export enum VariableType {
 
 type JSONValue = string | number | boolean | null | JSONObject | JSONArray
 
-interface JSONObject {
+type JSONObject = {
     [key: string]: JSONValue
 }
 
