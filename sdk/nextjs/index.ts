@@ -11,7 +11,11 @@ export { useAllFeatures } from './src/client/useAllFeatures'
 export { renderIfEnabled } from './src/client/renderIfEnabled'
 export { useDevCycleClient } from './src/client/useDevCycleClient'
 export { DevCycleClientsideProvider } from './src/client/DevCycleClientsideProvider'
-export { DVCVariable, DVCVariableValue } from '@devcycle/react-client-sdk'
+export {
+    DVCVariable,
+    DVCVariableValue,
+    DevCycleJSON,
+} from '@devcycle/react-client-sdk'
 
 type DevCycleClient = Omit<JSClient, 'identifyUser' | 'resetUser'>
 

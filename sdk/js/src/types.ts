@@ -4,13 +4,14 @@ import type {
     VariableTypeAlias,
     VariableValue,
     DVCJSON,
+    DevCycleJSON,
     DVCCustomDataJSON,
     BucketedUserConfig,
 } from '@devcycle/types'
 export { UserError } from '@devcycle/types'
 
 export type DVCVariableValue = VariableValue
-export type { DVCJSON, DVCCustomDataJSON }
+export type { DVCJSON, DVCCustomDataJSON, DevCycleJSON }
 
 export interface ErrorCallback<T> {
     (err: Error, result?: null | undefined): void

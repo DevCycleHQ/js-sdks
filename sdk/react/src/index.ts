@@ -16,6 +16,7 @@ export type {
     DVCUser,
     DVCVariableValue,
     DVCVariable,
+    DevCycleJSON,
     DevCycleEvent,
     DevCycleOptions,
     DVCEvent,
