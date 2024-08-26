@@ -39,9 +39,18 @@ export enum VariableType {
 /**
  * Supported variable values
  */
-export type DVCJSON = {
-    [key: string]: string | boolean | number | DVCJSON | unknown[] | null
+
+type JSONValue = string | number | boolean | null | JSONObject | JSONArray
+
+interface JSONObject {
+    [key: string]: JSONValue
 }
+
+type JSONArray = JSONValue[]
+
+export type DVCJSON = JSONObject
+export type DevCycleJSON = JSONObject
+
 export type VariableValue = string | boolean | number | DVCJSON
 
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
