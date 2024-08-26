@@ -28,6 +28,10 @@
         "./react": {
             "import": "./react.js",
             "types": "./react.d.ts"
+        },
+        "./next": {
+            "import": "./next.js",
+            "types": "./next.d.ts"
         }
     },
     "dependencies": {
@@ -35,9 +39,13 @@
     },
     "peerDependencies": {
         "@devcycle/js-client-sdk": "*",
+        "@devcycle/nextjs-sdk": "*",
         "@devcycle/react-client-sdk": "*"
     },
     "peerDependenciesMeta": {
+        "@devcycle/nextjs-sdk": {
+            "optional": true
+        },
         "@devcycle/react-client-sdk": {
             "optional": true
         }
