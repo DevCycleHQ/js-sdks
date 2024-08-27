@@ -403,6 +403,12 @@ export class DevCycleClient<
         user: DevCycleUser,
         callback?: ErrorCallback<DVCVariableSet>,
     ): Promise<DVCVariableSet> | void {
+        if (this.options.next) {
+            this.logger.error(
+                'Unable to change user identity from the clientside in Next.js',
+            )
+            return
+        }
         const promise = this._identifyUser(user)
 
         if (callback && typeof callback == 'function') {
@@ -460,6 +466,13 @@ export class DevCycleClient<
     resetUser(
         callback?: ErrorCallback<DVCVariableSet>,
     ): Promise<DVCVariableSet> | void {
+        if (this.options.next) {
+            this.logger.error(
+                'Unable to change user identity from the clientside in Next.js',
+            )
+            return
+        }
+
         let oldAnonymousId: string | null | undefined
         const anonUser = new DVCPopulatedUser(
             { isAnonymous: true },

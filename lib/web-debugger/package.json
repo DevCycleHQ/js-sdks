@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/web-debugger",
-    "version": "0.6.7",
+    "version": "0.7.1",
     "type": "module",
     "main": "./index.js",
     "types": "./index.d.ts",
@@ -28,16 +28,24 @@
         "./react": {
             "import": "./react.js",
             "types": "./react.d.ts"
+        },
+        "./next": {
+            "import": "./next.js",
+            "types": "./next.d.ts"
         }
     },
     "dependencies": {
-        "@devcycle/types": "^1.16.2"
+        "@devcycle/types": "^1.17.1"
     },
     "peerDependencies": {
         "@devcycle/js-client-sdk": "*",
+        "@devcycle/nextjs-sdk": "*",
         "@devcycle/react-client-sdk": "*"
     },
     "peerDependenciesMeta": {
+        "@devcycle/nextjs-sdk": {
+            "optional": true
+        },
         "@devcycle/react-client-sdk": {
             "optional": true
         }
