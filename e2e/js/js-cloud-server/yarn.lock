@@ -1497,27 +1497,27 @@ __metadata:
   linkType: hard
 
 "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server::locator=e2e-js-cloud-server%40workspace%3A.":
-  version: 1.13.0
-  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=ccfd04&locator=e2e-js-cloud-server%40workspace%3A."
+  version: 1.16.1
+  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=20b32c&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
-    "@devcycle/types": ^1.14.0
+    "@devcycle/types": ^1.17.1
     cross-fetch: ^4.0.0
     fetch-retry: ^5.0.6
     lodash: ^4.17.21
-  checksum: cbfd031e293dd729a6051d9eed706f981db22a04ec381a9f1ec5bcf28f8b6e7dc88b7055d71c053569967e1406cba10320715a36f47d868d896d972dcbbd5e0d
+  checksum: 278a8410c71b45296d778f98e77bcaaa357b0a3762613b311e044ef02120d06fea7945ff05c2a5138b2bf28c79a8e4902388f1e259244fefc9fe41fbae9e2771
   languageName: node
   linkType: hard
 
 "@devcycle/types@file:../../../dist/lib/shared/types::locator=e2e-js-cloud-server%40workspace%3A.":
-  version: 1.14.0
-  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=53fff0&locator=e2e-js-cloud-server%40workspace%3A."
+  version: 1.17.1
+  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=a56ffc&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
     class-transformer: 0.5.1
     class-validator: 0.14.1
     iso-639-1: ^2.1.13
     lodash: ^4.17.21
     reflect-metadata: ^0.1.13
-  checksum: f31345c67f7a3a6084d8dd501d32ecd5cc1753a8511af6e144cf51bbdcac42fedd657ba84a09f1cf468efcf86b8b6895e265e7112e06cb2b1106627526f7215a
+  checksum: cdfaf55977a3ab55bead18a0c0a3efcfbe71a2c61fdce2d2eda6a7caefd685e688f551aef657625124923e2e3b8ce2ca239a3927893882f47706289498cbd822
   languageName: node
   linkType: hard
 
@@ -2933,7 +2933,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"braces@npm:^3.0.2, braces@npm:~3.0.2":
+"braces@npm:^3.0.3, braces@npm:~3.0.2":
   version: 3.0.3
   resolution: "braces@npm:3.0.3"
   dependencies:
@@ -5229,12 +5229,12 @@ __metadata:
   linkType: hard
 
 "micromatch@npm:^4.0.4":
-  version: 4.0.5
-  resolution: "micromatch@npm:4.0.5"
+  version: 4.0.8
+  resolution: "micromatch@npm:4.0.8"
   dependencies:
-    braces: ^3.0.2
+    braces: ^3.0.3
     picomatch: ^2.3.1
-  checksum: 02a17b671c06e8fefeeb6ef996119c1e597c942e632a21ef589154f23898c9c6a9858526246abb14f8bca6e77734aa9dcf65476fca47cedfb80d9577d52843fc
+  checksum: 79920eb634e6f400b464a954fcfa589c4e7c7143209488e44baf627f9affc8b1e306f41f4f0deedde97e69cb725920879462d3e750ab3bd3c1aed675bb3a8966
   languageName: node
   linkType: hard
 
