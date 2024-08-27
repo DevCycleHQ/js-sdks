@@ -1497,27 +1497,27 @@ __metadata:
   linkType: hard
 
 "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server::locator=e2e-js-cloud-server%40workspace%3A.":
-  version: 1.13.0
-  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=54f652&locator=e2e-js-cloud-server%40workspace%3A."
+  version: 1.15.1
+  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=1c3858&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
-    "@devcycle/types": ^1.14.0
+    "@devcycle/types": ^1.16.0
     cross-fetch: ^4.0.0
     fetch-retry: ^5.0.6
     lodash: ^4.17.21
-  checksum: 7a176ee3bb2d79f24cf45f09502f8d84562b4366a61ed49806937686f0c6bf024d569c0792bbab5f0e193b19d4180d9ab4cc76ed830f37a4be1f18e9b80a9219
+  checksum: ffccf1918bc6dcacd55bfe00742f0bcb4a837936f1e10903bd05acb401f8ed66fbe50c9fa42e94e4ca148b30e8007c813d9b6f0407254c8e33a45f546d4f2a36
   languageName: node
   linkType: hard
 
 "@devcycle/types@file:../../../dist/lib/shared/types::locator=e2e-js-cloud-server%40workspace%3A.":
-  version: 1.14.0
-  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=860d35&locator=e2e-js-cloud-server%40workspace%3A."
+  version: 1.16.0
+  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=2da596&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
     class-transformer: 0.5.1
     class-validator: 0.14.1
     iso-639-1: ^2.1.13
     lodash: ^4.17.21
     reflect-metadata: ^0.1.13
-  checksum: 7c877f421cb852de892290d76ac157bf5611f633a4a3f597a0669ad93631f75d0ea0f0188abfc3e19fbe401b9cd9041d97b4aa655eceebc014075c2247faa60f
+  checksum: 3743b3494336de6ab5b7c7258d7cbbc6368d20b3065b03b0c965a11cd4558872a23830ef7f239f455c0b7edaf5003723b586092bb45e719176bcead5ae5d63ca
   languageName: node
   linkType: hard
 
@@ -2720,13 +2720,13 @@ __metadata:
   linkType: hard
 
 "axios@npm:^1.6.0":
-  version: 1.6.8
-  resolution: "axios@npm:1.6.8"
+  version: 1.7.5
+  resolution: "axios@npm:1.7.5"
   dependencies:
     follow-redirects: ^1.15.6
     form-data: ^4.0.0
     proxy-from-env: ^1.1.0
-  checksum: bf007fa4b207d102459300698620b3b0873503c6d47bf5a8f6e43c0c64c90035a4f698b55027ca1958f61ab43723df2781c38a99711848d232cad7accbcdfcdd
+  checksum: 2859fe01437cf133eee35571abc1d4b5224bb13e530e66cb3581ca226e170541dd5eef9f46abb41592cee0a2f54930c9e4978354e0cf1064748fc20d9a05e9d5
   languageName: node
   linkType: hard
 
@@ -2933,7 +2933,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"braces@npm:^3.0.2, braces@npm:~3.0.2":
+"braces@npm:^3.0.3, braces@npm:~3.0.2":
   version: 3.0.3
   resolution: "braces@npm:3.0.3"
   dependencies:
@@ -5229,12 +5229,12 @@ __metadata:
   linkType: hard
 
 "micromatch@npm:^4.0.4":
-  version: 4.0.5
-  resolution: "micromatch@npm:4.0.5"
+  version: 4.0.8
+  resolution: "micromatch@npm:4.0.8"
   dependencies:
-    braces: ^3.0.2
+    braces: ^3.0.3
     picomatch: ^2.3.1
-  checksum: 02a17b671c06e8fefeeb6ef996119c1e597c942e632a21ef589154f23898c9c6a9858526246abb14f8bca6e77734aa9dcf65476fca47cedfb80d9577d52843fc
+  checksum: 79920eb634e6f400b464a954fcfa589c4e7c7143209488e44baf627f9affc8b1e306f41f4f0deedde97e69cb725920879462d3e750ab3bd3c1aed675bb3a8966
   languageName: node
   linkType: hard
 

@@ -1451,15 +1451,15 @@ __metadata:
   linkType: hard
 
 "@devcycle/js-client-sdk@file:../../dist/sdk/js::locator=react-e2e%40workspace%3A.":
-  version: 1.26.0
-  resolution: "@devcycle/js-client-sdk@file:../../dist/sdk/js#../../dist/sdk/js::hash=b78f9f&locator=react-e2e%40workspace%3A."
+  version: 1.28.1
+  resolution: "@devcycle/js-client-sdk@file:../../dist/sdk/js#../../dist/sdk/js::hash=1be6f2&locator=react-e2e%40workspace%3A."
   dependencies:
-    "@devcycle/types": ^1.14.0
+    "@devcycle/types": ^1.16.0
     fetch-retry: ^5.0.6
     lodash: ^4.17.21
     ua-parser-js: ^1.0.36
     uuid: ^8.3.2
-  checksum: 91e0ff34df060672b142a7b2bb7aa620a3f7db1142cb67bab8ff7d221932afa5b2b2b96337a3bf4ddab9b424aa9707c4f2c9112342509a325b205ff338770703
+  checksum: e771c7ae607c14fc08e8fe9aaa5695fd80648a3b54d4800b4ae01b317a5a77faa50d64ef0402246b5105a2c4de9fcb4db7e5d4eb2a54aae2fa954657f881321b
   languageName: node
   linkType: hard
 
@@ -1477,15 +1477,15 @@ __metadata:
   linkType: hard
 
 "@devcycle/types@file:../../dist/lib/shared/types::locator=react-e2e%40workspace%3A.":
-  version: 1.14.0
-  resolution: "@devcycle/types@file:../../dist/lib/shared/types#../../dist/lib/shared/types::hash=860d35&locator=react-e2e%40workspace%3A."
+  version: 1.16.0
+  resolution: "@devcycle/types@file:../../dist/lib/shared/types#../../dist/lib/shared/types::hash=2da596&locator=react-e2e%40workspace%3A."
   dependencies:
     class-transformer: 0.5.1
     class-validator: 0.14.1
     iso-639-1: ^2.1.13
     lodash: ^4.17.21
     reflect-metadata: ^0.1.13
-  checksum: 7c877f421cb852de892290d76ac157bf5611f633a4a3f597a0669ad93631f75d0ea0f0188abfc3e19fbe401b9cd9041d97b4aa655eceebc014075c2247faa60f
+  checksum: 3743b3494336de6ab5b7c7258d7cbbc6368d20b3065b03b0c965a11cd4558872a23830ef7f239f455c0b7edaf5003723b586092bb45e719176bcead5ae5d63ca
   languageName: node
   linkType: hard
 
@@ -2340,7 +2340,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"braces@npm:^3.0.2, braces@npm:~3.0.2":
+"braces@npm:^3.0.3, braces@npm:~3.0.2":
   version: 3.0.3
   resolution: "braces@npm:3.0.3"
   dependencies:
@@ -4255,12 +4255,12 @@ __metadata:
   linkType: hard
 
 "micromatch@npm:^4.0.0, micromatch@npm:^4.0.2":
-  version: 4.0.5
-  resolution: "micromatch@npm:4.0.5"
+  version: 4.0.8
+  resolution: "micromatch@npm:4.0.8"
   dependencies:
-    braces: ^3.0.2
+    braces: ^3.0.3
     picomatch: ^2.3.1
-  checksum: 02a17b671c06e8fefeeb6ef996119c1e597c942e632a21ef589154f23898c9c6a9858526246abb14f8bca6e77734aa9dcf65476fca47cedfb80d9577d52843fc
+  checksum: 79920eb634e6f400b464a954fcfa589c4e7c7143209488e44baf627f9affc8b1e306f41f4f0deedde97e69cb725920879462d3e750ab3bd3c1aed675bb3a8966
   languageName: node
   linkType: hard
 
