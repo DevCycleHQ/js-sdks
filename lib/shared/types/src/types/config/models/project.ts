@@ -32,5 +32,9 @@ export class Project<IdType = string> {
             required: boolean
         }
         disablePassthroughRollouts?: boolean
+        customBucketingWorker?: {
+            name: string
+            enabled: boolean
+        }
     }
 }

@@ -9,6 +9,8 @@ import {
     PublicAudience,
     AudienceFilterOrOperator,
     UserSubType,
+    FilterType,
+    ConfigBody
 } from '@devcycle/types'
 import UAParser from 'ua-parser-js'
 
@@ -20,22 +22,24 @@ import UAParser from 'ua-parser-js'
  * @param data - The incoming user, device, and user agent data
  * @returns {*|boolean|boolean}
  */
-export const evaluateOperator = ({
+export const evaluateOperator = async ({
     operator,
     data,
     featureId,
     isOptInEnabled,
     audiences = {},
+    config,
 }: {
     operator: AudienceFilterOrOperator
     data: any
     featureId: string
     isOptInEnabled: boolean
     audiences?: { [id: string]: Omit<PublicAudience<string>, '_id'> }
-}): boolean => {
+    config: ConfigBody
+}): Promise<boolean> => {
     if (!operator?.filters?.length) return false
 
-    const doesUserPassFilter = (filter: AudienceFilterOrOperator) => {
+    const doesUserPassFilter = async (filter: AudienceFilterOrOperator) => {
         if (filter.operator) {
             return evaluateOperator({
                 operator: filter,
@@ -43,14 +47,15 @@ export const evaluateOperator = ({
                 featureId,
                 isOptInEnabled,
                 audiences,
+                config,
             })
         }
-        if (filter.type === 'all') return true
-        if (filter.type === 'optIn') {
+        if (filter.type === FilterType.all) return true
+        if (filter.type === FilterType.optIn) {
             const optIns = data.optIns
             return isOptInEnabled && !!optIns?.[featureId]
         }
-        if (filter.type === 'audienceMatch') {
+        if (filter.type === FilterType.audienceMatch) {
             return filterForAudienceMatch({
                 operator: filter,
                 data,
@@ -59,7 +64,10 @@ export const evaluateOperator = ({
                 audiences,
             })
         }
-        if (filter.type !== 'user') {
+        if (filter.type === FilterType.custom) {
+            return checkCustomFilter(data, filter, config)
+        }
+        if (filter.type !== FilterType.user) {
             console.error(`Invalid filter type: ${filter.type}`)
             return false
         }
@@ -77,9 +85,19 @@ export const evaluateOperator = ({
     }
 
     if (operator.operator === 'or') {
-        return operator.filters.some(doesUserPassFilter)
+        for (const filter of operator.filters) {
+            if (await doesUserPassFilter(filter)) {
+                return true
+            }
+        }
+        return false
     } else {
-        return operator.filters.every(doesUserPassFilter)
+        for (const filter of operator.filters) {
+            if (!(await doesUserPassFilter(filter))) {
+                return false
+            }
+        }
+        return true
     }
 }
 type FilterFunctionsBySubtype = {
@@ -101,32 +119,27 @@ function filterForAudienceMatch({
     featureId: string
     isOptInEnabled: boolean
     audiences?: { [id: string]: Omit<PublicAudience<string>, '_id'> }
-}): boolean {
-    if (!operator?._audiences) return false
-    const comparator = operator.comparator
-    // Recursively evaluate every audience in the _audiences array
-    for (const _audience of operator._audiences) {
-        // grab actual audience from the provided config data
-        const audience = audiences[_audience]
+}): Promise<boolean> { // Change return type to Promise<boolean>
+    if (!operator?._audiences) return Promise.resolve(false);
+    const comparator = operator.comparator;
+    // Use async/await and Promise.all for concurrent evaluation
+    return Promise.all(operator._audiences.map(async (_audience) => {
+        const audience = audiences[_audience];
         if (!audience) {
-            console.error(
-                'Invalid audience referenced by audienceMatch filter.',
-            )
-            return false
+            console.error('Invalid audience referenced by audienceMatch filter.');
+            return false;
         }
-        if (
-            evaluateOperator({
-                operator: audience.filters,
-                data,
-                featureId,
-                isOptInEnabled,
-                audiences,
-            })
-        ) {
-            return comparator === '='
-        }
-    }
-    return comparator === '!='
+        return await evaluateOperator({
+            operator: audience.filters,
+            data,
+            featureId,
+            isOptInEnabled,
+            audiences,
+            config: {} as ConfigBody
+        });
+    })).then(results => {
+        return comparator === '=' ? results.some(Boolean) : !results.some(Boolean);
+    });
 }
 
 const filterFunctionsBySubtype: FilterFunctionsBySubtype = {
@@ -136,7 +149,7 @@ const filterFunctionsBySubtype: FilterFunctionsBySubtype = {
     user_id: (data, filter) => checkStringsFilter(data.user_id, filter),
     appVersion: (data, filter) => checkVersionFilters(data.appVersion, filter),
     platformVersion: (data, filter) =>
-        checkVersionFilters(data.platformVersion, filter),
+    checkVersionFilters(data.platformVersion, filter),
     deviceModel: (data, filter) => checkStringsFilter(data.deviceModel, filter),
     platform: (data, filter) => checkStringsFilter(data.platform, filter),
     customData: (data, filter) => {
@@ -529,4 +542,48 @@ function checkValueExists(value: unknown): boolean {
         value !== '' &&
         !Number.isNaN(value)
     )
+}
+
+export async function checkCustomFilter(
+    data: any,
+    filter: AudienceFilterOrOperator,
+    config: ConfigBody
+): Promise<boolean> {
+    if (!filter.customFilter) {
+        console.error('Custom filter is missing data')
+        return false
+    }
+
+    const bucketingWorkerEnabled = config.project.settings.customBucketingWorker?.enabled
+    const workerName = config.project.settings.customBucketingWorker?.name
+    if (!bucketingWorkerEnabled || !workerName) {
+        console.error('Custom bucketing worker is not configured')
+        return false
+    }
+
+    const placeholderURL = 'https://example.com/custom-filter' // Replace with actual URL
+
+    try {
+        const response = await fetch(placeholderURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user: data,
+                data: filter.customFilter,
+                name: workerName,
+            }),
+        })
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+        }
+
+        const result = await response.json()
+        return result.passed === true
+    } catch (error) {
+        console.error('Error evaluating custom filter:', error)
+        return false
+    }
 }

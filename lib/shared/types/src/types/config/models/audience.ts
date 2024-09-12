@@ -67,6 +67,7 @@ export enum FilterType {
     user = 'user',
     optIn = 'optIn',
     audienceMatch = 'audienceMatch',
+    custom = 'custom',
     // TODO: Implement later
     // listAudience = 'listAudience'
 }
@@ -195,6 +196,11 @@ export class AudienceFilterOrOperator<IdType = string> {
      * Filters to apply using the "operator" operation if this is an operator object
      */
     filters?: AudienceFilterOrOperator<IdType>[]
+    
+    /**
+     * Custom filter data for filters of type 'custom'
+     */
+    customFilter?: any
 }
 
 /**

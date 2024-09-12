@@ -101,7 +101,7 @@ describe('User Hashing and Bucketing', () => {
 })
 
 describe('Config Parsing and Generating', () => {
-    it('generates the correctly modified config from the example config', () => {
+    it('generates the correctly modified config from the example config', async () => {
         const user = {
             country: 'canada',
             user_id: 'asuh',
@@ -159,11 +159,11 @@ describe('Config Parsing and Generating', () => {
                 },
             },
         }
-        const c = generateBucketedConfig({ config, user })
+        const c = await generateBucketedConfig({ config, user })
         expect(c).toEqual(expected)
     })
 
-    it('puts the user in the target for the first audience they match', () => {
+    it('puts the user in the target for the first audience they match', async () => {
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -290,11 +290,11 @@ describe('Config Parsing and Generating', () => {
                 },
             },
         }
-        const c = generateBucketedConfig({ config, user })
+        const c = await generateBucketedConfig({ config, user })
         expect(c).toEqual(expected)
     })
 
-    it('correctly buckets based on nested filters', () => {
+    it('correctly buckets based on nested filters', async () => {
         const user = {
             country: 'Canada',
             user_id: 'asuh',
@@ -353,11 +353,11 @@ describe('Config Parsing and Generating', () => {
                 },
             },
         }
-        const c = generateBucketedConfig({ config, user })
+        const c = await generateBucketedConfig({ config, user })
         expect(c).toEqual(expected)
     })
 
-    it('correctly doesnt bucket with nested filters', () => {
+    it('correctly doesnt bucket with nested filters', async () => {
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -427,11 +427,11 @@ describe('Config Parsing and Generating', () => {
                 },
             },
         }
-        const c = generateBucketedConfig({ config, user })
+        const c = await generateBucketedConfig({ config, user })
         expect(c).toEqual(expected)
     })
 
-    it('holds user in rollout if passthrough disabled', () => {
+    it('holds user in rollout if passthrough disabled', async () => {
         const newConfig = {
             ...config,
             project: {
@@ -492,11 +492,11 @@ describe('Config Parsing and Generating', () => {
                 },
             },
         }
-        const c = generateBucketedConfig({ config: newConfig, user })
+        const c = await generateBucketedConfig({ config: newConfig, user })
         expect(c).toEqual(expected)
     })
 
-    it('pushes user to next target if not in rollout and passthrough undefined', () => {
+    it('pushes user to next target if not in rollout and passthrough undefined', async () => {
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -599,11 +599,11 @@ describe('Config Parsing and Generating', () => {
                 },
             },
         }
-        const c = generateBucketedConfig({ config: newConfig, user })
+        const c = await generateBucketedConfig({ config: newConfig, user })
         expect(c).toEqual(expected)
     })
 
-    it('pushes user to next target if not in rollout', () => {
+    it('pushes user to next target if not in rollout', async () => {
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -694,11 +694,11 @@ describe('Config Parsing and Generating', () => {
                 },
             },
         }
-        const c = generateBucketedConfig({ config, user })
+        const c = await generateBucketedConfig({ config, user })
         expect(c).toEqual(expected)
     })
 
-    it('puts user through if in rollout', () => {
+    it('puts user through if in rollout', async () => {
         const user = {
             country: 'U S AND A',
             user_id: 'pass_rollout',
@@ -778,11 +778,11 @@ describe('Config Parsing and Generating', () => {
                 },
             },
         }
-        const c = generateBucketedConfig({ config, user })
+        const c = await generateBucketedConfig({ config, user })
         expect(c).toEqual(expected)
     })
 
-    it('buckets a user with user_id if no bucketingKey', () => {
+    it('buckets a user with user_id if no bucketingKey', async () => {
         const user = {
             country: 'U S AND A',
             user_id: 'pass_rollout',
@@ -798,19 +798,19 @@ describe('Config Parsing and Generating', () => {
         }
 
         const cWithBucketingKey = configWithBucketingKey('user_id')
-        const bucketedConfig = generateBucketedConfig({
+        const bucketedConfig = await generateBucketedConfig({
             config: config,
             user,
         })
 
-        const bucketedConfigFromBucketingKey = generateBucketedConfig({
+        const bucketedConfigFromBucketingKey = await generateBucketedConfig({
             config: cWithBucketingKey,
             user,
         })
         expect(bucketedConfig).toEqual(bucketedConfigFromBucketingKey)
     })
 
-    it('buckets a user with custom bucketingKey', () => {
+    it('buckets a user with custom bucketingKey', async () => {
         const user = {
             country: 'U S AND A',
             user_id: 'pass_rollout',
@@ -835,19 +835,19 @@ describe('Config Parsing and Generating', () => {
             user_id: 'a_different_person',
         }
         const configBucketedByFood = configWithBucketingKey('favouriteFood')
-        const bucketedConfigOrig = generateBucketedConfig({
+        const bucketedConfigOrig = await generateBucketedConfig({
             config: config,
             user,
         })
-        const bucketedConfigByFood = generateBucketedConfig({
+        const bucketedConfigByFood = await generateBucketedConfig({
             config: configBucketedByFood,
             user,
         })
-        const bucketedConfigSameUserDifferentFood = generateBucketedConfig({
+        const bucketedConfigSameUserDifferentFood = await generateBucketedConfig({
             config: configBucketedByFood,
             user: sameUserDifferentFood,
         })
-        const bucketedConfigDifferentUserSameFood = generateBucketedConfig({
+        const bucketedConfigDifferentUserSameFood = await generateBucketedConfig({
             config: configBucketedByFood,
             user: differentUserSameFood,
         })
@@ -864,7 +864,7 @@ describe('Config Parsing and Generating', () => {
         )
     })
 
-    it('buckets a user with custom bucketingKey from privateCustomData', () => {
+    it('buckets a user with custom bucketingKey from privateCustomData', async () => {
         const user = {
             country: 'U S AND A',
             user_id: 'pass_rollout',
@@ -886,19 +886,19 @@ describe('Config Parsing and Generating', () => {
             user_id: 'a_different_person',
         }
         const configBucketedByFood = configWithBucketingKey('favouriteFood')
-        const bucketedConfigOrig = generateBucketedConfig({
+        const bucketedConfigOrig = await generateBucketedConfig({
             config: config,
             user,
         })
-        const bucketedConfigByFood = generateBucketedConfig({
+        const bucketedConfigByFood = await generateBucketedConfig({
             config: configBucketedByFood,
             user,
         })
-        const bucketedConfigSameUserDifferentFood = generateBucketedConfig({
+        const bucketedConfigSameUserDifferentFood = await generateBucketedConfig({
             config: configBucketedByFood,
             user: sameUserDifferentFood,
         })
-        const bucketedConfigDifferentUserSameFood = generateBucketedConfig({
+        const bucketedConfigDifferentUserSameFood = await generateBucketedConfig({
             config: configBucketedByFood,
             user: differentUserSameFood,
         })
@@ -915,7 +915,7 @@ describe('Config Parsing and Generating', () => {
         )
     })
 
-    it('buckets a user with custom number bucketingKey', () => {
+    it('buckets a user with custom number bucketingKey', async () => {
         const user = {
             country: 'U S AND A',
             user_id: 'pass_rollout',
@@ -937,19 +937,19 @@ describe('Config Parsing and Generating', () => {
             user_id: 'a_different_person',
         }
         const configBucketedByNumber = configWithBucketingKey('favouriteNumber')
-        const bucketedConfigOrig = generateBucketedConfig({
+        const bucketedConfigOrig = await generateBucketedConfig({
             config: config,
             user,
         })
-        const bucketedConfigByNum = generateBucketedConfig({
+        const bucketedConfigByNum = await generateBucketedConfig({
             config: configBucketedByNumber,
             user,
         })
-        const bucketedConfigSameUserDifferentNum = generateBucketedConfig({
+        const bucketedConfigSameUserDifferentNum = await generateBucketedConfig({
             config: configBucketedByNumber,
             user: sameUserDifferentNum,
         })
-        const bucketedConfigDifferentUserSameNum = generateBucketedConfig({
+        const bucketedConfigDifferentUserSameNum = await generateBucketedConfig({
             config: configBucketedByNumber,
             user: differentUserSameNum,
         })
@@ -966,7 +966,7 @@ describe('Config Parsing and Generating', () => {
         )
     })
 
-    it('buckets a user with custom boolean bucketingKey', () => {
+    it('buckets a user with custom boolean bucketingKey', async () => {
         const user = {
             country: 'U S AND A',
             user_id: 'pass_rollout',
@@ -988,19 +988,19 @@ describe('Config Parsing and Generating', () => {
             user_id: 'a_different_person',
         }
         const configBucketedByBool = configWithBucketingKey('signed_up')
-        const bucketedConfigOrig = generateBucketedConfig({
+        const bucketedConfigOrig = await generateBucketedConfig({
             config: config,
             user,
         })
-        const bucketedConfigByBool = generateBucketedConfig({
+        const bucketedConfigByBool = await generateBucketedConfig({
             config: configBucketedByBool,
             user,
         })
-        const bucketedConfigSameUserDifferentBool = generateBucketedConfig({
+        const bucketedConfigSameUserDifferentBool = await generateBucketedConfig({
             config: configBucketedByBool,
             user: sameUserDifferentNum,
         })
-        const bucketedConfigDifferentUserSameBool = generateBucketedConfig({
+        const bucketedConfigDifferentUserSameBool = await generateBucketedConfig({
             config: configBucketedByBool,
             user: differentUserSameNum,
         })
@@ -1017,18 +1017,18 @@ describe('Config Parsing and Generating', () => {
         )
     })
 
-    it('errors when feature missing distribution', () => {
+    it('errors when feature missing distribution', async () => {
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
             email: 'test@email.com',
         }
-        expect(() =>
+        await expect(() =>
             generateBucketedConfig({ config: barrenConfig, user }),
-        ).toThrow('Failed to decide target variation')
+        ).rejects.toThrow('Failed to decide target variation')
     })
 
-    it('errors when config missing variations', () => {
+    it('errors when config missing variations', async () => {
         const user = {
             country: 'U S AND A',
             user_id: 'pass_rollout',
@@ -1044,24 +1044,24 @@ describe('Config Parsing and Generating', () => {
             os: 'Android',
             email: 'test@notemail.com',
         }
-        expect(() =>
+        await expect(() =>
             generateBucketedConfig({ config: barrenConfig, user }),
-        ).toThrow('Config missing variation: 615382338424cb11646d7667')
+        ).rejects.toThrow('Config missing variation: 615382338424cb11646d7667')
     })
 
-    it('errors when config missing variables', () => {
+    it('errors when config missing variables', async () => {
         const user = {
             country: 'canada',
             user_id: 'asuh',
             email: 'test@notemail.com',
             platform: 'Android',
         }
-        expect(() =>
+        await expect(() =>
             generateBucketedConfig({ config: barrenConfig, user }),
-        ).toThrow('Config missing variable: 61538237b0a70b58ae6af71g')
+        ).rejects.toThrow('Config missing variable: 61538237b0a70b58ae6af71g')
     })
 
-    it('puts the user in the target (customData !exists) with null Custom Data', () => {
+    it('puts the user in the target (customData !exists) with null Custom Data', async () => {
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -1116,14 +1116,14 @@ describe('Config Parsing and Generating', () => {
         // Targeting Rule expects the Custom Data property of "favouriteNull" to exist
         // However, since the User has a null value for this property,
         // the Variable for User method should not return any variables
-        const c = generateBucketedConfig({
+        const c = await generateBucketedConfig({
             config: configWithNullCustomData,
             user,
         })
         expect(c).toEqual(expected)
     })
 
-    it('puts the user in the target (customData exists) for the first audience they match', () => {
+    it('puts the user in the target (customData exists) for the first audience they match', async () => {
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -1178,7 +1178,7 @@ describe('Config Parsing and Generating', () => {
         // Targeting Rule expects the Custom Data property of "favouriteNull" to exist
         // However, since the User has a null value for this property,
         // the Variable for User method should not return any variables
-        const c = generateBucketedConfig({
+        const c = await generateBucketedConfig({
             config: configWithNullCustomData,
             user,
         })
@@ -1429,7 +1429,7 @@ describe('Rollout Logic', () => {
     })
 
     describe('overrides', () => {
-        it('correctly overrides a bucketing decision and a feature that doesnt normally pass segmentation', () => {
+        it('correctly overrides a bucketing decision and a feature that doesnt normally pass segmentation', async () => {
             const user = {
                 country: 'canada',
                 user_id: 'asuh',
@@ -1514,7 +1514,7 @@ describe('Rollout Logic', () => {
                     },
                 },
             }
-            const c = generateBucketedConfig({ config, user, overrides })
+            const c = await generateBucketedConfig({ config, user, overrides })
             expect(c).toEqual(expected)
         })
     })

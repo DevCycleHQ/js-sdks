@@ -155,15 +155,17 @@ type SegmentedFeatureData = {
     target: PublicTarget<string>
 }
 
-const checkRolloutAndEvaluate = ({
+const checkRolloutAndEvaluate = async ({
     user,
     target,
     disablePassthroughRollouts,
+    config,
 }: {
     user: DVCBucketingUser
     target: PublicTarget
     disablePassthroughRollouts: boolean
-}) => {
+    config: ConfigBody
+}): Promise<boolean> => {
     if (!target.rollout || disablePassthroughRollouts) {
         return true
     } else {
@@ -179,51 +181,65 @@ const checkRolloutAndEvaluate = ({
     }
 }
 
-export const getSegmentedFeatureDataFromConfig = ({
+export const getSegmentedFeatureDataFromConfig = async ({
     config,
     user,
 }: {
     config: ConfigBody
     user: DVCBucketingUser
-}): SegmentedFeatureData[] => {
+}): Promise<SegmentedFeatureData[]> => {
     const initialValue: SegmentedFeatureData[] = []
     const disablePassthroughRollouts =
         !!config.project.settings.disablePassthroughRollouts
-    return config.features.reduce((accumulator, feature) => {
-        // Returns the first target for which the user passes segmentation
+    const results = []
+    for (const feature of config.features) {
         const isOptInEnabled =
             feature.settings?.['optInEnabled'] &&
             config.project.settings?.['optIn']?.['enabled']
 
-        const segmentedFeatureTarget = feature.configuration.targets.find(
-            (target) => {
+        const segmentedFeatureTarget = await findAsync(feature.configuration.targets,
+            async (target) => {
                 return (
-                    checkRolloutAndEvaluate({
+                    await checkRolloutAndEvaluate({
                         target,
                         user,
                         disablePassthroughRollouts,
+                        config,
                     }) &&
-                    evaluateOperator({
+                    await evaluateOperator({
                         operator: target._audience.filters,
                         data: user,
                         featureId: feature._id,
                         isOptInEnabled: !!isOptInEnabled,
                         audiences: config.audiences,
+                        config,
                     })
                 )
-            },
+            }
         )
         if (segmentedFeatureTarget) {
-            accumulator.push({
+            results.push({
                 feature,
                 target: segmentedFeatureTarget,
             })
         }
-        return accumulator
-    }, initialValue)
+    }
+    return results
 }
 
-export const generateBucketedConfig = ({
+async function findAsync<T>(
+    arr: T[],
+    predicate: (item: T) => Promise<boolean>
+): Promise<T | undefined> {
+    for (const item of arr) {
+        if (await predicate(item)) {
+            return item
+        }
+    }
+    return undefined
+}
+
+export const generateBucketedConfig = async ({
     config,
     user,
     overrides,
@@ -231,11 +247,11 @@ export const generateBucketedConfig = ({
     config: ConfigBody
     user: DVCBucketingUser
     overrides?: Record<string, string>
-}): BucketedUserConfig => {
+}): Promise<BucketedUserConfig> => {
     const variableMap: BucketedUserConfig['variables'] = {}
     const featureKeyMap: BucketedUserConfig['features'] = {}
     const featureVariationMap: BucketedUserConfig['featureVariationMap'] = {}
-    const segmentedFeatures = getSegmentedFeatureDataFromConfig({
+    const segmentedFeatures = await getSegmentedFeatureDataFromConfig({
         config,
         user,
     })
