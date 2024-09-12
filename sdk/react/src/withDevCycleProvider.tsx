@@ -7,9 +7,12 @@ import React, {
 } from 'react'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import { DevCycleProvider } from './DevCycleProvider'
+import { DVCCustomDataJSON } from '@devcycle/js-client-sdk'
 
 export const withDevCycleProvider =
-    <T extends object>(config: ProviderConfig) =>
+    <T extends object, CustomData extends DVCCustomDataJSON = DVCCustomDataJSON>(
+        config: ProviderConfig<CustomData>,
+    ) =>
     (
         WrappedComponent: React.ComponentType<T>,
     ): ForwardRefExoticComponent<

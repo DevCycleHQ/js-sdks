@@ -1,20 +1,23 @@
 import 'server-only'
 import { getVariableValue } from './getVariableValue'
 import { initialize, validateSDKKey } from './initialize'
-import { DevCycleUser } from '@devcycle/js-client-sdk'
+import { DevCycleUser, DVCCustomDataJSON } from '@devcycle/js-client-sdk'
 import { getUserAgent } from './userAgent'
 import { getAllVariables } from './getAllVariables'
 import { getAllFeatures } from './allFeatures'
 import { DevCycleNextOptions } from '../common/types'
 
 // server-side users must always be "identified" with a user id
-type ServerUser = Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & {
+type ServerUser<CustomData extends DVCCustomDataJSON = DVCCustomDataJSON> = Omit<
+    DevCycleUser<CustomData>,
+    'user_id' | 'isAnonymous'
+> & {
     user_id: string
 }
 
 // allow return type inference
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const setupDevCycle = ({
+export const setupDevCycle = <CustomData extends DVCCustomDataJSON = DVCCustomDataJSON>({
     serverSDKKey,
     clientSDKKey,
     userGetter,
@@ -22,7 +25,7 @@ export const setupDevCycle = ({
 }: {
     serverSDKKey: string
     clientSDKKey: string
-    userGetter: () => Promise<ServerUser> | ServerUser
+    userGetter: () => Promise<ServerUser<CustomData>> | ServerUser<CustomData>
     options?: DevCycleNextOptions
 }) => {
     validateSDKKey(serverSDKKey, 'server')

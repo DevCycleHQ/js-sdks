@@ -3,6 +3,7 @@ import {
     DevCycleOptions,
     DVCVariableSet,
     DVCVariableValue,
+    DVCCustomDataJSON,
     DevCycleEvent,
     DevCycleUser,
     ErrorCallback,
@@ -53,6 +54,7 @@ export const isDeferredOptions = (
 
 export class DevCycleClient<
     Variables extends VariableDefinitions = VariableDefinitions,
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON
 > {
     logger: DVCLogger
     config?: BucketedUserConfig
@@ -65,9 +67,9 @@ export class DevCycleClient<
     private sdkKey: string
     private readonly options: DevCycleOptions
 
-    private onInitialized: Promise<DevCycleClient<Variables>>
+    private onInitialized: Promise<DevCycleClient<Variables, CustomData>>
     private settleOnInitialized: (
-        client: DevCycleClient<Variables>,
+        client: DevCycleClient<Variables, CustomData>,
         err?: unknown,
     ) => void
 
@@ -80,7 +82,7 @@ export class DevCycleClient<
         [key: string]: { [key: string]: DVCVariable<any> }
     }
     private store: CacheStore
-    private eventQueue: EventQueue
+    private eventQueue: EventQueue<Variables, CustomData>
     private requestConsolidator: ConfigRequestConsolidator
     eventEmitter: EventEmitter
     private streamingConnection?: StreamingConnection
@@ -95,10 +97,10 @@ export class DevCycleClient<
         user: undefined,
         options: DevCycleOptionsWithDeferredInitialization,
     )
-    constructor(sdkKey: string, user: DevCycleUser, options?: DevCycleOptions)
+    constructor(sdkKey: string, user: DevCycleUser<CustomData>, options?: DevCycleOptions)
     constructor(
         sdkKey: string,
-        user: DevCycleUser | undefined,
+        user: DevCycleUser<CustomData> | undefined,
         options: DevCycleOptions = {},
     ) {
         if (!options.sdkPlatform) {
@@ -171,7 +173,7 @@ export class DevCycleClient<
      * first identified (in deferred mode)
      * @param initialUser
      */
-    private clientInitialization = async (initialUser: DevCycleUser) => {
+    private clientInitialization = async (initialUser: DevCycleUser<CustomData>) => {
         if (this.initializeTriggered || this._closing) {
             return this
         }
@@ -259,13 +261,13 @@ export class DevCycleClient<
      * An optional callback can be passed in, and will return
      * a promise if no callback has been passed in.
      */
-    onClientInitialized(): Promise<DevCycleClient<Variables>>
+    onClientInitialized(): Promise<DevCycleClient<Variables, CustomData>>
     onClientInitialized(
-        onInitialized: ErrorCallback<DevCycleClient<Variables>>,
+        onInitialized: ErrorCallback<DevCycleClient<Variables, CustomData>>,
     ): void
     onClientInitialized(
-        onInitialized?: ErrorCallback<DevCycleClient<Variables>>,
-    ): Promise<DevCycleClient<Variables>> | void {
+        onInitialized?: ErrorCallback<DevCycleClient<Variables, CustomData>>,
+    ): Promise<DevCycleClient<Variables, CustomData>> | void {
         if (onInitialized && typeof onInitialized === 'function') {
             this.onInitialized
                 .then(() => onInitialized(null, this))
@@ -394,13 +396,13 @@ export class DevCycleClient<
      * @param user
      * @param callback
      */
-    identifyUser(user: DevCycleUser): Promise<DVCVariableSet>
+    identifyUser(user: DevCycleUser<CustomData>): Promise<DVCVariableSet>
     identifyUser(
-        user: DevCycleUser,
+        user: DevCycleUser<CustomData>,
         callback?: ErrorCallback<DVCVariableSet>,
     ): void
     identifyUser(
-        user: DevCycleUser,
+        user: DevCycleUser<CustomData>,
         callback?: ErrorCallback<DVCVariableSet>,
     ): Promise<DVCVariableSet> | void {
         if (this.options.next) {
@@ -421,7 +423,7 @@ export class DevCycleClient<
         return promise
     }
 
-    private async _identifyUser(user: DevCycleUser): Promise<DVCVariableSet> {
+    private async _identifyUser(user: DevCycleUser<CustomData>): Promise<DVCVariableSet> {
         let updatedUser: DVCPopulatedUser
 
         if (this.options.deferInitialization && !this.initializeTriggered) {
@@ -647,7 +649,7 @@ export class DevCycleClient<
      */
     synchronizeBootstrapData(
         config: BucketedUserConfig | null,
-        user: DevCycleUser,
+        user: DevCycleUser<CustomData>,
         userAgent?: string,
     ): void {
         const populatedUser = new DVCPopulatedUser(

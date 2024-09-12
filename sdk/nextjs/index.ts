@@ -15,6 +15,7 @@ export {
     DVCVariable,
     DVCVariableValue,
     DevCycleJSON,
+    DVCCustomDataJSON,
 } from '@devcycle/react-client-sdk'
 
 type DevCycleClient = Omit<JSClient, 'identifyUser' | 'resetUser'>
