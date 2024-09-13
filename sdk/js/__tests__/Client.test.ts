@@ -1,13 +1,16 @@
-global.fetch = jest.fn()
+global.fetch = jest.fn().mockResolvedValue({
+    json: jest.fn().mockResolvedValue({ features: {}, variables: {} }),
+})
+
 type Variables = {
     enum_var: 'value1' | 'value2'
     bool: boolean
     string: string
     number: number
 }
-jest.mock('fetch-retry')
 import { DevCycleClient } from '../src/Client'
 jest.mock('../src/StreamingConnection')
+
 describe('DevCycleClient', () => {
     it('should prevent invalid variables', () => {
         const client = new DevCycleClient<Variables>('test', {
