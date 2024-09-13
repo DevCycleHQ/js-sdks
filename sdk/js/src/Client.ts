@@ -54,7 +54,7 @@ export const isDeferredOptions = (
 
 export class DevCycleClient<
     Variables extends VariableDefinitions = VariableDefinitions,
-    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
 > {
     logger: DVCLogger
     config?: BucketedUserConfig
@@ -97,7 +97,11 @@ export class DevCycleClient<
         user: undefined,
         options: DevCycleOptionsWithDeferredInitialization,
     )
-    constructor(sdkKey: string, user: DevCycleUser<CustomData>, options?: DevCycleOptions)
+    constructor(
+        sdkKey: string,
+        user: DevCycleUser<CustomData>,
+        options?: DevCycleOptions,
+    )
     constructor(
         sdkKey: string,
         user: DevCycleUser<CustomData> | undefined,
@@ -173,7 +177,9 @@ export class DevCycleClient<
      * first identified (in deferred mode)
      * @param initialUser
      */
-    private clientInitialization = async (initialUser: DevCycleUser<CustomData>) => {
+    private clientInitialization = async (
+        initialUser: DevCycleUser<CustomData>,
+    ) => {
         if (this.initializeTriggered || this._closing) {
             return this
         }
@@ -423,7 +429,9 @@ export class DevCycleClient<
         return promise
     }
 
-    private async _identifyUser(user: DevCycleUser<CustomData>): Promise<DVCVariableSet> {
+    private async _identifyUser(
+        user: DevCycleUser<CustomData>,
+    ): Promise<DVCVariableSet> {
         let updatedUser: DVCPopulatedUser
 
         if (this.options.deferInitialization && !this.initializeTriggered) {
