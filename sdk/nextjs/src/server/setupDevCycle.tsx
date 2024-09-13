@@ -8,16 +8,16 @@ import { getAllFeatures } from './allFeatures'
 import { DevCycleNextOptions } from '../common/types'
 
 // server-side users must always be "identified" with a user id
-type ServerUser<CustomData extends DVCCustomDataJSON = DVCCustomDataJSON> = Omit<
-    DevCycleUser<CustomData>,
-    'user_id' | 'isAnonymous'
-> & {
-    user_id: string
-}
+type ServerUser<CustomData extends DVCCustomDataJSON = DVCCustomDataJSON> =
+    Omit<DevCycleUser<CustomData>, 'user_id' | 'isAnonymous'> & {
+        user_id: string
+    }
 
 // allow return type inference
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const setupDevCycle = <CustomData extends DVCCustomDataJSON = DVCCustomDataJSON>({
+export const setupDevCycle = <
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
+>({
     serverSDKKey,
     clientSDKKey,
     userGetter,

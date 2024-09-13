@@ -1,5 +1,10 @@
 import { DevCycleClient } from './Client'
-import { DevCycleEvent, DevCycleOptions, VariableDefinitions, DVCCustomDataJSON } from './types'
+import {
+    DevCycleEvent,
+    DevCycleOptions,
+    VariableDefinitions,
+    DVCCustomDataJSON,
+} from './types'
 import { publishEvents } from './Request'
 import { checkParamDefined } from './utils'
 import chunk from 'lodash/chunk'
@@ -15,7 +20,7 @@ type AggregateEvent = DevCycleEvent & {
 
 export class EventQueue<
     Variables extends VariableDefinitions = VariableDefinitions,
-    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
 > {
     private readonly sdkKey: string
     private readonly options: DevCycleOptions

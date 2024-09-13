@@ -9,9 +9,9 @@ import hoistNonReactStatics from 'hoist-non-react-statics'
 import { DevCycleProvider } from './DevCycleProvider'
 import { DVCCustomDataJSON } from '@devcycle/js-client-sdk'
 
-export function withDevCycleProvider<CustomData extends DVCCustomDataJSON = DVCCustomDataJSON>(
-    config: ProviderConfig<CustomData>,
-) {
+export function withDevCycleProvider<
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
+>(config: ProviderConfig<CustomData>) {
     return function <T extends object>(
         WrappedComponent: React.ComponentType<T>,
     ): ForwardRefExoticComponent<PropsWithoutRef<T> & RefAttributes<unknown>> {
