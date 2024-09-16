@@ -4322,47 +4322,57 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cloudflare/kv-asset-handler@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "@cloudflare/kv-asset-handler@npm:0.2.0"
+"@cloudflare/kv-asset-handler@npm:0.3.4":
+  version: 0.3.4
+  resolution: "@cloudflare/kv-asset-handler@npm:0.3.4"
   dependencies:
     mime: ^3.0.0
-  checksum: bc6a02a9c80be6de90e46454ef4de09301e68726eaa4835de0e30216e50fffcc5612274a17dfb455916cf3418f0cb25fefd2b561a9d2282f4cc10d40527f0acb
+  checksum: 7221f46231cfe4698260741d0661b36296d8cff7368672f563bc3d7fd806e36d66d15eb1abc0d114e8fc4d1218cd90f744729ff3aaa61fcfbfe0ac613704b3f5
   languageName: node
   linkType: hard
 
-"@cloudflare/workerd-darwin-64@npm:1.20231218.0":
-  version: 1.20231218.0
-  resolution: "@cloudflare/workerd-darwin-64@npm:1.20231218.0"
+"@cloudflare/workerd-darwin-64@npm:1.20240909.0":
+  version: 1.20240909.0
+  resolution: "@cloudflare/workerd-darwin-64@npm:1.20240909.0"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@cloudflare/workerd-darwin-arm64@npm:1.20231218.0":
-  version: 1.20231218.0
-  resolution: "@cloudflare/workerd-darwin-arm64@npm:1.20231218.0"
+"@cloudflare/workerd-darwin-arm64@npm:1.20240909.0":
+  version: 1.20240909.0
+  resolution: "@cloudflare/workerd-darwin-arm64@npm:1.20240909.0"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@cloudflare/workerd-linux-64@npm:1.20231218.0":
-  version: 1.20231218.0
-  resolution: "@cloudflare/workerd-linux-64@npm:1.20231218.0"
+"@cloudflare/workerd-linux-64@npm:1.20240909.0":
+  version: 1.20240909.0
+  resolution: "@cloudflare/workerd-linux-64@npm:1.20240909.0"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"@cloudflare/workerd-linux-arm64@npm:1.20231218.0":
-  version: 1.20231218.0
-  resolution: "@cloudflare/workerd-linux-arm64@npm:1.20231218.0"
+"@cloudflare/workerd-linux-arm64@npm:1.20240909.0":
+  version: 1.20240909.0
+  resolution: "@cloudflare/workerd-linux-arm64@npm:1.20240909.0"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"@cloudflare/workerd-windows-64@npm:1.20231218.0":
-  version: 1.20231218.0
-  resolution: "@cloudflare/workerd-windows-64@npm:1.20231218.0"
+"@cloudflare/workerd-windows-64@npm:1.20240909.0":
+  version: 1.20240909.0
+  resolution: "@cloudflare/workerd-windows-64@npm:1.20240909.0"
   conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@cloudflare/workers-shared@npm:0.5.3":
+  version: 0.5.3
+  resolution: "@cloudflare/workers-shared@npm:0.5.3"
+  dependencies:
+    mime: ^3.0.0
+    zod: ^3.22.3
+  checksum: 3dd0f22b0259c842f3c78c4bb9a816adf648b9b94ad57735dc1848ece0c2a36dcc2241e0c9f1da20bd2d50c8d68ea4b42242a4bb9caefe3c4869361b0d953fdb
   languageName: node
   linkType: hard
 
@@ -4652,7 +4662,7 @@ __metadata:
   resolution: "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script"
   dependencies:
     "@devcycle/bucketing-test-data": ^1.20.1
-    protobufjs: ^7.2.5
+    protobufjs: ^7.4.0
   languageName: unknown
   linkType: soft
 
@@ -14893,6 +14903,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"date-fns@npm:^3.6.0":
+  version: 3.6.0
+  resolution: "date-fns@npm:3.6.0"
+  checksum: 0daa1e9a436cf99f9f2ae9232b55e11f3dd46132bee10987164f3eebd29f245b2e066d7d7db40782627411ecf18551d8f4c9fcdf2226e48bb66545407d448ab7
+  languageName: node
+  linkType: hard
+
 "dateformat@npm:^3.0.0":
   version: 3.0.3
   resolution: "dateformat@npm:3.0.3"
@@ -15138,6 +15155,13 @@ __metadata:
   version: 1.0.1
   resolution: "defined@npm:1.0.1"
   checksum: b1a852300bdb57f297289b55eafdd0c517afaa3ec8190e78fce91b9d8d0c0369d4505ecbdacfd3d98372e664f4a267d9bd793938d4a8c76209c9d9516fbe2101
+  languageName: node
+  linkType: hard
+
+"defu@npm:^6.1.4":
+  version: 6.1.4
+  resolution: "defu@npm:6.1.4"
+  checksum: 40e3af6338f195ac1564f53d1887fa2d0429ac7e8c081204bc4d29191180059d3952b5f4e08fe5df8d59eb873aa26e9c88b56d4fac699673d4a372c93620b229
   languageName: node
   linkType: hard
 
@@ -15461,7 +15485,7 @@ __metadata:
     prettier: ^2.8.8
     prettier-eslint: ^16.3.0
     prettier-eslint-cli: ^8.0.1
-    protobufjs: ^7.2.5
+    protobufjs: ^7.4.0
     protobufjs-cli: ^1.1.2
     react: 18.2.0
     react-bootstrap: ^2.2.1
@@ -15500,7 +15524,7 @@ __metadata:
     webpack: 5.89.0
     webpack-merge: ^5.8.0
     winston: ^3.3.3
-    wrangler: ^3.22.4
+    wrangler: ^3.78.2
   languageName: unknown
   linkType: soft
 
@@ -23879,9 +23903,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"miniflare@npm:3.20231218.1":
-  version: 3.20231218.1
-  resolution: "miniflare@npm:3.20231218.1"
+"miniflare@npm:3.20240909.1":
+  version: 3.20240909.1
+  resolution: "miniflare@npm:3.20240909.1"
   dependencies:
     "@cspotcode/source-map-support": 0.8.1
     acorn: ^8.8.0
@@ -23890,14 +23914,14 @@ __metadata:
     exit-hook: ^2.2.1
     glob-to-regexp: ^0.4.1
     stoppable: ^1.1.0
-    undici: ^5.22.1
-    workerd: 1.20231218.0
-    ws: ^8.11.0
+    undici: ^5.28.4
+    workerd: 1.20240909.0
+    ws: ^8.17.1
     youch: ^3.2.2
-    zod: ^3.20.6
+    zod: ^3.22.3
   bin:
     miniflare: bootstrap.js
-  checksum: cea643257a4ce0e3e308d0a364d9286ad9b0afcae28d84ebf64eea59b154103e71f2ebbab896c733e05984c4dcdcb24381495ef0c30df124fcf0aa701452cc61
+  checksum: 2a31e073dadadf4c2f352c81c3dc451e996116c05fbe2657a28e6b8fd424dc44d3e998eba1fc4c75337926cbf8645593a8f3c8138744e585488faf29d66152e5
   languageName: node
   linkType: hard
 
@@ -25350,6 +25374,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ohash@npm:^1.1.3":
+  version: 1.1.4
+  resolution: "ohash@npm:1.1.4"
+  checksum: 8c63897941e67129ac81a15cfc2bb66a7b122200c9ee244e86d3d6b7aa7f5d9f7cb98d33dfc38b169c83b77c9babcc6f66ccbc90864d1f862f10ac8b72d80d66
+  languageName: node
+  linkType: hard
+
 "on-exit-leak-free@npm:^0.2.0":
   version: 0.2.0
   resolution: "on-exit-leak-free@npm:0.2.0"
@@ -25944,6 +25975,13 @@ __metadata:
   version: 4.0.0
   resolution: "path-type@npm:4.0.0"
   checksum: 5b1e2daa247062061325b8fdbfd1fb56dde0a448fb1455453276ea18c60685bdad23a445dc148cf87bc216be1573357509b7d4060494a6fd768c7efad833ee45
+  languageName: node
+  linkType: hard
+
+"pathe@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "pathe@npm:1.1.2"
+  checksum: ec5f778d9790e7b9ffc3e4c1df39a5bb1ce94657a4e3ad830c1276491ca9d79f189f47609884671db173400256b005f4955f7952f52a2aeb5834ad5fb4faf134
   languageName: node
   linkType: hard
 
@@ -27340,9 +27378,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"protobufjs@npm:^7.2.5":
-  version: 7.2.5
-  resolution: "protobufjs@npm:7.2.5"
+"protobufjs@npm:^7.4.0":
+  version: 7.4.0
+  resolution: "protobufjs@npm:7.4.0"
   dependencies:
     "@protobufjs/aspromise": ^1.1.2
     "@protobufjs/base64": ^1.1.2
@@ -27356,7 +27394,7 @@ __metadata:
     "@protobufjs/utf8": ^1.1.0
     "@types/node": ">=13.7.0"
     long: ^5.0.0
-  checksum: 3770a072114061faebbb17cfd135bc4e187b66bc6f40cd8bac624368b0270871ec0cfb43a02b9fb4f029c8335808a840f1afba3c2e7ede7063b98ae6b98a703f
+  checksum: ba0e6b60541bbf818bb148e90f5eb68bd99004e29a6034ad9895a381cbd352be8dce5376e47ae21b2e05559f2505b4a5f4a3c8fa62402822c6ab4dcdfb89ffb3
   languageName: node
   linkType: hard
 
@@ -28475,7 +28513,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^1.22.4":
+"resolve@npm:^1.22.4, resolve@npm:^1.22.8":
   version: 1.22.8
   resolution: "resolve@npm:1.22.8"
   dependencies:
@@ -28527,7 +28565,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@^1.22.4#~builtin<compat/resolve>":
+"resolve@patch:resolve@^1.22.4#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.8#~builtin<compat/resolve>":
   version: 1.22.8
   resolution: "resolve@patch:resolve@npm%3A1.22.8#~builtin<compat/resolve>::version=1.22.8&hash=c3c19d"
   dependencies:
@@ -29556,17 +29594,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map@npm:0.6.1, source-map@npm:^0.6.0, source-map@npm:^0.6.1, source-map@npm:~0.6.0, source-map@npm:~0.6.1":
-  version: 0.6.1
-  resolution: "source-map@npm:0.6.1"
-  checksum: 59ce8640cf3f3124f64ac289012c2b8bd377c238e316fb323ea22fbfe83da07d81e000071d7242cad7a23cd91c7de98e4df8830ec3f133cb6133a5f6e9f67bc2
-  languageName: node
-  linkType: hard
-
 "source-map@npm:^0.5.6":
   version: 0.5.7
   resolution: "source-map@npm:0.5.7"
   checksum: 5dc2043b93d2f194142c7f38f74a24670cd7a0063acdaf4bf01d2964b402257ae843c2a8fa822ad5b71013b5fcafa55af7421383da919752f22ff488bc553f4d
+  languageName: node
+  linkType: hard
+
+"source-map@npm:^0.6.0, source-map@npm:^0.6.1, source-map@npm:~0.6.0, source-map@npm:~0.6.1":
+  version: 0.6.1
+  resolution: "source-map@npm:0.6.1"
+  checksum: 59ce8640cf3f3124f64ac289012c2b8bd377c238e316fb323ea22fbfe83da07d81e000071d7242cad7a23cd91c7de98e4df8830ec3f133cb6133a5f6e9f67bc2
   languageName: node
   linkType: hard
 
@@ -31348,6 +31386,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ufo@npm:^1.5.4":
+  version: 1.5.4
+  resolution: "ufo@npm:1.5.4"
+  checksum: f244703b7d4f9f0df4f9af23921241ab73410b591f4e5b39c23e3147f3159b139a4b1fb5903189c306129f7a16b55995dac0008e0fbae88a37c3e58cbc34d833
+  languageName: node
+  linkType: hard
+
 "uglify-es@npm:^3.1.9":
   version: 3.3.10
   resolution: "uglify-es@npm:3.3.10"
@@ -31427,12 +31472,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^5.22.1":
+"undici@npm:^5.28.4":
   version: 5.28.4
   resolution: "undici@npm:5.28.4"
   dependencies:
     "@fastify/busboy": ^2.0.0
   checksum: a8193132d84540e4dc1895ecc8dbaa176e8a49d26084d6fbe48a292e28397cd19ec5d13bc13e604484e76f94f6e334b2bdc740d5f06a6e50c44072818d0c19f9
+  languageName: node
+  linkType: hard
+
+"unenv@npm:unenv-nightly@2.0.0-1724863496.70db6f1":
+  version: 2.0.0-1724863496.70db6f1
+  resolution: "unenv-nightly@npm:2.0.0-1724863496.70db6f1"
+  dependencies:
+    defu: ^6.1.4
+    ohash: ^1.1.3
+    pathe: ^1.1.2
+    ufo: ^1.5.4
+  checksum: e46f12439d431a416a5cb3cd77193900939bcbe7e2aa86652190ea5269499e99832df617d79502e0d4fad82cb1be711857237aef442a47e395af64a31a1f6815
   languageName: node
   linkType: hard
 
@@ -32420,15 +32477,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"workerd@npm:1.20231218.0":
-  version: 1.20231218.0
-  resolution: "workerd@npm:1.20231218.0"
+"workerd@npm:1.20240909.0":
+  version: 1.20240909.0
+  resolution: "workerd@npm:1.20240909.0"
   dependencies:
-    "@cloudflare/workerd-darwin-64": 1.20231218.0
-    "@cloudflare/workerd-darwin-arm64": 1.20231218.0
-    "@cloudflare/workerd-linux-64": 1.20231218.0
-    "@cloudflare/workerd-linux-arm64": 1.20231218.0
-    "@cloudflare/workerd-windows-64": 1.20231218.0
+    "@cloudflare/workerd-darwin-64": 1.20240909.0
+    "@cloudflare/workerd-darwin-arm64": 1.20240909.0
+    "@cloudflare/workerd-linux-64": 1.20240909.0
+    "@cloudflare/workerd-linux-arm64": 1.20240909.0
+    "@cloudflare/workerd-windows-64": 1.20240909.0
   dependenciesMeta:
     "@cloudflare/workerd-darwin-64":
       optional: true
@@ -32442,36 +32499,45 @@ __metadata:
       optional: true
   bin:
     workerd: bin/workerd
-  checksum: a6fe986402c488b20a37cfba5dc64def1b25e5d79214bc9decacef21179cb036d02159257070262fd6d62bee40e1ae8c657694c1b09f1d16a8a2f9365ffd85b6
+  checksum: 8c39b435f74fd5d9d02d2c4b5d2e6496e55d62f21d80cc991763c94c6a58acbfbbed534b666da6720eccce12aaa8e0f6a6e2bc9b8c4fa3ac8d1b336f80c9adfc
   languageName: node
   linkType: hard
 
-"wrangler@npm:^3.22.4":
-  version: 3.22.4
-  resolution: "wrangler@npm:3.22.4"
+"wrangler@npm:^3.78.2":
+  version: 3.78.2
+  resolution: "wrangler@npm:3.78.2"
   dependencies:
-    "@cloudflare/kv-asset-handler": ^0.2.0
-    "@cspotcode/source-map-support": 0.8.1
+    "@cloudflare/kv-asset-handler": 0.3.4
+    "@cloudflare/workers-shared": 0.5.3
     "@esbuild-plugins/node-globals-polyfill": ^0.2.3
     "@esbuild-plugins/node-modules-polyfill": ^0.2.2
     blake3-wasm: ^2.1.5
     chokidar: ^3.5.3
+    date-fns: ^3.6.0
     esbuild: 0.17.19
     fsevents: ~2.3.2
-    miniflare: 3.20231218.1
+    miniflare: 3.20240909.1
     nanoid: ^3.3.3
     path-to-regexp: ^6.2.0
+    resolve: ^1.22.8
     resolve.exports: ^2.0.2
     selfsigned: ^2.0.1
-    source-map: 0.6.1
+    source-map: ^0.6.1
+    unenv: "npm:unenv-nightly@2.0.0-1724863496.70db6f1"
+    workerd: 1.20240909.0
     xxhash-wasm: ^1.0.1
+  peerDependencies:
+    "@cloudflare/workers-types": ^4.20240909.0
   dependenciesMeta:
     fsevents:
+      optional: true
+  peerDependenciesMeta:
+    "@cloudflare/workers-types":
       optional: true
   bin:
     wrangler: bin/wrangler.js
     wrangler2: bin/wrangler.js
-  checksum: a32ab9bf862b6cd22fb76f59858d4722da26a28ba806c7be1f66d29e4ed5f0b56dc4b48433aa4f1d0cc7870c6e151d7e8bde06395c54088fec6453ba2dd2f79d
+  checksum: 54b14c32eca9a4fb60a2e4b1f0aadaa769f9d0f7a6123066a0bbf648e545e9a9509a746026d4ccec4a0c421d214285818f8f35965b6ad1cddce578482c4989e2
   languageName: node
   linkType: hard
 
@@ -32623,6 +32689,21 @@ __metadata:
     utf-8-validate:
       optional: true
   checksum: 442badcce1f1178ec87a0b5372ae2e9771e07c4929a3180321901f226127f252441e8689d765aa5cfba5f50ac60dd830954afc5aeae81609aefa11d3ddf5cecf
+  languageName: node
+  linkType: hard
+
+"ws@npm:^8.17.1":
+  version: 8.18.0
+  resolution: "ws@npm:8.18.0"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ">=5.0.2"
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: 91d4d35bc99ff6df483bdf029b9ea4bfd7af1f16fc91231a96777a63d263e1eabf486e13a2353970efc534f9faa43bdbf9ee76525af22f4752cbc5ebda333975
   languageName: node
   linkType: hard
 
@@ -32881,9 +32962,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.20.6":
-  version: 3.22.4
-  resolution: "zod@npm:3.22.4"
-  checksum: 80bfd7f8039b24fddeb0718a2ec7c02aa9856e4838d6aa4864335a047b6b37a3273b191ef335bf0b2002e5c514ef261ffcda5a589fb084a48c336ffc4cdbab7f
+"zod@npm:^3.22.3":
+  version: 3.23.8
+  resolution: "zod@npm:3.23.8"
+  checksum: 15949ff82118f59c893dacd9d3c766d02b6fa2e71cf474d5aa888570c469dbf5446ac5ad562bb035bf7ac9650da94f290655c194f4a6de3e766f43febd432c5c
   languageName: node
   linkType: hard
