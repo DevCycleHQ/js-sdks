@@ -467,11 +467,11 @@ export const config: ConfigBody = {
                         distribution: [
                             {
                                 _variation: variations[0]._id,
-                                percentage: 0.5,
+                                percentage: 0.6667,
                             },
                             {
                                 _variation: variations[1]._id,
-                                percentage: 0.5,
+                                percentage: 0.3333,
                             },
                         ],
                     },
@@ -617,23 +617,23 @@ export const config: ConfigBody = {
                         distribution: [
                             {
                                 _variation: variations[0]._id,
-                                percentage: 0.2,
+                                percentage: 0.2222,
                             },
                             {
                                 _variation: variations[1]._id,
-                                percentage: 0.2,
+                                percentage: 0.2222,
                             },
                             {
                                 _variation: variations[2]._id,
-                                percentage: 0.2,
+                                percentage: 0.2222,
                             },
                             {
                                 _variation: variations[3]._id,
-                                percentage: 0.2,
+                                percentage: 0.2222,
                             },
                             {
                                 _variation: variations[4]._id,
-                                percentage: 0.2,
+                                percentage: 0.1112,
                             },
                         ],
                     },

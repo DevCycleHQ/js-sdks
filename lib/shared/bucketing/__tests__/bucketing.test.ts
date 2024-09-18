@@ -25,13 +25,15 @@ describe('User Hashing and Bucketing', () => {
             _audience: { _id: 'id', filters: [] } as unknown as Audience,
             _id: 'target',
             distribution: [
-                { _variation: 'var1', percentage: 0.25 },
-                { _variation: 'var2', percentage: 0.45 },
+                { _variation: 'var1', percentage: 0.2555 },
+                { _variation: 'var2', percentage: 0.4445 },
                 { _variation: 'var4', percentage: 0.2 },
                 { _variation: 'var3', percentage: 0.1 },
             ],
         }
-        times(30000, () => {
+
+        // run 100,000 times to get a good distribution
+        times(100000, () => {
             const user_id = uuid.v4()
             const { bucketingHash } = generateBoundedHashes(
                 user_id,
@@ -50,10 +52,10 @@ describe('User Hashing and Bucketing', () => {
         const var3 = filter(buckets, (bucket) => bucket === 'var3')
         const var4 = filter(buckets, (bucket) => bucket === 'var4')
 
-        expect(var1.length / buckets.length).toBeGreaterThan(0.24)
-        expect(var1.length / buckets.length).toBeLessThan(0.26)
-        expect(var2.length / buckets.length).toBeGreaterThan(0.44)
-        expect(var2.length / buckets.length).toBeLessThan(0.46)
+        expect(var1.length / buckets.length).toBeGreaterThan(0.2525)
+        expect(var1.length / buckets.length).toBeLessThan(0.2575)
+        expect(var2.length / buckets.length).toBeGreaterThan(0.4425)
+        expect(var2.length / buckets.length).toBeLessThan(0.4475)
         expect(var4.length / buckets.length).toBeGreaterThan(0.19)
         expect(var4.length / buckets.length).toBeLessThan(0.21)
         expect(var3.length / buckets.length).toBeGreaterThan(0.09)
