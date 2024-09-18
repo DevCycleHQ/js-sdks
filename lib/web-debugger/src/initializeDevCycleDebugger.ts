@@ -52,6 +52,7 @@ class IframeManager {
     position: string
     debugLogs: boolean
     client: DevCycleClient | NextClient
+    private debouncedUpdateIframeData: () => void
 
     constructor(
         client: DevCycleClient | NextClient,
@@ -68,6 +69,22 @@ class IframeManager {
         this.debugLogs = debugLogs
         this.mainIframe = document.createElement('iframe')
         this.buttonIframe = document.createElement('iframe')
+        this.debouncedUpdateIframeData = this.debounce(() => {
+            this._updateIframeData()
+        }, 300)
+    }
+
+    private debounce(func: () => void, delay: number) {
+        let timeoutId: NodeJS.Timeout | null = null
+        return () => {
+            if (timeoutId) {
+                clearTimeout(timeoutId)
+            }
+            timeoutId = setTimeout(() => {
+                func()
+                timeoutId = null
+            }, delay)
+        }
     }
 
     createIframesWhenReady() {
@@ -79,7 +96,7 @@ class IframeManager {
         })
     }
 
-    updateIframeData() {
+    private _updateIframeData() {
         clientData.current.config = this.client.config
         clientData.current.user = this.client.user
         this.synchronizeIframeUrl()
@@ -99,9 +116,16 @@ class IframeManager {
         )
     }
 
+    updateIframeData() {
+        this.debouncedUpdateIframeData()
+    }
+
     setupSubscriptions() {
         const addEvent = (event: any) => {
             clientData.current.liveEvents.unshift(event)
+            if (clientData.current.liveEvents.length > 200) {
+                clientData.current.liveEvents.pop()
+            }
         }
 
         const onConfigUpdated = () => {
