@@ -1,4 +1,8 @@
-import type { DevCycleOptions, DevCycleUser } from '@devcycle/js-client-sdk'
+import type {
+    DevCycleOptions,
+    DevCycleUser,
+    DVCCustomDataJSON,
+} from '@devcycle/js-client-sdk'
 
 type WithSDKKey = {
     sdkKey: string
@@ -22,7 +26,9 @@ type OptionsWithDebug = DevCycleOptions & {
     }
 }
 
-export type ProviderConfig = (WithSDKKey | WithEnvironmentKey) & {
-    user?: DevCycleUser
+export type ProviderConfig<
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
+> = (WithSDKKey | WithEnvironmentKey) & {
+    user?: DevCycleUser<CustomData>
     options?: OptionsWithDebug
 }

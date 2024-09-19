@@ -1,5 +1,10 @@
 import { DevCycleClient } from './Client'
-import { DevCycleEvent, DevCycleOptions } from './types'
+import {
+    DevCycleEvent,
+    DevCycleOptions,
+    VariableDefinitions,
+    DVCCustomDataJSON,
+} from './types'
 import { publishEvents } from './Request'
 import { checkParamDefined } from './utils'
 import chunk from 'lodash/chunk'
@@ -13,10 +18,13 @@ type AggregateEvent = DevCycleEvent & {
     target: string
 }
 
-export class EventQueue {
+export class EventQueue<
+    Variables extends VariableDefinitions = VariableDefinitions,
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
+> {
     private readonly sdkKey: string
     private readonly options: DevCycleOptions
-    private readonly client: DevCycleClient
+    private readonly client: DevCycleClient<Variables, CustomData>
     private eventQueue: DevCycleEvent[]
     private aggregateEventMap: Record<string, Record<string, AggregateEvent>>
     private flushInterval: ReturnType<typeof setInterval>
@@ -26,7 +34,7 @@ export class EventQueue {
 
     constructor(
         sdkKey: string,
-        dvcClient: DevCycleClient,
+        dvcClient: DevCycleClient<Variables, CustomData>,
         options: DevCycleOptions,
     ) {
         this.sdkKey = sdkKey

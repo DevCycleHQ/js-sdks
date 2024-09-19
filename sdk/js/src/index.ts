@@ -4,6 +4,7 @@ import {
     DevCycleUser,
     VariableDefinitions,
     UserError,
+    DVCCustomDataJSON,
 } from './types'
 import {
     DevCycleClient,
@@ -38,8 +39,12 @@ export type DVCOptionsWithDeferredInitialization =
 
 export type { DevCycleOptionsWithDeferredInitialization, DevCycleClient }
 
-const determineUserAndOptions = (
-    userOrOptions: DevCycleUser | DevCycleOptionsWithDeferredInitialization,
+const determineUserAndOptions = <
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
+>(
+    userOrOptions:
+        | DevCycleUser<CustomData>
+        | DevCycleOptionsWithDeferredInitialization,
     optionsArg: DevCycleOptions = {},
 ):
     | {
@@ -48,11 +53,11 @@ const determineUserAndOptions = (
           isDeferred: true
       }
     | {
-          user: DevCycleUser
+          user: DevCycleUser<CustomData>
           options: DevCycleOptions
           isDeferred: false
       } => {
-    let user: DevCycleUser | undefined = undefined
+    let user: DevCycleUser<CustomData> | undefined = undefined
     if (!!userOrOptions && 'deferInitialization' in userOrOptions) {
         if (userOrOptions.deferInitialization) {
             return {
@@ -75,24 +80,29 @@ const determineUserAndOptions = (
 
 export function initializeDevCycle<
     Variables extends VariableDefinitions = VariableDefinitions,
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
 >(
     sdkKey: string,
     options: DevCycleOptionsWithDeferredInitialization,
-): DevCycleClient<Variables>
+): DevCycleClient<Variables, CustomData>
 export function initializeDevCycle<
     Variables extends VariableDefinitions = VariableDefinitions,
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
 >(
     sdkKey: string,
-    user: DevCycleUser,
+    user: DevCycleUser<CustomData>,
     options?: DevCycleOptions,
-): DevCycleClient<Variables>
+): DevCycleClient<Variables, CustomData>
 export function initializeDevCycle<
     Variables extends VariableDefinitions = VariableDefinitions,
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
 >(
     sdkKey: string,
-    userOrOptions: DevCycleUser | DevCycleOptionsWithDeferredInitialization,
+    userOrOptions:
+        | DevCycleUser<CustomData>
+        | DevCycleOptionsWithDeferredInitialization,
     optionsArg: DevCycleOptions = {},
-): DevCycleClient<Variables> {
+): DevCycleClient<Variables, CustomData> {
     if (!sdkKey) {
         throw new UserError(
             'Missing SDK key! Call initialize with a valid SDK key',
@@ -109,7 +119,10 @@ export function initializeDevCycle<
         )
     }
 
-    const userAndOptions = determineUserAndOptions(userOrOptions, optionsArg)
+    const userAndOptions = determineUserAndOptions<CustomData>(
+        userOrOptions,
+        optionsArg,
+    )
     const { options } = userAndOptions
     const isServiceWorker = checkIsServiceWorker()
 
@@ -136,12 +149,12 @@ export function initializeDevCycle<
         throw new Error('Invalid options! Call initialize with valid options')
     }
 
-    let client: DevCycleClient
+    let client: DevCycleClient<Variables, CustomData>
 
     if (userAndOptions.isDeferred) {
         client = new DevCycleClient(sdkKey, undefined, userAndOptions.options)
     } else {
-        client = new DevCycleClient(
+        client = new DevCycleClient<Variables, CustomData>(
             sdkKey,
             userAndOptions.user,
             userAndOptions.options,

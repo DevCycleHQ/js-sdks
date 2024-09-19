@@ -135,7 +135,7 @@ export interface DevCycleOptions {
     sdkPlatform?: string
 }
 
-export interface DevCycleUser {
+export interface DevCycleUser<T extends DVCCustomDataJSON = DVCCustomDataJSON> {
     /**
      * If a user is anonymous a unique anonymous user id will be generated and stored in the cache.
      * If no user_id is provided, the user is assumed to be anonymous.
@@ -183,14 +183,14 @@ export interface DevCycleUser {
      * Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will be logged to DevCycle's servers and available in the dashboard to view.
      */
-    customData?: DVCCustomDataJSON
+    customData?: T
 
     /**
      * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will not be logged to DevCycle's servers and
      * will not be available in the dashboard.
      */
-    privateCustomData?: DVCCustomDataJSON
+    privateCustomData?: T
 }
 
 export interface VariableDefinitions {
