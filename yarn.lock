@@ -7029,12 +7029,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/common@npm:^10.3.3":
-  version: 10.3.3
-  resolution: "@nestjs/common@npm:10.3.3"
+"@nestjs/common@npm:^10.4.3":
+  version: 10.4.3
+  resolution: "@nestjs/common@npm:10.4.3"
   dependencies:
     iterare: 1.2.1
-    tslib: 2.6.2
+    tslib: 2.7.0
     uid: 2.0.2
   peerDependencies:
     class-transformer: "*"
@@ -7046,7 +7046,7 @@ __metadata:
       optional: true
     class-validator:
       optional: true
-  checksum: 604862c8ca21751899e770d54a4a14f57f22d8792fa2b4834015bf775f17922cc64acd52b66f8684e7bb4f9c25a26056d679e7d85211b1d9db9e47a8b217a206
+  checksum: 980d545251c9310fb0680c07fe8a4de65033970e6db0d2bb9b9a82d54842c5e487ca94d1c147dbbdc959b745dabfa9a30a12915523cdb714c450130bc11f14b7
   languageName: node
   linkType: hard
 
@@ -15444,7 +15444,7 @@ __metadata:
     "@commitlint/cli": ^16.2.3
     "@commitlint/config-conventional": ^18.6.0
     "@devcycle/assemblyscript-json": ^2.0.0
-    "@nestjs/common": ^10.3.3
+    "@nestjs/common": ^10.4.3
     "@nestjs/core": ^10.3.3
     "@nrwl/js": 16.10.0
     "@nrwl/rollup": 16.10.0
@@ -31393,6 +31393,13 @@ __metadata:
   version: 2.6.2
   resolution: "tslib@npm:2.6.2"
   checksum: 329ea56123005922f39642318e3d1f0f8265d1e7fcb92c633e0809521da75eeaca28d2cf96d7248229deb40e5c19adf408259f4b9640afd20d13aecc1430f3ad
+  languageName: node
+  linkType: hard
+
+"tslib@npm:2.7.0":
+  version: 2.7.0
+  resolution: "tslib@npm:2.7.0"
+  checksum: 1606d5c89f88d466889def78653f3aab0f88692e80bb2066d090ca6112ae250ec1cfa9dbfaab0d17b60da15a4186e8ec4d893801c67896b277c17374e36e1d28
   languageName: node
   linkType: hard
 
