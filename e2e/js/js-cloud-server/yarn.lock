@@ -1509,15 +1509,15 @@ __metadata:
   linkType: hard
 
 "@devcycle/types@file:../../../dist/lib/shared/types::locator=e2e-js-cloud-server%40workspace%3A.":
-  version: 1.17.1
-  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=a56ffc&locator=e2e-js-cloud-server%40workspace%3A."
+  version: 1.17.2
+  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=6b782b&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
     class-transformer: 0.5.1
     class-validator: 0.14.1
     iso-639-1: ^2.1.13
     lodash: ^4.17.21
     reflect-metadata: ^0.1.13
-  checksum: cdfaf55977a3ab55bead18a0c0a3efcfbe71a2c61fdce2d2eda6a7caefd685e688f551aef657625124923e2e3b8ce2ca239a3927893882f47706289498cbd822
+  checksum: c5a6bf1d0c706b15b849da64d3d239c7d542b7a9d860a58b0a800cd01402209b244d321539bff04bc963a2a78c506fd1d8e7f12888d03f67857d3982f737442c
   languageName: node
   linkType: hard
 
@@ -5798,9 +5798,9 @@ __metadata:
   linkType: hard
 
 "path-to-regexp@npm:^6.2.0":
-  version: 6.2.1
-  resolution: "path-to-regexp@npm:6.2.1"
-  checksum: f0227af8284ea13300f4293ba111e3635142f976d4197f14d5ad1f124aebd9118783dd2e5f1fe16f7273743cc3dbeddfb7493f237bb27c10fdae07020cc9b698
+  version: 6.3.0
+  resolution: "path-to-regexp@npm:6.3.0"
+  checksum: eca78602e6434a1b6799d511d375ec044e8d7e28f5a48aa5c28d57d8152fb52f3fc62fb1cfc5dfa2198e1f041c2a82ed14043d75740a2fe60e91b5089a153250
   languageName: node
   linkType: hard
 
