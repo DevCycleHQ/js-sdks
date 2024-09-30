@@ -1,5 +1,5 @@
 const getFetchUrl = (sdkKey: string, obfuscated: boolean) =>
-    `https://config-cdn.devcycle.com/config/v1/server/bootstrap/${
+    `https://config-cdn.devcycle.com/config/v2/server/bootstrap/${
         obfuscated ? 'obfuscated/' : ''
     }${sdkKey}.json`
 
