@@ -38,11 +38,11 @@ export class CDNConfigSource extends ConfigSource {
             }
             throw e
         }
-        const metadata: Record<string, string | undefined> = {
+        const metadata: Record<string, string | undefined | number> = {
             resEtag: res.headers.get('etag') ?? undefined,
             resLastModified: res.headers.get('last-modified') ?? undefined,
             resRayId: res.headers.get('cf-ray') ?? undefined,
-            resStatus: res.status.toString() ?? undefined,
+            resStatus: res.status ?? undefined,
         }
         res.headers.forEach((value, name) => {
             metadata[`resHeader_` + name] = value
