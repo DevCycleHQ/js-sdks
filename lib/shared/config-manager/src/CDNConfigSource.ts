@@ -45,7 +45,7 @@ export class CDNConfigSource extends ConfigSource {
             resStatus: res.status.toString() ?? undefined,
         }
         res.headers.forEach((value, name) => {
-            metadata[`resHeader` + name] = value
+            metadata[`resHeader_` + name] = value
         })
 
         this.logger.debug(
