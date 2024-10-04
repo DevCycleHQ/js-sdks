@@ -1,17 +1,17 @@
 {
     "name": "example-nodejs-cloud",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "examples/nodejs-cloud/src",
+    "sourceRoot": "dev-apps/nodejs-cloud/src",
     "projectType": "application",
     "targets": {
         "build": {
             "executor": "@nx/webpack:webpack",
             "outputs": ["{options.outputPath}"],
             "options": {
-                "outputPath": "dist/examples/nodejs-cloud",
-                "main": "examples/nodejs-cloud/src/main.ts",
-                "tsConfig": "examples/nodejs-cloud/tsconfig.app.json",
-                "webpackConfig": "examples/nodejs-cloud/webpack.config.js",
+                "outputPath": "dist/dev-apps/nodejs-cloud",
+                "main": "dev-apps/nodejs-cloud/src/main.ts",
+                "tsConfig": "dev-apps/nodejs-cloud/tsconfig.app.json",
+                "webpackConfig": "dev-apps/nodejs-cloud/webpack.config.js",
                 "compiler": "tsc",
                 "target": "node"
             }
@@ -27,7 +27,7 @@
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["examples/nodejs-cloud/**/*.ts"]
+                "lintFilePatterns": ["dev-apps/nodejs-cloud/**/*.ts"]
             }
         }
     },

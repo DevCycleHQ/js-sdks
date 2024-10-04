@@ -34,8 +34,8 @@ globalConfig.json
 **/environment.json
 **/collection.json
 
-// ignore env files in examples
-examples/**/.env
+// ignore env files in dev-apps
+dev-apps/**/.env
 
 # React Native
 

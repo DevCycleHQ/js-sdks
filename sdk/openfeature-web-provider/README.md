@@ -13,7 +13,7 @@ Run `yarn nx test openfeature-web-provider` to execute the unit tests via [Jest]
 
 ## Example App
 
-See the [example app](/examples/openfeature-web) for a working example of the OpenFeature Web DevCycle Provider.
+See the [example app](/dev-apps/openfeature-web) for a working example of the OpenFeature Web DevCycle Provider.
 
 ## Usage
 
