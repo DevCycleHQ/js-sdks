@@ -1211,13 +1211,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-string-parser@npm:^7.24.8":
-  version: 7.24.8
-  resolution: "@babel/helper-string-parser@npm:7.24.8"
-  checksum: 39b03c5119216883878655b149148dc4d2e284791e969b19467a9411fccaa33f7a713add98f4db5ed519535f70ad273cdadfd2eb54d47ebbdeac5083351328ce
-  languageName: node
-  linkType: hard
-
 "@babel/helper-validator-identifier@npm:^7.16.7":
   version: 7.16.7
   resolution: "@babel/helper-validator-identifier@npm:7.16.7"
@@ -1243,13 +1236,6 @@ __metadata:
   version: 7.22.5
   resolution: "@babel/helper-validator-identifier@npm:7.22.5"
   checksum: 7f0f30113474a28298c12161763b49de5018732290ca4de13cdaefd4fd0d635a6fe3f6686c37a02905fb1e64f21a5ee2b55140cf7b070e729f1bd66866506aea
-  languageName: node
-  linkType: hard
-
-"@babel/helper-validator-identifier@npm:^7.24.7":
-  version: 7.24.7
-  resolution: "@babel/helper-validator-identifier@npm:7.24.7"
-  checksum: 6799ab117cefc0ecd35cd0b40ead320c621a298ecac88686a14cffceaac89d80cdb3c178f969861bf5fa5e4f766648f9161ea0752ecfe080d8e89e3147270257
   languageName: node
   linkType: hard
 
@@ -1429,17 +1415,6 @@ __metadata:
   bin:
     parser: ./bin/babel-parser.js
   checksum: a9493d9fb8625e0904a178703866c8ee4d3a6003f0954b08df9f772b54dae109c69376812b74732e0c3e1a7f1d5b30915577a1db12e5e16b0abee083539df574
-  languageName: node
-  linkType: hard
-
-"@babel/parser@npm:^7.14.0":
-  version: 7.25.6
-  resolution: "@babel/parser@npm:7.25.6"
-  dependencies:
-    "@babel/types": ^7.25.6
-  bin:
-    parser: ./bin/babel-parser.js
-  checksum: 85b237ded09ee43cc984493c35f3b1ff8a83e8dbbb8026b8132e692db6567acc5a1659ec928e4baa25499ddd840d7dae9dee3062be7108fe23ec5f94a8066b1e
   languageName: node
   linkType: hard
 
@@ -4284,17 +4259,6 @@ __metadata:
     "@babel/helper-validator-identifier": ^7.22.20
     to-fast-properties: ^2.0.0
   checksum: b96f1ec495351aeb2a5f98dd494aafa17df02a351548ae96999460f35c933261c839002a34c1e83552ff0d9f5e94d0b5b8e105d38131c7c9b0f5a6588676f35d
-  languageName: node
-  linkType: hard
-
-"@babel/types@npm:^7.25.6":
-  version: 7.25.6
-  resolution: "@babel/types@npm:7.25.6"
-  dependencies:
-    "@babel/helper-string-parser": ^7.24.8
-    "@babel/helper-validator-identifier": ^7.24.7
-    to-fast-properties: ^2.0.0
-  checksum: 9b2f84ff3f874ad05b0b9bf06862c56f478b65781801f82296b4cc01bee39e79c20a7c0a06959fed0ee582c8267e1cb21638318655c5e070b0287242a844d1c9
   languageName: node
   linkType: hard
 
@@ -15278,11 +15242,9 @@ __metadata:
     react-dom: 18.2.0
     react-is: 18.2.0
     react-native: 0.72.4
-    react-native-codegen: ^0.70.7
     react-native-config: 1.5.0
     react-native-device-info: ^8.7.0
     react-native-get-random-values: ^1.7.2
-    react-native-sse: ^1.2.1
     react-native-svg: 13.9.0
     react-native-svg-transformer: ^1.0.0
     react-refresh: ^0.10.0
@@ -17645,13 +17607,6 @@ __metadata:
   version: 0.178.0
   resolution: "flow-parser@npm:0.178.0"
   checksum: 9a46221ad94d784bb39698fed5d00e88d110a388febacaccfbfd27b6a9124e05fb060ea38685b6d6bf47d6726c4a1680db3e095654ebceb599eb4ac30c134475
-  languageName: node
-  linkType: hard
-
-"flow-parser@npm:^0.121.0":
-  version: 0.121.0
-  resolution: "flow-parser@npm:0.121.0"
-  checksum: 2d9a9724b903f4c2eae63f8e1442f97c8284516197bebd746cdbba938ff0a17f2dd7a2bc74ca9a987556af0f43d31a793b251ae30660d6b5e914f0c2e8501d2d
   languageName: node
   linkType: hard
 
@@ -27291,18 +27246,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-codegen@npm:^0.70.7":
-  version: 0.70.7
-  resolution: "react-native-codegen@npm:0.70.7"
-  dependencies:
-    "@babel/parser": ^7.14.0
-    flow-parser: ^0.121.0
-    jscodeshift: ^0.14.0
-    nullthrows: ^1.1.1
-  checksum: dfbf05ea6c5bcdff09ed2288919d8270bdb8ab78a7a973f2dbd970e63357bdf9fee05d95a2c9bee3795a609332e5ca37f667384ebe1cca61e4cb8f81e5aeabba
-  languageName: node
-  linkType: hard
-
 "react-native-config@npm:1.5.0":
   version: 1.5.0
   resolution: "react-native-config@npm:1.5.0"
@@ -27332,13 +27275,6 @@ __metadata:
   peerDependencies:
     react-native: ">=0.56"
   checksum: 9163368ebd935d897f6ea0f9e95c476aa7608080e3848bb6c6f85db01b9de3498d857795c84df5492d6511a55aebf89492860ac886b652a9a7a3efdb19913f87
-  languageName: node
-  linkType: hard
-
-"react-native-sse@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "react-native-sse@npm:1.2.1"
-  checksum: 424910fa1bcc6643a7e9f628f2710bf185c862b63375ea6ec4b8eecfb5b714055480757ea1250ce6cdae66c2785f6a64432cdf9833e0ec0411b59f9791f6cce8
   languageName: node
   linkType: hard
 
