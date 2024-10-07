@@ -47,7 +47,7 @@ export const sdkConfigAPI = async (
     return await fetch(getSDKAPIUrl(sdkKey, obfuscated, user), {
         next: {
             revalidate: 60,
-            tags: [sdkKey],
+            tags: [sdkKey, user.user_id],
         },
     })
 }
