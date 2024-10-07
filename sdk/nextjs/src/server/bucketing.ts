@@ -1,4 +1,4 @@
-import { fetchCDNConfig } from './requests'
+import { fetchCDNConfig, sdkConfigAPI } from './requests'
 import { generateBucketedConfig } from '@devcycle/bucketing'
 import { cache } from 'react'
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
@@ -6,12 +6,12 @@ import {
     BucketedConfigWithAdditionalFields,
     DevCycleNextOptions,
 } from '../common/types'
-import { ConfigBody, ConfigSource } from '@devcycle/types'
+import { BucketedUserConfig, ConfigBody, ConfigSource } from '@devcycle/types'
 
 // wrap this function in react cache to avoid redoing work for the same user and config
 const generateBucketedConfigCached = cache(
     async (
-        sdkKey: string,
+        obfuscated: boolean,
         user: DevCycleUser,
         config: ConfigBody,
         userAgent?: string,
@@ -23,12 +23,31 @@ const generateBucketedConfigCached = cache(
             undefined,
             userAgent ?? undefined,
         )
+
+        // clientSDKKey is always defined for bootstrap config
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const clientSDKKey = config.clientSDKKey!
+        if (config.debugUsers?.includes(user.user_id ?? '')) {
+            const bucketedConfigResponse = await sdkConfigAPI(
+                clientSDKKey,
+                obfuscated,
+                populatedUser,
+            )
+            const response =
+                (await bucketedConfigResponse.json()) as BucketedUserConfig
+
+            return {
+                bucketedConfig: {
+                    ...response,
+                    clientSDKKey,
+                },
+            }
+        }
+
         return {
             bucketedConfig: {
                 ...generateBucketedConfig({ user: populatedUser, config }),
-                // clientSDKKey is always defined for bootstrap config
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                clientSDKKey: config.clientSDKKey!,
+                clientSDKKey,
                 sse: {
                     url: config.sse
                         ? `${config.sse.hostname}${config.sse.path}`
@@ -92,7 +111,7 @@ export const getBucketedConfig = async (
     )
 
     const { bucketedConfig } = await generateBucketedConfigCached(
-        sdkKey,
+        !!options.enableObfuscation,
         user,
         config,
         userAgent,
