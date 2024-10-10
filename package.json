@@ -140,7 +140,7 @@
         "autoprefixer": "10.4.13",
         "babel-jest": "29.4.3",
         "cross-env": "^7.0.3",
-        "css-loader": "^6.4.0",
+        "css-loader": "^7.1.2",
         "cypress": "^13.0.0",
         "detox": "20.13.1",
         "dotenv-webpack": "^7.0.3",
