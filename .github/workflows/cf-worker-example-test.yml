@@ -23,7 +23,7 @@ jobs:
             - name: Run Yarn
               run: yarn --immutable
             - name: Setup .dev.vars file
-              run: echo "DEVCYCLE_SERVER_SDK_KEY=${{ secrets.DEVCYCLE_SERVER_SDK_KEY }}" > examples/js-cloud-server/cloudflare-worker/.dev.vars
+              run: echo "DEVCYCLE_SERVER_SDK_KEY=${{ secrets.DEVCYCLE_SERVER_SDK_KEY }}" > dev-apps/js-cloud-server/cloudflare-worker/.dev.vars
             - name: Run example app in background
               run: |
                   yarn nx serve example-js-cloud-server-sdk-cf-worker &

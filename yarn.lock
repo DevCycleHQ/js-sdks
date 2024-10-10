@@ -4657,9 +4657,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/js-client-sdk-web-example@workspace:examples/js":
+"@devcycle/js-client-sdk-web-example@workspace:dev-apps/js":
   version: 0.0.0-use.local
-  resolution: "@devcycle/js-client-sdk-web-example@workspace:examples/js"
+  resolution: "@devcycle/js-client-sdk-web-example@workspace:dev-apps/js"
   languageName: unknown
   linkType: soft
 
@@ -4713,15 +4713,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/nodejs-server-sdk-cloud-typescript-example@workspace:examples/nodejs-cloud":
+"@devcycle/nodejs-server-sdk-cloud-typescript-example@workspace:dev-apps/nodejs-cloud":
   version: 0.0.0-use.local
-  resolution: "@devcycle/nodejs-server-sdk-cloud-typescript-example@workspace:examples/nodejs-cloud"
+  resolution: "@devcycle/nodejs-server-sdk-cloud-typescript-example@workspace:dev-apps/nodejs-cloud"
   languageName: unknown
   linkType: soft
 
-"@devcycle/nodejs-server-sdk-local-typescript-example@workspace:examples/nodejs-local":
+"@devcycle/nodejs-server-sdk-local-typescript-example@workspace:dev-apps/nodejs-local":
   version: 0.0.0-use.local
-  resolution: "@devcycle/nodejs-server-sdk-local-typescript-example@workspace:examples/nodejs-local"
+  resolution: "@devcycle/nodejs-server-sdk-local-typescript-example@workspace:dev-apps/nodejs-local"
   languageName: unknown
   linkType: soft
 
@@ -4744,15 +4744,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/openfeature-nodejs-example@workspace:examples/openfeature-nodejs":
+"@devcycle/openfeature-nodejs-example@workspace:dev-apps/openfeature-nodejs":
   version: 0.0.0-use.local
-  resolution: "@devcycle/openfeature-nodejs-example@workspace:examples/openfeature-nodejs"
+  resolution: "@devcycle/openfeature-nodejs-example@workspace:dev-apps/openfeature-nodejs"
   languageName: unknown
   linkType: soft
 
-"@devcycle/openfeature-web-example@workspace:examples/openfeature-web":
+"@devcycle/openfeature-web-example@workspace:dev-apps/openfeature-web":
   version: 0.0.0-use.local
-  resolution: "@devcycle/openfeature-web-example@workspace:examples/openfeature-web"
+  resolution: "@devcycle/openfeature-web-example@workspace:dev-apps/openfeature-web"
   languageName: unknown
   linkType: soft
 
@@ -21228,9 +21228,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-cloud-server-sdk-test-worker@workspace:examples/js-cloud-server/cloudflare-worker":
+"js-cloud-server-sdk-test-worker@workspace:dev-apps/js-cloud-server/cloudflare-worker":
   version: 0.0.0-use.local
-  resolution: "js-cloud-server-sdk-test-worker@workspace:examples/js-cloud-server/cloudflare-worker"
+  resolution: "js-cloud-server-sdk-test-worker@workspace:dev-apps/js-cloud-server/cloudflare-worker"
   dependencies:
     "@devcycle/js-cloud-server-sdk": ^1.16.3
   languageName: unknown
@@ -23988,15 +23988,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nextjs-app-router@workspace:examples/nextjs/app-router":
+"nextjs-app-router@workspace:dev-apps/nextjs/app-router":
   version: 0.0.0-use.local
-  resolution: "nextjs-app-router@workspace:examples/nextjs/app-router"
+  resolution: "nextjs-app-router@workspace:dev-apps/nextjs/app-router"
   languageName: unknown
   linkType: soft
 
-"nextjs-pages-router@workspace:examples/nextjs/pages-router":
+"nextjs-pages-router@workspace:dev-apps/nextjs/pages-router":
   version: 0.0.0-use.local
-  resolution: "nextjs-pages-router@workspace:examples/nextjs/pages-router"
+  resolution: "nextjs-pages-router@workspace:dev-apps/nextjs/pages-router"
   languageName: unknown
   linkType: soft
 
@@ -31993,9 +31993,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"with-provider@workspace:examples/react":
+"with-provider@workspace:dev-apps/react":
   version: 0.0.0-use.local
-  resolution: "with-provider@workspace:examples/react"
+  resolution: "with-provider@workspace:dev-apps/react"
   languageName: unknown
   linkType: soft
 

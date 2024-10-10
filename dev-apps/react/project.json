@@ -1,7 +1,7 @@
 {
     "name": "example-react",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "examples/react/src",
+    "sourceRoot": "dev-apps/react/src",
     "projectType": "application",
     "targets": {
         "build": {
@@ -19,14 +19,14 @@
             "options": {
                 "statsJson": true,
                 "compiler": "babel",
-                "outputPath": "dist/examples/react",
-                "index": "examples/react/src/index.html",
+                "outputPath": "dist/dev-apps/react",
+                "index": "dev-apps/react/src/index.html",
                 "baseHref": "/",
-                "main": "examples/react/src/index.tsx",
-                "tsConfig": "examples/react/tsconfig.app.json",
-                "assets": ["examples/react/src/public"],
+                "main": "dev-apps/react/src/index.tsx",
+                "tsConfig": "dev-apps/react/tsconfig.app.json",
+                "assets": ["dev-apps/react/src/public"],
                 "scripts": [],
-                "webpackConfig": "examples/react/webpack.config.js"
+                "webpackConfig": "dev-apps/react/webpack.config.js"
             },
             "defaultConfiguration": "production"
         },
@@ -51,7 +51,7 @@
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["examples/react/**/*.{ts,tsx,js,jsx}"]
+                "lintFilePatterns": ["dev-apps/react/**/*.{ts,tsx,js,jsx}"]
             }
         }
     },

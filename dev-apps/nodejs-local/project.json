@@ -1,17 +1,17 @@
 {
     "name": "example-nodejs-local",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "examples/nodejs-local/src",
+    "sourceRoot": "dev-apps/nodejs-local/src",
     "projectType": "application",
     "targets": {
         "build": {
             "executor": "@nx/webpack:webpack",
             "outputs": ["{options.outputPath}"],
             "options": {
-                "outputPath": "dist/examples/nodejs-local",
-                "main": "examples/nodejs-local/src/main.ts",
-                "tsConfig": "examples/nodejs-local/tsconfig.app.json",
-                "webpackConfig": "examples/nodejs-local/webpack.config.js",
+                "outputPath": "dist/dev-apps/nodejs-local",
+                "main": "dev-apps/nodejs-local/src/main.ts",
+                "tsConfig": "dev-apps/nodejs-local/tsconfig.app.json",
+                "webpackConfig": "dev-apps/nodejs-local/webpack.config.js",
                 "compiler": "tsc",
                 "target": "node"
             }
@@ -33,7 +33,7 @@
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["examples/nodejs-local/**/*.ts"]
+                "lintFilePatterns": ["dev-apps/nodejs-local/**/*.ts"]
             }
         }
     },

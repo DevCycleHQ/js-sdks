@@ -1,7 +1,7 @@
 {
     "name": "example-nextjs-app-router",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "examples/nextjs/app-router",
+    "sourceRoot": "dev-apps/nextjs/app-router",
     "projectType": "application",
     "targets": {
         "build": {
@@ -9,12 +9,12 @@
             "outputs": ["{options.outputPath}"],
             "defaultConfiguration": "production",
             "options": {
-                "outputPath": "dist/examples/nextjs/app-router"
+                "outputPath": "dist/dev-apps/nextjs/app-router"
             },
             "configurations": {
                 "production": {},
                 "development": {
-                    "outputPath": "examples/nextjs/app-router"
+                    "outputPath": "dev-apps/nextjs/app-router"
                 }
             }
         },
@@ -47,7 +47,7 @@
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
-                    "examples/nextjs/app-router/**/*.{ts,tsx,js,jsx}"
+                    "dev-apps/nextjs/app-router/**/*.{ts,tsx,js,jsx}"
                 ]
             }
         }

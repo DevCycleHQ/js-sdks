@@ -12,7 +12,7 @@
             "rules": {
                 "@next/next/no-html-link-for-pages": [
                     "error",
-                    "examples/react/next-js-app/pages"
+                    "dev-apps/react/next-js-app/pages"
                 ]
             }
         },

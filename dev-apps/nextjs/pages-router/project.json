@@ -1,7 +1,7 @@
 {
     "name": "example-nextjs-pages-router",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "examples/nextjs/pages-router",
+    "sourceRoot": "dev-apps/nextjs/pages-router",
     "projectType": "application",
     "targets": {
         "build": {
@@ -9,12 +9,12 @@
             "outputs": ["{options.outputPath}"],
             "defaultConfiguration": "production",
             "options": {
-                "outputPath": "dist/examples/nextjs/pages-router"
+                "outputPath": "dist/dev-apps/nextjs/pages-router"
             },
             "configurations": {
                 "production": {},
                 "development": {
-                    "outputPath": "examples/nextjs/pages-router"
+                    "outputPath": "dev-apps/nextjs/pages-router"
                 }
             }
         },
@@ -47,7 +47,7 @@
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
-                    "examples/nextjs/pages-router/**/*.{ts,tsx,js,jsx}"
+                    "dev-apps/nextjs/pages-router/**/*.{ts,tsx,js,jsx}"
                 ]
             }
         }
