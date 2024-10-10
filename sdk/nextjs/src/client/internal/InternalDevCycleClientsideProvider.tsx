@@ -74,7 +74,10 @@ export const InternalDevCycleClientsideProvider = ({
             )
         }
         try {
-            await invalidateConfig(clientSDKKey)
+            await invalidateConfig(
+                clientSDKKey,
+                serverData?.user.user_id ?? null,
+            )
         } catch {
             // do nothing on failure, this is best effort
         }
