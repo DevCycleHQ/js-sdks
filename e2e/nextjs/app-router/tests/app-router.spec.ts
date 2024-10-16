@@ -151,3 +151,11 @@ test('has expected page elements when obfuscated', async ({ page }) => {
         page.getByText('Client Component Conditionally Bundled'),
     ).toBeVisible()
 })
+
+test('self-targeting overrides the values', async ({ page }) => {
+    await page.goto('/self-targeting')
+    await expect(page.getByText('Server Enabled Variable: false')).toBeVisible()
+    await expect(page.getByText('Client Enabled Variable: false')).toBeVisible()
+    await expect(page.getByText('Server Disabled Variable: true')).toBeVisible()
+    await expect(page.getByText('Client Disabled Variable: true')).toBeVisible()
+})
