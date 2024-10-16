@@ -1,18 +1,7 @@
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { generateBucketedConfig } from '@devcycle/bucketing'
 import { BucketedUserConfig, ConfigBody, ConfigSource } from '@devcycle/types'
-
-const getFetchUrl = (sdkKey: string, obfuscated: boolean) =>
-    `https://config-cdn.devcycle.com/config/v1/server/bootstrap/${
-        obfuscated ? 'obfuscated/' : ''
-    }${sdkKey}.json`
-
-export const fetchCDNConfig = async (
-    sdkKey: string,
-    obfuscated: boolean,
-): Promise<Response> => {
-    return await fetch(getFetchUrl(sdkKey, obfuscated))
-}
+import { fetchCDNConfig, sdkConfigAPI } from './requests.js'
 
 class CDNConfigSource extends ConfigSource {
     async getConfig(
@@ -47,6 +36,26 @@ class CDNConfigSource extends ConfigSource {
 
 const cdnConfigSource = new CDNConfigSource()
 
+const bucketOrFetchConfig = async (
+    user: DVCPopulatedUser,
+    config: ConfigBody,
+    obfuscated: boolean,
+) => {
+    if (config.debugUsers?.includes(user.user_id ?? '')) {
+        const bucketedConfigResponse = await sdkConfigAPI(
+            config.clientSDKKey!,
+            obfuscated,
+            user,
+        )
+        return (await bucketedConfigResponse.json()) as BucketedUserConfig
+    }
+
+    return generateBucketedConfig({
+        user,
+        config,
+    })
+}
+
 export const getBucketedConfig = async (
     sdkKey: string,
     user: DevCycleUser,
@@ -69,10 +78,11 @@ export const getBucketedConfig = async (
         userAgent ?? undefined,
     )
 
-    const bucketedConfig = generateBucketedConfig({
-        user: populatedUser,
+    const bucketedConfig = await bucketOrFetchConfig(
+        populatedUser,
         config,
-    })
+        obfuscated,
+    )
 
     for (const feature of Object.values(bucketedConfig.features)) {
         if (feature.settings === undefined) {

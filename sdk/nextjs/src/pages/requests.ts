@@ -1,26 +1,16 @@
 import { DVCPopulatedUser } from '@devcycle/js-client-sdk'
-import { serializeUserSearchParams } from '../common/serializeUser'
+import { serializeUserSearchParams } from '../common/serializeUser.js'
 
 const getFetchUrl = (sdkKey: string, obfuscated: boolean) =>
-    `https://config-cdn.devcycle.com/config/v2/server/bootstrap/${
+    `https://config-cdn.devcycle.com/config/v1/server/bootstrap/${
         obfuscated ? 'obfuscated/' : ''
     }${sdkKey}.json`
 
 export const fetchCDNConfig = async (
     sdkKey: string,
-    clientSDKKey: string,
     obfuscated: boolean,
 ): Promise<Response> => {
-    return await fetch(
-        getFetchUrl(sdkKey, obfuscated),
-        // only store for 60 seconds
-        {
-            next: {
-                revalidate: 60,
-                tags: [sdkKey, clientSDKKey],
-            },
-        },
-    )
+    return await fetch(getFetchUrl(sdkKey, obfuscated))
 }
 
 const getSDKAPIUrl = (
