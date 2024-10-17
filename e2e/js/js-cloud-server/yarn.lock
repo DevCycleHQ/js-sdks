@@ -1497,27 +1497,27 @@ __metadata:
   linkType: hard
 
 "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server::locator=e2e-js-cloud-server%40workspace%3A.":
-  version: 1.16.1
-  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=20b32c&locator=e2e-js-cloud-server%40workspace%3A."
+  version: 1.9.2
+  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=176498&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
-    "@devcycle/types": ^1.17.1
+    "@devcycle/types": ^1.10.2
     cross-fetch: ^4.0.0
     fetch-retry: ^5.0.6
     lodash: ^4.17.21
-  checksum: 278a8410c71b45296d778f98e77bcaaa357b0a3762613b311e044ef02120d06fea7945ff05c2a5138b2bf28c79a8e4902388f1e259244fefc9fe41fbae9e2771
+  checksum: dabc12cbbd048575470ec356bc74e3789808e1574a2d5274ae700f8ff59ed0dcc58393925c437e5455547a0dfbd634db1726f614aebda75fd83618a56b8366d3
   languageName: node
   linkType: hard
 
 "@devcycle/types@file:../../../dist/lib/shared/types::locator=e2e-js-cloud-server%40workspace%3A.":
-  version: 1.17.2
-  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=6b782b&locator=e2e-js-cloud-server%40workspace%3A."
+  version: 1.10.2
+  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=5ddbbc&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
     class-transformer: 0.5.1
     class-validator: 0.14.1
     iso-639-1: ^2.1.13
     lodash: ^4.17.21
     reflect-metadata: ^0.1.13
-  checksum: c5a6bf1d0c706b15b849da64d3d239c7d542b7a9d860a58b0a800cd01402209b244d321539bff04bc963a2a78c506fd1d8e7f12888d03f67857d3982f737442c
+  checksum: 5b09b2eb76bf31530cd7db8b76ac425c93fc4c61a5f9bf813db34fb74c2c409f4f5da4ce72a6286e9e0df00a6856860df8fca1f84ff73833f875cfb834be5265
   languageName: node
   linkType: hard
 
