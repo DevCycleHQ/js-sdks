@@ -156,6 +156,7 @@ export class EventQueue<
             )
             return
         }
+        console.log('queueEvent', event)
         this.eventQueue.push(event)
     }
 
@@ -170,6 +171,7 @@ export class EventQueue<
             )
             return
         }
+        console.log('queueAggregateEvent', event)
 
         checkParamDefined('type', event.type)
         checkParamDefined('target', event.target)

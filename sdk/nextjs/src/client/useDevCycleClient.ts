@@ -1,6 +1,6 @@
+import { DevCycleNextClient } from './internal/context'
 import { useDevCycleClient as internalUseClient } from './internal/useDevCycleClient'
-import { DevCycleClient } from '@devcycle/js-client-sdk'
 
-export const useDevCycleClient = (): DevCycleClient => {
+export const useDevCycleClient = (): DevCycleNextClient => {
     return internalUseClient()
 }

@@ -82,7 +82,7 @@ export class DevCycleClient<
         [key: string]: { [key: string]: DVCVariable<any> }
     }
     private store: CacheStore
-    private eventQueue: EventQueue<Variables, CustomData>
+    private eventQueue?: EventQueue<Variables, CustomData>
     private requestConsolidator: ConfigRequestConsolidator
     eventEmitter: EventEmitter
     private streamingConnection?: StreamingConnection
@@ -125,7 +125,15 @@ export class DevCycleClient<
 
         this.sdkKey = sdkKey
         this.variableDefaultMap = {}
-        this.eventQueue = new EventQueue(sdkKey, this, options)
+
+        if (
+            !(
+                this.options.disableAutomaticEventLogging &&
+                this.options.disableCustomEventLogging
+            )
+        ) {
+            this.eventQueue = new EventQueue(sdkKey, this, options)
+        }
 
         this.eventEmitter = new EventEmitter()
         if (!this.options.disableRealtimeUpdates) {
@@ -359,7 +367,7 @@ export class DevCycleClient<
 
         try {
             const variableFromConfig = this.config?.variables?.[variable.key]
-            this.eventQueue.queueAggregateEvent({
+            this.eventQueue?.queueAggregateEvent({
                 type: variable.isDefaulted
                     ? EventTypes.variableDefaulted
                     : EventTypes.variableEvaluated,
@@ -439,7 +447,7 @@ export class DevCycleClient<
             return this.config?.variables || {}
         }
 
-        void this.eventQueue.flushEvents()
+        void this.eventQueue?.flushEvents()
 
         try {
             await this.onInitialized
@@ -489,7 +497,7 @@ export class DevCycleClient<
             this.options,
         )
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
-            this.eventQueue.flushEvents()
+            this.eventQueue?.flushEvents()
 
             this.onInitialized
                 .then(() => this.store.loadAnonUserId())
@@ -598,7 +606,7 @@ export class DevCycleClient<
 
         checkParamDefined('type', event.type)
         this.onInitialized.then(() => {
-            this.eventQueue.queueEvent(event)
+            this.eventQueue?.queueEvent(event)
         })
     }
 
@@ -608,7 +616,10 @@ export class DevCycleClient<
      * @param callback
      */
     flushEvents(callback?: () => void): Promise<void> {
-        return this.eventQueue.flushEvents().then(() => callback?.())
+        return (
+            this.eventQueue?.flushEvents().then(() => callback?.()) ??
+            Promise.resolve().then(() => callback?.())
+        )
     }
 
     /**
@@ -637,7 +648,7 @@ export class DevCycleClient<
 
         this.streamingConnection?.close()
 
-        await this.eventQueue.close()
+        await this.eventQueue?.close()
     }
 
     /**

@@ -22,6 +22,8 @@ type DevCycleClientsideProviderProps = {
     children: React.ReactNode
 }
 
+const isServer = typeof window === 'undefined'
+
 /**
  * Component which renders nothing, but runs code to keep client state in sync with server
  * Also waits for the server's data promise with the `use` hook. This triggers the nearest suspense boundary,
@@ -36,7 +38,7 @@ export const SuspendedProviderInitialization = ({
 }: Pick<
     DevCycleClientContext,
     'serverDataPromise' | 'userAgent'
->): React.ReactElement => {
+>): React.ReactNode => {
     const serverData = use(serverDataPromise)
     const [previousContext, setPreviousContext] = useState<
         DevCycleServerData | undefined
@@ -45,14 +47,16 @@ export const SuspendedProviderInitialization = ({
     if (previousContext !== serverData) {
         // change user and config data to match latest server data
         // if the data has changed since the last invocation
-        context.client.synchronizeBootstrapData(
+        // assert this is a DevCycleClient, not a DevCycleNextClient, because it is. We expose a more limited type
+        // to the end user 
+        (context.client as DevCycleClient).synchronizeBootstrapData(
             serverData.config,
             serverData.user,
             userAgent,
         )
         setPreviousContext(serverData)
     }
-    return <></>
+    return null
 }
 
 export const InternalDevCycleClientsideProvider = ({
@@ -102,6 +106,12 @@ export const InternalDevCycleClientsideProvider = ({
             sdkPlatform: 'nextjs',
             deferInitialization: true,
             disableConfigCache: true,
+            ...(isServer
+                ? {
+                      disableAutomaticEventLogging: true,
+                      disableCustomEventLogging: true,
+                  }
+                : {}),
             next: {
                 configRefreshHandler: revalidateConfig,
             },
