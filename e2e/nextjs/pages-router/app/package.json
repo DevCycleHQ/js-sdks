@@ -10,14 +10,12 @@
     },
     "dependencies": {
         "@devcycle/nextjs-sdk": "file:../../../../dist/sdk/nextjs",
-        "next": "14.2.13",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "next": "15.0.1",
+        "react": "19.0.0-rc-69d4b800-20241021",
+        "react-dom": "19.0.0-rc-69d4b800-20241021"
     },
     "devDependencies": {
         "@types/node": "^20",
-        "@types/react": "18.2.20",
-        "@types/react-dom": "18.2.6",
         "typescript": "^5"
     },
     "resolutions": {
