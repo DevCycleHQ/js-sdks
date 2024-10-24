@@ -9,7 +9,7 @@ export const {
     clientSDKKey: process.env.NEXT_PUBLIC_E2E_NEXTJS_CLIENT_KEY ?? '',
     serverSDKKey: process.env.E2E_NEXTJS_SERVER_KEY ?? '',
     userGetter: async () => {
-        const reqHeaders = headers()
+        const reqHeaders = await headers()
         return {
             user_id: 'self-targeting-user',
             customData: {
