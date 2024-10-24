@@ -49,6 +49,7 @@ export class EventQueue {
     eventFlushIntervalMS: number
     flushEventQueueSize: number
     maxEventQueueSize: number
+    disabledEventFlush: boolean
     private flushInterval: NodeJS.Timer
     private flushInProgress = false
     private flushCallbacks: Array<(arg: unknown) => void> = []
@@ -63,6 +64,8 @@ export class EventQueue {
         this.reporter = options.reporter
         this.eventsAPIURI = options.eventsAPIURI
         this.eventFlushIntervalMS = options?.eventFlushIntervalMS || 10 * 1000
+        this.disabledEventFlush = false
+
         if (this.eventFlushIntervalMS < 500) {
             throw new Error(
                 `eventFlushIntervalMS: ${this.eventFlushIntervalMS} must be larger than 500ms`,
@@ -121,6 +124,7 @@ export class EventQueue {
 
     cleanup(): void {
         clearInterval(this.flushInterval)
+        this.disabledEventFlush = true
     }
 
     private async _flushEvents() {
@@ -219,12 +223,25 @@ export class EventQueue {
                     this.logger.debug(
                         `DevCycle Error Flushing Events response message: ${ex.message}`,
                     )
-                    this.bucketing.onPayloadFailure(
-                        this.sdkKey,
-                        flushPayload.payloadId,
-                        true,
-                    )
-                    results.retries++
+                    if ('status' in ex && ex.status === 401) {
+                        this.logger.debug(
+                            `SDK key is invalid, closing event flushing interval`,
+                        )
+                        this.bucketing.onPayloadFailure(
+                            this.sdkKey,
+                            flushPayload.payloadId,
+                            false,
+                        )
+                        results.failures++
+                        this.cleanup()
+                    } else {
+                        this.bucketing.onPayloadFailure(
+                            this.sdkKey,
+                            flushPayload.payloadId,
+                            true,
+                        )
+                        results.retries++
+                    }
                 }
             }),
         )
@@ -276,9 +293,19 @@ export class EventQueue {
      * Queue DVCAPIEvent for publishing to DevCycle Events API.
      */
     queueEvent(user: DVCPopulatedUser, event: DevCycleEvent): void {
+        if (this.disabledEventFlush) {
+            this.logger.warn(
+                `Event flushing is disabled, dropping event: ${
+                    event.type
+                }, event queue size: ${this.bucketing.eventQueueSize(
+                    this.sdkKey,
+                )}`,
+            )
+            return
+        }
         if (this.checkEventQueueSize()) {
             this.logger.warn(
-                `Max event queue size reached, dropping event: ${event}`,
+                `Max event queue size reached, dropping event: ${event.type}`,
             )
             return
         }
@@ -299,9 +326,15 @@ export class EventQueue {
         event: DevCycleEvent,
         bucketedConfig?: BucketedUserConfig,
     ): void {
+        if (this.disabledEventFlush) {
+            this.logger.warn(
+                `Event flushing is disabled, dropping aggregate event: ${event.type}`,
+            )
+            return
+        }
         if (this.checkEventQueueSize()) {
             this.logger.warn(
-                `Max event queue size reached, dropping aggregate event: ${event}`,
+                `Max event queue size reached, dropping aggregate event: ${event.type}`,
             )
             return
         }
