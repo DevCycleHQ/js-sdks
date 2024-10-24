@@ -19,7 +19,7 @@ jobs:
       - name: Set Git author
         shell: bash
         run: |
-          git config --global user.email "github-tracker-bot@taplytics.com"
+          git config --global user.email "foundation-admin@devcycle.com"
           git config --global user.name "DevCycle Automation"
 
       - name: Set branch name
