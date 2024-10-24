@@ -7,7 +7,6 @@ export type DevCycleClientContext = {
     clientSDKKey: string
     enableStreaming: boolean
     options: DevCycleNextOptions
-    userAgent?: string
 }
 
 type DevCycleClientsideProviderProps = {
