@@ -13,7 +13,6 @@ export type DevCycleClientContext = {
     options: DevCycleNextOptions
     enableStreaming: boolean
     realtimeDelay?: number
-    userAgent?: string
 }
 
 type DevCycleClientsideProviderProps = {
@@ -29,15 +28,13 @@ const isServer = typeof window === 'undefined'
  * Also waits for the server's data promise with the `use` hook. This triggers the nearest suspense boundary,
  * so this component is being rendered inside of a Suspense by the DevCycleClientsideProvider.
  * @param serverDataPromise
- * @param userAgent
  * @constructor
  */
 export const SuspendedProviderInitialization = ({
     serverDataPromise,
-    userAgent,
 }: Pick<
     DevCycleClientContext,
-    'serverDataPromise' | 'userAgent'
+    'serverDataPromise'
 >): React.ReactNode => {
     const serverData = use(serverDataPromise)
     const [previousContext, setPreviousContext] = useState<
@@ -52,7 +49,7 @@ export const SuspendedProviderInitialization = ({
         ;(context.client as DevCycleClient).synchronizeBootstrapData(
             serverData.config,
             serverData.user,
-            userAgent,
+            serverData.userAgent,
         )
         setPreviousContext(serverData)
     }
@@ -128,7 +125,7 @@ export const InternalDevCycleClientsideProvider = ({
             clientRef.current.synchronizeBootstrapData(
                 resolvedServerData.config,
                 resolvedServerData.user,
-                context.userAgent,
+                resolvedServerData.userAgent,
             )
         }
     }

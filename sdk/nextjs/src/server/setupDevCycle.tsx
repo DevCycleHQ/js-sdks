@@ -2,7 +2,6 @@ import 'server-only'
 import { getVariableValue } from './getVariableValue'
 import { initialize, validateSDKKey } from './initialize'
 import { DevCycleUser, DVCCustomDataJSON } from '@devcycle/js-client-sdk'
-import { getUserAgent } from './userAgent'
 import { getAllVariables } from './getAllVariables'
 import { getAllFeatures } from './allFeatures'
 import { DevCycleNextOptions } from '../common/types'
@@ -87,7 +86,6 @@ export const setupDevCycle = <
             // allow for propagation time of the custom source, since we don't have a first-class way to ensure its
             // up to date
             realtimeDelay: options?.configSource ? 10000 : undefined,
-            userAgent: getUserAgent(options),
         }
     }
 

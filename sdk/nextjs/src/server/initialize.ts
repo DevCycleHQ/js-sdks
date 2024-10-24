@@ -31,7 +31,7 @@ export const initialize = async (
 ): Promise<DevCycleServerData> => {
     // TODO moving this call to inside `getBucketedConfig` appears to cause static build issues from reading headers
     // Might be a bug in Next, if moving this make sure to verify you can `yarn next build` the e2e app router app
-    const userAgent = getUserAgent(options)
+    const userAgent = await getUserAgent(options)
 
     const user = await cachedUserGetter(userGetter)
     if (!user || typeof user.user_id !== 'string') {
@@ -72,10 +72,10 @@ export const initialize = async (
     }
 
     if (!initializeAlreadyCalled) {
-        client.synchronizeBootstrapData(config, user, getUserAgent(options))
+        client.synchronizeBootstrapData(config, user, await getUserAgent(options))
     }
 
-    return { config, user }
+    return { config, user, userAgent }
 }
 
 export const validateSDKKey = (
