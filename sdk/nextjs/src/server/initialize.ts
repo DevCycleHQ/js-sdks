@@ -72,7 +72,7 @@ export const initialize = async (
     }
 
     if (!initializeAlreadyCalled) {
-        client.synchronizeBootstrapData(config, user, await getUserAgent(options))
+        client.synchronizeBootstrapData(config, user, userAgent)
     }
 
     return { config, user, userAgent }
