@@ -32,10 +32,7 @@ const isServer = typeof window === 'undefined'
  */
 export const SuspendedProviderInitialization = ({
     serverDataPromise,
-}: Pick<
-    DevCycleClientContext,
-    'serverDataPromise'
->): React.ReactNode => {
+}: Pick<DevCycleClientContext, 'serverDataPromise'>): React.ReactNode => {
     const serverData = use(serverDataPromise)
     const [previousContext, setPreviousContext] = useState<
         DevCycleServerData | undefined
