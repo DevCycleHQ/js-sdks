@@ -1,6 +1,7 @@
 // Use this file to export React client code (e.g. those with 'use client' directive)
 // or other non-server utilities
-import { DevCycleClient as JSClient } from '@devcycle/js-client-sdk'
+
+import { DevCycleNextClient } from './src/client/internal/context'
 
 export { useVariable, useVariableValue } from './src/client/useVariableValue'
 export type * from './src/common/types'
@@ -18,6 +19,6 @@ export {
     DVCCustomDataJSON,
 } from '@devcycle/react-client-sdk'
 
-type DevCycleClient = Omit<JSClient, 'identifyUser' | 'resetUser'>
-
-export type { DevCycleClient }
+export type DevCycleClient = DevCycleNextClient
+export type { DevCycleClient as DevCycleJSClient } from '@devcycle/js-client-sdk'
+export type { DevCycleNextClient }
