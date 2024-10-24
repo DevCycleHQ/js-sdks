@@ -1,5 +1,7 @@
 import { DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { serializeUserSearchParams } from '../common/serializeUser'
+import { cache } from 'react'
+import { BucketedUserConfig } from '@devcycle/types'
 
 const getFetchUrl = (sdkKey: string, obfuscated: boolean) =>
     `https://config-cdn.devcycle.com/config/v2/server/bootstrap/${
@@ -39,15 +41,19 @@ const getSDKAPIUrl = (
     return `https://sdk-api.devcycle.com/v1/sdkConfig?${searchParams.toString()}`
 }
 
-export const sdkConfigAPI = async (
-    sdkKey: string,
-    obfuscated: boolean,
-    user: DVCPopulatedUser,
-): Promise<Response> => {
-    return await fetch(getSDKAPIUrl(sdkKey, obfuscated, user), {
-        next: {
-            revalidate: 60,
-            tags: [sdkKey, user.user_id],
-        },
-    })
-}
+export const sdkConfigAPI = cache(
+    async (
+        sdkKey: string,
+        obfuscated: boolean,
+        user: DVCPopulatedUser,
+    ): Promise<BucketedUserConfig> => {
+        const response = await fetch(getSDKAPIUrl(sdkKey, obfuscated, user), {
+            next: {
+                revalidate: 60,
+                tags: [sdkKey, user.user_id],
+            },
+        })
+
+        return (await response.json()) as BucketedUserConfig
+    },
+)

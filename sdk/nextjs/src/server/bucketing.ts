@@ -8,6 +8,16 @@ import {
 } from '../common/types'
 import { BucketedUserConfig, ConfigBody, ConfigSource } from '@devcycle/types'
 
+const getPopulatedUser = cache((user: DevCycleUser, userAgent?: string) => {
+    return new DVCPopulatedUser(
+        user,
+        {},
+        undefined,
+        undefined,
+        userAgent ?? undefined,
+    )
+})
+
 // wrap this function in react cache to avoid redoing work for the same user and config
 const generateBucketedConfigCached = cache(
     async (
@@ -16,13 +26,7 @@ const generateBucketedConfigCached = cache(
         config: ConfigBody,
         userAgent?: string,
     ) => {
-        const populatedUser = new DVCPopulatedUser(
-            user,
-            {},
-            undefined,
-            undefined,
-            userAgent ?? undefined,
-        )
+        const populatedUser = getPopulatedUser(user, userAgent)
 
         // clientSDKKey is always defined for bootstrap config
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -33,12 +37,10 @@ const generateBucketedConfigCached = cache(
                 obfuscated,
                 populatedUser,
             )
-            const response =
-                (await bucketedConfigResponse.json()) as BucketedUserConfig
 
             return {
                 bucketedConfig: {
-                    ...response,
+                    ...bucketedConfigResponse,
                     clientSDKKey,
                 },
             }
