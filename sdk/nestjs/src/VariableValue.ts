@@ -19,7 +19,7 @@ export const VariableValue = createParamDecorator((data: VariableValueData) => {
 
     if (!client || !user) {
         throw new Error(
-            'Missing DevCycle context. Is the DevCycleModule imported?',
+            'DevCycle context is missing. Ensure that the DevCycleModule is imported and a user factory is configured.',
         )
     }
 
