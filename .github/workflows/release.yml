@@ -32,6 +32,8 @@ jobs:
         strategy:
             matrix:
                 node-version: [20.x]
+        env:
+          GITHUB_TOKEN: ${{ secrets.AUTOMATION_USER_TOKEN }}
         steps:
             # Check out the repo with credentials that can bypass branch protection, and fetch git history instead of just latest commit
             - uses: actions/checkout@v4
