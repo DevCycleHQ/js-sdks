@@ -9704,9 +9704,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react-native@npm:12.3.2":
-  version: 12.3.2
-  resolution: "@testing-library/react-native@npm:12.3.2"
+"@testing-library/react-native@npm:12.8.0":
+  version: 12.8.0
+  resolution: "@testing-library/react-native@npm:12.8.0"
   dependencies:
     jest-matcher-utils: ^29.7.0
     pretty-format: ^29.7.0
@@ -9719,7 +9719,7 @@ __metadata:
   peerDependenciesMeta:
     jest:
       optional: true
-  checksum: c6fdaf64865a079b885ff83ae172330b354dbd13cb9a4370578a544080d87f21cc7a93e079a3bc4256ab0893c5de36feae4bcf6edf24b3a6617019f4369a6053
+  checksum: 324f2eeed9753fa986d897cacd16a6a2de7c59648f4e28c65a3b66bb6bfee1b6a8e62396012361b6b3947af632ab4b4e51d6c6f49419564d4f5aa0dcdb170331
   languageName: node
   linkType: hard
 
@@ -15336,7 +15336,7 @@ __metadata:
     "@testing-library/jest-dom": ^6.4.2
     "@testing-library/jest-native": 5.4.3
     "@testing-library/react": 14.0.0
-    "@testing-library/react-native": 12.3.2
+    "@testing-library/react-native": 12.8.0
     "@total-typescript/shoehorn": ^0.1.2
     "@types/async": ^3.2.8
     "@types/eventsource": ^1.1.15
