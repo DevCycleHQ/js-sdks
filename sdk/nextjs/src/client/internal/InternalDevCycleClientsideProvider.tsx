@@ -58,7 +58,7 @@ export const SuspendedProviderInitialization = ({
             )
             setPreviousContext(serverData)
         }
-    }, [serverData, context, previousContext])
+    }, [serverData, context.client, previousContext])
     return null
 }
 
