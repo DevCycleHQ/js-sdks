@@ -1,5 +1,13 @@
 'use client'
-import React, { Suspense, use, useContext, useRef, useState } from 'react'
+import React, {
+    Suspense,
+    use,
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from 'react'
 import { DevCycleClient, initializeDevCycle } from '@devcycle/js-client-sdk'
 import { invalidateConfig } from '../../common/invalidateConfig'
 import { DevCycleNextOptions, DevCycleServerData } from '../../common/types'
@@ -38,18 +46,31 @@ export const SuspendedProviderInitialization = ({
         DevCycleServerData | undefined
     >()
     const context = useContext(DevCycleProviderContext)
-    if (previousContext !== serverData) {
-        // change user and config data to match latest server data
-        // if the data has changed since the last invocation
-        // assert this is a DevCycleClient, not a DevCycleNextClient, because it is. We expose a more limited type
-        // to the end user
+
+    const synchronizeData = useCallback(() => {
         ;(context.client as DevCycleClient).synchronizeBootstrapData(
             serverData.config,
             serverData.user,
             serverData.userAgent,
         )
-        setPreviousContext(serverData)
+    }, [context.client, serverData])
+
+    if (!previousContext) {
+        synchronizeData()
     }
+
+    useEffect(() => {
+        if (previousContext !== serverData) {
+            // change user and config data to match latest server data
+            // if the data has changed since the last invocation
+            // assert this is a DevCycleClient, not a DevCycleNextClient, because it is. We expose a more limited type
+            // to the end user
+            if (previousContext) {
+                synchronizeData()
+            }
+            setPreviousContext(serverData)
+        }
+    }, [synchronizeData, serverData, previousContext])
     return null
 }
 
