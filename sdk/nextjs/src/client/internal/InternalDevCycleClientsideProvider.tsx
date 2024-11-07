@@ -2,6 +2,7 @@
 import React, {
     Suspense,
     use,
+    useCallback,
     useContext,
     useEffect,
     useRef,
@@ -45,20 +46,31 @@ export const SuspendedProviderInitialization = ({
         DevCycleServerData | undefined
     >()
     const context = useContext(DevCycleProviderContext)
+
+    const synchronizeData = useCallback(() => {
+        ;(context.client as DevCycleClient).synchronizeBootstrapData(
+            serverData.config,
+            serverData.user,
+            serverData.userAgent,
+        )
+    }, [context.client, serverData])
+
+    if (!previousContext) {
+        synchronizeData()
+    }
+
     useEffect(() => {
         if (previousContext !== serverData) {
             // change user and config data to match latest server data
             // if the data has changed since the last invocation
             // assert this is a DevCycleClient, not a DevCycleNextClient, because it is. We expose a more limited type
             // to the end user
-            ;(context.client as DevCycleClient).synchronizeBootstrapData(
-                serverData.config,
-                serverData.user,
-                serverData.userAgent,
-            )
+            if (previousContext) {
+                synchronizeData()
+            }
             setPreviousContext(serverData)
         }
-    }, [serverData, context.client, previousContext])
+    }, [synchronizeData, serverData, previousContext])
     return null
 }
 
