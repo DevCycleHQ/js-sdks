@@ -1,13 +1,5 @@
 'use client'
-import React, {
-    Suspense,
-    use,
-    useCallback,
-    useContext,
-    useEffect,
-    useRef,
-    useState,
-} from 'react'
+import React, { use, useRef } from 'react'
 import { DevCycleClient, initializeDevCycle } from '@devcycle/js-client-sdk'
 import { invalidateConfig } from '../../common/invalidateConfig'
 import { DevCycleNextOptions, DevCycleServerData } from '../../common/types'
@@ -30,49 +22,6 @@ type DevCycleClientsideProviderProps = {
 }
 
 const isServer = typeof window === 'undefined'
-
-/**
- * Component which renders nothing, but runs code to keep client state in sync with server
- * Also waits for the server's data promise with the `use` hook. This triggers the nearest suspense boundary,
- * so this component is being rendered inside of a Suspense by the DevCycleClientsideProvider.
- * @param serverDataPromise
- * @constructor
- */
-export const SuspendedProviderInitialization = ({
-    serverDataPromise,
-}: Pick<DevCycleClientContext, 'serverDataPromise'>): React.ReactNode => {
-    const serverData = use(serverDataPromise)
-    const [previousContext, setPreviousContext] = useState<
-        DevCycleServerData | undefined
-    >()
-    const context = useContext(DevCycleProviderContext)
-
-    const synchronizeData = useCallback(() => {
-        ;(context.client as DevCycleClient).synchronizeBootstrapData(
-            serverData.config,
-            serverData.user,
-            serverData.userAgent,
-        )
-    }, [context.client, serverData])
-
-    if (!previousContext) {
-        synchronizeData()
-    }
-
-    useEffect(() => {
-        if (previousContext !== serverData) {
-            // change user and config data to match latest server data
-            // if the data has changed since the last invocation
-            // assert this is a DevCycleClient, not a DevCycleNextClient, because it is. We expose a more limited type
-            // to the end user
-            if (previousContext) {
-                synchronizeData()
-            }
-            setPreviousContext(serverData)
-        }
-    }, [synchronizeData, serverData, previousContext])
-    return null
-}
 
 export const InternalDevCycleClientsideProvider = ({
     context,
@@ -145,6 +94,17 @@ export const InternalDevCycleClientsideProvider = ({
                 resolvedServerData.user,
                 resolvedServerData.userAgent,
             )
+        } else {
+            // if the promise isnt resolved yet, schedule it to synchronize when it is
+            // we check the above condition first to make sure we can use the resolved data on the first render pass
+            // since the `.then` here is only evaluated after this render pass is finished
+            serverDataPromise.then((serverData) => {
+                clientRef.current!.synchronizeBootstrapData(
+                    serverData.config,
+                    serverData.user,
+                    serverData.userAgent,
+                )
+            })
         }
     }
 
@@ -157,11 +117,6 @@ export const InternalDevCycleClientsideProvider = ({
                 serverDataPromise,
             }}
         >
-            <Suspense>
-                <SuspendedProviderInitialization
-                    serverDataPromise={serverDataPromise}
-                />
-            </Suspense>
             {children}
         </DevCycleProviderContext.Provider>
     )
