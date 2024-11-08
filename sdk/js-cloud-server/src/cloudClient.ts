@@ -144,11 +144,13 @@ export class DevCycleCloudClient<
             })
         } catch (err) {
             throwIfUserError(err)
-            this.logger.error(
-                `Request to get variable: ${key} failed with response message: ${
-                    (err as any).message
-                }`,
-            )
+            if (err instanceof ResponseError && err.status !== 404) {
+                this.logger.error(
+                    `Request to get variable: ${key} failed with response message: ${
+                        (err as any).message
+                    }`,
+                )
+            }
             // Default Variable
             return new DVCVariable({ key, type, defaultValue })
         }
