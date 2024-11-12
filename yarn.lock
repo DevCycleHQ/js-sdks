@@ -4676,7 +4676,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/js-cloud-server-sdk@^1.17.1, @devcycle/js-cloud-server-sdk@workspace:sdk/js-cloud-server":
+"@devcycle/js-cloud-server-sdk@^1.17.2, @devcycle/js-cloud-server-sdk@workspace:sdk/js-cloud-server":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-cloud-server-sdk@workspace:sdk/js-cloud-server"
   dependencies:
@@ -4691,7 +4691,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nestjs-server-sdk@workspace:sdk/nestjs"
   dependencies:
-    "@devcycle/nodejs-server-sdk": ^1.37.1
+    "@devcycle/nodejs-server-sdk": ^1.37.2
     "@devcycle/types": ^1.18.1
     nestjs-cls: ^4.3.0
   peerDependencies:
@@ -4725,12 +4725,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/nodejs-server-sdk@^1.37.1, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
+"@devcycle/nodejs-server-sdk@^1.37.2, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
     "@devcycle/bucketing-assembly-script": ^1.27.1
-    "@devcycle/js-cloud-server-sdk": ^1.17.1
+    "@devcycle/js-cloud-server-sdk": ^1.17.2
     "@devcycle/types": ^1.18.1
     cross-fetch: ^4.0.0
     eventsource: ^2.0.2
@@ -21425,7 +21425,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "js-cloud-server-sdk-test-worker@workspace:dev-apps/js-cloud-server/cloudflare-worker"
   dependencies:
-    "@devcycle/js-cloud-server-sdk": ^1.17.1
+    "@devcycle/js-cloud-server-sdk": ^1.17.2
   languageName: unknown
   linkType: soft
 
