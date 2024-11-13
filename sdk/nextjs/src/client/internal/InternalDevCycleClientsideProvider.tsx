@@ -94,7 +94,7 @@ export const InternalDevCycleClientsideProvider = ({
                 resolvedServerData.user,
                 resolvedServerData.userAgent,
             )
-        } else {
+        } else if (typeof window !== 'undefined') {
             // if the promise isnt resolved yet, schedule it to synchronize when it is
             // we check the above condition first to make sure we can use the resolved data on the first render pass
             // since the `.then` here is only evaluated after this render pass is finished
