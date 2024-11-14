@@ -12,7 +12,6 @@ export const invalidateConfig = async (
         )
         return
     }
-    console.log('Invalidating old DevCycle cached config')
     revalidateTag(sdkToken)
     if (userId) {
         revalidateTag(userId)
