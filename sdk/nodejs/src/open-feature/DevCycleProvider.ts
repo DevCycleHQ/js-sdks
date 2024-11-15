@@ -10,6 +10,8 @@ import {
     TargetingKeyMissingError,
     InvalidContextError,
     ProviderStatus,
+    Tracking,
+    TrackingEventDetails,
 } from '@openfeature/server-sdk'
 import {
     DevCycleClient,
@@ -38,7 +40,7 @@ type EvaluationContextObject = {
     [key: string]: EvaluationContextValue
 }
 
-export class DevCycleProvider implements Provider {
+export class DevCycleProvider implements Provider, Tracking {
     readonly metadata: ProviderMetadata = {
         name: 'devcycle-nodejs-provider',
     } as const
@@ -71,6 +73,28 @@ export class DevCycleProvider implements Provider {
         if (this.devcycleClient instanceof DevCycleCloudClient) return
 
         await this.devcycleClient.close()
+    }
+
+    track(
+        trackingEventName: string,
+        context?: EvaluationContext,
+        trackingEventDetails?: TrackingEventDetails,
+    ): void {
+        const user_id = context?.targetingKey ?? context?.user_id
+        if (!context || !user_id) {
+            throw new TargetingKeyMissingError(
+                'Missing targetingKey or user_id in context',
+            )
+        }
+
+        this.devcycleClient.track(this.devcycleUserFromContext(context), {
+            type: trackingEventName,
+            value: trackingEventDetails?.value,
+            metaData: trackingEventDetails && {
+                ...trackingEventDetails,
+                value: undefined,
+            },
+        })
     }
 
     /**

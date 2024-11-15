@@ -12,6 +12,8 @@ import {
     ResolutionDetails,
     StandardResolutionReasons,
     TargetingKeyMissingError,
+    Tracking,
+    TrackingEventDetails,
 } from '@openfeature/web-sdk'
 // Need to disable this to keep the working jest mock
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -41,7 +43,7 @@ type EvaluationContextObject = {
     [key: string]: EvaluationContextValue
 }
 
-export default class DevCycleProvider implements Provider {
+export default class DevCycleProvider implements Provider, Tracking {
     readonly metadata: ProviderMetadata = {
         name: 'devcycle-web-provider',
     } as const
@@ -114,6 +116,20 @@ export default class DevCycleProvider implements Provider {
         await this._devcycleClient?.identifyUser(
             this.dvcUserFromContext(newContext),
         )
+    }
+
+    track(
+        trackingEventName: string,
+        trackingEventDetails?: TrackingEventDetails,
+    ): void {
+        this._devcycleClient?.track({
+            type: trackingEventName,
+            value: trackingEventDetails?.value,
+            metaData: trackingEventDetails && {
+                ...trackingEventDetails,
+                value: undefined,
+            },
+        })
     }
 
     /**
