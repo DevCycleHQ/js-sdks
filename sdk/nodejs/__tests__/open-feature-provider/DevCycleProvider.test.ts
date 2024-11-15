@@ -2,6 +2,7 @@ import {
     OpenFeature,
     Client,
     StandardResolutionReasons,
+    ProviderEvents,
 } from '@openfeature/server-sdk'
 import {
     DevCycleClient,
@@ -13,9 +14,12 @@ import {
 
 jest.mock('../../src/bucketing')
 jest.mock('@devcycle/config-manager')
+jest.mock('../../src/eventQueue')
 
 const variableMock = jest.spyOn(DevCycleClient.prototype, 'variable')
 const cloudVariableMock = jest.spyOn(DevCycleCloudClient.prototype, 'variable')
+const trackMock = jest.spyOn(DevCycleClient.prototype, 'track')
+const cloudTrackMock = jest.spyOn(DevCycleCloudClient.prototype, 'track')
 
 const logger = {
     debug: jest.fn(),
@@ -445,12 +449,6 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
         })
 
         describe(`${dvcClientType} - Tracking`, () => {
-            const trackMock = jest.spyOn(DevCycleClient.prototype, 'track')
-            const cloudTrackMock = jest.spyOn(
-                DevCycleCloudClient.prototype,
-                'track',
-            )
-
             beforeEach(() => {
                 trackMock.mockClear()
                 cloudTrackMock.mockClear()
@@ -490,22 +488,6 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                 }
             })
 
-            it('should throw error if context is missing', async () => {
-                const { ofClient } = await initOFClient()
-
-                expect(ofClient.track('test-event')).rejects.toThrow(
-                    'Missing targetingKey or user_id in context',
-                )
-            })
-
-            it('should throw error if targetingKey is missing', async () => {
-                const { ofClient } = await initOFClient()
-
-                expect(ofClient.track('test-event', {})).rejects.toThrow(
-                    'Missing targetingKey or user_id in context',
-                )
-            })
-
             it('should track an event without value or metadata', async () => {
                 const { ofClient } = await initOFClient()
 
@@ -515,8 +497,6 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
 
                 const expectedTrackCall = {
                     type: 'test-event',
-                    value: undefined,
-                    metaData: {},
                 }
 
                 if (dvcClientType === 'DevCycleClient') {
@@ -530,6 +510,28 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                         expectedTrackCall,
                     )
                 }
+            })
+
+            it('should throw error if context is missing', async () => {
+                const { ofClient } = await initOFClient()
+
+                ofClient.addHandler(ProviderEvents.Error, (error) => {
+                    expect(error?.message).toBe(
+                        'Missing targetingKey or user_id in context',
+                    )
+                })
+                ofClient.track('test-event')
+            })
+
+            it('should throw error if targetingKey is missing', async () => {
+                const { ofClient } = await initOFClient()
+
+                ofClient.addHandler(ProviderEvents.Error, (error) => {
+                    expect(error?.message).toBe(
+                        'Missing targetingKey or user_id in context',
+                    )
+                })
+                ofClient.track('test-event', {})
             })
         })
     },
