@@ -117,7 +117,7 @@ export default class DevCycleProvider implements Provider {
         )
     }
 
-    track?(
+    track(
         trackingEventName: string,
         context?: EvaluationContext,
         trackingEventDetails?: TrackingEventDetails,
