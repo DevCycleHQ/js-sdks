@@ -11,8 +11,8 @@ module.exports = () => ({
             template: './src/index.html',
         }),
         new DefinePlugin({
-            'process.env.NEXT_PUBLIC_E2E_NEXTJS_KEY': JSON.stringify(
-                process.env.NEXT_PUBLIC_E2E_NEXTJS_KEY,
+            'process.env.NEXT_PUBLIC_E2E_NEXTJS_CLIENT_KEY': JSON.stringify(
+                process.env.NEXT_PUBLIC_E2E_NEXTJS_CLIENT_KEY,
             ),
         }),
         new ForkTsCheckerWebpackPlugin(),

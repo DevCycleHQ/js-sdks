@@ -1,5 +1,5 @@
 const SDK_KEY =
-    process.env.NEXT_PUBLIC_E2E_NEXTJS_KEY || '<DEVCYCLE_CLIENT_SDK_KEY>'
+    process.env.NEXT_PUBLIC_E2E_NEXTJS_CLIENT_KEY || '<DEVCYCLE_CLIENT_SDK_KEY>'
 import { initializeDevCycle } from '@devcycle/js-client-sdk'
 
 export default class HomeComponent extends HTMLElement {
