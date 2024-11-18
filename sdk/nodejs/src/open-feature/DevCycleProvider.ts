@@ -10,7 +10,6 @@ import {
     TargetingKeyMissingError,
     InvalidContextError,
     ProviderStatus,
-    Tracking,
     TrackingEventDetails,
 } from '@openfeature/server-sdk'
 import {
@@ -40,7 +39,7 @@ type EvaluationContextObject = {
     [key: string]: EvaluationContextValue
 }
 
-export class DevCycleProvider implements Provider, Tracking {
+export class DevCycleProvider implements Provider {
     readonly metadata: ProviderMetadata = {
         name: 'devcycle-nodejs-provider',
     } as const

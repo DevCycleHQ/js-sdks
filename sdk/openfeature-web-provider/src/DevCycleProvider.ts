@@ -12,7 +12,6 @@ import {
     ResolutionDetails,
     StandardResolutionReasons,
     TargetingKeyMissingError,
-    Tracking,
     TrackingEventDetails,
 } from '@openfeature/web-sdk'
 // Need to disable this to keep the working jest mock
@@ -43,7 +42,7 @@ type EvaluationContextObject = {
     [key: string]: EvaluationContextValue
 }
 
-export default class DevCycleProvider implements Provider, Tracking {
+export default class DevCycleProvider implements Provider {
     readonly metadata: ProviderMetadata = {
         name: 'devcycle-web-provider',
     } as const
@@ -118,8 +117,9 @@ export default class DevCycleProvider implements Provider, Tracking {
         )
     }
 
-    track(
+    track?(
         trackingEventName: string,
+        context?: EvaluationContext,
         trackingEventDetails?: TrackingEventDetails,
     ): void {
         this._devcycleClient?.track({

@@ -438,4 +438,69 @@ describe('DevCycleProvider Unit Tests', () => {
             })
         })
     })
+
+    describe('Tracking Events', () => {
+        let trackMock: any
+        let openFeatureClient: Client
+        let provider: DevCycleProvider
+
+        beforeEach(async () => {
+            const init = await initOFClient()
+            openFeatureClient = init.ofClient
+            provider = init.provider
+
+            if (provider.devcycleClient) {
+                trackMock = jest
+                    .spyOn(provider.devcycleClient, 'track')
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    .mockResolvedValue()
+            }
+        })
+
+        afterEach(() => {
+            trackMock?.mockClear()
+        })
+
+        it('should track an event with just a name', () => {
+            openFeatureClient.track('event-name')
+
+            expect(trackMock).toHaveBeenCalledWith({
+                type: 'event-name',
+                value: undefined,
+                metaData: undefined,
+            })
+        })
+
+        it('should track an event with value and metadata', () => {
+            openFeatureClient.track('event-name', {
+                value: 123,
+                someKey: 'someValue',
+                otherKey: true,
+            })
+
+            expect(trackMock).toHaveBeenCalledWith({
+                type: 'event-name',
+                value: 123,
+                metaData: {
+                    someKey: 'someValue',
+                    otherKey: true,
+                },
+            })
+        })
+
+        it('should track an event with just metadata', () => {
+            openFeatureClient.track('event-name', {
+                someKey: 'someValue',
+            })
+
+            expect(trackMock).toHaveBeenCalledWith({
+                type: 'event-name',
+                value: undefined,
+                metaData: {
+                    someKey: 'someValue',
+                },
+            })
+        })
+    })
 })
