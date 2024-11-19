@@ -21,6 +21,7 @@
     "homepage": "https://devcycle.com",
     "dependencies": {
         "@devcycle/bucketing-assembly-script": "^1.27.1",
+        "@devcycle/js-client-sdk": "^1.31.1",
         "@devcycle/js-cloud-server-sdk": "^1.17.2",
         "@devcycle/types": "^1.18.1",
         "cross-fetch": "^4.0.0",
