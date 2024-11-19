@@ -2,6 +2,7 @@ import {
     OpenFeature,
     Client,
     StandardResolutionReasons,
+    ProviderEvents,
 } from '@openfeature/server-sdk'
 import {
     DevCycleClient,
@@ -13,9 +14,12 @@ import {
 
 jest.mock('../../src/bucketing')
 jest.mock('@devcycle/config-manager')
+jest.mock('../../src/eventQueue')
 
 const variableMock = jest.spyOn(DevCycleClient.prototype, 'variable')
 const cloudVariableMock = jest.spyOn(DevCycleCloudClient.prototype, 'variable')
+const trackMock = jest.spyOn(DevCycleClient.prototype, 'track')
+const cloudTrackMock = jest.spyOn(DevCycleCloudClient.prototype, 'track')
 
 const logger = {
     debug: jest.fn(),
@@ -441,6 +445,93 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                         'DevCycle does not support null default values for JSON flags',
                     flagMetadata: {},
                 })
+            })
+        })
+
+        describe(`${dvcClientType} - Tracking`, () => {
+            beforeEach(() => {
+                trackMock.mockClear()
+                cloudTrackMock.mockClear()
+            })
+
+            it('should track an event with value and metadata', async () => {
+                const { ofClient } = await initOFClient()
+                const trackingData = {
+                    value: 123,
+                    customField: 'custom value',
+                }
+
+                ofClient.track(
+                    'test-event',
+                    { targetingKey: 'user-123' },
+                    trackingData,
+                )
+
+                const expectedTrackCall = {
+                    type: 'test-event',
+                    value: 123,
+                    metaData: {
+                        customField: 'custom value',
+                    },
+                }
+
+                if (dvcClientType === 'DevCycleClient') {
+                    expect(trackMock).toHaveBeenCalledWith(
+                        expect.any(DevCycleUser),
+                        expectedTrackCall,
+                    )
+                } else {
+                    expect(cloudTrackMock).toHaveBeenCalledWith(
+                        expect.any(DevCycleUser),
+                        expectedTrackCall,
+                    )
+                }
+            })
+
+            it('should track an event without value or metadata', async () => {
+                const { ofClient } = await initOFClient()
+
+                ofClient.track('test-event', {
+                    targetingKey: 'user-123',
+                })
+
+                const expectedTrackCall = {
+                    type: 'test-event',
+                }
+
+                if (dvcClientType === 'DevCycleClient') {
+                    expect(trackMock).toHaveBeenCalledWith(
+                        expect.any(DevCycleUser),
+                        expectedTrackCall,
+                    )
+                } else {
+                    expect(cloudTrackMock).toHaveBeenCalledWith(
+                        expect.any(DevCycleUser),
+                        expectedTrackCall,
+                    )
+                }
+            })
+
+            it('should throw error if context is missing', async () => {
+                const { ofClient } = await initOFClient()
+
+                ofClient.addHandler(ProviderEvents.Error, (error) => {
+                    expect(error?.message).toBe(
+                        'Missing targetingKey or user_id in context',
+                    )
+                })
+                ofClient.track('test-event')
+            })
+
+            it('should throw error if targetingKey is missing', async () => {
+                const { ofClient } = await initOFClient()
+
+                ofClient.addHandler(ProviderEvents.Error, (error) => {
+                    expect(error?.message).toBe(
+                        'Missing targetingKey or user_id in context',
+                    )
+                })
+                ofClient.track('test-event', {})
             })
         })
     },
