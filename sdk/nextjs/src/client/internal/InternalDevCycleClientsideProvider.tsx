@@ -1,5 +1,5 @@
 'use client'
-import React, { use, useRef } from 'react'
+import React, { Suspense, use, useEffect, useRef } from 'react'
 import { DevCycleClient, initializeDevCycle } from '@devcycle/js-client-sdk'
 import { invalidateConfig } from '../../common/invalidateConfig'
 import { DevCycleNextOptions, DevCycleServerData } from '../../common/types'
@@ -22,6 +22,34 @@ type DevCycleClientsideProviderProps = {
 }
 
 const isServer = typeof window === 'undefined'
+
+/**
+ * keep the clientside instance of the SDK up-to-date with new data coming from the server during realtime updates
+ * @param serverDataPromise
+ * @param client
+ * @constructor
+ */
+const SynchronizeClientData = ({
+    serverDataPromise,
+    client,
+}: {
+    serverDataPromise: Promise<DevCycleServerData>
+    client: DevCycleClient
+}) => {
+    const serverData = use(serverDataPromise)
+    const dataRef = useRef<DevCycleServerData | null>(null)
+    const clientRef = useRef<DevCycleClient | null>(null)
+
+    useEffect(() => {
+        if (dataRef.current !== serverData || clientRef.current !== client) {
+            dataRef.current = serverData
+            clientRef.current = client
+            client.synchronizeBootstrapData(serverData.config, serverData.user)
+        }
+    }, [serverData, client])
+
+    return null
+}
 
 export const InternalDevCycleClientsideProvider = ({
     context,
@@ -117,6 +145,12 @@ export const InternalDevCycleClientsideProvider = ({
                 serverDataPromise,
             }}
         >
+            <Suspense fallback={null}>
+                <SynchronizeClientData
+                    serverDataPromise={serverDataPromise}
+                    client={clientRef.current}
+                />
+            </Suspense>
             {children}
         </DevCycleProviderContext.Provider>
     )
