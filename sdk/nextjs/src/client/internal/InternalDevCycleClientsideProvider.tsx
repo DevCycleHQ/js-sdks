@@ -1,5 +1,5 @@
 'use client'
-import React, { use, useRef } from 'react'
+import React, { Suspense, use, useEffect, useRef } from 'react'
 import { DevCycleClient, initializeDevCycle } from '@devcycle/js-client-sdk'
 import { invalidateConfig } from '../../common/invalidateConfig'
 import { DevCycleNextOptions, DevCycleServerData } from '../../common/types'
@@ -17,16 +17,54 @@ export type DevCycleClientContext = {
 
 type DevCycleClientsideProviderProps = {
     context: DevCycleClientContext
-    promiseResolved: boolean
     children: React.ReactNode
 }
 
 const isServer = typeof window === 'undefined'
 
+/**
+ * keep the clientside instance of the SDK up-to-date with new data coming from the server during realtime updates
+ * @param serverDataPromise
+ * @param client
+ * @param enableStreaming
+ * @constructor
+ */
+const SynchronizeClientData = ({
+    serverDataPromise,
+    client,
+    enableStreaming,
+}: {
+    serverDataPromise: Promise<DevCycleServerData>
+    client: DevCycleClient
+    enableStreaming: boolean
+}) => {
+    const serverData = use(serverDataPromise)
+    const dataRef = useRef<DevCycleServerData | null>(
+        // when streaming is disabled, we run synchronization on the initial server data in the
+        // InternalDevCycleClientsideProvider component so we don't need to do it again immediately.
+        // In streaming mode we want to synchronize on that initial server data since we aren't doing it above
+        // Therefore set this ref to the initial server data so the below check won't run when not in streaming mode
+        !enableStreaming ? serverData : null,
+    )
+    const clientRef = useRef<DevCycleClient>(client)
+
+    if (dataRef.current !== serverData || clientRef.current !== client) {
+        dataRef.current = serverData
+        clientRef.current = client
+        // do this in a timeout to avoid setting React state in components that are subscribed to variables as a
+        // side effect of the current render, since this causes errors. Instead schedule the update to occur after
+        // render completes
+        setTimeout(() =>
+            client.synchronizeBootstrapData(serverData.config, serverData.user),
+        )
+    }
+
+    return null
+}
+
 export const InternalDevCycleClientsideProvider = ({
     context,
     children,
-    promiseResolved,
 }: DevCycleClientsideProviderProps): React.ReactElement => {
     const clientRef = useRef<DevCycleClient>()
     const router = useRouter()
@@ -56,14 +94,6 @@ export const InternalDevCycleClientsideProvider = ({
         }
     }
 
-    let resolvedServerData = serverData
-
-    if (!serverData && promiseResolved) {
-        // here the provider is being told from above that this promise has already resolved, so we can safely "use"
-        // it without blocking rendering, even in streaming mode
-        resolvedServerData = use(serverDataPromise)
-    }
-
     if (!clientRef.current) {
         clientRef.current = initializeDevCycle(clientSDKKey, {
             ...context.options,
@@ -81,7 +111,8 @@ export const InternalDevCycleClientsideProvider = ({
             },
         })
 
-        if (resolvedServerData || !enableStreaming) {
+        if (!enableStreaming) {
+            const resolvedServerData = use(serverDataPromise)
             // we expect that either the promise has resolved and we got the server data that way, or we weren't in
             // streaming mode and so the promise was awaited at a higher level and passed in here as serverData
             if (!resolvedServerData) {
@@ -94,17 +125,6 @@ export const InternalDevCycleClientsideProvider = ({
                 resolvedServerData.user,
                 resolvedServerData.userAgent,
             )
-        } else {
-            // if the promise isnt resolved yet, schedule it to synchronize when it is
-            // we check the above condition first to make sure we can use the resolved data on the first render pass
-            // since the `.then` here is only evaluated after this render pass is finished
-            serverDataPromise.then((serverData) => {
-                clientRef.current!.synchronizeBootstrapData(
-                    serverData.config,
-                    serverData.user,
-                    serverData.userAgent,
-                )
-            })
         }
     }
 
@@ -117,6 +137,13 @@ export const InternalDevCycleClientsideProvider = ({
                 serverDataPromise,
             }}
         >
+            <Suspense fallback={null}>
+                <SynchronizeClientData
+                    serverDataPromise={serverDataPromise}
+                    client={clientRef.current}
+                    enableStreaming={enableStreaming}
+                />
+            </Suspense>
             {children}
         </DevCycleProviderContext.Provider>
     )

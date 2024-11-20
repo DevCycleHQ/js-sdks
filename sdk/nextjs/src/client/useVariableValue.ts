@@ -1,5 +1,5 @@
 'use client'
-import type { DVCVariableValue } from '@devcycle/js-client-sdk'
+import { DevCycleClient, DVCVariableValue } from '@devcycle/js-client-sdk'
 import { useContext, use } from 'react'
 import { VariableTypeAlias } from '@devcycle/types'
 import { DVCVariable } from '@devcycle/js-client-sdk'
@@ -15,7 +15,7 @@ export const useVariable = <T extends DVCVariableValue>(
 
     // Fall back to nearest suspense boundary if client is not initialized yet.
     if (context.enableStreaming) {
-        use(context.serverDataPromise)
+        use((context.client as DevCycleClient).onClientInitialized())
     }
 
     return context.client.variable(key, defaultValue)
