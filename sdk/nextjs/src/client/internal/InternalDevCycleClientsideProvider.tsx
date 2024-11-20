@@ -17,7 +17,6 @@ export type DevCycleClientContext = {
 
 type DevCycleClientsideProviderProps = {
     context: DevCycleClientContext
-    promiseResolved: boolean
     children: React.ReactNode
 }
 
@@ -27,26 +26,36 @@ const isServer = typeof window === 'undefined'
  * keep the clientside instance of the SDK up-to-date with new data coming from the server during realtime updates
  * @param serverDataPromise
  * @param client
+ * @param skipInitialSync
  * @constructor
  */
 const SynchronizeClientData = ({
     serverDataPromise,
     client,
+    skipInitialSync,
 }: {
     serverDataPromise: Promise<DevCycleServerData>
     client: DevCycleClient
+    skipInitialSync: boolean
 }) => {
     const serverData = use(serverDataPromise)
-    const dataRef = useRef<DevCycleServerData | null>(null)
-    const clientRef = useRef<DevCycleClient | null>(null)
+    const dataRef = useRef<DevCycleServerData | null>(
+        // if we already triggered synchronization on the first pass, set this to the resolved data so the below check
+        // doesn't run again until the data changes. Otherwise set it to null so that we run the synchronization
+        skipInitialSync ? serverData : null,
+    )
+    const clientRef = useRef<DevCycleClient>(client)
 
-    useEffect(() => {
-        if (dataRef.current !== serverData || clientRef.current !== client) {
-            dataRef.current = serverData
-            clientRef.current = client
-            client.synchronizeBootstrapData(serverData.config, serverData.user)
-        }
-    }, [serverData, client])
+    if (dataRef.current !== serverData || clientRef.current !== client) {
+        dataRef.current = serverData
+        clientRef.current = client
+        // do this in a timeout to avoid setting React state in components that are subscribed to variables as a
+        // side effect of the current render, since this causes errors. Instead schedule the update to occur after
+        // render completes
+        setTimeout(() =>
+            client.synchronizeBootstrapData(serverData.config, serverData.user),
+        )
+    }
 
     return null
 }
@@ -54,10 +63,10 @@ const SynchronizeClientData = ({
 export const InternalDevCycleClientsideProvider = ({
     context,
     children,
-    promiseResolved,
 }: DevCycleClientsideProviderProps): React.ReactElement => {
     const clientRef = useRef<DevCycleClient>()
     const router = useRouter()
+    const skipInitialSync = useRef(false)
 
     const { serverDataPromise, serverData, clientSDKKey, enableStreaming } =
         context
@@ -84,15 +93,8 @@ export const InternalDevCycleClientsideProvider = ({
         }
     }
 
-    let resolvedServerData = serverData
-
-    if (!serverData && promiseResolved) {
-        // here the provider is being told from above that this promise has already resolved, so we can safely "use"
-        // it without blocking rendering, even in streaming mode
-        resolvedServerData = use(serverDataPromise)
-    }
-
     if (!clientRef.current) {
+        skipInitialSync.current = false
         clientRef.current = initializeDevCycle(clientSDKKey, {
             ...context.options,
             sdkPlatform: 'nextjs',
@@ -109,7 +111,8 @@ export const InternalDevCycleClientsideProvider = ({
             },
         })
 
-        if (resolvedServerData || !enableStreaming) {
+        if (!enableStreaming) {
+            const resolvedServerData = use(serverDataPromise)
             // we expect that either the promise has resolved and we got the server data that way, or we weren't in
             // streaming mode and so the promise was awaited at a higher level and passed in here as serverData
             if (!resolvedServerData) {
@@ -117,22 +120,12 @@ export const InternalDevCycleClientsideProvider = ({
                     'Server data should be available. Please contact DevCycle support.',
                 )
             }
+            skipInitialSync.current = true
             clientRef.current.synchronizeBootstrapData(
                 resolvedServerData.config,
                 resolvedServerData.user,
                 resolvedServerData.userAgent,
             )
-        } else {
-            // if the promise isnt resolved yet, schedule it to synchronize when it is
-            // we check the above condition first to make sure we can use the resolved data on the first render pass
-            // since the `.then` here is only evaluated after this render pass is finished
-            serverDataPromise.then((serverData) => {
-                clientRef.current!.synchronizeBootstrapData(
-                    serverData.config,
-                    serverData.user,
-                    serverData.userAgent,
-                )
-            })
         }
     }
 
@@ -149,6 +142,7 @@ export const InternalDevCycleClientsideProvider = ({
                 <SynchronizeClientData
                     serverDataPromise={serverDataPromise}
                     client={clientRef.current}
+                    skipInitialSync={skipInitialSync.current}
                 />
             </Suspense>
             {children}
