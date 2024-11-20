@@ -26,23 +26,25 @@ const isServer = typeof window === 'undefined'
  * keep the clientside instance of the SDK up-to-date with new data coming from the server during realtime updates
  * @param serverDataPromise
  * @param client
- * @param skipInitialSync
+ * @param enableStreaming
  * @constructor
  */
 const SynchronizeClientData = ({
     serverDataPromise,
     client,
-    skipInitialSync,
+    enableStreaming,
 }: {
     serverDataPromise: Promise<DevCycleServerData>
     client: DevCycleClient
-    skipInitialSync: boolean
+    enableStreaming: boolean
 }) => {
     const serverData = use(serverDataPromise)
     const dataRef = useRef<DevCycleServerData | null>(
-        // if we already triggered synchronization on the first pass, set this to the resolved data so the below check
-        // doesn't run again until the data changes. Otherwise set it to null so that we run the synchronization
-        skipInitialSync ? serverData : null,
+        // when streaming is disabled, we run synchronization on the initial server data in the
+        // InternalDevCycleClientsideProvider component so we don't need to do it again immediately.
+        // In streaming mode we want to synchronize on that initial server data since we aren't doing it above
+        // Therefore set this ref to the initial server data so the below check won't run when not in streaming mode
+        !enableStreaming ? serverData : null,
     )
     const clientRef = useRef<DevCycleClient>(client)
 
@@ -66,7 +68,6 @@ export const InternalDevCycleClientsideProvider = ({
 }: DevCycleClientsideProviderProps): React.ReactElement => {
     const clientRef = useRef<DevCycleClient>()
     const router = useRouter()
-    const skipInitialSync = useRef(false)
 
     const { serverDataPromise, serverData, clientSDKKey, enableStreaming } =
         context
@@ -94,7 +95,6 @@ export const InternalDevCycleClientsideProvider = ({
     }
 
     if (!clientRef.current) {
-        skipInitialSync.current = false
         clientRef.current = initializeDevCycle(clientSDKKey, {
             ...context.options,
             sdkPlatform: 'nextjs',
@@ -120,7 +120,6 @@ export const InternalDevCycleClientsideProvider = ({
                     'Server data should be available. Please contact DevCycle support.',
                 )
             }
-            skipInitialSync.current = true
             clientRef.current.synchronizeBootstrapData(
                 resolvedServerData.config,
                 resolvedServerData.user,
@@ -142,7 +141,7 @@ export const InternalDevCycleClientsideProvider = ({
                 <SynchronizeClientData
                     serverDataPromise={serverDataPromise}
                     client={clientRef.current}
-                    skipInitialSync={skipInitialSync.current}
+                    enableStreaming={enableStreaming}
                 />
             </Suspense>
             {children}
