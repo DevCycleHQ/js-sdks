@@ -1497,27 +1497,27 @@ __metadata:
   linkType: hard
 
 "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server::locator=e2e-js-cloud-server%40workspace%3A.":
-  version: 1.9.2
-  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=176498&locator=e2e-js-cloud-server%40workspace%3A."
+  version: 1.17.2
+  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=2335fe&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
-    "@devcycle/types": ^1.10.2
+    "@devcycle/types": ^1.18.1
     cross-fetch: ^4.0.0
     fetch-retry: ^5.0.6
     lodash: ^4.17.21
-  checksum: dabc12cbbd048575470ec356bc74e3789808e1574a2d5274ae700f8ff59ed0dcc58393925c437e5455547a0dfbd634db1726f614aebda75fd83618a56b8366d3
+  checksum: a62182d688d10924c0c347a0fe5a7ed73cd07a0c6e82105b9d215969f1e302609c325f0b2db2f744aaa0f61049280fd455cc9f8a4b6ccc5d9445ace0c6bd24f3
   languageName: node
   linkType: hard
 
 "@devcycle/types@file:../../../dist/lib/shared/types::locator=e2e-js-cloud-server%40workspace%3A.":
-  version: 1.10.2
-  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=5ddbbc&locator=e2e-js-cloud-server%40workspace%3A."
+  version: 1.18.1
+  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=d094ae&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
     class-transformer: 0.5.1
     class-validator: 0.14.1
     iso-639-1: ^2.1.13
     lodash: ^4.17.21
     reflect-metadata: ^0.1.13
-  checksum: 5b09b2eb76bf31530cd7db8b76ac425c93fc4c61a5f9bf813db34fb74c2c409f4f5da4ce72a6286e9e0df00a6856860df8fca1f84ff73833f875cfb834be5265
+  checksum: 8c37c512e1d183bf96bbbcde0c9c146a9154b48542646336aae80ac5e3b31115b88b26780e63aa5ef53ae9277a8e0d94f82bb8248e09ab4c6365020c575d0867
   languageName: node
   linkType: hard
 
@@ -3351,13 +3351,13 @@ __metadata:
   linkType: hard
 
 "cross-spawn@npm:^7.0.0, cross-spawn@npm:^7.0.3":
-  version: 7.0.3
-  resolution: "cross-spawn@npm:7.0.3"
+  version: 7.0.6
+  resolution: "cross-spawn@npm:7.0.6"
   dependencies:
     path-key: ^3.1.0
     shebang-command: ^2.0.0
     which: ^2.0.1
-  checksum: 671cc7c7288c3a8406f3c69a3ae2fc85555c04169e9d611def9a675635472614f1c0ed0ef80955d5b6d4e724f6ced67f0ad1bb006c2ea643488fcfef994d7f52
+  checksum: 8d306efacaf6f3f60e0224c287664093fa9185680b2d195852ba9a863f85d02dcc737094c6e512175f8ee0161f9b87c73c6826034c2422e39de7d6569cf4503b
   languageName: node
   linkType: hard
 

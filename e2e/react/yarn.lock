@@ -1464,15 +1464,15 @@ __metadata:
   linkType: hard
 
 "@devcycle/react-client-sdk@file:../../dist/sdk/react::locator=react-e2e%40workspace%3A.":
-  version: 1.29.1
-  resolution: "@devcycle/react-client-sdk@file:../../dist/sdk/react#../../dist/sdk/react::hash=7d8400&locator=react-e2e%40workspace%3A."
+  version: 1.27.2
+  resolution: "@devcycle/react-client-sdk@file:../../dist/sdk/react#../../dist/sdk/react::hash=1fe159&locator=react-e2e%40workspace%3A."
   dependencies:
-    "@devcycle/js-client-sdk": ^1.31.1
-    "@devcycle/types": ^1.18.1
+    "@devcycle/js-client-sdk": ^1.29.2
+    "@devcycle/types": ^1.17.2
     hoist-non-react-statics: ^3.3.2
   peerDependencies:
     react: ">=16.8.0"
-  checksum: a574733439eb571c48121054552e217e4cd2d4f18cad4c26c6e09d2f4659f496820e09ea3f801bf02a77b9d5175eb303175274630059204f25443844ddebe91e
+  checksum: 5538c7ef7f05fd4d24ec9b3f23255d0164e9706c39f55cdb8b13219653b487072df0511bc695bdd2cb0e7d4e51354bfaef104d9272034de99f86ff310f3222a2
   languageName: node
   linkType: hard
 
@@ -2696,13 +2696,13 @@ __metadata:
   linkType: hard
 
 "cross-spawn@npm:^7.0.0, cross-spawn@npm:^7.0.3":
-  version: 7.0.3
-  resolution: "cross-spawn@npm:7.0.3"
+  version: 7.0.6
+  resolution: "cross-spawn@npm:7.0.6"
   dependencies:
     path-key: ^3.1.0
     shebang-command: ^2.0.0
     which: ^2.0.1
-  checksum: 671cc7c7288c3a8406f3c69a3ae2fc85555c04169e9d611def9a675635472614f1c0ed0ef80955d5b6d4e724f6ced67f0ad1bb006c2ea643488fcfef994d7f52
+  checksum: 8d306efacaf6f3f60e0224c287664093fa9185680b2d195852ba9a863f85d02dcc737094c6e512175f8ee0161f9b87c73c6826034c2422e39de7d6569cf4503b
   languageName: node
   linkType: hard
 
@@ -3678,8 +3678,8 @@ __metadata:
   linkType: hard
 
 "http-proxy-middleware@npm:^2.0.3":
-  version: 2.0.6
-  resolution: "http-proxy-middleware@npm:2.0.6"
+  version: 2.0.7
+  resolution: "http-proxy-middleware@npm:2.0.7"
   dependencies:
     "@types/http-proxy": ^1.17.8
     http-proxy: ^1.18.1
@@ -3691,7 +3691,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/express":
       optional: true
-  checksum: 2ee85bc878afa6cbf34491e972ece0f5be0a3e5c98a60850cf40d2a9a5356e1fc57aab6cff33c1fc37691b0121c3a42602d2b1956c52577e87a5b77b62ae1c3a
+  checksum: 18caa21145917aa1054740353916e8f03f5a3a93bede9106f1f44d84f7b174df17af1c72bf5fade5cc440c2058ee813f47cbb2bdd6ae6874af1cf33e0ac575f3
   languageName: node
   linkType: hard
 
