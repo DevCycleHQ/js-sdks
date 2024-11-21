@@ -4747,8 +4747,6 @@ __metadata:
 "@devcycle/openfeature-nodejs-example@workspace:dev-apps/openfeature-nodejs":
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-nodejs-example@workspace:dev-apps/openfeature-nodejs"
-  dependencies:
-    "@openfeature/server-sdk": ^1.16.2
   languageName: unknown
   linkType: soft
 
@@ -4765,7 +4763,7 @@ __metadata:
     "@devcycle/js-client-sdk": ^1.31.2
   peerDependencies:
     "@openfeature/multi-provider-web": ^0.0.2
-    "@openfeature/web-sdk": ^1.0.3
+    "@openfeature/web-sdk": ^1.3.2
   peerDependenciesMeta:
     "@openfeature/multi-provider-web":
       optional: true
