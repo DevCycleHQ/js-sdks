@@ -4737,7 +4737,7 @@ __metadata:
     fetch-retry: ^5.0.6
   peerDependencies:
     "@openfeature/multi-provider": ^0.1.1
-    "@openfeature/server-sdk": ^1.13.5
+    "@openfeature/server-sdk": ^1.16.2
   peerDependenciesMeta:
     "@openfeature/multi-provider":
       optional: true
@@ -4747,6 +4747,8 @@ __metadata:
 "@devcycle/openfeature-nodejs-example@workspace:dev-apps/openfeature-nodejs":
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-nodejs-example@workspace:dev-apps/openfeature-nodejs"
+  dependencies:
+    "@openfeature/server-sdk": ^1.16.2
   languageName: unknown
   linkType: soft
 

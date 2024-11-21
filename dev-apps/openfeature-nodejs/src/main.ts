@@ -53,6 +53,14 @@ async function startDevCycle() {
         true,
     )
     console.log(`Value of the variable is ${defaultVariable} \n`)
+
+    openFeatureClient.track('of-test-event', context, {
+        value: 610,
+        metaDataField: 1,
+        metaDataFieldString: 'test',
+        metaDataFieldBoolean: true,
+        metaDataFieldDouble: 1.23,
+    })
 }
 
 startDevCycle()
