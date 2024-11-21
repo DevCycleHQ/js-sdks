@@ -117,7 +117,7 @@
         "@testing-library/jest-dom": "^6.4.2",
         "@testing-library/jest-native": "5.4.3",
         "@testing-library/react": "14.0.0",
-        "@testing-library/react-native": "12.3.2",
+        "@testing-library/react-native": "12.8.1",
         "@total-typescript/shoehorn": "^0.1.2",
         "@types/async": "^3.2.8",
         "@types/eventsource": "^1.1.15",
