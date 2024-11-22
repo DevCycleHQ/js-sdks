@@ -6,7 +6,7 @@ import {
     BucketedConfigWithAdditionalFields,
     DevCycleNextOptions,
 } from '../common/types'
-import { BucketedUserConfig, ConfigBody, ConfigSource } from '@devcycle/types'
+import { ConfigBody, ConfigSource } from '@devcycle/types'
 
 const getPopulatedUser = cache((user: DevCycleUser, userAgent?: string) => {
     return new DVCPopulatedUser(
