@@ -6,7 +6,7 @@ import {
     BucketedConfigWithAdditionalFields,
     DevCycleNextOptions,
 } from '../common/types'
-import { BucketedUserConfig, ConfigBody, ConfigSource } from '@devcycle/types'
+import { ConfigBody, ConfigSource } from '@devcycle/types'
 
 const getPopulatedUser = cache((user: DevCycleUser, userAgent?: string) => {
     return new DVCPopulatedUser(
@@ -67,18 +67,14 @@ class CDNConfigSource extends ConfigSource {
     }
     async getConfig(sdkKey: string, kind: string, obfuscated: boolean) {
         // this request will be cached by Next
-        const cdnConfig = await fetchCDNConfig(
+        const { config, headers } = await fetchCDNConfig(
             sdkKey,
             this.clientSDKKey,
             obfuscated,
         )
-        if (!cdnConfig.ok) {
-            const responseText = await cdnConfig.text()
-            throw new Error('Could not fetch config: ' + responseText)
-        }
         return {
-            config: (await cdnConfig.json()) as ConfigBody,
-            lastModified: cdnConfig.headers.get('last-modified'),
+            config: config,
+            lastModified: headers.get('last-modified'),
             metaData: {},
         }
     }

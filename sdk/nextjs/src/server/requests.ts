@@ -1,29 +1,40 @@
 import { DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { serializeUserSearchParams } from '../common/serializeUser'
 import { cache } from 'react'
-import { BucketedUserConfig } from '@devcycle/types'
+import { BucketedUserConfig, ConfigBody } from '@devcycle/types'
 
 const getFetchUrl = (sdkKey: string, obfuscated: boolean) =>
     `https://config-cdn.devcycle.com/config/v2/server/bootstrap/${
         obfuscated ? 'obfuscated/' : ''
     }${sdkKey}.json`
 
-export const fetchCDNConfig = async (
-    sdkKey: string,
-    clientSDKKey: string,
-    obfuscated: boolean,
-): Promise<Response> => {
-    return await fetch(
-        getFetchUrl(sdkKey, obfuscated),
-        // only store for 60 seconds
-        {
-            next: {
-                revalidate: 60,
-                tags: [sdkKey, clientSDKKey],
+export const fetchCDNConfig = cache(
+    async (
+        sdkKey: string,
+        clientSDKKey: string,
+        obfuscated: boolean,
+    ): Promise<{ config: ConfigBody; headers: Headers }> => {
+        const response = await fetch(
+            getFetchUrl(sdkKey, obfuscated),
+            // only store for 60 seconds
+            {
+                next: {
+                    revalidate: 60,
+                    tags: [sdkKey, clientSDKKey],
+                },
             },
-        },
-    )
-}
+        )
+
+        if (!response.ok) {
+            const responseText = await response.text()
+            throw new Error('Could not fetch config: ' + responseText)
+        }
+        return {
+            config: (await response.json()) as ConfigBody,
+            headers: response.headers,
+        }
+    },
+)
 
 const getSDKAPIUrl = (
     sdkKey: string,
