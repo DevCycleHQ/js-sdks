@@ -13,6 +13,7 @@ import { DVCPopulatedUserFromDevCycleUser } from '../src/models/populatedUserHel
 import { publishEvents } from '../src/request'
 
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
+import { ResponseError } from '@devcycle/server-request'
 const { config } = testData
 
 const publishEvents_mock = mocked(publishEvents)
@@ -231,7 +232,6 @@ describe('EventQueue Unit Tests', () => {
 
         const promise1 = eventQueue.flushEvents()
         const promise2 = eventQueue.flushEvents()
-        eventQueue.cleanup()
 
         await Promise.all([promise1, promise2])
         expect(publishEvents_mock).toHaveBeenCalledTimes(1)
@@ -327,6 +327,7 @@ describe('EventQueue Unit Tests', () => {
             ],
             'localhost:3000/client/1',
         )
+        eventQueue.cleanup()
     })
 
     it(
@@ -815,6 +816,31 @@ describe('EventQueue Unit Tests', () => {
             eventQueue.cleanup()
         },
     )
+
+    it('should close the event queue if the events api response is 401', async () => {
+        const eventQueue = initEventQueue('sdkKey', 'uuid')
+        const error = new ResponseError('401 error')
+        error.status = 401
+        publishEvents_mock.mockRejectedValueOnce(error)
+        eventQueue.queueEvent(
+            DVCPopulatedUserFromDevCycleUser({ user_id: 'user1' }),
+            { type: 'test_event' },
+        )
+        await eventQueue.flushEvents()
+
+        expect(eventQueue.disabledEventFlush).toBe(true)
+
+        eventQueue.queueEvent(
+            DVCPopulatedUserFromDevCycleUser({ user_id: 'user1' }),
+            { type: 'test_event' },
+        )
+        eventQueue.queueAggregateEvent(
+            DVCPopulatedUserFromDevCycleUser({ user_id: 'user1' }),
+            { type: EventTypes.aggVariableEvaluated, target: 'key' },
+            bucketedUserConfig,
+        )
+        await eventQueue.flushEvents()
+    })
 
     describe('Max queue size tests', () => {
         it(
