@@ -2,6 +2,7 @@ import { DVCPopulatedUser } from './models/populatedUser'
 import { DevCycleEvent } from './types'
 import { DevCycleServerSDKOptions } from '@devcycle/types'
 import { post } from '@devcycle/server-request'
+import { VariableKey } from '@devcycle/js-client-sdk'
 
 export const HOST = '.devcycle.com'
 
@@ -58,7 +59,7 @@ export async function getAllVariables(
 export async function getVariable(
     user: DVCPopulatedUser,
     sdkKey: string,
-    variableKey: string,
+    variableKey: VariableKey,
     options: DevCycleServerSDKOptions,
 ): Promise<Response> {
     const baseUrl = `${

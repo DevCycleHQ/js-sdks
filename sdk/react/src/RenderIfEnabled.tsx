@@ -1,11 +1,11 @@
 import useVariableValue from './useVariableValue'
-import { DVCVariableValue } from '@devcycle/js-client-sdk'
+import { DVCVariableValue, VariableKey } from '@devcycle/js-client-sdk'
 import { useContext } from 'react'
 import { debugContext } from './context'
 
 type CommonProps = {
     children: React.ReactNode
-    variableKey: string
+    variableKey: VariableKey
 }
 
 type RenderIfEnabledProps<T extends DVCVariableValue> =
