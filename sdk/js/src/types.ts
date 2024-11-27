@@ -193,15 +193,42 @@ export interface DevCycleUser<T extends DVCCustomDataJSON = DVCCustomDataJSON> {
     privateCustomData?: T
 }
 
-export interface VariableDefinitions {
-    [key: string]: VariableValue
-}
+/**
+ * Used to support strong typing of flag strings in the SDK.
+ * Usage;
+ * ```ts
+ * import '@devcycle/js-client-sdk';
+ * declare module '@devcycle/js-client-sdk' {
+ *   interface CustomVariableDefinitions {
+ *     'flag-one': boolean;
+ *   }
+ * }
+ * ```
+ * Or when using the cli generated types;
+ * ```ts
+ * import '@devcycle/js-client-sdk';
+ * declare module '@devcycle/js-client-sdk' {
+ *   interface CustomVariableDefinitions extends DVCVariableTypes {}
+ * }
+ * ```
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface CustomVariableDefinitions {}
+type DynamicBaseVariableDefinitions =
+    keyof CustomVariableDefinitions extends never
+        ? {
+              [key: string]: VariableValue
+          }
+        : CustomVariableDefinitions
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface VariableDefinitions extends DynamicBaseVariableDefinitions {}
+export type VariableKey = string & keyof VariableDefinitions
 
 export interface DVCVariable<T extends DVCVariableValue> {
     /**
      * Unique "key" by Project to use for this Dynamic Variable.
      */
-    readonly key: string
+    readonly key: VariableKey
 
     /**
      * The value for this Dynamic Variable which will be set to the `defaultValue`
