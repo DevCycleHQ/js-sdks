@@ -8,7 +8,6 @@ import {
     DevCycleUser,
     ErrorCallback,
     DVCFeature,
-    VariableDefinitions,
     UserError,
 } from './types'
 
@@ -20,7 +19,12 @@ import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
 import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
-import type { BucketedUserConfig, VariableTypeAlias } from '@devcycle/types'
+import type {
+    BucketedUserConfig,
+    InferredVariableType,
+    VariableDefinitions,
+    VariableTypeAlias,
+} from '@devcycle/types'
 import { getVariableTypeFromValue } from '@devcycle/types'
 import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'

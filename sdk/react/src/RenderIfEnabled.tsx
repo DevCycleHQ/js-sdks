@@ -1,7 +1,8 @@
 import useVariableValue from './useVariableValue'
-import { DVCVariableValue, VariableKey } from '@devcycle/js-client-sdk'
+import { DVCVariableValue } from '@devcycle/js-client-sdk'
 import { useContext } from 'react'
 import { debugContext } from './context'
+import { VariableKey } from '@devcycle/types'
 
 type CommonProps = {
     children: React.ReactNode

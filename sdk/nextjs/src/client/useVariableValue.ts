@@ -1,15 +1,18 @@
 'use client'
-import { DevCycleClient, DVCVariableValue } from '@devcycle/js-client-sdk'
+import { DevCycleClient } from '@devcycle/js-client-sdk'
 import { useContext, use } from 'react'
-import { VariableTypeAlias } from '@devcycle/types'
+import { VariableDefinitions, VariableKey } from '@devcycle/types'
 import { DVCVariable } from '@devcycle/js-client-sdk'
 import { DevCycleProviderContext } from './internal/context'
 import { useRerenderOnVariableChange } from './internal/useRerenderOnVariableChange'
 
-export const useVariable = <T extends DVCVariableValue>(
-    key: string,
-    defaultValue: T,
-): DVCVariable<T> => {
+export const useVariable = <
+    K extends VariableKey,
+    ValueType extends VariableDefinitions[K],
+>(
+    key: K,
+    defaultValue: ValueType,
+): DVCVariable<ValueType> => {
     const context = useContext(DevCycleProviderContext)
     useRerenderOnVariableChange(key)
 
@@ -21,10 +24,13 @@ export const useVariable = <T extends DVCVariableValue>(
     return context.client.variable(key, defaultValue)
 }
 
-export const useVariableValue = <T extends DVCVariableValue>(
-    key: string,
-    defaultValue: T,
-): VariableTypeAlias<T> => {
+export const useVariableValue = <
+    K extends VariableKey,
+    ValueType extends VariableDefinitions[K],
+>(
+    key: K,
+    defaultValue: ValueType,
+): DVCVariable<ValueType>['value'] => {
     return useVariable(key, defaultValue).value
 }
 

@@ -1,16 +1,16 @@
 'use client'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import context from './context'
-import type {
-    DVCVariable,
-    DVCVariableValue,
-    VariableKey,
-} from '@devcycle/js-client-sdk'
+import type { DVCVariable } from '@devcycle/js-client-sdk'
+import { VariableDefinitions, VariableKey } from '@devcycle/types'
 
-export const useVariable = <T extends DVCVariableValue>(
-    key: VariableKey,
-    defaultValue: T,
-): DVCVariable<T> => {
+export const useVariable = <
+    K extends VariableKey,
+    ValueType extends VariableDefinitions[K],
+>(
+    key: K,
+    defaultValue: ValueType,
+): DVCVariable<ValueType> => {
     const dvcContext = useContext(context)
     const [_, forceRerender] = useState({})
     const forceRerenderCallback = useCallback(() => forceRerender({}), [])

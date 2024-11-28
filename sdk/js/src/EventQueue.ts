@@ -1,13 +1,9 @@
 import { DevCycleClient } from './Client'
-import {
-    DevCycleEvent,
-    DevCycleOptions,
-    VariableDefinitions,
-    DVCCustomDataJSON,
-} from './types'
+import { DevCycleEvent, DevCycleOptions, DVCCustomDataJSON } from './types'
 import { publishEvents } from './Request'
 import { checkParamDefined } from './utils'
 import chunk from 'lodash/chunk'
+import { VariableDefinitions } from '@devcycle/types'
 
 export const EventTypes = {
     variableEvaluated: 'variableEvaluated',

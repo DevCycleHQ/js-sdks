@@ -7,6 +7,8 @@ import type {
     DevCycleJSON,
     DVCCustomDataJSON,
     BucketedUserConfig,
+    VariableKey,
+    InferredVariableType,
 } from '@devcycle/types'
 export { UserError } from '@devcycle/types'
 
@@ -193,38 +195,10 @@ export interface DevCycleUser<T extends DVCCustomDataJSON = DVCCustomDataJSON> {
     privateCustomData?: T
 }
 
-/**
- * Used to support strong typing of flag strings in the SDK.
- * Usage;
- * ```ts
- * import '@devcycle/js-client-sdk';
- * declare module '@devcycle/js-client-sdk' {
- *   interface CustomVariableDefinitions {
- *     'flag-one': boolean;
- *   }
- * }
- * ```
- * Or when using the cli generated types;
- * ```ts
- * import '@devcycle/js-client-sdk';
- * declare module '@devcycle/js-client-sdk' {
- *   interface CustomVariableDefinitions extends DVCVariableTypes {}
- * }
- * ```
- */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface CustomVariableDefinitions {}
-type DynamicBaseVariableDefinitions =
-    keyof CustomVariableDefinitions extends never
-        ? {
-              [key: string]: VariableValue
-          }
-        : CustomVariableDefinitions
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface VariableDefinitions extends DynamicBaseVariableDefinitions {}
-export type VariableKey = string & keyof VariableDefinitions
-
-export interface DVCVariable<T extends DVCVariableValue> {
+export interface DVCVariable<
+    T extends DVCVariableValue,
+    K extends VariableKey = VariableKey,
+> {
     /**
      * Unique "key" by Project to use for this Dynamic Variable.
      */
@@ -234,7 +208,7 @@ export interface DVCVariable<T extends DVCVariableValue> {
      * The value for this Dynamic Variable which will be set to the `defaultValue`
      * if accessed before the SDK is fully Initialized
      */
-    readonly value: VariableTypeAlias<T>
+    readonly value: InferredVariableType<K, T>
 
     /**
      * Default value set when creating the variable
