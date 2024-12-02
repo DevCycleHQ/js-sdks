@@ -15,8 +15,9 @@ import {
     DevCycleServerSDKOptions,
     DVCLogger,
     getVariableTypeFromValue,
+    InferredVariableType,
+    VariableDefinitions,
     VariableTypeAlias,
-    type VariableValue,
 } from '@devcycle/types'
 import {
     getAllFeatures,
@@ -66,10 +67,6 @@ const throwIfUserError = (err: unknown) => {
 
     // if not a ResponseError, throw it
     throw err
-}
-
-export interface VariableDefinitions {
-    [key: string]: VariableValue
 }
 
 export class DevCycleCloudClient<
@@ -163,7 +160,7 @@ export class DevCycleCloudClient<
         user: DevCycleUser,
         key: K,
         defaultValue: T,
-    ): Promise<VariableTypeAlias<T>> {
+    ): Promise<InferredVariableType<K, T>> {
         return (await this.variable(user, key, defaultValue)).value
     }
 

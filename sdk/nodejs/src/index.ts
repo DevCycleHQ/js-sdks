@@ -16,8 +16,7 @@ import {
     DVCFeatureSet,
     DevCyclePlatformDetails,
 } from '@devcycle/js-cloud-server-sdk'
-import { VariableDefinitions } from '@devcycle/js-client-sdk'
-import { DevCycleServerSDKOptions } from '@devcycle/types'
+import { DevCycleServerSDKOptions, VariableDefinitions } from '@devcycle/types'
 import { getNodeJSPlatformDetails } from './utils/platformDetails'
 
 // Dynamically import the OpenFeature Provider, as it's an optional peer dependency

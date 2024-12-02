@@ -7,6 +7,8 @@ import type {
     DevCycleJSON,
     DVCCustomDataJSON,
     BucketedUserConfig,
+    VariableKey,
+    InferredVariableType,
 } from '@devcycle/types'
 export { UserError } from '@devcycle/types'
 
@@ -193,21 +195,20 @@ export interface DevCycleUser<T extends DVCCustomDataJSON = DVCCustomDataJSON> {
     privateCustomData?: T
 }
 
-export interface VariableDefinitions {
-    [key: string]: VariableValue
-}
-
-export interface DVCVariable<T extends DVCVariableValue> {
+export interface DVCVariable<
+    T extends DVCVariableValue,
+    K extends VariableKey = VariableKey,
+> {
     /**
      * Unique "key" by Project to use for this Dynamic Variable.
      */
-    readonly key: string
+    readonly key: VariableKey
 
     /**
      * The value for this Dynamic Variable which will be set to the `defaultValue`
      * if accessed before the SDK is fully Initialized
      */
-    readonly value: VariableTypeAlias<T>
+    readonly value: InferredVariableType<K, T>
 
     /**
      * Default value set when creating the variable

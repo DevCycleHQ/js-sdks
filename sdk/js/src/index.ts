@@ -2,7 +2,6 @@ import {
     DevCycleEvent,
     DevCycleOptions,
     DevCycleUser,
-    VariableDefinitions,
     UserError,
     DVCCustomDataJSON,
 } from './types'
@@ -14,6 +13,9 @@ import { checkIsServiceWorker } from './utils'
 
 export * from './types'
 export { dvcDefaultLogger } from './logger'
+
+import { VariableDefinitions } from '@devcycle/types'
+export { VariableDefinitions }
 
 /**
  * @deprecated Use DevCycleClient instead

@@ -15,8 +15,9 @@ import {
     DVCLogger,
     getVariableTypeFromValue,
     VariableTypeAlias,
-    type VariableValue,
     UserError,
+    VariableDefinitions,
+    InferredVariableType,
 } from '@devcycle/types'
 import os from 'os'
 import {
@@ -55,10 +56,6 @@ const castIncomingUser = (user: DevCycleUser) => {
 type DevCycleProviderConstructor =
     typeof import('./open-feature/DevCycleProvider').DevCycleProvider
 type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
-
-export interface VariableDefinitions {
-    [key: string]: VariableValue
-}
 
 export class DevCycleClient<
     Variables extends VariableDefinitions = VariableDefinitions,
@@ -290,7 +287,7 @@ export class DevCycleClient<
     variableValue<
         K extends string & keyof Variables,
         T extends DVCVariableValue & Variables[K],
-    >(user: DevCycleUser, key: K, defaultValue: T): VariableTypeAlias<T> {
+    >(user: DevCycleUser, key: K, defaultValue: T): InferredVariableType<K, T> {
         return this.variable(user, key, defaultValue).value
     }
 

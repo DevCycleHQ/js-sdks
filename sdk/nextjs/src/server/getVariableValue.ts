@@ -1,17 +1,24 @@
 import { getClient } from './requestContext'
-import { DVCVariableValue } from '@devcycle/js-client-sdk'
-import { VariableTypeAlias } from '@devcycle/types'
+import {
+    InferredVariableType,
+    VariableDefinitions,
+    VariableKey,
+    VariableTypeAlias,
+} from '@devcycle/types'
 
-export async function getVariableValue<T extends DVCVariableValue>(
-    key: string,
-    defaultValue: T,
-): Promise<VariableTypeAlias<T>> {
+export async function getVariableValue<
+    K extends VariableKey,
+    ValueType extends VariableDefinitions[K],
+>(
+    key: K,
+    defaultValue: ValueType,
+): Promise<InferredVariableType<K, ValueType>> {
     const client = getClient()
     if (!client) {
         console.error(
             'React cache API is not working as expected. Please contact DevCycle support.',
         )
-        return defaultValue as VariableTypeAlias<T>
+        return defaultValue as VariableTypeAlias<ValueType>
     }
 
     const variable = client.variable(key, defaultValue)

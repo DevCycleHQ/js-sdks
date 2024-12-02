@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
+import { DevCycleClient, DevCycleUser } from '@devcycle/nodejs-server-sdk'
 import {
-    DVCVariableValue,
-    DevCycleClient,
-    DevCycleUser,
-} from '@devcycle/nodejs-server-sdk'
-import { VariableTypeAlias } from '@devcycle/types'
+    InferredVariableType,
+    VariableDefinitions,
+    VariableKey,
+} from '@devcycle/types'
 import { ClsService } from 'nestjs-cls'
 
 @Injectable()
@@ -18,14 +18,14 @@ export class DevCycleService {
         return this.cls.get('dvc_user')
     }
 
-    isEnabled(key: string): boolean {
+    isEnabled(key: VariableKey): boolean {
         return this.devcycleClient.variableValue(this.getUser(), key, false)
     }
 
-    variableValue<T extends DVCVariableValue>(
-        key: string,
-        defaultValue: T,
-    ): VariableTypeAlias<T> {
+    variableValue<
+        K extends VariableKey,
+        ValueType extends VariableDefinitions[K],
+    >(key: K, defaultValue: ValueType): InferredVariableType<K, ValueType> {
         return this.devcycleClient.variableValue(
             this.getUser(),
             key,
