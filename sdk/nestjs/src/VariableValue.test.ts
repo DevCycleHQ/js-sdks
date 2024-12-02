@@ -15,7 +15,6 @@ function getParamDecoratorFactory(decorator: () => ParameterDecorator) {
 }
 
 describe('VariableValue', () => {
-    let ctx: ExecutionContext
     let dvcClient: DevCycleClient
     let dvcUser: DevCycleUser
 
@@ -40,7 +39,7 @@ describe('VariableValue', () => {
         const defaultValue = 'default value'
 
         const factory = getParamDecoratorFactory(VariableValue)
-        const value = factory({ key, default: defaultValue }, ctx)
+        const value = factory({ key, default: defaultValue })
 
         expect(dvcClient.variableValue).toBeCalledWith(
             dvcUser,
