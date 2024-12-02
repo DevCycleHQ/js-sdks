@@ -9,15 +9,16 @@ const getUserIdentity = async () => {
     }
 }
 
-const { getVariableValue, getClientContext } = setupDevCycle(
+const { getVariableValue, getClientContext } = setupDevCycle({
+    serverSDKKey: process.env.NEXT_PUBLIC_DEVCYCLE_SERVER_SDK_KEY ?? '',
     // SDK Key. This will be public and sent to the client, so you MUST use the client SDK key.
-    process.env.NEXT_PUBLIC_DEVCYCLE_CLIENT_SDK_KEY ?? '',
+    clientSDKKey: process.env.NEXT_PUBLIC_DEVCYCLE_CLIENT_SDK_KEY ?? '',
     // pass your method for getting the user identity
-    getUserIdentity,
+    userGetter: getUserIdentity,
     // pass any options you want to use for the DevCycle SDK
-    {
+    options: {
         enableStreaming: process.env.NEXT_PUBLIC_ENABLE_STREAMING === '1',
     },
-)
+})
 
 export { getVariableValue, getClientContext, getUserIdentity }

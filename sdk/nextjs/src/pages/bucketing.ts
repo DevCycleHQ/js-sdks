@@ -2,6 +2,7 @@ import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { generateBucketedConfig } from '@devcycle/bucketing'
 import { BucketedUserConfig, ConfigBody, ConfigSource } from '@devcycle/types'
 import { fetchCDNConfig, sdkConfigAPI } from './requests.js'
+import { transformConfig } from '../common/transformConfig.js'
 
 class CDNConfigSource extends ConfigSource {
     async getConfig(
@@ -52,7 +53,7 @@ const bucketOrFetchConfig = async (
 
     return generateBucketedConfig({
         user,
-        config,
+        config: transformConfig(config),
     })
 }
 

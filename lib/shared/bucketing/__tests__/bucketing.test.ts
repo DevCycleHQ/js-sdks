@@ -1419,7 +1419,9 @@ describe('Rollout Logic', () => {
         it('should handle stepped rollout with 0% start and 100% later stage', () => {
             const rollout: PublicRollout = {
                 type: 'stepped',
-                startDate: new Date(),
+                startDate: new Date(
+                    new Date().getTime() - 1000 * 60 * 60 * 24 * 7,
+                ),
                 startPercentage: 0,
                 stages: [
                     {
@@ -1453,10 +1455,12 @@ describe('Rollout Logic', () => {
             jest.useRealTimers()
         })
 
-        it('should handle stepped rollout with 50% start and 100% later stage', () => {
+        it.only('should handle stepped rollout with 50% start and 100% later stage', () => {
             const rollout: PublicRollout = {
                 type: 'stepped',
-                startDate: new Date(),
+                startDate: new Date(
+                    new Date().getTime() - 1000 * 60 * 60 * 24 * 7,
+                ),
                 startPercentage: 0.5,
                 stages: [
                     {
@@ -1494,7 +1498,9 @@ describe('Rollout Logic', () => {
         it('should handle stepped rollout with 100% start and 0% later stage', () => {
             const rollout: PublicRollout = {
                 type: 'stepped',
-                startDate: new Date(),
+                startDate: new Date(
+                    new Date().getTime() - 1000 * 60 * 60 * 24 * 7,
+                ),
                 startPercentage: 1,
                 stages: [
                     {
