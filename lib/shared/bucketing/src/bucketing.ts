@@ -105,7 +105,7 @@ export const getCurrentRolloutPercentage = (
             : null)
 
     if (!currentStage) {
-        return 0
+        return start
     }
 
     if (!nextStage || nextStage.type === 'discrete') {
