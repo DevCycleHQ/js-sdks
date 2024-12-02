@@ -1,7 +1,11 @@
 'use client'
 import { DevCycleClient } from '@devcycle/js-client-sdk'
 import { useContext, use } from 'react'
-import { VariableDefinitions, VariableKey } from '@devcycle/types'
+import {
+    InferredVariableType,
+    VariableDefinitions,
+    VariableKey,
+} from '@devcycle/types'
 import { DVCVariable } from '@devcycle/js-client-sdk'
 import { DevCycleProviderContext } from './internal/context'
 import { useRerenderOnVariableChange } from './internal/useRerenderOnVariableChange'
@@ -30,7 +34,7 @@ export const useVariableValue = <
 >(
     key: K,
     defaultValue: ValueType,
-): DVCVariable<ValueType>['value'] => {
+): InferredVariableType<K, ValueType> => {
     return useVariable(key, defaultValue).value
 }
 

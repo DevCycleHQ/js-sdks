@@ -1,5 +1,6 @@
 import { getClient } from './requestContext'
 import {
+    InferredVariableType,
     VariableDefinitions,
     VariableKey,
     VariableTypeAlias,
@@ -8,7 +9,10 @@ import {
 export async function getVariableValue<
     K extends VariableKey,
     ValueType extends VariableDefinitions[K],
->(key: K, defaultValue: ValueType): Promise<VariableTypeAlias<ValueType>> {
+>(
+    key: K,
+    defaultValue: ValueType,
+): Promise<InferredVariableType<K, ValueType>> {
     const client = getClient()
     if (!client) {
         console.error(
