@@ -11,6 +11,7 @@
     "scripts": {
         "lint": "nx run-many --parallel --target lint --all",
         "test": "nx run-many --parallel --target test --all",
+        "check-types": "nx run-many --parallel --target check-types --all",
         "affected:lint": "nx affected --base=origin/main --head=HEAD --target=lint",
         "affected:test": "nx affected --base=origin/main --head=HEAD --target=test",
         "affected:e2e": "nx affected --base=origin/main --head=HEAD --target=e2e",
@@ -206,7 +207,7 @@
         "ts-jest": "29.1.0",
         "ts-node": "^10.9.2",
         "tslib": "^2.3.0",
-        "typescript": "^5.3.3",
+        "typescript": "^5.7.2",
         "url-loader": "^4.1.1",
         "validate-npm-package-name": "^5.0.0",
         "verdaccio": "^5.27.0",
