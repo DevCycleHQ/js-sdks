@@ -48,7 +48,10 @@ const generateBucketedConfigCached = cache(
 
         return {
             bucketedConfig: {
-                ...generateBucketedConfig({ user: populatedUser, config }),
+                ...generateBucketedConfig({
+                    user: populatedUser,
+                    config,
+                }),
                 clientSDKKey,
                 sse: {
                     url: config.sse
@@ -73,7 +76,7 @@ class CDNConfigSource extends ConfigSource {
             obfuscated,
         )
         return {
-            config: config,
+            config,
             lastModified: headers.get('last-modified'),
             metaData: {},
         }
