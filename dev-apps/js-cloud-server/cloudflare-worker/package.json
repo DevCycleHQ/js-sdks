@@ -1,12 +1,12 @@
 {
     "name": "js-cloud-server-sdk-test-worker",
-    "version": "1.18.0",
+    "version": "1.18.1",
     "private": true,
     "scripts": {
         "deploy": "wrangler deploy",
         "start": "wrangler dev"
     },
     "dependencies": {
-        "@devcycle/js-cloud-server-sdk": "^1.18.0"
+        "@devcycle/js-cloud-server-sdk": "^1.18.1"
     }
 }
