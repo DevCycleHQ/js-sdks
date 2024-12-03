@@ -2,6 +2,7 @@ import { DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { serializeUserSearchParams } from '../common/serializeUser'
 import { cache } from 'react'
 import { BucketedUserConfig, ConfigBody } from '@devcycle/types'
+import { plainToInstance } from 'class-transformer'
 
 const getFetchUrl = (sdkKey: string, obfuscated: boolean) =>
     `https://config-cdn.devcycle.com/config/v2/server/bootstrap/${
@@ -30,7 +31,7 @@ export const fetchCDNConfig = cache(
             throw new Error('Could not fetch config: ' + responseText)
         }
         return {
-            config: (await response.json()) as ConfigBody,
+            config: plainToInstance(ConfigBody, await response.json()),
             headers: response.headers,
         }
     },

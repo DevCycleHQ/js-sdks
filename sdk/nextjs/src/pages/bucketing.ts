@@ -2,7 +2,7 @@ import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
 import { generateBucketedConfig } from '@devcycle/bucketing'
 import { BucketedUserConfig, ConfigBody, ConfigSource } from '@devcycle/types'
 import { fetchCDNConfig, sdkConfigAPI } from './requests.js'
-import { transformConfig } from '../common/transformConfig.js'
+import { plainToInstance } from 'class-transformer'
 
 class CDNConfigSource extends ConfigSource {
     async getConfig(
@@ -19,7 +19,7 @@ class CDNConfigSource extends ConfigSource {
             throw new Error('Could not fetch config')
         }
         return {
-            config: await configResponse.json(),
+            config: plainToInstance(ConfigBody, await configResponse.json()),
             lastModified: configResponse.headers.get('last-modified'),
             metaData: {},
         }
@@ -53,7 +53,7 @@ const bucketOrFetchConfig = async (
 
     return generateBucketedConfig({
         user,
-        config: transformConfig(config),
+        config,
     })
 }
 

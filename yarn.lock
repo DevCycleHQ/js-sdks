@@ -4708,6 +4708,7 @@ __metadata:
     "@devcycle/js-client-sdk": ^1.32.0
     "@devcycle/react-client-sdk": ^1.30.0
     "@devcycle/types": ^1.19.0
+    class-transformer: ^0.5.1
     hoist-non-react-statics: ^3.3.2
     server-only: ^0.0.1
   languageName: unknown
@@ -13469,7 +13470,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"class-transformer@npm:0.5.1":
+"class-transformer@npm:0.5.1, class-transformer@npm:^0.5.1":
   version: 0.5.1
   resolution: "class-transformer@npm:0.5.1"
   checksum: f191c8b4cc4239990f5efdd790cabdd852c243ed66248e39f6616a349c910c6eed2d9fd1fbf7ee6ea89f69b4f1d0b493b27347fe0cd0ae26b47c3745a805b6d3

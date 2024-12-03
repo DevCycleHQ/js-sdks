@@ -7,7 +7,6 @@ import {
     DevCycleNextOptions,
 } from '../common/types'
 import { ConfigBody, ConfigSource } from '@devcycle/types'
-import { transformConfig } from '../common/transformConfig'
 
 const getPopulatedUser = cache((user: DevCycleUser, userAgent?: string) => {
     return new DVCPopulatedUser(
@@ -51,7 +50,7 @@ const generateBucketedConfigCached = cache(
             bucketedConfig: {
                 ...generateBucketedConfig({
                     user: populatedUser,
-                    config: transformConfig(config),
+                    config,
                 }),
                 clientSDKKey,
                 sse: {
@@ -77,7 +76,7 @@ class CDNConfigSource extends ConfigSource {
             obfuscated,
         )
         return {
-            config: config,
+            config,
             lastModified: headers.get('last-modified'),
             metaData: {},
         }

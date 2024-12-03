@@ -1455,7 +1455,7 @@ describe('Rollout Logic', () => {
             jest.useRealTimers()
         })
 
-        it.only('should handle stepped rollout with 50% start and 100% later stage', () => {
+        it('should handle stepped rollout with 50% start and 100% later stage', () => {
             const rollout: PublicRollout = {
                 type: 'stepped',
                 startDate: new Date(
@@ -1524,6 +1524,55 @@ describe('Rollout Logic', () => {
             // After 0% stage - should fail all users
             jest.useFakeTimers().setSystemTime(
                 new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 8),
+            )
+            for (let i = 0; i < 100; i++) {
+                expect(
+                    doesUserPassRollout({ rollout, boundedHash: i / 100 }),
+                ).toBeFalsy()
+            }
+
+            jest.useRealTimers()
+        })
+
+        it('should handle stepped rollout with a future start date', () => {
+            const rollout: PublicRollout = {
+                type: 'stepped',
+                startDate: new Date(
+                    new Date().getTime() + 1000 * 60 * 60 * 24 * 7,
+                ),
+                startPercentage: 1,
+                stages: [
+                    {
+                        type: 'discrete',
+                        date: new Date(
+                            new Date().getTime() + 1000 * 60 * 60 * 24 * 14,
+                        ),
+                        percentage: 0,
+                    },
+                ],
+            }
+
+            // Before next stage - should be no one
+            jest.useFakeTimers().setSystemTime(new Date())
+            for (let i = 0; i < 100; i++) {
+                expect(
+                    doesUserPassRollout({ rollout, boundedHash: i / 100 }),
+                ).toBeFalsy()
+            }
+
+            // After start date - should pass all users
+            jest.useFakeTimers().setSystemTime(
+                new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 8),
+            )
+            for (let i = 0; i < 100; i++) {
+                expect(
+                    doesUserPassRollout({ rollout, boundedHash: i / 100 }),
+                ).toBeTruthy()
+            }
+
+            // After next stage - should be no one
+            jest.useFakeTimers().setSystemTime(
+                new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15),
             )
             for (let i = 0; i < 100; i++) {
                 expect(
