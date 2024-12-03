@@ -112,18 +112,17 @@ export const InternalDevCycleClientsideProvider = ({
         })
 
         if (!enableStreaming) {
-            const resolvedServerData = use(serverDataPromise)
-            // we expect that either the promise has resolved and we got the server data that way, or we weren't in
-            // streaming mode and so the promise was awaited at a higher level and passed in here as serverData
-            if (!resolvedServerData) {
+            // we expect that in non-streaming mode, the serverside portion of this provider should have awaited
+            // the serverDataPromise and passed in the result here
+            if (!serverData) {
                 throw new Error(
                     'Server data should be available. Please contact DevCycle support.',
                 )
             }
             clientRef.current.synchronizeBootstrapData(
-                resolvedServerData.config,
-                resolvedServerData.user,
-                resolvedServerData.userAgent,
+                serverData.config,
+                serverData.user,
+                serverData.userAgent,
             )
         }
     }
