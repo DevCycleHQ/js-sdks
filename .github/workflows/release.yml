@@ -31,7 +31,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                node-version: [20.x]
+                node-version: [22.12]
         env:
           GITHUB_TOKEN: ${{ secrets.AUTOMATION_USER_TOKEN }}
         steps:
