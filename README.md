@@ -13,7 +13,7 @@ To view the README for a specific SDK, navigate to that SDK inside the `sdk` dir
 There are several examples included in this repository for various SDKs. If you want to run them, proceed to setup:
 
 ## Setup
-Ensure you have Node 20.x installed.
+Ensure you have Node 22.x installed.
 
 1. Clone this repo
 2. Run `yarn` from the root directory. SDKs and dev-apps should now be set up to run via Nx.
