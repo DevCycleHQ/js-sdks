@@ -108,8 +108,7 @@ export const getConfigFromSource = async (
 }
 
 /**
- * Retrieve the config from CDN for the current request's SDK Key. This data will often be cached
- * Compute the bucketed config for the current request's user using that data, with local bucketing library
+ * Compute the bucketed config for the current request's user using raw config data, with local bucketing library
  * Cache the bucketed config for this request so that repeated calls to this function are memoized
  */
 export const getBucketedConfig = async (
