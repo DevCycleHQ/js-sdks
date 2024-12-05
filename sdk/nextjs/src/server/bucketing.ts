@@ -88,21 +88,14 @@ class CDNConfigSource extends ConfigSource {
     }
 }
 
-/**
- * Retrieve the config from CDN for the current request's SDK Key. This data will often be cached
- * Compute the bucketed config for the current request's user using that data, with local bucketing library
- * Cache the bucketed config for this request so that repeated calls to this function are memoized
- */
-export const getBucketedConfig = async (
+export const getConfigFromSource = async (
     sdkKey: string,
     clientSDKKey: string,
-    user: DevCycleUser,
     options: DevCycleNextOptions,
-    userAgent?: string,
-): Promise<BucketedConfigWithAdditionalFields> => {
+): Promise<{ config: ConfigBody; lastModified: string | null }> => {
     const cdnConfigSource = new CDNConfigSource(clientSDKKey)
-
     const configSource = options.configSource ?? cdnConfigSource
+
     const { config, lastModified } = await configSource.getConfig(
         sdkKey,
         'bootstrap',
@@ -111,6 +104,21 @@ export const getBucketedConfig = async (
         true,
     )
 
+    return { config, lastModified }
+}
+
+/**
+ * Retrieve the config from CDN for the current request's SDK Key. This data will often be cached
+ * Compute the bucketed config for the current request's user using that data, with local bucketing library
+ * Cache the bucketed config for this request so that repeated calls to this function are memoized
+ */
+export const getBucketedConfig = async (
+    config: ConfigBody,
+    lastModified: string | null,
+    user: DevCycleUser,
+    options: DevCycleNextOptions,
+    userAgent?: string,
+): Promise<BucketedConfigWithAdditionalFields> => {
     const { bucketedConfig } = await generateBucketedConfigCached(
         !!options.enableObfuscation,
         user,

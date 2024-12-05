@@ -3,7 +3,7 @@ import { getClient, setClient } from './requestContext'
 import { getUserAgent } from './userAgent'
 import { DevCycleNextOptions, DevCycleServerData } from '../common/types'
 import { cache } from 'react'
-import { getBucketedConfig } from './bucketing'
+import { getBucketedConfig, getConfigFromSource } from './bucketing'
 
 const jsClientOptions = {
     // pass next object to enable "next" mode in JS SDK
@@ -29,11 +29,12 @@ export const initialize = async (
     userGetter: () => DevCycleUser | Promise<DevCycleUser>,
     options: DevCycleNextOptions = {},
 ): Promise<DevCycleServerData> => {
-    // TODO moving this call to inside `getBucketedConfig` appears to cause static build issues from reading headers
-    // Might be a bug in Next, if moving this make sure to verify you can `yarn next build` the e2e app router app
-    const userAgent = await getUserAgent(options)
+    const [userAgent, user, configData] = await Promise.all([
+        getUserAgent(options),
+        cachedUserGetter(userGetter),
+        getConfigFromSource(sdkKey, clientSDKKey, options),
+    ])
 
-    const user = await cachedUserGetter(userGetter)
     if (!user || typeof user.user_id !== 'string') {
         throw new Error('DevCycle user getter must return a user')
     }
@@ -53,8 +54,8 @@ export const initialize = async (
     let config = null
     try {
         config = await getBucketedConfig(
-            sdkKey,
-            clientSDKKey,
+            configData.config,
+            configData.lastModified,
             user,
             options,
             userAgent,
