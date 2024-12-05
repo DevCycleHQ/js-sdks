@@ -30,6 +30,63 @@ describe('EdgeConfigSource', () => {
         })
     })
 
+    it('transforms raw data into a valid ConfigBody', async () => {
+        const get = jest.fn()
+        const edgeConfigSource = new EdgeConfigSource(
+            fromPartial({
+                get,
+            }),
+        )
+
+        get.mockResolvedValue({
+            key: 'value',
+            features: [
+                {
+                    configuration: {
+                        targets: [
+                            {
+                                rollout: {
+                                    startDate: '2024-12-05T20:36:26.086Z',
+                                },
+                            },
+                        ],
+                    },
+                },
+            ],
+            lastModified: 'some date',
+        })
+
+        const result = await edgeConfigSource.getConfig(
+            'sdk-key',
+            'server',
+            false,
+        )
+
+        expect(result).toEqual({
+            config: {
+                key: 'value',
+                lastModified: 'some date',
+                features: [
+                    {
+                        configuration: {
+                            targets: [
+                                {
+                                    rollout: {
+                                        startDate: new Date(
+                                            '2024-12-05T20:36:26.086Z',
+                                        ),
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+            lastModified: 'some date',
+            metaData: { resLastModified: 'some date' },
+        })
+    })
+
     it('returns null when the existing config date is newer', async () => {
         const get = jest.fn()
         const edgeConfigSource = new EdgeConfigSource(
