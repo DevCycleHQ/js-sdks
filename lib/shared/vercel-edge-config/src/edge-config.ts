@@ -1,5 +1,6 @@
 import { EdgeConfigClient, EdgeConfigValue } from '@vercel/edge-config'
 import { ConfigBody, ConfigSource, UserError } from '@devcycle/types'
+import { plainToInstance } from 'class-transformer'
 
 export class EdgeConfigSource extends ConfigSource {
     constructor(private edgeConfigClient: EdgeConfigClient) {
@@ -44,7 +45,7 @@ export class EdgeConfigSource extends ConfigSource {
         this.configLastModified = config['lastModified'] as string
 
         return {
-            config: config as unknown as ConfigBody,
+            config: plainToInstance(ConfigBody, config),
             metaData: { resLastModified: this.configLastModified },
             lastModified: this.configLastModified,
         }
