@@ -68,6 +68,7 @@
         "react-native": "0.72.4",
         "react-native-device-info": "^8.7.0",
         "react-native-get-random-values": "^1.7.2",
+        "react-native-sse": "^1.2.1",
         "reflect-metadata": "^0.1.13",
         "regenerator-runtime": "0.13.7",
         "server-only": "^0.0.1",

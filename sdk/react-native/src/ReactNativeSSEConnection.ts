@@ -1,14 +1,10 @@
 import EventSource from 'react-native-sse'
 import type { DVCLogger } from '@devcycle/types'
-
-type SSEConnectionFunctions = {
-    onMessage: (message: unknown) => void
-    onOpen: () => void
-    onConnectionError: () => void
-}
+import type { SSEConnectionFunctions } from '@devcycle/sse-connection'
 
 export class ReactNativeSSEConnection {
     private connection?: EventSource
+    private connected = false
 
     constructor(
         private url: string,
@@ -27,10 +23,21 @@ export class ReactNativeSSEConnection {
 
         this.connection.addEventListener('open', () => {
             this.logger.debug('ReactNativeSSEConnection opened')
+            this.connected = true
             this.callbacks.onOpen()
         })
 
+        this.connection.addEventListener('close', () => {
+            this.logger.debug('ReactNativeSSEConnection closed')
+            this.connected = false
+        })
+
         this.connection.addEventListener('message', (event) => {
+            this.logger.debug(
+                `ReactNativeSSEConnection message received: ${JSON.stringify(
+                    event,
+                )}`,
+            )
             this.callbacks.onMessage(event.data)
         })
 
@@ -45,17 +52,19 @@ export class ReactNativeSSEConnection {
     }
 
     isConnected(): boolean {
-        return this.connection?.readyState === EventSource.OPEN
+        return this.connected
     }
 
     reopen(): void {
         if (!this.isConnected()) {
+            this.logger.debug('ReactNativeSSEConnection reopening')
             this.close()
             this.openConnection()
         }
     }
 
     close(): void {
+        this.logger.debug('ReactNativeSSEConnection closing')
         this.connection?.close()
     }
 }

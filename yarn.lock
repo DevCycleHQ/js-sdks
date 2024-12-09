@@ -15420,6 +15420,7 @@ __metadata:
     react-native-config: 1.5.0
     react-native-device-info: ^8.7.0
     react-native-get-random-values: ^1.7.2
+    react-native-sse: ^1.2.1
     react-native-svg: 13.9.0
     react-native-svg-transformer: ^1.0.0
     react-refresh: ^0.10.0
@@ -27436,6 +27437,13 @@ __metadata:
   peerDependencies:
     react-native: ">=0.56"
   checksum: 9163368ebd935d897f6ea0f9e95c476aa7608080e3848bb6c6f85db01b9de3498d857795c84df5492d6511a55aebf89492860ac886b652a9a7a3efdb19913f87
+  languageName: node
+  linkType: hard
+
+"react-native-sse@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "react-native-sse@npm:1.2.1"
+  checksum: 424910fa1bcc6643a7e9f628f2710bf185c862b63375ea6ec4b8eecfb5b714055480757ea1250ce6cdae66c2785f6a64432cdf9833e0ec0411b59f9791f6cce8
   languageName: node
   linkType: hard
 
