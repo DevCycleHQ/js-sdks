@@ -1,5 +1,11 @@
 /* eslint-disable max-len */
-import { Audience, FeatureType, PublicRollout, Rollout } from '@devcycle/types'
+import {
+    Audience,
+    FeatureType,
+    PublicRollout,
+    Rollout,
+    ConfigBody,
+} from '@devcycle/types'
 import {
     generateBoundedHashes,
     decideTargetVariation,
@@ -7,9 +13,9 @@ import {
     doesUserPassRollout,
 } from '../src/bucketing'
 import {
-    config,
-    barrenConfig,
-    configWithNullCustomData,
+    config as plainConfig,
+    barrenConfig as plainBarrenConfig,
+    configWithNullCustomData as plainConfigWithNullCustomData,
     configWithBucketingKey,
 } from '@devcycle/bucketing-test-data'
 
@@ -17,6 +23,14 @@ import moment from 'moment'
 import times from 'lodash/times'
 import filter from 'lodash/filter'
 import * as uuid from 'uuid'
+import { plainToInstance } from 'class-transformer'
+
+const config = plainToInstance(ConfigBody, plainConfig)
+const barrenConfig = plainToInstance(ConfigBody, plainBarrenConfig)
+const configWithNullCustomData = plainToInstance(
+    ConfigBody,
+    plainConfigWithNullCustomData,
+)
 
 describe('User Hashing and Bucketing', () => {
     it('generates buckets approximately in the same distribution as the variation distributions', () => {
@@ -1595,6 +1609,35 @@ describe('Rollout Logic', () => {
         expect(doesUserPassRollout({ boundedHash: 0.4 })).toBeTruthy()
         expect(doesUserPassRollout({ boundedHash: 0.6 })).toBeTruthy()
         expect(doesUserPassRollout({ boundedHash: 0.9 })).toBeTruthy()
+    })
+
+    it('should not throw when given a ConfigBody config', () => {
+        expect(() =>
+            generateBucketedConfig({
+                config,
+                user: {
+                    user_id: 'asuh',
+                },
+            }),
+        ).not.toThrow()
+    })
+
+    it('should throw when given a non-ConfigBody config', () => {
+        const config = {} as ConfigBody
+
+        expect(() =>
+            generateBucketedConfig({
+                config,
+                user: {
+                    user_id: 'asuh',
+                },
+            }),
+        ).toThrow()
+    })
+
+    it('should have isConfigBody set to true', () => {
+        const config = plainToInstance(ConfigBody, plainConfig)
+        expect(config.isConfigBody).toBeTruthy()
     })
 
     describe('overrides', () => {

@@ -40,6 +40,13 @@ export {
 
 export class ConfigBody<IdType = string> {
     /**
+     * This is to ensure usage of a proper ConfigBody instance by the bucketing library,
+     * using a regular JSON object will throw an error without this property, which is populated
+     * by using plainToInstance from class-transformer.
+     */
+    isConfigBody = true
+
+    /**
      * Basic project data used for building bucketing response
      */
     project: Project<IdType>

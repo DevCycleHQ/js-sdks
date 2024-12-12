@@ -232,6 +232,11 @@ export const generateBucketedConfig = ({
     user: DVCBucketingUser
     overrides?: Record<string, string>
 }): BucketedUserConfig => {
+    if (!config.isConfigBody) {
+        throw new Error(
+            'Config is not a ConfigBody, transform config using plainToInstance',
+        )
+    }
     const variableMap: BucketedUserConfig['variables'] = {}
     const featureKeyMap: BucketedUserConfig['features'] = {}
     const featureVariationMap: BucketedUserConfig['featureVariationMap'] = {}
