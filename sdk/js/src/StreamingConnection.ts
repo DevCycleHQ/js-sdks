@@ -1,6 +1,6 @@
-import type { DVCLogger } from '@devcycle/types'
+import type { DVCLogger, SSEConnectionInterface } from '@devcycle/types'
 
-export class StreamingConnection {
+export class StreamingConnection implements SSEConnectionInterface {
     private connection?: EventSource
 
     constructor(

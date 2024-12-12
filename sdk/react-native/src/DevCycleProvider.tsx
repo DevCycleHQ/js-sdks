@@ -1,6 +1,7 @@
 import React from 'react'
 import { DevCycleProvider as ReactDVCProvider } from '@devcycle/react-client-sdk'
 import ReactNativeStore from './ReactNativeCacheStore'
+import { ReactNativeSSEConnection } from './ReactNativeSSEConnection'
 
 type PropsType = Parameters<typeof ReactDVCProvider>[0]
 
@@ -24,6 +25,7 @@ export const getReactNativeConfig = (
             ...config.options,
             sdkPlatform: 'react-native',
             reactNative: true,
+            sseConnectionClass: ReactNativeSSEConnection,
         },
     }
     if (!config.options?.storage) {

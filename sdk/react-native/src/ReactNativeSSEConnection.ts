@@ -1,70 +1,65 @@
 import EventSource from 'react-native-sse'
-import type { DVCLogger } from '@devcycle/types'
-import type { SSEConnectionFunctions } from '@devcycle/sse-connection'
+import type { DVCLogger, SSEConnectionInterface } from '@devcycle/types'
 
-export class ReactNativeSSEConnection {
+export class ReactNativeSSEConnection implements SSEConnectionInterface {
     private connection?: EventSource
-    private connected = false
+    private isConnectionOpen = false
 
     constructor(
         private url: string,
+        private onMessage: (message: unknown) => void,
         private logger: DVCLogger,
-        private readonly callbacks: SSEConnectionFunctions,
     ) {
         this.openConnection()
     }
 
+    public updateURL(url: string): void {
+        this.close()
+        this.url = url
+        this.openConnection()
+    }
+
     private openConnection() {
+        this.logger.debug('ReactNativeSSEConnection opening connection, test 2')
         this.connection = new EventSource(this.url, {
-            headers: {
-                // Add any necessary headers here
-            },
+            debug: false
+        })
+
+        this.connection.addEventListener('message', (event) => {
+            this.logger.debug(`ReactNativeSSEConnection message. ${event.data}`)
+            this.onMessage(event.data)
+        })
+
+        this.connection.addEventListener('error', (error) => {
+            this.logger.error(
+                `ReactNativeSSEConnection error. ${
+                    (error as any)?.message || JSON.stringify(error)
+                }`,
+            )
         })
 
         this.connection.addEventListener('open', () => {
             this.logger.debug('ReactNativeSSEConnection opened')
-            this.connected = true
-            this.callbacks.onOpen()
+            this.isConnectionOpen = true
         })
-
         this.connection.addEventListener('close', () => {
             this.logger.debug('ReactNativeSSEConnection closed')
-            this.connected = false
-        })
-
-        this.connection.addEventListener('message', (event) => {
-            this.logger.debug(
-                `ReactNativeSSEConnection message received: ${JSON.stringify(
-                    event,
-                )}`,
-            )
-            this.callbacks.onMessage(event.data)
-        })
-
-        this.connection.addEventListener('error', (error) => {
-            this.logger.warn(
-                `ReactNativeSSEConnection warning. Connection failed. Error: ${JSON.stringify(
-                    error,
-                )}`,
-            )
-            this.callbacks.onConnectionError()
+            this.isConnectionOpen = false
         })
     }
 
     isConnected(): boolean {
-        return this.connected
+        return this.isConnectionOpen
     }
 
     reopen(): void {
         if (!this.isConnected()) {
-            this.logger.debug('ReactNativeSSEConnection reopening')
             this.close()
             this.openConnection()
         }
     }
 
     close(): void {
-        this.logger.debug('ReactNativeSSEConnection closing')
         this.connection?.close()
     }
 }

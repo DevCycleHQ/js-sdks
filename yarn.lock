@@ -4793,6 +4793,7 @@ __metadata:
     "@react-native-async-storage/async-storage": ^1.17.11
     react-native-device-info: ^8.7.0
     react-native-get-random-values: ^1.7.2
+    react-native-sse: ^1.2.1
   peerDependencies:
     react: ">=17.0.2"
     react-native: ">=0.68.0"
