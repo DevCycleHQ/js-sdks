@@ -751,7 +751,6 @@ export class DevCycleClient<
         }
 
         // Update the streaming connection URL if it has changed (for ex. if the current user has targeting overrides)
-        this.logger.debug(`Config SSE URL: ${config?.sse?.url}`)
         if (config?.sse?.url) {
             if (!this.streamingConnection) {
                 if (!this.options.disableRealtimeUpdates) {

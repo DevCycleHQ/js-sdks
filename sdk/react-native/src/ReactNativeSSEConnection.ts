@@ -20,9 +20,8 @@ export class ReactNativeSSEConnection implements SSEConnectionInterface {
     }
 
     private openConnection() {
-        this.logger.debug('ReactNativeSSEConnection opening connection, test 2')
         this.connection = new EventSource(this.url, {
-            debug: false
+            debug: false,
         })
 
         this.connection.addEventListener('message', (event) => {

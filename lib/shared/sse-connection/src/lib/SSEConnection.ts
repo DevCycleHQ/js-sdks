@@ -1,7 +1,7 @@
 import type { DVCLogger } from '@devcycle/types'
 import EventSource from 'eventsource'
 
-export type SSEConnectionFunctions = {
+type SSEConnectionFunctions = {
     onMessage: (message: unknown) => void
     onOpen: () => void
     onConnectionError: () => void
