@@ -128,8 +128,6 @@ export class DevCycleClient<
             this.logger,
         )
 
-        console.log(`Test `)
-
         this.options = options
 
         this.sdkKey = sdkKey
