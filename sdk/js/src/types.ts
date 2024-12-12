@@ -9,6 +9,7 @@ import type {
     BucketedUserConfig,
     VariableKey,
     InferredVariableType,
+    SSEConnectionConstructor,
 } from '@devcycle/types'
 export { UserError } from '@devcycle/types'
 
@@ -81,6 +82,10 @@ export interface DevCycleOptions {
      * Used to know if we are running in a React Native environment.
      */
     reactNative?: boolean
+    /**
+     * Custom SSE connection class to use for the SDK.
+     */
+    sseConnectionClass?: SSEConnectionConstructor
     /**
      * Disable Realtime Update and their SSE connection.
      */

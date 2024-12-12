@@ -756,10 +756,7 @@ export class DevCycleClient<
             if (!this.streamingConnection) {
                 if (!this.options.disableRealtimeUpdates) {
                     const SSEConnectionClass =
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        ((this.options as any)
-                            .sseConnectionClass as SSEConnectionConstructor) ||
-                        StreamingConnection
+                        this.options.sseConnectionClass || StreamingConnection
                     this.streamingConnection = new SSEConnectionClass(
                         config.sse.url,
                         this.onSSEMessage.bind(this),
