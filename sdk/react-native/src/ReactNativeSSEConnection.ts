@@ -22,6 +22,12 @@ export class ReactNativeSSEConnection implements SSEConnectionInterface {
     private openConnection() {
         this.connection = new EventSource(this.url, {
             debug: false,
+            // start connection immediately
+            timeoutBeforeConnection: 0,
+            // disable request timeout so connections are kept open
+            timeout: 0,
+            // enable withCredentials so we can send cookies
+            withCredentials: true,
         })
 
         this.connection.addEventListener('message', (event) => {
