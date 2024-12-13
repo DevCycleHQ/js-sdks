@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/vercel-edge-config",
-    "version": "0.4.2",
+    "version": "0.5.0",
     "peerDependencies": {
         "@devcycle/types": "*",
         "@vercel/edge-config": "^1.2.0"
