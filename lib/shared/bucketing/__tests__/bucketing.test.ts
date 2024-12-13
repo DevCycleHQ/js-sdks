@@ -32,8 +32,8 @@ describe('User Hashing and Bucketing', () => {
             ],
         }
 
-        // run 100,000 times to get a good distribution
-        times(100000, () => {
+        // run 200,000 times to get a good distribution
+        times(200000, () => {
             const user_id = uuid.v4()
             const { bucketingHash } = generateBoundedHashes(
                 user_id,
