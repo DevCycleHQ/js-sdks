@@ -21,14 +21,17 @@ import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
 import type {
     BucketedUserConfig,
-    InferredVariableType,
     VariableDefinitions,
     VariableTypeAlias,
 } from '@devcycle/types'
 import { getVariableTypeFromValue } from '@devcycle/types'
 import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
-import type { DVCLogger } from '@devcycle/types'
+import type {
+    DVCLogger,
+    SSEConnectionInterface,
+    SSEConnectionConstructor,
+} from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
 
 type variableUpdatedHandler = (
@@ -89,7 +92,7 @@ export class DevCycleClient<
     private eventQueue?: EventQueue<Variables, CustomData>
     private requestConsolidator: ConfigRequestConsolidator
     eventEmitter: EventEmitter
-    private streamingConnection?: StreamingConnection
+    private streamingConnection?: SSEConnectionInterface
     private pageVisibilityHandler?: () => void
     private inactivityHandlerId?: number
     private windowMessageHandler?: (event: MessageEvent) => void
@@ -747,10 +750,11 @@ export class DevCycleClient<
 
         // Update the streaming connection URL if it has changed (for ex. if the current user has targeting overrides)
         if (config?.sse?.url) {
-            // construct the streamingConnection if necessary
             if (!this.streamingConnection) {
                 if (!this.options.disableRealtimeUpdates) {
-                    this.streamingConnection = new StreamingConnection(
+                    const SSEConnectionClass =
+                        this.options.sseConnectionClass || StreamingConnection
+                    this.streamingConnection = new SSEConnectionClass(
                         config.sse.url,
                         this.onSSEMessage.bind(this),
                         this.logger,

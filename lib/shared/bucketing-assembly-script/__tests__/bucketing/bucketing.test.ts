@@ -153,8 +153,8 @@ describe('User Hashing and Bucketing', () => {
             ],
         }
 
-        // run 100,000 times to get a good distribution
-        for (let i = 0; i < 100000; i++) {
+        // run 200,000 times to get a good distribution
+        for (let i = 0; i < 200000; i++) {
             const user_id = uuid.v4()
             const { bucketingHash } = generateBoundedHashes(
                 user_id,
