@@ -24,7 +24,11 @@ describe('EdgeConfigSource', () => {
         expect(get).toHaveBeenCalledWith('devcycle-config-v2-server-sdk-key')
 
         expect(result).toEqual({
-            config: { key: 'value', lastModified: 'some date' },
+            config: {
+                key: 'value',
+                lastModified: 'some date',
+                isConfigBody: true,
+            },
             lastModified: 'some date',
             metaData: { resLastModified: 'some date' },
         })
@@ -64,6 +68,7 @@ describe('EdgeConfigSource', () => {
 
         expect(result).toEqual({
             config: {
+                isConfigBody: true,
                 key: 'value',
                 lastModified: 'some date',
                 features: [
