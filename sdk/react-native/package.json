@@ -26,9 +26,9 @@
     "types": "./index.cjs.d.ts",
     "license": "MIT",
     "dependencies": {
-        "@devcycle/types": "^1.19.2",
         "@devcycle/js-client-sdk": "^1.32.2",
         "@devcycle/react-client-sdk": "^1.30.2",
+        "@devcycle/types": "^1.19.2",
         "@react-native-async-storage/async-storage": "^1.17.11",
         "react-native-device-info": "^8.7.0",
         "react-native-get-random-values": "^1.7.2",
