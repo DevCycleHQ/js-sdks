@@ -5,6 +5,8 @@ import {
     useAllFeatures,
     renderIfEnabled,
 } from '@devcycle/nextjs-sdk'
+import { useState } from 'react'
+import { testAction } from './action'
 
 const ConditionalComponent = renderIfEnabled(
     'enabled-feature',
@@ -16,6 +18,7 @@ export const ClientComponent = () => {
     const disabledVar = useVariableValue('disabled-feature', false)
     const allVariables = useAllVariables()
     const allFeatures = useAllFeatures()
+    const [actionResult, setActionResult] = useState<boolean | null>(null)
 
     return (
         <div>
@@ -24,6 +27,14 @@ export const ClientComponent = () => {
             <p>Client Disabled Variable: {JSON.stringify(disabledVar)}</p>
             <p>Client All Variables: {JSON.stringify(allVariables)}</p>
             <p>Client All Features: {JSON.stringify(allFeatures)}</p>
+            <p>Client Action Result: {JSON.stringify(actionResult)}</p>
+            <button
+                onClick={() =>
+                    testAction().then((result) => setActionResult(result))
+                }
+            >
+                Test Action
+            </button>
             <ConditionalComponent />
         </div>
     )

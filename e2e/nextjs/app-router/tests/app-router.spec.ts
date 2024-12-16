@@ -95,6 +95,10 @@ test('has expected page elements', async ({ page }) => {
     await expect(
         page.getByText('Client Component Conditionally Bundled'),
     ).toBeVisible()
+
+    // test server action flagging
+    await page.getByText('Test Action').click()
+    await expect(page.getByText('Client Action Result: true')).toBeVisible()
 })
 
 test('works after a client side navigation', async ({ page }) => {

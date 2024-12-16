@@ -11,7 +11,7 @@ export const {
     userGetter: async () => {
         const reqHeaders = await headers()
         return {
-            user_id: '123',
+            user_id: 'normal-user',
             customData: {
                 // set a dummy field here so that the headers call stays in the build output
                 someKey: reqHeaders.get('some-key'),
