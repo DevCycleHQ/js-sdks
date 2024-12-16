@@ -98,7 +98,7 @@ test('has expected page elements', async ({ page }) => {
 
     // test server action flagging
     await page.getByText('Test Action').click()
-    await expect(page.getByText('Client Action Result: true')).toBeVisible()
+    await expect(page.getByText('Server Function Result: true')).toBeVisible()
 
     // test middleware flagging
     await expect(

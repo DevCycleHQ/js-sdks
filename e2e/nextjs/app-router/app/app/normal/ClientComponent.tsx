@@ -27,7 +27,7 @@ export const ClientComponent = () => {
             <p>Client Disabled Variable: {JSON.stringify(disabledVar)}</p>
             <p>Client All Variables: {JSON.stringify(allVariables)}</p>
             <p>Client All Features: {JSON.stringify(allFeatures)}</p>
-            <p>Client Action Result: {JSON.stringify(actionResult)}</p>
+            <p>Server Function Result: {JSON.stringify(actionResult)}</p>
             <button
                 onClick={() =>
                     testAction().then((result) => setActionResult(result))
