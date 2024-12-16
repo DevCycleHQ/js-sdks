@@ -1,5 +1,8 @@
-import { DevCycleUser, initializeDevCycle } from '@devcycle/js-client-sdk'
-import { getClient, setClient } from './requestContext'
+import {
+    DevCycleClient,
+    DevCycleUser,
+    initializeDevCycle,
+} from '@devcycle/js-client-sdk'
 import { getUserAgent } from './userAgent'
 import { DevCycleNextOptions, DevCycleServerData } from '../common/types'
 import { cache } from 'react'
@@ -23,61 +26,47 @@ const cachedUserGetter = cache(
     },
 )
 
-export const initialize = async (
-    sdkKey: string,
-    clientSDKKey: string,
-    userGetter: () => DevCycleUser | Promise<DevCycleUser>,
-    options: DevCycleNextOptions = {},
-): Promise<DevCycleServerData> => {
-    const [userAgent, user, configData] = await Promise.all([
-        getUserAgent(options),
-        cachedUserGetter(userGetter),
-        getConfigFromSource(sdkKey, clientSDKKey, options),
-    ])
+export const initialize = cache(
+    async (
+        sdkKey: string,
+        clientSDKKey: string,
+        userGetter: () => DevCycleUser | Promise<DevCycleUser>,
+        options: DevCycleNextOptions = {},
+    ): Promise<DevCycleServerData & { client: DevCycleClient }> => {
+        const [userAgent, user, configData] = await Promise.all([
+            getUserAgent(options),
+            cachedUserGetter(userGetter),
+            getConfigFromSource(sdkKey, clientSDKKey, options),
+        ])
 
-    if (!user || typeof user.user_id !== 'string') {
-        throw new Error('DevCycle user getter must return a user')
-    }
+        if (!user || typeof user.user_id !== 'string') {
+            throw new Error('DevCycle user getter must return a user')
+        }
 
-    const initializeAlreadyCalled = !!getClient()
+        const client = initializeDevCycle(sdkKey, user, {
+            ...options,
+            deferInitialization: true,
+            ...jsClientOptions,
+        })
 
-    if (!initializeAlreadyCalled) {
-        setClient(
-            initializeDevCycle(sdkKey, user, {
-                ...options,
-                deferInitialization: true,
-                ...jsClientOptions,
-            }),
-        )
-    }
+        let config = null
+        try {
+            config = await getBucketedConfig(
+                configData.config,
+                configData.lastModified,
+                user,
+                options,
+                userAgent,
+            )
+        } catch (e) {
+            console.error('Error fetching DevCycle config', e)
+        }
 
-    let config = null
-    try {
-        config = await getBucketedConfig(
-            configData.config,
-            configData.lastModified,
-            user,
-            options,
-            userAgent,
-        )
-    } catch (e) {
-        console.error('Error fetching DevCycle config', e)
-    }
-
-    const client = getClient()
-
-    if (!client) {
-        throw new Error(
-            "React 'cache' function not working as expected. Please contact DevCycle support.",
-        )
-    }
-
-    if (!initializeAlreadyCalled) {
         client.synchronizeBootstrapData(config, user, userAgent)
-    }
 
-    return { config, user, userAgent }
-}
+        return { config, user, userAgent, client }
+    },
+)
 
 export const validateSDKKey = (
     sdkKey: string,

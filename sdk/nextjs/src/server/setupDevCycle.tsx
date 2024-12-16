@@ -1,16 +1,26 @@
 import 'server-only'
-import { getVariableValue } from './getVariableValue'
 import { initialize, validateSDKKey } from './initialize'
-import { DevCycleUser, DVCCustomDataJSON } from '@devcycle/js-client-sdk'
-import { getAllVariables } from './getAllVariables'
-import { getAllFeatures } from './allFeatures'
+import {
+    DevCycleUser,
+    DVCCustomDataJSON,
+    VariableDefinitions,
+} from '@devcycle/js-client-sdk'
 import { DevCycleNextOptions } from '../common/types'
+import { InferredVariableType, VariableKey } from '@devcycle/types'
 
 // server-side users must always be "identified" with a user id
 type ServerUser<CustomData extends DVCCustomDataJSON = DVCCustomDataJSON> =
     Omit<DevCycleUser<CustomData>, 'user_id' | 'isAnonymous'> & {
         user_id: string
     }
+
+type GetVariableValue = <
+    K extends VariableKey,
+    ValueType extends VariableDefinitions[K],
+>(
+    key: K,
+    defaultValue: ValueType,
+) => Promise<InferredVariableType<K, ValueType>>
 
 // allow return type inference
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -30,22 +40,34 @@ export const setupDevCycle = <
     validateSDKKey(serverSDKKey, 'server')
     validateSDKKey(clientSDKKey, 'client')
 
-    const _getVariableValue: typeof getVariableValue = async (
-        key,
-        defaultValue,
-    ) => {
-        await initialize(serverSDKKey, clientSDKKey, userGetter, options)
-        return getVariableValue(key, defaultValue)
+    const _getVariableValue: GetVariableValue = async (key, defaultValue) => {
+        const { client } = await initialize(
+            serverSDKKey,
+            clientSDKKey,
+            userGetter,
+            options,
+        )
+        return client.variableValue(key, defaultValue)
     }
 
-    const _getAllVariables: typeof getAllVariables = async () => {
-        await initialize(serverSDKKey, clientSDKKey, userGetter, options)
-        return getAllVariables()
+    const _getAllVariables = async () => {
+        const { client } = await initialize(
+            serverSDKKey,
+            clientSDKKey,
+            userGetter,
+            options,
+        )
+        return client.allVariables()
     }
 
-    const _getAllFeatures: typeof getAllFeatures = async () => {
-        await initialize(serverSDKKey, clientSDKKey, userGetter, options)
-        return getAllFeatures()
+    const _getAllFeatures = async () => {
+        const { client } = await initialize(
+            serverSDKKey,
+            clientSDKKey,
+            userGetter,
+            options,
+        )
+        return client.allFeatures()
     }
 
     const _getClientContext = () => {
@@ -54,7 +76,10 @@ export const setupDevCycle = <
             clientSDKKey,
             userGetter,
             options,
-        )
+        ).then((result) => {
+            const { client, ...serverData } = result
+            return serverData
+        })
 
         const { enableStreaming, enableObfuscation, ...otherOptions } = options
 
