@@ -99,6 +99,11 @@ test('has expected page elements', async ({ page }) => {
     // test server action flagging
     await page.getByText('Test Action').click()
     await expect(page.getByText('Client Action Result: true')).toBeVisible()
+
+    // test middleware flagging
+    await expect(
+        page.getByText('Middleware Enabled Feature: true'),
+    ).toBeVisible()
 })
 
 test('works after a client side navigation', async ({ page }) => {
