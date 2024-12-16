@@ -26,45 +26,47 @@ const cachedUserGetter = cache(
     },
 )
 
-export const initialize = async (
-    sdkKey: string,
-    clientSDKKey: string,
-    userGetter: () => DevCycleUser | Promise<DevCycleUser>,
-    options: DevCycleNextOptions = {},
-): Promise<DevCycleServerData & { client: DevCycleClient }> => {
-    const [userAgent, user, configData] = await Promise.all([
-        getUserAgent(options),
-        cachedUserGetter(userGetter),
-        getConfigFromSource(sdkKey, clientSDKKey, options),
-    ])
+export const initialize = cache(
+    async (
+        sdkKey: string,
+        clientSDKKey: string,
+        userGetter: () => DevCycleUser | Promise<DevCycleUser>,
+        options: DevCycleNextOptions = {},
+    ): Promise<DevCycleServerData & { client: DevCycleClient }> => {
+        const [userAgent, user, configData] = await Promise.all([
+            getUserAgent(options),
+            cachedUserGetter(userGetter),
+            getConfigFromSource(sdkKey, clientSDKKey, options),
+        ])
 
-    if (!user || typeof user.user_id !== 'string') {
-        throw new Error('DevCycle user getter must return a user')
-    }
+        if (!user || typeof user.user_id !== 'string') {
+            throw new Error('DevCycle user getter must return a user')
+        }
 
-    const client = initializeDevCycle(sdkKey, user, {
-        ...options,
-        deferInitialization: true,
-        ...jsClientOptions,
-    })
+        const client = initializeDevCycle(sdkKey, user, {
+            ...options,
+            deferInitialization: true,
+            ...jsClientOptions,
+        })
 
-    let config = null
-    try {
-        config = await getBucketedConfig(
-            configData.config,
-            configData.lastModified,
-            user,
-            options,
-            userAgent,
-        )
-    } catch (e) {
-        console.error('Error fetching DevCycle config', e)
-    }
+        let config = null
+        try {
+            config = await getBucketedConfig(
+                configData.config,
+                configData.lastModified,
+                user,
+                options,
+                userAgent,
+            )
+        } catch (e) {
+            console.error('Error fetching DevCycle config', e)
+        }
 
-    client.synchronizeBootstrapData(config, user, userAgent)
+        client.synchronizeBootstrapData(config, user, userAgent)
 
-    return { config, user, userAgent, client }
-}
+        return { config, user, userAgent, client }
+    },
+)
 
 export const validateSDKKey = (
     sdkKey: string,

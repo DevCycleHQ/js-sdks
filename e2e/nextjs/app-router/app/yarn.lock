@@ -32,7 +32,7 @@ __metadata:
 
 "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs::locator=app%40workspace%3A.":
   version: 2.8.0
-  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=dd4636&locator=app%40workspace%3A."
+  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=7ea780&locator=app%40workspace%3A."
   dependencies:
     "@devcycle/bucketing": "npm:^1.25.0"
     "@devcycle/js-client-sdk": "npm:^1.33.0"
@@ -41,7 +41,7 @@ __metadata:
     class-transformer: "npm:^0.5.1"
     hoist-non-react-statics: "npm:^3.3.2"
     server-only: "npm:^0.0.1"
-  checksum: 772082de1189b6f1f4d86fabdd479c7b66bfbc67ddd0e9c987b8830004509604cba1d65d3a10d238c77e69851e3c8d7899d679a252d93e71baad45962d341544
+  checksum: a97ec2cd27c27cdef68d9b87bd99e32a4babe7a8bdbdb33941463a7651402b95864202c1a028870a471925a3aa5644d7fdfacdd730072a76cf2a429df8e89329
   languageName: node
   linkType: hard
 
