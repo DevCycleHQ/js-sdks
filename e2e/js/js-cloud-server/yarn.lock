@@ -1497,27 +1497,27 @@ __metadata:
   linkType: hard
 
 "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server::locator=e2e-js-cloud-server%40workspace%3A.":
-  version: 1.17.2
-  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=2335fe&locator=e2e-js-cloud-server%40workspace%3A."
+  version: 1.9.2
+  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=176498&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
-    "@devcycle/types": ^1.18.1
+    "@devcycle/types": ^1.10.2
     cross-fetch: ^4.0.0
     fetch-retry: ^5.0.6
     lodash: ^4.17.21
-  checksum: a62182d688d10924c0c347a0fe5a7ed73cd07a0c6e82105b9d215969f1e302609c325f0b2db2f744aaa0f61049280fd455cc9f8a4b6ccc5d9445ace0c6bd24f3
+  checksum: dabc12cbbd048575470ec356bc74e3789808e1574a2d5274ae700f8ff59ed0dcc58393925c437e5455547a0dfbd634db1726f614aebda75fd83618a56b8366d3
   languageName: node
   linkType: hard
 
 "@devcycle/types@file:../../../dist/lib/shared/types::locator=e2e-js-cloud-server%40workspace%3A.":
-  version: 1.18.1
-  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=d094ae&locator=e2e-js-cloud-server%40workspace%3A."
+  version: 1.10.2
+  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=5ddbbc&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
     class-transformer: 0.5.1
     class-validator: 0.14.1
     iso-639-1: ^2.1.13
     lodash: ^4.17.21
     reflect-metadata: ^0.1.13
-  checksum: 8c37c512e1d183bf96bbbcde0c9c146a9154b48542646336aae80ac5e3b31115b88b26780e63aa5ef53ae9277a8e0d94f82bb8248e09ab4c6365020c575d0867
+  checksum: 5b09b2eb76bf31530cd7db8b76ac425c93fc4c61a5f9bf813db34fb74c2c409f4f5da4ce72a6286e9e0df00a6856860df8fca1f84ff73833f875cfb834be5265
   languageName: node
   linkType: hard
 
@@ -3271,10 +3271,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookie@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "cookie@npm:0.5.0"
-  checksum: 1f4bd2ca5765f8c9689a7e8954183f5332139eb72b6ff783d8947032ec1fdf43109852c178e21a953a30c0dd42257828185be01b49d1eb1a67fd054ca588a180
+"cookie@npm:^0.7.1":
+  version: 0.7.2
+  resolution: "cookie@npm:0.7.2"
+  checksum: 9bf8555e33530affd571ea37b615ccad9b9a34febbf2c950c86787088eb00a8973690833b0f8ebd6b69b753c62669ea60cec89178c1fb007bf0749abed74f93e
   languageName: node
   linkType: hard
 
@@ -7052,13 +7052,13 @@ __metadata:
   linkType: hard
 
 "youch@npm:^3.2.2":
-  version: 3.3.3
-  resolution: "youch@npm:3.3.3"
+  version: 3.3.4
+  resolution: "youch@npm:3.3.4"
   dependencies:
-    cookie: ^0.5.0
+    cookie: ^0.7.1
     mustache: ^4.2.0
     stacktracey: ^2.1.8
-  checksum: 2b099d8f7b7579ef9d226023037d06c3c03ed6c663e03966d034505e11c026b7ea1359052d5402ded439a9e762cf72449b0db4170e6982ce8be24bbbda4e6b95
+  checksum: 9cfbd1d35a05ebd0d31da3fe9a1c200cc5a8adf04835ce15749f51fe8ecd440bbcc0cdb6749baf33ef02dbcd85b12b762cced42036e9125632ab4f7866e0ae25
   languageName: node
   linkType: hard
 
