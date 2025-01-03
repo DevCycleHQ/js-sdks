@@ -237,7 +237,9 @@
         "path-to-regexp@3.2.0": "^3.3.0",
         "send@0.18.0": "^0.19.0",
         "cross-spawn@^5.0.1": "^7.0.6",
-        "cross-spawn@^4.0.2": "^7.0.6"
+        "cross-spawn@^4.0.2": "^7.0.6",
+        "cookie@0.5.0": "^0.7.0",
+        "cookie@0.6.0": "^0.7.0"
     },
     "config": {
         "commitizen": {
