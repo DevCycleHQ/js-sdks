@@ -9709,22 +9709,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react-native@npm:12.3.2":
-  version: 12.3.2
-  resolution: "@testing-library/react-native@npm:12.3.2"
+"@testing-library/react-native@npm:13.0.0":
+  version: 13.0.0
+  resolution: "@testing-library/react-native@npm:13.0.0"
   dependencies:
     jest-matcher-utils: ^29.7.0
     pretty-format: ^29.7.0
     redent: ^3.0.0
   peerDependencies:
-    jest: ">=28.0.0"
-    react: ">=16.8.0"
-    react-native: ">=0.59"
-    react-test-renderer: ">=16.8.0"
+    jest: ">=29.0.0"
+    react: ">=18.2.0"
+    react-native: ">=0.71"
+    react-test-renderer: ">=18.2.0"
   peerDependenciesMeta:
     jest:
       optional: true
-  checksum: c6fdaf64865a079b885ff83ae172330b354dbd13cb9a4370578a544080d87f21cc7a93e079a3bc4256ab0893c5de36feae4bcf6edf24b3a6617019f4369a6053
+  checksum: e49f25ed7c615d34324af8c342ee47dd85f4d6b5bea33a52510962dc4aa9c3d6d71709dbc57d422de0a69afa7521739b3d4050d376d261a89bdf49faf923621d
   languageName: node
   linkType: hard
 
@@ -15320,7 +15320,7 @@ __metadata:
     "@testing-library/jest-dom": ^6.4.2
     "@testing-library/jest-native": 5.4.3
     "@testing-library/react": 14.0.0
-    "@testing-library/react-native": 12.3.2
+    "@testing-library/react-native": 13.0.0
     "@total-typescript/shoehorn": ^0.1.2
     "@types/async": ^3.2.8
     "@types/eventsource": ^1.1.15
