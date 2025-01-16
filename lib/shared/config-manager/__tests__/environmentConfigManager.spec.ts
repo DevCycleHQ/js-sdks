@@ -350,7 +350,10 @@ describe('EnvironmentConfigManager Unit Tests', () => {
 
     describe('SSE Connection', () => {
         const lastModifiedDate = new Date()
-        const connectToSSE = async (config?: string) => {
+        const connectToSSE = async (
+            config?: string,
+            disableRealTimeUpdates = false,
+        ) => {
             getEnvironmentConfig_mock.mockImplementation(async () =>
                 mockFetchResponse(
                     {
@@ -373,6 +376,7 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             const envConfig = getConfigManager(logger, 'sdkKey', {
                 configPollingIntervalMS: 1000,
                 configPollingTimeoutMS: 1000,
+                disableRealTimeUpdates,
             })
             await envConfig.fetchConfigPromise
             return envConfig
@@ -388,6 +392,16 @@ describe('EnvironmentConfigManager Unit Tests', () => {
 
             jest.advanceTimersByTime(10 * 60 * 1000)
             expect(getEnvironmentConfig_mock).toBeCalledTimes(2)
+
+            envConfig.cleanup()
+        })
+
+        it('shuld not conenct to SSE if disableRealTimeUpdates is true', async () => {
+            const envConfig = await connectToSSE(undefined, true)
+
+            expect(setInterval_mock).toHaveBeenCalledTimes(1)
+            expect(getEnvironmentConfig_mock).toBeCalledTimes(1)
+            expect(MockEventSource).not.toHaveBeenCalled()
 
             envConfig.cleanup()
         })
