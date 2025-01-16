@@ -92,6 +92,13 @@ export interface DevCycleServerSDKOptions {
     enableClientBootstrapping?: boolean
 
     /**
+     * Disables real time updates and their associated SSE connection
+     * will default back to polling for config updates
+     */
+    disableRealTimeUpdates?: boolean
+
+    /**
+     * @deprecated real time updates are enabled by default now
      * BETA: Enable Real Time Updates and their associated SSE connection
      */
     enableBetaRealTimeUpdates?: boolean

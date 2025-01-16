@@ -373,7 +373,6 @@ describe('EnvironmentConfigManager Unit Tests', () => {
             const envConfig = getConfigManager(logger, 'sdkKey', {
                 configPollingIntervalMS: 1000,
                 configPollingTimeoutMS: 1000,
-                enableBetaRealTimeUpdates: true,
             })
             await envConfig.fetchConfigPromise
             return envConfig
