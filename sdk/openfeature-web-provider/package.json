@@ -23,7 +23,7 @@
     },
     "peerDependencies": {
         "@openfeature/multi-provider-web": "^0.0.2",
-        "@openfeature/web-sdk": "^1.3.2"
+        "@openfeature/web-sdk": "^1.4.0"
     },
     "peerDependenciesMeta": {
         "@openfeature/multi-provider-web": {
