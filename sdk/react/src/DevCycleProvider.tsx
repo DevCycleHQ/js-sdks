@@ -2,7 +2,12 @@
 import { ProviderConfig } from './types'
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import initializeDevCycleClient from './initializeDevCycleClient'
-import { Provider, initializedContext } from './context'
+import {
+    Provider,
+    initializedContext,
+    debugContext,
+    debugContextDefaults,
+} from './context'
 import { DevCycleClient } from '@devcycle/js-client-sdk'
 
 type Props = {
@@ -59,6 +64,12 @@ export function DevCycleProvider(props: Props): React.ReactElement {
         }
     }, [sdkKey, user, options])
 
+    const mergedDebugOptions = Object.assign(
+        {},
+        debugContextDefaults,
+        props.config.options?.reactDebug ?? {},
+    )
+
     return (
         <Provider value={{ client: clientRef.current }}>
             <initializedContext.Provider
@@ -67,7 +78,9 @@ export function DevCycleProvider(props: Props): React.ReactElement {
                         isInitialized || clientRef.current.isInitialized,
                 }}
             >
-                {props.children}
+                <debugContext.Provider value={mergedDebugOptions}>
+                    {props.children}
+                </debugContext.Provider>
             </initializedContext.Provider>
         </Provider>
     )

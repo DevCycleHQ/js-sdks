@@ -1,6 +1,6 @@
-import type { DVCLogger } from '@devcycle/types'
+import type { DVCLogger, SSEConnectionInterface } from '@devcycle/types'
 
-export class StreamingConnection {
+export class StreamingConnection implements SSEConnectionInterface {
     private connection?: EventSource
 
     constructor(
@@ -8,6 +8,12 @@ export class StreamingConnection {
         private onMessage: (message: unknown) => void,
         private logger: DVCLogger,
     ) {
+        this.openConnection()
+    }
+
+    public updateURL(url: string): void {
+        this.close()
+        this.url = url
         this.openConnection()
     }
 

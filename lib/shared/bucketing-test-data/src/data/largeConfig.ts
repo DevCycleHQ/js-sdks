@@ -1,3 +1,5 @@
+import { ConfigBody } from '@devcycle/types'
+
 export const largeConfig = {
     project: {
         _id: '52979e6b353148fe8d54f1b7946578da',
@@ -51,7 +53,6 @@ export const largeConfig = {
                 targets: [
                     {
                         _audience: {
-                            _id: 'b8c6aca26fb540c78cea5560620d3fa5',
                             filters: {
                                 filters: [
                                     {
@@ -78,7 +79,6 @@ export const largeConfig = {
                     },
                     {
                         _audience: {
-                            _id: '59b2ecbd6d204f3ba8bd59ea17871844',
                             filters: {
                                 filters: [
                                     {
@@ -140,7 +140,6 @@ export const largeConfig = {
                 targets: [
                     {
                         _audience: {
-                            _id: '9a3c47be82ec469b836ef2aa63de3fdc',
                             filters: {
                                 filters: [
                                     {
@@ -275,7 +274,6 @@ export const largeConfig = {
                 targets: [
                     {
                         _audience: {
-                            _id: 'fa43ca76fc0943ba922051e144088065',
                             filters: {
                                 filters: [
                                     {
@@ -313,7 +311,6 @@ export const largeConfig = {
                     },
                     {
                         _audience: {
-                            _id: 'a0f11ee6388e4e7984667c779f423163',
                             filters: {
                                 filters: [
                                     {
@@ -371,7 +368,6 @@ export const largeConfig = {
                 targets: [
                     {
                         _audience: {
-                            _id: '19aec1d651d64ec7993df5c5a13ea33f',
                             filters: {
                                 filters: [
                                     {
@@ -403,7 +399,6 @@ export const largeConfig = {
                     },
                     {
                         _audience: {
-                            _id: '49b2698a5aa84622975f37d0582164e9',
                             filters: {
                                 filters: [
                                     {
@@ -461,7 +456,6 @@ export const largeConfig = {
                 targets: [
                     {
                         _audience: {
-                            _id: '09dce2cbd4594bf8bfc164769ec51415',
                             filters: {
                                 filters: [
                                     {
@@ -507,7 +501,6 @@ export const largeConfig = {
                     },
                     {
                         _audience: {
-                            _id: '86393f91545f4922a81b5567ac3ec901',
                             filters: {
                                 filters: [
                                     {

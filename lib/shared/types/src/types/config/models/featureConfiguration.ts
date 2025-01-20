@@ -1,4 +1,4 @@
-import { Audience } from './audience'
+import { TopLevelOperator } from './audience'
 import { Type } from 'class-transformer'
 
 export enum TargetingRuleTypes {
@@ -62,6 +62,13 @@ export class TargetDistribution<IdType = string> {
     percentage: number
 }
 
+export class TargetAudience<IdType = string> {
+    // this is leftover from legacy config format and is unused, but leads to parsing errors if removed
+    // we are going to write dummy strings here going forward
+    _id: string
+    filters: TopLevelOperator<IdType>
+}
+
 /**
  * Defines an Audience Target including the Audience model, rollout, and variation distribution
  * _id needed as it will be used as the seed in the hashing function to determine a given users position
@@ -73,7 +80,7 @@ export class Target<IdType = string> {
     /**
      * Audience model describing target segmentation.
      */
-    _audience: Audience<IdType>
+    _audience: TargetAudience<IdType>
 
     /**
      * Rollout sub-document describing how a Target's audience is rolled out
@@ -91,6 +98,11 @@ export class Target<IdType = string> {
      * Currently indicates virtual targeting rules generated due to overrides.
      */
     type?: TargetingRuleTypes
+
+    /**
+     * Bucketing key to use for this target. If not provided, user_id will be used.
+     */
+    bucketingKey?: string
 }
 
 export class FeaturePrerequisites<IdType = string> {

@@ -10,6 +10,7 @@ import {
     PublicProject,
     PublicVariable,
     PublicVariation,
+    TargetAudience,
     UserSubType,
     VariableType,
 } from '@devcycle/types'
@@ -24,6 +25,7 @@ export const project: PublicProject = {
         edgeDB: {
             enabled: false,
         },
+        disablePassthroughRollouts: false,
     },
 }
 
@@ -32,7 +34,7 @@ export const environment: PublicEnvironment = {
     key: 'test-environment',
 }
 
-export const audiences: PublicAudience[] = [
+export const reusableAudiences: PublicAudience[] = [
     {
         _id: '614ef6ea475929459060721a',
         filters: {
@@ -47,8 +49,25 @@ export const audiences: PublicAudience[] = [
             operator: AudienceOperator.and,
         },
     },
+]
+
+export const audiences: TargetAudience[] = [
     {
-        _id: '6153557f1ed7bac7268ea0d9',
+        _id: '',
+        filters: {
+            filters: [
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.email,
+                    comparator: FilterComparator['='],
+                    values: ['test@email.com', 'test2@email.com'],
+                },
+            ],
+            operator: AudienceOperator.and,
+        },
+    },
+    {
+        _id: '',
         filters: {
             filters: [
                 {
@@ -85,7 +104,7 @@ export const audiences: PublicAudience[] = [
         },
     },
     {
-        _id: '6153557f1ed7bac7268ea0d5',
+        _id: '',
         filters: {
             filters: [
                 {
@@ -115,7 +134,7 @@ export const audiences: PublicAudience[] = [
         },
     },
     {
-        _id: '6153557f1ed7bac7268ea0d6',
+        _id: '',
         filters: {
             filters: [
                 {
@@ -139,7 +158,7 @@ export const audiences: PublicAudience[] = [
         },
     },
     {
-        _id: '6153557f1ed7bac7268ea074',
+        _id: '',
         filters: {
             filters: [
                 {
@@ -152,7 +171,7 @@ export const audiences: PublicAudience[] = [
         },
     },
     {
-        _id: '6153557f1ed7bac7268ea0d7',
+        _id: '',
         filters: {
             filters: [
                 {
@@ -168,7 +187,7 @@ export const audiences: PublicAudience[] = [
         },
     },
     {
-        _id: '6153557f1ed7bac7268ea0d8',
+        _id: '',
         filters: {
             filters: [
                 {
@@ -178,6 +197,31 @@ export const audiences: PublicAudience[] = [
                     dataKeyType: DataKeyType.string,
                     comparator: FilterComparator['!exist'],
                     values: [],
+                },
+            ],
+            operator: AudienceOperator.and,
+        },
+    },
+    {
+        _id: '',
+        filters: {
+            filters: [
+                {
+                    type: FilterType.all,
+                },
+            ],
+            operator: AudienceOperator.and,
+        },
+    },
+    {
+        _id: '',
+        filters: {
+            filters: [
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.email,
+                    comparator: FilterComparator['='],
+                    values: ['testwithfood@email.com'],
                 },
             ],
             operator: AudienceOperator.and,
@@ -404,10 +448,11 @@ function configBodyAudiences(audiences: PublicAudience[]): {
     })
     return auds
 }
+
 export const config: ConfigBody = {
     project,
     environment,
-    audiences: configBodyAudiences(audiences),
+    audiences: configBodyAudiences(reusableAudiences),
     features: [
         {
             _id: '614ef6aa473928459060721a',
@@ -422,11 +467,11 @@ export const config: ConfigBody = {
                         distribution: [
                             {
                                 _variation: variations[0]._id,
-                                percentage: 0.5,
+                                percentage: 0.6667,
                             },
                             {
                                 _variation: variations[1]._id,
-                                percentage: 0.5,
+                                percentage: 0.3333,
                             },
                         ],
                     },
@@ -458,6 +503,16 @@ export const config: ConfigBody = {
                         distribution: [
                             {
                                 _variation: variations[1]._id,
+                                percentage: 1,
+                            },
+                        ],
+                    },
+                    {
+                        _id: '61536f468fd67f0091982535',
+                        _audience: audiences[7],
+                        distribution: [
+                            {
+                                _variation: variations[0]._id,
                                 percentage: 1,
                             },
                         ],
@@ -549,9 +604,53 @@ export const config: ConfigBody = {
             },
             variations: [variations[8]],
         },
+        {
+            _id: '614ef8aa475928459060721d',
+            type: FeatureType.release,
+            key: 'feature5',
+            configuration: {
+                _id: '61536f62502d80fff97ed641',
+                targets: [
+                    {
+                        _id: '61536f468fd67f0091982532',
+                        _audience: audiences[8],
+                        distribution: [
+                            {
+                                _variation: variations[0]._id,
+                                percentage: 0.2222,
+                            },
+                            {
+                                _variation: variations[1]._id,
+                                percentage: 0.2222,
+                            },
+                            {
+                                _variation: variations[2]._id,
+                                percentage: 0.2222,
+                            },
+                            {
+                                _variation: variations[3]._id,
+                                percentage: 0.2222,
+                            },
+                            {
+                                _variation: variations[4]._id,
+                                percentage: 0.1112,
+                            },
+                        ],
+                    },
+                ],
+            },
+            variations: [
+                variations[0],
+                variations[1],
+                variations[2],
+                variations[3],
+                variations[4],
+            ],
+        },
     ],
     variables,
     variableHashes,
+    clientSDKKey: 'test',
 }
 
 export const barrenConfig: ConfigBody = {
@@ -634,7 +733,7 @@ export const barrenConfig: ConfigBody = {
 export const configWithNullCustomData: ConfigBody = {
     project,
     environment,
-    audiences: configBodyAudiences(audiences),
+    audiences: configBodyAudiences(reusableAudiences),
     features: [
         {
             _id: '614ef6aa475928459060721d',
@@ -681,4 +780,21 @@ export const configWithNullCustomData: ConfigBody = {
     ],
     variables,
     variableHashes,
+    clientSDKKey: 'test',
 }
+
+export const configWithBucketingKey = (bucketingKey: string): ConfigBody => ({
+    ...config,
+    features: config.features.map((feature) => ({
+        ...feature,
+        configuration: {
+            ...feature.configuration,
+            targets: feature.configuration.targets.map((target) => {
+                return {
+                    ...target,
+                    bucketingKey,
+                }
+            }),
+        },
+    })),
+})

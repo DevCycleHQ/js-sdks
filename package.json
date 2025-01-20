@@ -5,12 +5,13 @@
     "workspaces": [
         "sdk/**/*",
         "lib/**/*",
-        "examples/**/*"
+        "dev-apps/**/*"
     ],
     "packageManager": "yarn@3.6.0",
     "scripts": {
         "lint": "nx run-many --parallel --target lint --all",
         "test": "nx run-many --parallel --target test --all",
+        "check-types": "nx run-many --parallel --target check-types --all",
         "affected:lint": "nx affected --base=origin/main --head=HEAD --target=lint",
         "affected:test": "nx affected --base=origin/main --head=HEAD --target=test",
         "affected:e2e": "nx affected --base=origin/main --head=HEAD --target=e2e",
@@ -33,11 +34,14 @@
     "dependencies": {
         "@altack/nx-bundlefy": "^0.16.0",
         "@devcycle/assemblyscript-json": "^2.0.0",
-        "@openfeature/core": "^0.0.25",
-        "@openfeature/server-sdk": "^1.11.0",
-        "@openfeature/web-sdk": "^0.4.12",
+        "@openfeature/core": "^1.5.0",
+        "@openfeature/multi-provider": "^0.1.1",
+        "@openfeature/multi-provider-web": "^0.0.2",
+        "@openfeature/server-sdk": "^1.16.2",
+        "@openfeature/web-sdk": "^1.3.2",
         "@swc/helpers": "~0.5.2",
         "@types/express": "^4.17.17",
+        "@vercel/edge-config": "^1.2.0",
         "async": "^3.2.1",
         "bootstrap": "5.1.3",
         "class-transformer": "0.5.1",
@@ -45,6 +49,7 @@
         "core-js": "^3.6.5",
         "cross-fetch": "^4.0.0",
         "eslint-plugin-lodash": "^7.4.0",
+        "eventsource": "^2.0.2",
         "fetch-retry": "^5.0.6",
         "hoist-non-react-statics": "^3.3.2",
         "iso-639-1": "^2.1.13",
@@ -54,8 +59,8 @@
         "md5": "^2.2.1",
         "moment": "^2.29.4",
         "murmurhash": "^2.0.0",
-        "next": "14.0.0",
-        "protobufjs": "^7.2.5",
+        "next": "15.0.1",
+        "protobufjs": "^7.4.0",
         "react": "18.2.0",
         "react-bootstrap": "^2.2.1",
         "react-dom": "18.2.0",
@@ -63,6 +68,7 @@
         "react-native": "0.72.4",
         "react-native-device-info": "^8.7.0",
         "react-native-get-random-values": "^1.7.2",
+        "react-native-sse": "^1.2.1",
         "reflect-metadata": "^0.1.13",
         "regenerator-runtime": "0.13.7",
         "server-only": "^0.0.1",
@@ -79,9 +85,8 @@
         "@cloudflare/workers-types": "^4.20230914.0",
         "@commitlint/cli": "^16.2.3",
         "@commitlint/config-conventional": "^18.6.0",
-        "@nestjs/common": "^10.3.3",
+        "@nestjs/common": "^10.4.4",
         "@nestjs/core": "^10.3.3",
-        "@nrwl/jest": "^18.1.2",
         "@nrwl/js": "16.10.0",
         "@nrwl/rollup": "16.10.0",
         "@nx/cypress": "16.10.0",
@@ -100,14 +105,14 @@
         "@nx/web": "16.10.0",
         "@nx/webpack": "16.10.0",
         "@nx/workspace": "16.10.0",
-        "@playwright/test": "^1.36.0",
+        "@playwright/test": "^1.49.1",
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
         "@react-native-async-storage/async-storage": "1.19.4",
         "@react-native-community/cli": "11.3.6",
         "@react-native-community/cli-platform-android": "11.3.6",
         "@react-native-community/cli-platform-ios": "11.3.6",
         "@react-native/metro-config": "0.72.11",
-        "@svgr/webpack": "^6.1.2",
+        "@svgr/webpack": "^8.0.1",
         "@swc/cli": "~0.1.62",
         "@swc/core": "^1.3.99",
         "@swc/jest": "^0.2.29",
@@ -115,7 +120,9 @@
         "@testing-library/jest-native": "5.4.3",
         "@testing-library/react": "14.0.0",
         "@testing-library/react-native": "12.3.2",
+        "@total-typescript/shoehorn": "^0.1.2",
         "@types/async": "^3.2.8",
+        "@types/eventsource": "^1.1.15",
         "@types/hoist-non-react-statics": "^3.3.1",
         "@types/jest": "29.4.4",
         "@types/lodash": "^4.14.175",
@@ -132,6 +139,7 @@
         "as-wasi": "^0.4.6",
         "assemblyscript": "~0.27.1",
         "assemblyscript-regex": "https://github.com/DevCycleHQ/assemblyscript-regex.git#8ff33297841880c16e38bd67a84df4cbdb8e887f",
+        "autoprefixer": "10.4.13",
         "babel-jest": "29.4.3",
         "cross-env": "^7.0.3",
         "css-loader": "^6.4.0",
@@ -178,6 +186,8 @@
         "nock": "^13.3.8",
         "npm-run-all": "^4.1.5",
         "nx": "16.10.0",
+        "object-path-immutable": "^4.1.2",
+        "postcss": "8.4.47",
         "prettier": "^2.8.8",
         "prettier-eslint": "^16.3.0",
         "prettier-eslint-cli": "^8.0.1",
@@ -194,16 +204,17 @@
         "stylus-loader": "^7.1.0",
         "supports-color": "9.4.0",
         "swc-loader": "0.1.15",
+        "tailwindcss": "3.2.7",
         "ts-jest": "29.1.0",
         "ts-node": "^10.9.2",
         "tslib": "^2.3.0",
-        "typescript": "5.1.6",
+        "typescript": "^5.7.2",
         "url-loader": "^4.1.1",
         "validate-npm-package-name": "^5.0.0",
         "verdaccio": "^5.27.0",
-        "webpack": "5.89.0",
+        "webpack": "^5.89.0",
         "webpack-merge": "^5.8.0",
-        "wrangler": "^3.22.4"
+        "wrangler": "^3.78.2"
     },
     "lint-staged": {
         "**/*.{ts,js}": [
@@ -220,11 +231,20 @@
         "semver@7.3.4": "^7.5.2",
         "semver@7.3.7": "^7.5.2",
         "semver@7.5.3": "^7.5.2",
-        "@altack/nx-bundlefy@^0.16.0": "patch:@altack/nx-bundlefy@npm%3A0.16.0#./.yarn/patches/@altack-nx-bundlefy-npm-0.16.0-fc464002e3.patch"
+        "@altack/nx-bundlefy@^0.16.0": "patch:@altack/nx-bundlefy@npm%3A0.16.0#./.yarn/patches/@altack-nx-bundlefy-npm-0.16.0-fc464002e3.patch",
+        "express@4.18.3": "~4.19.2",
+        "ejs@3.1.8": "3.1.10",
+        "path-to-regexp@3.2.0": "^3.3.0",
+        "send@0.18.0": "^0.19.0",
+        "cross-spawn@^5.0.1": "^7.0.6",
+        "cross-spawn@^4.0.2": "^7.0.6"
     },
     "config": {
         "commitizen": {
             "path": "./node_modules/cz-conventional-changelog"
         }
+    },
+    "nx": {
+        "includedScripts": []
     }
 }

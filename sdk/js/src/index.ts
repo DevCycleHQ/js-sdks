@@ -2,16 +2,20 @@ import {
     DevCycleEvent,
     DevCycleOptions,
     DevCycleUser,
-    VariableDefinitions,
+    UserError,
+    DVCCustomDataJSON,
 } from './types'
 import {
     DevCycleClient,
     DevCycleOptionsWithDeferredInitialization,
-    isDeferredOptions,
 } from './Client'
+import { checkIsServiceWorker } from './utils'
 
 export * from './types'
 export { dvcDefaultLogger } from './logger'
+
+import { VariableDefinitions } from '@devcycle/types'
+export { VariableDefinitions }
 
 /**
  * @deprecated Use DevCycleClient instead
@@ -37,8 +41,12 @@ export type DVCOptionsWithDeferredInitialization =
 
 export type { DevCycleOptionsWithDeferredInitialization, DevCycleClient }
 
-const determineUserAndOptions = (
-    userOrOptions: DevCycleUser | DevCycleOptionsWithDeferredInitialization,
+const determineUserAndOptions = <
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
+>(
+    userOrOptions:
+        | DevCycleUser<CustomData>
+        | DevCycleOptionsWithDeferredInitialization,
     optionsArg: DevCycleOptions = {},
 ):
     | {
@@ -47,11 +55,11 @@ const determineUserAndOptions = (
           isDeferred: true
       }
     | {
-          user: DevCycleUser
+          user: DevCycleUser<CustomData>
           options: DevCycleOptions
           isDeferred: false
       } => {
-    let user: DevCycleUser | undefined = undefined
+    let user: DevCycleUser<CustomData> | undefined = undefined
     if (!!userOrOptions && 'deferInitialization' in userOrOptions) {
         if (userOrOptions.deferInitialization) {
             return {
@@ -74,41 +82,56 @@ const determineUserAndOptions = (
 
 export function initializeDevCycle<
     Variables extends VariableDefinitions = VariableDefinitions,
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
 >(
     sdkKey: string,
     options: DevCycleOptionsWithDeferredInitialization,
-): DevCycleClient<Variables>
+): DevCycleClient<Variables, CustomData>
 export function initializeDevCycle<
     Variables extends VariableDefinitions = VariableDefinitions,
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
 >(
     sdkKey: string,
-    user: DevCycleUser,
+    user: DevCycleUser<CustomData>,
     options?: DevCycleOptions,
-): DevCycleClient<Variables>
+): DevCycleClient<Variables, CustomData>
 export function initializeDevCycle<
     Variables extends VariableDefinitions = VariableDefinitions,
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
 >(
     sdkKey: string,
-    userOrOptions: DevCycleUser | DevCycleOptionsWithDeferredInitialization,
+    userOrOptions:
+        | DevCycleUser<CustomData>
+        | DevCycleOptionsWithDeferredInitialization,
     optionsArg: DevCycleOptions = {},
-): DevCycleClient<Variables> {
+): DevCycleClient<Variables, CustomData> {
     if (!sdkKey) {
-        throw new Error('Missing SDK key! Call initialize with a valid SDK key')
-    }
-
-    const userAndOptions = determineUserAndOptions(userOrOptions, optionsArg)
-    const { options } = userAndOptions
-
-    // TODO: implement logger
-    if (typeof window === 'undefined' && !options.next) {
-        console.warn(
-            'Window is not defined, try initializing in a browser context',
+        throw new UserError(
+            'Missing SDK key! Call initialize with a valid SDK key',
         )
     }
 
     if (
+        !sdkKey.startsWith('client') &&
+        !sdkKey.startsWith('dvc_client') &&
+        !optionsArg?.next
+    ) {
+        throw new UserError(
+            'Invalid SDK key provided. Please call initialize with a valid client SDK key',
+        )
+    }
+
+    const userAndOptions = determineUserAndOptions<CustomData>(
+        userOrOptions,
+        optionsArg,
+    )
+    const { options } = userAndOptions
+    const isServiceWorker = checkIsServiceWorker()
+
+    if (
         typeof window !== 'undefined' &&
         !window.addEventListener &&
+        !isServiceWorker &&
         !options?.reactNative
     ) {
         throw new Error(
@@ -128,12 +151,12 @@ export function initializeDevCycle<
         throw new Error('Invalid options! Call initialize with valid options')
     }
 
-    let client: DevCycleClient
+    let client: DevCycleClient<Variables, CustomData>
 
     if (userAndOptions.isDeferred) {
         client = new DevCycleClient(sdkKey, undefined, userAndOptions.options)
     } else {
-        client = new DevCycleClient(
+        client = new DevCycleClient<Variables, CustomData>(
             sdkKey,
             userAndOptions.user,
             userAndOptions.options,

@@ -1,4 +1,8 @@
-import type { DevCycleOptions, DevCycleUser } from '@devcycle/js-client-sdk'
+import type {
+    DevCycleOptions,
+    DevCycleUser,
+    DVCCustomDataJSON,
+} from '@devcycle/js-client-sdk'
 
 type WithSDKKey = {
     sdkKey: string
@@ -8,7 +12,23 @@ type WithEnvironmentKey = {
     envKey: string
 }
 
-export type ProviderConfig = (WithSDKKey | WithEnvironmentKey) & {
-    user?: DevCycleUser
-    options?: DevCycleOptions
+type OptionsWithDebug = DevCycleOptions & {
+    reactDebug?: {
+        /**
+         * Show borders around components that are conditionally rendered using the RenderIf helper
+         */
+        showConditionalBorders?: boolean
+
+        /**
+         * Hex color string for the border color to show around conditional components
+         */
+        borderColor?: string
+    }
+}
+
+export type ProviderConfig<
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
+> = (WithSDKKey | WithEnvironmentKey) & {
+    user?: DevCycleUser<CustomData>
+    options?: OptionsWithDebug
 }

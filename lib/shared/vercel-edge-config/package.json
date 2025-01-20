@@ -1,0 +1,14 @@
+{
+    "name": "@devcycle/vercel-edge-config",
+    "version": "0.5.0",
+    "peerDependencies": {
+        "@devcycle/types": "*",
+        "@vercel/edge-config": "^1.2.0"
+    },
+    "dependencies": {
+        "class-transformer": "^0.5.1"
+    },
+    "type": "commonjs",
+    "main": "./src/index.js",
+    "typings": "./src/index.d.ts"
+}

@@ -1,6 +1,7 @@
 import { ExecutionContext } from '@nestjs/common'
 import { ROUTE_ARGS_METADATA } from '@nestjs/common/constants'
 import { DevCycleClient, DevCycleUser } from '@devcycle/nodejs-server-sdk'
+import { ClsServiceManager } from 'nestjs-cls'
 import { VariableValue } from './VariableValue'
 
 function getParamDecoratorFactory(decorator: () => ParameterDecorator) {
@@ -14,7 +15,6 @@ function getParamDecoratorFactory(decorator: () => ParameterDecorator) {
 }
 
 describe('VariableValue', () => {
-    let ctx: ExecutionContext
     let dvcClient: DevCycleClient
     let dvcUser: DevCycleUser
 
@@ -23,14 +23,15 @@ describe('VariableValue', () => {
             variableValue: jest.fn().mockResolvedValue('variable value'),
         } as unknown as DevCycleClient
         dvcUser = { user_id: 'foo' }
-        ctx = {
-            switchToHttp: jest.fn().mockReturnValue({
-                getRequest: jest.fn().mockReturnValue({
-                    dvc_client: dvcClient,
-                    dvc_user: dvcUser,
-                }),
-            }),
-        } as unknown as ExecutionContext
+        ClsServiceManager.getClsService = jest.fn().mockReturnValue({
+            get: jest.fn().mockImplementation(
+                (key: string) =>
+                    ({
+                        dvc_client: dvcClient,
+                        dvc_user: dvcUser,
+                    }[key]),
+            ),
+        })
     })
 
     it('calls variableValue on the devcycle client', () => {
@@ -38,7 +39,7 @@ describe('VariableValue', () => {
         const defaultValue = 'default value'
 
         const factory = getParamDecoratorFactory(VariableValue)
-        const value = factory({ key, default: defaultValue }, ctx)
+        const value = factory({ key, default: defaultValue })
 
         expect(dvcClient.variableValue).toBeCalledWith(
             dvcUser,

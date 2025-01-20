@@ -10,21 +10,22 @@ import {
     MODULE_OPTIONS_TOKEN,
     DevCycleModuleOptions,
 } from './DevCycleModuleOptions'
+import { ClsService } from 'nestjs-cls'
 
 @Injectable()
 export class RequestInterceptor implements NestInterceptor {
     constructor(
         @Inject(DevCycleClient) private client: DevCycleClient,
         @Inject(MODULE_OPTIONS_TOKEN) private options: DevCycleModuleOptions,
+        private readonly cls: ClsService,
     ) {}
 
     intercept(
         context: ExecutionContext,
         next: CallHandler,
     ): ReturnType<CallHandler['handle']> {
-        const req = context.switchToHttp().getRequest()
-        req.dvc_client = this.client
-        req.dvc_user = this.options.userFactory(context)
+        this.cls.set('dvc_client', this.client)
+        this.cls.set('dvc_user', this.options.userFactory(context))
 
         return next.handle()
     }

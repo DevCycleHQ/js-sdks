@@ -83,4 +83,31 @@ export interface DevCycleServerSDKOptions {
      * Overrides the default URL for the DVC Config CDN when using local bucketing.
      */
     configCDNURI?: string
+
+    /**
+     * Enable the ability to create a client configuration for use as a bootstrapping config
+     * Useful for serverside-rendering usecases where the config can be obtained on the server
+     * and provided to the client
+     */
+    enableClientBootstrapping?: boolean
+
+    /**
+     * Disables real time updates and their associated SSE connection
+     * will default back to polling for config updates
+     */
+    disableRealTimeUpdates?: boolean
+
+    /**
+     * @deprecated real time updates are enabled by default now
+     * BETA: Enable Real Time Updates and their associated SSE connection
+     */
+    enableBetaRealTimeUpdates?: boolean
+
+    /**
+     * Controls the polling interval in milliseconds to fetch new environment config changes
+     * when SSE connections are enabled, defaults to 10 minutes.
+     * This is only used when enableBetaRealTimeUpdates is true.
+     * @min 60000
+     */
+    sseConfigPollingIntervalMS?: number
 }

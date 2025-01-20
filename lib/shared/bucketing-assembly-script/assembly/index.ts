@@ -1,6 +1,6 @@
 import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import {
-    ConfigBody,
+    ConfigBodyV2 as ConfigBody,
     DVCPopulatedUser,
     FeatureVariation,
     PlatformData,
@@ -393,6 +393,16 @@ export function setClientCustomDataUTF8(
     }
 
     _setClientCustomData(sdkKey, parsed as JSON.Obj)
+}
+
+/**
+ * return the SDK key that is stored in the config. Normally this would be the same as the passed-in SDK key, but for
+ * bootstrapping configs it's actually the client SDK key, while the config is stored under the server SDK key
+ * @param sdkKey
+ */
+export function getSDKKeyFromConfig(sdkKey: string): string | null {
+    const config = _getConfigData(sdkKey)
+    return config.clientSDKKey
 }
 
 export * from './managers/eventQueueManager'

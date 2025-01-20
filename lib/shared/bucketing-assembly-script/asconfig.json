@@ -1,32 +1,32 @@
 {
-  "targets": {
-    "debug": {
-      "outFile": "build/bucketing-lib.debug.wasm",
-      "textFile": "build/bucketing-lib.debug.wat",
-      "tsdFile": "build/bucketing-lib.debug.d.ts",
-      "sourceMap": true,
-      "debug": true
+    "targets": {
+        "debug": {
+            "outFile": "build/bucketing-lib.debug.wasm",
+            "textFile": "build/bucketing-lib.debug.wat",
+            "tsdFile": "build/bucketing-lib.debug.d.ts",
+            "sourceMap": true,
+            "debug": true
+        },
+        "release": {
+            "outFile": "build/bucketing-lib.release.wasm",
+            "textFile": "build/bucketing-lib.release.wat",
+            "tsdFile": "build/bucketing-lib.release.d.ts",
+            "sourceMap": true,
+            "optimizeLevel": 3,
+            "shrinkLevel": 0,
+            "converge": false,
+            "noAssert": false
+        },
+        "worker": {
+            "outFile": "build/bucketing-lib.worker.wasm",
+            "textFile": "build/bucketing-lib.worker.wat",
+            "tsdFile": "build/bucketing-lib.worker.d.ts",
+            "sourceMap": true,
+            "optimizeLevel": 3,
+            "shrinkLevel": 0,
+            "converge": false,
+            "noAssert": false
+        }
     },
-    "release": {
-      "outFile": "build/bucketing-lib.release.wasm",
-      "textFile": "build/bucketing-lib.release.wat",
-      "tsdFile": "build/bucketing-lib.release.d.ts",
-      "sourceMap": true,
-      "optimizeLevel": 3,
-      "shrinkLevel": 0,
-      "converge": false,
-      "noAssert": false
-    },
-    "worker": {
-      "outFile": "build/bucketing-lib.worker.wasm",
-      "textFile": "build/bucketing-lib.worker.wat",
-      "tsdFile": "build/bucketing-lib.worker.d.ts",
-      "sourceMap": true,
-      "optimizeLevel": 3,
-      "shrinkLevel": 0,
-      "converge": false,
-      "noAssert": false
-    }
-  },
-  "options": {}
+    "options": {}
 }

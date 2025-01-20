@@ -1,6 +1,11 @@
 {
     "extends": ["../../.eslintrc.json"],
-    "ignorePatterns": ["!**/*", "node_modules/*", "src/pb-types/compiled*"],
+    "ignorePatterns": [
+        "!**/*",
+        "node_modules/*",
+        "src/pb-types/compiled*",
+        "*/__mocks__/*"
+    ],
     "overrides": [
         {
             "files": ["*.json"],
@@ -9,7 +14,7 @@
                 "@nx/dependency-checks": [
                     "error",
                     {
-                        "ignoredDependencies": []
+                        "ignoredDependencies": ["nestjs-cls"]
                     }
                 ]
             }

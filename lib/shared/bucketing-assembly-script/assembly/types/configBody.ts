@@ -7,22 +7,42 @@ import {
     jsonObjFromMap,
     isValidString,
     getJSONObjFromJSONOptional,
+    getStringFromJSONOptional,
+    getBoolFromJSON
 } from '../helpers/jsonHelpers'
 import { Feature } from './feature'
-import { NoIdAudience } from './target'
+import { Audience } from './target'
+
+export class Settings extends JSON.Value {
+    readonly disablePassthroughRollouts: bool
+
+    constructor(settings: JSON.Obj) {
+        super()
+        if (settings.has("disablePassthroughRollouts")) {
+            this.disablePassthroughRollouts = getBoolFromJSON(settings, 'disablePassthroughRollouts')
+        } else {
+            this.disablePassthroughRollouts = false
+        }
+    }
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('disablePassthroughRollouts', this.disablePassthroughRollouts)
+        return json.stringify()
+    }
+}
 
 export class PublicProject extends JSON.Value {
     readonly _id: string
     readonly key: string
     readonly a0_organization: string
-    readonly settings: JSON.Obj
+    readonly settings: Settings
 
     constructor(project: JSON.Obj) {
         super()
         this._id = getStringFromJSON(project, '_id')
         this.key = getStringFromJSON(project, 'key')
         this.a0_organization = getStringFromJSON(project, 'a0_organization')
-        this.settings = getJSONObjFromJSON(project, 'settings')
+        this.settings = new Settings(getJSONObjFromJSON(project, 'settings'))
     }
 
     stringify(): string {
@@ -79,11 +99,12 @@ export class Variable extends JSON.Value {
 
 export class ConfigBody {
     readonly project: PublicProject
-    readonly audiences: Map<string, NoIdAudience>
+    readonly audiences: Map<string, Audience>
     readonly environment: PublicEnvironment
     readonly features: Feature[]
     readonly variables: Variable[]
     readonly etag: string | null
+    readonly clientSDKKey: string | null
 
     private readonly _variableKeyMap: Map<string, Variable>
     private readonly _variableIdMap: Map<string, Variable>
@@ -119,7 +140,10 @@ export class ConfigBody {
 
     constructor(configJSONObj: JSON.Obj, etag: string | null = null) {
         this.etag = etag
-
+        this.clientSDKKey = getStringFromJSONOptional(
+            configJSONObj,
+            'clientSDKKey'
+        )
         this.project = new PublicProject(
             getJSONObjFromJSON(configJSONObj, 'project'),
         )
@@ -170,13 +194,13 @@ export class ConfigBody {
             configJSONObj,
             'audiences',
         )
-        const audiences = new Map<string, NoIdAudience>()
+        const audiences = new Map<string, Audience>()
         if (audiencesJSON) {
             const audienceKeys = audiencesJSON.keys
             for (let i = 0; i < audienceKeys.length; i++) {
                 const audience_id = audienceKeys[i]
                 const aud = audiencesJSON.get(audience_id)
-                audiences.set(audience_id, new NoIdAudience(aud as JSON.Obj))
+                audiences.set(audience_id, new Audience(aud as JSON.Obj))
             }
         }
         this.audiences = audiences
@@ -206,6 +230,9 @@ export class ConfigBody {
         json.set('audiences', jsonObjFromMap(this.audiences))
         json.set('features', jsonArrFromValueArray(this.features))
         json.set('variables', jsonArrFromValueArray(this.variables))
+        if (this.clientSDKKey) {
+            json.set('clientSDKKey', this.clientSDKKey)
+        }
         return json.stringify()
     }
 

@@ -1,5 +1,8 @@
 # DevCycle Javascript Cloud Bucketing Server SDK
 
+DevCycle is a feature flag management provider with robust support for user targeting, realtime updates of flag values
+and deep integrations with your development workflow.
+
 This SDK is used to integrate DevCycle with your Javascript server-side application, where a Node.js runtime isn't available.
 Example use-cases would be Cloudflare Workers and other edge-worker runtimes.
 

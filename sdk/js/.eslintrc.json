@@ -1,6 +1,6 @@
 {
     "extends": ["../../.eslintrc.json"],
-    "ignorePatterns": ["!**/*", "examples/**/*", "node_modules/*"],
+    "ignorePatterns": ["!**/*", "dev-apps/**/*", "node_modules/*"],
     "overrides": [
         {
             "files": ["*.json"],

@@ -4,18 +4,18 @@
 
 import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import {
-    BucketedUserConfig, ConfigBody, CustomDataFilter,
+    BucketedUserConfig, ConfigBody, ConfigBodyV2, CustomDataFilter,
     DVCPopulatedUser,
     DVCUser,
     Rollout as PublicRollout,
     Target as PublicTarget,
     AudienceOperator, UserFilter,
-    NoIdAudience,
     decodeVariableForUserParams_PB,
     encodeVariableForUserParams_PB,
     decodeDVCUser_PB,
     decodeSDKVariable_PB,
-    encodeSDKVariable_PB
+    encodeSDKVariable_PB,
+    Audience
 } from './types'
 import {
     _checkCustomData,
@@ -87,7 +87,7 @@ export function evaluateOperatorFromJSON(
     if (!operatorJSON.isObj) {
         throw new Error('evaluateOperatorFromJSON operatorStr or userStr param not a JSON Object')
     }
-    const audiences = new Map<string, NoIdAudience>()
+    const audiences = new Map<string, Audience>()
     if (audiencesStr !== '' && audiencesStr !== '{}') {
         const audiencesJSON = JSON.parse(audiencesStr) as JSON.Obj
         if (!audiencesJSON.isObj) {
@@ -96,7 +96,7 @@ export function evaluateOperatorFromJSON(
         const keys = audiencesJSON.keys
         for (let i = 0; i < keys.length; i++) {
             const aud = audiencesJSON.get(keys[i]) as JSON.Obj
-            audiences.set(keys[i], new NoIdAudience(aud))
+            audiences.set(keys[i], new Audience(aud))
         }
     }
 
@@ -128,6 +128,16 @@ export function testConfigBodyClass(configStr: string, etag: string | null = nul
 
 export function testConfigBodyClassFromUTF8(configStr: Uint8Array, etag: string | null = null): string {
     const config = ConfigBody.fromUTF8(configStr, etag)
+    return config.stringify()
+}
+
+export function testConfigBodyV2Class(configStr: string, etag: string | null = null): string {
+    const config = ConfigBodyV2.fromString(configStr, etag)
+    return config.stringify()
+}
+
+export function testConfigBodyV2ClassFromUTF8(configStr: Uint8Array, etag: string | null = null): string {
+    const config = ConfigBodyV2.fromUTF8(configStr, etag)
     return config.stringify()
 }
 

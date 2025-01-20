@@ -68,8 +68,8 @@ export class ConfigRequestConsolidator {
                     // don't resolve anything and just make another request while keeping all the previous resolvers
                     this.resolvers.push(...resolvers)
                 } else {
-                    resolvers.forEach(({ resolve }) => resolve(result))
                     this.handleConfigReceivedFunction(result, this.nextUser)
+                    resolvers.forEach(({ resolve }) => resolve(result))
                 }
             })
             .catch((err) => {
@@ -89,8 +89,12 @@ export class ConfigRequestConsolidator {
             this.requestParams ? this.requestParams : undefined,
         )
         this.requestParams = null
-        const bucketedConfig = await this.currentPromise
-        this.currentPromise = null
+        const bucketedConfig = await this.currentPromise.finally(() => {
+            // clear the current promise so we can make another request
+            // this should happen regardless of whether the request was successful or not
+            this.currentPromise = null
+        })
+
         return bucketedConfig
     }
 }

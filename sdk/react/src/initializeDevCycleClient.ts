@@ -8,12 +8,16 @@ const initializeDevCycleClient = (
 ): DevCycleClient => {
     if (options?.deferInitialization) {
         return initializeDevCycle(sdkKey, {
+            sdkPlatform: 'react',
             ...options,
             deferInitialization: true, // make typescript happy
             bootstrapConfig: undefined,
         })
     }
-    return initializeDevCycle(sdkKey, user, options)
+    return initializeDevCycle(sdkKey, user, {
+        sdkPlatform: 'react',
+        ...options,
+    })
 }
 
 export default initializeDevCycleClient

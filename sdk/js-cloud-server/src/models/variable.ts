@@ -1,4 +1,9 @@
-import { VariableType, VariableTypeAlias } from '@devcycle/types'
+import {
+    InferredVariableType,
+    VariableKey,
+    VariableType,
+    VariableTypeAlias,
+} from '@devcycle/types'
 import { DVCVariableInterface, DVCVariableValue } from '../types'
 import {
     checkParamDefined,
@@ -14,11 +19,13 @@ export type VariableParam<T extends DVCVariableValue> = {
     evalReason?: unknown
 }
 
-export class DVCVariable<T extends DVCVariableValue>
-    implements DVCVariableInterface
+export class DVCVariable<
+    T extends DVCVariableValue,
+    K extends VariableKey = VariableKey,
+> implements DVCVariableInterface
 {
-    key: string
-    value: VariableTypeAlias<T>
+    key: K
+    value: InferredVariableType<K, T>
     readonly defaultValue: T
     readonly isDefaulted: boolean
     readonly type: 'String' | 'Number' | 'Boolean' | 'JSON'
@@ -29,7 +36,9 @@ export class DVCVariable<T extends DVCVariableValue>
         checkParamDefined('key', key)
         checkParamDefined('defaultValue', defaultValue)
         checkParamType('key', key, typeEnum.string)
-        this.key = key.toLowerCase()
+        // kind of cheating here with the type assertion but we're basically assuming that all variable keys in
+        // generated types are lowercase since the system enforces that elsewhere
+        this.key = key.toLowerCase() as K
         this.isDefaulted = value === undefined || value === null
         this.value =
             value === undefined || value === null

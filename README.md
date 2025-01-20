@@ -13,18 +13,18 @@ To view the README for a specific SDK, navigate to that SDK inside the `sdk` dir
 There are several examples included in this repository for various SDKs. If you want to run them, proceed to setup:
 
 ## Setup
-Ensure you have Node 20.x installed.
+Ensure you have Node 22.x installed.
 
 1. Clone this repo
-2. Run `yarn` from the root directory. SDKs and examples should now be set up to run via Nx.
+2. Run `yarn` from the root directory. SDKs and dev-apps should now be set up to run via Nx.
 3. Run `aws configure sso`
 4. Run `aws sso login`
 
 
 ## Directory Structure
 ```
-examples/
-    - contains example applications using each SDK
+dev-apps/
+    - contains development test applications using each SDK
 lib/
     - contains shared Javascript libraries
 scripts/
@@ -33,12 +33,12 @@ sdk/
     - contains all SDKs
 ```
 
-## Running an example
-To run an example, use the `yarn start` command with the name of the example you want to run:
+## Running an development test app
+To run an app, use the `yarn start` command with the name of the example you want to run:
 `yarn start example-react-with-provider`
 
-The names of the examples are listed in the `workspace.json` file at the root of the repository. All examples are
-located in the root-level `examples/` directory.
+The names of the dev-apps are listed in the `workspace.json` file at the root of the repository. All dev-apps are
+located in the root-level `dev-apps/` directory.
 
 ## Development
 The repo is managed using `Nx`, a monorepo management tool. It's worth reading their docs here:

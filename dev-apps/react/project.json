@@ -1,0 +1,59 @@
+{
+    "name": "example-react",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "dev-apps/react/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nx/webpack:webpack",
+            "outputs": ["{options.outputPath}"],
+            "configurations": {
+                "production": {},
+                "development": {
+                    "extractLicenses": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "vendorChunk": true
+                }
+            },
+            "options": {
+                "statsJson": true,
+                "compiler": "babel",
+                "outputPath": "dist/dev-apps/react",
+                "index": "dev-apps/react/src/index.html",
+                "baseHref": "/",
+                "main": "dev-apps/react/src/index.tsx",
+                "tsConfig": "dev-apps/react/tsconfig.app.json",
+                "assets": ["dev-apps/react/src/public"],
+                "scripts": [],
+                "webpackConfig": "dev-apps/react/webpack.config.js"
+            },
+            "defaultConfiguration": "production"
+        },
+        "serve": {
+            "executor": "@nx/webpack:dev-server",
+            "options": {
+                "buildTarget": "example-react:build",
+                "hmr": true
+            },
+            "configurations": {
+                "production": {
+                    "buildTarget": "example-react:build:production",
+                    "hmr": false
+                },
+                "development": {
+                    "buildTarget": "example-react:build:development"
+                }
+            },
+            "defaultConfiguration": "development"
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["dev-apps/react/**/*.{ts,tsx,js,jsx}"]
+            }
+        }
+    },
+    "tags": []
+}

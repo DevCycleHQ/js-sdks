@@ -1,21 +1,56 @@
 {
     "name": "@devcycle/nodejs-server-sdk",
-    "version": "1.23.1",
+    "version": "1.39.0",
     "description": "The DevCycle NodeJS Server SDK used for feature management.",
     "license": "MIT",
+    "author": "DevCycle <support@devcycle.com>",
+    "keywords": [
+        "devcycle",
+        "feature flag",
+        "javascript",
+        "client",
+        "openfeature",
+        "node",
+        "server",
+        "sdk"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/DevCycleHQ/js-sdks.git"
+    },
+    "homepage": "https://devcycle.com",
     "dependencies": {
-        "@devcycle/bucketing-assembly-script": "^1.16.1",
-        "@devcycle/js-cloud-server-sdk": "^1.8.1",
-        "@devcycle/types": "^1.9.1",
+        "@devcycle/bucketing-assembly-script": "^1.29.0",
+        "@devcycle/js-cloud-server-sdk": "^1.19.0",
+        "@devcycle/types": "^1.20.0",
         "cross-fetch": "^4.0.0",
+        "eventsource": "^2.0.2",
         "fetch-retry": "^5.0.6"
     },
     "peerDependencies": {
-        "@openfeature/server-sdk": "^1.11.0"
+        "@openfeature/multi-provider": "^0.1.1",
+        "@openfeature/server-sdk": "^1.16.2"
+    },
+    "peerDependenciesMeta": {
+        "@openfeature/multi-provider": {
+            "optional": true
+        }
     },
     "engines": {
         "node": ">=16.0.0"
     },
     "main": "src/index.js",
-    "types": "src/index.d.ts"
+    "types": "src/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./src/index.js",
+            "require": "./src/index.js",
+            "types": "./src/index.d.ts"
+        },
+        "./openfeature-strategy": {
+            "import": "./openfeature-strategy.js",
+            "require": "./openfeature-strategy.js",
+            "types": "./openfeature-strategy.d.ts"
+        }
+    }
 }

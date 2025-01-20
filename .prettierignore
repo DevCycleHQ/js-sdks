@@ -1,12 +1,14 @@
 dist/
 coverage/
 test-results/
+lib/shared/bucketing-assembly-script/assembly/
+lib/shared/bucketing-assembly-script/protobuf/
+lib/shared/bucketing-assembly-script/build/
 eslint-common.js
 prettier.config.js
 jest.config.ts
 jest.preset.js
 *.MD
-lib/shared/bucketing-assembly-script/
 .yarn
 .husky
 .verdaccio
@@ -14,4 +16,4 @@ node_modules
 **/.next/**
 .github/
 **/Pods/**
-examples/react/react-native-app/package.json
+dev-apps/react/react-native-app/package.json

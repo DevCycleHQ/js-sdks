@@ -15,6 +15,8 @@ import {
     DevCycleServerSDKOptions,
     DVCLogger,
     getVariableTypeFromValue,
+    InferredVariableType,
+    VariableDefinitions,
     VariableTypeAlias,
 } from '@devcycle/types'
 import {
@@ -67,7 +69,9 @@ const throwIfUserError = (err: unknown) => {
     throw err
 }
 
-export class DevCycleCloudClient {
+export class DevCycleCloudClient<
+    Variables extends VariableDefinitions = VariableDefinitions,
+> {
     private sdkKey: string
     protected logger: DVCLogger
     private options: DevCycleServerSDKOptions
@@ -94,11 +98,10 @@ export class DevCycleCloudClient {
         return true
     }
 
-    async variable<T extends DVCVariableValue>(
-        user: DevCycleUser,
-        key: string,
-        defaultValue: T,
-    ): Promise<DVCVariable<T>> {
+    async variable<
+        K extends string & keyof Variables,
+        T extends DVCVariableValue & Variables[K],
+    >(user: DevCycleUser, key: K, defaultValue: T): Promise<DVCVariable<T>> {
         const incomingUser = castIncomingUser(user)
         const populatedUser = DVCPopulatedUser.fromDVCUser(
             incomingUser,
@@ -138,21 +141,26 @@ export class DevCycleCloudClient {
             })
         } catch (err) {
             throwIfUserError(err)
-            this.logger.error(
-                `Request to get variable: ${key} failed with response message: ${
-                    (err as any).message
-                }`,
-            )
+            if (err instanceof ResponseError && err.status !== 404) {
+                this.logger.error(
+                    `Request to get variable: ${key} failed with response message: ${
+                        (err as any).message
+                    }`,
+                )
+            }
             // Default Variable
             return new DVCVariable({ key, type, defaultValue })
         }
     }
 
-    async variableValue<T extends DVCVariableValue>(
+    async variableValue<
+        K extends string & keyof Variables,
+        T extends DVCVariableValue & Variables[K],
+    >(
         user: DevCycleUser,
-        key: string,
+        key: K,
         defaultValue: T,
-    ): Promise<VariableTypeAlias<T>> {
+    ): Promise<InferredVariableType<K, T>> {
         return (await this.variable(user, key, defaultValue)).value
     }
 

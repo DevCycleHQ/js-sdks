@@ -7,7 +7,6 @@ export const useRerenderOnVariableChange = (key?: string): void => {
     const client = useDevCycleClient()
 
     const variableKey = key ?? '*'
-
     useEffect(() => {
         client.subscribe(
             `variableUpdated:${variableKey}`,

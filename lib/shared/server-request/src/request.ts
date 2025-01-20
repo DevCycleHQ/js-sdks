@@ -20,6 +20,7 @@ export const exponentialBackoff: RequestInitWithRetry['retryDelay'] = (
     return delay + randomSum
 }
 
+export type RequestInitConfig = RequestInit | RequestInitWithRetry
 type retryOnRequestErrorFunc = (
     retries: number,
 ) => RequestInitWithRetry['retryOn']
@@ -151,7 +152,8 @@ async function getFetchAndConfig(
     const useRetries = 'retries' in requestConfig
     if (useRetries && requestConfig.retries) {
         const newConfig: RequestInitWithRetry = { ...requestConfig }
-        newConfig.retryOn = retryOnRequestError(requestConfig.retries)
+        newConfig.retryOn =
+            newConfig.retryOn || retryOnRequestError(requestConfig.retries)
         newConfig.retryDelay = exponentialBackoff
         return [await getFetchWithRetry(), newConfig]
     }

@@ -6,6 +6,8 @@ import {
     hasConfigDataForEtag,
 } from '../bucketingImportHelper'
 import cloneDeep from 'lodash/cloneDeep'
+import immutable from 'object-path-immutable'
+import { Feature } from '@devcycle/types'
 
 const testConfigBody = (str: string, utf8: boolean): any => {
     if (utf8) {
@@ -16,18 +18,43 @@ const testConfigBody = (str: string, utf8: boolean): any => {
     }
 }
 
+const postProcessedConfig = (config: unknown) => {
+    const parsedConfig = JSON.parse(JSON.stringify(config))
+    return immutable
+        .wrap(parsedConfig)
+        .set('project.settings', { disablePassthroughRollouts: false })
+        .del('variableHashes')
+        .set(
+            'features',
+            parsedConfig.features.map((feature: Feature) => {
+                return immutable.set(
+                    feature,
+                    'configuration.targets',
+                    feature.configuration.targets.map((target) => {
+                        return immutable.del(target, '_audience._id')
+                    }),
+                )
+            }),
+        )
+        .value()
+}
+
 describe.each([true, false])('Config Body', (utf8) => {
     it('should parse valid JSON into ConfigBody class', () => {
         expect(testConfigBody(JSON.stringify(testData.config), utf8)).toEqual(
-            JSON.parse(
-                JSON.stringify({
-                    ...testData.config,
-                    variableHashes: undefined,
-                }),
-            ),
+            postProcessedConfig(testData.config),
         )
     })
 
+    it('should parse if missing optional top level field', () => {
+        const config = cloneDeep(testData.config)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        delete config.clientSDKKey
+        expect(testConfigBody(JSON.stringify(config), utf8)).toEqual(
+            immutable.del(postProcessedConfig(testData.config), 'clientSDKKey'),
+        )
+    })
     it('should throw if target.rollout is missing type', () => {
         const config = cloneDeep(testData.config)
         const target: any = config.features[0].configuration.targets[0]
@@ -39,18 +66,34 @@ describe.each([true, false])('Config Body', (utf8) => {
         )
     })
 
-    it('should handle extended UTF8 characters, from UTF8: ' + utf8, () => {
-        const config = {
-            ...testData.config,
-            project: { ...testData.config.project, key: '👍 ö' },
-        }
+    it('should parse and omit bucketingKey', () => {
+        const config = cloneDeep(testData.config)
+        const target: any = config.features[0].configuration.targets[0]
+        target.bucketingKey = 'bucketingKey'
+        expect(testConfigBody(JSON.stringify(testData.config), utf8)).toEqual(
+            postProcessedConfig(testData.config),
+        )
+    })
+
+    it('should parse for startsWith/endsWith filter', () => {
+        const config = cloneDeep(testData.config)
+        const filters =
+            config.features[0].configuration.targets[0]._audience.filters
+        filters.filters[0] = {
+            type: 'user',
+            comparator: 'startWith',
+            subType: 'email',
+            values: [],
+        } as (typeof filters.filters)[0]
         expect(testConfigBody(JSON.stringify(config), utf8)).toEqual(
-            JSON.parse(
-                JSON.stringify({
-                    ...config,
-                    variableHashes: undefined,
-                }),
-            ),
+            postProcessedConfig(config),
+        )
+    })
+
+    it('should handle extended UTF8 characters, from UTF8: ' + utf8, () => {
+        const testConfig = immutable.set(testData.config, 'project.key', '👍 ö')
+        expect(testConfigBody(JSON.stringify(testConfig), utf8)).toEqual(
+            postProcessedConfig(testConfig),
         )
     })
 

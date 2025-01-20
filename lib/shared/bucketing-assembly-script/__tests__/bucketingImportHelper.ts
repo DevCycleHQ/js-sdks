@@ -10,7 +10,7 @@ type BucketingExports = Exports & {
 }
 
 const bucketingExports: BucketingExports = {
-    initialize
+    initialize,
 } as BucketingExports
 
 export = bucketingExports

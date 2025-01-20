@@ -24,7 +24,7 @@ describe('Request tests', () => {
                 sdkKey,
                 user as DVCPopulatedUser,
                 defaultLogger,
-                {},
+                { sdkPlatform: 'js' },
                 {
                     sse: true,
                     lastModified: 1234,
@@ -34,7 +34,8 @@ describe('Request tests', () => {
 
             expect(fetchRequestMock).toBeCalledWith(
                 'https://sdk-api.devcycle.com/v1/sdkConfig?sdkKey=' +
-                    `${sdkKey}&user_id=${user.user_id}&isAnonymous=false&sse=1&sseLastModified=1234&sseEtag=etag`,
+                    `${sdkKey}&user_id=${user.user_id}&isAnonymous=false&sse=1` +
+                    `&sseLastModified=1234&sseEtag=etag&sdkPlatform=js`,
                 expect.objectContaining({
                     headers: { 'Content-Type': 'application/json' },
                     method: 'GET',
