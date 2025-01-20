@@ -10,7 +10,7 @@ type ConfigPollingOptions = {
     configPollingTimeoutMS?: number
     configCDNURI?: string
     clientMode?: boolean
-    enableBetaRealTimeUpdates?: boolean
+    disableRealTimeUpdates?: boolean
 }
 
 type SetIntervalInterface = (handler: () => void, timeout?: number) => any
@@ -55,12 +55,12 @@ export class EnvironmentConfigManager {
             configPollingTimeoutMS = 5000,
             configCDNURI = 'https://config-cdn.devcycle.com',
             clientMode = false,
-            enableBetaRealTimeUpdates = false,
+            disableRealTimeUpdates = false,
         }: ConfigPollingOptions,
         configSource?: ConfigSource,
     ) {
         this.clientMode = clientMode
-        this.enableRealtimeUpdates = enableBetaRealTimeUpdates
+        this.enableRealtimeUpdates = !disableRealTimeUpdates
 
         this.configPollingIntervalMS =
             configPollingIntervalMS >= 1000 ? configPollingIntervalMS : 1000

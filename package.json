@@ -105,7 +105,7 @@
         "@nx/web": "16.10.0",
         "@nx/webpack": "16.10.0",
         "@nx/workspace": "16.10.0",
-        "@playwright/test": "^1.36.0",
+        "@playwright/test": "^1.49.1",
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
         "@react-native-async-storage/async-storage": "1.19.4",
         "@react-native-community/cli": "11.3.6",
