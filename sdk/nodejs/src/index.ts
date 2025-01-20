@@ -16,15 +16,17 @@ import {
     DVCFeatureSet,
     DevCyclePlatformDetails,
 } from '@devcycle/js-cloud-server-sdk'
-import { DevCycleServerSDKOptions } from '@devcycle/types'
+import { DevCycleServerSDKOptions, VariableDefinitions } from '@devcycle/types'
 import { getNodeJSPlatformDetails } from './utils/platformDetails'
 
 // Dynamically import the OpenFeature Provider, as it's an optional peer dependency
 type DevCycleProviderConstructor =
-    typeof import('./open-feature-provider/DevCycleProvider').DevCycleProvider
+    typeof import('./open-feature/DevCycleProvider').DevCycleProvider
 type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
 
-class DevCycleCloudClient extends InternalDevCycleCloudClient {
+class DevCycleCloudClient<
+    Variables extends VariableDefinitions = VariableDefinitions,
+> extends InternalDevCycleCloudClient<Variables> {
     private openFeatureProvider: DevCycleProvider
 
     constructor(
@@ -40,7 +42,7 @@ class DevCycleCloudClient extends InternalDevCycleCloudClient {
 
         try {
             const importedModule = await import(
-                './open-feature-provider/DevCycleProvider.js'
+                './open-feature/DevCycleProvider.js'
             )
             DevCycleProviderClass = importedModule.DevCycleProvider
         } catch (error) {
@@ -98,29 +100,49 @@ export type DVCEvent = DevCycleEvent
  */
 export type DVCOptions = DevCycleServerSDKOptions
 
+import { ConfigSource } from '@devcycle/types'
+
+export { ConfigSource }
+
+export { UserError } from '@devcycle/types'
+
 type DevCycleOptionsCloudEnabled = DevCycleServerSDKOptions & {
     enableCloudBucketing: true
 }
-type DevCycleOptionsLocalEnabled = DevCycleServerSDKOptions & {
+
+export type DevCycleOptionsLocalEnabled = DevCycleServerSDKOptions & {
     enableCloudBucketing?: false
+
+    /**
+     * Override the source to retrieve configuration from. Defaults to the DevCycle CDN
+     */
+    configSource?: ConfigSource
 }
 
-export function initializeDevCycle(
+export function initializeDevCycle<
+    Variables extends VariableDefinitions = VariableDefinitions,
+>(
     sdkKey: string,
     options?: DevCycleOptionsLocalEnabled,
-): DevCycleClient
-export function initializeDevCycle(
+): DevCycleClient<Variables>
+export function initializeDevCycle<
+    Variables extends VariableDefinitions = VariableDefinitions,
+>(
     sdkKey: string,
     options: DevCycleOptionsCloudEnabled,
-): DevCycleCloudClient
-export function initializeDevCycle(
+): DevCycleCloudClient<Variables>
+export function initializeDevCycle<
+    Variables extends VariableDefinitions = VariableDefinitions,
+>(
     sdkKey: string,
     options?: DevCycleServerSDKOptions,
-): DevCycleClient | DevCycleCloudClient
-export function initializeDevCycle(
+): DevCycleClient<Variables> | DevCycleCloudClient<Variables>
+export function initializeDevCycle<
+    Variables extends VariableDefinitions = VariableDefinitions,
+>(
     sdkKey: string,
     options: DevCycleServerSDKOptions = {},
-): DevCycleClient | DevCycleCloudClient {
+): DevCycleClient<Variables> | DevCycleCloudClient<Variables> {
     if (!sdkKey) {
         throw new Error('Missing SDK key! Call initialize with a valid SDK key')
     } else if (!isValidServerSDKKey(sdkKey)) {
@@ -136,7 +158,7 @@ export function initializeDevCycle(
             getNodeJSPlatformDetails(),
         )
     }
-    return new DevCycleClient(sdkKey, options)
+    return new DevCycleClient(sdkKey, options as DevCycleOptionsLocalEnabled)
 }
 
 /**

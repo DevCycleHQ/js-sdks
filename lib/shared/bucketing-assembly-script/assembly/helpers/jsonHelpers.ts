@@ -6,6 +6,15 @@ export function getJSONObjFromJSON(jsonObj: JSON.Obj, key: string): JSON.Obj {
     return obj
 }
 
+export function getBoolFromJSON(jsonObj: JSON.Obj, key: string): bool {
+    const bool = jsonObj.getBool(key)
+    if (!bool) {
+        throw new Error(`Missing bool value for key: "${key}", obj: ${jsonObj.stringify()}`)
+    } else {
+        return bool.valueOf()
+    }
+}
+
 export function getJSONObjFromJSONOptional(jsonObj: JSON.Obj, key: string): JSON.Obj | null {
     const obj = jsonObj.getObj(key)
     if (!obj) {
@@ -18,6 +27,14 @@ export function getJSONArrayFromJSON(jsonObj: JSON.Obj, key: string): JSON.Arr {
     const obj = jsonObj.getArr(key)
     if (!obj) throw new Error(`Array not found for key: "${key}", obj: ${jsonObj.stringify()}`)
     return obj
+}
+
+export function getValueFromJSONOptional(jsonObj: JSON.Obj, key: string): JSON.Value | null {
+    const value = jsonObj.get(key)
+    if (!value) {
+        return null
+    }
+    return value
 }
 
 export function getStringFromJSON(jsonObj: JSON.Obj, key: string): string {

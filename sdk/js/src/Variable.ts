@@ -13,7 +13,7 @@ export class DVCVariable<T extends DVCVariableValue> implements Variable<T> {
     key: string
     // prevent more specific typing based on type of defaultValue
     value: VariableTypeAlias<T>
-    callback?: (value: T) => void
+    callback?: (value: VariableTypeAlias<T>) => void
     readonly defaultValue: T
     isDefaulted: boolean
     readonly evalReason: any
@@ -36,7 +36,7 @@ export class DVCVariable<T extends DVCVariableValue> implements Variable<T> {
         this.evalReason = variable.evalReason
     }
 
-    onUpdate(callback: (value: T) => void): DVCVariable<T> {
+    onUpdate(callback: (value: VariableTypeAlias<T>) => void): DVCVariable<T> {
         checkParamType('callback', callback, 'function')
         this.callback = callback
         return this

@@ -16,10 +16,15 @@ export type {
     DVCUser,
     DVCVariableValue,
     DVCVariable,
+    DVCCustomDataJSON,
+    DevCycleJSON,
     DevCycleEvent,
     DevCycleOptions,
     DVCEvent,
 } from '@devcycle/js-client-sdk'
+
+export * from './RenderIfEnabled'
+export * from './SwapComponents'
 
 export {
     DevCycleProvider,

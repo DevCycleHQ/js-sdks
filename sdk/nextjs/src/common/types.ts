@@ -1,5 +1,5 @@
 import { DevCycleOptions, DevCycleUser } from '@devcycle/js-client-sdk'
-import { BucketedUserConfig } from '@devcycle/types'
+import { BucketedUserConfig, ConfigSource } from '@devcycle/types'
 
 export type DevCycleNextOptions = Pick<
     DevCycleOptions,
@@ -33,15 +33,22 @@ export type DevCycleNextOptions = Pick<
      *
      */
     staticMode?: boolean
+
+    /**
+     * Replace the default source for DevCycle configuration with an alternative
+     */
+    configSource?: ConfigSource
 }
 
-export type BucketedConfigWithLastModified = BucketedUserConfig & {
+export type BucketedConfigWithAdditionalFields = BucketedUserConfig & {
     lastModified?: string
+    clientSDKKey: string
 }
 
 export type DevCycleServerData = {
-    options: DevCycleNextOptions
     user: DevCycleUser
-    sdkKey: string
-    config: BucketedConfigWithLastModified | null
+    // this is null if the config failed to be fetched
+    config: BucketedConfigWithAdditionalFields | null
+
+    userAgent: string | undefined
 }

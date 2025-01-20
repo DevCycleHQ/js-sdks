@@ -3,25 +3,35 @@ import {
     DevCycleOptions,
     DVCVariableSet,
     DVCVariableValue,
+    DVCCustomDataJSON,
     DevCycleEvent,
     DevCycleUser,
     ErrorCallback,
     DVCFeature,
-    VariableDefinitions,
+    UserError,
 } from './types'
+
 import { DVCVariable, DVCVariableOptions } from './Variable'
 import { getConfigJson, saveEntity } from './Request'
 import CacheStore from './CacheStore'
-import DefaultStorage from './DefaultStorage'
+import { getStorageStrategy } from './DefaultCacheStore'
 import { DVCPopulatedUser } from './User'
 import { EventQueue, EventTypes } from './EventQueue'
 import { checkParamDefined } from './utils'
 import { EventEmitter } from './EventEmitter'
-import type { BucketedUserConfig, VariableTypeAlias } from '@devcycle/types'
+import type {
+    BucketedUserConfig,
+    VariableDefinitions,
+    VariableTypeAlias,
+} from '@devcycle/types'
 import { getVariableTypeFromValue } from '@devcycle/types'
 import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
-import type { DVCLogger } from '@devcycle/types'
+import type {
+    DVCLogger,
+    SSEConnectionInterface,
+    SSEConnectionConstructor,
+} from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
 
 type variableUpdatedHandler = (
@@ -51,6 +61,7 @@ export const isDeferredOptions = (
 
 export class DevCycleClient<
     Variables extends VariableDefinitions = VariableDefinitions,
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
 > {
     logger: DVCLogger
     config?: BucketedUserConfig
@@ -63,8 +74,11 @@ export class DevCycleClient<
     private sdkKey: string
     private readonly options: DevCycleOptions
 
-    private onInitialized: Promise<DevCycleClient<Variables>>
-    private resolveOnInitialized: (client: DevCycleClient<Variables>) => void
+    private onInitialized: Promise<DevCycleClient<Variables, CustomData>>
+    private settleOnInitialized: (
+        client: DevCycleClient<Variables, CustomData>,
+        err?: unknown,
+    ) => void
 
     private userSaved = false
     private _closing = false
@@ -75,10 +89,10 @@ export class DevCycleClient<
         [key: string]: { [key: string]: DVCVariable<any> }
     }
     private store: CacheStore
-    private eventQueue: EventQueue
+    private eventQueue?: EventQueue<Variables, CustomData>
     private requestConsolidator: ConfigRequestConsolidator
     eventEmitter: EventEmitter
-    private streamingConnection?: StreamingConnection
+    private streamingConnection?: SSEConnectionInterface
     private pageVisibilityHandler?: () => void
     private inactivityHandlerId?: number
     private windowMessageHandler?: (event: MessageEvent) => void
@@ -90,12 +104,19 @@ export class DevCycleClient<
         user: undefined,
         options: DevCycleOptionsWithDeferredInitialization,
     )
-    constructor(sdkKey: string, user: DevCycleUser, options?: DevCycleOptions)
     constructor(
         sdkKey: string,
-        user: DevCycleUser | undefined,
+        user: DevCycleUser<CustomData>,
+        options?: DevCycleOptions,
+    )
+    constructor(
+        sdkKey: string,
+        user: DevCycleUser<CustomData> | undefined,
         options: DevCycleOptions = {},
     ) {
+        if (!options.sdkPlatform) {
+            options.sdkPlatform = 'js'
+        }
         if (options.next?.configRefreshHandler) {
             this.configRefetchHandler = options.next.configRefreshHandler
         }
@@ -103,7 +124,7 @@ export class DevCycleClient<
         this.logger =
             options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.store = new CacheStore(
-            options.storage || new DefaultStorage(),
+            options.storage || getStorageStrategy(),
             this.logger,
         )
 
@@ -111,15 +132,30 @@ export class DevCycleClient<
 
         this.sdkKey = sdkKey
         this.variableDefaultMap = {}
-        this.eventQueue = new EventQueue(sdkKey, this, options)
+
+        if (
+            !(
+                this.options.disableAutomaticEventLogging &&
+                this.options.disableCustomEventLogging
+            )
+        ) {
+            this.eventQueue = new EventQueue(sdkKey, this, options)
+        }
 
         this.eventEmitter = new EventEmitter()
-        this.registerVisibilityChangeHandler()
+        if (!this.options.disableRealtimeUpdates) {
+            this.registerVisibilityChangeHandler()
+        }
 
         this.onInitialized = new Promise((resolve, reject) => {
-            this.resolveOnInitialized = (value) => {
-                this._isInitialized = true
-                resolve(value)
+            this.settleOnInitialized = (value, error) => {
+                if (error) {
+                    this._isInitialized = false
+                    reject(error)
+                } else {
+                    this._isInitialized = true
+                    resolve(value)
+                }
             }
         })
 
@@ -156,7 +192,9 @@ export class DevCycleClient<
      * first identified (in deferred mode)
      * @param initialUser
      */
-    private clientInitialization = async (initialUser: DevCycleUser) => {
+    private clientInitialization = async (
+        initialUser: DevCycleUser<CustomData>,
+    ) => {
         if (this.initializeTriggered || this._closing) {
             return this
         }
@@ -203,33 +241,19 @@ export class DevCycleClient<
                     Date.now(),
                 )
             }
-            this.resolveOnInitialized(this)
+            this._isInitialized = true
+            this.settleOnInitialized(this)
             this.logger.info('Client initialized')
         } catch (err) {
             this.initializeOnConfigFailure(this.user, err)
             return this
         }
-
         this.eventEmitter.emitInitialized(true)
 
         if (this.user.isAnonymous) {
-            this.store.saveAnonUserId(this.user.user_id)
+            void this.store.saveAnonUserId(this.user.user_id)
         } else {
-            this.store.removeAnonUserId()
-        }
-
-        if (this.config?.sse?.url) {
-            if (!this.options.disableRealtimeUpdates) {
-                this.streamingConnection = new StreamingConnection(
-                    this.config.sse.url,
-                    this.onSSEMessage.bind(this),
-                    this.logger,
-                )
-            } else {
-                this.logger.info(
-                    'Disabling Realtime Updates based on Initialization parameter',
-                )
-            }
+            void this.store.removeAnonUserId()
         }
 
         return this
@@ -249,8 +273,8 @@ export class DevCycleClient<
         if (err) {
             this.eventEmitter.emitError(err)
         }
-        this.setUser(user)
-        this.resolveOnInitialized(this)
+        void this.setUser(user)
+        this.settleOnInitialized(this, err instanceof UserError ? err : null)
     }
 
     /**
@@ -258,13 +282,13 @@ export class DevCycleClient<
      * An optional callback can be passed in, and will return
      * a promise if no callback has been passed in.
      */
-    onClientInitialized(): Promise<DevCycleClient<Variables>>
+    onClientInitialized(): Promise<DevCycleClient<Variables, CustomData>>
     onClientInitialized(
-        onInitialized: ErrorCallback<DevCycleClient<Variables>>,
+        onInitialized: ErrorCallback<DevCycleClient<Variables, CustomData>>,
     ): void
     onClientInitialized(
-        onInitialized?: ErrorCallback<DevCycleClient<Variables>>,
-    ): Promise<DevCycleClient<Variables>> | void {
+        onInitialized?: ErrorCallback<DevCycleClient<Variables, CustomData>>,
+    ): Promise<DevCycleClient<Variables, CustomData>> | void {
         if (onInitialized && typeof onInitialized === 'function') {
             this.onInitialized
                 .then(() => onInitialized(null, this))
@@ -350,7 +374,7 @@ export class DevCycleClient<
 
         try {
             const variableFromConfig = this.config?.variables?.[variable.key]
-            this.eventQueue.queueAggregateEvent({
+            this.eventQueue?.queueAggregateEvent({
                 type: variable.isDefaulted
                     ? EventTypes.variableDefaulted
                     : EventTypes.variableEvaluated,
@@ -393,15 +417,21 @@ export class DevCycleClient<
      * @param user
      * @param callback
      */
-    identifyUser(user: DevCycleUser): Promise<DVCVariableSet>
+    identifyUser(user: DevCycleUser<CustomData>): Promise<DVCVariableSet>
     identifyUser(
-        user: DevCycleUser,
+        user: DevCycleUser<CustomData>,
         callback?: ErrorCallback<DVCVariableSet>,
     ): void
     identifyUser(
-        user: DevCycleUser,
+        user: DevCycleUser<CustomData>,
         callback?: ErrorCallback<DVCVariableSet>,
     ): Promise<DVCVariableSet> | void {
+        if (this.options.next) {
+            this.logger.error(
+                'Unable to change user identity from the clientside in Next.js',
+            )
+            return
+        }
         const promise = this._identifyUser(user)
 
         if (callback && typeof callback == 'function') {
@@ -414,7 +444,9 @@ export class DevCycleClient<
         return promise
     }
 
-    private async _identifyUser(user: DevCycleUser): Promise<DVCVariableSet> {
+    private async _identifyUser(
+        user: DevCycleUser<CustomData>,
+    ): Promise<DVCVariableSet> {
         let updatedUser: DVCPopulatedUser
 
         if (this.options.deferInitialization && !this.initializeTriggered) {
@@ -422,7 +454,7 @@ export class DevCycleClient<
             return this.config?.variables || {}
         }
 
-        this.eventQueue.flushEvents()
+        void this.eventQueue?.flushEvents()
 
         try {
             await this.onInitialized
@@ -439,7 +471,7 @@ export class DevCycleClient<
             }
             const config = await this.requestConsolidator.queue(updatedUser)
             if (user.isAnonymous || !user.user_id) {
-                this.store.saveAnonUserId(updatedUser.user_id)
+                await this.store.saveAnonUserId(updatedUser.user_id)
             }
             return config.variables || {}
         } catch (err) {
@@ -459,30 +491,37 @@ export class DevCycleClient<
     resetUser(
         callback?: ErrorCallback<DVCVariableSet>,
     ): Promise<DVCVariableSet> | void {
+        if (this.options.next) {
+            this.logger.error(
+                'Unable to change user identity from the clientside in Next.js',
+            )
+            return
+        }
+
         let oldAnonymousId: string | null | undefined
         const anonUser = new DVCPopulatedUser(
             { isAnonymous: true },
             this.options,
         )
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
-            this.eventQueue.flushEvents()
+            this.eventQueue?.flushEvents()
 
             this.onInitialized
                 .then(() => this.store.loadAnonUserId())
-                .then((cachedAnonId) => {
-                    this.store.removeAnonUserId()
+                .then(async (cachedAnonId) => {
+                    await this.store.removeAnonUserId()
                     oldAnonymousId = cachedAnonId
                     return
                 })
                 .then(() => this.requestConsolidator.queue(anonUser))
-                .then((config) => {
-                    this.store.saveAnonUserId(anonUser.user_id)
+                .then(async (config) => {
+                    await this.store.saveAnonUserId(anonUser.user_id)
                     resolve(config.variables || {})
                 })
-                .catch((e) => {
+                .catch(async (e) => {
                     this.eventEmitter.emitError(e)
                     if (oldAnonymousId) {
-                        this.store.saveAnonUserId(oldAnonymousId)
+                        await this.store.saveAnonUserId(oldAnonymousId)
                     }
                     reject(e)
                 })
@@ -574,7 +613,7 @@ export class DevCycleClient<
 
         checkParamDefined('type', event.type)
         this.onInitialized.then(() => {
-            this.eventQueue.queueEvent(event)
+            this.eventQueue?.queueEvent(event)
         })
     }
 
@@ -584,7 +623,10 @@ export class DevCycleClient<
      * @param callback
      */
     flushEvents(callback?: () => void): Promise<void> {
-        return this.eventQueue.flushEvents().then(() => callback?.())
+        return (
+            this.eventQueue?.flushEvents().then(() => callback?.()) ??
+            Promise.resolve().then(() => callback?.())
+        )
     }
 
     /**
@@ -603,7 +645,6 @@ export class DevCycleClient<
                 this.pageVisibilityHandler,
             )
         }
-
         if (this.windowMessageHandler) {
             window.removeEventListener('message', this.windowMessageHandler)
         }
@@ -614,7 +655,7 @@ export class DevCycleClient<
 
         this.streamingConnection?.close()
 
-        await this.eventQueue.close()
+        await this.eventQueue?.close()
     }
 
     /**
@@ -634,7 +675,7 @@ export class DevCycleClient<
      */
     synchronizeBootstrapData(
         config: BucketedUserConfig | null,
-        user: DevCycleUser,
+        user: DevCycleUser<CustomData>,
         userAgent?: string,
     ): void {
         const populatedUser = new DVCPopulatedUser(
@@ -686,10 +727,10 @@ export class DevCycleClient<
     ) {
         const oldConfig = this.config
         this.config = config
-        this.store.saveConfig(config, user, dateFetched)
+        void this.store.saveConfig(config, user, dateFetched)
         this.isConfigCached = false
 
-        this.setUser(user)
+        void this.setUser(user)
 
         const oldFeatures = oldConfig?.features || {}
         const oldVariables = oldConfig?.variables || {}
@@ -699,17 +740,41 @@ export class DevCycleClient<
             config.variables,
             this.variableDefaultMap,
         )
-
-        if (!oldConfig || oldConfig.etag !== this.config.etag) {
+        // The URL including dvc_user means that this user is subscribed to a user specific ably channel
+        // This means that the user is a debug user and we should emit a config update event even if the etag
+        // is the same.
+        const isDebugUser = this.config?.sse?.url?.includes('dvc_user')
+        if (!oldConfig || isDebugUser || oldConfig.etag !== this.config.etag) {
             this.eventEmitter.emitConfigUpdate(config.variables)
+        }
+
+        // Update the streaming connection URL if it has changed (for ex. if the current user has targeting overrides)
+        if (config?.sse?.url) {
+            if (!this.streamingConnection) {
+                if (!this.options.disableRealtimeUpdates) {
+                    const SSEConnectionClass =
+                        this.options.sseConnectionClass || StreamingConnection
+                    this.streamingConnection = new SSEConnectionClass(
+                        config.sse.url,
+                        this.onSSEMessage.bind(this),
+                        this.logger,
+                    )
+                } else {
+                    this.logger.info(
+                        'Disabling Realtime Updates based on Initialization parameter',
+                    )
+                }
+            } else if (config.sse.url !== oldConfig?.sse?.url) {
+                this.streamingConnection.updateURL(config.sse.url)
+            }
         }
     }
 
-    private setUser(user: DVCPopulatedUser) {
+    private async setUser(user: DVCPopulatedUser) {
         if (this.user != user || !this.userSaved) {
             this.user = user
 
-            this.store.saveUser(user)
+            await this.store.saveUser(user)
 
             if (
                 !this.user.isAnonymous &&
@@ -720,14 +785,13 @@ export class DevCycleClient<
                     true,
                 )
             ) {
-                saveEntity(
+                const res = await saveEntity(
                     this.user,
                     this.sdkKey,
                     this.logger,
                     this.options,
-                ).then((res) =>
-                    this.logger.info(`Saved response entity! ${res}`),
                 )
+                this.logger.info(`Saved response entity! ${res}`)
             }
 
             this.userSaved = true

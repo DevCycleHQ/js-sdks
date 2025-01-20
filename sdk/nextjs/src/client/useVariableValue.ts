@@ -1,30 +1,40 @@
 'use client'
-import type { DVCVariableValue } from '@devcycle/js-client-sdk'
+import { DevCycleClient } from '@devcycle/js-client-sdk'
 import { useContext, use } from 'react'
-import { VariableTypeAlias } from '@devcycle/types'
+import {
+    InferredVariableType,
+    VariableDefinitions,
+    VariableKey,
+} from '@devcycle/types'
 import { DVCVariable } from '@devcycle/js-client-sdk'
 import { DevCycleProviderContext } from './internal/context'
 import { useRerenderOnVariableChange } from './internal/useRerenderOnVariableChange'
 
-export const useVariable = <T extends DVCVariableValue>(
-    key: string,
-    defaultValue: T,
-): DVCVariable<T> => {
+export const useVariable = <
+    K extends VariableKey,
+    ValueType extends VariableDefinitions[K],
+>(
+    key: K,
+    defaultValue: ValueType,
+): DVCVariable<ValueType> => {
     const context = useContext(DevCycleProviderContext)
     useRerenderOnVariableChange(key)
 
     // Fall back to nearest suspense boundary if client is not initialized yet.
     if (context.enableStreaming) {
-        use(context.serverDataPromise)
+        use((context.client as DevCycleClient).onClientInitialized())
     }
 
     return context.client.variable(key, defaultValue)
 }
 
-export const useVariableValue = <T extends DVCVariableValue>(
-    key: string,
-    defaultValue: T,
-): VariableTypeAlias<T> => {
+export const useVariableValue = <
+    K extends VariableKey,
+    ValueType extends VariableDefinitions[K],
+>(
+    key: K,
+    defaultValue: ValueType,
+): InferredVariableType<K, ValueType> => {
     return useVariable(key, defaultValue).value
 }
 

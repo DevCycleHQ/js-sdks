@@ -5,9 +5,9 @@ import {
     DVCReporter,
     FlushResults,
 } from '@devcycle/types'
-import { getBucketingLib } from './bucketing'
 import { publishEvents } from './request'
 import { DevCycleEvent, DVCPopulatedUser } from '@devcycle/js-cloud-server-sdk'
+import { WASMBucketingExports } from '@devcycle/bucketing-assembly-script'
 
 export const AggregateEventTypes: Record<string, string> = {
     variableEvaluated: 'variableEvaluated',
@@ -45,21 +45,27 @@ export type EventQueueOptions = {
 export class EventQueue {
     private readonly logger: DVCLogger
     private readonly reporter?: DVCReporter
-    private readonly sdkKey: string
     private readonly eventsAPIURI?: string
     eventFlushIntervalMS: number
     flushEventQueueSize: number
     maxEventQueueSize: number
+    disabledEventFlush: boolean
     private flushInterval: NodeJS.Timer
     private flushInProgress = false
     private flushCallbacks: Array<(arg: unknown) => void> = []
 
-    constructor(sdkKey: string, options: EventQueueOptions) {
+    constructor(
+        private readonly sdkKey: string,
+        private readonly clientUUID: string,
+        private readonly bucketing: WASMBucketingExports,
+        options: EventQueueOptions,
+    ) {
         this.logger = options.logger
         this.reporter = options.reporter
         this.eventsAPIURI = options.eventsAPIURI
-        this.sdkKey = sdkKey
         this.eventFlushIntervalMS = options?.eventFlushIntervalMS || 10 * 1000
+        this.disabledEventFlush = false
+
         if (this.eventFlushIntervalMS < 500) {
             throw new Error(
                 `eventFlushIntervalMS: ${this.eventFlushIntervalMS} must be larger than 500ms`,
@@ -103,11 +109,22 @@ export class EventQueue {
             this.eventFlushIntervalMS,
         )
 
-        getBucketingLib().initEventQueue(sdkKey, JSON.stringify(options))
+        const eventQueueOptions = {
+            eventRequestChunkSize: chunkSize,
+            disableAutomaticEventLogging: options.disableAutomaticEventLogging,
+            disableCustomEventLogging: options.disableCustomEventLogging,
+        }
+
+        this.bucketing.initEventQueue(
+            sdkKey,
+            this.clientUUID,
+            JSON.stringify(eventQueueOptions),
+        )
     }
 
     cleanup(): void {
         clearInterval(this.flushInterval)
+        this.disabledEventFlush = true
     }
 
     private async _flushEvents() {
@@ -117,20 +134,20 @@ export class EventQueue {
         }
         this.reporter?.reportMetric(
             'queueLength',
-            getBucketingLib().eventQueueSize(this.sdkKey),
+            this.bucketing.eventQueueSize(this.sdkKey),
             metricTags,
         )
 
         let flushPayloadsStr
         try {
-            flushPayloadsStr = getBucketingLib().flushEventQueue(this.sdkKey)
+            flushPayloadsStr = this.bucketing.flushEventQueue(this.sdkKey)
             this.reporter?.reportMetric(
                 'flushPayloadSize',
                 flushPayloadsStr?.length,
                 metricTags,
             )
         } catch (ex) {
-            this.logger.error(`DVC Error Flushing Events: ${ex.message}`)
+            this.logger.error(`DevCycle Error Flushing Events: ${ex.message}`)
         }
 
         const results: FlushResults = {
@@ -157,7 +174,7 @@ export class EventQueue {
             val + batches.eventCount
         const eventCount = flushPayloads.reduce(reducer, 0)
         this.logger.debug(
-            `DVC Flush ${eventCount} Events, for ${flushPayloads.length} Users`,
+            `DevCycle Flush ${eventCount} Events, for ${flushPayloads.length} Users`,
         )
 
         const startTimeRequests = Date.now()
@@ -172,21 +189,21 @@ export class EventQueue {
                         this.eventsAPIURI,
                     )
                     if (res.status !== 201) {
-                        this.logger.error(
+                        this.logger.debug(
                             `Error publishing events, status: ${
                                 res.status
                             }, body: ${await res.text()}`,
                         )
                         if (res.status >= 500) {
                             results.retries++
-                            getBucketingLib().onPayloadFailure(
+                            this.bucketing.onPayloadFailure(
                                 this.sdkKey,
                                 flushPayload.payloadId,
                                 true,
                             )
                         } else {
                             results.failures++
-                            getBucketingLib().onPayloadFailure(
+                            this.bucketing.onPayloadFailure(
                                 this.sdkKey,
                                 flushPayload.payloadId,
                                 false,
@@ -194,24 +211,37 @@ export class EventQueue {
                         }
                     } else {
                         this.logger.debug(
-                            `DVC Flushed ${eventCount} Events, for ${flushPayload.records.length} Users`,
+                            `DevCycle Flushed ${eventCount} Events, for ${flushPayload.records.length} Users`,
                         )
-                        getBucketingLib().onPayloadSuccess(
+                        this.bucketing.onPayloadSuccess(
                             this.sdkKey,
                             flushPayload.payloadId,
                         )
                         results.successes++
                     }
                 } catch (ex) {
-                    this.logger.error(
-                        `DVC Error Flushing Events response message: ${ex.message}`,
+                    this.logger.debug(
+                        `DevCycle Error Flushing Events response message: ${ex.message}`,
                     )
-                    getBucketingLib().onPayloadFailure(
-                        this.sdkKey,
-                        flushPayload.payloadId,
-                        true,
-                    )
-                    results.retries++
+                    if ('status' in ex && ex.status === 401) {
+                        this.logger.debug(
+                            `SDK key is invalid, closing event flushing interval`,
+                        )
+                        this.bucketing.onPayloadFailure(
+                            this.sdkKey,
+                            flushPayload.payloadId,
+                            false,
+                        )
+                        results.failures++
+                        this.cleanup()
+                    } else {
+                        this.bucketing.onPayloadFailure(
+                            this.sdkKey,
+                            flushPayload.payloadId,
+                            true,
+                        )
+                        results.retries++
+                    }
                 }
             }),
         )
@@ -263,14 +293,24 @@ export class EventQueue {
      * Queue DVCAPIEvent for publishing to DevCycle Events API.
      */
     queueEvent(user: DVCPopulatedUser, event: DevCycleEvent): void {
+        if (this.disabledEventFlush) {
+            this.logger.warn(
+                `Event flushing is disabled, dropping event: ${
+                    event.type
+                }, event queue size: ${this.bucketing.eventQueueSize(
+                    this.sdkKey,
+                )}`,
+            )
+            return
+        }
         if (this.checkEventQueueSize()) {
             this.logger.warn(
-                `Max event queue size reached, dropping event: ${event}`,
+                `Max event queue size reached, dropping event: ${event.type}`,
             )
             return
         }
 
-        getBucketingLib().queueEvent(
+        this.bucketing.queueEvent(
             this.sdkKey,
             JSON.stringify(user),
             JSON.stringify(event),
@@ -286,14 +326,20 @@ export class EventQueue {
         event: DevCycleEvent,
         bucketedConfig?: BucketedUserConfig,
     ): void {
+        if (this.disabledEventFlush) {
+            this.logger.warn(
+                `Event flushing is disabled, dropping aggregate event: ${event.type}`,
+            )
+            return
+        }
         if (this.checkEventQueueSize()) {
             this.logger.warn(
-                `Max event queue size reached, dropping aggregate event: ${event}`,
+                `Max event queue size reached, dropping aggregate event: ${event.type}`,
             )
             return
         }
 
-        getBucketingLib().queueAggregateEvent(
+        this.bucketing.queueAggregateEvent(
             this.sdkKey,
             JSON.stringify(event),
             JSON.stringify(bucketedConfig?.variableVariationMap || {}),
@@ -301,7 +347,7 @@ export class EventQueue {
     }
 
     private checkEventQueueSize(): boolean {
-        const queueSize = getBucketingLib().eventQueueSize(this.sdkKey)
+        const queueSize = this.bucketing.eventQueueSize(this.sdkKey)
         if (queueSize >= this.flushEventQueueSize) {
             this.flushEvents()
             if (queueSize >= this.maxEventQueueSize) {

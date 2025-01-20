@@ -1,7 +1,7 @@
 import * as assert from 'assert'
 import {
     evaluateOperatorFromJSON,
-    setPlatformData
+    setPlatformData,
 } from '../bucketingImportHelper'
 
 const defaultPlatformData = {
@@ -9,110 +9,149 @@ const defaultPlatformData = {
     platformVersion: '',
     sdkType: '',
     sdkVersion: '',
-    deviceModel: ''
+    deviceModel: '',
 }
 
 const setPlatformDataJSON = (data: unknown) => {
     setPlatformData(JSON.stringify(data))
 }
 
-const evaluateOperator = (
-    { operator, data, audiences = {} }:
-        { operator: unknown, data: Record<string, unknown>, audiences?: Record<string, unknown>}
-) => {
+const evaluateOperator = ({
+    operator,
+    data,
+    audiences = {},
+}: {
+    operator: unknown
+    data: Record<string, unknown>
+    audiences?: Record<string, unknown>
+}) => {
     // set required field to make class constructors happy
     data.user_id ||= 'some_user'
     return evaluateOperatorFromJSON(
         JSON.stringify(operator),
         JSON.stringify(data),
-        JSON.stringify(audiences)
+        JSON.stringify(audiences),
     )
 }
 
-const checkStringsFilter = (string: unknown, filter: { values?: unknown[], comparator: string }) => {
+const checkStringsFilter = (
+    string: unknown,
+    filter: { values?: unknown[]; comparator: string },
+) => {
     const emailFilter = {
         type: 'user',
         subType: 'email',
         values: [],
-        ...filter
+        ...filter,
     }
 
     const operator = {
-        'filters': [emailFilter],
-        'operator': 'and'
+        filters: [emailFilter],
+        operator: 'and',
     }
 
     const data = { email: string, user_id: 'some_user' }
 
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
+    return evaluateOperatorFromJSON(
+        JSON.stringify(operator),
+        JSON.stringify(data),
+    )
 }
-const checkBooleanFilter = (bool: unknown, filter: { values?: unknown[], comparator: string }) => {
+const checkBooleanFilter = (
+    bool: unknown,
+    filter: { values?: unknown[]; comparator: string },
+) => {
     const customDataFilter = {
         dataKey: 'key',
         type: 'user',
         subType: 'customData',
         dataKeyType: 'Boolean',
         values: [],
-        ...filter
+        ...filter,
     }
 
     const operator = {
-        'filters': [customDataFilter],
-        'operator': 'and'
+        filters: [customDataFilter],
+        operator: 'and',
     }
 
     const data = { customData: { key: bool }, user_id: 'some_user' }
 
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
+    return evaluateOperatorFromJSON(
+        JSON.stringify(operator),
+        JSON.stringify(data),
+    )
 }
 
-const checkNumbersFilter = (number: unknown, filter: { values?: unknown[], comparator: string }): boolean => {
+const checkNumbersFilter = (
+    number: unknown,
+    filter: { values?: unknown[]; comparator: string },
+): boolean => {
     const customDataFilter = {
         dataKey: 'key',
         type: 'user',
         subType: 'customData',
         dataKeyType: 'Number',
         values: [],
-        ...filter
+        ...filter,
     }
 
     const operator = {
-        'filters': [customDataFilter],
-        'operator': 'and'
+        filters: [customDataFilter],
+        operator: 'and',
     }
 
     const data = { customData: { key: number }, user_id: 'some_user' }
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
+    return evaluateOperatorFromJSON(
+        JSON.stringify(operator),
+        JSON.stringify(data),
+    )
 }
-const checkVersionFilters = (appVersion: string, filter: { values?: unknown[], comparator: string }): boolean => {
+const checkVersionFilters = (
+    appVersion: string,
+    filter: { values?: unknown[]; comparator: string },
+): boolean => {
     const appVersionFilter = {
         type: 'user',
         subType: 'appVersion',
         values: [],
-        ...filter
+        ...filter,
     }
 
     const operator = {
-        'filters': [appVersionFilter],
-        'operator': 'and'
+        filters: [appVersionFilter],
+        operator: 'and',
     }
 
     const data = { appVersion: appVersion, user_id: 'some_user' }
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(data))
+    return evaluateOperatorFromJSON(
+        JSON.stringify(operator),
+        JSON.stringify(data),
+    )
 }
 
-const checkVersionFilter = (appVersion: string, values: string[], comparator: string): boolean => {
+const checkVersionFilter = (
+    appVersion: string,
+    values: string[],
+    comparator: string,
+): boolean => {
     return checkVersionFilters(appVersion, { values, comparator })
 }
 
-const checkCustomData = (data: Record<string, unknown> | null, filter: unknown): boolean => {
+const checkCustomData = (
+    data: Record<string, unknown> | null,
+    filter: unknown,
+): boolean => {
     const operator = {
-        'filters': [filter],
-        'operator': 'and'
+        filters: [filter],
+        operator: 'and',
     }
 
     const user = { customData: data, user_id: 'some_user' }
-    return evaluateOperatorFromJSON(JSON.stringify(operator), JSON.stringify(user))
+    return evaluateOperatorFromJSON(
+        JSON.stringify(operator),
+        JSON.stringify(user),
+    )
 }
 
 describe('SegmentationManager Unit Test', () => {
@@ -306,89 +345,99 @@ describe('SegmentationManager Unit Test', () => {
 
             const operator = {
                 filters,
-                operator: 'and'
+                operator: 'and',
             }
 
             const data = {
                 country: 'Canada',
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
-                platform: 'iOS'
+                platform: 'iOS',
             }
             assert.strictEqual(false, evaluateOperator({ data, operator }))
             const orOp = {
                 filters,
-                operator: 'or'
+                operator: 'or',
             }
-            assert.strictEqual(false, evaluateOperator({ data: {}, operator: orOp }))
+            assert.strictEqual(
+                false,
+                evaluateOperator({ data: {}, operator: orOp }),
+            )
         })
 
         it('should pass for all filter', () => {
-            const filters = [{
-                type: 'all',
-                comparator: '=',
-                values: []
-            }]
+            const filters = [
+                {
+                    type: 'all',
+                    comparator: '=',
+                    values: [],
+                },
+            ]
 
             const operator = {
                 filters,
-                operator: 'and'
+                operator: 'and',
             }
 
             const data = {
                 country: 'Canada',
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
-                platform: 'iOS'
+                platform: 'iOS',
             }
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
         describe('evaluateOperator should handle optIn filter', () => {
-            const filters = [{
-                type: 'optIn',
-                comparator: '=',
-                values: []
-            }]
+            const filters = [
+                {
+                    type: 'optIn',
+                    comparator: '=',
+                    values: [],
+                },
+            ]
 
             const optInOperator = {
                 filters,
-                operator: 'and'
+                operator: 'and',
             }
 
             const optInData = {
                 country: 'Canada',
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
-                platform: 'iOS'
+                platform: 'iOS',
             }
             it('should fail optIn filter when feature in optIns and isOptInEnabled ', () => {
                 assert.strictEqual(
                     false,
                     evaluateOperator({
-                        data: optInData, operator: optInOperator
-                    })
+                        data: optInData,
+                        operator: optInOperator,
+                    }),
                 )
             })
         })
 
         describe('evaluateOperator should handle a new filter (myNewFilter) type', () => {
-            const filters = [{
-                type: 'myNewFilter',
-                comparator: '=',
-                values: []
-            }]
+            const filters = [
+                {
+                    type: 'myNewFilter',
+                    comparator: '=',
+                    values: [],
+                },
+            ]
 
             const operator = {
                 filters,
-                operator: 'and'
+                operator: 'and',
             }
 
             const data = {
                 country: 'Canada',
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
-                platform: 'iOS'
+                platform: 'iOS',
             }
             it('should fail myNewFilter filter', () => {
                 assert.strictEqual(false, evaluateOperator({ data, operator }))
@@ -396,23 +445,25 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         describe('evaluateOperator should handle a new operator (xylophone) type', () => {
-            const filters = [{
-                type: 'user',
-                subType: 'email',
-                comparator: '=',
-                values: ['brooks@big.lunch']
-            }]
+            const filters = [
+                {
+                    type: 'user',
+                    subType: 'email',
+                    comparator: '=',
+                    values: ['brooks@big.lunch'],
+                },
+            ]
 
             const operator = {
                 filters,
-                operator: 'xylophone'
+                operator: 'xylophone',
             }
 
             const data = {
                 country: 'Canada',
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
-                platform: 'iOS'
+                platform: 'iOS',
             }
             it('should fail xylophone operator', () => {
                 assert.strictEqual(false, evaluateOperator({ data, operator }))
@@ -421,30 +472,45 @@ describe('SegmentationManager Unit Test', () => {
 
         describe('evaluateOperator should handle audienceMatch filter', () => {
             const filters = [
-                { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
-                { type: 'user', subType: 'email', comparator: '=', values: ['dexter@smells.nice', 'brooks@big.lunch'] },
-                { type: 'user', subType: 'appVersion', comparator: '>', values: ['1.0.0'] }
+                {
+                    type: 'user',
+                    subType: 'country',
+                    comparator: '=',
+                    values: ['Canada'],
+                },
+                {
+                    type: 'user',
+                    subType: 'email',
+                    comparator: '=',
+                    values: ['dexter@smells.nice', 'brooks@big.lunch'],
+                },
+                {
+                    type: 'user',
+                    subType: 'appVersion',
+                    comparator: '>',
+                    values: ['1.0.0'],
+                },
             ]
             const operator = {
                 filters,
-                operator: 'and'
+                operator: 'and',
             }
             const data = {
                 country: 'Canada',
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
                 appVersion: '2.0.2',
-                platform: 'iOS'
+                platform: 'iOS',
             }
             const audienceMatchOperator = {
                 filters: [
                     {
                         type: 'audienceMatch',
                         comparator: '=',
-                        _audiences: ['test']
-                    }
+                        _audiences: ['test'],
+                    },
                 ],
-                operator: 'and'
+                operator: 'and',
             }
 
             const audienceMatchOperatorNotEqual = {
@@ -452,57 +518,76 @@ describe('SegmentationManager Unit Test', () => {
                     {
                         type: 'audienceMatch',
                         comparator: '!=',
-                        _audiences: ['test']
-                    }
+                        _audiences: ['test'],
+                    },
                 ],
-                operator: 'and'
+                operator: 'and',
             }
             it('should pass seg for an AND operator', () => {
                 const audiences = {
-                    'test': {
+                    test: {
                         _id: 'test',
-                        filters: operator
-                    }
+                        filters: operator,
+                    },
                 }
-                assert.strictEqual(true, evaluateOperator({
-                    data,
-                    operator: audienceMatchOperator,
-                    audiences
-                }))
+                assert.strictEqual(
+                    true,
+                    evaluateOperator({
+                        data,
+                        operator: audienceMatchOperator,
+                        audiences,
+                    }),
+                )
             })
 
             it('should pass seg for a nested audiencematch filter', () => {
-
                 const audiences = {
-                    'test': {
+                    test: {
                         _id: 'test',
-                        filters: operator
-                    }
+                        filters: operator,
+                    },
                 }
                 const parentOperator = {
                     operator: 'and',
-                    filters: [audienceMatchOperator, operator]
+                    filters: [audienceMatchOperator, operator],
                 }
-                assert.strictEqual(true, evaluateOperator(
-                    { data, operator: parentOperator, audiences }))
+                assert.strictEqual(
+                    true,
+                    evaluateOperator({
+                        data,
+                        operator: parentOperator,
+                        audiences,
+                    }),
+                )
             })
 
             it('should not pass seg when referenced audience does not exist', () => {
-                assert.strictEqual(false, evaluateOperator(
-                    { data, operator: audienceMatchOperator, audiences: {} }))
+                assert.strictEqual(
+                    false,
+                    evaluateOperator({
+                        data,
+                        operator: audienceMatchOperator,
+                        audiences: {},
+                    }),
+                )
             })
 
             it('should not pass seg when not in audience for an AND operator', () => {
-
                 const audiences = {
-                    'test': {
+                    test: {
                         _id: 'test',
-                        filters: operator
-                    }
+                        filters: operator,
+                    },
                 }
 
-                assert.strictEqual(false, evaluateOperator(
-                    { data, operator: audienceMatchOperatorNotEqual, audiences }))
+                assert.strictEqual(
+                    false,
+                    evaluateOperator({
+                        data,
+                        operator: audienceMatchOperatorNotEqual,
+                        audiences,
+                    }),
+                )
             })
             it('should pass seg for nested audiences', () => {
                 const nestedAudienceMatchOperator = {
@@ -510,24 +595,30 @@ describe('SegmentationManager Unit Test', () => {
                         {
                             type: 'audienceMatch',
                             comparator: '=',
-                            _audiences: ['nested']
-                        }
+                            _audiences: ['nested'],
+                        },
                     ],
-                    operator: 'and'
+                    operator: 'and',
                 }
 
                 const audiences = {
-                    'test': {
+                    test: {
                         _id: 'test',
-                        filters: operator
+                        filters: operator,
                     },
-                    'nested': {
+                    nested: {
                         _id: 'nested',
-                        filters: audienceMatchOperator
-                    }
+                        filters: audienceMatchOperator,
+                    },
                 }
-                assert.strictEqual(true, evaluateOperator(
-                    { data, operator: nestedAudienceMatchOperator, audiences }))
+                assert.strictEqual(
+                    true,
+                    evaluateOperator({
+                        data,
+                        operator: nestedAudienceMatchOperator,
+                        audiences,
+                    }),
+                )
             })
             it('should not pass seg for nested audiences with !=', () => {
                 const nestedAudienceMatchOperator = {
@@ -535,110 +626,137 @@ describe('SegmentationManager Unit Test', () => {
                         {
                             type: 'audienceMatch',
                             comparator: '!=',
-                            _audiences: ['nested']
-                        }
+                            _audiences: ['nested'],
+                        },
                     ],
-                    operator: 'and'
+                    operator: 'and',
                 }
 
                 const audiences = {
-                    'test': {
+                    test: {
                         _id: 'test',
-                        filters: operator
+                        filters: operator,
                     },
-                    'nested': {
+                    nested: {
                         _id: 'nested',
-                        filters: audienceMatchOperator
-                    }
+                        filters: audienceMatchOperator,
+                    },
                 }
-                assert.strictEqual(false, evaluateOperator(
-                    { data, operator: nestedAudienceMatchOperator, audiences }))
+                assert.strictEqual(
+                    false,
+                    evaluateOperator({
+                        data,
+                        operator: nestedAudienceMatchOperator,
+                        audiences,
+                    }),
+                )
             })
             it('should pass seg for an AND operator with multiple values', () => {
-
                 const filters = [
-                    { type: 'user', subType: 'country', comparator: '=', values: ['USA'] },
+                    {
+                        type: 'user',
+                        subType: 'country',
+                        comparator: '=',
+                        values: ['USA'],
+                    },
                 ]
 
                 const audiences = {
-                    'test': {
+                    test: {
                         _id: 'test',
-                        filters: operator
+                        filters: operator,
                     },
-                    'test2': {
+                    test2: {
                         _id: 'test2',
                         filters: {
                             filters,
-                            operator: 'and'
-                        }
-                    }
+                            operator: 'and',
+                        },
+                    },
                 }
                 const audienceMatchOperatorMultiple = {
                     filters: [
                         {
                             type: 'audienceMatch',
                             comparator: '=',
-                            _audiences: ['test', 'test2']
-                        }
+                            _audiences: ['test', 'test2'],
+                        },
                     ],
-                    operator: 'and'
+                    operator: 'and',
                 }
-                assert.strictEqual(true, evaluateOperator(
-                    { data, operator: audienceMatchOperatorMultiple, audiences }))
+                assert.strictEqual(
+                    true,
+                    evaluateOperator({
+                        data,
+                        operator: audienceMatchOperatorMultiple,
+                        audiences,
+                    }),
+                )
             })
             it('should not pass seg for an AND operator with multiple values', () => {
-
                 const filters = [
-                    { type: 'user', subType: 'country', comparator: '=', values: ['USA'] },
+                    {
+                        type: 'user',
+                        subType: 'country',
+                        comparator: '=',
+                        values: ['USA'],
+                    },
                 ]
 
                 const audiences = {
-                    'test': {
+                    test: {
                         _id: 'test',
-                        filters: operator
+                        filters: operator,
                     },
-                    'test2': {
+                    test2: {
                         _id: 'test2',
                         filters: {
                             filters,
-                            operator: 'and'
-                        }
-                    }
+                            operator: 'and',
+                        },
+                    },
                 }
                 const audienceMatchOperatorMultiple = {
                     filters: [
                         {
                             type: 'audienceMatch',
                             comparator: '!=',
-                            _audiences: ['test', 'test2']
-                        }
+                            _audiences: ['test', 'test2'],
+                        },
                     ],
-                    operator: 'and'
+                    operator: 'and',
                 }
-                assert.strictEqual(false, evaluateOperator(
-                    { data, operator: audienceMatchOperatorMultiple, audiences }))
+                assert.strictEqual(
+                    false,
+                    evaluateOperator({
+                        data,
+                        operator: audienceMatchOperatorMultiple,
+                        audiences,
+                    }),
+                )
             })
-
         })
 
         describe('evaluateOperator should handle a new user sub-filter (myNewFilter) type', () => {
-            const filters = [{
-                type: 'user',
-                subType: 'myNewFilter',
-                comparator: '=',
-                values: []
-            }]
+            const filters = [
+                {
+                    type: 'user',
+                    subType: 'myNewFilter',
+                    comparator: '=',
+                    values: [],
+                },
+            ]
 
             const operator = {
                 filters,
-                operator: 'and'
+                operator: 'and',
             }
 
             const data = {
                 country: 'Canada',
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
-                platform: 'iOS'
+                platform: 'iOS',
             }
             it('should fail for user filter with subType of myNewFilter', () => {
                 assert.strictEqual(false, evaluateOperator({ data, operator }))
@@ -646,27 +764,30 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         describe('evaluateOperator should handle a new comparator type', () => {
-            const filters = [{
-                type: 'user',
-                subType: 'email',
-                comparator: 'wowNewComparator',
-                values: []
-            }, {
-                type: 'audienceMatch',
-                _audiences: [],
-                comparator: 'wowNewComparator'
-            }]
+            const filters = [
+                {
+                    type: 'user',
+                    subType: 'email',
+                    comparator: 'wowNewComparator',
+                    values: [],
+                },
+                {
+                    type: 'audienceMatch',
+                    _audiences: [],
+                    comparator: 'wowNewComparator',
+                },
+            ]
 
             const operator = {
                 filters,
-                operator: 'and'
+                operator: 'and',
             }
 
             const data = {
                 country: 'Canada',
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
-                platform: 'iOS'
+                platform: 'iOS',
             }
 
             it('should fail for user and audienceMatch filters with comparator of myNewFilter', () => {
@@ -676,14 +797,29 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should work for an AND operator', () => {
             const filters = [
-                { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
-                { type: 'user', subType: 'email', comparator: '=', values: ['dexter@smells.nice', 'brooks@big.lunch'] },
-                { type: 'user', subType: 'appVersion', comparator: '>', values: ['1.0.0'] }
+                {
+                    type: 'user',
+                    subType: 'country',
+                    comparator: '=',
+                    values: ['Canada'],
+                },
+                {
+                    type: 'user',
+                    subType: 'email',
+                    comparator: '=',
+                    values: ['dexter@smells.nice', 'brooks@big.lunch'],
+                },
+                {
+                    type: 'user',
+                    subType: 'appVersion',
+                    comparator: '>',
+                    values: ['1.0.0'],
+                },
             ]
 
             const operator = {
                 filters,
-                operator: 'and'
+                operator: 'and',
             }
 
             const data = {
@@ -691,48 +827,83 @@ describe('SegmentationManager Unit Test', () => {
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
                 appVersion: '2.0.2',
-                platform: 'iOS'
+                platform: 'iOS',
             }
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
         it('should work for a top level AND with nested AND operator', () => {
             const filters = [
-                { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
-                { type: 'user', subType: 'email', comparator: '=', values: ['dexter@smells.nice', 'brooks@big.lunch'] },
-                { type: 'user', subType: 'appVersion', comparator: '>', values: ['1.0.0'] }
+                {
+                    type: 'user',
+                    subType: 'country',
+                    comparator: '=',
+                    values: ['Canada'],
+                },
+                {
+                    type: 'user',
+                    subType: 'email',
+                    comparator: '=',
+                    values: ['dexter@smells.nice', 'brooks@big.lunch'],
+                },
+                {
+                    type: 'user',
+                    subType: 'appVersion',
+                    comparator: '>',
+                    values: ['1.0.0'],
+                },
             ]
 
-            const topLevelFilter = { type: 'user', subType: 'country', comparator: '!=', values: ['Nanada'] }
+            const topLevelFilter = {
+                type: 'user',
+                subType: 'country',
+                comparator: '!=',
+                values: ['Nanada'],
+            }
             const nestedOperator = {
                 filters,
-                operator: 'and'
+                operator: 'and',
             }
 
             const operator = {
                 filters: [topLevelFilter, nestedOperator],
-                operator: 'and'
+                operator: 'and',
             }
             const data = {
                 country: 'Canada',
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
                 appVersion: '2.0.2',
-                platform: 'iOS'
+                platform: 'iOS',
             }
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
         it('should work for an OR operator', () => {
             const filters = [
-                { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
-                { type: 'user', subType: 'email', comparator: '=', values: ['dexter@smells.nice', 'brooks@big.lunch'] },
-                { type: 'user', subType: 'appVersion', comparator: '>', values: ['1.0.0'] }
+                {
+                    type: 'user',
+                    subType: 'country',
+                    comparator: '=',
+                    values: ['Canada'],
+                },
+                {
+                    type: 'user',
+                    subType: 'email',
+                    comparator: '=',
+                    values: ['dexter@smells.nice', 'brooks@big.lunch'],
+                },
+                {
+                    type: 'user',
+                    subType: 'appVersion',
+                    comparator: '>',
+                    values: ['1.0.0'],
+                },
             ]
 
             const operator = {
                 filters,
-                operator: 'or'
+                operator: 'or',
             }
 
             const data = {
@@ -740,75 +911,105 @@ describe('SegmentationManager Unit Test', () => {
                 email: 'fake@email.com',
                 platformVersion: '2.0.0',
                 appVersion: '2.0.2',
-                platform: 'iOS'
+                platform: 'iOS',
             }
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
         it('should work for a nested OR operator', () => {
             const filters = [
-                { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
-                { type: 'user', subType: 'email', comparator: '=', values: ['dexter@smells.nice', 'brooks@big.lunch'] },
-                { type: 'user', subType: 'appVersion', comparator: '>', values: ['1.0.0'] }
+                {
+                    type: 'user',
+                    subType: 'country',
+                    comparator: '=',
+                    values: ['Canada'],
+                },
+                {
+                    type: 'user',
+                    subType: 'email',
+                    comparator: '=',
+                    values: ['dexter@smells.nice', 'brooks@big.lunch'],
+                },
+                {
+                    type: 'user',
+                    subType: 'appVersion',
+                    comparator: '>',
+                    values: ['1.0.0'],
+                },
             ]
 
             const nestedOperator = {
                 filters,
-                operator: 'or'
+                operator: 'or',
             }
 
             const operator = {
-                filters: [nestedOperator, { type: 'user', subType: 'country', comparator: '=', values: ['Nanada'] }],
-                operator: 'or'
+                filters: [
+                    nestedOperator,
+                    {
+                        type: 'user',
+                        subType: 'country',
+                        comparator: '=',
+                        values: ['Nanada'],
+                    },
+                ],
+                operator: 'or',
             }
             const data = {
                 country: 'whomp',
                 email: 'fake@email.com',
                 platformVersion: '2.0.0',
                 appVersion: '2.0.2',
-                platform: 'iOS'
+                platform: 'iOS',
             }
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
         it('should work for an AND operator containing a custom data filter', () => {
             const filters = [
-                { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
+                {
+                    type: 'user',
+                    subType: 'country',
+                    comparator: '=',
+                    values: ['Canada'],
+                },
                 {
                     type: 'user',
                     subType: 'customData',
                     dataKey: 'something',
                     comparator: '!=',
                     values: ['Canada'],
-                    dataKeyType: 'String'
-                }
+                    dataKeyType: 'String',
+                },
             ]
 
             const operator = {
                 filters,
-                operator: 'and'
+                operator: 'and',
             }
 
             const data = {
                 country: 'Canada',
                 email: 'brooks@big.lunch',
                 appVersion: '2.0.0',
-                platform: 'iOS'
+                platform: 'iOS',
             }
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
         it('should pass for customData filter != multiple values', () => {
             const operator = {
-                filters: [{
-                    type: 'user',
-                    subType: 'customData',
-                    dataKey: 'testKey',
-                    dataKeyType: 'String',
-                    comparator: '!=',
-                    values: ['dataValue', 'dataValue2']
-                }],
-                operator: 'and'
+                filters: [
+                    {
+                        type: 'user',
+                        subType: 'customData',
+                        dataKey: 'testKey',
+                        dataKeyType: 'String',
+                        comparator: '!=',
+                        values: ['dataValue', 'dataValue2'],
+                    },
+                ],
+                operator: 'and',
             }
 
             const data = { customData: { testKey: 'dataValue' } }
@@ -817,15 +1018,17 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should pass for private customData filter != multiple values', () => {
             const operator = {
-                filters: [{
-                    type: 'user',
-                    subType: 'customData',
-                    dataKey: 'testKey',
-                    dataKeyType: 'String',
-                    comparator: '!=',
-                    values: ['dataValue', 'dataValue2']
-                }],
-                operator: 'and'
+                filters: [
+                    {
+                        type: 'user',
+                        subType: 'customData',
+                        dataKey: 'testKey',
+                        dataKeyType: 'String',
+                        comparator: '!=',
+                        values: ['dataValue', 'dataValue2'],
+                    },
+                ],
+                operator: 'and',
             }
 
             const data = { privateCustomData: { testKey: 'dataValue' } }
@@ -834,15 +1037,17 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should pass for customData filter does not contain multiple values', () => {
             const operator = {
-                filters: [{
-                    type: 'user',
-                    subType: 'customData',
-                    dataKey: 'testKey',
-                    dataKeyType: 'String',
-                    comparator: '!contain',
-                    values: ['dataValue', 'otherValue']
-                }],
-                operator: 'and'
+                filters: [
+                    {
+                        type: 'user',
+                        subType: 'customData',
+                        dataKey: 'testKey',
+                        dataKeyType: 'String',
+                        comparator: '!contain',
+                        values: ['dataValue', 'otherValue'],
+                    },
+                ],
+                operator: 'and',
             }
 
             const data = { customData: { testKey: 'otherValue' } }
@@ -851,13 +1056,15 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should pass for user_id filter', () => {
             const operator = {
-                filters: [{
-                    type: 'user',
-                    subType: 'user_id',
-                    comparator: '=',
-                    values: ['test_user']
-                }],
-                operator: 'and'
+                filters: [
+                    {
+                        type: 'user',
+                        subType: 'user_id',
+                        comparator: '=',
+                        values: ['test_user'],
+                    },
+                ],
+                operator: 'and',
             }
 
             const data = { user_id: 'test_user' }
@@ -866,13 +1073,15 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should pass for email filter', () => {
             const operator = {
-                filters: [{
-                    type: 'user',
-                    subType: 'email',
-                    comparator: '=',
-                    values: ['test@devcycle.com']
-                }],
-                operator: 'and'
+                filters: [
+                    {
+                        type: 'user',
+                        subType: 'email',
+                        comparator: '=',
+                        values: ['test@devcycle.com'],
+                    },
+                ],
+                operator: 'and',
             }
 
             const data = { email: 'test@devcycle.com' }
@@ -881,13 +1090,15 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should pass for country filter', () => {
             const operator = {
-                filters: [{
-                    type: 'user',
-                    subType: 'country',
-                    comparator: '=',
-                    values: ['CA']
-                }],
-                operator: 'and'
+                filters: [
+                    {
+                        type: 'user',
+                        subType: 'country',
+                        comparator: '=',
+                        values: ['CA'],
+                    },
+                ],
+                operator: 'and',
             }
 
             const data = { country: 'CA' }
@@ -896,13 +1107,15 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should pass for appVersion filter', () => {
             const operator = {
-                filters: [{
-                    type: 'user',
-                    subType: 'appVersion',
-                    comparator: '=',
-                    values: ['1.0.1']
-                }],
-                operator: 'and'
+                filters: [
+                    {
+                        type: 'user',
+                        subType: 'appVersion',
+                        comparator: '=',
+                        values: ['1.0.1'],
+                    },
+                ],
+                operator: 'and',
             }
 
             const data = { appVersion: '1.0.1' }
@@ -911,29 +1124,36 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should pass for platformVersion filter', () => {
             const operator = {
-                filters: [{
-                    type: 'user',
-                    subType: 'platformVersion',
-                    comparator: '>=',
-                    values: ['15.1']
-                }],
-                operator: 'and'
+                filters: [
+                    {
+                        type: 'user',
+                        subType: 'platformVersion',
+                        comparator: '>=',
+                        values: ['15.1'],
+                    },
+                ],
+                operator: 'and',
             }
 
             const data = {}
-            setPlatformDataJSON({ ...defaultPlatformData, platformVersion: '15.1' })
+            setPlatformDataJSON({
+                ...defaultPlatformData,
+                platformVersion: '15.1',
+            })
             assert.strictEqual(true, evaluateOperator({ data, operator }))
         })
 
         it('should pass for platform filter', () => {
             const operator = {
-                filters: [{
-                    type: 'user',
-                    subType: 'platform',
-                    comparator: '=',
-                    values: ['iOS', 'iPadOS', 'tvOS']
-                }],
-                operator: 'and'
+                filters: [
+                    {
+                        type: 'user',
+                        subType: 'platform',
+                        comparator: '=',
+                        values: ['iOS', 'iPadOS', 'tvOS'],
+                    },
+                ],
+                operator: 'and',
             }
 
             const data = {}
@@ -943,13 +1163,15 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should pass for deviceModel filter', () => {
             const operator = {
-                filters: [{
-                    type: 'user',
-                    subType: 'deviceModel',
-                    comparator: '=',
-                    values: ['Samsung Galaxy F12']
-                }],
-                operator: 'and'
+                filters: [
+                    {
+                        type: 'user',
+                        subType: 'deviceModel',
+                        comparator: '=',
+                        values: ['Samsung Galaxy F12'],
+                    },
+                ],
+                operator: 'and',
             }
 
             const data = { deviceModel: 'Samsung Galaxy F12' }
@@ -959,15 +1181,17 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should pass for customData filter', () => {
             const operator = {
-                filters: [{
-                    type: 'user',
-                    subType: 'customData',
-                    dataKey: 'testKey',
-                    dataKeyType: 'String',
-                    comparator: '=',
-                    values: ['dataValue']
-                }],
-                operator: 'and'
+                filters: [
+                    {
+                        type: 'user',
+                        subType: 'customData',
+                        dataKey: 'testKey',
+                        dataKeyType: 'String',
+                        comparator: '=',
+                        values: ['dataValue'],
+                    },
+                ],
+                operator: 'and',
             }
 
             const data = { customData: { testKey: 'dataValue' } }
@@ -976,15 +1200,17 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should pass for customData filter != multiple values', () => {
             const operator = {
-                filters: [{
-                    type: 'user',
-                    subType: 'customData',
-                    dataKey: 'testKey',
-                    dataKeyType: 'String',
-                    comparator: '!=',
-                    values: ['dataValue', 'dataValue2']
-                }],
-                operator: 'and'
+                filters: [
+                    {
+                        type: 'user',
+                        subType: 'customData',
+                        dataKey: 'testKey',
+                        dataKeyType: 'String',
+                        comparator: '!=',
+                        values: ['dataValue', 'dataValue2'],
+                    },
+                ],
+                operator: 'and',
             }
 
             const data = { customData: { testKey: 'dataValue' } }
@@ -1016,44 +1242,178 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false, checkStringsFilter('string', filter))
         })
         it('should return false if contains filter and no value', () => {
-            const filter = { type: 'user', comparator: 'contain', values: ['hello'] }
+            const filter = {
+                type: 'user',
+                comparator: 'contain',
+                values: ['hello'],
+            }
             assert.strictEqual(false, checkStringsFilter(null, filter))
+        })
+        it('should return true if startWith filter and contains', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'startWith',
+                values: ['test@'],
+            }
+            assert.strictEqual(
+                true,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return true if ends filter and contains', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'endWith',
+                values: ['@devcycle.com'],
+            }
+            assert.strictEqual(
+                true,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return true if not startWith filter and does not contain', () => {
+            const filter = {
+                type: 'user',
+                comparator: '!startWith',
+                values: ['testuser@'],
+            }
+            assert.strictEqual(
+                true,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return true if ends with filter and contains', () => {
+            const filter = {
+                type: 'user',
+                comparator: '!endWith',
+                values: ['@devcycle.io'],
+            }
+            assert.strictEqual(
+                true,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return true if startWith filter and contains', () => {
+            const filter = {
+                type: 'user',
+                comparator: '!startWith',
+                values: ['test@'],
+            }
+            assert.strictEqual(
+                false,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return true if ends with filter and contains', () => {
+            const filter = {
+                type: 'user',
+                comparator: '!endWith',
+                values: ['@devcycle.com'],
+            }
+            assert.strictEqual(
+                false,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return false if starts with with filter with empty value', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'startWith',
+                values: [''],
+            }
+            assert.strictEqual(
+                false,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return false if ends with filter with empty value', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'endWith',
+                values: [''],
+            }
+            assert.strictEqual(
+                false,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
+        })
+        it('should return false if contains filter with empty value', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'contains',
+                values: [''],
+            }
+            assert.strictEqual(
+                false,
+                checkStringsFilter('test@devcycle.com', filter),
+            )
         })
         it('should return true if browser filter works', () => {
             const filter = { type: 'user', comparator: '=', values: ['Chrome'] }
             assert.strictEqual(true, checkStringsFilter('Chrome', filter))
         })
         it('should return true if string filter works with non string value in values', () => {
-            const filter = { type: 'user', comparator: '=', values: ['Chrome', 0] }
+            const filter = {
+                type: 'user',
+                comparator: '=',
+                values: ['Chrome', 0],
+            }
             assert.strictEqual(true, checkStringsFilter('Chrome', filter))
         })
         it('should return true if browser device type filter works', () => {
-            const filter = { type: 'user', comparator: '=', values: ['Desktop'] }
+            const filter = {
+                type: 'user',
+                comparator: '=',
+                values: ['Desktop'],
+            }
             assert.strictEqual(true, checkStringsFilter('Desktop', filter))
         })
         it('should return true if contains filter and value contains', () => {
-            const filter = { type: 'user', comparator: 'contain', values: ['hello'] }
+            const filter = {
+                type: 'user',
+                comparator: 'contain',
+                values: ['hello'],
+            }
             assert.strictEqual(true, checkStringsFilter('helloWorld', filter))
         })
         it('should return false if contains filter and value does not contain', () => {
-            const filter = { type: 'user', comparator: 'contain', values: ['hello'] }
+            const filter = {
+                type: 'user',
+                comparator: 'contain',
+                values: ['hello'],
+            }
             assert.strictEqual(false, checkStringsFilter('xy', filter))
         })
         it('should return true if not contains filter and no value', () => {
-            const filter = { type: 'user', comparator: '!contain', values: ['hello'] }
+            const filter = {
+                type: 'user',
+                comparator: '!contain',
+                values: ['hello'],
+            }
             assert.strictEqual(true, checkStringsFilter(null, filter))
         })
         it('should return true if not contains filter and value', () => {
-            const filter = { type: 'user', comparator: '!contain', values: ['hello'] }
+            const filter = {
+                type: 'user',
+                comparator: '!contain',
+                values: ['hello'],
+            }
             assert.strictEqual(true, checkStringsFilter('xy', filter))
         })
         it('should return false if not contains filter and not value', () => {
-            const filter = { type: 'user', comparator: '!contain', values: ['hello'] }
+            const filter = {
+                type: 'user',
+                comparator: '!contain',
+                values: ['hello'],
+            }
             assert.strictEqual(false, checkStringsFilter('hello', filter))
         })
 
         it('should return false if string is not a string', () => {
-            assert.strictEqual(false, checkStringsFilter(1, { comparator: '=' }))
+            assert.strictEqual(
+                false,
+                checkStringsFilter(1, { comparator: '=' }),
+            )
         })
         it('should return false if filter value is not a string', () => {
             const filter = { type: 'user', comparator: '=', values: [1, 2] }
@@ -1068,39 +1428,73 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false, checkStringsFilter('Female', filter))
         })
         it('should return true if string is one of multiple values', () => {
-            const filter = { type: 'user', comparator: '=', values: ['iPhone OS', 'Android'] }
+            const filter = {
+                type: 'user',
+                comparator: '=',
+                values: ['iPhone OS', 'Android'],
+            }
             assert.strictEqual(true, checkStringsFilter('iPhone OS', filter))
         })
         it('should return true if string is not one of multiple values', () => {
-            const filter = { type: 'user', comparator: '!=', values: ['iPhone OS', 'Android', 'Android TV', 'web'] }
+            const filter = {
+                type: 'user',
+                comparator: '!=',
+                values: ['iPhone OS', 'Android', 'Android TV', 'web'],
+            }
             assert.strictEqual(true, checkStringsFilter('Roku', filter))
         })
         it('should return true if string is equal to multiple filters', () => {
             const filters = [
-                { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
-                { type: 'user', subType: 'country', comparator: '!=', values: ['Not Canada'] }
+                {
+                    type: 'user',
+                    subType: 'country',
+                    comparator: '=',
+                    values: ['Canada'],
+                },
+                {
+                    type: 'user',
+                    subType: 'country',
+                    comparator: '!=',
+                    values: ['Not Canada'],
+                },
             ]
 
             const operator = {
                 filters,
-                operator: 'and'
+                operator: 'and',
             } as unknown
 
-            assert.strictEqual(true, evaluateOperator({ data: { country: 'Canada' }, operator }))
+            assert.strictEqual(
+                true,
+                evaluateOperator({ data: { country: 'Canada' }, operator }),
+            )
         })
 
         it('should return false if string is not equal to multiple filters', () => {
             const filters = [
-                { type: 'user', subType: 'country', comparator: '=', values: ['Canada'] },
-                { type: 'user', subType: 'country', comparator: '=', values: ['Not Canada'] }
+                {
+                    type: 'user',
+                    subType: 'country',
+                    comparator: '=',
+                    values: ['Canada'],
+                },
+                {
+                    type: 'user',
+                    subType: 'country',
+                    comparator: '=',
+                    values: ['Not Canada'],
+                },
             ]
 
             const operator = {
                 filters,
-                operator: 'and'
+                operator: 'and',
             } as unknown
 
-            assert.strictEqual(false, evaluateOperator({ data: { country: 'Canada' }, operator }))
+            assert.strictEqual(
+                false,
+                evaluateOperator({ data: { country: 'Canada' }, operator }),
+            )
         })
     })
 
@@ -1125,7 +1519,11 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(false, checkBooleanFilter(false, filter))
         })
         it('should return false if filters value is not a boolean', () => {
-            const filter = { type: 'user', comparator: '=', values: ['hi1', 'hi2'] }
+            const filter = {
+                type: 'user',
+                comparator: '=',
+                values: ['hi1', 'hi2'],
+            }
             assert.strictEqual(false, checkBooleanFilter(true, filter))
         })
         it('should return true if filers value equals boolean', () => {
@@ -1133,7 +1531,11 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, checkBooleanFilter(true, filter))
         })
         it('should return true if filters values contains boolean value and non boolean value', () => {
-            const filter = { type: 'user', comparator: '=', values: [true, 'test'] }
+            const filter = {
+                type: 'user',
+                comparator: '=',
+                values: [true, 'test'],
+            }
             assert.strictEqual(true, checkBooleanFilter(true, filter))
         })
         it('should return false if filers value does not equals boolean', () => {
@@ -1153,7 +1555,10 @@ describe('SegmentationManager Unit Test', () => {
     describe('checkNumbersFilter', () => {
         it('should return false if exists filter and no number', () => {
             const filter = { type: 'user', comparator: 'exist' }
-            assert.strictEqual(false, checkNumbersFilter(null as unknown as number, filter))
+            assert.strictEqual(
+                false,
+                checkNumbersFilter(null as unknown as number, filter),
+            )
         })
 
         it('should return true if exists filter and number', () => {
@@ -1163,7 +1568,10 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should return true if not exists filter and no number', () => {
             const filter = { type: 'user', comparator: '!exist' }
-            assert.strictEqual(true, checkNumbersFilter(null as unknown as number, filter))
+            assert.strictEqual(
+                true,
+                checkNumbersFilter(null as unknown as number, filter),
+            )
         })
 
         it('should return false if not exists filter and number', () => {
@@ -1172,7 +1580,11 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         it('should return false if filter value is not a number', () => {
-            const filter = { type: 'user', comparator: '=', values: ['hi1', 'hi2'] }
+            const filter = {
+                type: 'user',
+                comparator: '=',
+                values: ['hi1', 'hi2'],
+            }
             assert.strictEqual(false, checkNumbersFilter(10, filter))
         })
 
@@ -1192,7 +1604,11 @@ describe('SegmentationManager Unit Test', () => {
         })
 
         it('should return true if number is in values array with non-number values', () => {
-            const filter = { type: 'user', comparator: '=', values: [10, 'test'] }
+            const filter = {
+                type: 'user',
+                comparator: '=',
+                values: [10, 'test'],
+            }
             assert.strictEqual(true, checkNumbersFilter(10, filter))
         })
 
@@ -1218,7 +1634,11 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should return false if values are not equal', () => {
             const filter = { type: 'user', comparator: '=', values: [10] }
-            const filter2 = { type: 'user', comparator: '=', values: [-10, -12] }
+            const filter2 = {
+                type: 'user',
+                comparator: '=',
+                values: [-10, -12],
+            }
 
             assert.strictEqual(false, checkNumbersFilter(0, filter))
             assert.strictEqual(false, checkNumbersFilter(10, filter2))
@@ -1226,7 +1646,11 @@ describe('SegmentationManager Unit Test', () => {
 
         it('should return true if values are not equal', () => {
             const filter = { type: 'user', comparator: '!=', values: [10] }
-            const filter2 = { type: 'user', comparator: '!=', values: [-10, -12] }
+            const filter2 = {
+                type: 'user',
+                comparator: '!=',
+                values: [-10, -12],
+            }
 
             assert.strictEqual(true, checkNumbersFilter(0, filter))
             assert.strictEqual(true, checkNumbersFilter(10, filter2))
@@ -1372,26 +1796,66 @@ describe('SegmentationManager Unit Test', () => {
 
     describe('checkVersionFilters', () => {
         it('should return false if filter and version is null', () => {
-            const filter = { type: 'user', comparator: '=', values: ['1.1.2', '1.1.3'] }
-            const filter1 = { type: 'user', comparator: '>=', values: ['1.1.2', '1.1.3'] }
-            assert.strictEqual(false, checkVersionFilters(null as unknown as string, filter))
-            assert.strictEqual(false, checkVersionFilters(null as unknown as string, filter1))
+            const filter = {
+                type: 'user',
+                comparator: '=',
+                values: ['1.1.2', '1.1.3'],
+            }
+            const filter1 = {
+                type: 'user',
+                comparator: '>=',
+                values: ['1.1.2', '1.1.3'],
+            }
+            assert.strictEqual(
+                false,
+                checkVersionFilters(null as unknown as string, filter),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilters(null as unknown as string, filter1),
+            )
         })
         it('should return true if filter equals version', () => {
-            const filter = { type: 'user', comparator: '=', values: ['1.1.2', '1.1.3'] }
+            const filter = {
+                type: 'user',
+                comparator: '=',
+                values: ['1.1.2', '1.1.3'],
+            }
             assert.strictEqual(true, checkVersionFilters('1.1.2', filter))
         })
         it('should return true if filter greater than or equals version', () => {
-            const filter = { type: 'user', comparator: '>=', values: ['1.1.2', '1.1.3'] }
+            const filter = {
+                type: 'user',
+                comparator: '>=',
+                values: ['1.1.2', '1.1.3'],
+            }
             assert.strictEqual(true, checkVersionFilters('1.1.2', filter))
         })
         it('should return true if filter equals version non semver', () => {
-            const filter = { type: 'user', comparator: '=', values: ['1.1.2.12'] }
-            const filter2 = { type: 'user', comparator: '=', values: ['31.331.2222.12'] }
-            const filter3 = { type: 'user', comparator: '=', values: ['1.1.2.12.1.2.3'] }
+            const filter = {
+                type: 'user',
+                comparator: '=',
+                values: ['1.1.2.12'],
+            }
+            const filter2 = {
+                type: 'user',
+                comparator: '=',
+                values: ['31.331.2222.12'],
+            }
+            const filter3 = {
+                type: 'user',
+                comparator: '=',
+                values: ['1.1.2.12.1.2.3'],
+            }
             assert.strictEqual(true, checkVersionFilters('1.1.2.12', filter))
-            assert.strictEqual(true, checkVersionFilters('31.331.2222.12', filter2))
-            assert.strictEqual(true, checkVersionFilters('1.1.2.12.1.2.3', filter3))
+            assert.strictEqual(
+                true,
+                checkVersionFilters('31.331.2222.12', filter2),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilters('1.1.2.12.1.2.3', filter3),
+            )
         })
         it('should return false if filter does not equals version', () => {
             const filter = { type: 'user', comparator: '=', values: ['1.1.1'] }
@@ -1403,44 +1867,83 @@ describe('SegmentationManager Unit Test', () => {
         it('should return true if string versions equal', () => {
             assert.strictEqual(true, checkVersionFilter('1', ['1'], '='))
             assert.strictEqual(true, checkVersionFilter('1.1', ['1.1'], '='))
-            assert.strictEqual(true, checkVersionFilter('1.1.1', ['1.1.1'], '='))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1.1', ['1.1.1'], '='),
+            )
         })
         it('should return false if string versions not equal', () => {
-            assert.strictEqual(false, checkVersionFilter(null as unknown as string, ['2'], '='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter(null as unknown as string, ['2'], '='),
+            )
             assert.strictEqual(false, checkVersionFilter('1', ['2'], '='))
             assert.strictEqual(false, checkVersionFilter('1.1', ['1.2'], '='))
             assert.strictEqual(false, checkVersionFilter('1.1', ['1.1.1'], '='))
-            assert.strictEqual(false, checkVersionFilter('1.1.', ['1.1.1'], '='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1.', ['1.1.1'], '='),
+            )
             assert.strictEqual(false, checkVersionFilter('1.1.1', ['1.1'], '='))
-            assert.strictEqual(false, checkVersionFilter('1.1.1', ['1.1.'], '='))
-            assert.strictEqual(false, checkVersionFilter('1.1.1', ['1.2.3'], '='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1.1', ['1.1.'], '='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1.1', ['1.2.3'], '='),
+            )
         })
         it('should return false if string versions not equal', () => {
             assert.strictEqual(false, checkVersionFilter('1', ['1'], '!='))
             assert.strictEqual(false, checkVersionFilter('1.1', ['1.1'], '!='))
-            assert.strictEqual(false, checkVersionFilter('1.1.1', ['1.1.1'], '!='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1.1', ['1.1.1'], '!='),
+            )
             assert.strictEqual(false, checkVersionFilter('1.1.', ['1.1'], '!='))
         })
         it('should return true if string versions not equal', () => {
             assert.strictEqual(true, checkVersionFilter('1', ['2'], '!='))
             assert.strictEqual(true, checkVersionFilter('1.1', ['1.2'], '!='))
             assert.strictEqual(true, checkVersionFilter('1.1', ['1.1.1'], '!='))
-            assert.strictEqual(true, checkVersionFilter('1.1.', ['1.1.1'], '!='))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1.', ['1.1.1'], '!='),
+            )
             assert.strictEqual(true, checkVersionFilter('1.1.1', ['1.1'], '!='))
-            assert.strictEqual(true, checkVersionFilter('1.1.1', ['1.1.'], '!='))
-            assert.strictEqual(true, checkVersionFilter('1.1.1', ['1.2.3'], '!='))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1.1', ['1.1.'], '!='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1.1', ['1.2.3'], '!='),
+            )
         })
         it('should return true if string versions greater than', () => {
-            assert.strictEqual(false, checkVersionFilter(null as unknown as string, ['1'], '>'))
+            assert.strictEqual(
+                false,
+                checkVersionFilter(null as unknown as string, ['1'], '>'),
+            )
             assert.strictEqual(false, checkVersionFilter('1', ['1'], '>'))
             assert.strictEqual(false, checkVersionFilter('1.1', ['1.1'], '>'))
-            assert.strictEqual(false, checkVersionFilter('1.1.1', ['1.1.1'], '>'))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1.1', ['1.1.1'], '>'),
+            )
             assert.strictEqual(false, checkVersionFilter('1.1.', ['1.1'], '>'))
             assert.strictEqual(false, checkVersionFilter('1', ['2'], '>'))
             assert.strictEqual(false, checkVersionFilter('1.1', ['1.2'], '>'))
             assert.strictEqual(false, checkVersionFilter('1.1', ['1.1.1'], '>'))
-            assert.strictEqual(false, checkVersionFilter('1.1.', ['1.1.1'], '>'))
-            assert.strictEqual(false, checkVersionFilter('1.1.1', ['1.2.3'], '>'))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1.', ['1.1.1'], '>'),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1.1', ['1.2.3'], '>'),
+            )
         })
         it('should return true if string versions greater than', () => {
             assert.strictEqual(true, checkVersionFilter('2', ['1'], '>'))
@@ -1448,186 +1951,453 @@ describe('SegmentationManager Unit Test', () => {
             assert.strictEqual(true, checkVersionFilter('2.1', ['1.1'], '>'))
             assert.strictEqual(true, checkVersionFilter('1.2.1', ['1.2'], '>'))
             assert.strictEqual(true, checkVersionFilter('1.2.', ['1.1'], '>'))
-            assert.strictEqual(true, checkVersionFilter('1.2.1', ['1.1.1'], '>'))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.2.1', ['1.1.1'], '>'),
+            )
             assert.strictEqual(true, checkVersionFilter('1.2.2', ['1.2'], '>'))
-            assert.strictEqual(true, checkVersionFilter('1.2.2', ['1.2.1'], '>'))
-            assert.strictEqual(true, checkVersionFilter('4.8.241', ['4.8'], '>'))
-            assert.strictEqual(true, checkVersionFilter('4.8.241.2', ['4'], '>'))
-            assert.strictEqual(true, checkVersionFilter('4.8.241.2', ['4.8'], '>'))
-            assert.strictEqual(true, checkVersionFilter('4.8.241.2', ['4.8.2'], '>'))
-            assert.strictEqual(true, checkVersionFilter('4.8.241.2', ['4.8.241.0'], '>'))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.2.2', ['1.2.1'], '>'),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('4.8.241', ['4.8'], '>'),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('4.8.241.2', ['4'], '>'),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('4.8.241.2', ['4.8'], '>'),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('4.8.241.2', ['4.8.2'], '>'),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('4.8.241.2', ['4.8.241.0'], '>'),
+            )
         })
         it('should return true if string versions greater than or equal', () => {
-            assert.strictEqual(false, checkVersionFilter(null as unknown as string, ['2'], '>='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter(null as unknown as string, ['2'], '>='),
+            )
             assert.strictEqual(false, checkVersionFilter('1', ['2'], '>='))
             assert.strictEqual(false, checkVersionFilter('1.1', ['1.2'], '>='))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.1.1'], '>='))
-            assert.strictEqual(false, checkVersionFilter('1.1.', ['1.1.1'], '>='))
-            assert.strictEqual(false, checkVersionFilter('1.1.1', ['1.2.3'], '>='))
-            assert.strictEqual(false, checkVersionFilter('4.8.241', ['4.9'], '>='))
-            assert.strictEqual(false, checkVersionFilter('4.8.241.2', ['5'], '>='))
-            assert.strictEqual(false, checkVersionFilter('4.8.241.2', ['4.9'], '>='))
-            assert.strictEqual(false, checkVersionFilter('4.8.241.2', ['4.8.242'], '>='))
-            assert.strictEqual(false, checkVersionFilter('4.8.241.2', ['4.8.241.5'], '>='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1', ['1.1.1'], '>='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1.', ['1.1.1'], '>='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1.1', ['1.2.3'], '>='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('4.8.241', ['4.9'], '>='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('4.8.241.2', ['5'], '>='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('4.8.241.2', ['4.9'], '>='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('4.8.241.2', ['4.8.242'], '>='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('4.8.241.2', ['4.8.241.5'], '>='),
+            )
         })
         it('should return true if string versions greater than or equal', () => {
             assert.strictEqual(true, checkVersionFilter('1', ['1'], '>='))
             assert.strictEqual(true, checkVersionFilter('1.1', ['1.1'], '>='))
-            assert.strictEqual(true, checkVersionFilter('1.1.1', ['1.1.1'], '>='))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1.1', ['1.1.1'], '>='),
+            )
             assert.strictEqual(true, checkVersionFilter('1.1.', ['1.1'], '>='))
             assert.strictEqual(true, checkVersionFilter('2', ['1'], '>='))
             assert.strictEqual(true, checkVersionFilter('1.2', ['1.1'], '>='))
             assert.strictEqual(true, checkVersionFilter('2.1', ['1.1'], '>='))
             assert.strictEqual(true, checkVersionFilter('1.2.1', ['1.2'], '>='))
             assert.strictEqual(true, checkVersionFilter('1.2.', ['1.1'], '>='))
-            assert.strictEqual(true, checkVersionFilter('1.2.1', ['1.1.1'], '>='))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.2.1', ['1.1.1'], '>='),
+            )
             assert.strictEqual(true, checkVersionFilter('1.2.2', ['1.2'], '>='))
-            assert.strictEqual(true, checkVersionFilter('1.2.2', ['1.2.1'], '>='))
-            assert.strictEqual(true, checkVersionFilter('4.8.241.2', ['4'], '>='))
-            assert.strictEqual(true, checkVersionFilter('4.8.241.2', ['4.8'], '>='))
-            assert.strictEqual(true, checkVersionFilter('4.8.241.2', ['4.8.2'], '>='))
-            assert.strictEqual(true, checkVersionFilter('4.8.241.2', ['4.8.241.0'], '>='))
-            assert.strictEqual(true, checkVersionFilter('4.8.241.2', ['4.8.241.2'], '>='))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.2.2', ['1.2.1'], '>='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('4.8.241.2', ['4'], '>='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('4.8.241.2', ['4.8'], '>='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('4.8.241.2', ['4.8.2'], '>='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('4.8.241.2', ['4.8.241.0'], '>='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('4.8.241.2', ['4.8.241.2'], '>='),
+            )
         })
         it('should work if version has other characters', () => {
-            assert.strictEqual(true, checkVersionFilter('1.2.2', ['v1.2.1-2v3asda'], '>='))
-            assert.strictEqual(true, checkVersionFilter('1.2.2', ['v1.2.1-va1sda'], '>'))
-            assert.strictEqual(true, checkVersionFilter('1.2.1', ['v1.2.1-vasd32a'], '>='))
-            assert.strictEqual(false, checkVersionFilter('1.2.1', ['v1.2.1-vasda'], '='))
-            assert.strictEqual(false, checkVersionFilter('v1.2.1-va21sda', ['v1.2.1-va13sda'], '='))
-            assert.strictEqual(false, checkVersionFilter('1.2.0', ['v1.2.1-vas1da'], '>='))
-            assert.strictEqual(true, checkVersionFilter('1.2.1', ['v1.2.1- va34sda'], '<='))
-            assert.strictEqual(true, checkVersionFilter('1.2.0', ['v1.2.1-vas3da'], '<='))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.2.2', ['v1.2.1-2v3asda'], '>='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.2.2', ['v1.2.1-va1sda'], '>'),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.2.1', ['v1.2.1-vasd32a'], '>='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.2.1', ['v1.2.1-vasda'], '='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('v1.2.1-va21sda', ['v1.2.1-va13sda'], '='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.2.0', ['v1.2.1-vas1da'], '>='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.2.1', ['v1.2.1- va34sda'], '<='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.2.0', ['v1.2.1-vas3da'], '<='),
+            )
         })
         it('should return false if string versions less than', () => {
             assert.strictEqual(true, checkVersionFilter('1', ['2'], '<'))
             assert.strictEqual(true, checkVersionFilter('1.1', ['1.2'], '<'))
             assert.strictEqual(true, checkVersionFilter('1.1', ['1.1.1'], '<'))
             assert.strictEqual(true, checkVersionFilter('1.1.', ['1.1.1'], '<'))
-            assert.strictEqual(true, checkVersionFilter('1.1.1', ['1.2.3'], '<'))
-            assert.strictEqual(true, checkVersionFilter('4.8.241.2', ['5'], '<'))
-            assert.strictEqual(true, checkVersionFilter('4.8.241.2', ['4.9'], '<'))
-            assert.strictEqual(true, checkVersionFilter('4.8.241.2', ['4.8.242'], '<'))
-            assert.strictEqual(true, checkVersionFilter('4.8.241.2', ['4.8.241.5'], '<'))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1.1', ['1.2.3'], '<'),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('4.8.241.2', ['5'], '<'),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('4.8.241.2', ['4.9'], '<'),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('4.8.241.2', ['4.8.242'], '<'),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('4.8.241.2', ['4.8.241.5'], '<'),
+            )
         })
         it('should return false if string versions less than', () => {
-            assert.strictEqual(false, checkVersionFilter(null as unknown as string, ['1'], '<'))
+            assert.strictEqual(
+                false,
+                checkVersionFilter(null as unknown as string, ['1'], '<'),
+            )
             assert.strictEqual(false, checkVersionFilter('1', ['1'], '<'))
             assert.strictEqual(false, checkVersionFilter('1.1', ['1.1'], '<'))
-            assert.strictEqual(false, checkVersionFilter('1.1.1', ['1.1.1'], '<'))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1.1', ['1.1.1'], '<'),
+            )
             assert.strictEqual(false, checkVersionFilter('1.1.', ['1.1'], '<'))
             assert.strictEqual(false, checkVersionFilter('2', ['1'], '<'))
             assert.strictEqual(false, checkVersionFilter('1.2', ['1.1'], '<'))
             assert.strictEqual(false, checkVersionFilter('2.1', ['1.1'], '<'))
             assert.strictEqual(false, checkVersionFilter('1.2.1', ['1.2'], '<'))
             assert.strictEqual(false, checkVersionFilter('1.2.', ['1.1'], '<'))
-            assert.strictEqual(false, checkVersionFilter('1.2.1', ['1.1.1'], '<'))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.2.1', ['1.1.1'], '<'),
+            )
             assert.strictEqual(false, checkVersionFilter('1.2.2', ['1.2'], '<'))
-            assert.strictEqual(false, checkVersionFilter('1.2.2', ['1.2.'], '<'))
-            assert.strictEqual(false, checkVersionFilter('1.2.2', ['1.2.1'], '<'))
-            assert.strictEqual(false, checkVersionFilter('4.8.241.2', ['4'], '<'))
-            assert.strictEqual(false, checkVersionFilter('4.8.241.2', ['4.8'], '<'))
-            assert.strictEqual(false, checkVersionFilter('4.8.241.2', ['4.8.241'], '<'))
-            assert.strictEqual(false, checkVersionFilter('4.8.241.2', ['4.8.241.0'], '<'))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.2.2', ['1.2.'], '<'),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.2.2', ['1.2.1'], '<'),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('4.8.241.2', ['4'], '<'),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('4.8.241.2', ['4.8'], '<'),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('4.8.241.2', ['4.8.241'], '<'),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('4.8.241.2', ['4.8.241.0'], '<'),
+            )
         })
         it('should return false if string versions less than or equal', () => {
             assert.strictEqual(true, checkVersionFilter('1', ['1'], '<='))
             assert.strictEqual(true, checkVersionFilter('1.1', ['1.1'], '<='))
-            assert.strictEqual(true, checkVersionFilter('1.1.1', ['1.1.1'], '<='))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1.1', ['1.1.1'], '<='),
+            )
             assert.strictEqual(true, checkVersionFilter('1.1.', ['1.1'], '<='))
             assert.strictEqual(true, checkVersionFilter('1', ['2'], '<='))
             assert.strictEqual(true, checkVersionFilter('1.1', ['1.2'], '<='))
             assert.strictEqual(true, checkVersionFilter('1.1', ['1.1.1'], '<='))
-            assert.strictEqual(true, checkVersionFilter('1.1.', ['1.1.1'], '<='))
-            assert.strictEqual(true, checkVersionFilter('1.1.1', ['1.2.3'], '<='))
-            assert.strictEqual(true, checkVersionFilter('4.8.241.2', ['4.8.241.2'], '<='))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1.', ['1.1.1'], '<='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1.1', ['1.2.3'], '<='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('4.8.241.2', ['4.8.241.2'], '<='),
+            )
         })
         it('should return false if string versions less than or equal', () => {
-            assert.strictEqual(false, checkVersionFilter(null as unknown as string, ['1'], '<='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter(null as unknown as string, ['1'], '<='),
+            )
             assert.strictEqual(false, checkVersionFilter('2', ['1'], '<='))
             assert.strictEqual(false, checkVersionFilter('1.2', ['1.1'], '<='))
             assert.strictEqual(false, checkVersionFilter('2.1', ['1.1'], '<='))
-            assert.strictEqual(false, checkVersionFilter('1.2.1', ['1.2'], '<='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.2.1', ['1.2'], '<='),
+            )
             assert.strictEqual(false, checkVersionFilter('1.2.', ['1.1'], '<='))
-            assert.strictEqual(false, checkVersionFilter('1.2.1', ['1.1.1'], '<='))
-            assert.strictEqual(false, checkVersionFilter('1.2.2', ['1.2'], '<='))
-            assert.strictEqual(false, checkVersionFilter('1.2.2', ['1.2.'], '<='))
-            assert.strictEqual(false, checkVersionFilter('1.2.2', ['1.2.1'], '<='))
-            assert.strictEqual(false, checkVersionFilter('4.8.241.2', ['4.8.241'], '<='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.2.1', ['1.1.1'], '<='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.2.2', ['1.2'], '<='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.2.2', ['1.2.'], '<='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.2.2', ['1.2.1'], '<='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('4.8.241.2', ['4.8.241'], '<='),
+            )
         })
         it('should return true if any numbers equal array', () => {
             assert.strictEqual(true, checkVersionFilter('1', ['1', '1.1'], '='))
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1', '1.1'], '='))
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1.1', ''], '='))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1', ['1', '1.1'], '='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1', ['1.1', ''], '='),
+            )
         })
         it('should return false if all numbers not equal array', () => {
-            assert.strictEqual(false, checkVersionFilter('1', ['2', '1.1'], '='))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.2', '1'], '='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1', ['2', '1.1'], '='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1', ['1.2', '1'], '='),
+            )
         })
         it('should return true if any string versions equal array', () => {
             assert.strictEqual(true, checkVersionFilter('1', ['1', '1.1'], '='))
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1.1', '1'], '='))
-            assert.strictEqual(true, checkVersionFilter('1.1.1', ['1.1.1', '1.1'], '='))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1', ['1.1', '1'], '='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1.1', ['1.1.1', '1.1'], '='),
+            )
         })
         it('should return false if all string versions not equal array', () => {
-            assert.strictEqual(false, checkVersionFilter(null as unknown as string, ['2', '3'], '='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter(null as unknown as string, ['2', '3'], '='),
+            )
             assert.strictEqual(false, checkVersionFilter('1', ['2', '3'], '='))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.2', '1.2'], '='))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.1.1', '1.2'], '='))
-            assert.strictEqual(false, checkVersionFilter('1.1.', ['1.1.1', '1.2'], '='))
-            assert.strictEqual(false, checkVersionFilter('1.1.1', ['1.1', '1.1'], '='))
-            assert.strictEqual(false, checkVersionFilter('1.1.1', ['1', '1.1.'], '='))
-            assert.strictEqual(false, checkVersionFilter('1.1.1', ['1.2.3', '1.'], '='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1', ['1.2', '1.2'], '='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1', ['1.1.1', '1.2'], '='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1.', ['1.1.1', '1.2'], '='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1.1', ['1.1', '1.1'], '='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1.1', ['1', '1.1.'], '='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1.1', ['1.2.3', '1.'], '='),
+            )
         })
         it('should return false if multiple versions do not equal the version', () => {
             assert.strictEqual(false, checkVersionFilter('1', ['2', '1'], '!='))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.2', '1.1'], '!='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1', ['1.2', '1.1'], '!='),
+            )
         })
         it('should return true if multiple versions do not equal version', () => {
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1.1.1', '1.2'], '!='))
-            assert.strictEqual(true, checkVersionFilter('1.1.', ['1.1.1', '1'], '!='))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1', ['1.1.1', '1.2'], '!='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1.', ['1.1.1', '1'], '!='),
+            )
         })
         it('should return false if any string versions not greater than array', () => {
             assert.strictEqual(false, checkVersionFilter('1', ['1', '1'], '>'))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.1', '1.1.', '1.1'], '>'))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1', ['1.1', '1.1.', '1.1'], '>'),
+            )
             assert.strictEqual(false, checkVersionFilter('1', ['2'], '>'))
             assert.strictEqual(false, checkVersionFilter('1.1', ['1.1.0'], '>'))
         })
         it('should return true any if string versions greater than array', () => {
             assert.strictEqual(true, checkVersionFilter('2', ['1', '2.0'], '>'))
-            assert.strictEqual(true, checkVersionFilter('1.2.1', ['1.2', '1.2'], '>'))
-            assert.strictEqual(true, checkVersionFilter('1.2.', ['1.1', '1.9.'], '>'))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.2.1', ['1.2', '1.2'], '>'),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.2.', ['1.1', '1.9.'], '>'),
+            )
         })
         it('should return false if all string versions not greater than or equal array', () => {
-            assert.strictEqual(false, checkVersionFilter('1', ['2', '1.2'], '>='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1', ['2', '1.2'], '>='),
+            )
             assert.strictEqual(false, checkVersionFilter('1.1', ['1.2'], '>='))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.1.1', '1.2'], '>='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1', ['1.1.1', '1.2'], '>='),
+            )
         })
         it('should return true if any string versions greater than or equal array', () => {
-            assert.strictEqual(true, checkVersionFilter('1', ['1', '1.1'], '>='))
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1.1', '1'], '>='))
-            assert.strictEqual(true, checkVersionFilter('1.1.1', ['1.2', '1.1.1'], '>='))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1', ['1', '1.1'], '>='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1', ['1.1', '1'], '>='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1.1', ['1.2', '1.1.1'], '>='),
+            )
             assert.strictEqual(true, checkVersionFilter('1.1.', ['1.1'], '>='))
             assert.strictEqual(true, checkVersionFilter('2', ['1', '3'], '>='))
         })
         it('should return true if any string versions less than array', () => {
             assert.strictEqual(true, checkVersionFilter('1', ['2', '1'], '<'))
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1.2', '1.5'], '<'))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1', ['1.2', '1.5'], '<'),
+            )
             assert.strictEqual(true, checkVersionFilter('1.1.', ['1.1.1'], '<'))
         })
         it('should return false if all string versions less than array', () => {
-            assert.strictEqual(false, checkVersionFilter('1', ['1', '1.0'], '<'))
-            assert.strictEqual(false, checkVersionFilter('1.1.', ['1.1', '1.1.0'], '<'))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1', ['1', '1.0'], '<'),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.1.', ['1.1', '1.1.0'], '<'),
+            )
         })
         it('should return true if any string versions less than or equal array', () => {
             assert.strictEqual(true, checkVersionFilter('1', ['1', '5'], '<='))
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1.1', '1.1.'], '<='))
-            assert.strictEqual(true, checkVersionFilter('1.1.', ['1.1.1', '1.1.'], '<='))
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1', ['1.1', '1.1.'], '<='),
+            )
+            assert.strictEqual(
+                true,
+                checkVersionFilter('1.1.', ['1.1.1', '1.1.'], '<='),
+            )
         })
         it('should return false if all string versions not less than or equal array', () => {
-            assert.strictEqual(false, checkVersionFilter('2', ['1', '1.9'], '<='))
-            assert.strictEqual(false, checkVersionFilter('1.2.1', ['1.2', '1.2'], '<='))
-            assert.strictEqual(false, checkVersionFilter('1.2.', ['1.1', '1.1.9'], '<='))
+            assert.strictEqual(
+                false,
+                checkVersionFilter('2', ['1', '1.9'], '<='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.2.1', ['1.2', '1.2'], '<='),
+            )
+            assert.strictEqual(
+                false,
+                checkVersionFilter('1.2.', ['1.1', '1.1.9'], '<='),
+            )
         })
     })
 
@@ -1639,29 +2409,45 @@ describe('SegmentationManager Unit Test', () => {
             subType: 'customData',
             dataKeyType: 'String',
             values: ['value'] as unknown[],
-            filters: []
+            filters: [],
         }
         it('should return false if filter and no data', () => {
             const data = null as unknown as Record<string, unknown>
             assert.strictEqual(false, checkCustomData(data, filterStr))
         })
         it('should return true if string value is equal', () => {
-            assert.strictEqual(true, checkCustomData({ strKey: 'value' }, filterStr))
+            assert.strictEqual(
+                true,
+                checkCustomData({ strKey: 'value' }, filterStr),
+            )
         })
         it('should return true if string is one OR value', () => {
             const filter = { ...filterStr }
             filter.values = ['value', 'value too']
-            assert.strictEqual(true, checkCustomData({ strKey: 'value' }, filter))
+            assert.strictEqual(
+                true,
+                checkCustomData({ strKey: 'value' }, filter),
+            )
         })
         it('should return false if string value is not equal', () => {
-            assert.strictEqual(false, checkCustomData({ strKey: 'not value' }, filterStr))
+            assert.strictEqual(
+                false,
+                checkCustomData({ strKey: 'not value' }, filterStr),
+            )
         })
         it('should return false if string value isnt present', () => {
             assert.strictEqual(false, checkCustomData({}, filterStr))
         })
         it('should return true if string is not equal to multiple values', () => {
-            const filter = { ...filterStr, comparator: '!=', values: ['value1', 'value2', 'value3'] }
-            assert.strictEqual(true, checkCustomData({ strKey: 'value' }, filter))
+            const filter = {
+                ...filterStr,
+                comparator: '!=',
+                values: ['value1', 'value2', 'value3'],
+            }
+            assert.strictEqual(
+                true,
+                checkCustomData({ strKey: 'value' }, filter),
+            )
         })
 
         const filterNum = { ...filterStr }
@@ -1739,33 +2525,47 @@ describe('SegmentationManager Unit Test', () => {
         filterBool.dataKeyType = 'Boolean'
         filterBool.values = [false]
         it('should return true if bool value is equal', () => {
-            assert.strictEqual(true, checkCustomData({ boolKey: false }, filterBool))
+            assert.strictEqual(
+                true,
+                checkCustomData({ boolKey: false }, filterBool),
+            )
         })
         it('should return false if bool value is not equal', () => {
-            assert.strictEqual(false, checkCustomData({ boolKey: true }, filterBool))
+            assert.strictEqual(
+                false,
+                checkCustomData({ boolKey: true }, filterBool),
+            )
         })
         it('should return true if all filters are equal', () => {
             const operatorFilter = {
                 filters: [filterStr, filterNum, filterBool],
-                operator: 'and'
+                operator: 'and',
             } as unknown
-            assert.strictEqual(true,
+            assert.strictEqual(
+                true,
                 evaluateOperator({
-                    data: { customData: { strKey: 'value', numKey: 0, boolKey: false } },
-                    operator: operatorFilter
-                })
+                    data: {
+                        customData: {
+                            strKey: 'value',
+                            numKey: 0,
+                            boolKey: false,
+                        },
+                    },
+                    operator: operatorFilter,
+                }),
             )
         })
         it('should return false if one custom data key is missing', () => {
             const operatorFilter = {
                 filters: [filterStr, filterNum, filterBool],
-                operator: 'and'
+                operator: 'and',
             } as unknown
-            assert.strictEqual(false,
+            assert.strictEqual(
+                false,
                 evaluateOperator({
                     data: { customData: { strKey: 'value', boolKey: false } },
-                    operator: operatorFilter
-                })
+                    operator: operatorFilter,
+                }),
             )
         })
 
@@ -1774,13 +2574,14 @@ describe('SegmentationManager Unit Test', () => {
             filter.comparator = '!='
             const operatorFilter = {
                 filters: [filterStr, filter, filterBool],
-                operator: 'and'
+                operator: 'and',
             } as unknown
-            assert.strictEqual(true,
+            assert.strictEqual(
+                true,
                 evaluateOperator({
                     data: { customData: { strKey: 'value', boolKey: false } },
-                    operator: operatorFilter
-                })
+                    operator: operatorFilter,
+                }),
             )
         })
 
@@ -1804,13 +2605,14 @@ describe('SegmentationManager Unit Test', () => {
             filter.comparator = '!='
             const operatorFilter = {
                 filters: [filterStr, filter, filterBool],
-                operator: 'and'
+                operator: 'and',
             } as unknown
-            assert.strictEqual(false,
+            assert.strictEqual(
+                false,
                 evaluateOperator({
                     data: { customData: null },
-                    operator: operatorFilter
-                })
+                    operator: operatorFilter,
+                }),
             )
         })
 
@@ -1819,13 +2621,14 @@ describe('SegmentationManager Unit Test', () => {
             filter.comparator = '!exist'
             const operatorFilter = {
                 filters: [filterStr, filter, filterBool],
-                operator: 'and'
+                operator: 'and',
             } as unknown
-            assert.strictEqual(false,
+            assert.strictEqual(
+                false,
                 evaluateOperator({
                     data: { customData: null },
-                    operator: operatorFilter
-                })
+                    operator: operatorFilter,
+                }),
             )
         })
 
@@ -1835,10 +2638,13 @@ describe('SegmentationManager Unit Test', () => {
             subType: 'customData',
             dataKey: 'last_order_no',
             dataKeyType: 'String',
-            values: ['FP']
+            values: ['FP'],
         }
         it('should return true if custom data contains value', () => {
-            assert.strictEqual(true, checkCustomData({ last_order_no: 'FP2423423' }, containsFilter))
+            assert.strictEqual(
+                true,
+                checkCustomData({ last_order_no: 'FP2423423' }, containsFilter),
+            )
         })
 
         const existsFilter = {
@@ -1847,95 +2653,102 @@ describe('SegmentationManager Unit Test', () => {
             subType: 'customData',
             dataKey: 'field',
             dataKeyType: 'String',
-            values: []
+            values: [],
         }
         it('should return true if custom data value exists', () => {
-            assert.strictEqual(true, checkCustomData({ field: 'something' }, existsFilter))
+            assert.strictEqual(
+                true,
+                checkCustomData({ field: 'something' }, existsFilter),
+            )
         })
 
         it('should return false if custom data value does not exist', () => {
-            assert.strictEqual(false, checkCustomData({ not_field: 'something' }, existsFilter))
+            assert.strictEqual(
+                false,
+                checkCustomData({ not_field: 'something' }, existsFilter),
+            )
         })
     })
 
     describe('filterAudiencesFromSubtypes', () => {
         const audiences = [
             {
-                '_id': '60cca1d8230f17002542b909',
-                'filters': {
-                    'filters': [{
-                        'values': [
-                            'Android',
-                            'Fire TV',
-                            'Android TV'
-                        ],
-                        'comparator': '=',
-                        'subType': 'platform',
-                        'type': 'user'
-                    }],
-                    'operator': 'and'
-                }
+                _id: '60cca1d8230f17002542b909',
+                filters: {
+                    filters: [
+                        {
+                            values: ['Android', 'Fire TV', 'Android TV'],
+                            comparator: '=',
+                            subType: 'platform',
+                            type: 'user',
+                        },
+                    ],
+                    operator: 'and',
+                },
             },
             {
-                '_id': '60cca1d8230f17002542b910',
-                'filters': {
-                    'filters': [{
-                        'values': [
-                            'Fire TV',
-                            'Android TV'
-                        ],
-                        'comparator': '=',
-                        'subType': 'platform',
-                        'type': 'user'
-                    }],
-                    'operator': 'and'
-                }
+                _id: '60cca1d8230f17002542b910',
+                filters: {
+                    filters: [
+                        {
+                            values: ['Fire TV', 'Android TV'],
+                            comparator: '=',
+                            subType: 'platform',
+                            type: 'user',
+                        },
+                    ],
+                    operator: 'and',
+                },
             },
             {
-                '_id': '60cca1d8230f17002542b911',
-                'filters': {
-                    'filters': [{
-                        'values': [
-                            'Android TV'
-                        ],
-                        'comparator': '=',
-                        'subType': 'platform',
-                        'type': 'user'
-                    }],
-                    'operator': 'and'
-                }
+                _id: '60cca1d8230f17002542b911',
+                filters: {
+                    filters: [
+                        {
+                            values: ['Android TV'],
+                            comparator: '=',
+                            subType: 'platform',
+                            type: 'user',
+                        },
+                    ],
+                    operator: 'and',
+                },
             },
             {
-                '_id': '60cca1d8230f17002542b912',
-                'filters': {
-                    'filters': [{
-                        'values': [
-                            'Android'
-                        ],
-                        'comparator': '=',
-                        'subType': 'platform',
-                        'type': 'user'
-                    }],
-                    'operator': 'and'
-                }
+                _id: '60cca1d8230f17002542b912',
+                filters: {
+                    filters: [
+                        {
+                            values: ['Android'],
+                            comparator: '=',
+                            subType: 'platform',
+                            type: 'user',
+                        },
+                    ],
+                    operator: 'and',
+                },
             },
             {
-                '_id': '60cca1d8230f17002542b913',
-                'filters': {
-                    'filters': [{
-                        'values': [
-                            'iOS'
-                        ],
-                        'comparator': '=',
-                        'subType': 'platform',
-                        'type': 'user'
-                    }],
-                    'operator': 'and'
-                }
-            }]
+                _id: '60cca1d8230f17002542b913',
+                filters: {
+                    filters: [
+                        {
+                            values: ['iOS'],
+                            comparator: '=',
+                            subType: 'platform',
+                            type: 'user',
+                        },
+                    ],
+                    operator: 'and',
+                },
+            },
+        ]
         it('should filter all Android TV audiences properly if it is included in data', () => {
             const data = {}
-            setPlatformDataJSON({ ...defaultPlatformData, platform: 'Android TV' })
+            setPlatformDataJSON({
+                ...defaultPlatformData,
+                platform: 'Android TV',
+            })
             const filteredAudiences = audiences.filter((aud) => {
                 return evaluateOperator({ operator: aud.filters, data })
             })
@@ -1946,7 +2759,7 @@ describe('SegmentationManager Unit Test', () => {
         })
         it('should filter experiment with iOS properly', () => {
             const data = {
-                user_id: 'some_id'
+                user_id: 'some_id',
             }
             setPlatformDataJSON({ ...defaultPlatformData, platform: 'iOS' })
             const filteredAudiences = audiences.filter((aud) => {

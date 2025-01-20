@@ -43,6 +43,7 @@ export class Target extends JSON.Value {
                 value: distribution[i]._variation
             })
         }
+
         this._sortedDistribution = sortObjectsByString<TargetDistribution>(sortingArray, 'desc')
     }
 
@@ -145,7 +146,7 @@ export class AudienceOperator extends JSON.Value {
     }
 }
 
-export class NoIdAudience extends JSON.Value {
+export class Audience extends JSON.Value {
     readonly filters: AudienceOperator
 
     constructor(audience: JSON.Obj) {
@@ -161,22 +162,6 @@ export class NoIdAudience extends JSON.Value {
     }
 }
 
-export class Audience extends NoIdAudience {
-    readonly _id: string
-
-    constructor(audience: JSON.Obj) {
-        super(audience)
-        this._id = getStringFromJSON(audience, '_id')
-    }
-
-    stringify(): string {
-        const json = new JSON.Obj()
-        json.set('_id', this._id)
-        json.set('filters', this.filters)
-        return json.stringify()
-    }
-}
-
 const validAudienceOperators = ['and', 'or']
 
 const validTypes = ['all', 'user', 'optIn', 'audienceMatch']
@@ -186,12 +171,12 @@ export const validSubTypes = [
     'platformVersion', 'appVersion', 'deviceModel', 'customData'
 ]
 
-const validComparators = [
-    '=', '!=', '>', '>=', '<', '<=', 'exist', '!exist', 'contain', '!contain'
-]
+export const validComparators = [
+    '=', '!=', '>', '>=', '<', '<=', 'exist', '!exist', 'contain', '!contain', 
+    'startWith', '!startWith', 'endWith', '!endWith' ]
 
 const validAudienceMatchComparators = ['=', '!=']
-const validDataKeyTypes = [
+export const validDataKeyTypes = [
     'String', 'Boolean', 'Number'
 ]
 

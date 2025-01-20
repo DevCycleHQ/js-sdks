@@ -95,6 +95,15 @@ test('has expected page elements', async ({ page }) => {
     await expect(
         page.getByText('Client Component Conditionally Bundled'),
     ).toBeVisible()
+
+    // test server action flagging
+    await page.getByText('Test Action').click()
+    await expect(page.getByText('Server Function Result: true')).toBeVisible()
+
+    // test middleware flagging
+    await expect(
+        page.getByText('Middleware Enabled Feature: true'),
+    ).toBeVisible()
 })
 
 test('works after a client side navigation', async ({ page }) => {
@@ -150,4 +159,12 @@ test('has expected page elements when obfuscated', async ({ page }) => {
     await expect(
         page.getByText('Client Component Conditionally Bundled'),
     ).toBeVisible()
+})
+
+test('self-targeting overrides the values', async ({ page }) => {
+    await page.goto('/self-targeting')
+    await expect(page.getByText('Server Enabled Variable: false')).toBeVisible()
+    await expect(page.getByText('Client Enabled Variable: false')).toBeVisible()
+    await expect(page.getByText('Server Disabled Variable: true')).toBeVisible()
+    await expect(page.getByText('Client Disabled Variable: true')).toBeVisible()
 })

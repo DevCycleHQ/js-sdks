@@ -324,6 +324,46 @@ export const checkStringsFilter = (
                 (!isString(string) ||
                     !find(values, (value) => includes(string, value)))
             )
+        case 'startWith':
+            return (
+                !!values &&
+                isString(string) &&
+                !!find(
+                    values,
+                    (value) => isString(value) && string.startsWith(value),
+                )
+            )
+        case '!startWith':
+            return (
+                !!values &&
+                (!isString(string) ||
+                    !find(
+                        values,
+                        (value) =>
+                            isString(value) &&
+                            string.startsWith(value as string),
+                    ))
+            )
+        case 'endWith':
+            return (
+                !!values &&
+                isString(string) &&
+                !!find(
+                    values,
+                    (value) =>
+                        isString(value) && string.endsWith(value as string),
+                )
+            )
+        case '!endWith':
+            return (
+                !!values &&
+                (!isString(string) ||
+                    !find(
+                        values,
+                        (value) =>
+                            isString(value) && string.endsWith(value as string),
+                    ))
+            )
     }
     return isString(string)
 }

@@ -1,7 +1,6 @@
 {
     "name": "nodejs",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "sdk/nodejs/src",
     "implicitDependencies": [
         "shared-bucketing-as",
         "shared-bucketing-test-data"
@@ -55,7 +54,8 @@
                     "shared-types",
                     "shared-bucketing-as",
                     "shared-bucketing-test-data",
-                    "js-cloud-server-sdk"
+                    "js-cloud-server-sdk",
+                    "js"
                 ]
             },
             "dependsOn": [

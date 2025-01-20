@@ -1,6 +1,9 @@
 jest.unmock('cross-fetch')
 import fetch from 'cross-fetch'
+
+Object.defineProperty(global, 'fetch', { writable: true })
 global.fetch = fetch
+
 import { DevCycleEvent } from '../src/types'
 import * as DVC from '../src'
 import { server } from '../src/__mocks__/server'

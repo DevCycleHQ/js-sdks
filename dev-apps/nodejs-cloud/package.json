@@ -1,0 +1,7 @@
+{
+    "name": "@devcycle/nodejs-server-sdk-cloud-typescript-example",
+    "version": "1.24.0",
+    "description": "DevCycle NodeJS Typescript Example App",
+    "keywords": [],
+    "license": "MIT"
+}

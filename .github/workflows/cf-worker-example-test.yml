@@ -7,9 +7,10 @@ jobs:
     build:
         runs-on:
             labels: ubuntu-latest-4-core
+        timeout-minutes: 15
         strategy:
             matrix:
-                node-version: [20.x]
+                node-version: [22.12]
         steps:
             - uses: actions/checkout@v4
               with:
@@ -22,7 +23,7 @@ jobs:
             - name: Run Yarn
               run: yarn --immutable
             - name: Setup .dev.vars file
-              run: echo "DEVCYCLE_SERVER_SDK_KEY=${{ secrets.DEVCYCLE_SERVER_SDK_KEY }}" > examples/js-cloud-server/cloudflare-worker/.dev.vars
+              run: echo "DEVCYCLE_SERVER_SDK_KEY=dvc_server_token_hash" > dev-apps/js-cloud-server/cloudflare-worker/.dev.vars
             - name: Run example app in background
               run: |
                   yarn nx serve example-js-cloud-server-sdk-cf-worker &

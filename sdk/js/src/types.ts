@@ -4,12 +4,17 @@ import type {
     VariableTypeAlias,
     VariableValue,
     DVCJSON,
+    DevCycleJSON,
     DVCCustomDataJSON,
     BucketedUserConfig,
+    VariableKey,
+    InferredVariableType,
+    SSEConnectionConstructor,
 } from '@devcycle/types'
+export { UserError } from '@devcycle/types'
 
 export type DVCVariableValue = VariableValue
-export type { DVCJSON, DVCCustomDataJSON }
+export type { DVCJSON, DVCCustomDataJSON, DevCycleJSON }
 
 export interface ErrorCallback<T> {
     (err: Error, result?: null | undefined): void
@@ -78,6 +83,10 @@ export interface DevCycleOptions {
      */
     reactNative?: boolean
     /**
+     * Custom SSE connection class to use for the SDK.
+     */
+    sseConnectionClass?: SSEConnectionConstructor
+    /**
      * Disable Realtime Update and their SSE connection.
      */
     disableRealtimeUpdates?: boolean
@@ -125,9 +134,15 @@ export interface DevCycleOptions {
      * using the CLI.
      */
     enableObfuscation?: boolean
+
+    /**
+     * The platform the SDK is running in. This is used for logging purposes.
+     * Example values ('of' for OpenFeature): 'js' | 'react' | 'react-native' | 'nextjs' | 'js-of' | 'react-of'
+     */
+    sdkPlatform?: string
 }
 
-export interface DevCycleUser {
+export interface DevCycleUser<T extends DVCCustomDataJSON = DVCCustomDataJSON> {
     /**
      * If a user is anonymous a unique anonymous user id will be generated and stored in the cache.
      * If no user_id is provided, the user is assumed to be anonymous.
@@ -175,31 +190,30 @@ export interface DevCycleUser {
      * Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will be logged to DevCycle's servers and available in the dashboard to view.
      */
-    customData?: DVCCustomDataJSON
+    customData?: T
 
     /**
      * Private Custom JSON data used for audience segmentation, must be limited to __kb in size.
      * Values will not be logged to DevCycle's servers and
      * will not be available in the dashboard.
      */
-    privateCustomData?: DVCCustomDataJSON
+    privateCustomData?: T
 }
 
-export interface VariableDefinitions {
-    [key: string]: VariableValue
-}
-
-export interface DVCVariable<T extends DVCVariableValue> {
+export interface DVCVariable<
+    T extends DVCVariableValue,
+    K extends VariableKey = VariableKey,
+> {
     /**
      * Unique "key" by Project to use for this Dynamic Variable.
      */
-    readonly key: string
+    readonly key: VariableKey
 
     /**
      * The value for this Dynamic Variable which will be set to the `defaultValue`
      * if accessed before the SDK is fully Initialized
      */
-    readonly value: VariableTypeAlias<T>
+    readonly value: InferredVariableType<K, T>
 
     /**
      * Default value set when creating the variable
@@ -223,7 +237,7 @@ export interface DVCVariable<T extends DVCVariableValue> {
      *
      * @param callback
      */
-    onUpdate(callback: (value: DVCVariableValue) => void): DVCVariable<T>
+    onUpdate(callback: (value: VariableTypeAlias<T>) => void): DVCVariable<T>
 }
 
 export interface DevCycleEvent {
@@ -259,7 +273,7 @@ export interface DVCStorage {
      * @param key
      * @param value
      **/
-    save(key: string, value: unknown): void
+    save(key: string, value: unknown): Promise<void>
 
     /**
      * Get a value from the cache store
@@ -271,7 +285,7 @@ export interface DVCStorage {
      * Remove a value from the cache store
      * @param key
      */
-    remove(key: string): void
+    remove(key: string): Promise<void>
 }
 
 export const StoreKey = {

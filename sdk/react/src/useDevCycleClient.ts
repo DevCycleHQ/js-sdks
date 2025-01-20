@@ -1,10 +1,15 @@
 import { useContext } from 'react'
 import context from './context'
-import { DevCycleClient, VariableDefinitions } from '@devcycle/js-client-sdk'
+import {
+    DevCycleClient,
+    VariableDefinitions,
+    DVCCustomDataJSON,
+} from '@devcycle/js-client-sdk'
 
 export const useDevCycleClient = <
     Variables extends VariableDefinitions = VariableDefinitions,
->(): DevCycleClient<Variables> => {
+    CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
+>(): DevCycleClient<Variables, CustomData> => {
     const dvcContext = useContext(context)
 
     if (dvcContext === undefined)
@@ -12,7 +17,8 @@ export const useDevCycleClient = <
             'useDevCycleClient must be used within DevCycleProvider',
         )
 
-    return dvcContext.client
+    // enforce the variable and custom data types provided by the user. These are for type-checking only.
+    return dvcContext.client as unknown as DevCycleClient<Variables, CustomData>
 }
 
 /**

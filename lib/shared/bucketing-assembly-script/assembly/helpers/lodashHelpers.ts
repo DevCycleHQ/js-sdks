@@ -19,6 +19,32 @@ export function findString(array: Array<string> | null, findStr: string): string
     return null
 }
 
+export function stringStartsWith(string: string, prefix: string): bool {
+    if(prefix === '') return false
+    if(prefix.length > string.length) return false
+
+    for (let i = 0; i < prefix.length; i++) {
+        if (string.charAt(i) !== prefix.charAt(i)) {
+            return false
+        }
+    }
+
+    return true
+}
+
+export function stringEndsWith(string: string, suffix: string): bool {
+    if(suffix === '') return false
+    if(suffix.length > string.length) return false
+
+    for (let i = 0; i < suffix.length; i++) {
+        if (string.charAt(string.length - suffix.length + i) !== suffix.charAt(i)) {
+            return false
+        }
+    }
+
+    return true
+}
+
 export function first<T>(array: Array<T> | null): T | null {
     return (array && array.length > 0) ? array[0] : null
 }

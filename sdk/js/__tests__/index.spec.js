@@ -6,7 +6,11 @@ jest.spyOn(Request, 'getConfigJson').mockImplementation(() => {
     return Promise.resolve({})
 })
 
+const test_key = 'client_test_sdk_key'
+const test_server_key = 'dvc_server_key'
 const missingKeyError = 'Missing SDK key! Call initialize with a valid SDK key'
+const invalidKeyError =
+    'Invalid SDK key provided. Please call initialize with a valid client SDK key'
 const missingUserError = 'Missing user! Call initialize with a valid user'
 const invalidUserError =
     'Must have a user_id, or have "isAnonymous" set on the user'
@@ -16,16 +20,16 @@ const invalidOptionsError =
 describe('initializeDevCycle tests', () => {
     it('should return client for initialize and initializeDevCycle', () => {
         const user = { user_id: 'user1' }
-        let client = DVC.initializeDevCycle('YOUR_CLIENT_SIDE_ID', user)
+        let client = DVC.initializeDevCycle(test_key, user)
         expect(client).not.toBeNull()
 
-        client = DVC.initialize('YOUR_CLIENT_SIDE_ID', user)
+        client = DVC.initialize(test_key, user)
         expect(client).not.toBeNull()
     })
 
     it('should return client when calling initialize', () => {
         const user = { user_id: 'user1' }
-        const client = DVC.initializeDevCycle('YOUR_CLIENT_SIDE_ID', user)
+        const client = DVC.initializeDevCycle(test_key, user)
         expect(client).not.toBeNull()
     })
 
@@ -34,31 +38,40 @@ describe('initializeDevCycle tests', () => {
         expect(() => DVC.initializeDevCycle()).toThrow(missingKeyError)
     })
 
+    it('should throw an error if invalid SDK key is passed in initialize', () => {
+        expect(() => DVC.initializeDevCycle('bad_key')).toThrow(invalidKeyError)
+    })
+
     it('should throw an error if user is not passed in initialize', () => {
-        expect(() => DVC.initializeDevCycle('YOUR_CLIENT_SIDE_ID')).toThrow(
-            missingUserError,
-        )
+        expect(() => DVC.initializeDevCycle(test_key)).toThrow(missingUserError)
     })
 
     it('should NOT throw an error if invalid user is passed in initialize', () => {
         const badUser = { who: 'me' }
-        const client = DVC.initializeDevCycle('YOUR_CLIENT_SIDE_ID', badUser)
+        const client = DVC.initializeDevCycle(test_key, badUser)
         expect(client).not.toBeNull()
     })
 
     it('should throw an error if invalid options are passed in initialize', () => {
         const user = { user_id: 'user1' }
+        expect(() => DVC.initializeDevCycle(test_key, user, null)).toThrow(
+            invalidOptionsError,
+        )
+        expect(() => DVC.initializeDevCycle(test_key, user, false)).toThrow(
+            invalidOptionsError,
+        )
+    })
+
+    it('should not throw an error if invalid SDK key is passed in initialize when running with next option set', () => {
+        const user = { user_id: 'user1' }
         expect(() =>
-            DVC.initializeDevCycle('YOUR_CLIENT_SIDE_ID', user, null),
-        ).toThrow(invalidOptionsError)
-        expect(() =>
-            DVC.initializeDevCycle('YOUR_CLIENT_SIDE_ID', user, false),
-        ).toThrow(invalidOptionsError)
+            DVC.initializeDevCycle(test_server_key, user, { next: 'test' }),
+        ).not.toThrow(invalidKeyError)
     })
 
     it('should flush when pagehide is triggered', () => {
         const user = { user_id: 'bruh' }
-        const client = DVC.initializeDevCycle('YOUR_CLIENT_SIDE_ID', user)
+        const client = DVC.initializeDevCycle(test_key, user)
         const flushMock = jest.fn()
         client.flushEvents = flushMock
 

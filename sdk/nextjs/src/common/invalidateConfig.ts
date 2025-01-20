@@ -1,11 +1,9 @@
 'use server'
-import { fetchCDNConfig } from '../server/requests'
 import { revalidateTag } from 'next/cache'
 
 export const invalidateConfig = async (
     sdkToken: string,
-    obfuscated: boolean,
-    lastModified?: number,
+    userId: string | null,
 ): Promise<void> => {
     if (typeof window != 'undefined') {
         console.error(
@@ -14,29 +12,8 @@ export const invalidateConfig = async (
         )
         return
     }
-    await invalidateConfigCache(sdkToken, obfuscated, lastModified)
-}
-
-export const invalidateConfigCache = async (
-    sdkKey: string,
-    obfuscated: boolean,
-    lastModified?: number,
-): Promise<void> => {
-    const response = await fetchCDNConfig(sdkKey, {
-        enableObfuscation: obfuscated,
-    })
-
-    const lastModifiedHeader = response.headers.get('last-modified')
-
-    const lastModifiedCache = new Date(lastModifiedHeader ?? 0)
-    const lastModifiedClient = new Date(lastModified ?? 0)
-
-    if (
-        lastModifiedHeader &&
-        lastModified &&
-        lastModifiedClient > lastModifiedCache
-    ) {
-        console.log('Invalidating old DevCycle cached config')
-        revalidateTag(sdkKey)
+    revalidateTag(sdkToken)
+    if (userId) {
+        revalidateTag(userId)
     }
 }

@@ -1,0 +1,6 @@
+{
+    "name": "@devcycle/openfeature-nodejs-example",
+    "version": "1.24.0",
+    "description": "DevCycle OpenFeature NodeJS Example App",
+    "license": "MIT"
+}

@@ -1,7 +1,6 @@
 import { useContext } from 'react'
-import { DevCycleProviderContext } from './context'
-import { DevCycleClient } from '@devcycle/js-client-sdk'
+import { DevCycleNextClient, DevCycleProviderContext } from './context'
 
-export const useDevCycleClient = (): DevCycleClient => {
+export const useDevCycleClient = (): DevCycleNextClient => {
     return useContext(DevCycleProviderContext).client
 }

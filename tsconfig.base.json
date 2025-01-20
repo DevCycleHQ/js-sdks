@@ -35,12 +35,18 @@
             "@devcycle/js-cloud-server-sdk": [
                 "sdk/js-cloud-server/src/index.ts"
             ],
-            "@devcycle/nextjs-sdk": ["sdk/nextjs/src/index.ts"],
-            "@devcycle/nextjs-sdk/pages": ["sdk/nextjs/src/pages.ts"],
-            "@devcycle/nextjs-sdk/server": ["sdk/nextjs/src/server.ts"],
+            "@devcycle/nextjs-sdk": ["sdk/nextjs/index.ts"],
+            "@devcycle/nextjs-sdk/pages": ["sdk/nextjs/pages.ts"],
+            "@devcycle/nextjs-sdk/server": ["sdk/nextjs/server.ts"],
             "@devcycle/nodejs-server-sdk": ["sdk/nodejs/src/index.ts"],
+            "@devcycle/nodejs-server-sdk/openfeature-strategy": [
+                "sdk/nodejs/openfeature-strategy.ts"
+            ],
             "@devcycle/openfeature-web-provider": [
                 "sdk/openfeature-web-provider/src/index.ts"
+            ],
+            "@devcycle/openfeature-web-provider/strategy": [
+                "sdk/openfeature-web-provider/strategy.ts"
             ],
             "@devcycle/react-client-sdk": ["sdk/react/src/index.ts"],
             "@devcycle/react-native-client-sdk": [
@@ -52,7 +58,15 @@
             "@devcycle/server-request": [
                 "lib/shared/server-request/src/index.ts"
             ],
-            "@devcycle/types": ["lib/shared/types/src/index.ts"]
+            "@devcycle/sse-connection": [
+                "lib/shared/sse-connection/src/index.ts"
+            ],
+            "@devcycle/types": ["lib/shared/types/src/index.ts"],
+            "@devcycle/vercel-edge-config": [
+                "shared/vercel-edge-config/src/index.ts"
+            ],
+            "@devcycle/web-debugger": ["lib/web-debugger/index.ts"],
+            "@devcycle/web-debugger/react": ["lib/web-debugger/react.tsx"]
         }
     },
     "exclude": ["node_modules", "tmp"]

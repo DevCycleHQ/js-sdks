@@ -1091,6 +1091,132 @@ describe('SegmentationManager Unit Test', () => {
                 segmentation.checkStringsFilter('helloWorld', filter),
             )
         })
+        it('should return true if starts with filter and value starts with', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'startWith',
+                values: ['testuser@'],
+            } as AudienceFilterOrOperator
+            assert.strictEqual(
+                true,
+                segmentation.checkStringsFilter(
+                    'testuser@devcycle.com',
+                    filter,
+                ),
+            )
+        })
+        it('should return true if ends with filter and value ends with', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'endWith',
+                values: ['devcycle.com'],
+            } as AudienceFilterOrOperator
+            assert.strictEqual(
+                true,
+                segmentation.checkStringsFilter(
+                    'testuser@devcycle.com',
+                    filter,
+                ),
+            )
+        })
+        it('should return true if not starts with filter and value does not start with', () => {
+            const filter = {
+                type: 'user',
+                comparator: '!startWith',
+                values: ['user@'],
+            } as AudienceFilterOrOperator
+            assert.strictEqual(
+                true,
+                segmentation.checkStringsFilter(
+                    'testuser@devcycle.com',
+                    filter,
+                ),
+            )
+        })
+        it('should return true if not ends with filter and value does not end with', () => {
+            const filter = {
+                type: 'user',
+                comparator: '!endWith',
+                values: ['devcycle.io'],
+            } as AudienceFilterOrOperator
+            assert.strictEqual(
+                true,
+                segmentation.checkStringsFilter(
+                    'testuser@devcycle.com',
+                    filter,
+                ),
+            )
+        })
+        it('should return false if ends with filter with empty string', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'endWith',
+                values: [''],
+            } as AudienceFilterOrOperator
+            assert.strictEqual(
+                false,
+                segmentation.checkStringsFilter(
+                    'testuser@devcycle.com',
+                    filter,
+                ),
+            )
+        })
+        it('should return false if starts with filter with empty string', () => {
+            const filter = {
+                type: 'user',
+                comparator: 'startWith',
+                values: [''],
+            } as AudienceFilterOrOperator
+            assert.strictEqual(
+                false,
+                segmentation.checkStringsFilter(
+                    'testuser@devcycle.com',
+                    filter,
+                ),
+            )
+        })
+        it('should return false if not starts with filter with empty string', () => {
+            const filter = {
+                type: 'user',
+                comparator: '!startWith',
+                values: [''],
+            } as AudienceFilterOrOperator
+            assert.strictEqual(
+                true,
+                segmentation.checkStringsFilter(
+                    'testuser@devcycle.com',
+                    filter,
+                ),
+            )
+        })
+        it('should return false if not ends with filter with empty string', () => {
+            const filter = {
+                type: 'user',
+                comparator: '!endWith',
+                values: [''],
+            } as AudienceFilterOrOperator
+            assert.strictEqual(
+                true,
+                segmentation.checkStringsFilter(
+                    'testuser@devcycle.com',
+                    filter,
+                ),
+            )
+        })
+        it('should return false if not ends with filter with empty string', () => {
+            const filter = {
+                type: 'user',
+                comparator: '!contain',
+                values: [''],
+            } as AudienceFilterOrOperator
+            assert.strictEqual(
+                true,
+                segmentation.checkStringsFilter(
+                    'testuser@devcycle.com',
+                    filter,
+                ),
+            )
+        })
         it('should return false if contains filter and value does not contain', () => {
             const filter = {
                 type: 'user',

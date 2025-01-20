@@ -9,7 +9,7 @@ jobs:
             labels: ubuntu-latest-4-core
         strategy:
             matrix:
-                node-version: [20.x]
+                node-version: [22.12]
         steps:
             - uses: actions/checkout@v4
               with:
@@ -31,4 +31,4 @@ jobs:
               with:
                   sdks-to-test: nodejs,of-nodejs
                   sdk-github-sha: ${{github.event.pull_request.head.sha}}
-                  github-token: ${{ secrets.TEST_HARNESS_GH_SECRET }}
+                  github-token: ${{ secrets.AUTOMATION_USER_TOKEN }}

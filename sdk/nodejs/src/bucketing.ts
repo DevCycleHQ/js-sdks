@@ -1,12 +1,12 @@
-import { instantiate, Exports } from '@devcycle/bucketing-assembly-script'
+import {
+    instantiate,
+    WASMBucketingExports,
+} from '@devcycle/bucketing-assembly-script'
 import {
     DVCLogger,
     DVCReporter,
     DevCycleServerSDKOptions,
 } from '@devcycle/types'
-
-let Bucketing: Exports | null
-let InstantiatePromise: Promise<Exports> | null
 
 export const importBucketingLib = async ({
     logger,
@@ -14,58 +14,43 @@ export const importBucketingLib = async ({
 }: {
     logger?: DVCLogger
     options?: DevCycleServerSDKOptions
-} = {}): Promise<void> => {
-    if (InstantiatePromise) {
-        await InstantiatePromise
-        return
-    }
+} = {}): Promise<[WASMBucketingExports, NodeJS.Timer | undefined]> => {
     const debugWASM = process.env.DEVCYCLE_DEBUG_WASM === '1'
-    InstantiatePromise = instantiate(debugWASM).then((exports) => {
-        Bucketing = exports
-        return Bucketing
-    })
-    await InstantiatePromise
-    startTrackingMemoryUsage(logger, options?.reporter)
+    const result = await instantiate(debugWASM)
+    const interval = startTrackingMemoryUsage(result, logger, options?.reporter)
+    return [result, interval]
 }
 
 export const startTrackingMemoryUsage = (
+    bucketing: WASMBucketingExports,
     logger?: DVCLogger,
     reporter?: DVCReporter,
     interval: number = 30 * 1000,
-): void => {
+): NodeJS.Timer | undefined => {
     if (!reporter) return
-    trackMemoryUsage(reporter, logger)
-    setInterval(() => trackMemoryUsage(reporter, logger), interval)
+    trackMemoryUsage(bucketing, reporter, logger)
+    return setInterval(
+        () => trackMemoryUsage(bucketing, reporter, logger),
+        interval,
+    )
 }
 
 export const trackMemoryUsage = (
+    bucketing: WASMBucketingExports,
     reporter: DVCReporter,
     logger?: DVCLogger,
 ): void => {
     if (!reporter) return
-    if (!Bucketing) {
-        throw new Error('Bucketing lib not initialized')
-    }
-    const memoryUsageMB = Bucketing.memory.buffer.byteLength / 1e6
+    const memoryUsageMB = bucketing.memory.buffer.byteLength / 1e6
     logger?.debug(`WASM memory usage: ${memoryUsageMB} MB`)
     reporter.reportMetric('wasmMemoryMB', memoryUsageMB, {})
 }
 
-export const getBucketingLib = (): Exports => {
-    if (!Bucketing) {
-        throw new Error('Bucketing library not loaded')
-    }
-    return Bucketing
-}
-
-export const cleanupBucketingLib = (): void => {
-    Bucketing = null
-}
-
 export const setConfigDataUTF8 = (
+    bucketing: WASMBucketingExports,
     sdkKey: string,
     projectConfigStr: string,
 ): void => {
     const configBuffer = Buffer.from(projectConfigStr, 'utf8')
-    getBucketingLib().setConfigDataUTF8(sdkKey, configBuffer)
+    bucketing.setConfigDataUTF8(sdkKey, configBuffer)
 }

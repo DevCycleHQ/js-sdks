@@ -1,0 +1,10 @@
+{
+    "name": "@devcycle/sse-connection",
+    "version": "1.0.0",
+    "license": "MIT",
+    "dependencies": {
+        "eventsource": "^2.0.2"
+    },
+    "types": "src/index.d.ts",
+    "main": "src/index.js"
+}

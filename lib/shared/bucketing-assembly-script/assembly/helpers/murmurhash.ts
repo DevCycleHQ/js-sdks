@@ -14,7 +14,7 @@ const keyBuffer = new StaticArray<i32>(murmurhashBufferSize)
 export function murmurhashV3(key: string, seed: u32): u32 {
     let currentBuffer = keyBuffer
     if (key.length > keyBuffer.length) {
-        console.log("Warning: exceeded maximum size of murmurhash buffer.")
+        // console.log("Warning: exceeded maximum size of murmurhash buffer.")
         currentBuffer = new StaticArray<i32>(key.length)
     }
 

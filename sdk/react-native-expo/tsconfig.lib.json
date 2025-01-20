@@ -2,8 +2,7 @@
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "outDir": "../../dist/out-tsc",
-        "types": ["node"],
-        "jsx": "react-native"
+        "types": ["node"]
     },
     "exclude": [
         "jest.config.ts",

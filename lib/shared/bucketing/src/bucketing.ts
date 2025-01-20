@@ -4,15 +4,15 @@ import pick from 'lodash/pick'
 import last from 'lodash/last'
 import first from 'lodash/first'
 import {
-    ConfigBody,
-    PublicTarget,
-    PublicFeature,
     BucketedUserConfig,
+    ConfigBody,
+    DVCBucketingUser,
+    Feature,
+    PublicFeature,
     PublicRollout,
     PublicRolloutStage,
-    DVCBucketingUser,
+    PublicTarget,
     Variation,
-    Feature,
 } from '@devcycle/types'
 
 import murmurhash from 'murmurhash'
@@ -21,6 +21,7 @@ import { evaluateOperator } from './segmentation'
 // Max value of an unsigned 32-bit integer, which is what murmurhash returns
 const MAX_HASH_VALUE = 4294967295
 const baseSeed = 1
+export const DEFAULT_BUCKETING_VALUE = 'null'
 
 export const generateBoundedHashes = (
     user_id: string,
@@ -154,6 +155,30 @@ type SegmentedFeatureData = {
     target: PublicTarget<string>
 }
 
+const checkRolloutAndEvaluate = ({
+    user,
+    target,
+    disablePassthroughRollouts,
+}: {
+    user: DVCBucketingUser
+    target: PublicTarget
+    disablePassthroughRollouts: boolean
+}) => {
+    if (!target.rollout || disablePassthroughRollouts) {
+        return true
+    } else {
+        const bucketingValue = getUserValueForBucketingKey({ user, target })
+        const { rolloutHash } = generateBoundedHashes(
+            bucketingValue,
+            target._id,
+        )
+        return doesUserPassRollout({
+            boundedHash: rolloutHash,
+            rollout: target.rollout,
+        })
+    }
+}
+
 export const getSegmentedFeatureDataFromConfig = ({
     config,
     user,
@@ -162,6 +187,8 @@ export const getSegmentedFeatureDataFromConfig = ({
     user: DVCBucketingUser
 }): SegmentedFeatureData[] => {
     const initialValue: SegmentedFeatureData[] = []
+    const disablePassthroughRollouts =
+        !!config.project.settings.disablePassthroughRollouts
     return config.features.reduce((accumulator, feature) => {
         // Returns the first target for which the user passes segmentation
         const isOptInEnabled =
@@ -170,13 +197,20 @@ export const getSegmentedFeatureDataFromConfig = ({
 
         const segmentedFeatureTarget = feature.configuration.targets.find(
             (target) => {
-                return evaluateOperator({
-                    operator: target._audience.filters,
-                    data: user,
-                    featureId: feature._id,
-                    isOptInEnabled: !!isOptInEnabled,
-                    audiences: config.audiences,
-                })
+                return (
+                    checkRolloutAndEvaluate({
+                        target,
+                        user,
+                        disablePassthroughRollouts,
+                    }) &&
+                    evaluateOperator({
+                        operator: target._audience.filters,
+                        data: user,
+                        featureId: feature._id,
+                        isOptInEnabled: !!isOptInEnabled,
+                        audiences: config.audiences,
+                    })
+                )
             },
         )
         if (segmentedFeatureTarget) {
@@ -205,7 +239,8 @@ export const generateBucketedConfig = ({
         config,
         user,
     })
-
+    const disablePassthroughRollouts =
+        config.project.settings.disablePassthroughRollouts
     const updateMapsWithBucketedFeature = ({
         feature,
         variation,
@@ -238,13 +273,15 @@ export const generateBucketedConfig = ({
     }
 
     segmentedFeatures.forEach(({ feature, target }) => {
-        const { _id, key, type, variations, settings } = feature
+        const { variations } = feature
+        const bucketingValue = getUserValueForBucketingKey({ user, target })
         const { rolloutHash, bucketingHash } = generateBoundedHashes(
-            user.user_id,
+            bucketingValue,
             target._id,
         )
         if (
             target.rollout &&
+            disablePassthroughRollouts &&
             !doesUserPassRollout({
                 boundedHash: rolloutHash,
                 rollout: target.rollout,
@@ -293,4 +330,29 @@ export const generateBucketedConfig = ({
         variableVariationMap: {},
         variables: variableMap,
     }
+}
+
+export const getUserValueForBucketingKey = ({
+    user,
+    target,
+}: {
+    user: DVCBucketingUser
+    target: PublicTarget
+}): string => {
+    if (target.bucketingKey && target.bucketingKey !== 'user_id') {
+        const bucketingValue =
+            user.customData?.[target.bucketingKey] ||
+            user.privateCustomData?.[target.bucketingKey] ||
+            DEFAULT_BUCKETING_VALUE
+        if (
+            typeof bucketingValue !== 'string' &&
+            typeof bucketingValue !== 'number' &&
+            typeof bucketingValue !== 'boolean'
+        ) {
+            return DEFAULT_BUCKETING_VALUE
+        } else {
+            return String(bucketingValue)
+        }
+    }
+    return user.user_id
 }

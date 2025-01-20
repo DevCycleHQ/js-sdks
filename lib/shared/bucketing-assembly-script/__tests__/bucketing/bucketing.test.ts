@@ -8,11 +8,10 @@ import {
     setClientCustomData,
     variableForUser as variableForUser_AS,
     VariableType,
-    testConfigBodyClassFromUTF8,
-    testConfigBodyClass,
 } from '../bucketingImportHelper'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config, barrenConfig, configWithNullCustomData } = testData
+import { configWithBucketingKey } from '../helpers/configWithBucketingKey'
 
 import moment from 'moment'
 import * as uuid from 'uuid'
@@ -147,14 +146,15 @@ describe('User Hashing and Bucketing', () => {
             _audience: { _id: 'id', filters: { filters: [], operator: 'and' } },
             _id: 'target',
             distribution: [
-                { _variation: 'var1', percentage: 0.25 },
-                { _variation: 'var2', percentage: 0.45 },
+                { _variation: 'var1', percentage: 0.2555 },
+                { _variation: 'var2', percentage: 0.4445 },
                 { _variation: 'var4', percentage: 0.2 },
                 { _variation: 'var3', percentage: 0.1 },
             ],
         }
 
-        for (let i = 0; i < 30000; i++) {
+        // run 200,000 times to get a good distribution
+        for (let i = 0; i < 200000; i++) {
             const user_id = uuid.v4()
             const { bucketingHash } = generateBoundedHashes(
                 user_id,
@@ -169,10 +169,10 @@ describe('User Hashing and Bucketing', () => {
             buckets.total++
         }
 
-        expect(buckets.var1 / buckets.total).toBeGreaterThan(0.24)
-        expect(buckets.var1 / buckets.total).toBeLessThan(0.26)
-        expect(buckets.var2 / buckets.total).toBeGreaterThan(0.44)
-        expect(buckets.var2 / buckets.total).toBeLessThan(0.46)
+        expect(buckets.var1 / buckets.total).toBeGreaterThan(0.2525)
+        expect(buckets.var1 / buckets.total).toBeLessThan(0.2575)
+        expect(buckets.var2 / buckets.total).toBeGreaterThan(0.4425)
+        expect(buckets.var2 / buckets.total).toBeLessThan(0.4475)
         expect(buckets.var4 / buckets.total).toBeGreaterThan(0.19)
         expect(buckets.var4 / buckets.total).toBeLessThan(0.21)
         expect(buckets.var3 / buckets.total).toBeGreaterThan(0.09)
@@ -515,7 +515,7 @@ describe('Config Parsing and Generating', () => {
         )
     })
 
-    it('holds user back if not in rollout', () => {
+    it('holds user back if not in rollout and passthrough disabled', () => {
         const user = {
             country: 'U S AND A',
             user_id: 'asuh',
@@ -531,6 +531,16 @@ describe('Config Parsing and Generating', () => {
             platformVersion: '1.1.2',
             os: 'Android',
             email: 'test@notemail.com',
+        }
+        const newConfig = {
+            ...config,
+            project: {
+                ...config.project,
+                settings: {
+                    ...config.project.settings,
+                    disablePassthroughRollouts: true,
+                },
+            },
         }
         const expected = {
             environment: {
@@ -570,7 +580,276 @@ describe('Config Parsing and Generating', () => {
                 },
             },
         }
+        initSDK(sdkKey, newConfig)
+
+        const c = generateBucketedConfig(user)
+        expect(c).toEqual(expected)
+
+        expectVariableForUser(
+            {
+                user,
+                variableKey: 'feature2Var',
+                variableType: VariableType.String,
+            },
+            expected.variables['feature2Var'],
+        )
+    })
+
+    it('pushes user to next target if not in rollout and passthrough not disabled', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'asuh',
+            customData: {
+                favouriteFood: 'pizza',
+                favouriteNull: null,
+            },
+            privateCustomData: {
+                favouriteDrink: 'coffee',
+                favouriteNumber: 610,
+                favouriteBoolean: true,
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'test@notemail.com',
+        }
+        const expected = {
+            environment: {
+                _id: '6153553b8cf4e45e0464268d',
+                key: 'test-environment',
+            },
+            project: expect.objectContaining({
+                _id: '61535533396f00bab586cb17',
+                a0_organization: 'org_12345612345',
+                key: 'test-project',
+            }),
+            features: {
+                feature1: {
+                    _id: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                    key: 'feature1',
+                    type: 'release',
+                    variationKey: 'variation-1-key',
+                    variationName: 'variation 1',
+                },
+                feature2: {
+                    _id: '614ef6aa475928459060721a',
+                    key: 'feature2',
+                    type: 'release',
+                    _variation: '615382338424cb11646d7667',
+                    variationName: 'variation 1 aud 2',
+                    variationKey: 'variation-1-aud-2-key',
+                },
+            },
+            variableVariationMap: {
+                'bool-var': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                },
+                feature2Var: {
+                    _feature: '614ef6aa475928459060721a',
+                    _variation: '615382338424cb11646d7667',
+                },
+                'json-var': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                },
+                'num-var': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                },
+                swagTest: {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                },
+                test: {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                },
+            },
+            featureVariationMap: {
+                '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
+                '614ef6aa475928459060721a': '615382338424cb11646d7667',
+            },
+            variables: {
+                feature2Var: {
+                    _id: '61538237b0a70b58ae6af71f',
+                    key: 'feature2Var',
+                    type: 'String',
+                    value: 'Var 1 aud 2',
+                },
+                'bool-var': {
+                    _id: '61538237b0a70b58ae6af71y',
+                    key: 'bool-var',
+                    type: 'Boolean',
+                    value: false,
+                },
+                'json-var': {
+                    _id: '61538237b0a70b58ae6af71q',
+                    key: 'json-var',
+                    type: 'JSON',
+                    value: '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var': {
+                    _id: '61538237b0a70b58ae6af71s',
+                    key: 'num-var',
+                    type: 'Number',
+                    value: 610.61,
+                },
+                swagTest: {
+                    _id: '615356f120ed334a6054564c',
+                    key: 'swagTest',
+                    type: 'String',
+                    value: 'man',
+                },
+                test: {
+                    _id: '614ef6ea475129459160721a',
+                    key: 'test',
+                    type: 'String',
+                    value: 'scat',
+                },
+            },
+        }
         initSDK(sdkKey, config)
+
+        const c = generateBucketedConfig(user)
+        expect(c).toEqual(expected)
+
+        expectVariableForUser(
+            {
+                user,
+                variableKey: 'feature2Var',
+                variableType: VariableType.String,
+            },
+            expected.variables['feature2Var'],
+        )
+    })
+
+    it('pushes user to next target if not in rollout and passthrough setting not defined', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'asuh',
+            customData: {
+                favouriteFood: 'pizza',
+                favouriteNull: null,
+            },
+            privateCustomData: {
+                favouriteDrink: 'coffee',
+                favouriteNumber: 610,
+                favouriteBoolean: true,
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'test@notemail.com',
+        }
+        const newConfig = {
+            ...config,
+            project: {
+                ...config.project,
+                settings: {
+                    ...config.project.settings,
+                    disablePassthroughRollouts: undefined,
+                },
+            },
+        }
+
+        const expected = {
+            environment: {
+                _id: '6153553b8cf4e45e0464268d',
+                key: 'test-environment',
+            },
+            project: expect.objectContaining({
+                _id: '61535533396f00bab586cb17',
+                a0_organization: 'org_12345612345',
+                key: 'test-project',
+            }),
+            features: {
+                feature1: {
+                    _id: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                    key: 'feature1',
+                    type: 'release',
+                    variationKey: 'variation-1-key',
+                    variationName: 'variation 1',
+                },
+                feature2: {
+                    _id: '614ef6aa475928459060721a',
+                    key: 'feature2',
+                    type: 'release',
+                    _variation: '615382338424cb11646d7667',
+                    variationName: 'variation 1 aud 2',
+                    variationKey: 'variation-1-aud-2-key',
+                },
+            },
+            variableVariationMap: {
+                'bool-var': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                },
+                feature2Var: {
+                    _feature: '614ef6aa475928459060721a',
+                    _variation: '615382338424cb11646d7667',
+                },
+                'json-var': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                },
+                'num-var': {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                },
+                swagTest: {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                },
+                test: {
+                    _feature: '614ef6aa473928459060721a',
+                    _variation: '6153553b8cf4e45e0464268d',
+                },
+            },
+            featureVariationMap: {
+                '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
+                '614ef6aa475928459060721a': '615382338424cb11646d7667',
+            },
+            variables: {
+                feature2Var: {
+                    _id: '61538237b0a70b58ae6af71f',
+                    key: 'feature2Var',
+                    type: 'String',
+                    value: 'Var 1 aud 2',
+                },
+                'bool-var': {
+                    _id: '61538237b0a70b58ae6af71y',
+                    key: 'bool-var',
+                    type: 'Boolean',
+                    value: false,
+                },
+                'json-var': {
+                    _id: '61538237b0a70b58ae6af71q',
+                    key: 'json-var',
+                    type: 'JSON',
+                    value: '{"hello":"world","num":610,"bool":true}',
+                },
+                'num-var': {
+                    _id: '61538237b0a70b58ae6af71s',
+                    key: 'num-var',
+                    type: 'Number',
+                    value: 610.61,
+                },
+                swagTest: {
+                    _id: '615356f120ed334a6054564c',
+                    key: 'swagTest',
+                    type: 'String',
+                    value: 'man',
+                },
+                test: {
+                    _id: '614ef6ea475129459160721a',
+                    key: 'test',
+                    type: 'String',
+                    value: 'scat',
+                },
+            },
+        }
+        initSDK(sdkKey, newConfig)
 
         const c = generateBucketedConfig(user)
         expect(c).toEqual(expected)
@@ -1309,7 +1588,9 @@ describe('Client Data', () => {
         const c1 = generateBucketedConfig(user)
         expect(c1).toEqual(
             expect.objectContaining({
-                featureVariationMap: {},
+                featureVariationMap: {
+                    '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
+                },
             }),
         )
 
@@ -1340,11 +1621,203 @@ describe('Client Data', () => {
         const c3 = generateBucketedConfig(user2)
         expect(c3).toEqual(
             expect.objectContaining({
-                featureVariationMap: {},
+                featureVariationMap: {
+                    '614ef6aa473928459060721a': '6153553b8cf4e45e0464268d',
+                },
             }),
         )
 
         // cleanup
         setClientCustomDataJSON({})
+    })
+})
+
+describe('bucketingKey tests', () => {
+    afterEach(() => cleanupSDK(sdkKey))
+
+    it('buckets a user with user_id if no bucketingKey', () => {
+        const user = {
+            user_id: 'test-id',
+            customData: {
+                favouriteFood: 'pizza',
+            },
+            platformVersion: '1.1.2',
+            email: 'testwithfood@email.com',
+        }
+        const cWithBucketingKey = configWithBucketingKey('user_id')
+        initSDK(sdkKey, cWithBucketingKey)
+
+        const c = generateBucketedConfig(user)
+
+        cleanupSDK(sdkKey)
+
+        initSDK(sdkKey, config)
+        const c2 = generateBucketedConfig(user)
+
+        expect(c.features.feature5).not.toBeFalsy()
+        expect(c.features.feature5.variationKey).toEqual(
+            c2.features.feature5.variationKey,
+        )
+    })
+
+    it('buckets a user with custom bucketingKey', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'pass_rollout',
+            customData: {
+                favouriteFood: 'pizza',
+            },
+            privateCustomData: {
+                favouriteDrink: 'coffee',
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'testwithfood@email.com',
+        }
+        const sameUserDifferentFood = {
+            ...user,
+            customData: {
+                favouriteFood: 'pasta',
+            },
+        }
+        const differentUserSameFood = {
+            ...sameUserDifferentFood,
+            user_id: 'a_different_person',
+        }
+        const cWithBucketingKey = configWithBucketingKey('favouriteFood')
+        initSDK(sdkKey, cWithBucketingKey)
+
+        const c = generateBucketedConfig(user)
+        const cSameUserDifferentFood = generateBucketedConfig(
+            sameUserDifferentFood,
+        )
+        const cDifferentUserSameFood = generateBucketedConfig(
+            differentUserSameFood,
+        )
+
+        expect(c.features.feature5.variationKey).not.toEqual(
+            cSameUserDifferentFood.features.feature5.variationKey,
+        )
+        expect(cSameUserDifferentFood.features.feature5.variationKey).toEqual(
+            cDifferentUserSameFood.features.feature5.variationKey,
+        )
+    })
+
+    it('buckets a user with custom bucketingKey from privateCustomData', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'pass_rollout',
+            privateCustomData: {
+                favouriteFood: 'pizza',
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'testwithfood@email.com',
+        }
+        const sameUserDifferentFood = {
+            ...user,
+            privateCustomData: {
+                favouriteFood: 'pasta',
+            },
+        }
+        const differentUserSameFood = {
+            ...sameUserDifferentFood,
+            user_id: 'a_different_person',
+        }
+        const cWithBucketingKey = configWithBucketingKey('favouriteFood')
+        initSDK(sdkKey, cWithBucketingKey)
+
+        const c = generateBucketedConfig(user)
+        const cSameUserDifferentFood = generateBucketedConfig(
+            sameUserDifferentFood,
+        )
+        const cDifferentUserSameFood = generateBucketedConfig(
+            differentUserSameFood,
+        )
+
+        expect(c.features.feature5.variationKey).not.toEqual(
+            cSameUserDifferentFood.features.feature5.variationKey,
+        )
+        expect(cSameUserDifferentFood.features.feature5.variationKey).toEqual(
+            cDifferentUserSameFood.features.feature5.variationKey,
+        )
+    })
+
+    it('buckets a user with custom number bucketingKey', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'pass_rollout',
+            privateCustomData: {
+                favouriteNumber: 610,
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'testwithfood@email.com',
+        }
+        const sameUserDifferentNum = {
+            ...user,
+            privateCustomData: {
+                favouriteNumber: 52900,
+            },
+        }
+        const differentUserSameNum = {
+            ...sameUserDifferentNum,
+            user_id: 'a_different_person',
+        }
+        const cWithBucketingKey = configWithBucketingKey('favouriteNumber')
+        initSDK(sdkKey, cWithBucketingKey)
+
+        const c = generateBucketedConfig(user)
+        const cSameUserDifferentNum =
+            generateBucketedConfig(sameUserDifferentNum)
+        const cDifferentUserSameNum =
+            generateBucketedConfig(differentUserSameNum)
+
+        expect(c.features.feature5.variationKey).not.toEqual(
+            cSameUserDifferentNum.features.feature5.variationKey,
+        )
+        expect(cSameUserDifferentNum.features.feature5.variationKey).toEqual(
+            cDifferentUserSameNum.features.feature5.variationKey,
+        )
+    })
+
+    it('buckets a user with custom boolean bucketingKey', () => {
+        const user = {
+            country: 'U S AND A',
+            user_id: 'pass_rollout',
+            privateCustomData: {
+                signed_up: true,
+            },
+            platformVersion: '1.1.2',
+            os: 'Android',
+            email: 'testwithfood@email.com',
+        }
+        const sameUserDifferentBool = {
+            ...user,
+            privateCustomData: {
+                signed_up: false,
+            },
+        }
+        const differentUserSameBool = {
+            ...sameUserDifferentBool,
+            user_id: 'a_different_person',
+        }
+        const cWithBucketingKey = configWithBucketingKey('signed_up')
+        initSDK(sdkKey, cWithBucketingKey)
+
+        const c = generateBucketedConfig(user)
+        const cSameUserDifferentBool = generateBucketedConfig(
+            sameUserDifferentBool,
+        )
+        const cDifferentUserSameBool = generateBucketedConfig(
+            differentUserSameBool,
+        )
+
+        expect(c.features.feature5.variationKey).not.toEqual(
+            cSameUserDifferentBool.features.feature5.variationKey,
+        )
+        expect(cSameUserDifferentBool.features.feature5.variationKey).toEqual(
+            cDifferentUserSameBool.features.feature5.variationKey,
+        )
     })
 })

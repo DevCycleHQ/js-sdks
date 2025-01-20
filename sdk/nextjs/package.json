@@ -1,11 +1,28 @@
 {
     "name": "@devcycle/nextjs-sdk",
-    "version": "1.5.2",
+    "version": "2.9.0",
+    "license": "MIT",
+    "author": "DevCycle <support@devcycle.com>",
+    "keywords": [
+        "devcycle",
+        "feature flag",
+        "javascript",
+        "client",
+        "nextjs",
+        "server components",
+        "sdk"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/DevCycleHQ/js-sdks.git"
+    },
+    "homepage": "https://devcycle.com",
     "dependencies": {
-        "@devcycle/bucketing": "^1.12.1",
-        "@devcycle/js-client-sdk": "^1.21.1",
-        "@devcycle/react-client-sdk": "^1.19.1",
-        "@devcycle/types": "^1.9.1",
+        "@devcycle/bucketing": "^1.25.0",
+        "@devcycle/js-client-sdk": "^1.33.0",
+        "@devcycle/react-client-sdk": "^1.31.0",
+        "@devcycle/types": "^1.20.0",
+        "class-transformer": "^0.5.1",
         "hoist-non-react-statics": "^3.3.2",
         "server-only": "^0.0.1"
     },
