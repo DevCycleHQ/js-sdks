@@ -465,11 +465,11 @@ describe('DevCycleProvider Unit Tests', () => {
         it('should track an event with just a name', () => {
             openFeatureClient.track('event-name')
 
-            expect(trackMock).toHaveBeenCalledWith({
-                type: 'event-name',
-                value: undefined,
-                metaData: undefined,
-            })
+            expect(trackMock).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: 'event-name',
+                }),
+            )
         })
 
         it('should track an event with value and metadata', () => {

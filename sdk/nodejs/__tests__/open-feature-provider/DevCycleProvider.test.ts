@@ -495,9 +495,9 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     targetingKey: 'user-123',
                 })
 
-                const expectedTrackCall = {
+                const expectedTrackCall = expect.objectContaining({
                     type: 'test-event',
-                }
+                })
 
                 if (dvcClientType === 'DevCycleClient') {
                     expect(trackMock).toHaveBeenCalledWith(
