@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/bucketing-assembly-script",
-    "version": "1.29.0",
+    "version": "1.30.0",
     "license": "MIT",
     "main": "index.js",
     "types": "index.d.ts",
@@ -15,6 +15,6 @@
         "protobufjs": "^7.4.0"
     },
     "devDependencies": {
-        "@devcycle/bucketing-test-data": "^1.23.0"
+        "@devcycle/bucketing-test-data": "^1.24.0"
     }
 }
