@@ -23,6 +23,7 @@
         "@devcycle/bucketing": "file:../../../../dist/lib/shared/bucketing",
         "@devcycle/js-client-sdk": "file:../../../../dist/sdk/js",
         "@devcycle/react-client-sdk": "file:../../../../dist/sdk/react",
-        "@devcycle/types": "file:../../../../dist/lib/shared/types"
+        "@devcycle/types": "file:../../../../dist/lib/shared/types",
+        "nanoid@^3.3.6": "^3.3.8"
     }
 }
