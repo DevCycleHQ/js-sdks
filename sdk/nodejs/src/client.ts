@@ -138,15 +138,7 @@ export class DevCycleClient<
                 },
             )
 
-            const platformData: IPlatformData = {
-                platform: 'NodeJS',
-                platformVersion: process.version,
-                sdkType: 'server',
-                sdkVersion: packageJson.version,
-                hostname: this.hostname,
-            }
-
-            this.bucketingLib.setPlatformData(JSON.stringify(platformData))
+            this.setPlatformDataInBucketingLib()
 
             return Promise.all([
                 this.configHelper.fetchConfigPromise,
@@ -173,6 +165,19 @@ export class DevCycleClient<
         process.on('exit', () => {
             this.close()
         })
+    }
+
+    private setPlatformDataInBucketingLib(): void {
+        if (!this.bucketingLib) return
+
+        const platformData: IPlatformData = {
+            platform: this.openFeatureProvider ? 'NodeJS-OF' : 'NodeJS',
+            platformVersion: process.version,
+            sdkType: 'server',
+            sdkVersion: packageJson.version,
+            hostname: this.hostname,
+        }
+        this.bucketingLib.setPlatformData(JSON.stringify(platformData))
     }
 
     async initializeBucketing({
@@ -206,6 +211,7 @@ export class DevCycleClient<
         this.openFeatureProvider = new DevCycleProviderClass(this, {
             logger: this.logger,
         })
+        this.setPlatformDataInBucketingLib()
         return this.openFeatureProvider
     }
 
