@@ -165,7 +165,7 @@ export class DevCycleClient<
 
         const platformDetails = getNodeJSPlatformDetails()
         if (this.openFeatureProvider) {
-            platformDetails.platform = 'NodeJS-OF'
+            platformDetails.sdkPlatform = 'node-of'
         }
         this.bucketingLib.setPlatformData(JSON.stringify(platformDetails))
     }

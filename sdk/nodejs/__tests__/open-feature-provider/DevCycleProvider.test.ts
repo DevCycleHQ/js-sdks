@@ -83,7 +83,7 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
             expect(ofClient).toBeDefined()
             expect(dvcClient).toBeDefined()
             expect(setPlatformDataMock).toHaveBeenCalledWith(
-                expect.stringContaining('"platform":"NodeJS-OF"'),
+                expect.stringContaining('"sdkPlatform":"node-of"'),
             )
         })
 
