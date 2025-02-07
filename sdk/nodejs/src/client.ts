@@ -36,14 +36,7 @@ import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
 import { randomUUID } from 'crypto'
 import { DevCycleOptionsLocalEnabled } from './index'
 import { WASMBucketingExports } from '@devcycle/bucketing-assembly-script'
-
-interface IPlatformData {
-    platform: string
-    platformVersion: string
-    sdkType: string
-    sdkVersion: string
-    hostname?: string
-}
+import { getNodeJSPlatformDetails } from './utils/platformDetails'
 
 const castIncomingUser = (user: DevCycleUser) => {
     if (!(user instanceof DevCycleUser)) {
@@ -170,14 +163,11 @@ export class DevCycleClient<
     private setPlatformDataInBucketingLib(): void {
         if (!this.bucketingLib) return
 
-        const platformData: IPlatformData = {
-            platform: this.openFeatureProvider ? 'NodeJS-OF' : 'NodeJS',
-            platformVersion: process.version,
-            sdkType: 'server',
-            sdkVersion: packageJson.version,
-            hostname: this.hostname,
+        const platformDetails = getNodeJSPlatformDetails()
+        if (this.openFeatureProvider) {
+            platformDetails.platform = 'NodeJS-OF'
         }
-        this.bucketingLib.setPlatformData(JSON.stringify(platformData))
+        this.bucketingLib.setPlatformData(JSON.stringify(platformDetails))
     }
 
     async initializeBucketing({
