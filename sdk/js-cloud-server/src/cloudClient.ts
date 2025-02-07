@@ -75,7 +75,7 @@ export class DevCycleCloudClient<
     private sdkKey: string
     protected logger: DVCLogger
     private options: DevCycleServerSDKOptions
-    private platformDetails: DevCyclePlatformDetails
+    protected platformDetails: DevCyclePlatformDetails
 
     constructor(
         sdkKey: string,

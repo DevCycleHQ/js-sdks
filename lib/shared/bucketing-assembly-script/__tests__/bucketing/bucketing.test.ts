@@ -30,6 +30,7 @@ const defaultPlatformData = {
     sdkType: '',
     sdkVersion: '',
     deviceModel: '',
+    sdkPlatform: '',
 }
 const sdkKey = 'sdkKey'
 

@@ -9,6 +9,7 @@ const defaultPlatformData = {
     platformVersion: '',
     sdkType: '',
     sdkVersion: '',
+    sdkPlatform: '',
     deviceModel: '',
 }
 

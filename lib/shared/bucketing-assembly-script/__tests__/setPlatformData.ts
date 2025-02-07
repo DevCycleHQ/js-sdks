@@ -35,6 +35,7 @@ export const initSDK = (
             platformVersion: '16.0',
             sdkType: 'server',
             sdkVersion: '1.0.0',
+            sdkPlatform: 'node',
             hostname: 'host.name',
         }),
     )

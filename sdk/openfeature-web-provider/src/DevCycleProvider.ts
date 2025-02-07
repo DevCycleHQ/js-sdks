@@ -63,6 +63,8 @@ export default class DevCycleProvider implements Provider {
         this.sdkKey = sdkKey
         if (!options.sdkPlatform) {
             options.sdkPlatform = 'js-of'
+        } else if (!options.sdkPlatform.toLowerCase().endsWith('-of')) {
+            options.sdkPlatform = `${options.sdkPlatform}-of`
         }
         this.options = options
     }
