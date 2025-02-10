@@ -7,7 +7,6 @@ import {
     variableForUser_PB,
 } from './utils/userBucketingHelper'
 import { EventQueue, EventTypes } from './eventQueue'
-import * as packageJson from '../package.json'
 import { importBucketingLib, setConfigDataUTF8 } from './bucketing'
 import {
     BucketedUserConfig,
@@ -31,6 +30,7 @@ import {
     DVCFeatureSet,
     DevCycleEvent,
     DVCPopulatedUser,
+    DevCyclePlatformDetails,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
 import { randomUUID } from 'crypto'
@@ -66,6 +66,7 @@ export class DevCycleClient<
     private bucketingLib: WASMBucketingExports
     private bucketingTracker?: NodeJS.Timer
     private bucketingImportPromise: Promise<void>
+    private platformDetails: DevCyclePlatformDetails
 
     get isInitialized(): boolean {
         return this._isInitialized
@@ -163,11 +164,11 @@ export class DevCycleClient<
     private setPlatformDataInBucketingLib(): void {
         if (!this.bucketingLib) return
 
-        const platformDetails = getNodeJSPlatformDetails()
+        this.platformDetails = getNodeJSPlatformDetails()
         if (this.openFeatureProvider) {
-            platformDetails.sdkPlatform = 'node-of'
+            this.platformDetails.sdkPlatform = 'node-of'
         }
-        this.bucketingLib.setPlatformData(JSON.stringify(platformDetails))
+        this.bucketingLib.setPlatformData(JSON.stringify(this.platformDetails))
     }
 
     async initializeBucketing({
@@ -234,7 +235,10 @@ export class DevCycleClient<
             this.logger,
             true,
         )
-        const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
+        const populatedUser = DVCPopulatedUserFromDevCycleUser(
+            incomingUser,
+            this.platformDetails,
+        )
 
         if (!this.configHelper?.hasConfig) {
             this.logger.warn(
@@ -297,7 +301,10 @@ export class DevCycleClient<
             return {}
         }
 
-        const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
+        const populatedUser = DVCPopulatedUserFromDevCycleUser(
+            incomingUser,
+            this.platformDetails,
+        )
         const bucketedConfig = bucketUserForConfig(
             this.bucketingLib,
             populatedUser,
@@ -316,7 +323,10 @@ export class DevCycleClient<
             return {}
         }
 
-        const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
+        const populatedUser = DVCPopulatedUserFromDevCycleUser(
+            incomingUser,
+            this.platformDetails,
+        )
         const bucketedConfig = bucketUserForConfig(
             this.bucketingLib,
             populatedUser,
@@ -336,7 +346,10 @@ export class DevCycleClient<
         }
 
         checkParamDefined('type', event.type)
-        const populatedUser = DVCPopulatedUserFromDevCycleUser(incomingUser)
+        const populatedUser = DVCPopulatedUserFromDevCycleUser(
+            incomingUser,
+            this.platformDetails,
+        )
         this.queueEvent(populatedUser, event)
     }
 
@@ -367,9 +380,10 @@ export class DevCycleClient<
         reqLastModified?: string,
         sseConnected?: boolean,
     ): void {
-        const populatedUser = DVCPopulatedUserFromDevCycleUser({
-            user_id: `${this.clientUUID}@${this.hostname}`,
-        })
+        const populatedUser = DVCPopulatedUserFromDevCycleUser(
+            { user_id: `${this.clientUUID}@${this.hostname}` },
+            this.platformDetails,
+        )
 
         this.queueEvent(populatedUser, {
             type: 'sdkConfig',
