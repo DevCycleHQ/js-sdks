@@ -1,0 +1,47 @@
+{
+    "name": "@devcycle/openfeature-react-provider",
+    "version": "1.0.0",
+    "description": "OpenFeature React SDK Provider for DevCycle React SDK",
+    "license": "MIT",
+    "author": "DevCycle <support@devcycle.com>",
+    "keywords": [
+        "devcycle",
+        "feature flag",
+        "javascript",
+        "client",
+        "openfeature",
+        "web",
+        "react",
+        "sdk"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/DevCycleHQ/js-sdks.git"
+    },
+    "homepage": "https://devcycle.com",
+    "dependencies": {
+        "@devcycle/js-client-sdk": "^1.35.0",
+        "@devcycle/openfeature-web-provider": "^1.0.0"
+    },
+    "peerDependencies": {
+        "@openfeature/multi-provider-web": "^0.0.3",
+        "@openfeature/web-sdk": "^1.4.1"
+    },
+    "peerDependenciesMeta": {
+        "@openfeature/multi-provider-web": {
+            "optional": true
+        }
+    },
+    "exports": {
+        ".": {
+            "import": "./src/index.js",
+            "require": "./src/index.js",
+            "types": "./src/index.d.ts"
+        },
+        "./strategy": {
+            "import": "./strategy.js",
+            "require": "./strategy.js",
+            "types": "./strategy.d.ts"
+        }
+    }
+}
