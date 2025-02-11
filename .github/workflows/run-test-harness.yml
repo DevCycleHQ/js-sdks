@@ -30,5 +30,6 @@ jobs:
               if: contains(env.TRIGGER_NODEJS_TEST_HARNESS, 'true')
               with:
                   sdks-to-test: nodejs,of-nodejs
+                  sdk-capabilities: edgeDB,cloud,lastModifiedHeader,sdkConfigEvent,clientUUID,v2Config,sdkPlatform
                   sdk-github-sha: ${{github.event.pull_request.head.sha}}
                   github-token: ${{ secrets.AUTOMATION_USER_TOKEN }}
