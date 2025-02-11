@@ -11,6 +11,7 @@ type StaticData = Pick<
     | 'deviceModel'
     | 'sdkType'
     | 'sdkVersion'
+    | 'sdkPlatform'
 >
 
 export class DVCPopulatedUser implements DevCycleUser {
@@ -32,6 +33,7 @@ export class DVCPopulatedUser implements DevCycleUser {
     readonly deviceModel: string
     readonly sdkType: 'client'
     readonly sdkVersion: string
+    readonly sdkPlatform?: string
 
     constructor(
         user: DevCycleUser,
@@ -89,6 +91,7 @@ export class DVCPopulatedUser implements DevCycleUser {
                     : userAgentString ?? 'SSR - unknown'
             this.sdkType = 'client'
             this.sdkVersion = packageJson.version
+            this.sdkPlatform = options?.sdkPlatform
         }
     }
 
@@ -100,6 +103,7 @@ export class DVCPopulatedUser implements DevCycleUser {
             deviceModel: this.deviceModel,
             sdkType: this.sdkType,
             sdkVersion: this.sdkVersion,
+            sdkPlatform: this.sdkPlatform,
         }
     }
 

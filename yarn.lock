@@ -4741,13 +4741,28 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@devcycle/openfeature-react-provider@workspace:sdk/openfeature-react-provider":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/openfeature-react-provider@workspace:sdk/openfeature-react-provider"
+  dependencies:
+    "@devcycle/js-client-sdk": ^1.35.0
+    "@devcycle/openfeature-web-provider": ^1.0.0
+  peerDependencies:
+    "@openfeature/multi-provider-web": ^0.0.3
+    "@openfeature/web-sdk": ^1.4.1
+  peerDependenciesMeta:
+    "@openfeature/multi-provider-web":
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@devcycle/openfeature-web-example@workspace:dev-apps/openfeature-web":
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-web-example@workspace:dev-apps/openfeature-web"
   languageName: unknown
   linkType: soft
 
-"@devcycle/openfeature-web-provider@workspace:sdk/openfeature-web-provider":
+"@devcycle/openfeature-web-provider@^1.0.0, @devcycle/openfeature-web-provider@workspace:sdk/openfeature-web-provider":
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-web-provider@workspace:sdk/openfeature-web-provider"
   dependencies:

@@ -48,6 +48,12 @@
             "@devcycle/openfeature-web-provider/strategy": [
                 "sdk/openfeature-web-provider/strategy.ts"
             ],
+            "@devcycle/openfeature-react-provider": [
+                "sdk/openfeature-react-provider/src/index.ts"
+            ],
+            "@devcycle/openfeature-react-provider/strategy": [
+                "sdk/openfeature-react-provider/strategy.ts"
+            ],
             "@devcycle/react-client-sdk": ["sdk/react/src/index.ts"],
             "@devcycle/react-native-client-sdk": [
                 "sdk/react-native/src/index.ts"

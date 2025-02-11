@@ -54,9 +54,6 @@ export const getConfigJson = async (
     if (options?.enableObfuscation) {
         queryParams.append('obfuscated', '1')
     }
-    if (options?.sdkPlatform) {
-        queryParams.append('sdkPlatform', options.sdkPlatform)
-    }
 
     const url =
         `${options?.apiProxyURL || CLIENT_SDK_URL}${CONFIG_PATH}?` +

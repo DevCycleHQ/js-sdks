@@ -18,13 +18,17 @@ describe('Request tests', () => {
 
     describe('getConfigJson', () => {
         it('should call get with serialized user and SDK key in params', async () => {
-            const user = { user_id: 'my_user', isAnonymous: false }
+            const user = {
+                user_id: 'my_user',
+                isAnonymous: false,
+                sdkPlatform: 'js',
+            }
             const sdkKey = 'my_sdk_key'
             await Request.getConfigJson(
                 sdkKey,
                 user as DVCPopulatedUser,
                 defaultLogger,
-                { sdkPlatform: 'js' },
+                undefined,
                 {
                     sse: true,
                     lastModified: 1234,
@@ -34,8 +38,8 @@ describe('Request tests', () => {
 
             expect(fetchRequestMock).toBeCalledWith(
                 'https://sdk-api.devcycle.com/v1/sdkConfig?sdkKey=' +
-                    `${sdkKey}&user_id=${user.user_id}&isAnonymous=false&sse=1` +
-                    `&sseLastModified=1234&sseEtag=etag&sdkPlatform=js`,
+                    `${sdkKey}&user_id=${user.user_id}&isAnonymous=false&sdkPlatform=js&sse=1` +
+                    `&sseLastModified=1234&sseEtag=etag`,
                 expect.objectContaining({
                     headers: { 'Content-Type': 'application/json' },
                     method: 'GET',
