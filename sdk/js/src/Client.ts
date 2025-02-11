@@ -27,11 +27,7 @@ import type {
 import { getVariableTypeFromValue } from '@devcycle/types'
 import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
-import type {
-    DVCLogger,
-    SSEConnectionInterface,
-    SSEConnectionConstructor,
-} from '@devcycle/types'
+import type { DVCLogger, SSEConnectionInterface } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
 
 type variableUpdatedHandler = (
