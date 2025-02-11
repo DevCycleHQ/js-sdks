@@ -4727,8 +4727,8 @@ __metadata:
     eventsource: ^2.0.2
     fetch-retry: ^5.0.6
   peerDependencies:
-    "@openfeature/multi-provider": ^0.1.1
-    "@openfeature/server-sdk": ^1.17.0
+    "@openfeature/multi-provider": ^0.1.2
+    "@openfeature/server-sdk": ^1.17.1
   peerDependenciesMeta:
     "@openfeature/multi-provider":
       optional: true
@@ -4753,8 +4753,8 @@ __metadata:
   dependencies:
     "@devcycle/js-client-sdk": ^1.35.0
   peerDependencies:
-    "@openfeature/multi-provider-web": ^0.0.2
-    "@openfeature/web-sdk": ^1.4.0
+    "@openfeature/multi-provider-web": ^0.0.3
+    "@openfeature/web-sdk": ^1.4.1
   peerDependenciesMeta:
     "@openfeature/multi-provider-web":
       optional: true
@@ -8390,50 +8390,50 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openfeature/core@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "@openfeature/core@npm:1.6.0"
-  checksum: 7d003d7e4c6f5037eebe38cda2c6a3a40077c8b73b1d0cacc69d97ec5bd8f309db7611764be4c23c2099401c48b2bff96659fdd7bf2eba73b54c9c7d16a41a7b
+"@openfeature/core@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "@openfeature/core@npm:1.7.0"
+  checksum: 9cf14c65d10a7e982cfe65c095891d61176e3b2f34cc5dbd017959d7cfdb80e41148332f1ee285bf681d0eeb5b511aee24096ae88f0a72334173b0ff8d891797
   languageName: node
   linkType: hard
 
-"@openfeature/multi-provider-web@npm:^0.0.2":
-  version: 0.0.2
-  resolution: "@openfeature/multi-provider-web@npm:0.0.2"
+"@openfeature/multi-provider-web@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@openfeature/multi-provider-web@npm:0.0.3"
   dependencies:
     tslib: ^2.3.0
   peerDependencies:
-    "@openfeature/web-sdk": ^1.2.1
-  checksum: 67fa5256ac0cea682ce565e063be628ccb5673496da5ab27cb144e6b66d5d09a97b64b831ce820dbfc6af1a08c03b68283bf71fadd06e03a5f542352314d79e9
+    "@openfeature/web-sdk": ^1.4.0
+  checksum: 79ce344165c324392d96ecef29d1716aa07c05045235ce8926c7860d0a6c13d467023c6078ba49b5235e0d951d1282c21574e2892cf1318bc70ca093ed0262d8
   languageName: node
   linkType: hard
 
-"@openfeature/multi-provider@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "@openfeature/multi-provider@npm:0.1.1"
+"@openfeature/multi-provider@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "@openfeature/multi-provider@npm:0.1.2"
   dependencies:
     tslib: ^2.3.0
   peerDependencies:
-    "@openfeature/server-sdk": ^1.6.0
-  checksum: e35defe85b336b3ff9279b1e4509fc89a4bd363f8b3b69cec3824a8c8ade02c068027966c6abce33fc788ca1860dab66ca67e440c705ed9d75963208fbb2f048
+    "@openfeature/server-sdk": ^1.17.0
+  checksum: f7150b7b21ebf7a852632c2150a3a281dde2326312427adf183a2469f0f33eed697e1a2d816f1788103687a6f69676280f1d02f50189952c09c88a5f2d22a943
   languageName: node
   linkType: hard
 
-"@openfeature/server-sdk@npm:^1.17.0":
-  version: 1.17.0
-  resolution: "@openfeature/server-sdk@npm:1.17.0"
+"@openfeature/server-sdk@npm:^1.17.1":
+  version: 1.17.1
+  resolution: "@openfeature/server-sdk@npm:1.17.1"
   peerDependencies:
-    "@openfeature/core": ^1.6.0
-  checksum: 3b23697307757b13e1401ff737fc4b13c0603b4f8be0daf467b49330da68fa2f296a3558e6f2767fbca220e4af7bbe9bd788a13a7ee35ba4eb776b1c48dbf50c
+    "@openfeature/core": ^1.7.0
+  checksum: e9b93e5c21694b0354de78d22a2570594ed58ab374b9aa466059f0a96ac225d0764e94ab6d5de03c4a73009b3c38542bf000e6d14d65525be025aa2875bd2982
   languageName: node
   linkType: hard
 
-"@openfeature/web-sdk@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@openfeature/web-sdk@npm:1.4.0"
+"@openfeature/web-sdk@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "@openfeature/web-sdk@npm:1.4.1"
   peerDependencies:
-    "@openfeature/core": ^1.6.0
-  checksum: ab5a11c258e3c35597a615db139bfaa5429d4bf91fa8d713dcb41ce118e5b8c65bea99f632addcabe7a8dca9be266a6d1e63df85ea74e359ab6fdec3bb3df45d
+    "@openfeature/core": ^1.7.0
+  checksum: ce5314e5235a5fae758a4116d76468d9fd6f47c65323d5faa16646bc503c55bb0b443f4b540cee0772754ecefc4ec457c141e2aec944de966ca6b1ed7f88f06c
   languageName: node
   linkType: hard
 
@@ -15299,11 +15299,11 @@ __metadata:
     "@nx/web": 16.10.0
     "@nx/webpack": 16.10.0
     "@nx/workspace": 16.10.0
-    "@openfeature/core": ^1.6.0
-    "@openfeature/multi-provider": ^0.1.1
-    "@openfeature/multi-provider-web": ^0.0.2
-    "@openfeature/server-sdk": ^1.17.0
-    "@openfeature/web-sdk": ^1.4.0
+    "@openfeature/core": ^1.7.0
+    "@openfeature/multi-provider": ^0.1.2
+    "@openfeature/multi-provider-web": ^0.0.3
+    "@openfeature/server-sdk": ^1.17.1
+    "@openfeature/web-sdk": ^1.4.1
     "@playwright/test": ^1.49.1
     "@pmmmwh/react-refresh-webpack-plugin": ^0.5.7
     "@react-native-async-storage/async-storage": 1.19.4
