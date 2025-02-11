@@ -57,6 +57,7 @@ class DevCycleCloudClient<
         this.openFeatureProvider = new DevCycleProviderClass(this, {
             logger: this.logger,
         })
+        this.platformDetails.sdkPlatform = 'nodejs-of'
         return this.openFeatureProvider
     }
 }

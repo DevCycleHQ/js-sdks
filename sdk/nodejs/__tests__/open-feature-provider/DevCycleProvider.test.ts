@@ -1,3 +1,16 @@
+jest.mock('@devcycle/config-manager')
+jest.mock('../../src/eventQueue')
+
+const setPlatformDataMock = jest.fn()
+jest.mock('../../src/bucketing', () => ({
+    importBucketingLib: jest.fn().mockResolvedValue([
+        {
+            setPlatformData: setPlatformDataMock,
+        },
+        null,
+    ]),
+}))
+
 import {
     OpenFeature,
     Client,
@@ -11,10 +24,6 @@ import {
     DVCVariable,
     DVCVariableValue,
 } from '../../src/index'
-
-jest.mock('../../src/bucketing')
-jest.mock('@devcycle/config-manager')
-jest.mock('../../src/eventQueue')
 
 const variableMock = jest.spyOn(DevCycleClient.prototype, 'variable')
 const cloudVariableMock = jest.spyOn(DevCycleCloudClient.prototype, 'variable')
@@ -73,6 +82,9 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
 
             expect(ofClient).toBeDefined()
             expect(dvcClient).toBeDefined()
+            expect(setPlatformDataMock).toHaveBeenCalledWith(
+                expect.stringContaining('"sdkPlatform":"nodejs-of"'),
+            )
         })
 
         describe(`${dvcClientType} - User Context`, () => {

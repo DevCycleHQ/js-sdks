@@ -8,6 +8,7 @@ export type DevCyclePlatformDetails = {
     platformVersion?: string
     sdkType?: SDKTypes
     sdkVersion?: string
+    sdkPlatform?: string
     hostname?: string
 }
 
@@ -27,6 +28,7 @@ export class DVCPopulatedUser implements DevCycleUser {
     readonly platformVersion: string
     readonly sdkType: SDKTypes
     readonly sdkVersion: string
+    readonly sdkPlatform?: string
     readonly hostname?: string
 
     constructor(user: DevCycleUser, platformDetails: DevCyclePlatformDetails) {
@@ -49,7 +51,8 @@ export class DVCPopulatedUser implements DevCycleUser {
         this.platformVersion = platformDetails?.platformVersion || ''
         this.sdkType = platformDetails?.sdkType || 'server'
         this.sdkVersion = platformDetails?.sdkVersion || packageJson.version
-        this.hostname = platformDetails?.hostname || ''
+        this.sdkPlatform = platformDetails?.sdkPlatform
+        this.hostname = platformDetails?.hostname
     }
 
     static fromDVCUser(

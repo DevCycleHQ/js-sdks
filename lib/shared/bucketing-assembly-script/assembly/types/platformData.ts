@@ -9,6 +9,7 @@ export class PlatformData extends JSON.Obj {
     readonly platformVersion: string
     readonly sdkType: string
     readonly sdkVersion: string
+    readonly sdkPlatform: string | null
     readonly hostname: string | null
 
     static fromUTF8(platformDataUTF8: Uint8Array): PlatformData {
@@ -32,6 +33,7 @@ export class PlatformData extends JSON.Obj {
         this.platformVersion = getStringFromJSON(platformJSONObj, 'platformVersion')
         this.sdkType = getStringFromJSON(platformJSONObj, 'sdkType')
         this.sdkVersion = getStringFromJSON(platformJSONObj, 'sdkVersion')
+        this.sdkPlatform = getStringFromJSONOptional(platformJSONObj, 'sdkPlatform')
         this.hostname = getStringFromJSONOptional(platformJSONObj, 'hostname')
     }
 
@@ -41,6 +43,7 @@ export class PlatformData extends JSON.Obj {
         json.set('platformVersion', this.platformVersion)
         json.set('sdkType', this.sdkType)
         json.set('sdkVersion', this.sdkVersion)
+        if (this.sdkPlatform) json.set('sdkPlatform', this.sdkPlatform)
         if (this.hostname) json.set('hostname', this.hostname)
         return json.stringify()
     }

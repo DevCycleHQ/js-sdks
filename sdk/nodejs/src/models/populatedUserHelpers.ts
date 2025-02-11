@@ -3,6 +3,7 @@ import {
     DVCPopulatedUser,
     DevCycleUser,
     DVCCustomDataJSON,
+    DevCyclePlatformDetails,
 } from '@devcycle/js-cloud-server-sdk'
 import { getNodeJSPlatformDetails } from '../utils/platformDetails'
 
@@ -50,8 +51,12 @@ export function DVCPopulatedUserToPBUser(
 
 export function DVCPopulatedUserFromDevCycleUser(
     user: DevCycleUser,
+    platformDetails?: DevCyclePlatformDetails,
 ): DVCPopulatedUser {
-    return new DVCPopulatedUser(user, getNodeJSPlatformDetails())
+    return new DVCPopulatedUser(
+        user,
+        platformDetails || getNodeJSPlatformDetails(),
+    )
 }
 
 export function getNullableCustomDataValue(

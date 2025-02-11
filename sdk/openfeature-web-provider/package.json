@@ -22,8 +22,8 @@
         "@devcycle/js-client-sdk": "^1.35.0"
     },
     "peerDependencies": {
-        "@openfeature/multi-provider-web": "^0.0.2",
-        "@openfeature/web-sdk": "^1.4.0"
+        "@openfeature/multi-provider-web": "^0.0.3",
+        "@openfeature/web-sdk": "^1.4.1"
     },
     "peerDependenciesMeta": {
         "@openfeature/multi-provider-web": {
