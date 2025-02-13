@@ -8,11 +8,7 @@ Run `yarn nx build openfeature-react-provider` to build the library.
 
 ## Running Unit Tests
 
-Run `yarn nx test openfeature-web-provider` to execute the unit tests via [Jest](https://jestjs.io).
-
-## Example App
-
-See the [example app](/dev-apps/openfeature-web) for a working example of the OpenFeature Web DevCycle Provider.
+Run `yarn nx test openfeature-react-provider` to execute the unit tests via [Jest](https://jestjs.io).
 
 ## Usage
 

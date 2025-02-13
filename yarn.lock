@@ -4735,6 +4735,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@devcycle/openfeature-angular-provider@workspace:sdk/openfeature-angular-provider":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/openfeature-angular-provider@workspace:sdk/openfeature-angular-provider"
+  dependencies:
+    "@devcycle/js-client-sdk": ^1.35.2
+    "@devcycle/openfeature-web-provider": ^1.0.2
+  peerDependencies:
+    "@openfeature/multi-provider-web": ^0.0.3
+    "@openfeature/web-sdk": ^1.4.1
+  peerDependenciesMeta:
+    "@openfeature/multi-provider-web":
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@devcycle/openfeature-nodejs-example@workspace:dev-apps/openfeature-nodejs":
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-nodejs-example@workspace:dev-apps/openfeature-nodejs"
