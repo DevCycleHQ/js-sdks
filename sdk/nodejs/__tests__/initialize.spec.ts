@@ -17,9 +17,8 @@ describe('NodeJS SDK Initialize', () => {
     })
 
     it('successfully creates a OpenFeature provider - local', async () => {
-        const provider = await initializeDevCycle(
-            'dvc_server_token',
-        ).getOpenFeatureProvider()
+        const provider =
+            initializeDevCycle('dvc_server_token').getOpenFeatureProvider()
         expect(provider).toBeDefined()
         await OpenFeature.setProviderAndWait(provider)
         expect(provider.status).toBe('READY')
@@ -28,7 +27,7 @@ describe('NodeJS SDK Initialize', () => {
     })
 
     it('successfully creates a OpenFeature provider - cloud', async () => {
-        const provider = await initializeDevCycle('dvc_server_token', {
+        const provider = initializeDevCycle('dvc_server_token', {
             enableCloudBucketing: true,
         }).getOpenFeatureProvider()
         expect(provider).toBeDefined()

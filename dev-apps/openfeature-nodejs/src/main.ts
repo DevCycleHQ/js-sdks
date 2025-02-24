@@ -8,9 +8,7 @@ let openFeatureClient: Client
 
 async function startDevCycle() {
     await OpenFeature.setProviderAndWait(
-        await initializeDevCycle(
-            DEVCYCLE_SERVER_SDK_KEY,
-        ).getOpenFeatureProvider(),
+        initializeDevCycle(DEVCYCLE_SERVER_SDK_KEY).getOpenFeatureProvider(),
     )
     openFeatureClient = OpenFeature.getClient()
 

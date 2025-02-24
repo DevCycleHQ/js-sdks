@@ -37,6 +37,7 @@ import { randomUUID } from 'crypto'
 import { DevCycleOptionsLocalEnabled } from './index'
 import { WASMBucketingExports } from '@devcycle/bucketing-assembly-script'
 import { getNodeJSPlatformDetails } from './utils/platformDetails'
+import { DevCycleProvider } from './open-feature/DevCycleProvider'
 
 const castIncomingUser = (user: DevCycleUser) => {
     if (!(user instanceof DevCycleUser)) {
@@ -44,11 +45,6 @@ const castIncomingUser = (user: DevCycleUser) => {
     }
     return user
 }
-
-// Dynamically import the OpenFeature Provider, as it's an optional peer dependency
-type DevCycleProviderConstructor =
-    typeof import('./open-feature/DevCycleProvider').DevCycleProvider
-type DevCycleProvider = InstanceType<DevCycleProviderConstructor>
 
 export class DevCycleClient<
     Variables extends VariableDefinitions = VariableDefinitions,
@@ -182,24 +178,10 @@ export class DevCycleClient<
         })
     }
 
-    async getOpenFeatureProvider(): Promise<DevCycleProvider> {
-        let DevCycleProviderClass
-
-        try {
-            const importedModule = await import(
-                './open-feature/DevCycleProvider.js'
-            )
-            DevCycleProviderClass = importedModule.DevCycleProvider
-        } catch (error) {
-            throw new Error(
-                'Missing "@openfeature/server-sdk" and/or "@openfeature/core" ' +
-                    'peer dependencies to get OpenFeature Provider',
-            )
-        }
-
+    getOpenFeatureProvider(): DevCycleProvider {
         if (this.openFeatureProvider) return this.openFeatureProvider
 
-        this.openFeatureProvider = new DevCycleProviderClass(this, {
+        this.openFeatureProvider = new DevCycleProvider(this, {
             logger: this.logger,
         })
         this.setPlatformDataInBucketingLib()
