@@ -24,6 +24,7 @@ class DevCycleCloudClient<
     Variables extends VariableDefinitions = VariableDefinitions,
 > extends InternalDevCycleCloudClient<Variables> {
     private openFeatureProvider: DevCycleProvider
+    private sdkPlatform?: string
 
     constructor(
         sdkKey: string,
@@ -31,6 +32,7 @@ class DevCycleCloudClient<
         platformDetails: DevCyclePlatformDetails,
     ) {
         super(sdkKey, options, platformDetails)
+        this.sdkPlatform = options.sdkPlatform
     }
 
     async getOpenFeatureProvider(): Promise<DevCycleProvider> {
@@ -39,7 +41,7 @@ class DevCycleCloudClient<
         this.openFeatureProvider = new DevCycleProvider(this, {
             logger: this.logger,
         })
-        this.platformDetails.sdkPlatform = 'nodejs-of'
+        this.platformDetails.sdkPlatform = this.sdkPlatform ?? 'nodejs-of'
         return this.openFeatureProvider
     }
 }

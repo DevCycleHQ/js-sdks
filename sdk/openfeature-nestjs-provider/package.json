@@ -1,0 +1,31 @@
+{
+    "name": "@devcycle/openfeature-nestjs-provider",
+    "version": "1.0.0",
+    "description": "OpenFeature NestJS SDK Provider",
+    "license": "MIT",
+    "author": "DevCycle <support@devcycle.com>",
+    "keywords": [
+        "devcycle",
+        "feature flag",
+        "javascript",
+        "server",
+        "openfeature",
+        "nestjs",
+        "sdk"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/DevCycleHQ/js-sdks.git"
+    },
+    "homepage": "https://devcycle.com",
+    "dependencies": {
+        "@devcycle/nodejs-server-sdk": "^1.41.2"
+    },
+    "exports": {
+        ".": {
+            "import": "./src/index.js",
+            "require": "./src/index.js",
+            "types": "./src/index.d.ts"
+        }
+    }
+}

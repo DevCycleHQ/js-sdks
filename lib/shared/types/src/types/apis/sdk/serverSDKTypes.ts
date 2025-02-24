@@ -110,4 +110,10 @@ export interface DevCycleServerSDKOptions {
      * @min 60000
      */
     sseConfigPollingIntervalMS?: number
+
+    /**
+     * The platform the SDK is running in. This is used for logging purposes.
+     * Example values ('of' for OpenFeature): 'nodejs' | 'nodejs-of' | 'nestjs' | 'nestjs-of'
+     */
+    sdkPlatform?: string
 }
