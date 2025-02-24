@@ -21,8 +21,15 @@ import {
     DVCJSON,
     DVCCustomDataJSON,
     dvcDefaultLogger,
+    initializeDevCycle,
+    DevCycleOptionsLocalEnabled,
+    DevCycleOptionsCloudEnabled,
 } from '../index'
-import { DVCLogger, VariableValue } from '@devcycle/types'
+import {
+    DevCycleServerSDKOptions,
+    DVCLogger,
+    VariableValue,
+} from '@devcycle/types'
 
 const DVCKnownPropertyKeyTypes: Record<string, string> = {
     email: 'string',
@@ -47,13 +54,45 @@ export class DevCycleProvider implements Provider {
     readonly runsOn = 'server'
 
     private readonly logger: DVCLogger
+    readonly devcycleClient: DevCycleClient | DevCycleCloudClient
 
+    /**
+     * Create a DevCycleProvider from an existing DevCycle client
+     */
     constructor(
-        private readonly devcycleClient: DevCycleClient | DevCycleCloudClient,
-        options: Pick<DevCycleOptions, 'logger' | 'logLevel'> = {},
+        devcycleClient: DevCycleClient | DevCycleCloudClient,
+        options?: Pick<DevCycleOptions, 'logger' | 'logLevel'>,
+    )
+    /**
+     * Create a DevCycleProvider with a local bucketing client
+     */
+    constructor(sdkKey: string, options?: DevCycleOptionsLocalEnabled)
+    /**
+     * Create a DevCycleProvider with a cloud bucketing client
+     */
+    constructor(sdkKey: string, options: DevCycleOptionsCloudEnabled)
+    constructor(
+        clientOrKey: DevCycleClient | DevCycleCloudClient | string,
+        options:
+            | Pick<DevCycleOptions, 'logger' | 'logLevel'>
+            | DevCycleOptionsLocalEnabled
+            | DevCycleOptionsCloudEnabled = {},
     ) {
+        if (typeof clientOrKey === 'string') {
+            this.devcycleClient = initializeDevCycle(
+                clientOrKey,
+                options as DevCycleServerSDKOptions,
+            )
+        } else {
+            this.devcycleClient = clientOrKey
+        }
+
         this.logger =
-            options.logger ?? dvcDefaultLogger({ level: options.logLevel })
+            (options as Pick<DevCycleOptions, 'logger' | 'logLevel'>).logger ??
+            dvcDefaultLogger({
+                level: (options as Pick<DevCycleOptions, 'logger' | 'logLevel'>)
+                    .logLevel,
+            })
     }
 
     get status(): ProviderStatus {

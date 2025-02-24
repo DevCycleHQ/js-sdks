@@ -33,7 +33,7 @@ class DevCycleCloudClient<
         super(sdkKey, options, platformDetails)
     }
 
-    getOpenFeatureProvider(): DevCycleProvider {
+    async getOpenFeatureProvider(): Promise<DevCycleProvider> {
         if (this.openFeatureProvider) return this.openFeatureProvider
 
         this.openFeatureProvider = new DevCycleProvider(this, {
@@ -45,6 +45,7 @@ class DevCycleCloudClient<
 }
 
 export {
+    DevCycleProvider,
     DevCycleClient,
     DevCycleCloudClient,
     DevCycleUser,
@@ -89,7 +90,7 @@ export { ConfigSource }
 
 export { UserError } from '@devcycle/types'
 
-type DevCycleOptionsCloudEnabled = DevCycleServerSDKOptions & {
+export type DevCycleOptionsCloudEnabled = DevCycleServerSDKOptions & {
     enableCloudBucketing: true
 }
 
