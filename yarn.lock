@@ -4723,12 +4723,13 @@ __metadata:
     "@devcycle/bucketing-assembly-script": ^1.31.2
     "@devcycle/js-cloud-server-sdk": ^1.21.2
     "@devcycle/types": ^1.22.2
+    "@openfeature/core": ^1.7.2
+    "@openfeature/server-sdk": ^1.17.1
     cross-fetch: ^4.0.0
     eventsource: ^2.0.2
     fetch-retry: ^5.0.6
   peerDependencies:
     "@openfeature/multi-provider": ^0.1.2
-    "@openfeature/server-sdk": ^1.17.1
   peerDependenciesMeta:
     "@openfeature/multi-provider":
       optional: true
@@ -8424,6 +8425,13 @@ __metadata:
   version: 1.7.0
   resolution: "@openfeature/core@npm:1.7.0"
   checksum: 9cf14c65d10a7e982cfe65c095891d61176e3b2f34cc5dbd017959d7cfdb80e41148332f1ee285bf681d0eeb5b511aee24096ae88f0a72334173b0ff8d891797
+  languageName: node
+  linkType: hard
+
+"@openfeature/core@npm:^1.7.2":
+  version: 1.7.2
+  resolution: "@openfeature/core@npm:1.7.2"
+  checksum: 8d367403a39740efd2be6bf49615fcf898d7d7f225affc497322e6004c3372b837650bab6a495b6c8b40dc822ae8965e04f4c009a997fa228b13e7bd3ae4b17e
   languageName: node
   linkType: hard
 

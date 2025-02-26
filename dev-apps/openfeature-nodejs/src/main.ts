@@ -1,5 +1,5 @@
 import { OpenFeature, Client } from '@openfeature/server-sdk'
-import { initializeDevCycle } from '@devcycle/nodejs-server-sdk'
+import { DevCycleProvider } from '@devcycle/nodejs-server-sdk'
 
 const DEVCYCLE_SERVER_SDK_KEY =
     process.env['DEVCYCLE_SERVER_SDK_KEY'] || '<DEVCYCLE_SERVER_SDK_KEY>'
@@ -7,11 +7,10 @@ const DEVCYCLE_SERVER_SDK_KEY =
 let openFeatureClient: Client
 
 async function startDevCycle() {
-    await OpenFeature.setProviderAndWait(
-        await initializeDevCycle(
-            DEVCYCLE_SERVER_SDK_KEY,
-        ).getOpenFeatureProvider(),
-    )
+    const provider = new DevCycleProvider(DEVCYCLE_SERVER_SDK_KEY, {
+        logLevel: 'debug',
+    })
+    await OpenFeature.setProviderAndWait(provider)
     openFeatureClient = OpenFeature.getClient()
 
     console.log('DevCycle OpenFeature client initialized')
@@ -61,6 +60,13 @@ async function startDevCycle() {
         metaDataFieldBoolean: true,
         metaDataFieldDouble: 1.23,
     })
+
+    const dvcUser = {
+        ...context,
+        user_id: context.targetingKey,
+    }
+    const allFeatures = provider.devcycleClient.allFeatures(dvcUser)
+    console.log(`All Features: ${JSON.stringify(allFeatures)}`)
 }
 
 startDevCycle()

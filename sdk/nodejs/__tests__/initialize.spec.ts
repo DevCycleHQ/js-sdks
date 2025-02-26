@@ -1,4 +1,8 @@
-import { DevCycleCloudClient, initializeDevCycle } from '../src/index'
+import {
+    DevCycleCloudClient,
+    DevCycleProvider,
+    initializeDevCycle,
+} from '../src/index'
 import { OpenFeature } from '@openfeature/server-sdk'
 
 jest.mock('../src/bucketing')
@@ -16,7 +20,7 @@ describe('NodeJS SDK Initialize', () => {
         expect(client).toBeDefined()
     })
 
-    it('successfully creates a OpenFeature provider - local', async () => {
+    it('successfully creates a OpenFeature provider from dvcClient - local', async () => {
         const provider = await initializeDevCycle(
             'dvc_server_token',
         ).getOpenFeatureProvider()
@@ -27,11 +31,30 @@ describe('NodeJS SDK Initialize', () => {
         expect(client).toBeDefined()
     })
 
-    it('successfully creates a OpenFeature provider - cloud', async () => {
+    it('successfully creates a OpenFeature provider - local', async () => {
+        const provider = new DevCycleProvider('dvc_server_token')
+        await OpenFeature.setProviderAndWait(provider)
+        expect(provider.status).toBe('READY')
+        const client = OpenFeature.getClient()
+        expect(client).toBeDefined()
+    })
+
+    it('successfully creates a OpenFeature provider from dvcClient - cloud', async () => {
         const provider = await initializeDevCycle('dvc_server_token', {
             enableCloudBucketing: true,
         }).getOpenFeatureProvider()
         expect(provider).toBeDefined()
+        expect(provider.status).toBe('READY') // onIntialized() is always true for cloud
+        await OpenFeature.setProviderAndWait(provider)
+        expect(provider.status).toBe('READY')
+        const client = OpenFeature.getClient()
+        expect(client).toBeDefined()
+    })
+
+    it('successfully creates a OpenFeature provider - cloud', async () => {
+        const provider = new DevCycleProvider('dvc_server_token', {
+            enableCloudBucketing: true,
+        })
         expect(provider.status).toBe('READY') // onIntialized() is always true for cloud
         await OpenFeature.setProviderAndWait(provider)
         expect(provider.status).toBe('READY')
