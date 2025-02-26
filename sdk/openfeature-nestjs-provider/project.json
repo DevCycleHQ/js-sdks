@@ -10,16 +10,14 @@
                 "tsConfig": "sdk/openfeature-nestjs-provider/tsconfig.lib.json",
                 "packageJson": "sdk/openfeature-nestjs-provider/package.json",
                 "main": "sdk/openfeature-nestjs-provider/src/index.ts",
-                "assets": ["sdk/openfeature-nestjs-provider/*.md"],
+                "assets": ["sdk/openfeature-nestjs-provider/*.md"]
             }
         },
         "lint": {
             "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": [
-                    "sdk/openfeature-nestjs-provider/**/*.ts"
-                ]
+                "lintFilePatterns": ["sdk/openfeature-nestjs-provider/**/*.ts"]
             }
         },
         "check-types": {
