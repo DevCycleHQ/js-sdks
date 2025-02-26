@@ -21,11 +21,6 @@
     "dependencies": {
         "@devcycle/nodejs-server-sdk": "^1.41.2"
     },
-    "exports": {
-        ".": {
-            "import": "./src/index.js",
-            "require": "./src/index.js",
-            "types": "./src/index.d.ts"
-        }
-    }
+    "main": "src/index.js",
+    "types": "src/index.d.ts"
 }

@@ -18,8 +18,7 @@
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
-                    "sdk/openfeature-nestjs-provider/**/*.ts",
-                    "sdk/openfeature-nestjs-provider/package.json"
+                    "sdk/openfeature-nestjs-provider/**/*.ts"
                 ]
             }
         },
