@@ -1,7 +1,6 @@
 {
     "name": "openfeature-nestjs-provider",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "implicitDependencies": ["js"],
     "targets": {
         "build": {
             "executor": "@nx/js:tsc",
@@ -11,8 +10,7 @@
                 "tsConfig": "sdk/openfeature-nestjs-provider/tsconfig.lib.json",
                 "packageJson": "sdk/openfeature-nestjs-provider/package.json",
                 "main": "sdk/openfeature-nestjs-provider/src/index.ts",
-                "assets": ["sdk/openfeature-nestjs-provider/*.md"],
-                "external": ["js", "openfeature-web-provider"]
+                "assets": ["sdk/openfeature-nestjs-provider/*.md"]
             }
         },
         "lint": {
@@ -20,6 +18,13 @@
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["sdk/openfeature-nestjs-provider/**/*.ts"]
+            }
+        },
+        "check-types": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "yarn run -T tsc -b --incremental",
+                "cwd": "sdk/openfeature-nestjs-provider"
             }
         },
         "test": {
