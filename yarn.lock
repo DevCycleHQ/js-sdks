@@ -4751,6 +4751,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@devcycle/openfeature-nestjs-provider@workspace:sdk/openfeature-nestjs-provider":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/openfeature-nestjs-provider@workspace:sdk/openfeature-nestjs-provider"
+  dependencies:
+    "@devcycle/nodejs-server-sdk": ^1.41.2
+  languageName: unknown
+  linkType: soft
+
 "@devcycle/openfeature-nodejs-example@workspace:dev-apps/openfeature-nodejs":
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-nodejs-example@workspace:dev-apps/openfeature-nodejs"

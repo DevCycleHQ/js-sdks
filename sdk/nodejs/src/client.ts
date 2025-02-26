@@ -63,6 +63,7 @@ export class DevCycleClient<
     private bucketingTracker?: NodeJS.Timer
     private bucketingImportPromise: Promise<void>
     private platformDetails: DevCyclePlatformDetails
+    private sdkPlatform?: string
 
     get isInitialized(): boolean {
         return this._isInitialized
@@ -72,6 +73,7 @@ export class DevCycleClient<
         this.clientUUID = randomUUID()
         this.hostname = os.hostname()
         this.sdkKey = sdkKey
+        this.sdkPlatform = options?.sdkPlatform
 
         this.logger =
             options?.logger || dvcDefaultLogger({ level: options?.logLevel })
@@ -161,8 +163,8 @@ export class DevCycleClient<
         if (!this.bucketingLib) return
 
         this.platformDetails = getNodeJSPlatformDetails()
-        if (this.openFeatureProvider) {
-            this.platformDetails.sdkPlatform = 'nodejs-of'
+        if (this.sdkPlatform || this.openFeatureProvider) {
+            this.platformDetails.sdkPlatform = this.sdkPlatform ?? 'nodejs-of'
         }
         this.bucketingLib.setPlatformData(JSON.stringify(this.platformDetails))
     }
