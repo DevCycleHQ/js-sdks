@@ -4729,7 +4729,6 @@ __metadata:
     fetch-retry: ^5.0.6
   peerDependencies:
     "@openfeature/multi-provider": ^0.1.2
-    "@openfeature/server-sdk": ^1.17.1
   peerDependenciesMeta:
     "@openfeature/multi-provider":
       optional: true
