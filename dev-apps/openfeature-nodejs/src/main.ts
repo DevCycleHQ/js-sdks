@@ -65,17 +65,8 @@ async function startDevCycle() {
         ...context,
         user_id: context.targetingKey,
     }
-    console.log(
-        `All Features: ${JSON.stringify(
-            provider.devcycleClient.allFeatures(dvcUser),
-        )}`,
-    )
-
-    console.log(
-        `All Variables: ${JSON.stringify(
-            provider.devcycleClient.allVariables(dvcUser),
-        )}`,
-    )
+    const allFeatures = await provider.devcycleClient.allFeatures(dvcUser)
+    console.log(`All Features: ${JSON.stringify(allFeatures)}`)
 }
 
 startDevCycle()

@@ -4723,6 +4723,7 @@ __metadata:
     "@devcycle/bucketing-assembly-script": ^1.31.2
     "@devcycle/js-cloud-server-sdk": ^1.21.2
     "@devcycle/types": ^1.22.2
+    "@openfeature/server-sdk": ^1.17.1
     cross-fetch: ^4.0.0
     eventsource: ^2.0.2
     fetch-retry: ^5.0.6
