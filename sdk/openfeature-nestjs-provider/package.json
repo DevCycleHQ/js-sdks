@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/openfeature-nestjs-provider",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "OpenFeature NestJS SDK Provider",
     "license": "MIT",
     "author": "DevCycle <support@devcycle.com>",
