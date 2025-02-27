@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/openfeature-react-provider",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "description": "OpenFeature React SDK Provider for DevCycle React SDK",
     "license": "MIT",
     "author": "DevCycle <support@devcycle.com>",
@@ -20,8 +20,8 @@
     },
     "homepage": "https://devcycle.com",
     "dependencies": {
-        "@devcycle/js-client-sdk": "^1.36.0",
-        "@devcycle/openfeature-web-provider": "^1.1.1"
+        "@devcycle/js-client-sdk": "^1.36.1",
+        "@devcycle/openfeature-web-provider": "^1.1.2"
     },
     "peerDependencies": {
         "@openfeature/multi-provider-web": "^0.0.3",

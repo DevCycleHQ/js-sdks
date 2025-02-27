@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/js-client-sdk",
-    "version": "1.36.0",
+    "version": "1.36.1",
     "description": "The Javascript Client SDK for DevCycle",
     "author": "DevCycle <support@devcycle.com>",
     "keywords": [
@@ -24,7 +24,7 @@
         "cross-fetch": "^4.0.0"
     },
     "dependencies": {
-        "@devcycle/types": "^1.23.0",
+        "@devcycle/types": "^1.23.1",
         "fetch-retry": "^5.0.6",
         "lodash": "^4.17.21",
         "ua-parser-js": "^1.0.36",
