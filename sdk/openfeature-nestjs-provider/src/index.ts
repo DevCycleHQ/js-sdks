@@ -7,6 +7,12 @@ import {
 // Re-export everything from the nodejs-server-sdk
 export * from '@devcycle/nodejs-server-sdk'
 
+function isCloudEnabled(
+    options: DevCycleOptionsLocalEnabled | DevCycleOptionsCloudEnabled,
+): options is DevCycleOptionsCloudEnabled {
+    return options.enableCloudBucketing === true
+}
+
 export class DevCycleNestJSProvider extends DevCycleProvider {
     constructor(
         sdkKey: string,
@@ -17,10 +23,10 @@ export class DevCycleNestJSProvider extends DevCycleProvider {
             sdkPlatform: 'nestjs-of',
         }
 
-        if (options.enableCloudBucketing === true) {
-            super(sdkKey, { ...updatedOptions, enableCloudBucketing: true })
+        if (isCloudEnabled(updatedOptions)) {
+            super(sdkKey, updatedOptions)
         } else {
-            super(sdkKey, { ...updatedOptions, enableCloudBucketing: false })
+            super(sdkKey, updatedOptions)
         }
     }
 }
