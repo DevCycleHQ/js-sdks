@@ -11,8 +11,7 @@
                 "tsConfig": "sdk/openfeature-angular-provider/tsconfig.lib.json",
                 "packageJson": "sdk/openfeature-angular-provider/package.json",
                 "main": "sdk/openfeature-angular-provider/src/index.ts",
-                "assets": ["sdk/openfeature-angular-provider/*.md"],
-                "external": ["js", "openfeature-web-provider"]
+                "assets": ["sdk/openfeature-angular-provider/*.md"]
             }
         },
         "lint": {
