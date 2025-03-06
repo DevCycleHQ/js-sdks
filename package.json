@@ -146,7 +146,7 @@
         "cypress": "^13.0.0",
         "detox": "20.13.1",
         "dotenv-webpack": "^7.0.3",
-        "esbuild": "0.19.5",
+        "esbuild": "~0.25.0",
         "eslint": "^8.56.0",
         "eslint-config-next": "^14.1.0",
         "eslint-config-prettier": "^8.8.0",
