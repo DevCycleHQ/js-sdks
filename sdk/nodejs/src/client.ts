@@ -17,6 +17,7 @@ import {
     UserError,
     VariableDefinitions,
     InferredVariableType,
+    DVCCustomDataJSON,
 } from '@devcycle/types'
 import os from 'os'
 import {
@@ -454,5 +455,17 @@ export class DevCycleClient<
         this.configHelper?.cleanup()
         this.eventQueue.cleanup()
         clearInterval(this.bucketingTracker)
+    }
+
+    setClientCustomData(clientCustomData: DVCCustomDataJSON): void {
+        if (!this.bucketingLib) {
+            throw new Error(
+                'Client must be initialized before calling setClientCustomData()',
+            )
+        }
+        this.bucketingLib.setClientCustomData(
+            this.sdkKey,
+            JSON.stringify(clientCustomData),
+        )
     }
 }

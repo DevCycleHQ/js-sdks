@@ -12,7 +12,6 @@ export default {
         ],
     },
     testEnvironment: 'jsdom',
-    collectCoverage: true,
     collectCoverageFrom: [
         '<rootDir>/src/**/*.{ts,js}',
         '!<rootDir>/**/*.{spec,test,mock}.{ts,js}',

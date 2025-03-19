@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { DevCycleClient } from '../src/client'
 import { DevCycleUser } from '@devcycle/js-cloud-server-sdk'
+import { DVCCustomDataJSON } from '@devcycle/types'
 
 jest.mock('../src/bucketing')
 jest.mock('@devcycle/config-manager', () => {
@@ -145,6 +146,51 @@ describe('variable', () => {
             {
                 key: 'test',
             },
+        )
+    })
+})
+
+describe('setClientCustomData', () => {
+    let client: DevCycleClient
+
+    beforeAll(async () => {
+        client = new DevCycleClient('token')
+        await client.onClientInitialized()
+    })
+
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
+
+    it('should call bucketingLib.setClientCustomData with correct parameters', () => {
+        const customData: DVCCustomDataJSON = { key1: 'value1', key2: 123 }
+        client.setClientCustomData(customData)
+
+        expect(
+            (client as any).bucketingLib.setClientCustomData,
+        ).toHaveBeenCalledWith('token', JSON.stringify(customData))
+    })
+
+    it('should throw error if client is not initialized', () => {
+        // Create a new client and spy on its access to bucketingLib
+        const uninitializedClient = new DevCycleClient('token')
+
+        // Mock the implementation of setClientCustomData to throw an error
+        // This simulates the error that would be thrown when bucketingLib is undefined
+        jest.spyOn(
+            uninitializedClient,
+            'setClientCustomData',
+        ).mockImplementation(() => {
+            throw new Error(
+                'Client must be initialized before calling setClientCustomData()',
+            )
+        })
+
+        const customData: DVCCustomDataJSON = { key1: 'value1' }
+        expect(() => {
+            uninitializedClient.setClientCustomData(customData)
+        }).toThrow(
+            'Client must be initialized before calling setClientCustomData()',
         )
     })
 })
