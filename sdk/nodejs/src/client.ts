@@ -17,6 +17,7 @@ import {
     UserError,
     VariableDefinitions,
     InferredVariableType,
+    DVCCustomDataJSON,
 } from '@devcycle/types'
 import os from 'os'
 import {
@@ -454,5 +455,15 @@ export class DevCycleClient<
         this.configHelper?.cleanup()
         this.eventQueue.cleanup()
         clearInterval(this.bucketingTracker)
+    }
+
+    async setClientCustomData(
+        clientCustomData: DVCCustomDataJSON,
+    ): Promise<void> {
+        await this.bucketingImportPromise
+        this.bucketingLib.setClientCustomData(
+            this.sdkKey,
+            JSON.stringify(clientCustomData),
+        )
     }
 }

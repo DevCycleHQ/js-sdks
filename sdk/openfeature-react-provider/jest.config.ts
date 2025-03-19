@@ -13,7 +13,6 @@ export default {
     },
     moduleFileExtensions: ['ts', 'js'],
     coverageDirectory: '../../coverage/sdk/openfeature-react-provider',
-    collectCoverage: true,
     collectCoverageFrom: [
         '<rootDir>/src/**/*.{ts,js}',
         '!<rootDir>/**/*.{spec,test,mock}.{ts,js}',

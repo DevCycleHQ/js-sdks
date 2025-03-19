@@ -13,7 +13,6 @@ export default {
         ],
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-    collectCoverage: true,
     collectCoverageFrom: [
         '<rootDir>/src/**/*.{ts,js}',
         '!<rootDir>/**/*.{spec,test,mock}.{ts,js}',

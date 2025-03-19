@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { DevCycleClient } from '../src/client'
 import { DevCycleUser } from '@devcycle/js-cloud-server-sdk'
+import { DVCCustomDataJSON } from '@devcycle/types'
 
 jest.mock('../src/bucketing')
 jest.mock('@devcycle/config-manager', () => {
@@ -146,5 +147,27 @@ describe('variable', () => {
                 key: 'test',
             },
         )
+    })
+})
+
+describe('setClientCustomData', () => {
+    let client: DevCycleClient
+
+    beforeAll(async () => {
+        client = new DevCycleClient('token')
+        await client.onClientInitialized()
+    })
+
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
+
+    it('should call bucketingLib.setClientCustomData with correct parameters', async () => {
+        const customData: DVCCustomDataJSON = { key1: 'value1', key2: 123 }
+        await client.setClientCustomData(customData)
+
+        expect(
+            (client as any).bucketingLib.setClientCustomData,
+        ).toHaveBeenCalledWith('token', JSON.stringify(customData))
     })
 })
