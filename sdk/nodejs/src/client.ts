@@ -457,10 +457,12 @@ export class DevCycleClient<
         clearInterval(this.bucketingTracker)
     }
 
-    async setClientCustomData(
-        clientCustomData: DVCCustomDataJSON,
-    ): Promise<void> {
-        await this.bucketingImportPromise
+    setClientCustomData(clientCustomData: DVCCustomDataJSON): void {
+        if (!this.bucketingLib) {
+            throw new Error(
+                'Client must be initialized before calling setClientCustomData()',
+            )
+        }
         this.bucketingLib.setClientCustomData(
             this.sdkKey,
             JSON.stringify(clientCustomData),
