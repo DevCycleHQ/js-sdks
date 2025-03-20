@@ -458,11 +458,7 @@ export class DevCycleClient<
     }
 
     setClientCustomData(clientCustomData: DVCCustomDataJSON): void {
-        if (!this.bucketingLib) {
-            throw new Error(
-                'Client must be initialized before calling setClientCustomData()',
-            )
-        }
+        if (!this.bucketingLib) return
         this.bucketingLib.setClientCustomData(
             this.sdkKey,
             JSON.stringify(clientCustomData),
