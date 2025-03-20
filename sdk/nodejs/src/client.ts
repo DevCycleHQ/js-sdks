@@ -422,7 +422,7 @@ export class DevCycleClient<
             const { generateClientPopulatedUser } = await import(
                 './clientUser.js'
             )
-            const populatedUser = generateClientPopulatedUser(
+            const populatedUser = await generateClientPopulatedUser(
                 incomingUser,
                 userAgent,
             )
