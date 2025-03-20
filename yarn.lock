@@ -4681,7 +4681,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nestjs-server-sdk@workspace:sdk/nestjs"
   dependencies:
-    "@devcycle/nodejs-server-sdk": ^1.42.2
+    "@devcycle/nodejs-server-sdk": ^1.43.0
     "@devcycle/types": ^1.23.2
     nestjs-cls: ^4.3.0
   peerDependencies:
@@ -4716,7 +4716,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/nodejs-server-sdk@^1.42.2, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
+"@devcycle/nodejs-server-sdk@^1.43.0, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
@@ -4755,7 +4755,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-nestjs-provider@workspace:sdk/openfeature-nestjs-provider"
   dependencies:
-    "@devcycle/nodejs-server-sdk": ^1.42.2
+    "@devcycle/nodejs-server-sdk": ^1.43.0
   languageName: unknown
   linkType: soft
 
