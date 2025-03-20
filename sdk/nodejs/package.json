@@ -30,9 +30,13 @@
         "fetch-retry": "^5.0.6"
     },
     "peerDependencies": {
+        "@devcycle/js-client-sdk": "^1.36.2",
         "@openfeature/multi-provider": "^0.1.2"
     },
     "peerDependenciesMeta": {
+        "@devcycle/js-client-sdk": {
+            "optional": true
+        },
         "@openfeature/multi-provider": {
             "optional": true
         }
