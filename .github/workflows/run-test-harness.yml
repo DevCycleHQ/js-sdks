@@ -19,6 +19,8 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: 'yarn'
+            - name: Enable Corepack
+              run: corepack enable
             - name: Run Yarn
               run: yarn --immutable
             - name: Check affected projects

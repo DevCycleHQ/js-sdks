@@ -16,6 +16,9 @@ jobs:
           node-version: '20.x'
           cache: 'yarn'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Set Git author
         shell: bash
         run: |

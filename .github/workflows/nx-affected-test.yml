@@ -17,6 +17,8 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: 'yarn'
+            - name: Enable Corepack
+              run: corepack enable
             - run: git fetch origin main
             - run: yarn --immutable
             - run: yarn affected:lint --parallel=4
