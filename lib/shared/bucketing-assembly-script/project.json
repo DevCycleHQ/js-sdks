@@ -80,10 +80,7 @@
                         "command": "rm -rf compiled.js compiled.d.ts"
                     },
                     {
-                        "command": "pbjs -t static-module --keep-case -w commonjs -o compiled.js ./*.proto"
-                    },
-                    {
-                        "command": "pbts -o compiled.d.ts compiled.js"
+                        "command": "protoc --plugin=protoc-gen-ts=../../../node_modules/.cache/nx/3088228708506283626/outputs/lib/shared/bucketing-assembly-script/node_modules/@protobuf-ts/plugin/bin/protoc-gen-ts --ts_out=./ --ts_opt=eslint_disable --proto_path=./ ./*.proto"
                     }
                 ],
                 "cwd": "lib/shared/bucketing-assembly-script/protobuf",

@@ -386,63 +386,6 @@ export class DevCycleClient<
         })
     }
 
-    /**
-     * Call this to obtain a config that is suitable for use in the "bootstrapConfig" option of client-side JS SDKs
-     * Useful for serverside-rendering use cases where the server performs the initial rendering pass, and provides it
-     * to the client along with the DevCycle config to allow hydration
-     * @param user
-     * @param userAgent
-     */
-    async getClientBootstrapConfig(
-        user: DevCycleUser,
-        userAgent: string,
-    ): Promise<BucketedUserConfig & { clientSDKKey: string }> {
-        const incomingUser = castIncomingUser(user)
-
-        await this.onInitialized
-
-        if (!this.clientConfigHelper) {
-            throw new Error(
-                'enableClientBootstrapping option must be set to true to use getClientBootstrapConfig',
-            )
-        }
-
-        const clientSDKKey = getSDKKeyFromConfig(
-            this.bucketingLib,
-            `${this.sdkKey}_client`,
-        )
-
-        if (!clientSDKKey) {
-            throw new Error(
-                'Client bootstrapping config is malformed. Please contact DevCycle support.',
-            )
-        }
-
-        try {
-            const { generateClientPopulatedUser } = await import(
-                './clientUser.js'
-            )
-            const populatedUser = await generateClientPopulatedUser(
-                incomingUser,
-                userAgent,
-            )
-            return {
-                ...bucketUserForConfig(
-                    this.bucketingLib,
-                    populatedUser,
-                    `${this.sdkKey}_client`,
-                ),
-                clientSDKKey,
-            }
-        } catch (e) {
-            throw new Error(
-                '@devcycle/js-client-sdk package could not be found. ' +
-                    'Please install it to use client boostrapping. Error: ' +
-                    e.message,
-            )
-        }
-    }
-
     async flushEvents(callback?: () => void): Promise<void> {
         return this.bucketingImportPromise.then(() =>
             this.eventQueue.flushEvents().then(callback),
