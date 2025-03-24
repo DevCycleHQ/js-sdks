@@ -50,7 +50,7 @@ export class EventQueue {
     flushEventQueueSize: number
     maxEventQueueSize: number
     disabledEventFlush: boolean
-    private flushInterval: NodeJS.Timer
+    private flushInterval: NodeJS.Timeout
     private flushInProgress = false
     private flushCallbacks: Array<(arg: unknown) => void> = []
 

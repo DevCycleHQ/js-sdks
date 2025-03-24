@@ -25,7 +25,7 @@
         "@devcycle/types": "^1.24.0",
         "@openfeature/core": "^1.7.2",
         "@openfeature/server-sdk": "^1.17.1",
-        "cross-fetch": "^4.0.0",
+        "cross-fetch": "^4.1.0",
         "eventsource": "^2.0.2",
         "fetch-retry": "^5.0.6"
     },
