@@ -17,6 +17,8 @@ jobs:
             - uses: actions/checkout@v4
               with:
                   fetch-depth: 0
+            - name: Enable Corepack
+              run: corepack enable
             - name: Set Secrets
               uses: DevCycleHQ/aws-secrets-action@main
               with:
@@ -27,8 +29,6 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: 'yarn'
-            - name: Enable Corepack
-              run: corepack enable
             - run: git fetch origin main
             - run: yarn --immutable
             - name: Install Playwright Browsers
