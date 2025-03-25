@@ -19,13 +19,15 @@ export function DevCycleProvider(props: Props): React.ReactElement {
     const { config } = props
     const { user, options } = config
     const [isInitialized, setIsInitialized] = useState(false)
+    const throwOnError =
+        options?.throwOnError !== undefined ? options.throwOnError : true
     let sdkKey: string
     if ('sdkKey' in config) {
         sdkKey = config.sdkKey
     } else {
         sdkKey = config.envKey
     }
-    if (!sdkKey) {
+    if (!sdkKey && !options?.throwOnError) {
         throw new Error('You must provide a sdkKey to DevCycleProvider')
     }
 
@@ -35,6 +37,7 @@ export function DevCycleProvider(props: Props): React.ReactElement {
     if (clientRef.current === undefined) {
         clientRef.current = initializeDevCycleClient(sdkKey, user, {
             ...options,
+            throwOnError,
         })
     }
 
@@ -42,6 +45,7 @@ export function DevCycleProvider(props: Props): React.ReactElement {
         if (clientRef.current === undefined) {
             clientRef.current = initializeDevCycleClient(sdkKey, user, {
                 ...options,
+                throwOnError,
             })
             // react doesn't know the effect changed the ref, make sure it re-renders
             forceRerender({})

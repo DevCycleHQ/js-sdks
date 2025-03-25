@@ -105,7 +105,7 @@ export function initializeDevCycle<
         | DevCycleOptionsWithDeferredInitialization,
     optionsArg: DevCycleOptions = {},
 ): DevCycleClient<Variables, CustomData> {
-    if (!sdkKey) {
+    if (!sdkKey && optionsArg?.throwOnError) {
         throw new UserError(
             'Missing SDK key! Call initialize with a valid SDK key',
         )
@@ -114,7 +114,8 @@ export function initializeDevCycle<
     if (
         !sdkKey.startsWith('client') &&
         !sdkKey.startsWith('dvc_client') &&
-        !optionsArg?.next
+        !optionsArg?.next &&
+        optionsArg?.throwOnError
     ) {
         throw new UserError(
             'Invalid SDK key provided. Please call initialize with a valid client SDK key',

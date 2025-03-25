@@ -140,6 +140,12 @@ export interface DevCycleOptions {
      * Example values ('of' for OpenFeature): 'js' | 'react' | 'react-native' | 'nextjs' | 'js-of' | 'react-of'
      */
     sdkPlatform?: string
+
+    /**
+     * Sets the option to not throw UserErrors when the DevCycle client is not initialized properly
+     * Default is true
+     */
+    throwOnError?: boolean
 }
 
 export interface DevCycleUser<T extends DVCCustomDataJSON = DVCCustomDataJSON> {
