@@ -1,6 +1,6 @@
 {
     "name": "app",
-    "packageManager": "yarn@4.0.2",
+    "packageManager": "yarn@4.6.0",
     "private": true,
     "scripts": {
         "dev": "node --preserve-symlinks node_modules/next/dist/bin/next dev",
@@ -10,16 +10,16 @@
     },
     "dependencies": {
         "@devcycle/nextjs-sdk": "file:../../../../dist/sdk/nextjs",
-        "next": "15.1.2",
-        "react": "19.0.0-rc-69d4b800-20241021",
-        "react-dom": "19.0.0-rc-69d4b800-20241021"
+        "next": "^15.2.3",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0"
     },
     "devDependencies": {
         "@types/node": "^20",
         "typescript": "^5"
     },
     "resolutions": {
-        "@types/react": "18.2.20",
+        "@types/react": "^19.0.0",
         "@devcycle/bucketing": "file:../../../../dist/lib/shared/bucketing",
         "@devcycle/js-client-sdk": "file:../../../../dist/sdk/js",
         "@devcycle/react-client-sdk": "file:../../../../dist/sdk/react",

@@ -35,11 +35,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.AUTOMATION_USER_TOKEN }}
         steps:
-            # Check out the repo with credentials that can bypass branch protection, and fetch git history instead of just latest commit
             - uses: actions/checkout@v4
               with:
                   token: ${{ secrets.AUTOMATION_USER_TOKEN }}
                   fetch-depth: 0
+            - name: Enable Corepack
+              run: corepack enable
             - name: Set Secrets
               uses: DevCycleHQ/aws-secrets-action@main
               with:

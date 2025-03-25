@@ -61,7 +61,7 @@ export class DevCycleClient<
     private _isInitialized = false
     private openFeatureProvider: DevCycleProvider
     private bucketingLib: WASMBucketingExports
-    private bucketingTracker?: NodeJS.Timer
+    private bucketingTracker?: NodeJS.Timeout
     private bucketingImportPromise: Promise<void>
     private platformDetails: DevCyclePlatformDetails
     private sdkPlatform?: string

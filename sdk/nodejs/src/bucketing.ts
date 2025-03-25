@@ -14,7 +14,7 @@ export const importBucketingLib = async ({
 }: {
     logger?: DVCLogger
     options?: DevCycleServerSDKOptions
-} = {}): Promise<[WASMBucketingExports, NodeJS.Timer | undefined]> => {
+} = {}): Promise<[WASMBucketingExports, NodeJS.Timeout | undefined]> => {
     const debugWASM = process.env.DEVCYCLE_DEBUG_WASM === '1'
     const result = await instantiate(debugWASM)
     const interval = startTrackingMemoryUsage(result, logger, options?.reporter)
@@ -26,7 +26,7 @@ export const startTrackingMemoryUsage = (
     logger?: DVCLogger,
     reporter?: DVCReporter,
     interval: number = 30 * 1000,
-): NodeJS.Timer | undefined => {
+): NodeJS.Timeout | undefined => {
     if (!reporter) return
     trackMemoryUsage(bucketing, reporter, logger)
     return setInterval(
