@@ -19,7 +19,6 @@ import {
     InferredVariableType,
     DVCCustomDataJSON,
 } from '@devcycle/types'
-import os from 'os'
 import {
     DevCycleUser,
     DVCVariable,
@@ -34,10 +33,10 @@ import {
     DevCyclePlatformDetails,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
-import { randomUUID } from 'crypto'
+import { v4 as uuidv4 } from 'uuid'
 import { DevCycleOptionsLocalEnabled } from './index'
 import { WASMBucketingExports } from '@devcycle/bucketing-assembly-script'
-import { getNodeJSPlatformDetails } from './utils/platformDetails'
+import { getNodeJSPlatformDetails, getHostname } from './utils/platformDetails'
 import { DevCycleProvider } from './open-feature/DevCycleProvider'
 
 const castIncomingUser = (user: DevCycleUser) => {
@@ -71,8 +70,8 @@ export class DevCycleClient<
     }
 
     constructor(sdkKey: string, options?: DevCycleOptionsLocalEnabled) {
-        this.clientUUID = randomUUID()
-        this.hostname = os.hostname()
+        this.clientUUID = uuidv4()
+        this.hostname = getHostname()
         this.sdkKey = sdkKey
         this.sdkPlatform = options?.sdkPlatform
 
@@ -154,10 +153,6 @@ export class DevCycleClient<
             .finally(() => {
                 this._isInitialized = true
             })
-
-        process.on('exit', () => {
-            this.close()
-        })
     }
 
     private setPlatformDataInBucketingLib(): void {
@@ -384,63 +379,6 @@ export class DevCycleClient<
                 sseConnected: sseConnected ?? undefined,
             },
         })
-    }
-
-    /**
-     * Call this to obtain a config that is suitable for use in the "bootstrapConfig" option of client-side JS SDKs
-     * Useful for serverside-rendering use cases where the server performs the initial rendering pass, and provides it
-     * to the client along with the DevCycle config to allow hydration
-     * @param user
-     * @param userAgent
-     */
-    async getClientBootstrapConfig(
-        user: DevCycleUser,
-        userAgent: string,
-    ): Promise<BucketedUserConfig & { clientSDKKey: string }> {
-        const incomingUser = castIncomingUser(user)
-
-        await this.onInitialized
-
-        if (!this.clientConfigHelper) {
-            throw new Error(
-                'enableClientBootstrapping option must be set to true to use getClientBootstrapConfig',
-            )
-        }
-
-        const clientSDKKey = getSDKKeyFromConfig(
-            this.bucketingLib,
-            `${this.sdkKey}_client`,
-        )
-
-        if (!clientSDKKey) {
-            throw new Error(
-                'Client bootstrapping config is malformed. Please contact DevCycle support.',
-            )
-        }
-
-        try {
-            const { generateClientPopulatedUser } = await import(
-                './clientUser.js'
-            )
-            const populatedUser = await generateClientPopulatedUser(
-                incomingUser,
-                userAgent,
-            )
-            return {
-                ...bucketUserForConfig(
-                    this.bucketingLib,
-                    populatedUser,
-                    `${this.sdkKey}_client`,
-                ),
-                clientSDKKey,
-            }
-        } catch (e) {
-            throw new Error(
-                '@devcycle/js-client-sdk package could not be found. ' +
-                    'Please install it to use client boostrapping. Error: ' +
-                    e.message,
-            )
-        }
     }
 
     async flushEvents(callback?: () => void): Promise<void> {

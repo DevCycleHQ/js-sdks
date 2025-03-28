@@ -1,6 +1,14 @@
 import { DevCyclePlatformDetails } from '@devcycle/js-cloud-server-sdk'
 import * as packageJson from '../../package.json'
-import os from 'os'
+
+function getNodeHostname(): string {
+    try {
+        const os = require('os')
+        return os.hostname()
+    } catch (e) {
+        return 'edge-runtime'
+    }
+}
 
 export function getNodeJSPlatformDetails(): DevCyclePlatformDetails {
     return {
@@ -8,6 +16,10 @@ export function getNodeJSPlatformDetails(): DevCyclePlatformDetails {
         platformVersion: process.version,
         sdkType: 'server',
         sdkVersion: packageJson.version,
-        hostname: os.hostname(),
+        hostname: getNodeHostname(),
     }
+}
+
+export function getHostname(): string {
+    return getNodeHostname()
 }

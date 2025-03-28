@@ -77,16 +77,16 @@
             "options": {
                 "commands": [
                     {
-                        "command": "rm -rf compiled.js compiled.d.ts"
+                        "command": "rm -rf ./protobuf/compiled.js ./protobuf/compiled.d.ts"
                     },
                     {
-                        "command": "pbjs -t static-module --keep-case -w commonjs -o compiled.js ./*.proto"
+                        "command": "protoc --plugin=../../../node_modules/@protobuf-ts/plugin/bin/protoc-gen-ts --ts_out=./protobuf --ts_opt=eslint_disable,output_javascript --proto_path=./protobuf ./protobuf/*.proto"
                     },
-                    {
-                        "command": "pbts -o compiled.d.ts compiled.js"
+                    { 
+                        "command": "cd protobuf/ && mv variableForUserParams.d.ts compiled.d.ts && mv variableForUserParams.js compiled.js"
                     }
                 ],
-                "cwd": "lib/shared/bucketing-assembly-script/protobuf",
+                "cwd": "lib/shared/bucketing-assembly-script",
                 "parallel": false
             }
         },
