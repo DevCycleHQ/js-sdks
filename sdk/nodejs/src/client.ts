@@ -19,7 +19,6 @@ import {
     InferredVariableType,
     DVCCustomDataJSON,
 } from '@devcycle/types'
-import os from 'os'
 import {
     DevCycleUser,
     DVCVariable,
@@ -34,10 +33,10 @@ import {
     DevCyclePlatformDetails,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
-import { randomUUID } from 'crypto'
+import { v4 as uuidv4 } from 'uuid'
 import { DevCycleOptionsLocalEnabled } from './index'
 import { WASMBucketingExports } from '@devcycle/bucketing-assembly-script'
-import { getNodeJSPlatformDetails } from './utils/platformDetails'
+import { getNodeJSPlatformDetails, getHostname } from './utils/platformDetails'
 import { DevCycleProvider } from './open-feature/DevCycleProvider'
 
 const castIncomingUser = (user: DevCycleUser) => {
@@ -71,8 +70,8 @@ export class DevCycleClient<
     }
 
     constructor(sdkKey: string, options?: DevCycleOptionsLocalEnabled) {
-        this.clientUUID = randomUUID()
-        this.hostname = os.hostname()
+        this.clientUUID = uuidv4()
+        this.hostname = getHostname()
         this.sdkKey = sdkKey
         this.sdkPlatform = options?.sdkPlatform
 
@@ -154,10 +153,6 @@ export class DevCycleClient<
             .finally(() => {
                 this._isInitialized = true
             })
-
-        process.on('exit', () => {
-            this.close()
-        })
     }
 
     private setPlatformDataInBucketingLib(): void {

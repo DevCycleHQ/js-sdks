@@ -1,6 +1,13 @@
 import { SDKVariable, VariableType as VariableTypeStr } from '@devcycle/types'
 import { variableForUser_PB, VariableType } from './bucketingImportHelper'
 import { VariableForUserParams_PB, SDKVariable_PB } from '../protobuf/compiled'
+import {
+    BinaryWriter,
+    BinaryReader,
+    BinaryWriteOptions,
+    BinaryReadOptions,
+    MessageType,
+} from '@protobuf-ts/runtime'
 
 type SDKVariable_PB_Type = {
     _id: string
@@ -96,6 +103,31 @@ export type VariableForUserArgs = {
     variableType: VariableType
 }
 
+export function encodeProtobufMessage<T extends object>(
+    message: T,
+    messageType: MessageType<T>,
+): Uint8Array {
+    const writer = new BinaryWriter()
+    const writeOptions: BinaryWriteOptions = {
+        writeUnknownFields: true,
+        writerFactory: () => new BinaryWriter(),
+    }
+    messageType.internalBinaryWrite(message, writer, writeOptions)
+    return writer.finish()
+}
+
+export function decodeProtobufMessage<T extends object>(
+    buffer: Uint8Array,
+    messageType: MessageType<T>,
+): T {
+    const reader = new BinaryReader(buffer)
+    const readOptions: BinaryReadOptions = {
+        readUnknownField: true,
+        readerFactory: () => new BinaryReader(new Uint8Array()),
+    }
+    return messageType.internalBinaryRead(reader, 0, readOptions)
+}
+
 export const variableForUserPB = ({
     sdkKey,
     user,
@@ -138,14 +170,11 @@ export const variableForUserPB = ({
         },
         shouldTrackEvent: true,
     }
-    const err = VariableForUserParams_PB.verify(params)
-    if (err) throw new Error(err)
-
     const pbMsg = VariableForUserParams_PB.create(params)
-    const buffer = VariableForUserParams_PB.encode(pbMsg).finish()
+    const buffer = encodeProtobufMessage(pbMsg, VariableForUserParams_PB)
     const resultBuffer = variableForUser_PB(buffer)
 
     return !resultBuffer
         ? null
-        : pbSDKVariableToJS(SDKVariable_PB.decode(resultBuffer))
+        : pbSDKVariableToJS(decodeProtobufMessage(resultBuffer, SDKVariable_PB))
 }

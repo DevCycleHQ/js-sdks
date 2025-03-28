@@ -4371,9 +4371,11 @@ __metadata:
     "@devcycle/types": "npm:^1.24.0"
     "@openfeature/core": "npm:^1.7.2"
     "@openfeature/server-sdk": "npm:^1.17.1"
+    "@protobuf-ts/runtime": "npm:^2.9.3"
     cross-fetch: "npm:^4.1.0"
     eventsource: "npm:^2.0.2"
     fetch-retry: "npm:^5.0.6"
+    uuid: "npm:^8.3.2"
   peerDependencies:
     "@devcycle/js-client-sdk": ^1.36.2
     "@openfeature/multi-provider": ^0.1.2

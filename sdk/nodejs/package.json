@@ -25,9 +25,11 @@
         "@devcycle/types": "^1.24.0",
         "@openfeature/core": "^1.7.2",
         "@openfeature/server-sdk": "^1.17.1",
+        "@protobuf-ts/runtime": "^2.9.3",
         "cross-fetch": "^4.1.0",
         "eventsource": "^2.0.2",
-        "fetch-retry": "^5.0.6"
+        "fetch-retry": "^5.0.6",
+        "uuid": "^8.3.2"
     },
     "peerDependencies": {
         "@devcycle/js-client-sdk": "^1.36.2",
