@@ -80,7 +80,7 @@
                         "command": "rm -rf compiled.js compiled.d.ts"
                     },
                     {
-                        "command": "protoc --plugin=protoc-gen-ts=../../../node_modules/.cache/nx/3088228708506283626/outputs/lib/shared/bucketing-assembly-script/node_modules/@protobuf-ts/plugin/bin/protoc-gen-ts --ts_out=./ --ts_opt=eslint_disable --proto_path=./ ./*.proto"
+                        "command": "pwd && echo 'Current directory:' && ls -la && echo 'Running protoc command...' && ../node_modules/.bin/protoc --plugin=protoc-gen-ts=/Users/jonathannorris/git/js-sdks/node_modules/.store/@protobuf-ts-plugin-npm-2.9.6-ab0cde551c/node_modules/@protobuf-ts/plugin/bin/protoc-gen-ts --ts_out=./ --ts_opt=eslint_disable,output_javascript --proto_path=./ ./*.proto && mv variableForUserParams.ts compiled.d.ts && mv variableForUserParams.js compiled.js"
                     }
                 ],
                 "cwd": "lib/shared/bucketing-assembly-script/protobuf",
