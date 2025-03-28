@@ -4272,7 +4272,6 @@ __metadata:
   dependencies:
     "@devcycle/bucketing-test-data": "npm:^1.27.0"
     "@protobuf-ts/plugin": "npm:^2.9.6"
-    "@protobuf-ts/protoc": "npm:^2.9.6"
     "@protobuf-ts/runtime": "npm:^2.9.3"
   languageName: unknown
   linkType: soft
@@ -15703,7 +15702,6 @@ __metadata:
     "@playwright/test": "npm:^1.51.1"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.5.15"
     "@protobuf-ts/plugin": "npm:^2.9.6"
-    "@protobuf-ts/protoc": "npm:^2.9.6"
     "@react-native-async-storage/async-storage": "npm:1.19.4"
     "@react-native-community/cli": "npm:11.3.6"
     "@react-native-community/cli-platform-android": "npm:11.3.6"

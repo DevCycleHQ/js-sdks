@@ -107,7 +107,6 @@
         "@playwright/test": "^1.51.1",
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
         "@protobuf-ts/plugin": "^2.9.6",
-        "@protobuf-ts/protoc": "^2.9.6",
         "@react-native-async-storage/async-storage": "1.19.4",
         "@react-native-community/cli": "11.3.6",
         "@react-native-community/cli-platform-android": "11.3.6",

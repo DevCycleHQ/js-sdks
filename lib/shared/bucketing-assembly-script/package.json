@@ -16,7 +16,6 @@
     },
     "devDependencies": {
         "@devcycle/bucketing-test-data": "^1.27.0",
-        "@protobuf-ts/plugin": "^2.9.6",
-        "@protobuf-ts/protoc": "^2.9.6"
+        "@protobuf-ts/plugin": "^2.9.6"
     }
 }
