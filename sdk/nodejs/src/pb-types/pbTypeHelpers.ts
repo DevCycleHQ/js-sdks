@@ -40,7 +40,7 @@ export function pbSDKVariableTransform(
     const { type, value } = getVariableTypeFromPB(variable)
 
     return {
-        _id: variable._id,
+        _id: variable.Id,
         type,
         key: variable.key,
         value,

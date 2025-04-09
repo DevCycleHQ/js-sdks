@@ -1,41 +1,43 @@
 import { SDKVariable, VariableType as VariableTypeStr } from '@devcycle/types'
-import { variableForUser_PB, VariableType } from './bucketingImportHelper'
-import { VariableForUserParams_PB, SDKVariable_PB } from '../protobuf/compiled'
+import { variableForUser_PB } from './bucketingImportHelper'
+import {
+    VariableForUserParams_PB,
+    SDKVariable_PB,
+    VariableType_PB,
+    CustomDataValue,
+    CustomDataType,
+} from '../protobuf/compiled'
 
-type SDKVariable_PB_Type = {
-    _id: string
-    type: number
-    key: string
-    boolValue: boolean
-    doubleValue: number
-    stringValue: string
-}
+import {
+    encodeProtobufMessage,
+    decodeProtobufMessage,
+} from '../protobuf/pbHelpers'
 
-const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
+const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB): SDKVariable => {
     if (pbSDKVariable.type === 0) {
         return {
-            _id: pbSDKVariable._id,
+            _id: pbSDKVariable.Id,
             key: pbSDKVariable.key,
             value: pbSDKVariable.boolValue,
             type: VariableTypeStr.boolean,
         }
     } else if (pbSDKVariable.type === 1) {
         return {
-            _id: pbSDKVariable._id,
+            _id: pbSDKVariable.Id,
             key: pbSDKVariable.key,
             value: pbSDKVariable.doubleValue,
             type: VariableTypeStr.number,
         }
     } else if (pbSDKVariable.type === 2) {
         return {
-            _id: pbSDKVariable._id,
+            _id: pbSDKVariable.Id,
             key: pbSDKVariable.key,
             value: pbSDKVariable.stringValue,
             type: VariableTypeStr.string,
         }
     } else if (pbSDKVariable.type === 3) {
         return {
-            _id: pbSDKVariable._id,
+            _id: pbSDKVariable.Id,
             key: pbSDKVariable.key,
             value: JSON.parse(pbSDKVariable.stringValue),
             type: VariableTypeStr.json,
@@ -44,44 +46,30 @@ const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
     throw new Error(`Unknown variable type: ${pbSDKVariable.type}`)
 }
 
-enum CustomDataTypePB {
-    Bool,
-    Num,
-    Str,
-    Null,
-}
-
-type CustomDataValuePB = {
-    type: CustomDataTypePB
-    boolValue?: boolean
-    doubleValue?: number
-    stringValue?: string
-}
-
 const customDataToPB = (
     customData: any,
-): Record<string, CustomDataValuePB> | undefined => {
+): Record<string, CustomDataValue> | undefined => {
     if (!customData) return undefined
 
-    const customDataPB: Record<string, CustomDataValuePB> = {}
+    const customDataPB: Record<string, CustomDataValue> = {}
     for (const [key, value] of Object.entries(customData)) {
         if (typeof value === 'boolean') {
             customDataPB[key] = {
-                type: CustomDataTypePB.Bool,
+                type: CustomDataType.Bool,
                 boolValue: value,
             }
         } else if (typeof value === 'number') {
             customDataPB[key] = {
-                type: CustomDataTypePB.Num,
+                type: CustomDataType.Num,
                 doubleValue: value,
             }
         } else if (typeof value === 'string') {
             customDataPB[key] = {
-                type: CustomDataTypePB.Str,
+                type: CustomDataType.Str,
                 stringValue: value,
             }
         } else if (value === null) {
-            customDataPB[key] = { type: CustomDataTypePB.Null }
+            customDataPB[key] = { type: CustomDataType.Null }
         } else {
             throw new Error(`Unknown custom data type: ${typeof value}`)
         }
@@ -93,7 +81,7 @@ export type VariableForUserArgs = {
     sdkKey: string
     user: any
     variableKey: string
-    variableType: VariableType
+    variableType: VariableType_PB
 }
 
 export const variableForUserPB = ({
@@ -138,14 +126,12 @@ export const variableForUserPB = ({
         },
         shouldTrackEvent: true,
     }
-    const err = VariableForUserParams_PB.verify(params)
-    if (err) throw new Error(err)
 
     const pbMsg = VariableForUserParams_PB.create(params)
-    const buffer = VariableForUserParams_PB.encode(pbMsg).finish()
+    const buffer = encodeProtobufMessage(pbMsg, VariableForUserParams_PB)
     const resultBuffer = variableForUser_PB(buffer)
 
     return !resultBuffer
         ? null
-        : pbSDKVariableToJS(SDKVariable_PB.decode(resultBuffer))
+        : pbSDKVariableToJS(decodeProtobufMessage(resultBuffer, SDKVariable_PB))
 }

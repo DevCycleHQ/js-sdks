@@ -6,35 +6,32 @@ import {
     testDVCUser_PB,
     testSDKVariable_PB,
 } from '../bucketingImportHelper'
-import protobuf, { Type } from 'protobufjs'
-import path from 'path'
+import * as ProtobufTypes from '../../protobuf/compiled'
+import {
+    encodeProtobufMessage,
+    decodeProtobufMessage,
+} from '../../protobuf/pbHelpers'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
 import { initSDK } from '../setPlatformData'
 
 describe('protobuf variable tests', () => {
     const sdkKey = 'sdkKey'
-    let VariableForUserParams_PB: Type
-    let DVCUser_PB: Type
-    let SDKVariable_PB: Type
+    const VariableForUserParams_PB = ProtobufTypes.VariableForUserParams_PB
+    const DVCUser_PB = ProtobufTypes.DVCUser_PB
+    const SDKVariable_PB = ProtobufTypes.SDKVariable_PB
 
     const callVariableForUser_PB = (params: any): Uint8Array | null => {
-        const err = VariableForUserParams_PB.verify(params)
-        if (err) throw new Error(err)
-
         const pbMsg = VariableForUserParams_PB.create(params)
-        const buffer = VariableForUserParams_PB.encode(pbMsg).finish()
+        const buffer = encodeProtobufMessage(pbMsg, VariableForUserParams_PB)
         return variableForUser_PB(buffer)
     }
 
     const callVariableForUser_PB_Preallocated = (
         params: any,
     ): Uint8Array | null => {
-        const err = VariableForUserParams_PB.verify(params)
-        if (err) throw new Error(err)
-
         const pbMsg = VariableForUserParams_PB.create(params)
-        const buffer = VariableForUserParams_PB.encode(pbMsg).finish()
+        const buffer = encodeProtobufMessage(pbMsg, VariableForUserParams_PB)
         const combinedBuffer = Buffer.concat([buffer, new Uint8Array(100)])
         return variableForUser_PB_Preallocated(combinedBuffer, buffer.length)
     }
@@ -42,47 +39,24 @@ describe('protobuf variable tests', () => {
     const callTestVariableForUserParams_PB = (
         params: any,
     ): Uint8Array | null => {
-        const err = VariableForUserParams_PB.verify(params)
-        if (err) throw new Error(err)
-
         const pbMsg = VariableForUserParams_PB.create(params)
-        const buffer = VariableForUserParams_PB.encode(pbMsg).finish()
+        const buffer = encodeProtobufMessage(pbMsg, VariableForUserParams_PB)
         return testVariableForUserParams_PB(buffer)
     }
 
     const callTestDVCUser_PB = (user: any): Uint8Array | null => {
-        const err = DVCUser_PB.verify(user)
-        if (err) throw new Error(err)
-
         const pbMsg = DVCUser_PB.create(user)
-        const buffer = DVCUser_PB.encode(pbMsg).finish()
+        const buffer = encodeProtobufMessage(pbMsg, DVCUser_PB)
         return testDVCUser_PB(buffer)
     }
 
     const callTestSDKVariable_PB = (variable: any): Uint8Array | null => {
-        const err = SDKVariable_PB.verify(variable)
-        if (err) throw new Error(err)
-
         const pbMsg = SDKVariable_PB.create(variable)
-        const buffer = SDKVariable_PB.encode(pbMsg).finish()
+        const buffer = encodeProtobufMessage(pbMsg, SDKVariable_PB)
         return testSDKVariable_PB(buffer)
     }
 
     beforeAll(() => {
-        const protoFile = '../../protobuf/variableForUserParams.proto'
-        const filePath = path.resolve(__dirname, protoFile)
-        const root = protobuf.loadSync(filePath)
-
-        VariableForUserParams_PB = root.lookupType('VariableForUserParams_PB')
-        if (!VariableForUserParams_PB)
-            throw new Error('VariableForUserParams_PB not found')
-
-        DVCUser_PB = root.lookupType('DVCUser_PB')
-        if (!DVCUser_PB) throw new Error('DVCUser_PB not found')
-
-        SDKVariable_PB = root.lookupType('SDKVariable_PB')
-        if (!SDKVariable_PB) throw new Error('SDKVariable_PB not found')
-
         initSDK(sdkKey, config)
     })
 
@@ -98,7 +72,7 @@ describe('protobuf variable tests', () => {
         },
     }
     const varForUserExpected = {
-        _id: '615356f120ed334a6054564c',
+        Id: '615356f120ed334a6054564c',
         boolValue: false,
         doubleValue: 0,
         evalReason: {
@@ -111,16 +85,22 @@ describe('protobuf variable tests', () => {
     }
 
     it('should write protobuf message to variableForUser_PB', () => {
+        console.log(`varForUserParams: ${JSON.stringify(varForUserParams)}`)
         const resultBuffer = callVariableForUser_PB(varForUserParams)
+        console.log(`resultBuffer: ${resultBuffer}`)
+        console.log(`resultBuffer length: ${resultBuffer?.length}`)
         expect(resultBuffer).not.toBeNull()
-        expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(varForUserExpected)
+        const decoded = decodeProtobufMessage(resultBuffer!, SDKVariable_PB)
+        console.log(`decoded: ${JSON.stringify(decoded)}`)
+        expect(decoded).toEqual(varForUserExpected)
     })
 
     it('should write preallocated protobuf message to variableForUser_PB_Preallocated', () => {
         const resultBuffer =
             callVariableForUser_PB_Preallocated(varForUserParams)
         expect(resultBuffer).not.toBeNull()
-        expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(varForUserExpected)
+        const decoded = decodeProtobufMessage(resultBuffer!, SDKVariable_PB)
+        expect(decoded).toEqual(varForUserExpected)
     })
 
     describe('protobuf type tests', () => {
@@ -178,9 +158,11 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestVariableForUserParams_PB(params)
                 expect(resultBuffer).not.toBeNull()
-                expect(VariableForUserParams_PB.decode(resultBuffer!)).toEqual(
-                    params,
+                const decoded = decodeProtobufMessage(
+                    resultBuffer!,
+                    VariableForUserParams_PB,
                 )
+                expect(decoded).toEqual(params)
             })
 
             it('should set defaults for missing user fields', () => {
@@ -197,9 +179,11 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestVariableForUserParams_PB(params)
                 expect(resultBuffer).not.toBeNull()
-                expect(VariableForUserParams_PB.decode(resultBuffer!)).toEqual(
-                    params,
+                const decoded = decodeProtobufMessage(
+                    resultBuffer!,
+                    VariableForUserParams_PB,
                 )
+                expect(decoded).toEqual(params)
             })
         })
 
@@ -251,7 +235,8 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestDVCUser_PB(user)
                 expect(resultBuffer).not.toBeNull()
-                expect(DVCUser_PB.decode(resultBuffer!)).toEqual(user)
+                const decoded = decodeProtobufMessage(resultBuffer!, DVCUser_PB)
+                expect(decoded).toEqual(user)
             })
 
             it('should set defaults for missing user fields', () => {
@@ -260,7 +245,8 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestDVCUser_PB(user)
                 expect(resultBuffer).not.toBeNull()
-                expect(DVCUser_PB.decode(resultBuffer!)).toEqual({
+                const decoded = decodeProtobufMessage(resultBuffer!, DVCUser_PB)
+                expect(decoded).toEqual({
                     userId: 'asuh',
                     email: { value: '', isNull: true },
                     name: { value: '', isNull: true },
@@ -278,7 +264,7 @@ describe('protobuf variable tests', () => {
         describe('SDKVariable_PB', () => {
             it('should parse boolean SDKVariable_PB protobuf message', () => {
                 const sdkVariable = {
-                    _id: '615356f120ed334a6054564c',
+                    Id: '615356f120ed334a6054564c',
                     type: 0,
                     key: 'bool-key',
                     boolValue: true,
@@ -288,14 +274,16 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()
-                expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(
-                    sdkVariable,
+                const decoded = decodeProtobufMessage(
+                    resultBuffer!,
+                    SDKVariable_PB,
                 )
+                expect(decoded).toEqual(sdkVariable)
             })
 
             it('should parse number SDKVariable_PB protobuf message', () => {
                 const sdkVariable = {
-                    _id: '615356f120ed334a6054564c',
+                    Id: '615356f120ed334a6054564c',
                     type: 1,
                     key: 'num-key',
                     boolValue: false,
@@ -304,14 +292,16 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()
-                expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(
-                    sdkVariable,
+                const decoded = decodeProtobufMessage(
+                    resultBuffer!,
+                    SDKVariable_PB,
                 )
+                expect(decoded).toEqual(sdkVariable)
             })
 
             it('should parse string SDKVariable_PB protobuf message', () => {
                 const sdkVariable = {
-                    _id: '615356f120ed334a6054564c',
+                    Id: '615356f120ed334a6054564c',
                     type: 2,
                     key: 'string-key',
                     boolValue: false,
@@ -320,14 +310,16 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()
-                expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(
-                    sdkVariable,
+                const decoded = decodeProtobufMessage(
+                    resultBuffer!,
+                    SDKVariable_PB,
                 )
+                expect(decoded).toEqual(sdkVariable)
             })
 
             it('should parse json SDKVariable_PB protobuf message', () => {
                 const sdkVariable = {
-                    _id: '615356f120ed334a6054564c',
+                    Id: '615356f120ed334a6054564c',
                     type: 2,
                     key: 'json-key',
                     boolValue: false,
@@ -336,9 +328,11 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()
-                expect(SDKVariable_PB.decode(resultBuffer!)).toEqual(
-                    sdkVariable,
+                const decoded = decodeProtobufMessage(
+                    resultBuffer!,
+                    SDKVariable_PB,
                 )
+                expect(decoded).toEqual(sdkVariable)
             })
         })
     })

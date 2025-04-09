@@ -43,8 +43,6 @@ export function DVCPopulatedUserToPBUser(
         customData: getNullableCustomDataValue(user.customData),
         privateCustomData: getNullableCustomDataValue(user.privateCustomData),
     }
-    const err = ProtobufTypes.DVCUser_PB.verify(params)
-    if (err) throw new Error(`DVCUser protobuf verification error: ${err}`)
 
     return ProtobufTypes.DVCUser_PB.create(params)
 }
