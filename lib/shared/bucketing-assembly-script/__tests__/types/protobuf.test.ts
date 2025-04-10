@@ -6,24 +6,21 @@ import {
     testDVCUser_PB,
     testSDKVariable_PB,
 } from '../bucketingImportHelper'
-import * as ProtobufTypes from '../../protobuf/compiled'
 import {
-    encodeProtobufMessage,
-    decodeProtobufMessage,
-} from '../../protobuf/pbHelpers'
+    VariableForUserParams_PB,
+    DVCUser_PB,
+    SDKVariable_PB,
+} from '../../protobuf/compiled'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
 import { initSDK } from '../setPlatformData'
 
 describe('protobuf variable tests', () => {
     const sdkKey = 'sdkKey'
-    const VariableForUserParams_PB = ProtobufTypes.VariableForUserParams_PB
-    const DVCUser_PB = ProtobufTypes.DVCUser_PB
-    const SDKVariable_PB = ProtobufTypes.SDKVariable_PB
 
     const callVariableForUser_PB = (params: any): Uint8Array | null => {
         const pbMsg = VariableForUserParams_PB.create(params)
-        const buffer = encodeProtobufMessage(pbMsg, VariableForUserParams_PB)
+        const buffer = VariableForUserParams_PB.toBinary(pbMsg)
         return variableForUser_PB(buffer)
     }
 
@@ -31,7 +28,7 @@ describe('protobuf variable tests', () => {
         params: any,
     ): Uint8Array | null => {
         const pbMsg = VariableForUserParams_PB.create(params)
-        const buffer = encodeProtobufMessage(pbMsg, VariableForUserParams_PB)
+        const buffer = VariableForUserParams_PB.toBinary(pbMsg)
         const combinedBuffer = Buffer.concat([buffer, new Uint8Array(100)])
         return variableForUser_PB_Preallocated(combinedBuffer, buffer.length)
     }
@@ -40,19 +37,19 @@ describe('protobuf variable tests', () => {
         params: any,
     ): Uint8Array | null => {
         const pbMsg = VariableForUserParams_PB.create(params)
-        const buffer = encodeProtobufMessage(pbMsg, VariableForUserParams_PB)
+        const buffer = VariableForUserParams_PB.toBinary(pbMsg)
         return testVariableForUserParams_PB(buffer)
     }
 
     const callTestDVCUser_PB = (user: any): Uint8Array | null => {
         const pbMsg = DVCUser_PB.create(user)
-        const buffer = encodeProtobufMessage(pbMsg, DVCUser_PB)
+        const buffer = DVCUser_PB.toBinary(pbMsg)
         return testDVCUser_PB(buffer)
     }
 
     const callTestSDKVariable_PB = (variable: any): Uint8Array | null => {
         const pbMsg = SDKVariable_PB.create(variable)
-        const buffer = encodeProtobufMessage(pbMsg, SDKVariable_PB)
+        const buffer = SDKVariable_PB.toBinary(pbMsg)
         return testSDKVariable_PB(buffer)
     }
 
@@ -71,7 +68,7 @@ describe('protobuf variable tests', () => {
             email: { value: 'test', isNull: false },
         },
     }
-    const varForUserExpected = {
+    const sdkVarForUserExpected = {
         Id: '615356f120ed334a6054564c',
         boolValue: false,
         doubleValue: 0,
@@ -84,23 +81,27 @@ describe('protobuf variable tests', () => {
         type: VariableType.String,
     }
 
+    it('should write protobuf message to buffer than read it back', () => {
+        const pbMsg = VariableForUserParams_PB.create(varForUserParams)
+        const buffer = VariableForUserParams_PB.toBinary(pbMsg)
+
+        const decoded = VariableForUserParams_PB.fromBinary(buffer)
+        expect(decoded).toEqual(varForUserParams)
+    })
+
     it('should write protobuf message to variableForUser_PB', () => {
-        console.log(`varForUserParams: ${JSON.stringify(varForUserParams)}`)
         const resultBuffer = callVariableForUser_PB(varForUserParams)
-        console.log(`resultBuffer: ${resultBuffer}`)
-        console.log(`resultBuffer length: ${resultBuffer?.length}`)
         expect(resultBuffer).not.toBeNull()
-        const decoded = decodeProtobufMessage(resultBuffer!, SDKVariable_PB)
-        console.log(`decoded: ${JSON.stringify(decoded)}`)
-        expect(decoded).toEqual(varForUserExpected)
+        const sdkVarDecoded = SDKVariable_PB.fromBinary(resultBuffer!)
+        expect(sdkVarDecoded).toEqual(sdkVarForUserExpected)
     })
 
     it('should write preallocated protobuf message to variableForUser_PB_Preallocated', () => {
         const resultBuffer =
             callVariableForUser_PB_Preallocated(varForUserParams)
         expect(resultBuffer).not.toBeNull()
-        const decoded = decodeProtobufMessage(resultBuffer!, SDKVariable_PB)
-        expect(decoded).toEqual(varForUserExpected)
+        const decoded = SDKVariable_PB.fromBinary(resultBuffer!)
+        expect(decoded).toEqual(sdkVarForUserExpected)
     })
 
     describe('protobuf type tests', () => {
@@ -158,9 +159,8 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestVariableForUserParams_PB(params)
                 expect(resultBuffer).not.toBeNull()
-                const decoded = decodeProtobufMessage(
+                const decoded = VariableForUserParams_PB.fromBinary(
                     resultBuffer!,
-                    VariableForUserParams_PB,
                 )
                 expect(decoded).toEqual(params)
             })
@@ -179,9 +179,8 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestVariableForUserParams_PB(params)
                 expect(resultBuffer).not.toBeNull()
-                const decoded = decodeProtobufMessage(
+                const decoded = VariableForUserParams_PB.fromBinary(
                     resultBuffer!,
-                    VariableForUserParams_PB,
                 )
                 expect(decoded).toEqual(params)
             })
@@ -235,7 +234,7 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestDVCUser_PB(user)
                 expect(resultBuffer).not.toBeNull()
-                const decoded = decodeProtobufMessage(resultBuffer!, DVCUser_PB)
+                const decoded = DVCUser_PB.fromBinary(resultBuffer!)
                 expect(decoded).toEqual(user)
             })
 
@@ -245,7 +244,7 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestDVCUser_PB(user)
                 expect(resultBuffer).not.toBeNull()
-                const decoded = decodeProtobufMessage(resultBuffer!, DVCUser_PB)
+                const decoded = DVCUser_PB.fromBinary(resultBuffer!)
                 expect(decoded).toEqual({
                     userId: 'asuh',
                     email: { value: '', isNull: true },
@@ -274,10 +273,7 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()
-                const decoded = decodeProtobufMessage(
-                    resultBuffer!,
-                    SDKVariable_PB,
-                )
+                const decoded = SDKVariable_PB.fromBinary(resultBuffer!)
                 expect(decoded).toEqual(sdkVariable)
             })
 
@@ -292,10 +288,7 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()
-                const decoded = decodeProtobufMessage(
-                    resultBuffer!,
-                    SDKVariable_PB,
-                )
+                const decoded = SDKVariable_PB.fromBinary(resultBuffer!)
                 expect(decoded).toEqual(sdkVariable)
             })
 
@@ -310,10 +303,7 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()
-                const decoded = decodeProtobufMessage(
-                    resultBuffer!,
-                    SDKVariable_PB,
-                )
+                const decoded = SDKVariable_PB.fromBinary(resultBuffer!)
                 expect(decoded).toEqual(sdkVariable)
             })
 
@@ -328,10 +318,7 @@ describe('protobuf variable tests', () => {
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()
-                const decoded = decodeProtobufMessage(
-                    resultBuffer!,
-                    SDKVariable_PB,
-                )
+                const decoded = SDKVariable_PB.fromBinary(resultBuffer!)
                 expect(decoded).toEqual(sdkVariable)
             })
         })

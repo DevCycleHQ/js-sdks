@@ -6,10 +6,6 @@ import {
     WASMBucketingExports,
     ProtobufTypes,
 } from '@devcycle/bucketing-assembly-script'
-import {
-    encodeProtobufMessage,
-    decodeProtobufMessage,
-} from '@devcycle/bucketing-assembly-script/protobuf/pbHelpers'
 
 export function bucketUserForConfig(
     bucketing: WASMBucketingExports,
@@ -79,14 +75,11 @@ export function variableForUser_PB(
         shouldTrackEvent: true,
     }
     const pbMsg = ProtobufTypes.VariableForUserParams_PB.create(params)
-    const buffer = encodeProtobufMessage(
-        pbMsg,
-        ProtobufTypes.VariableForUserParams_PB,
-    )
+    const buffer = ProtobufTypes.VariableForUserParams_PB.toBinary(pbMsg)
 
     const bucketedVariable = bucketing.variableForUser_PB(buffer)
     if (!bucketedVariable) return null
     return pbSDKVariableTransform(
-        decodeProtobufMessage(bucketedVariable, ProtobufTypes.SDKVariable_PB),
+        ProtobufTypes.SDKVariable_PB.fromBinary(bucketedVariable),
     )
 }

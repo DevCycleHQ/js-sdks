@@ -8,11 +8,6 @@ import {
     CustomDataType,
 } from '../protobuf/compiled'
 
-import {
-    encodeProtobufMessage,
-    decodeProtobufMessage,
-} from '../protobuf/pbHelpers'
-
 const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB): SDKVariable => {
     if (pbSDKVariable.type === 0) {
         return {
@@ -128,10 +123,10 @@ export const variableForUserPB = ({
     }
 
     const pbMsg = VariableForUserParams_PB.create(params)
-    const buffer = encodeProtobufMessage(pbMsg, VariableForUserParams_PB)
+    const buffer = VariableForUserParams_PB.toBinary(pbMsg)
     const resultBuffer = variableForUser_PB(buffer)
 
     return !resultBuffer
         ? null
-        : pbSDKVariableToJS(decodeProtobufMessage(resultBuffer, SDKVariable_PB))
+        : pbSDKVariableToJS(SDKVariable_PB.fromBinary(resultBuffer))
 }
