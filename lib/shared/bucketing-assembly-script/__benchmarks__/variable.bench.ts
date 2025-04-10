@@ -9,7 +9,6 @@ import {
 import { ConfigBody } from '@devcycle/types'
 import {
     initialize,
-    VariableType,
     initEventQueue,
     setPlatformData,
     setConfigData,
@@ -18,6 +17,7 @@ import {
 } from '../__tests__/bucketingImportHelper'
 import largeTestData from '@devcycle/bucketing-test-data/json-data/largeConfig.json'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
+import { VariableType_PB } from '../protobuf/compiled'
 const { config } = testData
 
 const largeConfig = largeTestData.largeConfig as unknown as ConfigBody
@@ -64,7 +64,7 @@ benchmarkSuite('variableForUser', {
         const variable = variableForUser({
             user,
             variableKey: 'feature4Var',
-            variableType: VariableType.String,
+            variableType: VariableType_PB.String,
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
@@ -72,7 +72,7 @@ benchmarkSuite('variableForUser', {
         const variable = variableForUser_PB({
             user,
             variableKey: 'feature4Var',
-            variableType: VariableType.String,
+            variableType: VariableType_PB.String,
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
@@ -80,7 +80,7 @@ benchmarkSuite('variableForUser', {
         const variable = variableForUser({
             user: largeUser,
             variableKey: 'feature4Var',
-            variableType: VariableType.String,
+            variableType: VariableType_PB.String,
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
@@ -88,7 +88,7 @@ benchmarkSuite('variableForUser', {
         const variable = variableForUser_PB({
             user: largeUser,
             variableKey: 'feature4Var',
-            variableType: VariableType.String,
+            variableType: VariableType_PB.String,
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
@@ -96,7 +96,7 @@ benchmarkSuite('variableForUser', {
         const variable = variableForUser({
             user: defaultUser,
             variableKey: 'feature4Var',
-            variableType: VariableType.String,
+            variableType: VariableType_PB.String,
         })
         if (variable) throw new Error('variable should be defaulted')
     },
@@ -104,7 +104,7 @@ benchmarkSuite('variableForUser', {
         const variable = variableForUser_PB({
             user: defaultUser,
             variableKey: 'feature4Var',
-            variableType: VariableType.String,
+            variableType: VariableType_PB.String,
         })
         if (variable) throw new Error('variable should be defaulted')
     },
@@ -112,7 +112,7 @@ benchmarkSuite('variableForUser', {
         const variable = variableForUser({
             user: defaultUser,
             variableKey: 'unknown key',
-            variableType: VariableType.String,
+            variableType: VariableType_PB.String,
         })
         if (variable) throw new Error('variable should be defaulted')
     },
@@ -120,7 +120,7 @@ benchmarkSuite('variableForUser', {
         const variable = variableForUser_PB({
             user: defaultUser,
             variableKey: 'unknown key',
-            variableType: VariableType.String,
+            variableType: VariableType_PB.String,
         })
         if (variable) throw new Error('variable should be defaulted')
     },
@@ -131,7 +131,7 @@ benchmarkSuite('variableForUser - Large Config', {
         console.log('setup variableForUser - Large Config tests')
         await initialize(true)
         // @ts-ignore
-        initSDK('sdkKey', largeConfig)
+        initSDK('sdkKey', 'clientUUID_large', largeConfig)
     },
     teardownSuite() {
         cleanupSDK()
@@ -140,7 +140,7 @@ benchmarkSuite('variableForUser - Large Config', {
         const variable = variableForUser({
             user: largeConfigUser,
             variableKey: 'v-key-50',
-            variableType: VariableType.Boolean,
+            variableType: VariableType_PB.Boolean,
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
@@ -148,7 +148,7 @@ benchmarkSuite('variableForUser - Large Config', {
         const variable = variableForUser_PB({
             user: largeConfigUser,
             variableKey: 'v-key-50',
-            variableType: VariableType.Boolean,
+            variableType: VariableType_PB.Boolean,
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
@@ -176,7 +176,7 @@ benchmarkSuite('generateBucketedConfigForUser - Large Config', {
         console.log('setup generateBucketedConfigForUser - Large Config tests')
         await initialize(true)
         // @ts-ignore
-        initSDK('sdkKey', largeConfig)
+        initSDK('sdkKey', 'clientUUID_large_2', largeConfig)
     },
     teardownSuite() {
         cleanupSDK()
@@ -202,7 +202,7 @@ benchmarkSuite('initEventQueue', {
         cleanupSDK()
     },
     ['initEventQueue']: () => {
-        initEventQueue('sdkKey_' + i, JSON.stringify({}))
+        initEventQueue('sdkKey_' + i, 'clientUUID_' + i, JSON.stringify({}))
         i++
     },
 })

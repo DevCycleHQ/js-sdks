@@ -7,12 +7,12 @@ import {
     clearPlatformData,
     cleanupEventQueue,
     setClientCustomData,
-    VariableType,
 } from './bucketingImportHelper'
 import { variableForUserPB } from './protobufVariableHelper'
 import { SDKVariable } from '@devcycle/types'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config } = testData
+import { VariableType_PB } from '../protobuf/compiled'
 
 type VariableForUserOptions = {
     sdkKey?: string
@@ -20,7 +20,7 @@ type VariableForUserOptions = {
     config?: unknown
     user: unknown
     variableKey: string
-    variableType: VariableType
+    variableType: VariableType_PB
 }
 
 export const variableForUser_PB = ({

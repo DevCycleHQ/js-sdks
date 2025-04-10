@@ -1,87 +1,70 @@
 import { SDKVariable, VariableType as VariableTypeStr } from '@devcycle/types'
-import { variableForUser_PB, VariableType } from './bucketingImportHelper'
-import { VariableForUserParams_PB, SDKVariable_PB } from '../protobuf/compiled'
+import { variableForUser_PB } from './bucketingImportHelper'
+import {
+    VariableForUserParams_PB,
+    SDKVariable_PB,
+    VariableType_PB,
+    CustomDataValue,
+    CustomDataType,
+} from '../protobuf/compiled'
 
-type SDKVariable_PB_Type = {
-    _id: string
-    type: number
-    key: string
-    boolValue: boolean
-    doubleValue: number
-    stringValue: string
-}
+const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB): SDKVariable => {
+    let sdkVariableType: VariableTypeStr
+    let value: any
 
-const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
-    if (pbSDKVariable.type === 0) {
-        return {
-            _id: pbSDKVariable._id,
-            key: pbSDKVariable.key,
-            value: pbSDKVariable.boolValue,
-            type: VariableTypeStr.boolean,
-        }
-    } else if (pbSDKVariable.type === 1) {
-        return {
-            _id: pbSDKVariable._id,
-            key: pbSDKVariable.key,
-            value: pbSDKVariable.doubleValue,
-            type: VariableTypeStr.number,
-        }
-    } else if (pbSDKVariable.type === 2) {
-        return {
-            _id: pbSDKVariable._id,
-            key: pbSDKVariable.key,
-            value: pbSDKVariable.stringValue,
-            type: VariableTypeStr.string,
-        }
-    } else if (pbSDKVariable.type === 3) {
-        return {
-            _id: pbSDKVariable._id,
-            key: pbSDKVariable.key,
-            value: JSON.parse(pbSDKVariable.stringValue),
-            type: VariableTypeStr.json,
-        }
+    switch (pbSDKVariable.type) {
+        case VariableType_PB.Boolean:
+            sdkVariableType = VariableTypeStr.boolean
+            value = pbSDKVariable.boolValue
+            break
+        case VariableType_PB.Number:
+            sdkVariableType = VariableTypeStr.number
+            value = pbSDKVariable.doubleValue
+            break
+        case VariableType_PB.String:
+            sdkVariableType = VariableTypeStr.string
+            value = pbSDKVariable.stringValue
+            break
+        case VariableType_PB.JSON:
+            sdkVariableType = VariableTypeStr.json
+            value = JSON.parse(pbSDKVariable.stringValue)
+            break
+        default:
+            throw new Error(`Unknown variable type: ${pbSDKVariable.type}`)
     }
-    throw new Error(`Unknown variable type: ${pbSDKVariable.type}`)
-}
 
-enum CustomDataTypePB {
-    Bool,
-    Num,
-    Str,
-    Null,
-}
-
-type CustomDataValuePB = {
-    type: CustomDataTypePB
-    boolValue?: boolean
-    doubleValue?: number
-    stringValue?: string
+    return {
+        _id: pbSDKVariable._id,
+        key: pbSDKVariable.key,
+        value,
+        type: sdkVariableType,
+    }
 }
 
 const customDataToPB = (
     customData: any,
-): Record<string, CustomDataValuePB> | undefined => {
+): Record<string, CustomDataValue> | undefined => {
     if (!customData) return undefined
 
-    const customDataPB: Record<string, CustomDataValuePB> = {}
+    const customDataPB: Record<string, CustomDataValue> = {}
     for (const [key, value] of Object.entries(customData)) {
         if (typeof value === 'boolean') {
             customDataPB[key] = {
-                type: CustomDataTypePB.Bool,
+                type: CustomDataType.Bool,
                 boolValue: value,
             }
         } else if (typeof value === 'number') {
             customDataPB[key] = {
-                type: CustomDataTypePB.Num,
+                type: CustomDataType.Num,
                 doubleValue: value,
             }
         } else if (typeof value === 'string') {
             customDataPB[key] = {
-                type: CustomDataTypePB.Str,
+                type: CustomDataType.Str,
                 stringValue: value,
             }
         } else if (value === null) {
-            customDataPB[key] = { type: CustomDataTypePB.Null }
+            customDataPB[key] = { type: CustomDataType.Null }
         } else {
             throw new Error(`Unknown custom data type: ${typeof value}`)
         }
@@ -93,7 +76,7 @@ export type VariableForUserArgs = {
     sdkKey: string
     user: any
     variableKey: string
-    variableType: VariableType
+    variableType: VariableType_PB
 }
 
 export const variableForUserPB = ({
@@ -138,14 +121,12 @@ export const variableForUserPB = ({
         },
         shouldTrackEvent: true,
     }
-    const err = VariableForUserParams_PB.verify(params)
-    if (err) throw new Error(err)
 
     const pbMsg = VariableForUserParams_PB.create(params)
-    const buffer = VariableForUserParams_PB.encode(pbMsg).finish()
-    const resultBuffer = variableForUser_PB(buffer)
+    const buffer = VariableForUserParams_PB.toBinary(pbMsg)
 
+    const resultBuffer = variableForUser_PB(buffer)
     return !resultBuffer
         ? null
-        : pbSDKVariableToJS(SDKVariable_PB.decode(resultBuffer))
+        : pbSDKVariableToJS(SDKVariable_PB.fromBinary(resultBuffer))
 }

@@ -1,12 +1,11 @@
 import { BucketedUserConfig, SDKVariable, VariableType } from '@devcycle/types'
 import { DVCPopulatedUser } from '@devcycle/js-cloud-server-sdk'
-import {
-    VariableForUserParams_PB,
-    SDKVariable_PB,
-} from '@devcycle/bucketing-assembly-script/protobuf/compiled'
 import { pbSDKVariableTransform } from '../pb-types/pbTypeHelpers'
 import { DVCPopulatedUserToPBUser } from '../models/populatedUserHelpers'
-import { WASMBucketingExports } from '@devcycle/bucketing-assembly-script'
+import {
+    WASMBucketingExports,
+    ProtobufTypes,
+} from '@devcycle/bucketing-assembly-script'
 
 export function bucketUserForConfig(
     bucketing: WASMBucketingExports,
@@ -75,15 +74,12 @@ export function variableForUser_PB(
         variableType: type,
         shouldTrackEvent: true,
     }
-    const err = VariableForUserParams_PB.verify(params)
-    if (err)
-        throw new Error(
-            `Invalid VariableForUserParams_PB protobuf params: ${err}`,
-        )
-
-    const buffer = VariableForUserParams_PB.encode(params).finish()
+    const pbMsg = ProtobufTypes.VariableForUserParams_PB.create(params)
+    const buffer = ProtobufTypes.VariableForUserParams_PB.toBinary(pbMsg)
 
     const bucketedVariable = bucketing.variableForUser_PB(buffer)
     if (!bucketedVariable) return null
-    return pbSDKVariableTransform(SDKVariable_PB.decode(bucketedVariable))
+    return pbSDKVariableTransform(
+        ProtobufTypes.SDKVariable_PB.fromBinary(bucketedVariable),
+    )
 }

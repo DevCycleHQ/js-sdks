@@ -29,9 +29,9 @@ enum CustomDataType {
 
 message CustomDataValue {
   CustomDataType type = 1;
-  bool boolValue = 2;
-  double doubleValue = 3;
-  string stringValue = 4;
+  optional bool boolValue = 2;
+  optional double doubleValue = 3;
+  optional string stringValue = 4;
 }
 
 message NullableCustomData {
