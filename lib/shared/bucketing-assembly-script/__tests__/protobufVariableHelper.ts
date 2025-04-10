@@ -9,36 +9,36 @@ import {
 } from '../protobuf/compiled'
 
 const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB): SDKVariable => {
-    if (pbSDKVariable.type === 0) {
-        return {
-            _id: pbSDKVariable.Id,
-            key: pbSDKVariable.key,
-            value: pbSDKVariable.boolValue,
-            type: VariableTypeStr.boolean,
-        }
-    } else if (pbSDKVariable.type === 1) {
-        return {
-            _id: pbSDKVariable.Id,
-            key: pbSDKVariable.key,
-            value: pbSDKVariable.doubleValue,
-            type: VariableTypeStr.number,
-        }
-    } else if (pbSDKVariable.type === 2) {
-        return {
-            _id: pbSDKVariable.Id,
-            key: pbSDKVariable.key,
-            value: pbSDKVariable.stringValue,
-            type: VariableTypeStr.string,
-        }
-    } else if (pbSDKVariable.type === 3) {
-        return {
-            _id: pbSDKVariable.Id,
-            key: pbSDKVariable.key,
-            value: JSON.parse(pbSDKVariable.stringValue),
-            type: VariableTypeStr.json,
-        }
+    let sdkVariableType: VariableTypeStr
+    let value: any
+
+    switch (pbSDKVariable.type) {
+        case VariableType_PB.Boolean:
+            sdkVariableType = VariableTypeStr.boolean
+            value = pbSDKVariable.boolValue
+            break
+        case VariableType_PB.Number:
+            sdkVariableType = VariableTypeStr.number
+            value = pbSDKVariable.doubleValue
+            break
+        case VariableType_PB.String:
+            sdkVariableType = VariableTypeStr.string
+            value = pbSDKVariable.stringValue
+            break
+        case VariableType_PB.JSON:
+            sdkVariableType = VariableTypeStr.json
+            value = JSON.parse(pbSDKVariable.stringValue)
+            break
+        default:
+            throw new Error(`Unknown variable type: ${pbSDKVariable.type}`)
     }
-    throw new Error(`Unknown variable type: ${pbSDKVariable.type}`)
+
+    return {
+        _id: pbSDKVariable._id,
+        key: pbSDKVariable.key,
+        value,
+        type: sdkVariableType,
+    }
 }
 
 const customDataToPB = (
@@ -124,8 +124,8 @@ export const variableForUserPB = ({
 
     const pbMsg = VariableForUserParams_PB.create(params)
     const buffer = VariableForUserParams_PB.toBinary(pbMsg)
-    const resultBuffer = variableForUser_PB(buffer)
 
+    const resultBuffer = variableForUser_PB(buffer)
     return !resultBuffer
         ? null
         : pbSDKVariableToJS(SDKVariable_PB.fromBinary(resultBuffer))

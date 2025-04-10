@@ -8,7 +8,7 @@ const testVariable = {
     evalReason: null,
 }
 const buffer = ProtobufTypes.SDKVariable_PB.toBinary({
-    Id: testVariable._id,
+    _id: testVariable._id,
     type: 0,
     key: testVariable.key,
     boolValue: testVariable.value,

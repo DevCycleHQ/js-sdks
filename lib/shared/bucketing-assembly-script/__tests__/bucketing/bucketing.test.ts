@@ -33,7 +33,6 @@ const defaultPlatformData = {
     sdkPlatform: '',
 }
 const sdkKey = 'sdkKey'
-const clientUUID = 'clientUUID'
 
 const setPlatformDataJSON = (data: unknown) => {
     setPlatformData(JSON.stringify(data))
@@ -89,7 +88,11 @@ const testGenerateBucketingConfigWithOverrides = (
 }
 
 const expectVariableForUser = (
-    args: { user: any; variableKey: string; variableType: VariableType_PB },
+    args: {
+        user: any
+        variableKey: string
+        variableType: VariableType_PB
+    },
     expectedValue: unknown,
 ) => {
     const variable = variableForUser({ ...args, sdkKey })
@@ -300,6 +303,8 @@ describe('Config Parsing and Generating', () => {
         }
         initSDK(sdkKey, config)
         const c = generateBucketedConfig(user)
+        console.log(`bucketed config: ${JSON.stringify(c)}`)
+        console.log(`expected: ${JSON.stringify(expected)}`)
         expect(c).toEqual(expected)
 
         expectVariableForUser(

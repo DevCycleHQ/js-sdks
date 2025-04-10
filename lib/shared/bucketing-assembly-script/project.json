@@ -80,7 +80,7 @@
                         "command": "rm -rf ./protobuf/compiled.js ./protobuf/compiled.d.ts"
                     },
                     {
-                        "command": "protoc --plugin=../../../node_modules/@protobuf-ts/plugin/bin/protoc-gen-ts --ts_out=./protobuf --ts_opt=eslint_disable,output_javascript,output_legacy_commonjs --proto_path=./protobuf ./protobuf/*.proto"
+                        "command": "protoc --plugin=../../../node_modules/@protobuf-ts/plugin/bin/protoc-gen-ts --ts_out=./protobuf --ts_opt=eslint_disable,output_javascript,output_legacy_commonjs,use_proto_field_name --proto_path=./protobuf ./protobuf/*.proto"
                     },
                     { 
                         "command": "cd protobuf/ && mv variableForUserParams.d.ts compiled.d.ts && mv variableForUserParams.js compiled.js"
