@@ -12,7 +12,7 @@
         "README.md"
     ],
     "dependencies": {
-        "protobufjs": "^7.4.0"
+        "@protobuf-ts/runtime": "^2.9.6"
     },
     "devDependencies": {
         "@devcycle/bucketing-test-data": "^1.27.0"

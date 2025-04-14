@@ -7,7 +7,6 @@ import {
     setPlatformData,
     setClientCustomData,
     variableForUser as variableForUser_AS,
-    VariableType,
 } from '../bucketingImportHelper'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
 const { config, barrenConfig, configWithNullCustomData } = testData
@@ -21,6 +20,7 @@ import {
     variableForUserPB,
     VariableForUserArgs,
 } from '../protobufVariableHelper'
+import { VariableType_PB } from '../../protobuf/compiled'
 
 type BoundedHash = { rolloutHash: number; bucketingHash: number }
 
@@ -88,7 +88,11 @@ const testGenerateBucketingConfigWithOverrides = (
 }
 
 const expectVariableForUser = (
-    args: { user: any; variableKey: string; variableType: VariableType },
+    args: {
+        user: any
+        variableKey: string
+        variableType: VariableType_PB
+    },
     expectedValue: unknown,
 ) => {
     const variable = variableForUser({ ...args, sdkKey })
@@ -305,7 +309,7 @@ describe('Config Parsing and Generating', () => {
             {
                 user,
                 variableKey: 'swagTest',
-                variableType: VariableType.String,
+                variableType: VariableType_PB.String,
             },
             expected.variables.swagTest,
         )
@@ -482,7 +486,7 @@ describe('Config Parsing and Generating', () => {
             {
                 user,
                 variableKey: 'audience-match',
-                variableType: VariableType.String,
+                variableType: VariableType_PB.String,
             },
             expected.variables['audience-match'],
         )
@@ -490,7 +494,7 @@ describe('Config Parsing and Generating', () => {
             {
                 user,
                 variableKey: 'feature2.cool',
-                variableType: VariableType.String,
+                variableType: VariableType_PB.String,
             },
             expected.variables['feature2.cool'],
         )
@@ -498,7 +502,7 @@ describe('Config Parsing and Generating', () => {
             {
                 user,
                 variableKey: 'feature2.hello',
-                variableType: VariableType.String,
+                variableType: VariableType_PB.String,
             },
             expected.variables['feature2.hello'],
         )
@@ -506,12 +510,12 @@ describe('Config Parsing and Generating', () => {
             {
                 user,
                 variableKey: 'swagTest',
-                variableType: VariableType.String,
+                variableType: VariableType_PB.String,
             },
             expected.variables['swagTest'],
         )
         expectVariableForUser(
-            { user, variableKey: 'test', variableType: VariableType.String },
+            { user, variableKey: 'test', variableType: VariableType_PB.String },
             expected.variables['test'],
         )
     })
@@ -581,16 +585,20 @@ describe('Config Parsing and Generating', () => {
                 },
             },
         }
+        console.log(`new config: ${JSON.stringify(newConfig)}`)
         initSDK(sdkKey, newConfig)
 
+        console.log(`user: ${JSON.stringify(user)}`)
         const c = generateBucketedConfig(user)
+        console.log(`bucketed config: ${JSON.stringify(c)}`)
+        console.log(`expected: ${JSON.stringify(expected)}`)
         expect(c).toEqual(expected)
 
         expectVariableForUser(
             {
                 user,
                 variableKey: 'feature2Var',
-                variableType: VariableType.String,
+                variableType: VariableType_PB.String,
             },
             expected.variables['feature2Var'],
         )
@@ -719,7 +727,7 @@ describe('Config Parsing and Generating', () => {
             {
                 user,
                 variableKey: 'feature2Var',
-                variableType: VariableType.String,
+                variableType: VariableType_PB.String,
             },
             expected.variables['feature2Var'],
         )
@@ -859,7 +867,7 @@ describe('Config Parsing and Generating', () => {
             {
                 user,
                 variableKey: 'feature2Var',
-                variableType: VariableType.String,
+                variableType: VariableType_PB.String,
             },
             expected.variables['feature2Var'],
         )
@@ -975,7 +983,7 @@ describe('Config Parsing and Generating', () => {
             {
                 user,
                 variableKey: 'swagTest',
-                variableType: VariableType.String,
+                variableType: VariableType_PB.String,
             },
             expected.variables['swagTest'],
         )
@@ -983,7 +991,7 @@ describe('Config Parsing and Generating', () => {
             {
                 user,
                 variableKey: 'feature2Var',
-                variableType: VariableType.String,
+                variableType: VariableType_PB.String,
             },
             expected.variables['feature2Var'],
         )
@@ -1004,7 +1012,7 @@ describe('Config Parsing and Generating', () => {
             {
                 user,
                 variableKey: 'feature2Var',
-                variableType: VariableType.String,
+                variableType: VariableType_PB.String,
             },
             null,
         )
@@ -1036,7 +1044,7 @@ describe('Config Parsing and Generating', () => {
             {
                 user,
                 variableKey: 'feature2Var',
-                variableType: VariableType.String,
+                variableType: VariableType_PB.String,
             },
             null,
         )
@@ -1057,7 +1065,7 @@ describe('Config Parsing and Generating', () => {
             {
                 user,
                 variableKey: 'feature2.cool',
-                variableType: VariableType.String,
+                variableType: VariableType_PB.String,
             },
             null,
         )
@@ -1129,7 +1137,7 @@ describe('Config Parsing and Generating', () => {
             {
                 user,
                 variableKey: 'audience-match',
-                variableType: VariableType.String,
+                variableType: VariableType_PB.String,
             },
             null,
         )
@@ -1201,7 +1209,7 @@ describe('Config Parsing and Generating', () => {
             {
                 user,
                 variableKey: 'audience-match',
-                variableType: VariableType.String,
+                variableType: VariableType_PB.String,
             },
             expected.variables['audience-match'],
         )

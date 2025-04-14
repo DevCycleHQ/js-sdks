@@ -1,4 +1,4 @@
-import { VariableType } from './bucketingImportHelper'
+import { VariableType_PB } from '../protobuf/compiled'
 import {
     initSDK,
     variableForUser,
@@ -20,7 +20,7 @@ describe('variableForUser tests', () => {
             config,
             user,
             variableKey: 'swagTest',
-            variableType: VariableType.String,
+            variableType: VariableType_PB.String,
         })
         expect(variable1).toEqual({
             _id: '615356f120ed334a6054564c',
@@ -32,7 +32,7 @@ describe('variableForUser tests', () => {
             config,
             user,
             variableKey: 'bool-var',
-            variableType: VariableType.Boolean,
+            variableType: VariableType_PB.Boolean,
         })
         expect(variable2).toEqual({
             _id: '61538237b0a70b58ae6af71y',
@@ -44,7 +44,7 @@ describe('variableForUser tests', () => {
             config,
             user,
             variableKey: 'num-var',
-            variableType: VariableType.Number,
+            variableType: VariableType_PB.Number,
         })
         expect(variable3).toEqual({
             _id: '61538237b0a70b58ae6af71s',
@@ -56,7 +56,7 @@ describe('variableForUser tests', () => {
             config,
             user,
             variableKey: 'json-var',
-            variableType: VariableType.JSON,
+            variableType: VariableType_PB.JSON,
         })
         expect(variable4).toEqual({
             _id: '61538237b0a70b58ae6af71q',
@@ -76,7 +76,7 @@ describe('variableForUser tests', () => {
             config,
             user,
             variableKey: 'swagTest',
-            variableType: VariableType.String,
+            variableType: VariableType_PB.String,
         })
         expect(variable1).toEqual({
             _id: '615356f120ed334a6054564c',
@@ -96,7 +96,7 @@ describe('variableForUser tests', () => {
             config,
             user,
             variableKey: 'swagTest',
-            variableType: VariableType.Number,
+            variableType: VariableType_PB.Number,
         })
         expect(variable).toBeNull()
     })
@@ -111,7 +111,7 @@ describe('variableForUser tests', () => {
             config,
             user,
             variableKey: 'unknownKey',
-            variableType: VariableType.String,
+            variableType: VariableType_PB.String,
         })
         expect(variable).toBeNull()
     })

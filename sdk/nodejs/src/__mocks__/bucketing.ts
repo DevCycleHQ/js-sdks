@@ -7,14 +7,14 @@ const testVariable = {
     key: 'test-key',
     evalReason: null,
 }
-const buffer = ProtobufTypes.SDKVariable_PB.encode({
+const buffer = ProtobufTypes.SDKVariable_PB.toBinary({
     _id: testVariable._id,
     type: 0,
     key: testVariable.key,
     boolValue: testVariable.value,
     doubleValue: 0,
     stringValue: '',
-}).finish()
+})
 
 enum VariableType {
     Boolean,
