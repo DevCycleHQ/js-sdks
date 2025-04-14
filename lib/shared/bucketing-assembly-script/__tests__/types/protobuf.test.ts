@@ -63,13 +63,13 @@ describe('protobuf variable tests', () => {
         variableType: 2,
         shouldTrackEvent: true,
         user: {
-            userId: 'asuh',
+            user_id: 'asuh',
             country: { value: 'canada', isNull: false },
             email: { value: 'test', isNull: false },
         },
     }
     const sdkVarForUserExpected = {
-        Id: '615356f120ed334a6054564c',
+        _id: '615356f120ed334a6054564c',
         boolValue: false,
         doubleValue: 0,
         evalReason: {
@@ -106,6 +106,17 @@ describe('protobuf variable tests', () => {
 
     describe('protobuf type tests', () => {
         describe('variableForUser_PB', () => {
+            it('should throw error if data is not set on variableForUser_PB create', () => {
+                expect(() =>
+                    callVariableForUser_PB({
+                        variableKey: 'swagTest',
+                        variableType: 0,
+                        shouldTrackEvent: true,
+                        user: {},
+                    }),
+                ).toThrow('Data is not set on variableForUser_PB create')
+            })
+
             it('should parse variableForUser_PB protobuf message', () => {
                 const params = {
                     sdkKey: sdkKey,
@@ -113,7 +124,7 @@ describe('protobuf variable tests', () => {
                     variableType: 0,
                     shouldTrackEvent: true,
                     user: {
-                        userId: 'asuh',
+                        user_id: 'asuh',
                         email: { value: 'test@devcycle.com', isNull: false },
                         name: { value: 'name', isNull: false },
                         language: { value: 'en', isNull: false },
@@ -172,7 +183,7 @@ describe('protobuf variable tests', () => {
                     variableType: 0,
                     shouldTrackEvent: false,
                     user: {
-                        userId: 'asuh',
+                        user_id: 'asuh',
                         customData: { value: {}, isNull: true },
                         privateCustomData: { value: {}, isNull: true },
                     },
@@ -189,7 +200,7 @@ describe('protobuf variable tests', () => {
         describe('testDVCUser_PB', () => {
             it('should parse testDVCUser_PB protobuf message', () => {
                 const user = {
-                    userId: 'asuh',
+                    user_id: 'asuh',
                     email: { value: 'test@devcycle.com', isNull: false },
                     name: { value: 'name', isNull: false },
                     language: { value: 'en', isNull: false },
@@ -240,13 +251,13 @@ describe('protobuf variable tests', () => {
 
             it('should set defaults for missing user fields', () => {
                 const user = {
-                    userId: 'asuh',
+                    user_id: 'asuh',
                 }
                 const resultBuffer = callTestDVCUser_PB(user)
                 expect(resultBuffer).not.toBeNull()
                 const decoded = DVCUser_PB.fromBinary(resultBuffer!)
                 expect(decoded).toEqual({
-                    userId: 'asuh',
+                    user_id: 'asuh',
                     email: { value: '', isNull: true },
                     name: { value: '', isNull: true },
                     language: { value: '', isNull: true },
@@ -263,7 +274,7 @@ describe('protobuf variable tests', () => {
         describe('SDKVariable_PB', () => {
             it('should parse boolean SDKVariable_PB protobuf message', () => {
                 const sdkVariable = {
-                    Id: '615356f120ed334a6054564c',
+                    _id: '615356f120ed334a6054564c',
                     type: 0,
                     key: 'bool-key',
                     boolValue: true,
@@ -279,7 +290,7 @@ describe('protobuf variable tests', () => {
 
             it('should parse number SDKVariable_PB protobuf message', () => {
                 const sdkVariable = {
-                    Id: '615356f120ed334a6054564c',
+                    _id: '615356f120ed334a6054564c',
                     type: 1,
                     key: 'num-key',
                     boolValue: false,
@@ -294,7 +305,7 @@ describe('protobuf variable tests', () => {
 
             it('should parse string SDKVariable_PB protobuf message', () => {
                 const sdkVariable = {
-                    Id: '615356f120ed334a6054564c',
+                    _id: '615356f120ed334a6054564c',
                     type: 2,
                     key: 'string-key',
                     boolValue: false,
@@ -309,7 +320,7 @@ describe('protobuf variable tests', () => {
 
             it('should parse json SDKVariable_PB protobuf message', () => {
                 const sdkVariable = {
-                    Id: '615356f120ed334a6054564c',
+                    _id: '615356f120ed334a6054564c',
                     type: 2,
                     key: 'json-key',
                     boolValue: false,

@@ -303,8 +303,6 @@ describe('Config Parsing and Generating', () => {
         }
         initSDK(sdkKey, config)
         const c = generateBucketedConfig(user)
-        console.log(`bucketed config: ${JSON.stringify(c)}`)
-        console.log(`expected: ${JSON.stringify(expected)}`)
         expect(c).toEqual(expected)
 
         expectVariableForUser(
@@ -587,9 +585,13 @@ describe('Config Parsing and Generating', () => {
                 },
             },
         }
+        console.log(`new config: ${JSON.stringify(newConfig)}`)
         initSDK(sdkKey, newConfig)
 
+        console.log(`user: ${JSON.stringify(user)}`)
         const c = generateBucketedConfig(user)
+        console.log(`bucketed config: ${JSON.stringify(c)}`)
+        console.log(`expected: ${JSON.stringify(expected)}`)
         expect(c).toEqual(expected)
 
         expectVariableForUser(
