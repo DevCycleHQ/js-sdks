@@ -1,6 +1,6 @@
 {
     "name": "app",
-    "packageManager": "yarn@4.6.0",
+    "packageManager": "yarn@4.9.1",
     "private": true,
     "scripts": {
         "dev": "node --preserve-symlinks node_modules/next/dist/bin/next dev",
@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "@devcycle/nextjs-sdk": "file:../../../../dist/sdk/nextjs",
-        "next": "^15.2.3",
+        "next": "~15.2.4",
         "react": "^19.0.0",
         "react-dom": "^19.0.0"
     },
