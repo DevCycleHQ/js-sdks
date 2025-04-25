@@ -414,4 +414,14 @@ export interface BucketedUserConfig {
      * staleness.
      */
     etag?: string
+
+    /**
+     * Settings for the bucketed config.
+     */
+    settings?: {
+        /**
+         * If true, the bucketed config will filter out featureVars per evaluation.
+         */
+        filterFeatureVars?: boolean
+    }
 }
