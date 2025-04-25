@@ -33,4 +33,82 @@ describe('RequestEvent tests', () => {
         const requestEvent = new DVCRequestEvent(event)
         expect(requestEvent.clientDate).toEqual(event.date)
     })
+
+    describe('filterFeatureVars tests', () => {
+        const mockConfig = {
+            settings: {
+                filterFeatureVars: true
+            },
+            variables: {
+                'test-var': {
+                    _feature: 'feature-1'
+                }
+            },
+            featureVariationMap: {
+                'feature-1': 'variation-1',
+                'feature-2': 'variation-2'
+            }
+        }
+
+        it('should filter feature vars for variableEvaluated events when filterFeatureVars is enabled', () => {
+            const event = {
+                type: EventTypes.variableEvaluated,
+                target: 'test-var'
+            }
+            const requestEvent = new DVCRequestEvent(event, 'user-1', mockConfig)
+            expect(requestEvent.featureVars).toEqual({
+                'feature-1': 'variation-1'
+            })
+        })
+
+        it('should filter feature vars for variableDefaulted events when filterFeatureVars is enabled', () => {
+            const event = {
+                type: EventTypes.variableDefaulted,
+                target: 'test-var'
+            }
+            const requestEvent = new DVCRequestEvent(event, 'user-1', mockConfig)
+            expect(requestEvent.featureVars).toEqual({
+                'feature-1': 'variation-1'
+            })
+        })
+
+        it('should return empty feature vars when variable not found', () => {
+            const event = {
+                type: EventTypes.variableEvaluated,
+                target: 'non-existent-var'
+            }
+            const requestEvent = new DVCRequestEvent(event, 'user-1', mockConfig)
+            expect(requestEvent.featureVars).toEqual({})
+        })
+
+        it('should return all feature vars for non-variable events', () => {
+            const event = {
+                type: 'customEvent'
+            }
+            const requestEvent = new DVCRequestEvent(event, 'user-1', mockConfig)
+            expect(requestEvent.featureVars).toEqual(mockConfig.featureVariationMap)
+        })
+
+        it('should return all feature vars when filterFeatureVars is disabled', () => {
+            const configWithoutFilter = {
+                ...mockConfig,
+                settings: undefined
+            }
+            const event = {
+                type: EventTypes.variableEvaluated,
+                target: 'test-var'
+            }
+            const requestEvent = new DVCRequestEvent(event, 'user-1', configWithoutFilter)
+            expect(requestEvent.featureVars).toEqual(mockConfig.featureVariationMap)
+        })
+
+        it('should handle undefined config', () => {
+            const event = {
+                type: EventTypes.variableEvaluated,
+                target: 'test-var'
+            }
+            const requestEvent = new DVCRequestEvent(event, 'user-1', undefined)
+            expect(requestEvent.featureVars).toEqual({})
+        })
+    })
 })

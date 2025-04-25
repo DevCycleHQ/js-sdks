@@ -1,11 +1,4 @@
-import { DevCycleEvent } from './types'
-import { DVCRequestEvent } from './RequestEvent'
-import { DVCPopulatedUser } from './User'
-import type {
-    BucketedUserConfig,
-    SDKEventRequestBody,
-    DVCClientAPIUser,
-} from '@devcycle/types'
+import { DVCClientAPIUser } from '@devcycle/types'
 
 const convertToQueryFriendlyFormat = (property?: any): any => {
     if (property instanceof Date) {
@@ -57,23 +50,6 @@ export const checkParamType = (
     }
 }
 
-export function generateEventPayload(
-    config: BucketedUserConfig | null,
-    user: DVCPopulatedUser,
-    events: DevCycleEvent[],
-): SDKEventRequestBody {
-    return {
-        events: events.map((event) => {
-            return new DVCRequestEvent(
-                event,
-                user.user_id,
-                config?.featureVariationMap,
-            )
-        }),
-        user,
-    }
-}
-
 // The `self` property is available only in WorkerScope environments (which don't have access to window)
 // ServiceWorkerGlobalScope is the name of the class when in a service worker environment
 // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope
@@ -90,5 +66,4 @@ export function checkIsServiceWorker(): boolean {
 export default {
     serializeUserSearchParams,
     checkParamDefined,
-    generateEventPayload,
 }

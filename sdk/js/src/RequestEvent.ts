@@ -1,7 +1,21 @@
 import { DevCycleEvent } from './types'
 import { checkParamDefined } from './utils'
 import { EventTypes } from './EventQueue'
+import { DVCPopulatedUser } from './User'
+import type { BucketedUserConfig, SDKEventRequestBody } from '@devcycle/types'
 
+export function generateEventPayload(
+    config: BucketedUserConfig | undefined,
+    user: DVCPopulatedUser,
+    events: DevCycleEvent[],
+): SDKEventRequestBody {
+    return {
+        events: events.map((event) => {
+            return new DVCRequestEvent(event, user.user_id, config)
+        }),
+        user,
+    }
+}
 export class DVCRequestEvent implements DevCycleEvent {
     type: string
     target?: string
@@ -15,7 +29,7 @@ export class DVCRequestEvent implements DevCycleEvent {
     constructor(
         event: DevCycleEvent,
         user_id: string,
-        featureVars?: Record<string, string>,
+        config: BucketedUserConfig | undefined,
     ) {
         const { type, target, date, value, metaData } = event
         checkParamDefined('type', type)
@@ -26,7 +40,24 @@ export class DVCRequestEvent implements DevCycleEvent {
         this.user_id = user_id
         this.clientDate = date || Date.now()
         this.value = value
-        this.featureVars = featureVars || {}
+
+        if (
+            config &&
+            config.settings?.filterFeatureVars &&
+            (type === 'variableEvaluated' || type === 'variableDefaulted') &&
+            target
+        ) {
+            const variable = config?.variables[target]
+            const featureId = variable?._feature
+            this.featureVars =
+                featureId && config?.featureVariationMap[featureId]
+                    ? {
+                          [featureId]: config?.featureVariationMap[featureId],
+                      }
+                    : {}
+        } else {
+            this.featureVars = config?.featureVariationMap || {}
+        }
         this.metaData = metaData
     }
 }
