@@ -343,6 +343,7 @@ export class DVCOptInUser {
 
 export type SDKVariable = PublicVariable & {
     value: VariableValue
+    _feature?: string
     evalReason?: unknown
 }
 
