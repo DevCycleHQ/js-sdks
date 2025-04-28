@@ -110,7 +110,7 @@ export class EventQueue<
             try {
                 const res = await publishEvents(
                     this.sdkKey,
-                    this.client.config || null,
+                    this.client.config,
                     user,
                     eventRequest,
                     this.client.logger,

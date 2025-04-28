@@ -38,6 +38,7 @@ jobs:
                   RESPONSE=$(curl -s http://localhost:8787)  # Replace with your server's port
                   # Check the response or do something based on the result.
                   if [[ "$RESPONSE" != *"DevCycle Variables:"* ]]; then
+                    echo "Server Response: $RESPONSE"
                     echo "Server didn't return the expected 'DevCycle Variables:' response"
                     exit 1
                   fi
