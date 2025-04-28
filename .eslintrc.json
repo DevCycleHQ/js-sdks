@@ -23,6 +23,12 @@
             }
         },
         {
+            "files": ["**/__tests__/**/*", "**/*.spec.*"],
+            "env": {
+                "jest": true
+            }
+        },
+        {
             "files": ["*.ts", "*.tsx"],
             "extends": ["plugin:@nx/typescript", "./eslint-common.js"],
             "rules": {

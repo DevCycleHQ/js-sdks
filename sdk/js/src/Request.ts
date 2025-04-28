@@ -1,6 +1,7 @@
 import { DevCycleEvent, DevCycleOptions, UserError } from './types'
 import { DVCPopulatedUser } from './User'
-import { serializeUserSearchParams, generateEventPayload } from './utils'
+import { serializeUserSearchParams } from './utils'
+import { generateEventPayload } from './RequestEvent'
 import type { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 import {
     ResponseError,
@@ -88,7 +89,7 @@ export const getConfigJson = async (
 
 export const publishEvents = async (
     sdkKey: string | null,
-    config: BucketedUserConfig | null,
+    config: BucketedUserConfig | undefined,
     user: DVCPopulatedUser,
     events: DevCycleEvent[],
     logger: DVCLogger,
