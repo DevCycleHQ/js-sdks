@@ -267,6 +267,7 @@ export const generateBucketedConfig = ({
             }
             variableMap[variable.key] = {
                 ...variable,
+                _feature: _id,
                 value,
             }
         })
