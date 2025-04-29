@@ -9,6 +9,10 @@ type SDKVariable_PB_Type = {
     boolValue: boolean
     doubleValue: number
     stringValue: string
+    _feature?: {
+        value: string
+        isNull: boolean
+    }
 }
 
 const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
@@ -18,6 +22,7 @@ const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
             key: pbSDKVariable.key,
             value: pbSDKVariable.boolValue,
             type: VariableTypeStr.boolean,
+            _feature: pbSDKVariable._feature?.value,
         }
     } else if (pbSDKVariable.type === 1) {
         return {
@@ -25,6 +30,7 @@ const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
             key: pbSDKVariable.key,
             value: pbSDKVariable.doubleValue,
             type: VariableTypeStr.number,
+            _feature: pbSDKVariable._feature?.value,
         }
     } else if (pbSDKVariable.type === 2) {
         return {
@@ -32,6 +38,7 @@ const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
             key: pbSDKVariable.key,
             value: pbSDKVariable.stringValue,
             type: VariableTypeStr.string,
+            _feature: pbSDKVariable._feature?.value,
         }
     } else if (pbSDKVariable.type === 3) {
         return {
@@ -39,6 +46,7 @@ const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
             key: pbSDKVariable.key,
             value: JSON.parse(pbSDKVariable.stringValue),
             type: VariableTypeStr.json,
+            _feature: pbSDKVariable._feature?.value,
         }
     }
     throw new Error(`Unknown variable type: ${pbSDKVariable.type}`)

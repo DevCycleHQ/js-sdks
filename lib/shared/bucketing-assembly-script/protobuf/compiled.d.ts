@@ -643,6 +643,9 @@ export class SDKVariable_PB implements ISDKVariable_PB {
     /** SDKVariable_PB evalReason. */
     public evalReason?: (INullableString|null);
 
+    /** SDKVariable_PB _feature. */
+    public _feature?: (INullableString|null);
+
     /**
      * Creates a new SDKVariable_PB instance using the specified properties.
      * @param [properties] Properties to set

@@ -108,6 +108,10 @@ describe('protobuf variable tests', () => {
         key: 'swagTest',
         stringValue: 'YEEEEOWZA',
         type: VariableType.String,
+        _feature: {
+            value: '614ef6aa473928459060721a',
+            isNull: false,
+        },
     }
 
     it('should write protobuf message to variableForUser_PB', () => {
@@ -285,6 +289,10 @@ describe('protobuf variable tests', () => {
                     doubleValue: 0,
                     stringValue: '',
                     evalReason: { value: '', isNull: true },
+                    _feature: {
+                        value: '615356f120ed334a6054564f',
+                        isNull: false,
+                    },
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()
@@ -301,6 +309,10 @@ describe('protobuf variable tests', () => {
                     boolValue: false,
                     doubleValue: 610,
                     stringValue: '',
+                    _feature: {
+                        value: '615356f120ed334a6054564f',
+                        isNull: false,
+                    },
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()
@@ -317,6 +329,10 @@ describe('protobuf variable tests', () => {
                     boolValue: false,
                     doubleValue: 0,
                     stringValue: 'string-value',
+                    _feature: {
+                        value: '615356f120ed334a6054564f',
+                        isNull: false,
+                    },
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()
@@ -333,6 +349,10 @@ describe('protobuf variable tests', () => {
                     boolValue: false,
                     doubleValue: 0,
                     stringValue: '{"hello":"world"}',
+                    _feature: {
+                        value: '615356f120ed334a6054564f',
+                        isNull: false,
+                    },
                 }
                 const resultBuffer = callTestSDKVariable_PB(sdkVariable)
                 expect(resultBuffer).not.toBeNull()

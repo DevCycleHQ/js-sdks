@@ -68,4 +68,5 @@ message SDKVariable_PB {
     double doubleValue = 5;
     string stringValue = 6;
     NullableString evalReason = 7;
+    NullableString _feature = 8; 
 }

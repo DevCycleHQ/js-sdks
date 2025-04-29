@@ -88,7 +88,7 @@ const testGenerateBucketingConfigWithOverrides = (
 }
 
 const expectVariableForUser = (
-    args: { user: any; variableKey: string; variableType: VariableType },
+    args: Omit<VariableForUserArgs, 'sdkKey'>,
     expectedValue: unknown,
 ) => {
     const variable = variableForUser({ ...args, sdkKey })
@@ -273,24 +273,28 @@ describe('Config Parsing and Generating', () => {
             variables: {
                 swagTest: {
                     _id: '615356f120ed334a6054564c',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'swagTest',
                     type: 'String',
                     value: 'YEEEEOWZA',
                 },
                 'bool-var': {
                     _id: '61538237b0a70b58ae6af71y',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'bool-var',
                     type: 'Boolean',
                     value: false,
                 },
                 'json-var': {
                     _id: '61538237b0a70b58ae6af71q',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'json-var',
                     type: 'JSON',
                     value: '{"hello":"world","num":610,"bool":true}',
                 },
                 'num-var': {
                     _id: '61538237b0a70b58ae6af71s',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'num-var',
                     type: 'Number',
                     value: 610.61,
@@ -420,54 +424,63 @@ describe('Config Parsing and Generating', () => {
             variables: {
                 'audience-match': {
                     _id: '61538237b0a70b58ae6af71z',
+                    _feature: '614ef6aa475928459060721c',
                     key: 'audience-match',
                     type: 'String',
                     value: 'audience_match',
                 },
                 'feature2.cool': {
                     _id: '61538237b0a70b58ae6af71g',
+                    _feature: '614ef6aa475928459060721a',
                     key: 'feature2.cool',
                     type: 'String',
                     value: 'multivar first',
                 },
                 'feature2.hello': {
                     _id: '61538237b0a70b58ae6af71h',
+                    _feature: '614ef6aa475928459060721a',
                     key: 'feature2.hello',
                     type: 'String',
                     value: 'multivar last',
                 },
                 swagTest: {
                     _id: '615356f120ed334a6054564c',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'swagTest',
                     type: 'String',
                     value: 'man',
                 },
                 test: {
                     _id: '614ef6ea475129459160721a',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'test',
                     type: 'String',
                     value: 'scat',
                 },
                 'bool-var': {
                     _id: '61538237b0a70b58ae6af71y',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'bool-var',
                     type: 'Boolean',
                     value: false,
                 },
                 'json-var': {
                     _id: '61538237b0a70b58ae6af71q',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'json-var',
                     type: 'JSON',
                     value: '{"hello":"world","num":610,"bool":true}',
                 },
                 'num-var': {
                     _id: '61538237b0a70b58ae6af71s',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'num-var',
                     type: 'Number',
                     value: 610.61,
                 },
                 feature4Var: {
                     _id: '61538937b0a70b58ae6af71f',
+                    _feature: '614ef8aa475928459060721c',
                     key: 'feature4Var',
                     type: 'String',
                     value: 'feature 4 value',
@@ -511,7 +524,11 @@ describe('Config Parsing and Generating', () => {
             expected.variables['swagTest'],
         )
         expectVariableForUser(
-            { user, variableKey: 'test', variableType: VariableType.String },
+            {
+                user,
+                variableKey: 'test',
+                variableType: VariableType.String,
+            },
             expected.variables['test'],
         )
     })
@@ -575,6 +592,7 @@ describe('Config Parsing and Generating', () => {
             variables: {
                 feature2Var: {
                     _id: '61538237b0a70b58ae6af71f',
+                    _feature: '614ef6aa475928459060721a',
                     key: 'feature2Var',
                     type: 'String',
                     value: 'Var 1 aud 2',
@@ -674,36 +692,42 @@ describe('Config Parsing and Generating', () => {
             variables: {
                 feature2Var: {
                     _id: '61538237b0a70b58ae6af71f',
+                    _feature: '614ef6aa475928459060721a',
                     key: 'feature2Var',
                     type: 'String',
                     value: 'Var 1 aud 2',
                 },
                 'bool-var': {
                     _id: '61538237b0a70b58ae6af71y',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'bool-var',
                     type: 'Boolean',
                     value: false,
                 },
                 'json-var': {
                     _id: '61538237b0a70b58ae6af71q',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'json-var',
                     type: 'JSON',
                     value: '{"hello":"world","num":610,"bool":true}',
                 },
                 'num-var': {
                     _id: '61538237b0a70b58ae6af71s',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'num-var',
                     type: 'Number',
                     value: 610.61,
                 },
                 swagTest: {
                     _id: '615356f120ed334a6054564c',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'swagTest',
                     type: 'String',
                     value: 'man',
                 },
                 test: {
                     _id: '614ef6ea475129459160721a',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'test',
                     type: 'String',
                     value: 'scat',
@@ -814,36 +838,42 @@ describe('Config Parsing and Generating', () => {
             variables: {
                 feature2Var: {
                     _id: '61538237b0a70b58ae6af71f',
+                    _feature: '614ef6aa475928459060721a',
                     key: 'feature2Var',
                     type: 'String',
                     value: 'Var 1 aud 2',
                 },
                 'bool-var': {
                     _id: '61538237b0a70b58ae6af71y',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'bool-var',
                     type: 'Boolean',
                     value: false,
                 },
                 'json-var': {
                     _id: '61538237b0a70b58ae6af71q',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'json-var',
                     type: 'JSON',
                     value: '{"hello":"world","num":610,"bool":true}',
                 },
                 'num-var': {
                     _id: '61538237b0a70b58ae6af71s',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'num-var',
                     type: 'Number',
                     value: 610.61,
                 },
                 swagTest: {
                     _id: '615356f120ed334a6054564c',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'swagTest',
                     type: 'String',
                     value: 'man',
                 },
                 test: {
                     _id: '614ef6ea475129459160721a',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'test',
                     type: 'String',
                     value: 'scat',
@@ -937,30 +967,35 @@ describe('Config Parsing and Generating', () => {
             variables: {
                 'bool-var': {
                     _id: '61538237b0a70b58ae6af71y',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'bool-var',
                     type: 'Boolean',
                     value: false,
                 },
                 swagTest: {
                     _id: '615356f120ed334a6054564c',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'swagTest',
                     type: 'String',
                     value: 'YEEEEOWZA',
                 },
                 feature2Var: {
                     _id: '61538237b0a70b58ae6af71f',
+                    _feature: '614ef6aa475928459060721a',
                     key: 'feature2Var',
                     type: 'String',
                     value: 'Var 1 aud 2',
                 },
                 'json-var': {
                     _id: '61538237b0a70b58ae6af71q',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'json-var',
                     type: 'JSON',
                     value: '{"hello":"world","num":610,"bool":true}',
                 },
                 'num-var': {
                     _id: '61538237b0a70b58ae6af71s',
+                    _feature: '614ef6aa473928459060721a',
                     key: 'num-var',
                     type: 'Number',
                     value: 610.61,
@@ -1112,6 +1147,7 @@ describe('Config Parsing and Generating', () => {
             variables: {
                 'audience-match': {
                     _id: '61538237b0a70b58ae6af71z',
+                    _feature: '614ef6aa475928459060721d',
                     key: 'audience-match',
                     type: 'String',
                     value: 'audience_match',
@@ -1184,6 +1220,7 @@ describe('Config Parsing and Generating', () => {
             variables: {
                 'audience-match': {
                     _id: '61538237b0a70b58ae6af71z',
+                    _feature: '614ef6aa475928459060721d',
                     key: 'audience-match',
                     type: 'String',
                     value: 'audience_match',
@@ -1282,36 +1319,42 @@ describe('Config Parsing and Generating', () => {
                 variables: {
                     swagTest: {
                         _id: '615356f120ed334a6054564c',
+                        _feature: '614ef6aa473928459060721a',
                         key: 'swagTest',
                         type: 'String',
                         value: 'man',
                     },
                     feature2Var: {
                         _id: '61538237b0a70b58ae6af71f',
+                        _feature: '614ef6aa475928459060721a',
                         key: 'feature2Var',
                         type: 'String',
                         value: 'Var 1 aud 2',
                     },
                     'bool-var': {
                         _id: '61538237b0a70b58ae6af71y',
+                        _feature: '614ef6aa473928459060721a',
                         key: 'bool-var',
                         type: 'Boolean',
                         value: false,
                     },
                     'json-var': {
                         _id: '61538237b0a70b58ae6af71q',
+                        _feature: '614ef6aa473928459060721a',
                         key: 'json-var',
                         type: 'JSON',
                         value: '{"hello":"world","num":610,"bool":true}',
                     },
                     'num-var': {
                         _id: '61538237b0a70b58ae6af71s',
+                        _feature: '614ef6aa473928459060721a',
                         key: 'num-var',
                         type: 'Number',
                         value: 610.61,
                     },
                     test: {
                         _id: '614ef6ea475129459160721a',
+                        _feature: '614ef6aa473928459060721a',
                         key: 'test',
                         type: 'String',
                         value: 'scat',

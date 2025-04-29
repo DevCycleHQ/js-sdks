@@ -173,6 +173,7 @@ export class SDKVariable extends JSON.Obj {
         public readonly key: string,
         public readonly value: JSON.Value,
         public readonly evalReason: string | null,
+        public readonly _feature: string | null,
     ) {
         super()
     }
@@ -192,7 +193,8 @@ export class SDKVariable extends JSON.Obj {
             getStringFromJSON(variableObj, 'type'),
             getStringFromJSON(variableObj, 'key'),
             getJSONValueFromJSON(variableObj, 'value'),
-            getStringFromJSONOptional(variableObj, 'evalReason')
+            getStringFromJSONOptional(variableObj, 'evalReason'),
+            getStringFromJSONOptional(variableObj, '_feature')
         )
     }
 
@@ -231,7 +233,8 @@ export class SDKVariable extends JSON.Obj {
             boolValue,
             numValue,
             stringValue || jsonValue || '',
-            new NullableString('', true)
+            new NullableString('', true),
+            new NullableString(this._feature || '', this._feature === null),
         )
         return encodeSDKVariable_PB(pbVariable)
     }
@@ -244,6 +247,9 @@ export class SDKVariable extends JSON.Obj {
         json.set('value', this.value)
         if (this.evalReason) {
             json.set('evalReason', this.evalReason)
+        }
+        if (this._feature) {
+            json.set('_feature', this._feature)
         }
         return json.stringify()
     }
