@@ -17,7 +17,6 @@ import moment from 'moment'
 import times from 'lodash/times'
 import filter from 'lodash/filter'
 import * as uuid from 'uuid'
-import _ from 'lodash'
 
 describe('User Hashing and Bucketing', () => {
     it('generates buckets approximately in the same distribution as the variation distributions', () => {
