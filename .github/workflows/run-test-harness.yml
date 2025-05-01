@@ -6,7 +6,7 @@ on:
 jobs:
     build:
         runs-on:
-            labels: ubuntu-latest-4-core
+            labels: ubuntu-latest-8-core
         strategy:
             matrix:
                 node-version: [22.12]

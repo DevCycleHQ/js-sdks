@@ -1668,7 +1668,7 @@ describe('Rollout Logic', () => {
                         _id: '614ef6aa473928459060721a',
                         _variation: '6153553b8cf4e45e0464268d',
                         key: 'feature1',
-                        type: 'release',
+                        type: ,
                         variationKey: 'variation-1-key',
                         variationName: 'variation 1',
                     },
