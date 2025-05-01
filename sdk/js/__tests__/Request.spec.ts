@@ -6,6 +6,7 @@ import { dvcDefaultLogger } from '../src/logger'
 const defaultLogger = dvcDefaultLogger({ level: 'debug' })
 const fetchRequestMock = fetch as jest.MockedFn<typeof fetch>
 import { Response } from 'cross-fetch'
+
 describe('Request tests', () => {
     beforeEach(() => {
         fetchRequestMock.mockClear()
