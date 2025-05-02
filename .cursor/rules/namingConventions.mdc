@@ -1,0 +1,9 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Naming Conventions
+
+- Files and variables should use camelCase (starting with a lowercase letter).
+- Folders should use kebab-case.
