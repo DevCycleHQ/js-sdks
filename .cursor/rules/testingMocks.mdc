@@ -1,0 +1,14 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Testing and Mocks
+
+- Source files in @lib/, @cf-workers/, and @services/ should have a corresponding test file.
+- Test files can be located in `__tests__` folders or have `.spec.ts`, `.spec.js`, `.test.js`, or `.test.ts` suffixes.
+- Test and script files themselves are excluded from this rule.
+- Tests are placed in `__tests__/` directories within each package or module.
+- Mock implementations are placed in `__mocks__/` directories within each package or module.
+- This convention is followed in both SDKs and shared libraries.
+- Test files can have `.spec.ts`, `.spec.js`, `.test.js`, or `.test.ts` suffixes.

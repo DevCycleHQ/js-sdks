@@ -1,0 +1,53 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project Structure Guide
+
+- This repository is managed as an NX monorepo.
+- The main configuration files are [nx.json](mdc:nx.json) and [project.json](mdc:project.json).
+- The main project root contains configuration files such as [package.json](mdc:package.json), [tsconfig.base.json](mdc:tsconfig.base.json), and [jest.config.ts](mdc:jest.config.ts).
+- Source code is organized under the `lib/`, `sdk/`, and `dev-apps/` directories.
+- Shared types and utilities are found in [lib/shared/](mdc:lib/shared).
+- Each project (library, SDK, or app) is defined in its own directory, typically under [lib/](mdc:lib), [sdk/](mdc:sdk), or [dev-apps/](mdc:dev-apps).
+- NX commands can be used to build, test, and manage dependencies between these projects.
+
+## SDKs
+- The [sdk/](mdc:sdk) directory contains SDKs for different platforms and frameworks.
+- Each SDK has its own directory.
+- Main source code is in `src/`.
+- Tests are in `__tests__/`.
+- Mocks are in `__mocks__/` where present.
+- Notable SDKs include:
+  - [js/](mdc:sdk/js): JavaScript client SDK
+  - [js-cloud-server/](mdc:sdk/js-cloud-server): JavaScript cloud/server SDK
+  - [nodejs/](mdc:sdk/nodejs): Node.js SDK
+  - [nextjs/](mdc:sdk/nextjs): Next.js SDK
+  - [react/](mdc:sdk/react): React SDK
+  - [react-native/](mdc:sdk/react-native): React Native SDK
+  - [react-native-expo/](mdc:sdk/react-native-expo): React Native Expo SDK
+  - [nestjs/](mdc:sdk/nestjs): NestJS SDK
+  - [openfeature-angular-provider/](mdc:sdk/openfeature-angular-provider): OpenFeature Angular provider
+  - [openfeature-nestjs-provider/](mdc:sdk/openfeature-nestjs-provider): OpenFeature NestJS provider
+  - [openfeature-react-provider/](mdc:sdk/openfeature-react-provider): OpenFeature React provider
+  - [openfeature-web-provider/](mdc:sdk/openfeature-web-provider): OpenFeature Web provider
+
+## Development & Example Apps
+- The [dev-apps/](mdc:dev-apps) directory contains development and example applications for testing, demos, and integration.
+- Each app has its own directory, with main code in `src/`.
+- Notable apps include:
+  - [js/](mdc:dev-apps/js): JavaScript demo app
+  - [nextjs/](mdc:dev-apps/nextjs): Next.js demo app (with app-router and pages-router)
+  - [nodejs-cloud/](mdc:dev-apps/nodejs-cloud): Node.js cloud integration example
+  - [nodejs-local/](mdc:dev-apps/nodejs-local): Node.js local integration example
+  - [openfeature-nodejs/](mdc:dev-apps/openfeature-nodejs): OpenFeature Node.js integration
+  - [openfeature-web/](mdc:dev-apps/openfeature-web): OpenFeature Web integration
+  - [react/](mdc:dev-apps/react): React demo app
+  - [js-cloud-server/](mdc:dev-apps/js-cloud-server): JavaScript cloud server demo
+
+- Test and mock data are located in `__tests__/` and `__mocks__/` subdirectories within each package.
+
+## README and Documentation
+- The main [README.md](mdc:README.md) at the project root provides an overview of the repository.
+- Many packages and libraries also include their own README.md files with details specific to that package.
