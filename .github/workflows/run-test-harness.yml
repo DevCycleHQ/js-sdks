@@ -34,3 +34,4 @@ jobs:
                   sdks-to-test: nodejs,of-nodejs
                   sdk-github-sha: ${{github.event.pull_request.head.sha}}
                   github-token: ${{ secrets.AUTOMATION_USER_TOKEN }}
+                  sdk-capabilities: edgeDB,cloud,sse,lastModifiedHeader,sdkConfigEvent,clientUUID,v2Config,variablesFeatureId
