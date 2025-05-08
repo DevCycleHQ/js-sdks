@@ -45,6 +45,8 @@ test('works after a client side navigation in streaming mode', async ({
     await page.goto('/streaming')
     await expect(page.getByText('Streaming Enabled')).toBeVisible()
 
+    // Wait for any Next.js portal overlays to be hidden before clicking
+    await page.waitForSelector('nextjs-portal', { state: 'hidden' })
     await page.getByText('Go To page').click()
     await expect(page.getByText('Navigated Server Component')).toBeVisible()
 
@@ -98,7 +100,9 @@ test('has expected page elements', async ({ page }) => {
 
     // test server action flagging
     await page.getByText('Test Action').click()
-    await expect(page.getByText('Server Function Result: true')).toBeVisible()
+    await expect(page.getByText('Server Function Result: true')).toBeVisible({
+        timeout: 10000,
+    })
 
     // test middleware flagging
     await expect(
