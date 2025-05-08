@@ -322,6 +322,7 @@ export function _generateBucketedConfig(
                 variable.key,
                 variationVar.value,
                 null,
+                feature._id,
             )
             variableMap.set(variable.key, newVar)
         }
@@ -381,6 +382,7 @@ export function _generateBucketedVariableForUser(
         variable.key,
         variationVar.value,
         null,
+        featureForVariable._id,
     )
     return { variable: sdkVar, variation, feature: featureForVariable }
 }

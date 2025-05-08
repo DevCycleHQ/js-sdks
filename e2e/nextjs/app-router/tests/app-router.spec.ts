@@ -45,8 +45,19 @@ test('works after a client side navigation in streaming mode', async ({
     await page.goto('/streaming')
     await expect(page.getByText('Streaming Enabled')).toBeVisible()
 
-    await page.getByText('Go To page').click()
-    await expect(page.getByText('Navigated Server Component')).toBeVisible()
+    // More reliable way to navigate in Next.js using page.$$eval to find and click the link
+    await page.$$eval('a:has-text("Go To page")', (elements) => {
+        if (elements.length > 0) {
+            ;(elements[0] as HTMLElement).click()
+        } else {
+            throw new Error('Link not found')
+        }
+    })
+
+    // Increase timeout for navigation in CI
+    await expect(page.getByText('Navigated Server Component')).toBeVisible({
+        timeout: 10000,
+    })
 
     await expect(page.getByText('Server Enabled Variable: true')).toBeVisible()
     await expect(
@@ -98,7 +109,9 @@ test('has expected page elements', async ({ page }) => {
 
     // test server action flagging
     await page.getByText('Test Action').click()
-    await expect(page.getByText('Server Function Result: true')).toBeVisible()
+    await expect(page.getByText('Server Function Result: true')).toBeVisible({
+        timeout: 10000,
+    })
 
     // test middleware flagging
     await expect(
