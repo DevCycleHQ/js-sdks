@@ -14,6 +14,7 @@ import {
     UserSubType,
     VariableType,
 } from '@devcycle/types'
+import { plainToInstance } from 'class-transformer'
 
 import moment from 'moment'
 
@@ -449,7 +450,7 @@ function configBodyAudiences(audiences: PublicAudience[]): {
     return auds
 }
 
-export const config: ConfigBody = {
+export const config = {
     project,
     environment,
     audiences: configBodyAudiences(reusableAudiences),
@@ -653,7 +654,7 @@ export const config: ConfigBody = {
     clientSDKKey: 'test',
 }
 
-export const barrenConfig: ConfigBody = {
+export const barrenConfig = {
     project,
     environment,
     audiences: {},
@@ -730,7 +731,7 @@ export const barrenConfig: ConfigBody = {
     variableHashes: {},
 }
 
-export const configWithNullCustomData: ConfigBody = {
+export const configWithNullCustomData = {
     project,
     environment,
     audiences: configBodyAudiences(reusableAudiences),
@@ -783,9 +784,10 @@ export const configWithNullCustomData: ConfigBody = {
     clientSDKKey: 'test',
 }
 
+const instancedConfig = plainToInstance(ConfigBody, config)
 export const configWithBucketingKey = (bucketingKey: string): ConfigBody => ({
-    ...config,
-    features: config.features.map((feature) => ({
+    ...instancedConfig,
+    features: instancedConfig.features.map((feature) => ({
         ...feature,
         configuration: {
             ...feature.configuration,
