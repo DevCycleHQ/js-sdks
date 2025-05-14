@@ -21,11 +21,11 @@ jobs:
                   cache: 'yarn'
             - run: git fetch origin main
             - run: yarn --immutable
-            - run: yarn affected:lint --parallel=4
+            - run: yarn affected:lint --parallel=8
             - run: yarn prettier --check .
               name: Prettier
             - name: Run Affected Tests
               shell: bash
               run: |
                 yarn nx build shared-bucketing-test-data
-                yarn affected:test --parallel=4
+                yarn affected:test --parallel=8
