@@ -6,7 +6,7 @@ on:
 jobs:
     build:
         runs-on:
-            labels: ubuntu-latest-8-core
+            labels: ubicloud-standard-8
         strategy:
             matrix:
                 node-version: [22.12]
