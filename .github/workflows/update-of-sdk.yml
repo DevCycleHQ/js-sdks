@@ -1,4 +1,7 @@
 name: Update DevCycle SDKs to Latest
+permissions:
+  contents: write
+  pull-requests: write
 on:
   schedule:
     - cron: "0 12 * * *"
