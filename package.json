@@ -212,7 +212,7 @@
         "url-loader": "^4.1.1",
         "validate-npm-package-name": "^5.0.1",
         "verdaccio": "^5.33.0",
-        "webpack": "^5.98.0",
+        "webpack": "^5.99.8",
         "webpack-merge": "^5.10.0",
         "wrangler": "^3.114.2"
     },
