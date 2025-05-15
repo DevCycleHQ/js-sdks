@@ -1,4 +1,6 @@
 name: Run CF Worker Example App
+permissions:
+    contents: read
 on:
     pull_request:
         branches: [main]
