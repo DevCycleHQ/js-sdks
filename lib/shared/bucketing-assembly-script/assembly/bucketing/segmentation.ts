@@ -36,8 +36,10 @@ export function _evaluateOperator(
         for (let i = 0; i < operator.filters.length; i++) {
             const filter = operator.filters[i]
             if (filter.operatorClass !== null) {
-                const evalResult = _evaluateOperator(filter.operatorClass as AudienceOperator, audiences, user, clientCustomData)
-                // Instead of returning the value from only the first filter, we want to return true if any of the filters are true
+                const evalResult =
+                    _evaluateOperator(filter.operatorClass as AudienceOperator, audiences, user, clientCustomData)
+                // Instead of returning the value from only the first filter,
+                // we want to return true if any of the filters are true
                 if (evalResult) {
                     return true
                 }

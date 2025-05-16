@@ -10,7 +10,13 @@ import {
     VariableType,
 } from '../bucketingImportHelper'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
-const { config, barrenConfig, configWithNullCustomData } = testData
+const {
+    config,
+    barrenConfig,
+    configWithNullCustomData,
+    configWithTopLevelOrAudience,
+    configWithNestedOrAudience,
+} = testData
 import { configWithBucketingKey } from '../helpers/configWithBucketingKey'
 
 import moment from 'moment'
@@ -1868,180 +1874,173 @@ describe('bucketingKey tests', () => {
         )
     })
 
-    it('bucket a user when a top level OR is used for an Audience and the user matche the second filter in the top level OR', () => {
-        const test_audience_or_config = {
-            project: {
-                _id: 'test_project_id',
-                key: 'test_project_key',
-                a0_organization: 'test_org_id',
-                settings: {
-                    edgeDB: { enabled: false },
-                    optIn: { enabled: false, colors: {} },
-                    obfuscation: { required: false, enabled: false },
-                    disablePassthroughRollouts: true,
-                },
-            },
-            environment: {
-                _id: 'test_environment_id',
-                key: 'development',
-            },
-            features: [
-                {
-                    _id: 'test_feature_id',
-                    key: 'test_feature_key',
-                    type: 'release',
-                    variations: [
-                        {
-                            key: 'variation-on',
-                            name: 'Variation On',
-                            variables: [
-                                {
-                                    _var: 'test_variable_id',
-                                    value: true,
-                                },
-                            ],
-                            _id: 'test_variation_id',
-                        },
-                        {
-                            key: 'variation-off',
-                            name: 'Variation Off',
-                            variables: [
-                                {
-                                    _var: 'test_variable_id',
-                                    value: false,
-                                },
-                            ],
-                            _id: 'test_variation_id_2',
-                        },
-                    ],
-                    tags: [],
-                    configuration: {
-                        _id: 'test_target_id',
-                        targets: [
-                            {
-                                _id: 'test_target_id',
-                                distribution: [
-                                    {
-                                        _variation: 'test_variation_id',
-                                        percentage: 1,
-                                    },
-                                ],
-                                _audience: {
-                                    _id: 'test_audience_1',
-                                    filters: {
-                                        filters: [
-                                            {
-                                                _audiences: [
-                                                    'test_audience_id',
-                                                ],
-                                                values: [],
-                                                comparator: '=',
-                                                type: 'audienceMatch',
-                                            },
-                                        ],
-                                        operator: 'and',
-                                    },
-                                },
-                                bucketingKey: 'user_id',
-                            },
-                        ],
-                    },
-                },
-            ],
-            variables: [
-                {
-                    _id: 'test_variable_id',
-                    key: 'test_variable_key',
-                    type: 'Boolean',
-                },
-            ],
-            variableHashes: {
-                test_variable_key: 2176954059,
-            },
-            audiences: {
-                test_audience_id: {
-                    filters: {
-                        filters: [
-                            {
-                                _audiences: [],
-                                values: [],
-                                operator: 'and',
-                                filters: [
-                                    {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
-                                        _audiences: [],
-                                        values: ['A', 'B', 'C', 'D'],
-                                        filters: [],
-                                    },
-                                ],
-                            },
-                            {
-                                _audiences: [],
-                                values: [],
-                                operator: 'and',
-                                filters: [
-                                    {
-                                        type: 'user',
-                                        subType: 'email',
-                                        comparator: '=',
-                                        _audiences: [],
-                                        values: ['email@email.com'],
-                                        filters: [],
-                                    },
-                                ],
-                            },
-                            {
-                                _audiences: [],
-                                values: [],
-                                operator: 'and',
-                                filters: [
-                                    {
-                                        type: 'user',
-                                        subType: 'appVersion',
-                                        comparator: '>',
-                                        _audiences: [],
-                                        values: ['0.0.0'],
-                                        filters: [],
-                                    },
-                                ],
-                            },
-                        ],
-                        operator: 'or',
-                    },
-                },
-            },
-            debugUsers: [],
-            sse: {
-                hostname: 'https://sse.devcycle.com',
-                path: '/event-stream?key=some_key&v=1.2&channels=some_channel',
-            },
-        }
-
+    it('bucket a user when the user matches any of the top level OR filters in an Audience', () => {
         const audience_or_config_sdk_key = 'audience_or_config_sdk_key'
-        const user = {
+
+        initSDK(audience_or_config_sdk_key, configWithTopLevelOrAudience)
+
+        const userMatchesEmailFilter = {
             user_id: 'Z',
             appVersion: '1.0.0',
             email: 'email@email.com',
             customData: {
-                F: 'F',
+                favouriteFood: 'coffee',
             },
         }
 
-        initSDK(audience_or_config_sdk_key, test_audience_or_config)
-        const bucketedUserConfig = generateBucketedConfig(
-            user,
+        const bucketedEmailUserConfig = generateBucketedConfig(
+            userMatchesEmailFilter,
             audience_or_config_sdk_key,
         )
 
-        // console.log(bucketedUserConfig)
         const audienceOrFeature =
-            bucketedUserConfig.features['test_feature_key']
+            bucketedEmailUserConfig.features['top_level_or_feature']
         const audienceOrValue =
-            bucketedUserConfig.variables['test_variable_key']
+            bucketedEmailUserConfig.variables['audience-match']
 
-        expect(audienceOrFeature.variationKey).toBe('variation-on')
-        expect(audienceOrValue.value).toBe(true)
+        expect(audienceOrFeature.variationKey).toBe('audience-match-variation')
+        expect(audienceOrValue.value).toBe('audience_match')
+
+        const userMatchesAppVersionFilter = {
+            user_id: 'Z',
+            appVersion: '1.0.0',
+            email: 'email@nomatch.com',
+            customData: {
+                favouriteFood: 'coffee',
+            },
+        }
+
+        const bucketedAppVersionUserConfig = generateBucketedConfig(
+            userMatchesAppVersionFilter,
+            audience_or_config_sdk_key,
+        )
+
+        const featureMatchesAppVersion =
+            bucketedAppVersionUserConfig.features['top_level_or_feature']
+        const variableMatchesAppVersion =
+            bucketedAppVersionUserConfig.variables['audience-match']
+
+        expect(featureMatchesAppVersion.variationKey).toBe(
+            'audience-match-variation',
+        )
+        expect(variableMatchesAppVersion.value).toBe('audience_match')
+
+        const userNoMatch = {
+            user_id: 'Z',
+            email: 'email@nomatch.com',
+            customData: {
+                favouriteFood: 'coffee',
+            },
+        }
+
+        const noMatchUserConfig = generateBucketedConfig(
+            userNoMatch,
+            audience_or_config_sdk_key,
+        )
+
+        const featureMatchesBoth =
+            noMatchUserConfig.features['top_level_or_feature']
+        const variableMatchesBoth =
+            noMatchUserConfig.variables['audience-match']
+
+        expect(featureMatchesBoth).toBeUndefined()
+        expect(variableMatchesBoth).toBeUndefined()
+    })
+
+    it('bucket a user when the user matches the nested OR filter in the top level OR in an Audience', () => {
+        const audience_nested_or_config_sdk_key =
+            'audience_nested_or_config_sdk_key'
+
+        initSDK(audience_nested_or_config_sdk_key, configWithNestedOrAudience)
+
+        const userMatchesFavouriteFoodFilter = {
+            user_id: 'Z',
+            appVersion: '0.0.0',
+            email: 'nomatch@email.com',
+            customData: {
+                favouriteFood: 'pizza',
+            },
+        }
+
+        const bucketedEmailUserConfig = generateBucketedConfig(
+            userMatchesFavouriteFoodFilter,
+            audience_nested_or_config_sdk_key,
+        )
+
+        const audienceOrFeature =
+            bucketedEmailUserConfig.features['nested_or_feature']
+        const audienceOrValue =
+            bucketedEmailUserConfig.variables['audience-match']
+
+        expect(audienceOrFeature.variationKey).toBe('audience-match-variation')
+        expect(audienceOrValue.value).toBe('audience_match')
+
+        const userMatchesAppVersionFilter = {
+            user_id: 'Z',
+            appVersion: '1.0.0',
+            email: 'email@nomatch.com',
+            customData: {
+                favouriteFood: 'coffee',
+            },
+        }
+
+        const bucketedAppVersionUserConfig = generateBucketedConfig(
+            userMatchesAppVersionFilter,
+            audience_nested_or_config_sdk_key,
+        )
+
+        const featureMatchesAppVersion =
+            bucketedAppVersionUserConfig.features['nested_or_feature']
+        const variableMatchesAppVersion =
+            bucketedAppVersionUserConfig.variables['audience-match']
+
+        expect(featureMatchesAppVersion.variationKey).toBe(
+            'audience-match-variation',
+        )
+        expect(variableMatchesAppVersion.value).toBe('audience_match')
+
+        const userMatchesNestedOr = {
+            user_id: 'Z',
+            email: 'email@nomatch.com',
+            customData: {
+                favouriteFood: 'pizza',
+            },
+        }
+
+        const bucketedNestedOrUserConfig = generateBucketedConfig(
+            userMatchesNestedOr,
+            audience_nested_or_config_sdk_key,
+        )
+
+        const featureMatchesNestedOr =
+            bucketedNestedOrUserConfig.features['nested_or_feature']
+        const variableMatchesNestedOr =
+            bucketedNestedOrUserConfig.variables['audience-match']
+
+        expect(featureMatchesNestedOr.variationKey).toBe(
+            'audience-match-variation',
+        )
+        expect(variableMatchesNestedOr.value).toBe('audience_match')
+
+        const userNoMatch = {
+            user_id: 'Z',
+            email: 'email@nomatch.com',
+            customData: {
+                favouriteFood: 'coffee',
+            },
+        }
+
+        const noMatchUserConfig = generateBucketedConfig(
+            userNoMatch,
+            audience_nested_or_config_sdk_key,
+        )
+
+        const featureMatchesBoth =
+            noMatchUserConfig.features['nested_or_feature']
+        const variableMatchesBoth =
+            noMatchUserConfig.variables['audience-match']
+
+        expect(featureMatchesBoth).toBeUndefined()
+        expect(variableMatchesBoth).toBeUndefined()
     })
 })
