@@ -62,9 +62,12 @@ const decideTargetVariation = ({
     return decideTargetVariationFromJSON(JSON.stringify(target), boundedHash)
 }
 
-const generateBucketedConfig = (user: unknown): BucketedUserConfig => {
+const generateBucketedConfig = (
+    user: unknown,
+    customSdkKey = sdkKey,
+): BucketedUserConfig => {
     const bucketedConfig = generateBucketedConfigForUser(
-        sdkKey,
+        customSdkKey,
         JSON.stringify(user),
     )
     return JSON.parse(bucketedConfig) as BucketedUserConfig
@@ -1863,5 +1866,182 @@ describe('bucketingKey tests', () => {
         expect(cSameUserDifferentBool.features.feature5.variationKey).toEqual(
             cDifferentUserSameBool.features.feature5.variationKey,
         )
+    })
+
+    it('bucket a user when a top level OR is used for an Audience and the user matche the second filter in the top level OR', () => {
+        const test_audience_or_config = {
+            project: {
+                _id: 'test_project_id',
+                key: 'test_project_key',
+                a0_organization: 'test_org_id',
+                settings: {
+                    edgeDB: { enabled: false },
+                    optIn: { enabled: false, colors: {} },
+                    obfuscation: { required: false, enabled: false },
+                    disablePassthroughRollouts: true,
+                },
+            },
+            environment: {
+                _id: 'test_environment_id',
+                key: 'development',
+            },
+            features: [
+                {
+                    _id: 'test_feature_id',
+                    key: 'test_feature_key',
+                    type: 'release',
+                    variations: [
+                        {
+                            key: 'variation-on',
+                            name: 'Variation On',
+                            variables: [
+                                {
+                                    _var: 'test_variable_id',
+                                    value: true,
+                                },
+                            ],
+                            _id: 'test_variation_id',
+                        },
+                        {
+                            key: 'variation-off',
+                            name: 'Variation Off',
+                            variables: [
+                                {
+                                    _var: 'test_variable_id',
+                                    value: false,
+                                },
+                            ],
+                            _id: 'test_variation_id_2',
+                        },
+                    ],
+                    tags: [],
+                    configuration: {
+                        _id: 'test_target_id',
+                        targets: [
+                            {
+                                _id: 'test_target_id',
+                                distribution: [
+                                    {
+                                        _variation: 'test_variation_id',
+                                        percentage: 1,
+                                    },
+                                ],
+                                _audience: {
+                                    _id: 'test_audience_1',
+                                    filters: {
+                                        filters: [
+                                            {
+                                                _audiences: [
+                                                    'test_audience_id',
+                                                ],
+                                                values: [],
+                                                comparator: '=',
+                                                type: 'audienceMatch',
+                                            },
+                                        ],
+                                        operator: 'and',
+                                    },
+                                },
+                                bucketingKey: 'user_id',
+                            },
+                        ],
+                    },
+                },
+            ],
+            variables: [
+                {
+                    _id: 'test_variable_id',
+                    key: 'test_variable_key',
+                    type: 'Boolean',
+                },
+            ],
+            variableHashes: {
+                test_variable_key: 2176954059,
+            },
+            audiences: {
+                test_audience_id: {
+                    filters: {
+                        filters: [
+                            {
+                                _audiences: [],
+                                values: [],
+                                operator: 'and',
+                                filters: [
+                                    {
+                                        type: 'user',
+                                        subType: 'user_id',
+                                        comparator: '=',
+                                        _audiences: [],
+                                        values: ['A', 'B', 'C', 'D'],
+                                        filters: [],
+                                    },
+                                ],
+                            },
+                            {
+                                _audiences: [],
+                                values: [],
+                                operator: 'and',
+                                filters: [
+                                    {
+                                        type: 'user',
+                                        subType: 'email',
+                                        comparator: '=',
+                                        _audiences: [],
+                                        values: ['email@email.com'],
+                                        filters: [],
+                                    },
+                                ],
+                            },
+                            {
+                                _audiences: [],
+                                values: [],
+                                operator: 'and',
+                                filters: [
+                                    {
+                                        type: 'user',
+                                        subType: 'appVersion',
+                                        comparator: '>',
+                                        _audiences: [],
+                                        values: ['0.0.0'],
+                                        filters: [],
+                                    },
+                                ],
+                            },
+                        ],
+                        operator: 'or',
+                    },
+                },
+            },
+            debugUsers: [],
+            sse: {
+                hostname: 'https://sse.devcycle.com',
+                path: '/event-stream?key=some_key&v=1.2&channels=some_channel',
+            },
+        }
+
+        const audience_or_config_sdk_key = 'audience_or_config_sdk_key'
+        const user = {
+            user_id: 'Z',
+            appVersion: '1.0.0',
+            email: 'email@email.com',
+            customData: {
+                F: 'F',
+            },
+        }
+
+        initSDK(audience_or_config_sdk_key, test_audience_or_config)
+        const bucketedUserConfig = generateBucketedConfig(
+            user,
+            audience_or_config_sdk_key,
+        )
+
+        // console.log(bucketedUserConfig)
+        const audienceOrFeature =
+            bucketedUserConfig.features['test_feature_key']
+        const audienceOrValue =
+            bucketedUserConfig.variables['test_variable_key']
+
+        expect(audienceOrFeature.variationKey).toBe('variation-on')
+        expect(audienceOrValue.value).toBe(true)
     })
 })
