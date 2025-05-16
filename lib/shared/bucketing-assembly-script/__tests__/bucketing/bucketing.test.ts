@@ -10,7 +10,13 @@ import {
     VariableType,
 } from '../bucketingImportHelper'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
-const { config, barrenConfig, configWithNullCustomData } = testData
+const {
+    config,
+    barrenConfig,
+    configWithNullCustomData,
+    configWithTopLevelOrAudience,
+    configWithNestedOrAudience,
+} = testData
 import { configWithBucketingKey } from '../helpers/configWithBucketingKey'
 
 import moment from 'moment'
@@ -62,9 +68,12 @@ const decideTargetVariation = ({
     return decideTargetVariationFromJSON(JSON.stringify(target), boundedHash)
 }
 
-const generateBucketedConfig = (user: unknown): BucketedUserConfig => {
+const generateBucketedConfig = (
+    user: unknown,
+    customSdkKey = sdkKey,
+): BucketedUserConfig => {
     const bucketedConfig = generateBucketedConfigForUser(
-        sdkKey,
+        customSdkKey,
         JSON.stringify(user),
     )
     return JSON.parse(bucketedConfig) as BucketedUserConfig
@@ -1863,5 +1872,175 @@ describe('bucketingKey tests', () => {
         expect(cSameUserDifferentBool.features.feature5.variationKey).toEqual(
             cDifferentUserSameBool.features.feature5.variationKey,
         )
+    })
+
+    it('bucket a user when the user matches any of the top level OR filters in an Audience', () => {
+        const audience_or_config_sdk_key = 'audience_or_config_sdk_key'
+
+        initSDK(audience_or_config_sdk_key, configWithTopLevelOrAudience)
+
+        const userMatchesEmailFilter = {
+            user_id: 'Z',
+            appVersion: '1.0.0',
+            email: 'email@email.com',
+            customData: {
+                favouriteFood: 'coffee',
+            },
+        }
+
+        const bucketedEmailUserConfig = generateBucketedConfig(
+            userMatchesEmailFilter,
+            audience_or_config_sdk_key,
+        )
+
+        const audienceOrFeature =
+            bucketedEmailUserConfig.features['top_level_or_feature']
+        const audienceOrValue =
+            bucketedEmailUserConfig.variables['audience-match']
+
+        expect(audienceOrFeature.variationKey).toBe('audience-match-variation')
+        expect(audienceOrValue.value).toBe('audience_match')
+
+        const userMatchesAppVersionFilter = {
+            user_id: 'Z',
+            appVersion: '1.0.0',
+            email: 'email@nomatch.com',
+            customData: {
+                favouriteFood: 'coffee',
+            },
+        }
+
+        const bucketedAppVersionUserConfig = generateBucketedConfig(
+            userMatchesAppVersionFilter,
+            audience_or_config_sdk_key,
+        )
+
+        const featureMatchesAppVersion =
+            bucketedAppVersionUserConfig.features['top_level_or_feature']
+        const variableMatchesAppVersion =
+            bucketedAppVersionUserConfig.variables['audience-match']
+
+        expect(featureMatchesAppVersion.variationKey).toBe(
+            'audience-match-variation',
+        )
+        expect(variableMatchesAppVersion.value).toBe('audience_match')
+
+        const userNoMatch = {
+            user_id: 'Z',
+            email: 'email@nomatch.com',
+            customData: {
+                favouriteFood: 'coffee',
+            },
+        }
+
+        const noMatchUserConfig = generateBucketedConfig(
+            userNoMatch,
+            audience_or_config_sdk_key,
+        )
+
+        const featureMatchesBoth =
+            noMatchUserConfig.features['top_level_or_feature']
+        const variableMatchesBoth =
+            noMatchUserConfig.variables['audience-match']
+
+        expect(featureMatchesBoth).toBeUndefined()
+        expect(variableMatchesBoth).toBeUndefined()
+    })
+
+    it('bucket a user when the user matches the nested OR filter in the top level OR in an Audience', () => {
+        const audience_nested_or_config_sdk_key =
+            'audience_nested_or_config_sdk_key'
+
+        initSDK(audience_nested_or_config_sdk_key, configWithNestedOrAudience)
+
+        const userMatchesFavouriteFoodFilter = {
+            user_id: 'Z',
+            appVersion: '0.0.0',
+            email: 'nomatch@email.com',
+            customData: {
+                favouriteFood: 'pizza',
+            },
+        }
+
+        const bucketedEmailUserConfig = generateBucketedConfig(
+            userMatchesFavouriteFoodFilter,
+            audience_nested_or_config_sdk_key,
+        )
+
+        const audienceOrFeature =
+            bucketedEmailUserConfig.features['nested_or_feature']
+        const audienceOrValue =
+            bucketedEmailUserConfig.variables['audience-match']
+
+        expect(audienceOrFeature.variationKey).toBe('audience-match-variation')
+        expect(audienceOrValue.value).toBe('audience_match')
+
+        const userMatchesAppVersionFilter = {
+            user_id: 'Z',
+            appVersion: '1.0.0',
+            email: 'email@nomatch.com',
+            customData: {
+                favouriteFood: 'coffee',
+            },
+        }
+
+        const bucketedAppVersionUserConfig = generateBucketedConfig(
+            userMatchesAppVersionFilter,
+            audience_nested_or_config_sdk_key,
+        )
+
+        const featureMatchesAppVersion =
+            bucketedAppVersionUserConfig.features['nested_or_feature']
+        const variableMatchesAppVersion =
+            bucketedAppVersionUserConfig.variables['audience-match']
+
+        expect(featureMatchesAppVersion.variationKey).toBe(
+            'audience-match-variation',
+        )
+        expect(variableMatchesAppVersion.value).toBe('audience_match')
+
+        const userMatchesNestedOr = {
+            user_id: 'Z',
+            email: 'email@nomatch.com',
+            customData: {
+                favouriteFood: 'pizza',
+            },
+        }
+
+        const bucketedNestedOrUserConfig = generateBucketedConfig(
+            userMatchesNestedOr,
+            audience_nested_or_config_sdk_key,
+        )
+
+        const featureMatchesNestedOr =
+            bucketedNestedOrUserConfig.features['nested_or_feature']
+        const variableMatchesNestedOr =
+            bucketedNestedOrUserConfig.variables['audience-match']
+
+        expect(featureMatchesNestedOr.variationKey).toBe(
+            'audience-match-variation',
+        )
+        expect(variableMatchesNestedOr.value).toBe('audience_match')
+
+        const userNoMatch = {
+            user_id: 'Z',
+            email: 'email@nomatch.com',
+            customData: {
+                favouriteFood: 'coffee',
+            },
+        }
+
+        const noMatchUserConfig = generateBucketedConfig(
+            userNoMatch,
+            audience_nested_or_config_sdk_key,
+        )
+
+        const featureMatchesBoth =
+            noMatchUserConfig.features['nested_or_feature']
+        const variableMatchesBoth =
+            noMatchUserConfig.variables['audience-match']
+
+        expect(featureMatchesBoth).toBeUndefined()
+        expect(variableMatchesBoth).toBeUndefined()
     })
 })

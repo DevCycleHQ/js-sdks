@@ -51,6 +51,77 @@ export const reusableAudiences: PublicAudience[] = [
     },
 ]
 
+export const reusableTopLevelOrAudience: PublicAudience[] = [
+    {
+        _id: '614ef6ea475929459060721b',
+        filters: {
+            filters: [
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.user_id,
+                    comparator: FilterComparator['='],
+                    values: ['A', 'B', 'C', 'D'],
+                },
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.email,
+                    comparator: FilterComparator['='],
+                    values: ['email@email.com'],
+                },
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.appVersion,
+                    comparator: FilterComparator['>'],
+                    values: ['0.1.0'],
+                },
+            ],
+            operator: AudienceOperator.or,
+        },
+    },
+]
+
+export const reusableNestedOrAudience: PublicAudience[] = [
+    {
+        _id: '614ef6ea475929459060721c',
+        filters: {
+            filters: [
+                {
+                    filters: [
+                        {
+                            type: FilterType.user,
+                            subType: UserSubType.user_id,
+                            comparator: FilterComparator['='],
+                            values: ['A', 'B', 'C', 'D'],
+                        },
+                        {
+                            type: FilterType.user,
+                            subType: UserSubType.customData,
+                            dataKey: 'favouriteFood',
+                            dataKeyType: DataKeyType.string,
+                            comparator: FilterComparator['='],
+                            values: ['pizza'],
+                        },
+                    ],
+                    operator: AudienceOperator.or,
+                },
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.email,
+                    comparator: FilterComparator['='],
+                    values: ['email@email.com'],
+                },
+                {
+                    type: FilterType.user,
+                    subType: UserSubType.appVersion,
+                    comparator: FilterComparator['>'],
+                    values: ['0.0.0'],
+                },
+            ],
+            operator: AudienceOperator.or,
+        },
+    },
+]
+
 export const audiences: TargetAudience[] = [
     {
         _id: '',
@@ -222,6 +293,34 @@ export const audiences: TargetAudience[] = [
                     subType: UserSubType.email,
                     comparator: FilterComparator['='],
                     values: ['testwithfood@email.com'],
+                },
+            ],
+            operator: AudienceOperator.and,
+        },
+    },
+    {
+        _id: '',
+        filters: {
+            filters: [
+                {
+                    type: FilterType.audienceMatch,
+                    comparator: FilterComparator['='],
+                    // Top Level OR audience
+                    _audiences: [reusableTopLevelOrAudience[0]._id],
+                },
+            ],
+            operator: AudienceOperator.and,
+        },
+    },
+    {
+        _id: '',
+        filters: {
+            filters: [
+                {
+                    type: FilterType.audienceMatch,
+                    comparator: FilterComparator['='],
+                    // Nested OR audience
+                    _audiences: [reusableNestedOrAudience[0]._id],
                 },
             ],
             operator: AudienceOperator.and,
@@ -781,6 +880,89 @@ export const configWithNullCustomData: ConfigBody = {
     variables,
     variableHashes,
     clientSDKKey: 'test',
+}
+
+export const configWithTopLevelOrAudience: ConfigBody = {
+    project,
+    environment,
+    audiences: configBodyAudiences(reusableTopLevelOrAudience),
+    features: [
+        {
+            _id: '614ef6aa475928459060721d',
+            type: FeatureType.permission,
+            key: 'feature4',
+            configuration: {
+                _id: '61536f62502d80fff97ed641',
+                targets: [
+                    {
+                        _id: '61536f468fd67f0091982532',
+                        _audience: audiences[5],
+                        distribution: [
+                            {
+                                _variation: variations[5]._id,
+                                percentage: 1,
+                            },
+                        ],
+                    },
+                ],
+            },
+            variations: [variations[5]],
+        },
+        {
+            _id: '614ef6aa475928459060721e',
+            type: FeatureType.ops,
+            key: 'top_level_or_feature',
+            configuration: {
+                _id: '61536f62502d80fff97ed642',
+                targets: [
+                    {
+                        _id: '61536f468fd67f0091982533',
+                        _audience: audiences[9],
+                        distribution: [
+                            {
+                                _variation: variations[5]._id,
+                                percentage: 1,
+                            },
+                        ],
+                    },
+                ],
+            },
+            variations: [variations[5]],
+        },
+    ],
+    variables,
+    variableHashes,
+}
+
+export const configWithNestedOrAudience: ConfigBody = {
+    project,
+    environment,
+    audiences: configBodyAudiences(reusableNestedOrAudience),
+    features: [
+        {
+            _id: '614ef6aa475928459060721d',
+            type: FeatureType.permission,
+            key: 'nested_or_feature',
+            configuration: {
+                _id: '61536f62502d80fff97ed641',
+                targets: [
+                    {
+                        _id: '61536f468fd67f0091982533',
+                        _audience: audiences[10],
+                        distribution: [
+                            {
+                                _variation: variations[5]._id,
+                                percentage: 1,
+                            },
+                        ],
+                    },
+                ],
+            },
+            variations: [variations[5]],
+        },
+    ],
+    variables,
+    variableHashes,
 }
 
 export const configWithBucketingKey = (bucketingKey: string): ConfigBody => ({
