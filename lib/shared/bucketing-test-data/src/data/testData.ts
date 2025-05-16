@@ -80,7 +80,7 @@ export const reusableTopLevelOrAudience: PublicAudience[] = [
     },
 ]
 
-export const nestedOrAudience: PublicAudience[] = [
+export const reusableNestedOrAudience: PublicAudience[] = [
     {
         _id: '614ef6ea475929459060721c',
         filters: {
@@ -306,7 +306,7 @@ export const audiences: TargetAudience[] = [
                     type: FilterType.audienceMatch,
                     comparator: FilterComparator['='],
                     // Top Level OR audience
-                    _audiences: ['614ef6ea475929459060721b'],
+                    _audiences: [reusableTopLevelOrAudience[0]._id],
                 },
             ],
             operator: AudienceOperator.and,
@@ -320,7 +320,7 @@ export const audiences: TargetAudience[] = [
                     type: FilterType.audienceMatch,
                     comparator: FilterComparator['='],
                     // Nested OR audience
-                    _audiences: ['614ef6ea475929459060721c'],
+                    _audiences: [reusableNestedOrAudience[0]._id],
                 },
             ],
             operator: AudienceOperator.and,
@@ -937,7 +937,7 @@ export const configWithTopLevelOrAudience: ConfigBody = {
 export const configWithNestedOrAudience: ConfigBody = {
     project,
     environment,
-    audiences: configBodyAudiences(nestedOrAudience),
+    audiences: configBodyAudiences(reusableNestedOrAudience),
     features: [
         {
             _id: '614ef6aa475928459060721d',

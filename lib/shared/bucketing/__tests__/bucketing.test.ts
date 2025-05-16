@@ -11,6 +11,8 @@ import {
     barrenConfig,
     configWithNullCustomData,
     configWithBucketingKey,
+    configWithNestedOrAudience,
+    configWithTopLevelOrAudience,
 } from '@devcycle/bucketing-test-data'
 
 import moment from 'moment'
@@ -1227,6 +1229,81 @@ describe('Config Parsing and Generating', () => {
             user,
         })
         expect(c).toEqual(expected)
+    })
+
+    describe('Audience OR definitions', () => {
+        it('should handle top level or', () => {
+            const userMatchesEmailAndAppVersion = {
+                user_id: 'Z',
+                appVersion: '1.0.0',
+                email: 'email@email.com',
+                customData: {
+                    favouriteFood: 'coffee',
+                },
+            }
+
+            const c = generateBucketedConfig({
+                config: configWithTopLevelOrAudience,
+                user: userMatchesEmailAndAppVersion,
+            })
+            expect(c.features['top_level_or_feature']).toBeDefined()
+            expect(c.features['top_level_or_feature'].variationKey).toBe(
+                'audience-match-variation',
+            )
+            expect(c.variables['audience-match']).toBeDefined()
+            expect(c.variables['audience-match'].value).toBe('audience_match')
+
+            const userNoMatch = {
+                user_id: 'Z',
+                appVersion: '0.0.0',
+                email: 'email@nomatch.com',
+                customData: {
+                    favouriteFood: 'coffee',
+                },
+            }
+
+            const noMatchConfig = generateBucketedConfig({
+                config: configWithTopLevelOrAudience,
+                user: userNoMatch,
+            })
+            expect(
+                noMatchConfig.features['top_level_or_feature'],
+            ).toBeUndefined()
+            expect(noMatchConfig.variables['audience-match']).toBeUndefined()
+        })
+
+        it('should handle nested or', () => {
+            const userMatchesFavouriteFood = {
+                user_id: 'Z',
+                customData: {
+                    favouriteFood: 'pizza',
+                },
+            }
+
+            const bucketedConfig = generateBucketedConfig({
+                config: configWithNestedOrAudience,
+                user: userMatchesFavouriteFood,
+            })
+            expect(bucketedConfig.features['nested_or_feature']).toBeDefined()
+            expect(
+                bucketedConfig.features['nested_or_feature'].variationKey,
+            ).toBe('audience-match-variation')
+            expect(bucketedConfig.variables['audience-match']).toBeDefined()
+            expect(bucketedConfig.variables['audience-match'].value).toBe(
+                'audience_match',
+            )
+
+            const userNoMatch = {
+                user_id: 'Z',
+            }
+
+            const noMatchConfig = generateBucketedConfig({
+                config: configWithNestedOrAudience,
+                user: userNoMatch,
+            })
+            expect(noMatchConfig.features['nested_or_feature']).toBeUndefined()
+            expect(noMatchConfig.variables['audience-match']).toBeUndefined()
+        })
     })
 })
 
