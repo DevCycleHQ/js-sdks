@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/openfeature-angular-provider",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "description": "OpenFeature Angular SDK Provider",
     "license": "MIT",
     "author": "DevCycle <support@devcycle.com>",
@@ -20,8 +20,8 @@
     },
     "homepage": "https://devcycle.com",
     "dependencies": {
-        "@devcycle/js-client-sdk": "^1.39.0",
-        "@devcycle/openfeature-web-provider": "^1.4.0"
+        "@devcycle/js-client-sdk": "^1.39.1",
+        "@devcycle/openfeature-web-provider": "^1.4.1"
     },
     "peerDependencies": {
         "@openfeature/multi-provider-web": "^0.0.3",
