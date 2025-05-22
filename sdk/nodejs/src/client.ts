@@ -175,7 +175,7 @@ export class DevCycleClient<
     }: {
         options?: DevCycleServerSDKOptions
     }): Promise<void> {
-        ;[this.bucketingLib, this.bucketingTracker] = await importBucketingLib({
+        [this.bucketingLib, this.bucketingTracker] = await importBucketingLib({
             options,
             logger: this.logger,
         })

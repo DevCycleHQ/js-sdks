@@ -30,9 +30,6 @@
         "libsDir": "",
         "appsDir": ""
     },
-    "affected": {
-        "defaultBase": "main"
-    },
     "generators": {
         "@nx/web:application": {
             "style": "css",
@@ -121,5 +118,7 @@
             "cache": true
         }
     },
-    "parallel": 1
+    "parallel": 1,
+    "useInferencePlugins": false,
+    "defaultBase": "main"
 }

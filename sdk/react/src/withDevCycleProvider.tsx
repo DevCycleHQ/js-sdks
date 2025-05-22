@@ -14,7 +14,7 @@ export function withDevCycleProvider<
 >(config: ProviderConfig<CustomData>) {
     return function <T extends object>(
         WrappedComponent: React.ComponentType<T>,
-    ) {
+    ): ForwardRefExoticComponent<PropsWithoutRef<T> & RefAttributes<unknown>> {
         const HoistedComponent = forwardRef(
             (props: PropsWithoutRef<T>, ref) => {
                 return (

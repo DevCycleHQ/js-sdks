@@ -25,10 +25,10 @@ type DevCycleNextOptions = Pick<
 export const appWithDevCycle = <Props extends NextJsAppProps>(
     WrappedComponent: React.ComponentType<Props>,
     additionalOptions: DevCycleNextOptions = {},
-) => {
+): React.ComponentType<Props & { pageProps: Props['pageProps'] & SSRProps }> => {
     const AppWithDevCycle = (
         props: Props & { pageProps: Props['pageProps'] & SSRProps },
-    ) => {
+    ): any => {
         const devcycleSSR = props.pageProps
             ._devcycleSSR as SSRProps['_devcycleSSR']
 

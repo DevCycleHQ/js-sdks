@@ -6,7 +6,7 @@ import useVariableValue from './useVariableValue'
 export const renderIfEnabled = <T extends { default: ComponentType<any> }>(
     key: string,
     importFunc: () => Promise<T>,
-) => {
+): (props: ComponentProps<T['default']>) => JSX.Element | null => {
     const Component = dynamic(() => importFunc())
     return function (props: ComponentProps<T['default']>) {
         const isEnabled = useVariableValue(key, false)

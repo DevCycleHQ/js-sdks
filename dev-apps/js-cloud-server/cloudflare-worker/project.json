@@ -3,6 +3,7 @@
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "dev-apps/js-cloud-server/cloudflare-worker/src",
     "projectType": "application",
+    "tags": [],
     "targets": {
         "build": {
             "executor": "@nx/webpack:webpack",
@@ -12,7 +13,8 @@
                 "main": "dev-apps/js-cloud-server/cloudflare-worker/src/index.ts",
                 "tsConfig": "dev-apps/js-cloud-server/cloudflare-worker/tsconfig.json",
                 "compiler": "tsc",
-                "target": "node"
+                "target": "node",
+                "webpackConfig": "dev-apps/js-cloud-server/cloudflare-worker/webpack.config.js"
             }
         },
         "serve": {
@@ -39,6 +41,5 @@
                 ]
             }
         }
-    },
-    "tags": []
+    }
 }

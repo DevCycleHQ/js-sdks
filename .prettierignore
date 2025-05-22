@@ -19,3 +19,4 @@ node_modules
 dev-apps/react/react-native-app/package.json
 
 /.nx/cache
+/.nx/workspace-data

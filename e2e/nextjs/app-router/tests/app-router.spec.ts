@@ -48,7 +48,7 @@ test('works after a client side navigation in streaming mode', async ({
     // More reliable way to navigate in Next.js using page.$$eval to find and click the link
     await page.$$eval('a:has-text("Go To page")', (elements) => {
         if (elements.length > 0) {
-            ;(elements[0] as HTMLElement).click()
+            (elements[0] as HTMLElement).click()
         } else {
             throw new Error('Link not found')
         }

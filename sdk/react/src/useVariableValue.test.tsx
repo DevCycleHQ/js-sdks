@@ -3,7 +3,7 @@ import { renderHook } from '@testing-library/react'
 import { DevCycleProvider } from './DevCycleProvider'
 import '@testing-library/jest-dom'
 import type { DVCJSON } from '@devcycle/js-client-sdk'
-import { ReactNode } from 'react'
+import { ReactElement, ReactNode } from 'react'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { mockSubscribeFunction } from '@devcycle/js-client-sdk' // defined in the mock
