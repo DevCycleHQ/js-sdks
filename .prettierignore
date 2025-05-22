@@ -17,3 +17,5 @@ node_modules
 .github/
 **/Pods/**
 dev-apps/react/react-native-app/package.json
+
+/.nx/cache
