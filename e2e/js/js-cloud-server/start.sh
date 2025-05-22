@@ -2,7 +2,7 @@
 cd "$(dirname "$0")"
 
 
-if [ $-z "${DVC_E2E_SERVER_SDK_KEY}" ]; then
+if [ -z "${DVC_E2E_SERVER_SDK_KEY}" ]; then
   echo "DVC_E2E_SERVER_SDK_KEY is not set"
   exit 1
 fi
