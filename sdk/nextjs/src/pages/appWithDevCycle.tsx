@@ -21,14 +21,14 @@ type DevCycleNextOptions = Pick<
     configSource?: ConfigSource
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export const appWithDevCycle = <Props extends NextJsAppProps>(
     WrappedComponent: React.ComponentType<Props>,
     additionalOptions: DevCycleNextOptions = {},
-): React.ComponentType<Props & { pageProps: Props['pageProps'] & SSRProps }> => {
+) => {
     const AppWithDevCycle = (
         props: Props & { pageProps: Props['pageProps'] & SSRProps },
-    ): any => {
+    ) => {
         const devcycleSSR = props.pageProps
             ._devcycleSSR as SSRProps['_devcycleSSR']
 
