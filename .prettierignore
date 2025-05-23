@@ -17,3 +17,7 @@ node_modules
 .github/
 **/Pods/**
 dev-apps/react/react-native-app/package.json
+**/.wrangler/**
+
+/.nx/cache
+/.nx/workspace-data

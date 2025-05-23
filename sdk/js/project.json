@@ -21,7 +21,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["sdk/js/**/*.ts", "sdk/js/package.json"]
@@ -37,7 +37,7 @@
             }
         },
         "build": {
-            "executor": "@nrwl/rollup:rollup",
+            "executor": "@nx/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/js",
@@ -58,7 +58,7 @@
             }
         },
         "build:es5": {
-            "executor": "@nrwl/rollup:rollup",
+            "executor": "@nx/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/es5/js",
@@ -96,7 +96,7 @@
                 "outputPath": "dist/sdk/cdn/js",
                 "tsConfig": "sdk/js/tsconfig.lib.json",
                 "packageJson": "sdk/js/package.json",
-                "main": "sdk/js/src/index.ts",
+                "main": "./sdk/js/src/index.ts",
                 "index": "",
                 "optimization": true,
                 "assets": [
@@ -111,7 +111,9 @@
                 "vendorChunk": false,
                 "commonChunk": false,
                 "namedChunks": false,
-                "webpackConfig": "sdk/js/webpack.config.js"
+                "webpackConfig": "sdk/js/webpack.config.js",
+                "compiler": "tsc",
+                "mode": "production"
             }
         }
     }

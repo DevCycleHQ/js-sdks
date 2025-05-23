@@ -42,18 +42,6 @@
             "@devcycle/nodejs-server-sdk/openfeature-strategy": [
                 "sdk/nodejs/openfeature-strategy.ts"
             ],
-            "@devcycle/openfeature-web-provider": [
-                "sdk/openfeature-web-provider/src/index.ts"
-            ],
-            "@devcycle/openfeature-web-provider/strategy": [
-                "sdk/openfeature-web-provider/strategy.ts"
-            ],
-            "@devcycle/openfeature-react-provider": [
-                "sdk/openfeature-react-provider/src/index.ts"
-            ],
-            "@devcycle/openfeature-react-provider/strategy": [
-                "sdk/openfeature-react-provider/strategy.ts"
-            ],
             "@devcycle/openfeature-angular-provider": [
                 "sdk/openfeature-angular-provider/src/index.ts"
             ],
@@ -62,6 +50,18 @@
             ],
             "@devcycle/openfeature-nestjs-provider": [
                 "sdk/openfeature-nestjs-provider/src/index.ts"
+            ],
+            "@devcycle/openfeature-react-provider": [
+                "sdk/openfeature-react-provider/src/index.ts"
+            ],
+            "@devcycle/openfeature-react-provider/strategy": [
+                "sdk/openfeature-react-provider/strategy.ts"
+            ],
+            "@devcycle/openfeature-web-provider": [
+                "sdk/openfeature-web-provider/src/index.ts"
+            ],
+            "@devcycle/openfeature-web-provider/strategy": [
+                "sdk/openfeature-web-provider/strategy.ts"
             ],
             "@devcycle/react-client-sdk": ["sdk/react/src/index.ts"],
             "@devcycle/react-native-client-sdk": [

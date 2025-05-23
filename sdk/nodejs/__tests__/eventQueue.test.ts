@@ -80,6 +80,7 @@ describe('EventQueue Unit Tests', () => {
     }
 
     beforeAll(async () => {
+        // eslint-disable-next-line @typescript-eslint/no-extra-semi
         ;[bucketing] = await importBucketingLib()
         setPlatformDataJSON(bucketing)
     })

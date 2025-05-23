@@ -176,6 +176,7 @@ export class EventQueue<
         if (!aggEventType) {
             this.aggregateEventMap[event.type] = { [event.target]: event }
         } else if (aggEventType[event.target]) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             aggEventType[event.target].value!++
         } else {
             aggEventType[event.target] = event
