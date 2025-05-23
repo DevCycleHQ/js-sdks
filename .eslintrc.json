@@ -34,6 +34,7 @@
             "rules": {
                 "@typescript-eslint/explicit-module-boundary-types": ["error"],
                 "@typescript-eslint/no-extra-semi": "error",
+                "@typescript-eslint/no-explicit-any": "off",
                 "no-extra-semi": "off"
             }
         },

@@ -9,7 +9,7 @@
                 "@nx/dependency-checks": [
                     "error",
                     {
-                        "ignoredDependencies": []
+                        "ignoredDependencies": ["tsconfig-paths-webpack-plugin"]
                     }
                 ]
             }

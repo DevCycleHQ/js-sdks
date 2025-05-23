@@ -20,7 +20,7 @@ export function dvcDefaultLogger(options?: DVCDefaultLoggerOptions): DVCLogger {
     const writeLog = (message: string): void => logWriter(prefix + message)
     const writeError = (message: string, error: unknown): void =>
         errorWriter(prefix + message, error)
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
     const noOpLog = (message: string): void => {}
 
     return {
