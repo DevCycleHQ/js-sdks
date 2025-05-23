@@ -1,13 +1,13 @@
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const path = require('path');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+const path = require('path')
 
 module.exports = (config, { options }) => {
     const libraryTarget = options.libraryTarget
     const libraryName = options.libraryName
     // Try options.root, then config.context, then process.cwd() as fallback for workspaceRoot
-    const workspaceRoot = options.root || config.context || process.cwd();
+    const workspaceRoot = options.root || config.context || process.cwd()
 
-    config.mode = 'production';
+    config.mode = 'production'
 
     config.optimization = config.optimization || {}
     config.optimization.runtimeChunk = false
@@ -34,22 +34,24 @@ module.exports = (config, { options }) => {
         filename: `${libraryName.toLowerCase()}.min.js`,
     }
 
-    config.resolve = config.resolve || {};
-    config.resolve.extensions = config.resolve.extensions || [];
+    config.resolve = config.resolve || {}
+    config.resolve.extensions = config.resolve.extensions || []
     if (!config.resolve.extensions.includes('.ts')) {
-        config.resolve.extensions.push('.ts');
+        config.resolve.extensions.push('.ts')
     }
     if (!config.resolve.extensions.includes('.js')) {
-        config.resolve.extensions.push('.js');
+        config.resolve.extensions.push('.js')
     }
 
-    config.resolve.plugins = config.resolve.plugins || [];
-    config.resolve.plugins.push(new TsconfigPathsPlugin({
-        configFile: options.tsConfig,
-    }));
+    config.resolve.plugins = config.resolve.plugins || []
+    config.resolve.plugins.push(
+        new TsconfigPathsPlugin({
+            configFile: options.tsConfig,
+        }),
+    )
 
-    config.module = config.module || {};
-    config.module.rules = config.module.rules || [];
+    config.module = config.module || {}
+    config.module.rules = config.module.rules || []
 
     const tsLoaderRule = {
         test: /\.ts$/,
@@ -58,14 +60,14 @@ module.exports = (config, { options }) => {
         options: {
             configFile: options.tsConfig,
         },
-    };
+    }
 
     const hasExistingTsRule = config.module.rules.some(
-        (rule) => rule.test && rule.test.toString().includes('\\.ts')
-    );
+        (rule) => rule.test && rule.test.toString().includes('\\.ts'),
+    )
 
     if (!hasExistingTsRule) {
-        config.module.rules.push(tsLoaderRule);
+        config.module.rules.push(tsLoaderRule)
     }
 
     return config
