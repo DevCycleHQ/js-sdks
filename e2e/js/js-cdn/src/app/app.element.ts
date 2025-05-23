@@ -1,6 +1,5 @@
 const SDK_KEY =
     process.env.NEXT_PUBLIC_E2E_NEXTJS_CLIENT_KEY || '<DEVCYCLE_CLIENT_SDK_KEY>'
-console.log('[E2E JS-CDN] SDK_KEY being used:', SDK_KEY)
 
 export class AppElement extends HTMLElement {
     constructor() {
@@ -99,7 +98,6 @@ declare global {
 }
 
 try {
-    console.log('[E2E JS-CDN] Attempting to initialize DevCycle SDK...')
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     window.devcycleClient = DevCycle.initializeDevCycle(SDK_KEY, user, {
@@ -108,7 +106,6 @@ try {
         eventFlushIntervalMS: 1000,
         deferInitialization: false,
     })
-    console.log('[E2E JS-CDN] DevCycle.initializeDevCycle called successfully.')
 
     window.devcycleClient.on('error', (error: Error) => {
         console.error('[E2E JS-CDN] DevCycle SDK Error Event:', error)
@@ -127,15 +124,10 @@ try {
             }
             return
         }
-        console.log(
-            '[E2E JS-CDN] onClientInitialized callback successful. Defining custom element.',
-        )
+
         if (!customElements.get('devcycle-root')) {
             customElements.define('devcycle-root', AppElement)
         } else {
-            console.log(
-                '[E2E JS-CDN] devcycle-root already defined. Forcing update.',
-            )
             const appRoot = document.querySelector(
                 'devcycle-root',
             ) as AppElement
