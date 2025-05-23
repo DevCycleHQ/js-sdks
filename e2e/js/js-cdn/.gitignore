@@ -1,0 +1,5 @@
+# Ignore .env files
+.env
+
+# Ignore other common files if necessary
+.DS_Store 

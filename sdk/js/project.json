@@ -96,7 +96,7 @@
                 "outputPath": "dist/sdk/cdn/js",
                 "tsConfig": "sdk/js/tsconfig.lib.json",
                 "packageJson": "sdk/js/package.json",
-                "main": "sdk/js/src/index.ts",
+                "main": "./sdk/js/src/index.ts",
                 "index": "",
                 "optimization": true,
                 "assets": [
@@ -111,7 +111,9 @@
                 "vendorChunk": false,
                 "commonChunk": false,
                 "namedChunks": false,
-                "webpackConfig": "sdk/js/webpack.config.js"
+                "webpackConfig": "sdk/js/webpack.config.js",
+                "compiler": "tsc",
+                "mode": "production"
             }
         }
     }

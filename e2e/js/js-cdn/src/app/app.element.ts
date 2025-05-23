@@ -1,5 +1,7 @@
 const SDK_KEY =
     process.env.NEXT_PUBLIC_E2E_NEXTJS_CLIENT_KEY || '<DEVCYCLE_CLIENT_SDK_KEY>'
+console.log('[E2E JS-CDN] SDK_KEY being used:', SDK_KEY)
+
 export class AppElement extends HTMLElement {
     constructor() {
         super()
@@ -8,17 +10,22 @@ export class AppElement extends HTMLElement {
     public static observedAttributes = []
 
     updateInnerHTML(): void {
-        const enabledVariable = devcycleClient.variableValue(
+        if (!window.devcycleClient) {
+            console.error(
+                '[E2E JS-CDN] devcycleClient not initialized in updateInnerHTML',
+            )
+            this.innerHTML = '<p>Error: Devcycle Client not initialized</p>'
+            return
+        }
+        const enabledVariable = window.devcycleClient.variableValue(
             'enabled-feature',
             false,
         )
-
-        const disabledVariable = devcycleClient.variableValue(
+        const disabledVariable = window.devcycleClient.variableValue(
             'disabled-feature',
             true,
         )
-
-        const defaultVariable = devcycleClient.variableValue(
+        const defaultVariable = window.devcycleClient.variableValue(
             'default-feature',
             true,
         )
@@ -54,14 +61,23 @@ export class AppElement extends HTMLElement {
                   ${defaultVariable}
                 </h1>
               </div>
-    `
+            </div>
+          </div>`
     }
 
     connectedCallback(): void {
-        this.updateInnerHTML()
-        devcycleClient.subscribe('configUpdated', () => {
+        if (window.devcycleClient && window.devcycleClient.isInitialized) {
             this.updateInnerHTML()
-        })
+        }
+        if (window.devcycleClient) {
+            window.devcycleClient.subscribe('configUpdated', () => {
+                this.updateInnerHTML()
+            })
+        } else {
+            console.error(
+                '[E2E JS-CDN] devcycleClient not available for configUpdated subscription',
+            )
+        }
     }
 }
 
@@ -76,12 +92,63 @@ const user = {
     isAnonymous: false,
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const devcycleClient = DevCycle.initializeDevCycle(SDK_KEY, user, {
-    enableEdgeDB: false,
-    logLevel: 'error',
-})
-devcycleClient.onClientInitialized(() =>
-    customElements.define('devcycle-root', AppElement),
-)
+declare global {
+    interface Window {
+        devcycleClient: any
+    }
+}
+
+try {
+    console.log('[E2E JS-CDN] Attempting to initialize DevCycle SDK...')
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    window.devcycleClient = DevCycle.initializeDevCycle(SDK_KEY, user, {
+        enableEdgeDB: false,
+        logLevel: 'debug',
+        eventFlushIntervalMS: 1000,
+        deferInitialization: false,
+    })
+    console.log('[E2E JS-CDN] DevCycle.initializeDevCycle called successfully.')
+
+    window.devcycleClient.on('error', (error: Error) => {
+        console.error('[E2E JS-CDN] DevCycle SDK Error Event:', error)
+    })
+
+    window.devcycleClient.onClientInitialized((error?: Error | null) => {
+        if (error) {
+            console.error(
+                '[E2E JS-CDN] onClientInitialized callback with error:',
+                error,
+            )
+            const appRoot = document.querySelector('devcycle-root')
+            if (appRoot) {
+                appRoot.innerHTML =
+                    '<p>DevCycle SDK Initialization Error. Check console.</p>'
+            }
+            return
+        }
+        console.log(
+            '[E2E JS-CDN] onClientInitialized callback successful. Defining custom element.',
+        )
+        if (!customElements.get('devcycle-root')) {
+            customElements.define('devcycle-root', AppElement)
+        } else {
+            console.log(
+                '[E2E JS-CDN] devcycle-root already defined. Forcing update.',
+            )
+            const appRoot = document.querySelector(
+                'devcycle-root',
+            ) as AppElement
+            if (appRoot && typeof appRoot.updateInnerHTML === 'function') {
+                appRoot.updateInnerHTML()
+            }
+        }
+    })
+} catch (e: any) {
+    console.error('[E2E JS-CDN] Critical error during DevCycle SDK setup:', e)
+    const appRoot = document.querySelector('devcycle-root')
+    if (appRoot) {
+        appRoot.innerHTML =
+            '<p>Critical Error Initializing DevCycle. Check console.</p>'
+    }
+}
