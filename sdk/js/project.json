@@ -6,6 +6,7 @@
     "targets": {
         "npm-publish": {
             "executor": "nx:run-commands",
+            "cache": false,
             "options": {
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/js-client-sdk\"",
                 "cwd": "dist/sdk/js",
@@ -15,6 +16,10 @@
         },
         "check-types": {
             "executor": "nx:run-commands",
+            "inputs": [
+                "{projectRoot}/src/**/*.ts",
+                "{projectRoot}/tsconfig*.json"
+            ],
             "options": {
                 "command": "yarn run -T tsc -b --incremental",
                 "cwd": "sdk/js"
@@ -59,6 +64,8 @@
         },
         "build:emit-legacy-types": {
             "executor": "nx:run-commands",
+            "inputs": ["{options.cwd}/**/*.d.ts"],
+            "outputs": ["{options.cwd}/ts3.5"],
             "options": {
                 "command": "npx --yes downlevel-dts . ts3.5 --to=3.5",
                 "cwd": "dist/sdk/js",

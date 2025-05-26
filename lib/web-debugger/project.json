@@ -16,6 +16,7 @@
         },
         "npm-publish": {
             "executor": "nx:run-commands",
+            "cache": false,
             "options": {
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/web-debugger\"",
                 "cwd": "dist/lib/web-debugger",
@@ -48,6 +49,7 @@
         },
         "check-types": {
             "executor": "nx:run-commands",
+            "inputs": ["{projectRoot}/**/*.ts", "{projectRoot}/tsconfig*.json"],
             "options": {
                 "command": "yarn run -T tsc -b --incremental",
                 "cwd": "lib/web-debugger"

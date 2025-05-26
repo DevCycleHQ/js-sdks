@@ -41,6 +41,7 @@
         },
         "npm-publish": {
             "executor": "nx:run-commands",
+            "cache": false,
             "options": {
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/nextjs-sdk\"",
                 "cwd": "dist/sdk/nextjs",
@@ -49,6 +50,10 @@
         },
         "check-types": {
             "executor": "nx:run-commands",
+            "inputs": [
+                "{projectRoot}/src/**/*.{ts,tsx}",
+                "{projectRoot}/tsconfig*.json"
+            ],
             "options": {
                 "command": "yarn run -T tsc -b --incremental",
                 "cwd": "sdk/nextjs"
