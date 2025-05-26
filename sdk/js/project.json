@@ -57,27 +57,6 @@
                 ]
             }
         },
-        "build:es5": {
-            "executor": "@nx/rollup:rollup",
-            "outputs": ["{options.outputPath}"],
-            "options": {
-                "outputPath": "dist/sdk/es5/js",
-                "tsConfig": "sdk/js/tsconfig.lib.es5.json",
-                "project": "sdk/js/package.json",
-                "entryFile": "sdk/js/src/index.ts",
-                "compiler": "tsc",
-                "format": ["esm", "cjs"],
-                "external": "all",
-                "generateExportsField": true,
-                "assets": [
-                    {
-                        "glob": "sdk/js/*.md",
-                        "input": ".",
-                        "output": "."
-                    }
-                ]
-            }
-        },
         "build:emit-legacy-types": {
             "executor": "nx:run-commands",
             "options": {
