@@ -3,10 +3,8 @@
 import './app.element.css'
 import DevCycleProvider from '@devcycle/openfeature-web-provider'
 import { OpenFeature } from '@openfeature/web-sdk'
-import { environment } from '../environments/environment'
 
-const DEVCYCLE_CLIENT_SDK_KEY =
-    environment.devcycleClientSdkKey || '<DEVCYCLE_CLIENT_SDK_KEY>'
+const DEVCYCLE_CLIENT_SDK_KEY = '<DEVCYCLE_CLIENT_SDK_KEY>'
 
 export class AppElement extends HTMLElement {
     constructor() {
