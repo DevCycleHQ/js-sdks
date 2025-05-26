@@ -32,6 +32,7 @@
         },
         "npm-publish": {
             "executor": "nx:run-commands",
+            "cache": false,
             "options": {
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/openfeature-angular-provider\"",
                 "cwd": "dist/sdk/openfeature-angular-provider",
