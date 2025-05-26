@@ -18,7 +18,7 @@ const MyComponent = SwapComponents(
     'test-feature',
 )
 
-export default function DevCycleExample() {
+export default function DevCycleExample(): JSX.Element {
     const variableKey = 'feature-release'
     const variableKeyString = 'variable-key-string'
     const variableKeyNumber = 'variable-key-number'

@@ -4,7 +4,7 @@
     "sourceRoot": "dev-apps/nodejs-cloud/src",
     "projectType": "application",
     "targets": {
-                "build": {
+        "build": {
             "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {

@@ -1,40 +1,35 @@
 {
-  "extends": "../../../tsconfig.base.json",
-  "compilerOptions": {
-    "jsx": "preserve",
-    "allowJs": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "types": [
-      "node",
-      "jest"
+    "extends": "../../../tsconfig.base.json",
+    "compilerOptions": {
+        "jsx": "preserve",
+        "allowJs": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "types": ["node", "jest"],
+        "strict": false,
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "incremental": true,
+        "moduleResolution": "node",
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ],
+        "strictNullChecks": true
+    },
+    "include": [
+        "**/*.js",
+        "**/*.jsx",
+        "**/*.ts",
+        "**/*.tsx",
+        "../../../dev-apps/nextjs/app-router/.next/types/**/*.ts",
+        "../../../dist/dev-apps/nextjs/app-router/.next/types/**/*.ts",
+        "../../nextjs/app-router/.next/types/**/*.ts",
+        "next-env.d.ts",
+        ".next/types/**/*.ts"
     ],
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "incremental": true,
-    "moduleResolution": "node",
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "strictNullChecks": true
-  },
-  "include": [
-    "**/*.js",
-    "**/*.jsx",
-    "**/*.ts",
-    "**/*.tsx",
-    "../../../dev-apps/nextjs/app-router/.next/types/**/*.ts",
-    "../../../dist/dev-apps/nextjs/app-router/.next/types/**/*.ts",
-    "../../nextjs/app-router/.next/types/**/*.ts",
-    "next-env.d.ts",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "exclude": ["node_modules"]
 }
