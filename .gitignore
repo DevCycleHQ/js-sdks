@@ -36,6 +36,8 @@ globalConfig.json
 
 // ignore env files in dev-apps
 dev-apps/**/.env
+dev-apps/**/.env.local
+dev-apps/**/.env.*.local
 
 # React Native
 
