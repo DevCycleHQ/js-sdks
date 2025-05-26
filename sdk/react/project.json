@@ -33,27 +33,6 @@
                 ]
             }
         },
-        "build:es5": {
-            "executor": "@nx/rollup:rollup",
-            "outputs": ["{options.outputPath}"],
-            "options": {
-                "outputPath": "dist/sdk/es5/react",
-                "tsConfig": "sdk/react/tsconfig.lib.es5.json",
-                "project": "sdk/react/package.json",
-                "entryFile": "sdk/react/src/index.ts",
-                "format": ["esm", "cjs"],
-                "external": "all",
-                "rollupConfig": "@nx/react/plugins/bundle-rollup",
-                "compiler": "tsc",
-                "assets": [
-                    {
-                        "glob": "sdk/react/README.md",
-                        "input": ".",
-                        "output": "."
-                    }
-                ]
-            }
-        },
         "lint": {
             "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
