@@ -49,10 +49,7 @@
         },
         "check-types": {
             "executor": "nx:run-commands",
-            "inputs": [
-                "{projectRoot}/**/*.ts",
-                "{projectRoot}/tsconfig*.json"
-            ],
+            "inputs": ["{projectRoot}/**/*.ts", "{projectRoot}/tsconfig*.json"],
             "options": {
                 "command": "yarn run -T tsc -b --incremental",
                 "cwd": "lib/web-debugger"
