@@ -21,15 +21,14 @@
         "strictNullChecks": true
     },
     "include": [
-        "**/*.js",
-        "**/*.jsx",
         "**/*.ts",
         "**/*.tsx",
-        "../../../dev-apps/nextjs/app-router/.next/types/**/*.ts",
-        "../../../dist/dev-apps/nextjs/app-router/.next/types/**/*.ts",
-        "../../nextjs/app-router/.next/types/**/*.ts",
+        "**/*.js",
+        "**/*.jsx",
         "next-env.d.ts",
-        ".next/types/**/*.ts"
+        "../../nextjs/app-router/.next/types/**/*.ts",
+        "../../../dist/dev-apps/nextjs/app-router/.next/types/**/*.ts",
+        "../../../dev-apps/nextjs/app-router/.next/types/**/*.ts"
     ],
     "exclude": ["node_modules"]
 }
