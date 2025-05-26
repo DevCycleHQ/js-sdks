@@ -12,7 +12,8 @@
                         "ignoredDependencies": [
                             "react-native",
                             "react-native-device-info",
-                            "react-native-get-random-values"
+                            "react-native-get-random-values",
+                            "@react-native-async-storage/async-storage"
                         ]
                     }
                 ]
