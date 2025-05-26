@@ -3,9 +3,10 @@
 import './app.element.css'
 import DevCycleProvider from '@devcycle/openfeature-web-provider'
 import { OpenFeature } from '@openfeature/web-sdk'
+import { environment } from '../environments/environment'
 
 const DEVCYCLE_CLIENT_SDK_KEY =
-    process.env.DEVCYCLE_CLIENT_SDK_KEY || '<DEVCYCLE_CLIENT_SDK_KEY>'
+    environment.devcycleClientSdkKey || '<DEVCYCLE_CLIENT_SDK_KEY>'
 
 export class AppElement extends HTMLElement {
     constructor() {
@@ -15,29 +16,43 @@ export class AppElement extends HTMLElement {
     public static observedAttributes = []
 
     updateInnerHTML(): void {
-        const titleVariable = ofClient.getStringValue(
-            'titlevariable',
-            'Welcome 👋',
-        )
-        const variableKey = ofClient.getBooleanValue('feature-release', true)
-        const variableKeyString = ofClient.getStringValue(
-            'variable-key-string',
-            'default',
-        )
-        const variableKeyNumber = ofClient.getNumberValue(
-            'variable-key-number',
-            100,
-        )
-        const variableKeyBoolean = ofClient.getBooleanValue(
-            'variable-key-boolean',
-            true,
-        )
-        const variableKeyJsonString = ofClient.getObjectValue(
-            'variable-json-key-string',
-            {
-                jsonStringKeyDefault: 'json default',
-            },
-        )
+        let titleVariable = 'Welcome 👋'
+        let variableKey = true
+        let variableKeyString = 'default'
+        let variableKeyNumber = 100
+        let variableKeyBoolean = true
+        let variableKeyJsonString = { jsonStringKeyDefault: 'json default' }
+
+        try {
+            titleVariable = ofClient.getStringValue(
+                'titlevariable',
+                'Welcome 👋',
+            )
+            variableKey = ofClient.getBooleanValue('feature-release', true)
+            variableKeyString = ofClient.getStringValue(
+                'variable-key-string',
+                'default',
+            )
+            variableKeyNumber = ofClient.getNumberValue(
+                'variable-key-number',
+                100,
+            )
+            variableKeyBoolean = ofClient.getBooleanValue(
+                'variable-key-boolean',
+                true,
+            )
+            const jsonValue = ofClient.getObjectValue(
+                'variable-json-key-string',
+                {
+                    jsonStringKeyDefault: 'json default',
+                },
+            )
+            variableKeyJsonString = jsonValue as {
+                jsonStringKeyDefault: string
+            }
+        } catch (error) {
+            console.log('OpenFeature not ready yet, using default values')
+        }
 
         this.innerHTML = `
           <div class="wrapper">
@@ -469,9 +484,22 @@ const user = {
     isAnonymous: false,
 }
 
+console.log('Setting up DevCycle OpenFeature provider')
 const devcycleProvider = new DevCycleProvider(DEVCYCLE_CLIENT_SDK_KEY)
+const ofClient = OpenFeature.getClient()
+
+// Define the custom element immediately
+customElements.define('devcycle-root', AppElement)
+
+// Set up OpenFeature asynchronously
 OpenFeature.setContext(user)
 OpenFeature.setProviderAndWait(devcycleProvider).then(() => {
-    customElements.define('devcycle-root', AppElement)
+    console.log('OpenFeature provider set up successfully')
+    // Trigger a re-render of any existing elements
+    const elements = document.querySelectorAll('devcycle-root')
+    elements.forEach((element: any) => {
+        if (element.updateInnerHTML) {
+            element.updateInnerHTML()
+        }
+    })
 })
-const ofClient = OpenFeature.getClient()

@@ -3,4 +3,5 @@
 
 export const environment = {
     production: false,
+    devcycleClientSdkKey: process.env.NX_DEVCYCLE_CLIENT_SDK_KEY,
 }
