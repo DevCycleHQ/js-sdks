@@ -5,21 +5,27 @@
     "projectType": "application",
     "targets": {
         "build": {
-            "executor": "@nx/webpack:webpack",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/dev-apps/nodejs-local",
                 "main": "dev-apps/nodejs-local/src/main.ts",
                 "tsConfig": "dev-apps/nodejs-local/tsconfig.app.json",
-                "webpackConfig": "dev-apps/nodejs-local/webpack.config.js",
-                "compiler": "tsc",
-                "target": "node"
+                "platform": "node",
+                "format": ["cjs"],
+                "assets": [
+                    {
+                        "glob": "**/*.wasm",
+                        "input": "lib/shared/bucketing-assembly-script/build",
+                        "output": "build"
+                    }
+                ]
             }
         },
         "serve": {
             "executor": "@nx/js:node",
             "options": {
-                "buildTarget": "example-nodejs-local:build"
+                "buildTarget": "build"
             },
             "dependsOn": ["^build"]
         },

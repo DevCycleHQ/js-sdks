@@ -4,22 +4,21 @@
     "sourceRoot": "dev-apps/nodejs-cloud/src",
     "projectType": "application",
     "targets": {
-        "build": {
-            "executor": "@nx/webpack:webpack",
+                "build": {
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/dev-apps/nodejs-cloud",
                 "main": "dev-apps/nodejs-cloud/src/main.ts",
                 "tsConfig": "dev-apps/nodejs-cloud/tsconfig.app.json",
-                "webpackConfig": "dev-apps/nodejs-cloud/webpack.config.js",
-                "compiler": "tsc",
-                "target": "node"
+                "platform": "node",
+                "format": ["cjs"]
             }
         },
         "serve": {
             "executor": "@nx/js:node",
             "options": {
-                "buildTarget": "example-nodejs-cloud:build"
+                "buildTarget": "build"
             },
             "dependsOn": ["^build"]
         },
