@@ -21,7 +21,7 @@ export default defineConfig({
     ...{
         ...nxConfig,
         // Only run the webkit browser.
-        projects: nxConfig.projects.filter((p) => p.name === 'webkit'),
+        projects: (nxConfig?.projects || []).filter((p) => p.name === 'webkit'),
     },
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {

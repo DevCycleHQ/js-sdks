@@ -1510,27 +1510,27 @@ __metadata:
   linkType: hard
 
 "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server::locator=e2e-js-cloud-server%40workspace%3A.":
-  version: 1.23.0
-  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=5618b4&locator=e2e-js-cloud-server%40workspace%3A."
+  version: 1.25.1
+  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=ac61d9&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
-    "@devcycle/types": "npm:^1.24.0"
+    "@devcycle/types": "npm:^1.26.1"
     cross-fetch: "npm:^4.1.0"
     fetch-retry: "npm:^5.0.6"
     lodash: "npm:^4.17.21"
-  checksum: 10/89291e18b49663db1f345ea3219a7f0186e88dc5a27e71aa65a64ddbd07e5591ed44202877360d7a413fbead7b48190d3ecad6b196443a87f34a9dc04e720db1
+  checksum: 10/25d273beaef38f956469f607e1379fe37e1cf404964c4868bd0b2428ed388ea21abdd646819ceb7d2d43c7d67e56d452ab0d4a298eaa0d85ca2fd9f8b367a3b9
   languageName: node
   linkType: hard
 
 "@devcycle/types@file:../../../dist/lib/shared/types::locator=e2e-js-cloud-server%40workspace%3A.":
-  version: 1.24.0
-  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=e2e275&locator=e2e-js-cloud-server%40workspace%3A."
+  version: 1.26.1
+  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=ab9993&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
     class-transformer: "npm:0.5.1"
     class-validator: "npm:0.14.1"
     iso-639-1: "npm:^2.1.15"
     lodash: "npm:^4.17.21"
     reflect-metadata: "npm:^0.1.14"
-  checksum: 10/ec416223d7b762cba6bad9d5d9575548a0670e4540d967217721f15081c498c4b6f192e3ee6a4084e234516a8daf9502701be1a6d70d350a93536c4738a54427
+  checksum: 10/b5625dfb8da008303c77124ec3808a0c26fdc133940aaa4cec438303b7f6b84a5732c1d5052acd0d3a228d841c2ea8030d3d505ecb368708affb750a2c6fc65e
   languageName: node
   linkType: hard
 

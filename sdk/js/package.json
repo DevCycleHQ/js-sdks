@@ -21,7 +21,8 @@
     },
     "types": "./index.cjs.d.ts",
     "devDependencies": {
-        "cross-fetch": "^4.1.0"
+        "cross-fetch": "^4.1.0",
+        "tsconfig-paths-webpack-plugin": "^4.2.0"
     },
     "dependencies": {
         "@devcycle/types": "^1.26.1",

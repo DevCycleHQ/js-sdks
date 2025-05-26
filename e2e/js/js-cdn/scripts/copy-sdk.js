@@ -8,10 +8,10 @@ const sdkSource = path.join(
 )
 const appDestination = path.join(__dirname, '../src/assets/devcycle.min.js')
 
-fs.copy(sdkSource, appDestination, function (err) {
-    if (err) {
-        console.error('Error copying SDK:', err)
-    } else {
-        console.log('SDK copied successfully!')
-    }
-})
+try {
+    fs.copySync(sdkSource, appDestination)
+    console.log('SDK copied successfully!')
+} catch (err) {
+    console.error('Error copying SDK:', err)
+    process.exit(1) // Exit with an error code if copy fails
+}

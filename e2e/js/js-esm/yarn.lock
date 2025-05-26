@@ -34,28 +34,28 @@ __metadata:
   linkType: hard
 
 "@devcycle/js-client-sdk@file:../../../dist/sdk/js::locator=e2e-js-esm%40workspace%3A.":
-  version: 1.38.0
-  resolution: "@devcycle/js-client-sdk@file:../../../dist/sdk/js#../../../dist/sdk/js::hash=5dd558&locator=e2e-js-esm%40workspace%3A."
+  version: 1.39.1
+  resolution: "@devcycle/js-client-sdk@file:../../../dist/sdk/js#../../../dist/sdk/js::hash=e62c0b&locator=e2e-js-esm%40workspace%3A."
   dependencies:
-    "@devcycle/types": "npm:^1.25.0"
+    "@devcycle/types": "npm:^1.26.1"
     fetch-retry: "npm:^5.0.6"
     lodash: "npm:^4.17.21"
     ua-parser-js: "npm:^1.0.40"
     uuid: "npm:^8.3.2"
-  checksum: 10/aa30c66bd51dfd66893ac4504730e474fbb8e05eb2b0cb519048636e599661e3555c98a786f3f248b3ed40b1337e911d4579444fd6524f8f15c36c38bb997ee3
+  checksum: 10/531bc1811c7c6192e954498536d6699cd87c8a7bc941915c8a7b667f727e07830bc6b5781a973e42c210ae7d973567c1abe4f9bfd201141c78eed3285dfede4b
   languageName: node
   linkType: hard
 
 "@devcycle/types@file:../../../dist/lib/shared/types::locator=e2e-js-esm%40workspace%3A.":
-  version: 1.25.0
-  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=417bf3&locator=e2e-js-esm%40workspace%3A."
+  version: 1.26.1
+  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=ab9993&locator=e2e-js-esm%40workspace%3A."
   dependencies:
     class-transformer: "npm:0.5.1"
     class-validator: "npm:0.14.1"
     iso-639-1: "npm:^2.1.15"
     lodash: "npm:^4.17.21"
     reflect-metadata: "npm:^0.1.14"
-  checksum: 10/f79650929f1ac9c04bb81a98874f14fce092e4f5ff969493733d8f7dd5ddf96e941aa71360c35216d30e45be92d2700b1d372d2a1fd29e384ef32c7732ea5ee8
+  checksum: 10/b5625dfb8da008303c77124ec3808a0c26fdc133940aaa4cec438303b7f6b84a5732c1d5052acd0d3a228d841c2ea8030d3d505ecb368708affb750a2c6fc65e
   languageName: node
   linkType: hard
 

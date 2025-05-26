@@ -3,7 +3,7 @@ import { renderHook } from '@testing-library/react'
 import { DevCycleProvider } from './DevCycleProvider'
 import '@testing-library/jest-dom'
 import type { DVCJSON } from '@devcycle/js-client-sdk'
-import { ReactElement } from 'react'
+import { ReactElement, ReactNode } from 'react'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { mockSubscribeFunction } from '@devcycle/js-client-sdk' // defined in the mock
@@ -11,7 +11,7 @@ import { mockSubscribeFunction } from '@devcycle/js-client-sdk' // defined in th
 jest.mock('@devcycle/js-client-sdk')
 
 const test_key = 'dvc_client_test_key'
-const ProviderWrapper = ({ children }: { children: ReactElement }) => {
+const ProviderWrapper = ({ children }: { children: ReactNode }) => {
     return (
         <DevCycleProvider
             config={{

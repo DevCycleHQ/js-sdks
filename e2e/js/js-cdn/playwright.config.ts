@@ -18,7 +18,7 @@ const config = nxE2EPreset(__filename, { testDir: './e2e' })
 export default defineConfig({
     ...{
         ...config,
-        projects: config.projects.filter((p) => p.name === 'webkit'),
+        projects: (config?.projects || []).filter((p) => p.name === 'webkit'),
     },
     reporter: [['html', { outputFolder: 'playwright-report' }]],
 

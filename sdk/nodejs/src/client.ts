@@ -175,6 +175,7 @@ export class DevCycleClient<
     }: {
         options?: DevCycleServerSDKOptions
     }): Promise<void> {
+        // eslint-disable-next-line @typescript-eslint/no-extra-semi
         ;[this.bucketingLib, this.bucketingTracker] = await importBucketingLib({
             options,
             logger: this.logger,
