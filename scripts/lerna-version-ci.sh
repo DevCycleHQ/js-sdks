@@ -46,7 +46,7 @@ VERSION_INCREMENT_TYPE="patch"
 parse_arguments "$@"
 
 if [ -z "$AFFECTED_PROJECTS" ]; then
-  AFFECTED_PROJECTS=$(yarn nx print-affected --base $LAST_TAGGED_SHA --select=projects)
+  AFFECTED_PROJECTS=$(yarn nx show projects --affected --base $LAST_TAGGED_SHA)
 fi
 
 echo "Affected projects: $AFFECTED_PROJECTS"
