@@ -53,12 +53,16 @@ export class EventEmitter {
             return
         }
 
-        if (handler) {
-            const handlerIndex = this.handlers[key].findIndex(
-                (h) => h === handler,
-            )
+        const handlers = this.handlers[key]
+        if (!handlers) {
+            return
+        }
 
-            this.handlers[key].splice(handlerIndex, 1)
+        if (handler) {
+            const handlerIndex = handlers.findIndex((h) => h === handler)
+            if (handlerIndex !== -1) {
+                handlers.splice(handlerIndex, 1)
+            }
         } else {
             this.handlers[key] = []
         }
