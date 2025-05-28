@@ -2,7 +2,7 @@ import type { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 import { DVCStorage, StoreKey } from './types'
 import { DVCPopulatedUser } from './User'
 
-const DEFAULT_CONFIG_CACHE_TTL = 2592000000 // 30 days in milliseconds
+const DEFAULT_CONFIG_CACHE_TTL = 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds
 
 export class CacheStore {
     store: DVCStorage
