@@ -1,23 +1,34 @@
-import Store from '../src/CacheStore'
+import CacheStore from '../src/CacheStore'
 import { StoreKey } from '../src/types'
 import { DVCPopulatedUser } from '../src/User'
 
-describe('Store tests', () => {
+describe('CacheStore tests', () => {
     const localStorage = {
         load: jest.fn(),
         save: jest.fn(),
         remove: jest.fn(),
     }
 
+    const mockLogger = {
+        info: jest.fn(),
+        debug: jest.fn(),
+        error: jest.fn(),
+        warn: jest.fn(),
+    }
+
     beforeEach(() => {
         localStorage.load.mockReset()
         localStorage.save.mockReset()
         localStorage.remove.mockReset()
+        mockLogger.info.mockReset()
+        mockLogger.debug.mockReset()
+        mockLogger.error.mockReset()
+        mockLogger.warn.mockReset()
     })
 
     it('should save config to local storage', async () => {
         jest.useFakeTimers()
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage, mockLogger)
         const config = {}
         const user = new DVCPopulatedUser({ user_id: 'test_user' })
         await store.saveConfig(config, user, Date.now())
@@ -36,7 +47,7 @@ describe('Store tests', () => {
     })
 
     it('should load config from local storage if user id and config date are validated', async () => {
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage, mockLogger)
         localStorage.load.mockReturnValue('test_user')
         const user = new DVCPopulatedUser({ user_id: 'test_user' })
         await store.loadConfig(user, 2592000000)
@@ -52,20 +63,20 @@ describe('Store tests', () => {
     })
 
     it('should save user to local storage', async () => {
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage, mockLogger)
         const user = { user_id: 'user1' }
         store.saveUser(user)
         expect(localStorage.save).toBeCalledWith(StoreKey.User, user)
     })
 
     it('should load user from local storage', async () => {
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage, mockLogger)
         store.loadUser()
         expect(localStorage.load).toBeCalledWith(StoreKey.User)
     })
 
     it('should use different cache keys for different identified users', async () => {
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage, mockLogger)
         const config = {}
         const user1 = new DVCPopulatedUser({ user_id: 'user1' })
         const user2 = new DVCPopulatedUser({ user_id: 'user2' })
@@ -86,7 +97,7 @@ describe('Store tests', () => {
     })
 
     it('should use anonymous cache key for anonymous users regardless of user_id', async () => {
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage, mockLogger)
         const config = {}
         const anonymousUser1 = new DVCPopulatedUser({
             user_id: 'anon1',
@@ -112,7 +123,7 @@ describe('Store tests', () => {
     })
 
     it('should use default TTL of 30 days when no TTL is provided', async () => {
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage, mockLogger)
         const user = new DVCPopulatedUser({ user_id: 'test_user' })
 
         // Mock the current time
@@ -149,7 +160,7 @@ describe('Store tests', () => {
     })
 
     it('should migrate config from legacy format to new per-user format', async () => {
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage, mockLogger)
         const validConfig = {
             features: {},
             variables: {},
@@ -161,11 +172,11 @@ describe('Store tests', () => {
         const user = new DVCPopulatedUser({ user_id: 'migrated_user' })
         const fetchDate = Date.now().toString()
 
-        // First load of user-specific key finds no config
+        // First load of user-specific key finds no config, then migration happens
         localStorage.load
             .mockReturnValueOnce(undefined) // No user_id in new format
-            .mockReturnValueOnce('migrated_user') // Legacy user_id matches
             .mockReturnValueOnce(validConfig) // Legacy config exists
+            .mockReturnValueOnce('migrated_user') // Legacy user_id matches
             .mockReturnValueOnce(fetchDate) // Legacy fetch date exists
             .mockReturnValueOnce('migrated_user') // Check user_id after migration
             .mockReturnValueOnce(fetchDate) // fetch_date after migration
@@ -173,18 +184,33 @@ describe('Store tests', () => {
 
         const result = await store.loadConfig(user)
 
-        // Verify migration saved to new format
+        // Verify migration saved config to new format
         expect(localStorage.save).toHaveBeenCalledWith(
             `${StoreKey.IdentifiedConfig}:migrated_user`,
             validConfig,
         )
+
+        // Verify migration saved fetch date to new format
         expect(localStorage.save).toHaveBeenCalledWith(
             `${StoreKey.IdentifiedConfig}:migrated_user.fetch_date`,
             fetchDate,
         )
+
+        // Verify migration saved user_id to new format
         expect(localStorage.save).toHaveBeenCalledWith(
             `${StoreKey.IdentifiedConfig}:migrated_user.user_id`,
             'migrated_user',
+        )
+
+        // Verify all legacy keys were removed
+        expect(localStorage.remove).toHaveBeenCalledWith(
+            StoreKey.IdentifiedConfig,
+        )
+        expect(localStorage.remove).toHaveBeenCalledWith(
+            `${StoreKey.IdentifiedConfig}.user_id`,
+        )
+        expect(localStorage.remove).toHaveBeenCalledWith(
+            `${StoreKey.IdentifiedConfig}.fetch_date`,
         )
 
         // Verify config was returned
@@ -192,25 +218,41 @@ describe('Store tests', () => {
     })
 
     it('should not migrate legacy config when user_id does not match', async () => {
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage, mockLogger)
         const user = new DVCPopulatedUser({ user_id: 'current_user' })
 
         // First load of user-specific key finds no config
         localStorage.load
             .mockReturnValueOnce(undefined) // No user_id in new format
+            .mockReturnValueOnce('some_config') // Legacy config exists
             .mockReturnValueOnce('different_user') // Legacy user_id doesn't match
+            .mockReturnValueOnce('some_date') // Legacy fetch date exists
 
         const result = await store.loadConfig(user)
 
-        // Verify no migration occurred
-        expect(localStorage.save).not.toHaveBeenCalled()
+        // Verify no migration save occurred for the config
+        expect(localStorage.save).not.toHaveBeenCalledWith(
+            `${StoreKey.IdentifiedConfig}:current_user`,
+            expect.anything(),
+        )
+
+        // Verify all legacy keys were still removed
+        expect(localStorage.remove).toHaveBeenCalledWith(
+            StoreKey.IdentifiedConfig,
+        )
+        expect(localStorage.remove).toHaveBeenCalledWith(
+            `${StoreKey.IdentifiedConfig}.user_id`,
+        )
+        expect(localStorage.remove).toHaveBeenCalledWith(
+            `${StoreKey.IdentifiedConfig}.fetch_date`,
+        )
 
         // Verify no config was returned
         expect(result).toBeNull()
     })
 
     it('should not migrate for anonymous users', async () => {
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage, mockLogger)
         const anonymousUser = new DVCPopulatedUser({
             user_id: 'anon_user',
             isAnonymous: true,
@@ -223,11 +265,38 @@ describe('Store tests', () => {
 
         // Check that we didn't try to load legacy config
         expect(localStorage.load).not.toHaveBeenCalledWith(
-            `${StoreKey.IdentifiedConfig}.user_id`,
+            StoreKey.IdentifiedConfig,
         )
 
         // Verify no migration occurred
         expect(localStorage.save).not.toHaveBeenCalled()
+        expect(localStorage.remove).not.toHaveBeenCalled()
+
+        // Verify no config was returned
+        expect(result).toBeNull()
+    })
+
+    it('should handle migration errors gracefully', async () => {
+        const store = new CacheStore(localStorage, mockLogger)
+        const user = new DVCPopulatedUser({ user_id: 'test_user' })
+
+        // Mock successful initial loads, but error during save
+        localStorage.load
+            .mockReturnValueOnce(undefined) // No user_id in new format
+            .mockReturnValueOnce('some_config') // Legacy config exists
+            .mockReturnValueOnce('test_user') // Legacy user_id matches
+            .mockReturnValueOnce('some_date') // Legacy fetch date exists
+
+        // Mock error during save operation
+        localStorage.save.mockRejectedValueOnce(new Error('Storage error'))
+
+        const result = await store.loadConfig(user)
+
+        // Verify error was logged
+        expect(mockLogger.error).toHaveBeenCalledWith(
+            'Error migrating legacy config',
+            expect.any(Error),
+        )
 
         // Verify no config was returned
         expect(result).toBeNull()

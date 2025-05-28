@@ -6,6 +6,6 @@ alwaysApply: true
 # Formatting
 
 - All formatting is deferred to Prettier for supported file types (JavaScript, TypeScript, JSON, Markdown, etc.).
-- Run prettier to apply formatting changes for files that are changed.
+- Run prettier (`yarn prettier:format`) to apply formatting changes for files that are changed.
 - ESLint is used to enforce code quality and linting rules.
 - No additional formatting rules are enforced by Cursor.

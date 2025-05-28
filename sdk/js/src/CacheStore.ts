@@ -27,28 +27,12 @@ export class CacheStore {
         }
     }
 
-    /**
-     * Get the legacy config key that was used before per-user caching
-     * This is used for migrating existing configs to the new format
-     */
-    private getLegacyConfigKey() {
-        return StoreKey.IdentifiedConfig
-    }
-
     private getConfigUserIdKey(user: DVCPopulatedUser) {
         return `${this.getConfigKey(user)}.user_id`
     }
 
-    private getLegacyConfigUserIdKey() {
-        return `${this.getLegacyConfigKey()}.user_id`
-    }
-
     private getConfigFetchDateKey(user: DVCPopulatedUser) {
         return `${this.getConfigKey(user)}.fetch_date`
-    }
-
-    private getLegacyConfigFetchDateKey() {
-        return `${this.getLegacyConfigKey()}.fetch_date`
     }
 
     /**
@@ -62,46 +46,42 @@ export class CacheStore {
         }
 
         // Check if there's a legacy config and if the user_id matches
-        const legacyUserId = await this.store.load<string>(
-            this.getLegacyConfigUserIdKey(),
+        const legacyConfig = await this.store.load<string>(
+            StoreKey.IdentifiedConfig,
         )
-
-        if (!legacyUserId || legacyUserId !== user.user_id) {
-            // No legacy config or user_id doesn't match
+        if (!legacyConfig) {
             return false
         }
 
-        // Load the legacy config data
-        const legacyConfig = await this.store.load<unknown>(
-            this.getLegacyConfigKey(),
+        const legacyUserId = await this.store.load<string>(
+            `${StoreKey.IdentifiedConfig}.user_id`,
         )
         const legacyFetchDate = await this.store.load<string>(
-            this.getLegacyConfigFetchDateKey(),
+            `${StoreKey.IdentifiedConfig}.fetch_date`,
         )
 
-        if (!legacyConfig || !legacyFetchDate) {
-            return false
-        }
-
-        if (!this.isBucketedUserConfig(legacyConfig)) {
-            this.logger?.debug(
-                `Skipping legacy config migration: invalid config found: ${JSON.stringify(
-                    legacyConfig,
-                )}`,
-            )
-            return false
-        }
-
         try {
-            // Save to new format
-            const configKey = this.getConfigKey(user)
-            const fetchDateKey = this.getConfigFetchDateKey(user)
-            const userIdKey = this.getConfigUserIdKey(user)
+            if (legacyConfig && legacyUserId === user.user_id) {
+                // Save to new format if the user_id matches
+                const newConfigKey = this.getConfigKey(user)
+                await this.store.save(newConfigKey, legacyConfig)
 
+                // Also migrate the fetch date if it exists
+                if (legacyFetchDate) {
+                    const newFetchDateKey = this.getConfigFetchDateKey(user)
+                    await this.store.save(newFetchDateKey, legacyFetchDate)
+                }
+
+                // Save the user_id in the new format
+                const newUserIdKey = this.getConfigUserIdKey(user)
+                await this.store.save(newUserIdKey, user.user_id)
+            }
+
+            // Remove the legacy config
             await Promise.all([
-                this.store.save(configKey, legacyConfig),
-                this.store.save(fetchDateKey, legacyFetchDate),
-                this.store.save(userIdKey, user.user_id),
+                this.store.remove(StoreKey.IdentifiedConfig),
+                this.store.remove(`${StoreKey.IdentifiedConfig}.user_id`),
+                this.store.remove(`${StoreKey.IdentifiedConfig}.fetch_date`),
             ])
 
             this.logger?.info(
