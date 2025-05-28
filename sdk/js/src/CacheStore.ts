@@ -26,13 +26,86 @@ export class CacheStore {
             return `${StoreKey.IdentifiedConfig}:${user.user_id}`
         }
     }
+    
+    /**
+     * Get the legacy config key that was used before per-user caching
+     * This is used for migrating existing configs to the new format
+     */
+    private getLegacyConfigKey() {
+        return StoreKey.IdentifiedConfig
+    }
 
     private getConfigUserIdKey(user: DVCPopulatedUser) {
         return `${this.getConfigKey(user)}.user_id`
     }
 
+    private getLegacyConfigUserIdKey() {
+        return `${this.getLegacyConfigKey()}.user_id`
+    }
+
     private getConfigFetchDateKey(user: DVCPopulatedUser) {
         return `${this.getConfigKey(user)}.fetch_date`
+    }
+    
+    private getLegacyConfigFetchDateKey() {
+        return `${this.getLegacyConfigKey()}.fetch_date`
+    }
+    
+    /**
+     * Checks if there's a configuration stored with the legacy format and migrates it
+     * to the new per-user format if the user ID matches
+     */
+    private async migrateFromLegacy(user: DVCPopulatedUser): Promise<boolean> {
+        if (user.isAnonymous) {
+            // Anonymous user configs didn't change format
+            return false
+        }
+        
+        // Check if there's a legacy config and if the user_id matches
+        const legacyUserId = await this.store.load<string>(this.getLegacyConfigUserIdKey())
+        
+        if (!legacyUserId || legacyUserId !== user.user_id) {
+            // No legacy config or user_id doesn't match
+            return false
+        }
+        
+        // Load the legacy config data
+        const legacyConfig = await this.store.load<unknown>(this.getLegacyConfigKey())
+        const legacyFetchDate = await this.store.load<string>(this.getLegacyConfigFetchDateKey())
+        
+        if (!legacyConfig || !legacyFetchDate) {
+            return false
+        }
+        
+        if (!this.isBucketedUserConfig(legacyConfig)) {
+            this.logger?.debug(
+                `Skipping legacy config migration: invalid config found: ${JSON.stringify(
+                    legacyConfig,
+                )}`,
+            )
+            return false
+        }
+        
+        try {
+            // Save to new format
+            const configKey = this.getConfigKey(user)
+            const fetchDateKey = this.getConfigFetchDateKey(user)
+            const userIdKey = this.getConfigUserIdKey(user)
+            
+            await Promise.all([
+                this.store.save(configKey, legacyConfig),
+                this.store.save(fetchDateKey, legacyFetchDate),
+                this.store.save(userIdKey, user.user_id),
+            ])
+            
+            this.logger?.info(
+                `Migrated legacy config for user ${user.user_id} to new format`,
+            )
+            return true
+        } catch (e) {
+            this.logger?.error('Error migrating legacy config', e)
+            return false
+        }
     }
 
     private async loadConfigUserId(
@@ -82,8 +155,20 @@ export class CacheStore {
         user: DVCPopulatedUser,
         configCacheTTL = DEFAULT_CONFIG_CACHE_TTL,
     ): Promise<BucketedUserConfig | null> {
+        // Check for userId match in current key format
         const userId = await this.loadConfigUserId(user)
+        
         if (user.user_id !== userId) {
+            // User ID doesn't match current format, check for legacy config
+            if (!user.isAnonymous) {
+                // Try to migrate from legacy format
+                const migrated = await this.migrateFromLegacy(user)
+                if (migrated) {
+                    // If migration succeeded, proceed with normal loading
+                    return this.loadConfig(user, configCacheTTL)
+                }
+            }
+            
             this.logger?.debug(
                 `Skipping cached config: no config for user ID ${user.user_id}`,
             )
