@@ -28,6 +28,12 @@ export class CacheStore {
         return h.toString(16); // Convert to hex string
     }
 
+    /**
+     * Generate cache key for user configuration
+     * Anonymous users share a single cache key since they have no unique identity
+     * Identified users get unique cache keys based on their hashed user_id to prevent
+     * different users from overwriting each other's cached configurations
+     */
     private getConfigKey(user: DVCPopulatedUser) {
         if (user.isAnonymous) {
             return StoreKey.AnonymousConfig
