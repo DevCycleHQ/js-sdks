@@ -12,9 +12,11 @@ export class CacheStore {
     }
 
     private getConfigKey(user: DVCPopulatedUser) {
-        return user.isAnonymous
-            ? StoreKey.AnonymousConfig
-            : StoreKey.IdentifiedConfig
+        if (user.isAnonymous) {
+            return StoreKey.AnonymousConfig
+        } else {
+            return `${StoreKey.IdentifiedConfig}:${user.user_id}`
+        }
     }
 
     private getConfigUserIdKey(user: DVCPopulatedUser) {
@@ -70,7 +72,7 @@ export class CacheStore {
 
     async loadConfig(
         user: DVCPopulatedUser,
-        configCacheTTL = 604800000,
+        configCacheTTL = 2592000000,
     ): Promise<BucketedUserConfig | null> {
         const userId = await this.loadConfigUserId(user)
         if (user.user_id !== userId) {
@@ -90,7 +92,7 @@ export class CacheStore {
             return null
         }
 
-        const configKey = await this.getConfigKey(user)
+        const configKey = this.getConfigKey(user)
         const config = await this.store.load<unknown>(configKey)
         if (config === null || config === undefined) {
             this.logger?.debug('Skipping cached config: no config found')

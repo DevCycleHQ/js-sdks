@@ -71,7 +71,7 @@ export interface DevCycleOptions {
      */
     disableConfigCache?: boolean
     /**
-     * The maximum allowed age of a cached config in milliseconds, defaults to 7 days
+     * The maximum allowed age of a cached config in milliseconds, defaults to 30 days
      */
     configCacheTTL?: number
     /**
