@@ -5,16 +5,21 @@
     "projectType": "application",
     "targets": {
         "build": {
-            "executor": "@nx/webpack:webpack",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/dev-apps/openfeature-nodejs",
                 "main": "dev-apps/openfeature-nodejs/src/main.ts",
                 "tsConfig": "dev-apps/openfeature-nodejs/tsconfig.app.json",
-                "webpackConfig": "dev-apps/openfeature-nodejs/webpack.config.js",
-                "compiler": "tsc",
-                "target": "node",
-                "external": ["nodejs", "shared-types"]
+                "platform": "node",
+                "format": ["cjs"],
+                "assets": [
+                    {
+                        "glob": "**/*.wasm",
+                        "input": "lib/shared/bucketing-assembly-script/build",
+                        "output": "build"
+                    }
+                ]
             }
         },
         "serve": {

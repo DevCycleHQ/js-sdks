@@ -22,6 +22,9 @@
         "baseUrl": ".",
         "paths": {
             "@devcycle/bucketing": ["lib/shared/bucketing/src/index.ts"],
+            "@devcycle/bucketing-assembly-script": [
+                "lib/shared/bucketing-assembly-script/index.d.ts"
+            ],
             "@devcycle/bucketing-test-data": [
                 "lib/shared/bucketing-test-data/src/main.ts"
             ],

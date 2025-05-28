@@ -6,59 +6,61 @@
     "tags": [],
     "targets": {
         "build": {
-            "executor": "@nx/webpack:webpack",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "defaultConfiguration": "production",
             "options": {
+                "platform": "browser",
                 "outputPath": "dist/dev-apps/openfeature-web",
-                "compiler": "babel",
-                "index": "dev-apps/openfeature-web/src/index.html",
-                "baseHref": "/",
+                "format": ["esm"],
+                "bundle": true,
                 "main": "dev-apps/openfeature-web/src/main.ts",
-                "polyfills": "dev-apps/openfeature-web/src/polyfills.ts",
                 "tsConfig": "dev-apps/openfeature-web/tsconfig.app.json",
                 "assets": [
-                    "dev-apps/openfeature-web/src/favicon.ico",
-                    "dev-apps/openfeature-web/src/assets"
+                    {
+                        "glob": "favicon.ico",
+                        "input": "dev-apps/openfeature-web/src",
+                        "output": "."
+                    },
+                    {
+                        "glob": "**/*",
+                        "input": "dev-apps/openfeature-web/src/assets",
+                        "output": "assets"
+                    },
+                    {
+                        "glob": "index.html",
+                        "input": "dev-apps/openfeature-web/src",
+                        "output": "."
+                    }
                 ],
-                "styles": ["dev-apps/openfeature-web/src/styles.css"],
-                "scripts": [],
-                "webpackConfig": "dev-apps/openfeature-web/webpack.config.js"
+                "generatePackageJson": false,
+                "thirdParty": true,
+                "outputFileName": "main.js"
             },
             "configurations": {
                 "production": {
-                    "fileReplacements": [
-                        {
-                            "replace": "dev-apps/openfeature-web/src/environments/environment.ts",
-                            "with": "dev-apps/openfeature-web/src/environments/environment.prod.ts"
-                        }
-                    ],
-                    "optimization": true,
-                    "outputHashing": "all",
-                    "sourceMap": false,
-                    "namedChunks": false,
-                    "extractLicenses": true,
-                    "vendorChunk": false
+                    "sourcemap": false,
+                    "minify": true,
+                    "metafile": false
                 },
                 "development": {
-                    "extractLicenses": false,
-                    "optimization": false,
-                    "sourceMap": true,
-                    "vendorChunk": true
+                    "sourcemap": true,
+                    "minify": false
                 }
             }
         },
         "serve": {
-            "executor": "@nx/webpack:dev-server",
+            "executor": "@nx/web:file-server",
             "options": {
-                "buildTarget": "example-openfeature-web:build"
+                "buildTarget": "build",
+                "staticFilePath": "dist/dev-apps/openfeature-web"
             },
             "configurations": {
                 "production": {
-                    "buildTarget": "example-openfeature-web:build:production"
+                    "buildTarget": "build:production"
                 },
                 "development": {
-                    "buildTarget": "example-openfeature-web:build:development"
+                    "buildTarget": "build:development"
                 }
             },
             "defaultConfiguration": "development"

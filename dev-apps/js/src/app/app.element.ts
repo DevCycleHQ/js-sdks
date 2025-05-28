@@ -3,8 +3,7 @@
 import './app.element.css'
 import { initializeDevCycle } from '@devcycle/js-client-sdk'
 
-const SDK_KEY =
-    process.env.DEVCYCLE_CLIENT_SDK_KEY || '<DEVCYCLE_CLIENT_SDK_KEY>'
+const SDK_KEY = '<DEVCYCLE_CLIENT_SDK_KEY>'
 
 export class AppElement extends HTMLElement {
     constructor() {
@@ -34,12 +33,15 @@ export class AppElement extends HTMLElement {
             'variable-key-boolean',
             true,
         )
-        const variableKeyJsonString = devcycleClient.variableValue(
+        const jsonValue = devcycleClient.variableValue(
             'variable-json-key-string',
             {
                 jsonStringKeyDefault: 'json default',
             },
         )
+        const variableKeyJsonString = jsonValue as {
+            jsonStringKeyDefault: string
+        }
 
         this.innerHTML = `
           <div class="wrapper">
@@ -471,10 +473,36 @@ const user = {
     isAnonymous: false,
 }
 
+if (SDK_KEY === '<DEVCYCLE_CLIENT_SDK_KEY>') {
+    console.error(
+        'Set the SDK_KEY in the app/app.element.ts file to the DevCycle client SDK key',
+    )
+    throw new Error(
+        'Set the SDK_KEY in the app/app.element.ts file to the DevCycle client SDK key',
+    )
+}
+
 const devcycleClient = initializeDevCycle(SDK_KEY, user, {
     enableEdgeDB: false,
     logLevel: 'error',
 })
-devcycleClient.onClientInitialized(() =>
-    customElements.define('devcycle-root', AppElement),
-)
+
+// Define the custom element immediately
+customElements.define('devcycle-root', AppElement)
+
+// Set up DevCycle client asynchronously
+devcycleClient.onClientInitialized((err) => {
+    if (err) {
+        console.error('Error initializing DevCycle client', err)
+        return
+    }
+
+    console.log('DevCycle client initialized successfully')
+    // Trigger a re-render of any existing elements
+    const elements = document.querySelectorAll('devcycle-root')
+    elements.forEach((element: any) => {
+        if (element.updateInnerHTML) {
+            element.updateInnerHTML()
+        }
+    })
+})

@@ -9,6 +9,6 @@
             "@nx/react/typings/image.d.ts"
         ]
     },
-    "files": ["src/test-setup.ts"],
+
     "include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts"]
 }

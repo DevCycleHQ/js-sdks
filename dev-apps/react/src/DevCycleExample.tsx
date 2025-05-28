@@ -3,7 +3,6 @@ import {
     SwapComponents,
     useVariable,
 } from '@devcycle/react-client-sdk'
-import React from 'react'
 
 const OldComponent = ({ text }: { text: string }) => {
     return <div>Old Component: {text}</div>
@@ -16,10 +15,10 @@ const RefactoredComponent = ({ text }: { text: string }) => {
 const MyComponent = SwapComponents(
     OldComponent,
     RefactoredComponent,
-    'test-featre',
+    'test-feature',
 )
 
-export default function DevCycleExample(): React.ReactElement {
+export default function DevCycleExample(): JSX.Element {
     const variableKey = 'feature-release'
     const variableKeyString = 'variable-key-string'
     const variableKeyNumber = 'variable-key-number'
@@ -44,12 +43,12 @@ export default function DevCycleExample(): React.ReactElement {
                     variable feature-release = {JSON.stringify(variable.value)}{' '}
                 </span>
             </div>
-            <RenderIfEnabled variableKey={'test-featre'}>
+            <RenderIfEnabled variableKey="test-feature">
                 <div>
                     <span>This content is conditionally rendered.</span>
                 </div>
             </RenderIfEnabled>
-            <MyComponent text={'Hello'} />
+            <MyComponent text="Hello" />
             <div>
                 <span>
                     variable variable-key-string ={' '}

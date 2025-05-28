@@ -6,59 +6,62 @@
     "tags": [],
     "targets": {
         "build": {
-            "executor": "@nx/webpack:webpack",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "defaultConfiguration": "production",
             "options": {
+                "platform": "browser",
                 "outputPath": "dist/dev-apps/js",
-                "compiler": "babel",
-                "index": "dev-apps/js/src/index.html",
-                "baseHref": "/",
+                "format": ["esm"],
+                "bundle": true,
                 "main": "dev-apps/js/src/main.ts",
-                "polyfills": "dev-apps/js/src/polyfills.ts",
                 "tsConfig": "dev-apps/js/tsconfig.app.json",
                 "assets": [
-                    "dev-apps/js/src/favicon.ico",
-                    "dev-apps/js/src/assets"
+                    {
+                        "glob": "favicon.ico",
+                        "input": "dev-apps/js/src",
+                        "output": "."
+                    },
+                    {
+                        "glob": "**/*",
+                        "input": "dev-apps/js/src/assets",
+                        "output": "assets"
+                    },
+                    {
+                        "glob": "index.html",
+                        "input": "dev-apps/js/src",
+                        "output": "."
+                    }
                 ],
-                "styles": ["dev-apps/js/src/styles.css"],
-                "scripts": [],
-                "webpackConfig": "dev-apps/js/webpack.config.js"
+                "generatePackageJson": false,
+                "thirdParty": true,
+                "outputFileName": "main.js",
+                "outputCssFileName": "main.css"
             },
             "configurations": {
                 "production": {
-                    "fileReplacements": [
-                        {
-                            "replace": "dev-apps/js/src/environments/environment.ts",
-                            "with": "dev-apps/js/src/environments/environment.prod.ts"
-                        }
-                    ],
-                    "optimization": true,
-                    "outputHashing": "all",
-                    "sourceMap": false,
-                    "namedChunks": false,
-                    "extractLicenses": true,
-                    "vendorChunk": false
+                    "sourcemap": false,
+                    "minify": true,
+                    "metafile": false
                 },
                 "development": {
-                    "extractLicenses": false,
-                    "optimization": false,
-                    "sourceMap": true,
-                    "vendorChunk": true
+                    "sourcemap": true,
+                    "minify": false
                 }
             }
         },
         "serve": {
-            "executor": "@nx/webpack:dev-server",
+            "executor": "@nx/web:file-server",
             "options": {
-                "buildTarget": "example-js:build"
+                "buildTarget": "build",
+                "staticFilePath": "dist/dev-apps/js"
             },
             "configurations": {
                 "production": {
-                    "buildTarget": "example-js:build:production"
+                    "buildTarget": "build:production"
                 },
                 "development": {
-                    "buildTarget": "example-js:build:development"
+                    "buildTarget": "build:development"
                 }
             },
             "defaultConfiguration": "development"
