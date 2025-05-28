@@ -2,6 +2,8 @@ import type { BucketedUserConfig, DVCLogger } from '@devcycle/types'
 import { DVCStorage, StoreKey } from './types'
 import { DVCPopulatedUser } from './User'
 
+const DEFAULT_CONFIG_CACHE_TTL = 604800000; // 7 days in milliseconds
+
 export class CacheStore {
     store: DVCStorage
     logger: DVCLogger
@@ -70,7 +72,7 @@ export class CacheStore {
 
     async loadConfig(
         user: DVCPopulatedUser,
-        configCacheTTL = 604800000,
+        configCacheTTL = DEFAULT_CONFIG_CACHE_TTL,
     ): Promise<BucketedUserConfig | null> {
         const userId = await this.loadConfigUserId(user)
         if (user.user_id !== userId) {
