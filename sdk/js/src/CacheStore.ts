@@ -14,31 +14,16 @@ export class CacheStore {
     }
 
     /**
-     * Simple string hashing function using FNV-1a algorithm
-     * @param str String to hash
-     * @returns Hashed string
-     */
-    hashUserId(str: string): string {
-        // Simple FNV-1a hash algorithm
-        let h = 2166136261; // FNV offset basis
-        for (let i = 0; i < str.length; i++) {
-            h ^= str.charCodeAt(i);
-            h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
-        }
-        return h.toString(16); // Convert to hex string
-    }
-
-    /**
      * Generate cache key for user configuration
      * Anonymous users share a single cache key since they have no unique identity
-     * Identified users get unique cache keys based on their hashed user_id to prevent
+     * Identified users get unique cache keys based on their user_id to prevent
      * different users from overwriting each other's cached configurations
      */
     private getConfigKey(user: DVCPopulatedUser) {
         if (user.isAnonymous) {
             return StoreKey.AnonymousConfig
         } else {
-            return `${StoreKey.IdentifiedConfig}:${this.hashUserId(user.user_id)}`
+            return `${StoreKey.IdentifiedConfig}:${user.user_id}`
         }
     }
 
