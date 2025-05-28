@@ -13,11 +13,26 @@ export class CacheStore {
         this.logger = logger
     }
 
+    /**
+     * Simple string hashing function using FNV-1a algorithm
+     * @param str String to hash
+     * @returns Hashed string
+     */
+    hashUserId(str: string): string {
+        // Simple FNV-1a hash algorithm
+        let h = 2166136261; // FNV offset basis
+        for (let i = 0; i < str.length; i++) {
+            h ^= str.charCodeAt(i);
+            h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+        }
+        return h.toString(16); // Convert to hex string
+    }
+
     private getConfigKey(user: DVCPopulatedUser) {
         if (user.isAnonymous) {
             return StoreKey.AnonymousConfig
         } else {
-            return `${StoreKey.IdentifiedConfig}:${user.user_id}`
+            return `${StoreKey.IdentifiedConfig}:${this.hashUserId(user.user_id)}`
         }
     }
 
