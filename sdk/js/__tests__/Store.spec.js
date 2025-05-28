@@ -20,8 +20,8 @@ describe('Store tests', () => {
         const store = new Store(localStorage)
         const config = {}
         const user = new DVCPopulatedUser({ user_id: 'test_user' })
-        const hashedUserId = store.hashUserId('test_user')
-        store.saveConfig(config, user, Date.now())
+        const hashedUserId = await store.hashUserId('test_user')
+        await store.saveConfig(config, user, Date.now())
         expect(localStorage.save).toBeCalledWith(
             `${StoreKey.IdentifiedConfig}:${hashedUserId}`,
             config,
@@ -40,7 +40,7 @@ describe('Store tests', () => {
         const store = new Store(localStorage)
         localStorage.load.mockReturnValue('test_user')
         const user = new DVCPopulatedUser({ user_id: 'test_user' })
-        const hashedUserId = store.hashUserId('test_user')
+        const hashedUserId = await store.hashUserId('test_user')
         await store.loadConfig(user, 2592000000)
         expect(localStorage.load).toBeCalledWith(
             `${StoreKey.IdentifiedConfig}:${hashedUserId}.user_id`,
@@ -69,18 +69,18 @@ describe('Store tests', () => {
         const config = {}
         const user1 = new DVCPopulatedUser({ user_id: 'user1' })
         const user2 = new DVCPopulatedUser({ user_id: 'user2' })
-        const hashedUserId1 = store.hashUserId('user1')
-        const hashedUserId2 = store.hashUserId('user2')
+        const hashedUserId1 = await store.hashUserId('user1')
+        const hashedUserId2 = await store.hashUserId('user2')
         
         // Save config for user1
-        store.saveConfig(config, user1, Date.now())
+        await store.saveConfig(config, user1, Date.now())
         expect(localStorage.save).toBeCalledWith(
             `${StoreKey.IdentifiedConfig}:${hashedUserId1}`,
             config,
         )
         
         // Save config for user2
-        store.saveConfig(config, user2, Date.now())
+        await store.saveConfig(config, user2, Date.now())
         expect(localStorage.save).toBeCalledWith(
             `${StoreKey.IdentifiedConfig}:${hashedUserId2}`,
             config,
@@ -94,13 +94,13 @@ describe('Store tests', () => {
         const anonymousUser2 = new DVCPopulatedUser({ user_id: 'anon2', isAnonymous: true })
         
         // Both anonymous users should use the same cache key
-        store.saveConfig(config, anonymousUser1, Date.now())
+        await store.saveConfig(config, anonymousUser1, Date.now())
         expect(localStorage.save).toBeCalledWith(
             StoreKey.AnonymousConfig,
             config,
         )
         
-        store.saveConfig(config, anonymousUser2, Date.now())
+        await store.saveConfig(config, anonymousUser2, Date.now())
         expect(localStorage.save).toBeCalledWith(
             StoreKey.AnonymousConfig,
             config,
@@ -137,24 +137,24 @@ describe('Store tests', () => {
         expect(expiredResult).toBeNull()
     })
 
-    it('should consistently hash the same user_id to the same value', () => {
+    it('should consistently hash the same user_id to the same value', async () => {
         const store = new Store(localStorage)
         const userId = 'test_user_123'
         
-        const hash1 = store.hashUserId(userId)
-        const hash2 = store.hashUserId(userId)
+        const hash1 = await store.hashUserId(userId)
+        const hash2 = await store.hashUserId(userId)
         
         expect(hash1).toBe(hash2)
         expect(hash1).not.toBe(userId) // Verify it's actually hashed
     })
 
-    it('should hash different user_ids to different values', () => {
+    it('should hash different user_ids to different values', async () => {
         const store = new Store(localStorage)
         const userId1 = 'user1'
         const userId2 = 'user2'
         
-        const hash1 = store.hashUserId(userId1)
-        const hash2 = store.hashUserId(userId2)
+        const hash1 = await store.hashUserId(userId1)
+        const hash2 = await store.hashUserId(userId2)
         
         expect(hash1).not.toBe(hash2)
     })

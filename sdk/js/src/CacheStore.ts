@@ -14,18 +14,17 @@ export class CacheStore {
     }
 
     /**
-     * Simple string hashing function using FNV-1a algorithm
+     * Hash user ID using SHA-256 algorithm via Web APIs
      * @param str String to hash
-     * @returns Hashed string
+     * @returns Promise resolving to hashed string
      */
-    hashUserId(str: string): string {
-        // Simple FNV-1a hash algorithm
-        let h = 2166136261; // FNV offset basis
-        for (let i = 0; i < str.length; i++) {
-            h ^= str.charCodeAt(i);
-            h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
-        }
-        return h.toString(16); // Convert to hex string
+    async hashUserId(str: string): Promise<string> {
+        // Use Web Crypto API for SHA-256 hashing
+        const encoder = new TextEncoder();
+        const data = encoder.encode(str);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
     /**
@@ -34,31 +33,34 @@ export class CacheStore {
      * Identified users get unique cache keys based on their hashed user_id to prevent
      * different users from overwriting each other's cached configurations
      */
-    private getConfigKey(user: DVCPopulatedUser) {
+    private async getConfigKey(user: DVCPopulatedUser): Promise<string> {
         if (user.isAnonymous) {
             return StoreKey.AnonymousConfig
         } else {
-            return `${StoreKey.IdentifiedConfig}:${this.hashUserId(user.user_id)}`
+            const hashedUserId = await this.hashUserId(user.user_id)
+            return `${StoreKey.IdentifiedConfig}:${hashedUserId}`
         }
     }
 
-    private getConfigUserIdKey(user: DVCPopulatedUser) {
-        return `${this.getConfigKey(user)}.user_id`
+    private async getConfigUserIdKey(user: DVCPopulatedUser): Promise<string> {
+        const configKey = await this.getConfigKey(user)
+        return `${configKey}.user_id`
     }
 
-    private getConfigFetchDateKey(user: DVCPopulatedUser) {
-        return `${this.getConfigKey(user)}.fetch_date`
+    private async getConfigFetchDateKey(user: DVCPopulatedUser): Promise<string> {
+        const configKey = await this.getConfigKey(user)
+        return `${configKey}.fetch_date`
     }
 
     private async loadConfigUserId(
         user: DVCPopulatedUser,
     ): Promise<string | undefined> {
-        const userIdKey = this.getConfigUserIdKey(user)
+        const userIdKey = await this.getConfigUserIdKey(user)
         return await this.store.load<string>(userIdKey)
     }
 
     private async loadConfigFetchDate(user: DVCPopulatedUser): Promise<number> {
-        const fetchDateKey = this.getConfigFetchDateKey(user)
+        const fetchDateKey = await this.getConfigFetchDateKey(user)
         const fetchDate = (await this.store.load<string>(fetchDateKey)) || '0'
         return parseInt(fetchDate, 10)
     }
@@ -68,9 +70,9 @@ export class CacheStore {
         user: DVCPopulatedUser,
         dateFetched: number,
     ): Promise<void> {
-        const configKey = this.getConfigKey(user)
-        const fetchDateKey = this.getConfigFetchDateKey(user)
-        const userIdKey = this.getConfigUserIdKey(user)
+        const configKey = await this.getConfigKey(user)
+        const fetchDateKey = await this.getConfigFetchDateKey(user)
+        const userIdKey = await this.getConfigUserIdKey(user)
         await Promise.all([
             this.store.save(configKey, data),
             this.store.save(fetchDateKey, dateFetched),
@@ -115,7 +117,7 @@ export class CacheStore {
             return null
         }
 
-        const configKey = this.getConfigKey(user)
+        const configKey = await this.getConfigKey(user)
         const config = await this.store.load<unknown>(configKey)
         if (config === null || config === undefined) {
             this.logger?.debug('Skipping cached config: no config found')
