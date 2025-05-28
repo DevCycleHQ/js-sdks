@@ -102,4 +102,34 @@ describe('Store tests', () => {
             config,
         )
     })
+
+    it('should use default TTL of 30 days when no TTL is provided', async () => {
+        const store = new Store(localStorage)
+        const user = new DVCPopulatedUser({ user_id: 'test_user' })
+        
+        // Mock the current time
+        const now = Date.now()
+        jest.spyOn(Date, 'now').mockReturnValue(now)
+        
+        // Mock cached data that is 29 days old (should be valid)
+        const twentyNineDaysAgo = now - (29 * 24 * 60 * 60 * 1000)
+        localStorage.load
+            .mockReturnValueOnce('test_user') // user_id
+            .mockReturnValueOnce(twentyNineDaysAgo.toString()) // fetch_date
+            .mockReturnValueOnce({ features: {}, variables: {}, project: {}, environment: {}, featureVariationMap: {}, variableVariationMap: {} }) // config
+        
+        // Should load config since it's within 30-day TTL
+        const result = await store.loadConfig(user) // No TTL provided, should use default
+        expect(result).not.toBeNull()
+        
+        // Mock cached data that is 31 days old (should be expired)
+        const thirtyOneDaysAgo = now - (31 * 24 * 60 * 60 * 1000)
+        localStorage.load
+            .mockReturnValueOnce('test_user') // user_id
+            .mockReturnValueOnce(thirtyOneDaysAgo.toString()) // fetch_date
+        
+        // Should return null since it's older than 30-day TTL
+        const expiredResult = await store.loadConfig(user) // No TTL provided, should use default
+        expect(expiredResult).toBeNull()
+    })
 })
