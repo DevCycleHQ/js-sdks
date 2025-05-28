@@ -1014,6 +1014,21 @@ describe('DevCycleClient tests', () => {
             expect(client.streamingConnection.close).toHaveBeenCalled()
             expect(removeListener).toHaveBeenCalled()
         })
+
+        it('closes without document defined', async () => {
+            const removeListener = jest.spyOn(document, 'removeEventListener')
+            const doc = global.document
+            // Remove the global document and ensure close does not throw
+            // and still closes all resources
+            // @ts-ignore - allow delete of global document
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+            delete (global as any).document
+            await expect(client.close()).resolves.not.toThrow()
+            global.document = doc
+            expect(client.eventQueue.close).toHaveBeenCalled()
+            expect(client.streamingConnection.close).toHaveBeenCalled()
+            expect(removeListener).not.toHaveBeenCalled()
+        })
     })
 
     describe('deferred mode', () => {
