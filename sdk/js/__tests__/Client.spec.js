@@ -1020,9 +1020,8 @@ describe('DevCycleClient tests', () => {
             const doc = global.document
             // Remove the global document and ensure close does not throw
             // and still closes all resources
-            // @ts-ignore - allow delete of global document
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-            delete (global as any).document
+            // @ts-expect-error - allow delete of global document
+            delete global.document
             await expect(client.close()).resolves.not.toThrow()
             global.document = doc
             expect(client.eventQueue.close).toHaveBeenCalled()
