@@ -3,6 +3,8 @@ import { StoreKey } from '../src/types'
 import { DVCPopulatedUser } from '../src/User'
 
 describe('CacheStore tests', () => {
+    const TEST_USER_ID = 'test_user'
+    
     const localStorage = {
         load: jest.fn(),
         save: jest.fn(),
@@ -30,35 +32,35 @@ describe('CacheStore tests', () => {
         jest.useFakeTimers()
         const store = new CacheStore(localStorage, mockLogger)
         const config = {}
-        const user = new DVCPopulatedUser({ user_id: 'test_user' })
+        const user = new DVCPopulatedUser({ user_id: TEST_USER_ID })
         await store.saveConfig(config, user, Date.now())
         expect(localStorage.save).toBeCalledWith(
-            `${StoreKey.IdentifiedConfig}:test_user`,
+            `${StoreKey.IdentifiedConfig}:${TEST_USER_ID}`,
             config,
         )
         expect(localStorage.save).toBeCalledWith(
-            `${StoreKey.IdentifiedConfig}:test_user.fetch_date`,
+            `${StoreKey.IdentifiedConfig}:${TEST_USER_ID}.fetch_date`,
             Date.now(),
         )
         expect(localStorage.save).toBeCalledWith(
-            `${StoreKey.IdentifiedConfig}:test_user.user_id`,
+            `${StoreKey.IdentifiedConfig}:${TEST_USER_ID}.user_id`,
             user.user_id,
         )
     })
 
     it('should load config from local storage if user id and config date are validated', async () => {
         const store = new CacheStore(localStorage, mockLogger)
-        localStorage.load.mockReturnValue('test_user')
-        const user = new DVCPopulatedUser({ user_id: 'test_user' })
+        localStorage.load.mockReturnValue(TEST_USER_ID)
+        const user = new DVCPopulatedUser({ user_id: TEST_USER_ID })
         await store.loadConfig(user, 2592000000)
         expect(localStorage.load).toBeCalledWith(
-            `${StoreKey.IdentifiedConfig}:test_user.user_id`,
+            `${StoreKey.IdentifiedConfig}:${TEST_USER_ID}.user_id`,
         )
         expect(localStorage.load).toBeCalledWith(
-            `${StoreKey.IdentifiedConfig}:test_user.fetch_date`,
+            `${StoreKey.IdentifiedConfig}:${TEST_USER_ID}.fetch_date`,
         )
         expect(localStorage.load).toBeCalledWith(
-            `${StoreKey.IdentifiedConfig}:test_user`,
+            `${StoreKey.IdentifiedConfig}:${TEST_USER_ID}`,
         )
     })
 
@@ -124,7 +126,7 @@ describe('CacheStore tests', () => {
 
     it('should use default TTL of 30 days when no TTL is provided', async () => {
         const store = new CacheStore(localStorage, mockLogger)
-        const user = new DVCPopulatedUser({ user_id: 'test_user' })
+        const user = new DVCPopulatedUser({ user_id: TEST_USER_ID })
 
         // Mock the current time
         const now = Date.now()
@@ -133,7 +135,7 @@ describe('CacheStore tests', () => {
         // Mock cached data that is 29 days old (should be valid)
         const twentyNineDaysAgo = now - 29 * 24 * 60 * 60 * 1000
         localStorage.load
-            .mockReturnValueOnce('test_user') // user_id
+            .mockReturnValueOnce(TEST_USER_ID) // user_id
             .mockReturnValueOnce(twentyNineDaysAgo.toString()) // fetch_date
             .mockReturnValueOnce({
                 features: {},
@@ -151,7 +153,7 @@ describe('CacheStore tests', () => {
         // Mock cached data that is 31 days old (should be expired)
         const thirtyOneDaysAgo = now - 31 * 24 * 60 * 60 * 1000
         localStorage.load
-            .mockReturnValueOnce('test_user') // user_id
+            .mockReturnValueOnce(TEST_USER_ID) // user_id
             .mockReturnValueOnce(thirtyOneDaysAgo.toString()) // fetch_date
 
         // Should return null since it's older than 30-day TTL
@@ -278,13 +280,13 @@ describe('CacheStore tests', () => {
 
     it('should handle migration errors gracefully', async () => {
         const store = new CacheStore(localStorage, mockLogger)
-        const user = new DVCPopulatedUser({ user_id: 'test_user' })
+        const user = new DVCPopulatedUser({ user_id: TEST_USER_ID })
 
         // Mock successful initial loads, but error during save
         localStorage.load
             .mockReturnValueOnce(undefined) // No user_id in new format
             .mockReturnValueOnce('some_config') // Legacy config exists
-            .mockReturnValueOnce('test_user') // Legacy user_id matches
+            .mockReturnValueOnce(TEST_USER_ID) // Legacy user_id matches
             .mockReturnValueOnce('some_date') // Legacy fetch date exists
 
         // Mock error during save operation
