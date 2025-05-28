@@ -20,7 +20,7 @@ describe('Store tests', () => {
         const store = new Store(localStorage)
         const config = {}
         const user = new DVCPopulatedUser({ user_id: 'test_user' })
-        const hashedUserId = await store.hashUserId('test_user')
+        const hashedUserId = store.hashUserId('test_user')
         await store.saveConfig(config, user, Date.now())
         expect(localStorage.save).toBeCalledWith(
             `${StoreKey.IdentifiedConfig}:${hashedUserId}`,
@@ -40,7 +40,7 @@ describe('Store tests', () => {
         const store = new Store(localStorage)
         localStorage.load.mockReturnValue('test_user')
         const user = new DVCPopulatedUser({ user_id: 'test_user' })
-        const hashedUserId = await store.hashUserId('test_user')
+        const hashedUserId = store.hashUserId('test_user')
         await store.loadConfig(user, 2592000000)
         expect(localStorage.load).toBeCalledWith(
             `${StoreKey.IdentifiedConfig}:${hashedUserId}.user_id`,
@@ -69,8 +69,8 @@ describe('Store tests', () => {
         const config = {}
         const user1 = new DVCPopulatedUser({ user_id: 'user1' })
         const user2 = new DVCPopulatedUser({ user_id: 'user2' })
-        const hashedUserId1 = await store.hashUserId('user1')
-        const hashedUserId2 = await store.hashUserId('user2')
+        const hashedUserId1 = store.hashUserId('user1')
+        const hashedUserId2 = store.hashUserId('user2')
         
         // Save config for user1
         await store.saveConfig(config, user1, Date.now())
@@ -141,8 +141,8 @@ describe('Store tests', () => {
         const store = new Store(localStorage)
         const userId = 'test_user_123'
         
-        const hash1 = await store.hashUserId(userId)
-        const hash2 = await store.hashUserId(userId)
+        const hash1 = store.hashUserId(userId)
+        const hash2 = store.hashUserId(userId)
         
         expect(hash1).toBe(hash2)
         expect(hash1).not.toBe(userId) // Verify it's actually hashed
@@ -153,8 +153,8 @@ describe('Store tests', () => {
         const userId1 = 'user1'
         const userId2 = 'user2'
         
-        const hash1 = await store.hashUserId(userId1)
-        const hash2 = await store.hashUserId(userId2)
+        const hash1 = store.hashUserId(userId1)
+        const hash2 = store.hashUserId(userId2)
         
         expect(hash1).not.toBe(hash2)
     })
