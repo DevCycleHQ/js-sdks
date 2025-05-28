@@ -466,7 +466,7 @@ describe('EventEmitter tests', () => {
             expect(configHandler).not.toHaveBeenCalled()
         })
 
-        it('fires when first config recieved', async () => {
+        it('fires when first config received', async () => {
             const configHandler = jest.fn()
             const client = new DevCycleClient('test_sdk_key', {
                 user_id: 'user1',
@@ -481,7 +481,7 @@ describe('EventEmitter tests', () => {
             expect(configHandler).toHaveBeenCalledWith(testConfig.variables)
         })
 
-        it('doesnt fire when config recieved with same etag', async () => {
+        it('doesnt fire when config received with same etag', async () => {
             const configHandler = jest.fn()
             const client = new DevCycleClient('test_sdk_key', {
                 user_id: 'user1',
@@ -497,7 +497,7 @@ describe('EventEmitter tests', () => {
             expect(configHandler).not.toHaveBeenCalled()
         })
 
-        it('fires when config recieved with different etag', async () => {
+        it('fires when config received with different etag', async () => {
             const configHandler = jest.fn()
             const client = new DevCycleClient('test_sdk_key', {
                 user_id: 'user1',
