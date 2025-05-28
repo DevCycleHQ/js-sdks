@@ -323,9 +323,11 @@ describe('DevCycleClient tests', () => {
                     `${StoreKey.IdentifiedConfig}:user1.user_id`,
                 ),
             ).toBe(JSON.stringify('user1'))
-            expect(window.localStorage.getItem(`${StoreKey.IdentifiedConfig}:user1`)).toBe(
-                JSON.stringify(testConfig),
-            )
+            expect(
+                window.localStorage.getItem(
+                    `${StoreKey.IdentifiedConfig}:user1`,
+                ),
+            ).toBe(JSON.stringify(testConfig))
             expect(client.isInitialized).toBe(true)
         })
 

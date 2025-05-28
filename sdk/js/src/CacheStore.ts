@@ -26,7 +26,7 @@ export class CacheStore {
             return `${StoreKey.IdentifiedConfig}:${user.user_id}`
         }
     }
-    
+
     /**
      * Get the legacy config key that was used before per-user caching
      * This is used for migrating existing configs to the new format
@@ -46,11 +46,11 @@ export class CacheStore {
     private getConfigFetchDateKey(user: DVCPopulatedUser) {
         return `${this.getConfigKey(user)}.fetch_date`
     }
-    
+
     private getLegacyConfigFetchDateKey() {
         return `${this.getLegacyConfigKey()}.fetch_date`
     }
-    
+
     /**
      * Checks if there's a configuration stored with the legacy format and migrates it
      * to the new per-user format if the user ID matches
@@ -60,23 +60,29 @@ export class CacheStore {
             // Anonymous user configs didn't change format
             return false
         }
-        
+
         // Check if there's a legacy config and if the user_id matches
-        const legacyUserId = await this.store.load<string>(this.getLegacyConfigUserIdKey())
-        
+        const legacyUserId = await this.store.load<string>(
+            this.getLegacyConfigUserIdKey(),
+        )
+
         if (!legacyUserId || legacyUserId !== user.user_id) {
             // No legacy config or user_id doesn't match
             return false
         }
-        
+
         // Load the legacy config data
-        const legacyConfig = await this.store.load<unknown>(this.getLegacyConfigKey())
-        const legacyFetchDate = await this.store.load<string>(this.getLegacyConfigFetchDateKey())
-        
+        const legacyConfig = await this.store.load<unknown>(
+            this.getLegacyConfigKey(),
+        )
+        const legacyFetchDate = await this.store.load<string>(
+            this.getLegacyConfigFetchDateKey(),
+        )
+
         if (!legacyConfig || !legacyFetchDate) {
             return false
         }
-        
+
         if (!this.isBucketedUserConfig(legacyConfig)) {
             this.logger?.debug(
                 `Skipping legacy config migration: invalid config found: ${JSON.stringify(
@@ -85,19 +91,19 @@ export class CacheStore {
             )
             return false
         }
-        
+
         try {
             // Save to new format
             const configKey = this.getConfigKey(user)
             const fetchDateKey = this.getConfigFetchDateKey(user)
             const userIdKey = this.getConfigUserIdKey(user)
-            
+
             await Promise.all([
                 this.store.save(configKey, legacyConfig),
                 this.store.save(fetchDateKey, legacyFetchDate),
                 this.store.save(userIdKey, user.user_id),
             ])
-            
+
             this.logger?.info(
                 `Migrated legacy config for user ${user.user_id} to new format`,
             )
@@ -157,7 +163,7 @@ export class CacheStore {
     ): Promise<BucketedUserConfig | null> {
         // Check for userId match in current key format
         const userId = await this.loadConfigUserId(user)
-        
+
         if (user.user_id !== userId) {
             // User ID doesn't match current format, check for legacy config
             if (!user.isAnonymous) {
@@ -168,7 +174,7 @@ export class CacheStore {
                     return this.loadConfig(user, configCacheTTL)
                 }
             }
-            
+
             this.logger?.debug(
                 `Skipping cached config: no config for user ID ${user.user_id}`,
             )

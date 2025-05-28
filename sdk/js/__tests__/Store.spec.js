@@ -147,7 +147,7 @@ describe('Store tests', () => {
         const expiredResult = await store.loadConfig(user) // No TTL provided, should use default
         expect(expiredResult).toBeNull()
     })
-    
+
     it('should migrate config from legacy format to new per-user format', async () => {
         const store = new Store(localStorage)
         const validConfig = {
@@ -160,7 +160,7 @@ describe('Store tests', () => {
         }
         const user = new DVCPopulatedUser({ user_id: 'migrated_user' })
         const fetchDate = Date.now().toString()
-        
+
         // First load of user-specific key finds no config
         localStorage.load
             .mockReturnValueOnce(undefined) // No user_id in new format
@@ -172,63 +172,63 @@ describe('Store tests', () => {
             .mockReturnValueOnce(validConfig) // config after migration
 
         const result = await store.loadConfig(user)
-        
+
         // Verify migration saved to new format
         expect(localStorage.save).toHaveBeenCalledWith(
-            `${StoreKey.IdentifiedConfig}:migrated_user`, 
-            validConfig
+            `${StoreKey.IdentifiedConfig}:migrated_user`,
+            validConfig,
         )
         expect(localStorage.save).toHaveBeenCalledWith(
-            `${StoreKey.IdentifiedConfig}:migrated_user.fetch_date`, 
-            fetchDate
+            `${StoreKey.IdentifiedConfig}:migrated_user.fetch_date`,
+            fetchDate,
         )
         expect(localStorage.save).toHaveBeenCalledWith(
-            `${StoreKey.IdentifiedConfig}:migrated_user.user_id`, 
-            'migrated_user'
+            `${StoreKey.IdentifiedConfig}:migrated_user.user_id`,
+            'migrated_user',
         )
-        
+
         // Verify config was returned
         expect(result).toEqual(validConfig)
     })
-    
+
     it('should not migrate legacy config when user_id does not match', async () => {
         const store = new Store(localStorage)
         const user = new DVCPopulatedUser({ user_id: 'current_user' })
-        
+
         // First load of user-specific key finds no config
         localStorage.load
             .mockReturnValueOnce(undefined) // No user_id in new format
             .mockReturnValueOnce('different_user') // Legacy user_id doesn't match
 
         const result = await store.loadConfig(user)
-        
+
         // Verify no migration occurred
         expect(localStorage.save).not.toHaveBeenCalled()
-        
+
         // Verify no config was returned
         expect(result).toBeNull()
     })
-    
+
     it('should not migrate for anonymous users', async () => {
         const store = new Store(localStorage)
-        const anonymousUser = new DVCPopulatedUser({ 
+        const anonymousUser = new DVCPopulatedUser({
             user_id: 'anon_user',
-            isAnonymous: true 
+            isAnonymous: true,
         })
-        
+
         // No config for anonymous user
         localStorage.load.mockReturnValueOnce(undefined)
 
         const result = await store.loadConfig(anonymousUser)
-        
+
         // Check that we didn't try to load legacy config
         expect(localStorage.load).not.toHaveBeenCalledWith(
-            `${StoreKey.IdentifiedConfig}.user_id`
+            `${StoreKey.IdentifiedConfig}.user_id`,
         )
-        
+
         // Verify no migration occurred
         expect(localStorage.save).not.toHaveBeenCalled()
-        
+
         // Verify no config was returned
         expect(result).toBeNull()
     })
