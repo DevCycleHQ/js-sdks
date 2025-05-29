@@ -1,31 +1,32 @@
 {
     "name": "sse-connection",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "lib/shared/sse-connection/src",
+    "sourceRoot": "lib/internal/sse-connection/src",
     "projectType": "library",
     "targets": {
         "build": {
             "executor": "@nx/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
-                "outputPath": "dist/lib/shared/sse-connection",
-                "main": "lib/shared/sse-connection/src/index.ts",
-                "tsConfig": "lib/shared/sse-connection/tsconfig.lib.json",
-                "assets": ["lib/shared/sse-connection/*.md"]
+                "outputPath": "dist/lib/internal/sse-connection",
+                "main": "lib/internal/sse-connection/src/index.ts",
+                "tsConfig": "lib/internal/sse-connection/tsconfig.lib.json",
+                "assets": ["lib/internal/sse-connection/*.md"],
+                "external": ["@devcycle/types"]
             }
         },
         "lint": {
             "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["lib/shared/sse-connection/**/*.ts"]
+                "lintFilePatterns": ["lib/internal/sse-connection/**/*.ts"]
             }
         },
         "test": {
             "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
             "options": {
-                "jestConfig": "lib/shared/sse-connection/jest.config.ts",
+                "jestConfig": "lib/internal/sse-connection/jest.config.ts",
                 "passWithNoTests": true
             },
             "configurations": {

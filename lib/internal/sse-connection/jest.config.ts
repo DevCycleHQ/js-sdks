@@ -10,5 +10,5 @@ export default {
         ],
     },
     moduleFileExtensions: ['ts', 'js', 'html'],
-    coverageDirectory: '../../../lib/coverage/shared/sse-connection'
+    coverageDirectory: '../../../coverage/lib/internal/sse-connection',
 }

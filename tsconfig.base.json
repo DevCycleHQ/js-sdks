@@ -77,7 +77,7 @@
                 "lib/internal/server-request/src/index.ts"
             ],
             "@devcycle/sse-connection": [
-                "lib/shared/sse-connection/src/index.ts"
+                "lib/internal/sse-connection/src/index.ts"
             ],
             "@devcycle/types": ["lib/shared/types/src/index.ts"],
             "@devcycle/vercel-edge-config": [
