@@ -74,7 +74,7 @@
                 "sdk/react-native-expo/src/index.ts"
             ],
             "@devcycle/server-request": [
-                "lib/shared/server-request/src/index.ts"
+                "lib/internal/server-request/src/index.ts"
             ],
             "@devcycle/sse-connection": [
                 "lib/shared/sse-connection/src/index.ts"

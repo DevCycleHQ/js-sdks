@@ -12,7 +12,11 @@
                 "main": "lib/internal/config-manager/src/index.ts",
                 "tsConfig": "lib/internal/config-manager/tsconfig.lib.json",
                 "assets": ["lib/internal/config-manager/*.md"],
-                "external": ["@devcycle/types", "@devcycle/server-request", "@devcycle/sse-connection"]
+                "external": [
+                    "@devcycle/types",
+                    "@devcycle/server-request",
+                    "@devcycle/sse-connection"
+                ]
             }
         },
         "lint": {

@@ -126,7 +126,7 @@
     },
     "release": {
         "projectsRelationship": "independent",
-        "projects": ["lib/**", "sdk/**"],
+        "projects": ["lib/shared/**", "lib/web-debugger/**", "sdk/**"],
         "version": {
             "conventionalCommits": true,
             "git": {
