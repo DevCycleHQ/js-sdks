@@ -4,7 +4,18 @@ set -eo pipefail
 
 # Get the last tagged sha from the output of "git describe"
 LAST_TAG=$(git describe --always --first-parent --abbrev=0)
-IGNORED_PACKAGES=("devcycle-js-sdks")
+IGNORED_PACKAGES=(
+  "devcycle-js-sdks"
+  "js-cloud-server-sdk-test-worker"
+  "nextjs-app-router"
+  "nextjs-pages-router"
+  "with-provider"
+  "react-e2e"
+  "config-manager"
+  "server-request"
+  "sse-connection"
+)
+IGNORED_PREFIXES=("e2e-" "example-")
 
 echo "::info::Last Tag $LAST_TAG"
 LAST_TAGGED_SHA=$(git rev-list -n 1 $LAST_TAG)
@@ -58,7 +69,9 @@ if [ -z "$AFFECTED_PROJECTS" ]; then
 fi
 
 # strip whitespace from affected projects
-AFFECTED_PROJECTS=$(echo "$AFFECTED_PROJECTS" | tr -d '[:space:]')
+AFFECTED_PROJECTS=$(echo "$AFFECTED_PROJECTS" | tr '\n' ',' | sed 's/,$//')
+
+echo "Affected projects, stripped: $AFFECTED_PROJECTS"
 
 # split affect projects on comma
 IFS=',' read -ra AFFECTED_PROJECTS <<< "$AFFECTED_PROJECTS"
@@ -68,6 +81,28 @@ PACKAGES=()
 for PROJECT in "${AFFECTED_PROJECTS[@]}"; do
 
   echo "Getting package name for $PROJECT"
+
+  # Quick check: ignore projects that start with known prefixes
+  SHOULD_SKIP_PROJECT=false
+  for PREFIX in "${IGNORED_PREFIXES[@]}"; do
+    if [[ "$PROJECT" == "$PREFIX"* ]]; then
+      echo "::info::Skipping project $PROJECT (project name prefix match: $PREFIX)"
+      SHOULD_SKIP_PROJECT=true
+      break
+    fi
+  done
+
+  # Quick check: ignore projects with exact name matches
+  if [ "$SHOULD_SKIP_PROJECT" = false ]; then
+    if [[ " ${IGNORED_PACKAGES[*]} " =~ " $PROJECT " ]]; then
+      echo "::info::Skipping project $PROJECT (project name exact match)"
+      SHOULD_SKIP_PROJECT=true
+    fi
+  fi
+
+  if [ "$SHOULD_SKIP_PROJECT" = true ]; then
+    continue
+  fi
 
   # get filepath from project.json
   FILEPATH=$(yarn nx show project $PROJECT | jq -r ".root")
@@ -80,19 +115,18 @@ for PROJECT in "${AFFECTED_PROJECTS[@]}"; do
   # get package name from package.json
   PACKAGE=$(cat "$FILEPATH/package.json" | jq -r '.name')
 
-  if [[ " ${IGNORED_PACKAGES[*]} " =~ " $PACKAGE " ]]; then
-      echo "::info::Ignoring package $PACKAGE"
-      continue
-  fi
-
   # add package to array
   PACKAGES+=("$PACKAGE")
 done
 
-# join packages with comma
-PACKAGES=$(IFS=','; echo "${PACKAGES[*]}")
+# Print packages for version increment
+echo "::info::Applying version increment $VERSION_INCREMENT_TYPE to packages:"
+for PACKAGE in "${PACKAGES[@]}"; do
+  echo "  - $PACKAGE"
+done
 
-echo -e "::info::Applying version increment $VERSION_INCREMENT_TYPE to packages:\n$PACKAGES"
+# join packages with comma for lerna command
+PACKAGES=$(IFS=','; echo "${PACKAGES[*]}")
 
 yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish" --no-push --yes "$VERSION_INCREMENT_TYPE"
 
