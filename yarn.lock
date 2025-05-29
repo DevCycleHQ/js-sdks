@@ -3071,9 +3071,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/bucketing-test-data@npm:^1.29.1, @devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data":
+"@devcycle/bucketing-test-data@npm:^1.29.1, @devcycle/bucketing-test-data@workspace:lib/internal/bucketing-test-data":
   version: 0.0.0-use.local
-  resolution: "@devcycle/bucketing-test-data@workspace:lib/shared/bucketing-test-data"
+  resolution: "@devcycle/bucketing-test-data@workspace:lib/internal/bucketing-test-data"
   languageName: unknown
   linkType: soft
 

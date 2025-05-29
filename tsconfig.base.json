@@ -26,10 +26,10 @@
                 "lib/shared/bucketing-assembly-script/index.d.ts"
             ],
             "@devcycle/bucketing-test-data": [
-                "lib/shared/bucketing-test-data/src/main.ts"
+                "lib/internal/bucketing-test-data/src/main.ts"
             ],
             "@devcycle/bucketing-test-data/json-data/testData.json": [
-                "lib/shared/bucketing-test-data/json-data/testData.json"
+                "lib/internal/bucketing-test-data/json-data/testData.json"
             ],
             "@devcycle/config-manager": [
                 "lib/internal/config-manager/src/index.ts"

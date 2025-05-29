@@ -1,6 +1,6 @@
 module.exports = {
   displayName: 'bucketing-test-data',
-  preset: '../jest.preset.js',
+  preset: '../../../jest.preset.js',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -10,5 +10,5 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../coverage/bucketing-test-data',
+  coverageDirectory: '../../../coverage/lib/internal/bucketing-test-data',
 }
