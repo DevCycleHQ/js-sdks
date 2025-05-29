@@ -3293,6 +3293,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@devcycle/sse-connection@workspace:lib/internal/sse-connection":
+  version: 0.0.0-use.local
+  resolution: "@devcycle/sse-connection@workspace:lib/internal/sse-connection"
+  dependencies:
+    eventsource: "npm:^2.0.2"
+  languageName: unknown
+  linkType: soft
+
 "@devcycle/types@npm:^1.26.1, @devcycle/types@workspace:lib/shared/types":
   version: 0.0.0-use.local
   resolution: "@devcycle/types@workspace:lib/shared/types"
