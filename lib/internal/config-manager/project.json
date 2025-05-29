@@ -1,32 +1,32 @@
 {
     "name": "config-manager",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "lib/shared/config-manager/src",
+    "sourceRoot": "lib/internal/config-manager/src",
     "projectType": "library",
     "targets": {
         "build": {
             "executor": "@nx/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
-                "outputPath": "dist/lib/shared/config-manager",
-                "main": "lib/shared/config-manager/src/index.ts",
-                "tsConfig": "lib/shared/config-manager/tsconfig.lib.json",
-                "assets": ["lib/shared/config-manager/*.md"],
-                "external": ["shared-types", "js-cloud-server-sdk"]
+                "outputPath": "dist/lib/internal/config-manager",
+                "main": "lib/internal/config-manager/src/index.ts",
+                "tsConfig": "lib/internal/config-manager/tsconfig.lib.json",
+                "assets": ["lib/internal/config-manager/*.md"],
+                "external": ["@devcycle/types", "@devcycle/server-request", "@devcycle/sse-connection"]
             }
         },
         "lint": {
             "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["lib/shared/config-manager/**/*.ts"]
+                "lintFilePatterns": ["lib/internal/config-manager/**/*.ts"]
             }
         },
         "test": {
             "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
             "options": {
-                "jestConfig": "lib/shared/config-manager/jest.config.ts",
+                "jestConfig": "lib/internal/config-manager/jest.config.ts",
                 "passWithNoTests": true
             },
             "configurations": {

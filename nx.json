@@ -123,5 +123,20 @@
     "defaultBase": "main",
     "tui": {
         "enabled": false
+    },
+    "release": {
+        "projectsRelationship": "independent",
+        "projects": ["lib/**", "sdk/**"],
+        "version": {
+            "conventionalCommits": true,
+            "git": {
+                "commit": false,
+                "tag": false
+            }
+        },
+        "changelog": {
+            "workspaceChangelog": false,
+            "projectChangelogs": false
+        }
     }
 }

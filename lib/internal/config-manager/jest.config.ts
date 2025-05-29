@@ -9,5 +9,5 @@ export default {
         ],
     },
     moduleFileExtensions: ['ts', 'js', 'html'],
-    coverageDirectory: '../../../coverage/lib/shared/config-manager',
+    coverageDirectory: '../../../coverage/lib/internal/config-manager',
 }
