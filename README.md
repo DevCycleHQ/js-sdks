@@ -109,8 +109,8 @@ Setup:
 - run `./scripts/brew-install.sh`
 - ensure you're on the main branch with the latest code
 
-Then use lerna to create new versions of all changed packages (ensure you do this on the main branch)
-`yarn lerna:version`
+Then use NX Release to create new versions of all changed packages (ensure you do this on the main branch)
+`yarn nx:version`
 
 This will automatically push the latest tags and version updates to github. 
 
