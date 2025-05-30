@@ -44,15 +44,16 @@
             ]
         },
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/js-cloud-server",
-                "tsConfig": "sdk/js-cloud-server/tsconfig.lib.json",
-                "packageJson": "sdk/js-cloud-server/package.json",
                 "main": "sdk/js-cloud-server/src/index.ts",
-                "assets": ["sdk/js-cloud-server/*.md"],
-                "external": ["shared-types", "shared-bucketing-test-data"]
+                "tsConfig": "sdk/js-cloud-server/tsconfig.lib.json",
+                "platform": "node",
+                "bundle": true,
+                "packages": "external",
+                "assets": ["sdk/js-cloud-server/*.md"]
             },
             "dependsOn": [
                 {

@@ -46,21 +46,22 @@
             ]
         },
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/nodejs",
-                "tsConfig": "sdk/nodejs/tsconfig.lib.json",
-                "packageJson": "sdk/nodejs/package.json",
                 "main": "sdk/nodejs/src/index.ts",
-                "assets": ["sdk/nodejs/*.md"],
+                "additionalEntryPoints": ["sdk/nodejs/openfeature-strategy.ts"],
+                "tsConfig": "sdk/nodejs/tsconfig.lib.json",
+                "platform": "node",
+                "bundle": true,
+                "packages": "external",
                 "external": [
-                    "shared-types",
-                    "shared-bucketing-as",
-                    "shared-bucketing-test-data",
-                    "js-cloud-server-sdk",
-                    "js"
-                ]
+                    "@devcycle/bucketing-assembly-script",
+                    "@devcycle/js-cloud-server-sdk",
+                    "@devcycle/types"
+                ],
+                "assets": ["sdk/nodejs/*.md"]
             },
             "dependsOn": [
                 {
