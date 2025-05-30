@@ -24,6 +24,22 @@
         "fetch-retry": "^5.0.6",
         "lodash": "^4.17.21"
     },
-    "main": "src/index.js",
-    "types": "src/index.d.ts"
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "main": "./index.cjs",
+    "module": "./index.js",
+    "types": "./index.d.ts",
+    "exports": {
+        ".": {
+            "require": {
+                "types": "./index.d.ts",
+                "default": "./index.cjs"
+            },
+            "import": {
+                "types": "./index.d.ts",
+                "default": "./index.js"
+            }
+        }
+    }
 }

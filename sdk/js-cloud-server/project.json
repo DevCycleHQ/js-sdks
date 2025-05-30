@@ -53,7 +53,20 @@
                 "platform": "node",
                 "bundle": true,
                 "packages": "external",
-                "assets": ["sdk/js-cloud-server/*.md"]
+                "format": ["cjs", "esm"],
+                "target": "node18",
+                "conditions": ["node"],
+                "mainFields": ["module", "main"],
+                "external": [
+                    "@devcycle/types"
+                ],
+                "assets": ["sdk/js-cloud-server/*.md"],
+                "outExtension": {
+                    ".js": ".cjs"
+                },
+                "splitting": false,
+                "keepNames": true,
+                "sourcemap": true
             },
             "dependsOn": [
                 {

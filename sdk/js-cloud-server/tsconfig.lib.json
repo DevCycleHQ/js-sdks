@@ -3,7 +3,17 @@
     "compilerOptions": {
         "outDir": "../../dist/out-tsc",
         "declaration": true,
-        "types": []
+        "declarationMap": true,
+        "sourceMap": true,
+        "types": ["node"],
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "target": "ES2022",
+        "lib": ["ES2022"],
+        "strict": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true
     },
     "exclude": [
         "**/*.spec.ts",
