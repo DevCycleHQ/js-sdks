@@ -12,7 +12,7 @@
                 "main": "lib/internal/sse-connection/src/index.ts",
                 "tsConfig": "lib/internal/sse-connection/tsconfig.lib.json",
                 "assets": ["lib/internal/sse-connection/*.md"],
-                "external": ["@devcycle/types"]
+                "external": ["shared-types"]
             }
         },
         "lint": {

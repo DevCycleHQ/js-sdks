@@ -19,7 +19,7 @@
                 "tsConfig": "lib/internal/bucketing-test-data/tsconfig.lib.json",
                 "packageJson": "lib/internal/bucketing-test-data/package.json",
                 "main": "lib/internal/bucketing-test-data/src/main.ts",
-                "external": ["@devcycle/types"]
+                "external": ["shared-types"]
             },
             "dependsOn": [
                 {
