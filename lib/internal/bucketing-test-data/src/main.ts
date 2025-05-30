@@ -3,7 +3,7 @@ import path from 'path'
 import * as testData from './data/testData'
 import * as largeTestData from './data/largeConfig'
 
-const folderName = 'lib/shared/bucketing-test-data/json-data/'
+const folderName = 'lib/internal/bucketing-test-data/json-data/'
 const folderPath = path.resolve(process.env.NX_WORKSPACE_ROOT || '', folderName)
 if (!fs.existsSync(folderPath)) {
     fs.mkdirSync(folderPath)

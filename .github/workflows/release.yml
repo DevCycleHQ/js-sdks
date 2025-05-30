@@ -67,14 +67,14 @@ jobs:
             - run: yarn --immutable
 
             # Only one of the following two steps will run, depending on whether the `update_all` input is set
-            - name: Increment affected package versions with lerna
+            - name: Increment affected package versions with NX
               run: |
-                  ./scripts/lerna-version-ci.sh --version-increment-type "${{ inputs.version-increment-type }}"
+                  ./scripts/nx-version-ci.sh --version-increment-type "${{ inputs.version-increment-type }}"
               if: inputs.update_all != true
 
-            - name: Increment all package versions with lerna
+            - name: Increment all package versions with NX
               run: |
-                  ./scripts/lerna-version-ci.sh --all-packages --version-increment-type="${{ inputs.version-increment-type }}"
+                  ./scripts/nx-version-ci.sh --all-packages --version-increment-type="${{ inputs.version-increment-type }}"
               if: inputs.update_all == true
 
             - name: Push version changes and tags

@@ -19,14 +19,14 @@
         "prettier:format": "yarn prettier --write .",
         "build": "nx build",
         "start": "nx serve",
-        "lerna:version": "scripts/lerna-version.sh",
         "local-registry": "./scripts/local-registry.sh",
         "e2e:nextjs-app-router:start": "nx build nextjs && ./e2e/nextjs/app-router/app/start.sh",
         "e2e:nextjs-pages-router:start": "nx build nextjs && ./e2e/nextjs/pages-router/app/start.sh",
         "e2e:js-cdn:start": "nx run js-cdn:build-with-sdk && nx run js-cdn:serve",
         "e2e:js-esm:start": "nx build js && ./e2e/js/js-esm/start.sh",
         "e2e:react:start": "nx build react && ./e2e/react/start.sh",
-        "e2e:js-cloud-server:start": "nx build js-cloud-server-sdk && ./e2e/js/js-cloud-server/start.sh"
+        "e2e:js-cloud-server:start": "nx build js-cloud-server-sdk && ./e2e/js/js-cloud-server/start.sh",
+        "nx:version": "scripts/nx-version-ci.sh"
     },
     "modulePathIgnorePatterns": [
         "<rootDir>/build"
@@ -176,7 +176,6 @@
         "jest-mock": "^29.7.0",
         "jest-react-native": "18.0.0",
         "jsonc-eslint-parser": "^2.4.0",
-        "lerna": "^5.6.2",
         "metro": "0.76.7",
         "metro-babel-register": "0.76.7",
         "metro-react-native-babel-preset": "0.76.7",

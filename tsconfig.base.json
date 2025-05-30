@@ -26,13 +26,13 @@
                 "lib/shared/bucketing-assembly-script/index.d.ts"
             ],
             "@devcycle/bucketing-test-data": [
-                "lib/shared/bucketing-test-data/src/main.ts"
+                "lib/internal/bucketing-test-data/src/main.ts"
             ],
             "@devcycle/bucketing-test-data/json-data/testData.json": [
-                "lib/shared/bucketing-test-data/json-data/testData.json"
+                "lib/internal/bucketing-test-data/json-data/testData.json"
             ],
             "@devcycle/config-manager": [
-                "lib/shared/config-manager/src/index.ts"
+                "lib/internal/config-manager/src/index.ts"
             ],
             "@devcycle/js-client-sdk": ["sdk/js/src/index.ts"],
             "@devcycle/js-cloud-server-sdk": [
@@ -74,10 +74,10 @@
                 "sdk/react-native-expo/src/index.ts"
             ],
             "@devcycle/server-request": [
-                "lib/shared/server-request/src/index.ts"
+                "lib/internal/server-request/src/index.ts"
             ],
             "@devcycle/sse-connection": [
-                "lib/shared/sse-connection/src/index.ts"
+                "lib/internal/sse-connection/src/index.ts"
             ],
             "@devcycle/types": ["lib/shared/types/src/index.ts"],
             "@devcycle/vercel-edge-config": [
