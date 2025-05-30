@@ -10,7 +10,9 @@ eg.
 The top-level folders inside `lib/` indicate where the library is intended to be used:
 ```
 lib/
-  shared/       - libraries that work in any JS project
+  internal/     - internal libraries that are shared but not published on NPM
+  shared/       - libraries that work in any JS project and are published on NPM
+  web-debugger/ - web debugging tools and components
 ```
 
 We are loosely following the advice in these articles for organizing our libraries

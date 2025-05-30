@@ -13,9 +13,9 @@
                 "tsConfig": "lib/internal/config-manager/tsconfig.lib.json",
                 "assets": ["lib/internal/config-manager/*.md"],
                 "external": [
-                    "@devcycle/types",
-                    "@devcycle/server-request",
-                    "@devcycle/sse-connection"
+                    "shared-types",
+                    "server-request",
+                    "sse-connection"
                 ]
             }
         },
