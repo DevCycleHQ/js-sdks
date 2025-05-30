@@ -6,6 +6,7 @@
     "targets": {
         "npm-publish": {
             "executor": "nx:run-commands",
+            "cache": false,
             "options": {
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/js-client-sdk\"",
                 "cwd": "dist/sdk/js",
@@ -15,13 +16,17 @@
         },
         "check-types": {
             "executor": "nx:run-commands",
+            "inputs": [
+                "{projectRoot}/src/**/*.ts",
+                "{projectRoot}/tsconfig*.json"
+            ],
             "options": {
                 "command": "yarn run -T tsc -b --incremental",
                 "cwd": "sdk/js"
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["sdk/js/**/*.ts", "sdk/js/package.json"]
@@ -37,7 +42,7 @@
             }
         },
         "build": {
-            "executor": "@nrwl/rollup:rollup",
+            "executor": "@nx/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/js",
@@ -57,29 +62,10 @@
                 ]
             }
         },
-        "build:es5": {
-            "executor": "@nrwl/rollup:rollup",
-            "outputs": ["{options.outputPath}"],
-            "options": {
-                "outputPath": "dist/sdk/es5/js",
-                "tsConfig": "sdk/js/tsconfig.lib.es5.json",
-                "project": "sdk/js/package.json",
-                "entryFile": "sdk/js/src/index.ts",
-                "compiler": "tsc",
-                "format": ["esm", "cjs"],
-                "external": "all",
-                "generateExportsField": true,
-                "assets": [
-                    {
-                        "glob": "sdk/js/*.md",
-                        "input": ".",
-                        "output": "."
-                    }
-                ]
-            }
-        },
         "build:emit-legacy-types": {
             "executor": "nx:run-commands",
+            "inputs": ["{options.cwd}/**/*.d.ts"],
+            "outputs": ["{options.cwd}/ts3.5"],
             "options": {
                 "command": "npx --yes downlevel-dts . ts3.5 --to=3.5",
                 "cwd": "dist/sdk/js",
@@ -96,7 +82,7 @@
                 "outputPath": "dist/sdk/cdn/js",
                 "tsConfig": "sdk/js/tsconfig.lib.json",
                 "packageJson": "sdk/js/package.json",
-                "main": "sdk/js/src/index.ts",
+                "main": "./sdk/js/src/index.ts",
                 "index": "",
                 "optimization": true,
                 "assets": [
@@ -111,7 +97,9 @@
                 "vendorChunk": false,
                 "commonChunk": false,
                 "namedChunks": false,
-                "webpackConfig": "sdk/js/webpack.config.js"
+                "webpackConfig": "sdk/js/webpack.config.js",
+                "compiler": "tsc",
+                "mode": "production"
             }
         }
     }

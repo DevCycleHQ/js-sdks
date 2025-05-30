@@ -7,13 +7,17 @@
     "targets": {
         "check-types": {
             "executor": "nx:run-commands",
+            "inputs": [
+                "{projectRoot}/src/**/*.{ts,tsx}",
+                "{projectRoot}/tsconfig*.json"
+            ],
             "options": {
                 "command": "yarn run -T tsc -b --incremental",
                 "cwd": "sdk/react-native"
             }
         },
         "build": {
-            "executor": "@nrwl/rollup:rollup",
+            "executor": "@nx/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "dependsOn": ["shared-types:build", "js:build", "react:build"],
             "options": {
@@ -35,7 +39,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
@@ -55,6 +59,7 @@
         },
         "npm-publish": {
             "executor": "nx:run-commands",
+            "cache": false,
             "options": {
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/react-native-client-sdk\"",
                 "cwd": "dist/sdk/react-native",

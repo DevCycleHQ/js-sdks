@@ -9,5 +9,5 @@ export default {
         ],
     },
     moduleFileExtensions: ['ts', 'js', 'html'],
-    coverageDirectory: '../../../coverage/lib/shared/server-request',
+    coverageDirectory: '../../../coverage/lib/internal/server-request',
 }

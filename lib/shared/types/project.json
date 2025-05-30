@@ -5,6 +5,10 @@
     "targets": {
         "check-types": {
             "executor": "nx:run-commands",
+            "inputs": [
+                "{projectRoot}/src/**/*.ts",
+                "{projectRoot}/tsconfig*.json"
+            ],
             "options": {
                 "command": "yarn run -T tsc -b --incremental",
                 "cwd": "lib/shared/types"
@@ -12,6 +16,7 @@
         },
         "npm-publish": {
             "executor": "nx:run-commands",
+            "cache": false,
             "options": {
                 "command": "../../../../scripts/npm-safe-publish.sh \"@devcycle/types\"",
                 "cwd": "dist/lib/shared/types",
@@ -20,7 +25,7 @@
             "dependsOn": ["build:emit-legacy-types"]
         },
         "build": {
-            "executor": "@nrwl/rollup:rollup",
+            "executor": "@nx/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "format": ["cjs", "esm"],
@@ -40,28 +45,10 @@
                 ]
             }
         },
-        "build:es5": {
-            "executor": "@nrwl/rollup:rollup",
-            "outputs": ["{options.outputPath}"],
-            "options": {
-                "format": ["cjs"],
-                "external": "all",
-                "project": "lib/shared/types/package.json",
-                "outputPath": "dist/lib/shared/es5/types",
-                "entryFile": "lib/shared/types/src/index.ts",
-                "tsConfig": "lib/shared/types/tsconfig.lib.es5.json",
-                "compiler": "tsc",
-                "assets": [
-                    {
-                        "glob": "*.md",
-                        "input": "lib/shared/types",
-                        "output": "."
-                    }
-                ]
-            }
-        },
         "build:emit-legacy-types": {
             "executor": "nx:run-commands",
+            "inputs": ["{options.cwd}/**/*.d.ts"],
+            "outputs": ["{options.cwd}/ts3.5"],
             "options": {
                 "command": "npx --yes downlevel-dts . ts3.5 --to=3.5",
                 "cwd": "dist/lib/shared/types",
@@ -70,7 +57,7 @@
             "dependsOn": ["build"]
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [

@@ -22,14 +22,17 @@
         "baseUrl": ".",
         "paths": {
             "@devcycle/bucketing": ["lib/shared/bucketing/src/index.ts"],
+            "@devcycle/bucketing-assembly-script": [
+                "lib/shared/bucketing-assembly-script/index.d.ts"
+            ],
             "@devcycle/bucketing-test-data": [
-                "lib/shared/bucketing-test-data/src/main.ts"
+                "lib/internal/bucketing-test-data/src/main.ts"
             ],
             "@devcycle/bucketing-test-data/json-data/testData.json": [
-                "lib/shared/bucketing-test-data/json-data/testData.json"
+                "lib/internal/bucketing-test-data/json-data/testData.json"
             ],
             "@devcycle/config-manager": [
-                "lib/shared/config-manager/src/index.ts"
+                "lib/internal/config-manager/src/index.ts"
             ],
             "@devcycle/js-client-sdk": ["sdk/js/src/index.ts"],
             "@devcycle/js-cloud-server-sdk": [
@@ -42,18 +45,6 @@
             "@devcycle/nodejs-server-sdk/openfeature-strategy": [
                 "sdk/nodejs/openfeature-strategy.ts"
             ],
-            "@devcycle/openfeature-web-provider": [
-                "sdk/openfeature-web-provider/src/index.ts"
-            ],
-            "@devcycle/openfeature-web-provider/strategy": [
-                "sdk/openfeature-web-provider/strategy.ts"
-            ],
-            "@devcycle/openfeature-react-provider": [
-                "sdk/openfeature-react-provider/src/index.ts"
-            ],
-            "@devcycle/openfeature-react-provider/strategy": [
-                "sdk/openfeature-react-provider/strategy.ts"
-            ],
             "@devcycle/openfeature-angular-provider": [
                 "sdk/openfeature-angular-provider/src/index.ts"
             ],
@@ -63,6 +54,18 @@
             "@devcycle/openfeature-nestjs-provider": [
                 "sdk/openfeature-nestjs-provider/src/index.ts"
             ],
+            "@devcycle/openfeature-react-provider": [
+                "sdk/openfeature-react-provider/src/index.ts"
+            ],
+            "@devcycle/openfeature-react-provider/strategy": [
+                "sdk/openfeature-react-provider/strategy.ts"
+            ],
+            "@devcycle/openfeature-web-provider": [
+                "sdk/openfeature-web-provider/src/index.ts"
+            ],
+            "@devcycle/openfeature-web-provider/strategy": [
+                "sdk/openfeature-web-provider/strategy.ts"
+            ],
             "@devcycle/react-client-sdk": ["sdk/react/src/index.ts"],
             "@devcycle/react-native-client-sdk": [
                 "sdk/react-native/src/index.ts"
@@ -71,10 +74,10 @@
                 "sdk/react-native-expo/src/index.ts"
             ],
             "@devcycle/server-request": [
-                "lib/shared/server-request/src/index.ts"
+                "lib/internal/server-request/src/index.ts"
             ],
             "@devcycle/sse-connection": [
-                "lib/shared/sse-connection/src/index.ts"
+                "lib/internal/sse-connection/src/index.ts"
             ],
             "@devcycle/types": ["lib/shared/types/src/index.ts"],
             "@devcycle/vercel-edge-config": [

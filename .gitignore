@@ -35,7 +35,7 @@ globalConfig.json
 **/collection.json
 
 // ignore env files in dev-apps
-dev-apps/**/.env
+dev-apps/**/.env**
 
 # React Native
 
@@ -100,3 +100,8 @@ verdaccio
 e2e/js/js-cdn/src/assets/devcycle.min.js
 e2e/js/js-cdn/playwright-report/
 e2e/js/js-esm/playwright-report/
+
+.nx/cache
+.nx/workspace-data
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md

@@ -72,7 +72,7 @@ export class IndexedDBStrategy extends StorageStrategy {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(IndexedDBStrategy.DBName, 1)
 
-            request.onupgradeneeded = (event) => {
+            request.onupgradeneeded = () => {
                 const db = request.result
                 if (
                     !db.objectStoreNames.contains(IndexedDBStrategy.storeName)
@@ -83,10 +83,12 @@ export class IndexedDBStrategy extends StorageStrategy {
                 }
             }
 
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             request.onsuccess = (event) => {
                 resolve(request.result)
             }
 
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             request.onerror = (event) => {
                 reject(request.error)
             }

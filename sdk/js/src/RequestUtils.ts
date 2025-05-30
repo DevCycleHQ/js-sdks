@@ -1,5 +1,5 @@
-// NOTE: This file is duplicated from "lib/shared/server-request" because nx:rollup cant build non-external dependencies
-// from outside the root directory https://github.com/nrwl/nx/issues/10395
+// NOTE: This file is duplicated from "lib/internal/server-request" because
+// nx:rollup cant build non-external dependencies
 // EDIT: This file has diverged from the server-request lib by removing the dynamic import of cross-fetch
 
 import fetchWithRetry, { RequestInitWithRetry } from 'fetch-retry'

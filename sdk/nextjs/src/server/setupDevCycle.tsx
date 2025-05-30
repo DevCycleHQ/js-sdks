@@ -23,7 +23,7 @@ type GetVariableValue = <
 ) => Promise<InferredVariableType<K, ValueType>>
 
 // allow return type inference
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export const setupDevCycle = <
     CustomData extends DVCCustomDataJSON = DVCCustomDataJSON,
 >({
@@ -121,3 +121,4 @@ export const setupDevCycle = <
         getClientContext: _getClientContext,
     }
 }
+/* eslint-enable @typescript-eslint/explicit-module-boundary-types */

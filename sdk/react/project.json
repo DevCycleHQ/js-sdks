@@ -6,13 +6,17 @@
     "targets": {
         "check-types": {
             "executor": "nx:run-commands",
+            "inputs": [
+                "{projectRoot}/src/**/*.{ts,tsx}",
+                "{projectRoot}/tsconfig*.json"
+            ],
             "options": {
                 "command": "yarn run -T tsc -b --incremental",
                 "cwd": "sdk/react"
             }
         },
         "build": {
-            "executor": "@nrwl/rollup:rollup",
+            "executor": "@nx/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/react",
@@ -33,29 +37,8 @@
                 ]
             }
         },
-        "build:es5": {
-            "executor": "@nrwl/rollup:rollup",
-            "outputs": ["{options.outputPath}"],
-            "options": {
-                "outputPath": "dist/sdk/es5/react",
-                "tsConfig": "sdk/react/tsconfig.lib.es5.json",
-                "project": "sdk/react/package.json",
-                "entryFile": "sdk/react/src/index.ts",
-                "format": ["esm", "cjs"],
-                "external": "all",
-                "rollupConfig": "@nx/react/plugins/bundle-rollup",
-                "compiler": "tsc",
-                "assets": [
-                    {
-                        "glob": "sdk/react/README.md",
-                        "input": ".",
-                        "output": "."
-                    }
-                ]
-            }
-        },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
@@ -75,6 +58,7 @@
         },
         "npm-publish": {
             "executor": "nx:run-commands",
+            "cache": false,
             "options": {
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/react-client-sdk\"",
                 "cwd": "dist/sdk/react",

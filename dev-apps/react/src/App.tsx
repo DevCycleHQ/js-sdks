@@ -1,4 +1,3 @@
-import React from 'react'
 import logo from './logo.svg'
 import './App.css'
 import {
@@ -7,8 +6,7 @@ import {
 } from '@devcycle/react-client-sdk'
 import DevCycleExample from './DevCycleExample'
 
-const SDK_KEY =
-    process.env.DEVCYCLE_CLIENT_SDK_KEY || '<DEVCYCLE_CLIENT_SDK_KEY>'
+const DEVCYCLE_CLIENT_SDK_KEY = '<DEVCYCLE_CLIENT_SDK_KEY>'
 const user = {
     user_id: 'userId1',
     email: 'auto@taplytics.com',
@@ -54,7 +52,7 @@ function App() {
 }
 
 export default withDevCycleProvider({
-    sdkKey: SDK_KEY,
-    user: user,
+    sdkKey: DEVCYCLE_CLIENT_SDK_KEY,
+    user,
     options: { logLevel: 'debug' },
 })(App)
