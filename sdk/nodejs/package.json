@@ -49,12 +49,12 @@
     "exports": {
         ".": {
             "import": "./src/index.js",
-            "require": "./src/index.js",
+            "require": "./src/index.cjs",
             "types": "./src/index.d.ts"
         },
         "./openfeature-strategy": {
             "import": "./openfeature-strategy.js",
-            "require": "./openfeature-strategy.js",
+            "require": "./openfeature-strategy.cjs",
             "types": "./openfeature-strategy.d.ts"
         }
     }

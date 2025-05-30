@@ -56,8 +56,13 @@
                 "platform": "node",
                 "bundle": true,
                 "packages": "external",
+                "format": ["cjs", "esm"],
+                "target": "node18",
+                "conditions": ["node"],
+                "mainFields": ["module", "main"],
                 "external": [
                     "@devcycle/bucketing-assembly-script",
+                    "@devcycle/js-client-sdk",
                     "@devcycle/js-cloud-server-sdk",
                     "@devcycle/types"
                 ],
