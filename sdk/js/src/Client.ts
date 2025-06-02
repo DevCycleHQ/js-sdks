@@ -770,8 +770,6 @@ export class DevCycleClient<
         if (this.user != user || !this.userSaved) {
             this.user = user
 
-            await this.store.saveUser(user)
-
             if (
                 !this.user.isAnonymous &&
                 checkIfEdgeEnabled(

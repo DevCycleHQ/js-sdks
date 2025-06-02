@@ -14,17 +14,9 @@ export class CacheStore {
     }
 
     private getConfigKey(user: DVCPopulatedUser) {
-        // For anonymous users, use the anonymous config key with user ID
-        if (user.isAnonymous) {
-            return `${StoreKey.AnonymousConfig}.${user.user_id}`
-        }
-        // For identified users, use the user config key with user ID
-        return `${StoreKey.UserConfig}.${user.user_id}`
-    }
-
-    private getUserKey(user: DVCPopulatedUser) {
-        // Save user data keyed by user_id
-        return `${StoreKey.User}.${user.user_id}`
+        return user.isAnonymous
+            ? `${StoreKey.AnonymousConfig}.${user.user_id}`
+            : `${StoreKey.UserConfig}.${user.user_id}`
     }
 
     private getConfigFetchDateKey(user: DVCPopulatedUser) {
@@ -71,58 +63,46 @@ export class CacheStore {
         user: DVCPopulatedUser,
         configCacheTTL = DEFAULT_CONFIG_CACHE_TTL,
     ): Promise<BucketedUserConfig | null> {
-        await this.migrateLegacyData()
+        await this.migrateLegacyConfigs()
 
         // Load config using the new user-specific key format
         const configKey = this.getConfigKey(user)
         const config = await this.store.load<unknown>(configKey)
 
-        if (config !== null && config !== undefined) {
-            // Check if config is valid
-            if (!this.isBucketedUserConfig(config)) {
-                this.logger?.debug(
-                    `Skipping cached config: invalid config found: ${JSON.stringify(
-                        config,
-                    )}`,
-                )
-                return null
-            }
-
-            // Check if the config is expired
-            const fetchDate = await this.loadConfigFetchDate(user)
-            const isConfigCacheTTLExpired =
-                Date.now() - fetchDate > configCacheTTL
-
-            if (isConfigCacheTTLExpired) {
-                this.logger?.debug(
-                    'Skipping cached config: last fetched date is too old',
-                )
-                return null
-            }
-
-            return config
+        if (!config) {
+            // No config found
+            this.logger?.debug('Skipping cached config: no config found')
+            return null
         }
 
-        // No config found
-        this.logger?.debug('Skipping cached config: no config found')
-        return null
-    }
-
-    async saveUser(user: DVCPopulatedUser): Promise<void> {
-        if (!user) {
-            throw new Error('No user to save')
+        // Check if config is valid
+        if (!this.isBucketedUserConfig(config)) {
+            this.logger?.debug(
+                `Skipping cached config: invalid config found: ${JSON.stringify(
+                    config,
+                )}`,
+            )
+            return null
         }
-        const userKey = this.getUserKey(user)
-        await this.store.save(userKey, user)
-        this.logger?.info(
-            `Successfully saved user ${user.user_id} to local storage`,
-        )
-    }
 
-    async loadUser(userId: string): Promise<DVCPopulatedUser | undefined> {
-        await this.migrateLegacyData()
-        const userKey = `${StoreKey.User}.${userId}`
-        return await this.store.load<DVCPopulatedUser>(userKey)
+        // Check if the config is expired
+        const fetchDate = await this.loadConfigFetchDate(user)
+        const isConfigCacheTTLExpired = Date.now() - fetchDate > configCacheTTL
+
+        if (isConfigCacheTTLExpired) {
+            this.logger?.debug(
+                'Skipping cached config: last fetched date is too old',
+            )
+            // Remove expired config and fetch date from storage
+            const fetchDateKey = this.getConfigFetchDateKey(user)
+            await Promise.all([
+                this.store.remove(configKey),
+                this.store.remove(fetchDateKey),
+            ])
+            return null
+        }
+
+        return config
     }
 
     async saveAnonUserId(userId: string): Promise<void> {
@@ -140,54 +120,12 @@ export class CacheStore {
         await this.store.remove(StoreKey.AnonUserId)
     }
 
-    async migrateLegacyData(): Promise<void> {
-        // Migrate both configs and user data
-        await Promise.all([
-            this.migrateLegacyConfigs(),
-            this.migrateLegacyUser(),
-        ])
-    }
-
     async migrateLegacyConfigs(): Promise<void> {
         // Migrate both anonymous and identified legacy configs
         await Promise.all([
             this.migrateLegacyConfigType(StoreKey.AnonymousConfig, true),
             this.migrateLegacyConfigType(StoreKey.IdentifiedConfig, false),
         ])
-    }
-
-    async migrateLegacyUser(): Promise<void> {
-        try {
-            // Check if legacy user data exists
-            const legacyUser = await this.store.load<DVCPopulatedUser>(
-                StoreKey.User,
-            )
-            if (!legacyUser || !legacyUser.user_id) {
-                return
-            }
-
-            // Check if new format already exists
-            const newUserKey = this.getUserKey(legacyUser)
-            const existingUser = await this.store.load<DVCPopulatedUser>(
-                newUserKey,
-            )
-            if (existingUser) {
-                // New format already exists, clean up legacy
-                await this.store.remove(StoreKey.User)
-                return
-            }
-
-            // Migrate to new format
-            this.logger?.debug(
-                `Migrating legacy user data for user ${legacyUser.user_id} to new format`,
-            )
-            await this.saveUser(legacyUser)
-
-            // Clean up legacy storage
-            await this.store.remove(StoreKey.User)
-        } catch (error) {
-            this.logger?.debug(`Failed to migrate legacy user data: ${error}`)
-        }
     }
 
     async migrateLegacyConfigType(
