@@ -85,17 +85,17 @@ describe('DevCycleClient tests', () => {
         const spy = jest.spyOn(window.localStorage.__proto__, 'getItem')
         const client = new DevCycleClient(test_key, { user_id: 'user1' })
         await client.onInitialized
-        
+
         // Migration checks for:
         // 1. User-specific config key
         // 2. User-specific config fetch date key
         // 3. Legacy identified config
-        // 4. Legacy anonymous config  
+        // 4. Legacy anonymous config
         // 5. Legacy user data
         // So we expect more than 1 call due to migration logic
         expect(spy).toHaveBeenCalled()
         const initialCallCount = spy.mock.calls.length
-        
+
         // construct another client to test if it reads from the cache populated by the initialization of the first
         // client
         const client2 = new DevCycleClient(
@@ -104,7 +104,7 @@ describe('DevCycleClient tests', () => {
             { bootstrapConfig: testConfig },
         )
         await client2.onInitialized
-        
+
         // Should have same number of calls as before since bootstrapped config skips cache loading
         expect(spy).toHaveBeenCalledTimes(initialCallCount)
         expect(client2.config).toStrictEqual(testConfig)
@@ -334,7 +334,9 @@ describe('DevCycleClient tests', () => {
             expect(window.localStorage.getItem(expectedKey)).toBe(
                 JSON.stringify(testConfig),
             )
-            expect(window.localStorage.getItem(`${expectedKey}.fetch_date`)).toBeTruthy()
+            expect(
+                window.localStorage.getItem(`${expectedKey}.fetch_date`),
+            ).toBeTruthy()
             expect(client.isInitialized).toBe(true)
         })
 
@@ -349,7 +351,9 @@ describe('DevCycleClient tests', () => {
             expect(window.localStorage.getItem(expectedKey)).toBe(
                 JSON.stringify(testConfig),
             )
-            expect(window.localStorage.getItem(`${expectedKey}.fetch_date`)).toBeTruthy()
+            expect(
+                window.localStorage.getItem(`${expectedKey}.fetch_date`),
+            ).toBeTruthy()
             expect(client.isInitialized).toBe(true)
         })
 
