@@ -60,9 +60,11 @@ export const generateBoundedHash = (
 export const decideTargetVariation = ({
     target,
     boundedHash,
+    reasonDetails,
 }: {
     target: PublicTarget
     boundedHash: number
+    reasonDetails?: string
 }): VariationReasonResult => {
     const variations = orderBy(target.distribution, '_variation', ['desc'])
     const isRollout = target.rollout !== undefined
@@ -82,9 +84,11 @@ export const decideTargetVariation = ({
                     isRollout || isRandomDistribution
                         ? {
                               reason: EVAL_REASONS.SPLIT,
+                              details: reasonDetails ?? undefined,
                           }
                         : {
                               reason: EVAL_REASONS.TARGETING_MATCH,
+                              details: reasonDetails ?? undefined,
                           },
             }
         }
@@ -162,11 +166,13 @@ export const doesUserPassRollout = ({
 export const bucketForSegmentedFeature = ({
     boundedHash,
     target,
+    reasonDetails,
 }: {
     target: PublicTarget
     boundedHash: number
+    reasonDetails?: string
 }): VariationReasonResult => {
-    return decideTargetVariation({ target, boundedHash })
+    return decideTargetVariation({ target, boundedHash, reasonDetails })
 }
 
 type SegmentedFeatureData = {
@@ -215,21 +221,25 @@ export const getSegmentedFeatureDataFromConfig = ({
             feature.settings?.['optInEnabled'] &&
             config.project.settings?.['optIn']?.['enabled']
 
+        let featureReasonDetails = ''
         const segmentedFeatureTarget = feature.configuration.targets.find(
             (target) => {
+                const { result, reasonDetails } = evaluateOperator({
+                    operator: target._audience.filters,
+                    data: user,
+                    featureId: feature._id,
+                    isOptInEnabled: !!isOptInEnabled,
+                    audiences: config.audiences,
+                })
+                if (result && reasonDetails) {
+                    featureReasonDetails = reasonDetails
+                }
                 return (
                     checkRolloutAndEvaluate({
                         target,
                         user,
                         disablePassthroughRollouts,
-                    }) &&
-                    evaluateOperator({
-                        operator: target._audience.filters,
-                        data: user,
-                        featureId: feature._id,
-                        isOptInEnabled: !!isOptInEnabled,
-                        audiences: config.audiences,
-                    })
+                    }) && result
                 )
             },
         )
@@ -237,6 +247,7 @@ export const getSegmentedFeatureDataFromConfig = ({
             accumulator.push({
                 feature,
                 target: segmentedFeatureTarget,
+                reasonDetails: featureReasonDetails,
             })
         }
         return accumulator
@@ -297,7 +308,7 @@ export const generateBucketedConfig = ({
         })
     }
 
-    segmentedFeatures.forEach(({ feature, target }) => {
+    segmentedFeatures.forEach(({ feature, target, reasonDetails }) => {
         const { variations } = feature
         const bucketingValue = getUserValueForBucketingKey({ user, target })
         const { rolloutHash, bucketingHash } = generateBoundedHashes(
@@ -319,6 +330,7 @@ export const generateBucketedConfig = ({
             bucketForSegmentedFeature({
                 boundedHash: bucketingHash,
                 target,
+                reasonDetails,
             })
         const variation = variations.find((v) => v._id === variation_id)
         if (!variation) {

@@ -139,6 +139,7 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-2-key',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'User ID AND Country',
                     },
                 },
             },
@@ -155,6 +156,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'YEEEEOWZA',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'User ID AND Country',
                     },
                 },
                 'bool-var': {
@@ -165,6 +167,7 @@ describe('Config Parsing and Generating', () => {
                     value: false,
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'User ID AND Country',
                     },
                 },
                 'json-var': {
@@ -175,6 +178,7 @@ describe('Config Parsing and Generating', () => {
                     value: '{"hello":"world","num":610,"bool":true}',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'User ID AND Country',
                     },
                 },
                 'num-var': {
@@ -185,6 +189,7 @@ describe('Config Parsing and Generating', () => {
                     value: 610.61,
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'User ID AND Country',
                     },
                 },
             },
@@ -231,6 +236,7 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-1-key',
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
+                        details: 'Email',
                     },
                 },
                 feature2: {
@@ -242,6 +248,7 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-feature-2-key',
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
+                        details: 'Email',
                     },
                 },
                 feature3: {
@@ -253,6 +260,7 @@ describe('Config Parsing and Generating', () => {
                     variationName: 'audience match variation',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'Audience Match',
                     },
                 },
                 feature4: {
@@ -265,6 +273,7 @@ describe('Config Parsing and Generating', () => {
                     variationName: 'feature 4 variation',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'Email',
                     },
                 },
             },
@@ -284,6 +293,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'audience_match',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'Audience Match',
                     },
                 },
                 'feature2.cool': {
@@ -294,6 +304,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'multivar first',
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
+                        details: 'Email',
                     },
                 },
                 'feature2.hello': {
@@ -304,6 +315,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'multivar last',
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
+                        details: 'Email',
                     },
                 },
                 swagTest: {
@@ -314,6 +326,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'man',
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
+                        details: 'Email',
                     },
                 },
                 test: {
@@ -324,6 +337,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'scat',
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
+                        details: 'Email',
                     },
                 },
                 'bool-var': {
@@ -334,6 +348,7 @@ describe('Config Parsing and Generating', () => {
                     value: false,
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
+                        details: 'Email',
                     },
                 },
                 'json-var': {
@@ -344,6 +359,7 @@ describe('Config Parsing and Generating', () => {
                     value: '{"hello":"world","num":610,"bool":true}',
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
+                        details: 'Email',
                     },
                 },
                 'num-var': {
@@ -354,6 +370,7 @@ describe('Config Parsing and Generating', () => {
                     value: 610.61,
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
+                        details: 'Email',
                     },
                 },
                 feature4Var: {
@@ -364,6 +381,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'feature 4 value',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'Email',
                     },
                 },
             },
@@ -400,6 +418,7 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-2-key',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'User ID AND Country',
                     },
                 },
             },
@@ -416,6 +435,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'YEEEEOWZA',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'User ID AND Country',
                     },
                 },
                 'bool-var': {
@@ -426,6 +446,7 @@ describe('Config Parsing and Generating', () => {
                     value: false,
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'User ID AND Country',
                     },
                 },
                 'json-var': {
@@ -436,6 +457,7 @@ describe('Config Parsing and Generating', () => {
                     value: '{"hello":"world","num":610,"bool":true}',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'User ID AND Country',
                     },
                 },
                 'num-var': {
@@ -446,6 +468,7 @@ describe('Config Parsing and Generating', () => {
                     value: 610.61,
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'User ID AND Country',
                     },
                 },
             },
@@ -479,6 +502,7 @@ describe('Config Parsing and Generating', () => {
                     variationName: 'variation 1',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
             },
@@ -503,6 +527,7 @@ describe('Config Parsing and Generating', () => {
                     value: false,
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 'json-var': {
@@ -513,6 +538,7 @@ describe('Config Parsing and Generating', () => {
                     value: '{"hello":"world","num":610,"bool":true}',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 'num-var': {
@@ -523,6 +549,7 @@ describe('Config Parsing and Generating', () => {
                     value: 610.61,
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 swagTest: {
@@ -533,6 +560,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'man',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 test: {
@@ -543,6 +571,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'scat',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
             },
@@ -599,6 +628,8 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-1-aud-2-key',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
                     },
                 },
             },
@@ -615,6 +646,8 @@ describe('Config Parsing and Generating', () => {
                     value: 'Var 1 aud 2',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
                     },
                 },
             },
@@ -674,6 +707,7 @@ describe('Config Parsing and Generating', () => {
                     variationName: 'variation 1',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 feature2: {
@@ -685,6 +719,8 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-1-aud-2-key',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
                     },
                 },
             },
@@ -702,6 +738,8 @@ describe('Config Parsing and Generating', () => {
                     value: 'Var 1 aud 2',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
                     },
                 },
                 'bool-var': {
@@ -712,6 +750,7 @@ describe('Config Parsing and Generating', () => {
                     value: false,
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 'json-var': {
@@ -722,6 +761,7 @@ describe('Config Parsing and Generating', () => {
                     value: '{"hello":"world","num":610,"bool":true}',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 'num-var': {
@@ -732,6 +772,7 @@ describe('Config Parsing and Generating', () => {
                     value: 610.61,
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 swagTest: {
@@ -742,6 +783,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'man',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 test: {
@@ -752,6 +794,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'scat',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
             },
@@ -799,6 +842,7 @@ describe('Config Parsing and Generating', () => {
                     variationName: 'variation 1',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 feature2: {
@@ -810,6 +854,8 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-1-aud-2-key',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
                     },
                 },
             },
@@ -827,6 +873,8 @@ describe('Config Parsing and Generating', () => {
                     value: 'Var 1 aud 2',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
                     },
                 },
                 'bool-var': {
@@ -837,6 +885,7 @@ describe('Config Parsing and Generating', () => {
                     value: false,
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 'json-var': {
@@ -847,6 +896,7 @@ describe('Config Parsing and Generating', () => {
                     value: '{"hello":"world","num":610,"bool":true}',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 'num-var': {
@@ -857,6 +907,7 @@ describe('Config Parsing and Generating', () => {
                     value: 610.61,
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 swagTest: {
@@ -867,6 +918,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'man',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 test: {
@@ -877,6 +929,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'scat',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
             },
@@ -919,6 +972,8 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-2-key',
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
+                        details:
+                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
                     },
                 },
                 feature2: {
@@ -930,6 +985,8 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-1-aud-2-key',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
                     },
                 },
             },
@@ -947,6 +1004,8 @@ describe('Config Parsing and Generating', () => {
                     value: 'YEEEEOWZA',
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
+                        details:
+                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
                     },
                 },
                 feature2Var: {
@@ -957,6 +1016,8 @@ describe('Config Parsing and Generating', () => {
                     value: 'Var 1 aud 2',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
                     },
                 },
                 'bool-var': {
@@ -967,6 +1028,8 @@ describe('Config Parsing and Generating', () => {
                     value: false,
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
+                        details:
+                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
                     },
                 },
                 'json-var': {
@@ -977,6 +1040,8 @@ describe('Config Parsing and Generating', () => {
                     value: '{"hello":"world","num":610,"bool":true}',
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
+                        details:
+                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
                     },
                 },
                 'num-var': {
@@ -987,6 +1052,8 @@ describe('Config Parsing and Generating', () => {
                     value: 610.61,
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
+                        details:
+                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
                     },
                 },
             },
@@ -1311,6 +1378,7 @@ describe('Config Parsing and Generating', () => {
                     variationName: 'audience match variation',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'Custom Data favouriteNull',
                     },
                 },
             },
@@ -1327,6 +1395,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'audience_match',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'Custom Data favouriteNull',
                     },
                 },
             },
@@ -1379,6 +1448,7 @@ describe('Config Parsing and Generating', () => {
                     variationName: 'audience match variation',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'Custom Data favouriteNull',
                     },
                 },
             },
@@ -1395,6 +1465,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'audience_match',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'Custom Data favouriteNull',
                     },
                 },
             },
