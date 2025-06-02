@@ -85,8 +85,17 @@ describe('DevCycleClient tests', () => {
         const spy = jest.spyOn(window.localStorage.__proto__, 'getItem')
         const client = new DevCycleClient(test_key, { user_id: 'user1' })
         await client.onInitialized
-        // one call to get cached config
-        expect(spy).toHaveBeenCalledTimes(1)
+        
+        // Migration checks for:
+        // 1. User-specific config key
+        // 2. User-specific config fetch date key
+        // 3. Legacy identified config
+        // 4. Legacy anonymous config  
+        // 5. Legacy user data
+        // So we expect more than 1 call due to migration logic
+        expect(spy).toHaveBeenCalled()
+        const initialCallCount = spy.mock.calls.length
+        
         // construct another client to test if it reads from the cache populated by the initialization of the first
         // client
         const client2 = new DevCycleClient(
@@ -95,7 +104,9 @@ describe('DevCycleClient tests', () => {
             { bootstrapConfig: testConfig },
         )
         await client2.onInitialized
-        expect(spy).toHaveBeenCalledTimes(1)
+        
+        // Should have same number of calls as before since bootstrapped config skips cache loading
+        expect(spy).toHaveBeenCalledTimes(initialCallCount)
         expect(client2.config).toStrictEqual(testConfig)
     })
 
@@ -318,14 +329,12 @@ describe('DevCycleClient tests', () => {
             })
             expect(client.isInitialized).toBe(false)
             await client.onClientInitialized()
-            expect(
-                window.localStorage.getItem(
-                    `${StoreKey.IdentifiedConfig}.user_id`,
-                ),
-            ).toBe(JSON.stringify('user1'))
-            expect(window.localStorage.getItem(StoreKey.IdentifiedConfig)).toBe(
+            // Check for config saved under new user-specific key format
+            const expectedKey = `${StoreKey.UserConfig}.user1`
+            expect(window.localStorage.getItem(expectedKey)).toBe(
                 JSON.stringify(testConfig),
             )
+            expect(window.localStorage.getItem(`${expectedKey}.fetch_date`)).toBeTruthy()
             expect(client.isInitialized).toBe(true)
         })
 
@@ -334,9 +343,13 @@ describe('DevCycleClient tests', () => {
                 isAnonymous: true,
             })
             await client.onClientInitialized()
-            expect(window.localStorage.getItem(StoreKey.AnonymousConfig)).toBe(
+            // Get the actual anonymous user ID that was generated
+            const user = client.user
+            const expectedKey = `${StoreKey.AnonymousConfig}.${user.user_id}`
+            expect(window.localStorage.getItem(expectedKey)).toBe(
                 JSON.stringify(testConfig),
             )
+            expect(window.localStorage.getItem(`${expectedKey}.fetch_date`)).toBeTruthy()
             expect(client.isInitialized).toBe(true)
         })
 
