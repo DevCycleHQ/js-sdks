@@ -1,8 +1,8 @@
-import Store from '../src/CacheStore'
+import { CacheStore } from '../src/CacheStore'
 import { StoreKey } from '../src/types'
 import { DVCPopulatedUser } from '../src/User'
 
-describe('Store tests', () => {
+describe('CacheStore tests', () => {
     const localStorage = {
         load: jest.fn(),
         save: jest.fn(),
@@ -17,7 +17,7 @@ describe('Store tests', () => {
 
     it('should save config to local storage', async () => {
         jest.useFakeTimers()
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage)
         const config = {}
         const user = new DVCPopulatedUser({ user_id: 'test_user' })
         const now = Date.now()
@@ -36,7 +36,7 @@ describe('Store tests', () => {
     })
 
     it('should load config from local storage using user-specific key', async () => {
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage)
         const user = new DVCPopulatedUser({ user_id: 'test_user' })
         const config = { 
             features: {}, 
@@ -63,7 +63,7 @@ describe('Store tests', () => {
     })
 
     it('should load legacy config and migrate to new format', async () => {
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage)
         const user = new DVCPopulatedUser({ user_id: 'test_user' })
         const config = { 
             features: {}, 
@@ -100,7 +100,7 @@ describe('Store tests', () => {
     })
 
     it('should use different keys for anonymous vs identified users', async () => {
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage)
         const identifiedUser = new DVCPopulatedUser({ user_id: 'identified_user' })
         const anonymousUser = new DVCPopulatedUser({ user_id: 'anon_user', isAnonymous: true })
         const config = {}
@@ -126,14 +126,14 @@ describe('Store tests', () => {
     })
 
     it('should save user to local storage', async () => {
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage)
         const user = { user_id: 'user1' }
         store.saveUser(user)
         expect(localStorage.save).toBeCalledWith(StoreKey.User, user)
     })
 
     it('should load user from local storage', async () => {
-        const store = new Store(localStorage)
+        const store = new CacheStore(localStorage)
         store.loadUser()
         expect(localStorage.load).toBeCalledWith(StoreKey.User)
     })
