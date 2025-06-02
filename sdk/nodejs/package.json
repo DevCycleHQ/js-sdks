@@ -44,29 +44,24 @@
     "engines": {
         "node": ">=18.0.0"
     },
-    "main": "./src/index.cjs",
-    "module": "./src/index.js",
-    "types": "./src/index.d.ts",
+    "files": [
+        "src",
+        "openfeature-strategy.cjs",
+        "openfeature-strategy.d.ts",
+        "openfeature-strategy.cjs.map",
+        "README.md"
+    ],
+    "type": "commonjs",
+    "main": "src/index.cjs",
+    "types": "src/index.d.ts",
     "exports": {
         ".": {
-            "require": {
-                "types": "./src/index.d.ts",
-                "default": "./src/index.cjs"
-            },
-            "import": {
-                "types": "./src/index.d.ts",
-                "default": "./src/index.js"
-            }
+            "types": "./src/index.d.ts",
+            "default": "./src/index.cjs"
         },
         "./openfeature-strategy": {
-            "require": {
-                "types": "./openfeature-strategy.d.ts",
-                "default": "./openfeature-strategy.cjs"
-            },
-            "import": {
-                "types": "./openfeature-strategy.d.ts",
-                "default": "./openfeature-strategy.js"
-            }
+            "types": "./openfeature-strategy.d.ts", 
+            "default": "./openfeature-strategy.cjs"
         }
     }
 }

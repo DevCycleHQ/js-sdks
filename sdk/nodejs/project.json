@@ -56,23 +56,25 @@
                 "platform": "node",
                 "bundle": true,
                 "packages": "external",
-                "format": ["cjs", "esm"],
+                "format": ["cjs"],
                 "target": "node18",
                 "conditions": ["node"],
-                "mainFields": ["module", "main"],
+                "mainFields": ["main"],
                 "external": [
                     "@devcycle/bucketing-assembly-script",
                     "@devcycle/js-client-sdk",
                     "@devcycle/js-cloud-server-sdk",
                     "@devcycle/types"
                 ],
-                "assets": ["sdk/nodejs/*.md"],
-                "outExtension": {
-                    ".js": ".cjs"
-                },
+                "thirdParty": false,
+                "sourcemap": true,
                 "splitting": false,
-                "keepNames": true,
-                "sourcemap": true
+                "declaration": true,
+                "minify": false,
+                "metafile": true,
+                "outExtension": {
+                    ".cjs": ".js"
+                }
             },
             "dependsOn": [
                 {
