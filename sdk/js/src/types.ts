@@ -293,7 +293,6 @@ export const StoreKey = {
     AnonUserId: 'dvc:anonymous_user_id',
     AnonymousConfig: 'dvc:anonymous_config',
     IdentifiedConfig: 'dvc:identified_config',
-    UserConfig: 'dvc:user_config', // New key for user-specific configs
 }
 
 type DeviceInfo = {

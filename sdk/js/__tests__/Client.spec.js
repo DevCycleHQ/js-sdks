@@ -330,7 +330,7 @@ describe('DevCycleClient tests', () => {
             expect(client.isInitialized).toBe(false)
             await client.onClientInitialized()
             // Check for config saved under new user-specific key format
-            const expectedKey = `${StoreKey.UserConfig}.user1`
+            const expectedKey = `${StoreKey.IdentifiedConfig}.user1`
             expect(window.localStorage.getItem(expectedKey)).toBe(
                 JSON.stringify(testConfig),
             )

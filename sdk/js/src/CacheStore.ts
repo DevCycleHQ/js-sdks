@@ -16,7 +16,7 @@ export class CacheStore {
     private getConfigKey(user: DVCPopulatedUser) {
         return user.isAnonymous
             ? `${StoreKey.AnonymousConfig}.${user.user_id}`
-            : `${StoreKey.UserConfig}.${user.user_id}`
+            : `${StoreKey.IdentifiedConfig}.${user.user_id}`
     }
 
     private getConfigFetchDateKey(user: DVCPopulatedUser) {

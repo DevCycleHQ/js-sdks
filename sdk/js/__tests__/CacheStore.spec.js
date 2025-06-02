@@ -35,7 +35,7 @@ describe('CacheStore tests', () => {
         store.saveConfig(config, user, now)
         
         // Check if it's using the new user-specific key format
-        const expectedKey = `${StoreKey.UserConfig}.${user.user_id}`
+        const expectedKey = `${StoreKey.IdentifiedConfig}.${user.user_id}`
         expect(localStorage.save).toHaveBeenCalledWith(
             expectedKey,
             config,
@@ -62,7 +62,7 @@ describe('CacheStore tests', () => {
         
         // Mock no legacy configs so migration doesn't interfere
         localStorage.load.mockImplementation((key) => {
-            const expectedKey = `${StoreKey.UserConfig}.test_user`
+            const expectedKey = `${StoreKey.IdentifiedConfig}.test_user`
             const expectedDateKey = `${expectedKey}.fetch_date`
             
             if (key === expectedKey) {
@@ -82,7 +82,7 @@ describe('CacheStore tests', () => {
         
         const result = await store.loadConfig(user, 2592000000) // 30 days
         
-        const expectedKey = `${StoreKey.UserConfig}.${user.user_id}`
+        const expectedKey = `${StoreKey.IdentifiedConfig}.${user.user_id}`
         expect(localStorage.load).toHaveBeenCalledWith(expectedKey)
         expect(localStorage.load).toHaveBeenCalledWith(`${expectedKey}.fetch_date`)
         expect(result).toBe(config)
@@ -105,7 +105,7 @@ describe('CacheStore tests', () => {
         
         localStorage.load.mockImplementation((key) => {
             // Return migrated config if it has been saved
-            const newConfigKey = `${StoreKey.UserConfig}.test_user`
+            const newConfigKey = `${StoreKey.IdentifiedConfig}.test_user`
             const newFetchDateKey = `${newConfigKey}.fetch_date`
             
             if (key === newConfigKey && migratedConfig) {
@@ -127,7 +127,7 @@ describe('CacheStore tests', () => {
         })
         
         localStorage.save.mockImplementation((key, value) => {
-            const newConfigKey = `${StoreKey.UserConfig}.test_user`
+            const newConfigKey = `${StoreKey.IdentifiedConfig}.test_user`
             const newFetchDateKey = `${newConfigKey}.fetch_date`
             
             if (key === newConfigKey) {
@@ -150,7 +150,7 @@ describe('CacheStore tests', () => {
         expect(localStorage.load).toHaveBeenCalledWith(`${legacyKey}.fetch_date`)
         
         // And migrated to new format
-        const newKey = `${StoreKey.UserConfig}.test_user`
+        const newKey = `${StoreKey.IdentifiedConfig}.test_user`
         expect(localStorage.save).toHaveBeenCalledWith(newKey, config)
         
         // And cleaned up legacy storage
@@ -173,8 +173,8 @@ describe('CacheStore tests', () => {
         store.saveConfig(config, identifiedUser, now)
         store.saveConfig(config, anonymousUser, now)
         
-        // Check identified user uses UserConfig key
-        const identifiedKey = `${StoreKey.UserConfig}.${identifiedUser.user_id}`
+        // Check identified user uses IdentifiedConfig key
+        const identifiedKey = `${StoreKey.IdentifiedConfig}.${identifiedUser.user_id}`
         expect(localStorage.save).toHaveBeenCalledWith(
             identifiedKey,
             config,
