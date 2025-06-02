@@ -66,40 +66,10 @@ export class CacheStore {
         )
     }
 
-    async loadConfig(
+    private async loadAndMigrateLegacyConfig(
         user: DVCPopulatedUser,
-        configCacheTTL = DEFAULT_CONFIG_CACHE_TTL,
+        configCacheTTL: number,
     ): Promise<BucketedUserConfig | null> {
-        // Try to load config using the new user-specific key format
-        const configKey = this.getConfigKey(user)
-        const config = await this.store.load<unknown>(configKey)
-        
-        if (config !== null && config !== undefined) {
-            // Check if config is valid
-            if (!this.isBucketedUserConfig(config)) {
-                this.logger?.debug(
-                    `Skipping cached config: invalid config found: ${JSON.stringify(
-                        config,
-                    )}`,
-                )
-                return null
-            }
-
-            // Check if the config is expired
-            const fetchDateKey = this.getConfigFetchDateKey(user)
-            const fetchDate = await this.loadConfigFetchDate(user)
-            const isConfigCacheTTLExpired = Date.now() - fetchDate > configCacheTTL
-            
-            if (isConfigCacheTTLExpired) {
-                this.logger?.debug(
-                    'Skipping cached config: last fetched date is too old',
-                )
-                return null
-            }
-
-            return config
-        }
-
         // For backward compatibility, try to load using the old format
         const legacyKey = user.isAnonymous
             ? StoreKey.AnonymousConfig
@@ -150,6 +120,43 @@ export class CacheStore {
         await this.saveConfig(legacyConfig, user, legacyFetchDate)
 
         return legacyConfig
+    }
+
+    async loadConfig(
+        user: DVCPopulatedUser,
+        configCacheTTL = DEFAULT_CONFIG_CACHE_TTL,
+    ): Promise<BucketedUserConfig | null> {
+        // Try to load config using the new user-specific key format
+        const configKey = this.getConfigKey(user)
+        const config = await this.store.load<unknown>(configKey)
+        
+        if (config !== null && config !== undefined) {
+            // Check if config is valid
+            if (!this.isBucketedUserConfig(config)) {
+                this.logger?.debug(
+                    `Skipping cached config: invalid config found: ${JSON.stringify(
+                        config,
+                    )}`,
+                )
+                return null
+            }
+
+            // Check if the config is expired
+            const fetchDateKey = this.getConfigFetchDateKey(user)
+            const fetchDate = await this.loadConfigFetchDate(user)
+            const isConfigCacheTTLExpired = Date.now() - fetchDate > configCacheTTL
+            
+            if (isConfigCacheTTLExpired) {
+                this.logger?.debug(
+                    'Skipping cached config: last fetched date is too old',
+                )
+                return null
+            }
+
+            return config
+        }
+
+        return await this.loadAndMigrateLegacyConfig(user, configCacheTTL)
     }
 
     async saveUser(user: DVCPopulatedUser): Promise<void> {
