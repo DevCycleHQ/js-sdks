@@ -84,5 +84,5 @@
             "@devcycle/web-debugger/react": ["lib/web-debugger/react.tsx"]
         }
     },
-    "exclude": ["node_modules", "tmp"]
+    "exclude": ["node_modules", "tmp", ".wrangler", "**/.wrangler"]
 }
