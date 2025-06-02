@@ -211,8 +211,8 @@ describe('SegmentationManager Unit Test', () => {
                 platformVersion: '2.0.0',
                 platform: 'iOS',
             }
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -224,8 +224,8 @@ describe('SegmentationManager Unit Test', () => {
                 filters,
                 operator: AudienceOperator.or,
             }
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 segmentation.evaluateOperator({
                     data: {},
                     operator: orOp,
@@ -239,8 +239,6 @@ describe('SegmentationManager Unit Test', () => {
             const filters = [
                 {
                     type: 'all',
-                    comparator: '=',
-                    values: [],
                 },
             ] as AudienceFilterOrOperator[]
 
@@ -255,8 +253,8 @@ describe('SegmentationManager Unit Test', () => {
                 platformVersion: '2.0.0',
                 platform: 'iOS',
             }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'All Users' },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -272,7 +270,7 @@ describe('SegmentationManager Unit Test', () => {
                     type: 'user',
                     subType: 'country',
                     comparator: '=',
-                    values: ['Canada'],
+                    values: ['CA'],
                 },
                 {
                     type: 'user',
@@ -294,14 +292,17 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = {
-                country: 'Canada',
+                country: 'CA',
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
                 appVersion: '2.0.2',
                 platform: 'iOS',
             }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                {
+                    result: true,
+                    reasonDetails: 'Country AND Email AND App Version',
+                },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -317,7 +318,7 @@ describe('SegmentationManager Unit Test', () => {
                     type: 'user',
                     subType: 'country',
                     comparator: '=',
-                    values: ['Canada'],
+                    values: ['CA'],
                 },
                 {
                     type: 'user',
@@ -345,8 +346,8 @@ describe('SegmentationManager Unit Test', () => {
                 appVersion: '2.0.2',
                 platform: 'iOS',
             }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -362,12 +363,13 @@ describe('SegmentationManager Unit Test', () => {
                     type: 'user',
                     subType: 'country',
                     comparator: '=',
-                    values: ['Canada'],
+                    values: ['CA'],
                 },
                 {
                     type: 'user',
                     subType: 'customData',
-                    datakey: '',
+                    dataKey: 'full_country',
+                    dataKeyType: 'String',
                     comparator: '=',
                     values: ['Canada'],
                 },
@@ -379,13 +381,19 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = {
-                country: 'Canada',
+                country: 'CA',
                 email: 'brooks@big.lunch',
                 appVersion: '2.0.0',
                 platform: 'iOS',
+                customData: {
+                    full_country: 'Canada',
+                },
             }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                {
+                    result: true,
+                    reasonDetails: 'Country AND Custom Data full_country',
+                },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -409,8 +417,8 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { user_id: 'test_user' }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'User ID' },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -434,8 +442,8 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { email: 'test@devcycle.com' }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -459,8 +467,8 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { country: 'CA' }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Country' },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -484,8 +492,8 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { appVersion: '1.0.1' }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -509,8 +517,8 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { platformVersion: '15.1' }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Platform Version' },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -534,8 +542,8 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { platform: 'iPadOS' }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Platform' },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -559,8 +567,8 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { deviceModel: 'Samsung Galaxy F12' }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Device Model' },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -586,8 +594,8 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { customData: { testKey: 'dataValue' } }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data testKey' },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -613,8 +621,8 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { customData: { testKey: 'dataValue' } }
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false, reasonDetails: '' },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -640,8 +648,8 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { privateCustomData: { testKey: 'dataValue' } }
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false, reasonDetails: '' },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -667,8 +675,8 @@ describe('SegmentationManager Unit Test', () => {
             } as TopLevelOperator
 
             const data = { customData: { testKey: 'otherValue' } }
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false, reasonDetails: '' },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -683,15 +691,13 @@ describe('SegmentationManager Unit Test', () => {
                 filters: [
                     {
                         type: 'optIn',
-                        comparator: '=',
-                        values: [],
                     },
                 ] as AudienceFilterOrOperator[],
                 operator: 'and',
             } as TopLevelOperator
 
             const optInData = {
-                country: 'Canada',
+                country: 'CA',
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
                 platform: 'iOS',
@@ -701,8 +707,8 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             it('should pass optIn filter when feature in optIns and isOptInEnabled', () => {
-                assert.strictEqual(
-                    true,
+                assert.deepStrictEqual(
+                    { result: true, reasonDetails: 'Opted-in' },
                     segmentation.evaluateOperator({
                         data: optInData,
                         operator: optInOperator,
@@ -713,8 +719,8 @@ describe('SegmentationManager Unit Test', () => {
             })
 
             it('should fail optIn filter when feature in optIns but isOptInEnabled is false', () => {
-                assert.strictEqual(
-                    false,
+                assert.deepStrictEqual(
+                    { result: false, reasonDetails: '' },
                     segmentation.evaluateOperator({
                         data: optInData,
                         operator: optInOperator,
@@ -725,8 +731,8 @@ describe('SegmentationManager Unit Test', () => {
             })
 
             it('should fail optIn filter when feature not in optIns', () => {
-                assert.strictEqual(
-                    false,
+                assert.deepStrictEqual(
+                    { result: false, reasonDetails: '' },
                     segmentation.evaluateOperator({
                         data: optInData,
                         operator: optInOperator,
@@ -796,8 +802,8 @@ describe('SegmentationManager Unit Test', () => {
                         filters: operator,
                     },
                 }
-                assert.strictEqual(
-                    true,
+                assert.deepStrictEqual(
+                    { result: true, reasonDetails: 'Audience Match' },
                     segmentation.evaluateOperator({
                         data,
                         operator: audienceMatchOperator,
@@ -809,8 +815,8 @@ describe('SegmentationManager Unit Test', () => {
             })
 
             it('should not pass seg for nonexistent audience', () => {
-                assert.strictEqual(
-                    false,
+                assert.deepStrictEqual(
+                    { result: false, reasonDetails: '' },
                     segmentation.evaluateOperator({
                         data,
                         operator: audienceMatchOperator,
@@ -827,8 +833,8 @@ describe('SegmentationManager Unit Test', () => {
                     },
                 }
 
-                assert.strictEqual(
-                    false,
+                assert.deepStrictEqual(
+                    { result: false, reasonDetails: '' },
                     segmentation.evaluateOperator({
                         data,
                         operator: audienceMatchOperatorNotEqual,
@@ -858,8 +864,8 @@ describe('SegmentationManager Unit Test', () => {
                         filters: audienceMatchOperator,
                     },
                 }
-                assert.strictEqual(
-                    true,
+                assert.deepStrictEqual(
+                    { result: true, reasonDetails: 'Audience Match' },
                     segmentation.evaluateOperator({
                         data,
                         operator: nestedAudienceMatchOperator,
@@ -889,8 +895,8 @@ describe('SegmentationManager Unit Test', () => {
                         filters: audienceMatchOperator,
                     },
                 }
-                assert.strictEqual(
-                    false,
+                assert.deepStrictEqual(
+                    { result: false, reasonDetails: '' },
                     segmentation.evaluateOperator({
                         data,
                         operator: nestedAudienceMatchOperator,
@@ -931,8 +937,8 @@ describe('SegmentationManager Unit Test', () => {
                     ],
                     operator: AudienceOperator.and,
                 }
-                assert.strictEqual(
-                    true,
+                assert.deepStrictEqual(
+                    { result: true, reasonDetails: 'Audience Match' },
                     segmentation.evaluateOperator({
                         data,
                         operator: audienceMatchOperatorMultiple,
@@ -973,8 +979,8 @@ describe('SegmentationManager Unit Test', () => {
                     ],
                     operator: AudienceOperator.and,
                 }
-                assert.strictEqual(
-                    false,
+                assert.deepStrictEqual(
+                    { result: false, reasonDetails: '' },
                     segmentation.evaluateOperator({
                         data,
                         operator: audienceMatchOperatorMultiple,
@@ -1320,19 +1326,20 @@ describe('SegmentationManager Unit Test', () => {
                 segmentation.checkStringsFilter('Roku', filter),
             )
         })
+
         it('should return true if string is equal to multiple filters', () => {
             const filters = [
                 {
                     type: 'user',
                     subType: 'country',
                     comparator: '=',
-                    values: ['Canada'],
+                    values: ['CA'],
                 },
                 {
                     type: 'user',
                     subType: 'country',
                     comparator: '!=',
-                    values: ['Not Canada'],
+                    values: ['USA'],
                 },
             ] as AudienceFilterOrOperator[]
 
@@ -1341,10 +1348,10 @@ describe('SegmentationManager Unit Test', () => {
                 operator: 'and',
             } as unknown as TopLevelOperator
 
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Country AND Country' },
                 segmentation.evaluateOperator({
-                    data: { country: 'Canada' },
+                    data: { country: 'CA' },
                     operator,
                     featureId,
                     isOptInEnabled,
@@ -1358,25 +1365,25 @@ describe('SegmentationManager Unit Test', () => {
                     type: 'user',
                     subType: 'country',
                     comparator: '=',
-                    values: ['Canada'],
+                    values: ['CA'],
                 },
                 {
                     type: 'user',
-                    subType: 'country',
+                    subType: 'user_id',
                     comparator: '=',
-                    values: ['Not Canada'],
+                    values: ['John'],
                 },
             ] as AudienceFilterOrOperator[]
 
             const operator = {
                 filters,
-                operator: 'and',
-            } as unknown as TopLevelOperator
+                operator: AudienceOperator.and,
+            }
 
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false, reasonDetails: '' },
                 segmentation.evaluateOperator({
-                    data: { country: 'Canada' },
+                    data: { country: 'CA', user_id: 'Sam' },
                     operator,
                     featureId,
                     isOptInEnabled,
@@ -3139,8 +3146,12 @@ describe('SegmentationManager Unit Test', () => {
                 filters: [filterStr, filterNum, filterBool],
                 operator: 'and',
             } as unknown as TopLevelOperator
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                {
+                    result: true,
+                    reasonDetails:
+                        'Custom Data strKey AND Custom Data numKey AND Custom Data boolKey',
+                },
                 segmentation.evaluateOperator({
                     data: {
                         customData: {
@@ -3160,8 +3171,8 @@ describe('SegmentationManager Unit Test', () => {
                 filters: [filterStr, filterNum, filterBool],
                 operator: 'and',
             } as unknown as TopLevelOperator
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false, reasonDetails: '' },
                 segmentation.evaluateOperator({
                     data: { customData: { strKey: 'value', boolKey: false } },
                     operator: operatorFilter,
@@ -3178,8 +3189,12 @@ describe('SegmentationManager Unit Test', () => {
                 filters: [filterStr, filter, filterBool],
                 operator: 'and',
             } as unknown as TopLevelOperator
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                {
+                    result: true,
+                    reasonDetails:
+                        'Custom Data strKey AND Custom Data numKey AND Custom Data boolKey',
+                },
                 segmentation.evaluateOperator({
                     data: { customData: { strKey: 'value', boolKey: false } },
                     operator: operatorFilter,
@@ -3211,8 +3226,8 @@ describe('SegmentationManager Unit Test', () => {
                 filters: [filterStr, filter, filterBool],
                 operator: 'and',
             } as unknown as TopLevelOperator
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false, reasonDetails: '' },
                 segmentation.evaluateOperator({
                     data: { customData: null },
                     operator: operatorFilter,
@@ -3229,8 +3244,8 @@ describe('SegmentationManager Unit Test', () => {
                 filters: [filterStr, filter, filterBool],
                 operator: 'and',
             } as unknown as TopLevelOperator
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false, reasonDetails: '' },
                 segmentation.evaluateOperator({
                     data: { customData: null },
                     operator: operatorFilter,
@@ -3612,17 +3627,19 @@ describe('SegmentationManager Unit Test', () => {
                 },
             },
         ] as unknown as Audience[]
+
         it('should filter all Android TV audiences properly if it is included in data', () => {
             const data = {
                 platform: 'Android TV',
             }
             const filteredAudiences = audiences.filter((aud) => {
-                return segmentation.evaluateOperator({
+                const { result } = segmentation.evaluateOperator({
                     operator: aud.filters,
                     data,
                     featureId,
                     isOptInEnabled,
                 })
+                return result
             })
             expect(filteredAudiences.length).toEqual(3)
             expect(filteredAudiences[0]._id).toEqual('60cca1d8230f17002542b909')
@@ -3634,12 +3651,13 @@ describe('SegmentationManager Unit Test', () => {
                 platform: 'iOS',
             }
             const filteredAudiences = audiences.filter((aud) => {
-                return segmentation.evaluateOperator({
+                const { result } = segmentation.evaluateOperator({
                     operator: aud.filters,
                     data,
                     featureId,
                     isOptInEnabled,
                 })
+                return result
             })
             expect(filteredAudiences.length).toEqual(1)
             expect(filteredAudiences[0]._id).toEqual('60cca1d8230f17002542b913')

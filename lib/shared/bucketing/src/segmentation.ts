@@ -12,6 +12,11 @@ import {
 } from '@devcycle/types'
 import UAParser from 'ua-parser-js'
 
+type SegmentationResult = {
+    result: boolean
+    reasonDetails?: string
+}
+
 // TODO add support for OR/XOR as well as recursive filters
 /**
  * Evaluate an operator object based on its contained filters and the user data given
@@ -32,10 +37,14 @@ export const evaluateOperator = ({
     featureId: string
     isOptInEnabled: boolean
     audiences?: { [id: string]: Omit<PublicAudience<string>, '_id'> }
-}): boolean => {
-    if (!operator?.filters?.length) return false
+}): SegmentationResult => {
+    if (!operator?.filters?.length) return { result: false }
 
-    const doesUserPassFilter = (filter: AudienceFilterOrOperator) => {
+    let reason = ''
+    const doesUserPassFilter = (
+        filter: AudienceFilterOrOperator,
+        index: number,
+    ) => {
         if (filter.operator) {
             return evaluateOperator({
                 operator: filter,
@@ -45,23 +54,32 @@ export const evaluateOperator = ({
                 audiences,
             })
         }
-        if (filter.type === 'all') return true
+        if (filter.type === 'all') {
+            reason = 'All Users'
+            return true
+        }
         if (filter.type === 'optIn') {
             const optIns = data.optIns
-            return isOptInEnabled && !!optIns?.[featureId]
+            const result = isOptInEnabled && !!optIns?.[featureId]
+            reason = result ? 'Opted-in' : 'Not opted-in'
+            return result
         }
         if (filter.type === 'audienceMatch') {
-            return filterForAudienceMatch({
+            const { result, reasonDetails } = filterForAudienceMatch({
                 operator: filter,
                 data,
                 featureId,
                 isOptInEnabled,
                 audiences,
             })
+            if (result && reasonDetails) {
+                reason = reasonDetails
+            }
+            return result
         }
         if (filter.type !== 'user') {
             console.error(`Invalid filter type: ${filter.type}`)
-            return false
+            return { result: false }
         }
 
         if (!filter.subType) {
@@ -70,23 +88,46 @@ export const evaluateOperator = ({
 
         if (!filterFunctionsBySubtype[filter.subType]) {
             console.error(`Invalid filter subType: ${filter.subType}`)
-            return false
+            return { result: false }
         }
 
-        return filterFunctionsBySubtype[filter.subType](data, filter)
+        const { result, reasonDetails } = filterFunctionsBySubtype[
+            filter.subType
+        ](data, filter)
+
+        if (result && reasonDetails) {
+            if (operator.operator === 'and') {
+                reason = reason.concat(
+                    reasonDetails,
+                    index < (operator.filters?.length ?? 0) - 1 ? ' AND ' : '',
+                )
+            } else {
+                reason = reasonDetails
+            }
+        }
+
+        return result
     }
 
     if (operator.operator === 'or') {
-        return operator.filters.some(doesUserPassFilter)
+        const result = operator.filters.some(doesUserPassFilter)
+        return {
+            result,
+            reasonDetails: result ? reason : '',
+        }
     } else {
-        return operator.filters.every(doesUserPassFilter)
+        const result = operator.filters.every(doesUserPassFilter)
+        return {
+            result,
+            reasonDetails: result ? reason : '',
+        }
     }
 }
 type FilterFunctionsBySubtype = {
     [key in UserSubType]: (
         data: any,
         filter: AudienceFilterOrOperator,
-    ) => boolean
+    ) => SegmentationResult
 }
 
 function filterForAudienceMatch({
@@ -101,8 +142,8 @@ function filterForAudienceMatch({
     featureId: string
     isOptInEnabled: boolean
     audiences?: { [id: string]: Omit<PublicAudience<string>, '_id'> }
-}): boolean {
-    if (!operator?._audiences) return false
+}): SegmentationResult {
+    if (!operator?._audiences) return { result: false }
     const comparator = operator.comparator
     // Recursively evaluate every audience in the _audiences array
     for (const _audience of operator._audiences) {
@@ -112,39 +153,95 @@ function filterForAudienceMatch({
             console.error(
                 'Invalid audience referenced by audienceMatch filter.',
             )
-            return false
+            return { result: false }
         }
-        if (
-            evaluateOperator({
-                operator: audience.filters,
-                data,
-                featureId,
-                isOptInEnabled,
-                audiences,
-            })
-        ) {
-            return comparator === '='
+        const { result } = evaluateOperator({
+            operator: audience.filters,
+            data,
+            featureId,
+            isOptInEnabled,
+            audiences,
+        })
+        if (result) {
+            return {
+                result: comparator === '=',
+                reasonDetails: 'Audience Match',
+            }
         }
     }
-    return comparator === '!='
+    return {
+        result: comparator === '!=',
+        reasonDetails: 'Not in Audience',
+    }
 }
 
 const filterFunctionsBySubtype: FilterFunctionsBySubtype = {
-    country: (data, filter) => checkStringsFilter(data.country, filter),
-    email: (data, filter) => checkStringsFilter(data.email, filter),
-    ip: (data, filter) => checkStringsFilter(data.ip, filter),
-    user_id: (data, filter) => checkStringsFilter(data.user_id, filter),
-    appVersion: (data, filter) => checkVersionFilters(data.appVersion, filter),
-    platformVersion: (data, filter) =>
-        checkVersionFilters(data.platformVersion, filter),
-    deviceModel: (data, filter) => checkStringsFilter(data.deviceModel, filter),
-    platform: (data, filter) => checkStringsFilter(data.platform, filter),
+    country: (data, filter) => {
+        const result = checkStringsFilter(data.country, filter)
+        return {
+            result,
+            reasonDetails: result ? `Country` : undefined,
+        }
+    },
+    email: (data, filter) => {
+        const result = checkStringsFilter(data.email, filter)
+        return {
+            result,
+            reasonDetails: result ? `Email` : undefined,
+        }
+    },
+    ip: (data, filter) => {
+        const result = checkStringsFilter(data.ip, filter)
+        return {
+            result,
+            reasonDetails: result ? 'IP' : undefined,
+        }
+    },
+    user_id: (data, filter) => {
+        const result = checkStringsFilter(data.user_id, filter)
+        return {
+            result,
+            reasonDetails: result ? 'User ID' : undefined,
+        }
+    },
+    appVersion: (data, filter) => {
+        const result = checkVersionFilters(data.appVersion, filter)
+        return {
+            result,
+            reasonDetails: result ? 'App Version' : undefined,
+        }
+    },
+    platformVersion: (data, filter) => {
+        const result = checkVersionFilters(data.platformVersion, filter)
+        return {
+            result,
+            reasonDetails: result ? 'Platform Version' : undefined,
+        }
+    },
+    deviceModel: (data, filter) => {
+        const result = checkStringsFilter(data.deviceModel, filter)
+        return {
+            result,
+            reasonDetails: result ? 'Device Model' : undefined,
+        }
+    },
+    platform: (data, filter) => {
+        const result = checkStringsFilter(data.platform, filter)
+        return {
+            result,
+            reasonDetails: result ? 'Platform' : undefined,
+        }
+    },
     customData: (data, filter) => {
         const combinedCustomData = {
             ...data.customData,
             ...data.privateCustomData,
         }
-        return checkCustomData(combinedCustomData, filter)
+        const result = checkCustomData(combinedCustomData, filter)
+        return {
+            result,
+            reasonDetails: result ? `Custom Data ${filter.dataKey}` : undefined,
+        }
     },
 }
 
