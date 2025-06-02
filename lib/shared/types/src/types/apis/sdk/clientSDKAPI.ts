@@ -27,6 +27,33 @@ export type SDKTypes = (typeof SDKTypeValues)[number]
 
 export type QueryParams = { [key: string]: string }
 
+export enum DEFAULT_REASONS {
+    MISSING_CONFIG = 'MISSING_CONFIG',
+    MISSING_VARIABLE = 'MISSING_VARIABLE',
+    MISSING_FEATURE = 'MISSING_FEATURE',
+    MISSING_VARIATION = 'MISSING_VARIATION',
+    MISSING_VARIABLE_FOR_VARIATION = 'MISSING_VARIABLE_FOR_VARIATION',
+    USER_NOT_IN_ROLLOUT = 'USER_NOT_IN_ROLLOUT',
+    USER_NOT_TARGETED = 'USER_NOT_TARGETED',
+    INVALID_VARIABLE_TYPE = 'INVALID_VARIABLE_TYPE',
+    UNKNOWN = 'UNKNOWN',
+}
+
+export enum EVAL_REASONS {
+    TARGETING_MATCH = 'TARGETING_MATCH',
+    SPLIT = 'SPLIT',
+    DEFAULT = 'DEFAULT',
+    DISABLED = 'DISABLED',
+    ERROR = 'ERROR',
+    OVERRIDE = 'OVERRIDE',
+    OPT_IN = 'OPT_IN',
+}
+
+export type EvalReason = {
+    reason: EVAL_REASONS | DEFAULT_REASONS
+    details?: string
+}
+
 const boolTransform = ({ value }: { value: unknown }) => {
     if (value === 'true') {
         return true
@@ -344,7 +371,7 @@ export class DVCOptInUser {
 export type SDKVariable = PublicVariable & {
     value: VariableValue
     _feature?: string
-    evalReason?: unknown
+    evalReason?: EvalReason
 }
 
 export type SDKFeature = Pick<
@@ -354,7 +381,7 @@ export type SDKFeature = Pick<
     _variation: string
     variationName: string
     variationKey: string
-    evalReason?: unknown
+    evalReason?: EvalReason
 }
 
 type FeatureVariation = {
