@@ -260,7 +260,7 @@ describe('Config Parsing and Generating', () => {
                     variationName: 'audience match variation',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Audience Match',
+                        details: 'Audience Match Email',
                     },
                 },
                 feature4: {
@@ -293,7 +293,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'audience_match',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Audience Match',
+                        details: 'Audience Match Email',
                     },
                 },
                 'feature2.cool': {

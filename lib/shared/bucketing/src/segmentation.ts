@@ -17,13 +17,12 @@ type SegmentationResult = {
     reasonDetails?: string
 }
 
-// TODO add support for OR/XOR as well as recursive filters
 /**
  * Evaluate an operator object based on its contained filters and the user data given
  * Returns true if the user's data allows them through the segmentation
- * @param operator - The set of filters to evaluate, and the boolean operator to follow (AND, OR, XOR)
+ * @param operator - The set of filters to evaluate, and the boolean operator to follow (AND, OR)
  * @param data - The incoming user, device, and user agent data
- * @returns {*|boolean|boolean}
+ * @returns {SegmentationResult}
  */
 export const evaluateOperator = ({
     operator,
@@ -46,13 +45,14 @@ export const evaluateOperator = ({
         index: number,
     ) => {
         if (filter.operator) {
-            return evaluateOperator({
+            const { result } = evaluateOperator({
                 operator: filter,
                 data,
                 featureId,
                 isOptInEnabled,
                 audiences,
             })
+            return result
         }
         if (filter.type === 'all') {
             reason = 'All Users'
@@ -79,7 +79,7 @@ export const evaluateOperator = ({
         }
         if (filter.type !== 'user') {
             console.error(`Invalid filter type: ${filter.type}`)
-            return { result: false }
+            return false
         }
 
         if (!filter.subType) {
@@ -88,7 +88,7 @@ export const evaluateOperator = ({
 
         if (!filterFunctionsBySubtype[filter.subType]) {
             console.error(`Invalid filter subType: ${filter.subType}`)
-            return { result: false }
+            return false
         }
 
         const { result, reasonDetails } = filterFunctionsBySubtype[
@@ -123,6 +123,7 @@ export const evaluateOperator = ({
         }
     }
 }
+
 type FilterFunctionsBySubtype = {
     [key in UserSubType]: (
         data: any,
@@ -155,7 +156,7 @@ function filterForAudienceMatch({
             )
             return { result: false }
         }
-        const { result } = evaluateOperator({
+        const { result, reasonDetails } = evaluateOperator({
             operator: audience.filters,
             data,
             featureId,
@@ -165,7 +166,9 @@ function filterForAudienceMatch({
         if (result) {
             return {
                 result: comparator === '=',
-                reasonDetails: 'Audience Match',
+                reasonDetails:
+                    'Audience Match' +
+                    (reasonDetails ? ` ${reasonDetails}` : ''),
             }
         }
     }
