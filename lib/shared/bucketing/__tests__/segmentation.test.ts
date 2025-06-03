@@ -803,7 +803,11 @@ describe('SegmentationManager Unit Test', () => {
                     },
                 }
                 assert.deepStrictEqual(
-                    { result: true, reasonDetails: 'Audience Match' },
+                    {
+                        result: true,
+                        reasonDetails:
+                            'Audience Match Country AND Email AND App Version',
+                    },
                     segmentation.evaluateOperator({
                         data,
                         operator: audienceMatchOperator,
@@ -865,7 +869,11 @@ describe('SegmentationManager Unit Test', () => {
                     },
                 }
                 assert.deepStrictEqual(
-                    { result: true, reasonDetails: 'Audience Match' },
+                    {
+                        result: true,
+                        reasonDetails:
+                            'Audience Match Audience Match Country AND Email AND App Version',
+                    },
                     segmentation.evaluateOperator({
                         data,
                         operator: nestedAudienceMatchOperator,
@@ -938,7 +946,11 @@ describe('SegmentationManager Unit Test', () => {
                     operator: AudienceOperator.and,
                 }
                 assert.deepStrictEqual(
-                    { result: true, reasonDetails: 'Audience Match' },
+                    {
+                        result: true,
+                        reasonDetails:
+                            'Audience Match Country AND Email AND App Version',
+                    },
                     segmentation.evaluateOperator({
                         data,
                         operator: audienceMatchOperatorMultiple,
