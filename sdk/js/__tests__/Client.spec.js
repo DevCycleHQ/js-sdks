@@ -737,7 +737,7 @@ describe('DevCycleClient tests', () => {
             )
 
             expect(anonUserId).toBe(originalAnonUserId)
-            expect(anonUserId).not.toBe(null)
+            expect(anonUserId).toBeDefined()
         })
     })
 
