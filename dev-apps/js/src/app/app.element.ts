@@ -461,7 +461,7 @@ export class AppElement extends HTMLElement {
 }
 
 const user = {
-    user_id: 'userId1',
+    user_id: 'userId2',
     email: 'auto@taplytics.com',
     customData: {
         cps: 'Matthew',
@@ -473,7 +473,7 @@ const user = {
 
 const devcycleClient = initializeDevCycle(SDK_KEY, user, {
     enableEdgeDB: false,
-    logLevel: 'error',
+    logLevel: 'debug',
 })
 devcycleClient.onClientInitialized(() =>
     customElements.define('devcycle-root', AppElement),

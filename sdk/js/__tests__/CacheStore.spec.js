@@ -7,6 +7,7 @@ describe('CacheStore tests', () => {
         load: jest.fn(),
         save: jest.fn(),
         remove: jest.fn(),
+        listKeys: jest.fn(),
     }
 
     const mockLogger = {
@@ -20,6 +21,7 @@ describe('CacheStore tests', () => {
         localStorage.load.mockReset()
         localStorage.save.mockReset()
         localStorage.remove.mockReset()
+        localStorage.listKeys.mockReset()
         mockLogger.error.mockReset()
         mockLogger.warn.mockReset()
         mockLogger.info.mockReset()
@@ -28,18 +30,19 @@ describe('CacheStore tests', () => {
 
     it('should save config to local storage', async () => {
         jest.useFakeTimers()
-        const store = new CacheStore(localStorage, mockLogger)
+        const ttl = 30 * 24 * 60 * 60 * 1000 // 30 days
+        const store = new CacheStore(localStorage, mockLogger, ttl)
         const config = {}
         const user = new DVCPopulatedUser({ user_id: 'test_user' }, {})
         const now = Date.now()
-        store.saveConfig(config, user, now)
+        store.saveConfig(config, user)
 
         // Check if it's using the new user-specific key format
         const expectedKey = `${StoreKey.IdentifiedConfig}.${user.user_id}`
         expect(localStorage.save).toHaveBeenCalledWith(expectedKey, config)
         expect(localStorage.save).toHaveBeenCalledWith(
-            `${expectedKey}.fetch_date`,
-            now,
+            `${expectedKey}.expiry_date`,
+            now + ttl,
         )
     })
 
@@ -54,41 +57,31 @@ describe('CacheStore tests', () => {
             variables: {},
         }
 
-        // Use a recent date that won't be expired
-        const recentDate = Date.now() - 1000 // 1 second ago
+        // Use a future expiry date that won't be expired
+        const futureExpiryDate = Date.now() + 60000 // 1 minute from now
 
         // Mock no legacy configs so migration doesn't interfere
         localStorage.load.mockImplementation((key) => {
             const expectedKey = `${StoreKey.IdentifiedConfig}.test_user`
-            const expectedDateKey = `${expectedKey}.fetch_date`
+            const expectedExpiryKey = `${expectedKey}.expiry_date`
 
             if (key === expectedKey) {
-                return config
+                return Promise.resolve(config)
             }
-            if (key === expectedDateKey) {
-                return recentDate.toString()
+            if (key === expectedExpiryKey) {
+                return Promise.resolve(futureExpiryDate.toString())
             }
-            // Return null for any legacy keys to avoid migration interference
-            if (
-                key === StoreKey.IdentifiedConfig ||
-                key === StoreKey.AnonymousConfig ||
-                key === StoreKey.User
-            ) {
-                return null
-            }
-            return null
+            // Return undefined for any other keys (legacy keys)
+            return Promise.resolve(undefined)
         })
 
         const store = new CacheStore(localStorage, mockLogger)
+        const result = await store.loadConfig(user)
 
-        const result = await store.loadConfig(user, 2592000000) // 30 days
-
-        const expectedKey = `${StoreKey.IdentifiedConfig}.${user.user_id}`
-        expect(localStorage.load).toHaveBeenCalledWith(expectedKey)
+        expect(result).toEqual(config)
         expect(localStorage.load).toHaveBeenCalledWith(
-            `${expectedKey}.fetch_date`,
+            `${StoreKey.IdentifiedConfig}.test_user`,
         )
-        expect(result).toBe(config)
     })
 
     it('should migrate legacy configs when loading config and no new format exists', async () => {
@@ -104,18 +97,18 @@ describe('CacheStore tests', () => {
         // Set up mocks for legacy format
         const legacyKey = StoreKey.IdentifiedConfig
         let migratedConfig = null
-        let migratedFetchDate = null
+        let migratedExpiryDate = null
 
         localStorage.load.mockImplementation((key) => {
             // Return migrated config if it has been saved
             const newConfigKey = `${StoreKey.IdentifiedConfig}.test_user`
-            const newFetchDateKey = `${newConfigKey}.fetch_date`
+            const newExpiryKey = `${newConfigKey}.expiry_date`
 
             if (key === newConfigKey && migratedConfig) {
                 return migratedConfig
             }
-            if (key === newFetchDateKey && migratedFetchDate) {
-                return migratedFetchDate.toString()
+            if (key === newExpiryKey && migratedExpiryDate) {
+                return migratedExpiryDate.toString()
             }
 
             // Legacy data
@@ -131,13 +124,13 @@ describe('CacheStore tests', () => {
 
         localStorage.save.mockImplementation((key, value) => {
             const newConfigKey = `${StoreKey.IdentifiedConfig}.test_user`
-            const newFetchDateKey = `${newConfigKey}.fetch_date`
+            const newExpiryKey = `${newConfigKey}.expiry_date`
 
             if (key === newConfigKey) {
                 migratedConfig = value
             }
-            if (key === newFetchDateKey) {
-                migratedFetchDate = value
+            if (key === newExpiryKey) {
+                migratedExpiryDate = value
             }
         })
 
@@ -145,7 +138,7 @@ describe('CacheStore tests', () => {
         const user = new DVCPopulatedUser({ user_id: 'test_user' }, {})
 
         // Load config should trigger migration
-        const result = await store.loadConfig(user, 2592000000) // 30 days
+        const result = await store.loadConfig(user)
 
         // Verify migration attempted to load legacy format
         expect(localStorage.load).toHaveBeenCalledWith(legacyKey)
@@ -170,7 +163,8 @@ describe('CacheStore tests', () => {
     })
 
     it('should use different keys for anonymous vs identified users', async () => {
-        const store = new CacheStore(localStorage, mockLogger)
+        const ttl = 30 * 24 * 60 * 60 * 1000 // 30 days
+        const store = new CacheStore(localStorage, mockLogger, ttl)
         const identifiedUser = new DVCPopulatedUser(
             { user_id: 'identified_user' },
             {},
@@ -180,11 +174,10 @@ describe('CacheStore tests', () => {
             {},
         )
         const config = {}
-        const now = Date.now()
 
         // Save configs for both user types
-        store.saveConfig(config, identifiedUser, now)
-        store.saveConfig(config, anonymousUser, now)
+        store.saveConfig(config, identifiedUser)
+        store.saveConfig(config, anonymousUser)
 
         // Check identified user uses IdentifiedConfig key
         const identifiedKey = `${StoreKey.IdentifiedConfig}.${identifiedUser.user_id}`
@@ -193,5 +186,47 @@ describe('CacheStore tests', () => {
         // Check anonymous user uses AnonymousConfig key
         const anonymousKey = `${StoreKey.AnonymousConfig}.${anonymousUser.user_id}`
         expect(localStorage.save).toHaveBeenCalledWith(anonymousKey, config)
+    })
+
+    it('should cleanup expired configs', async () => {
+        const store = new CacheStore(localStorage, mockLogger)
+        const now = Date.now()
+        const expiredKeys = [
+            'dvc:identified_config.old_user1',
+            'dvc:identified_config.old_user2',
+            'dvc:anonymous_config.old_anon_user',
+        ]
+
+        // Mock listKeys to return expired config keys
+        localStorage.listKeys.mockImplementation((prefix) => {
+            if (prefix === StoreKey.IdentifiedConfig) {
+                return [
+                    'dvc:identified_config.old_user1',
+                    'dvc:identified_config.old_user2',
+                ]
+            }
+            if (prefix === StoreKey.AnonymousConfig) {
+                return ['dvc:anonymous_config.old_anon_user']
+            }
+            return []
+        })
+
+        // Mock load to return expired dates for these configs
+        localStorage.load.mockImplementation((key) => {
+            if (key.endsWith('.expiry_date')) {
+                return (now - 1000).toString() // Expired 1 second ago
+            }
+            return null
+        })
+
+        await store.cleanupExpiredConfigs()
+
+        // Verify expired configs were removed
+        expiredKeys.forEach((key) => {
+            expect(localStorage.remove).toHaveBeenCalledWith(key)
+            expect(localStorage.remove).toHaveBeenCalledWith(
+                `${key}.expiry_date`,
+            )
+        })
     })
 })

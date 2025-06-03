@@ -20,6 +20,11 @@ export class ReactNativeStore implements DVCStorage {
     async remove(storeKey: string): Promise<void> {
         await this.store.removeItem(storeKey)
     }
+
+    async listKeys(prefix: string): Promise<string[]> {
+        const allKeys = await this.store.getAllKeys()
+        return allKeys.filter((key) => key.startsWith(prefix))
+    }
 }
 
 export default ReactNativeStore

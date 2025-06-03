@@ -335,7 +335,7 @@ describe('DevCycleClient tests', () => {
                 JSON.stringify(testConfig),
             )
             expect(
-                window.localStorage.getItem(`${expectedKey}.fetch_date`),
+                window.localStorage.getItem(`${expectedKey}.expiry_date`),
             ).toBeTruthy()
             expect(client.isInitialized).toBe(true)
         })
@@ -352,7 +352,7 @@ describe('DevCycleClient tests', () => {
                 JSON.stringify(testConfig),
             )
             expect(
-                window.localStorage.getItem(`${expectedKey}.fetch_date`),
+                window.localStorage.getItem(`${expectedKey}.expiry_date`),
             ).toBeTruthy()
             expect(client.isInitialized).toBe(true)
         })
