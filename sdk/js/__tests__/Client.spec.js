@@ -338,7 +338,7 @@ describe('DevCycleClient tests', () => {
             )
             expect(
                 window.localStorage.getItem(`${expectedKey}.expiry_date`),
-            ).toBeTruthy()
+            ).toBeDefined()
             expect(client.isInitialized).toBe(true)
         })
 
@@ -355,7 +355,7 @@ describe('DevCycleClient tests', () => {
             )
             expect(
                 window.localStorage.getItem(`${expectedKey}.expiry_date`),
-            ).toBeTruthy()
+            ).toBeDefined()
             expect(client.isInitialized).toBe(true)
         })
 
@@ -842,7 +842,7 @@ describe('DevCycleClient tests', () => {
             const oldAnonymousId = await client.store.store.load(
                 StoreKey.AnonUserId,
             )
-            expect(oldAnonymousId).toBeTruthy()
+            expect(oldAnonymousId).toBeDefined()
 
             await client.resetUser()
             const newAnonymousId = await client.store.store.load(
