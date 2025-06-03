@@ -392,7 +392,7 @@ describe('SegmentationManager Unit Test', () => {
             assert.deepStrictEqual(
                 {
                     result: true,
-                    reasonDetails: 'Country AND Custom Data full_country',
+                    reasonDetails: 'Country AND Custom Data -> full_country',
                 },
                 segmentation.evaluateOperator({
                     data,
@@ -595,7 +595,7 @@ describe('SegmentationManager Unit Test', () => {
 
             const data = { customData: { testKey: 'dataValue' } }
             assert.deepStrictEqual(
-                { result: true, reasonDetails: 'Custom Data testKey' },
+                { result: true, reasonDetails: 'Custom Data -> testKey' },
                 segmentation.evaluateOperator({
                     data,
                     operator,
@@ -806,7 +806,7 @@ describe('SegmentationManager Unit Test', () => {
                     {
                         result: true,
                         reasonDetails:
-                            'Audience Match Country AND Email AND App Version',
+                            'Audience Match -> Country AND Email AND App Version',
                     },
                     segmentation.evaluateOperator({
                         data,
@@ -872,7 +872,7 @@ describe('SegmentationManager Unit Test', () => {
                     {
                         result: true,
                         reasonDetails:
-                            'Audience Match Audience Match Country AND Email AND App Version',
+                            'Audience Match -> Audience Match -> Country AND Email AND App Version',
                     },
                     segmentation.evaluateOperator({
                         data,
@@ -949,7 +949,7 @@ describe('SegmentationManager Unit Test', () => {
                     {
                         result: true,
                         reasonDetails:
-                            'Audience Match Country AND Email AND App Version',
+                            'Audience Match -> Country AND Email AND App Version',
                     },
                     segmentation.evaluateOperator({
                         data,
@@ -3162,7 +3162,7 @@ describe('SegmentationManager Unit Test', () => {
                 {
                     result: true,
                     reasonDetails:
-                        'Custom Data strKey AND Custom Data numKey AND Custom Data boolKey',
+                        'Custom Data -> strKey AND Custom Data -> numKey AND Custom Data -> boolKey',
                 },
                 segmentation.evaluateOperator({
                     data: {
@@ -3205,7 +3205,7 @@ describe('SegmentationManager Unit Test', () => {
                 {
                     result: true,
                     reasonDetails:
-                        'Custom Data strKey AND Custom Data numKey AND Custom Data boolKey',
+                        'Custom Data -> strKey AND Custom Data -> numKey AND Custom Data -> boolKey',
                 },
                 segmentation.evaluateOperator({
                     data: { customData: { strKey: 'value', boolKey: false } },

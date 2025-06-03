@@ -260,7 +260,7 @@ describe('Config Parsing and Generating', () => {
                     variationName: 'audience match variation',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Audience Match Email',
+                        details: 'Audience Match -> Email',
                     },
                 },
                 feature4: {
@@ -293,7 +293,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'audience_match',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Audience Match Email',
+                        details: 'Audience Match -> Email',
                     },
                 },
                 'feature2.cool': {
@@ -629,7 +629,7 @@ describe('Config Parsing and Generating', () => {
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
                         details:
-                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
             },
@@ -647,7 +647,7 @@ describe('Config Parsing and Generating', () => {
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
                         details:
-                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
             },
@@ -720,7 +720,7 @@ describe('Config Parsing and Generating', () => {
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
                         details:
-                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
             },
@@ -739,7 +739,7 @@ describe('Config Parsing and Generating', () => {
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
                         details:
-                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 'bool-var': {
@@ -855,7 +855,7 @@ describe('Config Parsing and Generating', () => {
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
                         details:
-                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
             },
@@ -874,7 +874,7 @@ describe('Config Parsing and Generating', () => {
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
                         details:
-                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 'bool-var': {
@@ -973,7 +973,7 @@ describe('Config Parsing and Generating', () => {
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
                         details:
-                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 feature2: {
@@ -986,7 +986,7 @@ describe('Config Parsing and Generating', () => {
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
                         details:
-                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
             },
@@ -1005,7 +1005,7 @@ describe('Config Parsing and Generating', () => {
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
                         details:
-                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 feature2Var: {
@@ -1017,7 +1017,7 @@ describe('Config Parsing and Generating', () => {
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
                         details:
-                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 'bool-var': {
@@ -1029,7 +1029,7 @@ describe('Config Parsing and Generating', () => {
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
                         details:
-                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 'json-var': {
@@ -1041,7 +1041,7 @@ describe('Config Parsing and Generating', () => {
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
                         details:
-                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 'num-var': {
@@ -1053,7 +1053,7 @@ describe('Config Parsing and Generating', () => {
                     evalReason: {
                         reason: EVAL_REASONS.SPLIT,
                         details:
-                            'Platform Version AND Custom Data favouriteFood AND Custom Data favouriteDrink',
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
             },
@@ -1378,7 +1378,7 @@ describe('Config Parsing and Generating', () => {
                     variationName: 'audience match variation',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Custom Data favouriteNull',
+                        details: 'Custom Data -> favouriteNull',
                     },
                 },
             },
@@ -1395,7 +1395,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'audience_match',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Custom Data favouriteNull',
+                        details: 'Custom Data -> favouriteNull',
                     },
                 },
             },
@@ -1448,7 +1448,7 @@ describe('Config Parsing and Generating', () => {
                     variationName: 'audience match variation',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Custom Data favouriteNull',
+                        details: 'Custom Data -> favouriteNull',
                     },
                 },
             },
@@ -1465,7 +1465,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'audience_match',
                     evalReason: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Custom Data favouriteNull',
+                        details: 'Custom Data -> favouriteNull',
                     },
                 },
             },

@@ -177,7 +177,7 @@ function filterForAudienceMatch({
                 result: comparator === '=',
                 reasonDetails:
                     EVAL_REASON_DETAILS.AUDIENCE_MATCH +
-                    (reasonDetails ? ` ${reasonDetails}` : ''),
+                    (reasonDetails ? ` -> ${reasonDetails}` : ''),
             }
         }
     }
@@ -250,7 +250,7 @@ const filterFunctionsBySubtype: FilterFunctionsBySubtype = {
         return {
             result,
             reasonDetails: result
-                ? EVAL_REASON_DETAILS.CUSTOM_DATA + ` ${filter.dataKey}`
+                ? EVAL_REASON_DETAILS.CUSTOM_DATA + ` -> ${filter.dataKey}`
                 : undefined,
         }
     },
