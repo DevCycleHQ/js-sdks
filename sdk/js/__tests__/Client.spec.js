@@ -243,7 +243,7 @@ describe('DevCycleClient tests', () => {
         expect(client.user.user_id).toEqual('test_anon_user_id')
     })
 
-    it('should clear the anonymous user id from local storage when initialized with non-anon user', async () => {
+    it('should not clear the anonymous user id from local storage when initialized with non-anon user', async () => {
         window.localStorage.setItem(
             StoreKey.AnonUserId,
             JSON.stringify('anon_user_id'),
@@ -251,7 +251,9 @@ describe('DevCycleClient tests', () => {
         const client = new DevCycleClient(test_key, { user_id: 'user1' })
         await client.onClientInitialized()
         expect(client.user.user_id).toEqual('user1')
-        expect(window.localStorage.getItem(StoreKey.AnonUserId)).toBeNull()
+        expect(window.localStorage.getItem(StoreKey.AnonUserId)).toEqual(
+            JSON.stringify('anon_user_id'),
+        )
     })
 
     it('should not clear the anonymous user id from local storage when initialized without user_id and isAnonymous', async () => {
@@ -710,14 +712,14 @@ describe('DevCycleClient tests', () => {
             expect(publishEvents).toBeCalled()
         })
 
-        it('should clear existing anon user id from local storage when client initialize is delayed', async () => {
+        it('should not clear existing anon user id from local storage when client initialize is delayed', async () => {
             client = createClientWithDelay(1000)
             await client.store.store.save(StoreKey.AnonUserId, 'anon-user-id')
 
             await client.onClientInitialized()
             const anonUser = await client.store.store.load(StoreKey.AnonUserId)
 
-            expect(anonUser).toBeUndefined()
+            expect(anonUser).toBe('anon-user-id')
         })
 
         it('should not clear existing anon user id if called with anon user', async () => {

@@ -126,6 +126,16 @@ export class CacheStore {
     }
 
     async removeAnonUserId(): Promise<void> {
+        const anonUserId = await this.loadAnonUserId()
+        if (anonUserId) {
+            // Remove anonymous config data for this user
+            const configKey = `${StoreKey.AnonymousConfig}.${anonUserId}`
+            const expiryKey = `${configKey}.expiry_date`
+            await Promise.all([
+                this.store.remove(configKey),
+                this.store.remove(expiryKey),
+            ])
+        }
         await this.store.remove(StoreKey.AnonUserId)
     }
 

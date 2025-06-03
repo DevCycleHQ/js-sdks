@@ -248,8 +248,6 @@ export class DevCycleClient<
 
         if (this.user.isAnonymous) {
             void this.store.saveAnonUserId(this.user.user_id)
-        } else {
-            void this.store.removeAnonUserId()
         }
 
         return this
