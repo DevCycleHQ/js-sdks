@@ -143,9 +143,6 @@ describe('CacheStore tests', () => {
         // Verify migration attempted to load legacy format
         expect(localStorage.load).toHaveBeenCalledWith(legacyKey)
         expect(localStorage.load).toHaveBeenCalledWith(`${legacyKey}.user_id`)
-        expect(localStorage.load).toHaveBeenCalledWith(
-            `${legacyKey}.fetch_date`,
-        )
 
         // And migrated to new format
         const newKey = `${StoreKey.IdentifiedConfig}.test_user`
@@ -157,6 +154,7 @@ describe('CacheStore tests', () => {
         expect(localStorage.remove).toHaveBeenCalledWith(
             `${legacyKey}.fetch_date`,
         )
+        expect(localStorage.remove).toHaveBeenCalledWith(StoreKey.User)
 
         // Should return the migrated config
         expect(result).toBe(config)

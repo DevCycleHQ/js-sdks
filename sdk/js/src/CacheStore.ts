@@ -170,6 +170,7 @@ export class CacheStore {
                     this.store.remove(legacyKey),
                     this.store.remove(userIdKey),
                     this.store.remove(fetchDateKey),
+                    this.store.remove(StoreKey.User),
                 ])
                 return
             }
@@ -182,11 +183,12 @@ export class CacheStore {
             )
             await this.saveConfig(legacyConfig, user)
 
-            // Clean up legacy storage
+            // Clean up legacy storage including stored user
             await Promise.all([
                 this.store.remove(legacyKey),
                 this.store.remove(userIdKey),
                 this.store.remove(fetchDateKey),
+                this.store.remove(StoreKey.User),
             ])
         } catch (error) {
             this.logger?.debug(
