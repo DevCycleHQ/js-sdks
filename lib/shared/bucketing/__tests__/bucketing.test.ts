@@ -2000,6 +2000,7 @@ describe('Rollout Logic', () => {
                         variationName: 'variation 1',
                         evalReason: {
                             reason: EVAL_REASONS.OVERRIDE,
+                            details: 'Override',
                         },
                     },
                     feature2: {
@@ -2011,6 +2012,7 @@ describe('Rollout Logic', () => {
                         variationName: 'variation 1 aud 2',
                         evalReason: {
                             reason: EVAL_REASONS.OVERRIDE,
+                            details: 'Override',
                         },
                     },
                 },
@@ -2028,6 +2030,7 @@ describe('Rollout Logic', () => {
                         value: 'man',
                         evalReason: {
                             reason: EVAL_REASONS.OVERRIDE,
+                            details: 'Override',
                         },
                     },
                     'bool-var': {
@@ -2038,6 +2041,7 @@ describe('Rollout Logic', () => {
                         value: false,
                         evalReason: {
                             reason: EVAL_REASONS.OVERRIDE,
+                            details: 'Override',
                         },
                     },
                     feature2Var: {
@@ -2048,6 +2052,7 @@ describe('Rollout Logic', () => {
                         value: 'Var 1 aud 2',
                         evalReason: {
                             reason: EVAL_REASONS.OVERRIDE,
+                            details: 'Override',
                         },
                     },
                     'json-var': {
@@ -2058,6 +2063,7 @@ describe('Rollout Logic', () => {
                         value: '{"hello":"world","num":610,"bool":true}',
                         evalReason: {
                             reason: EVAL_REASONS.OVERRIDE,
+                            details: 'Override',
                         },
                     },
                     'num-var': {
@@ -2068,6 +2074,7 @@ describe('Rollout Logic', () => {
                         value: 610.61,
                         evalReason: {
                             reason: EVAL_REASONS.OVERRIDE,
+                            details: 'Override',
                         },
                     },
                     test: {
@@ -2078,6 +2085,7 @@ describe('Rollout Logic', () => {
                         value: 'scat',
                         evalReason: {
                             reason: EVAL_REASONS.OVERRIDE,
+                            details: 'Override',
                         },
                     },
                 },

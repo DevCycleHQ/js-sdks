@@ -49,6 +49,28 @@ export enum EVAL_REASONS {
     OPT_IN = 'OPT_IN',
 }
 
+export enum EVAL_REASON_DETAILS {
+    // All Users
+    ALL_USERS = 'All Users',
+    // Audiences
+    AUDIENCE_MATCH = 'Audience Match',
+    NOT_IN_AUDIENCE = 'Not in Audience',
+    // Opt-In
+    OPT_IN = 'Opt-In',
+    NOT_OPTED_IN = 'Not Opt-In',
+    // Overrides
+    OVERRIDE = 'Override',
+    // User Specific
+    USER_ID = 'User ID',
+    EMAIL = 'Email',
+    COUNTRY = 'Country',
+    PLATFORM = 'Platform',
+    PLATFORM_VERSION = 'Platform Version',
+    APP_VERSION = 'App Version',
+    DEVICE_MODEL = 'Device Model',
+    CUSTOM_DATA = 'Custom Data',
+}
+
 export type EvalReason = {
     reason: EVAL_REASONS | DEFAULT_REASONS
     details?: string

@@ -9,6 +9,7 @@ import {
     PublicAudience,
     AudienceFilterOrOperator,
     UserSubType,
+    EVAL_REASON_DETAILS,
 } from '@devcycle/types'
 import UAParser from 'ua-parser-js'
 
@@ -55,13 +56,15 @@ export const evaluateOperator = ({
             return result
         }
         if (filter.type === 'all') {
-            reason = 'All Users'
+            reason = EVAL_REASON_DETAILS.ALL_USERS
             return true
         }
         if (filter.type === 'optIn') {
             const optIns = data.optIns
             const result = isOptInEnabled && !!optIns?.[featureId]
-            reason = result ? 'Opted-in' : 'Not opted-in'
+            reason = result
+                ? EVAL_REASON_DETAILS.OPT_IN
+                : EVAL_REASON_DETAILS.NOT_OPTED_IN
             return result
         }
         if (filter.type === 'audienceMatch') {
@@ -111,16 +114,22 @@ export const evaluateOperator = ({
 
     if (operator.operator === 'or') {
         const result = operator.filters.some(doesUserPassFilter)
-        return {
-            result,
-            reasonDetails: result ? reason : '',
+        if (result) {
+            return {
+                result,
+                reasonDetails: reason,
+            }
         }
+        return { result }
     } else {
         const result = operator.filters.every(doesUserPassFilter)
-        return {
-            result,
-            reasonDetails: result ? reason : '',
+        if (result) {
+            return {
+                result,
+                reasonDetails: reason,
+            }
         }
+        return { result }
     }
 }
 
@@ -167,14 +176,14 @@ function filterForAudienceMatch({
             return {
                 result: comparator === '=',
                 reasonDetails:
-                    'Audience Match' +
+                    EVAL_REASON_DETAILS.AUDIENCE_MATCH +
                     (reasonDetails ? ` ${reasonDetails}` : ''),
             }
         }
     }
     return {
         result: comparator === '!=',
-        reasonDetails: 'Not in Audience',
+        reasonDetails: EVAL_REASON_DETAILS.NOT_IN_AUDIENCE,
     }
 }
 
@@ -183,56 +192,53 @@ const filterFunctionsBySubtype: FilterFunctionsBySubtype = {
         const result = checkStringsFilter(data.country, filter)
         return {
             result,
-            reasonDetails: result ? `Country` : undefined,
+            reasonDetails: result ? EVAL_REASON_DETAILS.COUNTRY : undefined,
         }
     },
     email: (data, filter) => {
         const result = checkStringsFilter(data.email, filter)
         return {
             result,
-            reasonDetails: result ? `Email` : undefined,
-        }
-    },
-    ip: (data, filter) => {
-        const result = checkStringsFilter(data.ip, filter)
-        return {
-            result,
-            reasonDetails: result ? 'IP' : undefined,
+            reasonDetails: result ? EVAL_REASON_DETAILS.EMAIL : undefined,
         }
     },
     user_id: (data, filter) => {
         const result = checkStringsFilter(data.user_id, filter)
         return {
             result,
-            reasonDetails: result ? 'User ID' : undefined,
+            reasonDetails: result ? EVAL_REASON_DETAILS.USER_ID : undefined,
         }
     },
     appVersion: (data, filter) => {
         const result = checkVersionFilters(data.appVersion, filter)
         return {
             result,
-            reasonDetails: result ? 'App Version' : undefined,
+            reasonDetails: result ? EVAL_REASON_DETAILS.APP_VERSION : undefined,
         }
     },
     platformVersion: (data, filter) => {
         const result = checkVersionFilters(data.platformVersion, filter)
         return {
             result,
-            reasonDetails: result ? 'Platform Version' : undefined,
+            reasonDetails: result
+                ? EVAL_REASON_DETAILS.PLATFORM_VERSION
+                : undefined,
         }
     },
     deviceModel: (data, filter) => {
         const result = checkStringsFilter(data.deviceModel, filter)
         return {
             result,
-            reasonDetails: result ? 'Device Model' : undefined,
+            reasonDetails: result
+                ? EVAL_REASON_DETAILS.DEVICE_MODEL
+                : undefined,
         }
     },
     platform: (data, filter) => {
         const result = checkStringsFilter(data.platform, filter)
         return {
             result,
-            reasonDetails: result ? 'Platform' : undefined,
+            reasonDetails: result ? EVAL_REASON_DETAILS.PLATFORM : undefined,
         }
     },
     customData: (data, filter) => {
@@ -243,7 +249,9 @@ const filterFunctionsBySubtype: FilterFunctionsBySubtype = {
         const result = checkCustomData(combinedCustomData, filter)
         return {
             result,
-            reasonDetails: result ? `Custom Data ${filter.dataKey}` : undefined,
+            reasonDetails: result
+                ? EVAL_REASON_DETAILS.CUSTOM_DATA + ` ${filter.dataKey}`
+                : undefined,
         }
     },
 }

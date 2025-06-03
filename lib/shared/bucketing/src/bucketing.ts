@@ -15,6 +15,7 @@ import {
     Variation,
     EVAL_REASONS,
     EvalReason,
+    EVAL_REASON_DETAILS,
 } from '@devcycle/types'
 
 import murmurhash from 'murmurhash'
@@ -356,6 +357,7 @@ export const generateBucketedConfig = ({
             variation,
             evalReason: {
                 reason: EVAL_REASONS.OVERRIDE,
+                details: EVAL_REASON_DETAILS.OVERRIDE,
             },
         })
     }
