@@ -114,7 +114,7 @@ describe('User Hashing and Bucketing', () => {
 describe('Config Parsing and Generating', () => {
     it('generates the correctly modified config from the example config', () => {
         const user = {
-            country: 'canada',
+            country: 'CA',
             user_id: 'asuh',
             email: 'test',
             platform: 'android',
@@ -200,7 +200,7 @@ describe('Config Parsing and Generating', () => {
 
     it('puts the user in the target for the first audience they match', () => {
         const user = {
-            country: 'U S AND A',
+            country: 'US',
             user_id: 'asuh',
             customData: {
                 favouriteFood: 'pizza',
@@ -392,7 +392,7 @@ describe('Config Parsing and Generating', () => {
 
     it('correctly buckets based on nested filters', () => {
         const user = {
-            country: 'Canada',
+            country: 'CA',
             user_id: 'asuh',
             platform: 'Android',
             email: 'test1@email.com',
@@ -479,7 +479,7 @@ describe('Config Parsing and Generating', () => {
 
     it('correctly doesnt bucket with nested filters', () => {
         const user = {
-            country: 'U S AND A',
+            country: 'US',
             user_id: 'asuh',
             platform: 'Android',
             email: 'notthisemail@email.com',
@@ -592,7 +592,7 @@ describe('Config Parsing and Generating', () => {
             },
         }
         const user = {
-            country: 'U S AND A',
+            country: 'US',
             user_id: 'asuh',
             customData: {
                 favouriteFood: 'pizza',
@@ -658,7 +658,7 @@ describe('Config Parsing and Generating', () => {
 
     it('pushes user to next target if not in rollout and passthrough undefined', () => {
         const user = {
-            country: 'U S AND A',
+            country: 'US',
             user_id: 'asuh',
             customData: {
                 favouriteFood: 'pizza',
@@ -805,7 +805,7 @@ describe('Config Parsing and Generating', () => {
 
     it('pushes user to next target if not in rollout', () => {
         const user = {
-            country: 'U S AND A',
+            country: 'US',
             user_id: 'asuh',
             customData: {
                 favouriteFood: 'pizza',
@@ -940,7 +940,7 @@ describe('Config Parsing and Generating', () => {
 
     it('puts user through if in rollout', () => {
         const user = {
-            country: 'U S AND A',
+            country: 'US',
             user_id: 'pass_rollout',
             customData: {
                 favouriteFood: 'pizza',
@@ -1064,7 +1064,7 @@ describe('Config Parsing and Generating', () => {
 
     it('buckets a user with user_id if no bucketingKey', () => {
         const user = {
-            country: 'U S AND A',
+            country: 'US',
             user_id: 'pass_rollout',
             customData: {
                 favouriteFood: 'pizza',
@@ -1092,7 +1092,7 @@ describe('Config Parsing and Generating', () => {
 
     it('buckets a user with custom bucketingKey', () => {
         const user = {
-            country: 'U S AND A',
+            country: 'US',
             user_id: 'pass_rollout',
             customData: {
                 favouriteFood: 'pizza',
@@ -1146,7 +1146,7 @@ describe('Config Parsing and Generating', () => {
 
     it('buckets a user with custom bucketingKey from privateCustomData', () => {
         const user = {
-            country: 'U S AND A',
+            country: 'US',
             user_id: 'pass_rollout',
             privateCustomData: {
                 favouriteFood: 'pizza',
@@ -1197,7 +1197,7 @@ describe('Config Parsing and Generating', () => {
 
     it('buckets a user with custom number bucketingKey', () => {
         const user = {
-            country: 'U S AND A',
+            country: 'US',
             user_id: 'pass_rollout',
             privateCustomData: {
                 favouriteNumber: 610,
@@ -1248,7 +1248,7 @@ describe('Config Parsing and Generating', () => {
 
     it('buckets a user with custom boolean bucketingKey', () => {
         const user = {
-            country: 'U S AND A',
+            country: 'US',
             user_id: 'pass_rollout',
             privateCustomData: {
                 signed_up: true,
@@ -1299,7 +1299,7 @@ describe('Config Parsing and Generating', () => {
 
     it('errors when feature missing distribution', () => {
         const user = {
-            country: 'U S AND A',
+            country: 'US',
             user_id: 'asuh',
             email: 'test@email.com',
         }
@@ -1310,7 +1310,7 @@ describe('Config Parsing and Generating', () => {
 
     it('errors when config missing variations', () => {
         const user = {
-            country: 'U S AND A',
+            country: 'US',
             user_id: 'pass_rollout',
             customData: {
                 favouriteFood: 'pizza',
@@ -1331,7 +1331,7 @@ describe('Config Parsing and Generating', () => {
 
     it('errors when config missing variables', () => {
         const user = {
-            country: 'canada',
+            country: 'CA',
             user_id: 'asuh',
             email: 'test@notemail.com',
             platform: 'Android',
@@ -1343,7 +1343,7 @@ describe('Config Parsing and Generating', () => {
 
     it('puts the user in the target (customData !exists) with null Custom Data', () => {
         const user = {
-            country: 'U S AND A',
+            country: 'US',
             user_id: 'asuh',
             customData: {
                 favouriteFood: 'pizza',
@@ -1413,7 +1413,7 @@ describe('Config Parsing and Generating', () => {
 
     it('puts the user in the target (customData exists) for the first audience they match', () => {
         const user = {
-            country: 'U S AND A',
+            country: 'US',
             user_id: 'asuh',
             customData: {
                 favouriteFood: 'pizza',
@@ -1969,7 +1969,7 @@ describe('Rollout Logic', () => {
     describe('overrides', () => {
         it('correctly overrides a bucketing decision and a feature that doesnt normally pass segmentation', () => {
             const user = {
-                country: 'canada',
+                country: 'CA',
                 user_id: 'asuh',
                 email: 'test',
                 platform: 'android',

@@ -206,7 +206,7 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = {
-                country: 'Canada',
+                country: 'CA',
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
                 platform: 'iOS',
@@ -248,7 +248,7 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = {
-                country: 'Canada',
+                country: 'CA',
                 email: 'brooks@big.lunch',
                 platformVersion: '2.0.0',
                 platform: 'iOS',
