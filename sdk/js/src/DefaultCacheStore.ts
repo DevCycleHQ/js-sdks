@@ -8,6 +8,7 @@ export abstract class StorageStrategy implements DVCStorage {
     abstract save(storeKey: string, data: unknown): Promise<void>
     abstract load<T>(storeKey: string): Promise<T | undefined>
     abstract remove(storeKey: string): Promise<void>
+    abstract listKeys(prefix: string): Promise<string[]>
 }
 
 // LocalStorage implementation
@@ -36,6 +37,17 @@ export class LocalStorageStrategy extends StorageStrategy {
 
     async remove(storeKey: string): Promise<void> {
         this.store.removeItem(storeKey)
+    }
+
+    async listKeys(prefix: string): Promise<string[]> {
+        const keys: string[] = []
+        for (let i = 0; i < this.store.length; i++) {
+            const key = this.store.key(i)
+            if (key && key.startsWith(prefix)) {
+                keys.push(key)
+            }
+        }
+        return keys
     }
 }
 
@@ -128,6 +140,34 @@ export class IndexedDBStrategy extends StorageStrategy {
         )
         const store = tx.objectStore(IndexedDBStrategy.storeName)
         store.delete(storeKey)
+    }
+
+    async listKeys(prefix: string): Promise<string[]> {
+        const keys: string[] = []
+        await this.connectionPromise
+        const tx = this.store.transaction(
+            IndexedDBStrategy.storeName,
+            'readonly',
+        )
+        const store = tx.objectStore(IndexedDBStrategy.storeName)
+        const request = store.openCursor()
+        return new Promise((resolve, reject) => {
+            request.onsuccess = (event) => {
+                const cursor = (
+                    event.target as IDBRequest<IDBCursorWithValue | null>
+                ).result
+                if (cursor) {
+                    const key = cursor.key as string
+                    if (key.startsWith(prefix)) {
+                        keys.push(key)
+                    }
+                    cursor.continue()
+                } else {
+                    resolve(keys)
+                }
+            }
+            request.onerror = () => reject(request.error)
+        })
     }
 }
 

@@ -122,6 +122,7 @@ export class DevCycleClient<
         this.store = new CacheStore(
             options.storage || getStorageStrategy(),
             this.logger,
+            options.configCacheTTL,
         )
 
         this.options = options
@@ -223,7 +224,7 @@ export class DevCycleClient<
                     extraParams,
                 ),
             (config: BucketedUserConfig, user: DVCPopulatedUser) =>
-                this.handleConfigReceived(config, user, Date.now()),
+                this.handleConfigReceived(config, user),
             this.user,
         )
 
@@ -234,7 +235,6 @@ export class DevCycleClient<
                 this.handleConfigReceived(
                     this.options.bootstrapConfig,
                     this.user,
-                    Date.now(),
                 )
             }
             this._isInitialized = true
@@ -248,8 +248,6 @@ export class DevCycleClient<
 
         if (this.user.isAnonymous) {
             void this.store.saveAnonUserId(this.user.user_id)
-        } else {
-            void this.store.removeAnonUserId()
         }
 
         return this
@@ -696,7 +694,7 @@ export class DevCycleClient<
             return
         }
 
-        this.handleConfigReceived(config, populatedUser, Date.now())
+        this.handleConfigReceived(config, populatedUser)
     }
 
     private async refetchConfig(
@@ -719,11 +717,10 @@ export class DevCycleClient<
     private handleConfigReceived(
         config: BucketedUserConfig,
         user: DVCPopulatedUser,
-        dateFetched: number,
     ) {
         const oldConfig = this.config
         this.config = config
-        void this.store.saveConfig(config, user, dateFetched)
+        void this.store.saveConfig(config, user)
         this.isConfigCached = false
 
         void this.setUser(user)
@@ -769,8 +766,6 @@ export class DevCycleClient<
     private async setUser(user: DVCPopulatedUser) {
         if (this.user != user || !this.userSaved) {
             this.user = user
-
-            await this.store.saveUser(user)
 
             if (
                 !this.user.isAnonymous &&
@@ -862,10 +857,7 @@ export class DevCycleClient<
             return
         }
 
-        const cachedConfig = await this.store.loadConfig(
-            user,
-            this.options.configCacheTTL,
-        )
+        const cachedConfig = await this.store.loadConfig(user)
 
         if (cachedConfig) {
             this.config = cachedConfig
