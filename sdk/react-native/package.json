@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/react-native-client-sdk",
-    "version": "2.14.1",
+    "version": "2.15.0",
     "description": "The DevCycle React Native SDK used for feature management.",
     "main": "dist/index.js",
     "author": "DevCycle <support@devcycle.com>",
@@ -26,9 +26,9 @@
     "types": "./index.cjs.d.ts",
     "license": "MIT",
     "dependencies": {
-        "@devcycle/js-client-sdk": "^1.39.1",
-        "@devcycle/react-client-sdk": "^1.37.1",
-        "@devcycle/types": "^1.26.1",
+        "@devcycle/js-client-sdk": "^1.40.0",
+        "@devcycle/react-client-sdk": "^1.38.0",
+        "@devcycle/types": "^1.27.0",
         "@react-native-async-storage/async-storage": "^1.17.11",
         "react-native-device-info": "^8.7.1",
         "react-native-get-random-values": "^1.11.0",
