@@ -58,7 +58,7 @@ export class TargetV2 extends JSON.Value {
         for (let i = 0; i < this._sortedDistribution.length; i++) {
             const distribution = this._sortedDistribution[i]
             distributionIndex += distribution.percentage
-            if (boundedHash >= previousDistributionIndex && boundedHash < distributionIndex) {
+            if (boundedHash >= previousDistributionIndex && (boundedHash < distributionIndex || (distributionIndex == 1 && boundedHash == 1))) {
                 return distribution._variation
             }
         }

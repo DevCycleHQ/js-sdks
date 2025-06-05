@@ -21,7 +21,7 @@ import { configWithBucketingKey } from '../helpers/configWithBucketingKey'
 
 import moment from 'moment'
 import * as uuid from 'uuid'
-import { BucketedUserConfig, SDKVariable } from '@devcycle/types'
+import { AudienceOperator, BucketedUserConfig, SDKVariable } from '@devcycle/types'
 import { cleanupSDK, initSDK } from '../setPlatformData'
 import {
     variableForUserPB,
@@ -1617,6 +1617,113 @@ describe('Rollout Logic', () => {
         expect(doesUserPassRollout({ boundedHash: 0.4 })).toBeTruthy()
         expect(doesUserPassRollout({ boundedHash: 0.6 })).toBeTruthy()
         expect(doesUserPassRollout({ boundedHash: 0.9 })).toBeTruthy()
+    })
+})
+
+describe('Bounded Hash Limits', () => {
+    const testCases = [
+        {
+            name: 'Random Distribution',
+            expectedVariation: '', // Don't test specific variation for random distribution
+            target: {
+                _id: 'target',
+                _audience: {
+                    _id: 'id',
+                    filters: {
+                        operator: AudienceOperator.and,
+                        filters: [],
+                    },
+                },
+                distribution: [
+                    {
+                        _variation: 'var1',
+                        percentage: 0.2555,
+                    },
+                    {
+                        _variation: 'var2',
+                        percentage: 0.4445,
+                    },
+                    {
+                        _variation: 'var3',
+                        percentage: 0.1,
+                    },
+                    {
+                        _variation: 'var4',
+                        percentage: 0.2,
+                    },
+                ],
+                bucketingKey: 'user_id',
+            },
+        },
+        {
+            name: 'Single Distribution',
+            expectedVariation: 'var1',
+            target: {
+                _id: 'target',
+                _audience: {
+                    _id: 'id',
+                    filters: {
+                        operator: AudienceOperator.and,
+                        filters: [],
+                    },
+                },
+                distribution: [
+                    {
+                        _variation: 'var1',
+                        percentage: 1,
+                    },
+                ],
+                bucketingKey: 'user_id',
+            },
+        },
+    ]
+
+    testCases.forEach((tc) => {
+        describe(tc.name, () => {
+            it('should handle bounded hash value 0.2555', () => {
+                const variation = decideTargetVariation({
+                    target: tc.target,
+                    boundedHash: 0.2555,
+                })
+                expect(variation).toBeDefined()
+                if (tc.expectedVariation) {
+                    expect(variation).toBe(tc.expectedVariation)
+                }
+            })
+
+            it('should handle edge case: bounded hash value 0', () => {
+                const variation = decideTargetVariation({
+                    target: tc.target,
+                    boundedHash: 0,
+                })
+                expect(variation).toBeDefined()
+                if (tc.expectedVariation) {
+                    expect(variation).toBe(tc.expectedVariation)
+                }
+            })
+
+            it('should handle edge case: bounded hash value 1', () => {
+                const variation = decideTargetVariation({
+                    target: tc.target,
+                    boundedHash: 1,
+                })
+                expect(variation).toBeDefined()
+                if (tc.expectedVariation) {
+                    expect(variation).toBe(tc.expectedVariation)
+                }
+            })
+
+            it('should handle edge case: bounded hash value just under 1', () => {
+                const variation = decideTargetVariation({
+                    target: tc.target,
+                    boundedHash: 0.9999999,
+                })
+                expect(variation).toBeDefined()
+                if (tc.expectedVariation) {
+                    expect(variation).toBe(tc.expectedVariation)
+                }
+            })
+        })
     })
 })
 

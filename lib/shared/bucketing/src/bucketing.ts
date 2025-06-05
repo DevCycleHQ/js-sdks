@@ -77,7 +77,8 @@ export const decideTargetVariation = ({
         distributionIndex += variation.percentage
         if (
             boundedHash >= previousDistributionIndex &&
-            boundedHash < distributionIndex
+            (boundedHash < distributionIndex ||
+                (distributionIndex == 1 && boundedHash == 1))
         ) {
             return {
                 variation: variation._variation,
