@@ -71,7 +71,10 @@ describe('DVCPopulatedUser tests', () => {
     })
 
     it('should use provided user_id when isAnonymous is true', () => {
-        const user = new DVCPopulatedUser({ user_id: 'abc123', isAnonymous: true })
+        const user = new DVCPopulatedUser({
+            user_id: 'abc123',
+            isAnonymous: true,
+        })
         expect(user.user_id).toBe('abc123')
         expect(user.isAnonymous).toBe(true)
     })
@@ -80,7 +83,9 @@ describe('DVCPopulatedUser tests', () => {
         const createUser = () => {
             new DVCPopulatedUser({ isAnonymous: false })
         }
-        expect(createUser).toThrow('A User cannot be created with isAnonymous: false without a valid user_id')
+        expect(createUser).toThrow(
+            'A User cannot be created with isAnonymous: false without a valid user_id',
+        )
     })
 
     it('should create an anonymous user if the user id is an empty string', () => {
@@ -99,6 +104,8 @@ describe('DVCPopulatedUser tests', () => {
         const createUser = () => {
             new DVCPopulatedUser({ user_id: '', isAnonymous: false })
         }
-        expect(createUser).toThrow('A User cannot be created with isAnonymous: false without a valid user_id')
+        expect(createUser).toThrow(
+            'A User cannot be created with isAnonymous: false without a valid user_id',
+        )
     })
 })
