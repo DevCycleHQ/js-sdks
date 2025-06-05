@@ -29,7 +29,7 @@ export class DVCVariable<
     readonly defaultValue: T
     readonly isDefaulted: boolean
     readonly type: 'String' | 'Number' | 'Boolean' | 'JSON'
-    readonly evalReason?: unknown
+    readonly eval?: unknown
 
     constructor(variable: VariableParam<T>) {
         const { key, defaultValue, value, evalReason, type } = variable
@@ -45,7 +45,7 @@ export class DVCVariable<
                 ? (defaultValue as unknown as VariableTypeAlias<T>)
                 : value
         this.defaultValue = defaultValue
-        this.evalReason = evalReason
+        this.eval = evalReason
         this.type = type
     }
 }
