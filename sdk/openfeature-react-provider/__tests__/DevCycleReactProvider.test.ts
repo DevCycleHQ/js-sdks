@@ -1,4 +1,5 @@
 global.fetch = jest.fn()
+import { EVAL_REASONS } from '@devcycle/types'
 import DevCycleReactProvider from '../src/index'
 import {
     Client,
@@ -42,7 +43,9 @@ async function initOFClient(): Promise<{
                 value: true,
                 defaultValue: false,
                 isDefaulted: false,
-                evalReason: undefined,
+                eval: {
+                    reason: EVAL_REASONS.TARGETING_MATCH,
+                },
                 onUpdate: jest.fn(),
             })
     }

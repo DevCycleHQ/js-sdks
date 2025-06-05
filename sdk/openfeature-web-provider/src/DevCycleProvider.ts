@@ -243,7 +243,8 @@ export default class DevCycleProvider implements Provider {
                   value: variable.value as T,
                   reason: variable.isDefaulted
                       ? StandardResolutionReasons.DEFAULT
-                      : StandardResolutionReasons.TARGETING_MATCH,
+                      : variable.eval?.reason ??
+                        StandardResolutionReasons.TARGETING_MATCH,
               }
             : {
                   value: ofDefaultValue,
