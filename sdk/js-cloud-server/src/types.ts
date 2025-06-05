@@ -1,11 +1,4 @@
-import {
-    DVCLogger,
-    DVCDefaultLogLevel,
-    DVCReporter,
-    DVCCustomDataJSON,
-    VariableValue,
-    DVCJSON,
-} from '@devcycle/types'
+import { DVCCustomDataJSON, VariableValue, DVCJSON } from '@devcycle/types'
 
 export type DVCVariableValue = VariableValue
 export type JSON = DVCJSON
@@ -48,7 +41,7 @@ export interface DVCVariableInterface {
      * Evaluation Reason as to why the variable was segmented into a specific Feature and
      * given this specific value
      */
-    readonly evalReason?: unknown
+    readonly eval?: unknown
 }
 
 export interface DevCycleEvent {
@@ -89,7 +82,7 @@ export interface DVCFeature {
 
     readonly type: string
 
-    readonly evalReason?: unknown
+    readonly eval?: unknown
 }
 
 export type DVCFeatureSet = Record<string, DVCFeature>

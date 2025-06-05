@@ -8,7 +8,9 @@ describe('DVCVariable Unit Tests', () => {
             defaultValue: false,
             value: true,
             type: VariableType.boolean,
-            evalReason: 'reason',
+            eval: {
+                reason: 'reason',
+            },
         })
         expect(variable).toEqual({
             key: 'key',
@@ -16,7 +18,9 @@ describe('DVCVariable Unit Tests', () => {
             value: true,
             defaultValue: false,
             type: 'Boolean',
-            evalReason: 'reason',
+            eval: {
+                reason: 'reason',
+            },
         })
     })
 

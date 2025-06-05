@@ -20,7 +20,7 @@ describe('DVCVariable tests', () => {
             key: 'variableKey',
             defaultValue: false,
             value: 4,
-            evalReason: {},
+            eval: {},
         } as any)
         expect(variable.key).toBe('variablekey')
         expect(variable.defaultValue).toBe(false)

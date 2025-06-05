@@ -1,4 +1,5 @@
 // src/mocks/handlers.js
+import { EVAL_REASONS } from '@devcycle/types'
 import { http, HttpResponse } from 'msw'
 
 export const handlers = [
@@ -28,6 +29,9 @@ export const handlers = [
                         value: true,
                         type: 'Boolean',
                         defaultValue: false,
+                        eval: {
+                            reason: EVAL_REASONS.OPT_IN,
+                        },
                     },
                     { status: 200 },
                 )
@@ -38,6 +42,9 @@ export const handlers = [
                         value: true,
                         type: 'Boolean',
                         defaultValue: false,
+                        eval: {
+                            reason: EVAL_REASONS.TARGETING_MATCH,
+                        },
                     },
                     { status: 200 },
                 )
@@ -67,6 +74,9 @@ export const handlers = [
                                 value: true,
                                 type: 'Boolean',
                                 defaultValue: false,
+                                eval: {
+                                    reason: EVAL_REASONS.OPT_IN,
+                                },
                             },
                         },
                         { status: 200 },
@@ -79,6 +89,9 @@ export const handlers = [
                                 value: true,
                                 type: 'Boolean',
                                 defaultValue: false,
+                                eval: {
+                                    reason: EVAL_REASONS.TARGETING_MATCH,
+                                },
                             },
                         },
                         { status: 200 },
@@ -112,6 +125,9 @@ export const handlers = [
                                 variationName: 'Variation Name',
                                 key: 'test-feature-edgedb',
                                 type: 'release',
+                                eval: {
+                                    reason: EVAL_REASONS.OPT_IN,
+                                },
                             },
                         },
                         { status: 200 },
@@ -126,6 +142,9 @@ export const handlers = [
                                 variationName: 'Variation Name',
                                 key: 'test-feature',
                                 type: 'release',
+                                eval: {
+                                    reason: EVAL_REASONS.TARGETING_MATCH,
+                                },
                             },
                         },
                         { status: 200 },

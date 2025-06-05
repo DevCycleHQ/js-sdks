@@ -12,8 +12,10 @@ import {
     DevCyclePlatformDetails,
 } from './models/populatedUser'
 import {
+    DEFAULT_REASON_DETAILS,
     DevCycleServerSDKOptions,
     DVCLogger,
+    EVAL_REASONS,
     getVariableTypeFromValue,
     InferredVariableType,
     VariableDefinitions,
@@ -130,7 +132,15 @@ export class DevCycleCloudClient<
                     `Type mismatch for variable ${key}. Expected ${type}, got ${variableResponse.type}`,
                 )
                 // Default Variable
-                return new DVCVariable({ key, type, defaultValue })
+                return new DVCVariable({
+                    key,
+                    type,
+                    defaultValue,
+                    eval: {
+                        reason: EVAL_REASONS.DEFAULT,
+                        details: DEFAULT_REASON_DETAILS.TYPE_MISMATCH,
+                    },
+                })
             }
 
             return new DVCVariable({
@@ -138,6 +148,7 @@ export class DevCycleCloudClient<
                 type,
                 defaultValue,
                 value: variableResponse.value as VariableTypeAlias<T>,
+                eval: variableResponse.eval,
             })
         } catch (err) {
             throwIfUserError(err)
@@ -149,7 +160,15 @@ export class DevCycleCloudClient<
                 )
             }
             // Default Variable
-            return new DVCVariable({ key, type, defaultValue })
+            return new DVCVariable({
+                key,
+                type,
+                defaultValue,
+                eval: {
+                    reason: EVAL_REASONS.DEFAULT,
+                    details: DEFAULT_REASON_DETAILS.ERROR,
+                },
+            })
         }
     }
 

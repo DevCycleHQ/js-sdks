@@ -27,18 +27,6 @@ export type SDKTypes = (typeof SDKTypeValues)[number]
 
 export type QueryParams = { [key: string]: string }
 
-export enum DEFAULT_REASONS {
-    MISSING_CONFIG = 'MISSING_CONFIG',
-    MISSING_VARIABLE = 'MISSING_VARIABLE',
-    MISSING_FEATURE = 'MISSING_FEATURE',
-    MISSING_VARIATION = 'MISSING_VARIATION',
-    MISSING_VARIABLE_FOR_VARIATION = 'MISSING_VARIABLE_FOR_VARIATION',
-    USER_NOT_IN_ROLLOUT = 'USER_NOT_IN_ROLLOUT',
-    USER_NOT_TARGETED = 'USER_NOT_TARGETED',
-    INVALID_VARIABLE_TYPE = 'INVALID_VARIABLE_TYPE',
-    UNKNOWN = 'UNKNOWN',
-}
-
 export enum EVAL_REASONS {
     TARGETING_MATCH = 'TARGETING_MATCH',
     SPLIT = 'SPLIT',
@@ -71,8 +59,22 @@ export enum EVAL_REASON_DETAILS {
     CUSTOM_DATA = 'Custom Data',
 }
 
+export enum DEFAULT_REASON_DETAILS {
+    MISSING_CONFIG = 'Missing Config',
+    MISSING_VARIABLE = 'Missing Variable',
+    MISSING_FEATURE = 'Missing Feature',
+    MISSING_VARIATION = 'Missing Variation',
+    MISSING_VARIABLE_FOR_VARIATION = 'Missing Variable for Variation',
+    USER_NOT_IN_ROLLOUT = 'User Not in Rollout',
+    USER_NOT_TARGETED = 'User Not Targeted',
+    INVALID_VARIABLE_TYPE = 'Invalid Variable Type',
+    TYPE_MISMATCH = 'Variable Type Mismatch',
+    UNKNOWN = 'Unknown',
+    ERROR = 'Error',
+}
+
 export type EvalReason = {
-    reason: EVAL_REASONS | DEFAULT_REASONS
+    reason: EVAL_REASONS
     details?: string
 }
 
@@ -393,6 +395,7 @@ export class DVCOptInUser {
 export type SDKVariable = PublicVariable & {
     value: VariableValue
     _feature?: string
+    evalReason?: unknown
     eval?: EvalReason
 }
 
