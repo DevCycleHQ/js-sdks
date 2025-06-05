@@ -1,4 +1,5 @@
 import { DevCycleOptions, DevCycleUser, DVCCustomDataJSON } from './types'
+import { CacheStore } from './CacheStore'
 import { v4 as uuidv4 } from 'uuid'
 import packageJson from '../package.json'
 import UAParser from 'ua-parser-js'
@@ -35,12 +36,25 @@ export class DVCPopulatedUser implements DevCycleUser {
     readonly sdkVersion: string
     readonly sdkPlatform?: string
 
+    private generateAndSaveAnonUserId(
+        anonymousUserId?: string,
+        store?: CacheStore,
+    ): string {
+        const userId = anonymousUserId || uuidv4()
+        // Save newly generated anonymous user ID to storage
+        if (!anonymousUserId && store) {
+            void store.saveAnonUserId(userId)
+        }
+        return userId
+    }
+
     constructor(
         user: DevCycleUser,
         options: DevCycleOptions,
         staticData?: StaticData,
         anonymousUserId?: string,
         headerUserAgent?: string,
+        store?: CacheStore,
     ) {
         // Treat empty string user_id as null
         const normalizedUserId = user.user_id === '' ? undefined : user.user_id
@@ -55,11 +69,16 @@ export class DVCPopulatedUser implements DevCycleUser {
         // Set user_id and isAnonymous based on the input
         if (user.isAnonymous === true) {
             // Case: { isAnonymous: true } or { user_id: 'abc', isAnonymous: true }
-            this.user_id = user.user_id || anonymousUserId || uuidv4()
+            this.user_id =
+                normalizedUserId ||
+                this.generateAndSaveAnonUserId(anonymousUserId, store)
             this.isAnonymous = true
         } else if (!normalizedUserId) {
             // Case: {} (empty object) - set as anonymous
-            this.user_id = anonymousUserId || uuidv4()
+            this.user_id = this.generateAndSaveAnonUserId(
+                anonymousUserId,
+                store,
+            )
             this.isAnonymous = true
         } else {
             // Case: { user_id: 'abc' } or { user_id: 'abc', isAnonymous: false }
