@@ -38,6 +38,9 @@ describe('DevCycleCloudClient without EdgeDB', () => {
             expect(res.isDefaulted).toBe(false)
             expect(res.key).not.toContain('edgedb')
             expect(res.type).toEqual('Boolean')
+            expect(res.eval).toEqual({
+                reason: 'TARGETING_MATCH',
+            })
 
             await expect(
                 client.variableValue(user, 'test-key', false),
@@ -65,6 +68,10 @@ describe('DevCycleCloudClient without EdgeDB', () => {
             expect(res.value).toBe(false)
             expect(res.isDefaulted).toBe(true)
             expect(res.type).toEqual('Boolean')
+            expect(res.eval).toEqual({
+                reason: 'DEFAULT',
+                details: 'Error',
+            })
 
             await expect(
                 client.variableValue(user, 'test-key-not-in-config', false),
@@ -135,6 +142,9 @@ describe('DevCycleCloudClient without EdgeDB', () => {
                     value: true,
                     type: 'Boolean',
                     defaultValue: false,
+                    eval: {
+                        reason: 'TARGETING_MATCH',
+                    },
                 },
             })
         })
@@ -167,6 +177,9 @@ describe('DevCycleCloudClient without EdgeDB', () => {
                     variationName: 'Variation Name',
                     key: 'test-feature',
                     type: 'release',
+                    eval: {
+                        reason: 'TARGETING_MATCH',
+                    },
                 },
             })
         })
@@ -259,6 +272,9 @@ describe('DevCycleCloudClient with EdgeDB Enabled', () => {
             expect(res.key).toContain('test-key')
             expect(res.value).toBe(true)
             expect(res.isDefaulted).toBe(false)
+            expect(res.eval).toEqual({
+                reason: 'OPT_IN',
+            })
 
             await expect(
                 client.variableValue(user, 'test-key', false),
@@ -274,6 +290,10 @@ describe('DevCycleCloudClient with EdgeDB Enabled', () => {
             expect(res.key).not.toContain('edgedb')
             expect(res.value).toBe(false)
             expect(res.isDefaulted).toBe(true)
+            expect(res.eval).toEqual({
+                reason: 'DEFAULT',
+                details: 'Error',
+            })
 
             await expect(
                 client.variableValue(user, 'test-key-not-in-config', false),
@@ -344,6 +364,9 @@ describe('DevCycleCloudClient with EdgeDB Enabled', () => {
                     value: true,
                     type: 'Boolean',
                     defaultValue: false,
+                    eval: {
+                        reason: 'OPT_IN',
+                    },
                 },
             })
         })
@@ -376,6 +399,9 @@ describe('DevCycleCloudClient with EdgeDB Enabled', () => {
                     variationName: 'Variation Name',
                     key: 'test-feature-edgedb',
                     type: 'release',
+                    eval: {
+                        reason: 'OPT_IN',
+                    },
                 },
             })
         })

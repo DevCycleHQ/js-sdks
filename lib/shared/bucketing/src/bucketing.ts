@@ -13,10 +13,18 @@ import {
     PublicRolloutStage,
     PublicTarget,
     Variation,
+    EVAL_REASONS,
+    EvalReason,
+    EVAL_REASON_DETAILS,
 } from '@devcycle/types'
 
 import murmurhash from 'murmurhash'
 import { evaluateOperator } from './segmentation'
+
+type VariationReasonResult = {
+    variation: string
+    eval?: EvalReason
+}
 
 // Max value of an unsigned 32-bit integer, which is what murmurhash returns
 const MAX_HASH_VALUE = 4294967295
@@ -53,11 +61,15 @@ export const generateBoundedHash = (
 export const decideTargetVariation = ({
     target,
     boundedHash,
+    reasonDetails,
 }: {
     target: PublicTarget
     boundedHash: number
-}): string => {
+    reasonDetails?: string
+}): VariationReasonResult => {
     const variations = orderBy(target.distribution, '_variation', ['desc'])
+    const isRollout = target.rollout !== undefined
+    const isRandomDistribution = target.distribution.length !== 1
 
     let distributionIndex = 0
     const previousDistributionIndex = 0
@@ -67,7 +79,19 @@ export const decideTargetVariation = ({
             boundedHash >= previousDistributionIndex &&
             boundedHash < distributionIndex
         ) {
-            return variation._variation
+            return {
+                variation: variation._variation,
+                eval:
+                    isRollout || isRandomDistribution
+                        ? {
+                              reason: EVAL_REASONS.SPLIT,
+                              details: reasonDetails ?? undefined,
+                          }
+                        : {
+                              reason: EVAL_REASONS.TARGETING_MATCH,
+                              details: reasonDetails ?? undefined,
+                          },
+            }
         }
     }
     throw new Error('Failed to decide target variation')
@@ -143,16 +167,19 @@ export const doesUserPassRollout = ({
 export const bucketForSegmentedFeature = ({
     boundedHash,
     target,
+    reasonDetails,
 }: {
     target: PublicTarget
     boundedHash: number
-}): string => {
-    return decideTargetVariation({ target, boundedHash })
+    reasonDetails?: string
+}): VariationReasonResult => {
+    return decideTargetVariation({ target, boundedHash, reasonDetails })
 }
 
 type SegmentedFeatureData = {
     feature: PublicFeature<string>
     target: PublicTarget<string>
+    reasonDetails?: string
 }
 
 const checkRolloutAndEvaluate = ({
@@ -195,21 +222,25 @@ export const getSegmentedFeatureDataFromConfig = ({
             feature.settings?.['optInEnabled'] &&
             config.project.settings?.['optIn']?.['enabled']
 
+        let featureReasonDetails = ''
         const segmentedFeatureTarget = feature.configuration.targets.find(
             (target) => {
+                const { result, reasonDetails } = evaluateOperator({
+                    operator: target._audience.filters,
+                    data: user,
+                    featureId: feature._id,
+                    isOptInEnabled: !!isOptInEnabled,
+                    audiences: config.audiences,
+                })
+                if (result && reasonDetails) {
+                    featureReasonDetails = reasonDetails
+                }
                 return (
                     checkRolloutAndEvaluate({
                         target,
                         user,
                         disablePassthroughRollouts,
-                    }) &&
-                    evaluateOperator({
-                        operator: target._audience.filters,
-                        data: user,
-                        featureId: feature._id,
-                        isOptInEnabled: !!isOptInEnabled,
-                        audiences: config.audiences,
-                    })
+                    }) && result
                 )
             },
         )
@@ -217,6 +248,7 @@ export const getSegmentedFeatureDataFromConfig = ({
             accumulator.push({
                 feature,
                 target: segmentedFeatureTarget,
+                reasonDetails: featureReasonDetails,
             })
         }
         return accumulator
@@ -244,9 +276,11 @@ export const generateBucketedConfig = ({
     const updateMapsWithBucketedFeature = ({
         feature,
         variation,
+        evalReason,
     }: {
         feature: Feature
         variation: Variation
+        evalReason?: EvalReason
     }) => {
         const { _id, key, type, settings } = feature
 
@@ -258,6 +292,7 @@ export const generateBucketedConfig = ({
             variationName: variation.name,
             variationKey: variation.key,
             settings,
+            eval: evalReason,
         }
         featureVariationMap[_id] = variation._id
         variation.variables.forEach(({ _var, value }) => {
@@ -269,11 +304,12 @@ export const generateBucketedConfig = ({
                 ...variable,
                 _feature: _id,
                 value,
+                eval: evalReason,
             }
         })
     }
 
-    segmentedFeatures.forEach(({ feature, target }) => {
+    segmentedFeatures.forEach(({ feature, target, reasonDetails }) => {
         const { variations } = feature
         const bucketingValue = getUserValueForBucketingKey({ user, target })
         const { rolloutHash, bucketingHash } = generateBoundedHashes(
@@ -291,16 +327,18 @@ export const generateBucketedConfig = ({
             return
         }
 
-        const variation_id = bucketForSegmentedFeature({
-            boundedHash: bucketingHash,
-            target,
-        })
+        const { variation: variation_id, eval: evalReason } =
+            bucketForSegmentedFeature({
+                boundedHash: bucketingHash,
+                target,
+                reasonDetails,
+            })
         const variation = variations.find((v) => v._id === variation_id)
         if (!variation) {
             throw new Error(`Config missing variation: ${variation_id}`)
         }
 
-        updateMapsWithBucketedFeature({ feature, variation })
+        updateMapsWithBucketedFeature({ feature, variation, evalReason })
     })
 
     for (const [_feature, _variation] of Object.entries(overrides || {})) {
@@ -314,7 +352,14 @@ export const generateBucketedConfig = ({
             continue
         }
 
-        updateMapsWithBucketedFeature({ feature, variation })
+        updateMapsWithBucketedFeature({
+            feature,
+            variation,
+            evalReason: {
+                reason: EVAL_REASONS.OVERRIDE,
+                details: EVAL_REASON_DETAILS.OVERRIDE,
+            },
+        })
     }
 
     return {

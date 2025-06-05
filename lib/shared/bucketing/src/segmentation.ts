@@ -9,16 +9,21 @@ import {
     PublicAudience,
     AudienceFilterOrOperator,
     UserSubType,
+    EVAL_REASON_DETAILS,
 } from '@devcycle/types'
 import UAParser from 'ua-parser-js'
 
-// TODO add support for OR/XOR as well as recursive filters
+type SegmentationResult = {
+    result: boolean
+    reasonDetails?: string
+}
+
 /**
  * Evaluate an operator object based on its contained filters and the user data given
  * Returns true if the user's data allows them through the segmentation
- * @param operator - The set of filters to evaluate, and the boolean operator to follow (AND, OR, XOR)
+ * @param operator - The set of filters to evaluate, and the boolean operator to follow (AND, OR)
  * @param data - The incoming user, device, and user agent data
- * @returns {*|boolean|boolean}
+ * @returns {SegmentationResult}
  */
 export const evaluateOperator = ({
     operator,
@@ -32,32 +37,48 @@ export const evaluateOperator = ({
     featureId: string
     isOptInEnabled: boolean
     audiences?: { [id: string]: Omit<PublicAudience<string>, '_id'> }
-}): boolean => {
-    if (!operator?.filters?.length) return false
+}): SegmentationResult => {
+    if (!operator?.filters?.length) return { result: false }
 
-    const doesUserPassFilter = (filter: AudienceFilterOrOperator) => {
+    let reason = ''
+    const doesUserPassFilter = (
+        filter: AudienceFilterOrOperator,
+        index: number,
+    ) => {
         if (filter.operator) {
-            return evaluateOperator({
+            const { result } = evaluateOperator({
                 operator: filter,
                 data,
                 featureId,
                 isOptInEnabled,
                 audiences,
             })
+            return result
         }
-        if (filter.type === 'all') return true
+        if (filter.type === 'all') {
+            reason = EVAL_REASON_DETAILS.ALL_USERS
+            return true
+        }
         if (filter.type === 'optIn') {
             const optIns = data.optIns
-            return isOptInEnabled && !!optIns?.[featureId]
+            const result = isOptInEnabled && !!optIns?.[featureId]
+            reason = result
+                ? EVAL_REASON_DETAILS.OPT_IN
+                : EVAL_REASON_DETAILS.NOT_OPTED_IN
+            return result
         }
         if (filter.type === 'audienceMatch') {
-            return filterForAudienceMatch({
+            const { result, reasonDetails } = filterForAudienceMatch({
                 operator: filter,
                 data,
                 featureId,
                 isOptInEnabled,
                 audiences,
             })
+            if (result && reasonDetails) {
+                reason = reasonDetails
+            }
+            return result
         }
         if (filter.type !== 'user') {
             console.error(`Invalid filter type: ${filter.type}`)
@@ -73,20 +94,50 @@ export const evaluateOperator = ({
             return false
         }
 
-        return filterFunctionsBySubtype[filter.subType](data, filter)
+        const { result, reasonDetails } = filterFunctionsBySubtype[
+            filter.subType
+        ](data, filter)
+
+        if (result && reasonDetails) {
+            if (operator.operator === 'and') {
+                reason = reason.concat(
+                    reasonDetails,
+                    index < (operator.filters?.length ?? 0) - 1 ? ' AND ' : '',
+                )
+            } else {
+                reason = reasonDetails
+            }
+        }
+
+        return result
     }
 
     if (operator.operator === 'or') {
-        return operator.filters.some(doesUserPassFilter)
+        const result = operator.filters.some(doesUserPassFilter)
+        if (result) {
+            return {
+                result,
+                reasonDetails: reason,
+            }
+        }
+        return { result }
     } else {
-        return operator.filters.every(doesUserPassFilter)
+        const result = operator.filters.every(doesUserPassFilter)
+        if (result) {
+            return {
+                result,
+                reasonDetails: reason,
+            }
+        }
+        return { result }
     }
 }
+
 type FilterFunctionsBySubtype = {
     [key in UserSubType]: (
         data: any,
         filter: AudienceFilterOrOperator,
-    ) => boolean
+    ) => SegmentationResult
 }
 
 function filterForAudienceMatch({
@@ -101,8 +152,8 @@ function filterForAudienceMatch({
     featureId: string
     isOptInEnabled: boolean
     audiences?: { [id: string]: Omit<PublicAudience<string>, '_id'> }
-}): boolean {
-    if (!operator?._audiences) return false
+}): SegmentationResult {
+    if (!operator?._audiences) return { result: false }
     const comparator = operator.comparator
     // Recursively evaluate every audience in the _audiences array
     for (const _audience of operator._audiences) {
@@ -112,39 +163,96 @@ function filterForAudienceMatch({
             console.error(
                 'Invalid audience referenced by audienceMatch filter.',
             )
-            return false
+            return { result: false }
         }
-        if (
-            evaluateOperator({
-                operator: audience.filters,
-                data,
-                featureId,
-                isOptInEnabled,
-                audiences,
-            })
-        ) {
-            return comparator === '='
+        const { result, reasonDetails } = evaluateOperator({
+            operator: audience.filters,
+            data,
+            featureId,
+            isOptInEnabled,
+            audiences,
+        })
+        if (result) {
+            return {
+                result: comparator === '=',
+                reasonDetails:
+                    EVAL_REASON_DETAILS.AUDIENCE_MATCH +
+                    (reasonDetails ? ` -> ${reasonDetails}` : ''),
+            }
         }
     }
-    return comparator === '!='
+    return {
+        result: comparator === '!=',
+        reasonDetails: EVAL_REASON_DETAILS.NOT_IN_AUDIENCE,
+    }
 }
 
 const filterFunctionsBySubtype: FilterFunctionsBySubtype = {
-    country: (data, filter) => checkStringsFilter(data.country, filter),
-    email: (data, filter) => checkStringsFilter(data.email, filter),
-    ip: (data, filter) => checkStringsFilter(data.ip, filter),
-    user_id: (data, filter) => checkStringsFilter(data.user_id, filter),
-    appVersion: (data, filter) => checkVersionFilters(data.appVersion, filter),
-    platformVersion: (data, filter) =>
-        checkVersionFilters(data.platformVersion, filter),
-    deviceModel: (data, filter) => checkStringsFilter(data.deviceModel, filter),
-    platform: (data, filter) => checkStringsFilter(data.platform, filter),
+    country: (data, filter) => {
+        const result = checkStringsFilter(data.country, filter)
+        return {
+            result,
+            reasonDetails: result ? EVAL_REASON_DETAILS.COUNTRY : undefined,
+        }
+    },
+    email: (data, filter) => {
+        const result = checkStringsFilter(data.email, filter)
+        return {
+            result,
+            reasonDetails: result ? EVAL_REASON_DETAILS.EMAIL : undefined,
+        }
+    },
+    user_id: (data, filter) => {
+        const result = checkStringsFilter(data.user_id, filter)
+        return {
+            result,
+            reasonDetails: result ? EVAL_REASON_DETAILS.USER_ID : undefined,
+        }
+    },
+    appVersion: (data, filter) => {
+        const result = checkVersionFilters(data.appVersion, filter)
+        return {
+            result,
+            reasonDetails: result ? EVAL_REASON_DETAILS.APP_VERSION : undefined,
+        }
+    },
+    platformVersion: (data, filter) => {
+        const result = checkVersionFilters(data.platformVersion, filter)
+        return {
+            result,
+            reasonDetails: result
+                ? EVAL_REASON_DETAILS.PLATFORM_VERSION
+                : undefined,
+        }
+    },
+    deviceModel: (data, filter) => {
+        const result = checkStringsFilter(data.deviceModel, filter)
+        return {
+            result,
+            reasonDetails: result
+                ? EVAL_REASON_DETAILS.DEVICE_MODEL
+                : undefined,
+        }
+    },
+    platform: (data, filter) => {
+        const result = checkStringsFilter(data.platform, filter)
+        return {
+            result,
+            reasonDetails: result ? EVAL_REASON_DETAILS.PLATFORM : undefined,
+        }
+    },
     customData: (data, filter) => {
         const combinedCustomData = {
             ...data.customData,
             ...data.privateCustomData,
         }
-        return checkCustomData(combinedCustomData, filter)
+        const result = checkCustomData(combinedCustomData, filter)
+        return {
+            result,
+            reasonDetails: result
+                ? EVAL_REASON_DETAILS.CUSTOM_DATA + ` -> ${filter.dataKey}`
+                : undefined,
+        }
     },
 }
 

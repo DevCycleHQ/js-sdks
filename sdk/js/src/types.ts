@@ -10,6 +10,7 @@ import type {
     VariableKey,
     InferredVariableType,
     SSEConnectionConstructor,
+    EvalReason,
 } from '@devcycle/types'
 export { UserError } from '@devcycle/types'
 
@@ -24,7 +25,7 @@ export interface ErrorCallback<T> {
 export type DVCVariableSet = {
     [key: string]: Pick<
         DVCVariable<DVCVariableValue>,
-        'key' | 'value' | 'evalReason'
+        'key' | 'value' | 'eval'
     > & {
         _id: string
         type: string
@@ -38,7 +39,7 @@ export type DVCFeature = {
     readonly variationName: string
     readonly key: string
     readonly type: string
-    readonly evalReason?: any
+    readonly eval?: EvalReason
 }
 
 export type DVCFeatureSet = {
@@ -229,7 +230,7 @@ export interface DVCVariable<
      * Evaluation Reason as to why the variable was segmented into a specific Feature and
      * given this specific value
      */
-    readonly evalReason?: any
+    readonly eval?: EvalReason
 
     /**
      * Use the onUpdate callback to be notified everytime the value of the variable

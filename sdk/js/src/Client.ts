@@ -341,7 +341,7 @@ export class DevCycleClient<
             if (configVariable) {
                 if (configVariable.type === type) {
                     data.value = configVariable.value as VariableTypeAlias<T>
-                    data.evalReason = configVariable.evalReason
+                    data.eval = configVariable.eval
                 } else {
                     this.logger.warn(
                         `Type mismatch for variable ${key}. Expected ${type}, got ${configVariable.type}`,

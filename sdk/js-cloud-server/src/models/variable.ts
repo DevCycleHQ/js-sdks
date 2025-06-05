@@ -17,6 +17,7 @@ export type VariableParam<T extends DVCVariableValue> = {
     value?: VariableTypeAlias<T>
     type: VariableType
     evalReason?: unknown
+    eval?: unknown
 }
 
 export class DVCVariable<
@@ -29,10 +30,10 @@ export class DVCVariable<
     readonly defaultValue: T
     readonly isDefaulted: boolean
     readonly type: 'String' | 'Number' | 'Boolean' | 'JSON'
-    readonly evalReason?: unknown
+    readonly eval?: unknown
 
     constructor(variable: VariableParam<T>) {
-        const { key, defaultValue, value, evalReason, type } = variable
+        const { key, defaultValue, value, eval: evalReason, type } = variable
         checkParamDefined('key', key)
         checkParamDefined('defaultValue', defaultValue)
         checkParamType('key', key, typeEnum.string)
@@ -45,7 +46,7 @@ export class DVCVariable<
                 ? (defaultValue as unknown as VariableTypeAlias<T>)
                 : value
         this.defaultValue = defaultValue
-        this.evalReason = evalReason
+        this.eval = evalReason
         this.type = type
     }
 }

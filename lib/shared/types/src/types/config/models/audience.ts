@@ -77,7 +77,6 @@ export enum FilterType {
 export enum UserSubType {
     user_id = 'user_id',
     email = 'email',
-    ip = 'ip',
     country = 'country',
     platform = 'platform',
     platformVersion = 'platformVersion',

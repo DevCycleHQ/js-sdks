@@ -27,6 +27,57 @@ export type SDKTypes = (typeof SDKTypeValues)[number]
 
 export type QueryParams = { [key: string]: string }
 
+export enum EVAL_REASONS {
+    TARGETING_MATCH = 'TARGETING_MATCH',
+    SPLIT = 'SPLIT',
+    DEFAULT = 'DEFAULT',
+    DISABLED = 'DISABLED',
+    ERROR = 'ERROR',
+    OVERRIDE = 'OVERRIDE',
+    OPT_IN = 'OPT_IN',
+}
+
+export enum EVAL_REASON_DETAILS {
+    // All Users
+    ALL_USERS = 'All Users',
+    // Audiences
+    AUDIENCE_MATCH = 'Audience Match',
+    NOT_IN_AUDIENCE = 'Not in Audience',
+    // Opt-In
+    OPT_IN = 'Opt-In',
+    NOT_OPTED_IN = 'Not Opt-In',
+    // Overrides
+    OVERRIDE = 'Override',
+    // User Specific
+    USER_ID = 'User ID',
+    EMAIL = 'Email',
+    COUNTRY = 'Country',
+    PLATFORM = 'Platform',
+    PLATFORM_VERSION = 'Platform Version',
+    APP_VERSION = 'App Version',
+    DEVICE_MODEL = 'Device Model',
+    CUSTOM_DATA = 'Custom Data',
+}
+
+export enum DEFAULT_REASON_DETAILS {
+    MISSING_CONFIG = 'Missing Config',
+    MISSING_VARIABLE = 'Missing Variable',
+    MISSING_FEATURE = 'Missing Feature',
+    MISSING_VARIATION = 'Missing Variation',
+    MISSING_VARIABLE_FOR_VARIATION = 'Missing Variable for Variation',
+    USER_NOT_IN_ROLLOUT = 'User Not in Rollout',
+    USER_NOT_TARGETED = 'User Not Targeted',
+    INVALID_VARIABLE_TYPE = 'Invalid Variable Type',
+    TYPE_MISMATCH = 'Variable Type Mismatch',
+    UNKNOWN = 'Unknown',
+    ERROR = 'Error',
+}
+
+export type EvalReason = {
+    reason: EVAL_REASONS
+    details?: string
+}
+
 const boolTransform = ({ value }: { value: unknown }) => {
     if (value === 'true') {
         return true
@@ -345,6 +396,7 @@ export type SDKVariable = PublicVariable & {
     value: VariableValue
     _feature?: string
     evalReason?: unknown
+    eval?: EvalReason
 }
 
 export type SDKFeature = Pick<
@@ -354,7 +406,7 @@ export type SDKFeature = Pick<
     _variation: string
     variationName: string
     variationKey: string
-    evalReason?: unknown
+    eval?: EvalReason
 }
 
 type FeatureVariation = {
