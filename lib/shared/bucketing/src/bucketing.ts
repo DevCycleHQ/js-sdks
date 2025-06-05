@@ -23,7 +23,7 @@ import { evaluateOperator } from './segmentation'
 
 type VariationReasonResult = {
     variation: string
-    evalReason?: EvalReason
+    eval?: EvalReason
 }
 
 // Max value of an unsigned 32-bit integer, which is what murmurhash returns
@@ -81,7 +81,7 @@ export const decideTargetVariation = ({
         ) {
             return {
                 variation: variation._variation,
-                evalReason:
+                eval:
                     isRollout || isRandomDistribution
                         ? {
                               reason: EVAL_REASONS.SPLIT,
@@ -292,7 +292,7 @@ export const generateBucketedConfig = ({
             variationName: variation.name,
             variationKey: variation.key,
             settings,
-            evalReason,
+            eval: evalReason,
         }
         featureVariationMap[_id] = variation._id
         variation.variables.forEach(({ _var, value }) => {
@@ -304,7 +304,7 @@ export const generateBucketedConfig = ({
                 ...variable,
                 _feature: _id,
                 value,
-                evalReason,
+                eval: evalReason,
             }
         })
     }
@@ -327,7 +327,7 @@ export const generateBucketedConfig = ({
             return
         }
 
-        const { variation: variation_id, evalReason } =
+        const { variation: variation_id, eval: evalReason } =
             bucketForSegmentedFeature({
                 boundedHash: bucketingHash,
                 target,

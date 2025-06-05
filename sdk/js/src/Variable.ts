@@ -1,12 +1,12 @@
 import { DVCVariable as Variable, DVCVariableValue } from './types'
 import { checkParamDefined, checkParamType } from './utils'
-import type { VariableTypeAlias } from '@devcycle/types'
+import type { EvalReason, VariableTypeAlias } from '@devcycle/types'
 
 export interface DVCVariableOptions<T> {
     key: string
     defaultValue: T
     value?: VariableTypeAlias<T>
-    evalReason?: any
+    eval?: EvalReason
 }
 
 export class DVCVariable<T extends DVCVariableValue> implements Variable<T> {
@@ -16,7 +16,7 @@ export class DVCVariable<T extends DVCVariableValue> implements Variable<T> {
     callback?: (value: VariableTypeAlias<T>) => void
     readonly defaultValue: T
     isDefaulted: boolean
-    readonly evalReason: any
+    readonly eval?: EvalReason
 
     constructor(variable: DVCVariableOptions<T>) {
         const { key, defaultValue } = variable
@@ -33,7 +33,7 @@ export class DVCVariable<T extends DVCVariableValue> implements Variable<T> {
         }
 
         this.defaultValue = variable.defaultValue
-        this.evalReason = variable.evalReason
+        this.eval = variable.eval
     }
 
     onUpdate(callback: (value: VariableTypeAlias<T>) => void): DVCVariable<T> {
