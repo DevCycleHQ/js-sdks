@@ -694,9 +694,9 @@ describe('DevCycleClient tests', () => {
         })
 
         it('should throw an error if the user is invalid', async () => {
-            await expect(client.identifyUser({ user_id: '' })).rejects.toThrow(
+            await expect(client.identifyUser({ user_id: '', isAnonymous: false })).rejects.toThrow(
                 new Error(
-                    'A User cannot be created with a user_id that is an empty string',
+                    'A User cannot be created with isAnonymous: false without a valid user_id',
                 ),
             )
         })
