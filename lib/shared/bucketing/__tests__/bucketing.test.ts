@@ -1625,7 +1625,7 @@ describe('Bounded Hash Limits', () => {
                 })
                 expect(variation).toBeDefined()
                 if (tc.expectedVariation) {
-                    expect(variation).toBe(tc.expectedVariation)
+                    expect(variation.variation).toBe(tc.expectedVariation)
                 }
             })
 
@@ -1636,7 +1636,7 @@ describe('Bounded Hash Limits', () => {
                 })
                 expect(variation).toBeDefined()
                 if (tc.expectedVariation) {
-                    expect(variation).toBe(tc.expectedVariation)
+                    expect(variation.variation).toBe(tc.expectedVariation)
                 }
             })
 
@@ -1647,7 +1647,7 @@ describe('Bounded Hash Limits', () => {
                 })
                 expect(variation).toBeDefined()
                 if (tc.expectedVariation) {
-                    expect(variation).toBe(tc.expectedVariation)
+                    expect(variation.variation).toBe(tc.expectedVariation)
                 }
             })
 
@@ -1658,7 +1658,7 @@ describe('Bounded Hash Limits', () => {
                 })
                 expect(variation).toBeDefined()
                 if (tc.expectedVariation) {
-                    expect(variation).toBe(tc.expectedVariation)
+                    expect(variation.variation).toBe(tc.expectedVariation)
                 }
             })
         })
