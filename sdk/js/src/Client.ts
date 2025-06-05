@@ -494,7 +494,7 @@ export class DevCycleClient<
 
         let oldAnonymousId: string | null | undefined
         let anonUser: DVCPopulatedUser
-        
+
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
             this.eventQueue?.flushEvents()
 
