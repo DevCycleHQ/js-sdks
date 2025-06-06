@@ -7,6 +7,7 @@ import {
     FeatureType,
     PublicRollout,
     Rollout,
+    Target,
 } from '@devcycle/types'
 import {
     generateBoundedHashes,
@@ -1559,7 +1560,11 @@ describe('Config Parsing and Generating', () => {
 })
 
 describe('Bounded Hash Limits', () => {
-    const testCases = [
+    const testCases: {
+        name: string
+        expectedVariation: string
+        target: Target
+    }[] = [
         {
             name: 'Random Distribution',
             expectedVariation: '', // Don't test specific variation for random distribution
