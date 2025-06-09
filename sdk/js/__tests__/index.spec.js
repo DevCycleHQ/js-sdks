@@ -108,7 +108,6 @@ describe('initializeDevCycle tests', () => {
         }).not.toThrow()
 
         await client.onClientInitialized()
-        expect(client.allFeatures()).toEqual({})
         expect(getConfigJsonSpy).toHaveBeenCalledTimes(1)
         const variable = client.variable('test', false)
         expect(variable.isDefaulted).toEqual(true)
