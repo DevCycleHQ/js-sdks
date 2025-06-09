@@ -96,8 +96,9 @@ describe('initializeDevCycle tests', () => {
     it('should not throw an error and use default config when config api throws an error', async () => {
         const user = { user_id: 'testuser' }
 
-        getConfigJsonSpy.mockImplementation(() => {
-            throw new Error('api error')
+        getConfigJsonSpy.mockResolvedValue({
+            invalidProp1: {},
+            invalidProp2: [],
         })
 
         /** @type {DVC.DevCycleClient} */
@@ -107,6 +108,7 @@ describe('initializeDevCycle tests', () => {
         }).not.toThrow()
 
         await client.onClientInitialized()
+        expect(client.allFeatures()).toEqual({})
         expect(getConfigJsonSpy).toHaveBeenCalledTimes(1)
         const variable = client.variable('test', false)
         expect(variable.isDefaulted).toEqual(true)
@@ -115,8 +117,9 @@ describe('initializeDevCycle tests', () => {
     it('should not throw an error and use default config when deffered', async () => {
         const user = { user_id: 'testuser' }
 
-        getConfigJsonSpy.mockImplementation(() => {
-            throw new Error('api error')
+        getConfigJsonSpy.mockResolvedValue({
+            invalidProp1: {},
+            invalidProp2: [],
         })
 
         const client = DVC.initializeDevCycle(test_key, {
