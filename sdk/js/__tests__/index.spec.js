@@ -2,9 +2,6 @@ import * as DVC from '../src'
 import * as Request from '../src/Request'
 
 jest.mock('../src/Request')
-jest.spyOn(Request, 'getConfigJson').mockImplementation(() => {
-    return Promise.resolve({})
-})
 
 const test_key = 'client_test_sdk_key'
 const test_server_key = 'dvc_server_key'
@@ -18,6 +15,23 @@ const invalidOptionsError =
     'Invalid options! Call initialize with valid options'
 
 describe('initializeDevCycle tests', () => {
+    /**
+     * @type {jest.SpyInstance}
+     */
+    let getConfigJsonSpy
+
+    beforeEach(() => {
+        getConfigJsonSpy = jest
+            .spyOn(Request, 'getConfigJson')
+            .mockImplementation(() => {
+                return Promise.resolve({})
+            })
+    })
+
+    afterEach(() => {
+        getConfigJsonSpy.mockRestore()
+    })
+
     it('should return client for initialize and initializeDevCycle', () => {
         const user = { user_id: 'user1' }
         let client = DVC.initializeDevCycle(test_key, user)
@@ -77,5 +91,43 @@ describe('initializeDevCycle tests', () => {
 
         window.dispatchEvent(new Event('pagehide'))
         expect(flushMock).toBeCalled()
+    })
+
+    it('should not throw an error and use default config when config api throws an error', async () => {
+        const user = { user_id: 'testuser' }
+
+        getConfigJsonSpy.mockResolvedValue({
+            invalidProp1: {},
+            invalidProp2: [],
+        })
+
+        /** @type {DVC.DevCycleClient} */
+        let client
+        expect(() => {
+            client = DVC.initializeDevCycle(test_key, user)
+        }).not.toThrow()
+
+        await client.onClientInitialized()
+        expect(getConfigJsonSpy).toHaveBeenCalledTimes(1)
+        const variable = client.variable('test', false)
+        expect(variable.isDefaulted).toEqual(true)
+        expect(variable.value).toEqual(false)
+    })
+    it('should not throw an error and use default config when deffered', async () => {
+        const user = { user_id: 'testuser' }
+
+        getConfigJsonSpy.mockResolvedValue({
+            invalidProp1: {},
+            invalidProp2: [],
+        })
+
+        const client = DVC.initializeDevCycle(test_key, {
+            deferInitialization: true,
+        })
+        await expect(client.identifyUser(user)).resolves.not.toThrow()
+        expect(getConfigJsonSpy).toHaveBeenCalledTimes(1)
+        const variable = client.variable('test', false)
+        expect(variable.isDefaulted).toEqual(true)
+        expect(variable.value).toEqual(false)
     })
 })
