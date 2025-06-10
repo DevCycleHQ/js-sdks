@@ -15,7 +15,7 @@ import {
     decodeDVCUser_PB,
     decodeSDKVariable_PB,
     encodeSDKVariable_PB,
-    Audience
+    Audience,
 } from './types'
 import {
     _checkCustomData,
@@ -102,14 +102,15 @@ export function evaluateOperatorFromJSON(
 
     const operator = new AudienceOperator(operatorJSON as JSON.Obj)
     const user = DVCPopulatedUser.fromJSONString(userStr)
-    return _evaluateOperator(operator, audiences, user, new JSON.Obj())
+    const result = _evaluateOperator(operator, audiences, user, new JSON.Obj())
+    return result
 }
 
 export function decideTargetVariationFromJSON(targetStr: string, boundedHash: f64): string {
     const targetJSON = JSON.parse(targetStr)
     if (!targetJSON.isObj) throw new Error('decideTargetVariationFromJSON targetStr param not a JSON Object')
     const target = new PublicTarget(targetJSON as JSON.Obj)
-    return target.decideTargetVariation(boundedHash)
+    return target.decideTargetVariation(boundedHash).stringify()
 }
 
 export function doesUserPassRolloutFromJSON(rolloutStr: string | null, boundedHash: f64): bool {
@@ -171,7 +172,7 @@ export function triggerAbort(): void {
 }
 
 class TestData {
-    key: string
+    key: string = ''
 }
 export function testSortObjectsByString(arr: SortingArray<TestData>, direction: string): TestData[] {
     return sortObjectsByString<TestData>(arr, direction)
