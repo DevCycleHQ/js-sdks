@@ -21,20 +21,25 @@ import { configWithBucketingKey } from '../helpers/configWithBucketingKey'
 
 import moment from 'moment'
 import * as uuid from 'uuid'
-import {
-    AudienceOperator,
-    BucketedUserConfig,
-    SDKVariable,
-    EVAL_REASONS,
-    EVAL_REASON_DETAILS,
-} from '@devcycle/types'
+import { BucketedUserConfig, SDKVariable } from '@devcycle/types'
 import { cleanupSDK, initSDK } from '../setPlatformData'
+import { EVAL_REASONS, EVAL_REASON_DETAILS } from '../../assembly/types'
 import {
     variableForUserPB,
     VariableForUserArgs,
 } from '../protobufVariableHelper'
 
 type BoundedHash = { rolloutHash: number; bucketingHash: number }
+
+type EvalReason = {
+    reason: string
+    details?: string
+}
+
+type VariationReasonResult = {
+    variation: string
+    eval?: EvalReason
+}
 
 const defaultPlatformData = {
     platform: '',
@@ -70,8 +75,12 @@ const decideTargetVariation = ({
 }: {
     target: unknown
     boundedHash: number
-}): string => {
-    return decideTargetVariationFromJSON(JSON.stringify(target), boundedHash)
+}): VariationReasonResult => {
+    const variationReasonResult = decideTargetVariationFromJSON(
+        JSON.stringify(target),
+        boundedHash,
+    )
+    return JSON.parse(variationReasonResult) as VariationReasonResult
 }
 
 const generateBucketedConfig = (
@@ -177,11 +186,12 @@ describe('User Hashing and Bucketing', () => {
                 testTarget._id,
             )
 
-            const variation = decideTargetVariation({
+            const { variation } = decideTargetVariation({
                 target: testTarget,
                 boundedHash: bucketingHash,
-            }) as keyof typeof buckets
-            buckets[variation]++
+            })
+            const variationKey = variation as keyof typeof buckets
+            buckets[variationKey]++
             buckets.total++
         }
 
