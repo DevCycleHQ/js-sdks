@@ -15,6 +15,76 @@ import {
     encodeSDKVariable_PB,
 } from './'
 
+export namespace DEFAULT_REASONS {
+    export const MISSING_CONFIG = 'MISSING_CONFIG'
+    export const MISSING_VARIABLE = 'MISSING_VARIABLE'
+    export const MISSING_FEATURE = 'MISSING_FEATURE'
+    export const MISSING_VARIATION = 'MISSING_VARIATION'
+    export const MISSING_VARIABLE_FOR_VARIATION = 'MISSING_VARIABLE_FOR_VARIATION'
+    export const USER_NOT_IN_ROLLOUT = 'USER_NOT_IN_ROLLOUT'
+    export const USER_NOT_TARGETED = 'USER_NOT_TARGETED'
+    export const INVALID_VARIABLE_TYPE = 'INVALID_VARIABLE_TYPE'
+    export const UNKNOWN = 'UNKNOWN'
+}
+
+export namespace EVAL_REASONS {
+    export const TARGETING_MATCH = 'TARGETING_MATCH'
+    export const SPLIT = 'SPLIT'
+    export const DEFAULT = 'DEFAULT'
+    export const DISABLED = 'DISABLED'
+    export const ERROR = 'ERROR'
+    export const OVERRIDE = 'OVERRIDE'
+    export const OPT_IN = 'OPT_IN'
+}
+
+export namespace EVAL_REASON_DETAILS {
+    // All Users
+    export const ALL_USERS = 'All Users'
+    // Audiences
+    export const AUDIENCE_MATCH = 'Audience Match'
+    export const NOT_IN_AUDIENCE = 'Not in Audience'
+    // Opt-In
+    export const OPT_IN = 'Opt-In'
+    export const NOT_OPTED_IN = 'Not Opt-In'
+    // Overrides
+    export const OVERRIDE = 'Override'
+    // User Specific
+    export const USER_ID = 'User ID'
+    export const EMAIL = 'Email'
+    export const COUNTRY = 'Country'
+    export const PLATFORM = 'Platform'
+    export const PLATFORM_VERSION = 'Platform Version'
+    export const APP_VERSION = 'App Version'
+    export const DEVICE_MODEL = 'Device Model'
+    export const CUSTOM_DATA = 'Custom Data'
+}
+
+export class EvalReason extends JSON.Value {
+    readonly reason: string
+    readonly details: string | null
+
+    constructor(reason: string, details: string | null = null) {
+        super()
+        this.reason = reason
+        this.details = details
+    }
+
+    static fromJSONObj(jsonObj: JSON.Obj): EvalReason {
+        const reason = getStringFromJSON(jsonObj, 'reason')
+        const details = getStringFromJSONOptional(jsonObj, 'details')
+        return new EvalReason(reason, details)
+    }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('reason', this.reason)
+        if (this.details !== null) {
+            json.set('details', this.details)
+        }
+        return json.stringify()
+    }
+}
+
 export class FeatureVariation extends JSON.Obj {
     constructor(
         public readonly _feature: string,
