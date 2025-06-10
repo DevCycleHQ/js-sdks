@@ -21,9 +21,15 @@ import { configWithBucketingKey } from '../helpers/configWithBucketingKey'
 
 import moment from 'moment'
 import * as uuid from 'uuid'
-import { BucketedUserConfig, SDKVariable } from '@devcycle/types'
+import {
+    AudienceOperator,
+    BucketedUserConfig,
+    SDKVariable,
+    EVAL_REASONS,
+    EVAL_REASON_DETAILS,
+} from '@devcycle/types'
 import { cleanupSDK, initSDK } from '../setPlatformData'
-import { EVAL_REASONS, EVAL_REASON_DETAILS } from '../../assembly/types'
+
 import {
     variableForUserPB,
     VariableForUserArgs,
