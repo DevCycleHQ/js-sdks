@@ -1,7 +1,6 @@
 import {
     EvaluationContext,
     EvaluationContextValue,
-    InvalidContextError,
     JsonValue,
     OpenFeatureEventEmitter,
     ParseError,
@@ -11,7 +10,6 @@ import {
     ProviderStatus,
     ResolutionDetails,
     StandardResolutionReasons,
-    TargetingKeyMissingError,
     TrackingEventDetails,
 } from '@openfeature/web-sdk'
 // Need to disable this to keep the working jest mock
@@ -26,17 +24,6 @@ import {
     initializeDevCycle,
 } from '@devcycle/js-client-sdk'
 import { VariableValue } from '@devcycle/types'
-
-const DVCKnownPropertyKeyTypes: Record<string, string> = {
-    email: 'string',
-    name: 'string',
-    language: 'string',
-    country: 'string',
-    appVersion: 'string',
-    appBuild: 'number',
-    customData: 'object',
-    privateCustomData: 'object',
-}
 
 type EvaluationContextObject = {
     [key: string]: EvaluationContextValue
@@ -258,101 +245,124 @@ export default class DevCycleProvider implements Provider {
      * @private
      */
     private dvcUserFromContext(context: EvaluationContext): DevCycleUser {
-        const user_id = context.targetingKey ?? context.user_id
-        if (!user_id) {
-            throw new TargetingKeyMissingError(
-                'Missing targetingKey or user_id in context',
-            )
-        }
-        if (typeof user_id !== 'string') {
-            throw new InvalidContextError(
-                'targetingKey or user_id must be a string',
-            )
-        }
+        // Get first non-empty userId from targetingKey, user_id, or userId
+        const userId =
+            [context.targetingKey, context.user_id, context.userId]
+                .filter(
+                    (id): id is string => typeof id === 'string' && id !== '',
+                )
+                .shift() || null
 
-        const dvcUserData: Record<string, string | number | DVCCustomDataJSON> =
-            {}
+        const dvcUserData: Partial<DevCycleUser> = {}
         let customData: DVCCustomDataJSON = {}
         let privateCustomData: DVCCustomDataJSON = {}
 
-        for (const [key, value] of Object.entries(context)) {
-            if (key === 'targetingKey' || key === 'user_id') continue
+        // Set userId if available
+        if (userId && typeof userId === 'string') {
+            dvcUserData.user_id = userId
+        }
 
-            const knownValueType = DVCKnownPropertyKeyTypes[key]
-            if (knownValueType) {
-                if (typeof value !== knownValueType) {
+        for (const [key, value] of Object.entries(context)) {
+            // Skip user ID fields as they're handled above
+            if (
+                key === 'targetingKey' ||
+                key === 'user_id' ||
+                key === 'userId'
+            ) {
+                continue
+            }
+
+            // Handle known DevCycleUser properties with type checking
+            if (
+                key === 'email' ||
+                key === 'name' ||
+                key === 'language' ||
+                key === 'country' ||
+                key === 'appVersion'
+            ) {
+                if (typeof value === 'string') {
+                    dvcUserData[key] = value
+                } else {
                     this._devcycleClient?.logger.warn(
-                        `Expected DevCycleUser property "${key}" to be "${knownValueType}" but got ` +
+                        `Expected DevCycleUser property "${key}" to be "string" but got ` +
                             `"${typeof value}" in EvaluationContext. Ignoring value.`,
                     )
-                    continue
                 }
-
-                switch (knownValueType) {
-                    case 'string':
-                        dvcUserData[key] = value as string
-                        break
-                    case 'number':
-                        dvcUserData[key] = value as number
-                        break
-                    case 'object':
-                        if (key === 'privateCustomData') {
-                            privateCustomData = this.convertToDVCCustomDataJSON(
-                                value as EvaluationContextObject,
-                            )
-                        } else if (key === 'customData') {
-                            customData = {
-                                ...customData,
-                                ...this.convertToDVCCustomDataJSON(
-                                    value as EvaluationContextObject,
-                                ),
-                            }
-                        }
-                        break
-                    default:
-                        break
+            } else if (key === 'appBuild') {
+                if (typeof value === 'number') {
+                    dvcUserData[key] = value
+                } else {
+                    this._devcycleClient?.logger.warn(
+                        `Expected DevCycleUser property "${key}" to be "number" but got ` +
+                            `"${typeof value}" in EvaluationContext. Ignoring value.`,
+                    )
+                }
+            } else if (key === 'isAnonymous') {
+                if (typeof value === 'boolean') {
+                    dvcUserData[key] = value
+                } else {
+                    this._devcycleClient?.logger.warn(
+                        `Expected isAnonymous to be boolean but got "${typeof value}" in EvaluationContext. Ignoring value.`,
+                    )
+                }
+            } else if (key === 'privateCustomData') {
+                if (
+                    typeof value === 'object' &&
+                    value !== null &&
+                    !Array.isArray(value)
+                ) {
+                    privateCustomData = this.convertToDVCCustomDataJSON(
+                        value as EvaluationContextObject,
+                    )
+                } else {
+                    this._devcycleClient?.logger.warn(
+                        `Expected DevCycleUser property "privateCustomData" to be "object" but got ` +
+                            `"${typeof value}" in EvaluationContext. Ignoring value.`,
+                    )
+                }
+            } else if (key === 'customData') {
+                if (
+                    typeof value === 'object' &&
+                    value !== null &&
+                    !Array.isArray(value)
+                ) {
+                    customData = {
+                        ...customData,
+                        ...this.convertToDVCCustomDataJSON(
+                            value as EvaluationContextObject,
+                        ),
+                    }
+                } else {
+                    this._devcycleClient?.logger.warn(
+                        `Expected DevCycleUser property "customData" to be "object" but got ` +
+                            `"${typeof value}" in EvaluationContext. Ignoring value.`,
+                    )
                 }
             } else {
-                switch (typeof value) {
-                    case 'string':
-                        customData[key] = value
-                        break
-                    case 'number':
-                        customData[key] = value
-                        break
-                    case 'boolean':
-                        customData[key] = value
-                        break
-                    case 'object':
-                        if (value === null) {
-                            customData[key] = null
-                            break
-                        }
-                        this._devcycleClient?.logger.warn(
-                            `EvaluationContext property "${key}" is an ${
-                                Array.isArray(value) ? 'Array' : 'Object'
-                            }. ` +
-                                'DevCycleUser only supports flat customData properties of type ' +
-                                'string / number / boolean / null',
-                        )
-                        break
-                    default:
-                        this._devcycleClient?.logger.warn(
-                            `Unknown EvaluationContext property "${key}" type. ` +
-                                'DevCycleUser only supports flat customData properties of type ' +
-                                'string / number / boolean / null',
-                        )
-                        break
+                // Add to customData if it's a flat JSON value
+                if (this.isFlatJsonValue(value)) {
+                    customData[key] = value
+                } else {
+                    this._devcycleClient?.logger.warn(
+                        `Unknown EvaluationContext property "${key}" type. ` +
+                            'DevCycleUser only supports flat customData properties of type ' +
+                            'string / number / boolean / null',
+                    )
                 }
             }
         }
+
+        // If no userId was set and isAnonymous wasn't explicitly set, default to anonymous
+        if (!userId && typeof context.isAnonymous !== 'boolean') {
+            dvcUserData.isAnonymous = true
+        }
+
         return {
-            user_id,
+            ...dvcUserData,
             customData: Object.keys(customData).length ? customData : undefined,
             privateCustomData: Object.keys(privateCustomData).length
                 ? privateCustomData
                 : undefined,
-            ...dvcUserData,
         }
     }
 
@@ -389,5 +399,21 @@ export default class DevCycleProvider implements Provider {
             }
         }
         return customData
+    }
+
+    /**
+     * Check if a value is a flat JSON value supported by DevCycle.
+     * @param value
+     * @private
+     */
+    private isFlatJsonValue(
+        value: EvaluationContextValue,
+    ): value is string | number | boolean | null {
+        return (
+            typeof value === 'string' ||
+            typeof value === 'number' ||
+            typeof value === 'boolean' ||
+            value === null
+        )
     }
 }

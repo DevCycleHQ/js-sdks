@@ -201,7 +201,7 @@ describe('DevCycleReactProvider Unit Tests', () => {
                     false,
                 )
                 expect(logger.warn).toHaveBeenCalledWith(
-                    'EvaluationContext property "obj" is an Object. ' +
+                    'Unknown EvaluationContext property "obj" type. ' +
                         'DevCycleUser only supports flat customData properties of type ' +
                         'string / number / boolean / null',
                 )
