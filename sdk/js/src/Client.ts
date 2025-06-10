@@ -248,8 +248,6 @@ export class DevCycleClient<
         }
         this.eventEmitter.emitInitialized(true)
 
-        // Anonymous user ID saving is now handled in User.ts constructor
-
         return this
     }
 
@@ -466,7 +464,6 @@ export class DevCycleClient<
                 )
             }
             const config = await this.requestConsolidator.queue(updatedUser)
-            // Anonymous user ID saving is now handled in User.ts constructor
             return config.variables || {}
         } catch (err) {
             this.eventEmitter.emitError(err)
@@ -516,7 +513,6 @@ export class DevCycleClient<
                 })
                 .then(() => this.requestConsolidator.queue(anonUser))
                 .then(async (config) => {
-                    // Anonymous user ID saving is now handled in User.ts constructor
                     resolve(config.variables || {})
                 })
                 .catch(async (e) => {
