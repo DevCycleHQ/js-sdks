@@ -498,8 +498,8 @@ export class DevCycleClient<
             this.onInitialized
                 .then(() => this.store.loadAnonUserId())
                 .then(async (cachedAnonId) => {
-                    await this.store.removeAnonUserId()
                     oldAnonymousId = cachedAnonId
+                    await this.store.removeAnonUserId()
                     // Create the new anonymous user AFTER removing the old ID
                     anonUser = new DVCPopulatedUser(
                         { isAnonymous: true },
@@ -509,9 +509,8 @@ export class DevCycleClient<
                         undefined,
                         this.store,
                     )
-                    return
+                    return this.requestConsolidator.queue(anonUser)
                 })
-                .then(() => this.requestConsolidator.queue(anonUser))
                 .then(async (config) => {
                     resolve(config.variables || {})
                 })
