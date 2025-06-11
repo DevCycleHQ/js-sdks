@@ -139,12 +139,97 @@ describe('DevCycleProvider Unit Tests', () => {
             )
         })
 
+        it('should use targetingKey as user_id when available', async () => {
+            const { provider } = await initOFClient()
+            await OpenFeature.setContext({
+                targetingKey: 'targeting-key-id',
+                user_id: 'user-id',
+                userId: 'userId',
+            })
+
+            expect(provider.devcycleClient?.identifyUser).toHaveBeenCalledWith({
+                user_id: 'targeting-key-id',
+            })
+        })
+
+        it('should fallback to user_id when targetingKey is empty', async () => {
+            const { provider } = await initOFClient()
+            await OpenFeature.setContext({
+                targetingKey: '',
+                user_id: 'user-id',
+                userId: 'userId',
+            })
+
+            expect(provider.devcycleClient?.identifyUser).toHaveBeenCalledWith({
+                user_id: 'user-id',
+            })
+        })
+
+        it('should fallback to userId when targetingKey and user_id are empty', async () => {
+            const { provider } = await initOFClient()
+            await OpenFeature.setContext({
+                targetingKey: '',
+                user_id: '',
+                userId: 'userId',
+            })
+
+            expect(provider.devcycleClient?.identifyUser).toHaveBeenCalledWith({
+                user_id: 'userId',
+            })
+        })
+
+        it('should set isAnonymous true when no valid user ID is provided', async () => {
+            const { provider } = await initOFClient()
+            await OpenFeature.setContext({
+                targetingKey: '',
+                user_id: '',
+                userId: '',
+                email: 'test@example.com',
+            })
+
+            expect(provider.devcycleClient?.identifyUser).toHaveBeenCalledWith({
+                user_id: undefined,
+                email: 'test@example.com',
+                isAnonymous: true,
+            })
+        })
+
+        it('should respect explicit isAnonymous value', async () => {
+            const { provider } = await initOFClient()
+            await OpenFeature.setContext({
+                user_id: 'user-id',
+                isAnonymous: false,
+            })
+
+            expect(provider.devcycleClient?.identifyUser).toHaveBeenCalledWith({
+                user_id: 'user-id',
+                isAnonymous: false,
+            })
+        })
+
+        it('should ignore undefined and null user ID sources', async () => {
+            const { ofClient, provider } = await initOFClient()
+            const context: any = {
+                user_id: null,
+                userId: 'valid-user-id',
+            }
+            await OpenFeature.setContext(context)
+
+            expect(ofClient.getBooleanValue('boolean-flag', false)).toEqual(
+                true,
+            )
+            expect(provider.devcycleClient?.identifyUser).toHaveBeenCalledWith({
+                user_id: 'valid-user-id',
+            })
+        })
+
         it('should skip DevCycleUser properties that are not the correct type', async () => {
             const { ofClient, provider } = await initOFClient()
             const dvcUser = {
                 user_id: 'user_id',
                 appVersion: 1.0,
                 appBuild: 'string',
+                isAnonymous: 'not-boolean',
                 customData: 'data',
             }
             await OpenFeature.setContext(dvcUser)
@@ -169,8 +254,11 @@ describe('DevCycleProvider Unit Tests', () => {
                     'Ignoring value.',
             )
             expect(logger.warn).toHaveBeenCalledWith(
-                'Expected DevCycleUser property "customData" to be "object" but got "string" in EvaluationContext. ' +
-                    'Ignoring value.',
+                'Expected isAnonymous to be boolean but got "string" in EvaluationContext. Ignoring value.',
+            )
+            expect(logger.warn).toHaveBeenCalledWith(
+                'Expected DevCycleUser property "customData" to be "object" but got ' +
+                    '"string" in EvaluationContext. Ignoring value.',
             )
         })
 
@@ -201,7 +289,7 @@ describe('DevCycleProvider Unit Tests', () => {
                     false,
                 )
                 expect(logger.warn).toHaveBeenCalledWith(
-                    'EvaluationContext property "obj" is an Object. ' +
+                    'Unknown EvaluationContext property "obj" type. ' +
                         'DevCycleUser only supports flat customData properties of type ' +
                         'string / number / boolean / null',
                 )

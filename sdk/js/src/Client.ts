@@ -207,6 +207,8 @@ export class DevCycleClient<
             this.options,
             undefined,
             storedAnonymousId,
+            undefined,
+            this.store,
         )
 
         if (!this.options.bootstrapConfig) {
@@ -245,10 +247,6 @@ export class DevCycleClient<
             return this
         }
         this.eventEmitter.emitInitialized(true)
-
-        if (this.user.isAnonymous) {
-            void this.store.saveAnonUserId(this.user.user_id)
-        }
 
         return this
     }
@@ -461,12 +459,11 @@ export class DevCycleClient<
                     this.options,
                     undefined,
                     storedAnonymousId,
+                    undefined,
+                    this.store,
                 )
             }
             const config = await this.requestConsolidator.queue(updatedUser)
-            if (user.isAnonymous || !user.user_id) {
-                await this.store.saveAnonUserId(updatedUser.user_id)
-            }
             return config.variables || {}
         } catch (err) {
             this.eventEmitter.emitError(err)
@@ -493,23 +490,28 @@ export class DevCycleClient<
         }
 
         let oldAnonymousId: string | null | undefined
-        const anonUser = new DVCPopulatedUser(
-            { isAnonymous: true },
-            this.options,
-        )
+        let anonUser: DVCPopulatedUser
+
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
             this.eventQueue?.flushEvents()
 
             this.onInitialized
                 .then(() => this.store.loadAnonUserId())
                 .then(async (cachedAnonId) => {
-                    await this.store.removeAnonUserId()
                     oldAnonymousId = cachedAnonId
-                    return
+                    await this.store.removeAnonUserId()
+                    // Create the new anonymous user AFTER removing the old ID
+                    anonUser = new DVCPopulatedUser(
+                        { isAnonymous: true },
+                        this.options,
+                        undefined,
+                        undefined,
+                        undefined,
+                        this.store,
+                    )
+                    return this.requestConsolidator.queue(anonUser)
                 })
-                .then(() => this.requestConsolidator.queue(anonUser))
                 .then(async (config) => {
-                    await this.store.saveAnonUserId(anonUser.user_id)
                     resolve(config.variables || {})
                 })
                 .catch(async (e) => {
@@ -678,6 +680,7 @@ export class DevCycleClient<
             undefined,
             undefined,
             userAgent,
+            this.store,
         )
 
         if (!config) {

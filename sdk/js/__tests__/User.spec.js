@@ -58,29 +58,54 @@ describe('DVCPopulatedUser tests', () => {
         expect(user.isAnonymous).toBe(false)
     })
 
-    it('should NOT throw an error if no user id and no anonymous flag set', () => {
-        const createUser = () => {
-            new DVCPopulatedUser({})
-        }
-        expect(createUser).not.toThrow(expect.any(Error))
+    it('should create an anonymous user if no user id and no anonymous flag set', () => {
+        const user = new DVCPopulatedUser({})
+        expect(uuidValidate(user.user_id)).toBe(true)
+        expect(user.isAnonymous).toBe(true)
     })
 
     it('should create an anonymous user id if isAnonymous is true', () => {
         const newUser = new DVCPopulatedUser({ isAnonymous: true })
         expect(uuidValidate(newUser.user_id)).toBe(true)
+        expect(newUser.isAnonymous).toBe(true)
     })
 
-    it('should throw an error if the user id is an empty string', () => {
-        const createUser = () => {
-            new DVCPopulatedUser({ user_id: '' })
-        }
-        expect(createUser).toThrow(expect.any(Error))
+    it('should use provided user_id when isAnonymous is true', () => {
+        const user = new DVCPopulatedUser({
+            user_id: 'abc123',
+            isAnonymous: true,
+        })
+        expect(user.user_id).toBe('abc123')
+        expect(user.isAnonymous).toBe(true)
     })
 
-    it('should throw an error if the user id is a string of only whitespace', () => {
+    it('should throw an error if isAnonymous is false without a user_id', () => {
         const createUser = () => {
-            new DVCPopulatedUser({ user_id: '     ' })
+            new DVCPopulatedUser({ isAnonymous: false })
         }
-        expect(createUser).toThrow(expect.any(Error))
+        expect(createUser).toThrow(
+            'A User cannot be created with isAnonymous: false without a valid user_id',
+        )
+    })
+
+    it('should create an anonymous user if the user id is an empty string', () => {
+        const user = new DVCPopulatedUser({ user_id: '' })
+        expect(uuidValidate(user.user_id)).toBe(true)
+        expect(user.isAnonymous).toBe(true)
+    })
+
+    it('should treat whitespace-only user_id as valid', () => {
+        const user = new DVCPopulatedUser({ user_id: '     ' })
+        expect(user.user_id).toBe('     ')
+        expect(user.isAnonymous).toBe(false)
+    })
+
+    it('should throw an error if isAnonymous is false with empty string user_id', () => {
+        const createUser = () => {
+            new DVCPopulatedUser({ user_id: '', isAnonymous: false })
+        }
+        expect(createUser).toThrow(
+            'A User cannot be created with isAnonymous: false without a valid user_id',
+        )
     })
 })
