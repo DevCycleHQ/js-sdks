@@ -172,7 +172,7 @@ export function triggerAbort(): void {
 }
 
 class TestData {
-    key: string = ''
+    key: string
 }
 export function testSortObjectsByString(arr: SortingArray<TestData>, direction: string): TestData[] {
     return sortObjectsByString<TestData>(arr, direction)
