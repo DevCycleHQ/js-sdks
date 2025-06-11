@@ -102,8 +102,8 @@ export function evaluateOperatorFromJSON(
 
     const operator = new AudienceOperator(operatorJSON as JSON.Obj)
     const user = DVCPopulatedUser.fromJSONString(userStr)
-    const result = _evaluateOperator(operator, audiences, user, new JSON.Obj())
-    return result
+    const resultReason = _evaluateOperator(operator, audiences, user, new JSON.Obj())
+    return resultReason.result
 }
 
 export function decideTargetVariationFromJSON(targetStr: string, boundedHash: f64): string {
