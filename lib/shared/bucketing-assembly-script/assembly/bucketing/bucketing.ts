@@ -20,7 +20,7 @@ import {
 } from '../types'
 
 import { murmurhashV3 } from '../helpers/murmurhash'
-import { _evaluateOperator, SegmentationResult } from './segmentation'
+import { _evaluateOperator } from './segmentation'
 import {
     getStringFromJSONOptional,
     getValueFromJSONOptional,
@@ -32,8 +32,8 @@ const baseSeed: i32 = 1
 const DEFAULT_BUCKETING_VALUE = 'null'
 
 export class BoundedHash {
-    public rolloutHash: f64 = 0
-    public bucketingHash: f64 = 0
+    public rolloutHash: f64
+    public bucketingHash: f64
 }
 
 export function _generateBoundedHashes(
@@ -132,18 +132,9 @@ export function _doesUserPassRollout(
 }
 
 class SegmentedFeatureData {
-    constructor(
-        public feature: PublicFeature,
-        public target: PublicTarget
-    ) {}
-}
-
-class TargetAndHashes {
-    constructor(
-        public target: Target,
-        public boundedHashData: BoundedHash,
-        public reasonDetails: string | null = null
-    ) {}
+    public feature: PublicFeature
+    public target: PublicTarget
+    public resonDetails?: string
 }
 
 function evaluateSegmentationForFeature(
@@ -151,7 +142,7 @@ function evaluateSegmentationForFeature(
     feature: Feature,
     user: DVCPopulatedUser,
     clientCustomData: JSON.Obj,
-): TargetAndHashes | null {
+): Target | null {
     // Returns the first target for which the user passes segmentation
     for (let i = 0; i < feature.configuration.targets.length; i++) {
         const target = feature.configuration.targets[i]
@@ -163,18 +154,18 @@ function evaluateSegmentationForFeature(
             const rolloutHash = boundedHashData.rolloutHash
             doesUserPassRollout = _doesUserPassRollout(target.rollout, rolloutHash) as boolean
         }
-        
-        const segmentationResult = _evaluateOperator(
-            target._audience.filters,
-            config.audiences,
-            user,
-            clientCustomData,
-        )
-        
-        if (doesUserPassRollout && segmentationResult.result) {
-            const bucketingValue = _getUserValueForBucketingKey(user, target)
-            const boundedHashData = _generateBoundedHashes(bucketingValue, target._id)
-            return new TargetAndHashes(target, boundedHashData, segmentationResult.reasonDetails)
+
+
+        if (doesUserPassRollout) {
+            const evalResult = _evaluateOperator(
+                target._audience.filters,
+                config.audiences,
+                user,
+                clientCustomData,
+            )
+            if(evalResult.result) {
+                return target 
+            }
         }
     }
     return null
@@ -191,7 +182,7 @@ export function getSegmentedFeatureDataFromConfig(
         const feature = config.features[y]
 
         // Returns the first target for which the user passes segmentation
-        const segmentedFeatureTarget: TargetAndHashes | null =
+        const segmentedFeatureTarget: Target | null =
             evaluateSegmentationForFeature(
                 config,
                 feature,
@@ -200,14 +191,19 @@ export function getSegmentedFeatureDataFromConfig(
             )
 
         if (segmentedFeatureTarget) {
-            const featureData: SegmentedFeatureData = new SegmentedFeatureData(
+            const featureData: SegmentedFeatureData = {
                 feature,
-                segmentedFeatureTarget.target,
-            )
+                target: segmentedFeatureTarget,
+            }
             accumulator.push(featureData)
         }
     }
     return accumulator
+}
+
+class TargetAndHashes {
+    public target: Target
+    public boundedHashData: BoundedHash
 }
 
 function doesUserQualifyForFeature(
@@ -216,22 +212,25 @@ function doesUserQualifyForFeature(
     user: DVCPopulatedUser,
     clientCustomData: JSON.Obj,
 ): TargetAndHashes | null {
-    const targetAndHashes = evaluateSegmentationForFeature(
+    const target = evaluateSegmentationForFeature(
         config,
         feature,
         user,
         clientCustomData,
     )
-    if (!targetAndHashes) return null
+    if (!target) return null
 
-    const bucketingValue = _getUserValueForBucketingKey( user, targetAndHashes.target )
-    const boundedHashData = _generateBoundedHashes(bucketingValue, targetAndHashes.target._id)
+    const bucketingValue = _getUserValueForBucketingKey( user, target )
+    const boundedHashData = _generateBoundedHashes(bucketingValue, target._id)
     const rolloutHash = boundedHashData.rolloutHash
     const passthroughRolloutEnabled = !config.project.settings.disablePassthroughRollouts
-    if (targetAndHashes.target.rollout && !passthroughRolloutEnabled && !_doesUserPassRollout(targetAndHashes.target.rollout, rolloutHash)) {
+    if (target.rollout && !passthroughRolloutEnabled && !_doesUserPassRollout(target.rollout, rolloutHash)) {
         return null
     }
-    return new TargetAndHashes(targetAndHashes.target, boundedHashData, targetAndHashes.reasonDetails)
+    return {
+        target,
+        boundedHashData
+    }
 }
 
 export function bucketUserForVariation(
@@ -247,11 +246,6 @@ export function bucketUserForVariation(
     } else {
         throw new Error(`Config missing variation: ${variationResult.variation}`)
     }
-}
-
-class BucketedFeature {
-    feature: Feature
-    variation: Variation
 }
 
 export function _generateBucketedConfig(
@@ -305,10 +299,10 @@ export function _generateBucketedConfig(
             const target = targetAndHashes.target
             const hasRollout = target.rollout !== null
             const hasMultipleDistributions = target.distribution.length !== 1
-            
+
             // Use reason details from segmentation
             const reasonDetails = targetAndHashes.reasonDetails || EVAL_REASON_DETAILS.CUSTOM_DATA
-            
+
             if (hasRollout || hasMultipleDistributions) {
                 evalReason = new EvalReason(EVAL_REASONS.SPLIT, reasonDetails)
             } else {
@@ -369,11 +363,9 @@ export function _generateBucketedConfig(
 }
 
 class BucketedVariableResponse {
-    constructor(
-        public variable: SDKVariable,
-        public variation: Variation,
-        public feature: Feature
-    ) {}
+    public variable: SDKVariable
+    public variation: Variation
+    public feature: Feature
 }
 
 export function _generateBucketedVariableForUser(
@@ -429,7 +421,7 @@ export function _generateBucketedVariableForUser(
         evalReason,
         featureForVariable._id,
     )
-    return new BucketedVariableResponse(sdkVar, variation, featureForVariable)
+    return { variable: sdkVar, variation, feature: featureForVariable }
 }
 
 export function _getUserValueForBucketingKey(
