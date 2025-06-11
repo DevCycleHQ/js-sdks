@@ -302,7 +302,8 @@ export default class DevCycleProvider implements Provider {
                     dvcUserData[key] = value
                 } else {
                     this._devcycleClient?.logger.warn(
-                        `Expected isAnonymous to be boolean but got "${typeof value}" in EvaluationContext. Ignoring value.`,
+                        `Expected isAnonymous to be boolean but got "${typeof value}" in ` +
+                            `EvaluationContext. Ignoring value.`,
                     )
                 }
             } else if (key === 'privateCustomData') {
