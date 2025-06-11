@@ -204,12 +204,18 @@ export class SDKFeature extends JSON.Obj {
         public readonly _variation: string,
         public readonly variationName: string,
         public readonly variationKey: string,
-        public readonly evalReason: string | null
+        public readonly evalReason: EvalReason | null
     ) {
         super()
     }
 
     static fromJSONObj(featureObj: JSON.Obj): SDKFeature {
+        const evalReasonObj = featureObj.getObj('evalReason')
+        let evalReason: EvalReason | null = null
+        if (evalReasonObj) {
+            evalReason = EvalReason.fromJSONObj(evalReasonObj)
+        }
+
         return new SDKFeature(
             getStringFromJSON(featureObj, '_id'),
             getStringFromJSON(featureObj, 'type'),
@@ -217,7 +223,7 @@ export class SDKFeature extends JSON.Obj {
             getStringFromJSON(featureObj, '_variation'),
             getStringFromJSON(featureObj, 'variationName'),
             getStringFromJSON(featureObj, 'variationKey'),
-            getStringFromJSONOptional(featureObj, 'evalReason')
+            evalReason
         )
     }
 
@@ -242,7 +248,7 @@ export class SDKVariable extends JSON.Obj {
         public readonly type: string,
         public readonly key: string,
         public readonly value: JSON.Value,
-        public readonly evalReason: string | null,
+        public readonly evalReason: EvalReason | null,
         public readonly _feature: string | null,
     ) {
         super()
@@ -258,12 +264,18 @@ export class SDKVariable extends JSON.Obj {
     }
 
     static fromJSONObj(variableObj: JSON.Obj): SDKVariable {
+        const evalReasonObj = variableObj.getObj('evalReason')
+        let evalReason: EvalReason | null = null
+        if (evalReasonObj) {
+            evalReason = EvalReason.fromJSONObj(evalReasonObj)
+        }
+
         return new SDKVariable(
             getStringFromJSON(variableObj, '_id'),
             getStringFromJSON(variableObj, 'type'),
             getStringFromJSON(variableObj, 'key'),
             getJSONValueFromJSON(variableObj, 'value'),
-            getStringFromJSONOptional(variableObj, 'evalReason'),
+            evalReason,
             getStringFromJSONOptional(variableObj, '_feature')
         )
     }

@@ -14,10 +14,13 @@ import {
     Variation,
     FeatureVariation,
     FeatureV2 as Feature,
+    EvalReason,
+    EVAL_REASONS,
+    EVAL_REASON_DETAILS,
 } from '../types'
 
 import { murmurhashV3 } from '../helpers/murmurhash'
-import { _evaluateOperator } from './segmentation'
+import { _evaluateOperator, SegmentationResult } from './segmentation'
 import {
     getStringFromJSONOptional,
     getValueFromJSONOptional,
@@ -29,8 +32,8 @@ const baseSeed: i32 = 1
 const DEFAULT_BUCKETING_VALUE = 'null'
 
 export class BoundedHash {
-    public rolloutHash: f64
-    public bucketingHash: f64
+    public rolloutHash: f64 = 0
+    public bucketingHash: f64 = 0
 }
 
 export function _generateBoundedHashes(
@@ -129,8 +132,18 @@ export function _doesUserPassRollout(
 }
 
 class SegmentedFeatureData {
-    public feature: PublicFeature
-    public target: PublicTarget
+    constructor(
+        public feature: PublicFeature,
+        public target: PublicTarget
+    ) {}
+}
+
+class TargetAndHashes {
+    constructor(
+        public target: Target,
+        public boundedHashData: BoundedHash,
+        public reasonDetails: string | null = null
+    ) {}
 }
 
 function evaluateSegmentationForFeature(
@@ -138,7 +151,7 @@ function evaluateSegmentationForFeature(
     feature: Feature,
     user: DVCPopulatedUser,
     clientCustomData: JSON.Obj,
-): Target | null {
+): TargetAndHashes | null {
     // Returns the first target for which the user passes segmentation
     for (let i = 0; i < feature.configuration.targets.length; i++) {
         const target = feature.configuration.targets[i]
@@ -148,17 +161,20 @@ function evaluateSegmentationForFeature(
             const bucketingValue = _getUserValueForBucketingKey(user, target)
             const boundedHashData = _generateBoundedHashes(bucketingValue, target._id)
             const rolloutHash = boundedHashData.rolloutHash
-            doesUserPassRollout = _doesUserPassRollout(target.rollout, rolloutHash)
+            doesUserPassRollout = _doesUserPassRollout(target.rollout, rolloutHash) as boolean
         }
-        if (
-            doesUserPassRollout && _evaluateOperator(
-                target._audience.filters,
-                config.audiences,
-                user,
-                clientCustomData,
-            )
-        ) {
-            return target
+        
+        const segmentationResult = _evaluateOperator(
+            target._audience.filters,
+            config.audiences,
+            user,
+            clientCustomData,
+        )
+        
+        if (doesUserPassRollout && segmentationResult.result) {
+            const bucketingValue = _getUserValueForBucketingKey(user, target)
+            const boundedHashData = _generateBoundedHashes(bucketingValue, target._id)
+            return new TargetAndHashes(target, boundedHashData, segmentationResult.reasonDetails)
         }
     }
     return null
@@ -175,7 +191,7 @@ export function getSegmentedFeatureDataFromConfig(
         const feature = config.features[y]
 
         // Returns the first target for which the user passes segmentation
-        const segmentedFeatureTarget: Target | null =
+        const segmentedFeatureTarget: TargetAndHashes | null =
             evaluateSegmentationForFeature(
                 config,
                 feature,
@@ -184,19 +200,14 @@ export function getSegmentedFeatureDataFromConfig(
             )
 
         if (segmentedFeatureTarget) {
-            const featureData: SegmentedFeatureData = {
+            const featureData: SegmentedFeatureData = new SegmentedFeatureData(
                 feature,
-                target: segmentedFeatureTarget,
-            }
+                segmentedFeatureTarget.target,
+            )
             accumulator.push(featureData)
         }
     }
     return accumulator
-}
-
-class TargetAndHashes {
-    public target: Target
-    public boundedHashData: BoundedHash
 }
 
 function doesUserQualifyForFeature(
@@ -205,39 +216,36 @@ function doesUserQualifyForFeature(
     user: DVCPopulatedUser,
     clientCustomData: JSON.Obj,
 ): TargetAndHashes | null {
-    const target = evaluateSegmentationForFeature(
+    const targetAndHashes = evaluateSegmentationForFeature(
         config,
         feature,
         user,
         clientCustomData,
     )
-    if (!target) return null
+    if (!targetAndHashes) return null
 
-    const bucketingValue = _getUserValueForBucketingKey( user, target )
-    const boundedHashData = _generateBoundedHashes(bucketingValue, target._id)
+    const bucketingValue = _getUserValueForBucketingKey( user, targetAndHashes.target )
+    const boundedHashData = _generateBoundedHashes(bucketingValue, targetAndHashes.target._id)
     const rolloutHash = boundedHashData.rolloutHash
     const passthroughRolloutEnabled = !config.project.settings.disablePassthroughRollouts
-    if (target.rollout && !passthroughRolloutEnabled && !_doesUserPassRollout(target.rollout, rolloutHash)) {
+    if (targetAndHashes.target.rollout && !passthroughRolloutEnabled && !_doesUserPassRollout(targetAndHashes.target.rollout, rolloutHash)) {
         return null
     }
-    return {
-        target,
-        boundedHashData,
-    }
+    return new TargetAndHashes(targetAndHashes.target, boundedHashData, targetAndHashes.reasonDetails)
 }
 
 export function bucketUserForVariation(
     feature: Feature,
     targetAndHashes: TargetAndHashes,
 ): Variation {
-    const variation_id = targetAndHashes.target.decideTargetVariation(
+    const variationResult = targetAndHashes.target.decideTargetVariation(
         targetAndHashes.boundedHashData.bucketingHash,
     )
-    const variation = feature.getVariationById(variation_id)
+    const variation = feature.getVariationById(variationResult.variation)
     if (variation) {
         return variation
     } else {
-        throw new Error(`Config missing variation: ${variation_id}`)
+        throw new Error(`Config missing variation: ${variationResult.variation}`)
     }
 }
 
@@ -288,6 +296,28 @@ export function _generateBucketedConfig(
             continue
         }
 
+        // Determine eval reason
+        let evalReason: EvalReason
+        if (featureOverride) {
+            evalReason = new EvalReason(EVAL_REASONS.OVERRIDE, EVAL_REASON_DETAILS.OVERRIDE)
+        } else if (targetAndHashes) {
+            // Determine if this was a targeting match or split based on target characteristics
+            const target = targetAndHashes.target
+            const hasRollout = target.rollout !== null
+            const hasMultipleDistributions = target.distribution.length !== 1
+            
+            // Use reason details from segmentation
+            const reasonDetails = targetAndHashes.reasonDetails || EVAL_REASON_DETAILS.CUSTOM_DATA
+            
+            if (hasRollout || hasMultipleDistributions) {
+                evalReason = new EvalReason(EVAL_REASONS.SPLIT, reasonDetails)
+            } else {
+                evalReason = new EvalReason(EVAL_REASONS.TARGETING_MATCH, reasonDetails)
+            }
+        } else {
+            evalReason = new EvalReason(EVAL_REASONS.DEFAULT, EVAL_REASON_DETAILS.ALL_USERS)
+        }
+
         featureKeyMap.set(
             feature.key,
             new SDKFeature(
@@ -297,7 +327,7 @@ export function _generateBucketedConfig(
                 variation._id,
                 variation.name,
                 variation.key,
-                null,
+                evalReason,
             ),
         )
         featureVariationMap.set(feature._id, variation._id)
@@ -321,7 +351,7 @@ export function _generateBucketedConfig(
                 variable.type,
                 variable.key,
                 variationVar.value,
-                null,
+                evalReason,
                 feature._id,
             )
             variableMap.set(variable.key, newVar)
@@ -339,11 +369,11 @@ export function _generateBucketedConfig(
 }
 
 class BucketedVariableResponse {
-    public variable: SDKVariable
-
-    public variation: Variation
-
-    public feature: Feature
+    constructor(
+        public variable: SDKVariable,
+        public variation: Variation,
+        public feature: Feature
+    ) {}
 }
 
 export function _generateBucketedVariableForUser(
@@ -376,15 +406,30 @@ export function _generateBucketedVariableForUser(
         throw new Error('Internal error processing configuration')
     }
 
+    // Determine eval reason
+    const target = targetAndHashes.target
+    const hasRollout = target.rollout !== null
+    const hasMultipleDistributions = target.distribution.length !== 1
+    
+    // Use reason details from segmentation
+    const reasonDetails = targetAndHashes.reasonDetails || EVAL_REASON_DETAILS.CUSTOM_DATA
+    
+    let evalReason: EvalReason
+    if (hasRollout || hasMultipleDistributions) {
+        evalReason = new EvalReason(EVAL_REASONS.SPLIT, reasonDetails)
+    } else {
+        evalReason = new EvalReason(EVAL_REASONS.TARGETING_MATCH, reasonDetails)
+    }
+
     const sdkVar = new SDKVariable(
         variable._id,
         variable.type,
         variable.key,
         variationVar.value,
-        null,
+        evalReason,
         featureForVariable._id,
     )
-    return { variable: sdkVar, variation, feature: featureForVariable }
+    return new BucketedVariableResponse(sdkVar, variation, featureForVariable)
 }
 
 export function _getUserValueForBucketingKey(
