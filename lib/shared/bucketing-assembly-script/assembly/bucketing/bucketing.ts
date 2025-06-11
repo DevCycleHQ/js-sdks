@@ -134,7 +134,12 @@ export function _doesUserPassRollout(
 class SegmentedFeatureData {
     public feature: PublicFeature
     public target: PublicTarget
-    public resonDetails?: string
+    public reasonDetails: string | null
+}
+
+class TargetResult { 
+    public target: PublicTarget
+    public reasonDetails: string | null
 }
 
 function evaluateSegmentationForFeature(
@@ -142,7 +147,7 @@ function evaluateSegmentationForFeature(
     feature: Feature,
     user: DVCPopulatedUser,
     clientCustomData: JSON.Obj,
-): Target | null {
+): TargetResult | null {
     // Returns the first target for which the user passes segmentation
     for (let i = 0; i < feature.configuration.targets.length; i++) {
         const target = feature.configuration.targets[i]
@@ -152,9 +157,8 @@ function evaluateSegmentationForFeature(
             const bucketingValue = _getUserValueForBucketingKey(user, target)
             const boundedHashData = _generateBoundedHashes(bucketingValue, target._id)
             const rolloutHash = boundedHashData.rolloutHash
-            doesUserPassRollout = _doesUserPassRollout(target.rollout, rolloutHash) as boolean
+            doesUserPassRollout = _doesUserPassRollout(target.rollout, rolloutHash)
         }
-
 
         if (doesUserPassRollout) {
             const evalResult = _evaluateOperator(
@@ -164,7 +168,10 @@ function evaluateSegmentationForFeature(
                 clientCustomData,
             )
             if(evalResult.result) {
-                return target 
+                return {
+                    target,
+                    reasonDetails: evalResult.reasonDetails
+                }
             }
         }
     }
@@ -204,6 +211,7 @@ export function getSegmentedFeatureDataFromConfig(
 class TargetAndHashes {
     public target: Target
     public boundedHashData: BoundedHash
+    public reasonDetails: string | null
 }
 
 function doesUserQualifyForFeature(
@@ -212,13 +220,19 @@ function doesUserQualifyForFeature(
     user: DVCPopulatedUser,
     clientCustomData: JSON.Obj,
 ): TargetAndHashes | null {
-    const target = evaluateSegmentationForFeature(
+    const targetResult = evaluateSegmentationForFeature(
         config,
         feature,
         user,
         clientCustomData,
     )
-    if (!target) return null
+    
+    // Early return if no target result
+    if (!targetResult) return null
+    
+    // Now we can safely extract the properties
+    const target = targetResult.target
+    const reasonDetails = targetResult.reasonDetails
 
     const bucketingValue = _getUserValueForBucketingKey( user, target )
     const boundedHashData = _generateBoundedHashes(bucketingValue, target._id)
@@ -229,7 +243,8 @@ function doesUserQualifyForFeature(
     }
     return {
         target,
-        boundedHashData
+        boundedHashData,
+        reasonDetails
     }
 }
 
@@ -321,7 +336,7 @@ export function _generateBucketedConfig(
                 variation._id,
                 variation.name,
                 variation.key,
-                evalReason,
+                null,
             ),
         )
         featureVariationMap.set(feature._id, variation._id)
@@ -345,7 +360,7 @@ export function _generateBucketedConfig(
                 variable.type,
                 variable.key,
                 variationVar.value,
-                evalReason,
+                null,
                 feature._id,
             )
             variableMap.set(variable.key, newVar)
@@ -402,7 +417,7 @@ export function _generateBucketedVariableForUser(
     const target = targetAndHashes.target
     const hasRollout = target.rollout !== null
     const hasMultipleDistributions = target.distribution.length !== 1
-    
+
     // Use reason details from segmentation
     const reasonDetails = targetAndHashes.reasonDetails || EVAL_REASON_DETAILS.CUSTOM_DATA
     

@@ -14,7 +14,6 @@ import {
 import { SortingArray, sortObjectsByString } from '../helpers/arrayHelpers'
 import { EvalReason, EVAL_REASONS  } from './bucketedUserConfig'
 
-
 export class VariationReasonResult extends JSON.Value {
     readonly variation: string
     readonly evalReason: EvalReason | null
