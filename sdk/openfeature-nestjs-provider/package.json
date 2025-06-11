@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/openfeature-nestjs-provider",
-    "version": "1.7.0",
+    "version": "1.8.0",
     "description": "OpenFeature NestJS SDK Provider",
     "license": "MIT",
     "author": "DevCycle <support@devcycle.com>",
@@ -19,7 +19,7 @@
     },
     "homepage": "https://devcycle.com",
     "dependencies": {
-        "@devcycle/nodejs-server-sdk": "^1.48.0"
+        "@devcycle/nodejs-server-sdk": "^1.49.0"
     },
     "main": "src/index.js",
     "types": "src/index.d.ts"
