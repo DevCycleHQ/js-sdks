@@ -67,24 +67,19 @@ export class DVCPopulatedUser implements DevCycleUser {
         }
 
         // Set user_id and isAnonymous based on the input
-        if (user.isAnonymous === true) {
-            // Case: { isAnonymous: true } or { user_id: 'abc', isAnonymous: true }
-            this.user_id =
-                normalizedUserId ||
-                this.generateAndSaveAnonUserId(anonymousUserId, store)
-            this.isAnonymous = true
-        } else if (!normalizedUserId) {
-            // Case: {} (empty object) - set as anonymous
+        if (normalizedUserId) {
+            // Case: { user_id: 'abc' } or { user_id: 'abc', isAnonymous: false/true }
+            this.user_id = normalizedUserId
+            this.isAnonymous = false
+        } else {
+            // Case: {} (empty object) or { isAnonymous: true } - set as anonymous
             this.user_id = this.generateAndSaveAnonUserId(
                 anonymousUserId,
                 store,
             )
             this.isAnonymous = true
-        } else {
-            // Case: { user_id: 'abc' } or { user_id: 'abc', isAnonymous: false }
-            this.user_id = normalizedUserId
-            this.isAnonymous = user.isAnonymous ?? false
         }
+
         this.email = user.email
         this.name = user.name
         this.language = user.language
