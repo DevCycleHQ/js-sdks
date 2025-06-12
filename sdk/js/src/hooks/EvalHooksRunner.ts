@@ -1,24 +1,35 @@
-import { DevCycleUser, DVCVariable, DVCVariableValue } from '../types'
+import { DVCVariable } from '../Variable'
+import { DVCPopulatedUser } from '../User'
 import { EvalHook } from './EvalHook'
 import { HookContext } from './HookContext'
+import { DVCVariableValue } from '../types'
 
-export class EvaluationHooksRunner<T extends DVCVariableValue> {
-    constructor(private readonly hooks: EvalHook<T>[] = []) {}
+export class EvalHooksRunner {
+    private readonly hooks: EvalHook<DVCVariableValue>[] = []
+    constructor() {}
 
-    async runHooksForEvaluation(
-        user: DevCycleUser,
+    runHooksForEvaluation<T extends DVCVariableValue>(
+        user: DVCPopulatedUser | undefined,
         key: string,
         defaultValue: T,
-        resolver: () => any,
-    ): Promise<DVCVariable<T>> {
-        const context = new HookContext<T>(user, key, defaultValue, {})
+        resolver: () => DVCVariable<T>,
+    ): DVCVariable<T> {
+        const context = new HookContext<DVCVariableValue>(
+            user ?? {},
+            key,
+            defaultValue,
+            {},
+        )
         const savedHooks = [...this.hooks]
         const reversedHooks = [...savedHooks].reverse()
 
         let variable: DVCVariable<T>
         try {
-            await this.runBefore(savedHooks, context)
-            variable = await resolver.call(context)
+            const frozenContext = Object.freeze({
+                ...context,
+            })
+            this.runBefore(savedHooks, frozenContext)
+            variable = resolver.call(frozenContext)
 
             const evaluationContext = {
                 key,
@@ -29,53 +40,62 @@ export class EvaluationHooksRunner<T extends DVCVariableValue> {
 
             context.evaluationContext = evaluationContext
 
-            await this.runAfter(reversedHooks, context)
+            this.runAfter(reversedHooks, context)
         } catch (error) {
-            await this.runError(reversedHooks, context, error as Error)
-            await this.runFinally(reversedHooks, context)
+            this.runError(reversedHooks, context, error as Error)
+            this.runFinally(reversedHooks, context)
             throw error
         }
-        await this.runFinally(reversedHooks, context)
+        this.runFinally(reversedHooks, context)
         return variable
     }
 
-    private async runBefore(hooks: EvalHook<T>[], context: HookContext<T>) {
+    private runBefore(
+        hooks: EvalHook<DVCVariableValue>[],
+        context: HookContext<DVCVariableValue>,
+    ) {
         for (const hook of hooks) {
-            await hook.before(context)
+            hook.before(context)
         }
     }
 
-    private async runAfter(hooks: EvalHook<T>[], context: HookContext<T>) {
+    private runAfter(
+        hooks: EvalHook<DVCVariableValue>[],
+        context: HookContext<DVCVariableValue>,
+    ) {
         for (const hook of hooks) {
-            await hook.after(context)
+            hook.after(context)
         }
     }
 
-    private async runFinally(hooks: EvalHook<T>[], context: HookContext<T>) {
+    private runFinally(
+        hooks: EvalHook<DVCVariableValue>[],
+        context: HookContext<DVCVariableValue>,
+    ) {
         try {
             for (const hook of hooks) {
-                await hook.onFinally(context)
+                hook.onFinally(context)
             }
         } catch (error) {
             // log using the logger
         }
     }
 
-    private async runError(
-        hooks: EvalHook<T>[],
-        context: HookContext<T>,
+    private runError(
+        hooks: EvalHook<DVCVariableValue>[],
+        context: HookContext<DVCVariableValue>,
         error: Error,
     ) {
         try {
             for (const hook of hooks) {
-                await hook.error(context, error)
+                hook.error(context, error)
             }
         } catch (error) {
             // log using the logger
         }
     }
 
-    enqueue(hook: EvalHook<T>): void {
+    enqueue(hook: EvalHook<DVCVariableValue>): void {
         this.hooks.push(hook)
     }
 }

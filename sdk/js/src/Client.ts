@@ -29,7 +29,7 @@ import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import type { DVCLogger, SSEConnectionInterface } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
-
+import { EvalHooksRunner } from './hooks/EvalHooksRunner'
 type variableUpdatedHandler = (
     key: string,
     variable: DVCVariable<DVCVariableValue> | null,
@@ -94,6 +94,7 @@ export class DevCycleClient<
     private windowMessageHandler?: (event: MessageEvent) => void
     private windowPageHideHandler?: () => void
     private configRefetchHandler: (lastModifiedDate?: number) => void
+    private evalHooksRunner: EvalHooksRunner
 
     constructor(
         sdkKey: string,
@@ -129,6 +130,7 @@ export class DevCycleClient<
 
         this.sdkKey = sdkKey
         this.variableDefaultMap = {}
+        this.evalHooksRunner = new EvalHooksRunner()
 
         if (
             !(
@@ -300,6 +302,18 @@ export class DevCycleClient<
      * @param defaultValue
      */
     variable<
+        K extends string & keyof Variables,
+        T extends DVCVariableValue & Variables[K],
+    >(key: K, defaultValue: T): DVCVariable<T> {
+        return this.evalHooksRunner.runHooksForEvaluation(
+            this.user,
+            key,
+            defaultValue,
+            () => this._variable(key, defaultValue),
+        )
+    }
+
+    private _variable<
         K extends string & keyof Variables,
         T extends DVCVariableValue & Variables[K],
     >(key: K, defaultValue: T): DVCVariable<T> {

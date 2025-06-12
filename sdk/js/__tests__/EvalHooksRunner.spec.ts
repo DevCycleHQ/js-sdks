@@ -1,17 +1,18 @@
-import { EvaluationHooksRunner } from '../src/hooks/EvalHooksRunner'
+import { EvalHooksRunner } from '../src/hooks/EvalHooksRunner'
 import { EvalHook } from '../src/hooks/EvalHook'
 import { HookContext } from '../src/hooks/HookContext'
 import { DVCVariableValue } from '../src/types'
+import { DVCPopulatedUser } from '../src/User'
 
-describe('HooksRunner', () => {
-    let hooksRunner: EvaluationHooksRunner<DVCVariableValue>
+describe('EvalHooksRunner', () => {
+    let hooksRunner: EvalHooksRunner
     let mockBefore: jest.Mock
     let mockAfter: jest.Mock
     let mockError: jest.Mock
     let mockFinally: jest.Mock
     let mockHook: EvalHook<DVCVariableValue>
     let mockResolver: jest.Mock
-    let mockUser: { [key: string]: string }
+    let mockUser: DVCPopulatedUser
     let mockKey: string
     let mockDefaultValue: DVCVariableValue
 
@@ -26,10 +27,11 @@ describe('HooksRunner', () => {
             value: 'test-value',
             isDefaulted: false,
         })
-        mockUser = { user_id: 'test-user' }
+        mockUser = new DVCPopulatedUser({ user_id: 'test-user' }, {})
         mockKey = 'test-key'
         mockDefaultValue = 'default-value'
-        hooksRunner = new EvaluationHooksRunner([mockHook])
+        hooksRunner = new EvalHooksRunner()
+        hooksRunner.enqueue(mockHook)
     })
 
     afterEach(() => {
@@ -37,13 +39,13 @@ describe('HooksRunner', () => {
     })
 
     it('should run hooks in correct order when resolver succeeds', async () => {
-        mockResolver.mockResolvedValue({
+        mockResolver.mockImplementation(() => ({
             key: 'test-key',
             value: 'test-value',
             isDefaulted: false,
-        })
+        }))
 
-        const returnValue = await hooksRunner.runHooksForEvaluation(
+        const returnValue = hooksRunner.runHooksForEvaluation(
             mockUser,
             mockKey,
             mockDefaultValue,
@@ -57,18 +59,22 @@ describe('HooksRunner', () => {
         expect(mockResolver).toHaveBeenCalledTimes(1)
 
         // Verify hook context and order
-        const expectedContext = new HookContext(
+        const expectedBeforeContext = new HookContext(
             mockUser,
             mockKey,
             mockDefaultValue,
             {},
-            {
+        )
+        const expectedContext = {
+            ...expectedBeforeContext,
+            evaluationContext: {
                 key: mockKey,
                 value: 'test-value',
                 isDefaulted: false,
             },
-        )
-        expect(mockBefore).toHaveBeenCalledWith(expectedContext)
+        }
+
+        expect(mockBefore).toHaveBeenCalledWith(expectedBeforeContext)
         expect(mockBefore.mock.invocationCallOrder[0]).toBeLessThan(
             mockAfter.mock.invocationCallOrder[0],
         )
@@ -82,18 +88,19 @@ describe('HooksRunner', () => {
         })
     })
 
-    it('should run hooks in correct order when resolver fails', async () => {
-        const error = new Error('Test error')
-        mockResolver.mockRejectedValue(error)
+    it('should run hooks in correct order when resolver fails', () => {
+        mockResolver.mockImplementation(() => {
+            throw new Error('Test error')
+        })
 
-        await expect(
+        expect(() =>
             hooksRunner.runHooksForEvaluation(
                 mockUser,
                 mockKey,
                 mockDefaultValue,
                 mockResolver,
             ),
-        ).rejects.toThrow('Test error')
+        ).toThrow('Test error')
 
         expect(mockBefore).toHaveBeenCalledTimes(1)
         expect(mockAfter).not.toHaveBeenCalled()
@@ -112,7 +119,10 @@ describe('HooksRunner', () => {
         expect(mockBefore.mock.invocationCallOrder[0]).toBeLessThan(
             mockError.mock.invocationCallOrder[0],
         )
-        expect(mockError).toHaveBeenCalledWith(expectedContext, error)
+        expect(mockError).toHaveBeenCalledWith(
+            expectedContext,
+            new Error('Test error'),
+        )
         expect(mockError.mock.invocationCallOrder[0]).toBeLessThan(
             mockFinally.mock.invocationCallOrder[0],
         )
@@ -130,11 +140,11 @@ describe('HooksRunner', () => {
             mockHook2Finally,
             mockHook2Error,
         )
-        hooksRunner = new EvaluationHooksRunner()
+        hooksRunner = new EvalHooksRunner()
         hooksRunner.enqueue(mockHook)
         hooksRunner.enqueue(mockHook2)
 
-        const returnValue = await hooksRunner.runHooksForEvaluation(
+        const returnValue = hooksRunner.runHooksForEvaluation(
             mockUser,
             mockKey,
             mockDefaultValue,
@@ -167,9 +177,9 @@ describe('HooksRunner', () => {
     })
 
     it('should work with no hooks', async () => {
-        hooksRunner = new EvaluationHooksRunner([])
+        hooksRunner = new EvalHooksRunner()
 
-        const returnValue = await hooksRunner.runHooksForEvaluation(
+        const returnValue = hooksRunner.runHooksForEvaluation(
             mockUser,
             mockKey,
             mockDefaultValue,
@@ -192,7 +202,7 @@ describe('HooksRunner', () => {
             },
         )
 
-        const returnValue = await hooksRunner.runHooksForEvaluation(
+        const returnValue = hooksRunner.runHooksForEvaluation(
             mockUser,
             mockKey,
             mockDefaultValue,
@@ -221,7 +231,7 @@ describe('HooksRunner', () => {
             },
         )
 
-        const returnValue = await hooksRunner.runHooksForEvaluation(
+        const returnValue = hooksRunner.runHooksForEvaluation(
             mockUser,
             mockKey,
             mockDefaultValue,
@@ -256,7 +266,7 @@ describe('HooksRunner', () => {
             },
         )
 
-        const returnValue = await hooksRunner.runHooksForEvaluation(
+        const returnValue = hooksRunner.runHooksForEvaluation(
             mockUser,
             mockKey,
             mockDefaultValue,
@@ -304,11 +314,11 @@ describe('HooksRunner', () => {
             },
         )
 
-        hooksRunner = new EvaluationHooksRunner()
+        hooksRunner = new EvalHooksRunner()
         hooksRunner.enqueue(mockHook)
         hooksRunner.enqueue(mockHook2)
 
-        const returnValue = await hooksRunner.runHooksForEvaluation(
+        const returnValue = hooksRunner.runHooksForEvaluation(
             mockUser,
             mockKey,
             mockDefaultValue,
@@ -362,11 +372,11 @@ describe('HooksRunner', () => {
             },
         )
 
-        hooksRunner = new EvaluationHooksRunner()
+        hooksRunner = new EvalHooksRunner()
         hooksRunner.enqueue(mockHook)
         hooksRunner.enqueue(mockHook2)
 
-        const returnValue = await hooksRunner.runHooksForEvaluation(
+        const returnValue = hooksRunner.runHooksForEvaluation(
             mockUser,
             mockKey,
             mockDefaultValue,
@@ -418,11 +428,11 @@ describe('HooksRunner', () => {
             },
         )
 
-        hooksRunner = new EvaluationHooksRunner()
+        hooksRunner = new EvalHooksRunner()
         hooksRunner.enqueue(mockHook)
         hooksRunner.enqueue(mockHook2)
 
-        const returnValue = await hooksRunner.runHooksForEvaluation(
+        const returnValue = hooksRunner.runHooksForEvaluation(
             mockUser,
             mockKey,
             mockDefaultValue,
@@ -449,15 +459,20 @@ describe('HooksRunner', () => {
         })
     })
 
-    it('should allow modifying user in before hooks', async () => {
-        const modifiedUser = { user_id: 'modified-user' }
+    it('should not allow modifying user in before hooks', async () => {
         mockBefore.mockImplementation(
             (context: HookContext<DVCVariableValue>) => {
-                context.user = modifiedUser
+                // Attempting to modify user should throw or have no effect
+                expect(() => {
+                    // @ts-expect-error: user is readonly
+                    context.user = { user_id: 'modified-user' }
+                }).toThrow()
+                // The user should remain unchanged
+                expect(context.user).toEqual(mockUser)
             },
         )
 
-        const returnValue = await hooksRunner.runHooksForEvaluation(
+        const returnValue = hooksRunner.runHooksForEvaluation(
             mockUser,
             mockKey,
             mockDefaultValue,
@@ -468,7 +483,7 @@ describe('HooksRunner', () => {
         expect(mockAfter).toHaveBeenCalledTimes(1)
         expect(mockAfter).toHaveBeenCalledWith(
             expect.objectContaining({
-                user: modifiedUser,
+                user: mockUser,
             }),
         )
         expect(returnValue).toEqual({
@@ -490,7 +505,7 @@ describe('HooksRunner', () => {
             },
         )
 
-        const returnValue = await hooksRunner.runHooksForEvaluation(
+        const returnValue = hooksRunner.runHooksForEvaluation(
             mockUser,
             mockKey,
             mockDefaultValue,
@@ -523,10 +538,10 @@ describe('HooksRunner', () => {
             mockHook2Error,
         )
 
-        // First hook modifies user
+        // Only modify metadata, not user
         mockBefore.mockImplementation(
             (context: HookContext<DVCVariableValue>) => {
-                context.user = { user_id: 'first-user' }
+                context.metadata.firstKey = 'firstValue'
             },
         )
 
@@ -537,11 +552,11 @@ describe('HooksRunner', () => {
             },
         )
 
-        hooksRunner = new EvaluationHooksRunner()
+        hooksRunner = new EvalHooksRunner()
         hooksRunner.enqueue(mockHook)
         hooksRunner.enqueue(mockHook2)
 
-        const returnValue = await hooksRunner.runHooksForEvaluation(
+        const returnValue = hooksRunner.runHooksForEvaluation(
             mockUser,
             mockKey,
             mockDefaultValue,
@@ -555,10 +570,11 @@ describe('HooksRunner', () => {
         // Verify final context has all modifications
         expect(mockAfter).toHaveBeenCalledWith(
             expect.objectContaining({
-                user: { user_id: 'first-user' },
                 metadata: {
+                    firstKey: 'firstValue',
                     secondKey: 'secondValue',
                 },
+                user: mockUser,
             }),
         )
         expect(returnValue).toEqual({
