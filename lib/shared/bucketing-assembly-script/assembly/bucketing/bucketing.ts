@@ -336,7 +336,7 @@ export function _generateBucketedConfig(
                 variation._id,
                 variation.name,
                 variation.key,
-                null,
+                evalReason,
             ),
         )
         featureVariationMap.set(feature._id, variation._id)
@@ -360,7 +360,7 @@ export function _generateBucketedConfig(
                 variable.type,
                 variable.key,
                 variationVar.value,
-                null,
+                evalReason, 
                 feature._id,
             )
             variableMap.set(variable.key, newVar)
@@ -420,7 +420,7 @@ export function _generateBucketedVariableForUser(
 
     // Use reason details from segmentation
     const reasonDetails = targetAndHashes.reasonDetails || EVAL_REASON_DETAILS.CUSTOM_DATA
-    
+
     let evalReason: EvalReason
     if (hasRollout || hasMultipleDistributions) {
         evalReason = new EvalReason(EVAL_REASONS.SPLIT, reasonDetails)
