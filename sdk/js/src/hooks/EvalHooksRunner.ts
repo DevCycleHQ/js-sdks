@@ -5,8 +5,7 @@ import { HookContext } from './HookContext'
 import { DVCVariableValue } from '../types'
 
 export class EvalHooksRunner {
-    private readonly hooks: EvalHook<DVCVariableValue>[] = []
-    constructor() {}
+    constructor(private readonly hooks: EvalHook<DVCVariableValue>[] = []) {}
 
     runHooksForEvaluation<T extends DVCVariableValue>(
         user: DVCPopulatedUser | undefined,

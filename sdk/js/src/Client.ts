@@ -30,6 +30,8 @@ import { dvcDefaultLogger } from './logger'
 import type { DVCLogger, SSEConnectionInterface } from '@devcycle/types'
 import { StreamingConnection } from './StreamingConnection'
 import { EvalHooksRunner } from './hooks/EvalHooksRunner'
+import { EvalHook } from './hooks/EvalHook'
+
 type variableUpdatedHandler = (
     key: string,
     variable: DVCVariable<DVCVariableValue> | null,
@@ -729,6 +731,10 @@ export class DevCycleClient<
                 etag,
             })
         }
+    }
+
+    addHook(hook: EvalHook<DVCVariableValue>): void {
+        this.evalHooksRunner.enqueue(hook)
     }
 
     private handleConfigReceived(

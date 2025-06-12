@@ -96,4 +96,51 @@ describe('DevCycleClient', () => {
             },
         })
     })
+
+    it('should call hooks when variable is evaluated', () => {
+        const client = new DevCycleClient<Variables>('test', {
+            user_id: 'test',
+        })
+
+        const mockBefore = jest.fn()
+        const mockAfter = jest.fn()
+        const mockOnFinally = jest.fn()
+        const mockError = jest.fn()
+
+        client.addHook({
+            before: (context) => {
+                mockBefore(context)
+            },
+            after: (context) => {
+                mockAfter(context)
+            },
+            onFinally: (context) => {
+                mockOnFinally(context)
+            },
+            error: (context, error) => {
+                mockError(context, error)
+            },
+        })
+
+        client.variable('bool', true)
+
+        expect(mockBefore).toHaveBeenCalled()
+        expect(mockAfter).toHaveBeenCalled()
+        expect(mockOnFinally).toHaveBeenCalled()
+        expect(mockError).not.toHaveBeenCalled()
+
+        client.variable('enum_var', 'value1')
+
+        expect(mockBefore).toHaveBeenCalledTimes(2)
+        expect(mockAfter).toHaveBeenCalledTimes(2)
+        expect(mockOnFinally).toHaveBeenCalledTimes(2)
+        expect(mockError).not.toHaveBeenCalled()
+
+        client.variable('number', 4)
+
+        expect(mockBefore).toHaveBeenCalledTimes(3)
+        expect(mockAfter).toHaveBeenCalledTimes(3)
+        expect(mockOnFinally).toHaveBeenCalledTimes(3)
+        expect(mockError).not.toHaveBeenCalled()
+    })
 })
