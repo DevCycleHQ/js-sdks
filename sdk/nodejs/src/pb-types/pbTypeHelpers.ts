@@ -44,9 +44,6 @@ export function pbSDKVariableTransform(
         type,
         key: variable.key,
         value,
-        evalReason:
-            !variable.evalReason || variable.evalReason.isNull
-                ? null
-                : variable.evalReason,
+        evalReason: variable.evalReason,
     }
 }

@@ -9,6 +9,10 @@ type SDKVariable_PB_Type = {
     boolValue: boolean
     doubleValue: number
     stringValue: string
+    evalReason?: {
+        reason: string
+        details: string
+    }
     _feature?: {
         value: string
         isNull: boolean
@@ -22,6 +26,7 @@ const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
             key: pbSDKVariable.key,
             value: pbSDKVariable.boolValue,
             type: VariableTypeStr.boolean,
+            evalReason: pbSDKVariable.evalReason,
             _feature: pbSDKVariable._feature?.value,
         }
     } else if (pbSDKVariable.type === 1) {
@@ -30,6 +35,7 @@ const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
             key: pbSDKVariable.key,
             value: pbSDKVariable.doubleValue,
             type: VariableTypeStr.number,
+            evalReason: pbSDKVariable.evalReason,
             _feature: pbSDKVariable._feature?.value,
         }
     } else if (pbSDKVariable.type === 2) {
@@ -38,6 +44,7 @@ const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
             key: pbSDKVariable.key,
             value: pbSDKVariable.stringValue,
             type: VariableTypeStr.string,
+            evalReason: pbSDKVariable.evalReason,
             _feature: pbSDKVariable._feature?.value,
         }
     } else if (pbSDKVariable.type === 3) {
@@ -46,6 +53,7 @@ const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
             key: pbSDKVariable.key,
             value: JSON.parse(pbSDKVariable.stringValue),
             type: VariableTypeStr.json,
+            evalReason: pbSDKVariable.evalReason,
             _feature: pbSDKVariable._feature?.value,
         }
     }
