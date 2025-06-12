@@ -167,10 +167,7 @@ describe('CacheStore tests', () => {
             { user_id: 'identified_user' },
             {},
         )
-        const anonymousUser = new DVCPopulatedUser(
-            { user_id: 'anon_user', isAnonymous: true },
-            {},
-        )
+        const anonymousUser = new DVCPopulatedUser({ isAnonymous: true }, {})
         const config = {}
 
         // Save configs for both user types

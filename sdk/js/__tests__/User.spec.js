@@ -76,7 +76,7 @@ describe('DVCPopulatedUser tests', () => {
             isAnonymous: true,
         })
         expect(user.user_id).toBe('abc123')
-        expect(user.isAnonymous).toBe(true)
+        expect(user.isAnonymous).toBe(false)
     })
 
     it('should throw an error if isAnonymous is false without a user_id', () => {
