@@ -12,6 +12,7 @@ import {
     NullableString,
     SDKVariable_PB,
     VariableType_PB,
+    EvalReason_PB,
     encodeSDKVariable_PB,
 } from './'
 
@@ -61,9 +62,9 @@ export namespace EVAL_REASON_DETAILS {
 
 export class EvalReason extends JSON.Value {
     readonly reason: string
-    readonly details: string | null
+    readonly details: string
 
-    constructor(reason: string, details: string | null = null) {
+    constructor(reason: string, details: string = "") {
         super()
         this.reason = reason
         this.details = details
@@ -71,16 +72,14 @@ export class EvalReason extends JSON.Value {
 
     static fromJSONObj(jsonObj: JSON.Obj): EvalReason {
         const reason = getStringFromJSON(jsonObj, 'reason')
-        const details = getStringFromJSONOptional(jsonObj, 'details')
+        const details = getStringFromJSON(jsonObj, 'details')
         return new EvalReason(reason, details)
     }
 
     stringify(): string {
         const json = new JSON.Obj()
         json.set('reason', this.reason)
-        if (this.details !== null) {
-            json.set('details', this.details)
-        }
+        json.set('details', this.details)
         return json.stringify()
     }
 }
@@ -248,7 +247,7 @@ export class SDKVariable extends JSON.Obj {
         public readonly type: string,
         public readonly key: string,
         public readonly value: JSON.Value,
-        public readonly evalReason: EvalReason | null,
+        public readonly evalReason: EvalReason,
         public readonly _feature: string | null,
     ) {
         super()
@@ -265,7 +264,7 @@ export class SDKVariable extends JSON.Obj {
 
     static fromJSONObj(variableObj: JSON.Obj): SDKVariable {
         const evalReasonObj = variableObj.getObj('evalReason')
-        let evalReason: EvalReason | null = null
+        let evalReason = new EvalReason('')
         if (evalReasonObj) {
             evalReason = EvalReason.fromJSONObj(evalReasonObj)
         }
@@ -308,6 +307,8 @@ export class SDKVariable extends JSON.Obj {
             ? this.value.stringify()
             : null
 
+        const evalReasonPb = new EvalReason_PB(this.evalReason.reason, this.evalReason.details)
+
         const pbVariable = new SDKVariable_PB(
             this._id,
             SDKVariable.variableTypeFromString(this.type),
@@ -315,7 +316,7 @@ export class SDKVariable extends JSON.Obj {
             boolValue,
             numValue,
             stringValue || jsonValue || '',
-            new NullableString('', true),
+            evalReasonPb,
             new NullableString(this._feature || '', this._feature === null),
         )
         return encodeSDKVariable_PB(pbVariable)

@@ -65,7 +65,7 @@ export class TargetV2 extends JSON.Value {
             if (boundedHash >= previousDistributionIndex && 
                 (boundedHash < distributionIndex || (distributionIndex == 1 && boundedHash == 1))) {
                 const reason = isRollout || isRandomDistribution ? EVAL_REASONS.SPLIT : EVAL_REASONS.TARGETING_MATCH
-                const evalReason = new EvalReason(reason, null)
+                const evalReason = new EvalReason(reason)
                 return new VariationReasonResult(distribution._variation, evalReason)
             }
         }
