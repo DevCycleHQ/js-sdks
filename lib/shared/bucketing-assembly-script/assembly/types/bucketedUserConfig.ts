@@ -71,8 +71,13 @@ export class EvalReason extends JSON.Value {
     }
 
     static fromJSONObj(jsonObj: JSON.Obj): EvalReason {
-        const reason = getStringFromJSON(jsonObj, 'reason')
-        const details = getStringFromJSON(jsonObj, 'details')
+        let reason = getStringFromJSONOptional(jsonObj, 'reason')
+        if(!reason){
+            reason = ""
+        }
+        let details = getStringFromJSONOptional(jsonObj, 'details')
+        if(!details)
+            details = ""
         return new EvalReason(reason, details)
     }
 
@@ -203,18 +208,14 @@ export class SDKFeature extends JSON.Obj {
         public readonly _variation: string,
         public readonly variationName: string,
         public readonly variationKey: string,
-        public readonly evalReason: EvalReason | null
+        public readonly eval: EvalReason
     ) {
         super()
     }
 
     static fromJSONObj(featureObj: JSON.Obj): SDKFeature {
-        const evalReasonObj = featureObj.getObj('evalReason')
-        let evalReason: EvalReason | null = null
-        if (evalReasonObj) {
-            evalReason = EvalReason.fromJSONObj(evalReasonObj)
-        }
-
+        const evalObj = featureObj.getObj('eval') 
+        const evalObjJSON =  evalObj ? evalObj : new JSON.Obj()
         return new SDKFeature(
             getStringFromJSON(featureObj, '_id'),
             getStringFromJSON(featureObj, 'type'),
@@ -222,7 +223,7 @@ export class SDKFeature extends JSON.Obj {
             getStringFromJSON(featureObj, '_variation'),
             getStringFromJSON(featureObj, 'variationName'),
             getStringFromJSON(featureObj, 'variationKey'),
-            evalReason
+            EvalReason.fromJSONObj(evalObjJSON)
         )
     }
 
@@ -234,9 +235,7 @@ export class SDKFeature extends JSON.Obj {
         json.set('_variation', this._variation)
         json.set('variationName', this.variationName)
         json.set('variationKey', this.variationKey)
-        if (this.evalReason) {
-            json.set('evalReason', this.evalReason)
-        }
+        json.set('eval', this.eval)
         return json.stringify()
     }
 }
@@ -247,7 +246,7 @@ export class SDKVariable extends JSON.Obj {
         public readonly type: string,
         public readonly key: string,
         public readonly value: JSON.Value,
-        public readonly evalReason: EvalReason,
+        public readonly eval: EvalReason,
         public readonly _feature: string | null,
     ) {
         super()
@@ -263,18 +262,15 @@ export class SDKVariable extends JSON.Obj {
     }
 
     static fromJSONObj(variableObj: JSON.Obj): SDKVariable {
-        const evalReasonObj = variableObj.getObj('evalReason')
-        let evalReason = new EvalReason('')
-        if (evalReasonObj) {
-            evalReason = EvalReason.fromJSONObj(evalReasonObj)
-        }
+        const evalObj = variableObj.getObj('eval') 
+        const evalObjJSON =  evalObj ? evalObj : new JSON.Obj()
 
         return new SDKVariable(
             getStringFromJSON(variableObj, '_id'),
             getStringFromJSON(variableObj, 'type'),
             getStringFromJSON(variableObj, 'key'),
             getJSONValueFromJSON(variableObj, 'value'),
-            evalReason,
+            EvalReason.fromJSONObj(evalObjJSON),
             getStringFromJSONOptional(variableObj, '_feature')
         )
     }
@@ -307,7 +303,7 @@ export class SDKVariable extends JSON.Obj {
             ? this.value.stringify()
             : null
 
-        const evalReasonPb = new EvalReason_PB(this.evalReason.reason, this.evalReason.details)
+        const evalReasonPb = new EvalReason_PB(this.eval.reason, this.eval.details)
 
         const pbVariable = new SDKVariable_PB(
             this._id,
@@ -328,9 +324,7 @@ export class SDKVariable extends JSON.Obj {
         json.set('type', this.type)
         json.set('key', this.key)
         json.set('value', this.value)
-        if (this.evalReason) {
-            json.set('evalReason', this.evalReason)
-        }
+        json.set('eval', this.eval)
         if (this._feature) {
             json.set('_feature', this._feature)
         }
