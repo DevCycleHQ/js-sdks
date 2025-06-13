@@ -640,8 +640,8 @@ export class SDKVariable_PB implements ISDKVariable_PB {
     /** SDKVariable_PB stringValue. */
     public stringValue: string;
 
-    /** SDKVariable_PB evalReason. */
-    public evalReason?: (IEvalReason_PB|null);
+    /** SDKVariable_PB eval. */
+    public eval?: (IEvalReason_PB|null);
 
     /** SDKVariable_PB _feature. */
     public _feature?: (INullableString|null);
