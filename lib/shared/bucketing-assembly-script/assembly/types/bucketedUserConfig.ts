@@ -16,6 +16,7 @@ import {
     encodeSDKVariable_PB,
 } from './'
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace DEFAULT_REASONS {
     export const MISSING_CONFIG = 'MISSING_CONFIG'
     export const MISSING_VARIABLE = 'MISSING_VARIABLE'
@@ -28,6 +29,7 @@ export namespace DEFAULT_REASONS {
     export const UNKNOWN = 'UNKNOWN'
 }
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace EVAL_REASONS {
     export const TARGETING_MATCH = 'TARGETING_MATCH'
     export const SPLIT = 'SPLIT'
@@ -38,6 +40,7 @@ export namespace EVAL_REASONS {
     export const OPT_IN = 'OPT_IN'
 }
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace EVAL_REASON_DETAILS {
     // All Users
     export const ALL_USERS = 'All Users'
@@ -64,6 +67,7 @@ export class EvalReason extends JSON.Value {
     readonly reason: string
     readonly details: string
 
+    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
     constructor(reason: string, details: string = "") {
         super()
         this.reason = reason
@@ -208,7 +212,7 @@ export class SDKFeature extends JSON.Obj {
         public readonly _variation: string,
         public readonly variationName: string,
         public readonly variationKey: string,
-        public readonly eval: EvalReason
+        public readonly evalReason: EvalReason
     ) {
         super()
     }
@@ -235,7 +239,7 @@ export class SDKFeature extends JSON.Obj {
         json.set('_variation', this._variation)
         json.set('variationName', this.variationName)
         json.set('variationKey', this.variationKey)
-        json.set('eval', this.eval)
+        json.set('eval', this.evalReason)
         return json.stringify()
     }
 }
@@ -246,7 +250,7 @@ export class SDKVariable extends JSON.Obj {
         public readonly type: string,
         public readonly key: string,
         public readonly value: JSON.Value,
-        public readonly eval: EvalReason,
+        public readonly evalReason: EvalReason,
         public readonly _feature: string | null,
     ) {
         super()
@@ -303,7 +307,7 @@ export class SDKVariable extends JSON.Obj {
             ? this.value.stringify()
             : null
 
-        const evalReasonPb = new EvalReason_PB(this.eval.reason, this.eval.details)
+        const evalReasonPb = new EvalReason_PB(this.evalReason.reason, this.evalReason.details)
 
         const pbVariable = new SDKVariable_PB(
             this._id,
@@ -324,7 +328,7 @@ export class SDKVariable extends JSON.Obj {
         json.set('type', this.type)
         json.set('key', this.key)
         json.set('value', this.value)
-        json.set('eval', this.eval)
+        json.set('eval', this.evalReason)
         if (this._feature) {
             json.set('_feature', this._feature)
         }
