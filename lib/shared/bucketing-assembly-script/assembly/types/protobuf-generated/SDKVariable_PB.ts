@@ -4,6 +4,7 @@
 //   protoc        v5.29.3
 
 import { Writer, Reader, Protobuf } from "as-proto/assembly";
+import { EvalReason_PB } from "./EvalReason_PB";
 import { NullableString } from "./NullableString";
 import { VariableType_PB } from "./VariableType_PB";
 
@@ -27,11 +28,11 @@ export class SDKVariable_PB {
     writer.uint32(50);
     writer.string(message.stringValue);
 
-    const evalReason = message.evalReason;
-    if (evalReason !== null) {
+    const eval = message.eval;
+    if (eval !== null) {
       writer.uint32(58);
       writer.fork();
-      NullableString.encode(evalReason, writer);
+      EvalReason_PB.encode(eval, writer);
       writer.ldelim();
     }
 
@@ -76,7 +77,7 @@ export class SDKVariable_PB {
           break;
 
         case 7:
-          message.evalReason = NullableString.decode(reader, reader.uint32());
+          message.eval = EvalReason_PB.decode(reader, reader.uint32());
           break;
 
         case 8:
@@ -98,7 +99,7 @@ export class SDKVariable_PB {
   boolValue: bool;
   doubleValue: f64;
   stringValue: string;
-  evalReason: NullableString | null;
+  eval: EvalReason_PB | null;
   feature: NullableString | null;
 
   constructor(
@@ -108,7 +109,7 @@ export class SDKVariable_PB {
     boolValue: bool = false,
     doubleValue: f64 = 0.0,
     stringValue: string = "",
-    evalReason: NullableString | null = null,
+    eval: EvalReason_PB | null = null,
     feature: NullableString | null = null
   ) {
     this.id = id;
@@ -117,7 +118,7 @@ export class SDKVariable_PB {
     this.boolValue = boolValue;
     this.doubleValue = doubleValue;
     this.stringValue = stringValue;
-    this.evalReason = evalReason;
+    this.eval = eval;
     this.feature = feature;
   }
 }
