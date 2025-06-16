@@ -259,7 +259,7 @@ export function bucketUserForVariation(
     }
 }
 
-function _determineEvalReason(
+function _getEvalReason(
     targetAndHashes: TargetAndHashes 
 ): EvalReason {
     const target = targetAndHashes.target
@@ -314,7 +314,7 @@ export function _generateBucketedConfig(
 
         const evalReason = featureOverride 
             ? new EvalReason(EVAL_REASONS.OVERRIDE, EVAL_REASON_DETAILS.OVERRIDE)
-            : _determineEvalReason(targetAndHashes!)
+            : _getEvalReason(targetAndHashes!)
 
         featureKeyMap.set(
             feature.key,
@@ -402,7 +402,7 @@ export function _generateBucketedVariableForUser(
         throw new Error('Internal error processing configuration')
     }
 
-    const evalReason = _determineEvalReason(targetAndHashes)
+    const evalReason = _getEvalReason(targetAndHashes)
 
     const sdkVar = new SDKVariable(
         variable._id,

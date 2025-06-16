@@ -56,18 +56,18 @@ export function _evaluateOperator(
         for (let i = 0; i < operator.filters.length; i++) {
             const filter = operator.filters[i]
             if (filter.operatorClass !== null) {
-               const evalResultWithReason =
+               const evalResult =
                     _evaluateOperator(filter.operatorClass as AudienceOperator, audiences, user, clientCustomData)
                 // Instead of returning the value from only the first filter,
                 // we want to return true if any of the filters are true
-                if(evalResultWithReason.result) {
-                    return evalResultWithReason
+                if(evalResult.result) {
+                    return evalResult
                 }
             } else if (filter.filterClass !== null) {
-                const evalResultWithReason = 
+                const evalResult = 
                     doesUserPassFilter(filter.filterClass as AudienceFilter, audiences, user, clientCustomData)
-                if(evalResultWithReason.result) {
-                    return evalResultWithReason
+                if(evalResult.result) {
+                    return evalResult
                 }
             }
         }
@@ -80,10 +80,10 @@ export function _evaluateOperator(
             if (filter.operatorClass !== null) {
                return _evaluateOperator(filter.operatorClass as AudienceOperator, audiences, user, clientCustomData)
             } else if (filter.filterClass !== null) {
-                const evalResultWithReason = 
+                const evalResult = 
                     doesUserPassFilter(filter.filterClass as AudienceFilter, audiences, user, clientCustomData)
-                if(evalResultWithReason.result && evalResultWithReason.reasonDetails){
-                    reasons.push(evalResultWithReason.reasonDetails!)
+                if(evalResult.result && evalResult.reasonDetails){
+                    reasons.push(evalResult.reasonDetails!)
                 } else {
                     return new SegmentationResult(false)
                 }
