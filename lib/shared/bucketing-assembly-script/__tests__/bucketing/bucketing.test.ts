@@ -427,7 +427,7 @@ describe('Config Parsing and Generating', () => {
                     variationName: 'audience match variation',
                     eval: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Audience Match Email',
+                        details: 'Audience Match -> Email',
                     },
                 },
                 feature4: {
@@ -497,7 +497,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'audience_match',
                     eval: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Audience Match Email',
+                        details: 'Audience Match -> Email',
                     },
                 },
                 'feature2.cool': {
@@ -683,7 +683,8 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-1-aud-2-key',
                     eval: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Custom Data',
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
             },
@@ -705,7 +706,8 @@ describe('Config Parsing and Generating', () => {
                     value: 'Var 1 aud 2',
                     eval: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Custom Data',
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
             },
@@ -761,8 +763,8 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-1-key',
                     variationName: 'variation 1',
                     eval: {
-                        reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 feature2: {
@@ -774,7 +776,8 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-1-aud-2-key',
                     eval: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Custom Data',
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
             },
@@ -817,7 +820,8 @@ describe('Config Parsing and Generating', () => {
                     value: 'Var 1 aud 2',
                     eval: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Custom Data',
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 'bool-var': {
@@ -827,8 +831,8 @@ describe('Config Parsing and Generating', () => {
                     type: 'Boolean',
                     value: false,
                     eval: {
-                        reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 'json-var': {
@@ -838,8 +842,8 @@ describe('Config Parsing and Generating', () => {
                     type: 'JSON',
                     value: '{"hello":"world","num":610,"bool":true}',
                     eval: {
-                        reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 'num-var': {
@@ -849,8 +853,8 @@ describe('Config Parsing and Generating', () => {
                     type: 'Number',
                     value: 610.61,
                     eval: {
-                        reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 swagTest: {
@@ -860,8 +864,8 @@ describe('Config Parsing and Generating', () => {
                     type: 'String',
                     value: 'man',
                     eval: {
-                        reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 test: {
@@ -871,8 +875,8 @@ describe('Config Parsing and Generating', () => {
                     type: 'String',
                     value: 'scat',
                     eval: {
-                        reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
             },
@@ -939,8 +943,8 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-1-key',
                     variationName: 'variation 1',
                     eval: {
-                        reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 feature2: {
@@ -952,7 +956,8 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-1-aud-2-key',
                     eval: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Custom Data',
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
             },
@@ -995,7 +1000,8 @@ describe('Config Parsing and Generating', () => {
                     value: 'Var 1 aud 2',
                     eval: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Custom Data',
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 'bool-var': {
@@ -1005,8 +1011,8 @@ describe('Config Parsing and Generating', () => {
                     type: 'Boolean',
                     value: false,
                     eval: {
-                        reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 'json-var': {
@@ -1016,8 +1022,8 @@ describe('Config Parsing and Generating', () => {
                     type: 'JSON',
                     value: '{"hello":"world","num":610,"bool":true}',
                     eval: {
-                        reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 'num-var': {
@@ -1027,8 +1033,8 @@ describe('Config Parsing and Generating', () => {
                     type: 'Number',
                     value: 610.61,
                     eval: {
-                        reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 swagTest: {
@@ -1038,8 +1044,8 @@ describe('Config Parsing and Generating', () => {
                     type: 'String',
                     value: 'man',
                     eval: {
-                        reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
                 test: {
@@ -1049,8 +1055,8 @@ describe('Config Parsing and Generating', () => {
                     type: 'String',
                     value: 'scat',
                     eval: {
-                        reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
                     },
                 },
             },
@@ -1105,7 +1111,8 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-2-key',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 feature2: {
@@ -1117,7 +1124,8 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-1-aud-2-key',
                     eval: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Custom Data',
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
             },
@@ -1156,7 +1164,8 @@ describe('Config Parsing and Generating', () => {
                     value: false,
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 swagTest: {
@@ -1167,7 +1176,8 @@ describe('Config Parsing and Generating', () => {
                     value: 'YEEEEOWZA',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 feature2Var: {
@@ -1178,7 +1188,8 @@ describe('Config Parsing and Generating', () => {
                     value: 'Var 1 aud 2',
                     eval: {
                         reason: EVAL_REASONS.TARGETING_MATCH,
-                        details: 'Custom Data',
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 'json-var': {
@@ -1189,7 +1200,8 @@ describe('Config Parsing and Generating', () => {
                     value: '{"hello":"world","num":610,"bool":true}',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 'num-var': {
@@ -1200,7 +1212,8 @@ describe('Config Parsing and Generating', () => {
                     value: 610.61,
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Custom Data',
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
             },
@@ -1337,7 +1350,7 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'audience-match-variation',
                     variationName: 'audience match variation',
                     eval: {
-                        details: 'Custom Data',
+                        details: 'Custom Data -> favouriteNull',
                         reason: 'TARGETING_MATCH',
                     },
                 },
@@ -1359,7 +1372,7 @@ describe('Config Parsing and Generating', () => {
                     type: 'String',
                     value: 'audience_match',
                     eval: {
-                        details: 'Custom Data',
+                        details: 'Custom Data -> favouriteNull',
                         reason: 'TARGETING_MATCH',
                     },
                 },
@@ -1418,7 +1431,7 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'audience-match-variation',
                     variationName: 'audience match variation',
                     eval: {
-                        details: 'Custom Data',
+                        details: 'Custom Data -> favouriteNull',
                         reason: 'TARGETING_MATCH',
                     },
                 },
@@ -1440,7 +1453,7 @@ describe('Config Parsing and Generating', () => {
                     type: 'String',
                     value: 'audience_match',
                     eval: {
-                        details: 'Custom Data',
+                        details: 'Custom Data -> favouriteNull',
                         reason: 'TARGETING_MATCH',
                     },
                 },

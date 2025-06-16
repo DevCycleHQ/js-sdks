@@ -226,11 +226,7 @@ function doesUserQualifyForFeature(
         user,
         clientCustomData,
     )
-    
-    // Early return if no target result
     if (!targetResult) return null
-    
-    // Now we can safely extract the properties
     const target = targetResult.target
     const reasonDetails = targetResult.reasonDetails
 
