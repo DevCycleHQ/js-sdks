@@ -105,6 +105,10 @@ describe('protobuf variable tests', () => {
             isNull: true,
             value: '',
         },
+        eval: {
+            details: 'User ID AND Country',
+            reason: 'TARGETING_MATCH',
+        },
         key: 'swagTest',
         stringValue: 'YEEEEOWZA',
         type: VariableType.String,
@@ -288,7 +292,6 @@ describe('protobuf variable tests', () => {
                     boolValue: true,
                     doubleValue: 0,
                     stringValue: '',
-                    evalReason: { value: '', isNull: true },
                     _feature: {
                         value: '615356f120ed334a6054564f',
                         isNull: false,

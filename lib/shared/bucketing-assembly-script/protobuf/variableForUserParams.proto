@@ -67,8 +67,9 @@ message SDKVariable_PB {
     bool boolValue = 4;
     double doubleValue = 5;
     string stringValue = 6;
-    EvalReason_PB eval = 7;
+    NullableString evalReason = 7;
     NullableString _feature = 8; 
+    EvalReason_PB eval = 9;
 }
 
 message EvalReason_PB {

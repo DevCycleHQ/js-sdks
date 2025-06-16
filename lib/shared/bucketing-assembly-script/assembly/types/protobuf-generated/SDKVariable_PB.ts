@@ -4,8 +4,8 @@
 //   protoc        v5.29.3
 
 import { Writer, Reader, Protobuf } from "as-proto/assembly";
-import { EvalReason_PB } from "./EvalReason_PB";
 import { NullableString } from "./NullableString";
+import { EvalReason_PB } from "./EvalReason_PB";
 import { VariableType_PB } from "./VariableType_PB";
 
 export class SDKVariable_PB {
@@ -28,11 +28,11 @@ export class SDKVariable_PB {
     writer.uint32(50);
     writer.string(message.stringValue);
 
-    const eval = message.eval;
-    if (eval !== null) {
+    const evalReason = message.evalReason;
+    if (evalReason !== null) {
       writer.uint32(58);
       writer.fork();
-      EvalReason_PB.encode(eval, writer);
+      NullableString.encode(evalReason, writer);
       writer.ldelim();
     }
 
@@ -41,6 +41,14 @@ export class SDKVariable_PB {
       writer.uint32(66);
       writer.fork();
       NullableString.encode(feature, writer);
+      writer.ldelim();
+    }
+
+    const eval = message.eval;
+    if (eval !== null) {
+      writer.uint32(74);
+      writer.fork();
+      EvalReason_PB.encode(eval, writer);
       writer.ldelim();
     }
   }
@@ -77,11 +85,15 @@ export class SDKVariable_PB {
           break;
 
         case 7:
-          message.eval = EvalReason_PB.decode(reader, reader.uint32());
+          message.evalReason = NullableString.decode(reader, reader.uint32());
           break;
 
         case 8:
           message.feature = NullableString.decode(reader, reader.uint32());
+          break;
+
+        case 9:
+          message.eval = EvalReason_PB.decode(reader, reader.uint32());
           break;
 
         default:
@@ -99,8 +111,9 @@ export class SDKVariable_PB {
   boolValue: bool;
   doubleValue: f64;
   stringValue: string;
-  eval: EvalReason_PB | null;
+  evalReason: NullableString | null;
   feature: NullableString | null;
+  eval: EvalReason_PB | null;
 
   constructor(
     id: string = "",
@@ -109,8 +122,9 @@ export class SDKVariable_PB {
     boolValue: bool = false,
     doubleValue: f64 = 0.0,
     stringValue: string = "",
-    eval: EvalReason_PB | null = null,
-    feature: NullableString | null = null
+    evalReason: NullableString | null = null,
+    feature: NullableString | null = null,
+    eval: EvalReason_PB | null = null
   ) {
     this.id = id;
     this.type = type;
@@ -118,8 +132,9 @@ export class SDKVariable_PB {
     this.boolValue = boolValue;
     this.doubleValue = doubleValue;
     this.stringValue = stringValue;
-    this.eval = eval;
+    this.evalReason = evalReason;
     this.feature = feature;
+    this.eval = eval;
   }
 }
 
