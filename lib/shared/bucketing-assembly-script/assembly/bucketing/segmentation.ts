@@ -106,8 +106,7 @@ function doesUserPassFilter(
 
     if (filter.type === 'all') return new SegmentationResult(true, EVAL_REASON_DETAILS.ALL_USERS)
     else if (filter.type === 'optIn') {
-            const reason = EVAL_REASON_DETAILS.OPT_IN // TODO: there is logic in js for checking optin?
-            return new SegmentationResult(false, reason)
+            return new SegmentationResult(false)
     } else if (filter.type === 'audienceMatch') {
         if (!(filter as AudienceMatchFilter).isValid) {
             isValid = false
@@ -174,7 +173,6 @@ function filterFunctionsBySubtype(
 ): SegmentationResult {
     if (subType === 'country') {
         const result = _checkStringsFilter(user.country, filter)
-        //TODO: should these be null or undefined?
         return new SegmentationResult(result, result ? EVAL_REASON_DETAILS.COUNTRY : null)
     } else if (subType === 'email') {
         const result = _checkStringsFilter(user.email, filter)
