@@ -197,7 +197,8 @@ function filterFunctionsBySubtype(
             throw new Error('Invalid filter data')
         }
         const result = _checkCustomData(user.getCombinedCustomData(), clientCustomData, filter as CustomDataFilter)
-        return new SegmentationResult(result, result ? `${EVAL_REASON_DETAILS.CUSTOM_DATA} -> ${(filter as CustomDataFilter).dataKey}` : null)
+        const reason = result ? `${EVAL_REASON_DETAILS.CUSTOM_DATA} -> ${(filter as CustomDataFilter).dataKey}` : null
+        return new SegmentationResult(result, reason)
     } else {
         return new SegmentationResult(false)
     }
