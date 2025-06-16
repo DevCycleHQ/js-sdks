@@ -239,6 +239,7 @@ export class SDKFeature extends JSON.Obj {
         json.set('_variation', this._variation)
         json.set('variationName', this.variationName)
         json.set('variationKey', this.variationKey)
+        // pb property is named eval for consistency with js lib
         json.set('eval', this.evalReason)
         return json.stringify()
     }
@@ -328,6 +329,7 @@ export class SDKVariable extends JSON.Obj {
         json.set('type', this.type)
         json.set('key', this.key)
         json.set('value', this.value)
+        // pb property is named eval for consistency with js lib
         json.set('eval', this.evalReason)
         if (this._feature) {
             json.set('_feature', this._feature)

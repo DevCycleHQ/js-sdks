@@ -155,7 +155,7 @@ function filterForAudienceMatch(
             // If the user is in any of the audiences return early.
             const matchResult = comparator === '='
             const reasonDetails = matchResult 
-                ? EVAL_REASON_DETAILS.AUDIENCE_MATCH + (result.reasonDetails ? ' ' + result.reasonDetails! : '')
+                ? EVAL_REASON_DETAILS.AUDIENCE_MATCH + (result.reasonDetails ? ' -> ' + result.reasonDetails! : '')
                 : null
             return new SegmentationResult(matchResult, reasonDetails)
         }
@@ -174,6 +174,7 @@ function filterFunctionsBySubtype(
 ): SegmentationResult {
     if (subType === 'country') {
         const result = _checkStringsFilter(user.country, filter)
+        //TODO: should these be null or undefined?
         return new SegmentationResult(result, result ? EVAL_REASON_DETAILS.COUNTRY : null)
     } else if (subType === 'email') {
         const result = _checkStringsFilter(user.email, filter)
@@ -198,7 +199,7 @@ function filterFunctionsBySubtype(
             throw new Error('Invalid filter data')
         }
         const result = _checkCustomData(user.getCombinedCustomData(), clientCustomData, filter as CustomDataFilter)
-        return new SegmentationResult(result, result ? EVAL_REASON_DETAILS.CUSTOM_DATA : null)
+        return new SegmentationResult(result, result ? `${EVAL_REASON_DETAILS.CUSTOM_DATA} -> ${(filter as CustomDataFilter).dataKey}` : null)
     } else {
         return new SegmentationResult(false)
     }
