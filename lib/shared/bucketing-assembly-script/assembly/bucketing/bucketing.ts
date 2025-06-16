@@ -259,6 +259,17 @@ export function bucketUserForVariation(
     }
 }
 
+function _determineEvalReason(
+    targetAndHashes: TargetAndHashes 
+): EvalReason {
+    const target = targetAndHashes.target
+    const hasRollout = target.rollout !== null
+    const hasMultipleDistributions = target.distribution.length !== 1
+
+    const reason = hasRollout || hasMultipleDistributions ? EVAL_REASONS.SPLIT : EVAL_REASONS.TARGETING_MATCH
+    return  new EvalReason(reason, targetAndHashes.reasonDetails)
+}
+
 export function _generateBucketedConfig(
     config: ConfigBody,
     user: DVCPopulatedUser,
@@ -301,22 +312,9 @@ export function _generateBucketedConfig(
             continue
         }
 
-        let evalReason: EvalReason
-        if (featureOverride) {
-            evalReason = new EvalReason(EVAL_REASONS.OVERRIDE, EVAL_REASON_DETAILS.OVERRIDE)
-        } else if (targetAndHashes) {
-            const target = targetAndHashes.target
-            const hasRollout = target.rollout !== null
-            const hasMultipleDistributions = target.distribution.length !== 1
-
-            if (hasRollout || hasMultipleDistributions) {
-                evalReason = new EvalReason(EVAL_REASONS.SPLIT, targetAndHashes.reasonDetails)
-            } else {
-                evalReason = new EvalReason(EVAL_REASONS.TARGETING_MATCH, targetAndHashes.reasonDetails)
-            }
-        } else { 
-            evalReason = new EvalReason(EVAL_REASONS.DEFAULT, EVAL_REASON_DETAILS.ALL_USERS)
-        }
+        const evalReason = featureOverride 
+            ? new EvalReason(EVAL_REASONS.OVERRIDE, EVAL_REASON_DETAILS.OVERRIDE)
+            : _determineEvalReason(targetAndHashes!)
 
         featureKeyMap.set(
             feature.key,
@@ -404,14 +402,7 @@ export function _generateBucketedVariableForUser(
         throw new Error('Internal error processing configuration')
     }
 
-    const target = targetAndHashes.target
-    const hasRollout = target.rollout !== null
-    const hasMultipleDistributions = target.distribution.length !== 1
-
-
-    const evalReason = hasRollout || hasMultipleDistributions 
-        ? new EvalReason(EVAL_REASONS.SPLIT, targetAndHashes.reasonDetails)
-        : new EvalReason(EVAL_REASONS.TARGETING_MATCH, targetAndHashes.reasonDetails)
+    const evalReason = _determineEvalReason(targetAndHashes)
 
     const sdkVar = new SDKVariable(
         variable._id,

@@ -89,8 +89,7 @@ export class Target extends JSON.Value {
             if (boundedHash >= previousDistributionIndex && 
                 (boundedHash < distributionIndex || (distributionIndex == 1 && boundedHash == 1))) {
                 const reason = isRollout || isRandomDistribution ? EVAL_REASONS.SPLIT : EVAL_REASONS.TARGETING_MATCH
-                // TODO: reasonDetails should not be null are passed as arg in js
-                const evalReason = new EvalReason(reason, 'test make sure you change this')
+                const evalReason = new EvalReason(reason)
                 return new VariationReasonResult(distribution._variation, evalReason)
             }
         }
