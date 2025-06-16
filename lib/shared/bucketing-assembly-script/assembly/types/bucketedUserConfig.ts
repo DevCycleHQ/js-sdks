@@ -212,7 +212,6 @@ export class SDKFeature extends JSON.Obj {
         public readonly _variation: string,
         public readonly variationName: string,
         public readonly variationKey: string,
-        public readonly oldEvalReason: string | null,
         public readonly evalReason: EvalReason
     ) {
         super()
@@ -228,7 +227,6 @@ export class SDKFeature extends JSON.Obj {
             getStringFromJSON(featureObj, '_variation'),
             getStringFromJSON(featureObj, 'variationName'),
             getStringFromJSON(featureObj, 'variationKey'),
-            getStringFromJSONOptional(featureObj, 'evalReason'),
             EvalReason.fromJSONObj(evalObjJSON)
         )
     }
@@ -241,9 +239,6 @@ export class SDKFeature extends JSON.Obj {
         json.set('_variation', this._variation)
         json.set('variationName', this.variationName)
         json.set('variationKey', this.variationKey)
-        if (this.oldEvalReason) {
-            json.set('evalReason', this.oldEvalReason)
-        }
         // pb property is named eval for consistency with js lib
         json.set('eval', this.evalReason)
         return json.stringify()
@@ -256,7 +251,6 @@ export class SDKVariable extends JSON.Obj {
         public readonly type: string,
         public readonly key: string,
         public readonly value: JSON.Value,
-        public readonly oldEvalReason: string | null,
         public readonly _feature: string | null,
         public readonly evalReason: EvalReason,
     ) {
@@ -281,7 +275,6 @@ export class SDKVariable extends JSON.Obj {
             getStringFromJSON(variableObj, 'type'),
             getStringFromJSON(variableObj, 'key'),
             getJSONValueFromJSON(variableObj, 'value'),
-            getStringFromJSONOptional(variableObj, 'evalReason'),
             getStringFromJSONOptional(variableObj, '_feature'),
             EvalReason.fromJSONObj(evalObjJSON),
         )
@@ -339,9 +332,7 @@ export class SDKVariable extends JSON.Obj {
         json.set('value', this.value)
         // pb property is named eval for consistency with js lib
         json.set('eval', this.evalReason)
-        if (this.oldEvalReason) {
-            json.set('evalReason', this.oldEvalReason)
-        }
+        // set evalReason in proto for backward compatibility
         if (this._feature) {
             json.set('_feature', this._feature)
         }

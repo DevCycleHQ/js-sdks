@@ -332,7 +332,6 @@ export function _generateBucketedConfig(
                 variation._id,
                 variation.name,
                 variation.key,
-                null,
                 evalReason,
             ),
         )
@@ -357,7 +356,6 @@ export function _generateBucketedConfig(
                 variable.type,
                 variable.key,
                 variationVar.value,
-                null,
                 feature._id,
                 evalReason, 
             )
@@ -431,7 +429,6 @@ export function _generateBucketedVariableForUser(
         variable.type,
         variable.key,
         variationVar.value,
-        null,
         featureForVariable._id,
         evalReason,
     )
