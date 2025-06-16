@@ -139,7 +139,7 @@ class SegmentedFeatureData {
 
 class TargetResult { 
     public target: PublicTarget
-    public reasonDetails: string | null
+    public reasonDetails: string
 }
 
 function evaluateSegmentationForFeature(
@@ -170,7 +170,7 @@ function evaluateSegmentationForFeature(
             if(evalResult.result) {
                 return {
                     target,
-                    reasonDetails: evalResult.reasonDetails
+                    reasonDetails: evalResult.reasonDetails || ""
                 }
             }
         }
@@ -211,7 +211,7 @@ export function getSegmentedFeatureDataFromConfig(
 class TargetAndHashes {
     public target: Target
     public boundedHashData: BoundedHash
-    public reasonDetails: string | null
+    public reasonDetails: string
 }
 
 function doesUserQualifyForFeature(
@@ -301,25 +301,20 @@ export function _generateBucketedConfig(
             continue
         }
 
-        // Determine eval reason
         let evalReason: EvalReason
         if (featureOverride) {
             evalReason = new EvalReason(EVAL_REASONS.OVERRIDE, EVAL_REASON_DETAILS.OVERRIDE)
         } else if (targetAndHashes) {
-            // Determine if this was a targeting match or split based on target characteristics
             const target = targetAndHashes.target
             const hasRollout = target.rollout !== null
             const hasMultipleDistributions = target.distribution.length !== 1
 
-            // Use reason details from segmentation
-            const reasonDetails = targetAndHashes.reasonDetails || EVAL_REASON_DETAILS.CUSTOM_DATA
-
             if (hasRollout || hasMultipleDistributions) {
-                evalReason = new EvalReason(EVAL_REASONS.SPLIT, reasonDetails)
+                evalReason = new EvalReason(EVAL_REASONS.SPLIT, targetAndHashes.reasonDetails)
             } else {
-                evalReason = new EvalReason(EVAL_REASONS.TARGETING_MATCH, reasonDetails)
+                evalReason = new EvalReason(EVAL_REASONS.TARGETING_MATCH, targetAndHashes.reasonDetails)
             }
-        } else {
+        } else { 
             evalReason = new EvalReason(EVAL_REASONS.DEFAULT, EVAL_REASON_DETAILS.ALL_USERS)
         }
 
@@ -409,20 +404,14 @@ export function _generateBucketedVariableForUser(
         throw new Error('Internal error processing configuration')
     }
 
-    // Determine eval reason
     const target = targetAndHashes.target
     const hasRollout = target.rollout !== null
     const hasMultipleDistributions = target.distribution.length !== 1
 
-    // Use reason details from segmentation
-    const reasonDetails = targetAndHashes.reasonDetails || EVAL_REASON_DETAILS.CUSTOM_DATA
 
-    let evalReason: EvalReason
-    if (hasRollout || hasMultipleDistributions) {
-        evalReason = new EvalReason(EVAL_REASONS.SPLIT, reasonDetails)
-    } else {
-        evalReason = new EvalReason(EVAL_REASONS.TARGETING_MATCH, reasonDetails)
-    }
+    const evalReason = hasRollout || hasMultipleDistributions 
+        ? new EvalReason(EVAL_REASONS.SPLIT, targetAndHashes.reasonDetails)
+        : new EvalReason(EVAL_REASONS.TARGETING_MATCH, targetAndHashes.reasonDetails)
 
     const sdkVar = new SDKVariable(
         variable._id,
