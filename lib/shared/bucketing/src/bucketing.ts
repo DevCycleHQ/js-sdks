@@ -72,7 +72,7 @@ export const decideTargetVariation = ({
     const isRandomDistribution = target.distribution.length !== 1
 
     let evalReason = EVAL_REASONS.TARGETING_MATCH
-    let evalReasonDetails = reasonDetails
+    let evalReasonDetails = reasonDetails ?? ''
 
     if (isRandomDistribution || isRollout) {
         evalReason = EVAL_REASONS.SPLIT
@@ -82,7 +82,7 @@ export const decideTargetVariation = ({
                 : isRandomDistribution
                 ? EVAL_REASON_DETAILS.RANDOM_DISTRIBUTION
                 : EVAL_REASON_DETAILS.ROLLOUT
-        evalReasonDetails = `${evalReasonPrefix} | ${reasonDetails}`
+        evalReasonDetails = `${evalReasonPrefix} | ${evalReasonDetails}`
     }
 
     let distributionIndex = 0
