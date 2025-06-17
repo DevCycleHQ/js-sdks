@@ -5,6 +5,7 @@ import {
     EVAL_REASONS,
     EvalReason,
     FeatureType,
+    FilterType,
     PublicRollout,
     Rollout,
 } from '@devcycle/types'
@@ -1626,7 +1627,7 @@ describe('Bounded Hash Limits', () => {
                     _id: 'id',
                     filters: {
                         operator: AudienceOperator.and,
-                        filters: [],
+                        filters: [{ type: FilterType.all }],
                     },
                 },
                 distribution: [
@@ -1651,20 +1652,50 @@ describe('Bounded Hash Limits', () => {
             },
         },
         {
-            name: 'Single Distribution',
-            expectedVariation: 'var1',
+            name: 'Random Distribution & Rollout',
+            expectedVariation: '', // Don't test specific variation for random distribution
             target: {
                 _id: 'target',
                 _audience: {
                     _id: 'id',
                     filters: {
                         operator: AudienceOperator.and,
-                        filters: [],
+                        filters: [{ type: FilterType.all }],
                     },
                 },
                 distribution: [
                     {
-                        _variation: 'var1',
+                        _variation: 'var5',
+                        percentage: 0.6667,
+                    },
+                    {
+                        _variation: 'var6',
+                        percentage: 0.3333,
+                    },
+                ],
+                bucketingKey: 'user_id',
+                rollout: {
+                    startDate: new Date(moment().subtract(1, 'days').toDate()),
+                    startPercentage: 0,
+                    type: 'schedule',
+                } as Rollout,
+            },
+        },
+        {
+            name: 'Single Distribution',
+            expectedVariation: 'var7',
+            target: {
+                _id: 'target',
+                _audience: {
+                    _id: 'id',
+                    filters: {
+                        operator: AudienceOperator.and,
+                        filters: [{ type: FilterType.all }],
+                    },
+                },
+                distribution: [
+                    {
+                        _variation: 'var7',
                         percentage: 1,
                     },
                 ],
@@ -1679,10 +1710,25 @@ describe('Bounded Hash Limits', () => {
                 const variation = decideTargetVariation({
                     target: tc.target,
                     boundedHash: 0.2555,
+                    reasonDetails: 'All Users',
                 })
                 expect(variation).toBeDefined()
                 if (tc.expectedVariation) {
                     expect(variation.variation).toBe(tc.expectedVariation)
+                    expect(variation.eval?.reason).toBe(
+                        EVAL_REASONS.TARGETING_MATCH,
+                    )
+                    expect(variation.eval?.details).toBe('All Users')
+                } else if (tc.target.rollout) {
+                    expect(variation.eval?.reason).toBe(EVAL_REASONS.SPLIT)
+                    expect(variation.eval?.details).toBe(
+                        'Random Distribution | Rollout | All Users',
+                    )
+                } else {
+                    expect(variation.eval?.reason).toBe(EVAL_REASONS.SPLIT)
+                    expect(variation.eval?.details).toBe(
+                        'Random Distribution | All Users',
+                    )
                 }
             })
 
@@ -1690,10 +1736,25 @@ describe('Bounded Hash Limits', () => {
                 const variation = decideTargetVariation({
                     target: tc.target,
                     boundedHash: 0,
+                    reasonDetails: 'All Users',
                 })
                 expect(variation).toBeDefined()
                 if (tc.expectedVariation) {
                     expect(variation.variation).toBe(tc.expectedVariation)
+                    expect(variation.eval?.reason).toBe(
+                        EVAL_REASONS.TARGETING_MATCH,
+                    )
+                    expect(variation.eval?.details).toBe('All Users')
+                } else if (tc.target.rollout) {
+                    expect(variation.eval?.reason).toBe(EVAL_REASONS.SPLIT)
+                    expect(variation.eval?.details).toBe(
+                        'Random Distribution | Rollout | All Users',
+                    )
+                } else {
+                    expect(variation.eval?.reason).toBe(EVAL_REASONS.SPLIT)
+                    expect(variation.eval?.details).toBe(
+                        'Random Distribution | All Users',
+                    )
                 }
             })
 
@@ -1701,10 +1762,25 @@ describe('Bounded Hash Limits', () => {
                 const variation = decideTargetVariation({
                     target: tc.target,
                     boundedHash: 1,
+                    reasonDetails: 'All Users',
                 })
                 expect(variation).toBeDefined()
                 if (tc.expectedVariation) {
                     expect(variation.variation).toBe(tc.expectedVariation)
+                    expect(variation.eval?.reason).toBe(
+                        EVAL_REASONS.TARGETING_MATCH,
+                    )
+                    expect(variation.eval?.details).toBe('All Users')
+                } else if (tc.target.rollout) {
+                    expect(variation.eval?.reason).toBe(EVAL_REASONS.SPLIT)
+                    expect(variation.eval?.details).toBe(
+                        'Random Distribution | Rollout | All Users',
+                    )
+                } else {
+                    expect(variation.eval?.reason).toBe(EVAL_REASONS.SPLIT)
+                    expect(variation.eval?.details).toBe(
+                        'Random Distribution | All Users',
+                    )
                 }
             })
 
@@ -1712,10 +1788,25 @@ describe('Bounded Hash Limits', () => {
                 const variation = decideTargetVariation({
                     target: tc.target,
                     boundedHash: 0.9999999,
+                    reasonDetails: 'All Users',
                 })
                 expect(variation).toBeDefined()
                 if (tc.expectedVariation) {
                     expect(variation.variation).toBe(tc.expectedVariation)
+                    expect(variation.eval?.reason).toBe(
+                        EVAL_REASONS.TARGETING_MATCH,
+                    )
+                    expect(variation.eval?.details).toBe('All Users')
+                } else if (tc.target.rollout) {
+                    expect(variation.eval?.reason).toBe(EVAL_REASONS.SPLIT)
+                    expect(variation.eval?.details).toBe(
+                        'Random Distribution | Rollout | All Users',
+                    )
+                } else {
+                    expect(variation.eval?.reason).toBe(EVAL_REASONS.SPLIT)
+                    expect(variation.eval?.details).toBe(
+                        'Random Distribution | All Users',
+                    )
                 }
             })
         })
