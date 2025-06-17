@@ -40,6 +40,8 @@ describe('DevCycleCloudClient without EdgeDB', () => {
             expect(res.type).toEqual('Boolean')
             expect(res.eval).toEqual({
                 reason: 'TARGETING_MATCH',
+                details: 'User ID',
+                target_id: 'test-target-id',
             })
 
             await expect(
@@ -144,6 +146,8 @@ describe('DevCycleCloudClient without EdgeDB', () => {
                     defaultValue: false,
                     eval: {
                         reason: 'TARGETING_MATCH',
+                        details: 'User ID',
+                        target_id: 'test-target-id',
                     },
                 },
             })
@@ -179,6 +183,8 @@ describe('DevCycleCloudClient without EdgeDB', () => {
                     type: 'release',
                     eval: {
                         reason: 'TARGETING_MATCH',
+                        details: 'User ID',
+                        target_id: 'test-target-id',
                     },
                 },
             })
@@ -274,6 +280,8 @@ describe('DevCycleCloudClient with EdgeDB Enabled', () => {
             expect(res.isDefaulted).toBe(false)
             expect(res.eval).toEqual({
                 reason: 'OPT_IN',
+                details: 'Opt-In',
+                target_id: 'test-target-id-edgedb',
             })
 
             await expect(
@@ -366,6 +374,8 @@ describe('DevCycleCloudClient with EdgeDB Enabled', () => {
                     defaultValue: false,
                     eval: {
                         reason: 'OPT_IN',
+                        details: 'Opt-In',
+                        target_id: 'test-target-id-edgedb',
                     },
                 },
             })
@@ -401,6 +411,8 @@ describe('DevCycleCloudClient with EdgeDB Enabled', () => {
                     type: 'release',
                     eval: {
                         reason: 'OPT_IN',
+                        details: 'Opt-In',
+                        target_id: 'test-target-id-edgedb',
                     },
                 },
             })

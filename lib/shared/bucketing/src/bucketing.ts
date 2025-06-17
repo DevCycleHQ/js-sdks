@@ -71,6 +71,20 @@ export const decideTargetVariation = ({
     const isRollout = target.rollout !== undefined
     const isRandomDistribution = target.distribution.length !== 1
 
+    let evalReason = EVAL_REASONS.TARGETING_MATCH
+    let evalReasonDetails = reasonDetails ?? ''
+
+    if (isRandomDistribution || isRollout) {
+        evalReason = EVAL_REASONS.SPLIT
+        const evalReasonPrefix =
+            isRandomDistribution && isRollout
+                ? `${EVAL_REASON_DETAILS.RANDOM_DISTRIBUTION} | ${EVAL_REASON_DETAILS.ROLLOUT}`
+                : isRandomDistribution
+                ? EVAL_REASON_DETAILS.RANDOM_DISTRIBUTION
+                : EVAL_REASON_DETAILS.ROLLOUT
+        evalReasonDetails = `${evalReasonPrefix} | ${evalReasonDetails}`
+    }
+
     let distributionIndex = 0
     const previousDistributionIndex = 0
     for (const variation of variations) {
@@ -82,16 +96,11 @@ export const decideTargetVariation = ({
         ) {
             return {
                 variation: variation._variation,
-                eval:
-                    isRollout || isRandomDistribution
-                        ? {
-                              reason: EVAL_REASONS.SPLIT,
-                              details: reasonDetails ?? undefined,
-                          }
-                        : {
-                              reason: EVAL_REASONS.TARGETING_MATCH,
-                              details: reasonDetails ?? undefined,
-                          },
+                eval: {
+                    reason: evalReason,
+                    details: evalReasonDetails,
+                    target_id: target._id,
+                },
             }
         }
     }

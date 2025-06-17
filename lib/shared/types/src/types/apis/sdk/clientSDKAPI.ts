@@ -57,6 +57,9 @@ export enum EVAL_REASON_DETAILS {
     APP_VERSION = 'App Version',
     DEVICE_MODEL = 'Device Model',
     CUSTOM_DATA = 'Custom Data',
+    // Split Details
+    RANDOM_DISTRIBUTION = 'Random Distribution',
+    ROLLOUT = 'Rollout',
 }
 
 export enum DEFAULT_REASON_DETAILS {
@@ -76,6 +79,7 @@ export enum DEFAULT_REASON_DETAILS {
 export type EvalReason = {
     reason: EVAL_REASONS
     details?: string
+    target_id?: string
 }
 
 const boolTransform = ({ value }: { value: unknown }) => {

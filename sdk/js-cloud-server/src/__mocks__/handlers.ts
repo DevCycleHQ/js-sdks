@@ -1,5 +1,5 @@
 // src/mocks/handlers.js
-import { EVAL_REASONS } from '@devcycle/types'
+import { EVAL_REASON_DETAILS, EVAL_REASONS } from '@devcycle/types'
 import { http, HttpResponse } from 'msw'
 
 export const handlers = [
@@ -31,6 +31,8 @@ export const handlers = [
                         defaultValue: false,
                         eval: {
                             reason: EVAL_REASONS.OPT_IN,
+                            details: EVAL_REASON_DETAILS.OPT_IN,
+                            target_id: 'test-target-id-edgedb',
                         },
                     },
                     { status: 200 },
@@ -44,6 +46,8 @@ export const handlers = [
                         defaultValue: false,
                         eval: {
                             reason: EVAL_REASONS.TARGETING_MATCH,
+                            details: EVAL_REASON_DETAILS.USER_ID,
+                            target_id: 'test-target-id',
                         },
                     },
                     { status: 200 },
@@ -76,6 +80,8 @@ export const handlers = [
                                 defaultValue: false,
                                 eval: {
                                     reason: EVAL_REASONS.OPT_IN,
+                                    details: EVAL_REASON_DETAILS.OPT_IN,
+                                    target_id: 'test-target-id-edgedb',
                                 },
                             },
                         },
@@ -91,6 +97,8 @@ export const handlers = [
                                 defaultValue: false,
                                 eval: {
                                     reason: EVAL_REASONS.TARGETING_MATCH,
+                                    details: EVAL_REASON_DETAILS.USER_ID,
+                                    target_id: 'test-target-id',
                                 },
                             },
                         },
@@ -127,6 +135,8 @@ export const handlers = [
                                 type: 'release',
                                 eval: {
                                     reason: EVAL_REASONS.OPT_IN,
+                                    details: EVAL_REASON_DETAILS.OPT_IN,
+                                    target_id: 'test-target-id-edgedb',
                                 },
                             },
                         },
@@ -144,6 +154,8 @@ export const handlers = [
                                 type: 'release',
                                 eval: {
                                     reason: EVAL_REASONS.TARGETING_MATCH,
+                                    details: EVAL_REASON_DETAILS.USER_ID,
+                                    target_id: 'test-target-id',
                                 },
                             },
                         },
