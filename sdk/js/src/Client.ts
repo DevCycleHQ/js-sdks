@@ -455,7 +455,7 @@ export class DevCycleClient<
     private async _identifyUser(
         user: DevCycleUser<CustomData>,
     ): Promise<DVCVariableSet> {
-        let updatedUser: DVCPopulatedUser
+        let updatedUser: DVCPopulatedUser | undefined
 
         if (this.options.deferInitialization && !this.initializeTriggered) {
             await this.clientInitialization(user)
@@ -480,8 +480,37 @@ export class DevCycleClient<
                 )
             }
             const config = await this.requestConsolidator.queue(updatedUser)
-            return config.variables || {}
+            if (!config) {
+                this.logger.error('Config fetch returned no config')
+                throw new Error('Failed to fetch user configuration')
+            } else {
+                return config.variables
+            }
         } catch (err) {
+            // Try to use cached config for the new user on config fetch error
+            // Only attempt this if updatedUser was successfully created
+            if (updatedUser) {
+                try {
+                    const cachedConfig = await this.store.loadConfig(
+                        updatedUser,
+                    )
+                    if (cachedConfig) {
+                        this.logger.warn(
+                            'Config fetch failed, using cached user config',
+                        )
+                        this.handleConfigReceived(cachedConfig, updatedUser)
+                        return cachedConfig.variables || {}
+                    } else {
+                        this.logger.debug(
+                            'Config fetch failed and no cached config available',
+                        )
+                    }
+                } catch (cacheErr) {
+                    this.logger.error('Failed to load cached config', cacheErr)
+                }
+            }
+
+            // No cached config available, throw error without changing client state
             this.eventEmitter.emitError(err)
             throw err
         }
@@ -505,19 +534,19 @@ export class DevCycleClient<
             return
         }
 
-        let oldAnonymousId: string | null | undefined
-        let anonUser: DVCPopulatedUser
-
         const promise = new Promise<DVCVariableSet>((resolve, reject) => {
             this.eventQueue?.flushEvents()
 
             this.onInitialized
-                .then(() => this.store.loadAnonUserId())
-                .then(async (cachedAnonId) => {
-                    oldAnonymousId = cachedAnonId
+                .then(async () => {
+                    // Store the original anonymous ID for potential rollback
+                    const originalAnonId = await this.store.loadAnonUserId()
+
+                    // Remove the old anonymous ID first
                     await this.store.removeAnonUserId()
-                    // Create the new anonymous user AFTER removing the old ID
-                    anonUser = new DVCPopulatedUser(
+
+                    // Create the new anonymous user (this will generate and save a new ID)
+                    const anonUser = new DVCPopulatedUser(
                         { isAnonymous: true },
                         this.options,
                         undefined,
@@ -525,16 +554,35 @@ export class DevCycleClient<
                         undefined,
                         this.store,
                     )
-                    return this.requestConsolidator.queue(anonUser)
+
+                    try {
+                        // Try to get config
+                        const config = await this.requestConsolidator.queue(
+                            anonUser,
+                        )
+                        if (!config) {
+                            this.logger.error('Config fetch returned no config')
+                            throw new Error(
+                                'Failed to fetch user configuration',
+                            )
+                        }
+                        return config
+                    } catch (error) {
+                        // Config fetch failed, restore the original anonymous ID
+                        if (originalAnonId) {
+                            await this.store.saveAnonUserId(originalAnonId)
+                        } else {
+                            await this.store.removeAnonUserId()
+                        }
+                        throw error
+                    }
                 })
                 .then(async (config) => {
-                    resolve(config.variables || {})
+                    resolve(config.variables)
                 })
                 .catch(async (e) => {
                     this.eventEmitter.emitError(e)
-                    if (oldAnonymousId) {
-                        await this.store.saveAnonUserId(oldAnonymousId)
-                    }
+                    // No need to restore anonymous ID since we never removed it on failure
                     reject(e)
                 })
         })
@@ -741,6 +789,11 @@ export class DevCycleClient<
         config: BucketedUserConfig,
         user: DVCPopulatedUser,
     ) {
+        if (!config) {
+            // Config is null/undefined, don't process it
+            return
+        }
+
         const oldConfig = this.config
         this.config = config
         void this.store.saveConfig(config, user)

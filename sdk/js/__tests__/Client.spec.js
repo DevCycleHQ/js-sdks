@@ -741,6 +741,81 @@ describe('DevCycleClient tests', () => {
             expect(anonUserId).toBe(originalAnonUserId)
             expect(anonUserId).toBeDefined()
         })
+
+        it('should throw error when config fetch returns null', async () => {
+            const newUser = { user_id: 'user2' }
+            getConfigJson_mock.mockClear()
+            getConfigJson_mock.mockResolvedValue(null)
+
+            await expect(client.identifyUser(newUser)).rejects.toThrow(
+                'Failed to fetch user configuration',
+            )
+        })
+
+        it('should use cached config when config fetch fails and cached config exists', async () => {
+            const newUser = { user_id: 'user2' }
+            const cachedConfig = { ...testConfig, variables: { cached: true } }
+            
+            // Mock store to return cached config
+            jest.spyOn(client.store, 'loadConfig').mockResolvedValue(
+                cachedConfig,
+            )
+            
+            // Mock config fetch to fail
+            getConfigJson_mock.mockClear()
+            getConfigJson_mock.mockRejectedValue(
+                new Error('Config fetch failed'),
+            )
+
+            const result = await client.identifyUser(newUser)
+
+            expect(result).toEqual({ cached: true })
+            expect(client.config).toEqual(cachedConfig)
+        })
+
+        it('should throw error when config fetch fails and no cached config exists', async () => {
+            const newUser = { user_id: 'user2' }
+            const originalConfig = client.config
+            
+            // Mock store to return no cached config
+            jest.spyOn(client.store, 'loadConfig').mockResolvedValue(null)
+            
+            // Mock config fetch to fail
+            getConfigJson_mock.mockClear()
+            getConfigJson_mock.mockRejectedValue(
+                new Error('Config fetch failed'),
+            )
+
+            await expect(client.identifyUser(newUser)).rejects.toThrow(
+                'Config fetch failed',
+            )
+            
+            // Ensure client state hasn't changed
+            expect(client.config).toEqual(originalConfig)
+        })
+
+        it('should throw error when config fetch fails and cache loading fails', async () => {
+            const newUser = { user_id: 'user2' }
+            const originalConfig = client.config
+            
+            // Mock store to throw error when loading cached config
+            jest.spyOn(client.store, 'loadConfig').mockRejectedValue(
+                new Error('Cache load failed'),
+            )
+            
+            // Mock config fetch to fail
+            getConfigJson_mock.mockClear()
+            getConfigJson_mock.mockRejectedValue(
+                new Error('Config fetch failed'),
+            )
+
+            await expect(client.identifyUser(newUser)).rejects.toThrow(
+                'Config fetch failed',
+            )
+            
+            // Ensure client state hasn't changed
+            expect(client.config).toEqual(originalConfig)
+        })
     })
 
     describe('resetUser', () => {
@@ -852,6 +927,79 @@ describe('DevCycleClient tests', () => {
             )
             expect(oldAnonymousId).not.toEqual(newAnonymousId)
             expect(client.user.user_id).toEqual(newAnonymousId)
+        })
+
+        it('should throw error when config fetch returns null', async () => {
+            getConfigJson_mock.mockClear()
+            getConfigJson_mock.mockResolvedValue(null)
+
+            await expect(client.resetUser()).rejects.toThrow(
+                'Failed to fetch user configuration',
+            )
+        })
+
+        it('should not change client state when config fetch fails', async () => {
+            // Create an anonymous client for this test
+            const anonClient = new DevCycleClient(test_key, {
+                isAnonymous: true,
+            })
+            await anonClient.onClientInitialized()
+            
+            const originalUser = anonClient.user
+            const originalConfig = anonClient.config
+            const originalAnonId = await anonClient.store.store.load(
+                StoreKey.AnonUserId,
+            )
+            
+            // Mock config fetch to fail
+            getConfigJson_mock.mockClear()
+            getConfigJson_mock.mockRejectedValue(
+                new Error('Config fetch failed'),
+            )
+
+            await expect(anonClient.resetUser()).rejects.toThrow(
+                'Config fetch failed',
+            )
+            
+            // Ensure client state hasn't changed
+            expect(anonClient.user).toEqual(originalUser)
+            expect(anonClient.config).toEqual(originalConfig)
+            // Anonymous ID should be restored to original value after config fetch failed
+            const currentAnonId = await anonClient.store.store.load(
+                StoreKey.AnonUserId,
+            )
+            expect(currentAnonId).toEqual(originalAnonId)
+        })
+
+        it('should not change client state when config fetch returns null', async () => {
+            // Create an anonymous client for this test
+            const anonClient = new DevCycleClient(test_key, {
+                isAnonymous: true,
+            })
+            await anonClient.onClientInitialized()
+            
+            const originalUser = anonClient.user
+            const originalConfig = anonClient.config
+            const originalAnonId = await anonClient.store.store.load(
+                StoreKey.AnonUserId,
+            )
+            
+            // Mock config fetch to return null
+            getConfigJson_mock.mockClear()
+            getConfigJson_mock.mockResolvedValue(null)
+
+            await expect(anonClient.resetUser()).rejects.toThrow(
+                'Failed to fetch user configuration',
+            )
+            
+            // Ensure client state hasn't changed
+            expect(anonClient.user).toEqual(originalUser)
+            expect(anonClient.config).toEqual(originalConfig)
+            // Anonymous ID should be restored to original value after config fetch failed
+            const currentAnonId = await anonClient.store.store.load(
+                StoreKey.AnonUserId,
+            )
+            expect(currentAnonId).toEqual(originalAnonId)
         })
     })
 
