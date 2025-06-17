@@ -99,6 +99,7 @@ export const decideTargetVariation = ({
                 eval: {
                     reason: evalReason,
                     details: evalReasonDetails,
+                    target_id: target._id,
                 },
             }
         }

@@ -79,6 +79,7 @@ export enum DEFAULT_REASON_DETAILS {
 export type EvalReason = {
     reason: EVAL_REASONS
     details?: string
+    target_id?: string
 }
 
 const boolTransform = ({ value }: { value: unknown }) => {
