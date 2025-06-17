@@ -750,7 +750,7 @@ describe('DevCycleClient tests', () => {
             await expect(client.identifyUser(newUser)).rejects.toThrow(
                 'Failed to fetch user configuration',
             )
-            
+
             // Ensure client can still return default values after failed identifyUser
             const variable = client.variable('test-variable', 'default-value')
             expect(variable.value).toBe('default-value')
