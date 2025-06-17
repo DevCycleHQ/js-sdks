@@ -82,7 +82,7 @@ export function evaluateOperatorFromJSON(
     operatorStr: string,
     userStr: string,
     audiencesStr: string | null = ''
-): bool {
+): string {
     const operatorJSON = JSON.parse(operatorStr)
     if (!operatorJSON.isObj) {
         throw new Error('evaluateOperatorFromJSON operatorStr or userStr param not a JSON Object')
@@ -103,7 +103,7 @@ export function evaluateOperatorFromJSON(
     const operator = new AudienceOperator(operatorJSON as JSON.Obj)
     const user = DVCPopulatedUser.fromJSONString(userStr)
     const resultReason = _evaluateOperator(operator, audiences, user, new JSON.Obj())
-    return resultReason.result
+    return resultReason.stringify()
 }
 
 export function decideTargetVariationFromJSON(targetStr: string, boundedHash: f64): string {

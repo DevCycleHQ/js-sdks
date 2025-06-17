@@ -17,6 +17,11 @@ const setPlatformDataJSON = (data: unknown) => {
     setPlatformData(JSON.stringify(data))
 }
 
+type SegmentationResult = {
+    result: boolean
+    reasonDetails?: string
+}
+
 const evaluateOperator = ({
     operator,
     data,
@@ -25,14 +30,15 @@ const evaluateOperator = ({
     operator: unknown
     data: Record<string, unknown>
     audiences?: Record<string, unknown>
-}) => {
+}): SegmentationResult => {
     // set required field to make class constructors happy
     data.user_id ||= 'some_user'
-    return evaluateOperatorFromJSON(
+    const evalResult = evaluateOperatorFromJSON(
         JSON.stringify(operator),
         JSON.stringify(data),
         JSON.stringify(audiences),
     )
+    return JSON.parse(evalResult) as SegmentationResult
 }
 
 const checkStringsFilter = (
@@ -53,10 +59,7 @@ const checkStringsFilter = (
 
     const data = { email: string, user_id: 'some_user' }
 
-    return evaluateOperatorFromJSON(
-        JSON.stringify(operator),
-        JSON.stringify(data),
-    )
+    return evaluateOperator({ operator, data })
 }
 const checkBooleanFilter = (
     bool: unknown,
@@ -78,16 +81,13 @@ const checkBooleanFilter = (
 
     const data = { customData: { key: bool }, user_id: 'some_user' }
 
-    return evaluateOperatorFromJSON(
-        JSON.stringify(operator),
-        JSON.stringify(data),
-    )
+    return evaluateOperator({ operator, data })
 }
 
 const checkNumbersFilter = (
     number: unknown,
     filter: { values?: unknown[]; comparator: string },
-): boolean => {
+): SegmentationResult => {
     const customDataFilter = {
         dataKey: 'key',
         type: 'user',
@@ -103,15 +103,12 @@ const checkNumbersFilter = (
     }
 
     const data = { customData: { key: number }, user_id: 'some_user' }
-    return evaluateOperatorFromJSON(
-        JSON.stringify(operator),
-        JSON.stringify(data),
-    )
+    return evaluateOperator({ operator, data })
 }
 const checkVersionFilters = (
     appVersion: string,
     filter: { values?: unknown[]; comparator: string },
-): boolean => {
+): SegmentationResult => {
     const appVersionFilter = {
         type: 'user',
         subType: 'appVersion',
@@ -125,34 +122,28 @@ const checkVersionFilters = (
     }
 
     const data = { appVersion: appVersion, user_id: 'some_user' }
-    return evaluateOperatorFromJSON(
-        JSON.stringify(operator),
-        JSON.stringify(data),
-    )
+    return evaluateOperator({ operator, data })
 }
 
 const checkVersionFilter = (
     appVersion: string,
     values: string[],
     comparator: string,
-): boolean => {
+): SegmentationResult => {
     return checkVersionFilters(appVersion, { values, comparator })
 }
 
 const checkCustomData = (
     data: Record<string, unknown> | null,
     filter: unknown,
-): boolean => {
+): SegmentationResult => {
     const operator = {
         filters: [filter],
         operator: 'and',
     }
 
     const user = { customData: data, user_id: 'some_user' }
-    return evaluateOperatorFromJSON(
-        JSON.stringify(operator),
-        JSON.stringify(user),
-    )
+    return evaluateOperator({ operator, data: user })
 }
 
 describe('SegmentationManager Unit Test', () => {
