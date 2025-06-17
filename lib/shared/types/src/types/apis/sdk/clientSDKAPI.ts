@@ -57,6 +57,9 @@ export enum EVAL_REASON_DETAILS {
     APP_VERSION = 'App Version',
     DEVICE_MODEL = 'Device Model',
     CUSTOM_DATA = 'Custom Data',
+    // Split Details
+    RANDOM_DISTRIBUTION = 'Random Distribution',
+    ROLLOUT = 'Rollout',
 }
 
 export enum DEFAULT_REASON_DETAILS {

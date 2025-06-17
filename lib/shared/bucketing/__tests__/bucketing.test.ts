@@ -237,7 +237,7 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-1-key',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                     },
                 },
                 feature2: {
@@ -249,7 +249,7 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-feature-2-key',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                     },
                 },
                 feature3: {
@@ -305,7 +305,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'multivar first',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                     },
                 },
                 'feature2.hello': {
@@ -316,7 +316,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'multivar last',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                     },
                 },
                 swagTest: {
@@ -327,7 +327,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'man',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                     },
                 },
                 test: {
@@ -338,7 +338,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'scat',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                     },
                 },
                 'bool-var': {
@@ -349,7 +349,7 @@ describe('Config Parsing and Generating', () => {
                     value: false,
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                     },
                 },
                 'json-var': {
@@ -360,7 +360,7 @@ describe('Config Parsing and Generating', () => {
                     value: '{"hello":"world","num":610,"bool":true}',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                     },
                 },
                 'num-var': {
@@ -371,7 +371,7 @@ describe('Config Parsing and Generating', () => {
                     value: 610.61,
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                     },
                 },
                 feature4Var: {
@@ -974,7 +974,7 @@ describe('Config Parsing and Generating', () => {
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
                         details:
-                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                            'Rollout | Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 feature2: {
@@ -1006,7 +1006,7 @@ describe('Config Parsing and Generating', () => {
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
                         details:
-                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                            'Rollout | Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 feature2Var: {
@@ -1030,7 +1030,7 @@ describe('Config Parsing and Generating', () => {
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
                         details:
-                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                            'Rollout | Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 'json-var': {
@@ -1042,7 +1042,7 @@ describe('Config Parsing and Generating', () => {
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
                         details:
-                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                            'Rollout | Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
                 'num-var': {
@@ -1054,7 +1054,7 @@ describe('Config Parsing and Generating', () => {
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
                         details:
-                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                            'Rollout | Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                     },
                 },
             },
