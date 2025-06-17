@@ -3,7 +3,6 @@ import {
     evaluateOperatorFromJSON,
     setPlatformData,
 } from '../bucketingImportHelper'
-
 const defaultPlatformData = {
     platform: '',
     platformVersion: '',
@@ -346,13 +345,16 @@ describe('SegmentationManager Unit Test', () => {
                 platformVersion: '2.0.0',
                 platform: 'iOS',
             }
-            assert.strictEqual(false, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: false },
+                evaluateOperator({ data, operator }),
+            )
             const orOp = {
                 filters,
                 operator: 'or',
             }
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 evaluateOperator({ data: {}, operator: orOp }),
             )
         })
@@ -377,7 +379,10 @@ describe('SegmentationManager Unit Test', () => {
                 platformVersion: '2.0.0',
                 platform: 'iOS',
             }
-            assert.strictEqual(true, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'All Users' },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         describe('evaluateOperator should handle optIn filter', () => {
@@ -401,8 +406,8 @@ describe('SegmentationManager Unit Test', () => {
                 platform: 'iOS',
             }
             it('should fail optIn filter when feature in optIns and isOptInEnabled ', () => {
-                assert.strictEqual(
-                    false,
+                assert.deepStrictEqual(
+                    { result: false },
                     evaluateOperator({
                         data: optInData,
                         operator: optInOperator,
@@ -432,7 +437,10 @@ describe('SegmentationManager Unit Test', () => {
                 platform: 'iOS',
             }
             it('should fail myNewFilter filter', () => {
-                assert.strictEqual(false, evaluateOperator({ data, operator }))
+                assert.deepStrictEqual(
+                    { result: false },
+                    evaluateOperator({ data, operator }),
+                )
             })
         })
 
@@ -458,7 +466,10 @@ describe('SegmentationManager Unit Test', () => {
                 platform: 'iOS',
             }
             it('should fail xylophone operator', () => {
-                assert.strictEqual(false, evaluateOperator({ data, operator }))
+                assert.deepStrictEqual(
+                    { result: false },
+                    evaluateOperator({ data, operator }),
+                )
             })
         })
 
@@ -522,8 +533,12 @@ describe('SegmentationManager Unit Test', () => {
                         filters: operator,
                     },
                 }
-                assert.strictEqual(
-                    true,
+                assert.deepStrictEqual(
+                    {
+                        result: true,
+                        reasonDetails:
+                            'Audience Match -> Country AND Email AND App Version',
+                    },
                     evaluateOperator({
                         data,
                         operator: audienceMatchOperator,
@@ -543,8 +558,12 @@ describe('SegmentationManager Unit Test', () => {
                     operator: 'and',
                     filters: [audienceMatchOperator, operator],
                 }
-                assert.strictEqual(
-                    true,
+                assert.deepStrictEqual(
+                    {
+                        result: true,
+                        reasonDetails:
+                            'Audience Match -> Country AND Email AND App Version',
+                    },
                     evaluateOperator({
                         data,
                         operator: parentOperator,
@@ -554,8 +573,8 @@ describe('SegmentationManager Unit Test', () => {
             })
 
             it('should not pass seg when referenced audience does not exist', () => {
-                assert.strictEqual(
-                    false,
+                assert.deepStrictEqual(
+                    { result: false },
                     evaluateOperator({
                         data,
                         operator: audienceMatchOperator,
@@ -572,8 +591,8 @@ describe('SegmentationManager Unit Test', () => {
                     },
                 }
 
-                assert.strictEqual(
-                    false,
+                assert.deepStrictEqual(
+                    { result: false },
                     evaluateOperator({
                         data,
                         operator: audienceMatchOperatorNotEqual,
@@ -603,8 +622,12 @@ describe('SegmentationManager Unit Test', () => {
                         filters: audienceMatchOperator,
                     },
                 }
-                assert.strictEqual(
-                    true,
+                assert.deepStrictEqual(
+                    {
+                        result: true,
+                        reasonDetails:
+                            'Audience Match -> Audience Match -> Country AND Email AND App Version',
+                    },
                     evaluateOperator({
                         data,
                         operator: nestedAudienceMatchOperator,
@@ -634,8 +657,8 @@ describe('SegmentationManager Unit Test', () => {
                         filters: audienceMatchOperator,
                     },
                 }
-                assert.strictEqual(
-                    false,
+                assert.deepStrictEqual(
+                    { result: false },
                     evaluateOperator({
                         data,
                         operator: nestedAudienceMatchOperator,
@@ -676,8 +699,12 @@ describe('SegmentationManager Unit Test', () => {
                     ],
                     operator: 'and',
                 }
-                assert.strictEqual(
-                    true,
+                assert.deepStrictEqual(
+                    {
+                        result: true,
+                        reasonDetails:
+                            'Audience Match -> Country AND Email AND App Version',
+                    },
                     evaluateOperator({
                         data,
                         operator: audienceMatchOperatorMultiple,
@@ -718,8 +745,8 @@ describe('SegmentationManager Unit Test', () => {
                     ],
                     operator: 'and',
                 }
-                assert.strictEqual(
-                    false,
+                assert.deepStrictEqual(
+                    { result: false },
                     evaluateOperator({
                         data,
                         operator: audienceMatchOperatorMultiple,
@@ -751,7 +778,10 @@ describe('SegmentationManager Unit Test', () => {
                 platform: 'iOS',
             }
             it('should fail for user filter with subType of myNewFilter', () => {
-                assert.strictEqual(false, evaluateOperator({ data, operator }))
+                assert.deepStrictEqual(
+                    { result: false },
+                    evaluateOperator({ data, operator }),
+                )
             })
         })
 
@@ -783,7 +813,10 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             it('should fail for user and audienceMatch filters with comparator of myNewFilter', () => {
-                assert.strictEqual(false, evaluateOperator({ data, operator }))
+                assert.deepStrictEqual(
+                    { result: false },
+                    evaluateOperator({ data, operator }),
+                )
             })
         })
 
@@ -821,7 +854,13 @@ describe('SegmentationManager Unit Test', () => {
                 appVersion: '2.0.2',
                 platform: 'iOS',
             }
-            assert.strictEqual(true, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                {
+                    result: true,
+                    reasonDetails: 'Country AND Email AND App Version',
+                },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should work for a top level AND with nested AND operator', () => {
@@ -868,7 +907,13 @@ describe('SegmentationManager Unit Test', () => {
                 appVersion: '2.0.2',
                 platform: 'iOS',
             }
-            assert.strictEqual(true, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                {
+                    result: true,
+                    reasonDetails: 'Country AND Email AND App Version',
+                },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should work for an OR operator', () => {
@@ -905,7 +950,10 @@ describe('SegmentationManager Unit Test', () => {
                 appVersion: '2.0.2',
                 platform: 'iOS',
             }
-            assert.strictEqual(true, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should work for a nested OR operator', () => {
@@ -954,7 +1002,10 @@ describe('SegmentationManager Unit Test', () => {
                 appVersion: '2.0.2',
                 platform: 'iOS',
             }
-            assert.strictEqual(true, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should work for an AND operator containing a custom data filter', () => {
@@ -986,7 +1037,13 @@ describe('SegmentationManager Unit Test', () => {
                 appVersion: '2.0.0',
                 platform: 'iOS',
             }
-            assert.strictEqual(true, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                {
+                    result: true,
+                    reasonDetails: 'Country AND Custom Data -> something',
+                },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should pass for customData filter != multiple values', () => {
@@ -1005,7 +1062,10 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = { customData: { testKey: 'dataValue' } }
-            assert.strictEqual(false, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: false },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should pass for private customData filter != multiple values', () => {
@@ -1024,7 +1084,10 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = { privateCustomData: { testKey: 'dataValue' } }
-            assert.strictEqual(false, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: false },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should pass for customData filter does not contain multiple values', () => {
@@ -1043,7 +1106,10 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = { customData: { testKey: 'otherValue' } }
-            assert.strictEqual(false, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: false },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should pass for user_id filter', () => {
@@ -1060,7 +1126,10 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = { user_id: 'test_user' }
-            assert.strictEqual(true, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'User ID' },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should pass for email filter', () => {
@@ -1077,7 +1146,10 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = { email: 'test@devcycle.com' }
-            assert.strictEqual(true, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should pass for country filter', () => {
@@ -1094,7 +1166,10 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = { country: 'CA' }
-            assert.strictEqual(true, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Country' },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should pass for appVersion filter', () => {
@@ -1111,7 +1186,10 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = { appVersion: '1.0.1' }
-            assert.strictEqual(true, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should pass for platformVersion filter', () => {
@@ -1132,7 +1210,10 @@ describe('SegmentationManager Unit Test', () => {
                 ...defaultPlatformData,
                 platformVersion: '15.1',
             })
-            assert.strictEqual(true, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Platform Version' },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should pass for platform filter', () => {
@@ -1150,7 +1231,10 @@ describe('SegmentationManager Unit Test', () => {
 
             const data = {}
             setPlatformDataJSON({ ...defaultPlatformData, platform: 'iOS' })
-            assert.strictEqual(true, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Platform' },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should pass for deviceModel filter', () => {
@@ -1168,7 +1252,10 @@ describe('SegmentationManager Unit Test', () => {
 
             const data = { deviceModel: 'Samsung Galaxy F12' }
 
-            assert.strictEqual(true, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Device Model' },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should pass for customData filter', () => {
@@ -1187,7 +1274,10 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = { customData: { testKey: 'dataValue' } }
-            assert.strictEqual(true, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> testKey' },
+                evaluateOperator({ data, operator }),
+            )
         })
 
         it('should pass for customData filter != multiple values', () => {
@@ -1206,32 +1296,56 @@ describe('SegmentationManager Unit Test', () => {
             }
 
             const data = { customData: { testKey: 'dataValue' } }
-            assert.strictEqual(false, evaluateOperator({ data, operator }))
+            assert.deepStrictEqual(
+                { result: false },
+                evaluateOperator({ data, operator }),
+            )
         })
     })
 
     describe('checkStringsFilter', () => {
         it('should return false if filter and no valid value', () => {
             const filter = { type: 'user', comparator: '=', values: [1, 2] }
-            assert.strictEqual(false, checkStringsFilter(null, filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkStringsFilter(null, filter),
+            )
         })
         it('should return false if exists filter and no value', () => {
             const filter = { type: 'user', comparator: 'exist' }
-            assert.strictEqual(false, checkStringsFilter(null, filter))
-            assert.strictEqual(false, checkStringsFilter('', filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkStringsFilter(null, filter),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkStringsFilter('', filter),
+            )
         })
         it('should return true if exists filter and value', () => {
             const filter = { type: 'user', comparator: 'exist' }
-            assert.strictEqual(true, checkStringsFilter('string', filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
+                checkStringsFilter('string', filter),
+            )
         })
         it('should return true if not exists filter and no value', () => {
             const filter = { type: 'user', comparator: '!exist' }
-            assert.strictEqual(true, checkStringsFilter(null, filter))
-            assert.strictEqual(true, checkStringsFilter('', filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
+                checkStringsFilter(null, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
+                checkStringsFilter('', filter),
+            )
         })
         it('should return false if not exists filter and value', () => {
             const filter = { type: 'user', comparator: '!exist' }
-            assert.strictEqual(false, checkStringsFilter('string', filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkStringsFilter('string', filter),
+            )
         })
         it('should return false if contains filter and no value', () => {
             const filter = {
@@ -1239,7 +1353,10 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: 'contain',
                 values: ['hello'],
             }
-            assert.strictEqual(false, checkStringsFilter(null, filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkStringsFilter(null, filter),
+            )
         })
         it('should return true if startWith filter and contains', () => {
             const filter = {
@@ -1247,8 +1364,8 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: 'startWith',
                 values: ['test@'],
             }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
                 checkStringsFilter('test@devcycle.com', filter),
             )
         })
@@ -1258,8 +1375,8 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: 'endWith',
                 values: ['@devcycle.com'],
             }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
                 checkStringsFilter('test@devcycle.com', filter),
             )
         })
@@ -1269,8 +1386,8 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '!startWith',
                 values: ['testuser@'],
             }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
                 checkStringsFilter('test@devcycle.com', filter),
             )
         })
@@ -1280,8 +1397,8 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '!endWith',
                 values: ['@devcycle.io'],
             }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
                 checkStringsFilter('test@devcycle.com', filter),
             )
         })
@@ -1291,8 +1408,8 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '!startWith',
                 values: ['test@'],
             }
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkStringsFilter('test@devcycle.com', filter),
             )
         })
@@ -1302,8 +1419,8 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '!endWith',
                 values: ['@devcycle.com'],
             }
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkStringsFilter('test@devcycle.com', filter),
             )
         })
@@ -1313,8 +1430,8 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: 'startWith',
                 values: [''],
             }
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkStringsFilter('test@devcycle.com', filter),
             )
         })
@@ -1324,8 +1441,8 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: 'endWith',
                 values: [''],
             }
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkStringsFilter('test@devcycle.com', filter),
             )
         })
@@ -1335,14 +1452,17 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: 'contains',
                 values: [''],
             }
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkStringsFilter('test@devcycle.com', filter),
             )
         })
         it('should return true if browser filter works', () => {
             const filter = { type: 'user', comparator: '=', values: ['Chrome'] }
-            assert.strictEqual(true, checkStringsFilter('Chrome', filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
+                checkStringsFilter('Chrome', filter),
+            )
         })
         it('should return true if string filter works with non string value in values', () => {
             const filter = {
@@ -1350,7 +1470,10 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '=',
                 values: ['Chrome', 0],
             }
-            assert.strictEqual(true, checkStringsFilter('Chrome', filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
+                checkStringsFilter('Chrome', filter),
+            )
         })
         it('should return true if browser device type filter works', () => {
             const filter = {
@@ -1358,7 +1481,10 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '=',
                 values: ['Desktop'],
             }
-            assert.strictEqual(true, checkStringsFilter('Desktop', filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
+                checkStringsFilter('Desktop', filter),
+            )
         })
         it('should return true if contains filter and value contains', () => {
             const filter = {
@@ -1366,7 +1492,10 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: 'contain',
                 values: ['hello'],
             }
-            assert.strictEqual(true, checkStringsFilter('helloWorld', filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
+                checkStringsFilter('helloWorld', filter),
+            )
         })
         it('should return false if contains filter and value does not contain', () => {
             const filter = {
@@ -1374,7 +1503,10 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: 'contain',
                 values: ['hello'],
             }
-            assert.strictEqual(false, checkStringsFilter('xy', filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkStringsFilter('xy', filter),
+            )
         })
         it('should return true if not contains filter and no value', () => {
             const filter = {
@@ -1382,7 +1514,10 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '!contain',
                 values: ['hello'],
             }
-            assert.strictEqual(true, checkStringsFilter(null, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
+                checkStringsFilter(null, filter),
+            )
         })
         it('should return true if not contains filter and value', () => {
             const filter = {
@@ -1390,7 +1525,10 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '!contain',
                 values: ['hello'],
             }
-            assert.strictEqual(true, checkStringsFilter('xy', filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
+                checkStringsFilter('xy', filter),
+            )
         })
         it('should return false if not contains filter and not value', () => {
             const filter = {
@@ -1398,26 +1536,38 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '!contain',
                 values: ['hello'],
             }
-            assert.strictEqual(false, checkStringsFilter('hello', filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkStringsFilter('hello', filter),
+            )
         })
 
         it('should return false if string is not a string', () => {
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkStringsFilter(1, { comparator: '=' }),
             )
         })
         it('should return false if filter value is not a string', () => {
             const filter = { type: 'user', comparator: '=', values: [1, 2] }
-            assert.strictEqual(false, checkStringsFilter('Male', filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkStringsFilter('Male', filter),
+            )
         })
         it('should return true if string is equal', () => {
             const filter = { type: 'user', comparator: '=', values: ['Male'] }
-            assert.strictEqual(true, checkStringsFilter('Male', filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
+                checkStringsFilter('Male', filter),
+            )
         })
         it('should return false if string is not equal', () => {
             const filter = { type: 'user', comparator: '=', values: ['Male'] }
-            assert.strictEqual(false, checkStringsFilter('Female', filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkStringsFilter('Female', filter),
+            )
         })
         it('should return true if string is one of multiple values', () => {
             const filter = {
@@ -1425,7 +1575,10 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '=',
                 values: ['iPhone OS', 'Android'],
             }
-            assert.strictEqual(true, checkStringsFilter('iPhone OS', filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
+                checkStringsFilter('iPhone OS', filter),
+            )
         })
         it('should return true if string is not one of multiple values', () => {
             const filter = {
@@ -1433,7 +1586,10 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '!=',
                 values: ['iPhone OS', 'Android', 'Android TV', 'web'],
             }
-            assert.strictEqual(true, checkStringsFilter('Roku', filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Email' },
+                checkStringsFilter('Roku', filter),
+            )
         })
         it('should return true if string is equal to multiple filters', () => {
             const filters = [
@@ -1456,8 +1612,8 @@ describe('SegmentationManager Unit Test', () => {
                 operator: 'and',
             } as unknown
 
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Country AND Country' },
                 evaluateOperator({ data: { country: 'Canada' }, operator }),
             )
         })
@@ -1483,8 +1639,8 @@ describe('SegmentationManager Unit Test', () => {
                 operator: 'and',
             } as unknown
 
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 evaluateOperator({ data: { country: 'Canada' }, operator }),
             )
         })
@@ -1493,22 +1649,43 @@ describe('SegmentationManager Unit Test', () => {
     describe('checkBooleanFilter', () => {
         it('should return false if exists filter and no value', () => {
             const filter = { type: 'user', comparator: 'exist' }
-            assert.strictEqual(false, checkBooleanFilter(null, filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkBooleanFilter(null, filter),
+            )
         })
         it('should return true if exists filter and value', () => {
             const filter = { type: 'user', comparator: 'exist' }
-            assert.strictEqual(true, checkBooleanFilter(true, filter))
-            assert.strictEqual(true, checkBooleanFilter(false, filter))
-            assert.strictEqual(true, checkBooleanFilter(10, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkBooleanFilter(true, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkBooleanFilter(false, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkBooleanFilter(10, filter),
+            )
         })
         it('should return true if not exists filter and no value', () => {
             const filter = { type: 'user', comparator: '!exist' }
-            assert.strictEqual(true, checkBooleanFilter(null, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkBooleanFilter(null, filter),
+            )
         })
         it('should return false if not exists filter and value', () => {
             const filter = { type: 'user', comparator: '!exist' }
-            assert.strictEqual(false, checkBooleanFilter(true, filter))
-            assert.strictEqual(false, checkBooleanFilter(false, filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkBooleanFilter(true, filter),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkBooleanFilter(false, filter),
+            )
         })
         it('should return false if filters value is not a boolean', () => {
             const filter = {
@@ -1516,11 +1693,17 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '=',
                 values: ['hi1', 'hi2'],
             }
-            assert.strictEqual(false, checkBooleanFilter(true, filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkBooleanFilter(true, filter),
+            )
         })
         it('should return true if filers value equals boolean', () => {
             const filter = { type: 'user', comparator: '=', values: [true] }
-            assert.strictEqual(true, checkBooleanFilter(true, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkBooleanFilter(true, filter),
+            )
         })
         it('should return true if filters values contains boolean value and non boolean value', () => {
             const filter = {
@@ -1528,47 +1711,65 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '=',
                 values: [true, 'test'],
             }
-            assert.strictEqual(true, checkBooleanFilter(true, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkBooleanFilter(true, filter),
+            )
         })
         it('should return false if filers value does not equals boolean', () => {
             const filter = { type: 'user', comparator: '=', values: [true] }
-            assert.strictEqual(false, checkBooleanFilter(false, filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkBooleanFilter(false, filter),
+            )
         })
         it('should return false if filers value equals boolean', () => {
             const filter = { type: 'user', comparator: '!=', values: [true] }
-            assert.strictEqual(false, checkBooleanFilter(true, filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkBooleanFilter(true, filter),
+            )
         })
         it('should return true if filers value does not equals boolean', () => {
             const filter = { type: 'user', comparator: '!=', values: [true] }
-            assert.strictEqual(true, checkBooleanFilter(false, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkBooleanFilter(false, filter),
+            )
         })
     })
 
     describe('checkNumbersFilter', () => {
         it('should return false if exists filter and no number', () => {
             const filter = { type: 'user', comparator: 'exist' }
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkNumbersFilter(null as unknown as number, filter),
             )
         })
 
         it('should return true if exists filter and number', () => {
             const filter = { type: 'user', comparator: 'exist' }
-            assert.strictEqual(true, checkNumbersFilter(10, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(10, filter),
+            )
         })
 
         it('should return true if not exists filter and no number', () => {
             const filter = { type: 'user', comparator: '!exist' }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
                 checkNumbersFilter(null as unknown as number, filter),
             )
         })
 
         it('should return false if not exists filter and number', () => {
             const filter = { type: 'user', comparator: '!exist' }
-            assert.strictEqual(false, checkNumbersFilter(10, filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkNumbersFilter(10, filter),
+            )
         })
 
         it('should return false if filter value is not a number', () => {
@@ -1577,22 +1778,34 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '=',
                 values: ['hi1', 'hi2'],
             }
-            assert.strictEqual(false, checkNumbersFilter(10, filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkNumbersFilter(10, filter),
+            )
         })
 
         it('should return true if values does not equal filter values', () => {
             const filter = { type: 'user', comparator: '!=', values: [10, 11] }
-            assert.strictEqual(true, checkNumbersFilter(12, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(12, filter),
+            )
         })
 
         it('should return true if values does not equal filter values', () => {
             const filter = { type: 'user', comparator: '!=', values: [10, 11] }
-            assert.strictEqual(true, checkNumbersFilter(12, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(12, filter),
+            )
         })
 
         it('should return true if number is equal', () => {
             const filter = { type: 'user', comparator: '=', values: [10] }
-            assert.strictEqual(true, checkNumbersFilter(10, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(10, filter),
+            )
         })
 
         it('should return true if number is in values array with non-number values', () => {
@@ -1601,17 +1814,26 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '=',
                 values: [10, 'test'],
             }
-            assert.strictEqual(true, checkNumbersFilter(10, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(10, filter),
+            )
         })
 
         it('should return false if number is not equal', () => {
             const filter = { type: 'user', comparator: '=', values: [10] }
-            assert.strictEqual(false, checkNumbersFilter(11, filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkNumbersFilter(11, filter),
+            )
         })
 
         it('should return false if number is equal to a OR values', () => {
             const filter = { type: 'user', comparator: '=', values: [10, 11] }
-            assert.strictEqual(true, checkNumbersFilter(11, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(11, filter),
+            )
         })
 
         it('should return true if values are equal', () => {
@@ -1619,9 +1841,18 @@ describe('SegmentationManager Unit Test', () => {
             const filter2 = { type: 'user', comparator: '=', values: [10] }
             const filter3 = { type: 'user', comparator: '=', values: [0, 10] }
 
-            assert.strictEqual(true, checkNumbersFilter(0, filter))
-            assert.strictEqual(true, checkNumbersFilter(10, filter2))
-            assert.strictEqual(true, checkNumbersFilter(10, filter3))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(0, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(10, filter2),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(10, filter3),
+            )
         })
 
         it('should return false if values are not equal', () => {
@@ -1632,8 +1863,14 @@ describe('SegmentationManager Unit Test', () => {
                 values: [-10, -12],
             }
 
-            assert.strictEqual(false, checkNumbersFilter(0, filter))
-            assert.strictEqual(false, checkNumbersFilter(10, filter2))
+            assert.deepStrictEqual(
+                { result: false },
+                checkNumbersFilter(0, filter),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkNumbersFilter(10, filter2),
+            )
         })
 
         it('should return true if values are not equal', () => {
@@ -1644,27 +1881,48 @@ describe('SegmentationManager Unit Test', () => {
                 values: [-10, -12],
             }
 
-            assert.strictEqual(true, checkNumbersFilter(0, filter))
-            assert.strictEqual(true, checkNumbersFilter(10, filter2))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(0, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(10, filter2),
+            )
         })
 
         it('should return true if values are not equal', () => {
             const filter = { type: 'user', comparator: '!=', values: [10] }
-            assert.strictEqual(false, checkNumbersFilter(10, filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkNumbersFilter(10, filter),
+            )
         })
 
         it('should return true if values are greater than', () => {
             const filter = { type: 'user', comparator: '>', values: [-1] }
             const filter2 = { type: 'user', comparator: '>', values: [1, 5] }
-            assert.strictEqual(true, checkNumbersFilter(0, filter))
-            assert.strictEqual(true, checkNumbersFilter(10, filter2))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(0, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(10, filter2),
+            )
         })
 
         it('should return false if values are not greater than', () => {
             const filter = { type: 'user', comparator: '>', values: [10] }
             const filter2 = { type: 'user', comparator: '>', values: [10] }
-            assert.strictEqual(false, checkNumbersFilter(0, filter))
-            assert.strictEqual(false, checkNumbersFilter(10, filter2))
+            assert.deepStrictEqual(
+                { result: false },
+                checkNumbersFilter(0, filter),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkNumbersFilter(10, filter2),
+            )
         })
 
         it('should return true if values are greater than or equal', () => {
@@ -1672,33 +1930,60 @@ describe('SegmentationManager Unit Test', () => {
             const filter2 = { type: 'user', comparator: '>=', values: [1] }
             const filter3 = { type: 'user', comparator: '>=', values: [10] }
 
-            assert.strictEqual(true, checkNumbersFilter(0, filter))
-            assert.strictEqual(true, checkNumbersFilter(10, filter2))
-            assert.strictEqual(true, checkNumbersFilter(10, filter3))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(0, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(10, filter2),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(10, filter3),
+            )
         })
 
         it('should return false if values are not greater than or equal', () => {
             const filter = { type: 'user', comparator: '>=', values: [10] }
             const filter2 = { type: 'user', comparator: '>=', values: [11] }
 
-            assert.strictEqual(false, checkNumbersFilter(0, filter))
-            assert.strictEqual(false, checkNumbersFilter(10, filter2))
+            assert.deepStrictEqual(
+                { result: false },
+                checkNumbersFilter(0, filter),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkNumbersFilter(10, filter2),
+            )
         })
 
         it('should return true if values are less than', () => {
             const filter = { type: 'user', comparator: '<', values: [0] }
             const filter2 = { type: 'user', comparator: '<', values: [10] }
 
-            assert.strictEqual(true, checkNumbersFilter(-1, filter))
-            assert.strictEqual(true, checkNumbersFilter(1, filter2))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(-1, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(1, filter2),
+            )
         })
 
         it('should return false if values are not less than', () => {
             const filter = { type: 'user', comparator: '<', values: [0] }
             const filter2 = { type: 'user', comparator: '<', values: [10] }
 
-            assert.strictEqual(false, checkNumbersFilter(10, filter))
-            assert.strictEqual(false, checkNumbersFilter(10, filter2))
+            assert.deepStrictEqual(
+                { result: false },
+                checkNumbersFilter(10, filter),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkNumbersFilter(10, filter2),
+            )
         })
 
         it('should return true if values are less than or equal', () => {
@@ -1706,17 +1991,32 @@ describe('SegmentationManager Unit Test', () => {
             const filter2 = { type: 'user', comparator: '<=', values: [10] }
             const filter3 = { type: 'user', comparator: '<=', values: [10] }
 
-            assert.strictEqual(true, checkNumbersFilter(-1, filter))
-            assert.strictEqual(true, checkNumbersFilter(1, filter2))
-            assert.strictEqual(true, checkNumbersFilter(10, filter3))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(-1, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(1, filter2),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> key' },
+                checkNumbersFilter(10, filter3),
+            )
         })
 
         it('should return false if values are not less than or equal', () => {
             const filter = { type: 'user', comparator: '<=', values: [0] }
             const filter2 = { type: 'user', comparator: '<=', values: [10] }
 
-            assert.strictEqual(false, checkNumbersFilter(10, filter))
-            assert.strictEqual(false, checkNumbersFilter(11, filter2))
+            assert.deepStrictEqual(
+                { result: false },
+                checkNumbersFilter(10, filter),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkNumbersFilter(11, filter2),
+            )
         })
     })
 
@@ -1798,12 +2098,12 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '>=',
                 values: ['1.1.2', '1.1.3'],
             }
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilters(null as unknown as string, filter),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilters(null as unknown as string, filter1),
             )
         })
@@ -1813,7 +2113,10 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '=',
                 values: ['1.1.2', '1.1.3'],
             }
-            assert.strictEqual(true, checkVersionFilters('1.1.2', filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilters('1.1.2', filter),
+            )
         })
         it('should return true if filter greater than or equals version', () => {
             const filter = {
@@ -1821,7 +2124,10 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '>=',
                 values: ['1.1.2', '1.1.3'],
             }
-            assert.strictEqual(true, checkVersionFilters('1.1.2', filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilters('1.1.2', filter),
+            )
         })
         it('should return true if filter equals version non semver', () => {
             const filter = {
@@ -1839,555 +2145,780 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '=',
                 values: ['1.1.2.12.1.2.3'],
             }
-            assert.strictEqual(true, checkVersionFilters('1.1.2.12', filter))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilters('1.1.2.12', filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilters('31.331.2222.12', filter2),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilters('1.1.2.12.1.2.3', filter3),
             )
         })
         it('should return false if filter does not equals version', () => {
             const filter = { type: 'user', comparator: '=', values: ['1.1.1'] }
-            assert.strictEqual(false, checkVersionFilters('1.1.2', filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilters('1.1.2', filter),
+            )
         })
     })
 
     describe('checkVersionFilter', () => {
         it('should return true if string versions equal', () => {
-            assert.strictEqual(true, checkVersionFilter('1', ['1'], '='))
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1.1'], '='))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1', ['1'], '='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.1', ['1.1'], '='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1.1', ['1.1.1'], '='),
             )
         })
         it('should return false if string versions not equal', () => {
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter(null as unknown as string, ['2'], '='),
             )
-            assert.strictEqual(false, checkVersionFilter('1', ['2'], '='))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.2'], '='))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.1.1'], '='))
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1', ['2'], '='),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.1', ['1.2'], '='),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.1', ['1.1.1'], '='),
+            )
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1.', ['1.1.1'], '='),
             )
-            assert.strictEqual(false, checkVersionFilter('1.1.1', ['1.1'], '='))
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.1.1', ['1.1'], '='),
+            )
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1.1', ['1.1.'], '='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1.1', ['1.2.3'], '='),
             )
         })
         it('should return false if string versions not equal', () => {
-            assert.strictEqual(false, checkVersionFilter('1', ['1'], '!='))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.1'], '!='))
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1', ['1'], '!='),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.1', ['1.1'], '!='),
+            )
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1.1', ['1.1.1'], '!='),
             )
-            assert.strictEqual(false, checkVersionFilter('1.1.', ['1.1'], '!='))
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.1.', ['1.1'], '!='),
+            )
         })
         it('should return true if string versions not equal', () => {
-            assert.strictEqual(true, checkVersionFilter('1', ['2'], '!='))
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1.2'], '!='))
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1.1.1'], '!='))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1', ['2'], '!='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.1', ['1.2'], '!='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.1', ['1.1.1'], '!='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1.', ['1.1.1'], '!='),
             )
-            assert.strictEqual(true, checkVersionFilter('1.1.1', ['1.1'], '!='))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.1.1', ['1.1'], '!='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1.1', ['1.1.'], '!='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1.1', ['1.2.3'], '!='),
             )
         })
         it('should return true if string versions greater than', () => {
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter(null as unknown as string, ['1'], '>'),
             )
-            assert.strictEqual(false, checkVersionFilter('1', ['1'], '>'))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.1'], '>'))
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1', ['1'], '>'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.1', ['1.1'], '>'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1.1', ['1.1.1'], '>'),
             )
-            assert.strictEqual(false, checkVersionFilter('1.1.', ['1.1'], '>'))
-            assert.strictEqual(false, checkVersionFilter('1', ['2'], '>'))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.2'], '>'))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.1.1'], '>'))
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.1.', ['1.1'], '>'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1', ['2'], '>'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.1', ['1.2'], '>'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.1', ['1.1.1'], '>'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1.', ['1.1.1'], '>'),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1.1', ['1.2.3'], '>'),
             )
         })
         it('should return true if string versions greater than', () => {
-            assert.strictEqual(true, checkVersionFilter('2', ['1'], '>'))
-            assert.strictEqual(true, checkVersionFilter('1.2', ['1.1'], '>'))
-            assert.strictEqual(true, checkVersionFilter('2.1', ['1.1'], '>'))
-            assert.strictEqual(true, checkVersionFilter('1.2.1', ['1.2'], '>'))
-            assert.strictEqual(true, checkVersionFilter('1.2.', ['1.1'], '>'))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('2', ['1'], '>'),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.2', ['1.1'], '>'),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('2.1', ['1.1'], '>'),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.2.1', ['1.2'], '>'),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.2.', ['1.1'], '>'),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.2.1', ['1.1.1'], '>'),
             )
-            assert.strictEqual(true, checkVersionFilter('1.2.2', ['1.2'], '>'))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.2.2', ['1.2'], '>'),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.2.2', ['1.2.1'], '>'),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('4.8.241', ['4.8'], '>'),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('4.8.241.2', ['4'], '>'),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('4.8.241.2', ['4.8'], '>'),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('4.8.241.2', ['4.8.2'], '>'),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('4.8.241.2', ['4.8.241.0'], '>'),
             )
         })
         it('should return true if string versions greater than or equal', () => {
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter(null as unknown as string, ['2'], '>='),
             )
-            assert.strictEqual(false, checkVersionFilter('1', ['2'], '>='))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.2'], '>='))
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1', ['2'], '>='),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.1', ['1.2'], '>='),
+            )
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1', ['1.1.1'], '>='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1.', ['1.1.1'], '>='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1.1', ['1.2.3'], '>='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('4.8.241', ['4.9'], '>='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('4.8.241.2', ['5'], '>='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('4.8.241.2', ['4.9'], '>='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('4.8.241.2', ['4.8.242'], '>='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('4.8.241.2', ['4.8.241.5'], '>='),
             )
         })
         it('should return true if string versions greater than or equal', () => {
-            assert.strictEqual(true, checkVersionFilter('1', ['1'], '>='))
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1.1'], '>='))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1', ['1'], '>='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.1', ['1.1'], '>='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1.1', ['1.1.1'], '>='),
             )
-            assert.strictEqual(true, checkVersionFilter('1.1.', ['1.1'], '>='))
-            assert.strictEqual(true, checkVersionFilter('2', ['1'], '>='))
-            assert.strictEqual(true, checkVersionFilter('1.2', ['1.1'], '>='))
-            assert.strictEqual(true, checkVersionFilter('2.1', ['1.1'], '>='))
-            assert.strictEqual(true, checkVersionFilter('1.2.1', ['1.2'], '>='))
-            assert.strictEqual(true, checkVersionFilter('1.2.', ['1.1'], '>='))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.1.', ['1.1'], '>='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('2', ['1'], '>='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.2', ['1.1'], '>='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('2.1', ['1.1'], '>='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.2.1', ['1.2'], '>='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.2.', ['1.1'], '>='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.2.1', ['1.1.1'], '>='),
             )
-            assert.strictEqual(true, checkVersionFilter('1.2.2', ['1.2'], '>='))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.2.2', ['1.2'], '>='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.2.2', ['1.2.1'], '>='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('4.8.241.2', ['4'], '>='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('4.8.241.2', ['4.8'], '>='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('4.8.241.2', ['4.8.2'], '>='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('4.8.241.2', ['4.8.241.0'], '>='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('4.8.241.2', ['4.8.241.2'], '>='),
             )
         })
         it('should work if version has other characters', () => {
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.2.2', ['v1.2.1-2v3asda'], '>='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.2.2', ['v1.2.1-va1sda'], '>'),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.2.1', ['v1.2.1-vasd32a'], '>='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.2.1', ['v1.2.1-vasda'], '='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('v1.2.1-va21sda', ['v1.2.1-va13sda'], '='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.2.0', ['v1.2.1-vas1da'], '>='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.2.1', ['v1.2.1- va34sda'], '<='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.2.0', ['v1.2.1-vas3da'], '<='),
             )
         })
         it('should return false if string versions less than', () => {
-            assert.strictEqual(true, checkVersionFilter('1', ['2'], '<'))
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1.2'], '<'))
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1.1.1'], '<'))
-            assert.strictEqual(true, checkVersionFilter('1.1.', ['1.1.1'], '<'))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1', ['2'], '<'),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.1', ['1.2'], '<'),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.1', ['1.1.1'], '<'),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.1.', ['1.1.1'], '<'),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1.1', ['1.2.3'], '<'),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('4.8.241.2', ['5'], '<'),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('4.8.241.2', ['4.9'], '<'),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('4.8.241.2', ['4.8.242'], '<'),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('4.8.241.2', ['4.8.241.5'], '<'),
             )
         })
         it('should return false if string versions less than', () => {
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter(null as unknown as string, ['1'], '<'),
             )
-            assert.strictEqual(false, checkVersionFilter('1', ['1'], '<'))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.1'], '<'))
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1', ['1'], '<'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.1', ['1.1'], '<'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1.1', ['1.1.1'], '<'),
             )
-            assert.strictEqual(false, checkVersionFilter('1.1.', ['1.1'], '<'))
-            assert.strictEqual(false, checkVersionFilter('2', ['1'], '<'))
-            assert.strictEqual(false, checkVersionFilter('1.2', ['1.1'], '<'))
-            assert.strictEqual(false, checkVersionFilter('2.1', ['1.1'], '<'))
-            assert.strictEqual(false, checkVersionFilter('1.2.1', ['1.2'], '<'))
-            assert.strictEqual(false, checkVersionFilter('1.2.', ['1.1'], '<'))
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.1.', ['1.1'], '<'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('2', ['1'], '<'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.2', ['1.1'], '<'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('2.1', ['1.1'], '<'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.2.1', ['1.2'], '<'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.2.', ['1.1'], '<'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.2.1', ['1.1.1'], '<'),
             )
-            assert.strictEqual(false, checkVersionFilter('1.2.2', ['1.2'], '<'))
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.2.2', ['1.2'], '<'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.2.2', ['1.2.'], '<'),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.2.2', ['1.2.1'], '<'),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('4.8.241.2', ['4'], '<'),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('4.8.241.2', ['4.8'], '<'),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('4.8.241.2', ['4.8.241'], '<'),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('4.8.241.2', ['4.8.241.0'], '<'),
             )
         })
         it('should return false if string versions less than or equal', () => {
-            assert.strictEqual(true, checkVersionFilter('1', ['1'], '<='))
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1.1'], '<='))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1', ['1'], '<='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.1', ['1.1'], '<='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1.1', ['1.1.1'], '<='),
             )
-            assert.strictEqual(true, checkVersionFilter('1.1.', ['1.1'], '<='))
-            assert.strictEqual(true, checkVersionFilter('1', ['2'], '<='))
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1.2'], '<='))
-            assert.strictEqual(true, checkVersionFilter('1.1', ['1.1.1'], '<='))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.1.', ['1.1'], '<='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1', ['2'], '<='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.1', ['1.2'], '<='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.1', ['1.1.1'], '<='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1.', ['1.1.1'], '<='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1.1', ['1.2.3'], '<='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('4.8.241.2', ['4.8.241.2'], '<='),
             )
         })
         it('should return false if string versions less than or equal', () => {
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter(null as unknown as string, ['1'], '<='),
             )
-            assert.strictEqual(false, checkVersionFilter('2', ['1'], '<='))
-            assert.strictEqual(false, checkVersionFilter('1.2', ['1.1'], '<='))
-            assert.strictEqual(false, checkVersionFilter('2.1', ['1.1'], '<='))
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('2', ['1'], '<='),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.2', ['1.1'], '<='),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('2.1', ['1.1'], '<='),
+            )
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.2.1', ['1.2'], '<='),
             )
-            assert.strictEqual(false, checkVersionFilter('1.2.', ['1.1'], '<='))
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.2.', ['1.1'], '<='),
+            )
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.2.1', ['1.1.1'], '<='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.2.2', ['1.2'], '<='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.2.2', ['1.2.'], '<='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.2.2', ['1.2.1'], '<='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('4.8.241.2', ['4.8.241'], '<='),
             )
         })
         it('should return true if any numbers equal array', () => {
-            assert.strictEqual(true, checkVersionFilter('1', ['1', '1.1'], '='))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1', ['1', '1.1'], '='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1', ['1', '1.1'], '='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1', ['1.1', ''], '='),
             )
         })
         it('should return false if all numbers not equal array', () => {
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1', ['2', '1.1'], '='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1', ['1.2', '1'], '='),
             )
         })
         it('should return true if any string versions equal array', () => {
-            assert.strictEqual(true, checkVersionFilter('1', ['1', '1.1'], '='))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1', ['1', '1.1'], '='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1', ['1.1', '1'], '='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1.1', ['1.1.1', '1.1'], '='),
             )
         })
         it('should return false if all string versions not equal array', () => {
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter(null as unknown as string, ['2', '3'], '='),
             )
-            assert.strictEqual(false, checkVersionFilter('1', ['2', '3'], '='))
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1', ['2', '3'], '='),
+            )
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1', ['1.2', '1.2'], '='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1', ['1.1.1', '1.2'], '='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1.', ['1.1.1', '1.2'], '='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1.1', ['1.1', '1.1'], '='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1.1', ['1', '1.1.'], '='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1.1', ['1.2.3', '1.'], '='),
             )
         })
         it('should return false if multiple versions do not equal the version', () => {
-            assert.strictEqual(false, checkVersionFilter('1', ['2', '1'], '!='))
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1', ['2', '1'], '!='),
+            )
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1', ['1.2', '1.1'], '!='),
             )
         })
         it('should return true if multiple versions do not equal version', () => {
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1', ['1.1.1', '1.2'], '!='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1.', ['1.1.1', '1'], '!='),
             )
         })
         it('should return false if any string versions not greater than array', () => {
-            assert.strictEqual(false, checkVersionFilter('1', ['1', '1'], '>'))
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1', ['1', '1'], '>'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1', ['1.1', '1.1.', '1.1'], '>'),
             )
-            assert.strictEqual(false, checkVersionFilter('1', ['2'], '>'))
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.1.0'], '>'))
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1', ['2'], '>'),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.1', ['1.1.0'], '>'),
+            )
         })
         it('should return true any if string versions greater than array', () => {
-            assert.strictEqual(true, checkVersionFilter('2', ['1', '2.0'], '>'))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('2', ['1', '2.0'], '>'),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.2.1', ['1.2', '1.2'], '>'),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.2.', ['1.1', '1.9.'], '>'),
             )
         })
         it('should return false if all string versions not greater than or equal array', () => {
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1', ['2', '1.2'], '>='),
             )
-            assert.strictEqual(false, checkVersionFilter('1.1', ['1.2'], '>='))
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
+                checkVersionFilter('1.1', ['1.2'], '>='),
+            )
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1', ['1.1.1', '1.2'], '>='),
             )
         })
         it('should return true if any string versions greater than or equal array', () => {
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1', ['1', '1.1'], '>='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1', ['1.1', '1'], '>='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1.1', ['1.2', '1.1.1'], '>='),
             )
-            assert.strictEqual(true, checkVersionFilter('1.1.', ['1.1'], '>='))
-            assert.strictEqual(true, checkVersionFilter('2', ['1', '3'], '>='))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.1.', ['1.1'], '>='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('2', ['1', '3'], '>='),
+            )
         })
         it('should return true if any string versions less than array', () => {
-            assert.strictEqual(true, checkVersionFilter('1', ['2', '1'], '<'))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1', ['2', '1'], '<'),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1', ['1.2', '1.5'], '<'),
             )
-            assert.strictEqual(true, checkVersionFilter('1.1.', ['1.1.1'], '<'))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1.1.', ['1.1.1'], '<'),
+            )
         })
         it('should return false if all string versions less than array', () => {
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1', ['1', '1.0'], '<'),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.1.', ['1.1', '1.1.0'], '<'),
             )
         })
         it('should return true if any string versions less than or equal array', () => {
-            assert.strictEqual(true, checkVersionFilter('1', ['1', '5'], '<='))
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
+                checkVersionFilter('1', ['1', '5'], '<='),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1', ['1.1', '1.1.'], '<='),
             )
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'App Version' },
                 checkVersionFilter('1.1.', ['1.1.1', '1.1.'], '<='),
             )
         })
         it('should return false if all string versions not less than or equal array', () => {
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('2', ['1', '1.9'], '<='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.2.1', ['1.2', '1.2'], '<='),
             )
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkVersionFilter('1.2.', ['1.1', '1.1.9'], '<='),
             )
         })
@@ -2405,30 +2936,36 @@ describe('SegmentationManager Unit Test', () => {
         }
         it('should return false if filter and no data', () => {
             const data = null as unknown as Record<string, unknown>
-            assert.strictEqual(false, checkCustomData(data, filterStr))
+            assert.deepStrictEqual(
+                { result: false },
+                checkCustomData(data, filterStr),
+            )
         })
         it('should return true if string value is equal', () => {
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> strKey' },
                 checkCustomData({ strKey: 'value' }, filterStr),
             )
         })
         it('should return true if string is one OR value', () => {
             const filter = { ...filterStr }
             filter.values = ['value', 'value too']
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> strKey' },
                 checkCustomData({ strKey: 'value' }, filter),
             )
         })
         it('should return false if string value is not equal', () => {
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkCustomData({ strKey: 'not value' }, filterStr),
             )
         })
         it('should return false if string value isnt present', () => {
-            assert.strictEqual(false, checkCustomData({}, filterStr))
+            assert.deepStrictEqual(
+                { result: false },
+                checkCustomData({}, filterStr),
+            )
         })
         it('should return true if string is not equal to multiple values', () => {
             const filter = {
@@ -2436,8 +2973,8 @@ describe('SegmentationManager Unit Test', () => {
                 comparator: '!=',
                 values: ['value1', 'value2', 'value3'],
             }
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> strKey' },
                 checkCustomData({ strKey: 'value' }, filter),
             )
         })
@@ -2447,69 +2984,129 @@ describe('SegmentationManager Unit Test', () => {
         filterNum.dataKeyType = 'Number'
         filterNum.values = [0]
         it('should return true if number value is equal', () => {
-            assert.strictEqual(true, checkCustomData({ numKey: 0 }, filterNum))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData({ numKey: 0 }, filterNum),
+            )
         })
         it('should return true if number is one OR value', () => {
             const filter = { ...filterNum }
             filter.values = [0, 1]
-            assert.strictEqual(true, checkCustomData({ numKey: 1 }, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData({ numKey: 1 }, filter),
+            )
         })
 
         it('should return false if number value is not equal', () => {
-            assert.strictEqual(false, checkCustomData({ numKey: 1 }, filterNum))
+            assert.deepStrictEqual(
+                { result: false },
+                checkCustomData({ numKey: 1 }, filterNum),
+            )
         })
 
         it('should return false when num is in values for != comparator', () => {
             const filter = { ...filterNum }
             filter.comparator = '!='
             filter.values = [0, 1]
-            assert.strictEqual(false, checkCustomData({ numKey: 1 }, filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkCustomData({ numKey: 1 }, filter),
+            )
         })
 
         it('should return true when num isnt in values for != comparator', () => {
             const filter = { ...filterNum }
             filter.comparator = '!='
             filter.values = [0, 1]
-            assert.strictEqual(true, checkCustomData({ numKey: 12 }, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData({ numKey: 12 }, filter),
+            )
         })
 
         it('should work for num for > comparator', () => {
             const filter = { ...filterNum }
             filter.comparator = '>'
             filter.values = [4, 10]
-            assert.strictEqual(true, checkCustomData({ numKey: 12 }, filter))
-            assert.strictEqual(true, checkCustomData({ numKey: 5 }, filter))
-            assert.strictEqual(false, checkCustomData({ numKey: 4 }, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData({ numKey: 12 }, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData({ numKey: 5 }, filter),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkCustomData({ numKey: 4 }, filter),
+            )
         })
 
         it('should work for num for >= comparator', () => {
             const filter = { ...filterNum }
             filter.comparator = '>='
             filter.values = [4, 10]
-            assert.strictEqual(true, checkCustomData({ numKey: 12 }, filter))
-            assert.strictEqual(true, checkCustomData({ numKey: 5 }, filter))
-            assert.strictEqual(true, checkCustomData({ numKey: 4 }, filter))
-            assert.strictEqual(false, checkCustomData({ numKey: 3 }, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData({ numKey: 12 }, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData({ numKey: 5 }, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData({ numKey: 4 }, filter),
+            )
+            assert.deepStrictEqual(
+                { result: false },
+                checkCustomData({ numKey: 3 }, filter),
+            )
         })
 
         it('should work for num for < comparator', () => {
             const filter = { ...filterNum }
             filter.comparator = '<'
             filter.values = [4, 10]
-            assert.strictEqual(false, checkCustomData({ numKey: 12 }, filter))
-            assert.strictEqual(true, checkCustomData({ numKey: 5 }, filter))
-            assert.strictEqual(true, checkCustomData({ numKey: 3 }, filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkCustomData({ numKey: 12 }, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData({ numKey: 5 }, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData({ numKey: 3 }, filter),
+            )
         })
 
         it('should work for num for <= comparator', () => {
             const filter = { ...filterNum }
             filter.comparator = '<='
             filter.values = [4, 10]
-            assert.strictEqual(false, checkCustomData({ numKey: 12 }, filter))
-            assert.strictEqual(true, checkCustomData({ numKey: 10 }, filter))
-            assert.strictEqual(true, checkCustomData({ numKey: 5 }, filter))
-            assert.strictEqual(true, checkCustomData({ numKey: 4 }, filter))
-            assert.strictEqual(true, checkCustomData({ numKey: 3 }, filter))
+            assert.deepStrictEqual(
+                { result: false },
+                checkCustomData({ numKey: 12 }, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData({ numKey: 10 }, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData({ numKey: 5 }, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData({ numKey: 4 }, filter),
+            )
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData({ numKey: 3 }, filter),
+            )
         })
 
         const filterBool = { ...filterStr }
@@ -2517,14 +3114,14 @@ describe('SegmentationManager Unit Test', () => {
         filterBool.dataKeyType = 'Boolean'
         filterBool.values = [false]
         it('should return true if bool value is equal', () => {
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> boolKey' },
                 checkCustomData({ boolKey: false }, filterBool),
             )
         })
         it('should return false if bool value is not equal', () => {
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkCustomData({ boolKey: true }, filterBool),
             )
         })
@@ -2533,8 +3130,12 @@ describe('SegmentationManager Unit Test', () => {
                 filters: [filterStr, filterNum, filterBool],
                 operator: 'and',
             } as unknown
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                {
+                    result: true,
+                    reasonDetails:
+                        'Custom Data -> strKey AND Custom Data -> numKey AND Custom Data -> boolKey',
+                },
                 evaluateOperator({
                     data: {
                         customData: {
@@ -2552,8 +3153,8 @@ describe('SegmentationManager Unit Test', () => {
                 filters: [filterStr, filterNum, filterBool],
                 operator: 'and',
             } as unknown
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 evaluateOperator({
                     data: { customData: { strKey: 'value', boolKey: false } },
                     operator: operatorFilter,
@@ -2568,8 +3169,12 @@ describe('SegmentationManager Unit Test', () => {
                 filters: [filterStr, filter, filterBool],
                 operator: 'and',
             } as unknown
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                {
+                    result: true,
+                    reasonDetails:
+                        'Custom Data -> strKey AND Custom Data -> numKey AND Custom Data -> boolKey',
+                },
                 evaluateOperator({
                     data: { customData: { strKey: 'value', boolKey: false } },
                     operator: operatorFilter,
@@ -2581,7 +3186,10 @@ describe('SegmentationManager Unit Test', () => {
             const filter = { ...filterNum }
             filter.comparator = '!='
             const data = null as unknown as Record<string, unknown>
-            assert.strictEqual(true, checkCustomData(data, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData(data, filter),
+            )
         })
 
         it('should return true if no custom data is provided with not exists filter value', () => {
@@ -2589,7 +3197,10 @@ describe('SegmentationManager Unit Test', () => {
             filter.comparator = '!exist'
 
             const data = null as unknown as Record<string, unknown>
-            assert.strictEqual(true, checkCustomData(data, filter))
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> numKey' },
+                checkCustomData(data, filter),
+            )
         })
 
         it('should return false if no custom data is provided with not equal filter and others', () => {
@@ -2599,8 +3210,8 @@ describe('SegmentationManager Unit Test', () => {
                 filters: [filterStr, filter, filterBool],
                 operator: 'and',
             } as unknown
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 evaluateOperator({
                     data: { customData: null },
                     operator: operatorFilter,
@@ -2615,8 +3226,8 @@ describe('SegmentationManager Unit Test', () => {
                 filters: [filterStr, filter, filterBool],
                 operator: 'and',
             } as unknown
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 evaluateOperator({
                     data: { customData: null },
                     operator: operatorFilter,
@@ -2633,8 +3244,8 @@ describe('SegmentationManager Unit Test', () => {
             values: ['FP'],
         }
         it('should return true if custom data contains value', () => {
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> last_order_no' },
                 checkCustomData({ last_order_no: 'FP2423423' }, containsFilter),
             )
         })
@@ -2648,15 +3259,15 @@ describe('SegmentationManager Unit Test', () => {
             values: [],
         }
         it('should return true if custom data value exists', () => {
-            assert.strictEqual(
-                true,
+            assert.deepStrictEqual(
+                { result: true, reasonDetails: 'Custom Data -> field' },
                 checkCustomData({ field: 'something' }, existsFilter),
             )
         })
 
         it('should return false if custom data value does not exist', () => {
-            assert.strictEqual(
-                false,
+            assert.deepStrictEqual(
+                { result: false },
                 checkCustomData({ not_field: 'something' }, existsFilter),
             )
         })
@@ -2742,7 +3353,11 @@ describe('SegmentationManager Unit Test', () => {
                 platform: 'Android TV',
             })
             const filteredAudiences = audiences.filter((aud) => {
-                return evaluateOperator({ operator: aud.filters, data })
+                const evalResult = evaluateOperator({
+                    operator: aud.filters,
+                    data,
+                })
+                return evalResult.result
             })
             expect(filteredAudiences.length).toEqual(3)
             expect(filteredAudiences[0]._id).toEqual('60cca1d8230f17002542b909')
@@ -2755,7 +3370,11 @@ describe('SegmentationManager Unit Test', () => {
             }
             setPlatformDataJSON({ ...defaultPlatformData, platform: 'iOS' })
             const filteredAudiences = audiences.filter((aud) => {
-                return evaluateOperator({ operator: aud.filters, data })
+                const evalResult = evaluateOperator({
+                    operator: aud.filters,
+                    data,
+                })
+                return evalResult.result
             })
             expect(filteredAudiences.length).toEqual(1)
             expect(filteredAudiences[0]._id).toEqual('60cca1d8230f17002542b913')

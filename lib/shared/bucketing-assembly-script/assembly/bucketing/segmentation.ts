@@ -82,10 +82,11 @@ export function _evaluateOperator(
             } else if (filter.filterClass !== null) {
                 const evalResult = 
                     doesUserPassFilter(filter.filterClass as AudienceFilter, audiences, user, clientCustomData)
-                if(evalResult.result && evalResult.reasonDetails){
-                    reasons.push(evalResult.reasonDetails!)
-                } else {
+                if(evalResult.result === false){
                     return new SegmentationResult(false)
+                }
+                if(evalResult.reasonDetails !== null){ 
+                    reasons.push(evalResult.reasonDetails!)
                 }
             }
         }
