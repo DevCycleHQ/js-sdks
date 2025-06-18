@@ -441,8 +441,11 @@ describe('DevCycleCloudClient with Hooks', () => {
     beforeAll(async () => {
         client = DVC.initializeDevCycle('dvc_server_token', {
             logLevel: 'error',
-            enableEdgeDB: true,
         })
+    })
+
+    afterEach(async () => {
+        await client.clearHooks()
     })
 
     it('should run hooks in correct order', async () => {
@@ -455,8 +458,8 @@ describe('DevCycleCloudClient with Hooks', () => {
         const onFinally = jest.fn()
         const error = jest.fn()
         client.addHook(new EvalHook(before, after, onFinally, error))
-        const variable = await client.variable(user, 'test-key', 'test')
-        expect(variable.value).toEqual('test')
+        const variable = await client.variable(user, 'test-key', false)
+        expect(variable.value).toEqual(true)
         expect(before).toHaveBeenCalled()
         expect(after).toHaveBeenCalled()
         expect(onFinally).toHaveBeenCalled()
@@ -468,16 +471,14 @@ describe('DevCycleCloudClient with Hooks', () => {
             user_id: 'node_sdk_test',
             country: 'CA',
         }
-        const before = jest.fn(() => {
-            throw new Error('test')
-        })
-        const after = jest.fn()
-        const onFinally = jest.fn()
-        const error = jest.fn()
+        const before = jest.fn().mockRejectedValue(new Error('test'))
+        const after = jest.fn().mockResolvedValue({})
+        const onFinally = jest.fn().mockResolvedValue({})
+        const error = jest.fn().mockResolvedValue({})
         client.addHook(new EvalHook(before, after, onFinally, error))
-        const variable = await client.variable(user, 'test-key', 'test')
-        expect(variable.value).toEqual('test')
-        expect(variable.isDefaulted).toEqual(true)
+        const variable = await client.variable(user, 'test-key', false)
+        expect(variable.value).toEqual(true)
+        expect(variable.isDefaulted).toEqual(false)
         expect(before).toHaveBeenCalled()
         expect(after).not.toHaveBeenCalled()
         expect(onFinally).toHaveBeenCalled()
@@ -489,16 +490,14 @@ describe('DevCycleCloudClient with Hooks', () => {
             user_id: 'node_sdk_test',
             country: 'CA',
         }
-        const before = jest.fn()
-        const after = jest.fn(() => {
-            throw new Error('test')
-        })
-        const onFinally = jest.fn()
-        const error = jest.fn()
+        const before = jest.fn().mockResolvedValue({})
+        const after = jest.fn().mockRejectedValue(new Error('test'))
+        const onFinally = jest.fn().mockResolvedValue({})
+        const error = jest.fn().mockResolvedValue({})
         client.addHook(new EvalHook(before, after, onFinally, error))
-        const variable = await client.variable(user, 'test-key', 'test')
-        expect(variable.value).toEqual('test')
-        expect(variable.isDefaulted).toEqual(true)
+        const variable = await client.variable(user, 'test-key', false)
+        expect(variable.value).toEqual(true)
+        expect(variable.isDefaulted).toEqual(false)
         expect(before).toHaveBeenCalled()
         expect(after).toHaveBeenCalled()
         expect(onFinally).toHaveBeenCalled()
@@ -510,16 +509,14 @@ describe('DevCycleCloudClient with Hooks', () => {
             user_id: 'node_sdk_test',
             country: 'CA',
         }
-        const before = jest.fn()
-        const after = jest.fn()
-        const onFinally = jest.fn(() => {
-            throw new Error('test')
-        })
-        const error = jest.fn()
+        const before = jest.fn().mockResolvedValue({})
+        const after = jest.fn().mockResolvedValue({})
+        const onFinally = jest.fn().mockRejectedValue(new Error('test'))
+        const error = jest.fn().mockResolvedValue({})
         client.addHook(new EvalHook(before, after, onFinally, error))
-        const variable = await client.variable(user, 'test-key', 'test')
-        expect(variable.value).toEqual('test')
-        expect(variable.isDefaulted).toEqual(true)
+        const variable = await client.variable(user, 'test-key', false)
+        expect(variable.value).toEqual(true)
+        expect(variable.isDefaulted).toEqual(false)
         expect(before).toHaveBeenCalled()
         expect(after).toHaveBeenCalled()
         expect(onFinally).toHaveBeenCalled()
@@ -530,18 +527,17 @@ describe('DevCycleCloudClient with Hooks', () => {
             user_id: 'node_sdk_test',
             country: 'CA',
         }
-        const before = jest.fn()
-        const after = jest.fn()
-        const onFinally = jest.fn()
-        const error = jest.fn(() => {
-            throw new Error('test')
-        })
+        const before = jest.fn().mockResolvedValue({})
+        const after = jest.fn().mockRejectedValue(new Error('test'))
+        const onFinally = jest.fn().mockResolvedValue({})
+        const error = jest.fn().mockRejectedValue(new Error('test'))
         client.addHook(new EvalHook(before, after, onFinally, error))
-        const variable = await client.variable(user, 'test-key', 'test')
-        expect(variable.value).toEqual('test')
-        expect(variable.isDefaulted).toEqual(true)
+        const variable = await client.variable(user, 'test-key', false)
+        expect(variable.value).toEqual(true)
+        expect(variable.isDefaulted).toEqual(false)
         expect(before).toHaveBeenCalled()
         expect(after).toHaveBeenCalled()
         expect(onFinally).toHaveBeenCalled()
+        expect(error).toHaveBeenCalled()
     })
 })

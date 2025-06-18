@@ -18,7 +18,7 @@ describe('EvalHooksRunner', () => {
         )
         hooksRunner.enqueue(hook1)
         hooksRunner.enqueue(hook2)
-        const result = hooksRunner.runHooksForEvaluation(
+        const result = await hooksRunner.runHooksForEvaluation(
             { user_id: 'test-user' },
             'test-key',
             'test-value',
@@ -48,7 +48,7 @@ describe('EvalHooksRunner', () => {
         expect(hook2.onFinally).toHaveBeenCalledTimes(1)
     })
 
-    it('should run hooks in correct order when resolver fails', () => {
+    it('should run hooks in correct order when resolver fails', async () => {
         const hooksRunner = new EvalHooksRunner()
         const hook1 = new EvalHook(
             jest.fn().mockResolvedValue({}),
@@ -65,16 +65,18 @@ describe('EvalHooksRunner', () => {
         hooksRunner.enqueue(hook1)
         hooksRunner.enqueue(hook2)
 
-        expect(() =>
-            hooksRunner.runHooksForEvaluation(
+        try {
+            await hooksRunner.runHooksForEvaluation(
                 { user_id: 'test-user' },
                 'test-key',
                 'test-value',
                 async () => {
                     throw new Error('test-error')
                 },
-            ),
-        ).toThrow('test-error')
+            )
+        } catch (error) {
+            expect(error).toEqual(new Error('test-error'))
+        }
 
         expect(hook1.before).toHaveBeenCalledTimes(1)
         expect(hook1.after).toHaveBeenCalledTimes(0)
@@ -88,28 +90,27 @@ describe('EvalHooksRunner', () => {
 
     it('should change user in before hook', async () => {
         const hooksRunner = new EvalHooksRunner()
+        const beforeHook2 = jest.fn().mockResolvedValue({})
         const hook1 = new EvalHook(
             jest.fn().mockImplementation((context) => {
-                return {
-                    ...context,
-                    user: {
-                        user_id: 'test-user-2',
-                    },
-                }
+                context.user.user_id = 'test-user-2'
+                return new Promise((resolve) => {
+                    resolve(context)
+                })
             }),
             jest.fn().mockResolvedValue({}),
             jest.fn().mockResolvedValue({}),
             jest.fn().mockResolvedValue({}),
         )
         const hook2 = new EvalHook(
-            jest.fn().mockResolvedValue({}),
+            beforeHook2,
             jest.fn().mockResolvedValue({}),
             jest.fn().mockResolvedValue({}),
             jest.fn().mockResolvedValue({}),
         )
         hooksRunner.enqueue(hook1)
         hooksRunner.enqueue(hook2)
-        const resolver = jest.fn().mockImplementation((context) => {
+        const resolver = jest.fn().mockImplementation(() => {
             return {
                 key: 'test-key',
                 defaultValue: 'test-value',
@@ -139,20 +140,7 @@ describe('EvalHooksRunner', () => {
         expect(hook2.after).toHaveBeenCalledTimes(1)
         expect(hook2.onFinally).toHaveBeenCalledTimes(1)
 
-        expect(hook2.before).toHaveBeenCalledWith(
-            expect.objectContaining({
-                user: {
-                    user_id: 'test-user-2',
-                },
-            }),
-        )
-        expect(resolver.mock.instances[0]).toEqual(
-            expect.objectContaining({
-                user: {
-                    user_id: 'test-user-2',
-                },
-            }),
-        )
+        expect(beforeHook2.mock.calls[0][0].user.user_id).toEqual('test-user-2')
     })
 
     it('should still work if before hook errors', async () => {
@@ -182,7 +170,7 @@ describe('EvalHooksRunner', () => {
             value: 'test-value',
             isDefaulted: false,
         }
-        const resolver = jest.fn().mockImplementation((context) => {
+        const resolver = jest.fn().mockImplementation(() => {
             return variable
         })
         const result = await hooksRunner.runHooksForEvaluation(

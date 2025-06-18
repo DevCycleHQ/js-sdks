@@ -6,7 +6,7 @@ import { VariableValue as DVCVariableValue } from '@devcycle/types'
 
 export class EvalHooksRunner {
     constructor(
-        private readonly hooks: EvalHook[] = [],
+        private hooks: EvalHook[] = [],
         private readonly logger?: DVCLogger,
     ) {}
 
@@ -25,7 +25,7 @@ export class EvalHooksRunner {
         try {
             beforeContext = await this.runBefore(savedHooks, context)
             variableDetails = await resolver(beforeContext)
-            await this.runAfter(savedHooks, beforeContext, variableDetails)
+            await this.runAfter(reversedHooks, beforeContext, variableDetails)
         } catch (error) {
             await this.runError(reversedHooks, context, error)
             await this.runFinally(reversedHooks, context, undefined)
@@ -109,6 +109,10 @@ export class EvalHooksRunner {
 
     enqueue(hook: EvalHook): void {
         this.hooks.push(hook)
+    }
+
+    clear(): void {
+        this.hooks = []
     }
 }
 

@@ -113,7 +113,7 @@ export class DevCycleCloudClient<
             key,
             defaultValue,
             async (context) =>
-                this._variable(context.user ?? user, key, defaultValue),
+                this._variable(context?.user ?? user, key, defaultValue),
         )
     }
 
@@ -285,5 +285,9 @@ export class DevCycleCloudClient<
 
     async addHook(hook: EvalHook): Promise<void> {
         this.hooksRunner.enqueue(hook)
+    }
+
+    async clearHooks(): Promise<void> {
+        this.hooksRunner.clear()
     }
 }
