@@ -39,7 +39,9 @@ import { DevCycleOptionsLocalEnabled } from './index'
 import { WASMBucketingExports } from '@devcycle/bucketing-assembly-script'
 import { getNodeJSPlatformDetails } from './utils/platformDetails'
 import { DevCycleProvider } from './open-feature/DevCycleProvider'
-
+import { HookContext } from './hooks/HookContext'
+import { EvalHooksRunner } from './hooks/EvalHooksRunner'
+import { EvalHook } from './hooks/EvalHook'
 const castIncomingUser = (user: DevCycleUser) => {
     if (!(user instanceof DevCycleUser)) {
         return new DevCycleUser(user)
@@ -65,7 +67,7 @@ export class DevCycleClient<
     private bucketingImportPromise: Promise<void>
     private platformDetails: DevCyclePlatformDetails
     private sdkPlatform?: string
-
+    private hooksRunner: EvalHooksRunner
     get isInitialized(): boolean {
         return this._isInitialized
     }
@@ -78,6 +80,7 @@ export class DevCycleClient<
 
         this.logger =
             options?.logger || dvcDefaultLogger({ level: options?.logLevel })
+        this.hooksRunner = new EvalHooksRunner([], this.logger)
 
         if (options?.enableEdgeDB) {
             this.logger.info(
@@ -212,6 +215,20 @@ export class DevCycleClient<
         K extends string & keyof Variables,
         T extends DVCVariableValue & Variables[K],
     >(user: DevCycleUser, key: K, defaultValue: T): DVCVariable<T> {
+        const result = this.hooksRunner.runHooksForEvaluation(
+            user,
+            key,
+            defaultValue,
+            (context: HookContext<T>) =>
+                this._variable(context?.user ?? user, key, defaultValue),
+        )
+        return result
+    }
+
+    _variable<
+        K extends string & keyof Variables,
+        T extends DVCVariableValue & Variables[K],
+    >(user: DevCycleUser, key: K, defaultValue: T): DVCVariable<T> {
         const incomingUser = castIncomingUser(user)
         // this will throw if type is invalid
         const type = getVariableTypeFromValue(
@@ -336,6 +353,10 @@ export class DevCycleClient<
             this.platformDetails,
         )
         this.queueEvent(populatedUser, event)
+    }
+
+    addHook(hook: EvalHook): void {
+        this.hooksRunner.enqueue(hook)
     }
 
     private queueEvent(populatedUser: DVCPopulatedUser, event: DevCycleEvent) {
