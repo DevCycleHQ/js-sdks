@@ -7,6 +7,7 @@ global.fetch = fetch
 import { DevCycleEvent } from '../src/types'
 import * as DVC from '../src'
 import { server } from '../src/__mocks__/server'
+import { EvalHook } from '../src/hooks/EvalHook'
 
 let client: DVC.DevCycleCloudClient
 
@@ -433,5 +434,114 @@ describe('DevCycleCloudClient with EdgeDB Enabled', () => {
             const res = await client.allFeatures(respond500User)
             expect(res).toEqual({})
         })
+    })
+})
+
+describe('DevCycleCloudClient with Hooks', () => {
+    beforeAll(async () => {
+        client = DVC.initializeDevCycle('dvc_server_token', {
+            logLevel: 'error',
+            enableEdgeDB: true,
+        })
+    })
+
+    it('should run hooks in correct order', async () => {
+        const user = {
+            user_id: 'node_sdk_test',
+            country: 'CA',
+        }
+        const before = jest.fn()
+        const after = jest.fn()
+        const onFinally = jest.fn()
+        const error = jest.fn()
+        client.addHook(new EvalHook(before, after, onFinally, error))
+        const variable = await client.variable(user, 'test-key', 'test')
+        expect(variable.value).toEqual('test')
+        expect(before).toHaveBeenCalled()
+        expect(after).toHaveBeenCalled()
+        expect(onFinally).toHaveBeenCalled()
+        expect(error).not.toHaveBeenCalled()
+    })
+
+    it('should return a variable if a before hook errors', async () => {
+        const user = {
+            user_id: 'node_sdk_test',
+            country: 'CA',
+        }
+        const before = jest.fn(() => {
+            throw new Error('test')
+        })
+        const after = jest.fn()
+        const onFinally = jest.fn()
+        const error = jest.fn()
+        client.addHook(new EvalHook(before, after, onFinally, error))
+        const variable = await client.variable(user, 'test-key', 'test')
+        expect(variable.value).toEqual('test')
+        expect(variable.isDefaulted).toEqual(true)
+        expect(before).toHaveBeenCalled()
+        expect(after).not.toHaveBeenCalled()
+        expect(onFinally).toHaveBeenCalled()
+        expect(error).toHaveBeenCalled()
+    })
+
+    it('should return a variable if an after hook errors', async () => {
+        const user = {
+            user_id: 'node_sdk_test',
+            country: 'CA',
+        }
+        const before = jest.fn()
+        const after = jest.fn(() => {
+            throw new Error('test')
+        })
+        const onFinally = jest.fn()
+        const error = jest.fn()
+        client.addHook(new EvalHook(before, after, onFinally, error))
+        const variable = await client.variable(user, 'test-key', 'test')
+        expect(variable.value).toEqual('test')
+        expect(variable.isDefaulted).toEqual(true)
+        expect(before).toHaveBeenCalled()
+        expect(after).toHaveBeenCalled()
+        expect(onFinally).toHaveBeenCalled()
+        expect(error).toHaveBeenCalled()
+    })
+
+    it('should return a variable if an onFinally hook errors', async () => {
+        const user = {
+            user_id: 'node_sdk_test',
+            country: 'CA',
+        }
+        const before = jest.fn()
+        const after = jest.fn()
+        const onFinally = jest.fn(() => {
+            throw new Error('test')
+        })
+        const error = jest.fn()
+        client.addHook(new EvalHook(before, after, onFinally, error))
+        const variable = await client.variable(user, 'test-key', 'test')
+        expect(variable.value).toEqual('test')
+        expect(variable.isDefaulted).toEqual(true)
+        expect(before).toHaveBeenCalled()
+        expect(after).toHaveBeenCalled()
+        expect(onFinally).toHaveBeenCalled()
+    })
+
+    it('should return a variable if an error hook errors', async () => {
+        const user = {
+            user_id: 'node_sdk_test',
+            country: 'CA',
+        }
+        const before = jest.fn()
+        const after = jest.fn()
+        const onFinally = jest.fn()
+        const error = jest.fn(() => {
+            throw new Error('test')
+        })
+        client.addHook(new EvalHook(before, after, onFinally, error))
+        const variable = await client.variable(user, 'test-key', 'test')
+        expect(variable.value).toEqual('test')
+        expect(variable.isDefaulted).toEqual(true)
+        expect(before).toHaveBeenCalled()
+        expect(after).toHaveBeenCalled()
+        expect(onFinally).toHaveBeenCalled()
     })
 })
