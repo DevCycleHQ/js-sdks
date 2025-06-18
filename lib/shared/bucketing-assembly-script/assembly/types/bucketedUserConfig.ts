@@ -66,12 +66,14 @@ export namespace EVAL_REASON_DETAILS {
 export class EvalReason extends JSON.Value {
     readonly reason: string
     readonly details: string
+    readonly targetId: string
 
     // eslint-disable-next-line @typescript-eslint/no-inferrable-types
-    constructor(reason: string, details: string = "") {
+    constructor(reason: string, details: string = "", targetId: string = "") {
         super()
         this.reason = reason
         this.details = details
+        this.targetId = targetId
     }
 
     static fromJSONObj(jsonObj: JSON.Obj): EvalReason {
@@ -82,13 +84,18 @@ export class EvalReason extends JSON.Value {
         let details = getStringFromJSONOptional(jsonObj, 'details')
         if(!details)
             details = ""
-        return new EvalReason(reason, details)
+
+        let targetId = getStringFromJSONOptional(jsonObj, 'targetId')
+        if(!targetId)
+            targetId = ""
+        return new EvalReason(reason, details, targetId)
     }
 
     stringify(): string {
         const json = new JSON.Obj()
         json.set('reason', this.reason)
         json.set('details', this.details)
+        json.set('targetId', this.targetId)
         return json.stringify()
     }
 }
@@ -308,7 +315,11 @@ export class SDKVariable extends JSON.Obj {
             ? this.value.stringify()
             : null
 
-        const evalReasonPb = new EvalReason_PB(this.evalReason.reason, this.evalReason.details)
+        const evalReasonPb = new EvalReason_PB(
+            this.evalReason.reason,
+            this.evalReason.details,
+            this.evalReason.targetId
+        )
 
         const pbVariable = new SDKVariable_PB(
             this._id,

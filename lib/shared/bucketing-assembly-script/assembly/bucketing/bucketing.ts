@@ -267,7 +267,7 @@ function _getEvalReason(
     const hasMultipleDistributions = target.distribution.length !== 1
 
     const reason = hasRollout || hasMultipleDistributions ? EVAL_REASONS.SPLIT : EVAL_REASONS.TARGETING_MATCH
-    return  new EvalReason(reason, targetAndHashes.reasonDetails)
+    return  new EvalReason(reason, targetAndHashes.reasonDetails, target._id)
 }
 
 export function _generateBucketedConfig(

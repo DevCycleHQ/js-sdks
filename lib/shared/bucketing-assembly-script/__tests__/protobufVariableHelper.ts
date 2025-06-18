@@ -17,6 +17,7 @@ type SDKVariable_PB_Type = {
     eval?: {
         reason: EVAL_REASONS
         details?: string
+        targetId?: string
     }
     _feature?: {
         value: string
