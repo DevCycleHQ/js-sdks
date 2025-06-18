@@ -3,9 +3,13 @@ import { DVCPopulatedUser } from '../User'
 import { EvalHook } from './EvalHook'
 import { HookContext } from './HookContext'
 import { DVCVariableValue } from '../types'
+import { DVCLogger } from '@devcycle/types'
 
 export class EvalHooksRunner {
-    constructor(private readonly hooks: EvalHook<DVCVariableValue>[] = []) {}
+    constructor(
+        private readonly hooks: EvalHook<DVCVariableValue>[] = [],
+        private readonly logger?: DVCLogger,
+    ) {}
 
     runHooksForEvaluation<T extends DVCVariableValue>(
         user: DVCPopulatedUser | undefined,
@@ -76,7 +80,7 @@ export class EvalHooksRunner {
                 hook.onFinally(context)
             }
         } catch (error) {
-            // log using the logger
+            this.logger?.error('Error running before hooks', error)
         }
     }
 
@@ -90,7 +94,7 @@ export class EvalHooksRunner {
                 hook.error(context, error)
             }
         } catch (error) {
-            // log using the logger
+            this.logger?.error('Error running error hooks', error)
         }
     }
 
