@@ -12,6 +12,9 @@ export class EvalReason_PB {
 
     writer.uint32(18);
     writer.string(message.details);
+
+    writer.uint32(26);
+    writer.string(message.targetId);
   }
 
   static decode(reader: Reader, length: i32): EvalReason_PB {
@@ -29,6 +32,10 @@ export class EvalReason_PB {
           message.details = reader.string();
           break;
 
+        case 3:
+          message.targetId = reader.string();
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -40,10 +47,16 @@ export class EvalReason_PB {
 
   reason: string;
   details: string;
+  targetId: string;
 
-  constructor(reason: string = "", details: string = "") {
+  constructor(
+    reason: string = "",
+    details: string = "",
+    targetId: string = ""
+  ) {
     this.reason = reason;
     this.details = details;
+    this.targetId = targetId;
   }
 }
 

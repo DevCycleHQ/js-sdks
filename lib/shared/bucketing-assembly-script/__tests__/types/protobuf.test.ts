@@ -108,6 +108,7 @@ describe('protobuf variable tests', () => {
         eval: {
             details: 'User ID AND Country',
             reason: 'TARGETING_MATCH',
+            targetId: '61536f468fd67f0091982533',
         },
         key: 'swagTest',
         stringValue: 'YEEEEOWZA',
