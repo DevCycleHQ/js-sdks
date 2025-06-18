@@ -75,5 +75,5 @@ message SDKVariable_PB {
 message EvalReason_PB {
   string reason = 1;
   string details = 2;
-  string targetId = 3;
+  string target_id = 3;
 }

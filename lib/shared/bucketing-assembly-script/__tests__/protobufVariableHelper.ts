@@ -1,5 +1,4 @@
 import {
-    EVAL_REASON_DETAILS,
     EVAL_REASONS,
     SDKVariable,
     VariableType as VariableTypeStr,
@@ -17,7 +16,7 @@ type SDKVariable_PB_Type = {
     eval?: {
         reason: EVAL_REASONS
         details?: string
-        targetId?: string
+        target_id?: string
     }
     _feature?: {
         value: string

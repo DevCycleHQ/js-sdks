@@ -742,8 +742,8 @@ export class EvalReason_PB implements IEvalReason_PB {
     /** EvalReason_PB details. */
     public details: string;
 
-    /** EvalReason_PB targetId. */
-    public targetId: string;
+    /** EvalReason_PB target_id. */
+    public target_id: string;
 
     /**
      * Creates a new EvalReason_PB instance using the specified properties.
