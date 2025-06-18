@@ -29,6 +29,8 @@ import {
 } from './request'
 import { DevCycleUser } from './models/user'
 import { ResponseError } from '@devcycle/server-request'
+import { EvalHooksRunner } from './hooks/EvalHooksRunner'
+import { EvalHook } from './hooks/EvalHook'
 
 const castIncomingUser = (user: DevCycleUser) => {
     if (!(user instanceof DevCycleUser)) {
@@ -78,6 +80,7 @@ export class DevCycleCloudClient<
     protected logger: DVCLogger
     private options: DevCycleServerSDKOptions
     protected platformDetails: DevCyclePlatformDetails
+    private hooksRunner: EvalHooksRunner
 
     constructor(
         sdkKey: string,
@@ -89,6 +92,7 @@ export class DevCycleCloudClient<
             options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.options = options
         this.platformDetails = platformDetails
+        this.hooksRunner = new EvalHooksRunner()
         this.logger.info('Running DevCycle NodeJS SDK in Cloud Bucketing mode')
     }
 
@@ -101,6 +105,19 @@ export class DevCycleCloudClient<
     }
 
     async variable<
+        K extends string & keyof Variables,
+        T extends DVCVariableValue & Variables[K],
+    >(user: DevCycleUser, key: K, defaultValue: T): Promise<DVCVariable<T>> {
+        return this.hooksRunner.runHooksForEvaluation(
+            user,
+            key,
+            defaultValue,
+            async (context) =>
+                this._variable(context?.user ?? user, key, defaultValue),
+        )
+    }
+
+    async _variable<
         K extends string & keyof Variables,
         T extends DVCVariableValue & Variables[K],
     >(user: DevCycleUser, key: K, defaultValue: T): Promise<DVCVariable<T>> {
@@ -264,5 +281,13 @@ export class DevCycleCloudClient<
                 }`,
             )
         }
+    }
+
+    async addHook(hook: EvalHook): Promise<void> {
+        this.hooksRunner.enqueue(hook)
+    }
+
+    async clearHooks(): Promise<void> {
+        this.hooksRunner.clear()
     }
 }
