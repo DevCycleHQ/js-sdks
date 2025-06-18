@@ -52,6 +52,9 @@ export namespace EVAL_REASON_DETAILS {
     export const NOT_OPTED_IN = 'Not Opt-In'
     // Overrides
     export const OVERRIDE = 'Override'
+    // Split details
+    export const RANDOM_DISTRIBUTION = 'Random Distribution'
+    export const ROLLOUT = 'Rollout'
     // User Specific
     export const USER_ID = 'User ID'
     export const EMAIL = 'Email'

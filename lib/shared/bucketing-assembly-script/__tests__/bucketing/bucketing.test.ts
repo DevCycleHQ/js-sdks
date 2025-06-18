@@ -408,7 +408,7 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-1-key',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                         targetId: '61536f3bc838a705c105eb62',
                     },
                 },
@@ -421,7 +421,7 @@ describe('Config Parsing and Generating', () => {
                     variationKey: 'variation-feature-2-key',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                         targetId: '61536f468fd67f0091982533',
                     },
                 },
@@ -518,7 +518,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'multivar first',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                         targetId: '61536f468fd67f0091982533',
                     },
                 },
@@ -530,7 +530,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'multivar last',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                         targetId: '61536f468fd67f0091982533',
                     },
                 },
@@ -542,7 +542,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'man',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                         targetId: '61536f3bc838a705c105eb62',
                     },
                 },
@@ -554,7 +554,7 @@ describe('Config Parsing and Generating', () => {
                     value: 'scat',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                         targetId: '61536f3bc838a705c105eb62',
                     },
                 },
@@ -566,7 +566,7 @@ describe('Config Parsing and Generating', () => {
                     value: false,
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                         targetId: '61536f3bc838a705c105eb62',
                     },
                 },
@@ -578,7 +578,7 @@ describe('Config Parsing and Generating', () => {
                     value: '{"hello":"world","num":610,"bool":true}',
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                         targetId: '61536f3bc838a705c105eb62',
                     },
                 },
@@ -590,7 +590,7 @@ describe('Config Parsing and Generating', () => {
                     value: 610.61,
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
-                        details: 'Email',
+                        details: 'Random Distribution | Email',
                         targetId: '61536f3bc838a705c105eb62',
                     },
                 },
@@ -1148,7 +1148,7 @@ describe('Config Parsing and Generating', () => {
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
                         details:
-                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                            'Rollout | Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                         targetId: '61536f468fd67f0091982534',
                     },
                 },
@@ -1203,7 +1203,7 @@ describe('Config Parsing and Generating', () => {
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
                         details:
-                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                            'Rollout | Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                         targetId: '61536f468fd67f0091982534',
                     },
                 },
@@ -1216,7 +1216,7 @@ describe('Config Parsing and Generating', () => {
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
                         details:
-                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                            'Rollout | Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                         targetId: '61536f468fd67f0091982534',
                     },
                 },
@@ -1242,7 +1242,7 @@ describe('Config Parsing and Generating', () => {
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
                         details:
-                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                            'Rollout | Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                         targetId: '61536f468fd67f0091982534',
                     },
                 },
@@ -1255,7 +1255,7 @@ describe('Config Parsing and Generating', () => {
                     eval: {
                         reason: EVAL_REASONS.SPLIT,
                         details:
-                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                            'Rollout | Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
                         targetId: '61536f468fd67f0091982534',
                     },
                 },

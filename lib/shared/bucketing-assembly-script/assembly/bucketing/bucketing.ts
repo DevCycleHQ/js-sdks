@@ -265,9 +265,20 @@ function _getEvalReason(
     const target = targetAndHashes.target
     const hasRollout = target.rollout !== null
     const hasMultipleDistributions = target.distribution.length !== 1
+    let reason = EVAL_REASONS.TARGETING_MATCH
+    let reasonDetails =  targetAndHashes.reasonDetails
 
-    const reason = hasRollout || hasMultipleDistributions ? EVAL_REASONS.SPLIT : EVAL_REASONS.TARGETING_MATCH
-    return  new EvalReason(reason, targetAndHashes.reasonDetails, target._id)
+    if (hasMultipleDistributions || hasRollout) {
+        reason = EVAL_REASONS.SPLIT
+        const evalReasonPrefix =
+            hasMultipleDistributions && hasRollout
+                ? `${EVAL_REASON_DETAILS.RANDOM_DISTRIBUTION} | ${EVAL_REASON_DETAILS.ROLLOUT}`
+                : hasMultipleDistributions
+                ? EVAL_REASON_DETAILS.RANDOM_DISTRIBUTION
+                : EVAL_REASON_DETAILS.ROLLOUT
+        reasonDetails = `${evalReasonPrefix} | ${reasonDetails}`
+    }
+    return  new EvalReason(reason, reasonDetails, target._id)
 }
 
 export function _generateBucketedConfig(
