@@ -28,7 +28,7 @@ describe('variableForUser tests', () => {
             eval: {
                 details: 'User ID AND Country',
                 reason: 'TARGETING_MATCH',
-                targetId: '61536f468fd67f0091982533',
+                target_id: '61536f468fd67f0091982533',
             },
             key: 'swagTest',
             type: 'String',
@@ -46,7 +46,7 @@ describe('variableForUser tests', () => {
             eval: {
                 details: 'User ID AND Country',
                 reason: 'TARGETING_MATCH',
-                targetId: '61536f468fd67f0091982533',
+                target_id: '61536f468fd67f0091982533',
             },
             key: 'bool-var',
             type: 'Boolean',
@@ -64,7 +64,7 @@ describe('variableForUser tests', () => {
             eval: {
                 details: 'User ID AND Country',
                 reason: 'TARGETING_MATCH',
-                targetId: '61536f468fd67f0091982533',
+                target_id: '61536f468fd67f0091982533',
             },
             key: 'num-var',
             type: 'Number',
@@ -82,7 +82,7 @@ describe('variableForUser tests', () => {
             eval: {
                 details: 'User ID AND Country',
                 reason: 'TARGETING_MATCH',
-                targetId: '61536f468fd67f0091982533',
+                target_id: '61536f468fd67f0091982533',
             },
             key: 'json-var',
             type: 'JSON',
@@ -108,7 +108,7 @@ describe('variableForUser tests', () => {
             eval: {
                 details: 'User ID AND Country',
                 reason: 'TARGETING_MATCH',
-                targetId: '61536f468fd67f0091982533',
+                target_id: '61536f468fd67f0091982533',
             },
             key: 'swagTest',
             type: 'String',
