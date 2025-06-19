@@ -81,12 +81,8 @@ const decideTargetVariation = ({
 }: {
     target: unknown
     boundedHash: number
-}): VariationReasonResult => {
-    const variationReasonResult = decideTargetVariationFromJSON(
-        JSON.stringify(target),
-        boundedHash,
-    )
-    return JSON.parse(variationReasonResult) as VariationReasonResult
+}): string => {
+    return decideTargetVariationFromJSON(JSON.stringify(target), boundedHash)
 }
 
 const generateBucketedConfig = (
@@ -192,7 +188,7 @@ describe('User Hashing and Bucketing', () => {
                 testTarget._id,
             )
 
-            const { variation } = decideTargetVariation({
+            const variation = decideTargetVariation({
                 target: testTarget,
                 boundedHash: bucketingHash,
             })
@@ -1996,7 +1992,7 @@ describe('Bounded Hash Limits', () => {
     testCases.forEach((tc) => {
         describe(tc.name, () => {
             it('should handle bounded hash value 0.2555', () => {
-                const { variation } = decideTargetVariation({
+                const variation = decideTargetVariation({
                     target: tc.target,
                     boundedHash: 0.2555,
                 })
@@ -2006,7 +2002,7 @@ describe('Bounded Hash Limits', () => {
                 }
             })
             it('should handle edge case: bounded hash value 0', () => {
-                const { variation } = decideTargetVariation({
+                const variation = decideTargetVariation({
                     target: tc.target,
                     boundedHash: 0,
                 })
@@ -2017,7 +2013,7 @@ describe('Bounded Hash Limits', () => {
             })
 
             it('should handle edge case: bounded hash value 1', () => {
-                const { variation } = decideTargetVariation({
+                const variation = decideTargetVariation({
                     target: tc.target,
                     boundedHash: 1,
                 })
@@ -2028,7 +2024,7 @@ describe('Bounded Hash Limits', () => {
             })
 
             it('should handle edge case: bounded hash value just under 1', () => {
-                const { variation } = decideTargetVariation({
+                const variation = decideTargetVariation({
                     target: tc.target,
                     boundedHash: 0.9999999,
                 })

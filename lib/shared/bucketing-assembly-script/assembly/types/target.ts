@@ -12,34 +12,6 @@ import {
     jsonArrFromValueArray
 } from '../helpers/jsonHelpers'
 import { SortingArray, sortObjectsByString } from '../helpers/arrayHelpers'
-import { EvalReason, EVAL_REASONS  } from './bucketedUserConfig'
-
-export class VariationReasonResult extends JSON.Value {
-    readonly variation: string
-    readonly evalReason: EvalReason | null
-
-    constructor(variation: string, evalReason: EvalReason | null = null) {
-        super()
-        this.variation = variation
-        this.evalReason = evalReason
-    }
-
-    static fromJSONObj(jsonObj: JSON.Obj): VariationReasonResult {
-        const variation = getStringFromJSON(jsonObj, 'variation')
-        const evalObj = jsonObj.getObj('eval')
-        const evalReason = evalObj ? EvalReason.fromJSONObj(evalObj) : null
-        return new VariationReasonResult(variation, evalReason)
-    }
-
-    stringify(): string {
-        const json = new JSON.Obj()
-        json.set('variation', this.variation)
-        if (this.evalReason !== null) {
-            json.set('eval', this.evalReason)
-        }
-        return json.stringify()
-    }
-}
 
 export class Target extends JSON.Value {
     readonly _id: string
@@ -78,19 +50,15 @@ export class Target extends JSON.Value {
     /**
      * Given the feature and a hash of the user_id, bucket the user according to the variation distribution percentages
      */
-    decideTargetVariation(boundedHash: f64): VariationReasonResult {
+    decideTargetVariation(boundedHash: f64): string {
         let distributionIndex: f64 = 0
         const previousDistributionIndex: f64 = 0
-        const isRollout = this.rollout !== null
-        const isRandomDistribution = this.distribution.length !== 1
         for (let i = 0; i < this._sortedDistribution.length; i++) {
             const distribution = this._sortedDistribution[i]
             distributionIndex += distribution.percentage
             if (boundedHash >= previousDistributionIndex && 
                 (boundedHash < distributionIndex || (distributionIndex == 1 && boundedHash == 1))) {
-                const reason = isRollout || isRandomDistribution ? EVAL_REASONS.SPLIT : EVAL_REASONS.TARGETING_MATCH
-                const evalReason = new EvalReason(reason)
-                return new VariationReasonResult(distribution._variation, evalReason)
+                return distribution._variation
             }
         }
         throw new Error(`Failed to decide target variation: ${this._id}`)

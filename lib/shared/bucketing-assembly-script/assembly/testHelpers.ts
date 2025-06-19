@@ -110,7 +110,7 @@ export function decideTargetVariationFromJSON(targetStr: string, boundedHash: f6
     const targetJSON = JSON.parse(targetStr)
     if (!targetJSON.isObj) throw new Error('decideTargetVariationFromJSON targetStr param not a JSON Object')
     const target = new PublicTarget(targetJSON as JSON.Obj)
-    return target.decideTargetVariation(boundedHash).stringify()
+    return target.decideTargetVariation(boundedHash)
 }
 
 export function doesUserPassRolloutFromJSON(rolloutStr: string | null, boundedHash: f64): bool {

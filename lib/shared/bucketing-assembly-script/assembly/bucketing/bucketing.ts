@@ -248,14 +248,14 @@ export function bucketUserForVariation(
     feature: Feature,
     targetAndHashes: TargetAndHashes,
 ): Variation {
-    const variationResult = targetAndHashes.target.decideTargetVariation(
+    const variation_id = targetAndHashes.target.decideTargetVariation(
         targetAndHashes.boundedHashData.bucketingHash,
     )
-    const variation = feature.getVariationById(variationResult.variation)
+    const variation = feature.getVariationById(variation_id)
     if (variation) {
         return variation
     } else {
-        throw new Error(`Config missing variation: ${variationResult.variation}`)
+        throw new Error(`Config missing variation: ${variation_id}`)
     }
 }
 
