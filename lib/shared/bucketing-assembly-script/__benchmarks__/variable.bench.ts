@@ -202,7 +202,7 @@ benchmarkSuite('initEventQueue', {
         cleanupSDK()
     },
     ['initEventQueue']: () => {
-        initEventQueue('sdkKey_' + i, JSON.stringify({}))
+        initEventQueue('sdkKey_' + i, 'uuid', JSON.stringify({}))
         i++
     },
 })
