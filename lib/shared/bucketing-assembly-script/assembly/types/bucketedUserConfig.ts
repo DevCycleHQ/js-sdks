@@ -81,16 +81,19 @@ export class EvalReason extends JSON.Value {
 
     static fromJSONObj(jsonObj: JSON.Obj): EvalReason {
         let reason = getStringFromJSONOptional(jsonObj, 'reason')
-        if(!reason){
+        if (!reason) {
             reason = ""
         }
+        
         let details = getStringFromJSONOptional(jsonObj, 'details')
-        if(!details)
+        if (!details) {
             details = ""
-
+        }
+        
         let targetId = getStringFromJSONOptional(jsonObj, 'targetId')
-        if(!targetId)
+        if (!targetId) {
             targetId = ""
+        }
         return new EvalReason(reason, details, targetId)
     }
 
