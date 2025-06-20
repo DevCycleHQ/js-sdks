@@ -14,6 +14,9 @@ import {
     Variation,
     FeatureVariation,
     FeatureV2 as Feature,
+    EvalReason,
+    EVAL_REASONS,
+    EVAL_REASON_DETAILS,
 } from '../types'
 
 import { murmurhashV3 } from '../helpers/murmurhash'
@@ -131,6 +134,12 @@ export function _doesUserPassRollout(
 class SegmentedFeatureData {
     public feature: PublicFeature
     public target: PublicTarget
+    public reasonDetails: string | null
+}
+
+class TargetResult { 
+    public target: PublicTarget
+    public reasonDetails: string
 }
 
 function evaluateSegmentationForFeature(
@@ -138,7 +147,7 @@ function evaluateSegmentationForFeature(
     feature: Feature,
     user: DVCPopulatedUser,
     clientCustomData: JSON.Obj,
-): Target | null {
+): TargetResult | null {
     // Returns the first target for which the user passes segmentation
     for (let i = 0; i < feature.configuration.targets.length; i++) {
         const target = feature.configuration.targets[i]
@@ -150,15 +159,20 @@ function evaluateSegmentationForFeature(
             const rolloutHash = boundedHashData.rolloutHash
             doesUserPassRollout = _doesUserPassRollout(target.rollout, rolloutHash)
         }
-        if (
-            doesUserPassRollout && _evaluateOperator(
+
+        if (doesUserPassRollout) {
+            const evalResult = _evaluateOperator(
                 target._audience.filters,
                 config.audiences,
                 user,
                 clientCustomData,
             )
-        ) {
-            return target
+            if (evalResult.result) {
+                return {
+                    target,
+                    reasonDetails: evalResult.reasonDetails || ""
+                }
+            }
         }
     }
     return null
@@ -197,6 +211,7 @@ export function getSegmentedFeatureDataFromConfig(
 class TargetAndHashes {
     public target: Target
     public boundedHashData: BoundedHash
+    public reasonDetails: string
 }
 
 function doesUserQualifyForFeature(
@@ -205,13 +220,15 @@ function doesUserQualifyForFeature(
     user: DVCPopulatedUser,
     clientCustomData: JSON.Obj,
 ): TargetAndHashes | null {
-    const target = evaluateSegmentationForFeature(
+    const targetResult = evaluateSegmentationForFeature(
         config,
         feature,
         user,
         clientCustomData,
     )
-    if (!target) return null
+    if (!targetResult) return null
+    const target = targetResult.target
+    const reasonDetails = targetResult.reasonDetails
 
     const bucketingValue = _getUserValueForBucketingKey( user, target )
     const boundedHashData = _generateBoundedHashes(bucketingValue, target._id)
@@ -223,6 +240,7 @@ function doesUserQualifyForFeature(
     return {
         target,
         boundedHashData,
+        reasonDetails
     }
 }
 
@@ -241,9 +259,26 @@ export function bucketUserForVariation(
     }
 }
 
-class BucketedFeature {
-    feature: Feature
-    variation: Variation
+function _getEvalReason(
+    targetAndHashes: TargetAndHashes 
+): EvalReason {
+    const target = targetAndHashes.target
+    const hasRollout = target.rollout !== null
+    const hasMultipleDistributions = target.distribution.length !== 1
+    let reason = EVAL_REASONS.TARGETING_MATCH
+    let reasonDetails =  targetAndHashes.reasonDetails
+
+    if (hasMultipleDistributions || hasRollout) {
+        reason = EVAL_REASONS.SPLIT
+        const evalReasonPrefix =
+            hasMultipleDistributions && hasRollout
+                ? `${EVAL_REASON_DETAILS.RANDOM_DISTRIBUTION} | ${EVAL_REASON_DETAILS.ROLLOUT}`
+                : hasMultipleDistributions
+                ? EVAL_REASON_DETAILS.RANDOM_DISTRIBUTION
+                : EVAL_REASON_DETAILS.ROLLOUT
+        reasonDetails = `${evalReasonPrefix} | ${reasonDetails}`
+    }
+    return  new EvalReason(reason, reasonDetails, target._id)
 }
 
 export function _generateBucketedConfig(
@@ -288,6 +323,10 @@ export function _generateBucketedConfig(
             continue
         }
 
+        const evalReason = featureOverride 
+            ? new EvalReason(EVAL_REASONS.OVERRIDE, EVAL_REASON_DETAILS.OVERRIDE)
+            : _getEvalReason(targetAndHashes!)
+
         featureKeyMap.set(
             feature.key,
             new SDKFeature(
@@ -297,7 +336,7 @@ export function _generateBucketedConfig(
                 variation._id,
                 variation.name,
                 variation.key,
-                null,
+                evalReason,
             ),
         )
         featureVariationMap.set(feature._id, variation._id)
@@ -321,8 +360,8 @@ export function _generateBucketedConfig(
                 variable.type,
                 variable.key,
                 variationVar.value,
-                null,
                 feature._id,
+                evalReason, 
             )
             variableMap.set(variable.key, newVar)
         }
@@ -340,9 +379,7 @@ export function _generateBucketedConfig(
 
 class BucketedVariableResponse {
     public variable: SDKVariable
-
     public variation: Variation
-
     public feature: Feature
 }
 
@@ -376,13 +413,15 @@ export function _generateBucketedVariableForUser(
         throw new Error('Internal error processing configuration')
     }
 
+    const evalReason = _getEvalReason(targetAndHashes)
+
     const sdkVar = new SDKVariable(
         variable._id,
         variable.type,
         variable.key,
         variationVar.value,
-        null,
         featureForVariable._id,
+        evalReason,
     )
     return { variable: sdkVar, variation, feature: featureForVariable }
 }

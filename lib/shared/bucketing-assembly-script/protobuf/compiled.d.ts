@@ -646,6 +646,9 @@ export class SDKVariable_PB implements ISDKVariable_PB {
     /** SDKVariable_PB _feature. */
     public _feature?: (INullableString|null);
 
+    /** SDKVariable_PB eval. */
+    public eval?: (IEvalReason_PB|null);
+
     /**
      * Creates a new SDKVariable_PB instance using the specified properties.
      * @param [properties] Properties to set
@@ -718,6 +721,102 @@ export class SDKVariable_PB implements ISDKVariable_PB {
 
     /**
      * Gets the default type url for SDKVariable_PB
+     * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns The default type url
+     */
+    public static getTypeUrl(typeUrlPrefix?: string): string;
+}
+
+/** Represents an EvalReason_PB. */
+export class EvalReason_PB implements IEvalReason_PB {
+
+    /**
+     * Constructs a new EvalReason_PB.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IEvalReason_PB);
+
+    /** EvalReason_PB reason. */
+    public reason: string;
+
+    /** EvalReason_PB details. */
+    public details: string;
+
+    /** EvalReason_PB target_id. */
+    public target_id: string;
+
+    /**
+     * Creates a new EvalReason_PB instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns EvalReason_PB instance
+     */
+    public static create(properties?: IEvalReason_PB): EvalReason_PB;
+
+    /**
+     * Encodes the specified EvalReason_PB message. Does not implicitly {@link EvalReason_PB.verify|verify} messages.
+     * @param message EvalReason_PB message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IEvalReason_PB, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified EvalReason_PB message, length delimited. Does not implicitly {@link EvalReason_PB.verify|verify} messages.
+     * @param message EvalReason_PB message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IEvalReason_PB, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes an EvalReason_PB message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns EvalReason_PB
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): EvalReason_PB;
+
+    /**
+     * Decodes an EvalReason_PB message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns EvalReason_PB
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): EvalReason_PB;
+
+    /**
+     * Verifies an EvalReason_PB message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates an EvalReason_PB message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns EvalReason_PB
+     */
+    public static fromObject(object: { [k: string]: any }): EvalReason_PB;
+
+    /**
+     * Creates a plain object from an EvalReason_PB message. Also converts values to other types if specified.
+     * @param message EvalReason_PB
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: EvalReason_PB, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this EvalReason_PB to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+
+    /**
+     * Gets the default type url for EvalReason_PB
      * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
      * @returns The default type url
      */
