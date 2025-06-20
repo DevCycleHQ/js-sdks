@@ -130,8 +130,7 @@ benchmarkSuite('variableForUser - Large Config', {
     async setupSuite() {
         console.log('setup variableForUser - Large Config tests')
         await initialize(true)
-        // @ts-ignore
-        initSDK('sdkKey', largeConfig)
+        initSDK('sdkKey', 'clientUUID', largeConfig)
     },
     teardownSuite() {
         cleanupSDK()
