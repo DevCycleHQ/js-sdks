@@ -167,7 +167,7 @@ function evaluateSegmentationForFeature(
                 user,
                 clientCustomData,
             )
-            if(evalResult.result) {
+            if (evalResult.result) {
                 return {
                     target,
                     reasonDetails: evalResult.reasonDetails || ""

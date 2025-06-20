@@ -37,16 +37,6 @@ import {
 
 type BoundedHash = { rolloutHash: number; bucketingHash: number }
 
-type EvalReason = {
-    reason: string
-    details?: string
-}
-
-type VariationReasonResult = {
-    variation: string
-    eval?: EvalReason
-}
-
 const defaultPlatformData = {
     platform: '',
     platformVersion: '1.1.2',
