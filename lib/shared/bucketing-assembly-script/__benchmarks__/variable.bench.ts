@@ -6,7 +6,6 @@ import {
     variableForUser,
     variableForUser_PB,
 } from '../__tests__/variableSetupHelper'
-import { ConfigBody } from '@devcycle/types'
 import {
     initialize,
     VariableType,
@@ -18,9 +17,9 @@ import {
 } from '../__tests__/bucketingImportHelper'
 import largeTestData from '@devcycle/bucketing-test-data/json-data/largeConfig.json'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
-const { config } = testData
-
-const largeConfig = largeTestData.largeConfig as unknown as ConfigBody
+import { ConfigBody } from '@devcycle/types'
+const config = testData.config as ConfigBody
+const largeConfig = largeTestData.largeConfig as ConfigBody
 
 const user = {
     user_id: 'asuh',
@@ -130,8 +129,7 @@ benchmarkSuite('variableForUser - Large Config', {
     async setupSuite() {
         console.log('setup variableForUser - Large Config tests')
         await initialize(true)
-        // @ts-ignore
-        initSDK('sdkKey', largeConfig)
+        initSDK('sdkKey', 'clientUUID', largeConfig)
     },
     teardownSuite() {
         cleanupSDK()
@@ -175,8 +173,7 @@ benchmarkSuite('generateBucketedConfigForUser - Large Config', {
     async setupSuite() {
         console.log('setup generateBucketedConfigForUser - Large Config tests')
         await initialize(true)
-        // @ts-ignore
-        initSDK('sdkKey', largeConfig)
+        initSDK('sdkKey', 'clientUUID', largeConfig)
     },
     teardownSuite() {
         cleanupSDK()
@@ -202,7 +199,7 @@ benchmarkSuite('initEventQueue', {
         cleanupSDK()
     },
     ['initEventQueue']: () => {
-        initEventQueue('sdkKey_' + i, JSON.stringify({}))
+        initEventQueue('sdkKey_' + i, 'uuid', JSON.stringify({}))
         i++
     },
 })
