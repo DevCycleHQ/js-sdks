@@ -11,14 +11,16 @@ import {
 
 export const largeConfig: ConfigBody = {
     project: {
-        _id: '61535533396f00bab586cb17',
-        key: 'test-project',
-        a0_organization: 'org_12345612345',
+        _id: '52979e6b353148fe8d54f1b7946578da',
+        key: 'runtime',
+        a0_organization: 'org_fake077d951604874362a1a7f784496d3fac',
         settings: {
             edgeDB: {
                 enabled: false,
             },
-            disablePassthroughRollouts: false,
+            optIn: {
+                enabled: false,
+            },
         },
     },
     environment: {
