@@ -1,6 +1,15 @@
-import { ConfigBody } from '@devcycle/types'
+import {
+    AudienceOperator,
+    ConfigBody,
+    FeatureType,
+    FilterType,
+    VariableType,
+    UserSubType,
+    FilterComparator,
+    DataKeyType,
+} from '@devcycle/types'
 
-export const largeConfig = {
+export const largeConfig: ConfigBody = {
     project: {
         _id: '52979e6b353148fe8d54f1b7946578da',
         key: 'runtime',
@@ -11,7 +20,6 @@ export const largeConfig = {
             },
             optIn: {
                 enabled: false,
-                colors: {},
             },
         },
     },
@@ -23,7 +31,7 @@ export const largeConfig = {
         {
             _id: '9c80217a89694beea48eb60600f3a551',
             key: 'v-key-25',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -53,12 +61,13 @@ export const largeConfig = {
                 targets: [
                     {
                         _audience: {
+                            _id: '',
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_680f420d-a65f-406c-8aaf-0b39a617e696',
@@ -66,7 +75,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -79,16 +88,17 @@ export const largeConfig = {
                     },
                     {
                         _audience: {
+                            _id: '',
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -110,7 +120,7 @@ export const largeConfig = {
         {
             _id: '1eea3a6f92d94d13a5be23dde619c820',
             key: 'v-key-37',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -140,16 +150,17 @@ export const largeConfig = {
                 targets: [
                     {
                         _audience: {
+                            _id: '',
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -167,7 +178,7 @@ export const largeConfig = {
         {
             _id: 'bacad17ded5b4e92a98bcb7a3c8f0f82',
             key: 'v-key-35',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -274,22 +285,23 @@ export const largeConfig = {
                 targets: [
                     {
                         _audience: {
+                            _id: '',
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-4',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['xPHyky3eMWWO'],
                                         filters: [],
                                     },
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_ddd50c4e-e7f4-4d0b-80cb-84743f18045c',
@@ -298,7 +310,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -311,16 +323,17 @@ export const largeConfig = {
                     },
                     {
                         _audience: {
+                            _id: '',
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -338,7 +351,7 @@ export const largeConfig = {
         {
             _id: '53e1eab3b3fc49d780df98b6753e8818',
             key: 'v-key-36',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -368,12 +381,13 @@ export const largeConfig = {
                 targets: [
                     {
                         _audience: {
+                            _id: '',
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_89171e4e-5e81-4381-b0d1-7d197228a780',
@@ -386,7 +400,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -399,16 +413,17 @@ export const largeConfig = {
                     },
                     {
                         _audience: {
+                            _id: '',
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -426,7 +441,7 @@ export const largeConfig = {
         {
             _id: '8d992f8131e046e7b3e134466155cd12',
             key: 'v-key-1',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -456,12 +471,13 @@ export const largeConfig = {
                 targets: [
                     {
                         _audience: {
+                            _id: '',
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_c8ca0b03-3891-4fc7-9173-6589ac6b393a',
@@ -488,7 +504,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -501,16 +517,17 @@ export const largeConfig = {
                     },
                     {
                         _audience: {
+                            _id: '',
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -528,7 +545,7 @@ export const largeConfig = {
         {
             _id: '8a6cad3f31034bae94918ee7c9393e81',
             key: 'v-key-26',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -562,8 +579,8 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'audienceMatch',
-                                        comparator: '=',
+                                        type: FilterType.audienceMatch,
+                                        comparator: FilterComparator['='],
                                         _audiences: [
                                             'e757fc6a16924b2ab5a95c00d609ab14',
                                             'a2a331f751914200a8a53b59ae6b7a6f',
@@ -573,7 +590,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -590,13 +607,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -614,7 +631,7 @@ export const largeConfig = {
         {
             _id: 'f9994a609a7f4bcfb80ee47fbcb7c856',
             key: 'v-key-47',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -648,9 +665,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_5631ec1f-937b-4c57-a7af-1395fead8abf',
@@ -659,7 +676,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -676,13 +693,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -700,7 +717,7 @@ export const largeConfig = {
         {
             _id: '761dd72c625e4818b97cf94be61e6935',
             key: 'v-key-54',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -734,9 +751,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_d45432c9-609e-4ca4-abed-52095d094017',
@@ -745,7 +762,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -762,13 +779,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -786,7 +803,7 @@ export const largeConfig = {
         {
             _id: '3a7371025c7f46c293a87820cda4c033',
             key: 'v-key-79',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -820,9 +837,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_ac43af96-e84a-4446-96b5-093b0f8d8d31',
@@ -835,7 +852,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -852,17 +869,17 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: 'contain',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['contain'],
                                         dataKey: 'data-key-5',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['krnFTNsIxvJA'],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -879,11 +896,11 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-6',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: [
                                             'iYI6uwZed0ip',
@@ -894,7 +911,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -911,13 +928,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -935,7 +952,7 @@ export const largeConfig = {
         {
             _id: '620009c4c36b4728ad441ce1a7500ee6',
             key: 'v-key-29',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -969,9 +986,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_ce5bf1e9-206e-4907-8e6a-55661ece0cb1',
@@ -983,7 +1000,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1000,13 +1017,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1024,7 +1041,7 @@ export const largeConfig = {
         {
             _id: 'caac5538231d44b4bacd6e8839dd3f6d',
             key: 'v-key-73',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -1058,11 +1075,11 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-7',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: [
                                             'E9hQ0Pqny45G',
@@ -1071,7 +1088,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1088,13 +1105,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1112,7 +1129,7 @@ export const largeConfig = {
         {
             _id: 'a03aa15947cd478b91fd90f3126e8d51',
             key: 'v-key-46',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -1146,9 +1163,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_27579841-c4dd-4b81-be14-b6c8090f8758',
@@ -1156,7 +1173,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1173,17 +1190,17 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-6',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['h6fCse1VCIo1'],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1204,13 +1221,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1232,7 +1249,7 @@ export const largeConfig = {
         {
             _id: 'ef8c60f834aa4129bc6e1bff9f002483',
             key: 'v-key-30',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -1266,13 +1283,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1294,7 +1311,7 @@ export const largeConfig = {
         {
             _id: '8ae450ec4a7144a89d1910f5811d5765',
             key: 'v-key-24',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -1328,13 +1345,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1352,7 +1369,7 @@ export const largeConfig = {
         {
             _id: '721639272a7b4a39949df3937a909220',
             key: 'v-key-71',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -1386,9 +1403,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_ac43af96-e84a-4446-96b5-093b0f8d8d31',
@@ -1396,7 +1413,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1413,17 +1430,17 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-8',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['t2v2OAaQxGTl'],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1440,17 +1457,17 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-9',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['DGBHUrJge6lf'],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1467,27 +1484,27 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-6',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['iYI6uwZed0ip'],
                                         filters: [],
                                     },
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-10',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['PyPREARJvoiq'],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1504,21 +1521,21 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-6',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['iYI6uwZed0ip'],
                                         filters: [],
                                     },
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-10',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: [
                                             'hOwQX5sV3eMQ',
@@ -1528,7 +1545,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1545,13 +1562,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1569,7 +1586,7 @@ export const largeConfig = {
         {
             _id: 'a95c73790b744750bc760420193b4afb',
             key: 'v-key-74',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -1603,9 +1620,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_c7d9fb50-4ff2-4dcc-bd9e-5608215fdd1b',
@@ -1615,7 +1632,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1632,13 +1649,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1656,7 +1673,7 @@ export const largeConfig = {
         {
             _id: '28e909dd385a4d54ae474419a178f454',
             key: 'v-key-63',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -1690,9 +1707,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_5abf7f9c-34cd-4721-8074-9e5d0aab9839',
@@ -1700,7 +1717,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1717,13 +1734,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1741,7 +1758,7 @@ export const largeConfig = {
         {
             _id: 'fa42c159bf384ed0b8ff69d64301698e',
             key: 'v-key-84',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -1808,27 +1825,27 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-6',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['iYI6uwZed0ip'],
                                         filters: [],
                                     },
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-7',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['3yejExtXkma4'],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1845,13 +1862,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1869,7 +1886,7 @@ export const largeConfig = {
         {
             _id: 'd955caaaea034ed5ade9205f0c5facdc',
             key: 'v-key-78',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -1903,9 +1920,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_5e49ebff-6a63-4935-9ea9-06696211e77f',
@@ -1913,7 +1930,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1930,8 +1947,8 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'audienceMatch',
-                                        comparator: '=',
+                                        type: FilterType.audienceMatch,
+                                        comparator: FilterComparator['='],
                                         _audiences: [
                                             'f4e70df027d945fb8af17bfa8dd48091',
                                         ],
@@ -1939,7 +1956,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1956,11 +1973,11 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-11',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: [
                                             'AXayVhoBs4iX',
@@ -1969,7 +1986,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -1986,13 +2003,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2010,7 +2027,7 @@ export const largeConfig = {
         {
             _id: 'c517267ac9f24125abea1bb67b492c31',
             key: 'v-key-76',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -2044,13 +2061,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2068,7 +2085,7 @@ export const largeConfig = {
         {
             _id: 'e95be3cb00854a4eac04602aff1f8fce',
             key: 'v-key-40',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -2102,13 +2119,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2126,7 +2143,7 @@ export const largeConfig = {
         {
             _id: 'd388e4c438a04c59a08b17f875fa250c',
             key: 'v-key-80',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -2160,11 +2177,11 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-6',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: [
                                             'iYI6uwZed0ip',
@@ -2175,7 +2192,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2192,13 +2209,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2216,7 +2233,7 @@ export const largeConfig = {
         {
             _id: '58f981512ce846ac9d0a02d708f844b7',
             key: 'v-key-56',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -2250,13 +2267,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2274,7 +2291,7 @@ export const largeConfig = {
         {
             _id: '0c358337318e4781bf504ea2700c9616',
             key: 'v-key-21',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'Custom Variation 1',
@@ -2319,13 +2336,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2343,7 +2360,7 @@ export const largeConfig = {
         {
             _id: 'd953bedfa6f24d9a8d99e10e4a895887',
             key: 'v-key-70',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -2377,17 +2394,17 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-8',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['t2v2OAaQxGTl'],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2404,13 +2421,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2428,7 +2445,7 @@ export const largeConfig = {
         {
             _id: '72bffc1b7a634b34afb7df5303c077f5',
             key: 'v-key-57',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -2462,13 +2479,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2486,7 +2503,7 @@ export const largeConfig = {
         {
             _id: 'ad370f277f20436fa72ceb4e40aa4b18',
             key: 'v-key-53',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -2520,17 +2537,17 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-12',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['ZvrTTPCLx00q'],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2547,13 +2564,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2571,7 +2588,7 @@ export const largeConfig = {
         {
             _id: 'e6344409a1ac480ca14b52fb38128bdf',
             key: 'v-key-81',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -2605,11 +2622,11 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-6',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: [
                                             'iYI6uwZed0ip',
@@ -2620,7 +2637,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2637,13 +2654,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2661,7 +2678,7 @@ export const largeConfig = {
         {
             _id: '974836d9868b42cda5dc9de6c1868424',
             key: 'v-key-67',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -2695,17 +2712,17 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-8',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['t2v2OAaQxGTl'],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2722,17 +2739,17 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-6',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['iYI6uwZed0ip'],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2749,13 +2766,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2773,7 +2790,7 @@ export const largeConfig = {
         {
             _id: '3d5211eee2e44062b6033ae2069a77d3',
             key: 'v-key-61',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -2807,11 +2824,11 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-9',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: [
                                             'uRV8gVD4ckHt',
@@ -2825,7 +2842,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2842,17 +2859,17 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-8',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['t2v2OAaQxGTl'],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2869,13 +2886,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2893,7 +2910,7 @@ export const largeConfig = {
         {
             _id: '3e61474d3c11440abfd846407064d5f8',
             key: 'v-key-13',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -2927,21 +2944,21 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-13',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['4u4lVuBudCTB'],
                                         filters: [],
                                     },
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-6',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: [
                                             'iYI6uwZed0ip',
@@ -2952,7 +2969,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2969,13 +2986,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -2993,7 +3010,7 @@ export const largeConfig = {
         {
             _id: 'f5c47b4aad5f41b0ac8f2ebf229a23a0',
             key: 'v-key-20',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'custom-variation-4',
@@ -3027,13 +3044,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3051,7 +3068,7 @@ export const largeConfig = {
         {
             _id: '4dfe3b0e5a784a78b42457e4f6d8b3d9',
             key: 'v-key-65',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -3085,8 +3102,8 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'audienceMatch',
-                                        comparator: '=',
+                                        type: FilterType.audienceMatch,
+                                        comparator: FilterComparator['='],
                                         _audiences: [
                                             'b400f04e086a4e8f9ae7f68920b92fee',
                                             '7db4d6f7e53543e4a413ac539477bac6',
@@ -3096,7 +3113,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3113,11 +3130,11 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-12',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: [
                                             'CXHnwl1TxPmH',
@@ -3133,7 +3150,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3150,8 +3167,8 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'audienceMatch',
-                                        comparator: '=',
+                                        type: FilterType.audienceMatch,
+                                        comparator: FilterComparator['='],
                                         _audiences: [
                                             'a2a331f751914200a8a53b59ae6b7a6f',
                                         ],
@@ -3159,7 +3176,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3180,8 +3197,8 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'audienceMatch',
-                                        comparator: '=',
+                                        type: FilterType.audienceMatch,
+                                        comparator: FilterComparator['='],
                                         _audiences: [
                                             'e757fc6a16924b2ab5a95c00d609ab14',
                                         ],
@@ -3189,7 +3206,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3210,13 +3227,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3238,7 +3255,7 @@ export const largeConfig = {
         {
             _id: 'c20d0f33a9954c74ace098d83cc23595',
             key: 'v-key-22',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -3272,9 +3289,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_91ac71cb-5fec-48e1-b320-3f03add4c1a3',
@@ -3283,7 +3300,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3300,13 +3317,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3324,7 +3341,7 @@ export const largeConfig = {
         {
             _id: '846f328e7f054df2bc10c14a902e249e',
             key: 'v-key-75',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -3358,9 +3375,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_8a834e64-50ce-4bf9-9bb1-4bacb3b3094c',
@@ -3368,7 +3385,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3385,8 +3402,8 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'audienceMatch',
-                                        comparator: '=',
+                                        type: FilterType.audienceMatch,
+                                        comparator: FilterComparator['='],
                                         _audiences: [
                                             '7db4d6f7e53543e4a413ac539477bac6',
                                             '145f66b2bfce4e7e9c8bd3a432e28c8d',
@@ -3395,7 +3412,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3412,13 +3429,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3436,7 +3453,7 @@ export const largeConfig = {
         {
             _id: '754debbc86e949e697927d9245711bf2',
             key: 'v-key-83',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -3536,9 +3553,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_5239eab2-74d6-4f4a-91a3-d527430ddb28',
@@ -3546,7 +3563,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3563,13 +3580,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3587,7 +3604,7 @@ export const largeConfig = {
         {
             _id: '420bcc3afca14766a7973755c3056b56',
             key: 'v-key-68',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -3621,13 +3638,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3649,7 +3666,7 @@ export const largeConfig = {
         {
             _id: '003efaabbd914e18831fa9b4532ecc9c',
             key: 'v-key-60',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'custom-variation-6',
@@ -3694,9 +3711,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_15fa0542-645a-4529-8201-c175fa4ae07e',
@@ -3705,7 +3722,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3722,9 +3739,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_0dcea18c-74c0-4872-a98a-b8d67eeadfc5',
@@ -3732,7 +3749,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3749,13 +3766,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3773,7 +3790,7 @@ export const largeConfig = {
         {
             _id: '00d806689ddd4a939137bc6619765527',
             key: 'v-key-64',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -3807,9 +3824,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_b401a363-1198-49b4-b334-8b7e78c9002d',
@@ -3817,7 +3834,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3834,13 +3851,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3858,7 +3875,7 @@ export const largeConfig = {
         {
             _id: '034e54c0a97d4b6691306a7657463a47',
             key: 'v-key-44',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -3892,11 +3909,11 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-9',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: [
                                             's4LzMhHxoxSK',
@@ -3909,7 +3926,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3926,17 +3943,17 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-8',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['t2v2OAaQxGTl'],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3953,13 +3970,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -3977,7 +3994,7 @@ export const largeConfig = {
         {
             _id: 'c52345616bbd45a2a388577372323630',
             key: 'v-key-82',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'custom-variation-9',
@@ -4011,9 +4028,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_165ae139-0716-4376-9163-2ec0bd38dc1e',
@@ -4025,7 +4042,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4042,13 +4059,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4066,7 +4083,7 @@ export const largeConfig = {
         {
             _id: '26bb8a138873483ca78397d25047b67f',
             key: 'v-key-38',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -4100,9 +4117,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_e7dc4f86-361c-4953-8ec9-ea83d0b2bcee',
@@ -4119,7 +4136,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4136,13 +4153,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4160,7 +4177,7 @@ export const largeConfig = {
         {
             _id: 'ea3d10c1d635493d9973da58362d2a27',
             key: 'v-key-52',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -4194,13 +4211,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4218,7 +4235,7 @@ export const largeConfig = {
         {
             _id: '5135955a5a6641fbb735e95eb1b37e99',
             key: 'v-key-77',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -4252,8 +4269,8 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'audienceMatch',
-                                        comparator: '=',
+                                        type: FilterType.audienceMatch,
+                                        comparator: FilterComparator['='],
                                         _audiences: [
                                             'b400f04e086a4e8f9ae7f68920b92fee',
                                         ],
@@ -4261,7 +4278,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4278,11 +4295,11 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-12',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: [
                                             'CXHnwl1TxPmH',
@@ -4298,7 +4315,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4315,13 +4332,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4343,7 +4360,7 @@ export const largeConfig = {
         {
             _id: '182936bccd6a4c72b823c892f3f15164',
             key: 'v-key-15',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -4377,9 +4394,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_945504bf-0c4a-47cc-ba14-a2a07dac99cd',
@@ -4394,7 +4411,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4411,13 +4428,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4435,7 +4452,7 @@ export const largeConfig = {
         {
             _id: '838c84e8b83c407b93003cc766f8bed8',
             key: 'v-key-12',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -4469,9 +4486,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_7c18a302-1036-4d46-bea8-2411fa9e612f',
@@ -4487,7 +4504,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4504,13 +4521,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4528,7 +4545,7 @@ export const largeConfig = {
         {
             _id: '54c6024646fa4a39923c66a3d4de93af',
             key: 'v-key-17',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -4562,9 +4579,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_2d267659-ac0e-4277-87aa-3f7296a4aa72',
@@ -4578,7 +4595,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4595,13 +4612,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4619,7 +4636,7 @@ export const largeConfig = {
         {
             _id: '0050d463494b4ec3bd07a58a95ab50a6',
             key: 'v-key-62',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -4653,13 +4670,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4677,7 +4694,7 @@ export const largeConfig = {
         {
             _id: '438667fdb82c4f9aa52b826fcb99df13',
             key: 'v-key-14',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -4711,9 +4728,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_11daf353-2fa7-4704-95fa-f2551b4c3199',
@@ -4722,7 +4739,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4739,13 +4756,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4763,7 +4780,7 @@ export const largeConfig = {
         {
             _id: 'e448205339e0480399a4dc01f4dc8184',
             key: 'v-key-39',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -4797,9 +4814,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_f5c8e4b2-8838-4f70-8724-ea2766485ed4',
@@ -4808,7 +4825,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4825,13 +4842,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4849,7 +4866,7 @@ export const largeConfig = {
         {
             _id: 'fe9b45f8730d411a8e3e73a04111ba4f',
             key: 'v-key-23',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -4883,13 +4900,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4907,7 +4924,7 @@ export const largeConfig = {
         {
             _id: '46c1012ddb224cf38fe17b0dbbca6549',
             key: 'v-key-59',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -4941,13 +4958,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -4965,7 +4982,7 @@ export const largeConfig = {
         {
             _id: '1d6227b48f244d629c521256335593f4',
             key: 'v-key-6',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -4999,13 +5016,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5023,7 +5040,7 @@ export const largeConfig = {
         {
             _id: 'a1a5e7d97dda42f6b6a64e30d6490803',
             key: 'v-key-34',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'custom-variation-9',
@@ -5079,8 +5096,8 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'audienceMatch',
-                                        comparator: '=',
+                                        type: FilterType.audienceMatch,
+                                        comparator: FilterComparator['='],
                                         _audiences: [
                                             '929a3f351a6249c68ca17133ab661ca7',
                                         ],
@@ -5088,7 +5105,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5105,11 +5122,11 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-11',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: [
                                             'uE5OJ7NUmPbH',
@@ -5123,7 +5140,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5140,13 +5157,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5164,7 +5181,7 @@ export const largeConfig = {
         {
             _id: 'e6b49849a4dd46dd836836b30f3185f0',
             key: 'v-key-85',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -5198,13 +5215,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5222,7 +5239,7 @@ export const largeConfig = {
         {
             _id: '6f94855fdde840f99b2b7fa894fddc47',
             key: 'v-key-72',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -5256,13 +5273,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5280,7 +5297,7 @@ export const largeConfig = {
         {
             _id: 'aa7aed5c5fc54beaae86daf6182de370',
             key: 'v-key-45',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -5314,13 +5331,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5338,7 +5355,7 @@ export const largeConfig = {
         {
             _id: 'cecdaf3f6db84d9da84ca6a5775bea1c',
             key: 'v-key-66',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -5372,17 +5389,17 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-12',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['UcPbSGx0qXYh'],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5399,8 +5416,8 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'audienceMatch',
-                                        comparator: '=',
+                                        type: FilterType.audienceMatch,
+                                        comparator: FilterComparator['='],
                                         _audiences: [
                                             '7db4d6f7e53543e4a413ac539477bac6',
                                             '145f66b2bfce4e7e9c8bd3a432e28c8d',
@@ -5409,7 +5426,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5426,13 +5443,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5454,7 +5471,7 @@ export const largeConfig = {
         {
             _id: 'c2dbde9797d74836b3d347ff342cc4bf',
             key: 'v-key-43',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -5488,13 +5505,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5512,7 +5529,7 @@ export const largeConfig = {
         {
             _id: 'b630db97fe234a6280f3ad7a28eef7bf',
             key: 'v-key-5',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -5546,8 +5563,8 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'audienceMatch',
-                                        comparator: '=',
+                                        type: FilterType.audienceMatch,
+                                        comparator: FilterComparator['='],
                                         _audiences: [
                                             '7db4d6f7e53543e4a413ac539477bac6',
                                         ],
@@ -5555,11 +5572,11 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: 'contain',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['contain'],
                                         dataKey: 'data-key-12',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: [
                                             'WQwnaM2S2Cgi',
@@ -5570,7 +5587,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5587,13 +5604,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5611,7 +5628,7 @@ export const largeConfig = {
         {
             _id: '88be649a5f564321acfa35b98049d8db',
             key: 'v-key-58',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -5645,13 +5662,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5669,7 +5686,7 @@ export const largeConfig = {
         {
             _id: '56ba393d7ad04efe9b00fc200528ec8e',
             key: 'v-key-9',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'Custom Variation 16',
@@ -5736,17 +5753,17 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-8',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['t2v2OAaQxGTl'],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5763,8 +5780,8 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'audienceMatch',
-                                        comparator: '=',
+                                        type: FilterType.audienceMatch,
+                                        comparator: FilterComparator['='],
                                         _audiences: [
                                             'a2a331f751914200a8a53b59ae6b7a6f',
                                             '145f66b2bfce4e7e9c8bd3a432e28c8d',
@@ -5773,7 +5790,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5806,11 +5823,11 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-12',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: [
                                             'Sr655QAjskJ0',
@@ -5917,7 +5934,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5950,13 +5967,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -5974,7 +5991,7 @@ export const largeConfig = {
         {
             _id: 'dc913cc3bbcc4ed89b28f862fa9e406b',
             key: 'v-key-3',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -6008,9 +6025,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_d4890258-c74a-47cb-95e7-e06e1bf37eec',
@@ -6018,7 +6035,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6035,13 +6052,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6059,7 +6076,7 @@ export const largeConfig = {
         {
             _id: '7ba41ece0e68430ebb4dbdffeaf99640',
             key: 'v-key-41',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -6093,13 +6110,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6117,7 +6134,7 @@ export const largeConfig = {
         {
             _id: 'da94d550950649be9d46f8d132e03a15',
             key: 'v-key-42',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -6151,11 +6168,11 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-6',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: [
                                             'iYI6uwZed0ip',
@@ -6164,7 +6181,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6181,17 +6198,17 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'customData',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.customData,
+                                        comparator: FilterComparator['='],
                                         dataKey: 'data-key-6',
-                                        dataKeyType: 'String',
+                                        dataKeyType: DataKeyType.string,
                                         _audiences: [],
                                         values: ['h6fCse1VCIo1'],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6208,13 +6225,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6232,7 +6249,7 @@ export const largeConfig = {
         {
             _id: '7dc85a8c34e14e3e9a40d1aa66e14370',
             key: 'v-key-8',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -6277,13 +6294,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6301,7 +6318,7 @@ export const largeConfig = {
         {
             _id: '1a5969cca89e4f3dbf9afd73ee76e5f9',
             key: 'v-key-10',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -6335,13 +6352,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6359,7 +6376,7 @@ export const largeConfig = {
         {
             _id: '15707ba401f8403c95fec7f7be771fc4',
             key: 'v-key-28',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -6393,9 +6410,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_8767c5da-48d9-4b62-9645-c6bda3ff013b',
@@ -6403,7 +6420,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6420,13 +6437,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6444,7 +6461,7 @@ export const largeConfig = {
         {
             _id: '969e5412f49f498c9e0b436dc5d3ff07',
             key: 'v-key-50',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -6478,9 +6495,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_431a7ba3-32a2-40e8-ac42-ed2934422a5b',
@@ -6489,7 +6506,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6506,13 +6523,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6530,7 +6547,7 @@ export const largeConfig = {
         {
             _id: '90d0c0a3cf7e46928c5b5f9b6d5e3d95',
             key: 'v-key-11',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -6564,13 +6581,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6588,7 +6605,7 @@ export const largeConfig = {
         {
             _id: '2bf49ec8a49c4a02a85dbc09ee5e57cd',
             key: 'v-key-7',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -6622,13 +6639,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6646,7 +6663,7 @@ export const largeConfig = {
         {
             _id: 'e21fcbcbed0c422c8200392dd15965cf',
             key: 'v-key-55',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'custom-variation-9',
@@ -6680,13 +6697,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6704,7 +6721,7 @@ export const largeConfig = {
         {
             _id: '5bcc2b767b3c48d780fc380df5641b9a',
             key: 'v-key-31',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'custom-variation-23',
@@ -6738,13 +6755,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6762,7 +6779,7 @@ export const largeConfig = {
         {
             _id: '1b9f59cdbc034b67af4b8bb4ad6ac873',
             key: 'v-key-19',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'production',
@@ -6796,13 +6813,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6820,7 +6837,7 @@ export const largeConfig = {
         {
             _id: 'd47f7d1219af404793c6f0bf4b0d69e0',
             key: 'v-key-33',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -6854,9 +6871,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_745163fe-e68f-4b39-af9a-d3a45ef19f8a',
@@ -6867,7 +6884,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6884,9 +6901,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_ab1e90d1-07c0-48c6-9994-6e19538c7c1d',
@@ -6896,7 +6913,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6913,13 +6930,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6937,7 +6954,7 @@ export const largeConfig = {
         {
             _id: '6ddad376c4314a38b485d7e60f85067f',
             key: 'v-key-2',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -6971,9 +6988,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_8a6015f1-5b84-406e-ad04-8556709f4d2a',
@@ -6981,7 +6998,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -6998,13 +7015,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -7022,7 +7039,7 @@ export const largeConfig = {
         {
             _id: '34f2429ea6a6424e88a67edd9faf4999',
             key: 'v-key-32',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -7056,9 +7073,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_745163fe-e68f-4b39-af9a-d3a45ef19f8a',
@@ -7072,7 +7089,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -7089,13 +7106,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -7113,7 +7130,7 @@ export const largeConfig = {
         {
             _id: 'bca09157d4844297b40015f4a2ce7f0d',
             key: 'v-key-51',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-1',
@@ -7147,9 +7164,9 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'user',
-                                        subType: 'user_id',
-                                        comparator: '=',
+                                        type: FilterType.user,
+                                        subType: UserSubType.user_id,
+                                        comparator: FilterComparator['='],
                                         _audiences: [],
                                         values: [
                                             'user_431a7ba3-32a2-40e8-ac42-ed2934422a5b',
@@ -7158,7 +7175,7 @@ export const largeConfig = {
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -7175,13 +7192,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -7199,7 +7216,7 @@ export const largeConfig = {
         {
             _id: '34a862d982dd44ed8f61bf5b81453734',
             key: 'v-key-4',
-            type: 'release',
+            type: FeatureType.release,
             variations: [
                 {
                     key: 'variation-on',
@@ -7233,13 +7250,13 @@ export const largeConfig = {
                             filters: {
                                 filters: [
                                     {
-                                        type: 'all',
+                                        type: FilterType.all,
                                         _audiences: [],
                                         values: [],
                                         filters: [],
                                     },
                                 ],
-                                operator: 'and',
+                                operator: AudienceOperator.and,
                             },
                         },
                         distribution: [
@@ -7259,427 +7276,427 @@ export const largeConfig = {
         {
             _id: '438a470309594543a140ffe97d732edb',
             key: 'v-key-1',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'd79206e8247e409e9749ad77057c4390',
             key: 'v-key-2',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '46c5fa9a964b463da03e97cfbe1be8be',
             key: 'v-key-3',
-            type: 'String',
+            type: VariableType.string,
         },
         {
             _id: '5594b6945cf2499a93f0626c5d82dcfd',
             key: 'v-key-4',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: 'b86026dbdea34ec09ef4adfc9734a4dc',
             key: 'v-key-5',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '3a85728d85fa430cbc6f8cfbc8b46451',
             key: 'v-key-6',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '49b2bb0ba51541b693a3921a1b0bc09f',
             key: 'v-key-7',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '11cd6e9c3e604ee787b5bbdb1eb15ff4',
             key: 'v-key-8',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: '8aa609cb010e46dcbaebdd14d319ce4a',
             key: 'v-key-9',
-            type: 'String',
+            type: VariableType.string,
         },
         {
             _id: '77c6940f85ae48119b0317b98e7fd92b',
             key: 'v-key-10',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: 'c21628fe66834e1a97048e904a85cd87',
             key: 'v-key-11',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'c47307dac00744cfa621b443e373ba8c',
             key: 'v-key-12',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '851ab1e228c346299dbaa6e2ed4e8d30',
             key: 'v-key-13',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'ebc12f6619a24fd797511492e8dc2dc9',
             key: 'v-key-14',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: 'a5b4ae7378014b8b86fec0e50a5b1d11',
             key: 'v-key-15',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'c5afa9e7e40c4214ac8bfa33a24ea41e',
             key: 'v-key-16',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '3448b5ba369c4aca8c3b32995559e6d7',
             key: 'v-key-17',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'cb548e9e31a943c6ad921a995e6931bf',
             key: 'v-key-18',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '3e25826ff35e4dd28ae11521e9f823a3',
             key: 'v-key-19',
-            type: 'String',
+            type: VariableType.string,
         },
         {
             _id: '6e5993c7b38d4945bb3fa15287a9988b',
             key: 'v-key-20',
-            type: 'String',
+            type: VariableType.string,
         },
         {
             _id: '48a1825684a341c3922ca93d4b0e046a',
             key: 'v-key-21',
-            type: 'String',
+            type: VariableType.string,
         },
         {
             _id: '2b682f1f92fa42c190324fff0c565efa',
             key: 'v-key-22',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '5f21eead3180485e906a7f890a823a4a',
             key: 'v-key-23',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '0c2c1c562b2d4b9196ed7dae1851694c',
             key: 'v-key-24',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '564e5883c09f4eda8c4d438218e80cf4',
             key: 'v-key-25',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'fe699eb0c3914a74acaed8757aa40005',
             key: 'v-key-26',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'c8f6799f02604a1c9ec96df4145caa8f',
             key: 'v-key-27',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '8a07b060a32c4e26acc0d04da832001f',
             key: 'v-key-28',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '06526b304eb14f4ebcb222b84ff0da27',
             key: 'v-key-29',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '7172c772d5a743dbb86951ec9f661d77',
             key: 'v-key-30',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '0b3990b60cf34ee980b423a633c5210c',
             key: 'v-key-31',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: '320e995007a24995b2589362f8b03cae',
             key: 'v-key-32',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'd9d3828077474b999c075e2a3e5e968e',
             key: 'v-key-33',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'f2a8f035eb7748b98c1693304bb01fc6',
             key: 'v-key-34',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: 'c1ed742bf0fb49789af284afa6d3c143',
             key: 'v-key-35',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: '8a4b14096f594212af40f74deb4e35a8',
             key: 'v-key-36',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '812bd49a1a24499f93d478d4cf121a2e',
             key: 'v-key-37',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'c37d06749b794878b5b78489b9665f11',
             key: 'v-key-38',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '0b296762cbf84cb7b5fedefce0467834',
             key: 'v-key-39',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '4f84abe8f3134a2da9035de370e106c2',
             key: 'v-key-40',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '70f1fb33230944b28f08b333a761b345',
             key: 'v-key-41',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'fd121aea5b22424688750cb224709ed7',
             key: 'v-key-42',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'cd127c5e6d3e43c1b503a2943b537c41',
             key: 'v-key-43',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: 'ff6bcafe19f8448f89136588f31d2859',
             key: 'v-key-44',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '8e2af859c11348b9a90ffdb620e9111a',
             key: 'v-key-45',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'a37c245fdddc40c9a37beb0bc1343347',
             key: 'v-key-46',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '90e5cf50ed2645d3867e773a3536fd62',
             key: 'v-key-47',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'e373e7a6dd704c0cafdc1d25101ea9ae',
             key: 'v-key-48',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '69e89ca7227d4f2ca91e20a2c4306fc5',
             key: 'v-key-49',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'a5a16cacfc71462e9184b1b1c252283e',
             key: 'v-key-50',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '0f648861e13e4d2eb6fb4aa8b1595402',
             key: 'v-key-51',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '4527054945a041bfb64672ecd7149b69',
             key: 'v-key-52',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '8066b5804a9f451bb6011af19e39e75e',
             key: 'v-key-53',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'fea764079b614314ac640bc0ea4463e6',
             key: 'v-key-54',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '4498aeafc1a44e5f8b66523f0b61cd2c',
             key: 'v-key-55',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: '77702fd7feb448e5942859b448e918c8',
             key: 'v-key-56',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: 'fcfbfb097fd4479496a21351dfbf8c60',
             key: 'v-key-57',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: 'f593910949e2438dac5fd6dcf0d43912',
             key: 'v-key-58',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '6951341207c14a2bb62940bcffbc6da6',
             key: 'v-key-59',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '917f5a4d089c400e86a6db867d3a752b',
             key: 'v-key-60',
-            type: 'String',
+            type: VariableType.string,
         },
         {
             _id: '44960795efff4210a5e7510f8ef6940d',
             key: 'v-key-61',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '55b371985ca0490f94fcf407c656737d',
             key: 'v-key-62',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '8cde1e4dc44741008defa79f8905f8f1',
             key: 'v-key-63',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'dc5eff4ddca2474ca83930d57752ddfe',
             key: 'v-key-64',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '22d1531da708470c8d16d3ebefce269b',
             key: 'v-key-65',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '109f4134efc64f8b83f5a22e0c4636bc',
             key: 'v-key-66',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '761bc57f612d4e71b69e18c26f32715f',
             key: 'v-key-67',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: '0933c3fd3a36449bb3b93f16fdb36aa2',
             key: 'v-key-68',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '3093fbcf12aa4494a2ac3d42c8e2f9c8',
             key: 'v-key-69',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '5b1fbfa669854da185dd66890f06ba3e',
             key: 'v-key-70',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '698aee1469ca4e48b286f11ba25aa44f',
             key: 'v-key-71',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'e5ad1e1f94714c359ae1fe1518c9a040',
             key: 'v-key-72',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '50d74d330a844b9894fb080623f71061',
             key: 'v-key-73',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'e407b156ae4b42b9b570990add98a284',
             key: 'v-key-74',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '5dc07eb3117c4dc9a4d244448079f396',
             key: 'v-key-75',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'deee697635a54fe0bc98a50afdc6f4b7',
             key: 'v-key-76',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: 'acd3fda7a24144249fb2c1e61482e53d',
             key: 'v-key-77',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'aeed0f6cc51042a8965e4a702f993757',
             key: 'v-key-78',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '19a39391cca946bcb748efebf6dc1615',
             key: 'v-key-79',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: '8680dd624dd14418b3fae7d9ba92ec1f',
             key: 'v-key-80',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'ec06b4b075b14b01a337adfcf55869cc',
             key: 'v-key-81',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
         {
             _id: 'b9a677aeb53d43a581b774ec714ac9d8',
             key: 'v-key-82',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: '202a6f34d0e64621993cf4075cb1cc5d',
             key: 'v-key-83',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: '90defac9e63748688e0e2fe62da64dbc',
             key: 'v-key-84',
-            type: 'Number',
+            type: VariableType.number,
         },
         {
             _id: '5bc4c6ac17024d63bcb69e723db87c35',
             key: 'v-key-85',
-            type: 'Boolean',
+            type: VariableType.boolean,
         },
     ],
     variableHashes: {
@@ -7774,77 +7791,77 @@ export const largeConfig = {
             filters: {
                 filters: [
                     {
-                        type: 'user',
-                        subType: 'customData',
-                        comparator: 'contain',
+                        type: FilterType.user,
+                        subType: UserSubType.customData,
+                        comparator: FilterComparator['contain'],
                         dataKey: 'data-key-1',
-                        dataKeyType: 'String',
+                        dataKeyType: DataKeyType.string,
                         _audiences: [],
                         values: ['JH0EYYW1xW0i'],
                         filters: [],
                     },
                 ],
-                operator: 'or',
+                operator: AudienceOperator.or,
             },
         },
         '145f66b2bfce4e7e9c8bd3a432e28c8d': {
             filters: {
                 filters: [
                     {
-                        type: 'user',
-                        subType: 'customData',
-                        comparator: 'contain',
+                        type: FilterType.user,
+                        subType: UserSubType.customData,
+                        comparator: FilterComparator['contain'],
                         dataKey: 'data-key-1',
-                        dataKeyType: 'String',
+                        dataKeyType: DataKeyType.string,
                         _audiences: [],
                         values: ['A8fuyGtFteKa'],
                         filters: [],
                     },
                 ],
-                operator: 'or',
+                operator: AudienceOperator.or,
             },
         },
         e757fc6a16924b2ab5a95c00d609ab14: {
             filters: {
                 filters: [
                     {
-                        type: 'user',
-                        subType: 'customData',
-                        comparator: 'contain',
+                        type: FilterType.user,
+                        subType: UserSubType.customData,
+                        comparator: FilterComparator['contain'],
                         dataKey: 'data-key-1',
-                        dataKeyType: 'String',
+                        dataKeyType: DataKeyType.string,
                         _audiences: [],
                         values: ['uCQ2D5q3q8nl'],
                         filters: [],
                     },
                 ],
-                operator: 'or',
+                operator: AudienceOperator.or,
             },
         },
         '7db4d6f7e53543e4a413ac539477bac6': {
             filters: {
                 filters: [
                     {
-                        type: 'user',
-                        subType: 'customData',
-                        comparator: '=',
+                        type: FilterType.user,
+                        subType: UserSubType.customData,
+                        comparator: FilterComparator['='],
                         dataKey: 'data-key-1',
-                        dataKeyType: 'String',
+                        dataKeyType: DataKeyType.string,
                         _audiences: [],
                         values: ['tTIjwEEOqp4f', 'UjMSlpr0rybV'],
                         filters: [],
                     },
                 ],
-                operator: 'or',
+                operator: AudienceOperator.or,
             },
         },
         f4e70df027d945fb8af17bfa8dd48091: {
             filters: {
                 filters: [
                     {
-                        type: 'user',
-                        subType: 'user_id',
-                        comparator: '=',
+                        type: FilterType.user,
+                        subType: UserSubType.user_id,
+                        comparator: FilterComparator['='],
                         _audiences: [],
                         values: [
                             'user_db29e033-8bce-4c9f-802b-956c7cb8f62c',
@@ -7861,18 +7878,18 @@ export const largeConfig = {
                         filters: [],
                     },
                 ],
-                operator: 'or',
+                operator: AudienceOperator.or,
             },
         },
         b400f04e086a4e8f9ae7f68920b92fee: {
             filters: {
                 filters: [
                     {
-                        type: 'user',
-                        subType: 'customData',
-                        comparator: '=',
+                        type: FilterType.user,
+                        subType: UserSubType.customData,
+                        comparator: FilterComparator['='],
                         dataKey: 'data-key-11',
-                        dataKeyType: 'String',
+                        dataKeyType: DataKeyType.string,
                         _audiences: [],
                         values: [
                             'user_91ac71cb-5fec-48e1-b320-3f03add4c1a3',
@@ -7902,26 +7919,26 @@ export const largeConfig = {
                         filters: [],
                     },
                     {
-                        type: 'user',
-                        subType: 'customData',
-                        comparator: 'contain',
+                        type: FilterType.user,
+                        subType: UserSubType.customData,
+                        comparator: FilterComparator['contain'],
                         dataKey: 'data-key-5',
-                        dataKeyType: 'String',
+                        dataKeyType: DataKeyType.string,
                         _audiences: [],
                         values: ['Fi3J4K9v6e5w'],
                         filters: [],
                     },
                 ],
-                operator: 'or',
+                operator: AudienceOperator.or,
             },
         },
         '929a3f351a6249c68ca17133ab661ca7': {
             filters: {
                 filters: [
                     {
-                        type: 'user',
-                        subType: 'user_id',
-                        comparator: '=',
+                        type: FilterType.user,
+                        subType: UserSubType.user_id,
+                        comparator: FilterComparator['='],
                         _audiences: [],
                         values: [
                             'user_323f4748-80f2-4930-a34b-716294720723',
@@ -7931,7 +7948,7 @@ export const largeConfig = {
                         filters: [],
                     },
                 ],
-                operator: 'or',
+                operator: AudienceOperator.or,
             },
         },
     },

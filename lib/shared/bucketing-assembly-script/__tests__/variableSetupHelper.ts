@@ -10,9 +10,9 @@ import {
     VariableType,
 } from './bucketingImportHelper'
 import { variableForUserPB } from './protobufVariableHelper'
-import { SDKVariable } from '@devcycle/types'
+import { ConfigBody, SDKVariable } from '@devcycle/types'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
-const { config } = testData
+const config = testData.config as ConfigBody
 
 type VariableForUserOptions = {
     sdkKey?: string
@@ -85,7 +85,7 @@ export const variableForUserPreallocated = ({
 export const initSDK = (
     sdkKey = 'sdkKey',
     clientUUID = 'uuid',
-    projectConfig = config,
+    projectConfig: ConfigBody = config,
 ): void => {
     initEventQueue(sdkKey, clientUUID, JSON.stringify({}))
     setPlatformData(
