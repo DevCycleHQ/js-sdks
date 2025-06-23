@@ -6,7 +6,6 @@ import {
     variableForUser,
     variableForUser_PB,
 } from '../__tests__/variableSetupHelper'
-import { ConfigBody } from '@devcycle/types'
 import {
     initialize,
     VariableType,
@@ -18,9 +17,9 @@ import {
 } from '../__tests__/bucketingImportHelper'
 import largeTestData from '@devcycle/bucketing-test-data/json-data/largeConfig.json'
 import testData from '@devcycle/bucketing-test-data/json-data/testData.json'
-const { config } = testData
-
-const largeConfig = largeTestData.largeConfig as unknown as ConfigBody
+import { ConfigBody } from '@devcycle/types'
+const config = testData.config as ConfigBody
+const largeConfig = largeTestData.largeConfig as ConfigBody
 
 const user = {
     user_id: 'asuh',
