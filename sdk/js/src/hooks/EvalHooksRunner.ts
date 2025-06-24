@@ -7,7 +7,7 @@ import { DVCLogger } from '@devcycle/types'
 
 export class EvalHooksRunner {
     constructor(
-        private readonly hooks: EvalHook<DVCVariableValue>[] = [],
+        private hooks: EvalHook<DVCVariableValue>[] = [],
         private readonly logger?: DVCLogger,
     ) {}
 
@@ -100,5 +100,9 @@ export class EvalHooksRunner {
 
     enqueue(hook: EvalHook<DVCVariableValue>): void {
         this.hooks.push(hook)
+    }
+
+    clear(): void {
+        this.hooks = []
     }
 }

@@ -12,6 +12,7 @@ import type {
     SSEConnectionConstructor,
     EvalReason,
 } from '@devcycle/types'
+import { EvalHook } from './hooks/EvalHook'
 export { UserError } from '@devcycle/types'
 
 export type DVCVariableValue = VariableValue
@@ -141,6 +142,11 @@ export interface DevCycleOptions {
      * Example values ('of' for OpenFeature): 'js' | 'react' | 'react-native' | 'nextjs' | 'js-of' | 'react-of'
      */
     sdkPlatform?: string
+
+    /**
+     * A list of hooks to run before and after the variable evaluation.
+     */
+    hooks?: EvalHook<DVCVariableValue>[]
 }
 
 export interface DevCycleUser<T extends DVCCustomDataJSON = DVCCustomDataJSON> {

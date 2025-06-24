@@ -132,7 +132,7 @@ export class DevCycleClient<
 
         this.sdkKey = sdkKey
         this.variableDefaultMap = {}
-        this.evalHooksRunner = new EvalHooksRunner()
+        this.evalHooksRunner = new EvalHooksRunner(options.hooks)
 
         if (
             !(
@@ -783,6 +783,10 @@ export class DevCycleClient<
 
     addHook(hook: EvalHook<DVCVariableValue>): void {
         this.evalHooksRunner.enqueue(hook)
+    }
+
+    clearHooks(): void {
+        this.evalHooksRunner.clear()
     }
 
     private handleConfigReceived(

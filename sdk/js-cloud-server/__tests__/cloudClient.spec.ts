@@ -540,4 +540,51 @@ describe('DevCycleCloudClient with Hooks', () => {
         expect(onFinally).toHaveBeenCalled()
         expect(error).toHaveBeenCalled()
     })
+
+    it('should clear hooks', async () => {
+        const user = {
+            user_id: 'node_sdk_test',
+            country: 'CA',
+        }
+        const before = jest.fn()
+        const after = jest.fn()
+        const onFinally = jest.fn()
+        const error = jest.fn()
+        client.addHook(new EvalHook(before, after, onFinally, error))
+        client.clearHooks()
+        const variable = await client.variable(user, 'test-key', false)
+        expect(variable.value).toEqual(true)
+        expect(before).not.toHaveBeenCalled()
+        expect(after).not.toHaveBeenCalled()
+        expect(onFinally).not.toHaveBeenCalled()
+        expect(error).not.toHaveBeenCalled()
+    })
+
+    it('should run hooks when variable is evaluated with hooks option', async () => {
+        const before = jest.fn()
+        const after = jest.fn()
+        const onFinally = jest.fn()
+        const error = jest.fn()
+        const clientWithHooks = DVC.initializeDevCycle('dvc_server_token', {
+            logLevel: 'error',
+            hooks: [
+                {
+                    before,
+                    after,
+                    onFinally,
+                    error,
+                },
+            ],
+        })
+        const user = {
+            user_id: 'node_sdk_test',
+            country: 'CA',
+        }
+        const variable = await clientWithHooks.variable(user, 'test-key', false)
+        expect(variable.value).toEqual(true)
+        expect(before).toHaveBeenCalled()
+        expect(after).toHaveBeenCalled()
+        expect(onFinally).toHaveBeenCalled()
+        expect(error).not.toHaveBeenCalled()
+    })
 })
