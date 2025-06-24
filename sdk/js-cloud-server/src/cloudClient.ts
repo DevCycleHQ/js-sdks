@@ -31,6 +31,7 @@ import { DevCycleUser } from './models/user'
 import { ResponseError } from '@devcycle/server-request'
 import { EvalHooksRunner } from './hooks/EvalHooksRunner'
 import { EvalHook } from './hooks/EvalHook'
+import { DevCycleCloudOptions } from '.'
 
 const castIncomingUser = (user: DevCycleUser) => {
     if (!(user instanceof DevCycleUser)) {
@@ -78,13 +79,13 @@ export class DevCycleCloudClient<
 > {
     private sdkKey: string
     protected logger: DVCLogger
-    private options: DevCycleServerSDKOptions
+    private options: DevCycleCloudOptions
     protected platformDetails: DevCyclePlatformDetails
     private hooksRunner: EvalHooksRunner
 
     constructor(
         sdkKey: string,
-        options: DevCycleServerSDKOptions,
+        options: DevCycleCloudOptions,
         platformDetails: DevCyclePlatformDetails,
     ) {
         this.sdkKey = sdkKey
@@ -92,7 +93,7 @@ export class DevCycleCloudClient<
             options.logger || dvcDefaultLogger({ level: options.logLevel })
         this.options = options
         this.platformDetails = platformDetails
-        this.hooksRunner = new EvalHooksRunner()
+        this.hooksRunner = new EvalHooksRunner(options.hooks)
         this.logger.info('Running DevCycle NodeJS SDK in Cloud Bucketing mode')
     }
 
