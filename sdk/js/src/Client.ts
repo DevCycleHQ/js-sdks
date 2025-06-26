@@ -24,7 +24,12 @@ import type {
     VariableDefinitions,
     VariableTypeAlias,
 } from '@devcycle/types'
-import { getVariableTypeFromValue } from '@devcycle/types'
+import {
+    DEFAULT_REASON_DETAILS,
+    EVAL_REASON_DETAILS,
+    EVAL_REASONS,
+    getVariableTypeFromValue,
+} from '@devcycle/types'
 import { ConfigRequestConsolidator } from './ConfigRequestConsolidator'
 import { dvcDefaultLogger } from './logger'
 import type { DVCLogger, SSEConnectionInterface } from '@devcycle/types'
@@ -360,6 +365,15 @@ export class DevCycleClient<
                     this.logger.warn(
                         `Type mismatch for variable ${key}. Expected ${type}, got ${configVariable.type}`,
                     )
+                    data.eval = {
+                        reason: EVAL_REASONS.DEFAULT,
+                        details: DEFAULT_REASON_DETAILS.TYPE_MISMATCH,
+                    }
+                }
+            } else {
+                data.eval = {
+                    reason: EVAL_REASONS.DEFAULT,
+                    details: DEFAULT_REASON_DETAILS.USER_NOT_TARGETED,
                 }
             }
 
@@ -395,6 +409,7 @@ export class DevCycleClient<
                         this.logger,
                     ),
                     _variable: variableFromConfig?._id,
+                    eval: variable.eval,
                 },
             })
         } catch (e) {

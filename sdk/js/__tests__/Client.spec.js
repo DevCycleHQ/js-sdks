@@ -38,6 +38,11 @@ const testConfig = {
             value: 'value1',
             type: 'String',
             default_value: 'default_value',
+            eval: {
+                reason: 'TARGETING_MATCH',
+                details: 'User ID',
+                target_id: 'test_target_id',
+            },
         },
     },
 }
@@ -380,6 +385,10 @@ describe('DevCycleClient tests', () => {
                     value: 'should fallback to this',
                     type: 'String',
                     _variable: undefined,
+                    eval: {
+                        reason: 'DEFAULT',
+                        details: 'User Not Targeted',
+                    },
                 },
                 date: expect.any(Number),
             })
@@ -396,6 +405,11 @@ describe('DevCycleClient tests', () => {
             expect(client.variableValue('key', 'default_value')).toBe('value1')
             expect(variable.value).toBe('value1')
             expect(variable.defaultValue).toBe('default_value')
+            expect(variable.isDefaulted).toBe(false)
+            expect(variable.eval).toBeDefined()
+            expect(variable.eval.reason).toBe('TARGETING_MATCH')
+            expect(variable.eval.details).toBe('User ID')
+            expect(variable.eval.target_id).toBe('test_target_id')
         })
 
         it('return the default value for the variable if the types do not match', async () => {
@@ -405,6 +419,10 @@ describe('DevCycleClient tests', () => {
             expect(client.variableValue('key', false)).toBe(false)
             expect(variable.value).toBe(false)
             expect(variable.defaultValue).toBe(false)
+            expect(variable.eval).toBeDefined()
+            expect(variable.eval.reason).toBe('DEFAULT')
+            expect(variable.eval.details).toBe('Variable Type Mismatch')
+            expect(variable.eval.target_id).toBeUndefined()
         })
 
         it('should create a variable if get fails to get config', async () => {
@@ -418,6 +436,10 @@ describe('DevCycleClient tests', () => {
             )
             expect(variable.value).toBe('default_value')
             expect(variable.defaultValue).toBe('default_value')
+            expect(variable.eval).toBeDefined()
+            expect(variable.eval.reason).toBe('DEFAULT')
+            expect(variable.eval.details).toBe('User Not Targeted')
+            expect(variable.eval.target_id).toBeUndefined()
         })
 
         it('should create a variable only if not already created', async () => {
@@ -443,6 +465,10 @@ describe('DevCycleClient tests', () => {
             expect(client.variableDefaultMap['key']['default_value']).toEqual(
                 variable,
             )
+            expect(variable.eval).toBeDefined()
+            expect(variable.eval.reason).toBe('DEFAULT')
+            expect(variable.eval.details).toBe('User Not Targeted')
+            expect(variable.eval.target_id).toBeUndefined()
         })
 
         it('should have no value and default value if config not done fetching', () => {
@@ -453,6 +479,10 @@ describe('DevCycleClient tests', () => {
             )
             expect(variable.value).toBe('default_value')
             expect(variable.defaultValue).toBe('default_value')
+            expect(variable.eval).toBeDefined()
+            expect(variable.eval.reason).toBe('DEFAULT')
+            expect(variable.eval.details).toBe('User Not Targeted')
+            expect(variable.eval.target_id).toBeUndefined()
         })
 
         it('should add to client variable default map with different types of default values', () => {
@@ -469,6 +499,26 @@ describe('DevCycleClient tests', () => {
                 variableMap[JSON.stringify(jsonVariable.defaultValue)],
             ).toEqual(jsonVariable)
             expect(Object.values(variableMap).length).toBe(4)
+
+            expect(stringVariable.eval).toBeDefined()
+            expect(stringVariable.eval.reason).toBe('DEFAULT')
+            expect(stringVariable.eval.details).toBe('User Not Targeted')
+            expect(stringVariable.eval.target_id).toBeUndefined()
+
+            expect(boolVariable.eval).toBeDefined()
+            expect(boolVariable.eval.reason).toBe('DEFAULT')
+            expect(boolVariable.eval.details).toBe('User Not Targeted')
+            expect(boolVariable.eval.target_id).toBeUndefined()
+
+            expect(numVariable.eval).toBeDefined()
+            expect(numVariable.eval.reason).toBe('DEFAULT')
+            expect(numVariable.eval.details).toBe('User Not Targeted')
+            expect(numVariable.eval.target_id).toBeUndefined()
+
+            expect(jsonVariable.eval).toBeDefined()
+            expect(jsonVariable.eval.reason).toBe('DEFAULT')
+            expect(jsonVariable.eval.details).toBe('User Not Targeted')
+            expect(jsonVariable.eval.target_id).toBeUndefined()
         })
 
         it('should call onUpdate after config is finished and variable is in config', (done) => {
@@ -1278,7 +1328,15 @@ describe('DevCycleClient tests', () => {
                 expect.objectContaining({ user_id: 'test' }),
                 [
                     { type: 'test' },
-                    expect.objectContaining({ type: 'variableDefaulted' }),
+                    expect.objectContaining({
+                        type: 'variableDefaulted',
+                        metaData: expect.objectContaining({
+                            eval: {
+                                reason: 'DEFAULT',
+                                details: 'User Not Targeted',
+                            },
+                        }),
+                    }),
                 ],
                 expect.anything(),
                 expect.any(Object),
@@ -1314,7 +1372,17 @@ describe('DevCycleClient tests', () => {
                 'client_test_sdk_key',
                 testConfig,
                 expect.objectContaining({ user_id: 'user1' }),
-                [expect.objectContaining({ type: 'variableDefaulted' })],
+                [
+                    expect.objectContaining({
+                        type: 'variableDefaulted',
+                        metaData: expect.objectContaining({
+                            eval: {
+                                reason: 'DEFAULT',
+                                details: 'User Not Targeted',
+                            },
+                        }),
+                    }),
+                ],
                 expect.anything(),
                 {
                     enableObfuscation: true,

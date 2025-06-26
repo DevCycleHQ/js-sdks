@@ -261,17 +261,36 @@ describe('EventQueue tests', () => {
                 type: EventTypes.variableEvaluated,
                 target: 'dummy_key1',
                 clientDate: Date.now(),
+                metaData: {
+                    eval: {
+                        reason: 'TARGETING_MATCH',
+                        details: 'User ID',
+                        target_id: 'test_target_id',
+                    },
+                },
             }
             const event2 = { ...event1, clientDate: Date.now() }
             const defaultEvent1 = {
                 type: EventTypes.variableDefaulted,
                 target: 'dummy_key1',
                 clientDate: Date.now(),
+                metaData: {
+                    eval: {
+                        reason: 'DEFAULT',
+                        details: 'User Not Targeted',
+                    },
+                },
             }
             const defaultEvent2 = {
                 type: EventTypes.variableDefaulted,
                 target: 'dummy_key1',
                 clientDate: Date.now(),
+                metaData: {
+                    eval: {
+                        reason: 'DEFAULT',
+                        details: 'User Not Targeted',
+                    },
+                },
             }
             eventQueue.queueAggregateEvent(event1)
             eventQueue.queueAggregateEvent(event2)
@@ -289,9 +308,27 @@ describe('EventQueue tests', () => {
 
             expect(aggregateEvaluatedEvent).toBeDefined()
             expect(aggregateEvaluatedEvent.value).toBe(2)
+            expect(aggregateEvaluatedEvent.metaData.eval).toBeDefined()
+            expect(aggregateEvaluatedEvent.metaData.eval.reason).toBe(
+                'TARGETING_MATCH',
+            )
+            expect(aggregateEvaluatedEvent.metaData.eval.details).toBe(
+                'User ID',
+            )
+            expect(aggregateEvaluatedEvent.metaData.eval.target_id).toBe(
+                'test_target_id',
+            )
 
             expect(aggregateDefaultedEvent).toBeDefined()
             expect(aggregateDefaultedEvent.value).toBe(2)
+            expect(aggregateDefaultedEvent.metaData.eval).toBeDefined()
+            expect(aggregateDefaultedEvent.metaData.eval.reason).toBe('DEFAULT')
+            expect(aggregateDefaultedEvent.metaData.eval.details).toBe(
+                'User Not Targeted',
+            )
+            expect(
+                aggregateDefaultedEvent.metaData.eval.target_id,
+            ).toBeUndefined()
         })
 
         it('aggregates with the proper value after flushing', async () => {

@@ -112,7 +112,11 @@ describe('initializeDevCycle tests', () => {
         const variable = client.variable('test', false)
         expect(variable.isDefaulted).toEqual(true)
         expect(variable.value).toEqual(false)
+        expect(variable.eval).toBeDefined()
+        expect(variable.eval.reason).toBe('DEFAULT')
+        expect(variable.eval.details).toBe('User Not Targeted')
     })
+
     it('should not throw an error and use default config when deffered', async () => {
         const user = { user_id: 'testuser' }
 
@@ -129,5 +133,8 @@ describe('initializeDevCycle tests', () => {
         const variable = client.variable('test', false)
         expect(variable.isDefaulted).toEqual(true)
         expect(variable.value).toEqual(false)
+        expect(variable.eval).toBeDefined()
+        expect(variable.eval.reason).toBe('DEFAULT')
+        expect(variable.eval.details).toBe('User Not Targeted')
     })
 })
