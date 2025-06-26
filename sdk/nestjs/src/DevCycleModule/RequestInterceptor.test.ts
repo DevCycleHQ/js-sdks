@@ -16,14 +16,6 @@ describe('RequestInterceptor', () => {
         client = {} as DevCycleClient
         user = {} as DevCycleUser
         cls = { get: jest.fn(), set: jest.fn() } as unknown as ClsService
-        interceptor = new RequestInterceptor(
-            client,
-            {
-                key: 'sdk_key',
-                userFactory: () => user,
-            },
-            cls,
-        )
         request = {} as Request
         context = {
             switchToHttp: jest.fn().mockReturnValue({
@@ -35,18 +27,91 @@ describe('RequestInterceptor', () => {
         } as CallHandler<unknown>
     })
 
-    it('should call next.handle', async () => {
-        await interceptor.intercept(context, next)
-        expect(next.handle).toHaveBeenCalled()
+    describe('with sync userFactory', () => {
+        beforeEach(() => {
+            interceptor = new RequestInterceptor(
+                client,
+                {
+                    key: 'sdk_key',
+                    userFactory: () => user,
+                },
+                cls,
+            )
+        })
+
+        it('should call next.handle', async () => {
+            await interceptor.intercept(context, next)
+            expect(next.handle).toHaveBeenCalled()
+        })
+
+        it('should add dvc_client property to cls', async () => {
+            await interceptor.intercept(context, next)
+            expect(cls.set).toHaveBeenCalledWith('dvc_client', client)
+        })
+
+        it('should add dvc_user property to cls', async () => {
+            await interceptor.intercept(context, next)
+            expect(cls.set).toHaveBeenCalledWith('dvc_user', user)
+        })
     })
 
-    it('should add dvc_client property to cls', async () => {
-        await interceptor.intercept(context, next)
-        expect(cls.set).toHaveBeenCalledWith('dvc_client', client)
+    describe('with async asyncUserFactory', () => {
+        beforeEach(() => {
+            interceptor = new RequestInterceptor(
+                client,
+                {
+                    key: 'sdk_key',
+                    asyncUserFactory: async () => user,
+                },
+                cls,
+            )
+        })
+
+        it('should call next.handle', async () => {
+            await interceptor.intercept(context, next)
+            expect(next.handle).toHaveBeenCalled()
+        })
+
+        it('should add dvc_client property to cls', async () => {
+            await interceptor.intercept(context, next)
+            expect(cls.set).toHaveBeenCalledWith('dvc_client', client)
+        })
+
+        it('should add dvc_user property to cls', async () => {
+            await interceptor.intercept(context, next)
+            expect(cls.set).toHaveBeenCalledWith('dvc_user', user)
+        })
+
+        it('should handle async user factory correctly', async () => {
+            const asyncUserFactory = jest.fn().mockResolvedValue(user)
+            interceptor = new RequestInterceptor(
+                client,
+                {
+                    key: 'sdk_key',
+                    asyncUserFactory,
+                },
+                cls,
+            )
+
+            await interceptor.intercept(context, next)
+            expect(asyncUserFactory).toHaveBeenCalledWith(context)
+            expect(cls.set).toHaveBeenCalledWith('dvc_user', user)
+        })
     })
 
-    it('should add dvc_user property to cls', async () => {
-        await interceptor.intercept(context, next)
-        expect(cls.set).toHaveBeenCalledWith('dvc_user', user)
+    describe('error handling', () => {
+        it('should throw error when neither userFactory nor asyncUserFactory is provided', async () => {
+            interceptor = new RequestInterceptor(
+                client,
+                {
+                    key: 'sdk_key',
+                },
+                cls,
+            )
+
+            await expect(interceptor.intercept(context, next)).rejects.toThrow(
+                'Either userFactory or asyncUserFactory must be provided'
+            )
+        })
     })
 })
