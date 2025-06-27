@@ -15,7 +15,7 @@ import {
     decodeDVCUser_PB,
     decodeSDKVariable_PB,
     encodeSDKVariable_PB,
-    Audience
+    Audience,
 } from './types'
 import {
     _checkCustomData,
@@ -82,7 +82,7 @@ export function evaluateOperatorFromJSON(
     operatorStr: string,
     userStr: string,
     audiencesStr: string | null = ''
-): bool {
+): string {
     const operatorJSON = JSON.parse(operatorStr)
     if (!operatorJSON.isObj) {
         throw new Error('evaluateOperatorFromJSON operatorStr or userStr param not a JSON Object')
@@ -102,7 +102,8 @@ export function evaluateOperatorFromJSON(
 
     const operator = new AudienceOperator(operatorJSON as JSON.Obj)
     const user = DVCPopulatedUser.fromJSONString(userStr)
-    return _evaluateOperator(operator, audiences, user, new JSON.Obj())
+    const resultReason = _evaluateOperator(operator, audiences, user, new JSON.Obj())
+    return resultReason.stringify()
 }
 
 export function decideTargetVariationFromJSON(targetStr: string, boundedHash: f64): string {
