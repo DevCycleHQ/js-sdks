@@ -7,8 +7,8 @@ import { Writer, Reader, Protobuf } from "as-proto/assembly";
 import { NullableString } from "./NullableString";
 import { VariableType_PB } from "./VariableType_PB";
 
-export class SDKVariable_PB {
-  static encode(message: SDKVariable_PB, writer: Writer): void {
+export class SDKVariableWithEval_Flat_PB {
+  static encode(message: SDKVariableWithEval_Flat_PB, writer: Writer): void {
     writer.uint32(10);
     writer.string(message.id);
 
@@ -42,11 +42,20 @@ export class SDKVariable_PB {
       NullableString.encode(feature, writer);
       writer.ldelim();
     }
+
+    writer.uint32(74);
+    writer.string(message.evalReason2);
+
+    writer.uint32(82);
+    writer.string(message.evalDetails);
+
+    writer.uint32(90);
+    writer.string(message.evalTargetId);
   }
 
-  static decode(reader: Reader, length: i32): SDKVariable_PB {
+  static decode(reader: Reader, length: i32): SDKVariableWithEval_Flat_PB {
     const end: usize = length < 0 ? reader.end : reader.ptr + length;
-    const message = new SDKVariable_PB();
+    const message = new SDKVariableWithEval_Flat_PB();
 
     while (reader.ptr < end) {
       const tag = reader.uint32();
@@ -83,6 +92,18 @@ export class SDKVariable_PB {
           message.feature = NullableString.decode(reader, reader.uint32());
           break;
 
+        case 9:
+          message.evalReason2 = reader.string();
+          break;
+
+        case 10:
+          message.evalDetails = reader.string();
+          break;
+
+        case 11:
+          message.evalTargetId = reader.string();
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -100,6 +121,9 @@ export class SDKVariable_PB {
   stringValue: string;
   evalReason: NullableString | null;
   feature: NullableString | null;
+  evalReason2: string;
+  evalDetails: string;
+  evalTargetId: string;
 
   constructor(
     id: string = "",
@@ -109,7 +133,10 @@ export class SDKVariable_PB {
     doubleValue: f64 = 0.0,
     stringValue: string = "",
     evalReason: NullableString | null = null,
-    feature: NullableString | null = null
+    feature: NullableString | null = null,
+    evalReason2: string = "",
+    evalDetails: string = "",
+    evalTargetId: string = ""
   ) {
     this.id = id;
     this.type = type;
@@ -119,13 +146,23 @@ export class SDKVariable_PB {
     this.stringValue = stringValue;
     this.evalReason = evalReason;
     this.feature = feature;
+    this.evalReason2 = evalReason2;
+    this.evalDetails = evalDetails;
+    this.evalTargetId = evalTargetId;
   }
 }
 
-export function encodeSDKVariable_PB(message: SDKVariable_PB): Uint8Array {
-  return Protobuf.encode(message, SDKVariable_PB.encode);
+export function encodeSDKVariableWithEval_Flat_PB(
+  message: SDKVariableWithEval_Flat_PB
+): Uint8Array {
+  return Protobuf.encode(message, SDKVariableWithEval_Flat_PB.encode);
 }
 
-export function decodeSDKVariable_PB(buffer: Uint8Array): SDKVariable_PB {
-  return Protobuf.decode<SDKVariable_PB>(buffer, SDKVariable_PB.decode);
+export function decodeSDKVariableWithEval_Flat_PB(
+  buffer: Uint8Array
+): SDKVariableWithEval_Flat_PB {
+  return Protobuf.decode<SDKVariableWithEval_Flat_PB>(
+    buffer,
+    SDKVariableWithEval_Flat_PB.decode
+  );
 }

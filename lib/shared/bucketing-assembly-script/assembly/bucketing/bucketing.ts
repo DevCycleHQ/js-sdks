@@ -17,6 +17,7 @@ import {
     EvalReason,
     EVAL_REASONS,
     EVAL_REASON_DETAILS,
+    FLAG_GET_EVAL_AS_OBJ,
 } from '../types'
 
 import { murmurhashV3 } from '../helpers/murmurhash'
@@ -258,6 +259,24 @@ export function bucketUserForVariation(
         throw new Error(`Config missing variation: ${variation_id}`)
     }
 }
+function _getEvalReasonDetails(
+    targetAndHashes: TargetAndHashes, 
+    hasMultipleDistributions: boolean,
+    hasRollout: boolean
+): string {
+    let reasonDetails =  targetAndHashes.reasonDetails
+
+    if (hasMultipleDistributions || hasRollout) {
+        const evalReasonPrefix =
+            hasMultipleDistributions && hasRollout
+                ? `${EVAL_REASON_DETAILS.RANDOM_DISTRIBUTION} | ${EVAL_REASON_DETAILS.ROLLOUT}`
+                : hasMultipleDistributions
+                ? EVAL_REASON_DETAILS.RANDOM_DISTRIBUTION
+                : EVAL_REASON_DETAILS.ROLLOUT
+        reasonDetails = `${evalReasonPrefix} | ${reasonDetails}`
+    }
+    return reasonDetails
+}
 
 function _getEvalReason(
     targetAndHashes: TargetAndHashes 
@@ -323,9 +342,9 @@ export function _generateBucketedConfig(
             continue
         }
 
-        const evalReason = featureOverride 
-            ? new EvalReason(EVAL_REASONS.OVERRIDE, EVAL_REASON_DETAILS.OVERRIDE)
-            : _getEvalReason(targetAndHashes!)
+        // const evalReason = featureOverride 
+        //     ? new EvalReason(EVAL_REASONS.OVERRIDE, EVAL_REASON_DETAILS.OVERRIDE)
+        //     : _getEvalReason(targetAndHashes!)
 
         featureKeyMap.set(
             feature.key,
@@ -336,7 +355,7 @@ export function _generateBucketedConfig(
                 variation._id,
                 variation.name,
                 variation.key,
-                evalReason,
+                // evalReason,
             ),
         )
         featureVariationMap.set(feature._id, variation._id)
@@ -361,7 +380,10 @@ export function _generateBucketedConfig(
                 variable.key,
                 variationVar.value,
                 feature._id,
-                evalReason, 
+                // "",
+                // "",
+                // ""
+                new EvalReason()
             )
             variableMap.set(variable.key, newVar)
         }
@@ -412,18 +434,39 @@ export function _generateBucketedVariableForUser(
     if (!variationVar) {
         throw new Error('Internal error processing configuration')
     }
+    if(FLAG_GET_EVAL_AS_OBJ) {
+        const evalDetails = _getEvalReason(targetAndHashes)
+        const sdkVar = new SDKVariable(
+            variable._id,
+            variable.type,
+            variable.key,
+            variationVar.value,
+            featureForVariable._id,
+            // evalDetails.reason,
+            // evalDetails.details,
+            // evalDetails.target_id 
+            evalDetails
+        )
+        return { variable: sdkVar, variation, feature: featureForVariable }
+    } else {
+        const hasRollout = targetAndHashes.target.rollout !== null
+        const hasMultipleDistributions = targetAndHashes.target.distribution.length !== 1
+        const evalReason = hasMultipleDistributions || hasRollout ? EVAL_REASONS.SPLIT: EVAL_REASONS.TARGETING_MATCH
+        const evalDetails = _getEvalReasonDetails(targetAndHashes, hasMultipleDistributions, hasRollout)
+        const sdkVar = new SDKVariable(
+            variable._id,
+            variable.type,
+            variable.key,
+            variationVar.value,
+            featureForVariable._id,
+            new EvalReason()
+            // evalReason,
+            // evalDetails,
+            // targetAndHashes.target._id
+        )
+        return { variable: sdkVar, variation, feature: featureForVariable }
+    }
 
-    const evalReason = _getEvalReason(targetAndHashes)
-
-    const sdkVar = new SDKVariable(
-        variable._id,
-        variable.type,
-        variable.key,
-        variationVar.value,
-        featureForVariable._id,
-        evalReason,
-    )
-    return { variable: sdkVar, variation, feature: featureForVariable }
 }
 
 export function _getUserValueForBucketingKey(

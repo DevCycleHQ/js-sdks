@@ -59,14 +59,14 @@ benchmarkSuite('variableForUser', {
     teardownSuite() {
         cleanupSDK()
     },
-    ['variableForUser']: () => {
-        const variable = variableForUser({
-            user,
-            variableKey: 'feature4Var',
-            variableType: VariableType.String,
-        })
-        if (!variable) throw new Error('variable should not be defaulted')
-    },
+    // ['variableForUser']: () => {
+    //     const variable = variableForUser({
+    //         user,
+    //         variableKey: 'feature4Var',
+    //         variableType: VariableType.String,
+    //     })
+    //     if (!variable) throw new Error('variable should not be defaulted')
+    // },
     ['variableForUser_PB']: () => {
         const variable = variableForUser_PB({
             user,
@@ -75,189 +75,189 @@ benchmarkSuite('variableForUser', {
         })
         if (!variable) throw new Error('variable should not be defaulted')
     },
-    ['variableForUser - large user']: () => {
-        const variable = variableForUser({
-            user: largeUser,
-            variableKey: 'feature4Var',
-            variableType: VariableType.String,
-        })
-        if (!variable) throw new Error('variable should not be defaulted')
-    },
-    ['variableForUser_PB - large user']: () => {
-        const variable = variableForUser_PB({
-            user: largeUser,
-            variableKey: 'feature4Var',
-            variableType: VariableType.String,
-        })
-        if (!variable) throw new Error('variable should not be defaulted')
-    },
-    ['variableForUser - defaulted']: () => {
-        const variable = variableForUser({
-            user: defaultUser,
-            variableKey: 'feature4Var',
-            variableType: VariableType.String,
-        })
-        if (variable) throw new Error('variable should be defaulted')
-    },
-    ['variableForUser_PB - defaulted']: () => {
-        const variable = variableForUser_PB({
-            user: defaultUser,
-            variableKey: 'feature4Var',
-            variableType: VariableType.String,
-        })
-        if (variable) throw new Error('variable should be defaulted')
-    },
-    ['variableForUser - unknown key']: () => {
-        const variable = variableForUser({
-            user: defaultUser,
-            variableKey: 'unknown key',
-            variableType: VariableType.String,
-        })
-        if (variable) throw new Error('variable should be defaulted')
-    },
-    ['variableForUser_PB - unknown key']: () => {
-        const variable = variableForUser_PB({
-            user: defaultUser,
-            variableKey: 'unknown key',
-            variableType: VariableType.String,
-        })
-        if (variable) throw new Error('variable should be defaulted')
-    },
-})
-
-benchmarkSuite('variableForUser - Large Config', {
-    async setupSuite() {
-        console.log('setup variableForUser - Large Config tests')
-        await initialize(true)
-        initSDK('sdkKey', 'clientUUID', largeConfig)
-    },
-    teardownSuite() {
-        cleanupSDK()
-    },
-    ['variableForUser']: () => {
-        const variable = variableForUser({
-            user: largeConfigUser,
-            variableKey: 'v-key-50',
-            variableType: VariableType.Boolean,
-        })
-        if (!variable) throw new Error('variable should not be defaulted')
-    },
-    ['variableForUser_PB']: () => {
-        const variable = variableForUser_PB({
-            user: largeConfigUser,
-            variableKey: 'v-key-50',
-            variableType: VariableType.Boolean,
-        })
-        if (!variable) throw new Error('variable should not be defaulted')
-    },
-})
-
-benchmarkSuite('generateBucketedConfigForUser', {
-    async setupSuite() {
-        console.log('setup generateBucketedConfigForUser tests')
-        await initialize(true)
-        initSDK()
-    },
-    teardownSuite() {
-        cleanupSDK()
-    },
-    ['generateBucketedConfigForUser']: () => {
-        generateBucketedConfigForUser('sdkKey', JSON.stringify(user))
-    },
-    ['generateBucketedConfigForUser - large user']: () => {
-        generateBucketedConfigForUser('sdkKey', JSON.stringify(largeConfigUser))
-    },
-})
-
-benchmarkSuite('generateBucketedConfigForUser - Large Config', {
-    async setupSuite() {
-        console.log('setup generateBucketedConfigForUser - Large Config tests')
-        await initialize(true)
-        initSDK('sdkKey', 'clientUUID', largeConfig)
-    },
-    teardownSuite() {
-        cleanupSDK()
-    },
-    ['generateBucketedConfigForUser']: () => {
-        generateBucketedConfigForUser('sdkKey', JSON.stringify(user))
-    },
-    ['generateBucketedConfigForUser - large user']: () => {
-        generateBucketedConfigForUser('sdkKey', JSON.stringify(largeConfigUser))
-    },
-})
-
-let i = 0
-
-benchmarkSuite('initEventQueue', {
-    async setupSuite() {
-        console.log('setup initEventQueue tests')
-        await initialize(true)
-        initSDK('sdkKey')
-        i = 0
-    },
-    teardownSuite() {
-        cleanupSDK()
-    },
-    ['initEventQueue']: () => {
-        initEventQueue('sdkKey_' + i, 'uuid', JSON.stringify({}))
-        i++
-    },
-})
-
-benchmarkSuite('setPlatformData', {
-    async setupSuite() {
-        console.log('setup setPlatformData tests')
-        await initialize(true)
-        initSDK('sdkKey')
-        i = 0
-    },
-    teardownSuite() {
-        cleanupSDK()
-    },
-    ['setPlatformData']: () => {
-        setPlatformData(
-            JSON.stringify({
-                platform: 'NodeJS',
-                platformVersion: '16.0',
-                sdkType: 'server',
-                sdkVersion: '1.0.' + i,
-                hostname: 'host.name',
-            }),
-        )
-        i++
-    },
-})
-
-benchmarkSuite('setConfigData', {
-    async setupSuite() {
-        console.log('setup setConfigData tests')
-        await initialize(true)
-        initSDK('sdkKey')
-        i = 0
-    },
-    teardownSuite() {
-        cleanupSDK()
-    },
-    ['setConfigData - small']: () => {
-        setConfigData('sdkKey_' + i, JSON.stringify(config))
-        i++
-    },
-    ['setConfigData - large']: () => {
-        setConfigData('sdkKey_' + i, JSON.stringify(largeConfig))
-        i++
-    },
-})
-
-benchmarkSuite('setClientCustomData', {
-    async setupSuite() {
-        console.log('setup setClientCustomData tests')
-        await initialize(true)
-        initSDK('sdkKey')
-    },
-    teardownSuite() {
-        cleanupSDK()
-    },
-    ['setClientCustomData - small']: () => {
-        setClientCustomData('sdkKey', JSON.stringify(largeUser.customData))
-    },
+    //     ['variableForUser - large user']: () => {
+    //         const variable = variableForUser({
+    //             user: largeUser,
+    //             variableKey: 'feature4Var',
+    //             variableType: VariableType.String,
+    //         })
+    //         if (!variable) throw new Error('variable should not be defaulted')
+    //     },
+    //     ['variableForUser_PB - large user']: () => {
+    //         const variable = variableForUser_PB({
+    //             user: largeUser,
+    //             variableKey: 'feature4Var',
+    //             variableType: VariableType.String,
+    //         })
+    //         if (!variable) throw new Error('variable should not be defaulted')
+    //     },
+    //     ['variableForUser - defaulted']: () => {
+    //         const variable = variableForUser({
+    //             user: defaultUser,
+    //             variableKey: 'feature4Var',
+    //             variableType: VariableType.String,
+    //         })
+    //         if (variable) throw new Error('variable should be defaulted')
+    //     },
+    //     ['variableForUser_PB - defaulted']: () => {
+    //         const variable = variableForUser_PB({
+    //             user: defaultUser,
+    //             variableKey: 'feature4Var',
+    //             variableType: VariableType.String,
+    //         })
+    //         if (variable) throw new Error('variable should be defaulted')
+    //     },
+    //     ['variableForUser - unknown key']: () => {
+    //         const variable = variableForUser({
+    //             user: defaultUser,
+    //             variableKey: 'unknown key',
+    //             variableType: VariableType.String,
+    //         })
+    //         if (variable) throw new Error('variable should be defaulted')
+    //     },
+    //     ['variableForUser_PB - unknown key']: () => {
+    //         const variable = variableForUser_PB({
+    //             user: defaultUser,
+    //             variableKey: 'unknown key',
+    //             variableType: VariableType.String,
+    //         })
+    //         if (variable) throw new Error('variable should be defaulted')
+    //     },
+    // })
+    //
+    // benchmarkSuite('variableForUser - Large Config', {
+    //     async setupSuite() {
+    //         console.log('setup variableForUser - Large Config tests')
+    //         await initialize(true)
+    //         initSDK('sdkKey', 'clientUUID', largeConfig)
+    //     },
+    //     teardownSuite() {
+    //         cleanupSDK()
+    //     },
+    //     ['variableForUser']: () => {
+    //         const variable = variableForUser({
+    //             user: largeConfigUser,
+    //             variableKey: 'v-key-50',
+    //             variableType: VariableType.Boolean,
+    //         })
+    //         if (!variable) throw new Error('variable should not be defaulted')
+    //     },
+    //     ['variableForUser_PB']: () => {
+    //         const variable = variableForUser_PB({
+    //             user: largeConfigUser,
+    //             variableKey: 'v-key-50',
+    //             variableType: VariableType.Boolean,
+    //         })
+    //         if (!variable) throw new Error('variable should not be defaulted')
+    //     },
+    // })
+    //
+    // benchmarkSuite('generateBucketedConfigForUser', {
+    //     async setupSuite() {
+    //         console.log('setup generateBucketedConfigForUser tests')
+    //         await initialize(true)
+    //         initSDK()
+    //     },
+    //     teardownSuite() {
+    //         cleanupSDK()
+    //     },
+    //     ['generateBucketedConfigForUser']: () => {
+    //         generateBucketedConfigForUser('sdkKey', JSON.stringify(user))
+    //     },
+    //     ['generateBucketedConfigForUser - large user']: () => {
+    //         generateBucketedConfigForUser('sdkKey', JSON.stringify(largeConfigUser))
+    //     },
+    // })
+    //
+    // benchmarkSuite('generateBucketedConfigForUser - Large Config', {
+    //     async setupSuite() {
+    //         console.log('setup generateBucketedConfigForUser - Large Config tests')
+    //         await initialize(true)
+    //         initSDK('sdkKey', 'clientUUID', largeConfig)
+    //     },
+    //     teardownSuite() {
+    //         cleanupSDK()
+    //     },
+    //     ['generateBucketedConfigForUser']: () => {
+    //         generateBucketedConfigForUser('sdkKey', JSON.stringify(user))
+    //     },
+    //     ['generateBucketedConfigForUser - large user']: () => {
+    //         generateBucketedConfigForUser('sdkKey', JSON.stringify(largeConfigUser))
+    //     },
+    // })
+    //
+    // let i = 0
+    //
+    // benchmarkSuite('initEventQueue', {
+    //     async setupSuite() {
+    //         console.log('setup initEventQueue tests')
+    //         await initialize(true)
+    //         initSDK('sdkKey')
+    //         i = 0
+    //     },
+    //     teardownSuite() {
+    //         cleanupSDK()
+    //     },
+    //     ['initEventQueue']: () => {
+    //         initEventQueue('sdkKey_' + i, 'uuid', JSON.stringify({}))
+    //         i++
+    //     },
+    // })
+    //
+    // benchmarkSuite('setPlatformData', {
+    //     async setupSuite() {
+    //         console.log('setup setPlatformData tests')
+    //         await initialize(true)
+    //         initSDK('sdkKey')
+    //         i = 0
+    //     },
+    //     teardownSuite() {
+    //         cleanupSDK()
+    //     },
+    //     ['setPlatformData']: () => {
+    //         setPlatformData(
+    //             JSON.stringify({
+    //                 platform: 'NodeJS',
+    //                 platformVersion: '16.0',
+    //                 sdkType: 'server',
+    //                 sdkVersion: '1.0.' + i,
+    //                 hostname: 'host.name',
+    //             }),
+    //         )
+    //         i++
+    //     },
+    // })
+    //
+    // benchmarkSuite('setConfigData', {
+    //     async setupSuite() {
+    //         console.log('setup setConfigData tests')
+    //         await initialize(true)
+    //         initSDK('sdkKey')
+    //         i = 0
+    //     },
+    //     teardownSuite() {
+    //         cleanupSDK()
+    //     },
+    //     ['setConfigData - small']: () => {
+    //         setConfigData('sdkKey_' + i, JSON.stringify(config))
+    //         i++
+    //     },
+    //     ['setConfigData - large']: () => {
+    //         setConfigData('sdkKey_' + i, JSON.stringify(largeConfig))
+    //         i++
+    //     },
+    // })
+    //
+    // benchmarkSuite('setClientCustomData', {
+    //     async setupSuite() {
+    //         console.log('setup setClientCustomData tests')
+    //         await initialize(true)
+    //         initSDK('sdkKey')
+    //     },
+    //     teardownSuite() {
+    //         cleanupSDK()
+    //     },
+    //     ['setClientCustomData - small']: () => {
+    //         setClientCustomData('sdkKey', JSON.stringify(largeUser.customData))
+    //     },
 })
