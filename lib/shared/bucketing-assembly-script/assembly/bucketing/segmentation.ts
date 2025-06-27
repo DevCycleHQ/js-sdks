@@ -15,6 +15,8 @@ import {
 import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import { getF64FromJSONValue } from '../helpers/jsonHelpers'
 
+const ENABLE_EVAL_REASONS = true
+
 export class SegmentationResult extends JSON.Value {
     readonly result: bool
     readonly reasonDetails: string | null
@@ -85,12 +87,12 @@ export function _evaluateOperator(
                 if(evalResult.result === false){
                     return new SegmentationResult(false)
                 }
-                if(evalResult.reasonDetails !== null){ 
+                if(ENABLE_EVAL_REASONS && evalResult.reasonDetails !== null){ 
                     reasons.push(evalResult.reasonDetails!)
                 }
             }
         }
-        const allReasons = reasons.join(' AND ') 
+        const allReasons =  ENABLE_EVAL_REASONS ? reasons.join(' AND ') : ""
         return new SegmentationResult(true, allReasons)
     } else {
         return new SegmentationResult(false) 
@@ -174,22 +176,22 @@ function filterFunctionsBySubtype(
 ): SegmentationResult {
     if (subType === 'country') {
         const result = _checkStringsFilter(user.country, filter)
-        return new SegmentationResult(result, result ? EVAL_REASON_DETAILS.COUNTRY : null)
+        return new SegmentationResult(result, result && ENABLE_EVAL_REASONS ? EVAL_REASON_DETAILS.COUNTRY : null)
     } else if (subType === 'email') {
         const result = _checkStringsFilter(user.email, filter)
-        return new SegmentationResult(result, result ? EVAL_REASON_DETAILS.EMAIL : null)
+        return new SegmentationResult(result, result && ENABLE_EVAL_REASONS ? EVAL_REASON_DETAILS.EMAIL : null)
     } else if (subType === 'user_id') {
         const result = _checkStringsFilter(user.user_id, filter)
-        return new SegmentationResult(result, result ? EVAL_REASON_DETAILS.USER_ID : null)
+        return new SegmentationResult(result, result && ENABLE_EVAL_REASONS ? EVAL_REASON_DETAILS.USER_ID : null)
     } else if (subType === 'appVersion') {
         const result = _checkVersionFilters(user.appVersion, filter)
-        return new SegmentationResult(result, result ? EVAL_REASON_DETAILS.APP_VERSION : null)
+        return new SegmentationResult(result, result && ENABLE_EVAL_REASONS ? EVAL_REASON_DETAILS.APP_VERSION : null)
     } else if (subType === 'platformVersion') {
         const result = _checkVersionFilters(user.platformVersion, filter)
-        return new SegmentationResult(result, result ? EVAL_REASON_DETAILS.PLATFORM_VERSION : null)
+        return new SegmentationResult(result, result && ENABLE_EVAL_REASONS ? EVAL_REASON_DETAILS.PLATFORM_VERSION : null)
     } else if (subType === 'deviceModel') {
         const result = _checkStringsFilter(user.deviceModel, filter)
-        return new SegmentationResult(result, result ? EVAL_REASON_DETAILS.DEVICE_MODEL : null)
+        return new SegmentationResult(result, result && ENABLE_EVAL_REASONS ? EVAL_REASON_DETAILS.DEVICE_MODEL : null)
     } else if (subType === 'platform') {
         const result = _checkStringsFilter(user.platform, filter)
         return new SegmentationResult(result, result ? EVAL_REASON_DETAILS.PLATFORM : null)
@@ -198,7 +200,7 @@ function filterFunctionsBySubtype(
             throw new Error('Invalid filter data')
         }
         const result = _checkCustomData(user.getCombinedCustomData(), clientCustomData, filter as CustomDataFilter)
-        const reason = result ? `${EVAL_REASON_DETAILS.CUSTOM_DATA} -> ${(filter as CustomDataFilter).dataKey}` : null
+        const reason = result && ENABLE_EVAL_REASONS ? `${EVAL_REASON_DETAILS.CUSTOM_DATA} -> ${(filter as CustomDataFilter).dataKey}` : null
         return new SegmentationResult(result, reason)
     } else {
         return new SegmentationResult(false)

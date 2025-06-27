@@ -14,7 +14,6 @@ import {
     Variation,
     FeatureVariation,
     FeatureV2 as Feature,
-    EvalReason,
     EVAL_REASONS,
     EVAL_REASON_DETAILS,
 } from '../types'
@@ -30,6 +29,7 @@ import {
 const MAX_HASH_VALUE: f64 = 4294967295
 const baseSeed: i32 = 1
 const DEFAULT_BUCKETING_VALUE = 'null'
+const ENABLE_EVAL_REASONS = true
 
 export class BoundedHash {
     public rolloutHash: f64
@@ -259,17 +259,14 @@ export function bucketUserForVariation(
     }
 }
 
-function _getEvalReason(
-    targetAndHashes: TargetAndHashes 
-): EvalReason {
-    const target = targetAndHashes.target
-    const hasRollout = target.rollout !== null
-    const hasMultipleDistributions = target.distribution.length !== 1
-    let reason = EVAL_REASONS.TARGETING_MATCH
+function _getEvalReasonDetails(
+    targetAndHashes: TargetAndHashes, 
+    hasMultipleDistributions: boolean,
+    hasRollout: boolean
+): string {
     let reasonDetails =  targetAndHashes.reasonDetails
 
     if (hasMultipleDistributions || hasRollout) {
-        reason = EVAL_REASONS.SPLIT
         const evalReasonPrefix =
             hasMultipleDistributions && hasRollout
                 ? `${EVAL_REASON_DETAILS.RANDOM_DISTRIBUTION} | ${EVAL_REASON_DETAILS.ROLLOUT}`
@@ -278,7 +275,7 @@ function _getEvalReason(
                 : EVAL_REASON_DETAILS.ROLLOUT
         reasonDetails = `${evalReasonPrefix} | ${reasonDetails}`
     }
-    return  new EvalReason(reason, reasonDetails, target._id)
+    return reasonDetails
 }
 
 export function _generateBucketedConfig(
@@ -323,9 +320,23 @@ export function _generateBucketedConfig(
             continue
         }
 
-        const evalReason = featureOverride 
-            ? new EvalReason(EVAL_REASONS.OVERRIDE, EVAL_REASON_DETAILS.OVERRIDE)
-            : _getEvalReason(targetAndHashes!)
+        const hasRollout = targetAndHashes!.target.rollout !== null
+        const hasMultipleDistributions = targetAndHashes!.target.distribution.length !== 1
+        
+        let evalReason: string
+        let evalDetails: string
+        
+        if (ENABLE_EVAL_REASONS) {
+            evalReason = featureOverride
+                ? EVAL_REASONS.OVERRIDE 
+                : hasMultipleDistributions || hasRollout 
+                    ? EVAL_REASONS.SPLIT
+                    : EVAL_REASONS.TARGETING_MATCH
+            evalDetails = _getEvalReasonDetails(targetAndHashes!, hasMultipleDistributions, hasRollout)
+        } else {
+            evalReason = ""
+            evalDetails = ""
+        }
 
         featureKeyMap.set(
             feature.key,
@@ -337,6 +348,8 @@ export function _generateBucketedConfig(
                 variation.name,
                 variation.key,
                 evalReason,
+                evalDetails,
+                targetAndHashes!.target._id
             ),
         )
         featureVariationMap.set(feature._id, variation._id)
@@ -361,7 +374,10 @@ export function _generateBucketedConfig(
                 variable.key,
                 variationVar.value,
                 feature._id,
-                evalReason, 
+                evalReason,
+                evalDetails,
+                targetAndHashes!.target._id
+                // evalReason, 
             )
             variableMap.set(variable.key, newVar)
         }
@@ -413,17 +429,36 @@ export function _generateBucketedVariableForUser(
         throw new Error('Internal error processing configuration')
     }
 
-    const evalReason = _getEvalReason(targetAndHashes)
+    if (ENABLE_EVAL_REASONS){ 
+        const hasRollout = targetAndHashes.target.rollout !== null
+        const hasMultipleDistributions = targetAndHashes.target.distribution.length !== 1
+        const evalReason = hasMultipleDistributions || hasRollout ? EVAL_REASONS.SPLIT: EVAL_REASONS.TARGETING_MATCH
+        const evalDetails = _getEvalReasonDetails(targetAndHashes, hasMultipleDistributions, hasRollout)
 
-    const sdkVar = new SDKVariable(
-        variable._id,
-        variable.type,
-        variable.key,
-        variationVar.value,
-        featureForVariable._id,
-        evalReason,
-    )
-    return { variable: sdkVar, variation, feature: featureForVariable }
+        const sdkVar = new SDKVariable(
+            variable._id,
+            variable.type,
+            variable.key,
+            variationVar.value,
+            featureForVariable._id,
+            evalReason,
+            evalDetails,
+            targetAndHashes.target._id
+        )
+        return { variable: sdkVar, variation, feature: featureForVariable }
+    } else {
+        const sdkVar = new SDKVariable(
+            variable._id,
+            variable.type,
+            variable.key,
+            variationVar.value,
+            featureForVariable._id,
+            "",
+            "",
+            ""
+        )
+        return { variable: sdkVar, variation, feature: featureForVariable }
+    }
 }
 
 export function _getUserValueForBucketingKey(

@@ -12,9 +12,10 @@ import {
     NullableString,
     SDKVariable_PB,
     VariableType_PB,
-    EvalReason_PB,
     encodeSDKVariable_PB,
 } from './'
+import { encodeSDKVariableWithEval_PB, SDKVariableWithEval_PB } from './protobuf-generated/SDKVariableWithEval_PB'
+import { EvalReason_PB } from './protobuf-generated/EvalReason_PB'
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace DEFAULT_REASONS {
@@ -66,45 +67,7 @@ export namespace EVAL_REASON_DETAILS {
     export const CUSTOM_DATA = 'Custom Data'
 }
 
-export class EvalReason extends JSON.Value {
-    readonly reason: string
-    readonly details: string
-    readonly target_id: string
-
-    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
-    constructor(reason: string, details: string = "", target_id: string = "") {
-        super()
-        this.reason = reason
-        this.details = details
-        this.target_id = target_id
-    }
-
-    static fromJSONObj(jsonObj: JSON.Obj): EvalReason {
-        let reason = getStringFromJSONOptional(jsonObj, 'reason')
-        if (!reason) {
-            reason = ""
-        }
-        
-        let details = getStringFromJSONOptional(jsonObj, 'details')
-        if (!details) {
-            details = ""
-        }
-        
-        let targetId = getStringFromJSONOptional(jsonObj, 'targetId')
-        if (!targetId) {
-            targetId = ""
-        }
-        return new EvalReason(reason, details, targetId)
-    }
-
-    stringify(): string {
-        const json = new JSON.Obj()
-        json.set('reason', this.reason)
-        json.set('details', this.details)
-        json.set('target_id', this.target_id)
-        return json.stringify()
-    }
-}
+const ENABLE_EVAL_REASONS = true
 
 export class FeatureVariation extends JSON.Obj {
     constructor(
@@ -225,14 +188,14 @@ export class SDKFeature extends JSON.Obj {
         public readonly _variation: string,
         public readonly variationName: string,
         public readonly variationKey: string,
-        public readonly evalReason: EvalReason
+        public readonly evalReason: string,
+        public readonly evalDetails: string,
+        public readonly evalTargetId: string,
     ) {
         super()
     }
 
     static fromJSONObj(featureObj: JSON.Obj): SDKFeature {
-        const evalObj = featureObj.getObj('eval') 
-        const evalObjJSON =  evalObj ? evalObj : new JSON.Obj()
         return new SDKFeature(
             getStringFromJSON(featureObj, '_id'),
             getStringFromJSON(featureObj, 'type'),
@@ -240,7 +203,9 @@ export class SDKFeature extends JSON.Obj {
             getStringFromJSON(featureObj, '_variation'),
             getStringFromJSON(featureObj, 'variationName'),
             getStringFromJSON(featureObj, 'variationKey'),
-            EvalReason.fromJSONObj(evalObjJSON)
+            getStringFromJSON(featureObj, 'evalReason'),
+            getStringFromJSON(featureObj, 'evalDetails'),
+            getStringFromJSON(featureObj, 'evalTargetId')
         )
     }
 
@@ -252,8 +217,12 @@ export class SDKFeature extends JSON.Obj {
         json.set('_variation', this._variation)
         json.set('variationName', this.variationName)
         json.set('variationKey', this.variationKey)
-        // pb property is named eval for consistency with js lib
-        json.set('eval', this.evalReason)
+        if(ENABLE_EVAL_REASONS){
+            const evalObj = new JSON.Obj()
+            evalObj.set('evalReason', this.evalReason)
+            evalObj.set('evalDetails', this.evalDetails)
+            evalObj.set('evalTargetId', this.evalTargetId)
+        }
         return json.stringify()
     }
 }
@@ -265,7 +234,9 @@ export class SDKVariable extends JSON.Obj {
         public readonly key: string,
         public readonly value: JSON.Value,
         public readonly _feature: string | null,
-        public readonly evalReason: EvalReason,
+        public readonly evalReason: string,
+        public readonly evalDetails: string,
+        public readonly evalTargetId: string,
     ) {
         super()
     }
@@ -280,16 +251,15 @@ export class SDKVariable extends JSON.Obj {
     }
 
     static fromJSONObj(variableObj: JSON.Obj): SDKVariable {
-        const evalObj = variableObj.getObj('eval') 
-        const evalObjJSON =  evalObj ? evalObj : new JSON.Obj()
-
         return new SDKVariable(
             getStringFromJSON(variableObj, '_id'),
             getStringFromJSON(variableObj, 'type'),
             getStringFromJSON(variableObj, 'key'),
             getJSONValueFromJSON(variableObj, 'value'),
             getStringFromJSONOptional(variableObj, '_feature'),
-            EvalReason.fromJSONObj(evalObjJSON),
+            getStringFromJSON(variableObj, 'evalReason'),
+            getStringFromJSON(variableObj, 'evalDetails'),
+            getStringFromJSON(variableObj, 'evalTargetId')
         )
     }
 
@@ -320,25 +290,35 @@ export class SDKVariable extends JSON.Obj {
         const jsonValue = (this.type === 'JSON' && this.value.isObj)
             ? this.value.stringify()
             : null
-
-        const evalReasonPb = new EvalReason_PB(
-            this.evalReason.reason,
-            this.evalReason.details,
-            this.evalReason.target_id
-        )
-
-        const pbVariable = new SDKVariable_PB(
-            this._id,
-            SDKVariable.variableTypeFromString(this.type),
-            this.key,
-            boolValue,
-            numValue,
-            stringValue || jsonValue || '',
-            new NullableString('', true),
-            new NullableString(this._feature || '', this._feature === null),
-            evalReasonPb,
-        )
-        return encodeSDKVariable_PB(pbVariable)
+        if(ENABLE_EVAL_REASONS) {
+            const evalReasonPb = new EvalReason_PB(
+                this.evalReason,
+                this.evalDetails,
+                this.evalTargetId,
+            )
+             const pbVariable = new SDKVariableWithEval_PB(
+                this._id,
+                SDKVariable.variableTypeFromString(this.type),
+                this.key,
+                boolValue,
+                numValue,
+                stringValue || jsonValue || '',
+                new NullableString(this._feature || '', this._feature === null),
+                evalReasonPb
+            )
+            return encodeSDKVariableWithEval_PB(pbVariable)
+        } else {
+             const pbVariable = new SDKVariable_PB(
+                this._id,
+                SDKVariable.variableTypeFromString(this.type),
+                this.key,
+                boolValue,
+                numValue,
+                stringValue || jsonValue || '',
+                new NullableString(this._feature || '', this._feature === null),
+            )
+            return encodeSDKVariable_PB(pbVariable)
+        }
     }
 
     stringify(): string {
@@ -347,9 +327,13 @@ export class SDKVariable extends JSON.Obj {
         json.set('type', this.type)
         json.set('key', this.key)
         json.set('value', this.value)
-        // pb property is named eval for consistency with js lib
-        json.set('eval', this.evalReason)
-        // set evalReason in proto for backward compatibility
+        if(ENABLE_EVAL_REASONS) {
+            const evalJson = new JSON.Obj()
+            evalJson.set('reason', this.evalReason)
+            evalJson.set('details', this.evalDetails)
+            evalJson.set('target_id', this.evalTargetId)
+            json.set('eval', evalJson)
+        }
         if (this._feature) {
             json.set('_feature', this._feature)
         }

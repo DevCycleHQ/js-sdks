@@ -7,14 +7,14 @@ import { Writer, Reader, Protobuf } from "as-proto/assembly";
 
 export class EvalReason_PB {
   static encode(message: EvalReason_PB, writer: Writer): void {
-    writer.uint32(10);
-    writer.string(message.reason);
+    writer.uint32(74);
+    writer.string(message.evalReason);
 
-    writer.uint32(18);
-    writer.string(message.details);
+    writer.uint32(82);
+    writer.string(message.evalDetails);
 
-    writer.uint32(26);
-    writer.string(message.targetId);
+    writer.uint32(90);
+    writer.string(message.evalTargetId);
   }
 
   static decode(reader: Reader, length: i32): EvalReason_PB {
@@ -24,16 +24,16 @@ export class EvalReason_PB {
     while (reader.ptr < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 1:
-          message.reason = reader.string();
+        case 9:
+          message.evalReason = reader.string();
           break;
 
-        case 2:
-          message.details = reader.string();
+        case 10:
+          message.evalDetails = reader.string();
           break;
 
-        case 3:
-          message.targetId = reader.string();
+        case 11:
+          message.evalTargetId = reader.string();
           break;
 
         default:
@@ -45,18 +45,18 @@ export class EvalReason_PB {
     return message;
   }
 
-  reason: string;
-  details: string;
-  targetId: string;
+  evalReason: string;
+  evalDetails: string;
+  evalTargetId: string;
 
   constructor(
-    reason: string = "",
-    details: string = "",
-    targetId: string = ""
+    evalReason: string = "",
+    evalDetails: string = "",
+    evalTargetId: string = ""
   ) {
-    this.reason = reason;
-    this.details = details;
-    this.targetId = targetId;
+    this.evalReason = evalReason;
+    this.evalDetails = evalDetails;
+    this.evalTargetId = evalTargetId;
   }
 }
 
