@@ -459,7 +459,7 @@ export function _generateBucketedVariableForUser(
             variable.key,
             variationVar.value,
             featureForVariable._id,
-            new EvalReason()
+            new EvalReason(evalReason, evalDetails, targetAndHashes.target._id)
             // evalReason,
             // evalDetails,
             // targetAndHashes.target._id
