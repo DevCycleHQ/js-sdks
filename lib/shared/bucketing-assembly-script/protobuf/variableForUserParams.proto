@@ -68,6 +68,20 @@ message SDKVariable_PB {
     double doubleValue = 5;
     string stringValue = 6;
     NullableString _feature = 8; 
+}
+
+message SDKVariableWithEval_PB {
+    string _id = 1;
+    VariableType_PB type = 2;
+    string key = 3;
+    bool boolValue = 4;
+    double doubleValue = 5;
+    string stringValue = 6;
+    NullableString _feature = 8; 
+    EvalReason_PB eval = 9;
+}
+
+message EvalReason_PB {
     string evalReason = 9;
     string evalDetails = 10;
     string evalTargetId = 11;

@@ -5,10 +5,11 @@
 
 import { Writer, Reader, Protobuf } from "as-proto/assembly";
 import { NullableString } from "./NullableString";
+import { EvalReason_PB } from "./EvalReason_PB";
 import { VariableType_PB } from "./VariableType_PB";
 
-export class SDKVariable_PB {
-  static encode(message: SDKVariable_PB, writer: Writer): void {
+export class SDKVariableWithEval_PB {
+  static encode(message: SDKVariableWithEval_PB, writer: Writer): void {
     writer.uint32(10);
     writer.string(message.id);
 
@@ -34,11 +35,19 @@ export class SDKVariable_PB {
       NullableString.encode(feature, writer);
       writer.ldelim();
     }
+
+    const eval = message.eval;
+    if (eval !== null) {
+      writer.uint32(74);
+      writer.fork();
+      EvalReason_PB.encode(eval, writer);
+      writer.ldelim();
+    }
   }
 
-  static decode(reader: Reader, length: i32): SDKVariable_PB {
+  static decode(reader: Reader, length: i32): SDKVariableWithEval_PB {
     const end: usize = length < 0 ? reader.end : reader.ptr + length;
-    const message = new SDKVariable_PB();
+    const message = new SDKVariableWithEval_PB();
 
     while (reader.ptr < end) {
       const tag = reader.uint32();
@@ -71,6 +80,10 @@ export class SDKVariable_PB {
           message.feature = NullableString.decode(reader, reader.uint32());
           break;
 
+        case 9:
+          message.eval = EvalReason_PB.decode(reader, reader.uint32());
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -87,6 +100,7 @@ export class SDKVariable_PB {
   doubleValue: f64;
   stringValue: string;
   feature: NullableString | null;
+  eval: EvalReason_PB | null;
 
   constructor(
     id: string = "",
@@ -95,7 +109,8 @@ export class SDKVariable_PB {
     boolValue: bool = false,
     doubleValue: f64 = 0.0,
     stringValue: string = "",
-    feature: NullableString | null = null
+    feature: NullableString | null = null,
+    eval: EvalReason_PB | null = null
   ) {
     this.id = id;
     this.type = type;
@@ -104,13 +119,21 @@ export class SDKVariable_PB {
     this.doubleValue = doubleValue;
     this.stringValue = stringValue;
     this.feature = feature;
+    this.eval = eval;
   }
 }
 
-export function encodeSDKVariable_PB(message: SDKVariable_PB): Uint8Array {
-  return Protobuf.encode(message, SDKVariable_PB.encode);
+export function encodeSDKVariableWithEval_PB(
+  message: SDKVariableWithEval_PB
+): Uint8Array {
+  return Protobuf.encode(message, SDKVariableWithEval_PB.encode);
 }
 
-export function decodeSDKVariable_PB(buffer: Uint8Array): SDKVariable_PB {
-  return Protobuf.decode<SDKVariable_PB>(buffer, SDKVariable_PB.decode);
+export function decodeSDKVariableWithEval_PB(
+  buffer: Uint8Array
+): SDKVariableWithEval_PB {
+  return Protobuf.decode<SDKVariableWithEval_PB>(
+    buffer,
+    SDKVariableWithEval_PB.decode
+  );
 }

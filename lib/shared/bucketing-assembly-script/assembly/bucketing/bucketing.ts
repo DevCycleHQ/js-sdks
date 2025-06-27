@@ -29,6 +29,7 @@ import {
 const MAX_HASH_VALUE: f64 = 4294967295
 const baseSeed: i32 = 1
 const DEFAULT_BUCKETING_VALUE = 'null'
+const ENABLE_EVAL_REASONS = true
 
 export class BoundedHash {
     public rolloutHash: f64
@@ -419,22 +420,36 @@ export function _generateBucketedVariableForUser(
         throw new Error('Internal error processing configuration')
     }
 
-    const hasRollout = targetAndHashes.target.rollout !== null
-    const hasMultipleDistributions = targetAndHashes.target.distribution.length !== 1
-    const evalReason = hasMultipleDistributions || hasRollout ? EVAL_REASONS.SPLIT: EVAL_REASONS.TARGETING_MATCH
-    const evalDetails = _getEvalReasonDetails(targetAndHashes, hasMultipleDistributions, hasRollout)
+    if (ENABLE_EVAL_REASONS){ 
+        const hasRollout = targetAndHashes.target.rollout !== null
+        const hasMultipleDistributions = targetAndHashes.target.distribution.length !== 1
+        const evalReason = hasMultipleDistributions || hasRollout ? EVAL_REASONS.SPLIT: EVAL_REASONS.TARGETING_MATCH
+        const evalDetails = _getEvalReasonDetails(targetAndHashes, hasMultipleDistributions, hasRollout)
 
-    const sdkVar = new SDKVariable(
-        variable._id,
-        variable.type,
-        variable.key,
-        variationVar.value,
-        featureForVariable._id,
-        evalReason,
-        evalDetails,
-        targetAndHashes.target._id
-    )
-    return { variable: sdkVar, variation, feature: featureForVariable }
+        const sdkVar = new SDKVariable(
+            variable._id,
+            variable.type,
+            variable.key,
+            variationVar.value,
+            featureForVariable._id,
+            evalReason,
+            evalDetails,
+            targetAndHashes.target._id
+        )
+        return { variable: sdkVar, variation, feature: featureForVariable }
+    } else {
+        const sdkVar = new SDKVariable(
+            variable._id,
+            variable.type,
+            variable.key,
+            variationVar.value,
+            featureForVariable._id,
+            "",
+            "",
+            ""
+        )
+        return { variable: sdkVar, variation, feature: featureForVariable }
+    }
 }
 
 export function _getUserValueForBucketingKey(
