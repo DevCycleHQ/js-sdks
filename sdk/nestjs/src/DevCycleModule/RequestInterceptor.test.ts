@@ -2,6 +2,7 @@ import { ExecutionContext, CallHandler } from '@nestjs/common'
 import { DevCycleClient, DevCycleUser } from '@devcycle/nodejs-server-sdk'
 import { RequestInterceptor } from './RequestInterceptor'
 import { ClsService } from 'nestjs-cls'
+import { DevCycleModuleOptions } from './DevCycleModuleOptions'
 
 describe('RequestInterceptor', () => {
     let interceptor: RequestInterceptor
@@ -61,7 +62,7 @@ describe('RequestInterceptor', () => {
                 client,
                 {
                     key: 'sdk_key',
-                    asyncUserFactory: async () => user,
+                    userFactory: async () => user,
                 },
                 cls,
             )
@@ -88,7 +89,7 @@ describe('RequestInterceptor', () => {
                 client,
                 {
                     key: 'sdk_key',
-                    asyncUserFactory,
+                    userFactory: asyncUserFactory,
                 },
                 cls,
             )
@@ -105,12 +106,12 @@ describe('RequestInterceptor', () => {
                 client,
                 {
                     key: 'sdk_key',
-                } as any, // Using 'as any' to bypass type checking for this error test case
+                } as DevCycleModuleOptions,
                 cls,
             )
 
             await expect(interceptor.intercept(context, next)).rejects.toThrow(
-                'Either userFactory or asyncUserFactory must be provided'
+                'this.options.userFactory is not a function',
             )
         })
     })

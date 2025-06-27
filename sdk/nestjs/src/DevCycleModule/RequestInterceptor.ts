@@ -5,7 +5,7 @@ import {
     Injectable,
     NestInterceptor,
 } from '@nestjs/common'
-import { DevCycleClient, DevCycleUser } from '@devcycle/nodejs-server-sdk'
+import { DevCycleClient } from '@devcycle/nodejs-server-sdk'
 import {
     MODULE_OPTIONS_TOKEN,
     DevCycleModuleOptions,
@@ -25,16 +25,8 @@ export class RequestInterceptor implements NestInterceptor {
         next: CallHandler,
     ): Promise<ReturnType<CallHandler['handle']>> {
         this.cls.set('dvc_client', this.client)
-        
-        let user: DevCycleUser
-        if (this.options.asyncUserFactory) {
-            user = await this.options.asyncUserFactory(context)
-        } else if (this.options.userFactory) {
-            user = this.options.userFactory(context)
-        } else {
-            throw new Error('Either userFactory or asyncUserFactory must be provided')
-        }
-        
+
+        const user = await this.options.userFactory(context)
         this.cls.set('dvc_user', user)
 
         return next.handle()
