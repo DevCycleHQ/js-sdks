@@ -322,12 +322,21 @@ export function _generateBucketedConfig(
 
         const hasRollout = targetAndHashes!.target.rollout !== null
         const hasMultipleDistributions = targetAndHashes!.target.distribution.length !== 1
-        const evalReason = featureOverride
+        
+        let evalReason: string
+        let evalDetails: string
+        
+        if (ENABLE_EVAL_REASONS) {
+            evalReason = featureOverride
                 ? EVAL_REASONS.OVERRIDE 
                 : hasMultipleDistributions || hasRollout 
                     ? EVAL_REASONS.SPLIT
                     : EVAL_REASONS.TARGETING_MATCH
-        const evalDetails = _getEvalReasonDetails(targetAndHashes!, hasMultipleDistributions, hasRollout)
+            evalDetails = _getEvalReasonDetails(targetAndHashes!, hasMultipleDistributions, hasRollout)
+        } else {
+            evalReason = ""
+            evalDetails = ""
+        }
 
         featureKeyMap.set(
             feature.key,

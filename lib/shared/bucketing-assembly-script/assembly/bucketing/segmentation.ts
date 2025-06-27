@@ -14,6 +14,7 @@ import {
 } from '../types'
 import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import { getF64FromJSONValue } from '../helpers/jsonHelpers'
+
 const ENABLE_EVAL_REASONS = true
 
 export class SegmentationResult extends JSON.Value {
@@ -29,7 +30,7 @@ export class SegmentationResult extends JSON.Value {
     stringify(): string {
         const json = new JSON.Obj()
         json.set('result', this.result)
-        if (ENABLE_EVAL_REASONS && this.reasonDetails !== null) {
+        if (this.reasonDetails !== null) {
             json.set('reasonDetails', this.reasonDetails!)
         }
         return json.stringify()
@@ -65,14 +66,10 @@ export function _evaluateOperator(
                     return evalResult
                 }
             } else if (filter.filterClass !== null) {
-                const result = doesUserPassFilter(filter.filterClass as AudienceFilter, audiences, user, clientCustomData)
-                if(result) {
-                    if (ENABLE_EVAL_REASONS){ 
-                        const reasonDetails = getFilterReason(filter.filterClass as AudienceFilter)
-                    return new SegmentationResult(true, reasonDetails)
-                    } else { 
-                        return new SegmentationResult(true)
-                    }
+                const evalResult = 
+                    doesUserPassFilter(filter.filterClass as AudienceFilter, audiences, user, clientCustomData)
+                if(evalResult.result) {
+                    return evalResult
                 }
             }
         }
@@ -85,25 +82,18 @@ export function _evaluateOperator(
             if (filter.operatorClass !== null) {
                return _evaluateOperator(filter.operatorClass as AudienceOperator, audiences, user, clientCustomData)
             } else if (filter.filterClass !== null) {
-                const result = doesUserPassFilter(filter.filterClass as AudienceFilter, audiences, user, clientCustomData)
-                if(!result){
+                const evalResult = 
+                    doesUserPassFilter(filter.filterClass as AudienceFilter, audiences, user, clientCustomData)
+                if(evalResult.result === false){
                     return new SegmentationResult(false)
                 }
-                // Only get reason when result is true
-                if(ENABLE_EVAL_REASONS) {
-                    const reason = getFilterReason(filter.filterClass as AudienceFilter)
-                    if(reason !== null){ 
-                        reasons.push(reason)
-                    }
+                if(ENABLE_EVAL_REASONS && evalResult.reasonDetails !== null){ 
+                    reasons.push(evalResult.reasonDetails!)
                 }
             }
         }
-        if(ENABLE_EVAL_REASONS) {
-            const allReasons = reasons.join(' AND ') 
-            return new SegmentationResult(true, allReasons)
-        } else {
-            return new SegmentationResult(true)
-        }
+        const allReasons =  ENABLE_EVAL_REASONS ? reasons.join(' AND ') : ""
+        return new SegmentationResult(true, allReasons)
     } else {
         return new SegmentationResult(false) 
     }
@@ -113,59 +103,69 @@ function doesUserPassFilter(
     filter: AudienceFilter,
     audiences: Map<string, Audience>,
     user: DVCPopulatedUser,
-    clientCustomData: JSON.Obj,
-): bool {
-    if (filter.type === 'all') return true
-    else if (filter.type === 'optIn') return false
-    else if (filter.type === 'audienceMatch') {
+    clientCustomData: JSON.Obj
+): SegmentationResult {
+    let isValid = true
+
+    if (filter.type === 'all') return new SegmentationResult(true, EVAL_REASON_DETAILS.ALL_USERS)
+    else if (filter.type === 'optIn') {
+            return new SegmentationResult(false)
+    } else if (filter.type === 'audienceMatch') {
         if (!(filter as AudienceMatchFilter).isValid) {
-            return false
+            isValid = false
         } else {
             return filterForAudienceMatch(filter as AudienceMatchFilter, audiences, user, clientCustomData)
         }
     } else if (!(filter instanceof UserFilter)) {
-        return false
+        isValid = false
     }
 
-    const userFilter = filter as UserFilter
-    if (userFilter.isValid) {
-        const subType = userFilter.subType
-        if (validSubTypes.includes(subType)) {
-            return filterFunctionsBySubtype(subType, user, userFilter, clientCustomData)
+    if (isValid) {
+        const userFilter = filter as UserFilter
+        if (userFilter.isValid) {
+            const subType = userFilter.subType
+            if (validSubTypes.includes(subType)) {
+                return filterFunctionsBySubtype(subType, user, userFilter, clientCustomData)
+            }
         }
     }
 
-    console.log(`[DevCycle] Warning: Invalid filter data ${filter}.`)
-    return false
+    console.log(`[DevCycle] Warning: Invalid filter data ${filter}.
+        To leverage this new filter definition, please update to the latest version of the DevCycle SDK.`)
+    return new SegmentationResult(false)
 }
 
 function filterForAudienceMatch(
     filter: AudienceMatchFilter,
     configAudiences: Map<string, Audience>,
     user: DVCPopulatedUser,
-    clientCustomData: JSON.Obj,
-): bool {
+    clientCustomData: JSON.Obj
+): SegmentationResult {
     const audiences = getFilterAudiencesAsStrings(filter)
     const comparator = filter.comparator
-
+    // Recursively evaluate every audience in the _audiences array
     for (let i = 0; i < audiences.length; i++) {
         if (!configAudiences.has(audiences[i])){
-            console.log(`[DevCycle] Warning: Invalid audience referenced by audienceMatch filter.`)
-            return false
+            console.log(`
+            [DevCycle] Warning: Invalid audience referenced by audienceMatch filter.
+        `)
+            return new SegmentationResult(false)
         }
         const audience = configAudiences.get(audiences[i])
         const result = _evaluateOperator(audience.filters, configAudiences, user, clientCustomData)
         if (result.result) {
+            // If the user is in any of the audiences return early.
             const matchResult = comparator === '='
-            return matchResult 
+            const reasonDetails = matchResult 
+                ? EVAL_REASON_DETAILS.AUDIENCE_MATCH + (result.reasonDetails ? ' -> ' + result.reasonDetails! : '')
+                : null
+            return new SegmentationResult(matchResult, reasonDetails)
         }
     }
+    // The user is not in any of the audiences.
     const matchResult = comparator === '!='
-    // const reasonDetails = matchResult ? EVAL_REASON_DETAILS.NOT_IN_AUDIENCE : null
-    // if(reasonDetails){
-    //     collectReasons.push(reasonDetails)
-    // }
-    return matchResult 
+    const reasonDetails = matchResult ? EVAL_REASON_DETAILS.NOT_IN_AUDIENCE : null
+    return new SegmentationResult(matchResult, reasonDetails)
 }
 
 function filterFunctionsBySubtype(
@@ -173,98 +173,37 @@ function filterFunctionsBySubtype(
     user: DVCPopulatedUser,
     filter: UserFilter,
     clientCustomData: JSON.Obj
-): bool {
+): SegmentationResult {
     if (subType === 'country') {
-        return _checkStringsFilter(user.country, filter)
+        const result = _checkStringsFilter(user.country, filter)
+        return new SegmentationResult(result, result && ENABLE_EVAL_REASONS ? EVAL_REASON_DETAILS.COUNTRY : null)
     } else if (subType === 'email') {
-        return _checkStringsFilter(user.email, filter)
+        const result = _checkStringsFilter(user.email, filter)
+        return new SegmentationResult(result, result && ENABLE_EVAL_REASONS ? EVAL_REASON_DETAILS.EMAIL : null)
     } else if (subType === 'user_id') {
-        return _checkStringsFilter(user.user_id, filter)
+        const result = _checkStringsFilter(user.user_id, filter)
+        return new SegmentationResult(result, result && ENABLE_EVAL_REASONS ? EVAL_REASON_DETAILS.USER_ID : null)
     } else if (subType === 'appVersion') {
-        return _checkVersionFilters(user.appVersion, filter)
+        const result = _checkVersionFilters(user.appVersion, filter)
+        return new SegmentationResult(result, result && ENABLE_EVAL_REASONS ? EVAL_REASON_DETAILS.APP_VERSION : null)
     } else if (subType === 'platformVersion') {
-        return _checkVersionFilters(user.platformVersion, filter)
+        const result = _checkVersionFilters(user.platformVersion, filter)
+        return new SegmentationResult(result, result && ENABLE_EVAL_REASONS ? EVAL_REASON_DETAILS.PLATFORM_VERSION : null)
     } else if (subType === 'deviceModel') {
-        return _checkStringsFilter(user.deviceModel, filter)
+        const result = _checkStringsFilter(user.deviceModel, filter)
+        return new SegmentationResult(result, result && ENABLE_EVAL_REASONS ? EVAL_REASON_DETAILS.DEVICE_MODEL : null)
     } else if (subType === 'platform') {
-        return _checkStringsFilter(user.platform, filter)
+        const result = _checkStringsFilter(user.platform, filter)
+        return new SegmentationResult(result, result ? EVAL_REASON_DETAILS.PLATFORM : null)
     } else if (subType === 'customData') {
         if (!(filter instanceof CustomDataFilter)) {
             throw new Error('Invalid filter data')
         }
-        return _checkCustomData(user.getCombinedCustomData(), clientCustomData, filter as CustomDataFilter)
+        const result = _checkCustomData(user.getCombinedCustomData(), clientCustomData, filter as CustomDataFilter)
+        const reason = result && ENABLE_EVAL_REASONS ? `${EVAL_REASON_DETAILS.CUSTOM_DATA} -> ${(filter as CustomDataFilter).dataKey}` : null
+        return new SegmentationResult(result, reason)
     } else {
-        return false
-    }
-}
-
-// New reason-only functions
-function getFilterReason(
-    filter: AudienceFilter,
-): string | null {
-    if (filter.type === 'all') return EVAL_REASON_DETAILS.ALL_USERS
-    else if (filter.type === 'optIn') return null
-    else if (filter.type === 'audienceMatch') {
-        if (!(filter as AudienceMatchFilter).isValid) {
-            return null
-        } else {
-            return getAudienceMatchReason(filter as AudienceMatchFilter)
-        }
-    } else if (!(filter instanceof UserFilter)) {
-        return null
-    }
-
-    const userFilter = filter as UserFilter
-    if (userFilter.isValid) {
-        const subType = userFilter.subType
-        if (validSubTypes.includes(subType)) {
-            return getSubtypeFilterReason(subType, userFilter)
-        }
-    }
-
-    return null
-}
-
-function getAudienceMatchReason(
-    filter: AudienceMatchFilter,
-): string | null {
-            // const reasonDetails = matchResult 
-            //     ? EVAL_REASON_DETAILS.AUDIENCE_MATCH + (result.reasonDetails ? ' -> ' + result.reasonDetails! : '')
-            //     : null
-    if (filter.comparator === '=') {
-        return EVAL_REASON_DETAILS.AUDIENCE_MATCH 
-    } else if (filter.comparator === '!=') {
-        return EVAL_REASON_DETAILS.NOT_IN_AUDIENCE
-    } else {
-    return null
-    }
-}
-
-function getSubtypeFilterReason(
-    subType: string,
-    filter: UserFilter,
-): string | null {
-    if (subType === 'country') {
-        return EVAL_REASON_DETAILS.COUNTRY
-    } else if (subType === 'email') {
-        return EVAL_REASON_DETAILS.EMAIL
-    } else if (subType === 'user_id') {
-        return EVAL_REASON_DETAILS.USER_ID
-    } else if (subType === 'appVersion') {
-        return EVAL_REASON_DETAILS.APP_VERSION
-    } else if (subType === 'platformVersion') {
-        return EVAL_REASON_DETAILS.PLATFORM_VERSION
-    } else if (subType === 'deviceModel') {
-        return EVAL_REASON_DETAILS.DEVICE_MODEL
-    } else if (subType === 'platform') {
-        return EVAL_REASON_DETAILS.PLATFORM
-    } else if (subType === 'customData') {
-        if (!(filter instanceof CustomDataFilter)) {
-            throw new Error('Invalid filter data')
-        }
-        return `${EVAL_REASON_DETAILS.CUSTOM_DATA} -> ${(filter as CustomDataFilter).dataKey}`
-    } else {
-        return null
+        return new SegmentationResult(false)
     }
 }
 

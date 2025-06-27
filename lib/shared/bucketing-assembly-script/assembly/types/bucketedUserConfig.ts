@@ -67,7 +67,7 @@ export namespace EVAL_REASON_DETAILS {
     export const CUSTOM_DATA = 'Custom Data'
 }
 
-const ENABLE_EVAL_REASONS = false
+const ENABLE_EVAL_REASONS = true
 
 export class FeatureVariation extends JSON.Obj {
     constructor(
