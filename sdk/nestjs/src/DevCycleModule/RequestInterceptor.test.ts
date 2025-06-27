@@ -105,7 +105,7 @@ describe('RequestInterceptor', () => {
                 client,
                 {
                     key: 'sdk_key',
-                },
+                } as any, // Using 'as any' to bypass type checking for this error test case
                 cls,
             )
 
