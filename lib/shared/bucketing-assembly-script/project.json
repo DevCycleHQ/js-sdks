@@ -113,9 +113,7 @@
         "build": {
             "executor": "nx:run-commands",
             "inputs": ["!{projectRoot}/build/**/*"],
-            "outputs": [
-                "{projectRoot}/build/**/*"
-            ],
+            "outputs": ["{projectRoot}/build/**/*"],
             "options": {
                 "commands": [
                     {
