@@ -113,7 +113,10 @@
         "build": {
             "executor": "nx:run-commands",
             "inputs": ["!{projectRoot}/build/**/*"],
-            "outputs": ["{projectRoot}"],
+            "outputs": [
+                "{projectRoot}/build/**/*",
+                "{projectRoot}/assembly/types/protobuf-generated/**/*"
+            ],
             "options": {
                 "commands": [
                     {
