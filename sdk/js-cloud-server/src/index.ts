@@ -3,6 +3,7 @@ import { DevCycleCloudClient } from './cloudClient'
 import { isValidServerSDKKey } from './utils/paramUtils'
 import { DevCycleUser } from './models/user'
 import { EvalHook } from './hooks/EvalHook'
+import { DVCVariableValue } from './types'
 export { DevCycleCloudClient, DevCycleUser }
 export * from './models/populatedUser'
 export * from './models/user'
@@ -12,13 +13,14 @@ export * from './request'
 export * from './utils/logger'
 export * from './utils/paramUtils'
 export * from './hooks/EvalHook'
-type DevCycleCloudOptions = Pick<
+export type DevCycleCloudOptions = Pick<
     DevCycleServerSDKOptions,
     'logger' | 'logLevel' | 'enableEdgeDB' | 'bucketingAPIURI'
 > & {
     platform?: 'NodeJS' | 'Electron' | 'EdgeWorker'
     platformVersion?: string
     hostname?: string
+    hooks?: EvalHook[]
 }
 
 export function initializeDevCycle(

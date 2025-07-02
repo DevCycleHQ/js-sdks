@@ -20,12 +20,20 @@ describe('DVCVariable tests', () => {
             key: 'variableKey',
             defaultValue: false,
             value: 4,
-            eval: {},
+            eval: {
+                reason: 'SPLIT',
+                details: 'Rollout | All Users',
+                target_id: 'test_rollout_id',
+            },
         } as any)
         expect(variable.key).toBe('variablekey')
         expect(variable.defaultValue).toBe(false)
         expect(variable.value).toBe(4)
-        expect(variable.eval).toEqual(expect.any(Object))
+        expect(variable.eval).toEqual({
+            reason: 'SPLIT',
+            details: 'Rollout | All Users',
+            target_id: 'test_rollout_id',
+        })
     })
 
     it('should set variable value to false and not default value', () => {
