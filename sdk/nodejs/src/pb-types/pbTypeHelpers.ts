@@ -52,5 +52,6 @@ export function pbSDKVariableTransform(
             !variable._feature || variable._feature.isNull
                 ? null
                 : variable._feature.value,
+        eval: variable.eval,
     }
 }
