@@ -18,6 +18,8 @@ import {
     VariableDefinitions,
     InferredVariableType,
     DVCCustomDataJSON,
+    EVAL_REASONS,
+    DEFAULT_REASON_DETAILS,
 } from '@devcycle/types'
 import os from 'os'
 import {
@@ -256,6 +258,10 @@ export class DevCycleClient<
                 defaultValue,
                 type,
                 key,
+                eval: {
+                    reason: EVAL_REASONS.DEFAULT,
+                    details: DEFAULT_REASON_DETAILS.MISSING_CONFIG,
+                },
             })
         }
 
@@ -275,8 +281,12 @@ export class DevCycleClient<
         if (configVariable) {
             if (type === configVariable.type) {
                 options.value = configVariable.value as VariableTypeAlias<T>
-                options.evalReason = configVariable.eval?.reason
+                options.eval = configVariable?.eval
             } else {
+                options.eval = {
+                    reason: EVAL_REASONS.DEFAULT,
+                    details: DEFAULT_REASON_DETAILS.TYPE_MISMATCH,
+                }
                 this.logger.error(
                     `Type mismatch for variable ${key}. Expected ${type}, got ${configVariable.type}`,
                 )
