@@ -285,7 +285,7 @@ export class DevCycleClient<
         if (configVariable) {
             if (type === configVariable.type) {
                 options.value = configVariable.value as VariableTypeAlias<T>
-                options.eval = configVariable?.eval
+                options.eval = { ...configVariable?.eval }
             } else {
                 options.eval = {
                     reason: EVAL_REASONS.DEFAULT,
@@ -294,6 +294,11 @@ export class DevCycleClient<
                 this.logger.error(
                     `Type mismatch for variable ${key}. Expected ${type}, got ${configVariable.type}`,
                 )
+            }
+        } else {
+            options.eval = {
+                reason: EVAL_REASONS.DEFAULT,
+                details: DEFAULT_REASON_DETAILS.USER_NOT_TARGETED,
             }
         }
 
