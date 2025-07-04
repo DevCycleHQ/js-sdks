@@ -5,6 +5,7 @@
 
 import { Writer, Reader, Protobuf } from "as-proto/assembly";
 import { NullableString } from "./NullableString";
+import { EvalReason_PB } from "./EvalReason_PB";
 import { VariableType_PB } from "./VariableType_PB";
 
 export class SDKVariable_PB {
@@ -40,6 +41,14 @@ export class SDKVariable_PB {
       writer.uint32(66);
       writer.fork();
       NullableString.encode(feature, writer);
+      writer.ldelim();
+    }
+
+    const eval = message.eval;
+    if (eval !== null) {
+      writer.uint32(74);
+      writer.fork();
+      EvalReason_PB.encode(eval, writer);
       writer.ldelim();
     }
   }
@@ -83,6 +92,10 @@ export class SDKVariable_PB {
           message.feature = NullableString.decode(reader, reader.uint32());
           break;
 
+        case 9:
+          message.eval = EvalReason_PB.decode(reader, reader.uint32());
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -100,6 +113,7 @@ export class SDKVariable_PB {
   stringValue: string;
   evalReason: NullableString | null;
   feature: NullableString | null;
+  eval: EvalReason_PB | null;
 
   constructor(
     id: string = "",
@@ -109,7 +123,8 @@ export class SDKVariable_PB {
     doubleValue: f64 = 0.0,
     stringValue: string = "",
     evalReason: NullableString | null = null,
-    feature: NullableString | null = null
+    feature: NullableString | null = null,
+    eval: EvalReason_PB | null = null
   ) {
     this.id = id;
     this.type = type;
@@ -119,6 +134,7 @@ export class SDKVariable_PB {
     this.stringValue = stringValue;
     this.evalReason = evalReason;
     this.feature = feature;
+    this.eval = eval;
   }
 }
 

@@ -25,8 +25,11 @@ import {
     AudienceOperator,
     BucketedUserConfig,
     SDKVariable,
+    EVAL_REASONS,
+    EVAL_REASON_DETAILS,
 } from '@devcycle/types'
 import { cleanupSDK, initSDK } from '../setPlatformData'
+
 import {
     variableForUserPB,
     VariableForUserArgs,
@@ -178,8 +181,9 @@ describe('User Hashing and Bucketing', () => {
             const variation = decideTargetVariation({
                 target: testTarget,
                 boundedHash: bucketingHash,
-            }) as keyof typeof buckets
-            buckets[variation]++
+            })
+            const variationKey = variation as keyof typeof buckets
+            buckets[variationKey]++
             buckets.total++
         }
 
@@ -260,6 +264,11 @@ describe('Config Parsing and Generating', () => {
                     _variation: '615357cf7e9ebdca58446ed0',
                     variationName: 'variation 2',
                     variationKey: 'variation-2-key',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'User ID AND Country',
+                        target_id: '61536f468fd67f0091982533',
+                    },
                 },
             },
             featureVariationMap: {
@@ -290,6 +299,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'swagTest',
                     type: 'String',
                     value: 'YEEEEOWZA',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'User ID AND Country',
+                        target_id: '61536f468fd67f0091982533',
+                    },
                 },
                 'bool-var': {
                     _id: '61538237b0a70b58ae6af71y',
@@ -297,6 +311,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'bool-var',
                     type: 'Boolean',
                     value: false,
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'User ID AND Country',
+                        target_id: '61536f468fd67f0091982533',
+                    },
                 },
                 'json-var': {
                     _id: '61538237b0a70b58ae6af71q',
@@ -304,6 +323,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'json-var',
                     type: 'JSON',
                     value: '{"hello":"world","num":610,"bool":true}',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'User ID AND Country',
+                        target_id: '61536f468fd67f0091982533',
+                    },
                 },
                 'num-var': {
                     _id: '61538237b0a70b58ae6af71s',
@@ -311,6 +335,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'num-var',
                     type: 'Number',
                     value: 610.61,
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'User ID AND Country',
+                        target_id: '61536f468fd67f0091982533',
+                    },
                 },
             },
         }
@@ -363,6 +392,11 @@ describe('Config Parsing and Generating', () => {
                     _variation: '6153553b8cf4e45e0464268d',
                     variationName: 'variation 1',
                     variationKey: 'variation-1-key',
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details: 'Random Distribution | Email',
+                        target_id: '61536f3bc838a705c105eb62',
+                    },
                 },
                 feature2: {
                     _id: '614ef6aa475928459060721a',
@@ -371,6 +405,11 @@ describe('Config Parsing and Generating', () => {
                     _variation: '615382338424cb11646d7668',
                     variationName: 'feature 2 variation',
                     variationKey: 'variation-feature-2-key',
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details: 'Random Distribution | Email',
+                        target_id: '61536f468fd67f0091982533',
+                    },
                 },
                 feature3: {
                     _id: '614ef6aa475928459060721c',
@@ -379,6 +418,11 @@ describe('Config Parsing and Generating', () => {
                     type: 'release',
                     variationKey: 'audience-match-variation',
                     variationName: 'audience match variation',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'Audience Match -> Email',
+                        target_id: '61536f468fd67f0091982531',
+                    },
                 },
                 feature4: {
                     _id: '614ef8aa475928459060721c',
@@ -388,6 +432,11 @@ describe('Config Parsing and Generating', () => {
                     type: 'release',
                     variationKey: 'variation-feature-2-key',
                     variationName: 'feature 4 variation',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'Email',
+                        target_id: '61536f468fd67f0091982531',
+                    },
                 },
             },
             featureVariationMap: {
@@ -441,6 +490,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'audience-match',
                     type: 'String',
                     value: 'audience_match',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'Audience Match -> Email',
+                        target_id: '61536f468fd67f0091982531',
+                    },
                 },
                 'feature2.cool': {
                     _id: '61538237b0a70b58ae6af71g',
@@ -448,6 +502,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'feature2.cool',
                     type: 'String',
                     value: 'multivar first',
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details: 'Random Distribution | Email',
+                        target_id: '61536f468fd67f0091982533',
+                    },
                 },
                 'feature2.hello': {
                     _id: '61538237b0a70b58ae6af71h',
@@ -455,6 +514,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'feature2.hello',
                     type: 'String',
                     value: 'multivar last',
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details: 'Random Distribution | Email',
+                        target_id: '61536f468fd67f0091982533',
+                    },
                 },
                 swagTest: {
                     _id: '615356f120ed334a6054564c',
@@ -462,6 +526,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'swagTest',
                     type: 'String',
                     value: 'man',
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details: 'Random Distribution | Email',
+                        target_id: '61536f3bc838a705c105eb62',
+                    },
                 },
                 test: {
                     _id: '614ef6ea475129459160721a',
@@ -469,6 +538,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'test',
                     type: 'String',
                     value: 'scat',
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details: 'Random Distribution | Email',
+                        target_id: '61536f3bc838a705c105eb62',
+                    },
                 },
                 'bool-var': {
                     _id: '61538237b0a70b58ae6af71y',
@@ -476,6 +550,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'bool-var',
                     type: 'Boolean',
                     value: false,
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details: 'Random Distribution | Email',
+                        target_id: '61536f3bc838a705c105eb62',
+                    },
                 },
                 'json-var': {
                     _id: '61538237b0a70b58ae6af71q',
@@ -483,6 +562,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'json-var',
                     type: 'JSON',
                     value: '{"hello":"world","num":610,"bool":true}',
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details: 'Random Distribution | Email',
+                        target_id: '61536f3bc838a705c105eb62',
+                    },
                 },
                 'num-var': {
                     _id: '61538237b0a70b58ae6af71s',
@@ -490,6 +574,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'num-var',
                     type: 'Number',
                     value: 610.61,
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details: 'Random Distribution | Email',
+                        target_id: '61536f3bc838a705c105eb62',
+                    },
                 },
                 feature4Var: {
                     _id: '61538937b0a70b58ae6af71f',
@@ -497,6 +586,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'feature4Var',
                     type: 'String',
                     value: 'feature 4 value',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'Email',
+                        target_id: '61536f468fd67f0091982531',
+                    },
                 },
             },
         }
@@ -591,6 +685,12 @@ describe('Config Parsing and Generating', () => {
                     _variation: '615382338424cb11646d7667',
                     variationName: 'variation 1 aud 2',
                     variationKey: 'variation-1-aud-2-key',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                        target_id: '61536f669c69b86cccc5f15e',
+                    },
                 },
             },
             variableVariationMap: {
@@ -609,6 +709,12 @@ describe('Config Parsing and Generating', () => {
                     key: 'feature2Var',
                     type: 'String',
                     value: 'Var 1 aud 2',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                        target_id: '61536f669c69b86cccc5f15e',
+                    },
                 },
             },
         }
@@ -662,6 +768,11 @@ describe('Config Parsing and Generating', () => {
                     type: 'release',
                     variationKey: 'variation-1-key',
                     variationName: 'variation 1',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
+                        target_id: '61536f468fd67f0091982535',
+                    },
                 },
                 feature2: {
                     _id: '614ef6aa475928459060721a',
@@ -670,6 +781,12 @@ describe('Config Parsing and Generating', () => {
                     _variation: '615382338424cb11646d7667',
                     variationName: 'variation 1 aud 2',
                     variationKey: 'variation-1-aud-2-key',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                        target_id: '61536f669c69b86cccc5f15e',
+                    },
                 },
             },
             variableVariationMap: {
@@ -709,6 +826,12 @@ describe('Config Parsing and Generating', () => {
                     key: 'feature2Var',
                     type: 'String',
                     value: 'Var 1 aud 2',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                        target_id: '61536f669c69b86cccc5f15e',
+                    },
                 },
                 'bool-var': {
                     _id: '61538237b0a70b58ae6af71y',
@@ -716,6 +839,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'bool-var',
                     type: 'Boolean',
                     value: false,
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
+                        target_id: '61536f468fd67f0091982535',
+                    },
                 },
                 'json-var': {
                     _id: '61538237b0a70b58ae6af71q',
@@ -723,6 +851,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'json-var',
                     type: 'JSON',
                     value: '{"hello":"world","num":610,"bool":true}',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
+                        target_id: '61536f468fd67f0091982535',
+                    },
                 },
                 'num-var': {
                     _id: '61538237b0a70b58ae6af71s',
@@ -730,6 +863,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'num-var',
                     type: 'Number',
                     value: 610.61,
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
+                        target_id: '61536f468fd67f0091982535',
+                    },
                 },
                 swagTest: {
                     _id: '615356f120ed334a6054564c',
@@ -737,6 +875,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'swagTest',
                     type: 'String',
                     value: 'man',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
+                        target_id: '61536f468fd67f0091982535',
+                    },
                 },
                 test: {
                     _id: '614ef6ea475129459160721a',
@@ -744,6 +887,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'test',
                     type: 'String',
                     value: 'scat',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
+                        target_id: '61536f468fd67f0091982535',
+                    },
                 },
             },
         }
@@ -808,6 +956,11 @@ describe('Config Parsing and Generating', () => {
                     type: 'release',
                     variationKey: 'variation-1-key',
                     variationName: 'variation 1',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
+                        target_id: '61536f468fd67f0091982535',
+                    },
                 },
                 feature2: {
                     _id: '614ef6aa475928459060721a',
@@ -816,6 +969,12 @@ describe('Config Parsing and Generating', () => {
                     _variation: '615382338424cb11646d7667',
                     variationName: 'variation 1 aud 2',
                     variationKey: 'variation-1-aud-2-key',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                        target_id: '61536f669c69b86cccc5f15e',
+                    },
                 },
             },
             variableVariationMap: {
@@ -855,6 +1014,12 @@ describe('Config Parsing and Generating', () => {
                     key: 'feature2Var',
                     type: 'String',
                     value: 'Var 1 aud 2',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                        target_id: '61536f669c69b86cccc5f15e',
+                    },
                 },
                 'bool-var': {
                     _id: '61538237b0a70b58ae6af71y',
@@ -862,6 +1027,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'bool-var',
                     type: 'Boolean',
                     value: false,
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
+                        target_id: '61536f468fd67f0091982535',
+                    },
                 },
                 'json-var': {
                     _id: '61538237b0a70b58ae6af71q',
@@ -869,6 +1039,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'json-var',
                     type: 'JSON',
                     value: '{"hello":"world","num":610,"bool":true}',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
+                        target_id: '61536f468fd67f0091982535',
+                    },
                 },
                 'num-var': {
                     _id: '61538237b0a70b58ae6af71s',
@@ -876,6 +1051,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'num-var',
                     type: 'Number',
                     value: 610.61,
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
+                        target_id: '61536f468fd67f0091982535',
+                    },
                 },
                 swagTest: {
                     _id: '615356f120ed334a6054564c',
@@ -883,6 +1063,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'swagTest',
                     type: 'String',
                     value: 'man',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
+                        target_id: '61536f468fd67f0091982535',
+                    },
                 },
                 test: {
                     _id: '614ef6ea475129459160721a',
@@ -890,6 +1075,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'test',
                     type: 'String',
                     value: 'scat',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: 'All Users',
+                        target_id: '61536f468fd67f0091982535',
+                    },
                 },
             },
         }
@@ -941,6 +1131,13 @@ describe('Config Parsing and Generating', () => {
                     _variation: '615357cf7e9ebdca58446ed0',
                     variationName: 'variation 2',
                     variationKey: 'variation-2-key',
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details:
+                            'Rollout | Platform Version AND ' +
+                            'Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                        target_id: '61536f468fd67f0091982534',
+                    },
                 },
                 feature2: {
                     _id: '614ef6aa475928459060721a',
@@ -949,6 +1146,12 @@ describe('Config Parsing and Generating', () => {
                     _variation: '615382338424cb11646d7667',
                     variationName: 'variation 1 aud 2',
                     variationKey: 'variation-1-aud-2-key',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                        target_id: '61536f669c69b86cccc5f15e',
+                    },
                 },
             },
             featureVariationMap: {
@@ -984,6 +1187,13 @@ describe('Config Parsing and Generating', () => {
                     key: 'bool-var',
                     type: 'Boolean',
                     value: false,
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details:
+                            'Rollout | Platform Version AND ' +
+                            'Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                        target_id: '61536f468fd67f0091982534',
+                    },
                 },
                 swagTest: {
                     _id: '615356f120ed334a6054564c',
@@ -991,6 +1201,13 @@ describe('Config Parsing and Generating', () => {
                     key: 'swagTest',
                     type: 'String',
                     value: 'YEEEEOWZA',
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details:
+                            'Rollout | Platform Version AND ' +
+                            'Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                        target_id: '61536f468fd67f0091982534',
+                    },
                 },
                 feature2Var: {
                     _id: '61538237b0a70b58ae6af71f',
@@ -998,6 +1215,12 @@ describe('Config Parsing and Generating', () => {
                     key: 'feature2Var',
                     type: 'String',
                     value: 'Var 1 aud 2',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details:
+                            'Platform Version AND Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                        target_id: '61536f669c69b86cccc5f15e',
+                    },
                 },
                 'json-var': {
                     _id: '61538237b0a70b58ae6af71q',
@@ -1005,6 +1228,13 @@ describe('Config Parsing and Generating', () => {
                     key: 'json-var',
                     type: 'JSON',
                     value: '{"hello":"world","num":610,"bool":true}',
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details:
+                            'Rollout | Platform Version AND ' +
+                            'Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                        target_id: '61536f468fd67f0091982534',
+                    },
                 },
                 'num-var': {
                     _id: '61538237b0a70b58ae6af71s',
@@ -1012,6 +1242,13 @@ describe('Config Parsing and Generating', () => {
                     key: 'num-var',
                     type: 'Number',
                     value: 610.61,
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details:
+                            'Rollout | Platform Version AND ' +
+                            'Custom Data -> favouriteFood AND Custom Data -> favouriteDrink',
+                        target_id: '61536f468fd67f0091982534',
+                    },
                 },
             },
         }
@@ -1146,6 +1383,11 @@ describe('Config Parsing and Generating', () => {
                     type: 'ops',
                     variationKey: 'audience-match-variation',
                     variationName: 'audience match variation',
+                    eval: {
+                        details: 'Custom Data -> favouriteNull',
+                        reason: 'TARGETING_MATCH',
+                        target_id: '61536f468fd67f0091982533',
+                    },
                 },
             },
             featureVariationMap: {
@@ -1164,6 +1406,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'audience-match',
                     type: 'String',
                     value: 'audience_match',
+                    eval: {
+                        details: 'Custom Data -> favouriteNull',
+                        reason: 'TARGETING_MATCH',
+                        target_id: '61536f468fd67f0091982533',
+                    },
                 },
             },
         }
@@ -1219,6 +1466,11 @@ describe('Config Parsing and Generating', () => {
                     type: 'permission',
                     variationKey: 'audience-match-variation',
                     variationName: 'audience match variation',
+                    eval: {
+                        details: 'Custom Data -> favouriteNull',
+                        reason: 'TARGETING_MATCH',
+                        target_id: '61536f468fd67f0091982532',
+                    },
                 },
             },
             featureVariationMap: {
@@ -1237,6 +1489,11 @@ describe('Config Parsing and Generating', () => {
                     key: 'audience-match',
                     type: 'String',
                     value: 'audience_match',
+                    eval: {
+                        details: 'Custom Data -> favouriteNull',
+                        reason: 'TARGETING_MATCH',
+                        target_id: '61536f468fd67f0091982532',
+                    },
                 },
             },
         }
@@ -1289,6 +1546,11 @@ describe('Config Parsing and Generating', () => {
                         _variation: '6153553b8cf4e45e0464268d',
                         variationName: 'variation 1',
                         variationKey: 'variation-1-key',
+                        eval: {
+                            reason: EVAL_REASONS.OVERRIDE,
+                            details: EVAL_REASON_DETAILS.OVERRIDE,
+                            target_id: '',
+                        },
                     },
                     feature2: {
                         _id: '614ef6aa475928459060721a',
@@ -1297,6 +1559,11 @@ describe('Config Parsing and Generating', () => {
                         _variation: '615382338424cb11646d7667',
                         variationKey: 'variation-1-aud-2-key',
                         variationName: 'variation 1 aud 2',
+                        eval: {
+                            reason: EVAL_REASONS.OVERRIDE,
+                            details: EVAL_REASON_DETAILS.OVERRIDE,
+                            target_id: '',
+                        },
                     },
                 },
                 featureVariationMap: {
@@ -1336,6 +1603,11 @@ describe('Config Parsing and Generating', () => {
                         key: 'swagTest',
                         type: 'String',
                         value: 'man',
+                        eval: {
+                            reason: EVAL_REASONS.OVERRIDE,
+                            details: EVAL_REASON_DETAILS.OVERRIDE,
+                            target_id: '',
+                        },
                     },
                     feature2Var: {
                         _id: '61538237b0a70b58ae6af71f',
@@ -1343,6 +1615,11 @@ describe('Config Parsing and Generating', () => {
                         key: 'feature2Var',
                         type: 'String',
                         value: 'Var 1 aud 2',
+                        eval: {
+                            reason: EVAL_REASONS.OVERRIDE,
+                            details: EVAL_REASON_DETAILS.OVERRIDE,
+                            target_id: '',
+                        },
                     },
                     'bool-var': {
                         _id: '61538237b0a70b58ae6af71y',
@@ -1350,6 +1627,11 @@ describe('Config Parsing and Generating', () => {
                         key: 'bool-var',
                         type: 'Boolean',
                         value: false,
+                        eval: {
+                            reason: EVAL_REASONS.OVERRIDE,
+                            details: EVAL_REASON_DETAILS.OVERRIDE,
+                            target_id: '',
+                        },
                     },
                     'json-var': {
                         _id: '61538237b0a70b58ae6af71q',
@@ -1357,6 +1639,11 @@ describe('Config Parsing and Generating', () => {
                         key: 'json-var',
                         type: 'JSON',
                         value: '{"hello":"world","num":610,"bool":true}',
+                        eval: {
+                            reason: EVAL_REASONS.OVERRIDE,
+                            details: EVAL_REASON_DETAILS.OVERRIDE,
+                            target_id: '',
+                        },
                     },
                     'num-var': {
                         _id: '61538237b0a70b58ae6af71s',
@@ -1364,6 +1651,11 @@ describe('Config Parsing and Generating', () => {
                         key: 'num-var',
                         type: 'Number',
                         value: 610.61,
+                        eval: {
+                            reason: EVAL_REASONS.OVERRIDE,
+                            details: EVAL_REASON_DETAILS.OVERRIDE,
+                            target_id: '',
+                        },
                     },
                     test: {
                         _id: '614ef6ea475129459160721a',
@@ -1371,6 +1663,11 @@ describe('Config Parsing and Generating', () => {
                         key: 'test',
                         type: 'String',
                         value: 'scat',
+                        eval: {
+                            reason: EVAL_REASONS.OVERRIDE,
+                            details: EVAL_REASON_DETAILS.OVERRIDE,
+                            target_id: '',
+                        },
                     },
                 },
             }
@@ -1694,7 +1991,6 @@ describe('Bounded Hash Limits', () => {
                     expect(variation).toBe(tc.expectedVariation)
                 }
             })
-
             it('should handle edge case: bounded hash value 0', () => {
                 const variation = decideTargetVariation({
                     target: tc.target,

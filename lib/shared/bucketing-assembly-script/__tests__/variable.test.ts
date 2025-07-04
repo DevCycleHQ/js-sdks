@@ -25,6 +25,11 @@ describe('variableForUser tests', () => {
         expect(variable1).toEqual({
             _id: '615356f120ed334a6054564c',
             _feature: '614ef6aa473928459060721a',
+            eval: {
+                details: 'User ID AND Country',
+                reason: 'TARGETING_MATCH',
+                target_id: '61536f468fd67f0091982533',
+            },
             key: 'swagTest',
             type: 'String',
             value: 'YEEEEOWZA',
@@ -38,6 +43,11 @@ describe('variableForUser tests', () => {
         expect(variable2).toEqual({
             _id: '61538237b0a70b58ae6af71y',
             _feature: '614ef6aa473928459060721a',
+            eval: {
+                details: 'User ID AND Country',
+                reason: 'TARGETING_MATCH',
+                target_id: '61536f468fd67f0091982533',
+            },
             key: 'bool-var',
             type: 'Boolean',
             value: false,
@@ -51,6 +61,11 @@ describe('variableForUser tests', () => {
         expect(variable3).toEqual({
             _id: '61538237b0a70b58ae6af71s',
             _feature: '614ef6aa473928459060721a',
+            eval: {
+                details: 'User ID AND Country',
+                reason: 'TARGETING_MATCH',
+                target_id: '61536f468fd67f0091982533',
+            },
             key: 'num-var',
             type: 'Number',
             value: 610.61,
@@ -64,6 +79,11 @@ describe('variableForUser tests', () => {
         expect(variable4).toEqual({
             _id: '61538237b0a70b58ae6af71q',
             _feature: '614ef6aa473928459060721a',
+            eval: {
+                details: 'User ID AND Country',
+                reason: 'TARGETING_MATCH',
+                target_id: '61536f468fd67f0091982533',
+            },
             key: 'json-var',
             type: 'JSON',
             value: '{"hello":"world","num":610,"bool":true}',
@@ -85,6 +105,11 @@ describe('variableForUser tests', () => {
         expect(variable1).toEqual({
             _id: '615356f120ed334a6054564c',
             _feature: '614ef6aa473928459060721a',
+            eval: {
+                details: 'User ID AND Country',
+                reason: 'TARGETING_MATCH',
+                target_id: '61536f468fd67f0091982533',
+            },
             key: 'swagTest',
             type: 'String',
             value: 'YEEEEOWZA',

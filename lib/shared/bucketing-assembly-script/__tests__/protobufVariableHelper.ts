@@ -1,4 +1,8 @@
-import { SDKVariable, VariableType as VariableTypeStr } from '@devcycle/types'
+import {
+    EVAL_REASONS,
+    SDKVariable,
+    VariableType as VariableTypeStr,
+} from '@devcycle/types'
 import { variableForUser_PB, VariableType } from './bucketingImportHelper'
 import { VariableForUserParams_PB, SDKVariable_PB } from '../protobuf/compiled'
 
@@ -9,6 +13,11 @@ type SDKVariable_PB_Type = {
     boolValue: boolean
     doubleValue: number
     stringValue: string
+    eval?: {
+        reason: EVAL_REASONS
+        details?: string
+        target_id?: string
+    }
     _feature?: {
         value: string
         isNull: boolean
@@ -22,6 +31,7 @@ const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
             key: pbSDKVariable.key,
             value: pbSDKVariable.boolValue,
             type: VariableTypeStr.boolean,
+            eval: pbSDKVariable.eval,
             _feature: pbSDKVariable._feature?.value,
         }
     } else if (pbSDKVariable.type === 1) {
@@ -30,6 +40,7 @@ const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
             key: pbSDKVariable.key,
             value: pbSDKVariable.doubleValue,
             type: VariableTypeStr.number,
+            eval: pbSDKVariable.eval,
             _feature: pbSDKVariable._feature?.value,
         }
     } else if (pbSDKVariable.type === 2) {
@@ -38,6 +49,7 @@ const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
             key: pbSDKVariable.key,
             value: pbSDKVariable.stringValue,
             type: VariableTypeStr.string,
+            eval: pbSDKVariable.eval,
             _feature: pbSDKVariable._feature?.value,
         }
     } else if (pbSDKVariable.type === 3) {
@@ -46,6 +58,7 @@ const pbSDKVariableToJS = (pbSDKVariable: SDKVariable_PB_Type): SDKVariable => {
             key: pbSDKVariable.key,
             value: JSON.parse(pbSDKVariable.stringValue),
             type: VariableTypeStr.json,
+            eval: pbSDKVariable.eval,
             _feature: pbSDKVariable._feature?.value,
         }
     }
