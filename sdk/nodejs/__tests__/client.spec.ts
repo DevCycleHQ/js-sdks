@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { DevCycleClient } from '../src/client'
 import { DevCycleUser } from '@devcycle/js-cloud-server-sdk'
-import { DVCCustomDataJSON } from '@devcycle/types'
+import {
+    DEFAULT_REASON_DETAILS,
+    DVCCustomDataJSON,
+    EVAL_REASON_DETAILS,
+    EVAL_REASONS,
+} from '@devcycle/types'
 import { EvalHook } from '../src/hooks/EvalHook'
 
 jest.mock('../src/bucketing')
@@ -80,6 +85,11 @@ describe('variable', () => {
         const variable = client.variable(user, 'test-key', false)
         expect(variable.value).toEqual(true)
         expect(variable.type).toEqual('Boolean')
+        expect(variable.eval).toEqual({
+            reason: EVAL_REASONS.TARGETING_MATCH,
+            details: EVAL_REASON_DETAILS.ALL_USERS,
+            target_id: 'mockTargetId',
+        })
 
         expect(client.variableValue(user, 'test-key', false)).toEqual(true)
     })
@@ -98,6 +108,10 @@ describe('variable', () => {
         const variable = client.variable(user, 'test-key2', false)
         expect(variable.value).toEqual(false)
         expect(variable.isDefaulted).toEqual(true)
+        expect(variable.eval).toEqual({
+            reason: EVAL_REASONS.DEFAULT,
+            details: DEFAULT_REASON_DETAILS.USER_NOT_TARGETED,
+        })
 
         // @ts-ignore
         client.bucketingLib.variableForUser_PB.mockReturnValueOnce(null)
@@ -110,6 +124,10 @@ describe('variable', () => {
         const variable = client.variable(user, 'test-key', 'test')
         expect(variable.value).toEqual('test')
         expect(variable.isDefaulted).toEqual(true)
+        expect(variable.eval).toEqual({
+            reason: EVAL_REASONS.DEFAULT,
+            details: DEFAULT_REASON_DETAILS.TYPE_MISMATCH,
+        })
 
         expect(client.variableValue(user, 'test-key', 'test')).toEqual('test')
     })
