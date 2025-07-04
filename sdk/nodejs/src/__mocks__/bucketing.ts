@@ -1,4 +1,5 @@
 import { Exports, ProtobufTypes } from '@devcycle/bucketing-assembly-script'
+import { EVAL_REASON_DETAILS, EVAL_REASONS } from '@devcycle/types'
 
 const testVariable = {
     _id: 'test-id',
@@ -6,6 +7,11 @@ const testVariable = {
     type: 'Boolean',
     key: 'test-key',
     evalReason: null,
+    eval: {
+        reason: EVAL_REASONS.TARGETING_MATCH,
+        details: EVAL_REASON_DETAILS.ALL_USERS,
+        target_id: 'mockTargetId',
+    },
 }
 const buffer = ProtobufTypes.SDKVariable_PB.encode({
     _id: testVariable._id,
@@ -14,6 +20,7 @@ const buffer = ProtobufTypes.SDKVariable_PB.encode({
     boolValue: testVariable.value,
     doubleValue: 0,
     stringValue: '',
+    eval: testVariable.eval,
 }).finish()
 
 enum VariableType {
