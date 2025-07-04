@@ -10,20 +10,24 @@ import {
 } from '@nestjs/common'
 import { DVCVariableValue, DevCycleClient } from '@devcycle/nodejs-server-sdk'
 import { ClsService } from 'nestjs-cls'
+import { VariableDefinitions, VariableKey } from '@devcycle/types'
 
-type VariableValues = {
-    [key: string]: DVCVariableValue
+type VariableValues<
+    K extends VariableKey,
+    ValueType extends VariableDefinitions[K],
+> = {
+    [key in K]: ValueType
 }
 
 export const RequireVariableValue = (
-    requiredVariables: VariableValues,
+    requiredVariables: VariableValues<VariableKey, DVCVariableValue>,
 ): ClassDecorator & MethodDecorator =>
     applyDecorators(
         UseInterceptors(RequireVariableValueInterceptor(requiredVariables)),
     )
 
 const RequireVariableValueInterceptor = (
-    requiredVariableValues: VariableValues,
+    requiredVariableValues: VariableValues<VariableKey, DVCVariableValue>,
 ) => {
     class RequireVariableValueInterceptor implements NestInterceptor {
         constructor(
@@ -44,7 +48,9 @@ const RequireVariableValueInterceptor = (
             for (const [key, requiredValue] of Object.entries(
                 requiredVariableValues,
             )) {
-                const defaultValue = getDefaultValue(requiredValue)
+                const defaultValue = getDefaultValue(
+                    requiredValue as DVCVariableValue,
+                )
                 const { value: servedValue, isDefaulted } =
                     this.dvcClient.variable(user, key, defaultValue)
 
