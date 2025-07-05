@@ -15,16 +15,13 @@ export const fetchCDNConfig = cache(
         clientSDKKey: string,
         obfuscated: boolean,
     ): Promise<{ config: ConfigBody; headers: Headers }> => {
-        const response = await fetch(
-            getFetchUrl(sdkKey, obfuscated),
-            // only store for 60 seconds
-            {
-                next: {
-                    revalidate: 60,
-                    tags: [sdkKey, clientSDKKey],
-                },
+        const url = getFetchUrl(sdkKey, obfuscated)
+        const response = await fetch(url, {
+            next: {
+                revalidate: 60,
+                tags: [sdkKey, clientSDKKey],
             },
-        )
+        })
 
         if (!response.ok) {
             const responseText = await response.text()
@@ -36,6 +33,8 @@ export const fetchCDNConfig = cache(
         }
     },
 )
+
+const getAPIUrl = (path: string) => `https://sdk-api.devcycle.com/v1/${path}`
 
 const getSDKAPIUrl = (
     sdkKey: string,
@@ -50,7 +49,7 @@ const getSDKAPIUrl = (
     }
     searchParams.set('sdkPlatform', 'nextjs')
     searchParams.set('sse', '1')
-    return `https://sdk-api.devcycle.com/v1/sdkConfig?${searchParams.toString()}`
+    return getAPIUrl(`sdkConfig?${searchParams.toString()}`)
 }
 
 export const sdkConfigAPI = cache(
@@ -67,5 +66,15 @@ export const sdkConfigAPI = cache(
         })
 
         return (await response.json()) as BucketedUserConfig
+    },
+)
+
+export const getOptInUsersFromConfigApi = cache(
+    async (sdkKey: string): Promise<string[]> => {
+        const response = await fetch(getAPIUrl(`optIns/users?sdkKey=${sdkKey}`))
+        if (!response.ok) {
+            return []
+        }
+        return (await response.json()).users
     },
 )
