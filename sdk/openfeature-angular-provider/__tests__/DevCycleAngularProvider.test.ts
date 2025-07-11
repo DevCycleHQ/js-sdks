@@ -43,6 +43,7 @@ async function initOFClient(): Promise<{
                 value: true,
                 defaultValue: false,
                 isDefaulted: false,
+                _feature: 'boolean-flag',
                 eval: {
                     reason: EVAL_REASONS.TARGETING_MATCH,
                 },
