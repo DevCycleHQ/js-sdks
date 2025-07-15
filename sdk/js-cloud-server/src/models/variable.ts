@@ -16,6 +16,9 @@ export type VariableParam<T extends DVCVariableValue> = {
     defaultValue: T
     value?: VariableTypeAlias<T>
     type: VariableType
+    /**
+     * @deprecated use eval instead
+     */
     evalReason?: unknown
     eval?: unknown
 }
