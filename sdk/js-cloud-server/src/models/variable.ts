@@ -16,6 +16,9 @@ export type VariableParam<T extends DVCVariableValue> = {
     defaultValue: T
     value?: VariableTypeAlias<T>
     type: VariableType
+    /**
+     * @deprecated use eval instead
+     */
     evalReason?: unknown
     eval?: unknown
 }
@@ -30,6 +33,10 @@ export class DVCVariable<
     readonly defaultValue: T
     readonly isDefaulted: boolean
     readonly type: 'String' | 'Number' | 'Boolean' | 'JSON'
+    /**
+     * @deprecated use eval instead
+     */
+    readonly evalReason?: unknown
     readonly eval?: unknown
 
     constructor(variable: VariableParam<T>) {

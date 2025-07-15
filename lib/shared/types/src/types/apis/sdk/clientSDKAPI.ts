@@ -399,6 +399,9 @@ export class DVCOptInUser {
 export type SDKVariable = PublicVariable & {
     value: VariableValue
     _feature?: string
+    /**
+     * @deprecated use eval instead
+     */
     evalReason?: unknown
     eval?: EvalReason
 }
@@ -410,6 +413,10 @@ export type SDKFeature = Pick<
     _variation: string
     variationName: string
     variationKey: string
+    /**
+     * @deprecated use eval instead
+     */
+    evalReason?: unknown
     eval?: EvalReason
 }
 
