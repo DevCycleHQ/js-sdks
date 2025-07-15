@@ -38,6 +38,10 @@ export interface DVCVariableInterface {
     readonly type?: 'String' | 'Number' | 'Boolean' | 'JSON'
 
     /**
+     * @deprecated use eval instead
+     */
+    readonly evalReason?: unknown
+    /**
      * Evaluation Reason as to why the variable was segmented into a specific Feature and
      * given this specific value
      */
@@ -82,6 +86,10 @@ export interface DVCFeature {
 
     readonly type: string
 
+    /**
+     * @deprecated use eval instead
+     */
+    readonly evalReason?: unknown
     readonly eval?: unknown
 }
 

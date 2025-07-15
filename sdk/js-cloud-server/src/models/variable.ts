@@ -30,6 +30,10 @@ export class DVCVariable<
     readonly defaultValue: T
     readonly isDefaulted: boolean
     readonly type: 'String' | 'Number' | 'Boolean' | 'JSON'
+    /**
+     * @deprecated use eval instead
+     */
+    readonly evalReason?: unknown
     readonly eval?: unknown
 
     constructor(variable: VariableParam<T>) {
@@ -47,6 +51,7 @@ export class DVCVariable<
                 : value
         this.defaultValue = defaultValue
         this.eval = evalReason
+        this.evalReason = null
         this.type = type
     }
 }
