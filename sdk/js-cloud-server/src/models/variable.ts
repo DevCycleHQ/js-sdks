@@ -54,7 +54,6 @@ export class DVCVariable<
                 : value
         this.defaultValue = defaultValue
         this.eval = evalReason
-        this.evalReason = null
         this.type = type
     }
 }
