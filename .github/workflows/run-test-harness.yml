@@ -3,7 +3,7 @@ permissions:
     contents: read
 on:
     pull_request:
-        branches: [main]
+        branches: [main, fix/revert-evalReason-removal]
 
 jobs:
     build:
