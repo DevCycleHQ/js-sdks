@@ -19,7 +19,7 @@
     },
     "homepage": "https://devcycle.com",
     "dependencies": {
-        "@devcycle/nodejs-server-sdk": "^1.52.1"
+        "@devcycle/nodejs-server-sdk": "1.52.1"
     },
     "main": "src/index.js",
     "types": "src/index.d.ts"

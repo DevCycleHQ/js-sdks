@@ -20,12 +20,12 @@
     },
     "homepage": "https://devcycle.com",
     "dependencies": {
-        "@devcycle/js-client-sdk": "^1.45.1",
-        "@devcycle/openfeature-web-provider": "^1.10.1"
+        "@devcycle/js-client-sdk": "1.45.1",
+        "@devcycle/openfeature-web-provider": "1.10.1"
     },
     "peerDependencies": {
         "@openfeature/multi-provider-web": "^0.0.3",
-        "@openfeature/web-sdk": "^1.4.1"
+        "@openfeature/web-sdk": "^1.5.0"
     },
     "peerDependenciesMeta": {
         "@openfeature/multi-provider-web": {
