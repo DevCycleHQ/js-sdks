@@ -70,8 +70,8 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
         }
 
         beforeEach(() => {
-            variableMock.mockClear()
-            cloudVariableMock.mockClear()
+            variableMock.mockReset()
+            cloudVariableMock.mockReset()
         })
 
         afterEach(async () => {
