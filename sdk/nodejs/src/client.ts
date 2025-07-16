@@ -185,7 +185,8 @@ export class DevCycleClient<
     }
 
     /**
-     * @deprecated Use DevCycleProvider directly instead. See docs: https://docs.devcycle.com/sdk/server-side-sdks/node/node-openfeature
+     * @deprecated Use DevCycleProvider directly instead.
+     * See docs: https://docs.devcycle.com/sdk/server-side-sdks/node/node-openfeature
      */
     async getOpenFeatureProvider(): Promise<DevCycleProvider> {
         if (this.openFeatureProvider) return this.openFeatureProvider
