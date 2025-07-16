@@ -19,8 +19,8 @@
     "homepage": "https://devcycle.com",
     "license": "MIT",
     "dependencies": {
-        "@devcycle/nodejs-server-sdk": "^1.52.0",
-        "@devcycle/types": "^1.30.0",
+        "@devcycle/nodejs-server-sdk": "~1.52.0",
+        "@devcycle/types": "~1.30.0",
         "nestjs-cls": "^4.5.0"
     },
     "peerDependencies": {
