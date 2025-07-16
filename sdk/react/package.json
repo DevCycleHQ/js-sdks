@@ -27,8 +27,8 @@
         "cross-fetch": "4.1.0"
     },
     "dependencies": {
-        "@devcycle/js-client-sdk": "^1.45.0",
-        "@devcycle/types": "^1.30.0",
+        "@devcycle/js-client-sdk": "~1.45.0",
+        "@devcycle/types": "~1.30.0",
         "hoist-non-react-statics": "^3.3.2"
     },
     "peerDependencies": {
