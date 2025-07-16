@@ -79,10 +79,10 @@ export class DevCycleProvider implements Provider {
             | DevCycleOptionsCloudEnabled = {},
     ) {
         if (typeof clientOrKey === 'string') {
-            this.devcycleClient = initializeDevCycle(
-                clientOrKey,
-                options as DevCycleServerSDKOptions,
-            )
+            this.devcycleClient = initializeDevCycle(clientOrKey, {
+                ...(options as DevCycleServerSDKOptions),
+                sdkPlatform: 'nodejs-of',
+            })
         } else {
             this.devcycleClient = clientOrKey
         }

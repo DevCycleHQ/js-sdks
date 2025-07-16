@@ -20,6 +20,7 @@ import {
 import {
     DevCycleClient,
     DevCycleCloudClient,
+    DevCycleProvider,
     DevCycleUser,
     DVCVariable,
     DVCVariableValue,
@@ -45,24 +46,19 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
             ofClient: Client
             dvcClient: DevCycleClient | DevCycleCloudClient
         }> {
-            const options = { logger }
-            const dvcClient =
-                dvcClientType === 'DevCycleClient'
-                    ? new DevCycleClient('DEVCYCLE_SERVER_SDK_KEY', options)
-                    : new DevCycleCloudClient(
-                          'DEVCYCLE_SERVER_SDK_KEY',
-                          options,
-                          {
-                              platform: 'NodeJS',
-                              sdkType: 'server',
-                          },
-                      )
-            await OpenFeature.setProviderAndWait(
-                await dvcClient.getOpenFeatureProvider(),
-            )
+            const provider =
+                dvcClientType === 'DevCycleCloudClient'
+                    ? new DevCycleProvider('dvc_server_sdk_key', {
+                          logger,
+                          enableCloudBucketing: true,
+                      })
+                    : new DevCycleProvider('dvc_server_sdk_key', { logger })
+
+            await OpenFeature.setProviderAndWait(provider)
             const ofClient = OpenFeature.getClient()
             ofClient.setContext({ targetingKey: 'node_sdk_test' })
-            return { ofClient, dvcClient }
+
+            return { ofClient, dvcClient: provider.devcycleClient }
         }
 
         function mockVariable(variable: DVCVariable<DVCVariableValue>) {
@@ -75,6 +71,13 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
 
         beforeEach(() => {
             variableMock.mockClear()
+            cloudVariableMock.mockClear()
+        })
+
+        afterEach(async () => {
+            variableMock.mockReset()
+            cloudVariableMock.mockReset()
+            await OpenFeature.close()
         })
 
         it(`${dvcClientType} - should setup an OpenFeature provider with a DVCUserClient`, async () => {
