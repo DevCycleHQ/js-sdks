@@ -24,7 +24,7 @@
         "cross-fetch": "^4.1.0"
     },
     "dependencies": {
-        "@devcycle/types": "^1.30.0",
+        "@devcycle/types": "~1.30.0",
         "fetch-retry": "^5.0.6",
         "lodash": "^4.17.21",
         "ua-parser-js": "^1.0.40",

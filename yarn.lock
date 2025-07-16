@@ -2070,7 +2070,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@devcycle/bucketing-assembly-script@npm:^1.40.0, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
+"@devcycle/bucketing-assembly-script@npm:~1.40.0, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script"
   dependencies:
@@ -2085,7 +2085,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/bucketing@npm:^1.36.0, @devcycle/bucketing@workspace:lib/shared/bucketing":
+"@devcycle/bucketing@npm:~1.36.0, @devcycle/bucketing@workspace:lib/shared/bucketing":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing@workspace:lib/shared/bucketing"
   dependencies:
@@ -2102,11 +2102,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/js-client-sdk@npm:^1.45.0, @devcycle/js-client-sdk@workspace:sdk/js":
+"@devcycle/js-client-sdk@npm:~1.45.0, @devcycle/js-client-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
   dependencies:
-    "@devcycle/types": "npm:^1.30.0"
+    "@devcycle/types": "npm:~1.30.0"
     cross-fetch: "npm:^4.1.0"
     fetch-retry: "npm:^5.0.6"
     lodash: "npm:^4.17.21"
@@ -2115,11 +2115,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/js-cloud-server-sdk@npm:^1.30.0, @devcycle/js-cloud-server-sdk@workspace:sdk/js-cloud-server":
+"@devcycle/js-cloud-server-sdk@npm:^1.30.0, @devcycle/js-cloud-server-sdk@npm:~1.30.0, @devcycle/js-cloud-server-sdk@workspace:sdk/js-cloud-server":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-cloud-server-sdk@workspace:sdk/js-cloud-server"
   dependencies:
-    "@devcycle/types": "npm:^1.30.0"
+    "@devcycle/types": "npm:~1.30.0"
     cross-fetch: "npm:^4.1.0"
     fetch-retry: "npm:^5.0.6"
     lodash: "npm:^4.17.21"
@@ -2130,8 +2130,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nestjs-server-sdk@workspace:sdk/nestjs"
   dependencies:
-    "@devcycle/nodejs-server-sdk": "npm:^1.52.0"
-    "@devcycle/types": "npm:^1.30.0"
+    "@devcycle/nodejs-server-sdk": "npm:~1.52.0"
+    "@devcycle/types": "npm:~1.30.0"
     nestjs-cls: "npm:^4.5.0"
   peerDependencies:
     "@nestjs/common": ^10.3.3
@@ -2143,10 +2143,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nextjs-sdk@workspace:sdk/nextjs"
   dependencies:
-    "@devcycle/bucketing": "npm:^1.36.0"
-    "@devcycle/js-client-sdk": "npm:^1.45.0"
-    "@devcycle/react-client-sdk": "npm:^1.43.0"
-    "@devcycle/types": "npm:^1.30.0"
+    "@devcycle/bucketing": "npm:~1.36.0"
+    "@devcycle/js-client-sdk": "npm:~1.45.0"
+    "@devcycle/react-client-sdk": "npm:~1.43.0"
+    "@devcycle/types": "npm:~1.30.0"
     class-transformer: "npm:^0.5.1"
     hoist-non-react-statics: "npm:^3.3.2"
     server-only: "npm:^0.0.1"
@@ -2165,15 +2165,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/nodejs-server-sdk@npm:^1.52.0, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
+"@devcycle/nodejs-server-sdk@npm:~1.52.0, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
-    "@devcycle/bucketing-assembly-script": "npm:^1.40.0"
-    "@devcycle/js-cloud-server-sdk": "npm:^1.30.0"
-    "@devcycle/types": "npm:^1.30.0"
-    "@openfeature/core": "npm:^1.7.2"
-    "@openfeature/server-sdk": "npm:^1.17.1"
+    "@devcycle/bucketing-assembly-script": "npm:~1.40.0"
+    "@devcycle/js-cloud-server-sdk": "npm:~1.30.0"
+    "@devcycle/types": "npm:~1.30.0"
+    "@openfeature/core": "npm:~1.7.2"
+    "@openfeature/server-sdk": "npm:~1.17.1"
     cross-fetch: "npm:^4.1.0"
     eventsource: "npm:^2.0.2"
     fetch-retry: "npm:^5.0.6"
@@ -2192,8 +2192,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-angular-provider@workspace:sdk/openfeature-angular-provider"
   dependencies:
-    "@devcycle/js-client-sdk": "npm:^1.45.0"
-    "@devcycle/openfeature-web-provider": "npm:^1.10.0"
+    "@devcycle/js-client-sdk": "npm:~1.45.0"
+    "@devcycle/openfeature-web-provider": "npm:~1.10.0"
   peerDependencies:
     "@openfeature/multi-provider-web": ^0.0.3
     "@openfeature/web-sdk": ^1.4.1
@@ -2207,7 +2207,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-nestjs-provider@workspace:sdk/openfeature-nestjs-provider"
   dependencies:
-    "@devcycle/nodejs-server-sdk": "npm:^1.52.0"
+    "@devcycle/nodejs-server-sdk": "npm:~1.52.0"
   languageName: unknown
   linkType: soft
 
@@ -2221,8 +2221,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-react-provider@workspace:sdk/openfeature-react-provider"
   dependencies:
-    "@devcycle/js-client-sdk": "npm:^1.45.0"
-    "@devcycle/openfeature-web-provider": "npm:^1.10.0"
+    "@devcycle/js-client-sdk": "npm:~1.45.0"
+    "@devcycle/openfeature-web-provider": "npm:~1.10.0"
   peerDependencies:
     "@openfeature/multi-provider-web": ^0.0.3
     "@openfeature/web-sdk": ^1.4.1
@@ -2238,11 +2238,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/openfeature-web-provider@npm:^1.10.0, @devcycle/openfeature-web-provider@workspace:sdk/openfeature-web-provider":
+"@devcycle/openfeature-web-provider@npm:~1.10.0, @devcycle/openfeature-web-provider@workspace:sdk/openfeature-web-provider":
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-web-provider@workspace:sdk/openfeature-web-provider"
   dependencies:
-    "@devcycle/js-client-sdk": "npm:^1.45.0"
+    "@devcycle/js-client-sdk": "npm:~1.45.0"
   peerDependencies:
     "@openfeature/multi-provider-web": ^0.0.3
     "@openfeature/web-sdk": ^1.4.1
@@ -2252,12 +2252,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/react-client-sdk@npm:^1.43.0, @devcycle/react-client-sdk@workspace:sdk/react":
+"@devcycle/react-client-sdk@npm:~1.43.0, @devcycle/react-client-sdk@workspace:sdk/react":
   version: 0.0.0-use.local
   resolution: "@devcycle/react-client-sdk@workspace:sdk/react"
   dependencies:
-    "@devcycle/js-client-sdk": "npm:^1.45.0"
-    "@devcycle/types": "npm:^1.30.0"
+    "@devcycle/js-client-sdk": "npm:~1.45.0"
+    "@devcycle/types": "npm:~1.30.0"
     cross-fetch: "npm:4.1.0"
     hoist-non-react-statics: "npm:^3.3.2"
   peerDependencies:
@@ -2269,9 +2269,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/react-native-client-sdk@workspace:sdk/react-native"
   dependencies:
-    "@devcycle/js-client-sdk": "npm:^1.45.0"
-    "@devcycle/react-client-sdk": "npm:^1.43.0"
-    "@devcycle/types": "npm:^1.30.0"
+    "@devcycle/js-client-sdk": "npm:~1.45.0"
+    "@devcycle/react-client-sdk": "npm:~1.43.0"
+    "@devcycle/types": "npm:~1.30.0"
     "@react-native-async-storage/async-storage": "npm:^1.17.11"
     react-native-device-info: "npm:^8.7.1"
     react-native-get-random-values: "npm:^1.11.0"
@@ -2286,8 +2286,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/react-native-expo-client-sdk@workspace:sdk/react-native-expo"
   dependencies:
-    "@devcycle/js-client-sdk": "npm:^1.45.0"
-    "@devcycle/react-client-sdk": "npm:^1.43.0"
+    "@devcycle/js-client-sdk": "npm:~1.45.0"
+    "@devcycle/react-client-sdk": "npm:~1.43.0"
     "@react-native-async-storage/async-storage": "npm:^1.17.11"
     react-native-device-info: "npm:^8.7.1"
     react-native-get-random-values: "npm:^1.11.0"
@@ -2305,7 +2305,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/types@npm:^1.30.0, @devcycle/types@workspace:lib/shared/types":
+"@devcycle/types@npm:^1.30.0, @devcycle/types@npm:~1.30.0, @devcycle/types@workspace:lib/shared/types":
   version: 0.0.0-use.local
   resolution: "@devcycle/types@workspace:lib/shared/types"
   dependencies:
@@ -5853,7 +5853,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openfeature/core@npm:^1.7.2":
+"@openfeature/core@npm:^1.7.2, @openfeature/core@npm:~1.7.2":
   version: 1.7.2
   resolution: "@openfeature/core@npm:1.7.2"
   checksum: 10/4a9c33f12cab6caf193ab809f4ca1c0b46ef78f7a722fadf0643672274ad8bd8e4d47961ea2a8b7c47eafc678b6cff48a39240a56e0fa76fa27eca15a76e52e0
@@ -5882,7 +5882,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openfeature/server-sdk@npm:^1.17.1":
+"@openfeature/server-sdk@npm:^1.17.1, @openfeature/server-sdk@npm:~1.17.1":
   version: 1.17.1
   resolution: "@openfeature/server-sdk@npm:1.17.1"
   peerDependencies:
