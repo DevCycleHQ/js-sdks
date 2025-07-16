@@ -59,7 +59,8 @@ done
 # join packages with comma
 PACKAGES=$(IFS=','; echo "${PACKAGES[*]}")
 
-yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish" "$@" --no-push
+yarn lerna version --exact --force-publish=$PACKAGES --message "chore(release): publish" "$@" --no-push
+
 # store the tags created for this commit
 RELEASE_TAGS=$(git tag --points-at HEAD)
 #  run yarn and add any lockfile changes

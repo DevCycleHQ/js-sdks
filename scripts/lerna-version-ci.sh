@@ -94,7 +94,7 @@ PACKAGES=$(IFS=','; echo "${PACKAGES[*]}")
 
 echo -e "::info::Applying version increment $VERSION_INCREMENT_TYPE to packages:\n$PACKAGES"
 
-yarn lerna version --force-publish=$PACKAGES --message "chore(release): publish" --no-push --yes "$VERSION_INCREMENT_TYPE"
+yarn lerna version --exact --force-publish=$PACKAGES --message "chore(release): publish" --no-push --yes "$VERSION_INCREMENT_TYPE"
 
 # store the tags created for this commit
 RELEASE_TAGS=$(git tag --points-at HEAD)

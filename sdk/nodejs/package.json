@@ -20,11 +20,11 @@
     },
     "homepage": "https://devcycle.com",
     "dependencies": {
-        "@devcycle/bucketing-assembly-script": "^1.40.1",
-        "@devcycle/js-cloud-server-sdk": "^1.30.1",
-        "@devcycle/types": "^1.30.1",
-        "@openfeature/core": "~1.7.2",
-        "@openfeature/server-sdk": "~1.17.1",
+        "@devcycle/bucketing-assembly-script": "1.40.1",
+        "@devcycle/js-cloud-server-sdk": "1.30.1",
+        "@devcycle/types": "1.30.1",
+        "@openfeature/core": "~1.8.1",
+        "@openfeature/server-sdk": "~1.18.0",
         "cross-fetch": "^4.1.0",
         "eventsource": "^2.0.2",
         "fetch-retry": "^5.0.6"
