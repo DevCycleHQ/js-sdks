@@ -7,6 +7,7 @@ export interface DVCVariableOptions<T> {
     defaultValue: T
     value?: VariableTypeAlias<T>
     eval?: EvalReason
+    _feature?: string | null
 }
 
 export class DVCVariable<T extends DVCVariableValue> implements Variable<T> {
@@ -17,6 +18,7 @@ export class DVCVariable<T extends DVCVariableValue> implements Variable<T> {
     readonly defaultValue: T
     isDefaulted: boolean
     readonly eval?: EvalReason
+    readonly _feature: string | null
 
     constructor(variable: DVCVariableOptions<T>) {
         const { key, defaultValue } = variable
@@ -34,6 +36,7 @@ export class DVCVariable<T extends DVCVariableValue> implements Variable<T> {
 
         this.defaultValue = variable.defaultValue
         this.eval = variable.eval
+        this._feature = variable._feature || null
     }
 
     onUpdate(callback: (value: VariableTypeAlias<T>) => void): DVCVariable<T> {
