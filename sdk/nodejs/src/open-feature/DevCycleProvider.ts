@@ -254,6 +254,8 @@ export class DevCycleProvider implements Provider {
                 ? StandardResolutionReasons.DEFAULT
                 : variable.eval?.reason ??
                   StandardResolutionReasons.TARGETING_MATCH,
+            //TODO: uncomment when cloud bucketing returns eval object. For now we need to support null eval
+            //reason: variable.eval?.reason ?? StandardResolutionReasons.DEFAULT,
         }
     }
 
