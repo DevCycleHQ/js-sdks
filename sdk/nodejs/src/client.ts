@@ -286,7 +286,7 @@ export class DevCycleClient<
             if (type === configVariable.type) {
                 options.value = configVariable.value as VariableTypeAlias<T>
                 if (configVariable.eval) {
-                    options.eval = { ...configVariable?.eval }
+                    options.eval = { ...configVariable.eval }
                 }
             } else {
                 options.eval = {
