@@ -1,4 +1,5 @@
 import {
+    EvalReason,
     InferredVariableType,
     VariableKey,
     VariableType,
@@ -20,7 +21,7 @@ export type VariableParam<T extends DVCVariableValue> = {
      * @deprecated use eval instead
      */
     evalReason?: unknown
-    eval?: unknown
+    eval?: EvalReason
 }
 
 export class DVCVariable<
@@ -37,7 +38,7 @@ export class DVCVariable<
      * @deprecated use eval instead
      */
     readonly evalReason?: unknown
-    readonly eval?: unknown
+    readonly eval?: EvalReason
 
     constructor(variable: VariableParam<T>) {
         const { key, defaultValue, value, eval: evalReason, type } = variable

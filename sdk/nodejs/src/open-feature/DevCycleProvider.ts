@@ -250,9 +250,11 @@ export class DevCycleProvider implements Provider {
     ): ResolutionDetails<T> {
         return {
             value: variable.value as T,
+            //TODO: once eval enabled from cloud bucketing, this can be simplified as eval won't be null
             reason: variable.isDefaulted
                 ? StandardResolutionReasons.DEFAULT
-                : StandardResolutionReasons.TARGETING_MATCH,
+                : variable.eval?.reason ??
+                  StandardResolutionReasons.TARGETING_MATCH,
         }
     }
 
