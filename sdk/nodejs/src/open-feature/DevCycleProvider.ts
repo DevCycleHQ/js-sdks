@@ -119,10 +119,18 @@ export class DevCycleProvider implements Provider {
         context?: EvaluationContext,
         trackingEventDetails?: TrackingEventDetails,
     ): void {
-        const user_id = context?.targetingKey ?? context?.user_id
+        // Get first non-empty userId from targetingKey, user_id, or userId
+        const user_id = context
+            ? [context.targetingKey, context.user_id, context.userId]
+                  .filter(
+                      (id): id is string => typeof id === 'string' && id !== '',
+                  )
+                  .shift() || null
+            : null
+
         if (!context || !user_id) {
             throw new TargetingKeyMissingError(
-                'Missing targetingKey or user_id in context',
+                'Missing targetingKey, user_id, or userId in context',
             )
         }
 
@@ -275,15 +283,16 @@ export class DevCycleProvider implements Provider {
      * @private
      */
     private devcycleUserFromContext(context: EvaluationContext): DevCycleUser {
-        const user_id = context.targetingKey ?? context.user_id
+        // Get first non-empty userId from targetingKey, user_id, or userId
+        const user_id = [context.targetingKey, context.user_id, context.userId]
+            .filter(
+                (id): id is string => typeof id === 'string' && id !== '',
+            )
+            .shift() || null
+
         if (!user_id) {
             throw new TargetingKeyMissingError(
-                'Missing targetingKey or user_id in context',
-            )
-        }
-        if (typeof user_id !== 'string') {
-            throw new InvalidContextError(
-                'targetingKey or user_id must be a string',
+                'Missing targetingKey, user_id, or userId in context',
             )
         }
 
@@ -293,7 +302,8 @@ export class DevCycleProvider implements Provider {
         let privateCustomData: DVCCustomDataJSON = {}
 
         for (const [key, value] of Object.entries(context)) {
-            if (key === 'targetingKey' || key === 'user_id') continue
+            // Skip user ID fields as they're handled above
+            if (key === 'targetingKey' || key === 'user_id' || key === 'userId') continue
 
             const knownValueType = DVCKnownPropertyKeyTypes[key]
             if (knownValueType) {
