@@ -121,7 +121,7 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     flagKey: 'boolean-flag',
                     value: false,
                     errorCode: 'TARGETING_KEY_MISSING',
-                    errorMessage: 'Missing targetingKey or user_id in context',
+                    errorMessage: 'Missing targetingKey, user_id, or userId in context',
                     reason: 'ERROR',
                     flagMetadata: {},
                 })
@@ -136,11 +136,174 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                 ).resolves.toEqual({
                     flagKey: 'boolean-flag',
                     value: false,
-                    errorCode: 'INVALID_CONTEXT',
-                    errorMessage: 'targetingKey or user_id must be a string',
+                    errorCode: 'TARGETING_KEY_MISSING',
+                    errorMessage: 'Missing targetingKey, user_id, or userId in context',
                     reason: 'ERROR',
                     flagMetadata: {},
                 })
+            })
+
+            it('should use targetingKey as user_id when present (highest priority)', async () => {
+                const { ofClient, dvcClient } = await initOFClient()
+                
+                ofClient.setContext({
+                    targetingKey: 'targeting-key-user',
+                    user_id: 'user_id-user',
+                    userId: 'userId-user',
+                })
+
+                await expect(
+                    ofClient.getBooleanValue('boolean-flag', false),
+                ).resolves.toEqual(true)
+                expect(dvcClient.variable).toHaveBeenCalledWith(
+                    new DevCycleUser({ user_id: 'targeting-key-user' }),
+                    'boolean-flag',
+                    false,
+                )
+            })
+
+            it('should use user_id when targetingKey is missing (second priority)', async () => {
+                const { ofClient, dvcClient } = await initOFClient()
+                
+                ofClient.setContext({
+                    user_id: 'user_id-user',
+                    userId: 'userId-user',
+                })
+
+                await expect(
+                    ofClient.getBooleanValue('boolean-flag', false),
+                ).resolves.toEqual(true)
+                expect(dvcClient.variable).toHaveBeenCalledWith(
+                    new DevCycleUser({ user_id: 'user_id-user' }),
+                    'boolean-flag',
+                    false,
+                )
+            })
+
+            it('should use userId when targetingKey and user_id are missing (lowest priority)', async () => {
+                const { ofClient, dvcClient } = await initOFClient()
+                
+                ofClient.setContext({
+                    userId: 'userId-user',
+                })
+
+                await expect(
+                    ofClient.getBooleanValue('boolean-flag', false),
+                ).resolves.toEqual(true)
+                expect(dvcClient.variable).toHaveBeenCalledWith(
+                    new DevCycleUser({ user_id: 'userId-user' }),
+                    'boolean-flag',
+                    false,
+                )
+            })
+
+            it('should use user_id over userId when targetingKey is empty string', async () => {
+                const { ofClient, dvcClient } = await initOFClient()
+                
+                ofClient.setContext({
+                    targetingKey: '',
+                    user_id: 'user_id-user',
+                    userId: 'userId-user',
+                })
+
+                await expect(
+                    ofClient.getBooleanValue('boolean-flag', false),
+                ).resolves.toEqual(true)
+                expect(dvcClient.variable).toHaveBeenCalledWith(
+                    new DevCycleUser({ user_id: 'user_id-user' }),
+                    'boolean-flag',
+                    false,
+                )
+            })
+
+            it('should use userId when both targetingKey and user_id are empty strings', async () => {
+                const { ofClient, dvcClient } = await initOFClient()
+                
+                ofClient.setContext({
+                    targetingKey: '',
+                    user_id: '',
+                    userId: 'userId-user',
+                })
+
+                await expect(
+                    ofClient.getBooleanValue('boolean-flag', false),
+                ).resolves.toEqual(true)
+                expect(dvcClient.variable).toHaveBeenCalledWith(
+                    new DevCycleUser({ user_id: 'userId-user' }),
+                    'boolean-flag',
+                    false,
+                )
+            })
+
+            it('should exclude userId from custom data when used as user_id', async () => {
+                const { ofClient, dvcClient } = await initOFClient()
+                
+                ofClient.setContext({
+                    userId: 'userId-user',
+                    customProp: 'custom-value',
+                })
+
+                await expect(
+                    ofClient.getBooleanValue('boolean-flag', false),
+                ).resolves.toEqual(true)
+                expect(dvcClient.variable).toHaveBeenCalledWith(
+                    new DevCycleUser({ 
+                        user_id: 'userId-user',
+                        customData: { customProp: 'custom-value' },
+                    }),
+                    'boolean-flag',
+                    false,
+                )
+            })
+
+            it('should include userId in custom data when not used as user_id (wrong type)', async () => {
+                const { ofClient, dvcClient } = await initOFClient()
+                
+                ofClient.setContext({
+                    targetingKey: 'targeting-key-user',
+                    userId: 123, // wrong type, should be included in custom data
+                    customProp: 'custom-value',
+                })
+
+                await expect(
+                    ofClient.getBooleanValue('boolean-flag', false),
+                ).resolves.toEqual(true)
+                expect(dvcClient.variable).toHaveBeenCalledWith(
+                    new DevCycleUser({ 
+                        user_id: 'targeting-key-user',
+                        customData: { 
+                            userId: 123,
+                            customProp: 'custom-value',
+                        },
+                    }),
+                    'boolean-flag',
+                    false,
+                )
+            })
+
+            it('should include userId in custom data when not used as user_id (lower priority)', async () => {
+                const { ofClient, dvcClient } = await initOFClient()
+                
+                ofClient.setContext({
+                    user_id: 'user_id-user',
+                    userId: 'userId-user', // lower priority, should be included in custom data
+                    customProp: 'custom-value',
+                })
+
+                await expect(
+                    ofClient.getBooleanValue('boolean-flag', false),
+                ).resolves.toEqual(true)
+                expect(dvcClient.variable).toHaveBeenCalledWith(
+                    new DevCycleUser({ 
+                        user_id: 'user_id-user',
+                        customData: { 
+                            userId: 'userId-user',
+                            customProp: 'custom-value',
+                        },
+                    }),
+                    'boolean-flag',
+                    false,
+                )
             })
 
             it('should convert Context properties to DevCycleUser properties', async () => {
@@ -643,7 +806,7 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
 
                 ofClient.addHandler(ProviderEvents.Error, (error) => {
                     expect(error?.message).toBe(
-                        'Missing targetingKey or user_id in context',
+                        'Missing targetingKey, user_id, or userId in context',
                     )
                 })
                 ofClient.track('test-event')
@@ -654,10 +817,85 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
 
                 ofClient.addHandler(ProviderEvents.Error, (error) => {
                     expect(error?.message).toBe(
-                        'Missing targetingKey or user_id in context',
+                        'Missing targetingKey, user_id, or userId in context',
                     )
                 })
                 ofClient.track('test-event', {})
+            })
+
+            it('should track using targetingKey as user_id (highest priority)', async () => {
+                const { ofClient } = await initOFClient()
+                
+                ofClient.track('test-event', {
+                    targetingKey: 'targeting-key-user',
+                    user_id: 'user_id-user',
+                    userId: 'userId-user',
+                })
+
+                const expectedTrackCall = expect.objectContaining({
+                    type: 'test-event',
+                })
+
+                if (dvcClientType === 'DevCycleClient') {
+                    expect(trackMock).toHaveBeenCalledWith(
+                        expect.objectContaining({ user_id: 'targeting-key-user' }),
+                        expectedTrackCall,
+                    )
+                } else {
+                    expect(cloudTrackMock).toHaveBeenCalledWith(
+                        expect.objectContaining({ user_id: 'targeting-key-user' }),
+                        expectedTrackCall,
+                    )
+                }
+            })
+
+            it('should track using user_id when targetingKey is missing (second priority)', async () => {
+                const { ofClient } = await initOFClient()
+                
+                ofClient.track('test-event', {
+                    user_id: 'user_id-user',
+                    userId: 'userId-user',
+                })
+
+                const expectedTrackCall = expect.objectContaining({
+                    type: 'test-event',
+                })
+
+                if (dvcClientType === 'DevCycleClient') {
+                    expect(trackMock).toHaveBeenCalledWith(
+                        expect.objectContaining({ user_id: 'user_id-user' }),
+                        expectedTrackCall,
+                    )
+                } else {
+                    expect(cloudTrackMock).toHaveBeenCalledWith(
+                        expect.objectContaining({ user_id: 'user_id-user' }),
+                        expectedTrackCall,
+                    )
+                }
+            })
+
+            it('should track using userId when targetingKey and user_id are missing (lowest priority)', async () => {
+                const { ofClient } = await initOFClient()
+                
+                ofClient.track('test-event', {
+                    userId: 'userId-user',
+                })
+
+                const expectedTrackCall = expect.objectContaining({
+                    type: 'test-event',
+                })
+
+                if (dvcClientType === 'DevCycleClient') {
+                    expect(trackMock).toHaveBeenCalledWith(
+                        expect.objectContaining({ user_id: 'userId-user' }),
+                        expectedTrackCall,
+                    )
+                } else {
+                    expect(cloudTrackMock).toHaveBeenCalledWith(
+                        expect.objectContaining({ user_id: 'userId-user' }),
+                        expectedTrackCall,
+                    )
+                }
             })
         })
     },
