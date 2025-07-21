@@ -280,7 +280,7 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
             it('should return reason DEFAULT if eval is null and isDefaulted is true', async () => {
                 mockVariable({
                     key: 'boolean-flag',
-                    value: true,
+                    value: false,
                     defaultValue: false,
                     isDefaulted: true,
                     type: 'Boolean',
@@ -290,7 +290,7 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     ofClient.getBooleanDetails('boolean-flag', false),
                 ).resolves.toEqual({
                     flagKey: 'boolean-flag',
-                    value: true,
+                    value: false,
                     reason: StandardResolutionReasons.DEFAULT,
                     flagMetadata: {},
                 })
