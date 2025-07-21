@@ -254,7 +254,70 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                 )
             })
         })
-
+        describe(`${dvcClientType} - Eval Reasons`, () => {
+            it('should return reason TARGETING_MATCH if eval is null and isDefaulted is false', async () => {
+                mockVariable({
+                    key: 'boolean-flag',
+                    value: true,
+                    defaultValue: false,
+                    isDefaulted: false,
+                    type: 'Boolean',
+                })
+                const { ofClient } = await initOFClient()
+                     expect(
+                        ofClient.getBooleanDetails('boolean-flag', false),
+                    ).resolves.toEqual({ 
+                        flagKey: 'boolean-flag',
+                        value: true,
+                        reason: StandardResolutionReasons.TARGETING_MATCH,
+                        flagMetadata: { },
+                    })
+            })
+            it('should return reason DEFAULT if eval is null and isDefaulted is true', async () => {
+                mockVariable({
+                    key: 'boolean-flag',
+                    value: true,
+                    defaultValue: false,
+                    isDefaulted: true,
+                    type: 'Boolean',
+                })
+                const { ofClient } = await initOFClient()
+                     expect(
+                        ofClient.getBooleanDetails('boolean-flag', false),
+                    ).resolves.toEqual({ 
+                        flagKey: 'boolean-flag',
+                        value: true,
+                        reason: StandardResolutionReasons.DEFAULT,
+                        flagMetadata: { },
+                    })
+            })
+            it('should return reason specified in eval if it exists', async () => {
+                mockVariable({
+                    key: 'boolean-flag',
+                    value: true,
+                    defaultValue: false,
+                    isDefaulted: true,
+                    type: 'Boolean',
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details: EVAL_REASON_DETAILS.ROLLOUT,
+                        target_id: 'target_id',
+                    },
+                })
+                const { ofClient } = await initOFClient()
+                     expect(
+                        ofClient.getBooleanDetails('boolean-flag', false),
+                    ).resolves.toEqual({ 
+                        flagKey: 'boolean-flag',
+                        value: true,
+                        reason: StandardResolutionReasons.SPLIT,
+                        flagMetadata: {
+                            evalReasonDetails: 'Rollout',
+                            evalReasonTargetId: 'target_id',
+                        },
+                    })
+            })
+        })
         describe(`${dvcClientType} - Boolean Flags`, () => {
             beforeEach(() => {
                 mockVariable({
