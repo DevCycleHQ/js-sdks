@@ -1,5 +1,5 @@
 import { DVCVariable } from '../../src/models/variable'
-import { VariableType } from '@devcycle/types'
+import { EVAL_REASONS, VariableType } from '@devcycle/types'
 
 describe('DVCVariable Unit Tests', () => {
     it('should construct DVCVariable from VariableParam', () => {
@@ -9,7 +9,7 @@ describe('DVCVariable Unit Tests', () => {
             value: true,
             type: VariableType.boolean,
             eval: {
-                reason: 'reason',
+                reason: EVAL_REASONS.SPLIT,
             },
         })
         expect(variable).toEqual({
@@ -19,7 +19,7 @@ describe('DVCVariable Unit Tests', () => {
             defaultValue: false,
             type: 'Boolean',
             eval: {
-                reason: 'reason',
+                reason: 'SPLIT',
             },
         })
     })
