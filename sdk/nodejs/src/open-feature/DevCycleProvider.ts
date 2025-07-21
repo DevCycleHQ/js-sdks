@@ -259,13 +259,11 @@ export class DevCycleProvider implements Provider {
                     : StandardResolutionReasons.TARGETING_MATCH),
         }
         if (variable.eval) {
+            const { details, target_id } = variable.eval
             const metadata: FlagMetadata = {}
-            if (variable.eval.details) {
-                metadata['evalReasonDetails'] = variable.eval?.details
-            }
-            if (variable.eval.target_id) {
-                metadata['evalReasonTargetId'] = variable.eval?.target_id
-            }
+            
+            if (details) metadata.evalReasonDetails = details
+            if (target_id) metadata.evalReasonTargetId = target_id
             resolutionDetails.flagMetadata = metadata
         }
         return resolutionDetails
