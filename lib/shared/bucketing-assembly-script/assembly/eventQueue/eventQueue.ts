@@ -1,3 +1,4 @@
+import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import {
     DVCEvent,
     DVCPopulatedUser,
@@ -7,7 +8,8 @@ import {
     FeatureVariation
 } from '../types'
 
-export type VariationAggMap = Map<string, i64>
+export type EvalReasonAggMap = Map<string, i64>
+export type VariationAggMap = Map<string, EvalReasonAggMap>
 export type FeatureAggMap = Map<string, VariationAggMap>
 export type VariableAggMap = Map<string, FeatureAggMap>
 export type AggEventQueue = Map<string, VariableAggMap>
@@ -37,7 +39,9 @@ export class EventQueue {
      * Map<'aggVariableDefaulted',
      *      Map<variable.key,
      *          Map<'value',
-     *              Map<'value', counter>
+     *              Map<'value', Map<
+     *                  defaultReason, counter>
+     *              >
      *          >
      *      >
      * >
@@ -45,7 +49,11 @@ export class EventQueue {
      * Map<'aggVariableEvaluated',
      *      Map<variable.key,
      *          Map<feature._id,
-     *              Map<variation_id, counter>
+     *              Map<variation_id,
+     *                  Map<
+     *                      evalReason, counter>
+     *                  >
+     *              >
      *          >
      *      >
      * >
@@ -136,21 +144,24 @@ export class EventQueue {
             }
             const featureVariation: FeatureVariation = variableVariationMap.get(target)
 
+            let evalReasonAggMap: EvalReasonAggMap = new Map<string, i64>()
             let variationAggMap: VariationAggMap
+
             if (featureVarAggMap.has(featureVariation._feature)) {
                 variationAggMap = featureVarAggMap.get(featureVariation._feature)
             } else {
-                variationAggMap = new Map<string, i64>()
+                variationAggMap = new Map<string, EvalReasonAggMap>()
                 featureVarAggMap.set(featureVariation._feature, variationAggMap)
             }
 
             if (variationAggMap.has(featureVariation._variation)) {
-                const variationCount: i64 = variationAggMap.get(featureVariation._variation)
-                variationAggMap.set(featureVariation._variation, variationCount + 1)
+                evalReasonAggMap = variationAggMap.get(featureVariation._variation)
             } else {
-                variationAggMap.set(featureVariation._variation, 1)
+                variationAggMap.set(featureVariation._variation, evalReasonAggMap)
                 this.eventQueueCount++
             }
+
+            this.addEvalReasonToVariationAggMap(evalReasonAggMap, event.metaData)
         } else {
             /**
              * Because `aggEventQueue` is now aggregated by both feature and variation,
@@ -159,16 +170,35 @@ export class EventQueue {
             if (featureVarAggMap.has('value')) {
                 const variationAggMap: VariationAggMap = featureVarAggMap.get('value')
                 if (variationAggMap.has('value')) {
-                    const count: i64 = variationAggMap.get('value')
-                    variationAggMap.set('value', count + 1)
+                    const evalReasonAggMap: EvalReasonAggMap = variationAggMap.get('value')
+                    this.addEvalReasonToVariationAggMap(evalReasonAggMap, event.metaData)
                 } else {
                     throw new Error('Missing second value map for aggVariableDefaulted')
                 }
             } else {
-                const variationAggMap = new Map<string, i64>()
-                variationAggMap.set('value', 1)
+                let evalReasonAggMap: EvalReasonAggMap = new Map<string, i64>()
+                this.addEvalReasonToVariationAggMap(evalReasonAggMap, event.metaData)
+
+                const variationAggMap = new Map<string, EvalReasonAggMap>()
+                variationAggMap.set('value', evalReasonAggMap)
                 featureVarAggMap.set('value', variationAggMap)
                 this.eventQueueCount++
+            }
+
+        }
+    }
+
+    private addEvalReasonToVariationAggMap(evalReasonAggMap: EvalReasonAggMap, eventMetadata: JSON.Obj | null): void {
+        if (eventMetadata && eventMetadata.has('evalReason')) {
+            const evalReason = eventMetadata.getString('evalReason')
+            if (evalReason) {
+                const evalReasonString = evalReason.valueOf()
+                if (evalReasonAggMap.has(evalReasonString)) {
+                    const evalReasonCount: i64 = evalReasonAggMap.get(evalReasonString)
+                    evalReasonAggMap.set(evalReason.valueOf(), evalReasonCount + 1)
+                } else {
+                    evalReasonAggMap.set(evalReason.valueOf(), 1)
+                }
             }
         }
     }

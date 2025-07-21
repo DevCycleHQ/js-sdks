@@ -6,6 +6,7 @@ import {
     FlushPayload,
     UserEventsBatchRecord,
     EventQueueOptions,
+    EVAL_REASONS,
 } from '../types'
 import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import { _getPlatformData } from '../managers/platformDataManager'
@@ -24,6 +25,16 @@ export class RequestPayloadManager {
     private pendingPayloads: Map<string, FlushPayload>
     private readonly chunkSize: i32
     private readonly clientUUID: string
+
+    private readonly evalReasonKeysToSkip: string[] = [
+        EVAL_REASONS.TARGETING_MATCH,
+        EVAL_REASONS.DEFAULT,
+        EVAL_REASONS.DISABLED,
+        EVAL_REASONS.ERROR,
+        EVAL_REASONS.OPT_IN,
+        EVAL_REASONS.OVERRIDE,
+        EVAL_REASONS.SPLIT,
+    ]
 
     constructor(options: EventQueueOptions, clientUUID: string) {
         this.pendingPayloads = new Map<string, FlushPayload>()
@@ -92,23 +103,39 @@ export class RequestPayloadManager {
                 if (featureVarAggMap.has('value')) {
                     const varAggMap = featureVarAggMap.get('value')
                     if (varAggMap.has('value')) {
-                        value = f64(varAggMap.get('value'))
+                        const evalReasonAggMap = varAggMap.get('value')
+                        if (evalReasonAggMap) {
+                            const evalReasonKeys = evalReasonAggMap.keys()
+                            for (let i = 0; i < evalReasonKeys.length; i++) {
+                                const evalReasonKey = evalReasonKeys[i]
+                                value = f64(evalReasonAggMap.get(evalReasonKey))
+                            }
 
-                        // Add aggVariableDefaulted Events
-                        const dvcEvent = new DVCEvent(
-                            type,
-                            variableKey,
-                            null,
-                            value,
-                            null,
-                        )
-                        aggEvents.push(
-                            new DVCRequestEvent(
-                                dvcEvent,
-                                user_id,
-                                emptyFeatureVars,
-                            ),
-                        )
+                            const evalMetadata = new JSON.Obj()
+                            evalMetadata.set('DEFAULT', value)
+
+                            const metaData = new JSON.Obj()
+                            metaData.set('_variation', 'DEFAULT')
+                            metaData.set('eval', evalMetadata)
+
+                            // Add aggVariableDefaulted Events
+                            const dvcEvent = new DVCEvent(
+                                type,
+                                variableKey,
+                                null,
+                                value,
+                                metaData,
+                            )
+                            aggEvents.push(
+                                new DVCRequestEvent(
+                                    dvcEvent,
+                                    user_id,
+                                    emptyFeatureVars,
+                                ),
+                            )
+                        } else {
+                            throw new Error('Missing evalReasonAggMap for value')
+                        }
                     } else {
                         throw new Error(
                             'Missing sub value map to write aggVariableDefaulted events',
@@ -124,12 +151,28 @@ export class RequestPayloadManager {
                         const variationAggMapKeys = variationAggMap.keys()
 
                         for (let z = 0; z < variationAggMapKeys.length; z++) {
-                            const _variation = variationAggMapKeys[z]
-                            value = f64(variationAggMap.get(_variation))
+                            const variationId = variationAggMapKeys[z]
+                            const evalReasonAggMap = variationAggMap.get(variationId)
+
+                            const evalMetadata = new JSON.Obj()
+
+                            value = 0
+                            if (evalReasonAggMap) {
+                                const evalReasonKeys = evalReasonAggMap.keys()
+                                for (let i = 0; i < evalReasonKeys.length; i++) {
+                                    const evalReasonKey = evalReasonKeys[i]
+                                    const evalReasonValue = f64(evalReasonAggMap.get(evalReasonKey))
+                                    evalMetadata.set(evalReasonKey, evalReasonValue)
+                                    value = value + evalReasonValue
+                                }
+                            }
 
                             const metaData = new JSON.Obj()
+                            if (evalMetadata.stringify() !== '{}') {
+                                metaData.set('eval', evalMetadata)
+                            }
                             metaData.set('_feature', _feature)
-                            metaData.set('_variation', _variation)
+                            metaData.set('_variation', variationId)
 
                             // Add aggVariableEvaluated Events
                             const dvcEvent = new DVCEvent(
@@ -268,5 +311,16 @@ export class RequestPayloadManager {
         return this.pendingPayloads.values().reduce((count: i32, payload) => {
             return count + payload.eventCount()
         }, 0 as i32)
+    }
+
+    private addEvalReasonCountsToMetaData(varAggMap: VariationAggMap, variationId: string, value: f64, metaData: JSON.Obj): void {
+        const varAggMapKeys = varAggMap.keys().filter((key) => key !== 'value')
+        for (let i = 0; i < varAggMapKeys.length; i++) {
+            const evalReason = varAggMapKeys[i]
+            if (evalReason === variationId) {
+                continue
+            }
+            metaData.set(evalReason, value)
+        }
     }
 }

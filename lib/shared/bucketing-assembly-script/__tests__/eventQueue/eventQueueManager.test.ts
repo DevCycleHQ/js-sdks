@@ -174,6 +174,9 @@ describe('EventQueueManager Tests', () => {
             const aggEvent = {
                 type: 'aggVariableDefaulted',
                 target: 'variableKey',
+                metaData: {
+                    evalReason: 'DEFAULT',
+                },
             }
 
             initSDK(sdkKey)
@@ -232,6 +235,111 @@ describe('EventQueueManager Tests', () => {
                                         featureVars: {},
                                         user_id: 'uuid@host.name',
                                         value: 1,
+                                        metaData: {
+                                            _variation: 'DEFAULT',
+                                            eval: {
+                                                DEFAULT: 1,
+                                            },
+                                        },
+                                    },
+                                ],
+                                user: {
+                                    createdDate: expect.any(String),
+                                    lastSeenDate: expect.any(String),
+                                    platform: 'NodeJS',
+                                    platformVersion: '16.0',
+                                    sdkType: 'server',
+                                    sdkVersion: '1.0.0',
+                                    sdkPlatform: 'node',
+                                    user_id: 'uuid@host.name',
+                                    hostname: 'host.name',
+                                },
+                            },
+                        ],
+                    },
+                ]),
+            )
+        })
+
+        it('should flush 2 aggVariableDefaulted events with Eval Reasons in metaData', () => {
+            const sdkKey = 'sdk_key_flush_test'
+            const event = {
+                type: 'testType',
+                target: 'testTarget',
+                value: 10,
+                metaData: { test: 'data' },
+            }
+            const defaultedEvent = {
+                type: 'aggVariableDefaulted',
+                target: 'variableKey',
+                metaData: {
+                    evalReason: 'DEFAULT',
+                },
+            }
+
+            initSDK(sdkKey)
+            queueEvent(sdkKey, dvcUser, event)
+            queueAggregateEvent(sdkKey, defaultedEvent, {})
+            queueAggregateEvent(sdkKey, defaultedEvent, {})
+            expect(eventQueueSize(sdkKey)).toEqual(2)
+            expect(flushEventQueue(sdkKey)).toEqual(
+                expect.arrayContaining([
+                    {
+                        payloadId: expect.any(String),
+                        eventCount: 2,
+                        records: [
+                            {
+                                events: [
+                                    {
+                                        clientDate: expect.any(String),
+                                        customType: 'testType',
+                                        date: expect.any(String),
+                                        featureVars: {
+                                            '614ef6aa473928459060721a':
+                                                '6153553b8cf4e45e0464268d',
+                                        },
+                                        metaData: { test: 'data' },
+                                        target: 'testTarget',
+                                        type: 'customEvent',
+                                        user_id: 'user_id',
+                                        value: 10,
+                                    },
+                                ],
+                                user: {
+                                    createdDate: expect.any(String),
+                                    lastSeenDate: expect.any(String),
+                                    platform: 'NodeJS',
+                                    platformVersion: '16.0',
+                                    sdkType: 'server',
+                                    sdkVersion: '1.0.0',
+                                    sdkPlatform: 'node',
+                                    user_id: 'user_id',
+                                    email: 'email@devcycle.com',
+                                    language: 'en',
+                                    country: 'us',
+                                    appVersion: '6.1.0',
+                                    appBuild: 188,
+                                    deviceModel: 'dvcServer',
+                                    customData: { custom: 'data' },
+                                    hostname: 'host.name',
+                                },
+                            },
+                            {
+                                events: [
+                                    {
+                                        clientDate: expect.any(String),
+                                        date: expect.any(String),
+                                        target: 'variableKey',
+                                        type: 'aggVariableDefaulted',
+                                        featureVars: {},
+                                        user_id: 'uuid@host.name',
+                                        value: 2,
+                                        metaData: {
+                                            _variation: 'DEFAULT',
+                                            eval: {
+                                                DEFAULT: 2,
+                                            },
+                                        },
                                     },
                                 ],
                                 user: {
@@ -751,10 +859,16 @@ describe('EventQueueManager Tests', () => {
             const eventDefaulted = {
                 type: 'aggVariableDefaulted',
                 target: 'testTarget',
+                metaData: {
+                    evalReason: 'DEFAULT',
+                },
             }
             const eventEvaluated = {
                 type: 'aggVariableEvaluated',
                 target: 'testTarget',
+                metaData: {
+                    evalReason: 'TARGETING_MATCH',
+                },
             }
             const variableVariationMap = {
                 test: {
@@ -786,6 +900,9 @@ describe('EventQueueManager Tests', () => {
             }
             for (let i = 0; i < 36; i++) {
                 eventEvaluated.target = 'test'
+                if (i > 25) {
+                    eventEvaluated.metaData.evalReason = 'SPLIT'
+                }
                 queueAggregateEvent(
                     sdkKey,
                     eventEvaluated,
@@ -794,6 +911,12 @@ describe('EventQueueManager Tests', () => {
             }
             for (let i = 0; i < 11; i++) {
                 eventEvaluated.target = 'swagTest'
+                // 6 TARGETING_MATCH and 5 SPLIT
+                if (i <= 5) {
+                    eventEvaluated.metaData.evalReason = 'TARGETING_MATCH'
+                } else {
+                    eventEvaluated.metaData.evalReason = 'SPLIT'
+                }
                 queueAggregateEvent(
                     sdkKey,
                     eventEvaluated,
@@ -813,6 +936,12 @@ describe('EventQueueManager Tests', () => {
                     featureVars: {},
                     user_id: 'uuid@host.name',
                     value: 36,
+                    metaData: {
+                        _variation: 'DEFAULT',
+                        eval: {
+                            DEFAULT: 36,
+                        },
+                    },
                 },
                 {
                     clientDate: expect.any(String),
@@ -822,6 +951,12 @@ describe('EventQueueManager Tests', () => {
                     featureVars: {},
                     user_id: 'uuid@host.name',
                     value: 11,
+                    metaData: {
+                        _variation: 'DEFAULT',
+                        eval: {
+                            DEFAULT: 11,
+                        },
+                    },
                 },
                 {
                     clientDate: expect.any(String),
@@ -834,6 +969,10 @@ describe('EventQueueManager Tests', () => {
                     metaData: {
                         _feature: '614ef6aa473928459060721a',
                         _variation: '6153553b8cf4e45e0464268d',
+                        eval: {
+                            TARGETING_MATCH: 26,
+                            SPLIT: 10,
+                        },
                     },
                 },
                 {
@@ -847,6 +986,10 @@ describe('EventQueueManager Tests', () => {
                     metaData: {
                         _feature: '614ef6aa473928459060721a',
                         _variation: '6153553b8cf4e45e0464268d',
+                        eval: {
+                            TARGETING_MATCH: 6,
+                            SPLIT: 5,
+                        },
                     },
                 },
             ])
