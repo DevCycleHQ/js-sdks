@@ -11,6 +11,7 @@ import {
     InvalidContextError,
     ProviderStatus,
     TrackingEventDetails,
+    FlagMetadata,
 } from '@openfeature/server-sdk'
 import {
     DevCycleClient,
@@ -248,14 +249,22 @@ export class DevCycleProvider implements Provider {
     private resultFromDVCVariable<T>(
         variable: DVCVariableInterface,
     ): ResolutionDetails<T> {
-        return {
+        const resolutionDetails: ResolutionDetails<T> = {
             value: variable.value as T,
-            //TODO: once eval enabled from cloud bucketing, this can be simplified as eval won't be null
-            reason: variable.isDefaulted
-                ? StandardResolutionReasons.DEFAULT
-                : variable.eval?.reason ??
-                  StandardResolutionReasons.TARGETING_MATCH,
+            //TODO: once eval enabled from cloud bucketing, eval won't be null unless defaulted
+            reason:
+                variable.eval?.reason ??
+                (variable.isDefaulted
+                    ? StandardResolutionReasons.DEFAULT
+                    : StandardResolutionReasons.TARGETING_MATCH),
         }
+        if (variable.eval) {
+            const metadata: FlagMetadata = {}
+            metadata['evalReasonDetails'] = variable.eval?.details || ''
+            metadata['evalReasonTargetId'] = variable.eval?.target_id || ''
+            resolutionDetails.flagMetadata = metadata
+        }
+        return resolutionDetails
     }
 
     /**
