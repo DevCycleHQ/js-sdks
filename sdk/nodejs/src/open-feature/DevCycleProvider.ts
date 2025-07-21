@@ -261,7 +261,7 @@ export class DevCycleProvider implements Provider {
         if (variable.eval) {
             const { details, target_id } = variable.eval
             const metadata: FlagMetadata = {}
-            
+
             if (details) metadata.evalReasonDetails = details
             if (target_id) metadata.evalReasonTargetId = target_id
             resolutionDetails.flagMetadata = metadata
