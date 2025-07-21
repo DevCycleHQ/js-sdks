@@ -25,6 +25,11 @@ import {
     DVCVariable,
     DVCVariableValue,
 } from '../../src/index'
+import {
+    DEFAULT_REASON_DETAILS,
+    EVAL_REASON_DETAILS,
+    EVAL_REASONS,
+} from '@devcycle/types'
 
 const variableMock = jest.spyOn(DevCycleClient.prototype, 'variable')
 const cloudVariableMock = jest.spyOn(DevCycleCloudClient.prototype, 'variable')
@@ -98,6 +103,11 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     defaultValue: false,
                     isDefaulted: false,
                     type: 'Boolean',
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details: EVAL_REASON_DETAILS.EMAIL,
+                        target_id: 'target_id',
+                    },
                 })
             })
 
@@ -248,7 +258,70 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                 )
             })
         })
-
+        describe(`${dvcClientType} - Eval Reasons`, () => {
+            it('should return reason TARGETING_MATCH if eval is null and isDefaulted is false', async () => {
+                mockVariable({
+                    key: 'boolean-flag',
+                    value: true,
+                    defaultValue: false,
+                    isDefaulted: false,
+                    type: 'Boolean',
+                })
+                const { ofClient } = await initOFClient()
+                expect(
+                    ofClient.getBooleanDetails('boolean-flag', false),
+                ).resolves.toEqual({
+                    flagKey: 'boolean-flag',
+                    value: true,
+                    reason: StandardResolutionReasons.TARGETING_MATCH,
+                    flagMetadata: {},
+                })
+            })
+            it('should return reason DEFAULT if eval is null and isDefaulted is true', async () => {
+                mockVariable({
+                    key: 'boolean-flag',
+                    value: false,
+                    defaultValue: false,
+                    isDefaulted: true,
+                    type: 'Boolean',
+                })
+                const { ofClient } = await initOFClient()
+                expect(
+                    ofClient.getBooleanDetails('boolean-flag', false),
+                ).resolves.toEqual({
+                    flagKey: 'boolean-flag',
+                    value: false,
+                    reason: StandardResolutionReasons.DEFAULT,
+                    flagMetadata: {},
+                })
+            })
+            it('should return reason specified in eval if it exists', async () => {
+                mockVariable({
+                    key: 'boolean-flag',
+                    value: true,
+                    defaultValue: false,
+                    isDefaulted: true,
+                    type: 'Boolean',
+                    eval: {
+                        reason: EVAL_REASONS.SPLIT,
+                        details: EVAL_REASON_DETAILS.ROLLOUT,
+                        target_id: 'target_id',
+                    },
+                })
+                const { ofClient } = await initOFClient()
+                expect(
+                    ofClient.getBooleanDetails('boolean-flag', false),
+                ).resolves.toEqual({
+                    flagKey: 'boolean-flag',
+                    value: true,
+                    reason: StandardResolutionReasons.SPLIT,
+                    flagMetadata: {
+                        evalReasonDetails: 'Rollout',
+                        evalReasonTargetId: 'target_id',
+                    },
+                })
+            })
+        })
         describe(`${dvcClientType} - Boolean Flags`, () => {
             beforeEach(() => {
                 mockVariable({
@@ -257,6 +330,11 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     defaultValue: false,
                     isDefaulted: false,
                     type: 'Boolean',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: EVAL_REASON_DETAILS.ROLLOUT,
+                        target_id: 'target_id',
+                    },
                 })
             })
 
@@ -277,7 +355,10 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     flagKey: 'boolean-flag',
                     value: true,
                     reason: StandardResolutionReasons.TARGETING_MATCH,
-                    flagMetadata: {},
+                    flagMetadata: {
+                        evalReasonDetails: 'Rollout',
+                        evalReasonTargetId: 'target_id',
+                    },
                 })
             })
 
@@ -288,6 +369,10 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     defaultValue: false,
                     isDefaulted: true,
                     type: 'Boolean',
+                    eval: {
+                        reason: EVAL_REASONS.DEFAULT,
+                        details: DEFAULT_REASON_DETAILS.USER_NOT_TARGETED,
+                    },
                 })
                 const { ofClient } = await initOFClient()
 
@@ -297,7 +382,9 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     flagKey: 'boolean-flag',
                     value: false,
                     reason: StandardResolutionReasons.DEFAULT,
-                    flagMetadata: {},
+                    flagMetadata: {
+                        evalReasonDetails: 'User Not Targeted',
+                    },
                 })
             })
         })
@@ -310,6 +397,11 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     defaultValue: 'string-default',
                     isDefaulted: false,
                     type: 'String',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: EVAL_REASON_DETAILS.ROLLOUT,
+                        target_id: 'target_id',
+                    },
                 })
             })
 
@@ -330,7 +422,10 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     flagKey: 'string-flag',
                     value: 'string-value',
                     reason: StandardResolutionReasons.TARGETING_MATCH,
-                    flagMetadata: {},
+                    flagMetadata: {
+                        evalReasonDetails: 'Rollout',
+                        evalReasonTargetId: 'target_id',
+                    },
                 })
             })
         })
@@ -343,6 +438,11 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     defaultValue: 2056,
                     isDefaulted: false,
                     type: 'Number',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: EVAL_REASON_DETAILS.ROLLOUT,
+                        target_id: 'target_id',
+                    },
                 })
             })
 
@@ -363,7 +463,10 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     flagKey: 'num-flag',
                     value: 610,
                     reason: StandardResolutionReasons.TARGETING_MATCH,
-                    flagMetadata: {},
+                    flagMetadata: {
+                        evalReasonDetails: 'Rollout',
+                        evalReasonTargetId: 'target_id',
+                    },
                 })
             })
         })
@@ -376,6 +479,11 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     defaultValue: { default: 'value' },
                     isDefaulted: false,
                     type: 'JSON',
+                    eval: {
+                        reason: EVAL_REASONS.TARGETING_MATCH,
+                        details: EVAL_REASON_DETAILS.ROLLOUT,
+                        target_id: 'target_id',
+                    },
                 })
             })
 
@@ -398,7 +506,10 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     flagKey: 'json-flag',
                     value: { hello: 'world' },
                     reason: StandardResolutionReasons.TARGETING_MATCH,
-                    flagMetadata: {},
+                    flagMetadata: {
+                        evalReasonDetails: 'Rollout',
+                        evalReasonTargetId: 'target_id',
+                    },
                 })
             })
 
