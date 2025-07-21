@@ -25,7 +25,11 @@ import {
     DVCVariable,
     DVCVariableValue,
 } from '../../src/index'
-import { DEFAULT_REASON_DETAILS, EVAL_REASON_DETAILS, EVAL_REASONS } from '@devcycle/types'
+import {
+    DEFAULT_REASON_DETAILS,
+    EVAL_REASON_DETAILS,
+    EVAL_REASONS,
+} from '@devcycle/types'
 
 const variableMock = jest.spyOn(DevCycleClient.prototype, 'variable')
 const cloudVariableMock = jest.spyOn(DevCycleCloudClient.prototype, 'variable')
@@ -264,14 +268,14 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     type: 'Boolean',
                 })
                 const { ofClient } = await initOFClient()
-                     expect(
-                        ofClient.getBooleanDetails('boolean-flag', false),
-                    ).resolves.toEqual({ 
-                        flagKey: 'boolean-flag',
-                        value: true,
-                        reason: StandardResolutionReasons.TARGETING_MATCH,
-                        flagMetadata: { },
-                    })
+                expect(
+                    ofClient.getBooleanDetails('boolean-flag', false),
+                ).resolves.toEqual({
+                    flagKey: 'boolean-flag',
+                    value: true,
+                    reason: StandardResolutionReasons.TARGETING_MATCH,
+                    flagMetadata: {},
+                })
             })
             it('should return reason DEFAULT if eval is null and isDefaulted is true', async () => {
                 mockVariable({
@@ -282,14 +286,14 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     type: 'Boolean',
                 })
                 const { ofClient } = await initOFClient()
-                     expect(
-                        ofClient.getBooleanDetails('boolean-flag', false),
-                    ).resolves.toEqual({ 
-                        flagKey: 'boolean-flag',
-                        value: true,
-                        reason: StandardResolutionReasons.DEFAULT,
-                        flagMetadata: { },
-                    })
+                expect(
+                    ofClient.getBooleanDetails('boolean-flag', false),
+                ).resolves.toEqual({
+                    flagKey: 'boolean-flag',
+                    value: true,
+                    reason: StandardResolutionReasons.DEFAULT,
+                    flagMetadata: {},
+                })
             })
             it('should return reason specified in eval if it exists', async () => {
                 mockVariable({
@@ -305,17 +309,17 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     },
                 })
                 const { ofClient } = await initOFClient()
-                     expect(
-                        ofClient.getBooleanDetails('boolean-flag', false),
-                    ).resolves.toEqual({ 
-                        flagKey: 'boolean-flag',
-                        value: true,
-                        reason: StandardResolutionReasons.SPLIT,
-                        flagMetadata: {
-                            evalReasonDetails: 'Rollout',
-                            evalReasonTargetId: 'target_id',
-                        },
-                    })
+                expect(
+                    ofClient.getBooleanDetails('boolean-flag', false),
+                ).resolves.toEqual({
+                    flagKey: 'boolean-flag',
+                    value: true,
+                    reason: StandardResolutionReasons.SPLIT,
+                    flagMetadata: {
+                        evalReasonDetails: 'Rollout',
+                        evalReasonTargetId: 'target_id',
+                    },
+                })
             })
         })
         describe(`${dvcClientType} - Boolean Flags`, () => {
@@ -380,7 +384,6 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     reason: StandardResolutionReasons.DEFAULT,
                     flagMetadata: {
                         evalReasonDetails: 'User Not Targeted',
-                        evalReasonTargetId: ''
                     },
                 })
             })

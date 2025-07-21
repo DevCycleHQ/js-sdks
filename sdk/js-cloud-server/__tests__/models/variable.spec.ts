@@ -19,7 +19,7 @@ describe('DVCVariable Unit Tests', () => {
             defaultValue: false,
             type: 'Boolean',
             eval: {
-                reason: 'SPLIT',
+                reason: EVAL_REASONS.SPLIT,
             },
         })
     })

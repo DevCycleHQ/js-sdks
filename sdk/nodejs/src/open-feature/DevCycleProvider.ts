@@ -260,8 +260,12 @@ export class DevCycleProvider implements Provider {
         }
         if (variable.eval) {
             const metadata: FlagMetadata = {}
-            metadata['evalReasonDetails'] = variable.eval?.details || ''
-            metadata['evalReasonTargetId'] = variable.eval?.target_id || ''
+            if (variable.eval.details) {
+                metadata['evalReasonDetails'] = variable.eval?.details
+            }
+            if (variable.eval.target_id) {
+                metadata['evalReasonTargetId'] = variable.eval?.target_id
+            }
             resolutionDetails.flagMetadata = metadata
         }
         return resolutionDetails
