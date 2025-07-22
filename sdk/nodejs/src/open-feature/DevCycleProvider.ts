@@ -288,7 +288,7 @@ export class DevCycleProvider implements Provider {
             user_id_source = 'userId'
         }
 
-        if (!user_id) {
+        if (!user_id || user_id === '') {
             throw new TargetingKeyMissingError(
                 'DevCycle: Evaluation context does not contain a valid targetingKey, user_id, or userId attribute',
             )
@@ -297,12 +297,6 @@ export class DevCycleProvider implements Provider {
         if (typeof user_id !== 'string') {
             throw new TargetingKeyMissingError(
                 `DevCycle: ${user_id_source} must be a string, got ${typeof user_id}`,
-            )
-        }
-
-        if (user_id === '') {
-            throw new TargetingKeyMissingError(
-                `DevCycle: ${user_id_source} cannot be an empty string`,
             )
         }
 
