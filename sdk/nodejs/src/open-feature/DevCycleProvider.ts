@@ -274,38 +274,31 @@ export class DevCycleProvider implements Provider {
      * @private
      */
     private devcycleUserFromContext(context: EvaluationContext): DevCycleUser {
-        // Check for user ID in priority order: targetingKey -> user_id -> userId
-        const userIdCandidates = [
-            { key: 'targetingKey', value: context.targetingKey },
-            { key: 'user_id', value: context.user_id },
-            { key: 'userId', value: context.userId },
-        ]
+        let user_id: string | null = null
+        let user_id_source: string | null = null
 
-        // Find first non-null/undefined candidate
-        const firstCandidate = userIdCandidates.find(
-            ({ value }) => value !== null && value !== undefined,
-        )
+        if (context.targetingKey) {
+            user_id = context.targetingKey
+            user_id_source = 'targetingKey'
+        } else if (context.user_id) {
+            user_id = context.user_id
+            user_id_source = 'user_id'
+        } else if (context.userId) {
+            user_id = context.userId
+            user_id_source = 'userId'
+        }
 
-        if (!firstCandidate) {
+        if (!user_id) {
             throw new TargetingKeyMissingError(
-                'Missing targetingKey, user_id, or userId in context',
+                'DevCycle: Evaluation context does not contain a valid targetingKey, user_id, or userId attribute',
             )
         }
 
-        // Check if the candidate is a non-empty string
-        if (typeof firstCandidate.value !== 'string') {
-            throw new InvalidContextError(
-                `${firstCandidate.key} must be a string, but got ${typeof firstCandidate.value}`,
-            )
-        }
-
-        if (firstCandidate.value === '') {
+        if (typeof user_id !== 'string') {
             throw new TargetingKeyMissingError(
-                `${firstCandidate.key} cannot be an empty string`,
+                `DevCycle: ${user_id_source} must be a string, got ${typeof user_id}`,
             )
         }
-
-        const user_id = firstCandidate.value
 
         const dvcUserData: Record<string, string | number | DVCCustomDataJSON> =
             {}
