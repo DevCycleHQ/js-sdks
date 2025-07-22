@@ -121,7 +121,7 @@ export class DevCycleProvider implements Provider {
     ): void {
         if (!context) {
             throw new TargetingKeyMissingError(
-                'Missing targetingKey, user_id, or userId in context',
+                'Missing context',
             )
         }
 
