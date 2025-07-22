@@ -300,6 +300,12 @@ export class DevCycleProvider implements Provider {
             )
         }
 
+        if (user_id === '') {
+            throw new TargetingKeyMissingError(
+                `DevCycle: ${user_id_source} cannot be an empty string`,
+            )
+        }
+
         const dvcUserData: Record<string, string | number | DVCCustomDataJSON> =
             {}
         let customData: DVCCustomDataJSON = {}
