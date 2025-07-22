@@ -277,13 +277,13 @@ export class DevCycleProvider implements Provider {
         let user_id: string | null = null
         let user_id_source: string | null = null
 
-        if (context.targetingKey && typeof context.targetingKey === 'string' && context.targetingKey !== '') {
+        if (context.targetingKey) {
             user_id = context.targetingKey
             user_id_source = 'targetingKey'
-        } else if (context.user_id && typeof context.user_id === 'string' && context.user_id !== '') {
+        } else if (context.user_id) {
             user_id = context.user_id
             user_id_source = 'user_id'
-        } else if (context.userId && typeof context.userId === 'string' && context.userId !== '') {
+        } else if (context.userId) {
             user_id = context.userId
             user_id_source = 'userId'
         }
@@ -291,6 +291,18 @@ export class DevCycleProvider implements Provider {
         if (!user_id) {
             throw new TargetingKeyMissingError(
                 'DevCycle: Evaluation context does not contain a valid targetingKey, user_id, or userId attribute',
+            )
+        }
+
+        if (typeof user_id !== 'string') {
+            throw new TargetingKeyMissingError(
+                `DevCycle: ${user_id_source} must be a string, got ${typeof user_id}`,
+            )
+        }
+
+        if (user_id === '') {
+            throw new TargetingKeyMissingError(
+                `DevCycle: ${user_id_source} cannot be an empty string`,
             )
         }
 
