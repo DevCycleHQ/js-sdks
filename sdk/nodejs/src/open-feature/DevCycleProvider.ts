@@ -274,18 +274,38 @@ export class DevCycleProvider implements Provider {
      * @private
      */
     private devcycleUserFromContext(context: EvaluationContext): DevCycleUser {
-        // Get first non-empty userId from targetingKey, user_id, or userId
-        const user_id = [context.targetingKey, context.user_id, context.userId]
-            .filter(
-                (id): id is string => typeof id === 'string' && id !== '',
-            )
-            .shift() || null
+        // Check for user ID in priority order: targetingKey -> user_id -> userId
+        const userIdCandidates = [
+            { key: 'targetingKey', value: context.targetingKey },
+            { key: 'user_id', value: context.user_id },
+            { key: 'userId', value: context.userId },
+        ]
 
-        if (!user_id) {
+        // Find first non-null/undefined candidate
+        const firstCandidate = userIdCandidates.find(
+            ({ value }) => value !== null && value !== undefined,
+        )
+
+        if (!firstCandidate) {
             throw new TargetingKeyMissingError(
                 'Missing targetingKey, user_id, or userId in context',
             )
         }
+
+        // Check if the candidate is a non-empty string
+        if (typeof firstCandidate.value !== 'string') {
+            throw new InvalidContextError(
+                `${firstCandidate.key} must be a string, but got ${typeof firstCandidate.value}`,
+            )
+        }
+
+        if (firstCandidate.value === '') {
+            throw new TargetingKeyMissingError(
+                `${firstCandidate.key} cannot be an empty string`,
+            )
+        }
+
+        const user_id = firstCandidate.value
 
         const dvcUserData: Record<string, string | number | DVCCustomDataJSON> =
             {}
