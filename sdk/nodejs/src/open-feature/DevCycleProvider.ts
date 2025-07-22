@@ -119,16 +119,7 @@ export class DevCycleProvider implements Provider {
         context?: EvaluationContext,
         trackingEventDetails?: TrackingEventDetails,
     ): void {
-        // Get first non-empty userId from targetingKey, user_id, or userId
-        const user_id = context
-            ? [context.targetingKey, context.user_id, context.userId]
-                  .filter(
-                      (id): id is string => typeof id === 'string' && id !== '',
-                  )
-                  .shift() || null
-            : null
-
-        if (!context || !user_id) {
+        if (!context) {
             throw new TargetingKeyMissingError(
                 'Missing targetingKey, user_id, or userId in context',
             )
