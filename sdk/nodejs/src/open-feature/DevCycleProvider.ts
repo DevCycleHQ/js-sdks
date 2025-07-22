@@ -121,7 +121,7 @@ export class DevCycleProvider implements Provider {
     ): void {
         if (!context) {
             throw new TargetingKeyMissingError(
-                'Missing context',
+                'Missing context to track event to DevCycle',
             )
         }
 
