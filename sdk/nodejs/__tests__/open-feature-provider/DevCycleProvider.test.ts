@@ -817,7 +817,7 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
 
                 ofClient.addHandler(ProviderEvents.Error, (error) => {
                     expect(error?.message).toBe(
-                        'DevCycle: Evaluation context does not contain a valid targetingKey, user_id, or userId attribute',
+                        'DevCycle: Evaluation context does not contain a valid targetingKey, user_id, or userId string attribute',
                     )
                 })
                 ofClient.track('test-event', {})
