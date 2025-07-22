@@ -6,7 +6,6 @@ import {
     FlushPayload,
     UserEventsBatchRecord,
     EventQueueOptions,
-    EVAL_REASONS,
 } from '../types'
 import { JSON } from '@devcycle/assemblyscript-json/assembly'
 import { _getPlatformData } from '../managers/platformDataManager'
@@ -25,16 +24,6 @@ export class RequestPayloadManager {
     private pendingPayloads: Map<string, FlushPayload>
     private readonly chunkSize: i32
     private readonly clientUUID: string
-
-    private readonly evalReasonKeysToSkip: string[] = [
-        EVAL_REASONS.TARGETING_MATCH,
-        EVAL_REASONS.DEFAULT,
-        EVAL_REASONS.DISABLED,
-        EVAL_REASONS.ERROR,
-        EVAL_REASONS.OPT_IN,
-        EVAL_REASONS.OVERRIDE,
-        EVAL_REASONS.SPLIT,
-    ]
 
     constructor(options: EventQueueOptions, clientUUID: string) {
         this.pendingPayloads = new Map<string, FlushPayload>()
@@ -311,16 +300,5 @@ export class RequestPayloadManager {
         return this.pendingPayloads.values().reduce((count: i32, payload) => {
             return count + payload.eventCount()
         }, 0 as i32)
-    }
-
-    private addEvalReasonCountsToMetaData(varAggMap: VariationAggMap, variationId: string, value: f64, metaData: JSON.Obj): void {
-        const varAggMapKeys = varAggMap.keys().filter((key) => key !== 'value')
-        for (let i = 0; i < varAggMapKeys.length; i++) {
-            const evalReason = varAggMapKeys[i]
-            if (evalReason === variationId) {
-                continue
-            }
-            metaData.set(evalReason, value)
-        }
     }
 }

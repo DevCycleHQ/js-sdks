@@ -176,7 +176,7 @@ export class EventQueue {
                     throw new Error('Missing second value map for aggVariableDefaulted')
                 }
             } else {
-                let evalReasonAggMap: EvalReasonAggMap = new Map<string, i64>()
+                const evalReasonAggMap: EvalReasonAggMap = new Map<string, i64>()
                 this.addEvalReasonToVariationAggMap(evalReasonAggMap, event.metaData)
 
                 const variationAggMap = new Map<string, EvalReasonAggMap>()
