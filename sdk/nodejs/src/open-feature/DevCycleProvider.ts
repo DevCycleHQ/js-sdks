@@ -274,8 +274,7 @@ export class DevCycleProvider implements Provider {
      * @private
      */
     private devcycleUserFromContext(context: EvaluationContext): DevCycleUser {
-        let user_id: string | null = null
-        let user_id_source: string | null = null
+        let user_id, user_id_source
 
         if (context.targetingKey) {
             user_id = context.targetingKey
@@ -290,7 +289,7 @@ export class DevCycleProvider implements Provider {
 
         if (!user_id || user_id === '') {
             throw new TargetingKeyMissingError(
-                'DevCycle: Evaluation context does not contain a valid targetingKey, user_id, or userId attribute',
+                'DevCycle: Evaluation context does not contain a valid targetingKey, user_id, or userId string attribute',
             )
         }
 
@@ -307,7 +306,8 @@ export class DevCycleProvider implements Provider {
 
         for (const [key, value] of Object.entries(context)) {
             // Skip user ID fields as they're handled above
-            if (key === 'targetingKey' || key === 'user_id' || key === 'userId') continue
+            if (key === 'targetingKey' || key === 'user_id' || key === 'userId')
+                continue
 
             const knownValueType = DVCKnownPropertyKeyTypes[key]
             if (knownValueType) {
