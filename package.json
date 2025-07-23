@@ -230,7 +230,6 @@
         "semver@7.3.7": "^7.5.2",
         "semver@7.5.3": "^7.5.2",
         "@altack/nx-bundlefy@^0.16.0": "patch:@altack/nx-bundlefy@npm%3A0.16.0#./.yarn/patches/@altack-nx-bundlefy-npm-0.16.0-fc464002e3.patch",
-        "express@4.18.3": "~4.19.2",
         "ejs@3.1.8": "3.1.10",
         "path-to-regexp@3.2.0": "^3.3.0",
         "path-to-regexp@0.1.10": "^0.1.12",
