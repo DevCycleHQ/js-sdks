@@ -36,4 +36,3 @@ jobs:
                   sdks-to-test: nodejs,of-nodejs
                   sdk-github-sha: ${{github.event.pull_request.head.sha}}
                   github-token: ${{ secrets.AUTOMATION_USER_TOKEN }}
-                  sdk-capabilities: '{ "NodeJS":["edgeDB", "cloud", "lastModifiedHeader", "bootstrapping", "sdkConfigEvent", "clientUUID", "v2Config", "clientCustomData", "variablesFeatureId", "cloudEvalReason", "evalReason", "allVariables", "allFeatures", "eventsEvalReason"], "OF-NodeJS": ["edgeDB", "cloud", "lastModifiedHeader", "sdkConfigEvent", "clientUUID", "v2Config", "sdkPlatform", "variablesFeatureId", "evalReason", "cloudEvalReason", "flagMetadata", "eventsEvalReason"]}'
