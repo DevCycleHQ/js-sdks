@@ -8,7 +8,6 @@ import {
     StandardResolutionReasons,
     ParseError,
     TargetingKeyMissingError,
-    InvalidContextError,
     ProviderStatus,
     TrackingEventDetails,
     FlagMetadata,
@@ -289,7 +288,8 @@ export class DevCycleProvider implements Provider {
 
         if (!user_id || user_id === '') {
             throw new TargetingKeyMissingError(
-                'DevCycle: Evaluation context does not contain a valid targetingKey, user_id, or userId string attribute',
+                'DevCycle: Evaluation context does not contain a valid ' +
+                    'targetingKey, user_id, or userId string attribute',
             )
         }
 

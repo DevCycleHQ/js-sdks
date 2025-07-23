@@ -47,7 +47,7 @@ type DevCycleClientTypes = 'DevCycleClient' | 'DevCycleCloudClient'
 describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
     'DevCycleProvider Unit Tests',
     (dvcClientType: DevCycleClientTypes) => {
-        async function initOFClient(skipContext: boolean = false): Promise<{
+        async function initOFClient(skipContext = false): Promise<{
             ofClient: Client
             dvcClient: DevCycleClient | DevCycleCloudClient
         }> {
@@ -124,7 +124,8 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
                     value: false,
                     errorCode: 'TARGETING_KEY_MISSING',
                     errorMessage:
-                        'DevCycle: Evaluation context does not contain a valid targetingKey, user_id, or userId string attribute',
+                        'DevCycle: Evaluation context does not contain a valid ' +
+                        'targetingKey, user_id, or userId string attribute',
                     reason: 'ERROR',
                     flagMetadata: {},
                 })
@@ -817,7 +818,8 @@ describe.each(['DevCycleClient', 'DevCycleCloudClient'])(
 
                 ofClient.addHandler(ProviderEvents.Error, (error) => {
                     expect(error?.message).toBe(
-                        'DevCycle: Evaluation context does not contain a valid targetingKey, user_id, or userId string attribute',
+                        'DevCycle: Evaluation context does not contain a valid ' +
+                            'targetingKey, user_id, or userId string attribute',
                     )
                 })
                 ofClient.track('test-event', {})
