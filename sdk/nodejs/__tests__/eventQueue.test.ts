@@ -106,6 +106,9 @@ describe('EventQueue Unit Tests', () => {
         const aggEvent = {
             type: EventTypes.aggVariableEvaluated,
             target: 'key',
+            metaData: {
+                evalReason: 'TARGETING_MATCH',
+            },
         }
         eventQueue.queueAggregateEvent(user, aggEvent, bucketedUserConfig)
 
@@ -150,6 +153,9 @@ describe('EventQueue Unit Tests', () => {
         const aggEvent = {
             type: EventTypes.aggVariableEvaluated,
             target: 'key',
+            metaData: {
+                evalReason: 'TARGETING_MATCH',
+            },
         }
         eventQueue.queueAggregateEvent(user, aggEvent, bucketedUserConfig)
 
@@ -205,6 +211,9 @@ describe('EventQueue Unit Tests', () => {
                             metaData: {
                                 _feature: 'feature',
                                 _variation: 'variation',
+                                eval: {
+                                    TARGETING_MATCH: 1,
+                                },
                             },
                         }),
                     ],
@@ -227,6 +236,9 @@ describe('EventQueue Unit Tests', () => {
         const aggEvent = {
             type: EventTypes.aggVariableEvaluated,
             target: 'key',
+            metaData: {
+                evalReason: 'TARGETING_MATCH',
+            },
         }
         eventQueue.queueAggregateEvent(user, aggEvent, bucketedUserConfig)
 
@@ -284,6 +296,9 @@ describe('EventQueue Unit Tests', () => {
                             metaData: {
                                 _feature: 'feature',
                                 _variation: 'variation',
+                                eval: {
+                                    TARGETING_MATCH: 1,
+                                },
                             },
                         }),
                     ],
@@ -349,6 +364,9 @@ describe('EventQueue Unit Tests', () => {
             const aggEvent = {
                 type: EventTypes.aggVariableEvaluated,
                 target: 'key',
+                metaData: {
+                    evalReason: 'TARGETING_MATCH',
+                },
             }
             eventQueue.queueAggregateEvent(user, aggEvent, bucketedUserConfig)
 
@@ -378,6 +396,9 @@ describe('EventQueue Unit Tests', () => {
                             metaData: {
                                 _feature: 'feature',
                                 _variation: 'variation',
+                                eval: {
+                                    TARGETING_MATCH: 1,
+                                },
                             },
                         }),
                     ],
@@ -407,6 +428,9 @@ describe('EventQueue Unit Tests', () => {
             const aggEvent = {
                 type: EventTypes.aggVariableEvaluated,
                 target: 'key',
+                metaData: {
+                    evalReason: 'TARGETING_MATCH',
+                },
             }
             eventQueue.queueAggregateEvent(user, aggEvent, bucketedUserConfig)
 
@@ -450,7 +474,11 @@ describe('EventQueue Unit Tests', () => {
         const user1 = DVCPopulatedUserFromDevCycleUser({ user_id: 'user1' })
         eventQueue.queueAggregateEvent(
             user1,
-            { type: EventTypes.aggVariableDefaulted, target: 'unknown_key' },
+            {
+                type: EventTypes.aggVariableDefaulted,
+                target: 'unknown_key',
+                metaData: { evalReason: 'DEFAULT' },
+            },
             bucketedUserConfig,
         )
         await eventQueue.flushEvents()
@@ -470,6 +498,12 @@ describe('EventQueue Unit Tests', () => {
                             type: 'aggVariableDefaulted',
                             user_id: 'uuid@host.name',
                             value: 1,
+                            metaData: {
+                                _variation: 'DEFAULT',
+                                eval: {
+                                    DEFAULT: 1,
+                                },
+                            },
                         },
                     ],
                     user: {
@@ -502,27 +536,47 @@ describe('EventQueue Unit Tests', () => {
 
         eventQueue.queueAggregateEvent(
             user1,
-            { type: EventTypes.aggVariableEvaluated, target: 'key_1' },
+            {
+                type: EventTypes.aggVariableEvaluated,
+                target: 'key_1',
+                metaData: { evalReason: 'TARGETING_MATCH' },
+            },
             bucketedUserConfig,
         )
         eventQueue.queueAggregateEvent(
             user2,
-            { type: EventTypes.aggVariableEvaluated, target: 'key_3' },
+            {
+                type: EventTypes.aggVariableEvaluated,
+                target: 'key_3',
+                metaData: { evalReason: 'TARGETING_MATCH' },
+            },
             bucketedUserConfig,
         )
         eventQueue.queueAggregateEvent(
             user2,
-            { type: EventTypes.aggVariableEvaluated, target: 'key_4' },
+            {
+                type: EventTypes.aggVariableEvaluated,
+                target: 'key_4',
+                metaData: { evalReason: 'TARGETING_MATCH' },
+            },
             bucketedUserConfig,
         )
         eventQueue.queueAggregateEvent(
             user2,
-            { type: EventTypes.aggVariableEvaluated, target: 'key_4' },
+            {
+                type: EventTypes.aggVariableEvaluated,
+                target: 'key_4',
+                metaData: { evalReason: 'TARGETING_MATCH' },
+            },
             bucketedUserConfig,
         )
         eventQueue.queueAggregateEvent(
             user2,
-            { type: EventTypes.aggVariableDefaulted, target: 'key_4' },
+            {
+                type: EventTypes.aggVariableDefaulted,
+                target: 'key_4',
+                metaData: { evalReason: 'DEFAULT' },
+            },
             bucketedUserConfig,
         )
 
@@ -573,24 +627,51 @@ describe('EventQueue Unit Tests', () => {
                             target: 'key_1',
                             value: 1,
                             user_id: 'uuid@host.name',
+                            metaData: {
+                                _feature: 'feature_1',
+                                _variation: 'variation_1',
+                                eval: {
+                                    TARGETING_MATCH: 1,
+                                },
+                            },
                         }),
                         expect.objectContaining({
                             type: 'aggVariableEvaluated',
                             target: 'key_3',
                             value: 1,
                             user_id: 'uuid@host.name',
+                            metaData: {
+                                _feature: 'feature_3',
+                                _variation: 'variation_3',
+                                eval: {
+                                    TARGETING_MATCH: 1,
+                                },
+                            },
                         }),
                         expect.objectContaining({
                             type: 'aggVariableEvaluated',
                             target: 'key_4',
                             value: 2,
                             user_id: 'uuid@host.name',
+                            metaData: {
+                                _feature: 'feature_4',
+                                _variation: 'variation_4',
+                                eval: {
+                                    TARGETING_MATCH: 2,
+                                },
+                            },
                         }),
                         expect.objectContaining({
                             type: 'aggVariableDefaulted',
                             target: 'key_4',
                             value: 1,
                             user_id: 'uuid@host.name',
+                            metaData: {
+                                _variation: 'DEFAULT',
+                                eval: {
+                                    DEFAULT: 1,
+                                },
+                            },
                         }),
                     ],
                 },
@@ -608,6 +689,9 @@ describe('EventQueue Unit Tests', () => {
         const aggEvent = {
             type: EventTypes.aggVariableEvaluated,
             target: 'key',
+            metaData: {
+                evalReason: 'TARGETING_MATCH',
+            },
         }
         eventQueue.queueAggregateEvent(user, aggEvent, bucketedUserConfig)
 
@@ -640,6 +724,13 @@ describe('EventQueue Unit Tests', () => {
                         type: 'aggVariableEvaluated',
                         target: 'key',
                         value: 1,
+                        metaData: {
+                            _feature: 'feature',
+                            _variation: 'variation',
+                            eval: {
+                                TARGETING_MATCH: 1,
+                            },
+                        },
                     }),
                 ]),
             },
@@ -662,6 +753,13 @@ describe('EventQueue Unit Tests', () => {
                         type: 'aggVariableEvaluated',
                         target: 'key',
                         value: 3,
+                        metaData: {
+                            _feature: 'feature',
+                            _variation: 'variation',
+                            eval: {
+                                TARGETING_MATCH: 3,
+                            },
+                        },
                     }),
                 ]),
             },
@@ -687,6 +785,9 @@ describe('EventQueue Unit Tests', () => {
                 const aggEvent = {
                     type: EventTypes.aggVariableEvaluated,
                     target: key,
+                    metaData: {
+                        evalReason: 'TARGETING_MATCH',
+                    },
                 }
                 varMap[key] = { _feature: 'feature', _variation: 'variation' }
                 const user = DVCPopulatedUserFromDevCycleUser({
@@ -755,6 +856,13 @@ describe('EventQueue Unit Tests', () => {
                             expect.objectContaining({
                                 type: 'aggVariableEvaluated',
                                 value: 1,
+                                metaData: {
+                                    _feature: 'feature',
+                                    _variation: 'variation',
+                                    eval: {
+                                        TARGETING_MATCH: 1,
+                                    },
+                                },
                             }),
                         ]),
                     },
@@ -779,6 +887,13 @@ describe('EventQueue Unit Tests', () => {
                             expect.objectContaining({
                                 type: 'aggVariableEvaluated',
                                 value: 1,
+                                metaData: {
+                                    _feature: 'feature',
+                                    _variation: 'variation',
+                                    eval: {
+                                        TARGETING_MATCH: 1,
+                                    },
+                                },
                             }),
                         ]),
                     },
@@ -836,7 +951,11 @@ describe('EventQueue Unit Tests', () => {
         )
         eventQueue.queueAggregateEvent(
             DVCPopulatedUserFromDevCycleUser({ user_id: 'user1' }),
-            { type: EventTypes.aggVariableEvaluated, target: 'key' },
+            {
+                type: EventTypes.aggVariableEvaluated,
+                target: 'key',
+                metaData: { evalReason: 'TARGETING_MATCH' },
+            },
             bucketedUserConfig,
         )
         await eventQueue.flushEvents()
@@ -862,6 +981,9 @@ describe('EventQueue Unit Tests', () => {
                     const aggEvent = {
                         type: EventTypes.aggVariableEvaluated,
                         target,
+                        metaData: {
+                            evalReason: 'TARGETING_MATCH',
+                        },
                     }
                     eventQueue.queueAggregateEvent(user, aggEvent, {
                         ...bucketedUserConfig,
@@ -914,6 +1036,9 @@ describe('EventQueue Unit Tests', () => {
                     const aggEvent = {
                         type: EventTypes.aggVariableEvaluated,
                         target,
+                        metaData: {
+                            evalReason: 'TARGETING_MATCH',
+                        },
                     }
                     eventQueue.queueAggregateEvent(user, aggEvent, {
                         ...bucketedUserConfig,
@@ -934,6 +1059,9 @@ describe('EventQueue Unit Tests', () => {
                     {
                         type: EventTypes.aggVariableEvaluated,
                         target: 'key_test_2',
+                        metaData: {
+                            evalReason: 'TARGETING_MATCH',
+                        },
                     },
                     bucketedUserConfig,
                 )
@@ -968,6 +1096,9 @@ describe('EventQueue Unit Tests', () => {
                     const aggEvent = {
                         type: EventTypes.aggVariableEvaluated,
                         target,
+                        metaData: {
+                            evalReason: 'TARGETING_MATCH',
+                        },
                     }
                     eventQueue.queueAggregateEvent(user, aggEvent, {
                         ...bucketedUserConfig,
@@ -1007,6 +1138,9 @@ describe('EventQueue Unit Tests', () => {
                     const aggEvent = {
                         type: EventTypes.aggVariableEvaluated,
                         target,
+                        metaData: {
+                            evalReason: 'TARGETING_MATCH',
+                        },
                     }
                     eventQueue.queueAggregateEvent(user, aggEvent, {
                         ...bucketedUserConfig,
@@ -1024,6 +1158,9 @@ describe('EventQueue Unit Tests', () => {
                     {
                         type: EventTypes.aggVariableEvaluated,
                         target: 'key_final',
+                        metaData: {
+                            evalReason: 'TARGETING_MATCH',
+                        },
                     },
                     {
                         ...bucketedUserConfig,
