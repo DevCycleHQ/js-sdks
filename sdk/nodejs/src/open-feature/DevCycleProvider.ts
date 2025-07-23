@@ -8,7 +8,6 @@ import {
     StandardResolutionReasons,
     ParseError,
     TargetingKeyMissingError,
-    InvalidContextError,
     ProviderStatus,
     TrackingEventDetails,
     FlagMetadata,
@@ -119,10 +118,9 @@ export class DevCycleProvider implements Provider {
         context?: EvaluationContext,
         trackingEventDetails?: TrackingEventDetails,
     ): void {
-        const user_id = context?.targetingKey ?? context?.user_id
-        if (!context || !user_id) {
+        if (!context) {
             throw new TargetingKeyMissingError(
-                'Missing targetingKey or user_id in context',
+                'Missing context to track event to DevCycle',
             )
         }
 
@@ -275,15 +273,29 @@ export class DevCycleProvider implements Provider {
      * @private
      */
     private devcycleUserFromContext(context: EvaluationContext): DevCycleUser {
-        const user_id = context.targetingKey ?? context.user_id
-        if (!user_id) {
+        let user_id, user_id_source
+
+        if (context.targetingKey) {
+            user_id = context.targetingKey
+            user_id_source = 'targetingKey'
+        } else if (context.user_id) {
+            user_id = context.user_id
+            user_id_source = 'user_id'
+        } else if (context.userId) {
+            user_id = context.userId
+            user_id_source = 'userId'
+        }
+
+        if (!user_id || user_id === '') {
             throw new TargetingKeyMissingError(
-                'Missing targetingKey or user_id in context',
+                'DevCycle: Evaluation context does not contain a valid ' +
+                    'targetingKey, user_id, or userId string attribute',
             )
         }
+
         if (typeof user_id !== 'string') {
-            throw new InvalidContextError(
-                'targetingKey or user_id must be a string',
+            throw new TargetingKeyMissingError(
+                `DevCycle: ${user_id_source} must be a string, got ${typeof user_id}`,
             )
         }
 
@@ -293,7 +305,9 @@ export class DevCycleProvider implements Provider {
         let privateCustomData: DVCCustomDataJSON = {}
 
         for (const [key, value] of Object.entries(context)) {
-            if (key === 'targetingKey' || key === 'user_id') continue
+            // Skip user ID fields as they're handled above
+            if (key === 'targetingKey' || key === 'user_id' || key === 'userId')
+                continue
 
             const knownValueType = DVCKnownPropertyKeyTypes[key]
             if (knownValueType) {

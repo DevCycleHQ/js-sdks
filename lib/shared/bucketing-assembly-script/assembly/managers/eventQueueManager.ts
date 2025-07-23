@@ -197,7 +197,14 @@ export function queueVariableEvaluatedEvent(
     const eventType =
         variable !== null ? 'aggVariableEvaluated' : 'aggVariableDefaulted'
 
-    const event = new DVCEvent(eventType, variableKey, null, NaN, null)
+    const metaData = new JSON.Obj()
+    if (variable) {
+        metaData.set('evalReason', variable.evalReason.reason)
+    } else {
+        metaData.set('evalReason', 'DEFAULT')
+    }
+
+    const event = new DVCEvent(eventType, variableKey, null, NaN, metaData)
 
     const aggByVariation = eventType === 'aggVariableEvaluated'
     eventQueue.queueAggregateEvent(event, variableVariationMap, aggByVariation)

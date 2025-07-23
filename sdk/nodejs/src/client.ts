@@ -253,19 +253,24 @@ export class DevCycleClient<
                 'variable called before DevCycleClient has config, returning default value',
             )
 
+            const evalReason = {
+                reason: EVAL_REASONS.DEFAULT,
+                details: DEFAULT_REASON_DETAILS.MISSING_CONFIG,
+            }
+
             this.queueAggregateEvent(populatedUser, {
                 type: EventTypes.aggVariableDefaulted,
                 target: key,
+                metaData: {
+                    evalReason: evalReason.reason,
+                },
             })
 
             return new DVCVariable({
                 defaultValue,
                 type,
                 key,
-                eval: {
-                    reason: EVAL_REASONS.DEFAULT,
-                    details: DEFAULT_REASON_DETAILS.MISSING_CONFIG,
-                },
+                eval: evalReason,
             })
         }
 
