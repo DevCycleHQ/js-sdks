@@ -7,7 +7,7 @@
         "lib/**/*",
         "dev-apps/**/*"
     ],
-    "packageManager": "yarn@4.9.1",
+    "packageManager": "yarn@4.9.2",
     "scripts": {
         "lint": "nx run-many --parallel --target lint --all",
         "test": "nx run-many --parallel --target test --all",
