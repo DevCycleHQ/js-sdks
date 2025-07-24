@@ -31,6 +31,7 @@ describe('EvalHooksRunner', () => {
                     isDefaulted: false,
                 }
             },
+            null, // configMetadata parameter
         )
         expect(result).toEqual({
             key: 'test-key',
@@ -73,6 +74,7 @@ describe('EvalHooksRunner', () => {
                 () => {
                     throw new Error('test-error')
                 },
+                null, // configMetadata parameter
             ),
         ).toThrow('test-error')
 

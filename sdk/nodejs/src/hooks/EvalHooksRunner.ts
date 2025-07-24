@@ -3,6 +3,7 @@ import { EvalHook } from './EvalHook'
 import { HookContext } from './HookContext'
 import { DVCLogger } from '@devcycle/types'
 import { VariableValue as DVCVariableValue } from '@devcycle/types'
+import { ConfigMetadata } from '../models/ConfigMetadata'
 
 export class EvalHooksRunner {
     constructor(
@@ -15,8 +16,9 @@ export class EvalHooksRunner {
         key: string,
         defaultValue: T,
         resolver: (context: HookContext<T>) => DVCVariable<T>,
+        configMetadata: ConfigMetadata | null = null,
     ): DVCVariable<T> {
-        const context = new HookContext<T>(user, key, defaultValue, {})
+        const context = new HookContext<T>(user, key, defaultValue, {}, configMetadata)
         const savedHooks = [...this.hooks]
         const reversedHooks = [...savedHooks].reverse()
 

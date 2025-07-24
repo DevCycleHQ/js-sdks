@@ -44,6 +44,8 @@ import { DevCycleProvider } from './open-feature/DevCycleProvider'
 import { HookContext } from './hooks/HookContext'
 import { EvalHooksRunner } from './hooks/EvalHooksRunner'
 import { EvalHook } from './hooks/EvalHook'
+import { ConfigManagerWrapper } from './models/ConfigManagerWrapper'
+import { ConfigMetadata } from './models/ConfigMetadata'
 const castIncomingUser = (user: DevCycleUser) => {
     if (!(user instanceof DevCycleUser)) {
         return new DevCycleUser(user)
@@ -57,8 +59,8 @@ export class DevCycleClient<
     private clientUUID: string
     private hostname: string
     private sdkKey: string
-    private configHelper?: EnvironmentConfigManager
-    private clientConfigHelper?: EnvironmentConfigManager
+    private configHelper?: ConfigManagerWrapper
+    private clientConfigHelper?: ConfigManagerWrapper
     private eventQueue: EventQueue
     private onInitialized: Promise<DevCycleClient<Variables>>
     private logger: DVCLogger
@@ -97,7 +99,7 @@ export class DevCycleClient<
         })
 
         const initializePromise = this.bucketingImportPromise.then(() => {
-            this.configHelper = new EnvironmentConfigManager(
+            this.configHelper = new ConfigManagerWrapper(
                 this.logger,
                 sdkKey,
                 (sdkKey: string, projectConfig: string) =>
@@ -109,7 +111,7 @@ export class DevCycleClient<
                 options?.configSource,
             )
             if (options?.enableClientBootstrapping) {
-                this.clientConfigHelper = new EnvironmentConfigManager(
+                this.clientConfigHelper = new ConfigManagerWrapper(
                     this.logger,
                     sdkKey,
                     (sdkKey: string, projectConfig: string) =>
@@ -217,6 +219,13 @@ export class DevCycleClient<
         return this.onInitialized
     }
 
+    /**
+     * Get the current config metadata
+     */
+    getMetadata(): ConfigMetadata | null {
+        return this.configHelper?.getConfigMetadata() || null
+    }
+
     variable<
         K extends string & keyof Variables,
         T extends DVCVariableValue & Variables[K],
@@ -227,6 +236,7 @@ export class DevCycleClient<
             defaultValue,
             (context: HookContext<T>) =>
                 this._variable(context?.user ?? user, key, defaultValue),
+            this.getMetadata(),
         )
         return result
     }
