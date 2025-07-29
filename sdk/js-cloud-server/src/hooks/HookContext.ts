@@ -1,3 +1,4 @@
+import { ConfigMetadata } from '@devcycle/types'
 import { DevCycleUser, DVCVariableValue } from '../../src/'
 
 export class HookContext<T extends DVCVariableValue> {
@@ -5,6 +6,6 @@ export class HookContext<T extends DVCVariableValue> {
         public user: DevCycleUser,
         public readonly variableKey: string,
         public readonly defaultValue: T,
-        public readonly metadata: { [key: string]: string },
+        public readonly metadata: ConfigMetadata | undefined,
     ) {}
 }

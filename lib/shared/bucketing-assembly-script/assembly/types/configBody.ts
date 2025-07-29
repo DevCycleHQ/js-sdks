@@ -254,3 +254,54 @@ export class ConfigBody {
             : null
     }
 }
+
+export class ConfigMetadata {
+    readonly project: ProjectMetadata
+    readonly environment: EnvironmentMetadata
+
+    constructor(project: PublicProject, environment: PublicEnvironment) {
+        this.project = new ProjectMetadata(project)
+        this.environment = new EnvironmentMetadata(environment)
+    }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('project', this.project.stringify())
+        json.set('environment', this.environment.stringify())
+        return json.stringify()
+    }
+}
+
+export class ProjectMetadata { 
+    readonly id: string
+    readonly key: string
+
+    constructor(project: PublicProject) {
+        this.id = project._id
+        this.key = project.key
+    }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('id', this.id)
+        json.set('key', this.key)
+        return json.stringify()
+    }
+}
+
+export class EnvironmentMetadata {
+    readonly id: string
+    readonly key: string
+
+    constructor(environment: PublicEnvironment) {
+        this.id = environment._id
+        this.key = environment.key
+    }
+
+    stringify(): string {
+        const json = new JSON.Obj()
+        json.set('id', this.id)
+        json.set('key', this.key)
+        return json.stringify()
+    }
+}

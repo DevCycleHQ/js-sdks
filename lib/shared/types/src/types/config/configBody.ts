@@ -10,6 +10,7 @@ import {
     RolloutStage,
     Feature,
     Target,
+    ConfigMetadata,
 } from './models'
 import { Type } from 'class-transformer'
 
@@ -23,6 +24,7 @@ export {
     Variable,
     Project,
     Environment,
+    ConfigMetadata,
 }
 
 export {

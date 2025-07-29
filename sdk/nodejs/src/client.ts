@@ -20,6 +20,7 @@ import {
     DVCCustomDataJSON,
     EVAL_REASONS,
     DEFAULT_REASON_DETAILS,
+    ConfigMetadata,
 } from '@devcycle/types'
 import os from 'os'
 import {
@@ -221,10 +222,12 @@ export class DevCycleClient<
         K extends string & keyof Variables,
         T extends DVCVariableValue & Variables[K],
     >(user: DevCycleUser, key: K, defaultValue: T): DVCVariable<T> {
+        const configMetadata = this.getConfigMetadata()
         const result = this.hooksRunner.runHooksForEvaluation(
             user,
             key,
             defaultValue,
+            configMetadata,
             (context: HookContext<T>) =>
                 this._variable(context?.user ?? user, key, defaultValue),
         )
@@ -510,5 +513,11 @@ export class DevCycleClient<
             this.sdkKey,
             JSON.stringify(clientCustomData),
         )
+    }
+
+    getConfigMetadata(): ConfigMetadata {
+        return JSON.parse(
+            this.bucketingLib.getConfigMetadata(this.sdkKey),
+        ) as ConfigMetadata
     }
 }

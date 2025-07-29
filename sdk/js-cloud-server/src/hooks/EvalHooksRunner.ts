@@ -16,7 +16,7 @@ export class EvalHooksRunner {
         defaultValue: T,
         resolver: (context: HookContext<T>) => Promise<DVCVariable<T>>,
     ): Promise<DVCVariable<T>> {
-        const context = new HookContext<T>(user, key, defaultValue, {})
+        const context = new HookContext<T>(user, key, defaultValue, undefined)
         const savedHooks = [...this.hooks]
         const reversedHooks = [...savedHooks].reverse()
 

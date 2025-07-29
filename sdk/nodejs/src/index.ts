@@ -16,10 +16,11 @@ import {
     DVCFeatureSet,
     DevCyclePlatformDetails,
 } from '@devcycle/js-cloud-server-sdk'
+import { EvalHook } from './hooks/EvalHook'
+import { HookContext } from './hooks/HookContext'
 import { DevCycleServerSDKOptions, VariableDefinitions } from '@devcycle/types'
 import { getNodeJSPlatformDetails } from './utils/platformDetails'
 import { DevCycleProvider } from './open-feature/DevCycleProvider'
-
 class DevCycleCloudClient<
     Variables extends VariableDefinitions = VariableDefinitions,
 > extends InternalDevCycleCloudClient<Variables> {
@@ -66,6 +67,8 @@ export {
     DVCVariableInterface,
     DVCFeature,
     DVCFeatureSet,
+    EvalHook,
+    HookContext,
 }
 export { dvcDefaultLogger }
 
