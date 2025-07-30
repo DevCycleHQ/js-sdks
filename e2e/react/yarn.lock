@@ -1451,39 +1451,41 @@ __metadata:
   linkType: hard
 
 "@devcycle/js-client-sdk@file:../../dist/sdk/js::locator=react-e2e%40workspace%3A.":
-  version: 1.38.0
-  resolution: "@devcycle/js-client-sdk@file:../../dist/sdk/js#../../dist/sdk/js::hash=64e3da&locator=react-e2e%40workspace%3A."
+  version: 1.44.0
+  resolution: "@devcycle/js-client-sdk@file:../../dist/sdk/js#../../dist/sdk/js::hash=8caf1a&locator=react-e2e%40workspace%3A."
   dependencies:
-    "@devcycle/types": "npm:^1.25.0"
+    "@devcycle/types": "npm:^1.29.0"
     fetch-retry: "npm:^5.0.6"
     lodash: "npm:^4.17.21"
     ua-parser-js: "npm:^1.0.40"
     uuid: "npm:^8.3.2"
-  checksum: 10/eec26ca21feafe396d1b99fba69d3767027cf7f4134b5aaa70ec92e7b469ea1fa5d7856cdf10cf5cb46c9cfa96c8df5fd174e60d73ba503b5282768b8304f3e6
+  checksum: 10/fd6ec0163284a974f12286c66bbbe669d6cea7bac1f2ff776156565893d307ebe70edeed0cfab7d811d3cfcc6477bbfffb74e2a7edfb8c236a6fef09ee36d165
   languageName: node
   linkType: hard
 
 "@devcycle/react-client-sdk@file:../../dist/sdk/react::locator=react-e2e%40workspace%3A.":
-  version: 1.36.0
-  resolution: "@devcycle/react-client-sdk@file:../../dist/sdk/react#../../dist/sdk/react::hash=959cd9&locator=react-e2e%40workspace%3A."
+  version: 1.42.0
+  resolution: "@devcycle/react-client-sdk@file:../../dist/sdk/react#../../dist/sdk/react::hash=d66c66&locator=react-e2e%40workspace%3A."
   dependencies:
-    "@devcycle/js-client-sdk": "npm:^1.38.0"
-    "@devcycle/types": "npm:^1.25.0"
+    "@devcycle/js-client-sdk": "npm:^1.44.0"
+    "@devcycle/types": "npm:^1.29.0"
     hoist-non-react-statics: "npm:^3.3.2"
-  checksum: 10/021f476ccb41e64239b33a63070e224fd043f0c2fec0a7daf3efacf00283659a130eb2954e0bd554c77b8282fb59c8325a82f7048d3e729422f9c85717040834
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 10/58aa9288d7ab279bd744dbd2bb17d60b02baf5164cebd7fb2ad32817cef41fa2a137b4c39b7cb070d7f1c4eca21995b39b355b18c1fde399ac005a8636dacf5d
   languageName: node
   linkType: hard
 
 "@devcycle/types@file:../../dist/lib/shared/types::locator=react-e2e%40workspace%3A.":
-  version: 1.25.0
-  resolution: "@devcycle/types@file:../../dist/lib/shared/types#../../dist/lib/shared/types::hash=ecc727&locator=react-e2e%40workspace%3A."
+  version: 1.29.0
+  resolution: "@devcycle/types@file:../../dist/lib/shared/types#../../dist/lib/shared/types::hash=e35875&locator=react-e2e%40workspace%3A."
   dependencies:
     class-transformer: "npm:0.5.1"
     class-validator: "npm:0.14.1"
     iso-639-1: "npm:^2.1.15"
     lodash: "npm:^4.17.21"
     reflect-metadata: "npm:^0.1.14"
-  checksum: 10/52caccffa8e717f661063c6cf255569b90e8123b8af27ba810a3adac54834f21c35bb7ca1d5a1ab260c6aa99552382550848cb471faf563846051c7df7c36cb5
+  checksum: 10/a71eb3a6740b0ce9998026fb51930975b8a33b95e8260235f05f5216f5994b657bed36fa8cd611154dd8e3f2b82574173b941e3c0d6881bf022754aea20555e1
   languageName: node
   linkType: hard
 

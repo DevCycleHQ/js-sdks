@@ -275,7 +275,7 @@ export class DevCycleClient<
             this.eventEmitter.emitError(err)
         }
         void this.setUser(user)
-        this.settleOnInitialized(this, err instanceof UserError ? err : null)
+        this.settleOnInitialized(this, err)
     }
 
     /**
