@@ -1,7 +1,7 @@
 import { DevCycleUser, DVCVariable } from '../../src/'
 import { EvalHook } from './EvalHook'
-import { HookContext } from './HookContext'
-import { ConfigMetadata, DVCLogger } from '@devcycle/types'
+import { HookContext, HookMetadata } from './HookContext'
+import { DVCLogger } from '@devcycle/types'
 import { VariableValue as DVCVariableValue } from '@devcycle/types'
 
 export class EvalHooksRunner {
@@ -14,7 +14,7 @@ export class EvalHooksRunner {
         user: DevCycleUser,
         key: string,
         defaultValue: T,
-        metadata: ConfigMetadata,
+        metadata: HookMetadata,
         resolver: (context: HookContext<T>) => DVCVariable<T>,
     ): DVCVariable<T> {
         const context = new HookContext<T>(user, key, defaultValue, metadata)

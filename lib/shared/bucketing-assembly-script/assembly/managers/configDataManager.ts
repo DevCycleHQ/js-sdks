@@ -24,9 +24,12 @@ export function _getConfigMetadata(sdkKey: string): string {
     if (_configMetadata.has(sdkKey)) {
         return _configMetadata.get(sdkKey)
     } else {
-        const config = _getConfigData(sdkKey)
-        const metadata = new ConfigMetadata(config.project, config.environment).stringify()
-        _configMetadata.set(sdkKey, metadata)
-        return metadata
+        if(_configData.has(sdkKey)){
+            const config = _getConfigData(sdkKey)
+            const metadata = new ConfigMetadata(config.project, config.environment).stringify()
+            _configMetadata.set(sdkKey, metadata)
+            return metadata
+        }
+        return ''
     }
 }
