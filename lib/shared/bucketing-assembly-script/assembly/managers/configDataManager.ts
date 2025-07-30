@@ -30,6 +30,6 @@ export function _getConfigMetadata(sdkKey: string): string {
             _configMetadata.set(sdkKey, metadata)
             return metadata
         }
-        return ''
+        return '{}'
     }
 }
