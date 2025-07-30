@@ -222,7 +222,7 @@ export class DevCycleClient<
         K extends string & keyof Variables,
         T extends DVCVariableValue & Variables[K],
     >(user: DevCycleUser, key: K, defaultValue: T): DVCVariable<T> {
-        const configMetadata = this.getConfigMetadata()
+        const configMetadata = this.getConfigMetadata() || {}
         const result = this.hooksRunner.runHooksForEvaluation(
             user,
             key,
@@ -515,7 +515,10 @@ export class DevCycleClient<
         )
     }
 
-    getConfigMetadata(): ConfigMetadata {
+    getConfigMetadata(): ConfigMetadata | undefined {
+        if (!this.bucketingLib) {
+            return
+        }
         return JSON.parse(
             this.bucketingLib.getConfigMetadata(this.sdkKey),
         ) as ConfigMetadata

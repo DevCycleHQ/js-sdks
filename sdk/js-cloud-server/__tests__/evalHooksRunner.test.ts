@@ -22,6 +22,7 @@ describe('EvalHooksRunner', () => {
             { user_id: 'test-user' },
             'test-key',
             'test-value',
+            {},
             async () => {
                 return {
                     key: 'test-key',
@@ -70,6 +71,7 @@ describe('EvalHooksRunner', () => {
                 { user_id: 'test-user' },
                 'test-key',
                 'test-value',
+                {},
                 async () => {
                     throw new Error('test-error')
                 },
@@ -123,6 +125,7 @@ describe('EvalHooksRunner', () => {
             { user_id: 'test-user' },
             'test-key',
             'test-value',
+            {},
             resolver,
         )
         expect(result).toEqual({
@@ -177,6 +180,7 @@ describe('EvalHooksRunner', () => {
             { user_id: 'test-user' },
             'test-key',
             'test-value',
+            {},
             resolver,
         )
         expect(result).toEqual(variable)
