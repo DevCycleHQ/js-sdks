@@ -113,6 +113,7 @@ export class DevCycleCloudClient<
             user,
             key,
             defaultValue,
+            {},
             async (context) =>
                 this._variable(context?.user ?? user, key, defaultValue),
         )

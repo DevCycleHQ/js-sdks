@@ -23,6 +23,7 @@ import {
     _getConfigData,
     _hasConfigData,
     _setConfigData,
+    _getConfigMetadata,
 } from './managers/configDataManager'
 import {
     _getClientCustomData,
@@ -403,6 +404,14 @@ export function setClientCustomDataUTF8(
 export function getSDKKeyFromConfig(sdkKey: string): string | null {
     const config = _getConfigData(sdkKey)
     return config.clientSDKKey
+}
+
+/**
+ * Returns the config metadata for the given SDK key.
+ * @param sdkKey
+ */
+export function getConfigMetadata(sdkKey: string): string {
+    return _getConfigMetadata(sdkKey)
 }
 
 export * from './managers/eventQueueManager'

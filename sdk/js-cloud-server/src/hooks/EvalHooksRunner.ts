@@ -1,6 +1,6 @@
 import { DevCycleUser, DVCVariable } from '../../src/'
 import { EvalHook } from './EvalHook'
-import { HookContext } from './HookContext'
+import { HookContext, HookMetadata } from './HookContext'
 import { DVCLogger } from '@devcycle/types'
 import { VariableValue as DVCVariableValue } from '@devcycle/types'
 
@@ -14,9 +14,10 @@ export class EvalHooksRunner {
         user: DevCycleUser,
         key: string,
         defaultValue: T,
+        metadata: HookMetadata,
         resolver: (context: HookContext<T>) => Promise<DVCVariable<T>>,
     ): Promise<DVCVariable<T>> {
-        const context = new HookContext<T>(user, key, defaultValue, {})
+        const context = new HookContext<T>(user, key, defaultValue, metadata)
         const savedHooks = [...this.hooks]
         const reversedHooks = [...savedHooks].reverse()
 

@@ -48,6 +48,7 @@ export const importBucketingLib = async (): Promise<[Exports, undefined]> => {
         VariableType,
         initEventQueue: jest.fn(),
         flushEventQueue: jest.fn(),
+        getConfigMetadata: jest.fn().mockReturnValue('{}'),
     })
     return [bucketing as unknown as Exports, undefined]
 }
