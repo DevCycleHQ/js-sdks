@@ -2070,7 +2070,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@devcycle/bucketing-assembly-script@npm:1.42.0, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
+"@devcycle/bucketing-assembly-script@npm:1.42.1, @devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script":
   version: 0.0.0-use.local
   resolution: "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script"
   dependencies:
@@ -2130,7 +2130,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nestjs-server-sdk@workspace:sdk/nestjs"
   dependencies:
-    "@devcycle/nodejs-server-sdk": "npm:1.54.0"
+    "@devcycle/nodejs-server-sdk": "npm:1.54.1"
     "@devcycle/types": "npm:1.32.0"
     nestjs-cls: "npm:^4.5.0"
   peerDependencies:
@@ -2165,11 +2165,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/nodejs-server-sdk@npm:1.54.0, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
+"@devcycle/nodejs-server-sdk@npm:1.54.1, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
-    "@devcycle/bucketing-assembly-script": "npm:1.42.0"
+    "@devcycle/bucketing-assembly-script": "npm:1.42.1"
     "@devcycle/js-cloud-server-sdk": "npm:1.32.0"
     "@devcycle/types": "npm:1.32.0"
     "@openfeature/core": "npm:~1.8.1"
@@ -2207,7 +2207,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-nestjs-provider@workspace:sdk/openfeature-nestjs-provider"
   dependencies:
-    "@devcycle/nodejs-server-sdk": "npm:1.54.0"
+    "@devcycle/nodejs-server-sdk": "npm:1.54.1"
   languageName: unknown
   linkType: soft
 

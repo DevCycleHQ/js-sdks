@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/bucketing-assembly-script",
-    "version": "1.42.0",
+    "version": "1.42.1",
     "license": "MIT",
     "main": "index.js",
     "types": "index.d.ts",
