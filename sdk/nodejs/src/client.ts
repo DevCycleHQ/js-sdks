@@ -519,7 +519,6 @@ export class DevCycleClient<
         if (!this.bucketingLib) {
             return
         }
-        console.warn(this.bucketingLib.getConfigMetadata(this.sdkKey))
         return JSON.parse(
             this.bucketingLib.getConfigMetadata(this.sdkKey),
         ) as ConfigMetadata
