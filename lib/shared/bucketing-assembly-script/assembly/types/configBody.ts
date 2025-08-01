@@ -266,8 +266,14 @@ export class ConfigMetadata {
 
     stringify(): string {
         const json = new JSON.Obj()
-        json.set('project', this.project.stringify())
-        json.set('environment', this.environment.stringify())
+        const project = new JSON.Obj()
+        project.set('id', this.project.id)
+        project.set('key', this.project.key)
+        const environment = new JSON.Obj()
+        environment.set('id', this.environment.id)
+        environment.set('key', this.environment.key)
+        json.set('project', project)
+        json.set('environment', environment)
         return json.stringify()
     }
 }
