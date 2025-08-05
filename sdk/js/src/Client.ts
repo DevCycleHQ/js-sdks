@@ -715,7 +715,7 @@ export class DevCycleClient<
 
         this._closing = true
 
-        if (document && this.pageVisibilityHandler) {
+        if (typeof document !== undefined && this.pageVisibilityHandler) {
             document.removeEventListener(
                 'visibilitychange',
                 this.pageVisibilityHandler,
