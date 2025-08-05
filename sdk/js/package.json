@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/js-client-sdk",
-    "version": "1.47.0",
+    "version": "1.47.1",
     "description": "The Javascript Client SDK for DevCycle",
     "author": "DevCycle <support@devcycle.com>",
     "keywords": [
