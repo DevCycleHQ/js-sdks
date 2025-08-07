@@ -48,7 +48,7 @@ export class DVCRequestEvent implements DevCycleEvent {
             target
         ) {
             const variable = config?.variables[target]
-            const featureId = variable?._feature
+            const featureId = variable?.featureId
             this.featureVars =
                 featureId && config?.featureVariationMap[featureId]
                     ? {

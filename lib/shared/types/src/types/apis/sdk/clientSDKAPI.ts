@@ -398,7 +398,7 @@ export class DVCOptInUser {
 
 export type SDKVariable = PublicVariable & {
     value: VariableValue
-    _feature?: string
+    featureId?: string
     /**
      * @deprecated use eval instead
      */
