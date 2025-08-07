@@ -1,3 +1,4 @@
+import { InternalDVCVariable } from '@devcycle/js-cloud-server-sdk'
 import { EvalHook } from '../src/hooks/EvalHook'
 import { EvalHooksRunner } from '../src/hooks/EvalHooksRunner'
 
@@ -30,7 +31,7 @@ describe('EvalHooksRunner', () => {
                     type: 'String',
                     value: 'test-value',
                     isDefaulted: false,
-                }
+                } as InternalDVCVariable<string, string>
             },
         )
         expect(result).toEqual({
