@@ -48,7 +48,7 @@ export function pbSDKVariableTransform(
             !variable.evalReason || variable.evalReason.isNull
                 ? null
                 : variable.evalReason,
-        featureId:
+        _feature:
             !variable._feature || variable._feature.isNull
                 ? null
                 : variable._feature.value,

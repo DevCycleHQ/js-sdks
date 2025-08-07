@@ -360,7 +360,7 @@ export class DevCycleClient<
             if (configVariable) {
                 if (configVariable.type === type) {
                     data.value = configVariable.value as VariableTypeAlias<T>
-                    data.featureId = configVariable.featureId
+                    data._feature = configVariable._feature
                     data.eval = configVariable.eval
                 } else {
                     this.logger.warn(
