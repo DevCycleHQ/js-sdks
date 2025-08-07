@@ -26,6 +26,7 @@ import os from 'os'
 import {
     DevCycleUser,
     DVCVariable,
+    InternalDVCVariable,
     VariableParam,
     checkParamDefined,
     dvcDefaultLogger,
@@ -231,13 +232,14 @@ export class DevCycleClient<
             (context: HookContext<T>) =>
                 this._variable(context?.user ?? user, key, defaultValue),
         )
-        return result
+        const variable = result as DVCVariable<T>
+        return variable
     }
 
     _variable<
         K extends string & keyof Variables,
         T extends DVCVariableValue & Variables[K],
-    >(user: DevCycleUser, key: K, defaultValue: T): DVCVariable<T> {
+    >(user: DevCycleUser, key: K, defaultValue: T): InternalDVCVariable<T> {
         const incomingUser = castIncomingUser(user)
         // this will throw if type is invalid
         const type = getVariableTypeFromValue(
@@ -269,7 +271,7 @@ export class DevCycleClient<
                 },
             })
 
-            return new DVCVariable({
+            return new InternalDVCVariable({
                 defaultValue,
                 type,
                 key,
@@ -312,7 +314,7 @@ export class DevCycleClient<
             }
         }
 
-        return new DVCVariable(options)
+        return new InternalDVCVariable(options, configVariable?._feature)
     }
 
     variableValue<

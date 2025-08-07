@@ -1,7 +1,7 @@
-import { DevCycleUser, DVCVariable } from '../../src/'
+import { DevCycleUser, InternalDVCVariable } from '../../src/'
 import { EvalHook } from './EvalHook'
 import { HookContext, HookMetadata } from './HookContext'
-import { DVCLogger } from '@devcycle/types'
+import { DVCLogger, SDKVariable } from '@devcycle/types'
 import { VariableValue as DVCVariableValue } from '@devcycle/types'
 
 export class EvalHooksRunner {
@@ -15,14 +15,14 @@ export class EvalHooksRunner {
         key: string,
         defaultValue: T,
         metadata: HookMetadata,
-        resolver: (context: HookContext<T>) => DVCVariable<T>,
-    ): DVCVariable<T> {
+        resolver: (context: HookContext<T>) => InternalDVCVariable<T>,
+    ): InternalDVCVariable<T> {
         const context = new HookContext<T>(user, key, defaultValue, metadata)
         const savedHooks = [...this.hooks]
         const reversedHooks = [...savedHooks].reverse()
 
         let beforeContext = context
-        let variableDetails: DVCVariable<T>
+        let variableDetails: InternalDVCVariable<T>
         try {
             beforeContext = this.runBefore(savedHooks, context)
             variableDetails = resolver.call(beforeContext)
@@ -68,7 +68,7 @@ export class EvalHooksRunner {
     private runAfter<T extends DVCVariableValue>(
         hooks: EvalHook[],
         context: HookContext<T>,
-        variableDetails: DVCVariable<T>,
+        variableDetails: InternalDVCVariable<T>,
     ) {
         try {
             for (const hook of hooks) {
@@ -83,7 +83,7 @@ export class EvalHooksRunner {
     private runFinally<T extends DVCVariableValue>(
         hooks: EvalHook[],
         context: HookContext<T>,
-        variableDetails: DVCVariable<T> | undefined,
+        variableDetails: InternalDVCVariable<T> | undefined,
     ) {
         try {
             for (const hook of hooks) {

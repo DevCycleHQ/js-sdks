@@ -58,3 +58,15 @@ export class DVCVariable<
         this.type = type
     }
 }
+
+export class InternalDVCVariable<
+    T extends DVCVariableValue,
+    K extends VariableKey = VariableKey,
+> extends DVCVariable<T, K> {
+    readonly featureId?: string
+
+    constructor(variable: VariableParam<T>, featureId?: string) {
+        super(variable)
+        this.featureId = featureId
+    }
+}
