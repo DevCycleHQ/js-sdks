@@ -21,6 +21,7 @@ import {
     EVAL_REASONS,
     DEFAULT_REASON_DETAILS,
     ConfigMetadata,
+    VariableType,
 } from '@devcycle/types'
 import os from 'os'
 import {
@@ -232,8 +233,7 @@ export class DevCycleClient<
             (context: HookContext<T>) =>
                 this._variable(context?.user ?? user, key, defaultValue),
         )
-        const variable = result as DVCVariable<T>
-        return variable
+        return result.toPublicVariable()
     }
 
     _variable<

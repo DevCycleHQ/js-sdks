@@ -1,7 +1,7 @@
 import { DevCycleUser, InternalDVCVariable } from '../../src/'
 import { EvalHook } from './EvalHook'
 import { HookContext, HookMetadata } from './HookContext'
-import { DVCLogger, SDKVariable } from '@devcycle/types'
+import { DVCLogger } from '@devcycle/types'
 import { VariableValue as DVCVariableValue } from '@devcycle/types'
 
 export class EvalHooksRunner {

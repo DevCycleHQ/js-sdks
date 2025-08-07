@@ -69,4 +69,13 @@ export class InternalDVCVariable<
         super(variable)
         this.featureId = featureId
     }
+
+    toPublicVariable(): DVCVariable<T, K> {
+        // omit prop featureId from final object returned to user
+        const { featureId, ...publicVariableProps } = this
+        return Object.assign(
+            Object.create(DVCVariable.prototype),
+            publicVariableProps,
+        ) as DVCVariable<T, K>
+    }
 }
