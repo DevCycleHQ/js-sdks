@@ -1,3 +1,4 @@
+import { VariableMetadata } from '@devcycle/js-cloud-server-sdk'
 import { DevCycleUser, DVCVariable } from '../../src/'
 import { EvalHook } from './EvalHook'
 import { HookContext, HookMetadata } from './HookContext'
@@ -15,7 +16,9 @@ export class EvalHooksRunner {
         key: string,
         defaultValue: T,
         metadata: HookMetadata,
-        resolver: (context: HookContext<T>) => DVCVariable<T>,
+        resolver: (
+            context: HookContext<T>,
+        ) => [DVCVariable<T>, VariableMetadata],
     ): DVCVariable<T> {
         const context = new HookContext<T>(user, key, defaultValue, metadata)
         const savedHooks = [...this.hooks]
@@ -23,23 +26,37 @@ export class EvalHooksRunner {
 
         let beforeContext = context
         let variableDetails: DVCVariable<T>
+        let variableMetadata: VariableMetadata
         try {
             beforeContext = this.runBefore(savedHooks, context)
-            variableDetails = resolver.call(beforeContext)
-            this.runAfter(savedHooks, beforeContext, variableDetails)
+            const [variable, metadata] = resolver.call(beforeContext)
+            variableDetails = variable
+            variableMetadata = metadata
+            this.runAfter(
+                savedHooks,
+                beforeContext,
+                variableDetails,
+                variableMetadata,
+            )
         } catch (error) {
             this.runError(reversedHooks, context, error)
-            this.runFinally(reversedHooks, context, undefined)
+            this.runFinally(reversedHooks, context, undefined, undefined)
             if (
                 error.name === 'BeforeHookError' ||
                 error.name === 'AfterHookError'
             ) {
                 // make sure to return with a variable if before or after hook errors
-                return resolver.call(context)
+                const [variable] = resolver.call(context)
+                return variable
             }
             throw error
         }
-        this.runFinally(reversedHooks, context, variableDetails)
+        this.runFinally(
+            reversedHooks,
+            context,
+            variableDetails,
+            variableMetadata,
+        )
         return variableDetails
     }
 
@@ -69,10 +86,11 @@ export class EvalHooksRunner {
         hooks: EvalHook[],
         context: HookContext<T>,
         variableDetails: DVCVariable<T>,
+        variableMetadata: VariableMetadata,
     ) {
         try {
             for (const hook of hooks) {
-                hook.after(context, variableDetails)
+                hook.after(context, variableDetails, variableMetadata)
             }
         } catch (error) {
             this.logger?.error('Error running after hooks', error)
@@ -84,10 +102,11 @@ export class EvalHooksRunner {
         hooks: EvalHook[],
         context: HookContext<T>,
         variableDetails: DVCVariable<T> | undefined,
+        variableMetadata: VariableMetadata | undefined,
     ) {
         try {
             for (const hook of hooks) {
-                hook.onFinally(context, variableDetails)
+                hook.onFinally(context, variableDetails, variableMetadata)
             }
         } catch (error) {
             this.logger?.error('Error running finally hooks', error)

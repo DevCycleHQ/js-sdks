@@ -26,6 +26,7 @@ import os from 'os'
 import {
     DevCycleUser,
     DVCVariable,
+    VariableMetadata,
     VariableParam,
     checkParamDefined,
     dvcDefaultLogger,
@@ -237,7 +238,11 @@ export class DevCycleClient<
     _variable<
         K extends string & keyof Variables,
         T extends DVCVariableValue & Variables[K],
-    >(user: DevCycleUser, key: K, defaultValue: T): DVCVariable<T> {
+    >(
+        user: DevCycleUser,
+        key: K,
+        defaultValue: T,
+    ): [DVCVariable<T>, VariableMetadata] {
         const incomingUser = castIncomingUser(user)
         // this will throw if type is invalid
         const type = getVariableTypeFromValue(
@@ -269,12 +274,15 @@ export class DevCycleClient<
                 },
             })
 
-            return new DVCVariable({
-                defaultValue,
-                type,
-                key,
-                eval: evalReason,
-            })
+            return [
+                new DVCVariable({
+                    defaultValue,
+                    type,
+                    key,
+                    eval: evalReason,
+                }),
+                new VariableMetadata(),
+            ]
         }
 
         const configVariable = variableForUser_PB(
@@ -312,7 +320,10 @@ export class DevCycleClient<
             }
         }
 
-        return new DVCVariable(options)
+        return [
+            new DVCVariable(options),
+            new VariableMetadata(configVariable?._feature),
+        ]
     }
 
     variableValue<
