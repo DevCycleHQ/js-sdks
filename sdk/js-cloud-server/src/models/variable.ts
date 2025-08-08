@@ -58,3 +58,7 @@ export class DVCVariable<
         this.type = type
     }
 }
+
+export class VariableMetadata {
+    constructor(public featureId?: string | null) {}
+}
