@@ -192,7 +192,7 @@ describe('EvalHooksRunner', () => {
             isDefaulted: false,
         }
         const resolver = jest.fn().mockImplementation((context) => {
-            return variable
+            return [variable]
         })
         const result = hooksRunner.runHooksForEvaluation(
             { user_id: 'test-user' },

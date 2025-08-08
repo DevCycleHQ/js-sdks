@@ -29,8 +29,8 @@ export class EvalHooksRunner {
         let variableMetadata: VariableMetadata
         try {
             beforeContext = this.runBefore(savedHooks, context)
-            const [details, metadata] = resolver.call(beforeContext)
-            variableDetails = details
+            const [variable, metadata] = resolver.call(beforeContext)
+            variableDetails = variable
             variableMetadata = metadata
             this.runAfter(
                 savedHooks,
@@ -46,7 +46,8 @@ export class EvalHooksRunner {
                 error.name === 'AfterHookError'
             ) {
                 // make sure to return with a variable if before or after hook errors
-                return resolver.call(context)
+                const [variable] = resolver.call(context)
+                return variable
             }
             throw error
         }
