@@ -24,13 +24,16 @@ describe('EvalHooksRunner', () => {
             'test-value',
             {},
             () => {
-                return {
-                    key: 'test-key',
-                    defaultValue: 'test-value',
-                    type: 'String',
-                    value: 'test-value',
-                    isDefaulted: false,
-                }
+                return [
+                    {
+                        key: 'test-key',
+                        defaultValue: 'test-value',
+                        type: 'String',
+                        value: 'test-value',
+                        isDefaulted: false,
+                    },
+                    { featureId: 'featureId' },
+                ]
             },
         )
         expect(result).toEqual({
@@ -112,13 +115,16 @@ describe('EvalHooksRunner', () => {
         hooksRunner.enqueue(hook1)
         hooksRunner.enqueue(hook2)
         const resolver = jest.fn().mockImplementation((context) => {
-            return {
-                key: 'test-key',
-                defaultValue: 'test-value',
-                type: 'String',
-                value: 'test-value',
-                isDefaulted: false,
-            }
+            return [
+                {
+                    key: 'test-key',
+                    defaultValue: 'test-value',
+                    type: 'String',
+                    value: 'test-value',
+                    isDefaulted: false,
+                },
+                { featureId: 'test' },
+            ]
         })
         const result = hooksRunner.runHooksForEvaluation(
             { user_id: 'test-user' },
