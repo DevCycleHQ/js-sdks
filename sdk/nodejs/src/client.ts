@@ -239,7 +239,7 @@ export class DevCycleClient<
     _variable<
         K extends string & keyof Variables,
         T extends DVCVariableValue & Variables[K],
-    >(user: DevCycleUser, key: K, defaultValue: T): VariableWithMetadata<T, K> {
+    >(user: DevCycleUser, key: K, defaultValue: T): VariableWithMetadata<T> {
         const incomingUser = castIncomingUser(user)
         // this will throw if type is invalid
         const type = getVariableTypeFromValue(
@@ -271,14 +271,12 @@ export class DevCycleClient<
                 },
             })
 
-            return new VariableWithMetadata(
-                new DVCVariable({
-                    defaultValue,
-                    type,
-                    key,
-                    eval: evalReason,
-                }),
-            )
+            return new VariableWithMetadata({
+                defaultValue,
+                type,
+                key,
+                eval: evalReason,
+            })
         }
 
         const configVariable = variableForUser_PB(
@@ -316,10 +314,7 @@ export class DevCycleClient<
             }
         }
 
-        return new VariableWithMetadata(
-            new DVCVariable(options),
-            configVariable?._feature,
-        )
+        return new VariableWithMetadata(options, configVariable?._feature)
     }
 
     variableValue<

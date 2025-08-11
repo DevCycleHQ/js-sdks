@@ -4,6 +4,7 @@ import {
 } from '@devcycle/js-cloud-server-sdk'
 import { EvalHook } from '../src/hooks/EvalHook'
 import { EvalHooksRunner } from '../src/hooks/EvalHooksRunner'
+import { VariableType } from '@devcycle/types'
 
 describe('EvalHooksRunner', () => {
     it('should run hooks in correct order when resolver succeeds', async () => {
@@ -26,9 +27,8 @@ describe('EvalHooksRunner', () => {
             {
                 key: 'test-key',
                 defaultValue: 'test-value',
-                type: 'String',
+                type: VariableType.string,
                 value: 'test-value',
-                isDefaulted: false,
             },
             'featureId',
         )
@@ -139,17 +139,17 @@ describe('EvalHooksRunner', () => {
         )
         hooksRunner.enqueue(hook1)
         hooksRunner.enqueue(hook2)
+        const mockVariable = new VariableWithMetadata<string>(
+            {
+                key: 'test-key',
+                defaultValue: 'test-value',
+                type: VariableType.string,
+                value: 'test-value',
+            },
+            'test',
+        )
         const resolver = jest.fn().mockImplementation((context) => {
-            return {
-                variable: {
-                    key: 'test-key',
-                    defaultValue: 'test-value',
-                    type: 'String',
-                    value: 'test-value',
-                    isDefaulted: false,
-                },
-                metadata: { featureId: 'test' },
-            }
+            return mockVariable
         })
         const result = hooksRunner.runHooksForEvaluation(
             { user_id: 'test-user' },
@@ -209,15 +209,14 @@ describe('EvalHooksRunner', () => {
         hooksRunner.enqueue(hook1)
         hooksRunner.enqueue(hook2)
 
-        const variable = {
+        const mockVariable = new VariableWithMetadata<string>({
             key: 'test-key',
             defaultValue: 'test-value',
-            type: 'String',
+            type: VariableType.string,
             value: 'test-value',
-            isDefaulted: false,
-        }
+        })
         const resolver = jest.fn().mockImplementation((context) => {
-            return { variable }
+            return mockVariable
         })
         const result = hooksRunner.runHooksForEvaluation(
             { user_id: 'test-user' },
@@ -226,7 +225,7 @@ describe('EvalHooksRunner', () => {
             {},
             resolver,
         )
-        expect(result).toEqual(variable)
+        expect(result).toEqual(mockVariable.variable)
 
         expect(hook1.before).toHaveBeenCalledTimes(1)
         expect(hook1.after).toHaveBeenCalledTimes(0)
