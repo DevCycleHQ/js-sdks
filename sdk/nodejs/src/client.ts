@@ -35,6 +35,7 @@ import {
     DevCycleEvent,
     DVCPopulatedUser,
     DevCyclePlatformDetails,
+    VariableAndMetadata,
 } from '@devcycle/js-cloud-server-sdk'
 import { DVCPopulatedUserFromDevCycleUser } from './models/populatedUserHelpers'
 import { randomUUID } from 'crypto'
@@ -237,7 +238,7 @@ export class DevCycleClient<
     _variable<
         K extends string & keyof Variables,
         T extends DVCVariableValue & Variables[K],
-    >(user: DevCycleUser, key: K, defaultValue: T): DVCVariable<T> {
+    >(user: DevCycleUser, key: K, defaultValue: T): VariableAndMetadata<T> {
         const incomingUser = castIncomingUser(user)
         // this will throw if type is invalid
         const type = getVariableTypeFromValue(
@@ -269,7 +270,7 @@ export class DevCycleClient<
                 },
             })
 
-            return new DVCVariable({
+            return new VariableAndMetadata({
                 defaultValue,
                 type,
                 key,
@@ -312,7 +313,7 @@ export class DevCycleClient<
             }
         }
 
-        return new DVCVariable(options)
+        return new VariableAndMetadata(options, configVariable?._feature)
     }
 
     variableValue<

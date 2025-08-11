@@ -1,5 +1,7 @@
+import { VariableAndMetadata } from '@devcycle/js-cloud-server-sdk'
 import { EvalHook } from '../src/hooks/EvalHook'
 import { EvalHooksRunner } from '../src/hooks/EvalHooksRunner'
+import { VariableType } from '@devcycle/types'
 
 describe('EvalHooksRunner', () => {
     it('should run hooks in correct order when resolver succeeds', async () => {
@@ -18,19 +20,22 @@ describe('EvalHooksRunner', () => {
         )
         hooksRunner.enqueue(hook1)
         hooksRunner.enqueue(hook2)
+        const mockVariable = new VariableAndMetadata<string>(
+            {
+                key: 'test-key',
+                defaultValue: 'test-value',
+                type: VariableType.string,
+                value: 'test-value',
+            },
+            'featureId',
+        )
         const result = hooksRunner.runHooksForEvaluation(
             { user_id: 'test-user' },
             'test-key',
             'test-value',
             {},
             () => {
-                return {
-                    key: 'test-key',
-                    defaultValue: 'test-value',
-                    type: 'String',
-                    value: 'test-value',
-                    isDefaulted: false,
-                }
+                return mockVariable
             },
         )
         expect(result).toEqual({
@@ -42,11 +47,31 @@ describe('EvalHooksRunner', () => {
         })
         expect(hook1.before).toHaveBeenCalledTimes(1)
         expect(hook1.after).toHaveBeenCalledTimes(1)
+        expect(hook1.after).toHaveBeenCalledWith(
+            expect.any(Object),
+            mockVariable.variable,
+            mockVariable.metadata,
+        )
         expect(hook1.onFinally).toHaveBeenCalledTimes(1)
+        expect(hook1.onFinally).toHaveBeenCalledWith(
+            expect.any(Object),
+            mockVariable.variable,
+            mockVariable.metadata,
+        )
         expect(hook1.error).not.toHaveBeenCalled()
         expect(hook2.before).toHaveBeenCalledTimes(1)
         expect(hook2.after).toHaveBeenCalledTimes(1)
+        expect(hook2.after).toHaveBeenCalledWith(
+            expect.any(Object),
+            mockVariable.variable,
+            mockVariable.metadata,
+        )
         expect(hook2.onFinally).toHaveBeenCalledTimes(1)
+        expect(hook2.onFinally).toHaveBeenCalledWith(
+            expect.any(Object),
+            mockVariable.variable,
+            mockVariable.metadata,
+        )
     })
 
     it('should run hooks in correct order when resolver fails', () => {
@@ -111,14 +136,17 @@ describe('EvalHooksRunner', () => {
         )
         hooksRunner.enqueue(hook1)
         hooksRunner.enqueue(hook2)
-        const resolver = jest.fn().mockImplementation((context) => {
-            return {
+        const mockVariable = new VariableAndMetadata<string>(
+            {
                 key: 'test-key',
                 defaultValue: 'test-value',
-                type: 'String',
+                type: VariableType.string,
                 value: 'test-value',
-                isDefaulted: false,
-            }
+            },
+            'test',
+        )
+        const resolver = jest.fn().mockImplementation((context) => {
+            return mockVariable
         })
         const result = hooksRunner.runHooksForEvaluation(
             { user_id: 'test-user' },
@@ -178,15 +206,14 @@ describe('EvalHooksRunner', () => {
         hooksRunner.enqueue(hook1)
         hooksRunner.enqueue(hook2)
 
-        const variable = {
+        const mockVariable = new VariableAndMetadata<string>({
             key: 'test-key',
             defaultValue: 'test-value',
-            type: 'String',
+            type: VariableType.string,
             value: 'test-value',
-            isDefaulted: false,
-        }
+        })
         const resolver = jest.fn().mockImplementation((context) => {
-            return variable
+            return mockVariable
         })
         const result = hooksRunner.runHooksForEvaluation(
             { user_id: 'test-user' },
@@ -195,7 +222,7 @@ describe('EvalHooksRunner', () => {
             {},
             resolver,
         )
-        expect(result).toEqual(variable)
+        expect(result).toEqual(mockVariable.variable)
 
         expect(hook1.before).toHaveBeenCalledTimes(1)
         expect(hook1.after).toHaveBeenCalledTimes(0)

@@ -58,3 +58,17 @@ export class DVCVariable<
         this.type = type
     }
 }
+
+export class VariableMetadata {
+    constructor(public featureId?: string) {}
+}
+
+export class VariableAndMetadata<T extends DVCVariableValue> {
+    variable: DVCVariable<T>
+    metadata: VariableMetadata
+
+    constructor(variableParams: VariableParam<T>, featureId?: string) {
+        this.variable = new DVCVariable<T>(variableParams)
+        this.metadata = new VariableMetadata(featureId)
+    }
+}
