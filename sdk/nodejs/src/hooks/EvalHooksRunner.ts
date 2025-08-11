@@ -30,9 +30,9 @@ export class EvalHooksRunner {
         let variableMetadata: VariableMetadata
         try {
             beforeContext = this.runBefore(savedHooks, context)
-            const result = resolver.call(beforeContext)
-            variableDetails = result.variable
-            variableMetadata = result.metadata
+            const { variable, metadata } = resolver.call(beforeContext)
+            variableDetails = variable
+            variableMetadata = metadata
             this.runAfter(
                 savedHooks,
                 beforeContext,
