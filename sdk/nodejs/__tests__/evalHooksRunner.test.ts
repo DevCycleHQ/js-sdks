@@ -1,4 +1,7 @@
-import { VariableWithMetadata } from '@devcycle/js-cloud-server-sdk'
+import {
+    DVCVariable,
+    VariableWithMetadata,
+} from '@devcycle/js-cloud-server-sdk'
 import { EvalHook } from '../src/hooks/EvalHook'
 import { EvalHooksRunner } from '../src/hooks/EvalHooksRunner'
 
@@ -19,23 +22,23 @@ describe('EvalHooksRunner', () => {
         )
         hooksRunner.enqueue(hook1)
         hooksRunner.enqueue(hook2)
-        const variableMock: VariableWithMetadata<string, string> = {
-            variable: {
+        const mockVariable = new VariableWithMetadata<string>(
+            {
                 key: 'test-key',
                 defaultValue: 'test-value',
                 type: 'String',
                 value: 'test-value',
                 isDefaulted: false,
             },
-            metadata: { featureId: 'featureId' },
-        }
+            'featureId',
+        )
         const result = hooksRunner.runHooksForEvaluation(
             { user_id: 'test-user' },
             'test-key',
             'test-value',
             {},
             () => {
-                return variableMock
+                return mockVariable
             },
         )
         expect(result).toEqual({
@@ -49,28 +52,28 @@ describe('EvalHooksRunner', () => {
         expect(hook1.after).toHaveBeenCalledTimes(1)
         expect(hook1.after).toHaveBeenCalledWith(
             expect.any(Object),
-            variableMock.variable,
-            variableMock.metadata,
+            mockVariable.variable,
+            mockVariable.metadata,
         )
         expect(hook1.onFinally).toHaveBeenCalledTimes(1)
         expect(hook1.onFinally).toHaveBeenCalledWith(
             expect.any(Object),
-            variableMock.variable,
-            variableMock.metadata,
+            mockVariable.variable,
+            mockVariable.metadata,
         )
         expect(hook1.error).not.toHaveBeenCalled()
         expect(hook2.before).toHaveBeenCalledTimes(1)
         expect(hook2.after).toHaveBeenCalledTimes(1)
         expect(hook2.after).toHaveBeenCalledWith(
             expect.any(Object),
-            variableMock.variable,
-            variableMock.metadata,
+            mockVariable.variable,
+            mockVariable.metadata,
         )
         expect(hook2.onFinally).toHaveBeenCalledTimes(1)
         expect(hook2.onFinally).toHaveBeenCalledWith(
             expect.any(Object),
-            variableMock.variable,
-            variableMock.metadata,
+            mockVariable.variable,
+            mockVariable.metadata,
         )
     })
 
