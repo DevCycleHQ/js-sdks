@@ -26,7 +26,6 @@ import os from 'os'
 import {
     DevCycleUser,
     DVCVariable,
-    VariableMetadata,
     VariableParam,
     checkParamDefined,
     dvcDefaultLogger,
