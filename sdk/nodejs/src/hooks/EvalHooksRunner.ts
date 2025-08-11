@@ -1,4 +1,7 @@
-import { VariableMetadata } from '@devcycle/js-cloud-server-sdk'
+import {
+    VariableMetadata,
+    VariableWithMetadata,
+} from '@devcycle/js-cloud-server-sdk'
 import { DevCycleUser, DVCVariable } from '../../src/'
 import { EvalHook } from './EvalHook'
 import { HookContext, HookMetadata } from './HookContext'
@@ -16,9 +19,7 @@ export class EvalHooksRunner {
         key: string,
         defaultValue: T,
         metadata: HookMetadata,
-        resolver: (
-            context: HookContext<T>,
-        ) => [DVCVariable<T>, VariableMetadata],
+        resolver: (context: HookContext<T>) => VariableWithMetadata<T>,
     ): DVCVariable<T> {
         const context = new HookContext<T>(user, key, defaultValue, metadata)
         const savedHooks = [...this.hooks]
@@ -29,9 +30,9 @@ export class EvalHooksRunner {
         let variableMetadata: VariableMetadata
         try {
             beforeContext = this.runBefore(savedHooks, context)
-            const [variable, metadata] = resolver.call(beforeContext)
-            variableDetails = variable
-            variableMetadata = metadata
+            const result = resolver.call(beforeContext)
+            variableDetails = result.variable
+            variableMetadata = result.metatdata
             this.runAfter(
                 savedHooks,
                 beforeContext,
@@ -46,7 +47,7 @@ export class EvalHooksRunner {
                 error.name === 'AfterHookError'
             ) {
                 // make sure to return with a variable if before or after hook errors
-                const [variable] = resolver.call(context)
+                const { variable } = resolver.call(context)
                 return variable
             }
             throw error
