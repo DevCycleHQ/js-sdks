@@ -1,7 +1,4 @@
-import {
-    DVCVariable,
-    VariableWithMetadata,
-} from '@devcycle/js-cloud-server-sdk'
+import { VariableAndMetadata } from '@devcycle/js-cloud-server-sdk'
 import { EvalHook } from '../src/hooks/EvalHook'
 import { EvalHooksRunner } from '../src/hooks/EvalHooksRunner'
 import { VariableType } from '@devcycle/types'
@@ -23,7 +20,7 @@ describe('EvalHooksRunner', () => {
         )
         hooksRunner.enqueue(hook1)
         hooksRunner.enqueue(hook2)
-        const mockVariable = new VariableWithMetadata<string>(
+        const mockVariable = new VariableAndMetadata<string>(
             {
                 key: 'test-key',
                 defaultValue: 'test-value',
@@ -139,7 +136,7 @@ describe('EvalHooksRunner', () => {
         )
         hooksRunner.enqueue(hook1)
         hooksRunner.enqueue(hook2)
-        const mockVariable = new VariableWithMetadata<string>(
+        const mockVariable = new VariableAndMetadata<string>(
             {
                 key: 'test-key',
                 defaultValue: 'test-value',
@@ -209,7 +206,7 @@ describe('EvalHooksRunner', () => {
         hooksRunner.enqueue(hook1)
         hooksRunner.enqueue(hook2)
 
-        const mockVariable = new VariableWithMetadata<string>({
+        const mockVariable = new VariableAndMetadata<string>({
             key: 'test-key',
             defaultValue: 'test-value',
             type: VariableType.string,

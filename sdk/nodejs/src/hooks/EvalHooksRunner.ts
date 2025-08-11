@@ -1,6 +1,6 @@
 import {
     VariableMetadata,
-    VariableWithMetadata,
+    VariableAndMetadata,
 } from '@devcycle/js-cloud-server-sdk'
 import { DevCycleUser, DVCVariable } from '../../src/'
 import { EvalHook } from './EvalHook'
@@ -19,7 +19,7 @@ export class EvalHooksRunner {
         key: string,
         defaultValue: T,
         metadata: HookMetadata,
-        resolver: (context: HookContext<T>) => VariableWithMetadata<T>,
+        resolver: (context: HookContext<T>) => VariableAndMetadata<T>,
     ): DVCVariable<T> {
         const context = new HookContext<T>(user, key, defaultValue, metadata)
         const savedHooks = [...this.hooks]

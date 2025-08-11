@@ -63,7 +63,7 @@ export class VariableMetadata {
     constructor(public featureId?: string) {}
 }
 
-export class VariableWithMetadata<T extends DVCVariableValue> {
+export class VariableAndMetadata<T extends DVCVariableValue> {
     variable: DVCVariable<T>
     metadata: VariableMetadata
 
