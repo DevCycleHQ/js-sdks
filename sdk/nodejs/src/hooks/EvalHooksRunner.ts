@@ -26,11 +26,11 @@ export class EvalHooksRunner {
         const reversedHooks = [...savedHooks].reverse()
 
         let beforeContext = context
-        let variableDetails: DVCVariable<T>
-        let variableMetadata: VariableMetadata
+        let variableDetails: DVCVariable<T> | undefined
+        let variableMetadata: VariableMetadata | undefined
         try {
             beforeContext = this.runBefore(savedHooks, context)
-            const { variable, metadata } = resolver.call(beforeContext)
+            const { variable, metadata } : VariableAndMetadata<T> = resolver.call(beforeContext)
             variableDetails = variable
             variableMetadata = metadata
             this.runAfter(
@@ -41,7 +41,12 @@ export class EvalHooksRunner {
             )
         } catch (error) {
             this.runError(reversedHooks, context, error)
-            this.runFinally(reversedHooks, context, undefined, undefined)
+            this.runFinally(
+                reversedHooks,
+                context,
+                variableDetails,
+                variableMetadata,
+            )
             if (
                 error.name === 'BeforeHookError' ||
                 error.name === 'AfterHookError'
