@@ -60,7 +60,7 @@ export class DVCVariable<
 }
 
 export class VariableMetadata {
-    constructor(public featureId?: string | null) {}
+    constructor(public featureId?: string) {}
 }
 
 export class VariableWithMetadata<T extends DVCVariableValue> {
