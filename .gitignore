@@ -106,3 +106,6 @@ e2e/js/js-esm/playwright-report/
 
 #opencode ai guidelines
 AGENTS.md
+
+# Large binary reference diagrams (kept locally only)
+docs/old-diagrams/
