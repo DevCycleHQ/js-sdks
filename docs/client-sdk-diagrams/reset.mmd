@@ -1,0 +1,16 @@
+sequenceDiagram
+  participant App
+  participant SDK
+  participant Storage
+  participant EventsAPI as Events API
+  participant Subscribers
+
+  App->>SDK: reset()
+  SDK->>SDK: stop schedulers/timers
+  SDK->>Storage: clear user and cached config
+  SDK->>EventsAPI: flush pending events (best-effort)
+  SDK->>SDK: re-initialize defaults (anonymous user, empty store)
+  SDK->>Subscribers: notify reset (variables changed)
+  SDK-->>App: resolve
+
+

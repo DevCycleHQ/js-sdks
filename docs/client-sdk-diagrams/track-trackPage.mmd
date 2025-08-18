@@ -1,0 +1,26 @@
+sequenceDiagram
+  participant App
+  participant SDK
+  participant EventsAPI as Events API
+
+  App->>SDK: track(eventName, props)
+  SDK->>SDK: validate and enrich (user, session, device)
+  SDK->>SDK: enqueue event in buffer
+  par flush policy
+    SDK->>EventsAPI: POST batch (size/interval/manual flush)
+    EventsAPI-->>SDK: 2xx/4xx/5xx
+    alt success
+      SDK->>SDK: mark events delivered
+    else retryable error
+      SDK->>SDK: schedule retry with backoff
+    else drop policy
+      SDK->>SDK: drop or persist offline (if supported)
+    end
+  end
+  SDK-->>App: resolve (queued)
+
+  App->>SDK: trackPage(url, title, props)
+  SDK->>SDK: build pageview event
+  SDK->>SDK: enqueue and process as above
+
+

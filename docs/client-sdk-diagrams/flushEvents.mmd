@@ -1,0 +1,13 @@
+sequenceDiagram
+  participant App
+  participant SDK
+  participant EventsAPI as Events API
+
+  App->>SDK: enqueue event(s)
+  SDK->>SDK: buffer until threshold/interval
+  App->>SDK: flush()
+  SDK->>EventsAPI: POST batched events
+  EventsAPI-->>SDK: 200 OK / error
+  SDK-->>App: resolve flush() promise
+
+

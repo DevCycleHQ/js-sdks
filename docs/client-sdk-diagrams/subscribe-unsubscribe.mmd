@@ -1,0 +1,18 @@
+sequenceDiagram
+  participant App
+  participant SDK
+  participant Bus as Internal Event Bus
+
+  App->>SDK: subscribe(event, handler)
+  SDK->>Bus: register handler for event
+  SDK-->>App: subscription token
+
+  note over SDK: When variables/config change or events occur
+  SDK->>Bus: emit(event, payload)
+  Bus->>App: invoke handler(payload)
+
+  App->>SDK: unsubscribe(token)
+  SDK->>Bus: remove handler
+  SDK-->>App: ok
+
+
