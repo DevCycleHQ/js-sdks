@@ -1,0 +1,57 @@
+flowchart TD
+  A["variable(key: String, defaultValue:\nDVCVariableValue): DVCVariable"]
+  AU["variable.onUpdate(callback: (value:\nDVCVariableValue) => void): Promise<DVCVariable>"]
+
+  subgraph DevCycle Client SDKs
+    direction TB
+
+    %% variable() flow
+    B{If both params are defined}
+    B -->|No| TE[Throw error]
+    B -->|Yes| RD[Return DVCVariable]
+
+    %% onUpdate() flow
+    U1{If callback is of type function}
+    U1 -->|No| TE
+    U1 -->|Yes| CB{DVCVariable has existing callback}
+    CB -->|Yes| RC[Replace existing callback to DVCVariable]
+    CB -->|No| SN[Set new callback on DVCVariable]
+
+    RC --> CC{Config ready}
+    SN --> CC
+
+    CC -->|No| DV[DVCVariable sets default value and isDefaulted to true]
+    DV --> TD[Track variableDefaulted aggregate event]
+    TD --> RV[Return DVCVariable]
+
+    CC -->|Yes| VC{Variable in the config}
+    VC -->|No| DV
+    VC -->|Yes| CM{Config variable type matches default type}
+
+    CM -->|No| LW[Log warning of mismatched variable]
+    LW --> DV
+
+    CM -->|Yes| DN[DVCVariable sets new config value]
+    DN --> CD{callback on DVCVariable defined}
+
+    CD -->|Yes| CU[Call onUpdate with DVCVariableValue when value changes]
+    CD -->|No| TV[Track variableEvaluated aggregate event]
+
+    CU --> TV
+    TV --> RV
+  end
+
+  A --> B
+  AU --> U1
+
+  %% Style: emit event nodes
+  classDef emitEvent fill:#fff3bf,stroke:#333,color:#000;
+  class TD,TV emitEvent;
+
+  %% Style: error nodes
+  classDef errorNode fill:#ffcccc,stroke:#333,color:#000;
+  class TE errorNode;
+
+  %% Style: terminal nodes
+  classDef terminal fill:#f3e5f5,stroke:#7b1fa2,color:#000;
+  class RD,RV terminal;
