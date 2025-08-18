@@ -1,13 +1,57 @@
-sequenceDiagram
-  participant App
-  participant SDK
-  participant EventsAPI as Events API
+flowchart TD
+  A["flushEvents({timeout} = {timeout: 5000}, callback?): Promise<void>"]
 
-  App->>SDK: enqueue event(s)
-  SDK->>SDK: buffer until threshold/interval
-  App->>SDK: flush()
-  SDK->>EventsAPI: POST batched events
-  EventsAPI-->>SDK: 200 OK / error
-  SDK-->>App: resolve flush() promise
+  subgraph DevCycle Client SDKs
+    direction TB
 
+    L[Wait flush interval ms]
+    B["Enqueue immutable outgoing payload using current user and events queue"]
+    C(("API Track Event Payloads in Queue"))
+    D{Track events result}
 
+    RC(("ensure retryable failed payloads remain in queue"))
+
+    S[Original events successfully flushed]
+    NS[Notify user of successful flush]
+
+    RE{Retryable error}
+    T{Timeout reached}
+    ER((Events remain in queue, flush loop continues))
+    NTO[Notify user of timeout exceeded error]
+    NUE[Notify user of unexpected error]
+
+    %% main flow
+    L --> B --> C --> D
+
+    %% completion handling
+    D -->|On completion| RC
+
+    %% success
+    D -->|Success| S
+    S --> NS
+
+    %% error handling
+    D -->|Error| RE
+    RE -->|Yes 5xx| T
+    RE -->|No 4xx| NUE
+    T -->|Yes| NTO
+    T -->|No| ER
+    ER --> L
+  end
+
+  A --> L
+
+  %% Style: emit event nodes
+  classDef emitEvent fill:#fff3bf,stroke:#333,color:#000;
+
+  %% Style: error nodes
+  classDef errorNode fill:#ffcccc,stroke:#333,color:#000;
+  class NUE,NTO errorNode;
+
+  %% Style: API call nodes
+  classDef apiCall fill:#e1f5fe,stroke:#0277bd,color:#000;
+  class C apiCall;
+
+  %% Style: terminal nodes
+  classDef terminal fill:#f3e5f5,stroke:#7b1fa2,color:#000;
+  class NS,S terminal;

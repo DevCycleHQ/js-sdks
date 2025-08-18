@@ -1,18 +1,63 @@
-sequenceDiagram
-  participant App
-  participant SDK
-  participant Bus as Internal Event Bus
+flowchart TD
+  INI["initialize(...)"]
+  IDN["identify(...)"]
+  RST["reset(...)"]
+  SUB["subscribe(key, onUpdate)"]
+  UNS["unsubscribe(key, onUpdate)"]
 
-  App->>SDK: subscribe(event, handler)
-  SDK->>Bus: register handler for event
-  SDK-->>App: subscription token
+  subgraph DevCycle Client SDKs
+    direction TB
 
-  note over SDK: When variables/config change or events occur
-  SDK->>Bus: emit(event, payload)
-  Bus->>App: invoke handler(payload)
+    %% Initialize flow emits
+    FCFG[API Fetch Config]
+    FRES{Fetch Config result}
 
-  App->>SDK: unsubscribe(token)
-  SDK->>Bus: remove handler
-  SDK-->>App: ok
+    %% Identify flow emits
+    IAPI[API Identify User]
+    IRES{Identify User result}
 
+    %% Reset flow emits
+    RRES{Reset User result}
 
+    EV_INIT[Emit event initialized]
+    EV_VAR[Emit event variableUpdated]
+    EV_ERR[Emit event error]
+
+    %% Subscribe / Unsubscribe actions
+    SAVE[Save onUpdate function for key]
+    DEL[Delete onUpdate function for key]
+
+    FCFG --> FRES
+    FRES -->|Successful| EV_INIT
+    FRES -->|Unsuccessful| EV_ERR
+
+    IAPI --> IRES
+    IRES -->|Successful| EV_VAR
+    IRES -->|Unsuccessful| EV_ERR
+
+    RRES -->|Successful| EV_VAR
+    RRES -->|Unsuccessful| EV_ERR
+  end
+
+  INI --> FCFG
+  IDN --> IAPI
+  RST --> RRES
+
+  SUB --> SAVE
+  UNS --> DEL
+
+  %% Style: emit event nodes
+  classDef emitEvent fill:#fff3bf,stroke:#333,color:#000;
+  class EV_INIT,EV_VAR emitEvent;
+
+  %% Style: error nodes
+  classDef errorNode fill:#ffcccc,stroke:#333,color:#000;
+  class EV_ERR errorNode;
+
+  %% Style: API call nodes
+  classDef apiCall fill:#e1f5fe,stroke:#0277bd,color:#000;
+  class FCFG,IAPI apiCall;
+
+  %% Style: terminal nodes
+  classDef terminal fill:#f3e5f5,stroke:#7b1fa2,color:#000;
+  class SAVE,DEL terminal;
