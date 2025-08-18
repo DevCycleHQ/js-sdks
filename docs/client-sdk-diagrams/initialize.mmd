@@ -1,0 +1,61 @@
+flowchart TD
+  A[initialize ENV_KEY, user, options]
+  subgraph DevCycle Client SDKs
+    direction TB
+    B{user is valid?}
+
+    B -->|invalid user| E[Throw error]
+    E --> NF[Notify user of error]
+    NF --> EF[Emit event: user SDK initialized failure]
+
+    B -->|valid user| C{user isAnonymous?}
+ 
+    C -->|Yes| C1{anon user id in cache?}
+    C1 -->|Yes| C2[read anon user id from cache]
+    C1 -->|No| C3[generate new anon user id]
+    C2 --> D[update user property on dvcClient]
+    C3 --> D
+
+    C -->|No| D[update user property on dvcClient]
+
+    D --> EC{use cached config}
+    EC -->|Yes| UC[update config property on dvcClient]
+    UC --> AN
+    EC -->|No| IR[initialize and return DevCycle client instance]
+
+    IR --> ED{edgeDB enabled?}
+    ED -->|Yes| F2[API fetch config with edgeDB param]
+    ED -->|No| F1[API fetch config]
+
+    F1 --> R{fetch config result}
+    F2 --> R
+
+    R -->|Successful| WC[write config to cache]
+    R -->|Failed| NF
+
+    WC --> AN{user isAnonymous?}
+    AN -->|No| CLR[clear anonymous id from storage]
+    AN -->|Yes| CB
+
+    CLR --> CB[call DVC variable callbacks for changed variables]
+    CB --> EV[emit event: features and variables that have changed]
+    EV --> ES[emit event: user SDK initialized success]
+    ES --> NR[notify user config has returned]
+  end
+  A --> B
+  
+  %% Style: emit event nodes
+  classDef emitEvent fill:#fff3bf,stroke:#333,color:#000;
+  class EF,EV,ES emitEvent;
+  
+  %% Style: error nodes
+  classDef errorNode fill:#ffcccc,stroke:#333,color:#000;
+  class E errorNode;
+  
+  %% Style: API call nodes
+  classDef apiCall fill:#e1f5fe,stroke:#0277bd,color:#000;
+  class F1,F2 apiCall;
+  
+  %% Style: terminal nodes
+  classDef terminal fill:#f3e5f5,stroke:#7b1fa2,color:#000;
+  class NR,NF terminal;
