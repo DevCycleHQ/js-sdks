@@ -18,6 +18,6 @@ This folder contains shareable, diffable Mermaid diagrams describing Client SDK 
 
 - Subscribe / Unsubscribe: [subscribe-unsubscribe.mmd](./subscribe-unsubscribe.mmd)
 
-- Track / TrackPage: [track-trackPage.mmd](./track-trackPage.mmd)
+- Track: [track.mmd](./track.mmd)
 
 - Variable: [variable.mmd](./variable.mmd)
