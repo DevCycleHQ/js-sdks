@@ -1,16 +1,26 @@
-sequenceDiagram
-  participant App
-  participant SDK
-  participant Storage
-  participant EventsAPI as Events API
-  participant Subscribers
+flowchart TD
+  A["reset(callback?): Promise<DVCVariableSet>"]
+  
+  subgraph DevCycle Client SDKs
+    direction TB
+    B(Clear cached anon user id)
+    C(Create new anonymous user)
+    D["GOTO Identify Flowchart"]
+    
+    B --> C --> D
+  end
+  
+  A --> B
 
-  App->>SDK: reset()
-  SDK->>SDK: stop schedulers/timers
-  SDK->>Storage: clear user and cached config
-  SDK->>EventsAPI: flush pending events (best-effort)
-  SDK->>SDK: re-initialize defaults (anonymous user, empty store)
-  SDK->>Subscribers: notify reset (variables changed)
-  SDK-->>App: resolve
-
-
+  %% Style: emit event nodes
+  classDef emitEvent fill:#fff3bf,stroke:#333,color:#000;
+  
+  %% Style: error nodes
+  classDef errorNode fill:#ffcccc,stroke:#333,color:#000;
+  
+  %% Style: API call nodes
+  classDef apiCall fill:#e1f5fe,stroke:#0277bd,color:#000;
+  
+  %% Style: terminal nodes
+  classDef terminal fill:#f3e5f5,stroke:#7b1fa2,color:#000;
+  class D terminal;
