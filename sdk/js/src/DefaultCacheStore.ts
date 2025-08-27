@@ -84,7 +84,7 @@ export class IndexedDBStrategy extends StorageStrategy {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(IndexedDBStrategy.DBName, 1)
 
-            request.onupgradeneeded = (event) => {
+            request.onupgradeneeded = () => {
                 const db = request.result
                 if (
                     !db.objectStoreNames.contains(IndexedDBStrategy.storeName)
@@ -95,11 +95,11 @@ export class IndexedDBStrategy extends StorageStrategy {
                 }
             }
 
-            request.onsuccess = (event) => {
+            request.onsuccess = () => {
                 resolve(request.result)
             }
 
-            request.onerror = (event) => {
+            request.onerror = () => {
                 reject(request.error)
             }
         })
@@ -112,7 +112,11 @@ export class IndexedDBStrategy extends StorageStrategy {
             'readwrite',
         )
         const store = tx.objectStore(IndexedDBStrategy.storeName)
-        store.put({ id: storeKey, data: data })
+        const request = store.put({ id: storeKey, data: data })
+        return new Promise((resolve, reject) => {
+            request.onsuccess = () => resolve()
+            request.onerror = () => reject(request.error)
+        })
     }
     // IndexedDB load
     async load<T>(storeKey: string): Promise<T | undefined> {
@@ -139,7 +143,11 @@ export class IndexedDBStrategy extends StorageStrategy {
             'readwrite',
         )
         const store = tx.objectStore(IndexedDBStrategy.storeName)
-        store.delete(storeKey)
+        const request = store.delete(storeKey)
+        return new Promise((resolve, reject) => {
+            request.onsuccess = () => resolve()
+            request.onerror = () => reject(request.error)
+        })
     }
 
     async listKeys(prefix: string): Promise<string[]> {
