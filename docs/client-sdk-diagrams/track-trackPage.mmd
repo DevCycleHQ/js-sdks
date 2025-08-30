@@ -1,0 +1,27 @@
+flowchart TD
+  A["track(eventName: String,value?: Number, attributes?: JSON)"]
+
+  subgraph DevCycle Client SDKs
+    direction TB
+    B{Config ready?}
+
+    B -->|Yes| C["Construct event<br/>using current user_id and<br/>config featureVars"]
+    B -->|No| D["Construct event<br/>using current user_id and<br/>empty featureVars"]
+
+    C --> E[(Queue Events)]
+    D --> E
+  end
+
+  A --> B
+
+  %% Style: emit event nodes
+  classDef emitEvent fill:#fff3bf,stroke:#333,color:#000;
+
+  %% Style: error nodes
+  classDef errorNode fill:#ffcccc,stroke:#333,color:#000;
+
+  %% Style: API call nodes
+  classDef apiCall fill:#e1f5fe,stroke:#0277bd,color:#000;
+
+  %% Style: terminal nodes
+  classDef terminal fill:#f3e5f5,stroke:#7b1fa2,color:#000;
