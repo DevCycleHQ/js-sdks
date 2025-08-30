@@ -1,0 +1,50 @@
+{
+    "name": "@devcycle/bucketing-zig",
+    "version": "1.0.0",
+    "description": "DevCycle Bucketing Library - Zig Implementation compiled to WebAssembly",
+    "main": "index.js",
+    "files": [
+        "build/*.wasm",
+        "index.js",
+        "README.md"
+    ],
+    "scripts": {
+        "build": "zig build release",
+        "build:debug": "zig build debug",
+        "test": "node test.js",
+        "test:zig": "echo 'Zig tests require native target (WASM tests not supported)'",
+        "test:js": "node test.js",
+        "clean": "rm -rf build/ zig-out/ .zig-cache/"
+    },
+    "keywords": [
+        "devcycle",
+        "feature-flags",
+        "bucketing",
+        "segmentation",
+        "wasm",
+        "webassembly",
+        "zig"
+    ],
+    "author": "DevCycle",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DevCycleHQ/js-sdks.git",
+        "directory": "lib/shared/bucketing-zig"
+    },
+    "engines": {
+        "node": ">=14.0.0"
+    },
+    "devDependencies": {},
+    "dependencies": {},
+    "exports": {
+        ".": {
+            "require": "./index.js",
+            "import": "./index.js"
+        }
+    },
+    "homepage": "https://devcycle.com",
+    "bugs": {
+        "url": "https://github.com/DevCycleHQ/js-sdks/issues"
+    }
+}
