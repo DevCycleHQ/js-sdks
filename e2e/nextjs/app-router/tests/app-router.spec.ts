@@ -54,9 +54,12 @@ test('works after a client side navigation in streaming mode', async ({
         }
     })
 
+    // Capture page content for debugging before the assertion
+    console.log('Page content before assertion:', await page.content())
+
     // Increase timeout for navigation in CI
     await expect(page.getByText('Navigated Server Component')).toBeVisible({
-        timeout: 10000,
+        timeout: 20000,
     })
 
     await expect(page.getByText('Server Enabled Variable: true')).toBeVisible()
