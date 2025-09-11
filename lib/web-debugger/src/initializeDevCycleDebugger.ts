@@ -40,6 +40,8 @@ export type DebuggerIframeOptions = {
     shouldEnable?: boolean | (() => boolean)
     shouldEnableVariable?: string
     hasClientSideUser?: boolean
+    size?: 'small' | 'large'
+    offset?: string
 }
 
 const defaultEnabledCheck = () => {
@@ -54,6 +56,8 @@ class IframeManager {
     debugLogs: boolean
     hasClientSideUser?: boolean
     client: DevCycleClient | NextClient
+    size: string
+    offset: string
     private debouncedUpdateIframeData: () => void
 
     constructor(
@@ -63,6 +67,8 @@ class IframeManager {
             debuggerUrl = 'https://debugger.devcycle.com',
             debugLogs = false,
             hasClientSideUser = true,
+            size = 'large',
+            offset = '25px',
         }: DebuggerIframeOptions = {},
     ) {
         this.client = client
@@ -70,7 +76,9 @@ class IframeManager {
         this.hasClientSideUser = hasClientSideUser
         this.debuggerUrl = debuggerUrl
         this.position = position
+        this.size = size
         this.debugLogs = debugLogs
+        this.offset = offset
         this.mainIframe = document.createElement('iframe')
         this.buttonIframe = document.createElement('iframe')
         this.debouncedUpdateIframeData = this.debounce(() => {
@@ -196,14 +204,14 @@ class IframeManager {
 
     createButtonIframe() {
         this.buttonIframe.id = 'devcycle-debugger-button-iframe'
-        this.buttonIframe.style.width = '80px'
-        this.buttonIframe.style.height = '80px'
+        this.buttonIframe.style.width = this.size === 'small' ? '40px' : '80px'
+        this.buttonIframe.style.height = this.size === 'small' ? '40px' : '80px'
         this.buttonIframe.style.position = 'fixed'
-        this.buttonIframe.style.bottom = '25px'
+        this.buttonIframe.style.bottom = this.size === 'small' ? '10px' : '25px'
         if (this.position === 'left') {
-            this.buttonIframe.style.left = '25px'
+            this.buttonIframe.style.left = this.offset
         } else {
-            this.buttonIframe.style.right = '25px'
+            this.buttonIframe.style.right = this.offset
         }
         this.buttonIframe.style.zIndex = '100'
         this.buttonIframe.style.border = 'none'
@@ -212,6 +220,7 @@ class IframeManager {
         const searchParams = new URLSearchParams()
         searchParams.set('parentOrigin', window.location.origin)
         searchParams.set('position', this.position)
+        searchParams.set('size', this.size)
         this.buttonIframe.src = `${
             this.debuggerUrl
         }/button?${searchParams.toString()}`
