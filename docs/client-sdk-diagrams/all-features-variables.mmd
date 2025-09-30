@@ -1,0 +1,22 @@
+flowchart TD
+  A["allFeatures(): DVCFeatureSet"]
+  subgraph "          DevCycle Client SDKs"
+    direction TB
+    B{Config ready?}
+
+    B -->|Yes| C["Return DVCFeatureSet"]
+    B -->|No| D["Return empty DVCFeatureSet"]
+  end
+  A --> B
+
+  %% Style: emit event nodes (kept for consistency with initialize.mmd)
+  classDef emitEvent fill:#fff3bf,stroke:#333,color:#000;
+
+  %% Style: error nodes
+  classDef errorNode fill:#ffcccc,stroke:#333,color:#000;
+
+  %% Style: API call nodes
+  classDef apiCall fill:#e1f5fe,stroke:#0277bd,color:#000;
+
+  %% Style: terminal nodes
+  classDef terminal fill:#f3e5f5,stroke:#7b1fa2,color:#000;
