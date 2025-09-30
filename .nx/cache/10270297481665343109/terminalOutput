@@ -1,0 +1,34 @@
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m bucketing-lib [39m[27m[0m [2mlib/shared/bucketing/__tests__/[22m[1msegmentation.test.ts[22m ([0m[1m[41m12.651 s[49m[22m[0m)
+  [1m● [22mConsole
+
+    [2m[31mconsole.error[39m[22m
+[31m      Invalid audience referenced by audienceMatch filter.[39m
+[2m[22m
+[2m    [0m [90m 161 |[39m         [36mconst[39m audience [33m=[39m audiences[_audience][22m
+[2m     [90m 162 |[39m         [36mif[39m ([33m![39maudience) {[22m
+[2m    [31m[1m>[22m[2m[39m[90m 163 |[39m             console[33m.[39merror([22m
+[2m     [90m     |[39m                     [31m[1m^[22m[2m[39m[22m
+[2m     [90m 164 |[39m                 [32m'Invalid audience referenced by audienceMatch filter.'[39m[33m,[39m[22m
+[2m     [90m 165 |[39m             )[22m
+[2m     [90m 166 |[39m             [36mreturn[39m { result[33m:[39m [36mfalse[39m }[0m[22m
+[2m[22m
+[2m      [2mat filterForAudienceMatch ([22m[2msrc/segmentation.ts[2m:163:21)[22m[2m[22m
+[2m      [2mat doesUserPassFilter ([22m[2msrc/segmentation.ts[2m:71:47)[22m[2m[22m
+[2m          at Array.every (<anonymous>)[22m
+[2m      [2mat Object.evaluateOperator ([22m[2msrc/segmentation.ts[2m:125:41)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36m__tests__/segmentation.test.ts[39m[0m[2m:824:34)[22m[2m[22m
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m bucketing-lib [39m[27m[0m [2mlib/shared/bucketing/__tests__/[22m[1mbucketing.test.ts[22m ([0m[1m[41m19.376 s[49m[22m[0m)
+  [1m● [22mConsole
+
+    [2mconsole.log[22m
+      Wrote test data to /workspace/lib/shared/bucketing-test-data/json-data
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m../bucketing-test-data/src/main.ts[2m:22:9)[22m[2m[22m
+
+
+[1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 total
+[1mTests:       [22m[1m[32m222 passed[39m[22m, 222 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        19.941 s
+[2mRan all test suites[22m[2m.[22m

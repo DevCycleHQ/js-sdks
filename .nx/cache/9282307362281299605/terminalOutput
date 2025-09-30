@@ -1,0 +1,217 @@
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-client-sdk [39m[27m[0m [2msdk/js/__tests__/[22m[1mEvalHooksRunner.spec.ts[22m ([0m[1m[41m15.13 s[49m[22m[0m)
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-client-sdk [39m[27m[0m [2msdk/js/__tests__/[22m[1mEventQueue.spec.js[22m ([0m[1m[41m5.195 s[49m[22m[0m)
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-client-sdk [39m[27m[0m [2msdk/js/__tests__/[22m[1mEventEmitter.spec.js[22m ([0m[1m[41m20.189 s[49m[22m[0m)
+  [1m● [22mConsole
+
+    [2m[31mconsole.error[39m[22m
+[31m      [DevCycle]: Request to get config failed for url: https://sdk-api.devcycle.com/v1/sdkConfig?sdkKey=test_sdk_key&user_id=user1&isAnonymous=false&lastSeenDate=1759268319824&createdDate=1759268319825&platform=web&platformVersion=WebKit+537.36&deviceModel=Mozilla%2F5.0+%28linux%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+jsdom%2F20.0.3&sdkType=client&sdkVersion=1.47.1, response message: TypeError: Cannot read properties of undefined (reading 'ok') undefined[39m
+[2m[22m
+[2m    [0m [90m 20 |[39m     [36mconst[39m writeLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m logWriter(prefix [33m+[39m message)[22m
+[2m     [90m 21 |[39m     [36mconst[39m writeError [33m=[39m (message[33m:[39m string[33m,[39m error[33m:[39m unknown)[33m:[39m [36mvoid[39m [33m=>[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 22 |[39m         errorWriter(prefix [33m+[39m message[33m,[39m error)[22m
+[2m     [90m    |[39m         [31m[1m^[22m[2m[39m[22m
+[2m     [90m 23 |[39m     [90m// eslint-disable-next-line @typescript-eslint/no-empty-function[39m[22m
+[2m     [90m 24 |[39m     [36mconst[39m noOpLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m {}[22m
+[2m     [90m 25 |[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.errorWriter [as error] ([22m[2msrc/logger.ts[2m:22:9)[22m[2m[22m
+[2m      [2mat error ([22m[2msrc/Request.ts[2m:67:16)[22m[2m[22m
+[2m      [2mat ConfigRequestConsolidator.performRequest ([22m[2msrc/ConfigRequestConsolidator.ts[2m:92:32)[22m[2m[22m
+[2m      [2mat ConfigRequestConsolidator.processQueue ([22m[2msrc/ConfigRequestConsolidator.ts[2m:64:9)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      [DevCycle]: Request to get config failed for url: https://sdk-api.devcycle.com/v1/sdkConfig?sdkKey=test_sdk_key&user_id=user1&isAnonymous=false&lastSeenDate=1759268319903&createdDate=1759268319903&platform=web&platformVersion=WebKit+537.36&deviceModel=Mozilla%2F5.0+%28linux%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+jsdom%2F20.0.3&sdkType=client&sdkVersion=1.47.1, response message: TypeError: Cannot read properties of undefined (reading 'ok') undefined[39m
+[2m[22m
+[2m    [0m [90m 20 |[39m     [36mconst[39m writeLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m logWriter(prefix [33m+[39m message)[22m
+[2m     [90m 21 |[39m     [36mconst[39m writeError [33m=[39m (message[33m:[39m string[33m,[39m error[33m:[39m unknown)[33m:[39m [36mvoid[39m [33m=>[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 22 |[39m         errorWriter(prefix [33m+[39m message[33m,[39m error)[22m
+[2m     [90m    |[39m         [31m[1m^[22m[2m[39m[22m
+[2m     [90m 23 |[39m     [90m// eslint-disable-next-line @typescript-eslint/no-empty-function[39m[22m
+[2m     [90m 24 |[39m     [36mconst[39m noOpLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m {}[22m
+[2m     [90m 25 |[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.errorWriter [as error] ([22m[2msrc/logger.ts[2m:22:9)[22m[2m[22m
+[2m      [2mat error ([22m[2msrc/Request.ts[2m:67:16)[22m[2m[22m
+[2m      [2mat ConfigRequestConsolidator.performRequest ([22m[2msrc/ConfigRequestConsolidator.ts[2m:92:32)[22m[2m[22m
+[2m      [2mat ConfigRequestConsolidator.processQueue ([22m[2msrc/ConfigRequestConsolidator.ts[2m:64:9)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      [DevCycle]: Request to get config failed for url: https://sdk-api.devcycle.com/v1/sdkConfig?sdkKey=test_sdk_key&user_id=user1&isAnonymous=false&lastSeenDate=1759268319919&createdDate=1759268319919&platform=web&platformVersion=WebKit+537.36&deviceModel=Mozilla%2F5.0+%28linux%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+jsdom%2F20.0.3&sdkType=client&sdkVersion=1.47.1, response message: TypeError: Cannot read properties of undefined (reading 'ok') undefined[39m
+[2m[22m
+[2m    [0m [90m 20 |[39m     [36mconst[39m writeLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m logWriter(prefix [33m+[39m message)[22m
+[2m     [90m 21 |[39m     [36mconst[39m writeError [33m=[39m (message[33m:[39m string[33m,[39m error[33m:[39m unknown)[33m:[39m [36mvoid[39m [33m=>[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 22 |[39m         errorWriter(prefix [33m+[39m message[33m,[39m error)[22m
+[2m     [90m    |[39m         [31m[1m^[22m[2m[39m[22m
+[2m     [90m 23 |[39m     [90m// eslint-disable-next-line @typescript-eslint/no-empty-function[39m[22m
+[2m     [90m 24 |[39m     [36mconst[39m noOpLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m {}[22m
+[2m     [90m 25 |[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.errorWriter [as error] ([22m[2msrc/logger.ts[2m:22:9)[22m[2m[22m
+[2m      [2mat error ([22m[2msrc/Request.ts[2m:67:16)[22m[2m[22m
+[2m      [2mat ConfigRequestConsolidator.performRequest ([22m[2msrc/ConfigRequestConsolidator.ts[2m:92:32)[22m[2m[22m
+[2m      [2mat ConfigRequestConsolidator.processQueue ([22m[2msrc/ConfigRequestConsolidator.ts[2m:64:9)[22m[2m[22m
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-client-sdk [39m[27m[0m [2msdk/js/__tests__/[22m[1mCacheStore.spec.js[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-client-sdk [39m[27m[0m [2msdk/js/__tests__/[22m[1mRequest.spec.ts[22m
+  [1m● [22mConsole
+
+    [2mconsole.log[22m
+      [DevCycle]: Submit Events Payload: {"events":[{"type":"customEvent","customType":"event_1_type","user_id":"my_user","clientDate":1759268321474,"featureVars":{}},{"type":"customEvent","customType":"event_2_type","user_id":"my_user","clientDate":1759268321474,"featureVars":{}}],"user":{"user_id":"my_user"}}
+[2m[22m
+[2m      [2mat Object.logWriter ([22m[2msrc/logger.ts[2m:20:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Posted Events, status: 200, body: [object Object]
+[2m[22m
+[2m      [2mat Object.logWriter ([22m[2msrc/logger.ts[2m:20:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Submit Events Payload: {"events":[{"type":"customEvent","customType":"event_1_type","user_id":"my_user","clientDate":1759268321478,"featureVars":{}},{"type":"customEvent","customType":"event_2_type","user_id":"my_user","clientDate":1759268321478,"featureVars":{}}],"user":{"user_id":"my_user"}}
+[2m[22m
+[2m      [2mat Object.logWriter ([22m[2msrc/logger.ts[2m:20:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Posted Events, status: 200, body: messages
+[2m[22m
+[2m      [2mat Object.logWriter ([22m[2msrc/logger.ts[2m:20:49)[22m[2m[22m
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-client-sdk [39m[27m[0m [2msdk/js/__tests__/[22m[1mConfigRequestConsolidator.spec.js[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-client-sdk [39m[27m[0m [2msdk/js/__tests__/[22m[1mClient.test.ts[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-client-sdk [39m[27m[0m [2msdk/js/__tests__/[22m[1mClient.spec.js[22m ([0m[1m[41m22.664 s[49m[22m[0m)
+  [1m● [22mConsole
+
+    [2m[31mconsole.error[39m[22m
+[31m      [DevCycle]: failed to flush events due to error, dropping events. Error message: Cannot read properties of undefined (reading 'status') undefined[39m
+[2m[22m
+[2m    [0m [90m 20 |[39m     [36mconst[39m writeLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m logWriter(prefix [33m+[39m message)[22m
+[2m     [90m 21 |[39m     [36mconst[39m writeError [33m=[39m (message[33m:[39m string[33m,[39m error[33m:[39m unknown)[33m:[39m [36mvoid[39m [33m=>[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 22 |[39m         errorWriter(prefix [33m+[39m message[33m,[39m error)[22m
+[2m     [90m    |[39m         [31m[1m^[22m[2m[39m[22m
+[2m     [90m 23 |[39m     [90m// eslint-disable-next-line @typescript-eslint/no-empty-function[39m[22m
+[2m     [90m 24 |[39m     [36mconst[39m noOpLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m {}[22m
+[2m     [90m 25 |[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.errorWriter [as error] ([22m[2msrc/logger.ts[2m:22:9)[22m[2m[22m
+[2m      [2mat EventQueue.error [as flushEvents] ([22m[2msrc/EventQueue.ts[2m:137:36)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      [DevCycle]: Config fetch returned no config undefined[39m
+[2m[22m
+[2m    [0m [90m 20 |[39m     [36mconst[39m writeLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m logWriter(prefix [33m+[39m message)[22m
+[2m     [90m 21 |[39m     [36mconst[39m writeError [33m=[39m (message[33m:[39m string[33m,[39m error[33m:[39m unknown)[33m:[39m [36mvoid[39m [33m=>[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 22 |[39m         errorWriter(prefix [33m+[39m message[33m,[39m error)[22m
+[2m     [90m    |[39m         [31m[1m^[22m[2m[39m[22m
+[2m     [90m 23 |[39m     [90m// eslint-disable-next-line @typescript-eslint/no-empty-function[39m[22m
+[2m     [90m 24 |[39m     [36mconst[39m noOpLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m {}[22m
+[2m     [90m 25 |[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.errorWriter [as error] ([22m[2msrc/logger.ts[2m:22:9)[22m[2m[22m
+[2m      [2mat DevCycleClient.error [as _identifyUser] ([22m[2msrc/Client.ts[2m:500:29)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36m__tests__/Client.spec.js[39m[0m[2m:800:13)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      [DevCycle]: Failed to load cached config Error: Cache load failed[39m
+[31m          at Object.<anonymous> (/workspace/sdk/js/__tests__/Client.spec.js:857:17)[39m
+[31m          at Promise.then.completed (/workspace/node_modules/.store/jest-circus-npm-29.7.0-f7679858c6/package/build/utils.js:298:28)[39m
+[31m          at new Promise (<anonymous>)[39m
+[31m          at callAsyncCircusFn (/workspace/node_modules/.store/jest-circus-npm-29.7.0-f7679858c6/package/build/utils.js:231:10)[39m
+[31m          at _callCircusTest (/workspace/node_modules/.store/jest-circus-npm-29.7.0-f7679858c6/package/build/run.js:316:40)[39m
+[31m          at _runTest (/workspace/node_modules/.store/jest-circus-npm-29.7.0-f7679858c6/package/build/run.js:252:3)[39m
+[31m          at _runTestsForDescribeBlock (/workspace/node_modules/.store/jest-circus-npm-29.7.0-f7679858c6/package/build/run.js:126:9)[39m
+[31m          at _runTestsForDescribeBlock (/workspace/node_modules/.store/jest-circus-npm-29.7.0-f7679858c6/package/build/run.js:121:9)[39m
+[31m          at _runTestsForDescribeBlock (/workspace/node_modules/.store/jest-circus-npm-29.7.0-f7679858c6/package/build/run.js:121:9)[39m
+[31m          at run (/workspace/node_modules/.store/jest-circus-npm-29.7.0-f7679858c6/package/build/run.js:71:3)[39m
+[31m          at runAndTransformResultsToJestFormat (/workspace/node_modules/.store/jest-circus-npm-29.7.0-f7679858c6/package/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)[39m
+[31m          at jestAdapter (/workspace/node_modules/.store/jest-circus-npm-29.7.0-f7679858c6/package/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)[39m
+[31m          at runTestInternal (/workspace/node_modules/.store/jest-runner-npm-29.7.0-3bc9f82b58/package/build/runTest.js:367:16)[39m
+[31m          at runTest (/workspace/node_modules/.store/jest-runner-npm-29.7.0-3bc9f82b58/package/build/runTest.js:444:34)[39m
+[31m          at Object.worker (/workspace/node_modules/.store/jest-runner-npm-29.7.0-3bc9f82b58/package/build/testWorker.js:106:12)[39m
+[2m[22m
+[2m    [0m [90m 20 |[39m     [36mconst[39m writeLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m logWriter(prefix [33m+[39m message)[22m
+[2m     [90m 21 |[39m     [36mconst[39m writeError [33m=[39m (message[33m:[39m string[33m,[39m error[33m:[39m unknown)[33m:[39m [36mvoid[39m [33m=>[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 22 |[39m         errorWriter(prefix [33m+[39m message[33m,[39m error)[22m
+[2m     [90m    |[39m         [31m[1m^[22m[2m[39m[22m
+[2m     [90m 23 |[39m     [90m// eslint-disable-next-line @typescript-eslint/no-empty-function[39m[22m
+[2m     [90m 24 |[39m     [36mconst[39m noOpLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m {}[22m
+[2m     [90m 25 |[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.errorWriter [as error] ([22m[2msrc/logger.ts[2m:22:9)[22m[2m[22m
+[2m      [2mat DevCycleClient.error [as _identifyUser] ([22m[2msrc/Client.ts[2m:525:33)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36m__tests__/Client.spec.js[39m[0m[2m:866:13)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      [DevCycle]: failed to flush events due to error, dropping events. Error message: Cannot read properties of undefined (reading 'status') undefined[39m
+[2m[22m
+[2m    [0m [90m 20 |[39m     [36mconst[39m writeLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m logWriter(prefix [33m+[39m message)[22m
+[2m     [90m 21 |[39m     [36mconst[39m writeError [33m=[39m (message[33m:[39m string[33m,[39m error[33m:[39m unknown)[33m:[39m [36mvoid[39m [33m=>[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 22 |[39m         errorWriter(prefix [33m+[39m message[33m,[39m error)[22m
+[2m     [90m    |[39m         [31m[1m^[22m[2m[39m[22m
+[2m     [90m 23 |[39m     [90m// eslint-disable-next-line @typescript-eslint/no-empty-function[39m[22m
+[2m     [90m 24 |[39m     [36mconst[39m noOpLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m {}[22m
+[2m     [90m 25 |[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.errorWriter [as error] ([22m[2msrc/logger.ts[2m:22:9)[22m[2m[22m
+[2m      [2mat EventQueue.error [as flushEvents] ([22m[2msrc/EventQueue.ts[2m:137:36)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      [DevCycle]: Config fetch returned no config undefined[39m
+[2m[22m
+[2m    [0m [90m 20 |[39m     [36mconst[39m writeLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m logWriter(prefix [33m+[39m message)[22m
+[2m     [90m 21 |[39m     [36mconst[39m writeError [33m=[39m (message[33m:[39m string[33m,[39m error[33m:[39m unknown)[33m:[39m [36mvoid[39m [33m=>[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 22 |[39m         errorWriter(prefix [33m+[39m message[33m,[39m error)[22m
+[2m     [90m    |[39m         [31m[1m^[22m[2m[39m[22m
+[2m     [90m 23 |[39m     [90m// eslint-disable-next-line @typescript-eslint/no-empty-function[39m[22m
+[2m     [90m 24 |[39m     [36mconst[39m noOpLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m {}[22m
+[2m     [90m 25 |[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.errorWriter [as error] ([22m[2msrc/logger.ts[2m:22:9)[22m[2m[22m
+[2m      [2mat error ([22m[2msrc/Client.ts[2m:580:41)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      [DevCycle]: Config fetch returned no config undefined[39m
+[2m[22m
+[2m    [0m [90m 20 |[39m     [36mconst[39m writeLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m logWriter(prefix [33m+[39m message)[22m
+[2m     [90m 21 |[39m     [36mconst[39m writeError [33m=[39m (message[33m:[39m string[33m,[39m error[33m:[39m unknown)[33m:[39m [36mvoid[39m [33m=>[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 22 |[39m         errorWriter(prefix [33m+[39m message[33m,[39m error)[22m
+[2m     [90m    |[39m         [31m[1m^[22m[2m[39m[22m
+[2m     [90m 23 |[39m     [90m// eslint-disable-next-line @typescript-eslint/no-empty-function[39m[22m
+[2m     [90m 24 |[39m     [36mconst[39m noOpLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m {}[22m
+[2m     [90m 25 |[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.errorWriter [as error] ([22m[2msrc/logger.ts[2m:22:9)[22m[2m[22m
+[2m      [2mat error ([22m[2msrc/Client.ts[2m:580:41)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      [DevCycle]: Client is closing, cannot track new events. undefined[39m
+[2m[22m
+[2m    [0m [90m 20 |[39m     [36mconst[39m writeLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m logWriter(prefix [33m+[39m message)[22m
+[2m     [90m 21 |[39m     [36mconst[39m writeError [33m=[39m (message[33m:[39m string[33m,[39m error[33m:[39m unknown)[33m:[39m [36mvoid[39m [33m=>[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 22 |[39m         errorWriter(prefix [33m+[39m message[33m,[39m error)[22m
+[2m     [90m    |[39m         [31m[1m^[22m[2m[39m[22m
+[2m     [90m 23 |[39m     [90m// eslint-disable-next-line @typescript-eslint/no-empty-function[39m[22m
+[2m     [90m 24 |[39m     [36mconst[39m noOpLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m {}[22m
+[2m     [90m 25 |[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.errorWriter [as error] ([22m[2msrc/logger.ts[2m:22:9)[22m[2m[22m
+[2m      [2mat DevCycleClient.error ([22m[2msrc/Client.ts[2m:685:25)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36m__tests__/Client.spec.js[39m[0m[2m:1183:20)[22m[2m[22m
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-client-sdk [39m[27m[0m [2msdk/js/__tests__/[22m[1mRequestEvent.spec.js[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-client-sdk [39m[27m[0m [2msdk/js/__tests__/[22m[1mUser.spec.js[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-client-sdk [39m[27m[0m [2msdk/js/__tests__/[22m[1mVariable.spec.ts[22m
+  [1m● [22mConsole
+
+    [2mconsole.log[22m
+      undefined
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36m__tests__/Variable.spec.ts[39m[0m[2m:84:17)[22m[2m[22m
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-client-sdk [39m[27m[0m [2msdk/js/__tests__/[22m[1mindex.spec.js[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-client-sdk [39m[27m[0m [2msdk/js/__tests__/[22m[1mindex.test.ts[22m
+[33mA worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.[39m
+
+[1mTest Suites: [22m[1m[32m13 passed[39m[22m, 13 total
+[1mTests:       [22m[1m[32m190 passed[39m[22m, 190 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        29.649 s
+[2mRan all test suites[22m[2m.[22m

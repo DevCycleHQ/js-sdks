@@ -1,0 +1,18 @@
+Compiling TypeScript files for project "shared-bucketing-test-data"...
+Done compiling TypeScript files for project "shared-bucketing-test-data".
+[1m[31mDebugger listening on ws://localhost:9229/df68b598-2929-474b-a8cc-b0a5e3b6dda8[39m[22m
+[1m[31mDebugger listening on ws://localhost:9229/df68b598-2929-474b-a8cc-b0a5e3b6dda8[39m[22m
+[1m[31mFor help, see: https://nodejs.org/en/docs/inspector[39m[22m
+[1m[31m[39m[22m
+[1m[31mError: Cannot find module '/workspace/dist/lib/shared/bucketing-test-data/src/main.js' imported from /workspace/node_modules/.store/@nx-js-virtual-df99e860bd/package/src/executors/node/node-with-require-overrides.js[39m[22m
+[1m[31m    at finalizeResolution (node:internal/modules/esm/resolve:275:11)[39m[22m
+[1m[31m    at moduleResolve (node:internal/modules/esm/resolve:860:10)[39m[22m
+[1m[31m    at defaultResolve (node:internal/modules/esm/resolve:984:11)[39m[22m
+[1m[31m    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:780:12)[39m[22m
+[1m[31m    at ModuleLoader.#cachedDefaultResolve (node:internal/modules/esm/loader:704:25)[39m[22m
+[1m[31m    at ModuleLoader.resolve (node:internal/modules/esm/loader:687:38)[39m[22m
+[1m[31m    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:305:38)[39m[22m
+[1m[31m    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:643:36)[39m[22m
+[1m[31m    at TracingChannel.tracePromise (node:diagnostics_channel:344:14)[39m[22m
+[1m[31m    at ModuleLoader.import (node:internal/modules/esm/loader:642:21)[39m[22m
+[1m[31m[39m[22m

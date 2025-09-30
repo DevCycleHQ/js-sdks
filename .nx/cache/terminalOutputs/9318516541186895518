@@ -1,0 +1,40 @@
+
+Linting "react"...
+[0m[0m
+[0m[4m/workspace/sdk/react/__mocks__/@devcycle/js-client-sdk.ts[24m[0m
+[0m  [2m1:14[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m6:25[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/react/src/DevCycleProvider.tsx[24m[0m
+[0m  [2m33:12[22m  [33mwarning[39m  '_' is assigned a value but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/react/src/RenderIfEnabled.tsx[24m[0m
+[0m  [2m66:16[22m  [33mwarning[39m  Fragments should contain more than one child - otherwise, there’s no need for a Fragment at all  [2mreact/jsx-no-useless-fragment[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/react/src/SwapComponents.test.tsx[24m[0m
+[0m  [2m30:7[22m   [33mwarning[39m  'MismatchPropsError' is assigned a value but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m32:11[22m  [33mwarning[39m  'Swapped' is assigned a value but never used             [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m36:7[22m   [33mwarning[39m  'PropTypeError' is assigned a value but never used       [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/react/src/SwapComponents.tsx[24m[0m
+[0m  [2m6:56[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/react/src/useVariable.ts[24m[0m
+[0m  [2m15:12[22m  [33mwarning[39m  '_' is assigned a value but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/react/src/useVariableValue.test.tsx[24m[0m
+[0m  [2m41:15[22m  [33mwarning[39m  '_testString' is assigned a value but never used   [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m43:15[22m  [33mwarning[39m  '_testNumber' is assigned a value but never used   [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m53:15[22m  [33mwarning[39m  '_testString' is assigned a value but never used   [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m54:15[22m  [33mwarning[39m  '_testNumber' is assigned a value but never used   [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m64:15[22m  [33mwarning[39m  '_testString' is assigned a value but never used   [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m66:15[22m  [33mwarning[39m  '_testNumber' is assigned a value but never used   [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m67:15[22m  [33mwarning[39m  '_testBoolean' is assigned a value but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m78:15[22m  [33mwarning[39m  '_testString' is assigned a value but never used   [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m80:15[22m  [33mwarning[39m  '_testNumber' is assigned a value but never used   [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m81:15[22m  [33mwarning[39m  '_testJSON' is assigned a value but never used     [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[33m[1m✖ 19 problems (0 errors, 19 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+✖ 19 problems (0 errors, 19 warnings)
+

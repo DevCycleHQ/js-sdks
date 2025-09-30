@@ -1,0 +1,14 @@
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m server-request [39m[27m[0m [2mlib/shared/server-request/__tests__/[22m[1mrequest.spec.ts[22m ([0m[1m[41m5.023 s[49m[22m[0m)
+  request.ts Unit Tests
+    get
+      [32m✓[39m [2mshould make GET request (5 ms)[22m
+      [32m✓[39m [2mshould fail on GET request for 500 error (18 ms)[22m
+    post
+      [32m✓[39m [2mshould make POST request (6 ms)[22m
+      [32m✓[39m [2mshould fail on POST request for 500 error (1 ms)[22m
+
+[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+[1mTests:       [22m[1m[32m4 passed[39m[22m, 4 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        6.297 s
+[2mRan all test suites[22m[2m.[22m

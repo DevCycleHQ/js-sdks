@@ -1,0 +1,83 @@
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-cloud-server-sdk [39m[27m[0m [2msdk/js-cloud-server/__tests__/models/[22m[1mpopulatedUser.spec.ts[22m ([0m[1m[41m13.715 s[49m[22m[0m)
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-cloud-server-sdk [39m[27m[0m [2msdk/js-cloud-server/__tests__/[22m[1mevalHooksRunner.test.ts[22m ([0m[1m[41m14.429 s[49m[22m[0m)
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-cloud-server-sdk [39m[27m[0m [2msdk/js-cloud-server/__tests__/utils/[22m[1mparamUtils.spec.ts[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-cloud-server-sdk [39m[27m[0m [2msdk/js-cloud-server/__tests__/utils/[22m[1mlogger.spec.ts[22m
+  [1m● [22mConsole
+
+    [2mconsole.log[22m
+      [DevCycle]: error message
+[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/jest-mock-npm-29.7.0-22c4769d06/package/build/index.js[2m:794:25[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: error message
+[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/jest-mock-npm-29.7.0-22c4769d06/package/build/index.js[2m:794:25[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: debug message
+[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/jest-mock-npm-29.7.0-22c4769d06/package/build/index.js[2m:794:25[22m[2m[22m
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-cloud-server-sdk [39m[27m[0m [2msdk/js-cloud-server/__tests__/models/[22m[1muser.spec.ts[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-cloud-server-sdk [39m[27m[0m [2msdk/js-cloud-server/__tests__/models/[22m[1mvariable.spec.ts[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-cloud-server-sdk [39m[27m[0m [2msdk/js-cloud-server/__tests__/[22m[1minitialize.spec.ts[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m js-cloud-server-sdk [39m[27m[0m [2msdk/js-cloud-server/__tests__/[22m[1mcloudClient.spec.ts[22m ([0m[1m[41m18.031 s[49m[22m[0m)
+  [1m● [22mConsole
+
+    [2mconsole.log[22m
+      [DevCycle]: Type mismatch for variable test-key. Expected String, got Boolean
+[2m[22m
+[2m      [2mat Object.logWriter [as error] ([22m[2msrc/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Type mismatch for variable test-key. Expected String, got Boolean
+[2m[22m
+[2m      [2mat Object.logWriter [as error] ([22m[2msrc/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Request to get variable: test-key failed with response message: Something went wrong
+[2m[22m
+[2m      [2mat Object.logWriter [as error] ([22m[2msrc/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Request to get variable: test-key failed with response message: Something went wrong
+[2m[22m
+[2m      [2mat Object.logWriter [as error] ([22m[2msrc/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Request to get all variable failed with response message: Something went wrong
+[2m[22m
+[2m      [2mat Object.logWriter [as error] ([22m[2msrc/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Request to get all features failed with response message: Something went wrong
+[2m[22m
+[2m      [2mat Object.logWriter [as error] ([22m[2msrc/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Request to get variable: test-key failed with response message: Something went wrong
+[2m[22m
+[2m      [2mat Object.logWriter [as error] ([22m[2msrc/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Request to get variable: test-key failed with response message: Something went wrong
+[2m[22m
+[2m      [2mat Object.logWriter [as error] ([22m[2msrc/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Request to get all variable failed with response message: Something went wrong
+[2m[22m
+[2m      [2mat Object.logWriter [as error] ([22m[2msrc/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Request to get all features failed with response message: Something went wrong
+[2m[22m
+[2m      [2mat Object.logWriter [as error] ([22m[2msrc/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+
+[1mTest Suites: [22m[1m[32m8 passed[39m[22m, 8 total
+[1mTests:       [22m[1m[32m71 passed[39m[22m, 71 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        19.62 s
+[2mRan all test suites[22m[2m.[22m

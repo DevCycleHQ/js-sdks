@@ -1,0 +1,8 @@
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m config-manager [39m[27m[0m [2mlib/shared/config-manager/__tests__/[22m[1mrequest.spec.ts[22m ([0m[1m[41m11.075 s[49m[22m[0m)
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m config-manager [39m[27m[0m [2mlib/shared/config-manager/__tests__/[22m[1menvironmentConfigManager.spec.ts[22m ([0m[1m[41m12.473 s[49m[22m[0m)
+
+[1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 total
+[1mTests:       [22m[1m[33m1 skipped[39m[22m, [1m[32m20 passed[39m[22m, 21 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        13.82 s
+[2mRan all test suites[22m[2m.[22m

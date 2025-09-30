@@ -1,0 +1,23 @@
+
+Linting "nextjs"...
+[0m[0m
+[0m[4m/workspace/sdk/nextjs/src/client/internal/InternalDevCycleClientsideProvider.tsx[24m[0m
+[0m  [2m2:32[22m  [33mwarning[39m  'useEffect' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/nextjs/src/client/internal/useRerenderOnVariableChange.ts[24m[0m
+[0m  [2m5:12[22m  [33mwarning[39m  '_' is assigned a value but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/nextjs/src/client/renderIfEnabled.tsx[24m[0m
+[0m  [2m6:68[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/nextjs/src/common/serializeUser.ts[24m[0m
+[0m  [2m3:50[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m3:56[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/nextjs/src/pages/bucketing.ts[24m[0m
+[0m  [2m47:13[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[33m[1m✖ 6 problems (0 errors, 6 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+✖ 6 problems (0 errors, 6 warnings)
+

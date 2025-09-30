@@ -1,0 +1,20 @@
+
+Linting "config-manager"...
+[0m[0m
+[0m[4m/workspace/lib/shared/config-manager/__tests__/environmentConfigManager.spec.ts[24m[0m
+[0m  [2m63:14[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/config-manager/__tests__/request.spec.ts[24m[0m
+[0m  [2m27:54[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m65:23[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/config-manager/src/index.ts[24m[0m
+[0m   [2m16:72[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m17:49[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m39:31[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m219:34[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[33m[1m✖ 7 problems (0 errors, 7 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+✖ 7 problems (0 errors, 7 warnings)
+

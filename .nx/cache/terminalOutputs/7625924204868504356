@@ -1,0 +1,35 @@
+
+Linting "nodejs"...
+[0m[0m
+[0m[4m/workspace/sdk/nodejs/__tests__/client.spec.ts[24m[0m
+[0m   [2m42:27[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m45:24[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m45:61[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m189:24[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/nodejs/__tests__/evalHooksRunner.test.ts[24m[0m
+[0m  [2m148:56[22m  [33mwarning[39m  'context' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m215:56[22m  [33mwarning[39m  'context' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/nodejs/__tests__/eventQueue.test.ts[24m[0m
+[0m  [2m58:37[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/nodejs/__tests__/models/requestEvent.spec.ts[24m[0m
+[0m  [2m48:46[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m51:46[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m57:46[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m60:46[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/nodejs/src/clientUser.ts[24m[0m
+[0m  [2m22:12[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/nodejs/src/hooks/EvalHooksRunner.ts[24m[0m
+[0m  [2m142:7[22m  [33mwarning[39m  'HooksRunnerError' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/nodejs/src/open-feature/DevCycleProvider.ts[24m[0m
+[0m  [2m104:22[22m  [33mwarning[39m  'context' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[33m[1m✖ 14 problems (0 errors, 14 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+✖ 14 problems (0 errors, 14 warnings)
+

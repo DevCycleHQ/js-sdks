@@ -1,0 +1,157 @@
+[33m[1m[1m●[22m[1m Validation Warning[22m:[39m
+[33m[39m
+[33m  Unknown option [1m"collectCoverage"[22m with value [1mfalse[22m was found.[39m
+[33m  This is probably a typing mistake. Fixing it will remove this message.[39m
+[33m[39m
+[33m  [1mConfiguration Documentation:[22m[39m
+[33m  https://jestjs.io/docs/configuration[39m
+[33m[39m
+[33m[1m[1m●[22m[1m Validation Warning[22m:[39m
+[33m[39m
+[33m  Unknown option [1m"reporters"[22m with value [1m["default", ["/workspace/node_modules/.store/jest-junit-npm-6.4.0-d2d9c589ee/package/index.js", {"outputDirectory": "test-results", "outputName": "bucketing-lib-as.xml"}]][22m was found.[39m
+[33m  This is probably a typing mistake. Fixing it will remove this message.[39m
+[33m[39m
+[33m  [1mConfiguration Documentation:[22m[39m
+[33m  https://jestjs.io/docs/configuration[39m
+[33m[39m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m bucketing-lib-as [39m[27m[0m [2mlib/shared/bucketing-assembly-script/__tests__/bucketing/[22m[1msegmentation.test.ts[22m ([0m[1m[41m17.506 s[49m[22m[0m)
+  [1m● [22mConsole
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: String value: myNewFilter, for key: type does not match a valid string.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: Invalid filter data {"type":"myNewFilter"}.
+              To leverage this new filter definition, please update to the latest version of the DevCycle SDK.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: String value: xylophone, for key: operator does not match a valid string.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      
+                  [DevCycle] Warning: Invalid audience referenced by audienceMatch filter.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: String value: myNewFilter, for key: subType does not match a valid string.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: Invalid filter data {"type":"user","subType":"myNewFilter","comparator":"=","values":[]}.
+              To leverage this new filter definition, please update to the latest version of the DevCycle SDK.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: String value: wowNewComparator, for key: comparator does not match a valid string.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: String value: wowNewComparator, for key: comparator does not match a valid string.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: Invalid filter data {"type":"user","subType":"email","comparator":"wowNewComparator","values":[]}.
+              To leverage this new filter definition, please update to the latest version of the DevCycle SDK.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: String value: contains, for key: comparator does not match a valid string.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: Invalid filter data {"type":"user","subType":"email","comparator":"contains","values":[""]}.
+              To leverage this new filter definition, please update to the latest version of the DevCycle SDK.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: Filter values must be all of the same type. Expected: string, got: 0
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: Filter values must be all of the same type. Expected: bool, got: test
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: Filter values must be all of the same type. Expected: number, got: test
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m bucketing-lib-as [39m[27m[0m [2mlib/shared/bucketing-assembly-script/__tests__/types/[22m[1mprotobuf.test.ts[22m ([0m[1m[41m11.692 s[49m[22m[0m)
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m bucketing-lib-as [39m[27m[0m [2mlib/shared/bucketing-assembly-script/__tests__/eventQueue/[22m[1meventQueueManager.test.ts[22m ([0m[1m[41m68.132 s[49m[22m[0m)
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m bucketing-lib-as [39m[27m[0m [2mlib/shared/bucketing-assembly-script/__tests__/types/[22m[1mconfigBodyV2.test.ts[22m ([0m[1m[41m67.826 s[49m[22m[0m)
+  [1m● [22mConsole
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: String value: xylophone, for key: operator does not match a valid string.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: String value: subtype, for key: subType does not match a valid string.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: String value: xylophone, for key: operator does not match a valid string.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: String value: subtype, for key: subType does not match a valid string.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m bucketing-lib-as [39m[27m[0m [2mlib/shared/bucketing-assembly-script/__tests__/types/[22m[1mconfigBody.test.ts[22m ([0m[1m[41m33.723 s[49m[22m[0m)
+  [1m● [22mConsole
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: String value: xylophone, for key: operator does not match a valid string.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: String value: subtype, for key: subType does not match a valid string.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: String value: xylophone, for key: operator does not match a valid string.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle] Warning: String value: subtype, for key: subType does not match a valid string.
+[2m[22m
+[2m      [2mat console.log ([22m[2mbuild/bucketing-lib.debug.js[2m:22:17)[22m[2m[22m
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m bucketing-lib-as [39m[27m[0m [2mlib/shared/bucketing-assembly-script/__tests__/helpers/[22m[1marrayHelpers.test.ts[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m bucketing-lib-as [39m[27m[0m [2mlib/shared/bucketing-assembly-script/__tests__/types/[22m[1mdvcUser.test.ts[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m bucketing-lib-as [39m[27m[0m [2mlib/shared/bucketing-assembly-script/__tests__/types/[22m[1mdvcEvent.test.ts[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m bucketing-lib-as [39m[27m[0m [2mlib/shared/bucketing-assembly-script/__tests__/helpers/[22m[1mmurmurhash.test.ts[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m bucketing-lib-as [39m[27m[0m [2mlib/shared/bucketing-assembly-script/__tests__/types/[22m[1mplatformData.test.ts[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m bucketing-lib-as [39m[27m[0m [2mlib/shared/bucketing-assembly-script/__tests__/types/[22m[1meventQueueOptions.test.ts[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m bucketing-lib-as [39m[27m[0m [2mlib/shared/bucketing-assembly-script/__tests__/[22m[1mvariable.test.ts[22m ([0m[1m[41m57.402 s[49m[22m[0m)
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m bucketing-lib-as [39m[27m[0m [2mlib/shared/bucketing-assembly-script/__tests__/bucketing/[22m[1mbucketing.test.ts[22m ([0m[1m[41m193.641 s[49m[22m[0m)
+[33mA worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.[39m
+
+[1mTest Suites: [22m[1m[32m13 passed[39m[22m, 13 total
+[1mTests:       [22m[1m[32m333 passed[39m[22m, 333 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        210.527 s
+[2mRan all test suites[22m[2m.[22m
