@@ -44,7 +44,7 @@ jobs:
             - name: Set Secrets
               uses: DevCycleHQ/aws-secrets-action@main
               with:
-                secrets_map: '{}'
+                secrets_map: '{}' # Using OIDC; no static NPM token required
                 aws_account_id: '134377926370'
 
             - name: Configure git
