@@ -17,5 +17,9 @@
         "iso-639-1": "^2.1.15",
         "lodash": "^4.17.21",
         "reflect-metadata": "^0.1.14"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/DevCycleHQ/js-sdks.git"
     }
 }
