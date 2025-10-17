@@ -64,5 +64,5 @@
 
 -   Use Aviator CLI (`av`) for managing stacked branches: `av branch chore-fix-invalid-input`
 -   Sync and push changes: `av sync --push=yes`
--   Create PR: `av pr --title "<title>" --body "<body>"` 
+-   Create PR: `av pr --title "<title>" --body "<body>"`
     -   title follows Conventional Commits, body uses markdown/bullets, `av pr` will push the branch
