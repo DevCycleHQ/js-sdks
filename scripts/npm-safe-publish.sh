@@ -71,6 +71,11 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
   fi
 
   if [[ -z "$DRY_RUN" ]]; then
+    # Preflight authentication check
+    if ! npm whoami >/dev/null 2>&1; then
+      echo "::error::Not authenticated to npm (missing OIDC/token). Aborting."
+      exit 1
+    fi
     echo "::info::Publishing $PACKAGE@$NPM_LS to NPM."
     npm publish --access=public
   else
