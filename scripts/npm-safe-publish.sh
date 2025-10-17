@@ -77,7 +77,7 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
       exit 1
     fi
     echo "::info::Publishing $PACKAGE@$NPM_LS to NPM."
-    npm publish --access=public
+    npm publish --access=public --provenance
   else
     echo "::warning::[DRY RUN] Not publishing $PACKAGE@$NPM_LS to NPM."
   fi
