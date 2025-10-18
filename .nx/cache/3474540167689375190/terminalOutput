@@ -1,0 +1,17 @@
+
+Linting "debugger"...
+[0m[0m
+[0m[4m/workspace/lib/web-debugger/src/initializeDevCycleDebugger.ts[24m[0m
+[0m   [2m13:28[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m124:34[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m139:35[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m151:35[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m245:13[22m  [33mwarning[39m  Forbidden non-null assertion              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m246:13[22m  [33mwarning[39m  Forbidden non-null assertion              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m247:13[22m  [33mwarning[39m  Forbidden non-null assertion              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m295:18[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[33m[1m✖ 8 problems (0 errors, 8 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+✖ 8 problems (0 errors, 8 warnings)
+

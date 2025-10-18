@@ -1,0 +1,2 @@
+__tests__/eventQueue.test.ts(15,22): error TS2307: Cannot find module '@devcycle/bucketing-test-data/json-data/testData.json' or its corresponding type declarations.
+Warning: run-commands command "yarn run -T tsc -b --incremental" exited with non-zero status code

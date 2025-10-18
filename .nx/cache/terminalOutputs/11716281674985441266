@@ -1,0 +1,17 @@
+
+Linting "e2e-nextjs-app-router"...
+Pages directory cannot be found at /workspace/pages or /workspace/src/pages. If using a custom path, please configure with the `no-html-link-for-pages` rule in your eslint config file.
+[0m[0m
+[0m[4m/workspace/e2e/nextjs/app-router/app/dvcVariableTypes.ts[24m[0m
+[0m  [2m1:6[22m  [33mwarning[39m  'DVCJSON' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/workspace/e2e/nextjs/app-router/tests/app-router.spec.ts[24m[0m
+[0m  [2m144:1[22m  [33mwarning[39m  This line has a length of 137. Maximum allowed is 120  [2mmax-len[22m[0m
+[0m  [2m149:1[22m  [33mwarning[39m  This line has a length of 139. Maximum allowed is 120  [2mmax-len[22m[0m
+[0m  [2m155:1[22m  [33mwarning[39m  This line has a length of 137. Maximum allowed is 120  [2mmax-len[22m[0m
+[0m  [2m160:1[22m  [33mwarning[39m  This line has a length of 139. Maximum allowed is 120  [2mmax-len[22m[0m
+[0m[0m
+[0m[33m[1m✖ 5 problems (0 errors, 5 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+✖ 5 problems (0 errors, 5 warnings)
+

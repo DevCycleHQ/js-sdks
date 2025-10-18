@@ -1,0 +1,41 @@
+
+Linting "js-cloud-server-sdk"...
+[0m[0m
+[0m[4m/workspace/sdk/js-cloud-server/__tests__/models/user.spec.ts[24m[0m
+[0m   [2m7:47[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m10:47[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m13:47[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m20:42[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/js-cloud-server/__tests__/models/variable.spec.ts[24m[0m
+[0m  [2m28:42[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m34:42[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/js-cloud-server/__tests__/utils/paramUtils.spec.ts[24m[0m
+[0m  [2m17:48[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m49:45[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/js-cloud-server/src/__mocks__/handlers.ts[24m[0m
+[0m   [2m17:56[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m62:56[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m115:56[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m172:53[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/js-cloud-server/src/cloudClient.ts[24m[0m
+[0m   [2m16:5[22m   [33mwarning[39m  'DevCycleServerSDKOptions' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m148:37[22m  [33mwarning[39m  Unexpected any. Specify a different type              [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m177:33[22m  [33mwarning[39m  Unexpected any. Specify a different type              [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m225:29[22m  [33mwarning[39m  Unexpected any. Specify a different type              [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m252:29[22m  [33mwarning[39m  Unexpected any. Specify a different type              [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m282:29[22m  [33mwarning[39m  Unexpected any. Specify a different type              [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/js-cloud-server/src/index.ts[24m[0m
+[0m  [2m6:10[22m  [33mwarning[39m  'DVCVariableValue' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/workspace/sdk/js-cloud-server/src/utils/logger.ts[24m[0m
+[0m  [2m21:22[22m  [33mwarning[39m  'message' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[33m[1m✖ 20 problems (0 errors, 20 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+✖ 20 problems (0 errors, 20 warnings)
+

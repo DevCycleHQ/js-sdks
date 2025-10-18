@@ -1,0 +1,239 @@
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m react-lib [39m[27m[0m [2msdk/react/src/[22m[1mRenderIfEnabled.test.tsx[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m react-lib [39m[27m[0m [2msdk/react/src/[22m[1museVariableValue.test.tsx[22m ([0m[1m[41m10.013 s[49m[22m[0m)
+  [1m● [22mConsole
+
+    [2m[31mconsole.error[39m[22m
+[31m      Warning: An update to DevCycleProvider inside a test was not wrapped in act(...).[39m
+[31m      [39m
+[31m      When testing, code that causes React state updates should be wrapped into act(...):[39m
+[31m      [39m
+[31m      act(() => {[39m
+[31m        /* fire events that update state */[39m
+[31m      });[39m
+[31m      /* assert on the output */[39m
+[31m      [39m
+[31m      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act[39m
+[31m          at config (/workspace/sdk/react/src/DevCycleProvider.tsx:19:13)[39m
+[31m          at children (/workspace/sdk/react/src/useVariableValue.test.tsx:14:28)[39m
+[2m[22m
+[2m    [0m [90m 51 |[39m             [33m.[39monClientInitialized()[22m
+[2m     [90m 52 |[39m             [33m.[39mthen(() [33m=>[39m {[22m
+[2m    [31m[1m>[22m[2m[39m[90m 53 |[39m                 setIsInitialized([36mtrue[39m)[22m
+[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
+[2m     [90m 54 |[39m             })[22m
+[2m     [90m 55 |[39m             [33m.[39m[36mcatch[39m(() [33m=>[39m {[22m
+[2m     [90m 56 |[39m                 [90m// set to true to unblock app load[39m[0m[22m
+[2m[22m
+[2m      [2mat printWarning ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:86:30)[22m[2m[22m
+[2m      [2mat error ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:60:7)[22m[2m[22m
+[2m      [2mat warnIfUpdatesNotWrappedWithActDEV ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:27589:9)[22m[2m[22m
+[2m      [2mat scheduleUpdateOnFiber ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:25508:5)[22m[2m[22m
+[2m      [2mat dispatchSetState ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:17527:7)[22m[2m[22m
+[2m      [2mat setIsInitialized ([22m[2msrc/DevCycleProvider.tsx[2m:53:17)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Warning: An update to DevCycleProvider inside a test was not wrapped in act(...).[39m
+[31m      [39m
+[31m      When testing, code that causes React state updates should be wrapped into act(...):[39m
+[31m      [39m
+[31m      act(() => {[39m
+[31m        /* fire events that update state */[39m
+[31m      });[39m
+[31m      /* assert on the output */[39m
+[31m      [39m
+[31m      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act[39m
+[31m          at config (/workspace/sdk/react/src/DevCycleProvider.tsx:19:13)[39m
+[31m          at children (/workspace/sdk/react/src/useVariableValue.test.tsx:14:28)[39m
+[2m[22m
+[2m    [0m [90m 51 |[39m             [33m.[39monClientInitialized()[22m
+[2m     [90m 52 |[39m             [33m.[39mthen(() [33m=>[39m {[22m
+[2m    [31m[1m>[22m[2m[39m[90m 53 |[39m                 setIsInitialized([36mtrue[39m)[22m
+[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
+[2m     [90m 54 |[39m             })[22m
+[2m     [90m 55 |[39m             [33m.[39m[36mcatch[39m(() [33m=>[39m {[22m
+[2m     [90m 56 |[39m                 [90m// set to true to unblock app load[39m[0m[22m
+[2m[22m
+[2m      [2mat printWarning ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:86:30)[22m[2m[22m
+[2m      [2mat error ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:60:7)[22m[2m[22m
+[2m      [2mat warnIfUpdatesNotWrappedWithActDEV ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:27589:9)[22m[2m[22m
+[2m      [2mat scheduleUpdateOnFiber ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:25508:5)[22m[2m[22m
+[2m      [2mat dispatchSetState ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:17527:7)[22m[2m[22m
+[2m      [2mat setIsInitialized ([22m[2msrc/DevCycleProvider.tsx[2m:53:17)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Warning: An update to DevCycleProvider inside a test was not wrapped in act(...).[39m
+[31m      [39m
+[31m      When testing, code that causes React state updates should be wrapped into act(...):[39m
+[31m      [39m
+[31m      act(() => {[39m
+[31m        /* fire events that update state */[39m
+[31m      });[39m
+[31m      /* assert on the output */[39m
+[31m      [39m
+[31m      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act[39m
+[31m          at config (/workspace/sdk/react/src/DevCycleProvider.tsx:19:13)[39m
+[31m          at children (/workspace/sdk/react/src/useVariableValue.test.tsx:14:28)[39m
+[2m[22m
+[2m    [0m [90m 51 |[39m             [33m.[39monClientInitialized()[22m
+[2m     [90m 52 |[39m             [33m.[39mthen(() [33m=>[39m {[22m
+[2m    [31m[1m>[22m[2m[39m[90m 53 |[39m                 setIsInitialized([36mtrue[39m)[22m
+[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
+[2m     [90m 54 |[39m             })[22m
+[2m     [90m 55 |[39m             [33m.[39m[36mcatch[39m(() [33m=>[39m {[22m
+[2m     [90m 56 |[39m                 [90m// set to true to unblock app load[39m[0m[22m
+[2m[22m
+[2m      [2mat printWarning ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:86:30)[22m[2m[22m
+[2m      [2mat error ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:60:7)[22m[2m[22m
+[2m      [2mat warnIfUpdatesNotWrappedWithActDEV ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:27589:9)[22m[2m[22m
+[2m      [2mat scheduleUpdateOnFiber ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:25508:5)[22m[2m[22m
+[2m      [2mat dispatchSetState ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:17527:7)[22m[2m[22m
+[2m      [2mat setIsInitialized ([22m[2msrc/DevCycleProvider.tsx[2m:53:17)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Warning: An update to DevCycleProvider inside a test was not wrapped in act(...).[39m
+[31m      [39m
+[31m      When testing, code that causes React state updates should be wrapped into act(...):[39m
+[31m      [39m
+[31m      act(() => {[39m
+[31m        /* fire events that update state */[39m
+[31m      });[39m
+[31m      /* assert on the output */[39m
+[31m      [39m
+[31m      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act[39m
+[31m          at config (/workspace/sdk/react/src/DevCycleProvider.tsx:19:13)[39m
+[31m          at children (/workspace/sdk/react/src/useVariableValue.test.tsx:14:28)[39m
+[2m[22m
+[2m    [0m [90m 51 |[39m             [33m.[39monClientInitialized()[22m
+[2m     [90m 52 |[39m             [33m.[39mthen(() [33m=>[39m {[22m
+[2m    [31m[1m>[22m[2m[39m[90m 53 |[39m                 setIsInitialized([36mtrue[39m)[22m
+[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
+[2m     [90m 54 |[39m             })[22m
+[2m     [90m 55 |[39m             [33m.[39m[36mcatch[39m(() [33m=>[39m {[22m
+[2m     [90m 56 |[39m                 [90m// set to true to unblock app load[39m[0m[22m
+[2m[22m
+[2m      [2mat printWarning ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:86:30)[22m[2m[22m
+[2m      [2mat error ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:60:7)[22m[2m[22m
+[2m      [2mat warnIfUpdatesNotWrappedWithActDEV ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:27589:9)[22m[2m[22m
+[2m      [2mat scheduleUpdateOnFiber ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:25508:5)[22m[2m[22m
+[2m      [2mat dispatchSetState ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:17527:7)[22m[2m[22m
+[2m      [2mat setIsInitialized ([22m[2msrc/DevCycleProvider.tsx[2m:53:17)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Warning: An update to DevCycleProvider inside a test was not wrapped in act(...).[39m
+[31m      [39m
+[31m      When testing, code that causes React state updates should be wrapped into act(...):[39m
+[31m      [39m
+[31m      act(() => {[39m
+[31m        /* fire events that update state */[39m
+[31m      });[39m
+[31m      /* assert on the output */[39m
+[31m      [39m
+[31m      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act[39m
+[31m          at config (/workspace/sdk/react/src/DevCycleProvider.tsx:19:13)[39m
+[31m          at children (/workspace/sdk/react/src/useVariableValue.test.tsx:14:28)[39m
+[2m[22m
+[2m    [0m [90m 51 |[39m             [33m.[39monClientInitialized()[22m
+[2m     [90m 52 |[39m             [33m.[39mthen(() [33m=>[39m {[22m
+[2m    [31m[1m>[22m[2m[39m[90m 53 |[39m                 setIsInitialized([36mtrue[39m)[22m
+[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
+[2m     [90m 54 |[39m             })[22m
+[2m     [90m 55 |[39m             [33m.[39m[36mcatch[39m(() [33m=>[39m {[22m
+[2m     [90m 56 |[39m                 [90m// set to true to unblock app load[39m[0m[22m
+[2m[22m
+[2m      [2mat printWarning ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:86:30)[22m[2m[22m
+[2m      [2mat error ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:60:7)[22m[2m[22m
+[2m      [2mat warnIfUpdatesNotWrappedWithActDEV ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:27589:9)[22m[2m[22m
+[2m      [2mat scheduleUpdateOnFiber ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:25508:5)[22m[2m[22m
+[2m      [2mat dispatchSetState ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:17527:7)[22m[2m[22m
+[2m      [2mat setIsInitialized ([22m[2msrc/DevCycleProvider.tsx[2m:53:17)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Warning: An update to DevCycleProvider inside a test was not wrapped in act(...).[39m
+[31m      [39m
+[31m      When testing, code that causes React state updates should be wrapped into act(...):[39m
+[31m      [39m
+[31m      act(() => {[39m
+[31m        /* fire events that update state */[39m
+[31m      });[39m
+[31m      /* assert on the output */[39m
+[31m      [39m
+[31m      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act[39m
+[31m          at config (/workspace/sdk/react/src/DevCycleProvider.tsx:19:13)[39m
+[31m          at children (/workspace/sdk/react/src/useVariableValue.test.tsx:14:28)[39m
+[2m[22m
+[2m    [0m [90m 51 |[39m             [33m.[39monClientInitialized()[22m
+[2m     [90m 52 |[39m             [33m.[39mthen(() [33m=>[39m {[22m
+[2m    [31m[1m>[22m[2m[39m[90m 53 |[39m                 setIsInitialized([36mtrue[39m)[22m
+[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
+[2m     [90m 54 |[39m             })[22m
+[2m     [90m 55 |[39m             [33m.[39m[36mcatch[39m(() [33m=>[39m {[22m
+[2m     [90m 56 |[39m                 [90m// set to true to unblock app load[39m[0m[22m
+[2m[22m
+[2m      [2mat printWarning ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:86:30)[22m[2m[22m
+[2m      [2mat error ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:60:7)[22m[2m[22m
+[2m      [2mat warnIfUpdatesNotWrappedWithActDEV ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:27589:9)[22m[2m[22m
+[2m      [2mat scheduleUpdateOnFiber ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:25508:5)[22m[2m[22m
+[2m      [2mat dispatchSetState ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:17527:7)[22m[2m[22m
+[2m      [2mat setIsInitialized ([22m[2msrc/DevCycleProvider.tsx[2m:53:17)[22m[2m[22m
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m react-lib [39m[27m[0m [2msdk/react/src/[22m[1museVariableValue.integration.test.tsx[22m ([0m[1m[41m7.725 s[49m[22m[0m)
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m react-lib [39m[27m[0m [2msdk/react/src/[22m[1mSwapComponents.test.tsx[22m
+
+  [1m● [22m [31m[1mCannot log after tests are done.[22m Did you forget to wait for something async in your test?[39m
+    Attempted to log "[DevCycle]: failed to flush events due to error, dropping events. Error message: Invalid SDK token provided: dvc_client_test_key undefined".
+
+    [0m[0m
+
+      [2mat console.error ([22m../../node_modules/.store/@jest-console-npm-29.7.0-77689f186f/package/build/BufferedConsole.js[2m:127:10)[22m
+      [2mat Object.writeError [as error] ([22m../js/src/logger.ts[2m:589:12)[22m
+      [2mat EventQueue.flushEvents ([22m../js/src/EventQueue.ts[2m:1987:28)[22m
+
+
+  [1m● [22m [31m[1mCannot log after tests are done.[22m Did you forget to wait for something async in your test?[39m
+    Attempted to log "[DevCycle]: failed to flush events due to error, dropping events. Error message: Invalid SDK token provided: dvc_client_test_key undefined".
+
+    [0m[0m
+
+      [2mat console.error ([22m../../node_modules/.store/@jest-console-npm-29.7.0-77689f186f/package/build/BufferedConsole.js[2m:127:10)[22m
+      [2mat Object.writeError [as error] ([22m../js/src/logger.ts[2m:589:12)[22m
+      [2mat EventQueue.flushEvents ([22m../js/src/EventQueue.ts[2m:1987:28)[22m
+      [2mat EventQueue.close ([22m../js/src/EventQueue.ts[2m:2138:5)[22m
+      [2mat DevCycleClient.close ([22m../js/src/Client.ts[2m:734:9)[22m
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m react-lib [39m[27m[0m [2msdk/react/src/[22m[1museIsDevCycleInitialized.test.tsx[22m ([0m[1m[41m15.165 s[49m[22m[0m)
+  [1m● [22mConsole
+
+    [2m[31mconsole.error[39m[22m
+[31m      Warning: An update to DevCycleProvider inside a test was not wrapped in act(...).[39m
+[31m      [39m
+[31m      When testing, code that causes React state updates should be wrapped into act(...):[39m
+[31m      [39m
+[31m      act(() => {[39m
+[31m        /* fire events that update state */[39m
+[31m      });[39m
+[31m      /* assert on the output */[39m
+[31m      [39m
+[31m      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act[39m
+[31m          at config (/workspace/sdk/react/src/DevCycleProvider.tsx:19:13)[39m
+[2m[22m
+[2m    [0m [90m 51 |[39m             [33m.[39monClientInitialized()[22m
+[2m     [90m 52 |[39m             [33m.[39mthen(() [33m=>[39m {[22m
+[2m    [31m[1m>[22m[2m[39m[90m 53 |[39m                 setIsInitialized([36mtrue[39m)[22m
+[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
+[2m     [90m 54 |[39m             })[22m
+[2m     [90m 55 |[39m             [33m.[39m[36mcatch[39m(() [33m=>[39m {[22m
+[2m     [90m 56 |[39m                 [90m// set to true to unblock app load[39m[0m[22m
+[2m[22m
+[2m      [2mat printWarning ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:86:30)[22m[2m[22m
+[2m      [2mat error ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:60:7)[22m[2m[22m
+[2m      [2mat warnIfUpdatesNotWrappedWithActDEV ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:27589:9)[22m[2m[22m
+[2m      [2mat scheduleUpdateOnFiber ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:25508:5)[22m[2m[22m
+[2m      [2mat dispatchSetState ([22m[2m../../node_modules/.store/react-dom-virtual-a999d73d27/package/cjs/react-dom.development.js[2m:17527:7)[22m[2m[22m
+[2m      [2mat setIsInitialized ([22m[2msrc/DevCycleProvider.tsx[2m:53:17)[22m[2m[22m
+
+
+[1mTest Suites: [22m[1m[32m5 passed[39m[22m, 5 total
+[1mTests:       [22m[1m[32m16 passed[39m[22m, 16 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        17.75 s
+[2mRan all test suites[22m[2m.[22m

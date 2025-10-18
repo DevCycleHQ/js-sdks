@@ -1,0 +1,10 @@
+
+Linting "shared-bucketing-test-data"...
+[0m[0m
+[0m[4m/workspace/lib/shared/bucketing-test-data/src/data/testData.ts[24m[0m
+[0m  [2m543:17[22m  [33mwarning[39m  '_id' is assigned a value but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[33m[1m✖ 1 problem (0 errors, 1 warning)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+✖ 1 problem (0 errors, 1 warning)
+

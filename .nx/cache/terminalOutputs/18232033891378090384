@@ -1,0 +1,1103 @@
+ts-jest[ts-jest-transformer] (WARN) Got a `.js` file to compile while `allowJs` option is not set to `true` (file: /workspace/lib/shared/bucketing-assembly-script/index.js). To fix this:
+  - if you want TypeScript to process JS files, set `allowJs` to `true` in your TypeScript config (usually tsconfig.json)
+  - if you do not want TypeScript to process your `.js` files, in your Jest config change the `transform` key which value is `ts-jest` so that it does not match `.js` files anymore
+ts-jest[ts-jest-transformer] (WARN) Got a `.js` file to compile while `allowJs` option is not set to `true` (file: /workspace/lib/shared/bucketing-assembly-script/protobuf/compiled.js). To fix this:
+  - if you want TypeScript to process JS files, set `allowJs` to `true` in your TypeScript config (usually tsconfig.json)
+  - if you do not want TypeScript to process your `.js` files, in your Jest config change the `transform` key which value is `ts-jest` so that it does not match `.js` files anymore
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m nodejs-server-sdk [39m[27m[0m [2msdk/nodejs/__tests__/[22m[1mclient.spec.ts[22m ([0m[1m[41m23.143 s[49m[22m[0m)
+  [1m● [22mConsole
+
+    [2mconsole.log[22m
+      [DevCycle]: Type mismatch for variable test-key. Expected String, got Boolean
+[2m[22m
+[2m      [2mat Object.writeLog [as error] ([22m[2m../js-cloud-server/src/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Type mismatch for variable test-key. Expected String, got Boolean
+[2m[22m
+[2m      [2mat Object.writeLog [as error] ([22m[2m../js-cloud-server/src/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Type mismatch for variable test-key. Expected String, got Boolean
+[2m[22m
+[2m      [2mat Object.writeLog [as error] ([22m[2m../js-cloud-server/src/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Type mismatch for variable test-key. Expected String, got Boolean
+[2m[22m
+[2m      [2mat Object.writeLog [as error] ([22m[2m../js-cloud-server/src/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Type mismatch for variable test-key. Expected Number, got Boolean
+[2m[22m
+[2m      [2mat Object.writeLog [as error] ([22m[2m../js-cloud-server/src/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Type mismatch for variable test-key. Expected Number, got Boolean
+[2m[22m
+[2m      [2mat Object.writeLog [as error] ([22m[2m../js-cloud-server/src/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Type mismatch for variable test-key. Expected JSON, got Boolean
+[2m[22m
+[2m      [2mat Object.writeLog [as error] ([22m[2m../js-cloud-server/src/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Type mismatch for variable test-key. Expected JSON, got Boolean
+[2m[22m
+[2m      [2mat Object.writeLog [as error] ([22m[2m../js-cloud-server/src/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Error running before hooks
+[2m[22m
+[2m      [2mat Object.writeLog [as error] ([22m[2m../js-cloud-server/src/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Error running after hooks
+[2m[22m
+[2m      [2mat Object.writeLog [as error] ([22m[2m../js-cloud-server/src/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+    [2mconsole.log[22m
+      [DevCycle]: Error running finally hooks
+[2m[22m
+[2m      [2mat Object.writeLog [as error] ([22m[2m../js-cloud-server/src/utils/logger.ts[2m:19:49)[22m[2m[22m
+
+(node:10358) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 exit listeners added to [process]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(Use `node --trace-warnings ...` to show where the warning was created)
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m nodejs-server-sdk [39m[27m[0m [2msdk/nodejs/__tests__/open-feature-provider/[22m[1mDevCycleProvider.test.ts[22m ([0m[1m[41m23.719 s[49m[22m[0m)
+  [1m● [22mConsole
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      Error during shutdown of provider devcycle-nodejs-provider: TypeError: Cannot read properties of undefined (reading 'then')[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:440:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.handleShutdownError ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:441:18)[22m[2m[22m
+[2m      [2mat _OpenFeatureAPI.<anonymous> ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:401:12)[22m[2m[22m
+[2m          at Generator.throw (<anonymous>)[22m
+[2m      [2mat rejected ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/dist/cjs/index.js[2m:47:29)[22m[2m[22m
+
+    [2m[31mconsole.error[39m[22m
+[31m      error closing provider: Cannot read properties of undefined (reading 'then'), TypeError: Cannot read properties of undefined (reading 'then')[39m
+[31m          at /workspace/sdk/nodejs/src/client.ts:499:42[39m
+[31m          at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[2m[22m
+[2m      [2mat DefaultLogger.error ([22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/logger/default-logger.ts[2m:7:13)[22m[2m[22m
+[2m      [2mat [22m[2m../../node_modules/.store/@openfeature-core-npm-1.8.1-89254cf898/package/src/open-feature.ts[2m:308:22[22m[2m[22m
+
+/workspace/sdk/js-cloud-server/src/cloudClient.ts:32
+            throw new Error(`DevCycle request failed with status ${code}. ${err.message || ''}`);
+                  ^
+
+Error: DevCycle request failed with status 401. Invalid SDK token provided: dvc_server_sdk_key
+    at throwIfUserError [90m(/workspace/[39msdk/js-cloud-server/src/cloudClient.ts:32:19[90m)[39m
+    at DevCycleCloudClient.track [90m(/workspace/[39msdk/js-cloud-server/src/cloudClient.ts:157:13[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+
+Node.js v22.16.0
+ts-jest[ts-jest-transformer] (WARN) Got a `.js` file to compile while `allowJs` option is not set to `true` (file: /workspace/lib/shared/bucketing-assembly-script/build/bucketing-lib.release.js). To fix this:
+  - if you want TypeScript to process JS files, set `allowJs` to `true` in your TypeScript config (usually tsconfig.json)
+  - if you do not want TypeScript to process your `.js` files, in your Jest config change the `transform` key which value is `ts-jest` so that it does not match `.js` files anymore
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m nodejs-server-sdk [39m[27m[0m [2msdk/nodejs/__tests__/[22m[1minitialize.spec.ts[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m nodejs-server-sdk [39m[27m[0m [2msdk/nodejs/__tests__/models/[22m[1mpopulatedPBUser.spec.ts[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m nodejs-server-sdk [39m[27m[0m [2msdk/nodejs/__tests__/models/[22m[1mrequestEvent.spec.ts[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m nodejs-server-sdk [39m[27m[0m [2msdk/nodejs/__tests__/[22m[1meventQueue.test.ts[22m ([0m[1m[41m32.407 s[49m[22m[0m)
+  [1m● [22mConsole
+
+    [2mconsole.log[22m
+      Wrote test data to /workspace/lib/shared/bucketing-test-data/json-data
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m../../lib/shared/bucketing-test-data/src/main.ts[2m:22:9)[22m[2m[22m
+
+    [2mconsole.log[22m
+      test 1
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36m__tests__/eventQueue.test.ts[39m[0m[2m:968:25)[22m[2m[22m
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m nodejs-server-sdk [39m[27m[0m [2msdk/nodejs/__tests__/[22m[1mevalHooksRunner.test.ts[22m ([0m[1m[41m11.625 s[49m[22m[0m)
+
+  [1m● [22m [31m[1mCannot log after tests are done.[22m Did you forget to wait for something async in your test?[39m
+    Attempted to log "[DevCycle]: DevCycle Error Flushing Events: No Event Queue found for sdkKey: sdkKey in assembly/managers/eventQueueManager.ts:23:9".
+
+    [0m [90m 20 |[39m     [90m// eslint-disable-next-line @typescript-eslint/no-empty-function[39m
+     [90m 21 |[39m     [36mconst[39m noOpLog [33m=[39m (message[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m {}
+    [31m[1m>[22m[39m[90m 22 |[39m
+     [90m    |[39m [31m[1m^[22m[39m
+     [90m 23 |[39m     [36mreturn[39m {
+     [90m 24 |[39m         error[33m:[39m [33mDVCLogLevels[39m[33m.[39merror [33m>=[39m minLevel [33m?[39m writeLog [33m:[39m noOpLog[33m,[39m
+     [90m 25 |[39m         warn[33m:[39m [33mDVCLogLevels[39m[33m.[39mwarn [33m>=[39m minLevel [33m?[39m writeLog [33m:[39m noOpLog[33m,[39m[0m
+
+      [2mat console.log ([22m../../node_modules/.store/@jest-console-npm-29.7.0-77689f186f/package/build/BufferedConsole.js[2m:156:10)[22m
+      [2mat Object.writeLog [as error] ([22m../js-cloud-server/src/utils/logger.ts[2m:22:35)[22m
+      [2mat EventQueue._flushEvents ([22msrc/eventQueue.ts[2m:3489:19)[22m
+      [2mat EventQueue.flushEvents ([22msrc/eventQueue.ts[2m:3710:18)[22m
+
+[33mA worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.[39m
+
+[1mTest Suites: [22m[1m[32m7 passed[39m[22m, 7 total
+[1mTests:       [22m[1m[32m126 passed[39m[22m, 126 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        51.465 s
+[2mRan all test suites[22m[2m.[22m

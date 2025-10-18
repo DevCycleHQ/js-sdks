@@ -1,0 +1,6 @@
+Bundling js...
+Circular dependency: sdk/js/src/Request.ts -> sdk/js/src/RequestEvent.ts -> sdk/js/src/EventQueue.ts -> sdk/js/src/Request.ts
+  [1mindex.esm.js[22m [36m76.965 KB[39m
+Circular dependency: sdk/js/src/Request.ts -> sdk/js/src/RequestEvent.ts -> sdk/js/src/EventQueue.ts -> sdk/js/src/Request.ts
+  [1mindex.cjs.js[22m [36m77.748 KB[39m
+⚡ Done in 12.58s

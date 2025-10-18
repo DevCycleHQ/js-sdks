@@ -1,0 +1,43 @@
+{
+  "run": {
+    "command": "nx build react",
+    "startTime": "2025-09-30T21:44:06.545Z",
+    "endTime": "2025-09-30T21:44:19.461Z",
+    "inner": false
+  },
+  "tasks": [
+    {
+      "taskId": "shared-types:build",
+      "target": "build",
+      "projectName": "shared-types",
+      "hash": "5030229781837092004",
+      "startTime": "2025-09-30T21:44:06.587Z",
+      "endTime": "2025-09-30T21:44:06.623Z",
+      "params": "",
+      "cacheStatus": "local-cache-hit",
+      "status": 0
+    },
+    {
+      "taskId": "js:build",
+      "target": "build",
+      "projectName": "js",
+      "hash": "614999752660046430",
+      "startTime": "2025-09-30T21:44:06.625Z",
+      "endTime": "2025-09-30T21:44:06.634Z",
+      "params": "",
+      "cacheStatus": "local-cache-hit",
+      "status": 0
+    },
+    {
+      "taskId": "react:build",
+      "target": "build",
+      "projectName": "react",
+      "hash": "5308983811270011232",
+      "startTime": "2025-09-30T21:44:06.638Z",
+      "endTime": "2025-09-30T21:44:19.460Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    }
+  ]
+}

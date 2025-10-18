@@ -1,0 +1,2 @@
+__tests__/eventQueue.test.ts(15,10): error TS2459: Module '"@devcycle/bucketing-test-data"' declares 'testData' locally, but it is not exported.
+Warning: run-commands command "yarn run -T tsc -b --incremental" exited with non-zero status code

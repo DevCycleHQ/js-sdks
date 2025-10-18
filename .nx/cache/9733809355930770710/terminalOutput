@@ -1,0 +1,32 @@
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m openfeature-angular-provider [39m[27m[0m [2msdk/openfeature-angular-provider/__tests__/[22m[1mDevCycleAngularProvider.test.ts[22m ([0m[1m[41m15.652 s[49m[22m[0m)
+  DevCycleReactProvider Unit Tests
+    [32m✓[39m [2mshould setup an OpenFeature provider with a DevCycleClient (67 ms)[22m
+    User Context
+      [32m✓[39m [2mshould convert Context properties to DevCycleUser properties (26 ms)[22m
+      [32m✓[39m [2mshould skip DevCycleUser properties that are not the correct type (4 ms)[22m
+      [32m✓[39m [2mshould skip Context properties that are sub-objects as DevCycleUser only supports flat properties (25 ms)[22m
+      [32m✓[39m [2mshould skip customData key that is not a flat json property (4 ms)[22m
+    Boolean Flags
+      [32m✓[39m [2mshould resolve a boolean flag value (2 ms)[22m
+      [32m✓[39m [2mshould resolve a boolean flag details (15 ms)[22m
+      [32m✓[39m [2mshould return default value if flag is not found (8 ms)[22m
+    String Flags
+      [32m✓[39m [2mshould resolve a string flag value (3 ms)[22m
+      [32m✓[39m [2mshould resolve a string flag details (17 ms)[22m
+    Number Flags
+      [32m✓[39m [2mshould resolve a number flag value (2 ms)[22m
+      [32m✓[39m [2mshould resolve a number flag details (2 ms)[22m
+    JSON Flags
+      [32m✓[39m [2mshould resolve a json flag value (2 ms)[22m
+      [32m✓[39m [2mshould resolve a json flag details (2 ms)[22m
+      [32m✓[39m [2mshould return default value if json default is not an object (3 ms)[22m
+    Tracking Events
+      [32m✓[39m [2mshould track an event with just a name (40 ms)[22m
+      [32m✓[39m [2mshould track an event with value and metadata (2 ms)[22m
+      [32m✓[39m [2mshould track an event with just metadata (1 ms)[22m
+
+[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+[1mTests:       [22m[1m[32m18 passed[39m[22m, 18 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        17.039 s
+[2mRan all test suites[22m[2m.[22m

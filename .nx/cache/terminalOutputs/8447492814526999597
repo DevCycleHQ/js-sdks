@@ -1,0 +1,16 @@
+
+Linting "shared-types"...
+[0m[0m
+[0m[4m/workspace/lib/shared/types/src/types/config/models/variable.ts[24m[0m
+[0m  [2m56:42[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/types/src/types/validators/dvcCustomDataJSON.ts[24m[0m
+[0m  [2m34:32[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/types/src/types/validators/isIso6391.ts[24m[0m
+[0m  [2m24:35[22m  [33mwarning[39m  'args' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[33m[1m✖ 3 problems (0 errors, 3 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+✖ 3 problems (0 errors, 3 warnings)
+

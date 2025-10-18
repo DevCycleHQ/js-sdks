@@ -1,0 +1,38 @@
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m openfeature-web-provider [39m[27m[0m [2msdk/openfeature-web-provider/__tests__/[22m[1mDevCycleProvider.test.ts[22m ([0m[1m[41m18.938 s[49m[22m[0m)
+  DevCycleProvider Unit Tests
+    [32m✓[39m [2mshould setup an OpenFeature provider with a DevCycleClient (166 ms)[22m
+    User Context
+      [32m✓[39m [2mshould convert Context properties to DevCycleUser properties (7 ms)[22m
+      [32m✓[39m [2mshould use targetingKey as user_id when available (3 ms)[22m
+      [32m✓[39m [2mshould fallback to user_id when targetingKey is empty (19 ms)[22m
+      [32m✓[39m [2mshould fallback to userId when targetingKey and user_id are empty (3 ms)[22m
+      [32m✓[39m [2mshould set isAnonymous true when no valid user ID is provided (19 ms)[22m
+      [32m✓[39m [2mshould respect explicit isAnonymous value (2 ms)[22m
+      [32m✓[39m [2mshould ignore undefined and null user ID sources (2 ms)[22m
+      [32m✓[39m [2mshould skip DevCycleUser properties that are not the correct type (25 ms)[22m
+      [32m✓[39m [2mshould skip Context properties that are sub-objects as DevCycleUser only supports flat properties (3 ms)[22m
+      [32m✓[39m [2mshould skip customData key that is not a flat json property (2 ms)[22m
+    Boolean Flags
+      [32m✓[39m [2mshould resolve a boolean flag value (45 ms)[22m
+      [32m✓[39m [2mshould resolve a boolean flag details (2 ms)[22m
+      [32m✓[39m [2mshould return default value if flag is not found (2 ms)[22m
+    String Flags
+      [32m✓[39m [2mshould resolve a string flag value (2 ms)[22m
+      [32m✓[39m [2mshould resolve a string flag details (16 ms)[22m
+    Number Flags
+      [32m✓[39m [2mshould resolve a number flag value (2 ms)[22m
+      [32m✓[39m [2mshould resolve a number flag details (2 ms)[22m
+    JSON Flags
+      [32m✓[39m [2mshould resolve a json flag value (2 ms)[22m
+      [32m✓[39m [2mshould resolve a json flag details (2 ms)[22m
+      [32m✓[39m [2mshould return default value if json default is not an object (3 ms)[22m
+    Tracking Events
+      [32m✓[39m [2mshould track an event with just a name (3 ms)[22m
+      [32m✓[39m [2mshould track an event with value and metadata (5 ms)[22m
+      [32m✓[39m [2mshould track an event with just metadata (2 ms)[22m
+
+[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+[1mTests:       [22m[1m[32m24 passed[39m[22m, 24 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        21.423 s
+[2mRan all test suites[22m[2m.[22m

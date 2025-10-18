@@ -1,0 +1,5098 @@
+{
+  "version": "6.0",
+  "nxVersion": "17.3.2",
+  "deps": {
+    "@altack/nx-bundlefy": "^0.16.0",
+    "@devcycle/assemblyscript-json": "^2.0.0",
+    "@openfeature/core": "~1.8.1",
+    "@openfeature/multi-provider": "~0.1.2",
+    "@openfeature/multi-provider-web": "~0.0.3",
+    "@openfeature/server-sdk": "~1.18.0",
+    "@openfeature/web-sdk": "~1.5.0",
+    "@swc/helpers": "~0.5.15",
+    "@vercel/edge-config": "^1.4.0",
+    "class-transformer": "0.5.1",
+    "class-validator": "^0.14.1",
+    "core-js": "^3.41.0",
+    "cross-fetch": "^4.1.0",
+    "eslint-plugin-lodash": "^7.4.0",
+    "eventsource": "^2.0.2",
+    "fetch-retry": "^5.0.6",
+    "hoist-non-react-statics": "^3.3.2",
+    "iso-639-1": "^2.1.15",
+    "lint-staged": "^11.2.6",
+    "lodash": "^4.17.21",
+    "moment": "^2.30.1",
+    "murmurhash": "^2.0.1",
+    "next": "~15.2.4",
+    "protobufjs": "^7.4.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-is": "18.2.0",
+    "react-native": "0.72.4",
+    "react-native-device-info": "^8.7.1",
+    "react-native-get-random-values": "^1.11.0",
+    "react-native-sse": "^1.2.1",
+    "reflect-metadata": "^0.1.14",
+    "regenerator-runtime": "0.13.7",
+    "server-only": "^0.0.1",
+    "source-map-support": "^0.5.21",
+    "terser-webpack-plugin": "^5.3.14",
+    "tslib": "^2.3.0",
+    "ua-parser-js": "^1.0.40",
+    "uuid": "^8.3.2",
+    "@babel/core": "^7.26.10",
+    "@babel/preset-react": "^7.26.3",
+    "@cloudflare/workers-types": "^4.20250321.0",
+    "@commitlint/cli": "^16.3.0",
+    "@commitlint/config-conventional": "^18.6.3",
+    "@nestjs/common": "^10.4.15",
+    "@nestjs/core": "^10.4.15",
+    "@nrwl/js": "17.3.2",
+    "@nrwl/rollup": "17.3.2",
+    "@nx/cypress": "17.3.2",
+    "@nx/detox": "17.3.2",
+    "@nx/devkit": "17.3.2",
+    "@nx/esbuild": "17.3.2",
+    "@nx/eslint-plugin": "17.3.2",
+    "@nx/jest": "17.3.2",
+    "@nx/js": "17.3.2",
+    "@nx/linter": "17.3.2",
+    "@nx/next": "17.3.2",
+    "@nx/node": "17.3.2",
+    "@nx/playwright": "17.3.2",
+    "@nx/react": "17.3.2",
+    "@nx/react-native": "17.3.2",
+    "@nx/web": "17.3.2",
+    "@nx/webpack": "17.3.2",
+    "@nx/workspace": "17.3.2",
+    "@playwright/test": "^1.51.1",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
+    "@react-native-async-storage/async-storage": "1.19.4",
+    "@react-native-community/cli": "11.3.6",
+    "@react-native-community/cli-platform-android": "11.3.6",
+    "@react-native-community/cli-platform-ios": "11.3.6",
+    "@react-native/metro-config": "0.72.11",
+    "@svgr/webpack": "^8.1.0",
+    "@swc/cli": "~0.1.65",
+    "@swc/core": "^1.11.13",
+    "@swc/jest": "^0.2.37",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/jest-native": "5.4.3",
+    "@testing-library/react": "14.3.1",
+    "@testing-library/react-native": "12.9.0",
+    "@total-typescript/shoehorn": "^0.1.2",
+    "@types/async": "^3.2.24",
+    "@types/eventsource": "^1.1.15",
+    "@types/express": "^5.0.3",
+    "@types/hoist-non-react-statics": "^3.3.6",
+    "@types/jest": "29.5.14",
+    "@types/lodash": "^4.17.16",
+    "@types/node": "18.19.83",
+    "@types/react": "18.3.20",
+    "@types/react-dom": "18.3.5",
+    "@types/ua-parser-js": "^0.7.39",
+    "@types/uuid": "^8.3.4",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "@typescript-eslint/parser": "5.62.0",
+    "as-proto": "^1.3.0",
+    "as-proto-gen": "^1.3.0",
+    "as-uuid": "^0.0.4",
+    "as-wasi": "^0.4.6",
+    "assemblyscript": "~0.27.1",
+    "assemblyscript-regex": "https://github.com/DevCycleHQ/assemblyscript-regex.git#8ff33297841880c16e38bd67a84df4cbdb8e887f",
+    "autoprefixer": "10.4.21",
+    "babel-jest": "29.7.0",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.11.0",
+    "cypress": "^13.17.0",
+    "detox": "20.35.1",
+    "dotenv-webpack": "^7.1.1",
+    "esbuild": "~0.25.1",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.25",
+    "eslint-config-prettier": "^8.10.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-cypress": "2.15.2",
+    "eslint-plugin-import": "2.31.0",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-no-only-tests": "^3.3.0",
+    "eslint-plugin-playwright": "^0.15.3",
+    "eslint-plugin-prettier": "^3.4.1",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-react": "7.37.4",
+    "eslint-plugin-react-hooks": "~4.6.2",
+    "eslint-plugin-standard": "^5.0.0",
+    "express": "^4.21.2",
+    "fs-extra": "^11.3.0",
+    "husky": "^7.0.4",
+    "jest": "^29.7.0",
+    "jest-bench": "^29.7.1",
+    "jest-circus": "~27.2.5",
+    "jest-cli": "~29.7.0",
+    "jest-environment-jsdom": "29.7.0",
+    "jest-environment-node": "^29.7.0",
+    "jest-fetch-mock": "^3.0.3",
+    "jest-junit": "~6.4.0",
+    "jest-mock": "^29.7.0",
+    "jest-react-native": "18.0.0",
+    "jsonc-eslint-parser": "^2.4.0",
+    "lerna": "^5.6.2",
+    "metro": "0.76.7",
+    "metro-babel-register": "0.76.7",
+    "metro-react-native-babel-preset": "0.76.7",
+    "metro-react-native-babel-transformer": "0.76.7",
+    "metro-resolver": "0.76.7",
+    "msw": "^2.7.3",
+    "nock": "^13.3.8",
+    "npm-run-all": "^4.1.5",
+    "nx": "17.3.2",
+    "object-path-immutable": "^4.1.2",
+    "postcss": "8.4.47",
+    "prettier": "^2.8.8",
+    "prettier-eslint": "^16.3.0",
+    "prettier-eslint-cli": "^8.0.1",
+    "protobufjs-cli": "^1.1.3",
+    "react-native-config": "1.5.0",
+    "react-native-svg": "13.9.0",
+    "react-native-svg-transformer": "^1.5.0",
+    "react-refresh": "^0.10.0",
+    "react-test-renderer": "18.2.0",
+    "rxjs": "^7.8.2",
+    "service-worker-mock": "^2.0.5",
+    "style-loader": "^3.3.4",
+    "supports-color": "9.4.0",
+    "swc-loader": "0.1.15",
+    "tailwindcss": "3.2.7",
+    "ts-jest": "29.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2",
+    "url-loader": "^4.1.1",
+    "validate-npm-package-name": "^5.0.1",
+    "verdaccio": "^5.33.0",
+    "webpack": "^5.99.8",
+    "webpack-merge": "^5.10.0",
+    "wrangler": "^3.114.2"
+  },
+  "pathMappings": {
+    "@devcycle/bucketing": [
+      "lib/shared/bucketing/src/index.ts"
+    ],
+    "@devcycle/bucketing-test-data": [
+      "lib/shared/bucketing-test-data/src/main.ts"
+    ],
+    "@devcycle/bucketing-test-data/json-data/testData.json": [
+      "lib/shared/bucketing-test-data/json-data/testData.json"
+    ],
+    "@devcycle/config-manager": [
+      "lib/shared/config-manager/src/index.ts"
+    ],
+    "@devcycle/js-client-sdk": [
+      "sdk/js/src/index.ts"
+    ],
+    "@devcycle/js-cloud-server-sdk": [
+      "sdk/js-cloud-server/src/index.ts"
+    ],
+    "@devcycle/nextjs-sdk": [
+      "sdk/nextjs/index.ts"
+    ],
+    "@devcycle/nextjs-sdk/pages": [
+      "sdk/nextjs/pages.ts"
+    ],
+    "@devcycle/nextjs-sdk/server": [
+      "sdk/nextjs/server.ts"
+    ],
+    "@devcycle/nodejs-server-sdk": [
+      "sdk/nodejs/src/index.ts"
+    ],
+    "@devcycle/nodejs-server-sdk/openfeature-strategy": [
+      "sdk/nodejs/openfeature-strategy.ts"
+    ],
+    "@devcycle/openfeature-web-provider": [
+      "sdk/openfeature-web-provider/src/index.ts"
+    ],
+    "@devcycle/openfeature-web-provider/strategy": [
+      "sdk/openfeature-web-provider/strategy.ts"
+    ],
+    "@devcycle/openfeature-react-provider": [
+      "sdk/openfeature-react-provider/src/index.ts"
+    ],
+    "@devcycle/openfeature-react-provider/strategy": [
+      "sdk/openfeature-react-provider/strategy.ts"
+    ],
+    "@devcycle/openfeature-angular-provider": [
+      "sdk/openfeature-angular-provider/src/index.ts"
+    ],
+    "@devcycle/openfeature-angular-provider/strategy": [
+      "sdk/openfeature-angular-provider/strategy.ts"
+    ],
+    "@devcycle/openfeature-nestjs-provider": [
+      "sdk/openfeature-nestjs-provider/src/index.ts"
+    ],
+    "@devcycle/react-client-sdk": [
+      "sdk/react/src/index.ts"
+    ],
+    "@devcycle/react-native-client-sdk": [
+      "sdk/react-native/src/index.ts"
+    ],
+    "@devcycle/react-native-expo-client-sdk": [
+      "sdk/react-native-expo/src/index.ts"
+    ],
+    "@devcycle/server-request": [
+      "lib/shared/server-request/src/index.ts"
+    ],
+    "@devcycle/sse-connection": [
+      "lib/shared/sse-connection/src/index.ts"
+    ],
+    "@devcycle/types": [
+      "lib/shared/types/src/index.ts"
+    ],
+    "@devcycle/vercel-edge-config": [
+      "shared/vercel-edge-config/src/index.ts"
+    ],
+    "@devcycle/web-debugger": [
+      "lib/web-debugger/index.ts"
+    ],
+    "@devcycle/web-debugger/react": [
+      "lib/web-debugger/react.tsx"
+    ]
+  },
+  "nxJsonPlugins": [],
+  "pluginsConfig": {
+    "@nx/js": {
+      "analyzeSourceFiles": true
+    },
+    "@nrwl/rollup": {
+      "analyzeSourceFiles": true
+    }
+  },
+  "fileMap": {
+    "projectFileMap": {
+      "example-openfeature-nodejs": [
+        {
+          "file": "dev-apps/openfeature-nodejs/.eslintrc.json",
+          "hash": "9220097867945776513"
+        },
+        {
+          "file": "dev-apps/openfeature-nodejs/README.md",
+          "hash": "15454900687251488756"
+        },
+        {
+          "file": "dev-apps/openfeature-nodejs/package.json",
+          "hash": "3299850020952468861"
+        },
+        {
+          "file": "dev-apps/openfeature-nodejs/project.json",
+          "hash": "14171089040038591702"
+        },
+        {
+          "file": "dev-apps/openfeature-nodejs/src/main.ts",
+          "hash": "5519897388488123400",
+          "deps": [
+            "npm:@openfeature/server-sdk",
+            "nodejs"
+          ]
+        },
+        {
+          "file": "dev-apps/openfeature-nodejs/tsconfig.app.json",
+          "hash": "8602849015541427548"
+        },
+        {
+          "file": "dev-apps/openfeature-nodejs/tsconfig.json",
+          "hash": "15787543957214591055"
+        },
+        {
+          "file": "dev-apps/openfeature-nodejs/tsconfig.spec.json",
+          "hash": "2017679710100040357"
+        },
+        {
+          "file": "dev-apps/openfeature-nodejs/webpack.config.js",
+          "hash": "9754852098855119222"
+        }
+      ],
+      "config-manager": [
+        {
+          "file": "lib/shared/config-manager/.eslintrc.json",
+          "hash": "9711169714124487252"
+        },
+        {
+          "file": "lib/shared/config-manager/README.md",
+          "hash": "2725547215793106520"
+        },
+        {
+          "file": "lib/shared/config-manager/__mocks__/cross-fetch.ts",
+          "hash": "9151741506596096951"
+        },
+        {
+          "file": "lib/shared/config-manager/__tests__/environmentConfigManager.spec.ts",
+          "hash": "690625843654473868",
+          "deps": [
+            "npm:jest-mock",
+            "npm:cross-fetch",
+            "shared-types",
+            "server-request"
+          ]
+        },
+        {
+          "file": "lib/shared/config-manager/__tests__/request.spec.ts",
+          "hash": "1383801776487795550",
+          "deps": [
+            "npm:cross-fetch"
+          ]
+        },
+        {
+          "file": "lib/shared/config-manager/jest.config.ts",
+          "hash": "4194272087755653449"
+        },
+        {
+          "file": "lib/shared/config-manager/project.json",
+          "hash": "1186288115803373488"
+        },
+        {
+          "file": "lib/shared/config-manager/src/CDNConfigSource.ts",
+          "hash": "13900322153886019746",
+          "deps": [
+            "shared-types",
+            "server-request"
+          ]
+        },
+        {
+          "file": "lib/shared/config-manager/src/index.ts",
+          "hash": "10858655393512406879",
+          "deps": [
+            "shared-types",
+            "server-request",
+            "sse-connection"
+          ]
+        },
+        {
+          "file": "lib/shared/config-manager/src/request.ts",
+          "hash": "13919903312298437383",
+          "deps": [
+            "server-request",
+            "npm:fetch-retry",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "lib/shared/config-manager/tsconfig.json",
+          "hash": "1861864473050275193"
+        },
+        {
+          "file": "lib/shared/config-manager/tsconfig.lib.json",
+          "hash": "10677914633772803777"
+        },
+        {
+          "file": "lib/shared/config-manager/tsconfig.spec.json",
+          "hash": "12398179462326272513"
+        }
+      ],
+      "e2e-react": [
+        {
+          "file": "e2e/react/.eslintrc.json",
+          "hash": "17173819443619805368"
+        },
+        {
+          "file": "e2e/react/.gitignore",
+          "hash": "9404204227973109122"
+        },
+        {
+          "file": "e2e/react/e2e/example.spec.ts",
+          "hash": "11537512333417360637",
+          "deps": [
+            "npm:@playwright/test"
+          ]
+        },
+        {
+          "file": "e2e/react/package.json",
+          "hash": "353496125102813206",
+          "deps": [
+            "react",
+            "npm:react",
+            "npm:react-dom",
+            "npm:@babel/core",
+            "npm:@babel/preset-react",
+            "npm:webpack"
+          ]
+        },
+        {
+          "file": "e2e/react/playwright.config.ts",
+          "hash": "15038940454766639226",
+          "deps": [
+            "npm:@playwright/test",
+            "npm:@nx/playwright",
+            "npm:@nx/devkit"
+          ]
+        },
+        {
+          "file": "e2e/react/project.json",
+          "hash": "15205126842438691147"
+        },
+        {
+          "file": "e2e/react/src/app/DevCycleExample.tsx",
+          "hash": "7250580908518286207",
+          "deps": [
+            "react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "e2e/react/src/app/app.tsx",
+          "hash": "11252211550884189328",
+          "deps": [
+            "npm:react",
+            "react"
+          ]
+        },
+        {
+          "file": "e2e/react/src/environments/environment.prod.ts",
+          "hash": "14319090500531079778"
+        },
+        {
+          "file": "e2e/react/src/environments/environment.ts",
+          "hash": "9178973365635766842"
+        },
+        {
+          "file": "e2e/react/src/index.html",
+          "hash": "4694540353889325535"
+        },
+        {
+          "file": "e2e/react/src/main.tsx",
+          "hash": "15779583174267560089",
+          "deps": [
+            "npm:react",
+            "npm:react-dom"
+          ]
+        },
+        {
+          "file": "e2e/react/start.sh",
+          "hash": "2878480040385792553"
+        },
+        {
+          "file": "e2e/react/tsconfig.json",
+          "hash": "12118161808401168974"
+        },
+        {
+          "file": "e2e/react/webpack.config.js",
+          "hash": "10236229075864696378",
+          "deps": [
+            "npm:html-webpack-plugin",
+            "npm:webpack",
+            "npm:fork-ts-checker-webpack-plugin",
+            "npm:path"
+          ]
+        },
+        {
+          "file": "e2e/react/yarn.lock",
+          "hash": "13515531870007398477"
+        }
+      ],
+      "shared-bucketing-as": [
+        {
+          "file": "lib/shared/bucketing-assembly-script/.eslintrc.json",
+          "hash": "14778773072652237745"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/.gitignore",
+          "hash": "2267398987751199612"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/README.md",
+          "hash": "11649336928095971296"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__benchmarks__/variable.bench.ts",
+          "hash": "3240563139999408541",
+          "deps": [
+            "npm:jest-bench",
+            "npm:@devcycle/bucketing-test-data/json-data/largeConfig.json",
+            "shared-bucketing-test-data",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/bucketing/bucketing.test.ts",
+          "hash": "16536671550570729445",
+          "deps": [
+            "shared-bucketing-test-data",
+            "npm:moment",
+            "npm:uuid",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/bucketing/segmentation.test.ts",
+          "hash": "12156344853523910062",
+          "deps": [
+            "npm:assert"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/bucketingImportHelper.ts",
+          "hash": "9221571415282779527"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/eventQueue/eventQueueManager.test.ts",
+          "hash": "8345418321418420689",
+          "deps": [
+            "shared-bucketing-test-data"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/eventQueue/random_json_2kb.json",
+          "hash": "6006602531506482793"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/helpers/arrayHelpers.test.ts",
+          "hash": "17998868996510728913"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/helpers/configWithBucketingKey.ts",
+          "hash": "6071102585330776598",
+          "deps": [
+            "shared-bucketing-test-data"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/helpers/murmurhash.test.ts",
+          "hash": "10535378726758491485",
+          "deps": [
+            "npm:murmurhash"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/protobufVariableHelper.ts",
+          "hash": "10466022518582371572",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/setPlatformData.ts",
+          "hash": "9412186525294590733"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/setup.js",
+          "hash": "15753480388377912669"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/types/configBody.test.ts",
+          "hash": "17277392455647994594",
+          "deps": [
+            "shared-bucketing-test-data",
+            "npm:lodash",
+            "npm:object-path-immutable",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/types/configBodyV2.test.ts",
+          "hash": "16555345476135780954",
+          "deps": [
+            "shared-bucketing-test-data",
+            "npm:lodash",
+            "npm:object-path-immutable",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/types/dvcEvent.test.ts",
+          "hash": "13789741458562052537"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/types/dvcUser.test.ts",
+          "hash": "14371923392230303836"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/types/eventQueueOptions.test.ts",
+          "hash": "10946705388089856706"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/types/platformData.test.ts",
+          "hash": "6688117851984486878"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/types/protobuf.test.ts",
+          "hash": "14194650031355809673",
+          "deps": [
+            "npm:protobufjs",
+            "npm:path",
+            "shared-bucketing-test-data"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/variable.test.ts",
+          "hash": "5558288810817737129",
+          "deps": [
+            "shared-bucketing-test-data"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/__tests__/variableSetupHelper.ts",
+          "hash": "14422550953635693251",
+          "deps": [
+            "shared-types",
+            "shared-bucketing-test-data"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/asconfig.json",
+          "hash": "4474212137808648338"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/bucketing/bucketing.ts",
+          "hash": "1401464157964811156",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/bucketing/index.ts",
+          "hash": "15629535812513500498"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/bucketing/segmentation.ts",
+          "hash": "14847436344797430847",
+          "deps": [
+            "npm:assemblyscript-regex",
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/bucketing/versionCompare.ts",
+          "hash": "13816639715995593911",
+          "deps": [
+            "npm:assemblyscript-regex"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/eventQueue/eventQueue.ts",
+          "hash": "6986127216607175857",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/eventQueue/requestPayloadManager.ts",
+          "hash": "14429935612056813421",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/helpers/arrayHelpers.ts",
+          "hash": "6437431433092383319"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/helpers/jsonHelpers.ts",
+          "hash": "5459771684713053655",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/helpers/lodashHelpers.ts",
+          "hash": "8041829203936499200",
+          "deps": [
+            "npm:assemblyscript-regex"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/helpers/murmurhash.ts",
+          "hash": "14418905963793882264"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/helpers/stringHelpers.ts",
+          "hash": "13686318451682812229"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/index.ts",
+          "hash": "12564745233035727408",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/managers/clientCustomDataManager.ts",
+          "hash": "6616592213474766271",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/managers/configDataManager.ts",
+          "hash": "6147169269183510465"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/managers/eventQueueManager.ts",
+          "hash": "206380379106362158",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/managers/platformDataManager.ts",
+          "hash": "10839934240842696469"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/testHelpers.ts",
+          "hash": "1031342934094250748",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/tsconfig.json",
+          "hash": "7293368523316728539"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/bucketedUserConfig.ts",
+          "hash": "6549878772045061340",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/configBody.ts",
+          "hash": "17821205623308001546",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/configBodyV2.ts",
+          "hash": "14204252482874834201",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/dvcEvent.ts",
+          "hash": "8376673971731100782",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json",
+            "npm:as-uuid"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/dvcUser.ts",
+          "hash": "314229629064785591",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/eventQueueOptions.ts",
+          "hash": "4483335289708447039",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/feature.ts",
+          "hash": "1522823498432152619",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/featureConfiguration.ts",
+          "hash": "964149522237092063",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/featureConfigurationV2.ts",
+          "hash": "8736512747738648435",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/featureV2.ts",
+          "hash": "16841804559234390773",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/index.ts",
+          "hash": "9840545912784646415"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/platformData.ts",
+          "hash": "3127143755233711565",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated/CustomDataType.ts",
+          "hash": "11391636484209181296"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated/CustomDataValue.ts",
+          "hash": "11294541422153041378",
+          "deps": [
+            "npm:as-proto"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated/DVCUser_PB.ts",
+          "hash": "5069859318870597106",
+          "deps": [
+            "npm:as-proto"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated/EvalReason_PB.ts",
+          "hash": "10114528630205574104",
+          "deps": [
+            "npm:as-proto"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated/NullableCustomData.ts",
+          "hash": "9879840105195438587",
+          "deps": [
+            "npm:as-proto"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated/NullableDouble.ts",
+          "hash": "6404597526769797044",
+          "deps": [
+            "npm:as-proto"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated/NullableString.ts",
+          "hash": "9238250200719653319",
+          "deps": [
+            "npm:as-proto"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated/SDKVariable_PB.ts",
+          "hash": "1022240500715809702",
+          "deps": [
+            "npm:as-proto"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated/VariableForUserParams_PB.ts",
+          "hash": "12536734131268584782",
+          "deps": [
+            "npm:as-proto"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/protobuf-generated/VariableType_PB.ts",
+          "hash": "9361798812476715306"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/target.ts",
+          "hash": "13813405219540201886",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/assembly/types/targetV2.ts",
+          "hash": "8348404586102746942",
+          "deps": [
+            "npm:@devcycle/assemblyscript-json"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/index-worker.d.ts",
+          "hash": "17763805554075806215"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/index-worker.js",
+          "hash": "12536227494985418508"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/index.d.ts",
+          "hash": "14728953457373791365"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/index.js",
+          "hash": "16368272338598004546",
+          "deps": [
+            "npm:path",
+            [
+              "npm:fs/promises",
+              "dynamic"
+            ]
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/jest-bench.config.ts",
+          "hash": "13528808225786152636"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/jest.config.ts",
+          "hash": "6498295023588794782"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/package.json",
+          "hash": "4131323012978233619",
+          "deps": [
+            "npm:protobufjs",
+            "shared-bucketing-test-data"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/project.json",
+          "hash": "4463157646454816481"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/protobuf/compiled.d.ts",
+          "hash": "18246921605478817929",
+          "deps": [
+            "npm:protobufjs",
+            "npm:long"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/protobuf/compiled.js",
+          "hash": "9342281265956656186",
+          "deps": [
+            "npm:protobufjs"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/protobuf/variableForUserParams.proto",
+          "hash": "17414442357514844244"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/tsconfig.json",
+          "hash": "17363748705404898932"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/tsconfig.lib.json",
+          "hash": "10374312802699012209"
+        },
+        {
+          "file": "lib/shared/bucketing-assembly-script/tsconfig.spec.json",
+          "hash": "5803835195558671310"
+        }
+      ],
+      "example-js": [
+        {
+          "file": "dev-apps/js/.babelrc",
+          "hash": "11933065911831293579"
+        },
+        {
+          "file": "dev-apps/js/.eslintrc.json",
+          "hash": "11902604076208507531"
+        },
+        {
+          "file": "dev-apps/js/README.md",
+          "hash": "14878685343608515584"
+        },
+        {
+          "file": "dev-apps/js/browserslist",
+          "hash": "3682804324403383287"
+        },
+        {
+          "file": "dev-apps/js/jest.config.ts",
+          "hash": "10390097142142696682"
+        },
+        {
+          "file": "dev-apps/js/package.json",
+          "hash": "6176842398663525239"
+        },
+        {
+          "file": "dev-apps/js/project.json",
+          "hash": "18307488168717061332"
+        },
+        {
+          "file": "dev-apps/js/src/app/app.element.css",
+          "hash": "14449459040666009454"
+        },
+        {
+          "file": "dev-apps/js/src/app/app.element.spec.ts",
+          "hash": "16304836741914104333"
+        },
+        {
+          "file": "dev-apps/js/src/app/app.element.ts",
+          "hash": "454481020593770022",
+          "deps": [
+            "js"
+          ]
+        },
+        {
+          "file": "dev-apps/js/src/assets/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "dev-apps/js/src/environments/environment.prod.ts",
+          "hash": "14319090500531079778"
+        },
+        {
+          "file": "dev-apps/js/src/environments/environment.ts",
+          "hash": "9178973365635766842"
+        },
+        {
+          "file": "dev-apps/js/src/favicon.ico",
+          "hash": "9303420814833116677"
+        },
+        {
+          "file": "dev-apps/js/src/index.html",
+          "hash": "11776556630644209288"
+        },
+        {
+          "file": "dev-apps/js/src/main.ts",
+          "hash": "9802556070214386378"
+        },
+        {
+          "file": "dev-apps/js/src/polyfills.ts",
+          "hash": "3605444650927540957",
+          "deps": [
+            "npm:core-js",
+            "npm:regenerator-runtime"
+          ]
+        },
+        {
+          "file": "dev-apps/js/src/styles.css",
+          "hash": "5195668842064076916"
+        },
+        {
+          "file": "dev-apps/js/src/test-setup.ts",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "dev-apps/js/tsconfig.app.json",
+          "hash": "3653935136253656324"
+        },
+        {
+          "file": "dev-apps/js/tsconfig.json",
+          "hash": "15787543957214591055"
+        },
+        {
+          "file": "dev-apps/js/tsconfig.spec.json",
+          "hash": "9929779869252348105"
+        }
+      ],
+      "e2e-js-esm": [
+        {
+          "file": "e2e/js/js-esm/.eslintrc.json",
+          "hash": "13685933650592578310"
+        },
+        {
+          "file": "e2e/js/js-esm/.gitignore",
+          "hash": "9118221356106466501"
+        },
+        {
+          "file": "e2e/js/js-esm/README.md",
+          "hash": "10804128731172853432"
+        },
+        {
+          "file": "e2e/js/js-esm/package.json",
+          "hash": "5246714566495927299",
+          "deps": [
+            "js",
+            "npm:webpack"
+          ]
+        },
+        {
+          "file": "e2e/js/js-esm/playwright.config.ts",
+          "hash": "18008851371121084424",
+          "deps": [
+            "npm:@playwright/test",
+            "npm:@nx/playwright",
+            "npm:@nx/devkit"
+          ]
+        },
+        {
+          "file": "e2e/js/js-esm/project.json",
+          "hash": "14323615233032775458"
+        },
+        {
+          "file": "e2e/js/js-esm/src/Home/Home.ts",
+          "hash": "6516412558806930009",
+          "deps": [
+            "js"
+          ]
+        },
+        {
+          "file": "e2e/js/js-esm/src/index.html",
+          "hash": "10073327583797450187"
+        },
+        {
+          "file": "e2e/js/js-esm/src/index.ts",
+          "hash": "3546858491802873606"
+        },
+        {
+          "file": "e2e/js/js-esm/start.sh",
+          "hash": "2878480040385792553"
+        },
+        {
+          "file": "e2e/js/js-esm/tests/js-esm.spec.ts",
+          "hash": "2156546484824965947",
+          "deps": [
+            "npm:@playwright/test"
+          ]
+        },
+        {
+          "file": "e2e/js/js-esm/tsconfig.json",
+          "hash": "11693111372726858718"
+        },
+        {
+          "file": "e2e/js/js-esm/webpack.config.js",
+          "hash": "16368113600683925151",
+          "deps": [
+            "npm:html-webpack-plugin",
+            "npm:webpack",
+            "npm:fork-ts-checker-webpack-plugin",
+            "npm:path"
+          ]
+        },
+        {
+          "file": "e2e/js/js-esm/yarn.lock",
+          "hash": "14050138999435066538"
+        }
+      ],
+      "nodejs": [
+        {
+          "file": "sdk/nodejs/.babelrc",
+          "hash": "842855554653651022"
+        },
+        {
+          "file": "sdk/nodejs/.eslintrc.json",
+          "hash": "862205228708624265"
+        },
+        {
+          "file": "sdk/nodejs/.gitignore",
+          "hash": "4174095619284331435"
+        },
+        {
+          "file": "sdk/nodejs/.test.env",
+          "hash": "10939626950826230846"
+        },
+        {
+          "file": "sdk/nodejs/README.md",
+          "hash": "6010887426777130394"
+        },
+        {
+          "file": "sdk/nodejs/__tests__/client.spec.ts",
+          "hash": "9839458861998531583",
+          "deps": [
+            "js-cloud-server-sdk",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/__tests__/evalHooksRunner.test.ts",
+          "hash": "18334549502563785967",
+          "deps": [
+            "js-cloud-server-sdk",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/__tests__/eventQueue.test.ts",
+          "hash": "7013768939869186548",
+          "deps": [
+            "shared-bucketing-as",
+            "shared-types",
+            "npm:jest-mock",
+            "npm:cross-fetch",
+            "js-cloud-server-sdk",
+            "shared-bucketing-test-data",
+            "server-request"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/__tests__/initialize.spec.ts",
+          "hash": "9289896597416185405",
+          "deps": [
+            "js-cloud-server-sdk",
+            "npm:@openfeature/server-sdk"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/__tests__/models/populatedPBUser.spec.ts",
+          "hash": "4670622201193251469",
+          "deps": [
+            "js-cloud-server-sdk"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/__tests__/models/requestEvent.spec.ts",
+          "hash": "10692602723664505250"
+        },
+        {
+          "file": "sdk/nodejs/__tests__/open-feature-provider/DevCycleProvider.test.ts",
+          "hash": "4867267815135612881",
+          "deps": [
+            "npm:@openfeature/server-sdk",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/__tests__/utils/setPlatformData.ts",
+          "hash": "18131955821920087238",
+          "deps": [
+            "npm:@devcycle/bucketing-assembly-script"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/jest.config.ts",
+          "hash": "9487907881421160425"
+        },
+        {
+          "file": "sdk/nodejs/openfeature-strategy.ts",
+          "hash": "202024575028332527"
+        },
+        {
+          "file": "sdk/nodejs/package.json",
+          "hash": "10307242852479111076",
+          "deps": [
+            "shared-bucketing-as",
+            "js-cloud-server-sdk",
+            "shared-types",
+            "npm:@openfeature/core",
+            "npm:@openfeature/server-sdk",
+            "npm:cross-fetch",
+            "npm:eventsource",
+            "npm:fetch-retry",
+            "js",
+            "npm:@openfeature/multi-provider"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/project.json",
+          "hash": "6375580788877474076"
+        },
+        {
+          "file": "sdk/nodejs/src/__mocks__/bucketing.ts",
+          "hash": "1456129435586967486",
+          "deps": [
+            "npm:@devcycle/bucketing-assembly-script",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/__mocks__/environmentConfigManager.ts",
+          "hash": "2567699136826988828"
+        },
+        {
+          "file": "sdk/nodejs/src/bucketing.ts",
+          "hash": "18001416355051416311",
+          "deps": [
+            "npm:@devcycle/bucketing-assembly-script",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/client.ts",
+          "hash": "15177491277385632878",
+          "deps": [
+            "config-manager",
+            "server-request",
+            "shared-types",
+            "npm:os",
+            "js-cloud-server-sdk",
+            "npm:crypto",
+            "npm:@devcycle/bucketing-assembly-script"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/clientUser.ts",
+          "hash": "17250767944892505188",
+          "deps": [
+            "js-cloud-server-sdk"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/eventQueue.ts",
+          "hash": "1837575687492471760",
+          "deps": [
+            "shared-types",
+            "js-cloud-server-sdk",
+            "npm:@devcycle/bucketing-assembly-script"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/hooks/EvalHook.ts",
+          "hash": "18410699587632612312",
+          "deps": [
+            "js-cloud-server-sdk"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/hooks/EvalHooksRunner.ts",
+          "hash": "12705611205150612067",
+          "deps": [
+            "js-cloud-server-sdk",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/hooks/HookContext.ts",
+          "hash": "14075231187527652068",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/index.ts",
+          "hash": "1359907163779901346",
+          "deps": [
+            "js-cloud-server-sdk",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/models/populatedUserHelpers.ts",
+          "hash": "7068138909942343915",
+          "deps": [
+            "npm:@devcycle/bucketing-assembly-script",
+            "js-cloud-server-sdk"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/models/requestEvent.ts",
+          "hash": "865042878908806559",
+          "deps": [
+            "js-cloud-server-sdk"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/open-feature/DevCycleMigrationStrategy.ts",
+          "hash": "8216943225939661268",
+          "deps": [
+            "npm:@openfeature/server-sdk",
+            "npm:@openfeature/multi-provider"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/open-feature/DevCycleProvider.ts",
+          "hash": "12423542665522349684",
+          "deps": [
+            "npm:@openfeature/server-sdk",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/open-feature/index.ts",
+          "hash": "16188799662751253880"
+        },
+        {
+          "file": "sdk/nodejs/src/pb-types/pbTypeHelpers.ts",
+          "hash": "3255247126819384428",
+          "deps": [
+            "shared-types",
+            "npm:@devcycle/bucketing-assembly-script"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/request.ts",
+          "hash": "3438004336370517466",
+          "deps": [
+            "server-request",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/utils/platformDetails.ts",
+          "hash": "13313389336715561259",
+          "deps": [
+            "js-cloud-server-sdk",
+            "npm:os"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/src/utils/userBucketingHelper.ts",
+          "hash": "4703496385190035234",
+          "deps": [
+            "shared-types",
+            "js-cloud-server-sdk",
+            "npm:@devcycle/bucketing-assembly-script/protobuf/compiled",
+            "npm:@devcycle/bucketing-assembly-script"
+          ]
+        },
+        {
+          "file": "sdk/nodejs/tsconfig.json",
+          "hash": "4041483701269408600"
+        },
+        {
+          "file": "sdk/nodejs/tsconfig.lib.json",
+          "hash": "12570728255601193534"
+        },
+        {
+          "file": "sdk/nodejs/tsconfig.spec.json",
+          "hash": "6495226866993251177"
+        }
+      ],
+      "e2e-nextjs-app-router": [
+        {
+          "file": "e2e/nextjs/app-router/.eslintrc.json",
+          "hash": "3342683490658230778"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/.eslintrc.json",
+          "hash": "3536216964628315908"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/.gitignore",
+          "hash": "13857520976425382491"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/.yarnrc.yml",
+          "hash": "5391657931463498180"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/layout.tsx",
+          "hash": "3529513771397853897",
+          "deps": [
+            "npm:next",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/normal/ClientComponent.tsx",
+          "hash": "7071298759682214219",
+          "deps": [
+            "nextjs",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/normal/ConditionalClientComponent.tsx",
+          "hash": "10168713101330359187"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/normal/ServerComponent.tsx",
+          "hash": "1936954772520353819",
+          "deps": [
+            "npm:next"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/normal/action.ts",
+          "hash": "1015910602743864673"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/normal/devcycle.ts",
+          "hash": "934336510733350016",
+          "deps": [
+            "nextjs",
+            "npm:next"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/normal/layout.tsx",
+          "hash": "7537654135062039099",
+          "deps": [
+            "npm:next",
+            "npm:react",
+            "nextjs"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/normal/page.tsx",
+          "hash": "10533634414796840098",
+          "deps": [
+            "npm:react",
+            "npm:next"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/normal/test/ClientComponent.tsx",
+          "hash": "10627042100817402692",
+          "deps": [
+            "nextjs"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/normal/test/ServerComponent.tsx",
+          "hash": "9682236132066658833"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/normal/test/page.tsx",
+          "hash": "16746112707624754832"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/obfuscated/ClientComponent.tsx",
+          "hash": "12431488449953060508",
+          "deps": [
+            "nextjs",
+            "npm:@/dvcVariableTypes"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/obfuscated/ConditionalClientComponent.tsx",
+          "hash": "10168713101330359187"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/obfuscated/ServerComponent.tsx",
+          "hash": "6726741267261080495",
+          "deps": [
+            "npm:@/dvcVariableTypes"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/obfuscated/devcycle.ts",
+          "hash": "9937381996000353029",
+          "deps": [
+            "nextjs",
+            "npm:next"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/obfuscated/layout.tsx",
+          "hash": "7537654135062039099",
+          "deps": [
+            "npm:next",
+            "npm:react",
+            "nextjs"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/obfuscated/page.tsx",
+          "hash": "17996476236296454868",
+          "deps": [
+            "npm:react",
+            "npm:next"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/obfuscated/test/ClientComponent.tsx",
+          "hash": "4882954226547577884",
+          "deps": [
+            "nextjs",
+            "npm:@/dvcVariableTypes"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/obfuscated/test/ServerComponent.tsx",
+          "hash": "2503779022173269488",
+          "deps": [
+            "npm:@/dvcVariableTypes"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/obfuscated/test/page.tsx",
+          "hash": "16746112707624754832"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/page.tsx",
+          "hash": "10825748903370535941",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/self-targeting/ClientComponent.tsx",
+          "hash": "15706578737023734813",
+          "deps": [
+            "nextjs"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/self-targeting/ConditionalClientComponent.tsx",
+          "hash": "10168713101330359187"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/self-targeting/ServerComponent.tsx",
+          "hash": "9017926900492133098"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/self-targeting/devcycle.ts",
+          "hash": "14024101372851651829",
+          "deps": [
+            "nextjs",
+            "npm:next"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/self-targeting/layout.tsx",
+          "hash": "7537654135062039099",
+          "deps": [
+            "npm:next",
+            "npm:react",
+            "nextjs"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/self-targeting/page.tsx",
+          "hash": "10533634414796840098",
+          "deps": [
+            "npm:react",
+            "npm:next"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/streaming/ClientComponent.tsx",
+          "hash": "17941436106768754616",
+          "deps": [
+            "nextjs"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/streaming/ServerComponent.tsx",
+          "hash": "9017926900492133098"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/streaming/devcycle.ts",
+          "hash": "10868413891960994004",
+          "deps": [
+            "nextjs"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/streaming/layout.tsx",
+          "hash": "7537654135062039099",
+          "deps": [
+            "npm:next",
+            "npm:react",
+            "nextjs"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/streaming/page.tsx",
+          "hash": "17494487414265563007",
+          "deps": [
+            "npm:react",
+            "npm:next"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/streaming/test/ClientComponent.tsx",
+          "hash": "10627042100817402692",
+          "deps": [
+            "nextjs"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/streaming/test/ServerComponent.tsx",
+          "hash": "15053548666148362658"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/app/streaming/test/page.tsx",
+          "hash": "16746112707624754832"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/dvcVariableTypes.ts",
+          "hash": "6903844305376272152"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/middleware.ts",
+          "hash": "3204233618705961892",
+          "deps": [
+            "npm:next"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/next.config.js",
+          "hash": "245766569704418266"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/package.json",
+          "hash": "14209098523948036878"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/start.sh",
+          "hash": "1857880386882472562"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/tsconfig.json",
+          "hash": "5602956310984472064"
+        },
+        {
+          "file": "e2e/nextjs/app-router/app/yarn.lock",
+          "hash": "3251691507624456880"
+        },
+        {
+          "file": "e2e/nextjs/app-router/playwright.config.ts",
+          "hash": "13965210571935670140",
+          "deps": [
+            "npm:@playwright/test",
+            "npm:@nx/playwright",
+            "npm:@nx/devkit"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/app-router/project.json",
+          "hash": "5809827009473312328"
+        },
+        {
+          "file": "e2e/nextjs/app-router/tests/app-router.spec.ts",
+          "hash": "17006839392611495453",
+          "deps": [
+            "npm:@playwright/test"
+          ]
+        }
+      ],
+      "example-js-cloud-server-sdk-cf-worker": [
+        {
+          "file": "dev-apps/js-cloud-server/cloudflare-worker/.eslintrc.json",
+          "hash": "1276778310647437785"
+        },
+        {
+          "file": "dev-apps/js-cloud-server/cloudflare-worker/.gitignore",
+          "hash": "15281677854535253486"
+        },
+        {
+          "file": "dev-apps/js-cloud-server/cloudflare-worker/README.md",
+          "hash": "10147351565335656246"
+        },
+        {
+          "file": "dev-apps/js-cloud-server/cloudflare-worker/package.json",
+          "hash": "798449768223288384",
+          "deps": [
+            "js-cloud-server-sdk"
+          ]
+        },
+        {
+          "file": "dev-apps/js-cloud-server/cloudflare-worker/project.json",
+          "hash": "7098060268741369377"
+        },
+        {
+          "file": "dev-apps/js-cloud-server/cloudflare-worker/src/index.ts",
+          "hash": "3220025530762068681",
+          "deps": [
+            "js-cloud-server-sdk"
+          ]
+        },
+        {
+          "file": "dev-apps/js-cloud-server/cloudflare-worker/tsconfig.app.json",
+          "hash": "2667860149229921978"
+        },
+        {
+          "file": "dev-apps/js-cloud-server/cloudflare-worker/tsconfig.json",
+          "hash": "3251068532393912178"
+        },
+        {
+          "file": "dev-apps/js-cloud-server/cloudflare-worker/wrangler.toml",
+          "hash": "10502654786568344820"
+        }
+      ],
+      "example-nextjs-pages-router": [
+        {
+          "file": "dev-apps/nextjs/pages-router/.eslintrc.json",
+          "hash": "6256191937622513341"
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/README.md",
+          "hash": "2491869933675138177"
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/index.d.ts",
+          "hash": "7632214158357716854"
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/next-env.d.ts",
+          "hash": "15001922542048550947"
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/next.config.js",
+          "hash": "18260426132752079827",
+          "deps": [
+            "npm:@nx/next"
+          ]
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/package.json",
+          "hash": "2351716891478190117"
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/pages/_app.tsx",
+          "hash": "14718252399859330130",
+          "deps": [
+            "npm:react",
+            "npm:next",
+            "nextjs"
+          ]
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/pages/_error.tsx",
+          "hash": "13697387129871647871",
+          "deps": [
+            "npm:next"
+          ]
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/pages/api/hello.ts",
+          "hash": "444296073272361615",
+          "deps": [
+            "npm:next"
+          ]
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/pages/index.tsx",
+          "hash": "10425354520532894703",
+          "deps": [
+            "npm:next",
+            "react",
+            "nextjs"
+          ]
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/project.json",
+          "hash": "708691593726443853"
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/public/favicon.ico",
+          "hash": "9157999678830540297"
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/public/vercel.svg",
+          "hash": "3233056503954796132"
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/styles/Home.module.css",
+          "hash": "14099199526046460004"
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/styles/globals.css",
+          "hash": "17598859201990945540"
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/tsconfig.json",
+          "hash": "8638707836705603754"
+        },
+        {
+          "file": "dev-apps/nextjs/pages-router/tsconfig.spec.json",
+          "hash": "7437277805711777648"
+        }
+      ],
+      "debugger": [
+        {
+          "file": "lib/web-debugger/.eslintrc.json",
+          "hash": "7713162948491626686"
+        },
+        {
+          "file": "lib/web-debugger/README.md",
+          "hash": "2407407682240957227"
+        },
+        {
+          "file": "lib/web-debugger/index.ts",
+          "hash": "3424125583741341907"
+        },
+        {
+          "file": "lib/web-debugger/jest.config.ts",
+          "hash": "18051509626592350399"
+        },
+        {
+          "file": "lib/web-debugger/next.tsx",
+          "hash": "3472124773114960363",
+          "deps": [
+            "npm:react",
+            "nextjs"
+          ]
+        },
+        {
+          "file": "lib/web-debugger/package.json",
+          "hash": "8066190993473856653",
+          "deps": [
+            "shared-types",
+            "js",
+            "nextjs",
+            "react"
+          ]
+        },
+        {
+          "file": "lib/web-debugger/project.json",
+          "hash": "8810515783970749186"
+        },
+        {
+          "file": "lib/web-debugger/react.tsx",
+          "hash": "17761915403486535807",
+          "deps": [
+            "npm:react",
+            "react"
+          ]
+        },
+        {
+          "file": "lib/web-debugger/src/initializeDevCycleDebugger.test.ts",
+          "hash": "16670281826342607328",
+          "deps": [
+            "js"
+          ]
+        },
+        {
+          "file": "lib/web-debugger/src/initializeDevCycleDebugger.ts",
+          "hash": "9874643520765851825",
+          "deps": [
+            "js",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "lib/web-debugger/tsconfig.json",
+          "hash": "3395331752703031462"
+        },
+        {
+          "file": "lib/web-debugger/tsconfig.lib.json",
+          "hash": "10595753759453033878"
+        },
+        {
+          "file": "lib/web-debugger/tsconfig.spec.json",
+          "hash": "12036719973816446703"
+        }
+      ],
+      "sse-connection": [
+        {
+          "file": "lib/shared/sse-connection/.eslintrc.json",
+          "hash": "9711169714124487252"
+        },
+        {
+          "file": "lib/shared/sse-connection/README.md",
+          "hash": "16239331380420464146"
+        },
+        {
+          "file": "lib/shared/sse-connection/jest.config.ts",
+          "hash": "3779510044900699537"
+        },
+        {
+          "file": "lib/shared/sse-connection/package.json",
+          "hash": "15724374754144434378",
+          "deps": [
+            "npm:eventsource"
+          ]
+        },
+        {
+          "file": "lib/shared/sse-connection/project.json",
+          "hash": "7531745752383042777"
+        },
+        {
+          "file": "lib/shared/sse-connection/src/index.ts",
+          "hash": "15076690629703307666"
+        },
+        {
+          "file": "lib/shared/sse-connection/src/lib/SSEConnection.spec.ts",
+          "hash": "16378287457348570608",
+          "deps": [
+            "npm:eventsource"
+          ]
+        },
+        {
+          "file": "lib/shared/sse-connection/src/lib/SSEConnection.ts",
+          "hash": "3498788934738043734",
+          "deps": [
+            "shared-types",
+            "npm:eventsource"
+          ]
+        },
+        {
+          "file": "lib/shared/sse-connection/tsconfig.json",
+          "hash": "1861864473050275193"
+        },
+        {
+          "file": "lib/shared/sse-connection/tsconfig.lib.json",
+          "hash": "17753869744540453478"
+        },
+        {
+          "file": "lib/shared/sse-connection/tsconfig.spec.json",
+          "hash": "2539292257596010229"
+        }
+      ],
+      "openfeature-web-provider": [
+        {
+          "file": "sdk/openfeature-web-provider/.babelrc",
+          "hash": "842855554653651022"
+        },
+        {
+          "file": "sdk/openfeature-web-provider/.eslintrc.json",
+          "hash": "9220097867945776513"
+        },
+        {
+          "file": "sdk/openfeature-web-provider/README.md",
+          "hash": "13087506549123450267"
+        },
+        {
+          "file": "sdk/openfeature-web-provider/__mocks__/@devcycle/js-client-sdk.ts",
+          "hash": "7949492134024099821",
+          "deps": [
+            "js",
+            [
+              "npm:@devcycle/js-client-sdk/src/Client",
+              "dynamic"
+            ]
+          ]
+        },
+        {
+          "file": "sdk/openfeature-web-provider/__tests__/DevCycleProvider.test.ts",
+          "hash": "12732973196922185088",
+          "deps": [
+            "shared-types",
+            "npm:@openfeature/web-sdk"
+          ]
+        },
+        {
+          "file": "sdk/openfeature-web-provider/jest.config.ts",
+          "hash": "11795862108173019982"
+        },
+        {
+          "file": "sdk/openfeature-web-provider/package.json",
+          "hash": "7937102893723260941",
+          "deps": [
+            "js",
+            "npm:@openfeature/multi-provider-web",
+            "npm:@openfeature/web-sdk"
+          ]
+        },
+        {
+          "file": "sdk/openfeature-web-provider/project.json",
+          "hash": "18052327662557779987"
+        },
+        {
+          "file": "sdk/openfeature-web-provider/src/DevCycleProvider.ts",
+          "hash": "916776491179075367",
+          "deps": [
+            "npm:@openfeature/web-sdk",
+            "js",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/openfeature-web-provider/src/index.ts",
+          "hash": "15494058484081694321"
+        },
+        {
+          "file": "sdk/openfeature-web-provider/src/strategy/DevCycleMigrationStrategy.ts",
+          "hash": "1991451808100840657",
+          "deps": [
+            "npm:@openfeature/web-sdk",
+            "npm:@openfeature/multi-provider-web"
+          ]
+        },
+        {
+          "file": "sdk/openfeature-web-provider/src/strategy/index.ts",
+          "hash": "11977257985741564016"
+        },
+        {
+          "file": "sdk/openfeature-web-provider/strategy.ts",
+          "hash": "102306353964640514"
+        },
+        {
+          "file": "sdk/openfeature-web-provider/tsconfig.json",
+          "hash": "4041483701269408600"
+        },
+        {
+          "file": "sdk/openfeature-web-provider/tsconfig.lib.json",
+          "hash": "15200743955213756185"
+        },
+        {
+          "file": "sdk/openfeature-web-provider/tsconfig.spec.json",
+          "hash": "5261655675484848120"
+        }
+      ],
+      "example-nodejs-local": [
+        {
+          "file": "dev-apps/nodejs-local/.eslintrc.json",
+          "hash": "9220097867945776513"
+        },
+        {
+          "file": "dev-apps/nodejs-local/README.md",
+          "hash": "8683473580630415726"
+        },
+        {
+          "file": "dev-apps/nodejs-local/package.json",
+          "hash": "6445243268143188955"
+        },
+        {
+          "file": "dev-apps/nodejs-local/project.json",
+          "hash": "4146242458991112536"
+        },
+        {
+          "file": "dev-apps/nodejs-local/src/benchmarkDVC.ts",
+          "hash": "11371057039149342022",
+          "deps": [
+            "nodejs",
+            "npm:util"
+          ]
+        },
+        {
+          "file": "dev-apps/nodejs-local/src/main.ts",
+          "hash": "9437809598439342525",
+          "deps": [
+            "nodejs",
+            "shared-types",
+            "npm:class-transformer",
+            "npm:express"
+          ]
+        },
+        {
+          "file": "dev-apps/nodejs-local/tsconfig.app.json",
+          "hash": "3653935136253656324"
+        },
+        {
+          "file": "dev-apps/nodejs-local/tsconfig.json",
+          "hash": "15787543957214591055"
+        },
+        {
+          "file": "dev-apps/nodejs-local/tsconfig.spec.json",
+          "hash": "13354945799557359042"
+        },
+        {
+          "file": "dev-apps/nodejs-local/webpack.config.js",
+          "hash": "57218262006176586"
+        }
+      ],
+      "react-native": [
+        {
+          "file": "sdk/react-native/.babelrc",
+          "hash": "10219870107895076881"
+        },
+        {
+          "file": "sdk/react-native/.eslintrc.json",
+          "hash": "13277366322992377990"
+        },
+        {
+          "file": "sdk/react-native/README.md",
+          "hash": "16132835956634900346"
+        },
+        {
+          "file": "sdk/react-native/jest.config.ts",
+          "hash": "7678970740305921695"
+        },
+        {
+          "file": "sdk/react-native/package.json",
+          "hash": "12272384797469327558",
+          "deps": [
+            "js",
+            "react",
+            "shared-types",
+            "npm:@react-native-async-storage/async-storage",
+            "npm:react-native-device-info",
+            "npm:react-native-get-random-values",
+            "npm:react-native-sse",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "sdk/react-native/project.json",
+          "hash": "13793308299965579233"
+        },
+        {
+          "file": "sdk/react-native/src/DevCycleProvider.tsx",
+          "hash": "12409292114599352556",
+          "deps": [
+            "npm:react",
+            "react"
+          ]
+        },
+        {
+          "file": "sdk/react-native/src/ReactNativeCacheStore.ts",
+          "hash": "14548619291442004651",
+          "deps": [
+            "npm:@react-native-async-storage/async-storage",
+            "js"
+          ]
+        },
+        {
+          "file": "sdk/react-native/src/ReactNativeSSEConnection.ts",
+          "hash": "6509228852859091656",
+          "deps": [
+            "npm:react-native-sse",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/react-native/src/index.ts",
+          "hash": "18150775095862804281",
+          "deps": [
+            "react"
+          ]
+        },
+        {
+          "file": "sdk/react-native/src/withDevCycleProvider.ts",
+          "hash": "9002401984659914676",
+          "deps": [
+            "react"
+          ]
+        },
+        {
+          "file": "sdk/react-native/test-setup.ts",
+          "hash": "12423721430955558727",
+          "deps": [
+            "npm:@testing-library/jest-native"
+          ]
+        },
+        {
+          "file": "sdk/react-native/tsconfig.json",
+          "hash": "18263641236462325816"
+        },
+        {
+          "file": "sdk/react-native/tsconfig.lib.json",
+          "hash": "15106267022389741664"
+        },
+        {
+          "file": "sdk/react-native/tsconfig.spec.json",
+          "hash": "16659597141740843918"
+        }
+      ],
+      "nextjs": [
+        {
+          "file": "sdk/nextjs/.babelrc",
+          "hash": "14897979749180017028"
+        },
+        {
+          "file": "sdk/nextjs/.eslintrc.json",
+          "hash": "17254052141672766337"
+        },
+        {
+          "file": "sdk/nextjs/README.md",
+          "hash": "16935876353828436685"
+        },
+        {
+          "file": "sdk/nextjs/index.ts",
+          "hash": "5804620102362602052",
+          "deps": [
+            "react",
+            "js"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/jest.config.ts",
+          "hash": "324979159859220178"
+        },
+        {
+          "file": "sdk/nextjs/next-env.d.ts",
+          "hash": "5909181270615354023"
+        },
+        {
+          "file": "sdk/nextjs/package.json",
+          "hash": "17529114363141748567",
+          "deps": [
+            "shared-bucketing",
+            "js",
+            "react",
+            "shared-types",
+            "npm:class-transformer",
+            "npm:hoist-non-react-statics",
+            "npm:server-only"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/pages.ts",
+          "hash": "1515400679316496422",
+          "deps": [
+            "react"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/project.json",
+          "hash": "5673046135018036611"
+        },
+        {
+          "file": "sdk/nextjs/server.ts",
+          "hash": "8890339631633516671"
+        },
+        {
+          "file": "sdk/nextjs/src/client/DevCycleClientsideProvider.tsx",
+          "hash": "12866609127570633400",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/client/internal/InternalDevCycleClientsideProvider.tsx",
+          "hash": "15822439052433778108",
+          "deps": [
+            "npm:react",
+            "js",
+            "npm:next"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/client/internal/context.ts",
+          "hash": "13126705868686617972",
+          "deps": [
+            "js",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/client/internal/useDevCycleClient.ts",
+          "hash": "8236071748787194181",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/client/internal/useRerenderOnVariableChange.ts",
+          "hash": "6490271788829456545",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/client/renderIfEnabled.tsx",
+          "hash": "11302933944905426769",
+          "deps": [
+            "npm:react",
+            "npm:next"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/client/useAllFeatures.ts",
+          "hash": "6107917361654793801",
+          "deps": [
+            "js",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/client/useAllVariables.ts",
+          "hash": "4198108910548953770",
+          "deps": [
+            "js",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/client/useDevCycleClient.ts",
+          "hash": "17055584817945183271"
+        },
+        {
+          "file": "sdk/nextjs/src/client/useTrack.ts",
+          "hash": "4615200362725876640",
+          "deps": [
+            "js",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/client/useUserIdentity.ts",
+          "hash": "1537756252927274194",
+          "deps": [
+            "js"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/client/useVariableValue.ts",
+          "hash": "8148281880712792114",
+          "deps": [
+            "js",
+            "npm:react",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/common/cookie.ts",
+          "hash": "4177741852189713018",
+          "deps": [
+            "js"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/common/invalidateConfig.ts",
+          "hash": "6885303046949676205",
+          "deps": [
+            "npm:next"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/common/serializeUser.ts",
+          "hash": "12834908374267593351",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/common/types.ts",
+          "hash": "16941359486504836459",
+          "deps": [
+            "js",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/pages/appWithDevCycle.tsx",
+          "hash": "6790546635585784179",
+          "deps": [
+            "npm:next",
+            "npm:hoist-non-react-statics",
+            "react",
+            "npm:react",
+            "js",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/pages/bucketing.ts",
+          "hash": "5693222034508869047",
+          "deps": [
+            "js",
+            "shared-bucketing",
+            "shared-types",
+            "npm:class-transformer"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/pages/getServerSideDevCycle.ts",
+          "hash": "1910356852360232908",
+          "deps": [
+            "js",
+            "npm:next",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/pages/requests.ts",
+          "hash": "12120248914198709221",
+          "deps": [
+            "js"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/pages/types.ts",
+          "hash": "17392595393903651908",
+          "deps": [
+            "shared-types",
+            "js"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/server/bucketing.ts",
+          "hash": "4092501358321671432",
+          "deps": [
+            "shared-bucketing",
+            "npm:react",
+            "js",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/server/initialize.ts",
+          "hash": "9929348041915730122",
+          "deps": [
+            "js",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/server/requests.ts",
+          "hash": "2704137308150074716",
+          "deps": [
+            "js",
+            "npm:react",
+            "shared-types",
+            "npm:class-transformer"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/server/setupDevCycle.tsx",
+          "hash": "12432820163683484626",
+          "deps": [
+            "npm:server-only",
+            "js",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/src/server/userAgent.ts",
+          "hash": "7928771834143961898",
+          "deps": [
+            "npm:next"
+          ]
+        },
+        {
+          "file": "sdk/nextjs/tsconfig.json",
+          "hash": "1089020545825896893"
+        },
+        {
+          "file": "sdk/nextjs/tsconfig.lib.json",
+          "hash": "6946929970176668743"
+        },
+        {
+          "file": "sdk/nextjs/tsconfig.spec.json",
+          "hash": "36482042969363195"
+        }
+      ],
+      "openfeature-nestjs-provider": [
+        {
+          "file": "sdk/openfeature-nestjs-provider/.babelrc",
+          "hash": "842855554653651022"
+        },
+        {
+          "file": "sdk/openfeature-nestjs-provider/.eslintrc.json",
+          "hash": "11966063840774988116"
+        },
+        {
+          "file": "sdk/openfeature-nestjs-provider/README.md",
+          "hash": "3942117161431942423"
+        },
+        {
+          "file": "sdk/openfeature-nestjs-provider/jest.config.ts",
+          "hash": "5152342826456126997"
+        },
+        {
+          "file": "sdk/openfeature-nestjs-provider/package.json",
+          "hash": "1546232210891191400",
+          "deps": [
+            "nodejs"
+          ]
+        },
+        {
+          "file": "sdk/openfeature-nestjs-provider/project.json",
+          "hash": "14908260999416195281"
+        },
+        {
+          "file": "sdk/openfeature-nestjs-provider/src/index.ts",
+          "hash": "15727746983560763901",
+          "deps": [
+            "nodejs"
+          ]
+        },
+        {
+          "file": "sdk/openfeature-nestjs-provider/tsconfig.json",
+          "hash": "4041483701269408600"
+        },
+        {
+          "file": "sdk/openfeature-nestjs-provider/tsconfig.lib.json",
+          "hash": "15200743955213756185"
+        },
+        {
+          "file": "sdk/openfeature-nestjs-provider/tsconfig.spec.json",
+          "hash": "5261655675484848120"
+        }
+      ],
+      "e2e-js-cloud-server": [
+        {
+          "file": "e2e/js/js-cloud-server/.eslintrc.json",
+          "hash": "1276778310647437785"
+        },
+        {
+          "file": "e2e/js/js-cloud-server/.gitignore",
+          "hash": "12452374089221702768"
+        },
+        {
+          "file": "e2e/js/js-cloud-server/README.md",
+          "hash": "16921176957083304880"
+        },
+        {
+          "file": "e2e/js/js-cloud-server/jest.config.ts",
+          "hash": "8381313286059117237"
+        },
+        {
+          "file": "e2e/js/js-cloud-server/package.json",
+          "hash": "454096517942016900",
+          "deps": [
+            "js-cloud-server-sdk",
+            "npm:@types/jest",
+            "npm:jest",
+            "npm:ts-jest",
+            "npm:wrangler"
+          ]
+        },
+        {
+          "file": "e2e/js/js-cloud-server/project.json",
+          "hash": "17070802289332186716"
+        },
+        {
+          "file": "e2e/js/js-cloud-server/src/index.ts",
+          "hash": "207729098218426501",
+          "deps": [
+            "js-cloud-server-sdk"
+          ]
+        },
+        {
+          "file": "e2e/js/js-cloud-server/start.sh",
+          "hash": "5690360268249890228"
+        },
+        {
+          "file": "e2e/js/js-cloud-server/tests/js-cloud-server.spec.ts",
+          "hash": "359433425252277085"
+        },
+        {
+          "file": "e2e/js/js-cloud-server/tsconfig.app.json",
+          "hash": "2667860149229921978"
+        },
+        {
+          "file": "e2e/js/js-cloud-server/tsconfig.json",
+          "hash": "11693111372726858718"
+        },
+        {
+          "file": "e2e/js/js-cloud-server/tsconfig.spec.json",
+          "hash": "9929779869252348105"
+        },
+        {
+          "file": "e2e/js/js-cloud-server/wrangler.toml",
+          "hash": "10502654786568344820"
+        },
+        {
+          "file": "e2e/js/js-cloud-server/yarn.lock",
+          "hash": "17723147051494719864"
+        }
+      ],
+      "react-native-expo": [
+        {
+          "file": "sdk/react-native-expo/.babelrc",
+          "hash": "10219870107895076881"
+        },
+        {
+          "file": "sdk/react-native-expo/.eslintrc.json",
+          "hash": "13277366322992377990"
+        },
+        {
+          "file": "sdk/react-native-expo/README.md",
+          "hash": "9312416077441156018"
+        },
+        {
+          "file": "sdk/react-native-expo/jest.config.ts",
+          "hash": "7678970740305921695"
+        },
+        {
+          "file": "sdk/react-native-expo/package.json",
+          "hash": "2293434102591894496",
+          "deps": [
+            "js",
+            "react",
+            "npm:@react-native-async-storage/async-storage",
+            "npm:react-native-device-info",
+            "npm:react-native-get-random-values",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "sdk/react-native-expo/project.json",
+          "hash": "1531043192728935709"
+        },
+        {
+          "file": "sdk/react-native-expo/src/DevCycleProvider.tsx",
+          "hash": "4482740762685685441",
+          "deps": [
+            "npm:react",
+            "react"
+          ]
+        },
+        {
+          "file": "sdk/react-native-expo/src/ReactNativeCacheStore.ts",
+          "hash": "14548619291442004651",
+          "deps": [
+            "npm:@react-native-async-storage/async-storage",
+            "js"
+          ]
+        },
+        {
+          "file": "sdk/react-native-expo/src/index.ts",
+          "hash": "18150775095862804281",
+          "deps": [
+            "react"
+          ]
+        },
+        {
+          "file": "sdk/react-native-expo/src/withDevCycleProvider.ts",
+          "hash": "9002401984659914676",
+          "deps": [
+            "react"
+          ]
+        },
+        {
+          "file": "sdk/react-native-expo/test-setup.ts",
+          "hash": "12423721430955558727",
+          "deps": [
+            "npm:@testing-library/jest-native"
+          ]
+        },
+        {
+          "file": "sdk/react-native-expo/tsconfig.json",
+          "hash": "18263641236462325816"
+        },
+        {
+          "file": "sdk/react-native-expo/tsconfig.lib.json",
+          "hash": "15106267022389741664"
+        },
+        {
+          "file": "sdk/react-native-expo/tsconfig.spec.json",
+          "hash": "16659597141740843918"
+        }
+      ],
+      "server-request": [
+        {
+          "file": "lib/shared/server-request/.eslintrc.json",
+          "hash": "9711169714124487252"
+        },
+        {
+          "file": "lib/shared/server-request/README.md",
+          "hash": "17028694027598145503"
+        },
+        {
+          "file": "lib/shared/server-request/__mocks__/cross-fetch.ts",
+          "hash": "9151741506596096951"
+        },
+        {
+          "file": "lib/shared/server-request/__mocks__/fetch-retry.ts",
+          "hash": "6479147895484053177"
+        },
+        {
+          "file": "lib/shared/server-request/__tests__/request.spec.ts",
+          "hash": "13875299615410334528",
+          "deps": [
+            "npm:cross-fetch"
+          ]
+        },
+        {
+          "file": "lib/shared/server-request/jest.config.ts",
+          "hash": "1703219546847276755"
+        },
+        {
+          "file": "lib/shared/server-request/project.json",
+          "hash": "4214381180843236979"
+        },
+        {
+          "file": "lib/shared/server-request/src/index.ts",
+          "hash": "2654766565678646966"
+        },
+        {
+          "file": "lib/shared/server-request/src/request.ts",
+          "hash": "6020549853524980434",
+          "deps": [
+            "npm:fetch-retry",
+            [
+              "npm:cross-fetch",
+              "dynamic"
+            ]
+          ]
+        },
+        {
+          "file": "lib/shared/server-request/tsconfig.json",
+          "hash": "1861864473050275193"
+        },
+        {
+          "file": "lib/shared/server-request/tsconfig.lib.json",
+          "hash": "10677914633772803777"
+        },
+        {
+          "file": "lib/shared/server-request/tsconfig.spec.json",
+          "hash": "4125311216041900173"
+        }
+      ],
+      "openfeature-react-provider": [
+        {
+          "file": "sdk/openfeature-react-provider/.babelrc",
+          "hash": "842855554653651022"
+        },
+        {
+          "file": "sdk/openfeature-react-provider/.eslintrc.json",
+          "hash": "11966063840774988116"
+        },
+        {
+          "file": "sdk/openfeature-react-provider/README.md",
+          "hash": "14453381746274790811"
+        },
+        {
+          "file": "sdk/openfeature-react-provider/__mocks__/@devcycle/js-client-sdk.ts",
+          "hash": "7949492134024099821",
+          "deps": [
+            "js",
+            [
+              "npm:@devcycle/js-client-sdk/src/Client",
+              "dynamic"
+            ]
+          ]
+        },
+        {
+          "file": "sdk/openfeature-react-provider/__tests__/DevCycleReactProvider.test.ts",
+          "hash": "10145423005232029344",
+          "deps": [
+            "shared-types",
+            "npm:@openfeature/web-sdk"
+          ]
+        },
+        {
+          "file": "sdk/openfeature-react-provider/jest.config.ts",
+          "hash": "3039770821677306964"
+        },
+        {
+          "file": "sdk/openfeature-react-provider/package.json",
+          "hash": "12687084557539499101",
+          "deps": [
+            "js",
+            "openfeature-web-provider",
+            "npm:@openfeature/multi-provider-web",
+            "npm:@openfeature/web-sdk"
+          ]
+        },
+        {
+          "file": "sdk/openfeature-react-provider/project.json",
+          "hash": "11922828084498462280"
+        },
+        {
+          "file": "sdk/openfeature-react-provider/src/index.ts",
+          "hash": "5645139140343403747",
+          "deps": [
+            "js",
+            "openfeature-web-provider"
+          ]
+        },
+        {
+          "file": "sdk/openfeature-react-provider/strategy.ts",
+          "hash": "2085299361551672884",
+          "deps": [
+            "openfeature-web-provider"
+          ]
+        },
+        {
+          "file": "sdk/openfeature-react-provider/tsconfig.json",
+          "hash": "4041483701269408600"
+        },
+        {
+          "file": "sdk/openfeature-react-provider/tsconfig.lib.json",
+          "hash": "15200743955213756185"
+        },
+        {
+          "file": "sdk/openfeature-react-provider/tsconfig.spec.json",
+          "hash": "5261655675484848120"
+        }
+      ],
+      "react": [
+        {
+          "file": "sdk/react/.babelrc",
+          "hash": "12518696695936721075"
+        },
+        {
+          "file": "sdk/react/.eslintrc.json",
+          "hash": "7793206704282563207"
+        },
+        {
+          "file": "sdk/react/.gitignore",
+          "hash": "4174095619284331435"
+        },
+        {
+          "file": "sdk/react/README.md",
+          "hash": "9459580649845309835"
+        },
+        {
+          "file": "sdk/react/__mocks__/@devcycle/js-client-sdk.ts",
+          "hash": "4974998081487160099"
+        },
+        {
+          "file": "sdk/react/jest.config.ts",
+          "hash": "14075894714158589832"
+        },
+        {
+          "file": "sdk/react/mockData/mockConfig.ts",
+          "hash": "9470404608808328880"
+        },
+        {
+          "file": "sdk/react/package.json",
+          "hash": "552770314987120816",
+          "deps": [
+            "js",
+            "shared-types",
+            "npm:hoist-non-react-statics",
+            "npm:cross-fetch",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "sdk/react/project.json",
+          "hash": "4000599646673900185"
+        },
+        {
+          "file": "sdk/react/src/DevCycleProvider.tsx",
+          "hash": "16634610240815742864",
+          "deps": [
+            "npm:react",
+            "js"
+          ]
+        },
+        {
+          "file": "sdk/react/src/RenderIfEnabled.test.tsx",
+          "hash": "7928492274324507456",
+          "deps": [
+            "npm:@testing-library/react",
+            "npm:@testing-library/jest-dom"
+          ]
+        },
+        {
+          "file": "sdk/react/src/RenderIfEnabled.tsx",
+          "hash": "6615285006345083319",
+          "deps": [
+            "js",
+            "npm:react",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/react/src/SwapComponents.test.tsx",
+          "hash": "13743950164369422877",
+          "deps": [
+            "npm:@testing-library/react",
+            "npm:@testing-library/jest-dom"
+          ]
+        },
+        {
+          "file": "sdk/react/src/SwapComponents.tsx",
+          "hash": "15576115460864112276",
+          "deps": [
+            "npm:react",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/react/src/asyncDVCProvider.tsx",
+          "hash": "259932182615459854",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "sdk/react/src/context.ts",
+          "hash": "14518878732138872490",
+          "deps": [
+            "npm:react",
+            "js"
+          ]
+        },
+        {
+          "file": "sdk/react/src/index.ts",
+          "hash": "8362867546551594164",
+          "deps": [
+            "js"
+          ]
+        },
+        {
+          "file": "sdk/react/src/initializeDevCycleClient.ts",
+          "hash": "8544010647403396167",
+          "deps": [
+            "js"
+          ]
+        },
+        {
+          "file": "sdk/react/src/types.ts",
+          "hash": "17674290387075102267",
+          "deps": [
+            "js"
+          ]
+        },
+        {
+          "file": "sdk/react/src/useDVCVariable.ts",
+          "hash": "1324715166478825488",
+          "deps": [
+            "js"
+          ]
+        },
+        {
+          "file": "sdk/react/src/useDevCycleClient.ts",
+          "hash": "13869405120626678789",
+          "deps": [
+            "npm:react",
+            "js"
+          ]
+        },
+        {
+          "file": "sdk/react/src/useIsDevCycleInitialized.test.tsx",
+          "hash": "1710321954719776926",
+          "deps": [
+            "npm:@testing-library/react",
+            "npm:nock",
+            "npm:react",
+            "npm:@testing-library/react-native",
+            "shared-types",
+            "npm:cross-fetch"
+          ]
+        },
+        {
+          "file": "sdk/react/src/useIsDevCycleInitialized.ts",
+          "hash": "7204219923104373053",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "sdk/react/src/useVariable.ts",
+          "hash": "10841349284010044957",
+          "deps": [
+            "npm:react",
+            "js",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/react/src/useVariableValue.integration.test.tsx",
+          "hash": "3144773998172633729",
+          "deps": [
+            "npm:@testing-library/react",
+            "npm:nock",
+            "npm:cross-fetch"
+          ]
+        },
+        {
+          "file": "sdk/react/src/useVariableValue.test.tsx",
+          "hash": "14279354432899531524",
+          "deps": [
+            "npm:@testing-library/react",
+            "npm:@testing-library/jest-dom",
+            "js",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "sdk/react/src/useVariableValue.ts",
+          "hash": "3803953060010859068",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/react/src/withDevCycleProvider.tsx",
+          "hash": "5419238993868693859",
+          "deps": [
+            "npm:react",
+            "npm:hoist-non-react-statics",
+            "js"
+          ]
+        },
+        {
+          "file": "sdk/react/tsconfig.json",
+          "hash": "14670269001048019541"
+        },
+        {
+          "file": "sdk/react/tsconfig.lib.es5.json",
+          "hash": "8007791089812200267"
+        },
+        {
+          "file": "sdk/react/tsconfig.lib.json",
+          "hash": "15188646432795717339"
+        },
+        {
+          "file": "sdk/react/tsconfig.spec.json",
+          "hash": "2363138631830145362"
+        }
+      ],
+      "js": [
+        {
+          "file": "sdk/js/.babelrc",
+          "hash": "842855554653651022"
+        },
+        {
+          "file": "sdk/js/.eslintrc.json",
+          "hash": "9108473630004283362"
+        },
+        {
+          "file": "sdk/js/.gitignore",
+          "hash": "14569810938490650252"
+        },
+        {
+          "file": "sdk/js/README.md",
+          "hash": "12971878315423962292"
+        },
+        {
+          "file": "sdk/js/__mocks__/fetch-retry.ts",
+          "hash": "6479147895484053177"
+        },
+        {
+          "file": "sdk/js/__tests__/CacheStore.spec.js",
+          "hash": "10116633763695205728"
+        },
+        {
+          "file": "sdk/js/__tests__/Client.spec.js",
+          "hash": "10807906767237562067",
+          "deps": [
+            "npm:jest-mock"
+          ]
+        },
+        {
+          "file": "sdk/js/__tests__/Client.test.ts",
+          "hash": "6988883348504344653"
+        },
+        {
+          "file": "sdk/js/__tests__/ConfigRequestConsolidator.spec.js",
+          "hash": "4859050353056396214"
+        },
+        {
+          "file": "sdk/js/__tests__/EvalHooksRunner.spec.ts",
+          "hash": "6402054235285527054"
+        },
+        {
+          "file": "sdk/js/__tests__/EventEmitter.spec.js",
+          "hash": "11398574271114993174"
+        },
+        {
+          "file": "sdk/js/__tests__/EventQueue.spec.js",
+          "hash": "1179218873558401053"
+        },
+        {
+          "file": "sdk/js/__tests__/Request.spec.ts",
+          "hash": "17234741238509139177",
+          "deps": [
+            "shared-types",
+            "npm:cross-fetch"
+          ]
+        },
+        {
+          "file": "sdk/js/__tests__/RequestEvent.spec.js",
+          "hash": "149244393395346790"
+        },
+        {
+          "file": "sdk/js/__tests__/User.spec.js",
+          "hash": "398585080892579298",
+          "deps": [
+            "npm:uuid"
+          ]
+        },
+        {
+          "file": "sdk/js/__tests__/Variable.spec.ts",
+          "hash": "9852177293605607444"
+        },
+        {
+          "file": "sdk/js/__tests__/index.spec.js",
+          "hash": "5899218161489093383"
+        },
+        {
+          "file": "sdk/js/__tests__/index.test.ts",
+          "hash": "3392298394129565311"
+        },
+        {
+          "file": "sdk/js/__tests__/setupConfig.js",
+          "hash": "9377776460044166631"
+        },
+        {
+          "file": "sdk/js/jest.config.ts",
+          "hash": "15744120635789890725"
+        },
+        {
+          "file": "sdk/js/package.json",
+          "hash": "10550391041783803063",
+          "deps": [
+            "shared-types",
+            "npm:fetch-retry",
+            "npm:lodash",
+            "npm:ua-parser-js",
+            "npm:uuid",
+            "npm:cross-fetch"
+          ]
+        },
+        {
+          "file": "sdk/js/project.json",
+          "hash": "4773589212137702934"
+        },
+        {
+          "file": "sdk/js/src/CacheStore.ts",
+          "hash": "942696138021403886",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js/src/Client.ts",
+          "hash": "2411987747492167726",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js/src/ConfigRequestConsolidator.ts",
+          "hash": "7272572128938429299",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js/src/DefaultCacheStore.ts",
+          "hash": "14664990151529752574"
+        },
+        {
+          "file": "sdk/js/src/EventEmitter.ts",
+          "hash": "61127385482759879"
+        },
+        {
+          "file": "sdk/js/src/EventQueue.ts",
+          "hash": "14027051405588177907",
+          "deps": [
+            "npm:lodash",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js/src/Request.ts",
+          "hash": "3288567131807047639",
+          "deps": [
+            "shared-types",
+            "npm:fetch-retry"
+          ]
+        },
+        {
+          "file": "sdk/js/src/RequestEvent.ts",
+          "hash": "7387930894758658097",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js/src/RequestUtils.ts",
+          "hash": "5745175391863715346",
+          "deps": [
+            "npm:fetch-retry"
+          ]
+        },
+        {
+          "file": "sdk/js/src/StreamingConnection.ts",
+          "hash": "6690385626361195571",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js/src/User.ts",
+          "hash": "15624822534745378878",
+          "deps": [
+            "npm:uuid",
+            "npm:ua-parser-js"
+          ]
+        },
+        {
+          "file": "sdk/js/src/Variable.ts",
+          "hash": "10410441308927098092",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js/src/hooks/EvalHook.ts",
+          "hash": "3401386111588550870"
+        },
+        {
+          "file": "sdk/js/src/hooks/EvalHooksRunner.ts",
+          "hash": "17532856085026186315",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js/src/hooks/HookContext.ts",
+          "hash": "3966016489438428369"
+        },
+        {
+          "file": "sdk/js/src/index.ts",
+          "hash": "18060172555611783491",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js/src/logger.ts",
+          "hash": "11284903285230381647",
+          "deps": [
+            "npm:lodash",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js/src/types.ts",
+          "hash": "9739149801005926172",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js/src/utils.ts",
+          "hash": "3164271455023351589",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js/tsconfig.json",
+          "hash": "3536978636630054942"
+        },
+        {
+          "file": "sdk/js/tsconfig.lib.es5.json",
+          "hash": "8787351659340717418"
+        },
+        {
+          "file": "sdk/js/tsconfig.lib.json",
+          "hash": "16574221497913981371"
+        },
+        {
+          "file": "sdk/js/tsconfig.spec.json",
+          "hash": "4538240548915547115"
+        },
+        {
+          "file": "sdk/js/webpack.config.js",
+          "hash": "17285710130321130458"
+        }
+      ],
+      "shared-vercel-edge-config": [
+        {
+          "file": "lib/shared/vercel-edge-config/.eslintrc.json",
+          "hash": "9407271667849444263"
+        },
+        {
+          "file": "lib/shared/vercel-edge-config/README.md",
+          "hash": "14822086986837932849"
+        },
+        {
+          "file": "lib/shared/vercel-edge-config/jest.config.ts",
+          "hash": "15123928248951708331"
+        },
+        {
+          "file": "lib/shared/vercel-edge-config/package.json",
+          "hash": "3188345953892966225",
+          "deps": [
+            "npm:class-transformer",
+            "shared-types",
+            "npm:@vercel/edge-config"
+          ]
+        },
+        {
+          "file": "lib/shared/vercel-edge-config/project.json",
+          "hash": "17412206976930860725"
+        },
+        {
+          "file": "lib/shared/vercel-edge-config/src/edge-config.spec.ts",
+          "hash": "17151536462014511964",
+          "deps": [
+            "npm:@total-typescript/shoehorn"
+          ]
+        },
+        {
+          "file": "lib/shared/vercel-edge-config/src/edge-config.ts",
+          "hash": "9366248775763883898",
+          "deps": [
+            "npm:@vercel/edge-config",
+            "shared-types",
+            "npm:class-transformer"
+          ]
+        },
+        {
+          "file": "lib/shared/vercel-edge-config/src/index.ts",
+          "hash": "8794494671005801055"
+        },
+        {
+          "file": "lib/shared/vercel-edge-config/tsconfig.json",
+          "hash": "1861864473050275193"
+        },
+        {
+          "file": "lib/shared/vercel-edge-config/tsconfig.lib.json",
+          "hash": "13407645719435366195"
+        },
+        {
+          "file": "lib/shared/vercel-edge-config/tsconfig.spec.json",
+          "hash": "12398179462326272513"
+        }
+      ],
+      "e2e-nextjs-pages-router": [
+        {
+          "file": "e2e/nextjs/pages-router/.eslintrc.json",
+          "hash": "9413133235847933221"
+        },
+        {
+          "file": "e2e/nextjs/pages-router/app/.gitignore",
+          "hash": "13857520976425382491"
+        },
+        {
+          "file": "e2e/nextjs/pages-router/app/.yarnrc.yml",
+          "hash": "5391657931463498180"
+        },
+        {
+          "file": "e2e/nextjs/pages-router/app/next.config.js",
+          "hash": "14594058484359092244"
+        },
+        {
+          "file": "e2e/nextjs/pages-router/app/package.json",
+          "hash": "14209098523948036878"
+        },
+        {
+          "file": "e2e/nextjs/pages-router/app/pages/_app.tsx",
+          "hash": "12501737710927029425",
+          "deps": [
+            "npm:next",
+            "nextjs"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/pages-router/app/pages/_document.tsx",
+          "hash": "15622967365521260028",
+          "deps": [
+            "npm:next"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/pages-router/app/pages/index.tsx",
+          "hash": "5540969668960113953",
+          "deps": [
+            "nextjs",
+            "npm:next"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/pages-router/app/pages/self-targeting/index.tsx",
+          "hash": "15184933572442708511",
+          "deps": [
+            "nextjs",
+            "npm:next"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/pages-router/app/start.sh",
+          "hash": "1857880386882472562"
+        },
+        {
+          "file": "e2e/nextjs/pages-router/app/tsconfig.json",
+          "hash": "5602956310984472064"
+        },
+        {
+          "file": "e2e/nextjs/pages-router/app/yarn.lock",
+          "hash": "9869903062464727124"
+        },
+        {
+          "file": "e2e/nextjs/pages-router/playwright.config.ts",
+          "hash": "9777118947283598048",
+          "deps": [
+            "npm:@playwright/test",
+            "npm:@nx/playwright",
+            "npm:@nx/devkit"
+          ]
+        },
+        {
+          "file": "e2e/nextjs/pages-router/project.json",
+          "hash": "2907042630874624279"
+        },
+        {
+          "file": "e2e/nextjs/pages-router/tests/pages-router.spec.ts",
+          "hash": "1246460110576736470",
+          "deps": [
+            "npm:@playwright/test"
+          ]
+        }
+      ],
+      "example-openfeature-web": [
+        {
+          "file": "dev-apps/openfeature-web/.babelrc",
+          "hash": "11933065911831293579"
+        },
+        {
+          "file": "dev-apps/openfeature-web/.eslintrc.json",
+          "hash": "11902604076208507531"
+        },
+        {
+          "file": "dev-apps/openfeature-web/README.md",
+          "hash": "6866970998646707083"
+        },
+        {
+          "file": "dev-apps/openfeature-web/browserslist",
+          "hash": "3682804324403383287"
+        },
+        {
+          "file": "dev-apps/openfeature-web/jest.config.ts",
+          "hash": "17969851424224690976"
+        },
+        {
+          "file": "dev-apps/openfeature-web/package.json",
+          "hash": "5982220029372839897"
+        },
+        {
+          "file": "dev-apps/openfeature-web/project.json",
+          "hash": "12359422197039802179"
+        },
+        {
+          "file": "dev-apps/openfeature-web/src/app/app.element.css",
+          "hash": "14449459040666009454"
+        },
+        {
+          "file": "dev-apps/openfeature-web/src/app/app.element.spec.ts",
+          "hash": "2925362803370935237"
+        },
+        {
+          "file": "dev-apps/openfeature-web/src/app/app.element.ts",
+          "hash": "17603155637345342359",
+          "deps": [
+            "openfeature-web-provider",
+            "npm:@openfeature/web-sdk"
+          ]
+        },
+        {
+          "file": "dev-apps/openfeature-web/src/assets/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "dev-apps/openfeature-web/src/environments/environment.prod.ts",
+          "hash": "14319090500531079778"
+        },
+        {
+          "file": "dev-apps/openfeature-web/src/environments/environment.ts",
+          "hash": "9178973365635766842"
+        },
+        {
+          "file": "dev-apps/openfeature-web/src/favicon.ico",
+          "hash": "9303420814833116677"
+        },
+        {
+          "file": "dev-apps/openfeature-web/src/index.html",
+          "hash": "11776556630644209288"
+        },
+        {
+          "file": "dev-apps/openfeature-web/src/main.ts",
+          "hash": "9802556070214386378"
+        },
+        {
+          "file": "dev-apps/openfeature-web/src/polyfills.ts",
+          "hash": "3605444650927540957",
+          "deps": [
+            "npm:core-js",
+            "npm:regenerator-runtime"
+          ]
+        },
+        {
+          "file": "dev-apps/openfeature-web/src/styles.css",
+          "hash": "5195668842064076916"
+        },
+        {
+          "file": "dev-apps/openfeature-web/src/test-setup.ts",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "dev-apps/openfeature-web/tsconfig.app.json",
+          "hash": "18434308148894042130"
+        },
+        {
+          "file": "dev-apps/openfeature-web/tsconfig.json",
+          "hash": "15787543957214591055"
+        },
+        {
+          "file": "dev-apps/openfeature-web/tsconfig.spec.json",
+          "hash": "13651284285843202557"
+        }
+      ],
+      "shared-bucketing-test-data": [
+        {
+          "file": "lib/shared/bucketing-test-data/.babelrc",
+          "hash": "842855554653651022"
+        },
+        {
+          "file": "lib/shared/bucketing-test-data/.eslintrc.json",
+          "hash": "9711169714124487252"
+        },
+        {
+          "file": "lib/shared/bucketing-test-data/.gitignore",
+          "hash": "14721821773779202173"
+        },
+        {
+          "file": "lib/shared/bucketing-test-data/README.md",
+          "hash": "6751311620970310970"
+        },
+        {
+          "file": "lib/shared/bucketing-test-data/jest.config.ts",
+          "hash": "3996237673062206241"
+        },
+        {
+          "file": "lib/shared/bucketing-test-data/package.json",
+          "hash": "16403510935708365036"
+        },
+        {
+          "file": "lib/shared/bucketing-test-data/project.json",
+          "hash": "109808289333435822"
+        },
+        {
+          "file": "lib/shared/bucketing-test-data/src/data/largeConfig.ts",
+          "hash": "5937212883278427500",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-test-data/src/data/testData.ts",
+          "hash": "14039889851205506218",
+          "deps": [
+            "shared-types",
+            "npm:moment"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-test-data/src/main.ts",
+          "hash": "10190839358137550617",
+          "deps": [
+            "npm:fs",
+            "npm:path"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing-test-data/tsconfig.json",
+          "hash": "18420787794129039294"
+        },
+        {
+          "file": "lib/shared/bucketing-test-data/tsconfig.lib.json",
+          "hash": "9439081797481745153"
+        },
+        {
+          "file": "lib/shared/bucketing-test-data/tsconfig.spec.json",
+          "hash": "13395697971408159470"
+        }
+      ],
+      "nestjs": [
+        {
+          "file": "sdk/nestjs/.babelrc",
+          "hash": "842855554653651022"
+        },
+        {
+          "file": "sdk/nestjs/.eslintrc.json",
+          "hash": "8526526896830405483"
+        },
+        {
+          "file": "sdk/nestjs/.gitignore",
+          "hash": "4174095619284331435"
+        },
+        {
+          "file": "sdk/nestjs/.test.env",
+          "hash": "10939626950826230846"
+        },
+        {
+          "file": "sdk/nestjs/README.md",
+          "hash": "14413746645540983322"
+        },
+        {
+          "file": "sdk/nestjs/jest.config.ts",
+          "hash": "16308281166124066606"
+        },
+        {
+          "file": "sdk/nestjs/mocks.ts",
+          "hash": "5155429917553355375"
+        },
+        {
+          "file": "sdk/nestjs/package.json",
+          "hash": "7215037987150460150",
+          "deps": [
+            "nodejs",
+            "shared-types",
+            "npm:@nestjs/common",
+            "npm:@nestjs/core"
+          ]
+        },
+        {
+          "file": "sdk/nestjs/project.json",
+          "hash": "4876104199735512737"
+        },
+        {
+          "file": "sdk/nestjs/src/DevCycleModule/DevCycleModule.ts",
+          "hash": "17820675624883617289",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/core",
+            "nodejs",
+            "npm:nestjs-cls"
+          ]
+        },
+        {
+          "file": "sdk/nestjs/src/DevCycleModule/DevCycleModuleOptions.ts",
+          "hash": "10496430381655797359",
+          "deps": [
+            "npm:@nestjs/common",
+            "nodejs"
+          ]
+        },
+        {
+          "file": "sdk/nestjs/src/DevCycleModule/DevCycleService.ts",
+          "hash": "10519955472513758347",
+          "deps": [
+            "npm:@nestjs/common",
+            "nodejs",
+            "shared-types",
+            "npm:nestjs-cls"
+          ]
+        },
+        {
+          "file": "sdk/nestjs/src/DevCycleModule/RequestInterceptor.test.ts",
+          "hash": "1311223157201000614",
+          "deps": [
+            "npm:@nestjs/common",
+            "nodejs",
+            "npm:nestjs-cls"
+          ]
+        },
+        {
+          "file": "sdk/nestjs/src/DevCycleModule/RequestInterceptor.ts",
+          "hash": "3545822281669545782",
+          "deps": [
+            "npm:@nestjs/common",
+            "nodejs",
+            "npm:nestjs-cls"
+          ]
+        },
+        {
+          "file": "sdk/nestjs/src/DevCycleModule/index.ts",
+          "hash": "13866507491968765540"
+        },
+        {
+          "file": "sdk/nestjs/src/RequireVariableValue.ts",
+          "hash": "13000028370203684399",
+          "deps": [
+            "npm:@nestjs/common",
+            "nodejs",
+            "npm:nestjs-cls",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nestjs/src/VariableValue.test.ts",
+          "hash": "9320740964670805623",
+          "deps": [
+            "npm:@nestjs/common",
+            "nodejs",
+            "npm:nestjs-cls"
+          ]
+        },
+        {
+          "file": "sdk/nestjs/src/VariableValue.ts",
+          "hash": "2054324764015133014",
+          "deps": [
+            "npm:@nestjs/common",
+            "nodejs",
+            "npm:nestjs-cls",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nestjs/src/__mocks__/DevCycleClient.ts",
+          "hash": "9727758233767473174",
+          "deps": [
+            "nodejs",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/nestjs/src/__mocks__/DevCycleModule.ts",
+          "hash": "8686170564265481357",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/core",
+            "nodejs",
+            "npm:nestjs-cls"
+          ]
+        },
+        {
+          "file": "sdk/nestjs/src/__mocks__/RequireVariableValue.ts",
+          "hash": "16380519723863573280"
+        },
+        {
+          "file": "sdk/nestjs/src/__mocks__/VariableValue.ts",
+          "hash": "436030080679329624"
+        },
+        {
+          "file": "sdk/nestjs/src/__mocks__/index.ts",
+          "hash": "15188675109913075907",
+          "deps": [
+            "nodejs"
+          ]
+        },
+        {
+          "file": "sdk/nestjs/src/index.ts",
+          "hash": "14514197448805875996",
+          "deps": [
+            "nodejs"
+          ]
+        },
+        {
+          "file": "sdk/nestjs/tsconfig.json",
+          "hash": "4041483701269408600"
+        },
+        {
+          "file": "sdk/nestjs/tsconfig.lib.json",
+          "hash": "13917047921192640361"
+        },
+        {
+          "file": "sdk/nestjs/tsconfig.spec.json",
+          "hash": "11512467525245454865"
+        }
+      ],
+      "shared-bucketing": [
+        {
+          "file": "lib/shared/bucketing/.circleci/config.yml",
+          "hash": "7314763551242074469"
+        },
+        {
+          "file": "lib/shared/bucketing/.eslintrc.json",
+          "hash": "14782607021747849245"
+        },
+        {
+          "file": "lib/shared/bucketing/README.md",
+          "hash": "12755801226365804968"
+        },
+        {
+          "file": "lib/shared/bucketing/__tests__/bucketing.test.ts",
+          "hash": "10480913840891766617",
+          "deps": [
+            "shared-types",
+            "shared-bucketing-test-data",
+            "npm:moment",
+            "npm:lodash",
+            "npm:uuid"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing/__tests__/segmentation.test.ts",
+          "hash": "10002991658369598066",
+          "deps": [
+            "npm:lodash",
+            "npm:assert",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing/jest.config.ts",
+          "hash": "14979869711988818752"
+        },
+        {
+          "file": "lib/shared/bucketing/package.json",
+          "hash": "8523856274964940334",
+          "deps": [
+            "shared-types",
+            "npm:lodash",
+            "npm:murmurhash",
+            "npm:ua-parser-js"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing/project.json",
+          "hash": "16320895110885316731"
+        },
+        {
+          "file": "lib/shared/bucketing/src/bucketing.ts",
+          "hash": "447844936440675618",
+          "deps": [
+            "npm:lodash",
+            "shared-types",
+            "npm:murmurhash"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing/src/index.ts",
+          "hash": "15629535812513500498"
+        },
+        {
+          "file": "lib/shared/bucketing/src/segmentation.ts",
+          "hash": "11397596886297556360",
+          "deps": [
+            "npm:lodash",
+            "shared-types",
+            "npm:ua-parser-js"
+          ]
+        },
+        {
+          "file": "lib/shared/bucketing/src/versionCompare.ts",
+          "hash": "2131437516749645139"
+        },
+        {
+          "file": "lib/shared/bucketing/tsconfig.json",
+          "hash": "16886295927430927676"
+        },
+        {
+          "file": "lib/shared/bucketing/tsconfig.lib.json",
+          "hash": "8086080125984965656"
+        },
+        {
+          "file": "lib/shared/bucketing/tsconfig.spec.json",
+          "hash": "9622449286671273793"
+        }
+      ],
+      "openfeature-angular-provider": [
+        {
+          "file": "sdk/openfeature-angular-provider/.babelrc",
+          "hash": "842855554653651022"
+        },
+        {
+          "file": "sdk/openfeature-angular-provider/.eslintrc.json",
+          "hash": "11966063840774988116"
+        },
+        {
+          "file": "sdk/openfeature-angular-provider/README.md",
+          "hash": "16867269341556705100"
+        },
+        {
+          "file": "sdk/openfeature-angular-provider/__mocks__/@devcycle/js-client-sdk.ts",
+          "hash": "7949492134024099821",
+          "deps": [
+            "js",
+            [
+              "npm:@devcycle/js-client-sdk/src/Client",
+              "dynamic"
+            ]
+          ]
+        },
+        {
+          "file": "sdk/openfeature-angular-provider/__tests__/DevCycleAngularProvider.test.ts",
+          "hash": "16668511110757519214",
+          "deps": [
+            "shared-types",
+            "npm:@openfeature/web-sdk"
+          ]
+        },
+        {
+          "file": "sdk/openfeature-angular-provider/jest.config.ts",
+          "hash": "15091440014161486877"
+        },
+        {
+          "file": "sdk/openfeature-angular-provider/package.json",
+          "hash": "2836994544655968434",
+          "deps": [
+            "js",
+            "openfeature-web-provider",
+            "npm:@openfeature/multi-provider-web",
+            "npm:@openfeature/web-sdk"
+          ]
+        },
+        {
+          "file": "sdk/openfeature-angular-provider/project.json",
+          "hash": "5170659828882168524"
+        },
+        {
+          "file": "sdk/openfeature-angular-provider/src/index.ts",
+          "hash": "18319224267217571008",
+          "deps": [
+            "js",
+            "openfeature-web-provider"
+          ]
+        },
+        {
+          "file": "sdk/openfeature-angular-provider/strategy.ts",
+          "hash": "2085299361551672884",
+          "deps": [
+            "openfeature-web-provider"
+          ]
+        },
+        {
+          "file": "sdk/openfeature-angular-provider/tsconfig.json",
+          "hash": "4041483701269408600"
+        },
+        {
+          "file": "sdk/openfeature-angular-provider/tsconfig.lib.json",
+          "hash": "15200743955213756185"
+        },
+        {
+          "file": "sdk/openfeature-angular-provider/tsconfig.spec.json",
+          "hash": "5261655675484848120"
+        }
+      ],
+      "example-react": [
+        {
+          "file": "dev-apps/react/.babelrc",
+          "hash": "3362769191121751979"
+        },
+        {
+          "file": "dev-apps/react/.browserslistrc",
+          "hash": "2888533144288818662"
+        },
+        {
+          "file": "dev-apps/react/.eslintrc.json",
+          "hash": "14345762046889961813"
+        },
+        {
+          "file": "dev-apps/react/README.md",
+          "hash": "10059099393240768675"
+        },
+        {
+          "file": "dev-apps/react/package.json",
+          "hash": "16719724631065491416"
+        },
+        {
+          "file": "dev-apps/react/project.json",
+          "hash": "2750886987343804947"
+        },
+        {
+          "file": "dev-apps/react/src/App.css",
+          "hash": "2926794878711069775"
+        },
+        {
+          "file": "dev-apps/react/src/App.tsx",
+          "hash": "4334220243888613428",
+          "deps": [
+            "npm:react",
+            "react"
+          ]
+        },
+        {
+          "file": "dev-apps/react/src/DevCycleExample.tsx",
+          "hash": "4111052739055098380",
+          "deps": [
+            "react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "dev-apps/react/src/index.css",
+          "hash": "9926194074183173659"
+        },
+        {
+          "file": "dev-apps/react/src/index.html",
+          "hash": "16719153543826714728"
+        },
+        {
+          "file": "dev-apps/react/src/index.tsx",
+          "hash": "12189316210407511811",
+          "deps": [
+            "npm:react",
+            "npm:react-dom"
+          ]
+        },
+        {
+          "file": "dev-apps/react/src/logo.svg",
+          "hash": "5137778160416929466"
+        },
+        {
+          "file": "dev-apps/react/src/public/favicon.ico",
+          "hash": "2949791817221603359"
+        },
+        {
+          "file": "dev-apps/react/src/public/logo192.png",
+          "hash": "7585273181698778288"
+        },
+        {
+          "file": "dev-apps/react/src/public/logo512.png",
+          "hash": "9339365414554387981"
+        },
+        {
+          "file": "dev-apps/react/src/public/manifest.json",
+          "hash": "566142960187074662"
+        },
+        {
+          "file": "dev-apps/react/src/public/robots.txt",
+          "hash": "2790380794362165217"
+        },
+        {
+          "file": "dev-apps/react/src/react-app-env.d.ts",
+          "hash": "3195158367843515590"
+        },
+        {
+          "file": "dev-apps/react/tsconfig.app.json",
+          "hash": "8543885938378649315"
+        },
+        {
+          "file": "dev-apps/react/tsconfig.json",
+          "hash": "15508481369200738424"
+        },
+        {
+          "file": "dev-apps/react/webpack.config.js",
+          "hash": "941498329123770840",
+          "deps": [
+            "npm:@nx/webpack",
+            "npm:@nx/react"
+          ]
+        }
+      ],
+      "shared-types": [
+        {
+          "file": "lib/shared/types/.babelrc",
+          "hash": "842855554653651022"
+        },
+        {
+          "file": "lib/shared/types/.eslintrc.json",
+          "hash": "6011782468326600306"
+        },
+        {
+          "file": "lib/shared/types/README.md",
+          "hash": "6659057883059369534"
+        },
+        {
+          "file": "lib/shared/types/__tests__/clientSDKAPI.test.ts",
+          "hash": "12696808904398198369",
+          "deps": [
+            "npm:class-transformer",
+            "npm:class-validator"
+          ]
+        },
+        {
+          "file": "lib/shared/types/__tests__/dvcCustomDataJSON.test.ts",
+          "hash": "17972144476041852473"
+        },
+        {
+          "file": "lib/shared/types/__tests__/isNotBlank.test.ts",
+          "hash": "10381982280967301775"
+        },
+        {
+          "file": "lib/shared/types/__tests__/iso-639-1.test.ts",
+          "hash": "12878798833869258173"
+        },
+        {
+          "file": "lib/shared/types/jest.config.ts",
+          "hash": "2427014665122153606"
+        },
+        {
+          "file": "lib/shared/types/package.json",
+          "hash": "5452265597792904126",
+          "deps": [
+            "npm:class-transformer",
+            "npm:class-validator",
+            "npm:iso-639-1",
+            "npm:lodash",
+            "npm:reflect-metadata"
+          ]
+        },
+        {
+          "file": "lib/shared/types/project.json",
+          "hash": "346644855172922605"
+        },
+        {
+          "file": "lib/shared/types/src/index.ts",
+          "hash": "15101662317104962111"
+        },
+        {
+          "file": "lib/shared/types/src/logger.ts",
+          "hash": "6540481575913918476"
+        },
+        {
+          "file": "lib/shared/types/src/reporter.ts",
+          "hash": "13087754298717703179"
+        },
+        {
+          "file": "lib/shared/types/src/types/ConfigSource.ts",
+          "hash": "1736475622376076465"
+        },
+        {
+          "file": "lib/shared/types/src/types/SSETypes.ts",
+          "hash": "5875145895263801522"
+        },
+        {
+          "file": "lib/shared/types/src/types/UserError.ts",
+          "hash": "5985134549598963720"
+        },
+        {
+          "file": "lib/shared/types/src/types/apis/events/eventsAPI.ts",
+          "hash": "16158153701900070517",
+          "deps": [
+            "npm:class-validator",
+            "npm:reflect-metadata"
+          ]
+        },
+        {
+          "file": "lib/shared/types/src/types/apis/sdk/clientSDKAPI.ts",
+          "hash": "18219597100204575244",
+          "deps": [
+            "npm:lodash",
+            "npm:class-validator",
+            "npm:class-transformer",
+            "npm:reflect-metadata"
+          ]
+        },
+        {
+          "file": "lib/shared/types/src/types/apis/sdk/serverSDKTypes.ts",
+          "hash": "6853026714390783274"
+        },
+        {
+          "file": "lib/shared/types/src/types/apis/sdk/track.ts",
+          "hash": "7906309137756542147",
+          "deps": [
+            "npm:class-validator",
+            "npm:class-transformer"
+          ]
+        },
+        {
+          "file": "lib/shared/types/src/types/config/configBody.ts",
+          "hash": "15360883315182192015",
+          "deps": [
+            "npm:class-transformer"
+          ]
+        },
+        {
+          "file": "lib/shared/types/src/types/config/models/audience.ts",
+          "hash": "18184920941699231143"
+        },
+        {
+          "file": "lib/shared/types/src/types/config/models/configMetadata.ts",
+          "hash": "8332040237783380754"
+        },
+        {
+          "file": "lib/shared/types/src/types/config/models/environment.ts",
+          "hash": "14022379708463951777"
+        },
+        {
+          "file": "lib/shared/types/src/types/config/models/feature.ts",
+          "hash": "11489976932013504719",
+          "deps": [
+            "npm:class-transformer"
+          ]
+        },
+        {
+          "file": "lib/shared/types/src/types/config/models/featureConfiguration.ts",
+          "hash": "16325597760361764958",
+          "deps": [
+            "npm:class-transformer"
+          ]
+        },
+        {
+          "file": "lib/shared/types/src/types/config/models/index.ts",
+          "hash": "2227129094136555456"
+        },
+        {
+          "file": "lib/shared/types/src/types/config/models/listAudience.ts",
+          "hash": "168255132575546807"
+        },
+        {
+          "file": "lib/shared/types/src/types/config/models/project.ts",
+          "hash": "12359155072444721916"
+        },
+        {
+          "file": "lib/shared/types/src/types/config/models/variable.ts",
+          "hash": "18016665326191370547"
+        },
+        {
+          "file": "lib/shared/types/src/types/validators/dvcCustomDataJSON.ts",
+          "hash": "3332768095065819946",
+          "deps": [
+            "npm:lodash",
+            "npm:class-validator"
+          ]
+        },
+        {
+          "file": "lib/shared/types/src/types/validators/isIso6391.ts",
+          "hash": "5299742912030255803",
+          "deps": [
+            "npm:class-validator",
+            "npm:iso-639-1"
+          ]
+        },
+        {
+          "file": "lib/shared/types/src/types/validators/isNotBlank.ts",
+          "hash": "11024631049884859201",
+          "deps": [
+            "npm:class-validator"
+          ]
+        },
+        {
+          "file": "lib/shared/types/src/types/variableKeys.ts",
+          "hash": "13501631785249033777"
+        },
+        {
+          "file": "lib/shared/types/src/utils.ts",
+          "hash": "3754627181263377988"
+        },
+        {
+          "file": "lib/shared/types/tsconfig.json",
+          "hash": "9516319180746977111"
+        },
+        {
+          "file": "lib/shared/types/tsconfig.lib.es5.json",
+          "hash": "5977561575202228009"
+        },
+        {
+          "file": "lib/shared/types/tsconfig.lib.json",
+          "hash": "11057856529035836740"
+        },
+        {
+          "file": "lib/shared/types/tsconfig.spec.json",
+          "hash": "9622449286671273793"
+        }
+      ],
+      "example-nodejs-cloud": [
+        {
+          "file": "dev-apps/nodejs-cloud/.eslintrc.json",
+          "hash": "9220097867945776513"
+        },
+        {
+          "file": "dev-apps/nodejs-cloud/README.md",
+          "hash": "2795658260030383872"
+        },
+        {
+          "file": "dev-apps/nodejs-cloud/package.json",
+          "hash": "4574039784020255799"
+        },
+        {
+          "file": "dev-apps/nodejs-cloud/project.json",
+          "hash": "1818053816986939130"
+        },
+        {
+          "file": "dev-apps/nodejs-cloud/src/main.ts",
+          "hash": "10795326313489138897",
+          "deps": [
+            "nodejs",
+            "shared-types",
+            "npm:class-transformer",
+            "npm:express"
+          ]
+        },
+        {
+          "file": "dev-apps/nodejs-cloud/tsconfig.app.json",
+          "hash": "3653935136253656324"
+        },
+        {
+          "file": "dev-apps/nodejs-cloud/tsconfig.json",
+          "hash": "15787543957214591055"
+        },
+        {
+          "file": "dev-apps/nodejs-cloud/tsconfig.spec.json",
+          "hash": "13354945799557359042"
+        },
+        {
+          "file": "dev-apps/nodejs-cloud/webpack.config.js",
+          "hash": "13985146060508845339"
+        }
+      ],
+      "js-cloud-server-sdk": [
+        {
+          "file": "sdk/js-cloud-server/.babelrc",
+          "hash": "842855554653651022"
+        },
+        {
+          "file": "sdk/js-cloud-server/.eslintrc.json",
+          "hash": "5917332738401828627"
+        },
+        {
+          "file": "sdk/js-cloud-server/.gitignore",
+          "hash": "4174095619284331435"
+        },
+        {
+          "file": "sdk/js-cloud-server/README.md",
+          "hash": "10243234256685021357"
+        },
+        {
+          "file": "sdk/js-cloud-server/__mocks__/cross-fetch.ts",
+          "hash": "9151741506596096951"
+        },
+        {
+          "file": "sdk/js-cloud-server/__mocks__/fetch-retry.ts",
+          "hash": "6479147895484053177"
+        },
+        {
+          "file": "sdk/js-cloud-server/__tests__/cloudClient.spec.ts",
+          "hash": "18276839299813936906",
+          "deps": [
+            "npm:cross-fetch"
+          ]
+        },
+        {
+          "file": "sdk/js-cloud-server/__tests__/evalHooksRunner.test.ts",
+          "hash": "15247309778904375457"
+        },
+        {
+          "file": "sdk/js-cloud-server/__tests__/initialize.spec.ts",
+          "hash": "1395872520363078222"
+        },
+        {
+          "file": "sdk/js-cloud-server/__tests__/models/populatedUser.spec.ts",
+          "hash": "7373888788998456558"
+        },
+        {
+          "file": "sdk/js-cloud-server/__tests__/models/user.spec.ts",
+          "hash": "13991084243753520507"
+        },
+        {
+          "file": "sdk/js-cloud-server/__tests__/models/variable.spec.ts",
+          "hash": "1745667920994465689",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js-cloud-server/__tests__/utils/logger.spec.ts",
+          "hash": "14884838474834333443"
+        },
+        {
+          "file": "sdk/js-cloud-server/__tests__/utils/paramUtils.spec.ts",
+          "hash": "5166396309483988202"
+        },
+        {
+          "file": "sdk/js-cloud-server/jest.config.ts",
+          "hash": "273875144597148166"
+        },
+        {
+          "file": "sdk/js-cloud-server/package.json",
+          "hash": "16446976055725343319",
+          "deps": [
+            "shared-types",
+            "npm:cross-fetch",
+            "npm:fetch-retry",
+            "npm:lodash"
+          ]
+        },
+        {
+          "file": "sdk/js-cloud-server/project.json",
+          "hash": "14891279929514873431"
+        },
+        {
+          "file": "sdk/js-cloud-server/src/__mocks__/handlers.ts",
+          "hash": "6561292029821273988",
+          "deps": [
+            "shared-types",
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "sdk/js-cloud-server/src/__mocks__/server.ts",
+          "hash": "18411906828821752707",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "sdk/js-cloud-server/src/cloudClient.ts",
+          "hash": "4697060137566043010",
+          "deps": [
+            "shared-types",
+            "server-request"
+          ]
+        },
+        {
+          "file": "sdk/js-cloud-server/src/hooks/EvalHook.ts",
+          "hash": "16120264022016606234"
+        },
+        {
+          "file": "sdk/js-cloud-server/src/hooks/EvalHooksRunner.ts",
+          "hash": "12511982839686908715",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js-cloud-server/src/hooks/HookContext.ts",
+          "hash": "4515407881133925393",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js-cloud-server/src/index.ts",
+          "hash": "8011071007632689460",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js-cloud-server/src/models/populatedUser.ts",
+          "hash": "8905250647269098950",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js-cloud-server/src/models/user.ts",
+          "hash": "5053211365024840818",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js-cloud-server/src/models/variable.ts",
+          "hash": "4910647870359996293",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js-cloud-server/src/request.ts",
+          "hash": "455306702691107954",
+          "deps": [
+            "shared-types",
+            "server-request"
+          ]
+        },
+        {
+          "file": "sdk/js-cloud-server/src/types.ts",
+          "hash": "9870378551863392680",
+          "deps": [
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js-cloud-server/src/utils/logger.ts",
+          "hash": "14241400177935210711",
+          "deps": [
+            "npm:lodash",
+            "shared-types"
+          ]
+        },
+        {
+          "file": "sdk/js-cloud-server/src/utils/paramUtils.ts",
+          "hash": "9508084840349841358"
+        },
+        {
+          "file": "sdk/js-cloud-server/tsconfig.json",
+          "hash": "4041483701269408600"
+        },
+        {
+          "file": "sdk/js-cloud-server/tsconfig.lib.json",
+          "hash": "5645343205550694878"
+        },
+        {
+          "file": "sdk/js-cloud-server/tsconfig.spec.json",
+          "hash": "6495226866993251177"
+        }
+      ],
+      "js-cdn": [
+        {
+          "file": "e2e/js/js-cdn/.eslintrc.json",
+          "hash": "10469404946594091659"
+        },
+        {
+          "file": "e2e/js/js-cdn/README.md",
+          "hash": "12149154420381744590"
+        },
+        {
+          "file": "e2e/js/js-cdn/e2e/example.spec.ts",
+          "hash": "282355482284072507",
+          "deps": [
+            "npm:@playwright/test"
+          ]
+        },
+        {
+          "file": "e2e/js/js-cdn/playwright.config.ts",
+          "hash": "11780145618130097930",
+          "deps": [
+            "npm:@playwright/test",
+            "npm:@nx/playwright",
+            "npm:@nx/devkit"
+          ]
+        },
+        {
+          "file": "e2e/js/js-cdn/project.json",
+          "hash": "5653396138045371695"
+        },
+        {
+          "file": "e2e/js/js-cdn/scripts/copy-sdk.js",
+          "hash": "17645849670976341920",
+          "deps": [
+            "npm:fs-extra",
+            "npm:path"
+          ]
+        },
+        {
+          "file": "e2e/js/js-cdn/src/app/app.element.ts",
+          "hash": "56101639983018587"
+        },
+        {
+          "file": "e2e/js/js-cdn/src/assets/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "e2e/js/js-cdn/src/environments/environment.prod.ts",
+          "hash": "5376776311323998691"
+        },
+        {
+          "file": "e2e/js/js-cdn/src/environments/environment.ts",
+          "hash": "9178973365635766842"
+        },
+        {
+          "file": "e2e/js/js-cdn/src/favicon.ico",
+          "hash": "9303420814833116677"
+        },
+        {
+          "file": "e2e/js/js-cdn/src/index.html",
+          "hash": "10626867422343486191"
+        },
+        {
+          "file": "e2e/js/js-cdn/src/main.ts",
+          "hash": "9802556070214386378"
+        },
+        {
+          "file": "e2e/js/js-cdn/src/styles.css",
+          "hash": "5195668842064076916"
+        },
+        {
+          "file": "e2e/js/js-cdn/tsconfig.app.json",
+          "hash": "12769322176693086300"
+        },
+        {
+          "file": "e2e/js/js-cdn/tsconfig.json",
+          "hash": "3251068532393912178"
+        },
+        {
+          "file": "e2e/js/js-cdn/tsconfig.spec.json",
+          "hash": "1647871760843048678"
+        },
+        {
+          "file": "e2e/js/js-cdn/webpack.config.js",
+          "hash": "3727351601621054210",
+          "deps": [
+            "npm:@nx/webpack",
+            "npm:webpack"
+          ]
+        }
+      ],
+      "example-nextjs-app-router": [
+        {
+          "file": "dev-apps/nextjs/app-router/.eslintrc.json",
+          "hash": "11735049913129226066"
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/README.md",
+          "hash": "8885386419299456007"
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/app/ClientComponent.tsx",
+          "hash": "447017478847207751"
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/app/ClientIdentity.tsx",
+          "hash": "2286615660429042591",
+          "deps": [
+            "nextjs"
+          ]
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/app/ServerIdentity.tsx",
+          "hash": "925758078716023835",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/app/clientside.tsx",
+          "hash": "463584209952291676",
+          "deps": [
+            "npm:next",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/app/devcycle.tsx",
+          "hash": "3858572962604408968",
+          "deps": [
+            "nextjs"
+          ]
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/app/layout.tsx",
+          "hash": "10288354538461150144",
+          "deps": [
+            "npm:react",
+            "nextjs"
+          ]
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/app/page.tsx",
+          "hash": "3875749433943923108",
+          "deps": [
+            "npm:next",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/index.d.ts",
+          "hash": "7632214158357716854"
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/next-env.d.ts",
+          "hash": "13904763933831424769"
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/next.config.js",
+          "hash": "18260426132752079827",
+          "deps": [
+            "npm:@nx/next"
+          ]
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/package.json",
+          "hash": "11752094159344659116"
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/project.json",
+          "hash": "7065693807761375941"
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/public/favicon.ico",
+          "hash": "9157999678830540297"
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/public/vercel.svg",
+          "hash": "3233056503954796132"
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/styles/Home.module.css",
+          "hash": "14099199526046460004"
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/styles/globals.css",
+          "hash": "17598859201990945540"
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/tsconfig.json",
+          "hash": "10168810028806242440"
+        },
+        {
+          "file": "dev-apps/nextjs/app-router/tsconfig.spec.json",
+          "hash": "7437277805711777648"
+        }
+      ],
+      "devcycle-js-sdks": [
+        {
+          "file": ".cm/gitstream.cm",
+          "hash": "8339539353888871198"
+        },
+        {
+          "file": ".commitlintrc.json",
+          "hash": "209100139757919131"
+        },
+        {
+          "file": ".cursor/rules/configTooling.mdc",
+          "hash": "6603328480495904075"
+        },
+        {
+          "file": ".cursor/rules/formatting.mdc",
+          "hash": "2712016445261694920"
+        },
+        {
+          "file": ".cursor/rules/gitCommitConventions.mdc",
+          "hash": "5884953699159922392"
+        },
+        {
+          "file": ".cursor/rules/internalLibraryImports.mdc",
+          "hash": "17872037836219805719"
+        },
+        {
+          "file": ".cursor/rules/namingConventions.mdc",
+          "hash": "14191936261577026849"
+        },
+        {
+          "file": ".cursor/rules/projectStructure.mdc",
+          "hash": "7081782061915674148"
+        },
+        {
+          "file": ".cursor/rules/testingMocks.mdc",
+          "hash": "18278296483281653359"
+        },
+        {
+          "file": ".eslintignore",
+          "hash": "17560936040807002447"
+        },
+        {
+          "file": ".eslintrc.json",
+          "hash": "18064220007485474573"
+        },
+        {
+          "file": ".gitattributes",
+          "hash": "15469291048726430390"
+        },
+        {
+          "file": ".github/CODEOWNERS",
+          "hash": "8808263486033162040"
+        },
+        {
+          "file": ".github/workflows/cf-worker-example-test.yml",
+          "hash": "8581980390135824827"
+        },
+        {
+          "file": ".github/workflows/nx-affected-e2e.yml",
+          "hash": "11468489740400663500"
+        },
+        {
+          "file": ".github/workflows/nx-affected-test.yml",
+          "hash": "13282112599988655307"
+        },
+        {
+          "file": ".github/workflows/release.yml",
+          "hash": "7735862392035668071"
+        },
+        {
+          "file": ".github/workflows/run-test-harness.yml",
+          "hash": "8231784387282422909"
+        },
+        {
+          "file": ".github/workflows/semantic-prs.yml",
+          "hash": "12307092527064927068"
+        },
+        {
+          "file": ".github/workflows/update-of-sdk.yml",
+          "hash": "10611624977064420475"
+        },
+        {
+          "file": ".gitignore",
+          "hash": "16312798010753786275"
+        },
+        {
+          "file": ".husky/commit-msg",
+          "hash": "15057229804480021109"
+        },
+        {
+          "file": ".husky/pre-commit",
+          "hash": "6435602602922017399"
+        },
+        {
+          "file": ".husky/prepare-commit-msg",
+          "hash": "15057229804480021109"
+        },
+        {
+          "file": ".nvmrc",
+          "hash": "17563865914353181919"
+        },
+        {
+          "file": ".prettierignore",
+          "hash": "167253619518801190"
+        },
+        {
+          "file": ".prettierrc.json",
+          "hash": "3839524773266025499"
+        },
+        {
+          "file": ".verdaccio/config.yml",
+          "hash": "9033531777191510563"
+        },
+        {
+          "file": ".verdaccio/htpasswd",
+          "hash": "13118670494463105877"
+        },
+        {
+          "file": ".yarn/patches/@altack-nx-bundlefy-npm-0.16.0-fc464002e3.patch",
+          "hash": "4440701401379034569"
+        },
+        {
+          "file": ".yarnrc",
+          "hash": "13027559677655277581"
+        },
+        {
+          "file": ".yarnrc.yml",
+          "hash": "735657039350129677"
+        },
+        {
+          "file": "LICENSE",
+          "hash": "1190317375839161503"
+        },
+        {
+          "file": "README.md",
+          "hash": "7517968818489262213"
+        },
+        {
+          "file": "babel.config.json",
+          "hash": "15419948787014016184"
+        },
+        {
+          "file": "eslint-common.js",
+          "hash": "4686293112541979518"
+        },
+        {
+          "file": "jest.config.ts",
+          "hash": "2534740781675325087",
+          "deps": [
+            "npm:@nx/jest"
+          ]
+        },
+        {
+          "file": "jest.preset.js",
+          "hash": "3018332318718856117",
+          "deps": [
+            "npm:@nx/jest"
+          ]
+        },
+        {
+          "file": "lerna.json",
+          "hash": "18161905129548834816"
+        },
+        {
+          "file": "lib/README.md",
+          "hash": "17666137345907882684"
+        },
+        {
+          "file": "nx.json",
+          "hash": "10000946397411783452"
+        },
+        {
+          "file": "package.json",
+          "hash": "17757418943438964967",
+          "deps": [
+            "npm:@altack/nx-bundlefy",
+            "npm:@devcycle/assemblyscript-json",
+            "npm:@openfeature/core",
+            "npm:@openfeature/multi-provider",
+            "npm:@openfeature/multi-provider-web",
+            "npm:@openfeature/server-sdk",
+            "npm:@openfeature/web-sdk",
+            "npm:@swc/helpers",
+            "npm:@vercel/edge-config",
+            "npm:class-transformer",
+            "npm:class-validator",
+            "npm:core-js",
+            "npm:cross-fetch",
+            "npm:eslint-plugin-lodash",
+            "npm:eventsource",
+            "npm:fetch-retry",
+            "npm:hoist-non-react-statics",
+            "npm:iso-639-1",
+            "npm:lint-staged",
+            "npm:lodash",
+            "npm:moment",
+            "npm:murmurhash",
+            "npm:next",
+            "npm:protobufjs",
+            "npm:react",
+            "npm:react-dom",
+            "npm:react-is",
+            "npm:react-native",
+            "npm:react-native-device-info",
+            "npm:react-native-get-random-values",
+            "npm:react-native-sse",
+            "npm:reflect-metadata",
+            "npm:regenerator-runtime",
+            "npm:server-only",
+            "npm:source-map-support",
+            "npm:terser-webpack-plugin",
+            "npm:tslib",
+            "npm:ua-parser-js",
+            "npm:uuid",
+            "npm:@babel/core",
+            "npm:@babel/preset-react",
+            "npm:@cloudflare/workers-types",
+            "npm:@commitlint/cli",
+            "npm:@commitlint/config-conventional",
+            "npm:@nestjs/common",
+            "npm:@nestjs/core",
+            "npm:@nrwl/js",
+            "npm:@nrwl/rollup",
+            "npm:@nx/cypress",
+            "npm:@nx/detox",
+            "npm:@nx/devkit",
+            "npm:@nx/esbuild",
+            "npm:@nx/eslint-plugin",
+            "npm:@nx/jest",
+            "npm:@nx/js",
+            "npm:@nx/linter",
+            "npm:@nx/next",
+            "npm:@nx/node",
+            "npm:@nx/playwright",
+            "npm:@nx/react",
+            "npm:@nx/react-native",
+            "npm:@nx/web",
+            "npm:@nx/webpack",
+            "npm:@nx/workspace",
+            "npm:@playwright/test",
+            "npm:@pmmmwh/react-refresh-webpack-plugin",
+            "npm:@react-native-async-storage/async-storage",
+            "npm:@react-native-community/cli",
+            "npm:@react-native-community/cli-platform-android",
+            "npm:@react-native-community/cli-platform-ios",
+            "npm:@react-native/metro-config",
+            "npm:@svgr/webpack",
+            "npm:@swc/cli",
+            "npm:@swc/core",
+            "npm:@swc/jest",
+            "npm:@testing-library/jest-dom",
+            "npm:@testing-library/jest-native",
+            "npm:@testing-library/react",
+            "npm:@testing-library/react-native",
+            "npm:@total-typescript/shoehorn",
+            "npm:@types/async",
+            "npm:@types/eventsource",
+            "npm:@types/express",
+            "npm:@types/hoist-non-react-statics",
+            "npm:@types/jest",
+            "npm:@types/lodash",
+            "npm:@types/node",
+            "npm:@types/react",
+            "npm:@types/react-dom",
+            "npm:@types/ua-parser-js",
+            "npm:@types/uuid",
+            "npm:@typescript-eslint/eslint-plugin",
+            "npm:@typescript-eslint/parser",
+            "npm:as-proto",
+            "npm:as-proto-gen",
+            "npm:as-uuid",
+            "npm:as-wasi",
+            "npm:assemblyscript",
+            "npm:assemblyscript-regex",
+            "npm:autoprefixer",
+            "npm:babel-jest",
+            "npm:cross-env",
+            "npm:css-loader",
+            "npm:cypress",
+            "npm:detox",
+            "npm:dotenv-webpack",
+            "npm:esbuild",
+            "npm:eslint",
+            "npm:eslint-config-next",
+            "npm:eslint-config-prettier",
+            "npm:eslint-config-standard",
+            "npm:eslint-plugin-babel",
+            "npm:eslint-plugin-cypress",
+            "npm:eslint-plugin-import",
+            "npm:eslint-plugin-jsx-a11y",
+            "npm:eslint-plugin-no-only-tests",
+            "npm:eslint-plugin-playwright",
+            "npm:eslint-plugin-prettier",
+            "npm:eslint-plugin-promise",
+            "npm:eslint-plugin-react",
+            "npm:eslint-plugin-react-hooks",
+            "npm:eslint-plugin-standard",
+            "npm:express",
+            "npm:fs-extra",
+            "npm:husky",
+            "npm:jest",
+            "npm:jest-bench",
+            "npm:jest-circus",
+            "npm:jest-cli",
+            "npm:jest-environment-jsdom",
+            "npm:jest-environment-node",
+            "npm:jest-fetch-mock",
+            "npm:jest-junit",
+            "npm:jest-mock",
+            "npm:jest-react-native",
+            "npm:jsonc-eslint-parser",
+            "npm:lerna",
+            "npm:metro",
+            "npm:metro-babel-register",
+            "npm:metro-react-native-babel-preset",
+            "npm:metro-react-native-babel-transformer",
+            "npm:metro-resolver",
+            "npm:msw",
+            "npm:nock",
+            "npm:npm-run-all",
+            "npm:nx",
+            "npm:object-path-immutable",
+            "npm:postcss",
+            "npm:prettier",
+            "npm:prettier-eslint",
+            "npm:prettier-eslint-cli",
+            "npm:protobufjs-cli",
+            "npm:react-native-config",
+            "npm:react-native-svg",
+            "npm:react-native-svg-transformer",
+            "npm:react-refresh",
+            "npm:react-test-renderer",
+            "npm:rxjs",
+            "npm:service-worker-mock",
+            "npm:style-loader",
+            "npm:supports-color",
+            "npm:swc-loader",
+            "npm:tailwindcss",
+            "npm:ts-jest",
+            "npm:ts-node",
+            "npm:typescript",
+            "npm:url-loader",
+            "npm:validate-npm-package-name",
+            "npm:verdaccio",
+            "npm:webpack",
+            "npm:webpack-merge",
+            "npm:wrangler"
+          ]
+        },
+        {
+          "file": "project.json",
+          "hash": "3114036573099475936"
+        },
+        {
+          "file": "scripts/brew-install.sh",
+          "hash": "11054018722815702241"
+        },
+        {
+          "file": "scripts/lerna-version-ci.sh",
+          "hash": "16411669809666744438"
+        },
+        {
+          "file": "scripts/lerna-version.sh",
+          "hash": "18418371656233208330"
+        },
+        {
+          "file": "scripts/local-registry.sh",
+          "hash": "15511311698838846020"
+        },
+        {
+          "file": "scripts/npm-safe-publish.sh",
+          "hash": "16775825602279954470"
+        },
+        {
+          "file": "should-vercel-build.sh",
+          "hash": "6501681460111677667"
+        },
+        {
+          "file": "tsconfig.base.json",
+          "hash": "1025308946687540031"
+        },
+        {
+          "file": "yarn.lock",
+          "hash": "9732620535090998086"
+        }
+      ]
+    },
+    "nonProjectFiles": []
+  }
+}

@@ -1,0 +1,10 @@
+
+Linting "example-js-cloud-server-sdk-cf-worker"...
+[0m[0m
+[0m[4m/workspace/dev-apps/js-cloud-server/cloudflare-worker/src/index.ts[24m[0m
+[0m  [2m11:9[22m  [33mwarning[39m  'ctx' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[33m[1m✖ 1 problem (0 errors, 1 warning)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+✖ 1 problem (0 errors, 1 warning)
+

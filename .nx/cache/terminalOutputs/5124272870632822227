@@ -1,0 +1,73 @@
+
+Linting "shared-bucketing-as"...
+[0m[0m
+[0m[4m/workspace/lib/shared/bucketing-assembly-script/__tests__/bucketing/bucketing.test.ts[24m[0m
+[0m  [2m1711:13[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/bucketing-assembly-script/__tests__/protobufVariableHelper.ts[24m[0m
+[0m   [2m83:17[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m115:11[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/bucketing-assembly-script/__tests__/types/configBody.test.ts[24m[0m
+[0m   [2m12:54[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m60:23[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m71:23[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m102:24[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/bucketing-assembly-script/__tests__/types/configBodyV2.test.ts[24m[0m
+[0m   [2m14:56[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m65:23[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m76:23[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m111:24[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/bucketing-assembly-script/__tests__/types/dvcUser.test.ts[24m[0m
+[0m  [2m9:27[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m9:48[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/bucketing-assembly-script/__tests__/types/platformData.test.ts[24m[0m
+[0m  [2m6:56[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/bucketing-assembly-script/__tests__/types/protobuf.test.ts[24m[0m
+[0m   [2m21:45[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m31:17[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m43:17[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m53:39[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m62:47[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m125:38[22m  [33mwarning[39m  Forbidden non-null assertion              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m132:38[22m  [33mwarning[39m  Forbidden non-null assertion              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m190:56[22m  [33mwarning[39m  Forbidden non-null assertion              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m209:56[22m  [33mwarning[39m  Forbidden non-null assertion              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m263:42[22m  [33mwarning[39m  Forbidden non-null assertion              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m272:42[22m  [33mwarning[39m  Forbidden non-null assertion              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m303:46[22m  [33mwarning[39m  Forbidden non-null assertion              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m323:46[22m  [33mwarning[39m  Forbidden non-null assertion              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m343:46[22m  [33mwarning[39m  Forbidden non-null assertion              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m363:46[22m  [33mwarning[39m  Forbidden non-null assertion              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/bucketing-assembly-script/assembly/bucketing/bucketing.ts[24m[0m
+[0m  [2m328:30[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/bucketing-assembly-script/assembly/bucketing/segmentation.ts[24m[0m
+[0m   [2m32:39[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m   [2m89:34[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m158:89[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/bucketing-assembly-script/assembly/index.ts[24m[0m
+[0m  [2m294:35[22m  [33mwarning[39m  'empty' is assigned a value but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/bucketing-assembly-script/assembly/managers/configDataManager.ts[24m[0m
+[0m  [2m1:54[22m  [33mwarning[39m  'ProjectMetadata' is defined but never used      [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m1:71[22m  [33mwarning[39m  'EnvironmentMetadata' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/bucketing-assembly-script/assembly/types/dvcUser.ts[24m[0m
+[0m  [2m273:18[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m274:52[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m275:17[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[4m/workspace/lib/shared/bucketing-assembly-script/index.d.ts[24m[0m
+[0m  [2m7:14[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[33m[1m✖ 40 problems (0 errors, 40 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+✖ 40 problems (0 errors, 40 warnings)
+

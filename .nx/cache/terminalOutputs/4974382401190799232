@@ -1,0 +1,43 @@
+src/useVariableValue.test.tsx(36,17): error TS2322: Type '({ children }: { children: ReactElement; }) => JSX.Element' is not assignable to type 'JSXElementConstructor<{ children: ReactNode; }> | undefined'.
+  Type '({ children }: { children: ReactElement; }) => JSX.Element' is not assignable to type '(props: { children: ReactNode; }, deprecatedLegacyContext?: any) => ReactNode'.
+    Types of parameters '__0' and 'props' are incompatible.
+      Type '{ children: ReactNode; }' is not assignable to type '{ children: ReactElement<any, string | JSXElementConstructor<any>>; }'.
+        Types of property 'children' are incompatible.
+          Type 'ReactNode' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>>'.
+            Type 'undefined' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>>'.
+src/useVariableValue.test.tsx(48,13): error TS2322: Type '({ children }: { children: ReactElement; }) => JSX.Element' is not assignable to type 'JSXElementConstructor<{ children: ReactNode; }> | undefined'.
+  Type '({ children }: { children: ReactElement; }) => JSX.Element' is not assignable to type '(props: { children: ReactNode; }, deprecatedLegacyContext?: any) => ReactNode'.
+    Types of parameters '__0' and 'props' are incompatible.
+      Type '{ children: ReactNode; }' is not assignable to type '{ children: ReactElement<any, string | JSXElementConstructor<any>>; }'.
+        Types of property 'children' are incompatible.
+          Type 'ReactNode' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>>'.
+            Type 'undefined' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>>'.
+src/useVariableValue.test.tsx(59,13): error TS2322: Type '({ children }: { children: ReactElement; }) => JSX.Element' is not assignable to type 'JSXElementConstructor<{ children: ReactNode; }> | undefined'.
+  Type '({ children }: { children: ReactElement; }) => JSX.Element' is not assignable to type '(props: { children: ReactNode; }, deprecatedLegacyContext?: any) => ReactNode'.
+    Types of parameters '__0' and 'props' are incompatible.
+      Type '{ children: ReactNode; }' is not assignable to type '{ children: ReactElement<any, string | JSXElementConstructor<any>>; }'.
+        Types of property 'children' are incompatible.
+          Type 'ReactNode' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>>'.
+            Type 'undefined' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>>'.
+src/useVariableValue.test.tsx(73,15): error TS2322: Type '({ children }: { children: ReactElement; }) => JSX.Element' is not assignable to type 'JSXElementConstructor<{ children: ReactNode; }> | undefined'.
+  Type '({ children }: { children: ReactElement; }) => JSX.Element' is not assignable to type '(props: { children: ReactNode; }, deprecatedLegacyContext?: any) => ReactNode'.
+    Types of parameters '__0' and 'props' are incompatible.
+      Type '{ children: ReactNode; }' is not assignable to type '{ children: ReactElement<any, string | JSXElementConstructor<any>>; }'.
+        Types of property 'children' are incompatible.
+          Type 'ReactNode' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>>'.
+            Type 'undefined' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>>'.
+src/useVariableValue.test.tsx(86,13): error TS2322: Type '({ children }: { children: ReactElement; }) => JSX.Element' is not assignable to type 'JSXElementConstructor<{ children: ReactNode; }> | undefined'.
+  Type '({ children }: { children: ReactElement; }) => JSX.Element' is not assignable to type '(props: { children: ReactNode; }, deprecatedLegacyContext?: any) => ReactNode'.
+    Types of parameters '__0' and 'props' are incompatible.
+      Type '{ children: ReactNode; }' is not assignable to type '{ children: ReactElement<any, string | JSXElementConstructor<any>>; }'.
+        Types of property 'children' are incompatible.
+          Type 'ReactNode' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>>'.
+            Type 'undefined' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>>'.
+src/useVariableValue.test.tsx(89,13): error TS2322: Type '({ children }: { children: ReactElement; }) => JSX.Element' is not assignable to type 'JSXElementConstructor<{ children: ReactNode; }> | undefined'.
+  Type '({ children }: { children: ReactElement; }) => JSX.Element' is not assignable to type '(props: { children: ReactNode; }, deprecatedLegacyContext?: any) => ReactNode'.
+    Types of parameters '__0' and 'props' are incompatible.
+      Type '{ children: ReactNode; }' is not assignable to type '{ children: ReactElement<any, string | JSXElementConstructor<any>>; }'.
+        Types of property 'children' are incompatible.
+          Type 'ReactNode' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>>'.
+            Type 'undefined' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>>'.
+Warning: run-commands command "yarn run -T tsc -b --incremental" exited with non-zero status code

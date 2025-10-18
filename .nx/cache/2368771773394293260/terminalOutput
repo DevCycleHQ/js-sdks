@@ -1,0 +1,13 @@
+
+Linting "openfeature-angular-provider"...
+[0m[0m
+[0m[4m/workspace/sdk/openfeature-angular-provider/__tests__/DevCycleAngularProvider.test.ts[24m[0m
+[0m   [2m10:19[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m11:23[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m12:24[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m447:24[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[33m[1m✖ 4 problems (0 errors, 4 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+✖ 4 problems (0 errors, 4 warnings)
+
