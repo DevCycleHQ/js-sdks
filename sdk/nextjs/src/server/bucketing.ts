@@ -1,4 +1,8 @@
-import { fetchCDNConfig, sdkConfigAPI } from './requests'
+import {
+    fetchCDNConfig,
+    getOptInUsersFromConfigApi,
+    sdkConfigAPI,
+} from './requests'
 import { generateBucketedConfig } from '@devcycle/bucketing'
 import { cache } from 'react'
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
@@ -31,7 +35,13 @@ const generateBucketedConfigCached = cache(
         // clientSDKKey is always defined for bootstrap config
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const clientSDKKey = config.clientSDKKey!
-        if (config.debugUsers?.includes(user.user_id ?? '')) {
+        const optInUsers = config.project.settings.optIn?.enabled
+            ? await getOptInUsersFromConfigApi(clientSDKKey)
+            : []
+        if (
+            config.debugUsers?.includes(user.user_id ?? '') ||
+            optInUsers.includes(user.user_id ?? '')
+        ) {
             const bucketedConfigResponse = await sdkConfigAPI(
                 clientSDKKey,
                 obfuscated,
