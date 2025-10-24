@@ -44,7 +44,7 @@ jobs:
             - name: Set Secrets
               uses: DevCycleHQ/aws-secrets-action@main
               with:
-                secrets_map: '{"NODE_AUTH_TOKEN":"DEVCYCLE_GITHUB_JS-SDKS_NPM_TOKEN"}'
+                secrets_map: '{}' # Using OIDC; no static NPM token required
                 aws_account_id: '134377926370'
 
             - name: Configure git

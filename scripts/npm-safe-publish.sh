@@ -15,7 +15,6 @@ PACKAGE=$1
 JQ_PATH=".version"
 NPM_REGISTRY="$(yarn config get npmRegistryServer)"
 SHA="$(git rev-parse HEAD)"
-OTP=""
 DRY_RUN=""
 
 
@@ -23,10 +22,6 @@ DRY_RUN=""
 function parse_arguments() {
   while (( "$#" )); do
     case "$1" in
-      --otp=*)
-        OTP="${1#*=}"
-        shift
-        ;;
       --dry-run)
         DRY_RUN="true"
         echo "Dry run enabled. Not pushing to NPM."
@@ -39,14 +34,6 @@ function parse_arguments() {
   done
 }
 
-function npm_authenticated() {
-  if [[ -z "$NODE_AUTH_TOKEN" ]]; then
-    npm "$@" --otp="$OTP"
-  else
-    npm "$@"
-  fi
-}
-
 parse_arguments "$@"
 
 NPM_SHOW="$(npm show "$PACKAGE" version)"
@@ -54,12 +41,6 @@ NPM_LS="$(cat package.json | jq -r $JQ_PATH)"
 
 if [[ "$NPM_REGISTRY" != "https://registry.yarnpkg.com" ]]; then
   echo "NPM registry is not set to https://registry.yarnpkg.com. Aborting."
-  exit 1
-fi
-
-# check if otp is set
-if [[ -z "$OTP" && -z "$NODE_AUTH_TOKEN" ]]; then
-  echo "::error::Must specify the NPM one-time password using the --otp option, or set the NODE_AUTH_TOKEN environment variable. Aborting."
   exit 1
 fi
 
@@ -90,8 +71,13 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
   fi
 
   if [[ -z "$DRY_RUN" ]]; then
+    # Preflight authentication check
+    if ! npm whoami >/dev/null 2>&1; then
+      echo "::error::Not authenticated to npm (missing OIDC/token). Aborting."
+      exit 1
+    fi
     echo "::info::Publishing $PACKAGE@$NPM_LS to NPM."
-    npm_authenticated publish --access=public
+    npm publish --access=public --provenance
   else
     echo "::warning::[DRY RUN] Not publishing $PACKAGE@$NPM_LS to NPM."
   fi

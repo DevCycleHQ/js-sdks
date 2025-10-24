@@ -16,5 +16,9 @@
     },
     "devDependencies": {
         "@devcycle/bucketing-test-data": "1.36.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/DevCycleHQ/js-sdks.git"
     }
 }
