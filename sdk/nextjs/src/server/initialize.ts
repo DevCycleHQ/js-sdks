@@ -6,7 +6,12 @@ import {
 import { getUserAgent } from './userAgent'
 import { DevCycleNextOptions, DevCycleServerData } from '../common/types'
 import { cache } from 'react'
-import { getBucketedConfig, getConfigFromSource } from './bucketing'
+import {
+    getBucketedConfig,
+    getConfigFromSource,
+    getPopulatedUser,
+} from './bucketing'
+import { hasOptInEnabled, sdkConfigAPI } from './requests'
 
 const jsClientOptions = {
     // pass next object to enable "next" mode in JS SDK
@@ -49,15 +54,49 @@ export const initialize = cache(
             ...jsClientOptions,
         })
 
-        let config = null
-        try {
-            config = await getBucketedConfig(
+        const getUserConfig = () => {
+            return getBucketedConfig(
                 configData.config,
                 configData.lastModified,
                 user,
                 options,
                 userAgent,
             )
+        }
+
+        let config = null
+        try {
+            if (configData.config.project.settings.optIn?.enabled) {
+                try {
+                    const hasOptInRecords = await hasOptInEnabled(
+                        user.user_id,
+                        sdkKey,
+                    )
+                    if (hasOptInRecords) {
+                        const populatedUser = getPopulatedUser(user, userAgent)
+                        const bucketedConfigResponse = await sdkConfigAPI(
+                            clientSDKKey,
+                            !!options.enableObfuscation,
+                            populatedUser,
+                        )
+
+                        config = {
+                            ...bucketedConfigResponse,
+                            clientSDKKey: clientSDKKey,
+                        }
+                    } else {
+                        config = await getUserConfig()
+                    }
+                } catch (e) {
+                    console.error(
+                        'Error fetching opt in records, using regular bucketed config',
+                        e,
+                    )
+                    config = await getUserConfig()
+                }
+            } else {
+                config = await getUserConfig()
+            }
         } catch (e) {
             console.error('Error fetching DevCycle config', e)
         }

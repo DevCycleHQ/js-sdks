@@ -8,15 +8,17 @@ import {
 } from '../common/types'
 import { ConfigBody, ConfigSource } from '@devcycle/types'
 
-const getPopulatedUser = cache((user: DevCycleUser, userAgent?: string) => {
-    return new DVCPopulatedUser(
-        user,
-        {},
-        undefined,
-        undefined,
-        userAgent ?? undefined,
-    )
-})
+export const getPopulatedUser = cache(
+    (user: DevCycleUser, userAgent?: string) => {
+        return new DVCPopulatedUser(
+            user,
+            {},
+            undefined,
+            undefined,
+            userAgent ?? undefined,
+        )
+    },
+)
 
 // wrap this function in react cache to avoid redoing work for the same user and config
 const generateBucketedConfigCached = cache(
