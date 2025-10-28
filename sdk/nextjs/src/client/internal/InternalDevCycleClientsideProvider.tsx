@@ -5,6 +5,7 @@ import { invalidateConfig } from '../../common/invalidateConfig'
 import { DevCycleNextOptions, DevCycleServerData } from '../../common/types'
 import { DevCycleProviderContext } from './context'
 import { useRouter } from 'next/navigation'
+import { invalidateOptInEnabled } from '../../common/invalidateOptInEnabled'
 
 export type DevCycleClientContext = {
     serverDataPromise: Promise<DevCycleServerData>
@@ -80,6 +81,12 @@ export const InternalDevCycleClientsideProvider = ({
             )
         }
         try {
+            if (serverData?.config?.project?.settings?.optIn?.enabled) {
+                await invalidateOptInEnabled(
+                    clientSDKKey,
+                    serverData?.user.user_id ?? null,
+                )
+            }
             await invalidateConfig(
                 clientSDKKey,
                 serverData?.user.user_id ?? null,

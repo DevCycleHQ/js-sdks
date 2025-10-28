@@ -37,6 +37,23 @@ export const fetchCDNConfig = cache(
     },
 )
 
+export const hasOptInEnabled = cache(
+    async (userId: string, sdkKey: string): Promise<boolean> => {
+        const response = await fetch(
+            `https://sdk-api.devcycle.com/v1/optIns/${encodeURIComponent(
+                userId,
+            )}/hasEnabled?sdkKey=${sdkKey}`,
+            {
+                next: {
+                    revalidate: 3600,
+                    tags: [sdkKey, userId],
+                },
+            },
+        )
+        return await response.json()
+    },
+)
+
 const getSDKAPIUrl = (
     sdkKey: string,
     obfuscated: boolean,
