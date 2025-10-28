@@ -10,11 +10,11 @@ import { getBucketedConfig, getConfigFromSource } from './bucketing'
 
 const jsClientOptions = {
     // pass next object to enable "next" mode in JS SDK
-    next: {},
+    next: { disableAutomaticEventFlush: true },
     disableConfigCache: true,
     disableRealtimeUpdates: true,
-    disableAutomaticEventLogging: true,
-    disableCustomEventLogging: true,
+    disableAutomaticEventLogging: false,
+    disableCustomEventLogging: false,
     sdkPlatform: 'nextjs',
 }
 

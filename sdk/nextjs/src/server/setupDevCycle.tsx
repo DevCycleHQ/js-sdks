@@ -1,12 +1,15 @@
 import 'server-only'
 import { initialize, validateSDKKey } from './initialize'
 import {
+    DevCycleClient,
     DevCycleUser,
     DVCCustomDataJSON,
     VariableDefinitions,
 } from '@devcycle/js-client-sdk'
 import { DevCycleNextOptions } from '../common/types'
 import { InferredVariableType, VariableKey } from '@devcycle/types'
+import { cache } from 'react'
+import { after } from 'next/server'
 
 // server-side users must always be "identified" with a user id
 type ServerUser<CustomData extends DVCCustomDataJSON = DVCCustomDataJSON> =
@@ -21,6 +24,11 @@ type GetVariableValue = <
     key: K,
     defaultValue: ValueType,
 ) => Promise<InferredVariableType<K, ValueType>>
+
+const cachedFlushEvents = cache((client: DevCycleClient) => {
+    after(() => client.flushEvents(() => console.log('events flushed')))
+    console.log('cache hit')
+})
 
 // allow return type inference
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -47,6 +55,7 @@ export const setupDevCycle = <
             userGetter,
             options,
         )
+        cachedFlushEvents(client)
         return client.variableValue(key, defaultValue)
     }
 
