@@ -41,11 +41,13 @@ const bucketOrFetchConfig = async (
     user: DVCPopulatedUser,
     config: ConfigBody,
     obfuscated: boolean,
+    enableEdgeDB: boolean = false,
 ) => {
     if (config.debugUsers?.includes(user.user_id ?? '')) {
         const bucketedConfigResponse = await sdkConfigAPI(
             config.clientSDKKey!,
             obfuscated,
+            enableEdgeDB,
             user,
         )
         return (await bucketedConfigResponse.json()) as BucketedUserConfig

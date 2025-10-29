@@ -13,6 +13,7 @@ export type DevCycleNextOptions = Pick<
     | 'disableAutomaticEventLogging'
     | 'disableCustomEventLogging'
     | 'enableObfuscation'
+    | 'enableEdgeDB'
 > & {
     /**
      * Make the SDK's initialization non-blocking. This unblocks serverside rendering up to the point of a variable

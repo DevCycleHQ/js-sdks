@@ -22,6 +22,7 @@ const getPopulatedUser = cache((user: DevCycleUser, userAgent?: string) => {
 const generateBucketedConfigCached = cache(
     async (
         obfuscated: boolean,
+        enableEdgeDB: boolean,
         user: DevCycleUser,
         config: ConfigBody,
         userAgent?: string,
@@ -31,10 +32,13 @@ const generateBucketedConfigCached = cache(
         // clientSDKKey is always defined for bootstrap config
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const clientSDKKey = config.clientSDKKey!
-        if (config.debugUsers?.includes(user.user_id ?? '')) {
+        const useEdgeDB = config.project.settings.edgeDB.enabled && enableEdgeDB
+
+        if (config.debugUsers?.includes(user.user_id ?? '') || useEdgeDB) {
             const bucketedConfigResponse = await sdkConfigAPI(
                 clientSDKKey,
                 obfuscated,
+                useEdgeDB,
                 populatedUser,
             )
 
@@ -118,8 +122,15 @@ export const getBucketedConfig = async (
     options: DevCycleNextOptions,
     userAgent?: string,
 ): Promise<BucketedConfigWithAdditionalFields> => {
+    if (options.enableEdgeDB && !config.project.settings.edgeDB.enabled) {
+        console.warn(
+            'EdgeDB is not enabled for this project. Only using local user data.',
+        )
+    }
+
     const { bucketedConfig } = await generateBucketedConfigCached(
         !!options.enableObfuscation,
+        !!options.enableEdgeDB,
         user,
         config,
         userAgent,

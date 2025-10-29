@@ -40,6 +40,7 @@ export const fetchCDNConfig = cache(
 const getSDKAPIUrl = (
     sdkKey: string,
     obfuscated: boolean,
+    enableEdgeDB: boolean,
     user: DVCPopulatedUser,
 ) => {
     const searchParams = new URLSearchParams()
@@ -47,6 +48,9 @@ const getSDKAPIUrl = (
     searchParams.set('sdkKey', sdkKey)
     if (obfuscated) {
         searchParams.set('obfuscated', '1')
+    }
+    if (enableEdgeDB) {
+        searchParams.set('enableEdgeDB', '1')
     }
     searchParams.set('sdkPlatform', 'nextjs')
     searchParams.set('sse', '1')
@@ -57,6 +61,7 @@ export const sdkConfigAPI = cache(
     async (
         sdkKey: string,
         obfuscated: boolean,
+        enableEdgeDB: boolean,
         user: DVCPopulatedUser,
     ): Promise<BucketedUserConfig> => {
         const response = await fetch(getSDKAPIUrl(sdkKey, obfuscated, user), {
