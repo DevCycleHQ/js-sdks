@@ -43,11 +43,12 @@ const bucketOrFetchConfig = async (
     obfuscated: boolean,
     enableEdgeDB: boolean = false,
 ) => {
-    if (config.debugUsers?.includes(user.user_id ?? '')) {
+    const useEdgeDB = config.project.settings.edgeDB.enabled && enableEdgeDB
+    if (config.debugUsers?.includes(user.user_id ?? '') || useEdgeDB) {
         const bucketedConfigResponse = await sdkConfigAPI(
             config.clientSDKKey!,
             obfuscated,
-            enableEdgeDB,
+            useEdgeDB,
             user,
         )
         return (await bucketedConfigResponse.json()) as BucketedUserConfig

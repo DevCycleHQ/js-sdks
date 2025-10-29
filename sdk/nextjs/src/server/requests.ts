@@ -64,12 +64,15 @@ export const sdkConfigAPI = cache(
         enableEdgeDB: boolean,
         user: DVCPopulatedUser,
     ): Promise<BucketedUserConfig> => {
-        const response = await fetch(getSDKAPIUrl(sdkKey, obfuscated, user), {
-            next: {
-                revalidate: 60,
-                tags: [sdkKey, user.user_id],
+        const response = await fetch(
+            getSDKAPIUrl(sdkKey, obfuscated, enableEdgeDB, user),
+            {
+                next: {
+                    revalidate: 60,
+                    tags: [sdkKey, user.user_id],
+                },
             },
-        })
+        )
 
         return (await response.json()) as BucketedUserConfig
     },
