@@ -41,7 +41,7 @@ const bucketOrFetchConfig = async (
     user: DVCPopulatedUser,
     config: ConfigBody,
     obfuscated: boolean,
-    enableEdgeDB: boolean = false,
+    enableEdgeDB = false,
 ) => {
     const useEdgeDB = config.project.settings.edgeDB.enabled && enableEdgeDB
     if (config.debugUsers?.includes(user.user_id ?? '') || useEdgeDB) {
