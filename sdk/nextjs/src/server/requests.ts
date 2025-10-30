@@ -50,7 +50,7 @@ const getSDKAPIUrl = (
         searchParams.set('obfuscated', '1')
     }
     if (enableEdgeDB) {
-        searchParams.set('enableEdgeDB', '1')
+        searchParams.set('enableEdgeDB', 'true')
     }
     searchParams.set('sdkPlatform', 'nextjs')
     searchParams.set('sse', '1')
