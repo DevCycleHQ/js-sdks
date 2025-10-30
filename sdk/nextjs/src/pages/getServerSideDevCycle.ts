@@ -8,7 +8,10 @@ type IdentifiedUser = Omit<DevCycleUser, 'user_id' | 'isAnonymous'> & {
     user_id: string
 }
 
-type DevCycleServersideOptions = Pick<DevCycleOptions, 'enableObfuscation'> & {
+type DevCycleServersideOptions = Pick<
+    DevCycleOptions,
+    'enableObfuscation' | 'enableEdgeDB'
+> & {
     configSource?: ConfigSource
 }
 
@@ -32,8 +35,9 @@ export const getServerSideDevCycle = async ({
             serverSDKKey,
             user,
             userAgent,
-            !!options.enableObfuscation,
             options.configSource,
+            !!options.enableObfuscation,
+            !!options.enableEdgeDB,
         )
         bucketedConfig = bucketingConfigResult.config
     } catch (e) {
@@ -65,8 +69,9 @@ export const getStaticDevCycle = async ({
         serverSDKKey,
         user,
         null,
-        !!options.enableObfuscation,
         options.configSource,
+        !!options.enableObfuscation,
+        !!options.enableEdgeDB,
     )
     return {
         _devcycleSSR: {

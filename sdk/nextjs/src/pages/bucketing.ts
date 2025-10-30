@@ -41,12 +41,21 @@ const bucketOrFetchConfig = async (
     user: DVCPopulatedUser,
     config: ConfigBody,
     obfuscated: boolean,
+    enableEdgeDB: boolean,
 ) => {
-    if (config.debugUsers?.includes(user.user_id ?? '')) {
+    if (enableEdgeDB && !config.project.settings.edgeDB.enabled) {
+        console.warn(
+            'EdgeDB is not enabled for this project. Only using local user data.',
+        )
+    }
+    const useEdgeDB = config.project.settings.edgeDB.enabled && enableEdgeDB
+
+    if (config.debugUsers?.includes(user.user_id ?? '') || useEdgeDB) {
         const bucketedConfigResponse = await sdkConfigAPI(
             config.clientSDKKey!,
-            obfuscated,
             user,
+            obfuscated,
+            useEdgeDB,
         )
         return (await bucketedConfigResponse.json()) as BucketedUserConfig
     }
@@ -61,8 +70,9 @@ export const getBucketedConfig = async (
     sdkKey: string,
     user: DevCycleUser,
     userAgent: string | null,
-    obfuscated: boolean,
     configSource: ConfigSource = cdnConfigSource,
+    obfuscated: boolean,
+    enableEdgeDB: boolean,
 ): Promise<{ config: BucketedUserConfig }> => {
     const { config } = await configSource.getConfig(
         sdkKey,
@@ -83,6 +93,7 @@ export const getBucketedConfig = async (
         populatedUser,
         config,
         obfuscated,
+        enableEdgeDB,
     )
 
     for (const feature of Object.values(bucketedConfig.features)) {

@@ -15,14 +15,18 @@ export const fetchCDNConfig = async (
 
 const getSDKAPIUrl = (
     sdkKey: string,
-    obfuscated: boolean,
     user: DVCPopulatedUser,
+    obfuscated: boolean,
+    enableEdgeDB: boolean,
 ) => {
     const searchParams = new URLSearchParams()
     serializeUserSearchParams(user, searchParams)
     searchParams.set('sdkKey', sdkKey)
     if (obfuscated) {
         searchParams.set('obfuscated', '1')
+    }
+    if (enableEdgeDB) {
+        searchParams.set('enableEdgeDB', 'true')
     }
     searchParams.set('sdkPlatform', 'nextjs')
     searchParams.set('sse', '1')
@@ -31,10 +35,11 @@ const getSDKAPIUrl = (
 
 export const sdkConfigAPI = async (
     sdkKey: string,
-    obfuscated: boolean,
     user: DVCPopulatedUser,
+    obfuscated: boolean,
+    enableEdgeDB: boolean,
 ): Promise<Response> => {
-    return await fetch(getSDKAPIUrl(sdkKey, obfuscated, user), {
+    return await fetch(getSDKAPIUrl(sdkKey, user, obfuscated, enableEdgeDB), {
         next: {
             revalidate: 60,
             tags: [sdkKey, user.user_id],
