@@ -15,9 +15,9 @@ export const fetchCDNConfig = async (
 
 const getSDKAPIUrl = (
     sdkKey: string,
+    user: DVCPopulatedUser,
     obfuscated: boolean,
     enableEdgeDB: boolean,
-    user: DVCPopulatedUser,
 ) => {
     const searchParams = new URLSearchParams()
     serializeUserSearchParams(user, searchParams)
@@ -35,11 +35,11 @@ const getSDKAPIUrl = (
 
 export const sdkConfigAPI = async (
     sdkKey: string,
+    user: DVCPopulatedUser,
     obfuscated: boolean,
     enableEdgeDB: boolean,
-    user: DVCPopulatedUser,
 ): Promise<Response> => {
-    return await fetch(getSDKAPIUrl(sdkKey, obfuscated, enableEdgeDB, user), {
+    return await fetch(getSDKAPIUrl(sdkKey, user, obfuscated, enableEdgeDB), {
         next: {
             revalidate: 60,
             tags: [sdkKey, user.user_id],

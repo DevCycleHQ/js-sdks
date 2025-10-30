@@ -60,9 +60,9 @@ const getSDKAPIUrl = (
 export const sdkConfigAPI = cache(
     async (
         sdkKey: string,
+        user: DVCPopulatedUser,
         obfuscated: boolean,
         enableEdgeDB: boolean,
-        user: DVCPopulatedUser,
     ): Promise<BucketedUserConfig> => {
         const response = await fetch(
             getSDKAPIUrl(sdkKey, obfuscated, enableEdgeDB, user),

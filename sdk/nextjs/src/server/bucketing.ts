@@ -21,10 +21,10 @@ const getPopulatedUser = cache((user: DevCycleUser, userAgent?: string) => {
 // wrap this function in react cache to avoid redoing work for the same user and config
 const generateBucketedConfigCached = cache(
     async (
-        obfuscated: boolean,
-        enableEdgeDB: boolean,
         user: DevCycleUser,
         config: ConfigBody,
+        obfuscated: boolean,
+        enableEdgeDB: boolean,
         userAgent?: string,
     ) => {
         const populatedUser = getPopulatedUser(user, userAgent)
@@ -43,9 +43,9 @@ const generateBucketedConfigCached = cache(
         if (config.debugUsers?.includes(user.user_id ?? '') || useEdgeDB) {
             const bucketedConfigResponse = await sdkConfigAPI(
                 clientSDKKey,
+                populatedUser,
                 obfuscated,
                 useEdgeDB,
-                populatedUser,
             )
 
             return {
@@ -129,10 +129,10 @@ export const getBucketedConfig = async (
     userAgent?: string,
 ): Promise<BucketedConfigWithAdditionalFields> => {
     const { bucketedConfig } = await generateBucketedConfigCached(
-        !!options.enableObfuscation,
-        !!options.enableEdgeDB,
         user,
         config,
+        !!options.enableObfuscation,
+        !!options.enableEdgeDB,
         userAgent,
     )
 

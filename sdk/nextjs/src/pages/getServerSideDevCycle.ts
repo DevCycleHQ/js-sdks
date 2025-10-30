@@ -35,9 +35,9 @@ export const getServerSideDevCycle = async ({
             serverSDKKey,
             user,
             userAgent,
+            options.configSource,
             !!options.enableObfuscation,
             !!options.enableEdgeDB,
-            options.configSource,
         )
         bucketedConfig = bucketingConfigResult.config
     } catch (e) {
@@ -69,9 +69,9 @@ export const getStaticDevCycle = async ({
         serverSDKKey,
         user,
         null,
+        options.configSource,
         !!options.enableObfuscation,
         !!options.enableEdgeDB,
-        options.configSource,
     )
     return {
         _devcycleSSR: {
