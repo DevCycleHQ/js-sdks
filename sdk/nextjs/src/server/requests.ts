@@ -50,6 +50,10 @@ export const hasOptInEnabled = cache(
                 },
             },
         )
+        if (!response.ok) {
+            const responseText = await response.text()
+            throw new Error('Could not fetch opt-in status: ' + responseText)
+        }
         return await response.json()
     },
 )
