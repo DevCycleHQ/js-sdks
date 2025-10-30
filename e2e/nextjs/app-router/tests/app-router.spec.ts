@@ -173,3 +173,25 @@ test('self-targeting overrides the values', async ({ page }) => {
     await expect(page.getByText('Server Disabled Variable: true')).toBeVisible()
     await expect(page.getByText('Client Disabled Variable: true')).toBeVisible()
 })
+
+test('edgeDB uses EdgeDB data for feature targeting', async ({ page }) => {
+    await page.goto('/edgedb')
+    await expect(page.getByText('EdgeDB Test Page')).toBeVisible()
+
+    // Baseline features should work
+    await expect(page.getByText('Server Enabled Variable: true')).toBeVisible()
+    await expect(
+        page.getByText('Server Disabled Variable: false'),
+    ).toBeVisible()
+
+    // EdgeDB-targeted features (for user-1 with premium tier)
+    await expect(page.getByText('Server Premium Feature: true')).toBeVisible()
+    await expect(page.getByText('Server Registered Access: true')).toBeVisible()
+    await expect(
+        page.getByText('Server US Premium Feature: true'),
+    ).toBeVisible()
+
+    // Client-side should match
+    await expect(page.getByText('Client Premium Feature: true')).toBeVisible()
+    await expect(page.getByText('Client Registered Access: true')).toBeVisible()
+})
