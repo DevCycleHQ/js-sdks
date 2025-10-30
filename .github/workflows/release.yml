@@ -52,17 +52,17 @@ jobs:
                   git config --global user.email "foundation-admin@devcycle.com"
                   git config --global user.name "DevCycle Automation"
 
-            - name: Use Node.js ${{ matrix.node-version }}
+            - name: Set up Node.js for npm publish
               uses: actions/setup-node@v4
               with:
-                  node-version: ${{ matrix.node-version }}
-                  registry-url: 'https://registry.npmjs.org'
-                  cache: 'yarn'
+                node-version: ${{ matrix.node-version }}
+                registry-url: "https://registry.npmjs.org"
+                cache: 'yarn'
+                scope: "@devcycle"
 
-            - name: Validate npm config and auth
-              run: |
-                  npm config list
-                  npm whoami
+            - name: Update npm for OIDC support
+              shell: bash
+              run: npm install -g npm@11.6.2
 
             - run: yarn --immutable
 
