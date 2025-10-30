@@ -5,7 +5,7 @@ export const invalidateOptInEnabled = async (
     sdkKey: string,
     userId: string | null,
 ): Promise<void> => {
-    if (typeof window != 'undefined') {
+    if (typeof window !== 'undefined') {
         console.warn('Error invalidating opt in enabled')
         return
     }
