@@ -1,9 +1,9 @@
 {
     "name": "@devcycle/bucketing",
-    "version": "1.38.1",
+    "version": "1.38.2",
     "license": "MIT",
     "dependencies": {
-        "@devcycle/types": "1.32.1",
+        "@devcycle/types": "1.32.2",
         "lodash": "^4.17.21",
         "murmurhash": "^2.0.1",
         "ua-parser-js": "^1.0.40"
