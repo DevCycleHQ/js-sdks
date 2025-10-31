@@ -2,6 +2,7 @@ import 'server-only'
 import { initialize, validateSDKKey } from './initialize'
 import {
     DevCycleClient,
+    DevCycleEvent,
     DevCycleUser,
     DVCCustomDataJSON,
     VariableDefinitions,
@@ -25,9 +26,17 @@ type GetVariableValue = <
     defaultValue: ValueType,
 ) => Promise<InferredVariableType<K, ValueType>>
 
+// queue flush events once after response complete
 const cachedFlushEvents = cache((client: DevCycleClient) => {
-    after(() => client.flushEvents(() => console.log('events flushed')))
-    console.log('cache hit')
+    try {
+        after(async () => {
+            await client.flushEvents()
+        })
+    } catch (error) {
+        client.logger.error(
+            'Event logging not supported in this environment. Disable automatic event logging in sdk options',
+        )
+    }
 })
 
 // allow return type inference
@@ -55,7 +64,13 @@ export const setupDevCycle = <
             userGetter,
             options,
         )
-        cachedFlushEvents(client)
+        const eventLoggingDisabled =
+            options.disableAutomaticEventLogging &&
+            options.disableCustomEventLogging
+
+        if (!eventLoggingDisabled) {
+            cachedFlushEvents(client)
+        }
         return client.variableValue(key, defaultValue)
     }
 
@@ -77,6 +92,16 @@ export const setupDevCycle = <
             options,
         )
         return client.allFeatures()
+    }
+
+    const _track = async (event: DevCycleEvent) => {
+        const { client } = await initialize(
+            serverSDKKey,
+            clientSDKKey,
+            userGetter,
+            options,
+        )
+        return client.track(event)
     }
 
     const _getClientContext = () => {
@@ -128,5 +153,6 @@ export const setupDevCycle = <
         getAllVariables: _getAllVariables,
         getAllFeatures: _getAllFeatures,
         getClientContext: _getClientContext,
+        track: _track,
     }
 }
