@@ -62,8 +62,7 @@ jobs:
 
             - name: Update npm for OIDC support
               shell: bash
-              run: npm install -g npm@11.6.2
-
+              run: npm install -g npm@latest
             - run: yarn --immutable
 
             # Only one of the following two steps will run, depending on whether the `update_all` input is set
