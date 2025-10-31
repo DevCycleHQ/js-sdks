@@ -10,10 +10,12 @@ export const {
     serverSDKKey: process.env.E2E_EDGEDB_SERVER_KEY ?? '',
     userGetter: async () => {
         const reqHeaders = await headers()
-        // Keep headers() call to prevent it from being removed during build
-        const _keepInBuild = reqHeaders.get('some-key')
         return {
             user_id: 'edgedb-user-1',
+            customData: {
+                // set a dummy field here so that the headers call stays in the build output
+                someKey: reqHeaders.get('some-key'),
+            },
         }
     },
     options: {
