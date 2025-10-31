@@ -64,11 +64,8 @@ export const setupDevCycle = <
             userGetter,
             options,
         )
-        const eventLoggingDisabled =
-            options.disableAutomaticEventLogging &&
-            options.disableCustomEventLogging
 
-        if (!eventLoggingDisabled) {
+        if (!options.disableAutomaticEventLogging) {
             cachedFlushEvents(client)
         }
         return client.variableValue(key, defaultValue)
@@ -101,6 +98,9 @@ export const setupDevCycle = <
             userGetter,
             options,
         )
+        if (!options.disableCustomEventLogging) {
+            cachedFlushEvents(client)
+        }
         return client.track(event)
     }
 

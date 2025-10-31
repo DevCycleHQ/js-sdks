@@ -102,7 +102,7 @@ export const InternalDevCycleClientsideProvider = ({
             disableConfigCache: true,
             next: {
                 configRefreshHandler: revalidateConfig,
-                disableAutomaticEventFlush: isServer ? true : false,
+                disableAutomaticEventFlush: isServer,
             },
         })
 
