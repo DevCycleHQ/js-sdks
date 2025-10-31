@@ -96,9 +96,6 @@ export class EventQueue<
 
         const eventsToFlush = [...this.eventQueue]
         const aggregateEventsToFlush = this.eventsFromAggregateEventMap()
-        console.log(
-            `internal flushing ${this.eventQueue.length} events, ${aggregateEventsToFlush.length} aggEvents`,
-        )
         eventsToFlush.push(...aggregateEventsToFlush)
 
         if (!eventsToFlush.length) {
@@ -157,7 +154,6 @@ export class EventQueue<
             )
             return
         }
-        console.log('queued event')
         this.eventQueue.push(event)
     }
 
@@ -210,7 +206,6 @@ export class EventQueue<
     }
 
     async close(): Promise<void> {
-        console.log('close')
         clearInterval(this.flushInterval)
         await this.flushEvents()
     }
