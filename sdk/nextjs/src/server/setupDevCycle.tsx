@@ -26,7 +26,7 @@ type GetVariableValue = <
     defaultValue: ValueType,
 ) => Promise<InferredVariableType<K, ValueType>>
 
-// queue flush events once after response complete
+// flushes events from queue once per request, after request completes
 const cachedFlushEvents = cache((client: DevCycleClient) => {
     try {
         after(async () => {
