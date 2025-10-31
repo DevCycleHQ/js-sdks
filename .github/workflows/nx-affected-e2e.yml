@@ -22,7 +22,7 @@ jobs:
             - name: Set Secrets
               uses: DevCycleHQ/aws-secrets-action@main
               with:
-                secrets_map: '{"E2E_NEXTJS_SERVER_KEY":"DEVCYCLE_GITHUB_js-sdks_E2E_NEXTJS_SERVER_KEY", "NEXT_PUBLIC_E2E_NEXTJS_CLIENT_KEY": "DEVCYCLE_GITHUB_js-sdks_NEXT_PUBLIC_E2E_NEXTJS_CLIENT_KEY", "DVC_E2E_SERVER_SDK_KEY": "DEVCYCLE_GITHUB_js-sdks_DVC_E2E_SERVER_SDK_KEY"}'
+                secrets_map: '{"NEXT_PUBLIC_E2E_EDGEDB_CLIENT_KEY":"DEVCYCLE_GITHUB_js-sdks_NEXT_PUBLIC_E2E_EDGEDB_CLIENT_KEY","E2E_EDGEDB_SERVER_KEY":"DEVCYCLE_GITHUB_js-sdks_E2E_EDGEDB_SERVER_KEY","E2E_NEXTJS_SERVER_KEY":"DEVCYCLE_GITHUB_js-sdks_E2E_NEXTJS_SERVER_KEY", "NEXT_PUBLIC_E2E_NEXTJS_CLIENT_KEY": "DEVCYCLE_GITHUB_js-sdks_NEXT_PUBLIC_E2E_NEXTJS_CLIENT_KEY", "DVC_E2E_SERVER_SDK_KEY": "DEVCYCLE_GITHUB_js-sdks_DVC_E2E_SERVER_SDK_KEY"}'
                 aws_account_id: '134377926370'
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v4
