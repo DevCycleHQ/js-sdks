@@ -13,7 +13,6 @@ fi
 
 PACKAGE=$1
 JQ_PATH=".version"
-NPM_REGISTRY="$(yarn config get npmRegistryServer)"
 SHA="$(git rev-parse HEAD)"
 DRY_RUN=""
 
@@ -38,11 +37,6 @@ parse_arguments "$@"
 
 NPM_SHOW="$(npm show "$PACKAGE" version)"
 NPM_LS="$(cat package.json | jq -r $JQ_PATH)"
-
-if [[ "$NPM_REGISTRY" != "https://registry.yarnpkg.com" ]]; then
-  echo "NPM registry is not set to https://registry.yarnpkg.com. Aborting."
-  exit 1
-fi
 
 echo "$PACKAGE npm show: $NPM_SHOW, npm ls: $NPM_LS"
 
@@ -71,11 +65,6 @@ if [[ "$NPM_SHOW" != "$NPM_LS" ]]; then
   fi
 
   if [[ -z "$DRY_RUN" ]]; then
-    # Preflight authentication check
-    if ! npm whoami >/dev/null 2>&1; then
-      echo "::error::Not authenticated to npm (missing OIDC/token). Aborting."
-      exit 1
-    fi
     echo "::info::Publishing $PACKAGE@$NPM_LS to NPM."
     npm publish --access=public --provenance
   else
