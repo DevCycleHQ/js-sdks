@@ -100,12 +100,6 @@ export const InternalDevCycleClientsideProvider = ({
             sdkPlatform: 'nextjs',
             deferInitialization: true,
             disableConfigCache: true,
-            // ...(isServer
-            //     ? {
-            //           disableAutomaticEventLogging: true,
-            //           disableCustomEventLogging: true,
-            //       }
-            //     : {}),
             next: {
                 configRefreshHandler: revalidateConfig,
                 disableAutomaticEventFlush: isServer ? true : false,
