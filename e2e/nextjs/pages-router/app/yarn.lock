@@ -6,66 +6,68 @@ __metadata:
   cacheKey: 10
 
 "@devcycle/bucketing@file:../../../../dist/lib/shared/bucketing::locator=app%40workspace%3A.":
-  version: 1.30.0
-  resolution: "@devcycle/bucketing@file:../../../../dist/lib/shared/bucketing#../../../../dist/lib/shared/bucketing::hash=d45726&locator=app%40workspace%3A."
+  version: 1.38.3
+  resolution: "@devcycle/bucketing@file:../../../../dist/lib/shared/bucketing#../../../../dist/lib/shared/bucketing::hash=61d5fb&locator=app%40workspace%3A."
   dependencies:
-    "@devcycle/types": "npm:^1.25.0"
+    "@devcycle/types": "npm:1.32.3"
     lodash: "npm:^4.17.21"
     murmurhash: "npm:^2.0.1"
     ua-parser-js: "npm:^1.0.40"
-  checksum: 10/e727d5469a0ccaf92d73a258dcf0846f7c3b912018cf88d6f911b4195fd74fa8823692cd2e5b662abbac81ee77ef9a029fc09d2a6ee534382280203ffe33bb9d
+  checksum: 10/4d121412f9f8c1585b1c00355b67c8aa1b4d9e7bc7858d381c4a41e745a24463d6ad63bc4c1e34a0b0150fd906206e2f351ec14c0b5acc743244119812f04451
   languageName: node
   linkType: hard
 
 "@devcycle/js-client-sdk@file:../../../../dist/sdk/js::locator=app%40workspace%3A.":
-  version: 1.38.0
-  resolution: "@devcycle/js-client-sdk@file:../../../../dist/sdk/js#../../../../dist/sdk/js::hash=64e3da&locator=app%40workspace%3A."
+  version: 1.47.4
+  resolution: "@devcycle/js-client-sdk@file:../../../../dist/sdk/js#../../../../dist/sdk/js::hash=dd6fee&locator=app%40workspace%3A."
   dependencies:
-    "@devcycle/types": "npm:^1.25.0"
+    "@devcycle/types": "npm:1.32.3"
     fetch-retry: "npm:^5.0.6"
     lodash: "npm:^4.17.21"
     ua-parser-js: "npm:^1.0.40"
     uuid: "npm:^8.3.2"
-  checksum: 10/eec26ca21feafe396d1b99fba69d3767027cf7f4134b5aaa70ec92e7b469ea1fa5d7856cdf10cf5cb46c9cfa96c8df5fd174e60d73ba503b5282768b8304f3e6
+  checksum: 10/204cac325bdb3028ab191a76f79f4ed5d371d53f9e784aaaf018c4dd0cf40f8497329d6ae4107a70732b2fdb15736e6f9dc7fac20eb59f8e6e72516003644871
   languageName: node
   linkType: hard
 
 "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs::locator=app%40workspace%3A.":
-  version: 2.14.0
-  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=d59235&locator=app%40workspace%3A."
+  version: 2.23.4
+  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=9b95e9&locator=app%40workspace%3A."
   dependencies:
-    "@devcycle/bucketing": "npm:^1.30.0"
-    "@devcycle/js-client-sdk": "npm:^1.38.0"
-    "@devcycle/react-client-sdk": "npm:^1.36.0"
-    "@devcycle/types": "npm:^1.25.0"
+    "@devcycle/bucketing": "npm:1.38.3"
+    "@devcycle/js-client-sdk": "npm:1.47.4"
+    "@devcycle/react-client-sdk": "npm:1.45.4"
+    "@devcycle/types": "npm:1.32.3"
     class-transformer: "npm:^0.5.1"
     hoist-non-react-statics: "npm:^3.3.2"
     server-only: "npm:^0.0.1"
-  checksum: 10/4b4ab462dbccdbf328456fd741ed34abab55a4cc42b2ca95ca805bb7f1b9b0df6df8538d0e939085276a26f0508e430b224c87762ef62b97360dc3a52ca9f8b9
+  checksum: 10/000dc508a7a7a39d396923defc5a82e986c1211682a22a152d51b9d4ff0c86cf9a10b97c313841ae47a84e6031f27cdce6cfabd86827c79797bb42cdbaacefde
   languageName: node
   linkType: hard
 
 "@devcycle/react-client-sdk@file:../../../../dist/sdk/react::locator=app%40workspace%3A.":
-  version: 1.36.0
-  resolution: "@devcycle/react-client-sdk@file:../../../../dist/sdk/react#../../../../dist/sdk/react::hash=959cd9&locator=app%40workspace%3A."
+  version: 1.45.4
+  resolution: "@devcycle/react-client-sdk@file:../../../../dist/sdk/react#../../../../dist/sdk/react::hash=0acea3&locator=app%40workspace%3A."
   dependencies:
-    "@devcycle/js-client-sdk": "npm:^1.38.0"
-    "@devcycle/types": "npm:^1.25.0"
+    "@devcycle/js-client-sdk": "npm:1.47.4"
+    "@devcycle/types": "npm:1.32.3"
     hoist-non-react-statics: "npm:^3.3.2"
-  checksum: 10/021f476ccb41e64239b33a63070e224fd043f0c2fec0a7daf3efacf00283659a130eb2954e0bd554c77b8282fb59c8325a82f7048d3e729422f9c85717040834
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 10/5fa96cfa8260b7b8370fad889899a68a0aba1dab39c1877eb5be1e98bf975cf72db750908f3ef3fd801ab194a69e925012836f6b0be7d6344f1312f6ffb7fba4
   languageName: node
   linkType: hard
 
 "@devcycle/types@file:../../../../dist/lib/shared/types::locator=app%40workspace%3A.":
-  version: 1.25.0
-  resolution: "@devcycle/types@file:../../../../dist/lib/shared/types#../../../../dist/lib/shared/types::hash=ecc727&locator=app%40workspace%3A."
+  version: 1.32.3
+  resolution: "@devcycle/types@file:../../../../dist/lib/shared/types#../../../../dist/lib/shared/types::hash=d994a0&locator=app%40workspace%3A."
   dependencies:
     class-transformer: "npm:0.5.1"
     class-validator: "npm:0.14.1"
     iso-639-1: "npm:^2.1.15"
     lodash: "npm:^4.17.21"
     reflect-metadata: "npm:^0.1.14"
-  checksum: 10/52caccffa8e717f661063c6cf255569b90e8123b8af27ba810a3adac54834f21c35bb7ca1d5a1ab260c6aa99552382550848cb471faf563846051c7df7c36cb5
+  checksum: 10/0a65010ad70a1c8d8a40eab0f51a806cf48b6bc9f0ea99212d95537545d920518ab5996e6bdbef5fbaa6ea4001132983d7a3bb857c54756653658517f8f46a6a
   languageName: node
   linkType: hard
 
