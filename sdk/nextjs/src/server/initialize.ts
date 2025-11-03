@@ -51,11 +51,11 @@ export const initialize = cache(
 
         let config = null
         try {
-            console.log('initializing config')
             config = await getBucketedConfig(
                 configData.config,
                 configData.lastModified,
-                user,
+                // we know the user has a user_id because we checked it above
+                user as DevCycleUser & { user_id: string },
                 options,
                 userAgent,
                 clientSDKKey,

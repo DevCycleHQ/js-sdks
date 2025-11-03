@@ -13,6 +13,7 @@ export const invalidateConfig = async (
         return
     }
     revalidateTag(sdkToken)
+    revalidateTag(`optin-${sdkToken}`)
     if (userId) {
         revalidateTag(userId)
     }

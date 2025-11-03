@@ -8,7 +8,6 @@ import {
 export const ClientComponent = () => {
     const enabledVar = useVariableValue('enabled-feature', false)
     const disabledVar = useVariableValue('disabled-feature', false)
-    const compromisedToken = useVariableValue('show-client-warning', false)
     const allVariables = useAllVariables()
     const allFeatures = useAllFeatures()
 
@@ -17,9 +16,8 @@ export const ClientComponent = () => {
             <h1>Client Component</h1>
             <p>Client Enabled Variable: {JSON.stringify(enabledVar)}</p>
             <p>Client Disabled Variable: {JSON.stringify(disabledVar)}</p>
-            <p>Client Compromised Token: {JSON.stringify(compromisedToken)}</p>
-            {/* <p>Client All Variables: {JSON.stringify(allVariables)}</p>
-            <p>Client All Features: {JSON.stringify(allFeatures)}</p> */}
+            <p>Client All Variables: {JSON.stringify(allVariables)}</p>
+            <p>Client All Features: {JSON.stringify(allFeatures)}</p>
         </div>
     )
 }

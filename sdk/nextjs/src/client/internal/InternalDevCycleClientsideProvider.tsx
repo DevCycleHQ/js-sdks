@@ -5,7 +5,6 @@ import { invalidateConfig } from '../../common/invalidateConfig'
 import { DevCycleNextOptions, DevCycleServerData } from '../../common/types'
 import { DevCycleProviderContext } from './context'
 import { useRouter } from 'next/navigation'
-import { invalidateOptInEnabled } from '../../common/invalidateOptInEnabled'
 
 export type DevCycleClientContext = {
     serverDataPromise: Promise<DevCycleServerData>
@@ -95,11 +94,6 @@ export const InternalDevCycleClientsideProvider = ({
         }
     }
 
-    const revalidateOptInEnabled = async () => {
-        await invalidateOptInEnabled(clientSDKKey)
-        await revalidateConfig()
-    }
-
     if (!clientRef.current) {
         clientRef.current = initializeDevCycle(clientSDKKey, {
             ...context.options,
@@ -114,7 +108,6 @@ export const InternalDevCycleClientsideProvider = ({
                 : {}),
             next: {
                 configRefreshHandler: revalidateConfig,
-                optInRefreshHandler: revalidateOptInEnabled,
             },
         })
 

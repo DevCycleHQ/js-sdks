@@ -129,7 +129,6 @@ export interface DevCycleOptions {
      */
     next?: {
         configRefreshHandler?: (lastModifiedDate?: number) => void
-        optInRefreshHandler?: () => void
     }
 
     /**

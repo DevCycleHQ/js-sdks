@@ -23,7 +23,7 @@ export const getPopulatedUser = cache(
 // wrap this function in react cache to avoid redoing work for the same user and config
 const generateBucketedConfigCached = cache(
     async (
-        user: DevCycleUser,
+        user: DevCycleUser & { user_id: string },
         config: ConfigBody,
         obfuscated: boolean,
         enableEdgeDB: boolean,
@@ -41,8 +41,23 @@ const generateBucketedConfigCached = cache(
             )
         }
         const useEdgeDB = config.project.settings.edgeDB.enabled && enableEdgeDB
+        const checkOptInEnabled = async () => {
+            if (!config.project.settings.optIn?.enabled) {
+                return false
+            }
+            const hasOptInRecords = await hasOptInEnabled(
+                user.user_id,
+                clientSDKKey,
+            )
+            return hasOptInRecords
+        }
+        const useOptIn = await checkOptInEnabled()
 
-        if (config.debugUsers?.includes(user.user_id ?? '') || useEdgeDB) {
+        if (
+            config.debugUsers?.includes(user.user_id ?? '') ||
+            useEdgeDB ||
+            useOptIn
+        ) {
             const bucketedConfigResponse = await sdkConfigAPI(
                 clientSDKKey,
                 populatedUser,
@@ -126,64 +141,18 @@ export const getConfigFromSource = async (
 export const getBucketedConfig = async (
     config: ConfigBody,
     lastModified: string | null,
-    user: DevCycleUser,
+    user: DevCycleUser & { user_id: string },
     options: DevCycleNextOptions,
     userAgent?: string,
     clientSDKKey?: string,
 ): Promise<BucketedConfigWithAdditionalFields> => {
-    const generateBucketedConfig = async () => {
-        const { bucketedConfig } = await generateBucketedConfigCached(
-            user,
-            config,
-            !!options.enableObfuscation,
-            !!options.enableEdgeDB,
-            userAgent,
-        )
-        return bucketedConfig
-    }
-    let bucketedConfig
-    if (config.project.settings.optIn?.enabled) {
-        try {
-            console.log('getting opt in records')
-            if (!clientSDKKey) {
-                throw new Error(
-                    'clientSDKKey is required when optIn is enabled',
-                )
-            }
-            const hasOptInRecords = await hasOptInEnabled(
-                user.user_id!,
-                clientSDKKey,
-            )
-            console.log('hasOptInRecords: ', hasOptInRecords)
-            if (hasOptInRecords) {
-                console.log('hasOptInRecords is true, fetching bucketed config')
-                const populatedUser = getPopulatedUser(user, userAgent)
-                const bucketedConfigResponse = await sdkConfigAPI(
-                    clientSDKKey,
-                    populatedUser,
-                    !!options.enableObfuscation,
-                    !!options.enableEdgeDB,
-                )
-
-                bucketedConfig = {
-                    ...bucketedConfigResponse,
-                    clientSDKKey: clientSDKKey,
-                }
-                console.log('bucketedConfig: ', bucketedConfig)
-            } else {
-                bucketedConfig = await generateBucketedConfig()
-            }
-        } catch (e) {
-            console.error(
-                'Error fetching opt in records, using regular bucketed config',
-                e,
-            )
-            bucketedConfig = await generateBucketedConfig()
-        }
-    } else {
-        bucketedConfig = await generateBucketedConfig()
-    }
-
+    const { bucketedConfig } = await generateBucketedConfigCached(
+        user,
+        config,
+        !!options.enableObfuscation,
+        !!options.enableEdgeDB,
+        userAgent,
+    )
     return {
         ...bucketedConfig,
         lastModified: lastModified ?? undefined,

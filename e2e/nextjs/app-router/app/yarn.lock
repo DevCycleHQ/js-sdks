@@ -19,20 +19,20 @@ __metadata:
 
 "@devcycle/js-client-sdk@file:../../../../dist/sdk/js::locator=app%40workspace%3A.":
   version: 1.47.4
-  resolution: "@devcycle/js-client-sdk@file:../../../../dist/sdk/js#../../../../dist/sdk/js::hash=b019f6&locator=app%40workspace%3A."
+  resolution: "@devcycle/js-client-sdk@file:../../../../dist/sdk/js#../../../../dist/sdk/js::hash=dd6fee&locator=app%40workspace%3A."
   dependencies:
     "@devcycle/types": "npm:1.32.3"
     fetch-retry: "npm:^5.0.6"
     lodash: "npm:^4.17.21"
     ua-parser-js: "npm:^1.0.40"
     uuid: "npm:^8.3.2"
-  checksum: 10/26f4dd85bb86720f90cc22c58fcb7ffa1925b0b5667ab8f781bb506629d5032413155b2621e585a2cf3593a1ea7aff21d646dc25a9f4881b7ad32163dc4c3137
+  checksum: 10/204cac325bdb3028ab191a76f79f4ed5d371d53f9e784aaaf018c4dd0cf40f8497329d6ae4107a70732b2fdb15736e6f9dc7fac20eb59f8e6e72516003644871
   languageName: node
   linkType: hard
 
 "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs::locator=app%40workspace%3A.":
   version: 2.23.4
-  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=dfa706&locator=app%40workspace%3A."
+  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=91dbe2&locator=app%40workspace%3A."
   dependencies:
     "@devcycle/bucketing": "npm:1.38.3"
     "@devcycle/js-client-sdk": "npm:1.47.4"
@@ -41,7 +41,7 @@ __metadata:
     class-transformer: "npm:^0.5.1"
     hoist-non-react-statics: "npm:^3.3.2"
     server-only: "npm:^0.0.1"
-  checksum: 10/cb4b75407fc40e0982dc50e84817a49d29fd63d7d8d661c36fafc7b756aa47f9c5849d6606fe1ba6c01c9df4a856b14ed5628a1f5ab5dd687f05c8fb6575ee87
+  checksum: 10/dceb5a21e573424b1f35157a0c7cc124f9abed29f5d69ea07723a8bfb3f337e7c9b1cbbf58c1c213e091200a612e43d87e63cefd119133359d87f2f21067a157
   languageName: node
   linkType: hard
 

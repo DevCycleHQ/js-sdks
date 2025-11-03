@@ -42,8 +42,11 @@ export const hasOptInEnabled = cache(
         const response = await fetch(
             `https://sdk-api.devcycle.com/v1/optIns/${encodeURIComponent(
                 userId,
-            )}/hasEnabled?sdkKey=${sdkKey}`,
+            )}/hasEnabled`,
             {
+                headers: {
+                    Authorization: sdkKey,
+                },
                 next: {
                     revalidate: 3600,
                     tags: [`optin-${sdkKey}`],
