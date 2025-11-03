@@ -10,16 +10,13 @@ export const {
     serverSDKKey: process.env.E2E_OPTIN_SERVER_KEY ?? '',
     userGetter: async () => {
         const reqHeaders = await headers()
+        const testUserId = reqHeaders.get('x-test-user-id')
         return {
-            user_id: 'optin-user-1',
+            user_id: testUserId ?? 'optin-user-1',
             customData: {
                 // set a dummy field here so that the headers call stays in the build output
                 someKey: reqHeaders.get('some-key'),
             },
         }
-    },
-    options: {
-        enableStreaming: false,
-        enableEdgeDB: true,
     },
 })

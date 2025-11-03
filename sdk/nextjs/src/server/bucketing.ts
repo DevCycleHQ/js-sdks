@@ -20,10 +20,21 @@ export const getPopulatedUser = cache(
     },
 )
 
+const checkOptInEnabled = async (
+    config: ConfigBody,
+    user: DVCPopulatedUser,
+    clientSDKKey: string,
+) => {
+    if (!config.project.settings.optIn?.enabled) {
+        return false
+    }
+    return await hasOptInEnabled(user.user_id, clientSDKKey)
+}
+
 // wrap this function in react cache to avoid redoing work for the same user and config
 const generateBucketedConfigCached = cache(
     async (
-        user: DevCycleUser & { user_id: string },
+        user: DevCycleUser,
         config: ConfigBody,
         obfuscated: boolean,
         enableEdgeDB: boolean,
@@ -41,17 +52,11 @@ const generateBucketedConfigCached = cache(
             )
         }
         const useEdgeDB = config.project.settings.edgeDB.enabled && enableEdgeDB
-        const checkOptInEnabled = async () => {
-            if (!config.project.settings.optIn?.enabled) {
-                return false
-            }
-            const hasOptInRecords = await hasOptInEnabled(
-                user.user_id,
-                clientSDKKey,
-            )
-            return hasOptInRecords
-        }
-        const useOptIn = await checkOptInEnabled()
+        const useOptIn = await checkOptInEnabled(
+            config,
+            populatedUser,
+            clientSDKKey,
+        )
 
         if (
             config.debugUsers?.includes(user.user_id ?? '') ||
@@ -141,10 +146,9 @@ export const getConfigFromSource = async (
 export const getBucketedConfig = async (
     config: ConfigBody,
     lastModified: string | null,
-    user: DevCycleUser & { user_id: string },
+    user: DevCycleUser,
     options: DevCycleNextOptions,
     userAgent?: string,
-    clientSDKKey?: string,
 ): Promise<BucketedConfigWithAdditionalFields> => {
     const { bucketedConfig } = await generateBucketedConfigCached(
         user,

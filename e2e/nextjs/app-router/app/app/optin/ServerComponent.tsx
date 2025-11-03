@@ -18,7 +18,7 @@ export const ServerComponent = async () => {
             <p>Client All Variables: {JSON.stringify(allVariables)}</p>
             <p>Client All Features: {JSON.stringify(allFeatures)}</p>
             <h2>OptIn-Targeted Features:</h2>
-            <p>Client OptIn Enabled Feature: {optInEnabledFeature}</p>
+            <p>Server OptIn Enabled Feature: {optInEnabledFeature}</p>
         </div>
     )
 }
