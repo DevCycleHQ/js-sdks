@@ -81,12 +81,6 @@ export const InternalDevCycleClientsideProvider = ({
             )
         }
         try {
-            if (serverData?.config?.project?.settings?.optIn?.enabled) {
-                await invalidateOptInEnabled(
-                    clientSDKKey,
-                    serverData?.user.user_id ?? null,
-                )
-            }
             await invalidateConfig(
                 clientSDKKey,
                 serverData?.user.user_id ?? null,
@@ -99,6 +93,11 @@ export const InternalDevCycleClientsideProvider = ({
             // call for a full in-place refresh
             router.refresh()
         }
+    }
+
+    const revalidateOptInEnabled = async () => {
+        await invalidateOptInEnabled(clientSDKKey)
+        await revalidateConfig()
     }
 
     if (!clientRef.current) {
@@ -115,6 +114,7 @@ export const InternalDevCycleClientsideProvider = ({
                 : {}),
             next: {
                 configRefreshHandler: revalidateConfig,
+                optInRefreshHandler: revalidateOptInEnabled,
             },
         })
 

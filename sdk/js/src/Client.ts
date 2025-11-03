@@ -101,6 +101,7 @@ export class DevCycleClient<
     private windowMessageHandler?: (event: MessageEvent) => void
     private windowPageHideHandler?: () => void
     private configRefetchHandler: (lastModifiedDate?: number) => void
+    private optInRefetchHandler?: () => void
     private evalHooksRunner: EvalHooksRunner
 
     constructor(
@@ -123,6 +124,9 @@ export class DevCycleClient<
         }
         if (options.next?.configRefreshHandler) {
             this.configRefetchHandler = options.next.configRefreshHandler
+        }
+        if (options.next?.optInRefreshHandler) {
+            this.optInRefetchHandler = options.next.optInRefreshHandler
         }
 
         this.logger =
@@ -180,7 +184,16 @@ export class DevCycleClient<
             this.windowMessageHandler = (event: MessageEvent) => {
                 const message = event.data
                 if (message?.type === 'DVC.optIn.saved') {
-                    this.refetchConfig(false)
+                    if (
+                        this.config?.project?.settings?.optIn?.enabled &&
+                        this.optInRefetchHandler
+                    ) {
+                        // this will invalidate the hasOptInEnabled fetch and the config fetch, so no need to call
+                        // refetchConfig
+                        this.optInRefetchHandler()
+                    } else {
+                        this.refetchConfig(false)
+                    }
                 }
             }
             window.addEventListener('message', this.windowMessageHandler)

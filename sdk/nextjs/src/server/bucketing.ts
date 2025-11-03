@@ -1,4 +1,4 @@
-import { fetchCDNConfig, sdkConfigAPI } from './requests'
+import { fetchCDNConfig, hasOptInEnabled, sdkConfigAPI } from './requests'
 import { generateBucketedConfig } from '@devcycle/bucketing'
 import { cache } from 'react'
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
@@ -129,14 +129,60 @@ export const getBucketedConfig = async (
     user: DevCycleUser,
     options: DevCycleNextOptions,
     userAgent?: string,
+    clientSDKKey?: string,
 ): Promise<BucketedConfigWithAdditionalFields> => {
-    const { bucketedConfig } = await generateBucketedConfigCached(
-        user,
-        config,
-        !!options.enableObfuscation,
-        !!options.enableEdgeDB,
-        userAgent,
-    )
+    const generateBucketedConfig = async () => {
+        const { bucketedConfig } = await generateBucketedConfigCached(
+            user,
+            config,
+            !!options.enableObfuscation,
+            !!options.enableEdgeDB,
+            userAgent,
+        )
+        return bucketedConfig
+    }
+    let bucketedConfig
+    if (config.project.settings.optIn?.enabled) {
+        try {
+            console.log('getting opt in records')
+            if (!clientSDKKey) {
+                throw new Error(
+                    'clientSDKKey is required when optIn is enabled',
+                )
+            }
+            const hasOptInRecords = await hasOptInEnabled(
+                user.user_id!,
+                clientSDKKey,
+            )
+            console.log('hasOptInRecords: ', hasOptInRecords)
+            if (hasOptInRecords) {
+                console.log('hasOptInRecords is true, fetching bucketed config')
+                const populatedUser = getPopulatedUser(user, userAgent)
+                const bucketedConfigResponse = await sdkConfigAPI(
+                    clientSDKKey,
+                    populatedUser,
+                    !!options.enableObfuscation,
+                    !!options.enableEdgeDB,
+                )
+
+                bucketedConfig = {
+                    ...bucketedConfigResponse,
+                    clientSDKKey: clientSDKKey,
+                }
+                console.log('bucketedConfig: ', bucketedConfig)
+            } else {
+                bucketedConfig = await generateBucketedConfig()
+            }
+        } catch (e) {
+            console.error(
+                'Error fetching opt in records, using regular bucketed config',
+                e,
+            )
+            bucketedConfig = await generateBucketedConfig()
+        }
+    } else {
+        bucketedConfig = await generateBucketedConfig()
+    }
 
     return {
         ...bucketedConfig,

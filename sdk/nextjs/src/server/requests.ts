@@ -46,11 +46,18 @@ export const hasOptInEnabled = cache(
             {
                 next: {
                     revalidate: 3600,
-                    tags: [sdkKey, userId],
+                    tags: [`optin-${sdkKey}`],
                 },
             },
         )
-        return await response.json()
+        const status = response.status
+        if (status === 200) {
+            return true
+        } else if (status === 204) {
+            return false
+        } else {
+            throw new Error(`Unexpected status code: ${status}`)
+        }
     },
 )
 
