@@ -61,9 +61,7 @@ const bucketOrFetchConfig = async (
         )
     }
 
-    const useOptIn =
-        config.project.settings.optIn?.enabled &&
-        (await checkOptInEnabled(config, user, config.clientSDKKey))
+    const useOptIn = await checkOptInEnabled(config, user, config.clientSDKKey)
     const useEdgeDB = config.project.settings.edgeDB.enabled && enableEdgeDB
 
     if (
