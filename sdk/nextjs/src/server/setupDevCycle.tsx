@@ -34,7 +34,8 @@ const cachedFlushEvents = cache((client: DevCycleClient) => {
         })
     } catch (error) {
         client.logger.error(
-            'Event logging is not supported in this environment. Disable custom and automatic event logging in sdk options.',
+            'Event logging is not supported in this environment. ' +
+                'Disable custom and automatic event logging in sdk options.',
         )
     }
 })
