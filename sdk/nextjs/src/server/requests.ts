@@ -3,6 +3,7 @@ import { serializeUserSearchParams } from '../common/serializeUser'
 import { cache } from 'react'
 import { BucketedUserConfig, ConfigBody } from '@devcycle/types'
 import { plainToInstance } from 'class-transformer'
+import { hasOptInEnabled as hasOptInEnabledCommon } from '../common/requests'
 
 const getFetchUrl = (sdkKey: string, obfuscated: boolean) =>
     `https://config-cdn.devcycle.com/config/v2/server/bootstrap/${
@@ -37,32 +38,7 @@ export const fetchCDNConfig = cache(
     },
 )
 
-export const hasOptInEnabled = cache(
-    async (userId: string, sdkKey: string): Promise<boolean> => {
-        const response = await fetch(
-            `https://sdk-api.devcycle.com/v1/optIns/${encodeURIComponent(
-                userId,
-            )}/hasEnabled`,
-            {
-                headers: {
-                    Authorization: sdkKey,
-                },
-                next: {
-                    revalidate: 3600,
-                    tags: [`optin-${sdkKey}`],
-                },
-            },
-        )
-        const status = response.status
-        if (status === 200) {
-            return true
-        } else if (status === 204) {
-            return false
-        } else {
-            throw new Error(`Unexpected status code: ${status}`)
-        }
-    },
-)
+export const hasOptInEnabled = cache(hasOptInEnabledCommon)
 
 const getSDKAPIUrl = (
     sdkKey: string,

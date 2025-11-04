@@ -3,6 +3,18 @@ import { generateBucketedConfig } from '@devcycle/bucketing'
 import { BucketedUserConfig, ConfigBody, ConfigSource } from '@devcycle/types'
 import { fetchCDNConfig, sdkConfigAPI } from './requests.js'
 import { plainToInstance } from 'class-transformer'
+import { hasOptInEnabled } from '../common/requests.js'
+
+const checkOptInEnabled = async (
+    config: ConfigBody,
+    user: DVCPopulatedUser,
+    clientSDKKey: string | undefined,
+) => {
+    if (!config.project.settings.optIn?.enabled || !clientSDKKey) {
+        return false
+    }
+    return await hasOptInEnabled(user.user_id, clientSDKKey)
+}
 
 class CDNConfigSource extends ConfigSource {
     async getConfig(
@@ -48,9 +60,15 @@ const bucketOrFetchConfig = async (
             'EdgeDB is not enabled for this project. Only using local user data.',
         )
     }
+
+    const useOptIn = await checkOptInEnabled(config, user, config.clientSDKKey)
     const useEdgeDB = config.project.settings.edgeDB.enabled && enableEdgeDB
 
-    if (config.debugUsers?.includes(user.user_id ?? '') || useEdgeDB) {
+    if (
+        config.debugUsers?.includes(user.user_id ?? '') ||
+        useEdgeDB ||
+        useOptIn
+    ) {
         const bucketedConfigResponse = await sdkConfigAPI(
             config.clientSDKKey!,
             user,
