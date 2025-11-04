@@ -1,4 +1,4 @@
-import { fetchCDNConfig, sdkConfigAPI } from './requests'
+import { fetchCDNConfig, hasOptInEnabled, sdkConfigAPI } from './requests'
 import { generateBucketedConfig } from '@devcycle/bucketing'
 import { cache } from 'react'
 import { DevCycleUser, DVCPopulatedUser } from '@devcycle/js-client-sdk'
@@ -8,15 +8,28 @@ import {
 } from '../common/types'
 import { ConfigBody, ConfigSource } from '@devcycle/types'
 
-const getPopulatedUser = cache((user: DevCycleUser, userAgent?: string) => {
-    return new DVCPopulatedUser(
-        user,
-        {},
-        undefined,
-        undefined,
-        userAgent ?? undefined,
-    )
-})
+export const getPopulatedUser = cache(
+    (user: DevCycleUser, userAgent?: string) => {
+        return new DVCPopulatedUser(
+            user,
+            {},
+            undefined,
+            undefined,
+            userAgent ?? undefined,
+        )
+    },
+)
+
+const checkOptInEnabled = async (
+    config: ConfigBody,
+    user: DVCPopulatedUser,
+    clientSDKKey: string,
+) => {
+    if (!config.project.settings.optIn?.enabled) {
+        return false
+    }
+    return await hasOptInEnabled(user.user_id, clientSDKKey)
+}
 
 // wrap this function in react cache to avoid redoing work for the same user and config
 const generateBucketedConfigCached = cache(
@@ -39,8 +52,17 @@ const generateBucketedConfigCached = cache(
             )
         }
         const useEdgeDB = config.project.settings.edgeDB.enabled && enableEdgeDB
+        const useOptIn = await checkOptInEnabled(
+            config,
+            populatedUser,
+            clientSDKKey,
+        )
 
-        if (config.debugUsers?.includes(user.user_id ?? '') || useEdgeDB) {
+        if (
+            config.debugUsers?.includes(user.user_id ?? '') ||
+            useEdgeDB ||
+            useOptIn
+        ) {
             const bucketedConfigResponse = await sdkConfigAPI(
                 clientSDKKey,
                 populatedUser,
@@ -135,7 +157,6 @@ export const getBucketedConfig = async (
         !!options.enableEdgeDB,
         userAgent,
     )
-
     return {
         ...bucketedConfig,
         lastModified: lastModified ?? undefined,

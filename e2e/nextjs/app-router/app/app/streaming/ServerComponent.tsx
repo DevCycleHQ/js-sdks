@@ -2,6 +2,7 @@ import { getAllFeatures, getAllVariables, getVariableValue } from './devcycle'
 export const ServerComponent = async () => {
     const enabledVar = await getVariableValue('enabled-feature', false)
     const disabledVar = await getVariableValue('disabled-feature', false)
+
     const allVariables = await getAllVariables()
     const allFeatures = await getAllFeatures()
 
