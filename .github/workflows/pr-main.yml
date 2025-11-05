@@ -5,6 +5,14 @@ on:
     pull_request:
         branches: [main]
 jobs:
+    license-check:
+        name: License Check
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v4
+          - uses: DevCycleHQ/license-action@main
+            with:
+              language: "javascript"
     build:
         runs-on: ubicloud-standard-8
         strategy:
