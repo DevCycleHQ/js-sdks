@@ -13,8 +13,6 @@ const jsClientOptions = {
     next: { disableAutomaticEventFlush: true },
     disableConfigCache: true,
     disableRealtimeUpdates: true,
-    disableAutomaticEventLogging: false,
-    disableCustomEventLogging: false,
     sdkPlatform: 'nextjs',
 }
 
