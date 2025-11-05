@@ -1,12 +1,16 @@
 import 'server-only'
 import { initialize, validateSDKKey } from './initialize'
 import {
+    DevCycleClient,
+    DevCycleEvent,
     DevCycleUser,
     DVCCustomDataJSON,
     VariableDefinitions,
 } from '@devcycle/js-client-sdk'
 import { DevCycleNextOptions } from '../common/types'
 import { InferredVariableType, VariableKey } from '@devcycle/types'
+import { cache } from 'react'
+import { after } from 'next/server'
 
 // server-side users must always be "identified" with a user id
 type ServerUser<CustomData extends DVCCustomDataJSON = DVCCustomDataJSON> =
@@ -21,6 +25,20 @@ type GetVariableValue = <
     key: K,
     defaultValue: ValueType,
 ) => Promise<InferredVariableType<K, ValueType>>
+
+// flushes events from queue once per request, after request completes
+const cachedFlushEvents = cache((client: DevCycleClient) => {
+    try {
+        after(async () => {
+            await client.flushEvents()
+        })
+    } catch (error) {
+        client.logger.error(
+            'Event logging is not supported in this environment. ' +
+                'Disable custom and automatic event logging in sdk options.',
+        )
+    }
+})
 
 // allow return type inference
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -47,6 +65,10 @@ export const setupDevCycle = <
             userGetter,
             options,
         )
+
+        if (!options.disableAutomaticEventLogging) {
+            cachedFlushEvents(client)
+        }
         return client.variableValue(key, defaultValue)
     }
 
@@ -68,6 +90,19 @@ export const setupDevCycle = <
             options,
         )
         return client.allFeatures()
+    }
+
+    const _track = async (event: DevCycleEvent) => {
+        const { client } = await initialize(
+            serverSDKKey,
+            clientSDKKey,
+            userGetter,
+            options,
+        )
+        if (!options.disableCustomEventLogging) {
+            cachedFlushEvents(client)
+        }
+        return client.track(event)
     }
 
     const _getClientContext = () => {
@@ -119,5 +154,6 @@ export const setupDevCycle = <
         getAllVariables: _getAllVariables,
         getAllFeatures: _getAllFeatures,
         getClientContext: _getClientContext,
+        track: _track,
     }
 }

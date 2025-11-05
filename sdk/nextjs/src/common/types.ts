@@ -1,4 +1,8 @@
-import { DevCycleOptions, DevCycleUser } from '@devcycle/js-client-sdk'
+import {
+    DevCycleOptions,
+    DevCycleUser,
+    DevCycleEvent,
+} from '@devcycle/js-client-sdk'
 import { BucketedUserConfig, ConfigSource } from '@devcycle/types'
 
 export type DevCycleNextOptions = Pick<
@@ -53,3 +57,5 @@ export type DevCycleServerData = {
 
     userAgent: string | undefined
 }
+
+export type { DevCycleEvent }
