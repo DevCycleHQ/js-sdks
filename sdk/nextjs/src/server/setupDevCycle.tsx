@@ -27,18 +27,26 @@ type GetVariableValue = <
 ) => Promise<InferredVariableType<K, ValueType>>
 
 // flushes events after request completes from queue, using cache to ensure its once per request
-const flushEventsAfter = cache((client: DevCycleClient) => {
-    try {
-        after(async () => {
-            await client.flushEvents()
-        })
-    } catch (error) {
-        client.logger.error(
-            'Event logging is not supported in this environment. ' +
-                'Disable custom and automatic event logging in sdk options.',
-        )
-    }
-})
+const flushEventsAfter = cache(
+    (client: DevCycleClient, options: DevCycleNextOptions) => {
+        if (
+            options.disableAutomaticEventLogging &&
+            options.disableCustomEventLogging
+        ) {
+            return
+        }
+        try {
+            after(async () => {
+                await client.flushEvents()
+            })
+        } catch (error) {
+            client.logger.error(
+                'Event logging is not supported in this environment. ' +
+                    'Disable custom and automatic event logging in sdk options.',
+            )
+        }
+    },
+)
 
 // allow return type inference
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -65,11 +73,11 @@ export const setupDevCycle = <
             userGetter,
             options,
         )
-
+        const variableValue = client.variableValue(key, defaultValue)
         if (!options.disableAutomaticEventLogging) {
-            flushEventsAfter(client)
+            flushEventsAfter(client, options)
         }
-        return client.variableValue(key, defaultValue)
+        return variableValue
     }
 
     const _getAllVariables = async () => {
@@ -93,16 +101,16 @@ export const setupDevCycle = <
     }
 
     const _track = async (event: DevCycleEvent) => {
-        const { client } = await initialize(
-            serverSDKKey,
-            clientSDKKey,
-            userGetter,
-            options,
-        )
         if (!options.disableCustomEventLogging) {
-            flushEventsAfter(client)
+            const { client } = await initialize(
+                serverSDKKey,
+                clientSDKKey,
+                userGetter,
+                options,
+            )
+            client.track(event)
+            flushEventsAfter(client, options)
         }
-        return client.track(event)
     }
 
     const _getClientContext = () => {
