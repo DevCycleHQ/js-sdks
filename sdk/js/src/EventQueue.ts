@@ -53,12 +53,10 @@ export class EventQueue<
             )
         }
 
-        if (!options.next?.disableAutomaticEventFlush) {
-            this.flushInterval = setInterval(
-                this.flushEvents.bind(this),
-                eventFlushIntervalMS,
-            )
-        }
+        this.flushInterval = setInterval(
+            this.flushEvents.bind(this),
+            eventFlushIntervalMS,
+        )
 
         this.flushEventQueueSize = options?.flushEventQueueSize ?? 100
         this.maxEventQueueSize = options?.maxEventQueueSize ?? 1000
