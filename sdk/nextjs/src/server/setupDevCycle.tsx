@@ -1,12 +1,16 @@
 import 'server-only'
 import { initialize, validateSDKKey } from './initialize'
 import {
+    DevCycleClient,
+    DevCycleEvent,
     DevCycleUser,
     DVCCustomDataJSON,
     VariableDefinitions,
 } from '@devcycle/js-client-sdk'
 import { DevCycleNextOptions } from '../common/types'
 import { InferredVariableType, VariableKey } from '@devcycle/types'
+import { cache } from 'react'
+import { after } from 'next/server'
 
 // server-side users must always be "identified" with a user id
 type ServerUser<CustomData extends DVCCustomDataJSON = DVCCustomDataJSON> =
@@ -21,6 +25,28 @@ type GetVariableValue = <
     key: K,
     defaultValue: ValueType,
 ) => Promise<InferredVariableType<K, ValueType>>
+
+// flushes events after request completes from queue, using cache to ensure its once per request
+const flushEventsAfter = cache(
+    (client: DevCycleClient, options: DevCycleNextOptions) => {
+        if (
+            options.disableAutomaticEventLogging &&
+            options.disableCustomEventLogging
+        ) {
+            return
+        }
+        try {
+            after(async () => {
+                await client.flushEvents()
+            })
+        } catch (error) {
+            client.logger.error(
+                'Event logging is not supported in this environment. ' +
+                    'Set disableAutomaticEventLogging and disableCustomEventLogging to true in initialization options.',
+            )
+        }
+    },
+)
 
 // allow return type inference
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -47,7 +73,11 @@ export const setupDevCycle = <
             userGetter,
             options,
         )
-        return client.variableValue(key, defaultValue)
+        const variableValue = client.variableValue(key, defaultValue)
+        if (!options.disableAutomaticEventLogging) {
+            flushEventsAfter(client, options)
+        }
+        return variableValue
     }
 
     const _getAllVariables = async () => {
@@ -68,6 +98,19 @@ export const setupDevCycle = <
             options,
         )
         return client.allFeatures()
+    }
+
+    const _track = async (event: DevCycleEvent) => {
+        if (options.disableCustomEventLogging) return
+
+        const { client } = await initialize(
+            serverSDKKey,
+            clientSDKKey,
+            userGetter,
+            options,
+        )
+        client.track(event)
+        flushEventsAfter(client, options)
     }
 
     const _getClientContext = () => {
@@ -119,5 +162,6 @@ export const setupDevCycle = <
         getAllVariables: _getAllVariables,
         getAllFeatures: _getAllFeatures,
         getClientContext: _getClientContext,
+        track: _track,
     }
 }
