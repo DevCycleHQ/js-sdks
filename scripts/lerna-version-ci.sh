@@ -5,8 +5,7 @@ set -eo pipefail
 # Get the last tagged sha from the output of "git describe"
 LAST_TAG=$(git describe --always --first-parent --abbrev=0)
 IGNORED_PACKAGES=()
-#TODO: remove nextjs after it is released
-INCLUDED_PACKAGES=("@devcycle/nextjs-sdk")
+INCLUDED_PACKAGES=()
 
 echo "::info::Last Tag $LAST_TAG"
 LAST_TAGGED_SHA=$(git rev-list -n 1 $LAST_TAG)
