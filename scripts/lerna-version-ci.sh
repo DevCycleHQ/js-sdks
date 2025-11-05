@@ -82,14 +82,14 @@ for PROJECT in "${AFFECTED_PROJECTS[@]}"; do
   # get package name from package.json
   PACKAGE=$(cat "$FILEPATH/package.json" | jq -r '.name')
 
-  if [[ " ${IGNORED_PACKAGES[*]} " =~ " $PACKAGE " ]]; then
-      echo "::info::Ignoring package $PACKAGE"
-      continue
-  fi
-
   # If INCLUDED_PACKAGES is specified and package is not in it, skip
   if [[ ${#INCLUDED_PACKAGES[@]} -gt 0 && ! " ${INCLUDED_PACKAGES[*]} " =~ " $PACKAGE " ]]; then
       echo "::info::Skipping package $PACKAGE (not in INCLUDED_PACKAGES)"
+      continue
+  fi
+
+  if [[ " ${IGNORED_PACKAGES[*]} " =~ " $PACKAGE " ]]; then
+      echo "::info::Ignoring package $PACKAGE"
       continue
   fi
 
