@@ -42,7 +42,7 @@ const flushEventsAfter = cache(
         } catch (error) {
             client.logger.error(
                 'Event logging is not supported in this environment. ' +
-                    'Disable custom and automatic event logging in sdk options.',
+                    'Set disableAutomaticEventLogging and disableCustomEventLogging to true in initialization options.',
             )
         }
     },
@@ -110,6 +110,7 @@ export const setupDevCycle = <
             )
             client.track(event)
             flushEventsAfter(client, options)
+            return
         }
     }
 
