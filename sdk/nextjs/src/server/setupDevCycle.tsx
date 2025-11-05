@@ -101,17 +101,16 @@ export const setupDevCycle = <
     }
 
     const _track = async (event: DevCycleEvent) => {
-        if (!options.disableCustomEventLogging) {
-            const { client } = await initialize(
-                serverSDKKey,
-                clientSDKKey,
-                userGetter,
-                options,
-            )
-            client.track(event)
-            flushEventsAfter(client, options)
-            return
-        }
+        if (options.disableCustomEventLogging) return
+
+        const { client } = await initialize(
+            serverSDKKey,
+            clientSDKKey,
+            userGetter,
+            options,
+        )
+        client.track(event)
+        flushEventsAfter(client, options)
     }
 
     const _getClientContext = () => {
