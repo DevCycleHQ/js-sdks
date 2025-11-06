@@ -277,6 +277,17 @@ class IframeManager {
                         'Unable to change user identity from debugger in Next.js',
                     )
                 }
+            } else if (
+                event.data.type === 'DEVCYCLE_REVERT_TO_ORIGINAL_USER' &&
+                event.data.user
+            ) {
+                if ('identifyUser' in this.client) {
+                    this.client.identifyUser(event.data.user).then(() => {
+                        this.updateIframeData()
+                    })
+                } else {
+                    // TODO: handle next.js case and clear cookies
+                }
             } else if (event.data.type === 'DEVCYCLE_REFRESH') {
                 this.updateIframeData()
             } else if (event.data.type === 'DEVCYCLE_TOGGLE_OVERLAY') {
