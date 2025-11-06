@@ -39,7 +39,7 @@
     },
     "peerDependencies": {
         "@devcycle/js-client-sdk": "*",
-        "@devcycle/nextjs-sdk": "*",
+        "@devcycle/nextjs-sdk": ">=3.0.1",
         "@devcycle/react-client-sdk": "*"
     },
     "peerDependenciesMeta": {
