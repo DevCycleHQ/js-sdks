@@ -20,7 +20,11 @@ export const setDebugUser = async (user: DevCycleUser): Promise<void> => {
     }
 }
 
-export const removeDebugUser = async (): Promise<void> => {
+export const removeDebugUser = async (user_id?: string): Promise<void> => {
     const cookieStore = await cookies()
     cookieStore.delete(COOKIE_NAME)
+    // Revalidate caches to trigger fresh bucketing
+    if (user_id) {
+        revalidateTag(user_id)
+    }
 }

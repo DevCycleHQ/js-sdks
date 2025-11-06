@@ -1,5 +1,5 @@
 'use client'
-import React, { Suspense, use, useEffect, useRef } from 'react'
+import React, { Suspense, use, useRef } from 'react'
 import { DevCycleClient, initializeDevCycle } from '@devcycle/js-client-sdk'
 import { invalidateConfig } from '../../common/invalidateConfig'
 import { DevCycleNextOptions, DevCycleServerData } from '../../common/types'
