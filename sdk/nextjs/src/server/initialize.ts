@@ -8,7 +8,7 @@ import { DevCycleNextOptions, DevCycleServerData } from '../common/types'
 import { cache } from 'react'
 import { getBucketedConfig, getConfigFromSource } from './bucketing'
 import { cookies } from 'next/headers'
-import { COOKIE_NAME } from '../common/webDebugUser'
+import { debugUserCookieName } from '../common/cookie'
 
 const jsClientOptions = {
     // pass next object to enable "next" mode in JS SDK
@@ -25,7 +25,7 @@ const cachedUserGetter = cache(
         // Check for user debug cookie
         try {
             const cookieStore = await cookies()
-            const userCookie = cookieStore.get(COOKIE_NAME)
+            const userCookie = cookieStore.get(debugUserCookieName)
 
             if (userCookie?.value) {
                 const webDebugUser: DevCycleUser = JSON.parse(userCookie.value)

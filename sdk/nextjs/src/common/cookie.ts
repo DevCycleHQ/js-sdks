@@ -12,3 +12,4 @@ export const createCookieContents = (
     return JSON.stringify({ user, fromClient })
 }
 export const cookieName = 'devcycle-next'
+export const debugUserCookieName = 'devcycle-web-debug-user'
