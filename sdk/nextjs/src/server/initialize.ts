@@ -29,7 +29,7 @@ const cachedUserGetter = cache(
 
             if (userCookie?.value) {
                 const cookieData: DVCCookie = JSON.parse(userCookie.value)
-                if (cookieData.fromClient && cookieData.user) {
+                if (cookieData.user) {
                     return cookieData.user
                 }
             }
