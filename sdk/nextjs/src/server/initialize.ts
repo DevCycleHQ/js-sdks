@@ -8,7 +8,7 @@ import { DevCycleNextOptions, DevCycleServerData } from '../common/types'
 import { cache } from 'react'
 import { getBucketedConfig, getConfigFromSource } from './bucketing'
 import { cookies } from 'next/headers'
-import { cookieName, DVCCookie } from '../common/cookie'
+import { COOKIE_NAME } from '../common/webDebugUser'
 
 const jsClientOptions = {
     // pass next object to enable "next" mode in JS SDK
@@ -22,15 +22,15 @@ const cachedUserGetter = cache(
     async (
         userGetter: () => DevCycleUser | Promise<DevCycleUser>,
     ): Promise<DevCycleUser> => {
-        // Check for user override from cookie first
+        // Check for user debug cookie
         try {
             const cookieStore = await cookies()
-            const userCookie = cookieStore.get(cookieName)
+            const userCookie = cookieStore.get(COOKIE_NAME)
 
             if (userCookie?.value) {
-                const cookieData: DVCCookie = JSON.parse(userCookie.value)
-                if (cookieData.user) {
-                    return cookieData.user
+                const webDebugUser: DevCycleUser = JSON.parse(userCookie.value)
+                if (webDebugUser) {
+                    return webDebugUser
                 }
             }
         } catch (error) {
