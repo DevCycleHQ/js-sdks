@@ -40,6 +40,7 @@ export type DebuggerIframeOptions = {
     shouldEnable?: boolean | (() => boolean)
     shouldEnableVariable?: string
     onIdentifyUser?: (user: any) => void
+    onRevertUser?: (user: any) => void
 }
 
 const defaultEnabledCheck = () => {
@@ -55,6 +56,7 @@ class IframeManager {
     client: DevCycleClient | NextClient
     private debouncedUpdateIframeData: () => void
     private onIdentifyUser?: (user: any) => void
+    private onRevertUser?: (user: any) => void
 
     constructor(
         client: DevCycleClient | NextClient,
@@ -63,6 +65,7 @@ class IframeManager {
             debuggerUrl = 'https://debugger.devcycle.com',
             debugLogs = false,
             onIdentifyUser,
+            onRevertUser,
         }: DebuggerIframeOptions = {},
     ) {
         this.client = client
@@ -71,6 +74,7 @@ class IframeManager {
         this.position = position
         this.debugLogs = debugLogs
         this.onIdentifyUser = onIdentifyUser
+        this.onRevertUser = onRevertUser
         this.mainIframe = document.createElement('iframe')
         this.buttonIframe = document.createElement('iframe')
         this.debouncedUpdateIframeData = this.debounce(() => {
@@ -287,12 +291,16 @@ class IframeManager {
                 event.data.type === 'DEVCYCLE_REVERT_TO_ORIGINAL_USER' &&
                 event.data.user
             ) {
-                if ('identifyUser' in this.client) {
+                if (this.onRevertUser) {
+                    this.onRevertUser(event.data.user)
+                } else if ('identifyUser' in this.client) {
                     this.client.identifyUser(event.data.user).then(() => {
                         this.updateIframeData()
                     })
                 } else {
-                    // TODO: handle next.js case and clear cookies
+                    this.log(
+                        'Unable to revert user identity from debugger in Next.js',
+                    )
                 }
             } else if (event.data.type === 'DEVCYCLE_REFRESH') {
                 this.updateIframeData()

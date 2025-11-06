@@ -7,6 +7,7 @@ import {
     useDevCycleClient,
     DevCycleJSClient,
     setDebugUser,
+    removeDebugUser,
 } from '@devcycle/nextjs-sdk'
 import { DevCycleUser } from '@devcycle/js-client-sdk'
 
@@ -22,6 +23,9 @@ export const DevCycleDebugger = (options: DebuggerIframeOptions): null => {
                 ...options,
                 onIdentifyUser: (user: DevCycleUser) => {
                     setDebugUser(user)
+                },
+                onRevertUser: (user: DevCycleUser) => {
+                    removeDebugUser(user.user_id)
                 },
             },
         )
