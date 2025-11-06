@@ -39,7 +39,6 @@ export type DebuggerIframeOptions = {
     debugLogs?: boolean
     shouldEnable?: boolean | (() => boolean)
     shouldEnableVariable?: string
-    onIdentifyUser?: (user: any) => void
 }
 
 const defaultEnabledCheck = () => {
@@ -54,7 +53,6 @@ class IframeManager {
     debugLogs: boolean
     client: DevCycleClient | NextClient
     private debouncedUpdateIframeData: () => void
-    private onIdentifyUser?: (user: any) => void
 
     constructor(
         client: DevCycleClient | NextClient,
@@ -62,7 +60,6 @@ class IframeManager {
             position = 'right',
             debuggerUrl = 'https://debugger.devcycle.com',
             debugLogs = false,
-            onIdentifyUser,
         }: DebuggerIframeOptions = {},
     ) {
         this.client = client
@@ -70,7 +67,6 @@ class IframeManager {
         this.debuggerUrl = debuggerUrl
         this.position = position
         this.debugLogs = debugLogs
-        this.onIdentifyUser = onIdentifyUser
         this.mainIframe = document.createElement('iframe')
         this.buttonIframe = document.createElement('iframe')
         this.debouncedUpdateIframeData = this.debounce(() => {
@@ -262,9 +258,7 @@ class IframeManager {
                 event.data.type === 'DEVCYCLE_IDENTIFY_USER' &&
                 event.data.user
             ) {
-                if (this.onIdentifyUser) {
-                    this.onIdentifyUser(event.data.user)
-                } else if ('identifyUser' in this.client) {
+                if ('identifyUser' in this.client) {
                     this.client.identifyUser(event.data.user).then(() => {
                         this.updateIframeData()
                     })
