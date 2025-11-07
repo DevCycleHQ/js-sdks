@@ -2102,7 +2102,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/js-client-sdk@npm:1.47.5, @devcycle/js-client-sdk@workspace:sdk/js":
+"@devcycle/js-client-sdk@npm:1.47.6, @devcycle/js-client-sdk@workspace:sdk/js":
   version: 0.0.0-use.local
   resolution: "@devcycle/js-client-sdk@workspace:sdk/js"
   dependencies:
@@ -2130,7 +2130,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/nestjs-server-sdk@workspace:sdk/nestjs"
   dependencies:
-    "@devcycle/nodejs-server-sdk": "npm:1.55.4"
+    "@devcycle/nodejs-server-sdk": "npm:1.55.5"
     "@devcycle/types": "npm:1.32.3"
     nestjs-cls: "npm:^4.5.0"
   peerDependencies:
@@ -2144,8 +2144,8 @@ __metadata:
   resolution: "@devcycle/nextjs-sdk@workspace:sdk/nextjs"
   dependencies:
     "@devcycle/bucketing": "npm:1.38.3"
-    "@devcycle/js-client-sdk": "npm:1.47.5"
-    "@devcycle/react-client-sdk": "npm:1.45.5"
+    "@devcycle/js-client-sdk": "npm:1.47.6"
+    "@devcycle/react-client-sdk": "npm:1.45.6"
     "@devcycle/types": "npm:1.32.3"
     class-transformer: "npm:^0.5.1"
     hoist-non-react-statics: "npm:^3.3.2"
@@ -2167,7 +2167,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/nodejs-server-sdk@npm:1.55.4, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
+"@devcycle/nodejs-server-sdk@npm:1.55.5, @devcycle/nodejs-server-sdk@workspace:sdk/nodejs":
   version: 0.0.0-use.local
   resolution: "@devcycle/nodejs-server-sdk@workspace:sdk/nodejs"
   dependencies:
@@ -2194,8 +2194,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-angular-provider@workspace:sdk/openfeature-angular-provider"
   dependencies:
-    "@devcycle/js-client-sdk": "npm:1.47.5"
-    "@devcycle/openfeature-web-provider": "npm:1.12.5"
+    "@devcycle/js-client-sdk": "npm:1.47.6"
+    "@devcycle/openfeature-web-provider": "npm:1.12.6"
   peerDependencies:
     "@openfeature/multi-provider-web": ^0.0.3
     "@openfeature/web-sdk": ^1.5.0
@@ -2209,7 +2209,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-nestjs-provider@workspace:sdk/openfeature-nestjs-provider"
   dependencies:
-    "@devcycle/nodejs-server-sdk": "npm:1.55.4"
+    "@devcycle/nodejs-server-sdk": "npm:1.55.5"
   languageName: unknown
   linkType: soft
 
@@ -2223,8 +2223,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-react-provider@workspace:sdk/openfeature-react-provider"
   dependencies:
-    "@devcycle/js-client-sdk": "npm:1.47.5"
-    "@devcycle/openfeature-web-provider": "npm:1.12.5"
+    "@devcycle/js-client-sdk": "npm:1.47.6"
+    "@devcycle/openfeature-web-provider": "npm:1.12.6"
   peerDependencies:
     "@openfeature/multi-provider-web": ^0.0.3
     "@openfeature/web-sdk": ^1.5.0
@@ -2240,11 +2240,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/openfeature-web-provider@npm:1.12.5, @devcycle/openfeature-web-provider@workspace:sdk/openfeature-web-provider":
+"@devcycle/openfeature-web-provider@npm:1.12.6, @devcycle/openfeature-web-provider@workspace:sdk/openfeature-web-provider":
   version: 0.0.0-use.local
   resolution: "@devcycle/openfeature-web-provider@workspace:sdk/openfeature-web-provider"
   dependencies:
-    "@devcycle/js-client-sdk": "npm:1.47.5"
+    "@devcycle/js-client-sdk": "npm:1.47.6"
   peerDependencies:
     "@openfeature/multi-provider-web": ^0.0.3
     "@openfeature/web-sdk": ^1.5.0
@@ -2254,11 +2254,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@devcycle/react-client-sdk@npm:1.45.5, @devcycle/react-client-sdk@workspace:sdk/react":
+"@devcycle/react-client-sdk@npm:1.45.6, @devcycle/react-client-sdk@workspace:sdk/react":
   version: 0.0.0-use.local
   resolution: "@devcycle/react-client-sdk@workspace:sdk/react"
   dependencies:
-    "@devcycle/js-client-sdk": "npm:1.47.5"
+    "@devcycle/js-client-sdk": "npm:1.47.6"
     "@devcycle/types": "npm:1.32.3"
     cross-fetch: "npm:4.1.0"
     hoist-non-react-statics: "npm:^3.3.2"
@@ -2271,8 +2271,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/react-native-client-sdk@workspace:sdk/react-native"
   dependencies:
-    "@devcycle/js-client-sdk": "npm:1.47.5"
-    "@devcycle/react-client-sdk": "npm:1.45.5"
+    "@devcycle/js-client-sdk": "npm:1.47.6"
+    "@devcycle/react-client-sdk": "npm:1.45.6"
     "@devcycle/types": "npm:1.32.3"
     "@react-native-async-storage/async-storage": "npm:^1.17.11"
     react-native-device-info: "npm:^8.7.1"
@@ -2288,8 +2288,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@devcycle/react-native-expo-client-sdk@workspace:sdk/react-native-expo"
   dependencies:
-    "@devcycle/js-client-sdk": "npm:1.47.5"
-    "@devcycle/react-client-sdk": "npm:1.45.5"
+    "@devcycle/js-client-sdk": "npm:1.47.6"
+    "@devcycle/react-client-sdk": "npm:1.45.6"
     "@react-native-async-storage/async-storage": "npm:^1.17.11"
     react-native-device-info: "npm:^8.7.1"
     react-native-get-random-values: "npm:^1.11.0"
