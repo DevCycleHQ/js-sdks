@@ -1,11 +1,14 @@
 'use client'
 import React, { Suspense, use, useRef } from 'react'
 import { DevCycleClient, initializeDevCycle } from '@devcycle/js-client-sdk'
-import { invalidateConfig } from '../../common/invalidateConfig'
 import { DevCycleNextOptions, DevCycleServerData } from '../../common/types'
 import { DevCycleProviderContext } from './context'
 import { useRouter } from 'next/navigation'
-import { removeDebugUser, setDebugUser } from '../../common/webDebugUser'
+import {
+    invalidateConfig,
+    setDebugUser,
+    removeDebugUser,
+} from '../../common/actions'
 
 export type DevCycleClientContext = {
     serverDataPromise: Promise<DevCycleServerData>
