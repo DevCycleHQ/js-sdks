@@ -47,7 +47,7 @@ type errorHandler = (error: unknown) => void
 type initializedHandler = (success: boolean) => void
 type configUpdatedHandler = (newVars: DVCVariableSet) => void
 type debugUserSet = (user: DevCycleUser) => void
-type debugUserReverted = (user_id: string) => void
+type debugUserReverted = (user: DevCycleUser) => void
 type variableEvaluatedHandler = (
     key: string,
     variable: DVCVariable<DVCVariableValue>,
