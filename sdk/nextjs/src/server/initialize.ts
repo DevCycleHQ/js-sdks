@@ -18,27 +18,31 @@ const jsClientOptions = {
     sdkPlatform: 'nextjs',
 }
 
+const getWebDebugUser = async () => {
+    try {
+        // Check for user debug cookie
+        const cookieStore = await cookies()
+        const userCookie = cookieStore.get(debugUserCookieName)
+
+        if (userCookie?.value) {
+            const webDebugUser: DevCycleUser = JSON.parse(userCookie.value)
+            if (webDebugUser) {
+                return webDebugUser
+            }
+        }
+    } catch (error) {
+        console.warn('Failed to parse DevCycle user cookie:', error)
+    }
+    return null
+}
+
 const cachedUserGetter = cache(
     async (
         userGetter: () => DevCycleUser | Promise<DevCycleUser>,
     ): Promise<DevCycleUser> => {
-        // Check for user debug cookie
-        try {
-            const cookieStore = await cookies()
-            const userCookie = cookieStore.get(debugUserCookieName)
-
-            if (userCookie?.value) {
-                const webDebugUser: DevCycleUser = JSON.parse(userCookie.value)
-                if (webDebugUser) {
-                    return webDebugUser
-                }
-            }
-        } catch (error) {
-            console.warn('Failed to parse DevCycle user cookie:', error)
-        }
-
+        const webDebugUser = await getWebDebugUser()
         // Fallback to original userGetter
-        return userGetter()
+        return webDebugUser ?? userGetter()
     },
 )
 

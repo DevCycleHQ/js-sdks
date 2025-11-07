@@ -14,8 +14,8 @@ export const DevCycleDebugger = (options: DebuggerIframeOptions): null => {
         const cleanupPromise = initializeDevCycleDebugger(
             client as DevCycleJSClient,
             {
-                hasClientSideUser: false,
                 ...options,
+                hasClientSideUser: false,
             },
         )
         return () => {
