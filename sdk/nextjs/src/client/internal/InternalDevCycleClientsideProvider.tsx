@@ -110,7 +110,7 @@ export const InternalDevCycleClientsideProvider = ({
             },
         })
 
-        // pass a callback to call server actions to set webdebugger user
+        // pass server actions as callback in client to be called by web-debugger
         clientRef.current.subscribe('debugUserSet', setDebugUser)
         clientRef.current.subscribe('debugUserReverted', removeDebugUser)
 
