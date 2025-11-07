@@ -5,6 +5,7 @@ import { invalidateConfig } from '../../common/invalidateConfig'
 import { DevCycleNextOptions, DevCycleServerData } from '../../common/types'
 import { DevCycleProviderContext } from './context'
 import { useRouter } from 'next/navigation'
+import { removeDebugUser, setDebugUser } from '../../common/webDebugUser'
 
 export type DevCycleClientContext = {
     serverDataPromise: Promise<DevCycleServerData>
@@ -105,6 +106,10 @@ export const InternalDevCycleClientsideProvider = ({
                 disableAutomaticEventFlush: isServer,
             },
         })
+
+        // pass a callback to call server actions to set webdebugger user
+        clientRef.current.subscribe('debugUserSet', setDebugUser)
+        clientRef.current.subscribe('debugUserReverted', removeDebugUser)
 
         if (!enableStreaming) {
             // we expect that in non-streaming mode, the serverside portion of this provider should have awaited

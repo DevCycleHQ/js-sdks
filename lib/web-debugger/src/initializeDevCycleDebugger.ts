@@ -39,8 +39,7 @@ export type DebuggerIframeOptions = {
     debugLogs?: boolean
     shouldEnable?: boolean | (() => boolean)
     shouldEnableVariable?: string
-    onIdentifyUser?: (user: any) => void
-    onRevertUser?: (user: any) => void
+    hasClientSideUser?: boolean
 }
 
 const defaultEnabledCheck = () => {
@@ -53,10 +52,9 @@ class IframeManager {
     debuggerUrl: string
     position: string
     debugLogs: boolean
+    hasClientSideUser?: boolean
     client: DevCycleClient | NextClient
     private debouncedUpdateIframeData: () => void
-    private onIdentifyUser?: (user: any) => void
-    private onRevertUser?: (user: any) => void
 
     constructor(
         client: DevCycleClient | NextClient,
@@ -64,17 +62,15 @@ class IframeManager {
             position = 'right',
             debuggerUrl = 'https://debugger.devcycle.com',
             debugLogs = false,
-            onIdentifyUser,
-            onRevertUser,
+            hasClientSideUser = true,
         }: DebuggerIframeOptions = {},
     ) {
         this.client = client
         clientData.current.allowIdentify = 'identifyUser' in client
+        this.hasClientSideUser = hasClientSideUser
         this.debuggerUrl = debuggerUrl
         this.position = position
         this.debugLogs = debugLogs
-        this.onIdentifyUser = onIdentifyUser
-        this.onRevertUser = onRevertUser
         this.mainIframe = document.createElement('iframe')
         this.buttonIframe = document.createElement('iframe')
         this.debouncedUpdateIframeData = this.debounce(() => {
@@ -266,16 +262,12 @@ class IframeManager {
                 event.data.type === 'DEVCYCLE_IDENTIFY_USER' &&
                 event.data.user
             ) {
-                if (this.onIdentifyUser) {
-                    this.onIdentifyUser(event.data.user)
-                } else if ('identifyUser' in this.client) {
+                if ('identifyUser' in this.client && this.hasClientSideUser) {
                     this.client.identifyUser(event.data.user).then(() => {
                         this.updateIframeData()
                     })
                 } else {
-                    this.log(
-                        'Unable to change user identity from debugger in Next.js',
-                    )
+                    this.client.eventEmitter.emitDebugUserSet(event.data.user)
                 }
             } else if (event.data.type === 'DEVCYCLE_RESET_USER') {
                 if ('resetUser' in this.client) {
@@ -291,15 +283,13 @@ class IframeManager {
                 event.data.type === 'DEVCYCLE_REVERT_TO_ORIGINAL_USER' &&
                 event.data.user
             ) {
-                if (this.onRevertUser) {
-                    this.onRevertUser(event.data.user)
-                } else if ('identifyUser' in this.client) {
+                if ('identifyUser' in this.client && this.hasClientSideUser) {
                     this.client.identifyUser(event.data.user).then(() => {
                         this.updateIframeData()
                     })
                 } else {
-                    this.log(
-                        'Unable to revert user identity from debugger in Next.js',
+                    this.client.eventEmitter.emitDebugUserReverted(
+                        event.data.user,
                     )
                 }
             } else if (event.data.type === 'DEVCYCLE_REFRESH') {

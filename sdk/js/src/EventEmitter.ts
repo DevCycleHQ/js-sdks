@@ -1,4 +1,4 @@
-import { DVCFeatureSet, DVCVariableSet } from './types'
+import { DevCycleUser, DVCFeatureSet, DVCVariableSet } from './types'
 import { DVCVariable } from './Variable'
 import { checkParamType } from './utils'
 
@@ -10,6 +10,8 @@ const EventNames = {
     FEATURE_UPDATED: 'featureUpdated',
     CONFIG_UPDATED: 'configUpdated',
     VARIABLE_EVALUATED: 'variableEvaluated',
+    DEBUG_USER_SET: 'debugUserSet',
+    DEBUG_USER_REVERTED: 'debugUserReverted',
 }
 
 type EventHandler = (...args: any[]) => void
@@ -73,6 +75,14 @@ export class EventEmitter {
                 resolve(true)
             })
         })
+    }
+
+    emitDebugUserSet(user: DevCycleUser): void {
+        this.emit(EventNames.DEBUG_USER_SET, user)
+    }
+
+    emitDebugUserReverted(user: DevCycleUser): void {
+        this.emit(EventNames.DEBUG_USER_REVERTED, user)
     }
 
     emitInitialized(success: boolean): void {

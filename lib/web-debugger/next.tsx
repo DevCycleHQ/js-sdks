@@ -2,14 +2,8 @@ import { useEffect } from 'react'
 import {
     initializeDevCycleDebugger,
     DebuggerIframeOptions,
-} from './src/initializeDevCycleDebugger.js'
-import {
-    useDevCycleClient,
-    DevCycleJSClient,
-    setDebugUser,
-    removeDebugUser,
-} from '@devcycle/nextjs-sdk'
-import { DevCycleUser } from '@devcycle/js-client-sdk'
+} from './src/initializeDevCycleDebugger'
+import { useDevCycleClient, DevCycleJSClient } from '@devcycle/nextjs-sdk'
 
 export const DevCycleDebugger = (options: DebuggerIframeOptions): null => {
     const client = useDevCycleClient()
@@ -20,13 +14,8 @@ export const DevCycleDebugger = (options: DebuggerIframeOptions): null => {
         const cleanupPromise = initializeDevCycleDebugger(
             client as DevCycleJSClient,
             {
+                hasClientSideUser: false,
                 ...options,
-                onIdentifyUser: (user: DevCycleUser) => {
-                    setDebugUser(user)
-                },
-                onRevertUser: (user: DevCycleUser) => {
-                    removeDebugUser(user.user_id)
-                },
             },
         )
         return () => {
