@@ -25,10 +25,7 @@ const getWebDebugUser = async () => {
         const userCookie = cookieStore.get(debugUserCookieName)
 
         if (userCookie?.value) {
-            const webDebugUser: DevCycleUser = JSON.parse(userCookie.value)
-            if (webDebugUser) {
-                return webDebugUser
-            }
+            return JSON.parse(userCookie.value) as DevCycleUser
         }
     } catch (error) {
         console.warn('Failed to parse DevCycle user cookie:', error)
