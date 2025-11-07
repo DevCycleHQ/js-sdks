@@ -1,10 +1,14 @@
 'use client'
-import React, { Suspense, use, useEffect, useRef } from 'react'
+import React, { Suspense, use, useRef } from 'react'
 import { DevCycleClient, initializeDevCycle } from '@devcycle/js-client-sdk'
-import { invalidateConfig } from '../../common/invalidateConfig'
 import { DevCycleNextOptions, DevCycleServerData } from '../../common/types'
 import { DevCycleProviderContext } from './context'
 import { useRouter } from 'next/navigation'
+import {
+    invalidateConfig,
+    setDebugUser,
+    removeDebugUser,
+} from '../../common/actions'
 
 export type DevCycleClientContext = {
     serverDataPromise: Promise<DevCycleServerData>
@@ -105,6 +109,10 @@ export const InternalDevCycleClientsideProvider = ({
                 disableAutomaticEventFlush: isServer,
             },
         })
+
+        // pass server actions as callback in client to be called by web-debugger
+        clientRef.current.subscribe('debugUserSet', setDebugUser)
+        clientRef.current.subscribe('debugUserReverted', removeDebugUser)
 
         if (!enableStreaming) {
             // we expect that in non-streaming mode, the serverside portion of this provider should have awaited

@@ -46,6 +46,8 @@ type newVariablesHandler = () => void
 type errorHandler = (error: unknown) => void
 type initializedHandler = (success: boolean) => void
 type configUpdatedHandler = (newVars: DVCVariableSet) => void
+type debugUserSet = (user: DevCycleUser) => void
+type debugUserReverted = (user: DevCycleUser) => void
 type variableEvaluatedHandler = (
     key: string,
     variable: DVCVariable<DVCVariableValue>,
@@ -661,6 +663,8 @@ export class DevCycleClient<
     subscribe(key: 'error', handler: errorHandler): void
     subscribe(key: 'initialized', handler: initializedHandler): void
     subscribe(key: 'configUpdated', handler: configUpdatedHandler): void
+    subscribe(key: 'debugUserSet', handler: debugUserSet): void
+    subscribe(key: 'debugUserReverted', handler: debugUserReverted): void
     subscribe(key: string, handler: (...args: any[]) => void): void {
         this.eventEmitter.subscribe(key, handler)
     }

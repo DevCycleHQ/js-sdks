@@ -7,6 +7,8 @@ import { getUserAgent } from './userAgent'
 import { DevCycleNextOptions, DevCycleServerData } from '../common/types'
 import { cache } from 'react'
 import { getBucketedConfig, getConfigFromSource } from './bucketing'
+import { cookies } from 'next/headers'
+import { debugUserCookieName } from '../common/cookie'
 
 const jsClientOptions = {
     // pass next object to enable "next" mode in JS SDK
@@ -16,11 +18,28 @@ const jsClientOptions = {
     sdkPlatform: 'nextjs',
 }
 
+const getWebDebugUser = async () => {
+    try {
+        // Check for user debug cookie
+        const cookieStore = await cookies()
+        const userCookie = cookieStore.get(debugUserCookieName)
+
+        if (userCookie?.value) {
+            return JSON.parse(userCookie.value) as DevCycleUser
+        }
+    } catch (error) {
+        console.warn('Failed to parse DevCycle user cookie:', error)
+    }
+    return null
+}
+
 const cachedUserGetter = cache(
     async (
         userGetter: () => DevCycleUser | Promise<DevCycleUser>,
     ): Promise<DevCycleUser> => {
-        return userGetter()
+        const webDebugUser = await getWebDebugUser()
+        // Fallback to original userGetter
+        return webDebugUser ?? userGetter()
     },
 )
 

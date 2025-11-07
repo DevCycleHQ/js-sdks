@@ -39,6 +39,7 @@ export type DebuggerIframeOptions = {
     debugLogs?: boolean
     shouldEnable?: boolean | (() => boolean)
     shouldEnableVariable?: string
+    hasClientSideUser?: boolean
 }
 
 const defaultEnabledCheck = () => {
@@ -51,6 +52,7 @@ class IframeManager {
     debuggerUrl: string
     position: string
     debugLogs: boolean
+    hasClientSideUser?: boolean
     client: DevCycleClient | NextClient
     private debouncedUpdateIframeData: () => void
 
@@ -60,10 +62,12 @@ class IframeManager {
             position = 'right',
             debuggerUrl = 'https://debugger.devcycle.com',
             debugLogs = false,
+            hasClientSideUser = true,
         }: DebuggerIframeOptions = {},
     ) {
         this.client = client
         clientData.current.allowIdentify = 'identifyUser' in client
+        this.hasClientSideUser = hasClientSideUser
         this.debuggerUrl = debuggerUrl
         this.position = position
         this.debugLogs = debugLogs
@@ -258,14 +262,12 @@ class IframeManager {
                 event.data.type === 'DEVCYCLE_IDENTIFY_USER' &&
                 event.data.user
             ) {
-                if ('identifyUser' in this.client) {
+                if ('identifyUser' in this.client && this.hasClientSideUser) {
                     this.client.identifyUser(event.data.user).then(() => {
                         this.updateIframeData()
                     })
                 } else {
-                    this.log(
-                        'Unable to change user identity from debugger in Next.js',
-                    )
+                    this.client.eventEmitter.emitDebugUserSet(event.data.user)
                 }
             } else if (event.data.type === 'DEVCYCLE_RESET_USER') {
                 if ('resetUser' in this.client) {
@@ -281,12 +283,14 @@ class IframeManager {
                 event.data.type === 'DEVCYCLE_REVERT_TO_ORIGINAL_USER' &&
                 event.data.user
             ) {
-                if ('identifyUser' in this.client) {
+                if ('identifyUser' in this.client && this.hasClientSideUser) {
                     this.client.identifyUser(event.data.user).then(() => {
                         this.updateIframeData()
                     })
                 } else {
-                    // TODO: handle next.js case and clear cookies
+                    this.client.eventEmitter.emitDebugUserReverted(
+                        event.data.user,
+                    )
                 }
             } else if (event.data.type === 'DEVCYCLE_REFRESH') {
                 this.updateIframeData()
