@@ -9,6 +9,7 @@ import {
     setDebugUser,
     removeDebugUser,
 } from '../../common/actions'
+import { useClearUserDebugCookie } from './useClearUserDebugCookie'
 
 export type DevCycleClientContext = {
     serverDataPromise: Promise<DevCycleServerData>
@@ -72,7 +73,7 @@ export const InternalDevCycleClientsideProvider = ({
 }: DevCycleClientsideProviderProps): React.ReactElement => {
     const clientRef = useRef<DevCycleClient>()
     const router = useRouter()
-
+    useClearUserDebugCookie()
     const { serverDataPromise, serverData, clientSDKKey, enableStreaming } =
         context
 
