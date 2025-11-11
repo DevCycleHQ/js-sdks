@@ -1,4 +1,8 @@
-export * from './src/pages/getServerSideDevCycle.js'
+export {
+    getServerSideDevCycle,
+    getServerSideDevCycleWithHelpers,
+    getStaticDevCycle,
+} from './src/pages/getServerSideDevCycle.js'
 export * from './src/pages/appWithDevCycle.js'
 export {
     useVariableValue,
@@ -13,3 +17,4 @@ export type {
     DevCycleClient,
     DevCycleOptions,
 } from '@devcycle/react-client-sdk'
+export type { DevCycleServerInstance, SSRProps } from './src/pages/types'

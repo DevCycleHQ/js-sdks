@@ -63,3 +63,34 @@ test('optIn works with a user with existing opt-ins', async ({ page }) => {
     ).toBeVisible()
     await page.setExtraHTTPHeaders({})
 })
+
+test('server-side evaluation works correctly', async ({ page }) => {
+    await page.goto('/server-eval')
+    await expect(page.getByText('Server Evaluation Test')).toBeVisible()
+
+    // Server-evaluated values
+    await expect(page.getByText('Server Enabled Variable: true')).toBeVisible()
+    await expect(
+        page.getByText('Server Disabled Variable: false'),
+    ).toBeVisible()
+
+    // Client values should match server
+    await expect(page.getByText('Client Enabled Variable: true')).toBeVisible()
+    await expect(
+        page.getByText('Client Disabled Variable: false'),
+    ).toBeVisible()
+
+    // Verify allVariables works
+    await expect(
+        page.getByText(
+            /Server All Variables: .*"key":"enabled-feature","type":"Boolean"/,
+        ),
+    ).toBeVisible()
+
+    // Verify allFeatures works
+    await expect(
+        page.getByText(
+            /Server All Features: .*"key":"enabled-feature","type":"permission"/,
+        ),
+    ).toBeVisible()
+})
