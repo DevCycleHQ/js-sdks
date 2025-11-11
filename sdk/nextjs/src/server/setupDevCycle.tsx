@@ -5,10 +5,8 @@ import {
     DevCycleEvent,
     DevCycleUser,
     DVCCustomDataJSON,
-    VariableDefinitions,
 } from '@devcycle/js-client-sdk'
-import { DevCycleNextOptions } from '../common/types'
-import { InferredVariableType, VariableKey } from '@devcycle/types'
+import { DevCycleNextOptions, GetVariableValue } from '../common/types'
 import { cache } from 'react'
 import { after } from 'next/server'
 
@@ -17,14 +15,6 @@ type ServerUser<CustomData extends DVCCustomDataJSON = DVCCustomDataJSON> =
     Omit<DevCycleUser<CustomData>, 'user_id' | 'isAnonymous'> & {
         user_id: string
     }
-
-type GetVariableValue = <
-    K extends VariableKey,
-    ValueType extends VariableDefinitions[K],
->(
-    key: K,
-    defaultValue: ValueType,
-) => Promise<InferredVariableType<K, ValueType>>
 
 // flushes events after request completes from queue, using cache to ensure its once per request
 const flushEventsAfter = cache(
