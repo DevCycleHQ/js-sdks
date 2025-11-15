@@ -101,7 +101,7 @@
         "@playwright/test": "^1.55.1",
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
         "@react-native-async-storage/async-storage": "1.19.4",
-        "@react-native-community/cli": "17.0.1",
+        "@react-native-community/cli": "18.0.1",
         "@react-native-community/cli-platform-android": "11.3.6",
         "@react-native-community/cli-platform-ios": "11.3.6",
         "@react-native/metro-config": "0.72.11",
