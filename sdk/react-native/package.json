@@ -23,7 +23,7 @@
         "tsc": "tsc",
         "build": "yarn clean && yarn tsc"
     },
-    "types": "./index.cjs.d.ts",
+    "types": "./index.d.ts",
     "license": "MIT",
     "dependencies": {
         "@devcycle/js-client-sdk": "1.47.7",

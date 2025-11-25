@@ -11,11 +11,13 @@
                 "outputPath": "dist/lib/shared/vercel-edge-config",
                 "main": "lib/shared/vercel-edge-config/src/index.ts",
                 "tsConfig": "lib/shared/vercel-edge-config/tsconfig.lib.json",
-                "assets": ["lib/shared/vercel-edge-config/*.md"]
+                "packageJson": "lib/shared/vercel-edge-config/package.json",
+                "assets": ["lib/shared/vercel-edge-config/*.md"],
+                "rootDir": "lib/shared/vercel-edge-config"
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [

@@ -5,7 +5,7 @@
     "projectType": "library",
     "targets": {
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["lib/shared/bucketing-test-data/**/*.ts"]
@@ -18,7 +18,8 @@
                 "outputPath": "dist/lib/shared/bucketing-test-data",
                 "tsConfig": "lib/shared/bucketing-test-data/tsconfig.lib.json",
                 "packageJson": "lib/shared/bucketing-test-data/package.json",
-                "main": "lib/shared/bucketing-test-data/src/main.ts"
+                "main": "lib/shared/bucketing-test-data/src/main.ts",
+                "rootDir": "lib/shared/bucketing-test-data"
             },
             "dependsOn": [
                 {
