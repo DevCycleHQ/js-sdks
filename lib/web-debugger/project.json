@@ -5,15 +5,36 @@
     "projectType": "library",
     "targets": {
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/lib/web-debugger",
                 "main": "lib/web-debugger/index.ts",
+                "additionalEntryPoints": [
+                    "lib/web-debugger/react.tsx",
+                    "lib/web-debugger/next.tsx"
+                ],
                 "tsConfig": "lib/web-debugger/tsconfig.lib.json",
-                "packageJson": "lib/web-debugger/package.json",
-                "assets": ["lib/web-debugger/*.md"],
-                "rootDir": "lib/web-debugger"
+                "format": ["esm"],
+                "platform": "browser",
+                "bundle": true,
+                "declaration": true,
+                "sourcemap": true,
+                "assets": [
+                    "lib/web-debugger/*.md",
+                    "lib/web-debugger/package.json"
+                ],
+                "external": [
+                    "@devcycle/types",
+                    "@devcycle/js-client-sdk",
+                    "@devcycle/nextjs-sdk",
+                    "@devcycle/react-client-sdk",
+                    "react",
+                    "react/*"
+                ],
+                "esbuildOptions": {
+                    "outExtension": { ".js": ".js" }
+                }
             }
         },
         "npm-publish": {

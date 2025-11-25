@@ -4,15 +4,30 @@
     "implicitDependencies": ["js"],
     "targets": {
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/openfeature-angular-provider",
                 "tsConfig": "sdk/openfeature-angular-provider/tsconfig.lib.json",
-                "packageJson": "sdk/openfeature-angular-provider/package.json",
                 "main": "sdk/openfeature-angular-provider/src/index.ts",
-                "assets": ["sdk/openfeature-angular-provider/*.md"],
-                "rootDir": "sdk/openfeature-angular-provider"
+                "additionalEntryPoints": ["sdk/openfeature-angular-provider/strategy.ts"],
+                "format": ["cjs"],
+                "platform": "browser",
+                "bundle": true,
+                "declaration": true,
+                "sourcemap": true,
+                "assets": [
+                    "sdk/openfeature-angular-provider/*.md",
+                    "sdk/openfeature-angular-provider/package.json"
+                ],
+                "external": [
+                    "@devcycle/js-client-sdk",
+                    "@devcycle/openfeature-web-provider",
+                    "@openfeature/*"
+                ],
+                "esbuildOptions": {
+                    "outExtension": { ".js": ".js" }
+                }
             }
         },
         "lint": {

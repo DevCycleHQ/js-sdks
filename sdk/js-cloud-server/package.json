@@ -24,6 +24,6 @@
         "fetch-retry": "^5.0.6",
         "lodash": "^4.17.21"
     },
-    "main": "src/index.js",
+    "main": "index.js",
     "types": "src/index.d.ts"
 }
