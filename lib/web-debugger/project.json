@@ -11,7 +11,9 @@
                 "outputPath": "dist/lib/web-debugger",
                 "main": "lib/web-debugger/index.ts",
                 "tsConfig": "lib/web-debugger/tsconfig.lib.json",
-                "assets": ["lib/web-debugger/*.md"]
+                "packageJson": "lib/web-debugger/package.json",
+                "assets": ["lib/web-debugger/*.md"],
+                "rootDir": "lib/web-debugger"
             }
         },
         "npm-publish": {
@@ -23,7 +25,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [

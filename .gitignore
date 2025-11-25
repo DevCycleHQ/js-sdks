@@ -4,6 +4,8 @@ node_modules
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+.nx/cache
+.nx/workspace-data
 lerna-debug.log
 yarn-error.log
 .tmp/

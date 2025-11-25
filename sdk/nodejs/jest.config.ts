@@ -1,5 +1,6 @@
-/* eslint-disable */
-export default {
+import type { Config } from 'jest'
+
+const config: Config = {
     displayName: 'nodejs-server-sdk',
     globals: {},
     transform: {
@@ -18,15 +19,16 @@ export default {
     ],
     coverageDirectory: '../../coverage/sdk/nodejs-server-sdk',
     preset: '../../jest.preset.js',
+    reporters: [
+        'default',
+        [
+            'jest-junit',
+            {
+                outputDirectory: 'test-results',
+                outputName: 'nodejs-server-sdk.xml',
+            },
+        ],
+    ],
 }
 
-module.exports.reporters = [
-    'default',
-    [
-        'jest-junit',
-        {
-            outputDirectory: 'test-results',
-            outputName: `${module.exports.displayName}.xml`,
-        },
-    ],
-]
+module.exports = config

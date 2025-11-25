@@ -1,5 +1,4 @@
-/* eslint-disable */
-export default {
+const config = {
     displayName: 'e2e-js-cloud-server',
     globals: {
         'ts-jest': {
@@ -15,13 +14,15 @@ export default {
     testTimeout: 60000,
 }
 
-module.exports.reporters = [
+config.reporters = [
     'default',
     [
         'jest-junit',
         {
             outputDirectory: 'test-results',
-            outputName: `${module.exports.displayName}.xml`,
+            outputName: `${config.displayName}.xml`,
         },
     ],
 ]
+
+module.exports = config

@@ -1,5 +1,7 @@
 /* eslint-disable */
-export default {
+import type { Config } from 'jest'
+
+const config: Config = {
     displayName: 'shared-types',
     globals: {},
     transform: {
@@ -13,15 +15,16 @@ export default {
     moduleFileExtensions: ['ts', 'js', 'html'],
     coverageDirectory: '../../../coverage/lib/shared/types',
     preset: '../../../jest.preset.js',
+    reporters: [
+        'default',
+        [
+            'jest-junit',
+            {
+                outputDirectory: 'test-results',
+                outputName: 'shared-types.xml',
+            },
+        ],
+    ],
 }
 
-module.exports.reporters = [
-    'default',
-    [
-        'jest-junit',
-        {
-            outputDirectory: 'test-results',
-            outputName: `${module.exports.displayName}.xml`,
-        },
-    ],
-]
+module.exports = config
