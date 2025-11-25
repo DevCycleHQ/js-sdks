@@ -12,7 +12,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
@@ -48,7 +48,7 @@
                 "packageJson": "sdk/js-cloud-server/package.json",
                 "main": "sdk/js-cloud-server/src/index.ts",
                 "assets": ["sdk/js-cloud-server/*.md"],
-                "external": ["shared-types", "shared-bucketing-test-data"]
+                "rootDir": "sdk/js-cloud-server"
             },
             "dependsOn": [
                 {

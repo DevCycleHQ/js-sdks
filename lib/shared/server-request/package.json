@@ -1,0 +1,12 @@
+{
+    "name": "@devcycle/server-request",
+    "version": "1.0.0",
+    "license": "MIT",
+    "main": "src/index.js",
+    "types": "src/index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/DevCycleHQ/js-sdks.git"
+    }
+}
+

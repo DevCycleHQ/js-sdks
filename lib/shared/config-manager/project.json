@@ -11,12 +11,13 @@
                 "outputPath": "dist/lib/shared/config-manager",
                 "main": "lib/shared/config-manager/src/index.ts",
                 "tsConfig": "lib/shared/config-manager/tsconfig.lib.json",
+                "packageJson": "lib/shared/config-manager/package.json",
                 "assets": ["lib/shared/config-manager/*.md"],
-                "external": ["shared-types", "js-cloud-server-sdk"]
+                "rootDir": "lib/shared/config-manager"
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["lib/shared/config-manager/**/*.ts"]

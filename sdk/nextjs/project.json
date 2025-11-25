@@ -5,7 +5,7 @@
     "tags": [],
     "targets": {
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
@@ -22,7 +22,8 @@
                 "tsConfig": "sdk/nextjs/tsconfig.lib.json",
                 "packageJson": "sdk/nextjs/package.json",
                 "main": "sdk/nextjs/index.ts",
-                "assets": ["sdk/nextjs/README.md"]
+                "assets": ["sdk/nextjs/README.md"],
+                "rootDir": "sdk/nextjs"
             }
         },
         "test": {

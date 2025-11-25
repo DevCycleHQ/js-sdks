@@ -11,7 +11,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
@@ -42,7 +42,8 @@
                 "tsConfig": "sdk/nestjs/tsconfig.lib.json",
                 "packageJson": "sdk/nestjs/package.json",
                 "main": "sdk/nestjs/src/index.ts",
-                "assets": ["sdk/nestjs/*.md"]
+                "assets": ["sdk/nestjs/*.md"],
+                "rootDir": "sdk/nestjs"
             }
         },
         "npm-publish": {

@@ -11,11 +11,12 @@
                 "tsConfig": "sdk/openfeature-web-provider/tsconfig.lib.json",
                 "packageJson": "sdk/openfeature-web-provider/package.json",
                 "main": "sdk/openfeature-web-provider/src/index.ts",
-                "assets": ["sdk/openfeature-web-provider/*.md"]
+                "assets": ["sdk/openfeature-web-provider/*.md"],
+                "rootDir": "sdk/openfeature-web-provider"
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["sdk/openfeature-web-provider/**/*.ts"]

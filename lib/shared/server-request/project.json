@@ -11,11 +11,13 @@
                 "outputPath": "dist/lib/shared/server-request",
                 "main": "lib/shared/server-request/src/index.ts",
                 "tsConfig": "lib/shared/server-request/tsconfig.lib.json",
-                "assets": ["lib/shared/server-request/*.md"]
+                "packageJson": "lib/shared/server-request/package.json",
+                "assets": ["lib/shared/server-request/*.md"],
+                "rootDir": "lib/shared/server-request"
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["lib/shared/server-request/**/*.ts"]
