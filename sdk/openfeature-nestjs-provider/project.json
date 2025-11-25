@@ -3,15 +3,27 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "targets": {
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/openfeature-nestjs-provider",
                 "tsConfig": "sdk/openfeature-nestjs-provider/tsconfig.lib.json",
-                "packageJson": "sdk/openfeature-nestjs-provider/package.json",
                 "main": "sdk/openfeature-nestjs-provider/src/index.ts",
-                "assets": ["sdk/openfeature-nestjs-provider/*.md"],
-                "rootDir": "sdk/openfeature-nestjs-provider"
+                "format": ["cjs"],
+                "platform": "node",
+                "bundle": true,
+                "declaration": true,
+                "sourcemap": true,
+                "assets": [
+                    "sdk/openfeature-nestjs-provider/*.md",
+                    "sdk/openfeature-nestjs-provider/package.json"
+                ],
+                "external": [
+                    "@devcycle/nodejs-server-sdk"
+                ],
+                "esbuildOptions": {
+                    "outExtension": { ".js": ".js" }
+                }
             }
         },
         "lint": {

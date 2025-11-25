@@ -20,15 +20,30 @@
             }
         },
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/lib/shared/bucketing",
                 "main": "lib/shared/bucketing/src/index.ts",
                 "tsConfig": "lib/shared/bucketing/tsconfig.lib.json",
-                "packageJson": "lib/shared/bucketing/package.json",
-                "assets": ["lib/shared/bucketing/*.md"],
-                "rootDir": "lib/shared/bucketing"
+                "format": ["cjs"],
+                "platform": "node",
+                "bundle": true,
+                "declaration": true,
+                "sourcemap": true,
+                "assets": [
+                    "lib/shared/bucketing/*.md",
+                    "lib/shared/bucketing/package.json"
+                ],
+                "external": [
+                    "@devcycle/types",
+                    "lodash",
+                    "murmurhash",
+                    "ua-parser-js"
+                ],
+                "esbuildOptions": {
+                    "outExtension": { ".js": ".js" }
+                }
             }
         },
         "lint": {
