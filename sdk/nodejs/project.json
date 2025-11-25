@@ -14,7 +14,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
@@ -50,13 +50,7 @@
                 "packageJson": "sdk/nodejs/package.json",
                 "main": "sdk/nodejs/src/index.ts",
                 "assets": ["sdk/nodejs/*.md"],
-                "external": [
-                    "shared-types",
-                    "shared-bucketing-as",
-                    "shared-bucketing-test-data",
-                    "js-cloud-server-sdk",
-                    "js"
-                ]
+                "rootDir": "sdk/nodejs"
             },
             "dependsOn": [
                 {
