@@ -5,15 +5,29 @@
     "projectType": "library",
     "targets": {
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/lib/shared/vercel-edge-config",
                 "main": "lib/shared/vercel-edge-config/src/index.ts",
                 "tsConfig": "lib/shared/vercel-edge-config/tsconfig.lib.json",
-                "packageJson": "lib/shared/vercel-edge-config/package.json",
-                "assets": ["lib/shared/vercel-edge-config/*.md"],
-                "rootDir": "lib/shared/vercel-edge-config"
+                "format": ["cjs"],
+                "platform": "node",
+                "bundle": true,
+                "declaration": true,
+                "sourcemap": true,
+                "assets": [
+                    "lib/shared/vercel-edge-config/*.md",
+                    "lib/shared/vercel-edge-config/package.json"
+                ],
+                "external": [
+                    "@devcycle/types",
+                    "@vercel/edge-config",
+                    "class-transformer"
+                ],
+                "esbuildOptions": {
+                    "outExtension": { ".js": ".js" }
+                }
             }
         },
         "lint": {

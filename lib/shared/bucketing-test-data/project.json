@@ -12,14 +12,29 @@
             }
         },
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/lib/shared/bucketing-test-data",
                 "tsConfig": "lib/shared/bucketing-test-data/tsconfig.lib.json",
-                "packageJson": "lib/shared/bucketing-test-data/package.json",
                 "main": "lib/shared/bucketing-test-data/src/main.ts",
-                "rootDir": "lib/shared/bucketing-test-data"
+                "format": ["cjs"],
+                "platform": "node",
+                "bundle": true,
+                "declaration": true,
+                "sourcemap": true,
+                "assets": [
+                    "lib/shared/bucketing-test-data/package.json"
+                ],
+                "external": [
+                    "@devcycle/types",
+                    "class-transformer",
+                    "class-validator",
+                    "reflect-metadata"
+                ],
+                "esbuildOptions": {
+                    "outExtension": { ".js": ".js" }
+                }
             },
             "dependsOn": [
                 {

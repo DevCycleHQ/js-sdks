@@ -5,15 +5,28 @@
     "projectType": "library",
     "targets": {
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/lib/shared/sse-connection",
                 "main": "lib/shared/sse-connection/src/index.ts",
                 "tsConfig": "lib/shared/sse-connection/tsconfig.lib.json",
-                "packageJson": "lib/shared/sse-connection/package.json",
-                "assets": ["lib/shared/sse-connection/*.md"],
-                "rootDir": "lib/shared/sse-connection"
+                "format": ["cjs"],
+                "platform": "node",
+                "bundle": true,
+                "declaration": true,
+                "sourcemap": true,
+                "assets": [
+                    "lib/shared/sse-connection/*.md",
+                    "lib/shared/sse-connection/package.json"
+                ],
+                "external": [
+                    "@devcycle/types",
+                    "eventsource"
+                ],
+                "esbuildOptions": {
+                    "outExtension": { ".js": ".js" }
+                }
             }
         },
         "lint": {
