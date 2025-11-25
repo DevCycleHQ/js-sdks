@@ -40,22 +40,33 @@
             ]
         },
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/js-cloud-server",
                 "tsConfig": "sdk/js-cloud-server/tsconfig.lib.json",
-                "packageJson": "sdk/js-cloud-server/package.json",
                 "main": "sdk/js-cloud-server/src/index.ts",
-                "assets": ["sdk/js-cloud-server/*.md"],
-                "rootDir": "sdk/js-cloud-server"
-            },
-            "dependsOn": [
-                {
-                    "target": "build",
-                    "dependencies": true
+                "format": ["cjs"],
+                "platform": "node",
+                "bundle": true,
+                "declaration": true,
+                "sourcemap": true,
+                "assets": [
+                    "sdk/js-cloud-server/*.md",
+                    "sdk/js-cloud-server/package.json"
+                ],
+                "external": [
+                    "@devcycle/types",
+                    "cross-fetch",
+                    "fetch-retry",
+                    "lodash"
+                ],
+                "esbuildOptions": {
+                    "outExtension": {
+                        ".js": ".js"
+                    }
                 }
-            ]
+            }
         },
         "npm-publish": {
             "executor": "nx:run-commands",
@@ -63,7 +74,7 @@
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/js-cloud-server-sdk\"",
                 "cwd": "dist/sdk/js-cloud-server",
                 "forwardAllArgs": true
-            }
+            },
         }
     },
     "tags": []

@@ -42,22 +42,38 @@
             ]
         },
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/nodejs",
                 "tsConfig": "sdk/nodejs/tsconfig.lib.json",
-                "packageJson": "sdk/nodejs/package.json",
                 "main": "sdk/nodejs/src/index.ts",
-                "assets": ["sdk/nodejs/*.md"],
-                "rootDir": "sdk/nodejs"
-            },
-            "dependsOn": [
-                {
-                    "target": "build",
-                    "dependencies": true
+                "additionalEntryPoints": ["sdk/nodejs/openfeature-strategy.ts"],
+                "format": ["cjs"],
+                "platform": "node",
+                "bundle": true,
+                "declaration": true,
+                "sourcemap": true,
+                "assets": [
+                    "sdk/nodejs/*.md",
+                    "sdk/nodejs/package.json"
+                ],
+                "external": [
+                    "@devcycle/types",
+                    "@devcycle/bucketing-assembly-script",
+                    "@devcycle/js-cloud-server-sdk",
+                    "@devcycle/js-client-sdk",
+                    "@openfeature/*",
+                    "cross-fetch",
+                    "eventsource",
+                    "fetch-retry"
+                ],
+                "esbuildOptions": {
+                    "outExtension": {
+                        ".js": ".js"
+                    }
                 }
-            ]
+            }
         },
         "npm-publish": {
             "executor": "nx:run-commands",
@@ -65,7 +81,7 @@
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/nodejs-server-sdk\"",
                 "cwd": "dist/sdk/nodejs",
                 "forwardAllArgs": true
-            }
+            },
         }
     },
     "tags": []
