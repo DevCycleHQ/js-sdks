@@ -30,10 +30,7 @@
                 "bundle": true,
                 "declaration": true,
                 "sourcemap": true,
-                "assets": [
-                    "sdk/nextjs/README.md",
-                    "sdk/nextjs/package.json"
-                ],
+                "assets": ["sdk/nextjs/README.md", "sdk/nextjs/package.json"],
                 "external": [
                     "@devcycle/bucketing",
                     "@devcycle/js-client-sdk",
