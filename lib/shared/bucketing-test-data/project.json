@@ -23,9 +23,7 @@
                 "bundle": true,
                 "declaration": true,
                 "sourcemap": true,
-                "assets": [
-                    "lib/shared/bucketing-test-data/package.json"
-                ],
+                "assets": ["lib/shared/bucketing-test-data/package.json"],
                 "external": [
                     "@devcycle/types",
                     "class-transformer",

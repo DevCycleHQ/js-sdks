@@ -18,9 +18,7 @@
                     "sdk/openfeature-nestjs-provider/*.md",
                     "sdk/openfeature-nestjs-provider/package.json"
                 ],
-                "external": [
-                    "@devcycle/nodejs-server-sdk"
-                ],
+                "external": ["@devcycle/nodejs-server-sdk"],
                 "esbuildOptions": {
                     "outExtension": { ".js": ".js" }
                 }
