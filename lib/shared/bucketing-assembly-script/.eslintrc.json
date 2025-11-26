@@ -4,6 +4,7 @@
         "!**/*",
         "node_modules/*",
         "build/*",
+        "tmp/**",
         "assembly/types/protobuf-generated/*",
         "protobuf/compiled*"
     ],
