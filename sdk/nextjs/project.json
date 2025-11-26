@@ -15,38 +15,13 @@
             }
         },
         "build": {
-            "executor": "@nx/esbuild:esbuild",
+            "executor": "@nx/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/nextjs",
                 "tsConfig": "sdk/nextjs/tsconfig.lib.json",
                 "main": "sdk/nextjs/index.ts",
-                "additionalEntryPoints": [
-                    "sdk/nextjs/server.ts",
-                    "sdk/nextjs/pages.ts"
-                ],
-                "format": ["cjs"],
-                "platform": "node",
-                "bundle": true,
-                "declaration": true,
-                "sourcemap": true,
-                "assets": ["sdk/nextjs/README.md", "sdk/nextjs/package.json"],
-                "external": [
-                    "@devcycle/bucketing",
-                    "@devcycle/js-client-sdk",
-                    "@devcycle/react-client-sdk",
-                    "@devcycle/types",
-                    "class-transformer",
-                    "hoist-non-react-statics",
-                    "server-only",
-                    "next",
-                    "next/*",
-                    "react",
-                    "react/*"
-                ],
-                "esbuildOptions": {
-                    "outExtension": { ".js": ".js" }
-                }
+                "assets": ["sdk/nextjs/README.md", "sdk/nextjs/package.json"]
             }
         },
         "test": {
