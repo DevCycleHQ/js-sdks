@@ -10,7 +10,9 @@
                 "outputPath": "dist/sdk/openfeature-angular-provider",
                 "tsConfig": "sdk/openfeature-angular-provider/tsconfig.lib.json",
                 "main": "sdk/openfeature-angular-provider/src/index.ts",
-                "additionalEntryPoints": ["sdk/openfeature-angular-provider/strategy.ts"],
+                "additionalEntryPoints": [
+                    "sdk/openfeature-angular-provider/strategy.ts"
+                ],
                 "format": ["cjs"],
                 "platform": "browser",
                 "bundle": true,

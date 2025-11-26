@@ -74,7 +74,7 @@
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/js-cloud-server-sdk\"",
                 "cwd": "dist/sdk/js-cloud-server",
                 "forwardAllArgs": true
-            },
+            }
         }
     },
     "tags": []

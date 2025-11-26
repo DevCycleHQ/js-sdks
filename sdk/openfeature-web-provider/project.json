@@ -10,7 +10,9 @@
                 "outputPath": "dist/sdk/openfeature-web-provider",
                 "tsConfig": "sdk/openfeature-web-provider/tsconfig.lib.json",
                 "main": "sdk/openfeature-web-provider/src/index.ts",
-                "additionalEntryPoints": ["sdk/openfeature-web-provider/strategy.ts"],
+                "additionalEntryPoints": [
+                    "sdk/openfeature-web-provider/strategy.ts"
+                ],
                 "format": ["cjs"],
                 "platform": "browser",
                 "bundle": true,
@@ -20,10 +22,7 @@
                     "sdk/openfeature-web-provider/*.md",
                     "sdk/openfeature-web-provider/package.json"
                 ],
-                "external": [
-                    "@devcycle/js-client-sdk",
-                    "@openfeature/*"
-                ],
+                "external": ["@devcycle/js-client-sdk", "@openfeature/*"],
                 "esbuildOptions": {
                     "outExtension": { ".js": ".js" }
                 }

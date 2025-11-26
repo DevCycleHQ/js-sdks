@@ -10,7 +10,9 @@
                 "outputPath": "dist/sdk/openfeature-react-provider",
                 "tsConfig": "sdk/openfeature-react-provider/tsconfig.lib.json",
                 "main": "sdk/openfeature-react-provider/src/index.ts",
-                "additionalEntryPoints": ["sdk/openfeature-react-provider/strategy.ts"],
+                "additionalEntryPoints": [
+                    "sdk/openfeature-react-provider/strategy.ts"
+                ],
                 "format": ["cjs"],
                 "platform": "browser",
                 "bundle": true,

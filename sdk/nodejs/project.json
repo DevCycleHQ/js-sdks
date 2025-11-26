@@ -54,10 +54,7 @@
                 "bundle": true,
                 "declaration": true,
                 "sourcemap": true,
-                "assets": [
-                    "sdk/nodejs/*.md",
-                    "sdk/nodejs/package.json"
-                ],
+                "assets": ["sdk/nodejs/*.md", "sdk/nodejs/package.json"],
                 "external": [
                     "@devcycle/types",
                     "@devcycle/bucketing-assembly-script",
@@ -81,7 +78,7 @@
                 "command": "../../../scripts/npm-safe-publish.sh \"@devcycle/nodejs-server-sdk\"",
                 "cwd": "dist/sdk/nodejs",
                 "forwardAllArgs": true
-            },
+            }
         }
     },
     "tags": []

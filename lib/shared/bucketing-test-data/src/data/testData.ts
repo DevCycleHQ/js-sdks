@@ -973,12 +973,14 @@ export const configWithBucketingKey = (bucketingKey: string): ConfigBody => ({
         ...feature,
         configuration: {
             ...feature.configuration,
-            targets: feature.configuration.targets.map((target: PublicTarget) => {
-                return {
-                    ...target,
-                    bucketingKey,
-                }
-            }),
+            targets: feature.configuration.targets.map(
+                (target: PublicTarget) => {
+                    return {
+                        ...target,
+                        bucketingKey,
+                    }
+                },
+            ),
         },
     })),
 })
