@@ -46,10 +46,7 @@
                 "bundle": true,
                 "declaration": true,
                 "sourcemap": true,
-                "assets": [
-                    "sdk/nestjs/*.md",
-                    "sdk/nestjs/package.json"
-                ],
+                "assets": ["sdk/nestjs/*.md", "sdk/nestjs/package.json"],
                 "external": [
                     "@devcycle/nodejs-server-sdk",
                     "@devcycle/types",
