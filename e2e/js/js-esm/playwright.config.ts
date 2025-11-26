@@ -18,12 +18,9 @@ const baseURL = process.env['BASE_URL'] || 'http://127.0.0.1:3000'
 const nxConfig = nxE2EPreset(__filename, { testDir: './tests' })
 
 export default defineConfig({
-    ...{
-        ...nxConfig,
-        // Only run the webkit browser.
-        projects: nxConfig.projects.filter((p) => p.name === 'webkit'),
-        reporter: [['html', { outputFolder: 'playwright-report' }]],
-    },
+    ...nxConfig,
+    projects: [{ name: 'webkit', use: { browserName: 'webkit' } }],
+    reporter: [['html', { outputFolder: 'playwright-report' }]],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
         baseURL,

@@ -1,4 +1,6 @@
-const config = {
+import type { JestConfigWithTsJest } from 'ts-jest'
+
+const config: JestConfigWithTsJest = {
     displayName: 'e2e-js-cloud-server',
     globals: {
         'ts-jest': {
@@ -12,17 +14,16 @@ const config = {
     collectCoverage: false,
     maxWorkers: 1,
     testTimeout: 60000,
+    reporters: [
+        'default',
+        [
+            'jest-junit',
+            {
+                outputDirectory: 'test-results',
+                outputName: 'e2e-js-cloud-server.xml',
+            },
+        ],
+    ],
 }
 
-config.reporters = [
-    'default',
-    [
-        'jest-junit',
-        {
-            outputDirectory: 'test-results',
-            outputName: `${config.displayName}.xml`,
-        },
-    ],
-]
-
-module.exports = config
+export default config
