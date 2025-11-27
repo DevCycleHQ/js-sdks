@@ -35,6 +35,7 @@ export type DevCycleNextOptions = Pick<
      * like headers or cookies.
      * This option will disable the following features:
      * - automatic user agent parsing to populate targeting rule data for Platform Version and Device Model
+     * - web-debugger user override for server-side evaluations
      *
      */
     staticMode?: boolean

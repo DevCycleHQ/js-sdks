@@ -36,7 +36,13 @@ const getWebDebugUser = async () => {
 const cachedUserGetter = cache(
     async (
         userGetter: () => DevCycleUser | Promise<DevCycleUser>,
+        options: DevCycleNextOptions,
     ): Promise<DevCycleUser> => {
+        // If static mode is enabled, use the userGetter directly
+        if (options.staticMode) {
+            return userGetter()
+        }
+
         const webDebugUser = await getWebDebugUser()
         // Fallback to original userGetter
         return webDebugUser ?? userGetter()
@@ -52,7 +58,7 @@ export const initialize = cache(
     ): Promise<DevCycleServerData & { client: DevCycleClient }> => {
         const [userAgent, user, configData] = await Promise.all([
             getUserAgent(options),
-            cachedUserGetter(userGetter),
+            cachedUserGetter(userGetter, options),
             getConfigFromSource(sdkKey, clientSDKKey, options),
         ])
 
