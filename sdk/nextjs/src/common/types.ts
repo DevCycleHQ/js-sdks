@@ -3,7 +3,13 @@ import {
     DevCycleUser,
     DevCycleEvent,
 } from '@devcycle/js-client-sdk'
-import { BucketedUserConfig, ConfigSource } from '@devcycle/types'
+import {
+    BucketedUserConfig,
+    ConfigSource,
+    InferredVariableType,
+    VariableDefinitions,
+    VariableKey,
+} from '@devcycle/types'
 
 export type DevCycleNextOptions = Pick<
     DevCycleOptions,
@@ -60,3 +66,11 @@ export type DevCycleServerData = {
 }
 
 export type { DevCycleEvent }
+
+export type GetVariableValue = <
+    K extends VariableKey,
+    ValueType extends VariableDefinitions[K],
+>(
+    key: K,
+    defaultValue: ValueType,
+) => Promise<InferredVariableType<K, ValueType>>

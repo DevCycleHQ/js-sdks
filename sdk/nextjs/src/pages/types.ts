@@ -1,5 +1,11 @@
 import { BucketedUserConfig } from '@devcycle/types'
-import { DevCycleUser } from '@devcycle/js-client-sdk'
+import {
+    DevCycleEvent,
+    DevCycleUser,
+    DVCFeatureSet,
+    DVCVariableSet,
+} from '@devcycle/js-client-sdk'
+import { GetVariableValue } from '../common/types'
 
 export type SSRProps = {
     _devcycleSSR: {
@@ -8,4 +14,12 @@ export type SSRProps = {
         sdkKey: string
         userAgent: string | null
     }
+}
+
+export type DevCycleServerInstance = {
+    getVariableValue: GetVariableValue
+    getAllVariables: () => Promise<DVCVariableSet>
+    getAllFeatures: () => Promise<DVCFeatureSet>
+    track: (event: DevCycleEvent) => void
+    getSSRProps: () => SSRProps
 }
