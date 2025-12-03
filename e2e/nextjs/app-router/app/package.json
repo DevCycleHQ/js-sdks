@@ -11,7 +11,7 @@
     "dependencies": {
         "@devcycle/nextjs-sdk": "file:../../../../dist/sdk/nextjs",
         "@devcycle/web-debugger": "file:../../../../dist/lib/web-debugger",
-        "next": "~15.4.7",
+        "next": "~15.4.8",
         "react": "^19.0.0",
         "react-dom": "^19.0.0"
     },
