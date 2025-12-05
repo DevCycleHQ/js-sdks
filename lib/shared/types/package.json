@@ -3,7 +3,7 @@
     "version": "1.32.4",
     "license": "MIT",
     "main": "./index.cjs.js",
-    "types": "./index.cjs.d.ts",
+    "types": "./index.d.ts",
     "typesVersions": {
         "<4.0": {
             "*": [
