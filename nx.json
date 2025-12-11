@@ -18,11 +18,14 @@
             }
         }
     },
+    "tui": {
+        "enabled": false
+    },
     "pluginsConfig": {
         "@nx/js": {
             "analyzeSourceFiles": true
         },
-        "@nrwl/rollup": {
+        "@nx/rollup": {
             "analyzeSourceFiles": true
         }
     },
@@ -50,9 +53,7 @@
         "libsDir": "",
         "appsDir": ""
     },
-    "affected": {
-        "defaultBase": "main"
-    },
+    "defaultBase": "main",
     "generators": {
         "@nx/web:application": {
             "style": "css",
