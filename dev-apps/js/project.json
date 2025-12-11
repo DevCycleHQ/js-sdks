@@ -22,7 +22,8 @@
                     "dev-apps/js/src/assets"
                 ],
                 "styles": ["dev-apps/js/src/styles.css"],
-                "scripts": []
+                "scripts": [],
+                "webpackConfig": "dev-apps/js/webpack.config.js"
             },
             "configurations": {
                 "production": {
