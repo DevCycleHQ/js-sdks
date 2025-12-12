@@ -4878,10 +4878,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:15.2.6":
-  version: 15.2.6
-  resolution: "@next/env@npm:15.2.6"
-  checksum: 10/7d09add4887a433d3b27a41d21e4b1b46a2e58d5e2c030f8db2e832b1cfc8cd7d47a56359b6ca926178ceca67fce2acd94787cbd27656882c3cec151dc6262ab
+"@next/env@npm:15.2.8":
+  version: 15.2.8
+  resolution: "@next/env@npm:15.2.8"
+  checksum: 10/75dd1bf33f712d971121885a4ee8a6ec9501f29b6bc9b2dabc8ff9c986adf6ee1db0b6a4a7b608a9eed99ea823978a123e9150c60b06a2bc21521ffeb71d4b88
   languageName: node
   linkType: hard
 
@@ -13817,7 +13817,7 @@ __metadata:
     moment: "npm:^2.30.1"
     msw: "npm:^2.7.3"
     murmurhash: "npm:^2.0.1"
-    next: "npm:~15.2.6"
+    next: "npm:~15.2.7"
     nock: "npm:^13.3.8"
     npm-run-all: "npm:^4.1.5"
     nx: "npm:16.10.0"
@@ -23498,11 +23498,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:~15.2.6":
-  version: 15.2.6
-  resolution: "next@npm:15.2.6"
+"next@npm:~15.2.7":
+  version: 15.2.8
+  resolution: "next@npm:15.2.8"
   dependencies:
-    "@next/env": "npm:15.2.6"
+    "@next/env": "npm:15.2.8"
     "@next/swc-darwin-arm64": "npm:15.2.5"
     "@next/swc-darwin-x64": "npm:15.2.5"
     "@next/swc-linux-arm64-gnu": "npm:15.2.5"
@@ -23555,7 +23555,7 @@ __metadata:
       optional: true
   bin:
     next: dist/bin/next
-  checksum: 10/17c5b116a14b658f441e0f82f05509b58e633d76f7e026c63e0a8bca3253b96bbfa7165114725abf25ff647c7c4998c6adbed03d0394f05c1980c29325e14166
+  checksum: 10/8af9ee2552d7291a36b95c63c0b80a8b82230e7786f6328187c92158fa7a9d54372ddae699185781db2c1474f3c1bb29ef96fea9d2bf090baeb9aa98ed575f50
   languageName: node
   linkType: hard
 

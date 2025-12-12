@@ -54,7 +54,7 @@
         "lodash": "^4.17.21",
         "moment": "^2.30.1",
         "murmurhash": "^2.0.1",
-        "next": "~15.2.6",
+        "next": "~15.2.7",
         "protobufjs": "^7.4.0",
         "react": "18.2.0",
         "react-dom": "18.2.0",
