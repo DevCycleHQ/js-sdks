@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "@devcycle/nextjs-sdk": "file:../../../../dist/sdk/nextjs",
-        "next": "~15.4.8",
+        "next": "~15.4.9",
         "react": "^19.0.0",
         "react-dom": "^19.0.0"
     },
