@@ -13,7 +13,8 @@
                 "tsConfig": "dev-apps/nodejs-local/tsconfig.app.json",
                 "webpackConfig": "dev-apps/nodejs-local/webpack.config.js",
                 "compiler": "tsc",
-                "target": "node"
+                "target": "node",
+                "external": ["@devcycle/nodejs-server-sdk", "express", "class-transformer"]
             }
         },
         "serve": {
