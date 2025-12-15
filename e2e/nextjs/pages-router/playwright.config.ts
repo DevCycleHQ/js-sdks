@@ -18,8 +18,9 @@ const baseURL = process.env['BASE_URL'] || 'http://127.0.0.1:3003'
 const nxConfig = nxE2EPreset(__filename, { testDir: './tests' })
 
 export default defineConfig({
+    // Spread nxConfig to inherit NX-specific settings (testDir, outputDir, etc.)
+    // then override projects to use webkit only for consistent browser testing
     ...nxConfig,
-    // Override projects to use webkit only for consistent browser testing
     projects: [{ name: 'webkit', use: { browserName: 'webkit' } }],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
