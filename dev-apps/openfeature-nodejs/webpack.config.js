@@ -1,4 +1,4 @@
-module.exports = (config) => {
+module.exports = (config, { options }) => {
     // turn on __dirname replacement so that the WASM file can be referenced by the assemblyscript lib
     config.node = {
         __dirname: true,
@@ -12,6 +12,17 @@ module.exports = (config) => {
     // Don't use browser field for resolution
     if (!config.resolve.aliasFields) {
         config.resolve.aliasFields = []
+    }
+    // Configure externals - webpack externals function
+    if (options.external && Array.isArray(options.external)) {
+        config.externals = config.externals || []
+        const externalArray = Array.isArray(config.externals) ? config.externals : [config.externals]
+        config.externals = [
+            ...externalArray,
+            ...options.external.map((pkg) => ({
+                [pkg]: `commonjs ${pkg}`,
+            })),
+        ]
     }
     return config
 }
