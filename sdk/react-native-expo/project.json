@@ -23,7 +23,7 @@
             ],
             "options": {
                 "outputPath": "dist/sdk/react-native-expo",
-                "tsConfig": "sdk/react-native-expo/tsconfig.lib.json",
+                "tsConfig": "sdk/react-native-expo/tsconfig.build.json",
                 "project": "sdk/react-native-expo/package.json",
                 "entryFile": "sdk/react-native-expo/src/index.ts",
                 "format": ["esm", "cjs"],
