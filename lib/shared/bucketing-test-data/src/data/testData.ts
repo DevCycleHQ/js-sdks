@@ -969,18 +969,14 @@ export const configWithNestedOrAudience: ConfigBody = {
 
 export const configWithBucketingKey = (bucketingKey: string): ConfigBody => ({
     ...config,
-    features: config.features.map((feature: PublicFeature) => ({
+    features: config.features.map((feature) => ({
         ...feature,
         configuration: {
             ...feature.configuration,
-            targets: feature.configuration.targets.map(
-                (target: PublicTarget) => {
-                    return {
-                        ...target,
-                        bucketingKey,
-                    }
-                },
-            ),
+            targets: feature.configuration.targets.map((target) => ({
+                ...target,
+                bucketingKey,
+            })),
         },
     })),
 })
