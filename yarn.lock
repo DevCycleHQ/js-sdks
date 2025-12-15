@@ -3420,7 +3420,6 @@ __metadata:
   dependencies:
     "@devcycle/js-client-sdk": "npm:1.47.7"
     "@devcycle/react-client-sdk": "npm:1.45.7"
-    "@devcycle/types": "npm:1.32.4"
     "@react-native-async-storage/async-storage": "npm:^1.17.11"
     react-native-device-info: "npm:^8.7.1"
     react-native-get-random-values: "npm:^1.11.0"
