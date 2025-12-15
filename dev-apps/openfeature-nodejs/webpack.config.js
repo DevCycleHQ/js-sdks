@@ -3,7 +3,15 @@ module.exports = (config) => {
     config.node = {
         __dirname: true,
     }
-    // set the "context" for where __dirname should be relative to, to the root of the repo.
-    config.context = config.context + '/../..'
+    if (!config.resolve) {
+        config.resolve = {}
+    }
+    // Disable browser field resolution for node targets
+    config.resolve.mainFields = ['main', 'module']
+    config.resolve.conditionNames = ['node', 'require', 'import']
+    // Don't use browser field for resolution
+    if (!config.resolve.aliasFields) {
+        config.resolve.aliasFields = []
+    }
     return config
 }

@@ -13,7 +13,8 @@
                 "tsConfig": "dev-apps/nodejs-cloud/tsconfig.app.json",
                 "webpackConfig": "dev-apps/nodejs-cloud/webpack.config.js",
                 "compiler": "tsc",
-                "target": "node"
+                "target": "node",
+                "external": ["@devcycle/js-cloud-server-sdk"]
             }
         },
         "serve": {

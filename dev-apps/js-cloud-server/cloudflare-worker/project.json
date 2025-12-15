@@ -11,6 +11,7 @@
                 "outputPath": "dist/dev-apps/js-cloud-server/cloudflare-worker",
                 "main": "dev-apps/js-cloud-server/cloudflare-worker/src/index.ts",
                 "tsConfig": "dev-apps/js-cloud-server/cloudflare-worker/tsconfig.json",
+                "webpackConfig": "dev-apps/js-cloud-server/cloudflare-worker/webpack.config.js",
                 "compiler": "tsc",
                 "target": "node"
             }
