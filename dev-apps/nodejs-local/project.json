@@ -14,7 +14,11 @@
                 "webpackConfig": "dev-apps/nodejs-local/webpack.config.js",
                 "compiler": "tsc",
                 "target": "node",
-                "external": ["@devcycle/nodejs-server-sdk", "express", "class-transformer"]
+                "external": [
+                    "@devcycle/nodejs-server-sdk",
+                    "express",
+                    "class-transformer"
+                ]
             }
         },
         "serve": {

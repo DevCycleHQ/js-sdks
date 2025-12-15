@@ -11,7 +11,9 @@ module.exports = (config, { options }) => {
     // Configure externals - webpack externals function
     if (options.external && Array.isArray(options.external)) {
         config.externals = config.externals || []
-        const externalArray = Array.isArray(config.externals) ? config.externals : [config.externals]
+        const externalArray = Array.isArray(config.externals)
+            ? config.externals
+            : [config.externals]
         config.externals = [
             ...externalArray,
             ...options.external.map((pkg) => ({
@@ -21,4 +23,3 @@ module.exports = (config, { options }) => {
     }
     return config
 }
-

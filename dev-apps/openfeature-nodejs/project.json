@@ -14,7 +14,13 @@
                 "webpackConfig": "dev-apps/openfeature-nodejs/webpack.config.js",
                 "compiler": "tsc",
                 "target": "node",
-                "external": ["nodejs", "shared-types", "@devcycle/nodejs-server-sdk", "@openfeature/server-sdk", "@openfeature/core"]
+                "external": [
+                    "nodejs",
+                    "shared-types",
+                    "@devcycle/nodejs-server-sdk",
+                    "@openfeature/server-sdk",
+                    "@openfeature/core"
+                ]
             }
         },
         "serve": {
