@@ -39,7 +39,7 @@ jobs:
         run: yarn nx run-many -t build -p shared-types server-request js-cloud-server-sdk nextjs js react --parallel=1
       - name: Run Affected E2E Tests
         shell: bash
-        run: yarn affected:e2e --parallel=3
+        run: yarn affected:e2e
       - name: Upload Playwright Report
         if: always()
         uses: actions/upload-artifact@v4
