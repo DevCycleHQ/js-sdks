@@ -21,9 +21,9 @@ export default defineConfig({
     // Spread nxConfig to inherit NX-specific settings (testDir, outputDir, etc.)
     // then override projects to use webkit only for consistent browser testing
     ...nxConfig,
-    projects:
-        nxConfig.projects?.filter((p) => p.name === 'webkit') ||
-        [{ name: 'webkit', use: { browserName: 'webkit' } }],
+    projects: nxConfig.projects?.filter((p) => p.name === 'webkit') || [
+        { name: 'webkit', use: { browserName: 'webkit' } },
+    ],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
         baseURL,
