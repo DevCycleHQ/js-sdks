@@ -36,7 +36,7 @@ jobs:
         run: yarn playwright install --with-deps
       - name: Build shared libraries
         shell: bash
-        run: yarn nx run-many -t build -p shared-types server-request js-cloud-server-sdk nextjs js react --parallel=1
+        run: yarn nx run-many -t build -p shared-types shared-bucketing server-request js-cloud-server-sdk nextjs js react --parallel=1
       - name: Run Affected E2E Tests
         shell: bash
         run: yarn affected:e2e
