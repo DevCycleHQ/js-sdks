@@ -19,7 +19,9 @@ const nxConfig = nxE2EPreset(__filename, { testDir: './tests' })
 
 export default defineConfig({
     ...nxConfig,
-    projects: nxConfig.projects?.filter((p) => p.name === 'webkit') || [{ name: 'webkit', use: { browserName: 'webkit' } }],
+    projects:
+        nxConfig.projects?.filter((p) => p.name === 'webkit') ||
+        [{ name: 'webkit', use: { browserName: 'webkit' } }],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
         baseURL,
