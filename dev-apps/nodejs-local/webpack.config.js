@@ -1,14 +1,24 @@
+const { composePlugins, withNx } = require('@nx/webpack')
 const path = require('path')
 
-module.exports = (config, { options }) => {
+module.exports = composePlugins(withNx(), (config, { options }) => {
     // turn on __dirname replacement so that the WASM file can be referenced by the assemblyscript lib
     config.node = {
         __dirname: true,
     }
-    // Ensure context is set correctly to avoid resolving from root
-    if (!config.context) {
-        config.context = path.resolve(__dirname)
+    
+    // Fix __dirname replacement for bucketing-assembly-script to use absolute path
+    // This ensures path.resolve(__dirname) works correctly
+    if (!config.plugins) {
+        config.plugins = []
     }
+    const webpack = require('webpack')
+    config.plugins.push(
+        new webpack.DefinePlugin({
+            '__dirname': JSON.stringify(path.resolve(__dirname, '../../lib/shared/bucketing-assembly-script'))
+        })
+    )
+    
     if (!config.resolve) {
         config.resolve = {}
     }
@@ -47,4 +57,4 @@ module.exports = (config, { options }) => {
         }
     }
     return config
-}
+})
