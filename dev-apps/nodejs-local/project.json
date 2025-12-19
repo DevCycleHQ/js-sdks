@@ -15,9 +15,15 @@
                 "compiler": "tsc",
                 "target": "node",
                 "external": [
-                    "@devcycle/nodejs-server-sdk",
                     "express",
                     "class-transformer"
+                ],
+                "assets": [
+                    {
+                        "glob": "**/*.wasm",
+                        "input": "lib/shared/bucketing-assembly-script/build",
+                        "output": "lib/shared/bucketing-assembly-script/build"
+                    }
                 ]
             }
         },
