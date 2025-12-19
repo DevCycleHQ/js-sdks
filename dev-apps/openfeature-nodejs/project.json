@@ -15,11 +15,15 @@
                 "compiler": "tsc",
                 "target": "node",
                 "external": [
-                    "nodejs",
-                    "shared-types",
-                    "@devcycle/nodejs-server-sdk",
                     "@openfeature/server-sdk",
                     "@openfeature/core"
+                ],
+                "assets": [
+                    {
+                        "glob": "**/*.wasm",
+                        "input": "lib/shared/bucketing-assembly-script/build",
+                        "output": "lib/shared/bucketing-assembly-script/build"
+                    }
                 ]
             }
         },
