@@ -26682,18 +26682,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nextjs-app-router@workspace:dev-apps/nextjs/app-router":
-  version: 0.0.0-use.local
-  resolution: "nextjs-app-router@workspace:dev-apps/nextjs/app-router"
-  languageName: unknown
-  linkType: soft
-
-"nextjs-pages-router@workspace:dev-apps/nextjs/pages-router":
-  version: 0.0.0-use.local
-  resolution: "nextjs-pages-router@workspace:dev-apps/nextjs/pages-router"
-  languageName: unknown
-  linkType: soft
-
 "nice-try@npm:^1.0.4":
   version: 1.0.5
   resolution: "nice-try@npm:1.0.5"
