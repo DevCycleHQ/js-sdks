@@ -14,10 +14,7 @@
                 "webpackConfig": "dev-apps/nodejs-local/webpack.config.js",
                 "compiler": "tsc",
                 "target": "node",
-                "external": [
-                    "express",
-                    "class-transformer"
-                ],
+                "external": ["express", "class-transformer"],
                 "assets": [
                     {
                         "glob": "**/*.wasm",

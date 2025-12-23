@@ -8,4 +8,3 @@ module.exports = composePlugins(withNx(), withWeb(), (config) => {
     }
     return config
 })
-
