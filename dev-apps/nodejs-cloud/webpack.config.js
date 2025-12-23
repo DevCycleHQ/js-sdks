@@ -1,4 +1,6 @@
-module.exports = (config, { options }) => {
+const { composePlugins, withNx } = require('@nx/webpack')
+
+module.exports = composePlugins(withNx(), (config, { options }) => {
     if (!config.resolve) {
         config.resolve = {}
     }
@@ -22,4 +24,4 @@ module.exports = (config, { options }) => {
         ]
     }
     return config
-}
+})
