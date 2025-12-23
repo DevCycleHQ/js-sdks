@@ -20,7 +20,7 @@
             "dependsOn": ["build:emit-legacy-types"]
         },
         "build": {
-            "executor": "@nrwl/rollup:rollup",
+            "executor": "@nx/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "format": ["cjs", "esm"],
@@ -41,7 +41,7 @@
             }
         },
         "build:es5": {
-            "executor": "@nrwl/rollup:rollup",
+            "executor": "@nx/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "format": ["cjs"],
@@ -70,7 +70,7 @@
             "dependsOn": ["build"]
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [

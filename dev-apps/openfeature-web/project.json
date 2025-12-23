@@ -22,7 +22,8 @@
                     "dev-apps/openfeature-web/src/assets"
                 ],
                 "styles": ["dev-apps/openfeature-web/src/styles.css"],
-                "scripts": []
+                "scripts": [],
+                "webpackConfig": "dev-apps/openfeature-web/webpack.config.js"
             },
             "configurations": {
                 "production": {
@@ -63,7 +64,7 @@
             "defaultConfiguration": "development"
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["dev-apps/openfeature-web/**/*.ts"]

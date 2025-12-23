@@ -6,14 +6,14 @@ __metadata:
   cacheKey: 10
 
 "@devcycle/bucketing@file:../../../../dist/lib/shared/bucketing::locator=app%40workspace%3A.":
-  version: 1.38.3
-  resolution: "@devcycle/bucketing@file:../../../../dist/lib/shared/bucketing#../../../../dist/lib/shared/bucketing::hash=1e3d88&locator=app%40workspace%3A."
+  version: 1.38.4
+  resolution: "@devcycle/bucketing@file:../../../../dist/lib/shared/bucketing#../../../../dist/lib/shared/bucketing::hash=23a8b1&locator=app%40workspace%3A."
   dependencies:
-    "@devcycle/types": "npm:1.32.3"
+    "@devcycle/types": "npm:1.32.4"
     lodash: "npm:^4.17.21"
     murmurhash: "npm:^2.0.1"
     ua-parser-js: "npm:^1.0.40"
-  checksum: 10/746f32025a1b48f334858a267ef678afc4b61bac5e21f823d95326240fcc522f232df5b34a64ea9a945fe0f48aab99bc12bcb9aed49812b90b19843c3de2e9d3
+  checksum: 10/878fd541f014eb0d45fdd42ca61cc9a92baa76e606d9d4a257b4ad666263aa030b5f2d62ec53e707ae6785e2cc57437e0166d55b3450d4ffdb004e458610f483
   languageName: node
   linkType: hard
 
@@ -31,19 +31,19 @@ __metadata:
   linkType: hard
 
 "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs::locator=app%40workspace%3A.":
-  version: 3.0.1
-  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=37b9ab&locator=app%40workspace%3A."
+  version: 3.0.2
+  resolution: "@devcycle/nextjs-sdk@file:../../../../dist/sdk/nextjs#../../../../dist/sdk/nextjs::hash=2fc5c1&locator=app%40workspace%3A."
   dependencies:
-    "@devcycle/bucketing": "npm:1.38.3"
-    "@devcycle/js-client-sdk": "npm:1.47.6"
-    "@devcycle/react-client-sdk": "npm:1.45.6"
-    "@devcycle/types": "npm:1.32.3"
+    "@devcycle/bucketing": "npm:1.38.4"
+    "@devcycle/js-client-sdk": "npm:1.47.7"
+    "@devcycle/react-client-sdk": "npm:1.45.7"
+    "@devcycle/types": "npm:1.32.4"
     class-transformer: "npm:^0.5.1"
     hoist-non-react-statics: "npm:^3.3.2"
     server-only: "npm:^0.0.1"
   peerDependencies:
-    next: ">=15.1.0"
-  checksum: 10/cbe86fc64636faf67a5aa37414734abe173e6247d31fff373cadc7452231599577e224742f7ce4fc3071db56a375a51d612ce843becf937b4fd8ac71a66ea412
+    next: ">=15.1.9"
+  checksum: 10/02b64c304ba48833354c50779b0a10e05a6ee1b3faa6cc79319db631bca17e93de11ddc43d24fe70bdbd34ffe6448ac36a3697e59c4dfe333b14c869c830b058
   languageName: node
   linkType: hard
 
@@ -821,8 +821,8 @@ __metadata:
   linkType: hard
 
 "validator@npm:^13.9.0":
-  version: 13.15.23
-  resolution: "validator@npm:13.15.23"
-  checksum: 10/03e4a37c04c4e8337b0c91e529bdb6376de6b52ef683616e2e909276be73903e6054203d274ed35e88e3498ec68764125b194338dd2ee893818d3008fbad1ba7
+  version: 13.11.0
+  resolution: "validator@npm:13.11.0"
+  checksum: 10/4bf094641eb71729c06a42d669840e7189597ba655a8264adabac9bf03f95cd6fde5fbc894b0a13ee861bd4a852f56d2afdc9391aeaeb3fc0f9633a974140e12
   languageName: node
   linkType: hard
