@@ -7,7 +7,7 @@ module.exports = composePlugins(withNx(), (config, { options }) => {
     config.node = {
         __dirname: true,
     }
-    
+
     // Fix __dirname replacement for bucketing-assembly-script to use absolute path
     // This ensures path.resolve(__dirname) works correctly
     if (!config.plugins) {
@@ -15,10 +15,15 @@ module.exports = composePlugins(withNx(), (config, { options }) => {
     }
     config.plugins.push(
         new webpack.DefinePlugin({
-            '__dirname': JSON.stringify(path.resolve(__dirname, '../../lib/shared/bucketing-assembly-script'))
-        })
+            __dirname: JSON.stringify(
+                path.resolve(
+                    __dirname,
+                    '../../lib/shared/bucketing-assembly-script',
+                ),
+            ),
+        }),
     )
-    
+
     if (!config.resolve) {
         config.resolve = {}
     }
