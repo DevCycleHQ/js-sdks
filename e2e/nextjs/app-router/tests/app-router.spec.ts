@@ -47,7 +47,7 @@ test('works after a client side navigation in streaming mode', async ({
 
     await page.getByRole('link', { name: 'Go To page' }).click()
     await expect(page.getByText('Navigated Server Component')).toBeVisible({
-        timeout: 30000,
+        timeout: 30000, // Increased timeout for CI environment variability
     })
 
     await expect(page.getByText('Server Enabled Variable: true')).toBeVisible()
