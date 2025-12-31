@@ -11,7 +11,7 @@
                 "outputPath": "dist/lib/shared/sse-connection",
                 "main": "lib/shared/sse-connection/src/index.ts",
                 "tsConfig": "lib/shared/sse-connection/tsconfig.lib.json",
-                "format": ["cjs"],
+                "format": ["cjs", "esm"],
                 "platform": "node",
                 "bundle": true,
                 "declaration": true,
@@ -20,10 +20,7 @@
                     "lib/shared/sse-connection/*.md",
                     "lib/shared/sse-connection/package.json"
                 ],
-                "external": ["@devcycle/types", "eventsource"],
-                "esbuildOptions": {
-                    "outExtension": { ".js": ".js" }
-                }
+                "external": ["@devcycle/types", "eventsource"]
             }
         },
         "lint": {

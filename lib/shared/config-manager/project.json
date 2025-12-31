@@ -11,7 +11,7 @@
                 "outputPath": "dist/lib/shared/config-manager",
                 "main": "lib/shared/config-manager/src/index.ts",
                 "tsConfig": "lib/shared/config-manager/tsconfig.lib.json",
-                "format": ["cjs"],
+                "format": ["cjs", "esm"],
                 "platform": "node",
                 "bundle": true,
                 "declaration": true,
@@ -25,10 +25,7 @@
                     "cross-fetch",
                     "fetch-retry",
                     "eventsource"
-                ],
-                "esbuildOptions": {
-                    "outExtension": { ".js": ".js" }
-                }
+                ]
             }
         },
         "lint": {
