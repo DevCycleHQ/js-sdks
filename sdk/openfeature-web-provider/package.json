@@ -30,16 +30,19 @@
             "optional": true
         }
     },
+    "main": "./index.cjs",
+    "module": "./index.js",
+    "types": "./src/index.d.ts",
     "exports": {
         ".": {
-            "import": "./src/index.js",
-            "require": "./src/index.js",
-            "types": "./src/index.d.ts"
+            "types": "./src/index.d.ts",
+            "import": "./index.js",
+            "require": "./index.cjs"
         },
         "./strategy": {
+            "types": "./strategy.d.ts",
             "import": "./strategy.js",
-            "require": "./strategy.js",
-            "types": "./strategy.d.ts"
+            "require": "./strategy.cjs"
         }
     }
 }

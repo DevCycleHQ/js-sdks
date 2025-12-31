@@ -41,7 +41,7 @@
                 "outputPath": "dist/sdk/nestjs",
                 "tsConfig": "sdk/nestjs/tsconfig.lib.json",
                 "main": "sdk/nestjs/src/index.ts",
-                "format": ["cjs"],
+                "format": ["cjs", "esm"],
                 "platform": "node",
                 "bundle": true,
                 "declaration": true,
@@ -52,10 +52,7 @@
                     "@devcycle/types",
                     "nestjs-cls",
                     "@nestjs/*"
-                ],
-                "esbuildOptions": {
-                    "outExtension": { ".js": ".js" }
-                }
+                ]
             }
         },
         "npm-publish": {

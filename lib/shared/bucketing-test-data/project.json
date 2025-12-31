@@ -18,7 +18,7 @@
                 "outputPath": "dist/lib/shared/bucketing-test-data",
                 "tsConfig": "lib/shared/bucketing-test-data/tsconfig.lib.json",
                 "main": "lib/shared/bucketing-test-data/src/main.ts",
-                "format": ["cjs"],
+                "format": ["cjs", "esm"],
                 "platform": "node",
                 "bundle": true,
                 "declaration": true,
@@ -29,10 +29,7 @@
                     "class-transformer",
                     "class-validator",
                     "reflect-metadata"
-                ],
-                "esbuildOptions": {
-                    "outExtension": { ".js": ".js" }
-                }
+                ]
             },
             "dependsOn": [
                 {
