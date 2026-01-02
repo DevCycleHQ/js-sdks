@@ -29,6 +29,7 @@
                 "format": ["cjs", "esm"],
                 "platform": "node",
                 "bundle": true,
+                "thirdParty": true,
                 "declaration": true,
                 "sourcemap": true,
                 "assets": [
@@ -37,7 +38,6 @@
                 ],
                 "external": [
                     "@devcycle/types",
-                    "lodash",
                     "murmurhash",
                     "ua-parser-js"
                 ]
