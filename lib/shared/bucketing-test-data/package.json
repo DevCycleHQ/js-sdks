@@ -2,16 +2,6 @@
     "name": "@devcycle/bucketing-test-data",
     "version": "1.36.4",
     "license": "MIT",
-    "main": "./main.cjs",
-    "module": "./main.js",
-    "types": "./main.d.ts",
-    "exports": {
-        ".": {
-            "types": "./main.d.ts",
-            "import": "./main.js",
-            "require": "./main.cjs"
-        }
-    },
     "repository": {
         "type": "git",
         "url": "git://github.com/DevCycleHQ/js-sdks.git"
