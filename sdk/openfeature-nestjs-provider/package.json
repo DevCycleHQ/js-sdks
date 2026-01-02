@@ -21,6 +21,6 @@
     "dependencies": {
         "@devcycle/nodejs-server-sdk": "1.55.6"
     },
-    "main": "src/index.js",
+    "main": "index.js",
     "types": "src/index.d.ts"
 }

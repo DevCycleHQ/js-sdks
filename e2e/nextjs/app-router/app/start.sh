@@ -7,4 +7,4 @@ YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn
 # clear cache because next seems to cache node modules even if they change :/
 rm -rf .next
 
-yarn dev
+yarn dev --port 3002

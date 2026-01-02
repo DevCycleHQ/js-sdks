@@ -4,18 +4,32 @@
     "implicitDependencies": ["js"],
     "targets": {
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/openfeature-web-provider",
                 "tsConfig": "sdk/openfeature-web-provider/tsconfig.lib.json",
-                "packageJson": "sdk/openfeature-web-provider/package.json",
                 "main": "sdk/openfeature-web-provider/src/index.ts",
-                "assets": ["sdk/openfeature-web-provider/*.md"]
+                "additionalEntryPoints": [
+                    "sdk/openfeature-web-provider/strategy.ts"
+                ],
+                "format": ["cjs"],
+                "platform": "browser",
+                "bundle": true,
+                "declaration": true,
+                "sourcemap": true,
+                "assets": [
+                    "sdk/openfeature-web-provider/*.md",
+                    "sdk/openfeature-web-provider/package.json"
+                ],
+                "external": ["@devcycle/js-client-sdk", "@openfeature/*"],
+                "esbuildOptions": {
+                    "outExtension": { ".js": ".js" }
+                }
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["sdk/openfeature-web-provider/**/*.ts"]

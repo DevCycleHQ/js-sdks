@@ -16,10 +16,10 @@ const config = nxE2EPreset(__filename, { testDir: './e2e' })
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-    ...{
-        ...config,
-        projects: config.projects.filter((p) => p.name === 'webkit'),
-    },
+    ...config,
+    projects: config.projects?.filter((p) => p.name === 'webkit') || [
+        { name: 'webkit', use: { browserName: 'webkit' } },
+    ],
     reporter: [['html', { outputFolder: 'playwright-report' }]],
 
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */

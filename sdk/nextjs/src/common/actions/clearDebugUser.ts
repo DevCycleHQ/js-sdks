@@ -10,7 +10,7 @@ export const clearDebugUserCookie = async (): Promise<void> => {
     const cookieStore = await cookies()
     cookieStore.set(debugUserCookieName, '', {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: process.env['NODE_ENV'] === 'production',
         sameSite: 'strict',
         path: '/',
         expires: new Date(0),
