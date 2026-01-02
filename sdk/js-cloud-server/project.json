@@ -46,7 +46,7 @@
                 "outputPath": "dist/sdk/js-cloud-server",
                 "tsConfig": "sdk/js-cloud-server/tsconfig.lib.json",
                 "main": "sdk/js-cloud-server/src/index.ts",
-                "format": ["cjs"],
+                "format": ["cjs", "esm"],
                 "platform": "node",
                 "bundle": true,
                 "declaration": true,
@@ -60,12 +60,7 @@
                     "cross-fetch",
                     "fetch-retry",
                     "lodash"
-                ],
-                "esbuildOptions": {
-                    "outExtension": {
-                        ".js": ".js"
-                    }
-                }
+                ]
             }
         },
         "npm-publish": {

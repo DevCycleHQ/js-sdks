@@ -13,7 +13,7 @@
                 "additionalEntryPoints": [
                     "sdk/openfeature-web-provider/strategy.ts"
                 ],
-                "format": ["cjs"],
+                "format": ["cjs", "esm"],
                 "platform": "browser",
                 "bundle": true,
                 "declaration": true,
@@ -22,10 +22,7 @@
                     "sdk/openfeature-web-provider/*.md",
                     "sdk/openfeature-web-provider/package.json"
                 ],
-                "external": ["@devcycle/js-client-sdk", "@openfeature/*"],
-                "esbuildOptions": {
-                    "outExtension": { ".js": ".js" }
-                }
+                "external": ["@devcycle/js-client-sdk", "@openfeature/*"]
             }
         },
         "lint": {

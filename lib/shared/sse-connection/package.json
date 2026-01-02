@@ -5,8 +5,16 @@
     "dependencies": {
         "eventsource": "^2.0.2"
     },
-    "types": "src/index.d.ts",
-    "main": "src/index.js",
+    "main": "./index.cjs",
+    "module": "./index.js",
+    "types": "./src/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./src/index.d.ts",
+            "import": "./index.js",
+            "require": "./index.cjs"
+        }
+    },
     "repository": {
         "type": "git",
         "url": "git://github.com/DevCycleHQ/js-sdks.git"

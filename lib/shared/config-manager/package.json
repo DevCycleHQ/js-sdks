@@ -2,8 +2,16 @@
     "name": "@devcycle/config-manager",
     "version": "1.0.0",
     "license": "MIT",
-    "main": "src/index.js",
-    "types": "src/index.d.ts",
+    "main": "./index.cjs",
+    "module": "./index.js",
+    "types": "./src/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./src/index.d.ts",
+            "import": "./index.js",
+            "require": "./index.cjs"
+        }
+    },
     "repository": {
         "type": "git",
         "url": "git://github.com/DevCycleHQ/js-sdks.git"

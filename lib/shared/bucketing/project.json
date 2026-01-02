@@ -26,9 +26,10 @@
                 "outputPath": "dist/lib/shared/bucketing",
                 "main": "lib/shared/bucketing/src/index.ts",
                 "tsConfig": "lib/shared/bucketing/tsconfig.lib.json",
-                "format": ["cjs"],
+                "format": ["cjs", "esm"],
                 "platform": "node",
                 "bundle": true,
+                "thirdParty": true,
                 "declaration": true,
                 "sourcemap": true,
                 "assets": [
@@ -37,13 +38,9 @@
                 ],
                 "external": [
                     "@devcycle/types",
-                    "lodash",
                     "murmurhash",
                     "ua-parser-js"
-                ],
-                "esbuildOptions": {
-                    "outExtension": { ".js": ".js" }
-                }
+                ]
             }
         },
         "lint": {
