@@ -21,3 +21,10 @@ npm install @devcycle/nodejs-server-sdk
 ### Usage
 
 To find usage documentation, visit our [docs](https://docs.devcycle.com/docs/sdk/server-side-sdks/node).
+
+### Architecture
+
+For detailed diagrams describing the functionality of each public-facing API function:
+
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - Local Bucketing mode (default)
+- [ARCHITECTURE-CLOUD.md](./ARCHITECTURE-CLOUD.md) - Cloud Bucketing mode
