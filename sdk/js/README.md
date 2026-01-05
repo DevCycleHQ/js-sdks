@@ -24,3 +24,7 @@ import { initialize } from '@devcycle/js-client-sdk'
 # Usage
 
 To find usage documentation, visit our [docs](https://docs.devcycle.com/docs/sdk/client-side-sdks/javascript).
+
+# Architecture
+
+For detailed diagrams describing the functionality of each public-facing API function, see [ARCHITECTURE.md](./ARCHITECTURE.md).
