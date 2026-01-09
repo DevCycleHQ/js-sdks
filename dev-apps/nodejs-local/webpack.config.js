@@ -1,5 +1,9 @@
 const { composePlugins, withNx } = require('@nx/webpack')
 const path = require('path')
+const {
+    configureExternals,
+    configureNodeResolve,
+} = require('../../webpack-utils')
 
 module.exports = composePlugins(withNx(), (config, { options }) => {
     // turn on __dirname replacement so that the WASM file can be referenced by the assemblyscript lib
@@ -24,15 +28,7 @@ module.exports = composePlugins(withNx(), (config, { options }) => {
         }),
     )
 
-    if (!config.resolve) {
-        config.resolve = {}
-    }
-    config.resolve.extensionAlias = {
-        '.js': ['.ts', '.js'],
-    }
-    // Disable browser field resolution for node targets
-    config.resolve.mainFields = ['main', 'module']
-    config.resolve.conditionNames = ['node', 'require', 'import']
+    configureNodeResolve(config)
     // Don't use browser field for resolution
     if (!config.resolve.aliasFields) {
         config.resolve.aliasFields = []
@@ -41,25 +37,7 @@ module.exports = composePlugins(withNx(), (config, { options }) => {
     if (!config.resolve.modules) {
         config.resolve.modules = ['node_modules']
     }
-    // Configure externals - use array format which is simpler and more reliable
-    if (options.external && Array.isArray(options.external)) {
-        // Convert to object format for webpack externals
-        const externalsObj = {}
-        options.external.forEach((pkg) => {
-            externalsObj[pkg] = `commonjs ${pkg}`
-        })
-        const originalExternals = config.externals
-        if (originalExternals) {
-            if (Array.isArray(originalExternals)) {
-                config.externals = [...originalExternals, externalsObj]
-            } else if (typeof originalExternals === 'object') {
-                config.externals = { ...originalExternals, ...externalsObj }
-            } else {
-                config.externals = [originalExternals, externalsObj]
-            }
-        } else {
-            config.externals = externalsObj
-        }
-    }
+
+    configureExternals(config, options)
     return config
 })
