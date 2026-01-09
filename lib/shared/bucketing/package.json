@@ -8,8 +8,16 @@
         "murmurhash": "^2.0.1",
         "ua-parser-js": "^1.0.40"
     },
-    "types": "src/index.d.ts",
-    "main": "src/index.js",
+    "main": "./index.cjs",
+    "module": "./index.js",
+    "types": "./src/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./src/index.d.ts",
+            "import": "./index.js",
+            "require": "./index.cjs"
+        }
+    },
     "repository": {
         "type": "git",
         "url": "git://github.com/DevCycleHQ/js-sdks.git"

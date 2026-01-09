@@ -8,9 +8,16 @@
     "dependencies": {
         "class-transformer": "^0.5.1"
     },
-    "type": "commonjs",
-    "main": "./src/index.js",
-    "typings": "./src/index.d.ts",
+    "main": "./index.cjs",
+    "module": "./index.js",
+    "types": "./src/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./src/index.d.ts",
+            "import": "./index.js",
+            "require": "./index.cjs"
+        }
+    },
     "repository": {
         "type": "git",
         "url": "git://github.com/DevCycleHQ/js-sdks.git"

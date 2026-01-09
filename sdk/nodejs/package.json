@@ -44,18 +44,19 @@
     "engines": {
         "node": ">=16.0.0"
     },
-    "main": "src/index.js",
-    "types": "src/index.d.ts",
+    "main": "./src/index.cjs",
+    "module": "./src/index.js",
+    "types": "./src/index.d.ts",
     "exports": {
         ".": {
+            "types": "./src/index.d.ts",
             "import": "./src/index.js",
-            "require": "./src/index.js",
-            "types": "./src/index.d.ts"
+            "require": "./src/index.cjs"
         },
         "./openfeature-strategy": {
+            "types": "./openfeature-strategy.d.ts",
             "import": "./openfeature-strategy.js",
-            "require": "./openfeature-strategy.js",
-            "types": "./openfeature-strategy.d.ts"
+            "require": "./openfeature-strategy.cjs"
         }
     }
 }

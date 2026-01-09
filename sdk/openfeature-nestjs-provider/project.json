@@ -9,7 +9,7 @@
                 "outputPath": "dist/sdk/openfeature-nestjs-provider",
                 "tsConfig": "sdk/openfeature-nestjs-provider/tsconfig.lib.json",
                 "main": "sdk/openfeature-nestjs-provider/src/index.ts",
-                "format": ["cjs"],
+                "format": ["cjs", "esm"],
                 "platform": "node",
                 "bundle": true,
                 "declaration": true,
@@ -18,10 +18,7 @@
                     "sdk/openfeature-nestjs-provider/*.md",
                     "sdk/openfeature-nestjs-provider/package.json"
                 ],
-                "external": ["@devcycle/nodejs-server-sdk"],
-                "esbuildOptions": {
-                    "outExtension": { ".js": ".js" }
-                }
+                "external": ["@devcycle/nodejs-server-sdk"]
             }
         },
         "lint": {

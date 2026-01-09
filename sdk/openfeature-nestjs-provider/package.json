@@ -21,6 +21,14 @@
     "dependencies": {
         "@devcycle/nodejs-server-sdk": "1.55.6"
     },
-    "main": "index.js",
-    "types": "src/index.d.ts"
+    "main": "./index.cjs",
+    "module": "./index.js",
+    "types": "./src/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./src/index.d.ts",
+            "import": "./index.js",
+            "require": "./index.cjs"
+        }
+    }
 }
