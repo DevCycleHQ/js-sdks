@@ -30,6 +30,6 @@
     "engines": {
         "node": ">=16.0.0"
     },
-    "main": "src/index.js",
+    "main": "index.js",
     "types": "src/index.d.ts"
 }

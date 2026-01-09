@@ -20,3 +20,4 @@ dev-apps/react/react-native-app/package.json
 .wrangler/
 *.html
 tmp/
+.nx/

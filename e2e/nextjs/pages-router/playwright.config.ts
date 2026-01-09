@@ -4,7 +4,7 @@ import { nxE2EPreset } from '@nx/playwright/preset'
 import { workspaceRoot } from '@nx/devkit'
 
 // For CI, you may want to set BASE_URL to the deployed application.
-const baseURL = process.env['BASE_URL'] || 'http://127.0.0.1:3000'
+const baseURL = process.env['BASE_URL'] || 'http://127.0.0.1:3003'
 
 /**
  * Read environment variables from file.
@@ -18,11 +18,12 @@ const baseURL = process.env['BASE_URL'] || 'http://127.0.0.1:3000'
 const nxConfig = nxE2EPreset(__filename, { testDir: './tests' })
 
 export default defineConfig({
-    ...{
-        ...nxConfig,
-        // Only run the webkit browser.
-        projects: nxConfig.projects.filter((p) => p.name === 'webkit'),
-    },
+    // Spread nxConfig to inherit NX-specific settings (testDir, outputDir, etc.)
+    // then override projects to use webkit only for consistent browser testing
+    ...nxConfig,
+    projects: nxConfig.projects?.filter((p) => p.name === 'webkit') || [
+        { name: 'webkit', use: { browserName: 'webkit' } },
+    ],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
         baseURL,
@@ -32,7 +33,7 @@ export default defineConfig({
     /* Run your local dev server before starting the tests */
     webServer: {
         command: 'yarn e2e:nextjs-pages-router:start',
-        url: 'http://127.0.0.1:3000',
+        url: 'http://127.0.0.1:3003',
         reuseExistingServer: !process.env.CI,
         stdout: 'pipe',
         cwd: workspaceRoot,
