@@ -99,6 +99,7 @@
                 "main": "sdk/js/src/index.ts",
                 "index": "",
                 "optimization": true,
+                "compiler": "tsc",
                 "assets": [
                     {
                         "input": "sdk/js",

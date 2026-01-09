@@ -1,7 +1,7 @@
-const { composePlugins, withNx, withWeb } = require('@nx/webpack')
+const { composePlugins, withNx } = require('@nx/webpack')
 const path = require('path')
 
-module.exports = composePlugins(withNx(), withWeb(), (config, { options }) => {
+module.exports = composePlugins(withNx(), (config, { options }) => {
     const libraryTarget = options.libraryTarget
     const libraryName = options.libraryName
 
