@@ -14,7 +14,7 @@ jobs:
             with:
               language: "javascript"
     build:
-        runs-on: ubicloud-standard-8
+        runs-on: ubuntu-latest-8-core
         strategy:
             matrix:
                 node-version: [22.12]

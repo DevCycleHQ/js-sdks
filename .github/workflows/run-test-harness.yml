@@ -8,7 +8,7 @@ on:
 jobs:
     build:
         runs-on:
-            labels: ubicloud-standard-16
+            labels: ubuntu-24-arm-16-core
         strategy:
             matrix:
                 node-version: [22.12]

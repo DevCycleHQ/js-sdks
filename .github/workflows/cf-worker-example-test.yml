@@ -8,7 +8,7 @@ on:
 jobs:
     build:
         runs-on:
-            labels: ubicloud-standard-4
+            labels: ubuntu-latest-4-core
         timeout-minutes: 15
         strategy:
             matrix:
