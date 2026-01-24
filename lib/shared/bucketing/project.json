@@ -20,17 +20,34 @@
             }
         },
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/lib/shared/bucketing",
                 "main": "lib/shared/bucketing/src/index.ts",
                 "tsConfig": "lib/shared/bucketing/tsconfig.lib.json",
-                "assets": ["lib/shared/bucketing/*.md"]
+                "format": ["cjs"],
+                "platform": "node",
+                "bundle": true,
+                "declaration": true,
+                "sourcemap": true,
+                "assets": [
+                    "lib/shared/bucketing/*.md",
+                    "lib/shared/bucketing/package.json"
+                ],
+                "external": [
+                    "@devcycle/types",
+                    "lodash",
+                    "murmurhash",
+                    "ua-parser-js"
+                ],
+                "esbuildOptions": {
+                    "outExtension": { ".js": ".js" }
+                }
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [

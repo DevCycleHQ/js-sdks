@@ -1,4 +1,5 @@
 ## JS SDK Monorepo
+
 This is the DevCycle JS SDK Monorepo which contains all the Javascript-based SDKs and public
 shared packages used by DevCycle products.
 
@@ -13,6 +14,7 @@ To view the README for a specific SDK, navigate to that SDK inside the `sdk` dir
 There are several examples included in this repository for various SDKs. If you want to run them, proceed to setup:
 
 ## Setup
+
 Ensure you have Node 22.x installed.
 
 1. Clone this repo
@@ -20,8 +22,8 @@ Ensure you have Node 22.x installed.
 3. Run `aws configure sso`
 4. Run `aws sso login`
 
-
 ## Directory Structure
+
 ```
 dev-apps/
     - contains development test applications using each SDK
@@ -34,6 +36,7 @@ sdk/
 ```
 
 ## Running an development test app
+
 To run an app, use the `yarn start` command with the name of the example you want to run:
 `yarn start example-react-with-provider`
 
@@ -41,6 +44,7 @@ The names of the dev-apps are listed in the `workspace.json` file at the root of
 located in the root-level `dev-apps/` directory.
 
 ## Development
+
 The repo is managed using `Nx`, a monorepo management tool. It's worth reading their docs here:
 https://nx.dev/l/n/getting-started/intro
 
@@ -52,6 +56,7 @@ commands against them. For example, to test the "nodejs" project, run:
 These commands can be run from the root directory, but should work in any directory.
 
 The full list of relevant Nx commands is below:
+
 ```
 build - build the compiled Webpack output of the project
 serve - build and then run the compiled project
@@ -61,6 +66,7 @@ format:write - run prettier against the project and write all formatting changes
 ```
 
 There are also several root-level yarn commands for running services:
+
 ```
 yarn start                - start all services in the repo
 yarn start:partial        - start the services you specify (eg. yarn start:partial api,config)
@@ -102,9 +108,11 @@ You can run commands in every javascript project using Nx: `nx run-many --target
 This allows you to lint and/or test all projects at once.
 
 ### Publishing a Release
+
 **Note:** You need admin privileges to publish a release. If you don't have them, ask someone who does to do the release for you.
 
 Setup:
+
 - run `aws sso login`
 - run `./scripts/brew-install.sh`
 - ensure you're on the main branch with the latest code
@@ -138,4 +146,3 @@ This will create three files in the `dist/sdk/js` folder:
 ```
 
 Upload them all to S3. Ensure that their access controls allow public access.
-

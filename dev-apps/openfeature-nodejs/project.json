@@ -14,7 +14,19 @@
                 "webpackConfig": "dev-apps/openfeature-nodejs/webpack.config.js",
                 "compiler": "tsc",
                 "target": "node",
-                "external": ["nodejs", "shared-types"]
+                "external": [
+                    "nodejs",
+                    "shared-types",
+                    "@openfeature/server-sdk",
+                    "@openfeature/core"
+                ],
+                "assets": [
+                    {
+                        "glob": "**/*.wasm",
+                        "input": "lib/shared/bucketing-assembly-script/build",
+                        "output": "lib/shared/bucketing-assembly-script/build"
+                    }
+                ]
             }
         },
         "serve": {
@@ -25,7 +37,7 @@
             "dependsOn": ["^build"]
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["dev-apps/openfeature-nodejs/**/*.ts"]

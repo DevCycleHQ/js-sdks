@@ -11,7 +11,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
@@ -35,14 +35,27 @@
             ]
         },
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/nestjs",
                 "tsConfig": "sdk/nestjs/tsconfig.lib.json",
-                "packageJson": "sdk/nestjs/package.json",
                 "main": "sdk/nestjs/src/index.ts",
-                "assets": ["sdk/nestjs/*.md"]
+                "format": ["cjs"],
+                "platform": "node",
+                "bundle": true,
+                "declaration": true,
+                "sourcemap": true,
+                "assets": ["sdk/nestjs/*.md", "sdk/nestjs/package.json"],
+                "external": [
+                    "@devcycle/nodejs-server-sdk",
+                    "@devcycle/types",
+                    "nestjs-cls",
+                    "@nestjs/*"
+                ],
+                "esbuildOptions": {
+                    "outExtension": { ".js": ".js" }
+                }
             }
         },
         "npm-publish": {

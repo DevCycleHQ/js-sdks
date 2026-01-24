@@ -1,5 +1,6 @@
-/* eslint-disable */
-export default {
+import type { Config } from 'jest'
+
+const config: Config = {
     displayName: 'bucketing-lib',
 
     globals: {},
@@ -19,15 +20,16 @@ export default {
     ],
     coverageDirectory: '../../../coverage/lib/shared/bucketing',
     preset: '../../../jest.preset.js',
+    reporters: [
+        'default',
+        [
+            'jest-junit',
+            {
+                outputDirectory: 'test-results',
+                outputName: 'bucketing-lib.xml',
+            },
+        ],
+    ],
 }
 
-module.exports.reporters = [
-    'default',
-    [
-        'jest-junit',
-        {
-            outputDirectory: 'test-results',
-            outputName: `${module.exports.displayName}.xml`,
-        },
-    ],
-]
+module.exports = config
