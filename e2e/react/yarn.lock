@@ -1452,8 +1452,8 @@ __metadata:
 
 "@devcycle/react-client-sdk@file:../../dist/sdk/react::locator=react-e2e%40workspace%3A.":
   version: 0.0.0
-  resolution: "@devcycle/react-client-sdk@file:../../dist/sdk/react#../../dist/sdk/react::hash=e4c19a&locator=react-e2e%40workspace%3A."
-  checksum: 10/fbbe1b22e6691605cc12127dc766ff2bd01a446ded87e46f09199fb9cf48dbed3f9414f11cc9511a652a90d2741bf0a57b0040b3b8f15f35ee6c5bb8047c5996
+  resolution: "@devcycle/react-client-sdk@file:../../dist/sdk/react#../../dist/sdk/react::hash=71d702&locator=react-e2e%40workspace%3A."
+  checksum: 10/9b681a3652b0c220848ebd0a916f281349bf3e9699799cefa36310246c1d3418d76e5393b27d3a8817585542215a0c1b24014b7412ef04fad9a049a39448f7d3
   languageName: node
   linkType: hard
 
@@ -4260,7 +4260,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^9.0.7":
+"minimatch@npm:^9.0.1":
   version: 9.0.9
   resolution: "minimatch@npm:9.0.9"
   dependencies:

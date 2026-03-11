@@ -13952,7 +13952,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dns-packet@npm:^5.4.0":
+"dns-packet@npm:^5.2.2":
   version: 5.6.1
   resolution: "dns-packet@npm:5.6.1"
   dependencies:
@@ -16281,7 +16281,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-xml-parser@npm:^4.5.4":
+"fast-xml-parser@npm:^4.0.12, fast-xml-parser@npm:^4.4.1":
   version: 4.5.4
   resolution: "fast-xml-parser@npm:4.5.4"
   dependencies:
@@ -16670,16 +16670,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:^4.0.4":
-  version: 4.0.4
-  resolution: "form-data@npm:4.0.4"
+"form-data@npm:^4.0.0, form-data@npm:~4.0.0":
+  version: 4.0.5
+  resolution: "form-data@npm:4.0.5"
   dependencies:
     asynckit: "npm:^0.4.0"
     combined-stream: "npm:^1.0.8"
     es-set-tostringtag: "npm:^2.1.0"
     hasown: "npm:^2.0.2"
     mime-types: "npm:^2.1.12"
-  checksum: 10/a4b62e21932f48702bc468cc26fb276d186e6b07b557e3dd7cc455872bdbb82db7db066844a64ad3cf40eaf3a753c830538183570462d3649fdfd705601cbcfb
+  checksum: 10/52ecd6e927c8c4e215e68a7ad5e0f7c1031397439672fd9741654b4a94722c4182e74cc815b225dcb5be3f4180f36428f67c6dd39eaa98af0dcfdd26c00c19cd
   languageName: node
   linkType: hard
 
@@ -18158,7 +18158,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"immutable@npm:^4.3.8":
+"immutable@npm:^4.0.0":
   version: 4.3.8
   resolution: "immutable@npm:4.3.8"
   checksum: 10/27a134cec0089ba60c5f50fdd08a0296533c9ce6d112188461c89a6bb3c720368e4363dc5f8d40440c6f9120400867e9cf86bd7463c7d3ee12d4ad44f797d4cc
@@ -23047,7 +23047,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^5.1.8":
+"minimatch@npm:^5.0.1":
   version: 5.1.9
   resolution: "minimatch@npm:5.1.9"
   dependencies:
@@ -23056,7 +23056,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^9.0.7":
+"minimatch@npm:^9.0.1, minimatch@npm:^9.0.3, minimatch@npm:^9.0.4, minimatch@npm:^9.0.7":
   version: 9.0.9
   resolution: "minimatch@npm:9.0.9"
   dependencies:
@@ -23402,6 +23402,15 @@ __metadata:
   dependencies:
     node-gyp: "npm:latest"
   checksum: 10/1a5a53bea35ce2844f85c7d276d358fa131c6e60ee88bcb104b61596254963892378a54b7b65365ad1fe048b4c1aeeabf6e3966a2b293f68fb53a4f91b4337fc
+  languageName: node
+  linkType: hard
+
+"nanoid@npm:^3.3.6, nanoid@npm:^3.3.7":
+  version: 3.3.11
+  resolution: "nanoid@npm:3.3.11"
+  bin:
+    nanoid: bin/nanoid.cjs
+  checksum: 10/73b5afe5975a307aaa3c95dfe3334c52cdf9ae71518176895229b8d65ab0d1c0417dd081426134eb7571c055720428ea5d57c645138161e7d10df80815527c48
   languageName: node
   linkType: hard
 
@@ -28427,6 +28436,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"semver@npm:7.5.3":
+  version: 7.5.3
+  resolution: "semver@npm:7.5.3"
+  dependencies:
+    lru-cache: "npm:^6.0.0"
+  bin:
+    semver: bin/semver.js
+  checksum: 10/80b4b3784abff33bacf200727e012dc66768ed5835441e0a802ba9f3f5dd6b10ee366294711f5e7e13d73b82a6127ea55f11f9884d35e76a6a618dc11bc16ccf
+  languageName: node
+  linkType: hard
+
 "semver@npm:7.6.3, semver@npm:^7.6.3":
   version: 7.6.3
   resolution: "semver@npm:7.6.3"
@@ -30010,7 +30030,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svgo@npm:^2.8.1":
+"svgo@npm:^2.7.0":
   version: 2.8.2
   resolution: "svgo@npm:2.8.2"
   dependencies:
@@ -30027,7 +30047,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svgo@npm:^3.3.3":
+"svgo@npm:^3.0.2":
   version: 3.3.3
   resolution: "svgo@npm:3.3.3"
   dependencies:

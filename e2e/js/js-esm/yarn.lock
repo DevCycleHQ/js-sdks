@@ -35,8 +35,8 @@ __metadata:
 
 "@devcycle/js-client-sdk@file:../../../dist/sdk/js::locator=e2e-js-esm%40workspace%3A.":
   version: 0.0.0
-  resolution: "@devcycle/js-client-sdk@file:../../../dist/sdk/js#../../../dist/sdk/js::hash=648406&locator=e2e-js-esm%40workspace%3A."
-  checksum: 10/ee1bab33ecaa20454085541b61aaced210c2b74517f4a43c38aa826876f855e77f3a252c785acd35f6776a5364a7a23ae990c6bef870bf31ef6f30dc21202b60
+  resolution: "@devcycle/js-client-sdk@file:../../../dist/sdk/js#../../../dist/sdk/js::hash=941c36&locator=e2e-js-esm%40workspace%3A."
+  checksum: 10/59d2f19ea337582f23f1469a55eb7b81a724e7adfc7c3f0071ad6b35a5c83f32c584ca951e80bb49dcde5ec082848a164c8b3520c1f8c9da6d120047e35e4f8c
   languageName: node
   linkType: hard
 
@@ -2653,7 +2653,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^9.0.7":
+"minimatch@npm:^9.0.1":
   version: 9.0.9
   resolution: "minimatch@npm:9.0.9"
   dependencies:

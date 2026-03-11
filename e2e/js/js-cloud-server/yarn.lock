@@ -1511,8 +1511,8 @@ __metadata:
 
 "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server::locator=e2e-js-cloud-server%40workspace%3A.":
   version: 0.0.0
-  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=5b7069&locator=e2e-js-cloud-server%40workspace%3A."
-  checksum: 10/927fa09f6d4bdc3ff816b79f1945207ab291bb2c133db344bc73e1a349332e575d436095980c68a4e34345e98ac242ae6b006845090f5efac48a5fce12037936
+  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=2e3e79&locator=e2e-js-cloud-server%40workspace%3A."
+  checksum: 10/47bbbf6541ca81d095625a39cf8002626a5b103ce37d1f99c689e15231f03bc78cd7a20ccbdae05b04c6f4ecdcaa8028ddbca40dae7302e2e2fb8feed2d8168e
   languageName: node
   linkType: hard
 
@@ -5494,7 +5494,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^5.1.8":
+"minimatch@npm:^5.0.1":
   version: 5.1.9
   resolution: "minimatch@npm:5.1.9"
   dependencies:
@@ -5503,7 +5503,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^9.0.7":
+"minimatch@npm:^9.0.1, minimatch@npm:^9.0.7":
   version: 9.0.9
   resolution: "minimatch@npm:9.0.9"
   dependencies:
