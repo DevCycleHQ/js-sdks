@@ -28,6 +28,9 @@
     "resolutions": {
         "@types/react": "18.2.20",
         "@devcycle/js-client-sdk": "file:../../dist/sdk/js",
-        "@devcycle/types": "file:../../dist/lib/shared/types"
+        "@devcycle/types": "file:../../dist/lib/shared/types",
+        "tar@^6.1.2": "^7.5.11",
+        "tar@^6.1.11": "^7.5.11",
+        "serialize-javascript@^6.0.1": "^7.0.3"
     }
 }

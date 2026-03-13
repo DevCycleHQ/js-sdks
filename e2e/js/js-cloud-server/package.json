@@ -15,7 +15,10 @@
     "resolutions": {
         "@devcycle/types": "file:../../../dist/lib/shared/types",
         "cookie@^0.5.0": "0.7.0",
-        "esbuild@0.17.19": "~0.25.0"
+        "esbuild@0.17.19": "~0.25.0",
+        "tar@^6.1.2": "^7.5.11",
+        "tar@^6.1.11": "^7.5.11",
+        "minimatch@9.0.3": "^9.0.7"
     },
     "devDependencies": {
         "@nrwl/jest": "^18.1.2",
