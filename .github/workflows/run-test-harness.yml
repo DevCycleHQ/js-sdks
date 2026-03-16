@@ -10,7 +10,7 @@ jobs:
         runs-on: ubuntu-24-arm-16-core
         strategy:
             matrix:
-                node-version: [24]
+                node-version: ['24.x']
         steps:
             - uses: actions/checkout@v4
               with:
