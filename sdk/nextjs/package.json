@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/nextjs-sdk",
-    "version": "3.0.2",
+    "version": "3.0.3",
     "license": "MIT",
     "author": "DevCycle <support@devcycle.com>",
     "keywords": [
@@ -18,10 +18,10 @@
     },
     "homepage": "https://devcycle.com",
     "dependencies": {
-        "@devcycle/bucketing": "1.38.4",
-        "@devcycle/js-client-sdk": "1.47.7",
-        "@devcycle/react-client-sdk": "1.45.7",
-        "@devcycle/types": "1.32.4",
+        "@devcycle/bucketing": "1.38.5",
+        "@devcycle/js-client-sdk": "1.47.8",
+        "@devcycle/react-client-sdk": "1.45.8",
+        "@devcycle/types": "1.32.5",
         "class-transformer": "^0.5.1",
         "hoist-non-react-statics": "^3.3.2",
         "server-only": "^0.0.1"
