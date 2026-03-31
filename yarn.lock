@@ -28369,6 +28369,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"rollup-plugin-typescript2@patch:rollup-plugin-typescript2@npm%3A0.34.1#./.yarn/patches/rollup-plugin-typescript2-npm-0.34.1-5b4fdb5e3a.patch::locator=devcycle-js-sdks%40workspace%3A.":
+  version: 0.34.1
+  resolution: "rollup-plugin-typescript2@patch:rollup-plugin-typescript2@npm%3A0.34.1#./.yarn/patches/rollup-plugin-typescript2-npm-0.34.1-5b4fdb5e3a.patch::version=0.34.1&hash=6e7498&locator=devcycle-js-sdks%40workspace%3A."
+  dependencies:
+    "@rollup/pluginutils": "npm:^4.1.2"
+    find-cache-dir: "npm:^3.3.2"
+    fs-extra: "npm:^10.0.0"
+    semver: "npm:^7.3.7"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    rollup: ">=1.26.3"
+    typescript: ">=2.4.0"
+  checksum: 10/dea0ea22fbeab44ca2f44f2a4dc62878f09211203b824a997792acb5bbb095a44571f82d5946be3d9898336098d928bf4ed2adecb7081fae1da2e044720f5e8b
+  languageName: node
+  linkType: hard
+
 "rollup-pluginutils@npm:^2.8.1, rollup-pluginutils@npm:^2.8.2":
   version: 2.8.2
   resolution: "rollup-pluginutils@npm:2.8.2"

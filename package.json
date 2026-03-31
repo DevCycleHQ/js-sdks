@@ -240,6 +240,7 @@
         "serialize-javascript@^6.0.2": "^7.0.5",
         "serialize-javascript@^7.0.3": "^7.0.5",
         "@tootallnate/once@2": "^3.0.1",
+        "rollup-plugin-typescript2@0.34.1": "patch:rollup-plugin-typescript2@npm%3A0.34.1#./.yarn/patches/rollup-plugin-typescript2-npm-0.34.1-5b4fdb5e3a.patch",
         "rollup@^2.56.2": "^2.80.0",
         "minimatch@3.0.5": "^3.1.5",
         "minimatch@^3.0.2": "^3.1.5",
