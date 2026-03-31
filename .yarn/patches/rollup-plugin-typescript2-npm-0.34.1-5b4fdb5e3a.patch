@@ -1,0 +1,15 @@
+diff --git a/dist/rollup-plugin-typescript2.cjs.js b/dist/rollup-plugin-typescript2.cjs.js
+index 03f92fd8345de9735c5f67ed8dc3d7876ec18869..9bddf71972dcd1a060c2fbe5d265718878dd74be 100644
+--- a/dist/rollup-plugin-typescript2.cjs.js
++++ b/dist/rollup-plugin-typescript2.cjs.js
+@@ -27985,8 +27985,8 @@ function typescript(config = {}) {
+         verbosity: VerbosityLevel.Warning,
+         clean: false,
+         cacheRoot: findCacheDir({ name: "rollup-plugin-typescript2" }),
+-        include: ["*.ts+(|x)", "**/*.ts+(|x)"],
+-        exclude: ["*.d.ts", "**/*.d.ts"],
++        include: [/\.tsx?$/],
++        exclude: [/\.d\.ts$/],
+         abortOnError: true,
+         rollupCommonJSResolveHack: false,
+         tsconfig: undefined,
