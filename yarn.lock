@@ -2141,8 +2141,8 @@ __metadata:
     "@devcycle/types": "npm:1.32.5"
     nestjs-cls: "npm:^4.5.0"
   peerDependencies:
-    "@nestjs/common": ^10.3.3
-    "@nestjs/core": ^10.3.3
+    "@nestjs/common": ^10.3.3 || ^11.0.0
+    "@nestjs/core": ^10.3.3 || ^11.0.0
   languageName: unknown
   linkType: soft
 
@@ -5073,7 +5073,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/common@npm:^11.1.18":
+"@nestjs/common@npm:^11.1.19":
   version: 11.1.19
   resolution: "@nestjs/common@npm:11.1.19"
   dependencies:
@@ -5096,7 +5096,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/core@npm:^11.1.18":
+"@nestjs/core@npm:^11.1.19":
   version: 11.1.19
   resolution: "@nestjs/core@npm:11.1.19"
   dependencies:
@@ -14084,8 +14084,8 @@ __metadata:
     "@commitlint/cli": "npm:^16.3.0"
     "@commitlint/config-conventional": "npm:^18.6.3"
     "@devcycle/assemblyscript-json": "npm:^2.0.0"
-    "@nestjs/common": "npm:^11.1.18"
-    "@nestjs/core": "npm:^11.1.18"
+    "@nestjs/common": "npm:^11.1.19"
+    "@nestjs/core": "npm:^11.1.19"
     "@nrwl/js": "npm:16.10.0"
     "@nrwl/rollup": "npm:16.10.0"
     "@nx/cypress": "npm:16.10.0"
