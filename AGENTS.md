@@ -60,6 +60,10 @@
 -   Tests located in `__tests__/` directories or alongside source files.
 -   Mock implementations placed in `__mocks__/` directories within each package or module.
 
+## PR Descriptions
+
+-   Never add AI attribution footers (e.g., "🤖 Generated with Claude Code") to PR titles, bodies, or commit messages.
+
 ## Aviator CLI Workflow (optional)
 
 -   Use Aviator CLI (`av`) for managing stacked branches: `av branch chore-fix-invalid-input`

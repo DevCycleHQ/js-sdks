@@ -2082,7 +2082,7 @@ __metadata:
   resolution: "@devcycle/bucketing-assembly-script@workspace:lib/shared/bucketing-assembly-script"
   dependencies:
     "@devcycle/bucketing-test-data": "npm:1.36.5"
-    protobufjs: "npm:^7.4.0"
+    protobufjs: "npm:^7.5.5"
   languageName: unknown
   linkType: soft
 
@@ -5124,10 +5124,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:15.5.14":
-  version: 15.5.14
-  resolution: "@next/env@npm:15.5.14"
-  checksum: 10/1329983f0d0e762d5053ecf89e2f4de0926a972142fab8d4c836d46e89743d8efe10352e4194750d60038252918d982dd0a28449f9ada844a6f69e994fd3cef2
+"@next/env@npm:15.5.15":
+  version: 15.5.15
+  resolution: "@next/env@npm:15.5.15"
+  checksum: 10/563340390668c717ca179067c3caf7f9e12b282b66a05a5f6b3dec1ab64cfdd93e08d7f2ac4fdb37fffcb8c32911054a35e6c9d3a443fba990c2a0c868db0514
   languageName: node
   linkType: hard
 
@@ -5140,58 +5140,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-arm64@npm:15.5.14":
-  version: 15.5.14
-  resolution: "@next/swc-darwin-arm64@npm:15.5.14"
+"@next/swc-darwin-arm64@npm:15.5.15":
+  version: 15.5.15
+  resolution: "@next/swc-darwin-arm64@npm:15.5.15"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-x64@npm:15.5.14":
-  version: 15.5.14
-  resolution: "@next/swc-darwin-x64@npm:15.5.14"
+"@next/swc-darwin-x64@npm:15.5.15":
+  version: 15.5.15
+  resolution: "@next/swc-darwin-x64@npm:15.5.15"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-gnu@npm:15.5.14":
-  version: 15.5.14
-  resolution: "@next/swc-linux-arm64-gnu@npm:15.5.14"
+"@next/swc-linux-arm64-gnu@npm:15.5.15":
+  version: 15.5.15
+  resolution: "@next/swc-linux-arm64-gnu@npm:15.5.15"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-musl@npm:15.5.14":
-  version: 15.5.14
-  resolution: "@next/swc-linux-arm64-musl@npm:15.5.14"
+"@next/swc-linux-arm64-musl@npm:15.5.15":
+  version: 15.5.15
+  resolution: "@next/swc-linux-arm64-musl@npm:15.5.15"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-gnu@npm:15.5.14":
-  version: 15.5.14
-  resolution: "@next/swc-linux-x64-gnu@npm:15.5.14"
+"@next/swc-linux-x64-gnu@npm:15.5.15":
+  version: 15.5.15
+  resolution: "@next/swc-linux-x64-gnu@npm:15.5.15"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-musl@npm:15.5.14":
-  version: 15.5.14
-  resolution: "@next/swc-linux-x64-musl@npm:15.5.14"
+"@next/swc-linux-x64-musl@npm:15.5.15":
+  version: 15.5.15
+  resolution: "@next/swc-linux-x64-musl@npm:15.5.15"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@next/swc-win32-arm64-msvc@npm:15.5.14":
-  version: 15.5.14
-  resolution: "@next/swc-win32-arm64-msvc@npm:15.5.14"
+"@next/swc-win32-arm64-msvc@npm:15.5.15":
+  version: 15.5.15
+  resolution: "@next/swc-win32-arm64-msvc@npm:15.5.15"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-win32-x64-msvc@npm:15.5.14":
-  version: 15.5.14
-  resolution: "@next/swc-win32-x64-msvc@npm:15.5.14"
+"@next/swc-win32-x64-msvc@npm:15.5.15":
+  version: 15.5.15
+  resolution: "@next/swc-win32-x64-msvc@npm:15.5.15"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -14203,7 +14203,7 @@ __metadata:
     moment: "npm:^2.30.1"
     msw: "npm:^2.7.3"
     murmurhash: "npm:^2.0.1"
-    next: "npm:~15.5.14"
+    next: "npm:~15.5.15"
     nock: "npm:^13.3.8"
     npm-run-all: "npm:^4.1.5"
     nx: "npm:16.10.0"
@@ -14212,7 +14212,7 @@ __metadata:
     prettier: "npm:^2.8.8"
     prettier-eslint: "npm:^16.3.0"
     prettier-eslint-cli: "npm:^8.0.1"
-    protobufjs: "npm:^7.4.0"
+    protobufjs: "npm:^7.5.5"
     protobufjs-cli: "npm:^1.1.3"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
@@ -16970,23 +16970,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0":
-  version: 1.15.6
-  resolution: "follow-redirects@npm:1.15.6"
+"follow-redirects@npm:^1.16.0":
+  version: 1.16.0
+  resolution: "follow-redirects@npm:1.16.0"
   peerDependenciesMeta:
     debug:
       optional: true
-  checksum: 10/70c7612c4cab18e546e36b991bbf8009a1a41cf85354afe04b113d1117569abf760269409cb3eb842d9f7b03d62826687086b081c566ea7b1e6613cf29030bf7
-  languageName: node
-  linkType: hard
-
-"follow-redirects@npm:^1.15.11":
-  version: 1.15.11
-  resolution: "follow-redirects@npm:1.15.11"
-  peerDependenciesMeta:
-    debug:
-      optional: true
-  checksum: 10/07372fd74b98c78cf4d417d68d41fdaa0be4dcacafffb9e67b1e3cf090bc4771515e65020651528faab238f10f9b9c0d9707d6c1574a6c0387c5de1042cde9ba
+  checksum: 10/3fbe3d80b3b544c22705d837aa5d4a0d07a740d913534a2620b0a004c610af4148e3b58723536dd099aaa1c9d3a155964bde9665d6e5cb331460809a1fc572fd
   languageName: node
   linkType: hard
 
@@ -23876,19 +23866,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:~15.5.14":
-  version: 15.5.14
-  resolution: "next@npm:15.5.14"
+"next@npm:~15.5.15":
+  version: 15.5.15
+  resolution: "next@npm:15.5.15"
   dependencies:
-    "@next/env": "npm:15.5.14"
-    "@next/swc-darwin-arm64": "npm:15.5.14"
-    "@next/swc-darwin-x64": "npm:15.5.14"
-    "@next/swc-linux-arm64-gnu": "npm:15.5.14"
-    "@next/swc-linux-arm64-musl": "npm:15.5.14"
-    "@next/swc-linux-x64-gnu": "npm:15.5.14"
-    "@next/swc-linux-x64-musl": "npm:15.5.14"
-    "@next/swc-win32-arm64-msvc": "npm:15.5.14"
-    "@next/swc-win32-x64-msvc": "npm:15.5.14"
+    "@next/env": "npm:15.5.15"
+    "@next/swc-darwin-arm64": "npm:15.5.15"
+    "@next/swc-darwin-x64": "npm:15.5.15"
+    "@next/swc-linux-arm64-gnu": "npm:15.5.15"
+    "@next/swc-linux-arm64-musl": "npm:15.5.15"
+    "@next/swc-linux-x64-gnu": "npm:15.5.15"
+    "@next/swc-linux-x64-musl": "npm:15.5.15"
+    "@next/swc-win32-arm64-msvc": "npm:15.5.15"
+    "@next/swc-win32-x64-msvc": "npm:15.5.15"
     "@swc/helpers": "npm:0.5.15"
     caniuse-lite: "npm:^1.0.30001579"
     postcss: "npm:8.4.31"
@@ -23931,7 +23921,7 @@ __metadata:
       optional: true
   bin:
     next: dist/bin/next
-  checksum: 10/2a8515ab081f5b29e749257186cfcc8c07b578a5447535ad2f704d355cb88073ac152c5559576086cab6708fed21c0083bbf3406b743b602a30e429d5f3596fd
+  checksum: 10/f15867d9e068194376a9657a13b5bc28dee4afedf4a163304c49cf9cec008ad5b905b8f4639bbebd702f77342b76847252b02dffeb130dd07be24aa0d2a694f0
   languageName: node
   linkType: hard
 
@@ -27046,9 +27036,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"protobufjs@npm:^7.4.0":
-  version: 7.4.0
-  resolution: "protobufjs@npm:7.4.0"
+"protobufjs@npm:^7.5.5":
+  version: 7.5.5
+  resolution: "protobufjs@npm:7.5.5"
   dependencies:
     "@protobufjs/aspromise": "npm:^1.1.2"
     "@protobufjs/base64": "npm:^1.1.2"
@@ -27062,7 +27052,7 @@ __metadata:
     "@protobufjs/utf8": "npm:^1.1.0"
     "@types/node": "npm:>=13.7.0"
     long: "npm:^5.0.0"
-  checksum: 10/408423506610f70858d7593632f4a6aa4f05796c90fd632be9b9252457c795acc71aa6d3b54bb7f48a890141728fee4ca3906723ccea6c202ad71f21b3879b8b
+  checksum: 10/048898023a38d22f5fc9a1bcf0dcce5cfbcd37fb00753bd72283720eee7e2cb6055b23957542e5bcdc136379af66203a2ddb8d8c39d11f73169bacf07885fedd
   languageName: node
   linkType: hard
 
