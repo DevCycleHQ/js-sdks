@@ -269,7 +269,7 @@
         "yaml@^1.10.0": "^1.10.3",
         "yaml@^1.10.2": "^1.10.3",
         "yaml@^2.2.1": "^2.8.3",
-        "follow-redirects": ">=1.16.0"
+        "follow-redirects": "^1.16.0"
     },
     "config": {
         "commitizen": {
