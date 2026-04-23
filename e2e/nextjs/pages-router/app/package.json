@@ -26,6 +26,6 @@
         "@devcycle/types": "file:../../../../dist/lib/shared/types",
         "nanoid@^3.3.6": "^3.3.8",
         "lodash": "^4.18.1",
-        "uuid": "14.0.0"
+        "uuid": "^14.0.0"
     }
 }
