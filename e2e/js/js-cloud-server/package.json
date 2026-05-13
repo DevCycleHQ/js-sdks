@@ -35,7 +35,8 @@
         "yaml@^1.7.2": "^1.10.3",
         "defu": "^6.1.5",
         "follow-redirects": "^1.16.0",
-        "ip-address@npm:^9.0.5": "^10.1.1"
+        "ip-address@npm:^9.0.5": "^10.1.1",
+        "@babel/plugin-transform-modules-systemjs": "^7.29.4"
     },
     "devDependencies": {
         "@nrwl/jest": "^18.1.2",
