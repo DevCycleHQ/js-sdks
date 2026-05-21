@@ -33314,7 +33314,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:>=5.2.4":
+"webpack-dev-server@npm:^5.2.4":
   version: 5.2.4
   resolution: "webpack-dev-server@npm:5.2.4"
   dependencies:
