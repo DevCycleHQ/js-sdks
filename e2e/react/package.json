@@ -16,7 +16,7 @@
         "ts-loader": "9.5.1",
         "webpack": "^5.90.3",
         "webpack-cli": "^5.1.4",
-        "webpack-dev-server": "^5.2.1"
+        "webpack-dev-server": "^5.2.4"
     },
     "dependencies": {
         "@devcycle/react-client-sdk": "file:../../dist/sdk/react",
@@ -43,6 +43,7 @@
         "lodash": "^4.18.1",
         "follow-redirects": "^1.16.0",
         "ip-address@npm:^9.0.5": "^10.1.1",
-        "@babel/plugin-transform-modules-systemjs": "^7.29.4"
+        "@babel/plugin-transform-modules-systemjs": "^7.29.4",
+        "uuid": "^11.1.1"
     }
 }
