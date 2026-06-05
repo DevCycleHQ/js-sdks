@@ -33,6 +33,7 @@ jobs:
             - run: yarn --immutable
             - name: Install Playwright Browsers
               shell: bash
+              timeout-minutes: 10
               run: yarn playwright install --with-deps
             - name: Run Affected E2E Tests
               shell: bash
