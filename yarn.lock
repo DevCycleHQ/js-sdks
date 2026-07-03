@@ -134,7 +134,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.29.6":
+"@babel/core@npm:^7.29.7":
   version: 7.29.7
   resolution: "@babel/core@npm:7.29.7"
   dependencies:
@@ -14934,7 +14934,7 @@ __metadata:
   resolution: "devcycle-js-sdks@workspace:."
   dependencies:
     "@altack/nx-bundlefy": "npm:^0.16.0"
-    "@babel/core": "npm:^7.29.6"
+    "@babel/core": "npm:^7.29.7"
     "@babel/preset-react": "npm:^7.26.3"
     "@cloudflare/workers-types": "npm:^4.20250321.0"
     "@commitlint/cli": "npm:^16.3.0"
@@ -15068,8 +15068,8 @@ __metadata:
     prettier: "npm:^2.8.8"
     prettier-eslint: "npm:^16.3.0"
     prettier-eslint-cli: "npm:^8.0.1"
-    protobufjs: "npm:^7.6.3"
-    protobufjs-cli: "npm:^1.3.2"
+    protobufjs: "npm:^7.6.4"
+    protobufjs-cli: "npm:^1.3.3"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
     react-is: "npm:18.2.0"
@@ -21854,7 +21854,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^4.2.0":
+"js-yaml@npm:^4.3.0":
   version: 4.3.0
   resolution: "js-yaml@npm:4.3.0"
   dependencies:
@@ -23162,7 +23162,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it@npm:^14.2.0":
+"markdown-it@npm:^14.3.0":
   version: 14.3.0
   resolution: "markdown-it@npm:14.3.0"
   dependencies:
@@ -27989,7 +27989,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"protobufjs-cli@npm:^1.3.2":
+"protobufjs-cli@npm:^1.3.3":
   version: 1.3.3
   resolution: "protobufjs-cli@npm:1.3.3"
   dependencies:
@@ -28012,7 +28012,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"protobufjs@npm:^7.6.3":
+"protobufjs@npm:^7.6.4":
   version: 7.6.4
   resolution: "protobufjs@npm:7.6.4"
   dependencies:
