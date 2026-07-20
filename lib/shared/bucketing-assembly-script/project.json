@@ -135,7 +135,7 @@
                         "command": "sed -i.bu 's/export async function instantiate/exports.instantiate = async function instantiate/g' build/bucketing-lib.worker.js"
                     },
                     {
-                        "command": "rm build/bucketing-lib.release.js.bu && rm build/bucketing-lib.debug.js.bu && rm build/bucketing-lib.worker.js.bu"
+                        "command": "rm -f build/bucketing-lib.release.js.bu build/bucketing-lib.debug.js.bu build/bucketing-lib.worker.js.bu"
                     }
                 ],
                 "cwd": "lib/shared/bucketing-assembly-script",
