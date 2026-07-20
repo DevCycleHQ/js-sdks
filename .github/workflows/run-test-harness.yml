@@ -33,6 +33,20 @@ jobs:
                   if yarn nx print-affected --base=origin/main --select=projects | grep -E '(^nodejs|[^-]nodejs)'; then
                     echo "TRIGGER_NODEJS_TEST_HARNESS=true" >> $GITHUB_ENV
                   fi
+            - name: Diagnose Docker build (capture install.sh output)
+              if: contains(env.TRIGGER_NODEJS_TEST_HARNESS, 'true')
+              continue-on-error: true
+              run: |
+                git clone --depth=1 https://github.com/DevCycleHQ/test-harness.git /tmp/th-debug
+                echo "=== Building of-nodejs Docker image with full logs ==="
+                docker buildx build \
+                  --build-arg SDK_GITHUB_SHA=${{ github.event.pull_request.head.sha }} \
+                  --build-arg SDKS_TO_TEST=of-nodejs \
+                  --no-cache \
+                  --progress=plain \
+                  -f /tmp/th-debug/proxies/openfeature-nodejs/Dockerfile \
+                  /tmp/th-debug/proxies/openfeature-nodejs/ 2>&1 || true
+                echo "=== Docker build diagnostic done ==="
             - uses: DevCycleHQ/test-harness@main
               if: contains(env.TRIGGER_NODEJS_TEST_HARNESS, 'true')
               with:
