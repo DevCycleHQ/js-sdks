@@ -208,6 +208,11 @@
         "webpack-merge": "^5.10.0",
         "wrangler": "^3.114.2"
     },
+    "dependenciesMeta": {
+        "canvas": {
+            "built": false
+        }
+    },
     "lint-staged": {
         "**/*.{ts,js}": [
             "nx affected --uncommitted --parallel --target=check-types && :",

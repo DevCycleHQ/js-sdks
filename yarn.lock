@@ -15105,6 +15105,9 @@ __metadata:
     webpack: "npm:^5.99.8"
     webpack-merge: "npm:^5.10.0"
     wrangler: "npm:^3.114.2"
+  dependenciesMeta:
+    canvas:
+      built: false
   languageName: unknown
   linkType: soft
 
