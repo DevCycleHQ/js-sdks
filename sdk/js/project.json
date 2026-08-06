@@ -81,7 +81,7 @@
         "build:emit-legacy-types": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "npx --yes downlevel-dts . ts3.5 --to=3.5",
+                "command": "npx --yes --package=downlevel-dts@0.11.0 --package=typescript@$(node -p \"require('typescript/package.json').version\") downlevel-dts . ts3.5 --to=3.5",
                 "cwd": "dist/sdk/js",
                 "forwardAllArgs": true
             },
