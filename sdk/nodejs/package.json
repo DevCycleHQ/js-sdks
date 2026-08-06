@@ -23,15 +23,15 @@
         "@devcycle/bucketing-assembly-script": "1.42.6",
         "@devcycle/js-cloud-server-sdk": "1.33.5",
         "@devcycle/types": "1.32.5",
-        "@openfeature/core": "~1.8.1",
-        "@openfeature/server-sdk": "~1.18.0",
+        "@openfeature/core": "~1.12.0",
+        "@openfeature/server-sdk": "~1.23.0",
         "cross-fetch": "^4.1.0",
         "eventsource": "^2.0.2",
         "fetch-retry": "^5.0.6"
     },
     "peerDependencies": {
         "@devcycle/js-client-sdk": "^1.36.2",
-        "@openfeature/multi-provider": "^0.1.2"
+        "@openfeature/multi-provider": "^0.1.3"
     },
     "peerDependenciesMeta": {
         "@devcycle/js-client-sdk": {

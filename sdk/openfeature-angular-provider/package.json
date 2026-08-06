@@ -24,8 +24,8 @@
         "@devcycle/openfeature-web-provider": "1.12.8"
     },
     "peerDependencies": {
-        "@openfeature/multi-provider-web": "^0.0.3",
-        "@openfeature/web-sdk": "^1.5.0"
+        "@openfeature/multi-provider-web": "^0.0.4",
+        "@openfeature/web-sdk": "^1.10.0"
     },
     "peerDependenciesMeta": {
         "@openfeature/multi-provider-web": {
