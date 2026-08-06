@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/react-client-sdk",
-    "version": "1.45.8",
+    "version": "1.45.9",
     "description": "The DevCycle React SDK used for feature management.",
     "author": "DevCycle <support@devcycle.com>",
     "keywords": [
@@ -27,8 +27,8 @@
         "cross-fetch": "4.1.0"
     },
     "dependencies": {
-        "@devcycle/js-client-sdk": "1.47.8",
-        "@devcycle/types": "1.32.5",
+        "@devcycle/js-client-sdk": "1.47.9",
+        "@devcycle/types": "1.32.6",
         "hoist-non-react-statics": "^3.3.2"
     },
     "peerDependencies": {
