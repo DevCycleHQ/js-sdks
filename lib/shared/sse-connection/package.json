@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/sse-connection",
-    "version": "1.4.6",
+    "version": "1.4.7",
     "license": "MIT",
     "dependencies": {
         "eventsource": "^2.0.2"
