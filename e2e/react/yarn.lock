@@ -1665,41 +1665,41 @@ __metadata:
   linkType: hard
 
 "@devcycle/js-client-sdk@file:../../dist/sdk/js::locator=react-e2e%40workspace%3A.":
-  version: 1.47.8
-  resolution: "@devcycle/js-client-sdk@file:../../dist/sdk/js#../../dist/sdk/js::hash=46d46d&locator=react-e2e%40workspace%3A."
+  version: 1.47.10
+  resolution: "@devcycle/js-client-sdk@file:../../dist/sdk/js#../../dist/sdk/js::hash=91ea61&locator=react-e2e%40workspace%3A."
   dependencies:
-    "@devcycle/types": "npm:1.32.5"
+    "@devcycle/types": "npm:1.32.7"
     fetch-retry: "npm:^5.0.6"
     lodash: "npm:^4.17.21"
     ua-parser-js: "npm:^1.0.40"
-    uuid: "npm:^8.3.2"
-  checksum: 10/3c7775d4a4ad744ea7962b645d62f36bc3444dc99e4c4ae6b1c9628458bfe0dc9de23fa83e506ab3fddd79390eb0a046d77312a29a8ea15570299a1d62d6e647
+    uuid: "npm:^11.1.1"
+  checksum: 10/0fd9a701e0343d1d5d5635372bfc86d04075018ae8a4e9d63692776e2430a4f0f9c864f734eebb2499492201bad028bdce8ad66372102b8ae32965519d999de3
   languageName: node
   linkType: hard
 
 "@devcycle/react-client-sdk@file:../../dist/sdk/react::locator=react-e2e%40workspace%3A.":
-  version: 1.45.7
-  resolution: "@devcycle/react-client-sdk@file:../../dist/sdk/react#../../dist/sdk/react::hash=edae91&locator=react-e2e%40workspace%3A."
+  version: 1.45.10
+  resolution: "@devcycle/react-client-sdk@file:../../dist/sdk/react#../../dist/sdk/react::hash=d1ffa8&locator=react-e2e%40workspace%3A."
   dependencies:
-    "@devcycle/js-client-sdk": "npm:1.47.7"
-    "@devcycle/types": "npm:1.32.4"
+    "@devcycle/js-client-sdk": "npm:1.47.10"
+    "@devcycle/types": "npm:1.32.7"
     hoist-non-react-statics: "npm:^3.3.2"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 10/8d3f633cc2188e3648d65a373663ab8757c605a33ffe46a248b77946443c4a6150619dffe320c036b111b5a39bfa14efa1f7ad353d0da3d8b3140431ce461f9e
+  checksum: 10/8f6845a6c27ac6da1831539e933acda33ed92135d9a09d0a895b4f1d15d6147c58c4ed0b60526c7b8d5932b87d0b4a4444f6bf03d1c7f2af5254f11efe99bf8d
   languageName: node
   linkType: hard
 
 "@devcycle/types@file:../../dist/lib/shared/types::locator=react-e2e%40workspace%3A.":
-  version: 1.32.5
-  resolution: "@devcycle/types@file:../../dist/lib/shared/types#../../dist/lib/shared/types::hash=fb742a&locator=react-e2e%40workspace%3A."
+  version: 1.32.7
+  resolution: "@devcycle/types@file:../../dist/lib/shared/types#../../dist/lib/shared/types::hash=b8561f&locator=react-e2e%40workspace%3A."
   dependencies:
     class-transformer: "npm:0.5.1"
     class-validator: "npm:0.14.1"
     iso-639-1: "npm:^2.1.15"
     lodash: "npm:^4.17.21"
     reflect-metadata: "npm:^0.1.14"
-  checksum: 10/e01ff47223a78bf7a17601c6dfc960dac9811831276c0526d0e10966cbb5b7c24ca3badadda55399a623bae357300418929b41c0db69e74efa2f1a52e080e359
+  checksum: 10/7e28f83c5817d70bb4dbf0c41e1fc6e6b737bc0238b86d98199c4fc8d016020581bcd063ba649c977bd678b345a0128fdf5dfca09dc051f4d6847589f8ac591a
   languageName: node
   linkType: hard
 
@@ -2835,13 +2835,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"brace-expansion@npm:^1.1.16":
-  version: 1.1.16
-  resolution: "brace-expansion@npm:1.1.16"
+"brace-expansion@npm:^1.1.18":
+  version: 1.1.18
+  resolution: "brace-expansion@npm:1.1.18"
   dependencies:
     balanced-match: "npm:^1.0.0"
     concat-map: "npm:0.0.1"
-  checksum: 10/94498bead66c51536df5b7bf1b0a0e581a5b7f86888be10481d06920c4bd9d976e003b13a3d19fddc733f21a09d162ff72f90e18b2c9d062b15121e973d0e13b
+  checksum: 10/b55a3c03239b8d2127c7cbb3408c9ad3a556a8c303bf3064df78bfb7c093160fc8f6e0a32e42a850a78eba12f29ccf6ef997690b9acf945d242c56c61c4aa977
   languageName: node
   linkType: hard
 
@@ -4548,14 +4548,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^4.3.0":
-  version: 4.3.0
-  resolution: "js-yaml@npm:4.3.0"
+"js-yaml@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "js-yaml@npm:4.3.1"
   dependencies:
     argparse: "npm:^2.0.1"
   bin:
     js-yaml: bin/js-yaml.js
-  checksum: 10/2bcec3a8118d7f744badeb04e14366578d234a736f353d41fe35d2305e4ce2409a8e041d277f07cd6bbc8aaa12128d650a68ce43247072519bede20962d2126f
+  checksum: 10/2ce71b5d632abbd77da80447bf860e8a0264e54bffe94840984887d58b023761495b523727547904517a6107a1ef189854b361e0fc44995ee13a84f222d7bd42
   languageName: node
   linkType: hard
 
