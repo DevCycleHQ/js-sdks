@@ -13926,7 +13926,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"brace-expansion@npm:^1.1.16":
+"brace-expansion@npm:^1.1.18":
   version: 1.1.18
   resolution: "brace-expansion@npm:1.1.18"
   dependencies:
@@ -19397,7 +19397,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-uri@npm:^3.1.4":
+"fast-uri@npm:^3.1.5":
   version: 3.1.5
   resolution: "fast-uri@npm:3.1.5"
   checksum: 10/784bef687ca3ecfb4587a05104a4d41101796f0fec72be47a9abed743b10109e69a24d1ad0854ee7d2705912dc2ca9d93e03d35b65df0a3da0339e05b5d83b5c
@@ -24055,7 +24055,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^3.15.0":
+"js-yaml@npm:^3.15.1":
   version: 3.15.1
   resolution: "js-yaml@npm:3.15.1"
   dependencies:
@@ -24067,7 +24067,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^4.3.0":
+"js-yaml@npm:^4.3.1":
   version: 4.3.1
   resolution: "js-yaml@npm:4.3.1"
   dependencies:
@@ -35531,7 +35531,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^6.27.0":
+"undici@npm:^6.28.0":
   version: 6.28.0
   resolution: "undici@npm:6.28.0"
   checksum: 10/672a7a53bd1f6c80edb73b357ab36e98ef9e474024c442aab2b8ea2bc32f1103cab05525c78661ae724f3e1340e23d03efb9730fba28e76218ab0ec52e15d75a
