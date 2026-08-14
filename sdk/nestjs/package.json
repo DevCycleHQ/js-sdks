@@ -30,14 +30,6 @@
     "engines": {
         "node": ">=16.0.0"
     },
-    "main": "./index.cjs",
-    "module": "./index.js",
-    "types": "./src/index.d.ts",
-    "exports": {
-        ".": {
-            "types": "./src/index.d.ts",
-            "import": "./index.js",
-            "require": "./index.cjs"
-        }
-    }
+    "main": "src/index.js",
+    "types": "src/index.d.ts"
 }
