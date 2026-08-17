@@ -4,18 +4,36 @@
     "implicitDependencies": ["js"],
     "targets": {
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/openfeature-react-provider",
                 "tsConfig": "sdk/openfeature-react-provider/tsconfig.lib.json",
-                "packageJson": "sdk/openfeature-react-provider/package.json",
                 "main": "sdk/openfeature-react-provider/src/index.ts",
-                "assets": ["sdk/openfeature-react-provider/*.md"]
+                "additionalEntryPoints": [
+                    "sdk/openfeature-react-provider/strategy.ts"
+                ],
+                "format": ["cjs"],
+                "platform": "browser",
+                "bundle": true,
+                "declaration": true,
+                "sourcemap": true,
+                "assets": [
+                    "sdk/openfeature-react-provider/*.md",
+                    "sdk/openfeature-react-provider/package.json"
+                ],
+                "external": [
+                    "@devcycle/js-client-sdk",
+                    "@devcycle/openfeature-web-provider",
+                    "@openfeature/*"
+                ],
+                "esbuildOptions": {
+                    "outExtension": { ".js": ".js" }
+                }
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["sdk/openfeature-react-provider/**/*.ts"]

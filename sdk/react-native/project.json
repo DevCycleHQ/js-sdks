@@ -13,7 +13,7 @@
             }
         },
         "build": {
-            "executor": "@nrwl/rollup:rollup",
+            "executor": "@nx/rollup:rollup",
             "outputs": ["{options.outputPath}"],
             "dependsOn": ["shared-types:build", "js:build", "react:build"],
             "options": {
@@ -35,7 +35,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [

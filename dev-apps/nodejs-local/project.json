@@ -13,7 +13,15 @@
                 "tsConfig": "dev-apps/nodejs-local/tsconfig.app.json",
                 "webpackConfig": "dev-apps/nodejs-local/webpack.config.js",
                 "compiler": "tsc",
-                "target": "node"
+                "target": "node",
+                "external": ["express", "class-transformer"],
+                "assets": [
+                    {
+                        "glob": "**/*.wasm",
+                        "input": "lib/shared/bucketing-assembly-script/build",
+                        "output": "lib/shared/bucketing-assembly-script/build"
+                    }
+                ]
             }
         },
         "serve": {
@@ -30,7 +38,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["dev-apps/nodejs-local/**/*.ts"]

@@ -1,7 +1,7 @@
 name: Nx Affected E2E
 on:
-    pull_request:
-        branches: [main]
+  pull_request:
+    branches: [main]
 jobs:
     build:
         runs-on: ubuntu-latest-8-core
@@ -35,6 +35,9 @@ jobs:
               shell: bash
               timeout-minutes: 10
               run: yarn playwright install --with-deps
+            - name: Build shared libraries
+              shell: bash
+              run: yarn nx run-many -t build -p shared-types shared-bucketing server-request js-cloud-server-sdk nextjs js react --parallel=1
             - name: Run Affected E2E Tests
               shell: bash
               run: yarn affected:e2e

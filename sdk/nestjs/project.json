@@ -11,7 +11,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
@@ -36,6 +36,9 @@
         },
         "build": {
             "executor": "@nx/js:tsc",
+            "metadata": {
+                "description": "Must stay on @nx/js:tsc. esbuild does not implement emitDecoratorMetadata, which NestJS DI needs to resolve DevCycleService's constructor dependencies. Under esbuild the metadata is dropped, Nest injects undefined without throwing, and the failure only surfaces on the first variable evaluation."
+            },
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/nestjs",

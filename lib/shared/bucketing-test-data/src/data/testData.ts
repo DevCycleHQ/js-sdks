@@ -7,7 +7,9 @@ import {
     FilterType,
     PublicAudience,
     PublicEnvironment,
+    PublicFeature,
     PublicProject,
+    PublicTarget,
     PublicVariable,
     PublicVariation,
     TargetAudience,
@@ -971,12 +973,10 @@ export const configWithBucketingKey = (bucketingKey: string): ConfigBody => ({
         ...feature,
         configuration: {
             ...feature.configuration,
-            targets: feature.configuration.targets.map((target) => {
-                return {
-                    ...target,
-                    bucketingKey,
-                }
-            }),
+            targets: feature.configuration.targets.map((target) => ({
+                ...target,
+                bucketingKey,
+            })),
         },
     })),
 })

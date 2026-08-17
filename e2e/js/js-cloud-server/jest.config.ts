@@ -1,5 +1,6 @@
-/* eslint-disable */
-export default {
+import type { JestConfigWithTsJest } from 'ts-jest'
+
+const config: JestConfigWithTsJest = {
     displayName: 'e2e-js-cloud-server',
     globals: {
         'ts-jest': {
@@ -13,15 +14,16 @@ export default {
     collectCoverage: false,
     maxWorkers: 1,
     testTimeout: 60000,
+    reporters: [
+        'default',
+        [
+            'jest-junit',
+            {
+                outputDirectory: 'test-results',
+                outputName: 'e2e-js-cloud-server.xml',
+            },
+        ],
+    ],
 }
 
-module.exports.reporters = [
-    'default',
-    [
-        'jest-junit',
-        {
-            outputDirectory: 'test-results',
-            outputName: `${module.exports.displayName}.xml`,
-        },
-    ],
-]
+export default config

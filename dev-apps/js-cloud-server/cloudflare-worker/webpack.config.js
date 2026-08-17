@@ -1,11 +1,11 @@
 const { composePlugins, withNx } = require('@nx/webpack')
 
 module.exports = composePlugins(withNx(), (config, { options }) => {
+    config.node = {
+        __dirname: true,
+    }
     if (!config.resolve) {
         config.resolve = {}
-    }
-    config.resolve.extensionAlias = {
-        '.js': ['.ts', '.js'],
     }
     // Disable browser field resolution for node targets
     config.resolve.mainFields = ['main', 'module']

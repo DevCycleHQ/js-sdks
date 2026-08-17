@@ -5,17 +5,29 @@
     "projectType": "library",
     "targets": {
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/lib/shared/server-request",
                 "main": "lib/shared/server-request/src/index.ts",
                 "tsConfig": "lib/shared/server-request/tsconfig.lib.json",
-                "assets": ["lib/shared/server-request/*.md"]
+                "format": ["cjs"],
+                "platform": "node",
+                "bundle": true,
+                "declaration": true,
+                "sourcemap": true,
+                "assets": [
+                    "lib/shared/server-request/*.md",
+                    "lib/shared/server-request/package.json"
+                ],
+                "external": ["cross-fetch", "fetch-retry"],
+                "esbuildOptions": {
+                    "outExtension": { ".js": ".js" }
+                }
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["lib/shared/server-request/**/*.ts"]

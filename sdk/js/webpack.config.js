@@ -1,17 +1,21 @@
-module.exports = (config, { options }) => {
+const { composePlugins, withNx } = require('@nx/webpack')
+const path = require('path')
+
+module.exports = composePlugins(withNx(), (config, { options }) => {
     const libraryTarget = options.libraryTarget
     const libraryName = options.libraryName
 
+    config.optimization = config.optimization || {}
     config.optimization.runtimeChunk = false
 
-    try {
+    config.entry = config.entry || {}
+    if (config.entry.main) {
         delete config.entry.main
-    } catch (error) {
-        console.warn(`Could not delete entry.main: ${error}`)
     }
 
+    const entryPath = path.resolve(__dirname, '../../', options.main)
     config.entry[libraryName] = {
-        import: options.main,
+        import: entryPath,
         library: {
             name: libraryName,
             type: libraryTarget,
@@ -25,4 +29,4 @@ module.exports = (config, { options }) => {
     }
 
     return config
-}
+})

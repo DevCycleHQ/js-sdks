@@ -12,7 +12,7 @@ export const setDebugUser = async (user: DevCycleUser): Promise<void> => {
     const cookieStore = await cookies()
     cookieStore.set(debugUserCookieName, JSON.stringify(user), {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: process.env['NODE_ENV'] === 'production',
         sameSite: 'strict',
         path: '/',
     })

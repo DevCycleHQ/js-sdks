@@ -14,7 +14,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
@@ -42,28 +42,35 @@
             ]
         },
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/esbuild:esbuild",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/sdk/nodejs",
                 "tsConfig": "sdk/nodejs/tsconfig.lib.json",
-                "packageJson": "sdk/nodejs/package.json",
                 "main": "sdk/nodejs/src/index.ts",
-                "assets": ["sdk/nodejs/*.md"],
+                "additionalEntryPoints": ["sdk/nodejs/openfeature-strategy.ts"],
+                "format": ["cjs"],
+                "platform": "node",
+                "bundle": true,
+                "declaration": true,
+                "sourcemap": true,
+                "assets": ["sdk/nodejs/*.md", "sdk/nodejs/package.json"],
                 "external": [
-                    "shared-types",
-                    "shared-bucketing-as",
-                    "shared-bucketing-test-data",
-                    "js-cloud-server-sdk",
-                    "js"
-                ]
-            },
-            "dependsOn": [
-                {
-                    "target": "build",
-                    "dependencies": true
+                    "@devcycle/types",
+                    "@devcycle/bucketing-assembly-script",
+                    "@devcycle/js-cloud-server-sdk",
+                    "@devcycle/js-client-sdk",
+                    "@openfeature/*",
+                    "cross-fetch",
+                    "eventsource",
+                    "fetch-retry"
+                ],
+                "esbuildOptions": {
+                    "outExtension": {
+                        ".js": ".js"
+                    }
                 }
-            ]
+            }
         },
         "npm-publish": {
             "executor": "nx:run-commands",

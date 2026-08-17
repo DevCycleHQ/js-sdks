@@ -19,7 +19,7 @@
             ]
         }
     },
-    "types": "./index.cjs.d.ts",
+    "types": "./index.d.ts",
     "devDependencies": {
         "cross-fetch": "^4.1.0"
     },

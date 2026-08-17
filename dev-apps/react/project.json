@@ -48,7 +48,7 @@
             "defaultConfiguration": "development"
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["dev-apps/react/**/*.{ts,tsx,js,jsx}"]
