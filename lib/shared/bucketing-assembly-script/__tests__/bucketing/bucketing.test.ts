@@ -1720,6 +1720,69 @@ describe('Rollout Logic', () => {
             ).toBeTruthy()
         })
 
+        // A rollout that sits at 100% for its whole window must let everyone
+        // through immediately. The interpolation must be
+        // start + (end - start) * t, not (start + (end - start)) * t.
+        // it.failing: asserts the bug still exists. Flipped to a normal
+        // it() in the commit that fixes the interpolation.
+        it.failing('should pass everyone when the rollout is 100% for its whole window', () => {
+            const rollout = {
+                startDate: moment().subtract(1, 'minute').toDate(),
+                startPercentage: 1,
+                type: 'gradual',
+                stages: [
+                    {
+                        percentage: 1,
+                        date: moment().add(1, 'days').toDate(),
+                        type: 'linear',
+                    },
+                ],
+            }
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0 }),
+            ).toBeTruthy()
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.25 }),
+            ).toBeTruthy()
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.5 }),
+            ).toBeTruthy()
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.99 }),
+            ).toBeTruthy()
+        })
+
+        // Halfway through a 50% -> 100% ramp the rollout is at 75%, not 50%.
+        // Guards the same interpolation for any non-zero startPercentage.
+        // it.failing: asserts the bug still exists. Flipped to a normal
+        // it() in the commit that fixes the interpolation.
+        it.failing('should interpolate from a non-zero startPercentage', () => {
+            const rollout = {
+                startDate: moment().subtract(1, 'days').toDate(),
+                startPercentage: 0.5,
+                type: 'gradual',
+                stages: [
+                    {
+                        percentage: 1,
+                        date: moment().add(1, 'days').toDate(),
+                        type: 'linear',
+                    },
+                ],
+            }
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.5 }),
+            ).toBeTruthy()
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.74 }),
+            ).toBeTruthy()
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.76 }),
+            ).toBeFalsy()
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.9 }),
+            ).toBeFalsy()
+        })
+
         it('should not pass rollout for startDates in the future', () => {
             const rollout = {
                 startDate: moment().add(1, 'days').toDate(),
