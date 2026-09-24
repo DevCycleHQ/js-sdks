@@ -1723,9 +1723,7 @@ describe('Rollout Logic', () => {
         // A rollout that sits at 100% for its whole window must let everyone
         // through immediately. The interpolation must be
         // start + (end - start) * t, not (start + (end - start)) * t.
-        // it.failing: asserts the bug still exists. Flipped to a normal
-        // it() in the commit that fixes the interpolation.
-        it.failing('should pass everyone when the rollout is 100% for its whole window', () => {
+        it('should pass everyone when the rollout is 100% for its whole window', () => {
             const rollout = {
                 startDate: moment().subtract(1, 'minute').toDate(),
                 startPercentage: 1,
@@ -1754,9 +1752,7 @@ describe('Rollout Logic', () => {
 
         // Halfway through a 50% -> 100% ramp the rollout is at 75%, not 50%.
         // Guards the same interpolation for any non-zero startPercentage.
-        // it.failing: asserts the bug still exists. Flipped to a normal
-        // it() in the commit that fixes the interpolation.
-        it.failing('should interpolate from a non-zero startPercentage', () => {
+        it('should interpolate from a non-zero startPercentage', () => {
             const rollout = {
                 startDate: moment().subtract(1, 'days').toDate(),
                 startPercentage: 0.5,

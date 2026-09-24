@@ -112,9 +112,9 @@ export function getCurrentRolloutPercentage(
     }
 
     return (
-        (currentStage.percentage +
-            (nextStage.percentage - currentStage.percentage)) *
-        f64(currentDatePercentage)
+        currentStage.percentage +
+        (nextStage.percentage - currentStage.percentage) *
+            f64(currentDatePercentage)
     )
 }
 
