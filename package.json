@@ -241,6 +241,7 @@
         "tar@^6.1.0": "7.5.21",
         "tar@^6.1.2": "7.5.21",
         "tar@^6.1.11": "7.5.21",
+        "image-size@^1.0.2": "^2.0.3",
         "serialize-javascript@^6.0.0": "^7.0.5",
         "serialize-javascript@^6.0.1": "^7.0.5",
         "serialize-javascript@^6.0.2": "^7.0.5",
