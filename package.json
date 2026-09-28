@@ -171,7 +171,7 @@
         "jest-react-native": "18.0.0",
         "jsonc-eslint-parser": "^2.4.0",
         "lerna": "^5.6.2",
-        "metro": "0.76.7",
+        "metro": "patch:metro@npm%3A0.76.7#~/.yarn/patches/metro-npm-0.76.7-9139533605.patch",
         "metro-babel-register": "0.76.7",
         "metro-react-native-babel-preset": "0.76.7",
         "metro-react-native-babel-transformer": "0.76.7",
@@ -322,7 +322,11 @@
         "sharp": "^0.35.4",
         "svgo@^2.7.0": "^2.8.4",
         "svgo@^3.0.2": "^3.3.5",
-        "immutable": "^4.3.9"
+        "immutable": "^4.3.9",
+        "metro@npm:0.76.8": "patch:metro@npm%3A0.76.8#~/.yarn/patches/metro-npm-0.76.8-7614864b79.patch",
+        "metro@npm:0.76.7": "patch:metro@npm%3A0.76.7#~/.yarn/patches/metro-npm-0.76.7-9139533605.patch",
+        "metro@npm:^0.81.0": "patch:metro@npm%3A0.81.4#~/.yarn/patches/metro-npm-0.81.4-6bc8121131.patch",
+        "metro@npm:0.81.4": "patch:metro@npm%3A0.81.4#~/.yarn/patches/metro-npm-0.81.4-6bc8121131.patch"
     },
     "config": {
         "commitizen": {
