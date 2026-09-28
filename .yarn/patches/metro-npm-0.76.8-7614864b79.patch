@@ -1,0 +1,17 @@
+diff --git a/src/Assets.js b/src/Assets.js
+index af14a3a42cd827064d33f40fc5b61d75c9ac5fb4..83f81deb05c0f18861c37a9959456893f18d6b2e 100644
+--- a/src/Assets.js
++++ b/src/Assets.js
+@@ -15,7 +15,11 @@ const AssetPaths = require("./node-haste/lib/AssetPaths");
+ const crypto = require("crypto");
+ const denodeify = require("denodeify");
+ const fs = require("fs");
+-const getImageSize = require("image-size");
++const _imageSizeModule = require("image-size");
++const getImageSize =
++  typeof _imageSizeModule === "function"
++    ? _imageSizeModule
++    : _imageSizeModule.imageSize || _imageSizeModule.default;
+ const path = require("path");
+ const readDir = denodeify(fs.readdir);
+ const readFile = denodeify(fs.readFile);
