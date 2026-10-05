@@ -32,47 +32,42 @@ jobs:
         run: echo "BRANCH_NAME=update-of-sdk" >> $GITHUB_ENV
 
       - name: Update OpenFeature SDKs to latest
-        run: yarn add @openfeature/core @openfeature/server-sdk @openfeature/web-sdk
-
-      - name: Update @openfeature/server-sdk peerDependencies in sdk/nodejs/package.json
-        working-directory: sdk/nodejs
-        run: yarn add --peer @openfeature/server-sdk
+        # yarn up updates these in every workspace that depends on them (root and sdk/nodejs)
+        run: yarn up --tilde @openfeature/core @openfeature/server-sdk @openfeature/web-sdk
 
       - name: Update @openfeature/web-sdk peerDependencies in sdk/openfeature-web-provider/package.json
         working-directory: sdk/openfeature-web-provider
-        run: yarn add --peer @openfeature/web-sdk
+        # yarn add --peer writes "*" unless a range is given
+        run: yarn add --peer "@openfeature/web-sdk@^$(npm view @openfeature/web-sdk version)"
 
-      - name: Check for changes to package.json
+      - name: Check for changes
         shell: bash
         run: |
-          IS_UPDATED=$(git diff --name-only origin/main package.json sdk/nodejs/package.json sdk/openfeature-web-provider/package.json | wc -l)
-          if [ "$IS_UPDATED" -gt "0" ]; then
-            echo "IS_UPDATED=true" >> $GITHUB_ENV
-          else
+          if git diff --quiet; then
             echo "IS_UPDATED=false" >> $GITHUB_ENV
+          else
+            echo "IS_UPDATED=true" >> $GITHUB_ENV
           fi
 
-      - name: Check if branch already exists
-        run: echo "BRANCH_EXISTS=$(git branch -a | grep $BRANCH_NAME)" >> $GITHUB_ENV
-
       - name: Commit & push changes
-        if: ${{ env.IS_UPDATED && !env.BRANCH_EXISTS }}
+        if: ${{ env.IS_UPDATED == 'true' }}
         shell: bash
         run: |
-          git checkout -b "$BRANCH_NAME"
-          git add package.json
-          git add sdk/nodejs/package.json
-          git add sdk/openfeature-web-provider/package.json
-          git add yarn.lock
-          git commit -m "Update OpenFeature SDKs to latest"
-          git push --set-upstream origin "$BRANCH_NAME"
+          git checkout -B "$BRANCH_NAME"
+          git add package.json sdk/nodejs/package.json sdk/openfeature-web-provider/package.json yarn.lock
+          git commit -m "chore(deps): update OpenFeature SDKs to latest"
+          git push --force origin "$BRANCH_NAME"
 
       - name: Create Pull Request
-        if: ${{ env.IS_UPDATED && !env.BRANCH_EXISTS }}
+        if: ${{ env.IS_UPDATED == 'true' }}
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.AUTOMATION_USER_TOKEN }}
         run: |
+          if [ -n "$(gh pr list --head "$BRANCH_NAME" --state open --json number --jq '.[].number')" ]; then
+            echo "PR already open for $BRANCH_NAME, branch updated"
+            exit 0
+          fi
           gh pr create \
           --base main --head "$BRANCH_NAME" \
           --title "chore(deps): Update OpenFeature SDKs to latest" \
