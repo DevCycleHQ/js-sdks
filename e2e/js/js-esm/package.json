@@ -51,6 +51,7 @@
         "launch-editor@^2.6.1": "^2.14.1",
         "launch-editor@^2.9.1": "^2.14.1",
         "websocket-driver@>=0.5.1": "^0.7.5",
-        "websocket-driver@^0.7.4": "^0.7.5"
+        "websocket-driver@^0.7.4": "^0.7.5",
+        "webpack-dev-middleware@^7.4.2": "^7.4.6"
     }
 }
