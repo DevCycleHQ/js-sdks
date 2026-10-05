@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
+          token: ${{ secrets.AUTOMATION_USER_TOKEN }}
           fetch-depth: 0
       - name: Enable Corepack
         run: corepack enable
