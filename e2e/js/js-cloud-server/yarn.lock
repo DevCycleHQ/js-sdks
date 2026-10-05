@@ -493,27 +493,27 @@ __metadata:
   linkType: hard
 
 "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server::locator=e2e-js-cloud-server%40workspace%3A.":
-  version: 1.33.7
-  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=9e2522&locator=e2e-js-cloud-server%40workspace%3A."
+  version: 1.33.8
+  resolution: "@devcycle/js-cloud-server-sdk@file:../../../dist/sdk/js-cloud-server#../../../dist/sdk/js-cloud-server::hash=1a2bc9&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
-    "@devcycle/types": "npm:1.32.7"
+    "@devcycle/types": "npm:1.32.8"
     cross-fetch: "npm:^4.1.0"
     fetch-retry: "npm:^5.0.6"
     lodash: "npm:^4.17.21"
-  checksum: 10/e4f19913f276eafb936fc10abe402b036cc38314c0bbb7e3d457818d9dc88205c9ea92a2e12f1aca3fa17bc0338372d663139e190ab5992f4561b9116ef574c0
+  checksum: 10/dfcad17f42669f557a0a0479be5620f288164336afd395ba723a675c177511be14718f6dd48032304fc74d07a0e9155ed8e5d9420fe078b08e64dad25c326e2f
   languageName: node
   linkType: hard
 
 "@devcycle/types@file:../../../dist/lib/shared/types::locator=e2e-js-cloud-server%40workspace%3A.":
-  version: 1.32.7
-  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=b8561f&locator=e2e-js-cloud-server%40workspace%3A."
+  version: 1.32.8
+  resolution: "@devcycle/types@file:../../../dist/lib/shared/types#../../../dist/lib/shared/types::hash=882919&locator=e2e-js-cloud-server%40workspace%3A."
   dependencies:
     class-transformer: "npm:0.5.1"
     class-validator: "npm:0.14.1"
     iso-639-1: "npm:^2.1.15"
     lodash: "npm:^4.17.21"
     reflect-metadata: "npm:^0.1.14"
-  checksum: 10/7e28f83c5817d70bb4dbf0c41e1fc6e6b737bc0238b86d98199c4fc8d016020581bcd063ba649c977bd678b345a0128fdf5dfca09dc051f4d6847589f8ac591a
+  checksum: 10/c9924798341abf5b46c4e60a2162e9ed0fdc286efaaf692869f3628b36a1d64d296cd1f64c537a284c84ef589d88ffa41e3eecd0d56a54a640e0e84627990b25
   languageName: node
   linkType: hard
 
@@ -1773,22 +1773,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"brace-expansion@npm:^1.1.18":
-  version: 1.1.18
-  resolution: "brace-expansion@npm:1.1.18"
+"brace-expansion@npm:^1.1.21":
+  version: 1.1.21
+  resolution: "brace-expansion@npm:1.1.21"
   dependencies:
     balanced-match: "npm:^1.0.0"
     concat-map: "npm:0.0.1"
-  checksum: 10/b55a3c03239b8d2127c7cbb3408c9ad3a556a8c303bf3064df78bfb7c093160fc8f6e0a32e42a850a78eba12f29ccf6ef997690b9acf945d242c56c61c4aa977
+  checksum: 10/6c0ed34107cb3bd3f44c01d90ec8c01baa3ed75b7755617e2e5797b5908bbf20b313edf575612b200a783b84c7d1826aec2f7a2f03de9905bbfae5dc3dea6a95
   languageName: node
   linkType: hard
 
-"brace-expansion@npm:^2.1.3":
-  version: 2.1.4
-  resolution: "brace-expansion@npm:2.1.4"
+"brace-expansion@npm:^2.1.7":
+  version: 2.1.7
+  resolution: "brace-expansion@npm:2.1.7"
   dependencies:
     balanced-match: "npm:^1.0.0"
-  checksum: 10/11e18dc39706037331abedbb742af1da733267042f94c0f08487ef1a63cee068c1859f8d5f95523869725191133eb1a69753de457ed4b76b7c187d9ea0646737
+  checksum: 10/4763be07b688136db4f98f71ab96c4a1a73b6785f69864c130c748f4429be961c6a9a4129c0a81aad4f9cfb08e31a3cf2809b2427509bf2990d1490b7b5dd2d0
   languageName: node
   linkType: hard
 
@@ -2814,10 +2814,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ip-address@npm:^10.3.1":
-  version: 10.4.0
-  resolution: "ip-address@npm:10.4.0"
-  checksum: 10/8a286dd112a88c372b10c706caca14dcf5ed029a11c3911062ad8937ca0f951aa513ecacf82e15ffcf6343749ae6c079dd9741282fc94033a06ff1b7bd6ce69a
+"ip-address@npm:^10.7.1":
+  version: 10.7.3
+  resolution: "ip-address@npm:10.7.3"
+  checksum: 10/04655aa25ad682bb26ecb82281c9d3ecd99da8ecde9c95146f0a96685de90a359432d905bf6c53b5732fed0bfb1f93763cd3c91c3f266eec96cc41bfea987197
   languageName: node
   linkType: hard
 
@@ -4802,10 +4802,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^6.28.0":
-  version: 6.28.0
-  resolution: "undici@npm:6.28.0"
-  checksum: 10/672a7a53bd1f6c80edb73b357ab36e98ef9e474024c442aab2b8ea2bc32f1103cab05525c78661ae724f3e1340e23d03efb9730fba28e76218ab0ec52e15d75a
+"undici@npm:^6.28.1":
+  version: 6.29.0
+  resolution: "undici@npm:6.29.0"
+  checksum: 10/fd4969cfc846cb4da7f7b1b225536d629e17b17b4a1913287f1264f30c855b9eb65a6da6cde46ba1ddfe42f113a3969ab2697029c2b920401be2b7b3b40abef8
   languageName: node
   linkType: hard
 
