@@ -1862,6 +1862,56 @@ describe('Rollout Logic', () => {
                 doesUserPassRollout({ rollout, boundedHash: 0.9 }),
             ).toBeFalsy()
         })
+
+        it('interpolates from a non-zero start percentage', () => {
+            // 1 day into a 10 day window: 0.5 + (1 - 0.5) * 0.1 = 0.55
+            const rollout = {
+                startDate: moment().subtract(1, 'days').toDate(),
+                startPercentage: 0.5,
+                type: 'gradual',
+                stages: [
+                    {
+                        percentage: 1,
+                        date: moment().add(9, 'days').toDate(),
+                        type: 'linear',
+                    },
+                ],
+            }
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.3 }),
+            ).toBeTruthy()
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.5 }),
+            ).toBeTruthy()
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.6 }),
+            ).toBeFalsy()
+        })
+
+        it('interpolates a decreasing rollout', () => {
+            // 1 day into a 10 day window: 1 + (0 - 1) * 0.1 = 0.9
+            const rollout = {
+                startDate: moment().subtract(1, 'days').toDate(),
+                startPercentage: 1,
+                type: 'gradual',
+                stages: [
+                    {
+                        percentage: 0,
+                        date: moment().add(9, 'days').toDate(),
+                        type: 'linear',
+                    },
+                ],
+            }
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.5 }),
+            ).toBeTruthy()
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.85 }),
+            ).toBeTruthy()
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.95 }),
+            ).toBeFalsy()
+        })
     })
 
     describe('stepped', () => {
@@ -1903,6 +1953,36 @@ describe('Rollout Logic', () => {
             ).toBeFalsy()
             expect(
                 doesUserPassRollout({ rollout, boundedHash: 0.9 }),
+            ).toBeFalsy()
+        })
+
+        it('interpolates between a discrete stage and a linear stage', () => {
+            // 1 day into a 4 day window: 0.5 + (1 - 0.5) * 0.25 = 0.625
+            const rollout = {
+                startDate: moment().subtract(2, 'days').toDate(),
+                startPercentage: 0,
+                type: 'stepped',
+                stages: [
+                    {
+                        type: 'discrete',
+                        percentage: 0.5,
+                        date: moment().subtract(1, 'days').toDate(),
+                    },
+                    {
+                        type: 'linear',
+                        percentage: 1,
+                        date: moment().add(3, 'days').toDate(),
+                    },
+                ],
+            }
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.4 }),
+            ).toBeTruthy()
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.6 }),
+            ).toBeTruthy()
+            expect(
+                doesUserPassRollout({ rollout, boundedHash: 0.7 }),
             ).toBeFalsy()
         })
     })
