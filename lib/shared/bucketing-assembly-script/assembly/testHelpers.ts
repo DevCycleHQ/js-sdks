@@ -22,7 +22,8 @@ import {
     _checkVersionFilters,
     _doesUserPassRollout,
     _evaluateOperator,
-    checkNumbersFilterJSONValue
+    checkNumbersFilterJSONValue,
+    getCurrentRolloutPercentage
 } from './bucketing'
 import { SortingArray, sortObjectsByString } from './helpers/arrayHelpers'
 
@@ -120,6 +121,15 @@ export function doesUserPassRolloutFromJSON(rolloutStr: string | null, boundedHa
     }
     const rollout = rolloutJSON ? new PublicRollout(rolloutJSON as JSON.Obj) : null
     return _doesUserPassRollout(rollout, boundedHash)
+}
+
+export function getCurrentRolloutPercentageFromJSON(rolloutStr: string, currentDateMs: f64): f64 {
+    const rolloutJSON = JSON.parse(rolloutStr)
+    if (!rolloutJSON.isObj) {
+        throw new Error('getCurrentRolloutPercentageFromJSON rolloutStr param not a JSON Object')
+    }
+    const rollout = new PublicRollout(rolloutJSON as JSON.Obj)
+    return getCurrentRolloutPercentage(rollout, new Date(i64(currentDateMs)))
 }
 
 export function testConfigBodyClass(configStr: string, etag: string | null = null): string {
