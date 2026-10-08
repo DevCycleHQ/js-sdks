@@ -25,7 +25,7 @@ export class EdgeConfigSource extends ConfigSource {
 
         if (!config) {
             throw new UserError(
-                `Invalid SDK key provided, or Vercel Global Config integration is not setup: ${sdkKey}`,
+                `Invalid SDK key provided, or Vercel Global Config integration is not set up: ${sdkKey}`,
             )
         }
 

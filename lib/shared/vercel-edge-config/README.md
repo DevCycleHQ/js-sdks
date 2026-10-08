@@ -4,7 +4,7 @@ This library provides an adapter for DevCycle Node.js and Next.js SDKs to retrie
 Global Config (formerly Edge Config). To use this adapter, you must have the Vercel integration set up.
 
 Vercel Global Config provides a much faster configuration retrieval for services deployed to Vercel's cloud infrastructure.
-With the DevCycle Global Config Adapter, you can significantly improve the speed flags are retrieved during user requests.
+With the DevCycle Global Config Adapter, you can significantly improve the speed at which flags are retrieved during user requests.
 
 ```bash
 npm install @devcycle/vercel-edge-config @vercel/global-config
