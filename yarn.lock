@@ -2587,7 +2587,7 @@ __metadata:
     class-transformer: "npm:^0.5.1"
   peerDependencies:
     "@devcycle/types": "*"
-    "@vercel/edge-config": ^1.2.0
+    "@vercel/global-config": ^1.5.1
   languageName: unknown
   linkType: soft
 
@@ -9688,24 +9688,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/edge-config-fs@npm:0.1.0":
+"@vercel/global-config-fs@npm:0.1.0":
   version: 0.1.0
-  resolution: "@vercel/edge-config-fs@npm:0.1.0"
-  checksum: 10/4eb27927a1c6a9d77cee4457424e208c3ff7f01e1cd0249b133804d12fd7099bd1aed6a9d9574b122d3bd59289b294a913b4df05bb69aca6091c8a020cbc2121
+  resolution: "@vercel/global-config-fs@npm:0.1.0"
+  checksum: 10/f2af44ec7eedf5e43233c4a1b3687c9977ef70f7dd9084783e9d6271536717cb3688bd139448473619ccab013e1356e13329f43b2d08464468c17f7d5ba53c7d
   languageName: node
   linkType: hard
 
-"@vercel/edge-config@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@vercel/edge-config@npm:1.4.0"
+"@vercel/global-config@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "@vercel/global-config@npm:1.5.1"
   dependencies:
-    "@vercel/edge-config-fs": "npm:0.1.0"
+    "@vercel/global-config-fs": "npm:0.1.0"
   peerDependencies:
     "@opentelemetry/api": ^1.7.0
+    next: ">=1"
   peerDependenciesMeta:
     "@opentelemetry/api":
       optional: true
-  checksum: 10/669c34db94bedd41c7b8efc05781f5a7fee2920e1c625228d15c27648eb1d5d15a66b20778ec56105cd08837d29eb40537806ff7b73aac497c1deebaa71a2796
+    next:
+      optional: true
+  checksum: 10/c3e542b7dfc30073f7391eef9d1b3d156923161f226e79f3db61b5da075c5de2281aa6e3007c4eef3749daa5680d40fcf42a401f4ea49a83b6241eaf99f02dce
   languageName: node
   linkType: hard
 
@@ -14720,7 +14723,7 @@ __metadata:
     "@types/uuid": "npm:^8.3.4"
     "@typescript-eslint/eslint-plugin": "npm:5.62.0"
     "@typescript-eslint/parser": "npm:5.62.0"
-    "@vercel/edge-config": "npm:^1.4.0"
+    "@vercel/global-config": "npm:^1.5.1"
     as-proto: "npm:^1.3.0"
     as-proto-gen: "npm:^1.3.0"
     as-uuid: "npm:^0.0.4"
