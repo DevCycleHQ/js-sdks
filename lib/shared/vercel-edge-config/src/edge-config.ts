@@ -1,9 +1,9 @@
-import { EdgeConfigClient, EdgeConfigValue } from '@vercel/edge-config'
+import { GlobalConfigClient, GlobalConfigValue } from '@vercel/global-config'
 import { ConfigBody, ConfigSource, UserError } from '@devcycle/types'
 import { plainToInstance } from 'class-transformer'
 
 export class EdgeConfigSource extends ConfigSource {
-    constructor(private edgeConfigClient: EdgeConfigClient) {
+    constructor(private edgeConfigClient: GlobalConfigClient) {
         super()
     }
 
@@ -20,12 +20,12 @@ export class EdgeConfigSource extends ConfigSource {
     }> {
         const configPath = this.getConfigURL(sdkKey, kind, obfuscated)
         const config = await this.edgeConfigClient.get<{
-            [x: string]: EdgeConfigValue
+            [x: string]: GlobalConfigValue
         }>(configPath)
 
         if (!config) {
             throw new UserError(
-                `Invalid SDK key provided, or edge config integration is not setup: ${sdkKey}`,
+                `Invalid SDK key provided, or Vercel Global Config integration is not setup: ${sdkKey}`,
             )
         }
 
