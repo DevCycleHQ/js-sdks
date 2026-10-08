@@ -14,6 +14,7 @@ import {
     decideTargetVariation,
     generateBucketedConfig,
     doesUserPassRollout,
+    getCurrentRolloutPercentage,
 } from '../src/bucketing'
 import {
     config,
@@ -2205,6 +2206,28 @@ describe('Rollout Logic', () => {
             }
 
             jest.useRealTimers()
+        })
+
+        it('returns the current stage percentage at the start of a linear stage', () => {
+            const stageDate = new Date('2026-01-02T00:00:00.000Z')
+            const rollout: Rollout = {
+                type: 'stepped',
+                startPercentage: 0,
+                startDate: new Date('2026-01-01T00:00:00.000Z'),
+                stages: [
+                    {
+                        type: 'discrete',
+                        percentage: 0.5,
+                        date: stageDate,
+                    },
+                    {
+                        type: 'linear',
+                        percentage: 1,
+                        date: new Date('2026-01-03T00:00:00.000Z'),
+                    },
+                ],
+            }
+            expect(getCurrentRolloutPercentage(rollout, stageDate)).toBe(0.5)
         })
     })
 

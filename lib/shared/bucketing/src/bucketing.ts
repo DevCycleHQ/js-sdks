@@ -150,10 +150,6 @@ export const getCurrentRolloutPercentage = (
         (currentDate.getTime() - currentStage.date.getTime()) /
         (nextStage.date.getTime() - currentStage.date.getTime())
 
-    if (currentDatePercentage === 0) {
-        return 0
-    }
-
     return (
         currentStage.percentage +
         (nextStage.percentage - currentStage.percentage) * currentDatePercentage

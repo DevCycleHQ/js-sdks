@@ -107,14 +107,10 @@ export function getCurrentRolloutPercentage(
         ((currentDateTime - currentStage.date.getTime()) as f64) /
         ((nextStage.date.getTime() - currentStage.date.getTime()) as f64)
 
-    if (currentDatePercentage === 0) {
-        return 0
-    }
-
     return (
-        (currentStage.percentage +
-            (nextStage.percentage - currentStage.percentage)) *
-        f64(currentDatePercentage)
+        currentStage.percentage +
+        (nextStage.percentage - currentStage.percentage) *
+            f64(currentDatePercentage)
     )
 }
 
