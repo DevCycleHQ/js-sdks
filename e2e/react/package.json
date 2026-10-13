@@ -26,6 +26,8 @@
         "react-dom": "18.2.0"
     },
     "resolutions": {
+        "proxy-addr": "^2.0.8",
+        "compression": "^1.8.2",
         "@types/react": "18.2.20",
         "@devcycle/js-client-sdk": "file:../../dist/sdk/js",
         "@devcycle/types": "file:../../dist/lib/shared/types",
@@ -46,7 +48,7 @@
         "ip-address@npm:^9.0.5": "^10.7.1",
         "@babel/plugin-transform-modules-systemjs": "^7.29.4",
         "uuid": "^11.1.1",
-        "shell-quote": "^1.9.0",
+        "shell-quote": "^1.11.0",
         "ws@^8.18.0": "^8.21.0",
         "js-yaml@^3.10.0": "^3.15.2",
         "js-yaml@^3.13.1": "^3.15.2",
