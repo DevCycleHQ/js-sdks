@@ -40,7 +40,7 @@
         "@openfeature/server-sdk": "~1.23.0",
         "@openfeature/web-sdk": "~1.10.0",
         "@swc/helpers": "~0.5.15",
-        "@vercel/edge-config": "^1.4.0",
+        "@vercel/global-config": "^1.5.1",
         "class-transformer": "0.5.1",
         "class-validator": "^0.14.1",
         "core-js": "^3.41.0",
