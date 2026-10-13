@@ -1,6 +1,6 @@
 {
     "name": "@devcycle/nestjs-server-sdk",
-    "version": "0.34.0",
+    "version": "0.34.1",
     "description": "The DevCycle NestJS Server SDK used for feature management.",
     "author": "DevCycle <support@devcycle.com>",
     "keywords": [
@@ -19,8 +19,8 @@
     "homepage": "https://devcycle.com",
     "license": "MIT",
     "dependencies": {
-        "@devcycle/nodejs-server-sdk": "1.56.0",
-        "@devcycle/types": "1.32.9",
+        "@devcycle/nodejs-server-sdk": "1.56.1",
+        "@devcycle/types": "1.32.10",
         "nestjs-cls": "^4.5.0"
     },
     "peerDependencies": {
