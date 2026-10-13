@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "@devcycle/nextjs-sdk": "file:../../../../dist/sdk/nextjs",
-        "next": "~15.5.24",
+        "next": "~15.5.27",
         "react": "^19.0.0",
         "react-dom": "^19.0.0"
     },
@@ -19,6 +19,7 @@
         "typescript": "^5"
     },
     "resolutions": {
+        "source-map-js": "^1.2.2",
         "@types/react": "^19.0.0",
         "@devcycle/bucketing": "file:../../../../dist/lib/shared/bucketing",
         "@devcycle/js-client-sdk": "file:../../../../dist/sdk/js",
@@ -28,6 +29,6 @@
         "lodash": "^4.18.1",
         "postcss": "^8.5.18",
         "uuid": "^11.1.1",
-        "sharp": "^0.35.4"
+        "sharp": "^0.35.5"
     }
 }
