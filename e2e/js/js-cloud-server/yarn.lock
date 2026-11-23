@@ -2815,9 +2815,9 @@ __metadata:
   linkType: hard
 
 "ip-address@npm:^10.7.1":
-  version: 10.7.3
-  resolution: "ip-address@npm:10.7.3"
-  checksum: 10/04655aa25ad682bb26ecb82281c9d3ecd99da8ecde9c95146f0a96685de90a359432d905bf6c53b5732fed0bfb1f93763cd3c91c3f266eec96cc41bfea987197
+  version: 10.7.6
+  resolution: "ip-address@npm:10.7.6"
+  checksum: 10/16b2604753400f8eedb17d482f9cdbb6e8ca6dac31bcb6fa6984e6098091ac58acd92990cc4d09a9ee96936b6ab19fd60e5622f4add52bd7d2465969a04e2ca9
   languageName: node
   linkType: hard
 
@@ -4803,9 +4803,9 @@ __metadata:
   linkType: hard
 
 "undici@npm:^6.28.1":
-  version: 6.29.0
-  resolution: "undici@npm:6.29.0"
-  checksum: 10/fd4969cfc846cb4da7f7b1b225536d629e17b17b4a1913287f1264f30c855b9eb65a6da6cde46ba1ddfe42f113a3969ab2697029c2b920401be2b7b3b40abef8
+  version: 6.29.1
+  resolution: "undici@npm:6.29.1"
+  checksum: 10/92acb64ec190fe3499dec69830fdfc48e28f6f19627bad7563cfd57c37b4e95379c12b8ac15a2e6a8739eaac358f17503a229c160d3dc8774141b1e270d8aa57
   languageName: node
   linkType: hard
 
